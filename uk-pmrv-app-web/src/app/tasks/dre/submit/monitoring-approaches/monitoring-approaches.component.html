@@ -1,0 +1,15 @@
+<app-dre-task [breadcrumb]="true">
+  <app-approaches-add-template
+    (formSubmit)="onSubmit()"
+    [monitoringApproaches]="monitoringApproaches$ | async"
+    submitText="Continue"
+    [form]="form"
+  >
+    <ng-container heading>
+      <p class="govuk-body">Select the monitoring approaches used during the reporting year</p>
+    </ng-container>
+    <ng-container returnTo>
+      <a govukLink routerLink="..">Return to: reportable emissions task</a>
+    </ng-container>
+  </app-approaches-add-template>
+</app-dre-task>

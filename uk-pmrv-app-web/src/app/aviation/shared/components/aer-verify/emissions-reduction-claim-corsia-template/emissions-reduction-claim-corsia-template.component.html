@@ -1,0 +1,9 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Describe the results of your review</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.reviewResults }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+</dl>

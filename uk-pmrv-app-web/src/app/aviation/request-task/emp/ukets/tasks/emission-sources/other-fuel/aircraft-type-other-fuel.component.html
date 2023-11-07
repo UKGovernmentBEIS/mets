@@ -1,0 +1,19 @@
+<div class="govuk-grid-row" data-testid="aircraft-other-fuel-form">
+  <div class="govuk-grid-column-three-quarters">
+    <app-wizard-step
+      (formSubmit)="onSubmit()"
+      [formGroup]="form"
+      heading="How will you calculate the emission factors for the ‘other’ fuel selected in the aircraft type table?"
+      submitText="Continue"
+      [hideSubmit]="false"
+    >
+      <p class="govuk-body">
+        Describe the procedures you use to work out emissions factors and biomass content (if applicable) for these
+        fuels for reporting purposes.
+      </p>
+      <p class="govuk-body">These may be from sampling and analysis or from supplier purchase records.</p>
+      <div formControlName="otherFuelExplanation" govuk-textarea [maxLength]="2000"></div>
+    </app-wizard-step>
+    <app-return-to-link></app-return-to-link>
+  </div>
+</div>

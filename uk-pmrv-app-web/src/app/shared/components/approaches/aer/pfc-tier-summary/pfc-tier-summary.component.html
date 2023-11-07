@@ -1,0 +1,372 @@
+<ng-container>
+  <h2 class="govuk-heading-m">Emission network</h2>
+  <dl govuk-summary-list *ngIf="sourceStream">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Source stream</dt>
+      <dd govukSummaryListRowValue>
+        {{ sourceStream?.reference }} {{ sourceStream?.description | sourceStreamDescription }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../emission-network']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="emissionSources">
+      <dt govukSummaryListRowKey>Emission sources</dt>
+      <dd govukSummaryListRowValue>
+        <ng-container *ngFor="let emissionSource of emissionSources; let isLast = last">
+          {{ emissionSource.reference }}
+          {{ emissionSource.description + (!isLast ? ', ' : '') }}
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../emission-network']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Method to calculate emissions</dt>
+      <dd govukSummaryListRowValue>
+        {{
+          sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData?.calculationMethod === 'SLOPE'
+            ? 'Method A (Slope)'
+            : 'Method B (Overvoltage)'
+        }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../emission-network']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+
+    <ng-container *ngIf="sourceStreamEmission?.massBalanceApproachUsed">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Are you using a mass balance approach to identify the activity data?</dt>
+
+        <dd govukSummaryListRowValue>{{ sourceStreamEmission?.massBalanceApproachUsed ? 'Yes' : 'No' }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../emission-network']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Date range for this entry</dt>
+      <dd govukSummaryListRowValue>
+        {{
+          sourceStreamEmission?.durationRange?.fullYearCovered
+            ? 'the whole year'
+            : (sourceStreamEmission?.durationRange?.coverageStartDate | govukDate) +
+              ' - ' +
+              (sourceStreamEmission?.durationRange?.coverageEndDate | govukDate)
+        }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../date-range']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="sourceStreamEmission?.parameterMonitoringTierDiffReason as reason">
+  <h2 class="govuk-heading-m">Reason for not using monitoring plan tiers</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason</dt>
+      <dd govukSummaryListRowValue>
+        <ng-container *ngIf="reason?.type === 'DATA_GAP'">
+          Due to a data gap <br />
+          <br />
+          {{ reason?.reason }}
+        </ng-container>
+        <ng-container *ngIf="reason?.type !== 'DATA_GAP'">
+          {{ reason?.reason }}
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../tiers-reason']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="reason?.type === 'DATA_GAP' && !!reason?.relatedNotifications">
+      <dt govukSummaryListRowKey>Notifications related to this issue</dt>
+      <dd govukSummaryListRowValue>
+        <ng-container *ngFor="let relatedNotification of reason?.relatedNotifications; let isLast = last">
+          {{ relatedNotification }}
+          <ng-container *ngIf="!isLast">
+            <br />
+          </ng-container>
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../tiers-reason']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container>
+  <h2 class="govuk-heading-m">Activity data</h2>
+  <dl govuk-summary-list>
+    <ng-container *ngIf="permitParamMonitoringTiers?.activityDataTier as activityDataTier">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Tier applied in the monitoring plan</dt>
+        <dd govukSummaryListRowValue>{{ activityDataTier | appliedTier }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+    </ng-container>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Tier used</dt>
+      <dd govukSummaryListRowValue>
+        {{ sourceStreamEmission?.parameterMonitoringTier?.activityDataTier | appliedTier }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../tiers-used']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total production of primary aluminium</dt>
+      <dd govukSummaryListRowValue>{{ sourceStreamEmission?.totalPrimaryAluminium }} tonnes</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../primary-aluminium']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container>
+  <h2 class="govuk-heading-m">Emission factor</h2>
+  <dl govuk-summary-list>
+    <ng-container *ngIf="permitParamMonitoringTiers?.emissionFactorTier as emissionFactorTier">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Tier applied in the monitoring plan</dt>
+        <dd govukSummaryListRowValue>{{ emissionFactorTier | appliedTier }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+    </ng-container>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Tier used</dt>
+      <dd govukSummaryListRowValue>
+        {{ sourceStreamEmission?.parameterMonitoringTier?.emissionFactorTier | appliedTier }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../tiers-used']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container>
+  <h2 class="govuk-heading-m">Calculation data</h2>
+  <dl govuk-summary-list>
+    <ng-container
+      *ngIf="$any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.calculationMethod === 'SLOPE'"
+    >
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Amount of anode effects per cell-day</dt>
+        <dd govukSummaryListRowValue>
+          {{ $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.anodeEffectsPerCellDay }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../method-a']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Average duration of anode effects, in minutes</dt>
+        <dd govukSummaryListRowValue>
+          {{
+            $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)
+              ?.averageDurationOfAnodeEffectsInMinutes
+          }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../method-a']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Slope emission factor of CF4</dt>
+        <dd govukSummaryListRowValue>
+          {{ $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.slopeCF4EmissionFactor }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../method-a']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+
+    <ng-container
+      *ngIf="
+        $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.calculationMethod === 'OVERVOLTAGE'
+      "
+    >
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Anode effect overvoltage per cell, in millivolts</dt>
+        <dd govukSummaryListRowValue>
+          {{ $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.anodeEffectsOverVoltagePerCell }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../method-b']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Average current efficiency of aluminium production</dt>
+        <dd govukSummaryListRowValue>
+          {{
+            $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)
+              ?.aluminiumAverageCurrentEfficiencyProduction
+          }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../method-b']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Overvoltage coefficient</dt>
+        <dd govukSummaryListRowValue>
+          {{ $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.overVoltageCoefficient }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../method-b']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Weight fraction of C2F6</dt>
+      <dd govukSummaryListRowValue>
+        {{ $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.c2F6WeightFraction }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="[
+            $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.calculationMethod === 'SLOPE'
+              ? '../method-a'
+              : '../method-b'
+          ]"
+          [state]="{ changing: true }"
+          >Change</a
+        >
+      </dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Collection efficiency</dt>
+      <dd govukSummaryListRowValue>
+        {{ $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.percentageOfCollectionEfficiency }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="[
+            $any(sourceStreamEmission?.pfcSourceStreamEmissionCalculationMethodData)?.calculationMethod === 'SLOPE'
+              ? '../method-a'
+              : '../method-b'
+          ]"
+          [state]="{ changing: true }"
+          >Change</a
+        >
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container>
+  <h2 class="govuk-heading-m">CF4 (Tetrafluoromethane)</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Amount of CF4</dt>
+      <dd govukSummaryListRowValue>
+        {{ sourceStreamEmission?.amountOfCF4 | bigNumber }}
+      </dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Global warming potential</dt>
+      <dd govukSummaryListRowValue>7390 tonnes CO2 / tonnes CF4</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total CF4 emissions</dt>
+      <dd govukSummaryListRowValue>
+        {{ sourceStreamEmission?.totalCF4Emissions | bigNumber }}
+      </dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container>
+  <h2 class="govuk-heading-m">C2F6 (Hexafluoroethane)</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Amount of C2F6</dt>
+      <dd govukSummaryListRowValue>
+        {{ sourceStreamEmission?.amountOfC2F6 | bigNumber }}
+      </dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Global warming potential</dt>
+      <dd govukSummaryListRowValue>12,000 tonnes CO2/ tonnes C2F6</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total CF4 emissions</dt>
+      <dd govukSummaryListRowValue>
+        {{ sourceStreamEmission?.totalC2F6Emissions | bigNumber }}
+      </dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container>
+  <h2 class="govuk-heading-m">Calculated emissions</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reportable emissions</dt>
+      <dd govukSummaryListRowValue>{{ sourceStreamEmission?.reportableEmissions | bigNumber }} tonnes CO2e</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Are the calculated emissions correct?</dt>
+      <dd govukSummaryListRowValue>
+        {{ sourceStreamEmission?.calculationCorrect ? 'Yes' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../calculation-review']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+
+    <ng-container *ngIf="!sourceStreamEmission?.calculationCorrect">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Explain why you are providing your own emission figures</dt>
+        <dd govukSummaryListRowValue>
+          {{ sourceStreamEmission?.providedEmissions?.reasonForProvidingManualEmissions }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../calculation-review']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Reportable emissions</dt>
+        <dd govukSummaryListRowValue>
+          {{ sourceStreamEmission?.providedEmissions?.totalProvidedReportableEmissions | bigNumber }} tonnes CO2e
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../calculation-review']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+  </dl>
+</ng-container>

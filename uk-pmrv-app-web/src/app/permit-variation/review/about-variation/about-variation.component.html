@@ -1,0 +1,31 @@
+<app-permit-task-review [breadcrumb]="true" [notification]="notification" heading="About the variation">
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      [link]="(canViewSectionDetails$ | async) ? '../../about/summary' : null"
+      linkText="About the variation"
+      [status]="aboutVariationStatus$ | async"
+      [hasContent]="true"
+    >
+      <app-about-variation-summary-details
+        [hasBottomBorder]="false"
+        [showChangeLink]="false"
+        [permitVariationDetails]="permitVariationDetails$ | async"
+      ></app-about-variation-summary-details>
+    </li>
+  </ul>
+
+  <ng-container *ngIf="isVariationRegulatorLed; else operatorLed">
+    <app-variation-regulator-led-review-group-decision
+      groupKey="ABOUT_VARIATION"
+      (notification)="notification = $event"
+    ></app-variation-regulator-led-review-group-decision>
+  </ng-container>
+
+  <ng-template #operatorLed>
+    <app-variation-operator-led-review-group-decision
+      groupKey="ABOUT_VARIATION"
+      (notification)="notification = $event"
+    ></app-variation-operator-led-review-group-decision>
+  </ng-template>
+</app-permit-task-review>

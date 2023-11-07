@@ -1,0 +1,17 @@
+<app-permit-task [breadcrumb]="true" reviewGroupTitle="Transfer details" reviewGroupUrl="transfer-details">
+  <app-page-heading>Check your answers</app-page-heading>
+
+  <h1 class="govuk-heading-m">Transfer details</h1>
+  <app-permit-transfer-details-summary-template
+    [payload]="transferDetails$ | async"
+    [allowChange]="false"
+    [files]="files$ | async"
+  ></app-permit-transfer-details-summary-template>
+
+  <h1 class="govuk-heading-m">Confirmation statement</h1>
+  <app-transfer-details-summary-details-template
+    [showChangeLink]="isEditable$ | async"
+    [transferDetailsConfirmation]="transferDetailsConfirmation$ | async"
+  ></app-transfer-details-summary-details-template>
+  <app-list-return-link reviewGroupTitle="Transfer details" reviewGroupUrl="transfer-details"></app-list-return-link>
+</app-permit-task>

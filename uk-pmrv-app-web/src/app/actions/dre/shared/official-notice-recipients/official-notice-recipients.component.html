@@ -1,0 +1,28 @@
+<h2 app-summary-header class="govuk-heading-m govuk-!-margin-top-9">Official notice recipients</h2>
+<dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Users</dt>
+    <dd govukSummaryListRowValue>
+      <div *ngFor="let user of operators">
+        {{ user | userInfoResolver: payload.usersInfo }}
+      </div>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+    <dd govukSummaryListRowValue>
+      {{ payload.decisionNotification.signatory | userInfoResolver: payload.usersInfo }}
+    </dd>
+  </div>
+  <div govukSummaryListRow *ngIf="payload.officialNotice as officialNotice">
+    <dt govukSummaryListRowKey>Official notice</dt>
+    <dd govukSummaryListRowValue>
+      <a
+        [routerLink]="['/actions', action.id, 'file-download', 'document', officialNotice.uuid]"
+        govukLink
+        target="_blank"
+        >{{ officialNotice.name }}</a
+      >
+    </dd>
+  </div>
+</dl>

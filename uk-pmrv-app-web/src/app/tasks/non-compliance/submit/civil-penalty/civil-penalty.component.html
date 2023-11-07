@@ -1,0 +1,34 @@
+<app-non-compliance-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Provide details of breach"
+    submitText="Save and Continue"
+    [showBackLink]="true"
+  >
+    <div
+      formControlName="civilPenalty"
+      govuk-radio
+      legend="Will we pursue a civil penalty in line with our enforcement policy?"
+      legendSize="medium"
+    >
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="noCivilPenaltyJustification"
+            govuk-textarea
+            label="Explain why a civil penalty will not be pursued"
+            [maxLength]="10000"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+  <div *ngIf="(currentDomain$ | async) === 'INSTALLATION'; else aviation">
+    <a govukLink routerLink="..">Return to: non compliance task</a>
+  </div>
+  <ng-template #aviation>
+    <app-return-to-link></app-return-to-link>
+  </ng-template>
+</app-non-compliance-task>

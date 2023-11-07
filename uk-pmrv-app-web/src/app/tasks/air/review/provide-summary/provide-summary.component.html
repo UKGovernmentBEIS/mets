@@ -1,0 +1,18 @@
+<app-air-task heading="Provide summary of improvements for official notice">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false">
+
+    <div
+      formControlName="reportSummary"
+      govuk-textarea
+      label="Text for official notice"
+      hint="This will be entered into the body of the official notice"
+      labelSize="medium"
+      [maxLength]="10000">
+    </div>
+
+  </app-wizard-step>
+</app-air-task>

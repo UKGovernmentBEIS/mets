@@ -1,0 +1,17 @@
+<app-wizard-step [formGroup]="form" (ngSubmit)="onSubmit()" data-testid="secondary-data-sources">
+  <div class="govuk-!-width-two-thirds">
+    <app-page-heading>
+      Secondary data sources to determine fuel consumption
+    </app-page-heading>
+    <p class="govuk-body">
+      List the secondary data sources that can be used to determine fuel consumption if the data from your primary
+      source is missing or incorrect.
+    </p>
+    <p class="govuk-body">
+      Secondary data sources produce the same values as primary data, for example data from paper records instead of
+      automatically transmitted Aircraft Communication Addressing and Reporting System (ACARS) data items.
+    </p>
+    <div formControlName="secondaryDataSources" govuk-textarea [maxLength]="2000"></div>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

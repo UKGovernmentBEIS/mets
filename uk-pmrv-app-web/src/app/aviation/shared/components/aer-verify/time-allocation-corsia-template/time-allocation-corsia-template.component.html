@@ -1,0 +1,16 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Total time of the verification</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.verificationTotalTime }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Scope of the verification</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.verificationScope }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+</dl>

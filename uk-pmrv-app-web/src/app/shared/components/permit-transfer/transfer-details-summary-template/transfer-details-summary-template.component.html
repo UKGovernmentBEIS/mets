@@ -1,0 +1,66 @@
+<dl govuk-summary-list [hasBorders]="true">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Reason for the transfer</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      <span>{{ payload.reason }}</span>
+    </dd>
+    <dd govukSummaryListRowActions>
+      <a *ngIf="allowChange" govukLink [routerLink]="['..', 'reason']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Files added</dt>
+    <dd govukSummaryListRowValue *ngIf="files.length > 0; else noFiles">
+      <app-summary-download-files [files]="files"> </app-summary-download-files>
+    </dd>
+    <ng-template #noFiles>
+      <dd govukSummaryListRowValue>
+        <span>None</span>
+      </dd>
+    </ng-template>
+    <dd govukSummaryListRowActions>
+      <a *ngIf="allowChange" govukLink [routerLink]="['..', 'reason']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Actual or estimated date of transfer</dt>
+    <dd govukSummaryListRowValue>
+      <span>{{ payload.transferDate | govukDate }}</span>
+    </dd>
+    <dd govukSummaryListRowActions>
+      <a *ngIf="allowChange" govukLink [routerLink]="['..', 'date']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Who is paying for the transfer?</dt>
+    <dd govukSummaryListRowValue>
+      <span>{{ payload.payer | transferParty }}</span>
+    </dd>
+    <dd govukSummaryListRowActions>
+      <a *ngIf="allowChange" govukLink [routerLink]="['..', 'payment']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Who is completing the annual emission report?</dt>
+    <dd govukSummaryListRowValue>
+      <span>{{ payload.aerLiable | transferParty }}</span>
+    </dd>
+    <dd govukSummaryListRowActions>
+      <a *ngIf="allowChange" govukLink [routerLink]="['..', 'aem-report']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Transfer code</dt>
+    <dd govukSummaryListRowValue>
+      <span>{{ payload.transferCode }}</span>
+    </dd>
+    <dd govukSummaryListRowActions>
+      <a *ngIf="allowChange" govukLink [routerLink]="['..', 'code']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>

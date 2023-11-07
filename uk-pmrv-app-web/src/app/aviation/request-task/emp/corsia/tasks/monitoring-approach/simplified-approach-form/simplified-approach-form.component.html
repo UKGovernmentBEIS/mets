@@ -1,0 +1,16 @@
+<div
+  [maxLength]="10000"
+  formControlName="explanation"
+  govuk-textarea
+  label="Explain how you are eligible to apply this approach"
+  hint="Estimate your total annual emissions from international flights (tCO2) that are subject to offsetting
+    requirements, and explain the basis for this estimate. It can be based on the previous year’s activity, or
+    predicted activity for the current scheme year."
+></div>
+
+<app-multiple-file-input
+  [baseDownloadUrl]="vm.downloadUrl"
+  label="Upload supporting evidence (optional)"
+  hint="This could be a copy of the CERT output used to estimate your emissions, or a document showing how you have worked out your own estimate."
+  formControlName="supportingEvidenceFiles"
+></app-multiple-file-input>

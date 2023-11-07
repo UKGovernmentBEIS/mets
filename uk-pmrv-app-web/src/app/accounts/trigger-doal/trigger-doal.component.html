@@ -1,0 +1,14 @@
+<app-page-heading size="xl">Which reporting year does this activity level determination relate to?</app-page-heading>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+  <govuk-error-summary *ngIf="isErrorSummaryDisplayed | async" [form]="form"></govuk-error-summary>
+  <h3 class="govuk-heading-s">Select year</h3>
+  <div
+    [options]="years"
+    formControlName="year"
+    label="This must be the year of the monitoring period, for example if the ALR was received on 31 March 2023 then you should select 2022"
+    govuk-select
+    widthClass="govuk-!-width-two-thirds"
+  ></div>
+  <button appPendingButton govukButton type="submit">Save and continue</button>
+</form>

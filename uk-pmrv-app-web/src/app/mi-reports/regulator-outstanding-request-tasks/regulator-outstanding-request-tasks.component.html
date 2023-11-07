@@ -1,0 +1,50 @@
+<app-page-heading size="xl">Regulator outstanding request tasks</app-page-heading>
+<form (ngSubmit)="onSubmit()" [formGroup]="reportOptionsForm">
+  <div
+    formControlName="taskTypes"
+    app-multi-select
+    label="Task"
+    hint="If no tasks are selected, no filtering will be applied"
+  >
+    <div
+      *ngFor="let task of taskTypes$ | async"
+      [itemValue]="task"
+      [label]="task | itemName"
+      app-multi-select-item
+      itemName="taskTypes"
+    ></div>
+  </div>
+  <div
+    formControlName="regulators"
+    app-multi-select
+    label="Assigned to"
+    hint="If no users are selected, no filtering will be applied"
+  >
+    <div
+      *ngFor="let regulator of regulators$ | async"
+      [itemValue]="regulator.value"
+      [label]="regulator.label"
+      app-multi-select-item
+      itemName="regulators"
+    ></div>
+  </div>
+  <div class="govuk-button-group">
+    <button appPendingButton govukButton type="submit">Execute</button>
+    <button appPendingButton govukButton type="button" (click)="exportToExcel()">Export to excel</button>
+  </div>
+</form>
+<div *ngIf="pageItems$ | async as items">
+  <ng-container *ngIf="items.length; else noResults">
+    <div class="overflow-auto overflow-auto-table">
+      <govuk-table [columns]="tableColumns" [data]="items"> </govuk-table>
+    </div>
+    <app-pagination
+      [count]="totalNumOfItems$ | async"
+      (currentPageChange)="currentPage$.next($event)"
+      [pageSize]="pageSize"
+    ></app-pagination>
+  </ng-container>
+  <ng-template #noResults>
+    <div class="govuk-body"><h2>No results</h2></div>
+  </ng-template>
+</div>

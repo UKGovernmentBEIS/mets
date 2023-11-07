@@ -1,0 +1,21 @@
+<app-air-task heading="Provide information about this improvement" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <app-air-improvement-item [airImprovement]="airImprovement" [reference]="reference"></app-air-improvement-item>
+    <div
+      formControlName="type"
+      govuk-radio
+      [legend]="'Are improvements to meet the highest tier being proposed?'"
+      [legendSize]="'medium'"
+    >
+      <govuk-radio-option [value]="'YES'" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="'NO'" label="No"></govuk-radio-option>
+      <govuk-radio-option [value]="'ALREADY_MADE'" label="Improvement already made"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-air-task>
+

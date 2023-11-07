@@ -1,0 +1,112 @@
+<ng-container *ngIf="formSubmission$ | async as submission; else mainView">
+  <app-decision-confirmation
+    *ngIf="submission.form === 'decision'"
+    [isAccepted]="submission.isAccepted"
+  ></app-decision-confirmation>
+</ng-container>
+
+<ng-template #mainView>
+  <div class="govuk-grid-row">
+    <ng-container *ngIf="info$ | async as info">
+      <div [class]="(hasRelatedActions$ | async) === true ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
+        <app-page-heading size="xl">
+          <div *ngIf="info.requestTask.type | includes: 'INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE'; else newPermit">
+            Share transfer code with operator
+          </div>
+          <ng-template #newPermit> Installation account details </ng-template>
+          <app-task-header-info
+            [assignee]="info.requestTask.assigneeFullName"
+            [daysRemaining]="info.requestTask.daysRemaining"
+          ></app-task-header-info>
+        </app-page-heading>
+
+        <app-decision
+          *ngIf="info.allowedRequestTaskActions | includes: 'INSTALLATION_ACCOUNT_OPENING_SUBMIT_DECISION'"
+          [taskId]="info.requestTask.id"
+          (submitted)="submittedDecision($event)"
+        ></app-decision>
+
+        <app-archive
+          *ngIf="info.allowedRequestTaskActions | includes: 'INSTALLATION_ACCOUNT_OPENING_ARCHIVE'"
+          [taskId]="info.requestTask.id"
+          type="INSTALLATION_ACCOUNT_OPENING_ARCHIVE"
+          warningText="This task / item can be archived for future reference."
+          (submitted)="archived()"
+        ></app-archive>
+
+        <ng-container *ngIf="info.requestTask.type | includes: 'INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE'">
+          <ng-template
+            [ngIf]="!(info.allowedRequestTaskActions | includes: 'INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE')"
+            [ngIfElse]="archiveTaskTemplate"
+          >
+            <ng-container *ngTemplateOutlet="transferringArchiveBody"> </ng-container>
+            <hr class="govuk-!-margin-bottom-6" />
+          </ng-template>
+          <ng-template #archiveTaskTemplate>
+            <app-archive
+              [taskId]="info.requestTask.id"
+              type="INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE"
+              (submitted)="archived()"
+              buttonText="Archive and return to dashboard."
+            >
+              <ng-container *ngTemplateOutlet="transferringArchiveBody"> </ng-container>
+            </app-archive>
+          </ng-template>
+          <ng-template #transferringArchiveBody>
+            <p class="govuk-body">
+              You have opened an account for the purpose of a transfer.
+              <br />
+              <br />
+              You must share your transfer code with the operator of the installation who you are receiving a transfer
+              from via email or telephone or some other manner.
+            </p>
+            <h3 class="govuk-heading-m">Your transfer code is: {{ info.requestTask?.payload['transferCode'] }}</h3>
+            <br />
+            <h4 class="govuk-heading-s">What will happen next</h4>
+            <p class="govuk-body">
+              The transferring operator will use the code you have provided and input it into a form requesting the
+              transfer.
+              <br />
+              <br />
+              When they have completed this form, you will receive a copy to review and confirm the details of the
+              transfer
+              <br />
+              <br />
+              Afterwards, the regulator will receive a copy of this form, which has been seen and verified by both
+              yourself and the transferring operator.
+            </p>
+          </ng-template>
+        </ng-container>
+
+        <app-review-summary
+          *ngIf="
+            info.requestTask?.payload &&
+            !(info.requestTask.type | includes: 'INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE')
+          "
+          [item]="info.requestTask.payload"
+          [taskId]="
+            (info.allowedRequestTaskActions | includes: 'INSTALLATION_ACCOUNT_OPENING_SUBMIT_DECISION')
+              ? info.requestTask.id
+              : null
+          "
+        ></app-review-summary>
+
+        <app-timeline>
+          <app-timeline-item
+            *ngFor="let action of actions$ | async"
+            [action]="action"
+            [link]="action | timelineItemLink"
+            [state]="navigationState"
+          ></app-timeline-item>
+        </app-timeline>
+      </div>
+      <div class="govuk-grid-column-one-third" *ngIf="(hasRelatedActions$ | async) === true">
+        <app-related-actions
+          [isAssignable$]="isAssignableAndCapableToAssign$"
+          [taskId$]="taskId$"
+          [allowedActions$]="allowedRequestTaskActions$"
+        ></app-related-actions>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>

@@ -1,0 +1,174 @@
+<ng-container *ngIf="store.requestTaskType as requestTaskType">
+  <app-base-task-container-component
+    [header]="aerTitle$ | async"
+    [customContentTemplate]="customContentTemplate"
+    [expectedTaskType]="requestTaskType"
+    [notification]="notification"
+    [daysRemaining]="daysRemaining$ | async"
+  >
+  </app-base-task-container-component>
+
+  <ng-template #customContentTemplate>
+    <ol class="app-task-list">
+      <li app-task-section title="Installation details">
+        <ul app-task-item-list>
+          <li
+            *ngIf="isTaskTypeAmendsSubmit && (reviewGroupsForAmend$ | async | includes: 'INSTALLATION_DETAILS')"
+            app-task-item
+            [link]="'./amend/INSTALLATION_DETAILS/summary'"
+            [linkText]="'Amends needed for ' + ('INSTALLATION_DETAILS' | amendHeading)"
+            [status]="'AMEND_INSTALLATION_DETAILS' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            link="./installation-details"
+            linkText="Installation and operator details"
+            [status]="'complete'"
+          ></li>
+          <li
+            app-task-item
+            link="./prtr/summary"
+            linkText="Pollutant Release and Transfer Register codes (PRTR)"
+            [status]="'pollutantRegisterActivities' | taskStatus | async"
+          ></li>
+          <li app-task-item link="./nace-codes" linkText="NACE codes" [status]="'naceCodes' | taskStatus | async"></li>
+          <li
+            app-task-item
+            link="./regulated-activities"
+            linkText="Regulated activities carried out at the installation"
+            [status]="'regulatedActivities' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            link="./monitoring-plan/summary"
+            linkText="Monitoring plan versions during the reporting year"
+            [status]="'aerMonitoringPlanDeviation' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            link="./monitoring-approaches"
+            linkText="Monitoring approaches used during the reporting year"
+            [status]="'monitoringApproachEmissions' | taskStatus | async"
+          ></li>
+        </ul>
+      </li>
+
+      <li app-task-section title="Fuels and equipment inventory">
+        <ul app-task-item-list>
+          <li
+            *ngIf="isTaskTypeAmendsSubmit && (reviewGroupsForAmend$ | async | includes: 'FUELS_AND_EQUIPMENT')"
+            app-task-item
+            [link]="'./amend/FUELS_AND_EQUIPMENT/summary'"
+            [linkText]="'Amends needed for ' + ('FUELS_AND_EQUIPMENT' | amendHeading)"
+            [status]="'AMEND_FUELS_AND_EQUIPMENT' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            link="./source-streams"
+            linkText="Source streams (fuels and materials)"
+            [status]="'sourceStreams' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            link="./emission-sources"
+            linkText="Emission sources"
+            [status]="'emissionSources' | taskStatus | async"
+          ></li>
+          <li
+            *ngIf="isMeasurementOrN2OApproachesSelected$ | async"
+            app-task-item
+            link="./emission-points"
+            linkText="Emission points"
+            [status]="'emissionPoints' | taskStatus | async"
+          ></li>
+        </ul>
+      </li>
+
+      <li app-task-section title="Total emissions for the year">
+        <ul app-task-item-list>
+          <li
+            *ngIf="isTaskTypeAmendsSubmit && (reviewGroupsForAmend$ | async | includesAny: totalEmissions)"
+            app-task-item
+            [link]="'./amend/TOTAL_EMISSIONS/summary'"
+            [linkText]="'Amends needed for ' + ('TOTAL_EMISSIONS' | amendHeading)"
+            [status]="'AMEND_TOTAL_EMISSIONS' | taskStatus | async"
+          ></li>
+          <div *ngFor="let approach of monitoringApproaches$ | async">
+            <div *ngIf="approach.status | taskStatus | async as status">
+              <li
+                *ngIf="status !== 'cannot start yet'; else linkAsText"
+                app-task-item
+                [link]="approach.link"
+                [linkText]="approach.linkText"
+                [status]="status"
+              ></li>
+              <ng-template #linkAsText>
+                <li app-task-item [linkText]="approach.linkText" [status]="status"></li>
+              </ng-template>
+            </div>
+          </div>
+          <li app-task-item link="./emissions-summary" linkText="Emissions summary"></li>
+        </ul>
+      </li>
+
+      <li app-task-section title="Additional information">
+        <ul app-task-item-list>
+          <li
+            *ngIf="isTaskTypeAmendsSubmit && (reviewGroupsForAmend$ | async | includes: 'ADDITIONAL_INFORMATION')"
+            app-task-item
+            [link]="'./amend/ADDITIONAL_INFORMATION/summary'"
+            [linkText]="'Amends needed for ' + ('ADDITIONAL_INFORMATION' | amendHeading)"
+            [status]="'AMEND_ADDITIONAL_INFORMATION' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            link="./abbreviations/summary"
+            linkText="Abbreviations and definitions"
+            [status]="'abbreviations' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            link="./additional-documents/summary"
+            linkText="Additional documents and information"
+            [status]="'additionalDocuments' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            link="./confidentiality-statement/summary"
+            linkText="Confidentiality statement"
+            [status]="'confidentialityStatement' | taskStatus | async"
+          ></li>
+        </ul>
+      </li>
+
+      <li app-task-section title="Activity level report" *ngIf="isGHGE$ | async">
+        <ul app-task-item-list>
+          <li
+            *ngIf="isTaskTypeAmendsSubmit && (reviewGroupsForAmend$ | async | includes: 'ACTIVITY_LEVEL_REPORT')"
+            app-task-item
+            [link]="'./amend/ACTIVITY_LEVEL_REPORT/summary'"
+            [linkText]="'Amends needed for ' + ('ACTIVITY_LEVEL_REPORT' | amendHeading)"
+            [status]="'AMEND_ACTIVITY_LEVEL_REPORT' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            link="./activity-level-report/summary"
+            linkText="Activity level report"
+            [status]="'activityLevelReport' | taskStatus | async"
+          ></li>
+        </ul>
+      </li>
+
+      <li app-task-section title="Send report">
+        <ul app-task-item-list>
+          <li
+            app-task-item
+            link="./send-report"
+            linkText="Send report"
+            [status]="'sendReport' | taskStatus | async"
+          ></li>
+        </ul>
+      </li>
+    </ol>
+  </ng-template>
+</ng-container>

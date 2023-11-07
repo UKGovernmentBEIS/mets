@@ -1,0 +1,30 @@
+<app-aer-task-review heading="Has the operator reported any planned or actual changes correctly?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <govuk-details summary="See guidance">
+      <article>
+        <p class="govuk-body">
+          If an operator has to include further elements in their monitoring plan, you need to check they are applying
+          and implementing the procedures correctly.
+        </p>
+        <p class="govuk-body">
+          You must also check if the operator has told the competent authority about any changes to an installation’s
+          capacity, activity level and operation by 31 December of the reporting period.
+        </p>
+      </article>
+    </govuk-details>
+    <div formControlName="plannedActualChangesReported" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="plannedActualChangesNotReportedReason" govuk-textarea
+               label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

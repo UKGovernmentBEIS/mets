@@ -1,0 +1,23 @@
+<ng-container *ngIf="'FALLBACK' | monitoringApproachTask: !showOriginal | async as task">
+  <dl
+    *ngIf="task?.approachDescription || task?.justification"
+    govuk-summary-list
+    [hasBorders]="false"
+    [class.summary-list--edge-border]="hasBottomBorder"
+  >
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Approach description</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ task?.approachDescription }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Justification</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ task?.justification }}</dd>
+    </div>
+    <div govukSummaryListRow *ngIf="task?.files?.length">
+      <dt govukSummaryListRowKey>Supporting files</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="store.getDownloadUrlFiles(task.files)"> </app-summary-download-files>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

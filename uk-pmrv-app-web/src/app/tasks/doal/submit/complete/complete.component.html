@@ -1,0 +1,23 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <ng-container *ngIf="(confirmationDisplayed$ | async) === false; else confirmation">
+      <app-page-heading size="xl">
+        Are you sure you want to complete the determination of activity level task?
+      </app-page-heading>
+
+      <div class="govuk-button-group">
+        <button type="button" govukButton appPendingButton (click)="complete()">Yes, complete this task</button>
+      </div>
+      <app-task-return-link taskType="DOAL_APPLICATION_SUBMIT"></app-task-return-link>
+    </ng-container>
+    <ng-template #confirmation>
+      <div>
+        <govuk-panel title="Task completed">
+          <strong>Your reference code is:</strong><br />{{ requestId$ | async }}
+        </govuk-panel>
+
+        <a govukLink [routerLink]="'/dashboard'"> Return to dashboard </a>
+      </div>
+    </ng-template>
+  </div>
+</div>

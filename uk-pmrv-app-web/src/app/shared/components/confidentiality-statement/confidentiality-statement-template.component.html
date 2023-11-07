@@ -1,0 +1,77 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  [caption]="caption"
+  heading="Disclosure of information provided to the UK ETS reporting service"
+  [submitText]="submitText"
+  [hideSubmit]="!isEditable"
+>
+  <h2 class="govuk-heading-s">
+    If you are regulated by the Environment Agency, Natural Resources Wales, the Northern Ireland Environment Agency or
+    the Offshore Petroleum Regulator for Environment and Decommissioning
+  </h2>
+  <div class="govuk-body">
+    <p>
+      All information held or obtained under UK ETS legislation, including all information submitted to the UK ETS
+      reporting service, is subject to the provisions relating to the disclosure of information set out in Article 75B
+      of the Greenhouse Gas Emissions Trading Scheme Order 2020 (the Order).
+    </p>
+    <p>
+      Information held in the UK ETS reporting service will be subject to public access to information requirements,
+      including those under the Freedom of Information Act 2000 (FOI), and the Environmental Information Regulations
+      2004 (EIR). For further information about disclosure under FOI and EIR, please refer to the Information
+      Commissioner's Office (ICO).
+    </p>
+  </div>
+  <h2 class="govuk-heading-s">If you are regulated by the Scottish Environment Protection Agency</h2>
+  <div class="govuk-body">
+    <p>
+      All information held or obtained under UK ETS legislation, including all information submitted to the UK ETS
+      reporting service, is subject to the provisions relating to the disclosure of information set out in Article 75B
+      of the Greenhouse Gas Emissions Trading Scheme Order 2020 (the Order).
+    </p>
+    <p>
+      The information held in the UK ETS reporting service will be subject to public access to information requirements
+      including those under the Freedom of Information (Scotland) Act 2002 ("the Act") and the Environmental Information
+      (Scotland) Regulations 2004 ("the Regulations").
+    </p>
+  </div>
+  <app-boolean-radio-group
+    controlName="exist"
+    legend="Is any of the information in your application commercially confidential?"
+    [isEditable]="isEditable"
+  >
+    <div govukConditionalContent>
+      <h2 class="govuk-heading-m">List the sections that are commercially confidential</h2>
+      <p class="govuk-body">
+        Identify which sections of the application you consider should be treated as commercially confidential and
+        explain why disclosure of this information would have an adverse effect to your commercial interests.
+      </p>
+      <div formArrayName="confidentialSections">
+        <fieldset
+          *ngFor="let section of sections.controls; index as i"
+          [formGroupName]="i"
+          govukFieldset
+          id="confidentiality-statement-{{ i }}"
+        >
+          <legend govukLegend>Confidentiality statement {{ i + 1 }}</legend>
+          <button
+            (click)="sections.removeAt(i)"
+            *ngIf="sections.length > 1"
+            [heading]="heading"
+            appAddAnother
+            govukSecondaryButton
+            type="button"
+            [disabled]="!isEditable"
+            #removeButton
+          >
+            Remove
+          </button>
+          <div formControlName="section" govuk-text-input label="Section"></div>
+          <div formControlName="explanation" govuk-textarea [maxLength]="10000" label="Explanation"></div>
+        </fieldset>
+        <button (click)="addSection()" govukSecondaryButton type="button" [disabled]="!isEditable">Add another</button>
+      </div>
+    </div>
+  </app-boolean-radio-group>
+</app-wizard-step>

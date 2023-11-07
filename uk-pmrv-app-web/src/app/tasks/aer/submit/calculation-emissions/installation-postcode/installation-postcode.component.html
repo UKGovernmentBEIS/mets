@@ -1,0 +1,22 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    submitText="Find local delivery zone"
+    caption="Apply regional data for natural gas"
+    heading="Find your local delivery zone"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      If your postcode cannot be found, or is in 2 different local delivery zones, contact your local gas supplier.
+    </p>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-third">
+        <h2 class="govuk-heading-m govuk-!-font-weight-regular">Installation postcode</h2>
+        <div formControlName="postCode" govuk-text-input></div>
+      </div>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

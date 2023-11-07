@@ -1,0 +1,22 @@
+<div>
+  <h2 class="govuk-heading-m">Reporting status</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow id="reporting-status">
+      <dt govukSummaryListRowKey>Reporting status</dt>
+      <dd govukSummaryListRowValue>{{ accountInfo?.reportingStatus | accountReportingStatus }}</dd>
+      <dd govukSummaryListRowActions *ngIf="userRoleType === 'REGULATOR' && accountInfo.status !== 'CLOSED'">
+        <a govukLink [routerLink]="['edit-reporting-status']">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow id="reporting-reason" *ngIf="userRoleType === 'REGULATOR'">
+      <dt govukSummaryListRowKey>Reason</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ accountInfo?.reportingStatusReason }}</dd>
+      <dd govukSummaryListRowActions *ngIf="accountInfo.status !== 'CLOSED'">
+        <a govukLink [routerLink]="['edit-reporting-status']">Change</a>
+      </dd>
+    </div>
+    <p>
+      <a govukLink routerLink="reporting-status-history" *ngIf="userRoleType === 'REGULATOR'">View history</a>
+    </p>
+  </dl>
+</div>

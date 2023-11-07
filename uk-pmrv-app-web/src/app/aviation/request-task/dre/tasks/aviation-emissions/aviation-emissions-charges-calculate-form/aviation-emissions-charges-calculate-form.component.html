@@ -1,0 +1,33 @@
+<div class="govuk-!-width-two-thirds">
+  <p class="govuk-body">A payment task will be created after you send the official notice to the operator</p>
+  <div
+    govuk-text-input
+    formControlName="totalBillableHours"
+    label="Total billable hours"
+    labelSize="small"
+    widthClass="govuk-input--width-10"
+  ></div>
+  <div
+    formControlName="hourlyRate"
+    label="Hourly rate"
+    labelSize="small"
+    widthClass="govuk-input--width-10"
+    prefix="&pound;"
+    suffix="per hour"
+    govuk-text-input
+  ></div>
+
+  <h3 class="govuk-heading-s">Set a due date for the payment</h3>
+  <div formControlName="dueDate" govuk-date-input></div>
+
+  <div
+    formControlName="comments"
+    govuk-textarea
+    [maxLength]="10000"
+    label="Regulator comments (optional)"
+    labelSize="small"
+    hint="The operator cannot view this"
+  ></div>
+
+  <h2 class="govuk-heading-s">Total operator fee: {{ totalOperatorFee | currency: 'GBP':'symbol':'1.2-2' }}</h2>
+</div>

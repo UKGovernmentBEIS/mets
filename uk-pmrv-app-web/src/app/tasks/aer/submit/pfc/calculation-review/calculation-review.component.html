@@ -1,0 +1,70 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    [heading]="'Review the calculated emissions data'"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <ng-container *ngIf="sourceStreamEmission$ | async as sourceStreamEmission">
+      <h2 class="govuk-heading-m">CF4 (Tetrafluoromethane)</h2>
+      <p class="govuk-body">
+        Amount of CF4:
+        {{ (sourceStreamEmission$ | async)?.amountOfCF4 | bigNumber }} tonnes
+      </p>
+      <p class="govuk-body">Global warming potential: 7390 tonnes CO2 / tonnes CF4</p>
+      <p class="govuk-body">
+        Total CF4 emissions:
+        {{ (sourceStreamEmission$ | async)?.totalCF4Emissions | bigNumber }} tonnes CO2e
+      </p>
+
+      <br />
+
+      <h2 class="govuk-heading-m">C2F6 (Hexafluoroethane)</h2>
+      <p class="govuk-body">
+        Amount of C2F6:
+        {{ (sourceStreamEmission$ | async)?.amountOfC2F6 | bigNumber }} tonnes
+      </p>
+      <p class="govuk-body">Global warming potential: 12200 tonnes CO2 / tonnes C2F6</p>
+      <p class="govuk-body">
+        Total C2F6 emissions:
+        {{ (sourceStreamEmission$ | async)?.totalC2F6Emissions | bigNumber }} tonnes CO2e
+      </p>
+
+      <br />
+
+      <h2 class="govuk-heading-m">Calculated emissions</h2>
+      <p class="govuk-body">
+        Emissions: {{ (sourceStreamEmission$ | async)?.reportableEmissions | bigNumber }} tonnes CO2e
+      </p>
+
+      <br />
+    </ng-container>
+    <div
+      formControlName="calculationCorrect"
+      govuk-radio
+      legend="Are the calculated emissions correct?"
+      legendSize="medium"
+    >
+      <govuk-radio-option [value]="true" label="Yes, the emissions are correct"> </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No, I want to provide my own emissions figures">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="reasonForProvidingManualEmissions"
+            govuk-textarea
+            [maxLength]="10000"
+            label="Explain why you are providing your own emission figures"
+          ></div>
+          <div
+            formControlName="totalProvidedReportableEmissions"
+            govuk-text-input
+            [label]="'Enter your total emissions'"
+            widthClass="govuk-input--width-20"
+            suffix="tonnes CO2e"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_PFC' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

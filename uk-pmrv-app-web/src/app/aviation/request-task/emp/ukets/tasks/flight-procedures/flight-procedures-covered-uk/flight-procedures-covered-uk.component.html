@@ -1,0 +1,16 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Details about flights covered by the UK ETS"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Describe the procedures used to determine which flights need to be reported under the UK ETS, and how you avoid
+    double counting flights or duplicating data.
+  </p>
+
+  <app-flight-procedures-form></app-flight-procedures-form>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

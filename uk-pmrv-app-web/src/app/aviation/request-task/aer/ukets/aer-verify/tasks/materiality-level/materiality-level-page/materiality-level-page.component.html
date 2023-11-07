@@ -1,0 +1,23 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="false"
+  [heading]="'Materiality level'"
+  class="govuk-!-width-two-thirds"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    As well as stating the materiality level to which the report has been assessed, provide any other relevant details
+    or criteria around the work performed, or the basis of the opinion, so the operator can understand its depth and
+    scope (see Article 23 of the AVR).
+  </p>
+
+  <p class="govuk-body govuk-!-width-two-thirds">
+    For example, if you had to check 100% of data because non-conformities were found during the verification, this may
+    be helpful for the operator to understand.
+  </p>
+
+  <div [maxLength]="10000" formControlName="materialityDetails" govuk-textarea class="govuk-!-width-two-thirds"></div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

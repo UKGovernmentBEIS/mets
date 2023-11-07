@@ -1,0 +1,56 @@
+<dl govuk-summary-list *ngIf="significantChangesText?.length">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Significant changes</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let change of significantChangesText">
+        <p>{{ change }}</p>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+<dl govuk-summary-list *ngIf="nonSignificantChangesText?.length">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Non-significant changes</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let change of nonSignificantChangesText">
+        <p>{{ change }}</p>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+<dl govuk-summary-list *ngIf="variationDetails.reason">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Explain what you are changing and the reasons for the changes</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>
+      {{ variationDetails?.reason }}
+    </dd>
+    <dd></dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+<ng-container *ngIf="variationRegulatorLedReason">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason to include in the notice</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{
+          variationRegulatorLedReason.type === 'OTHER'
+            ? variationRegulatorLedReason.reasonOtherSummary
+            : (variationRegulatorLedReason.type | empVariationDetailsReasonType)
+        }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../reason'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

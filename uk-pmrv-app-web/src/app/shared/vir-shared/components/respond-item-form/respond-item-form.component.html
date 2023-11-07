@@ -1,0 +1,56 @@
+<app-wizard-step
+  [heading]="heading"
+  (formSubmit)="onSubmit()"
+  [formGroup]="formGroup"
+  submitText="Continue"
+  [hideSubmit]="isEditable === false"
+>
+  <app-verification-recommendation-item [verificationDataItem]="verificationDataItem">
+  </app-verification-recommendation-item>
+
+  <app-operator-response-item
+    [reference]="verificationDataItem.reference"
+    [operatorImprovementResponse]="operatorImprovementResponse"
+    [attachedFiles]="documentFiles"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-operator-response-item>
+
+  <app-regulator-response-item
+    [reference]="verificationDataItem.reference"
+    [regulatorImprovementResponse]="regulatorImprovementResponse"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-regulator-response-item>
+
+  <div
+    formControlName="improvementCompleted"
+    govuk-radio
+    [legend]="'Is the required improvement complete?'"
+    [legendSize]="'medium'"
+  >
+    <govuk-radio-option [value]="true" label="Yes">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="dateCompleted"
+          govuk-date-input
+          label="When was the improvement completed?"
+          [isRequired]="true"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          [maxLength]="10000"
+          formControlName="reason"
+          govuk-textarea
+          label="Tell us why you have chosen not to address this recommendation"
+          labelSize="medium"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</app-wizard-step>

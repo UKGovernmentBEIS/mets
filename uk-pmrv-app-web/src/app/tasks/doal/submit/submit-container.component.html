@@ -1,0 +1,36 @@
+<app-base-task-container-component
+  [header]="header$ | async"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="DOAL_APPLICATION_SUBMIT"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <div class="govuk-button-group">
+    <button
+      *ngIf="allowNotifyOperator$ | async"
+      (click)="notifyOperator()"
+      govukButton
+      title="Notify Operator for decision"
+      type="button"
+    >
+      Notify Operator
+    </button>
+
+    <button *ngIf="allowComplete$ | async" (click)="complete()" govukButton title="Complete" type="button">
+      Complete
+    </button>
+
+    <button
+      *ngIf="allowSendPeerReview$ | async"
+      (click)="sendPeerReview()"
+      govukButton
+      title="Send for peer review"
+      type="button"
+    >
+      Send for peer review
+    </button>
+  </div>
+
+  <app-submit-section-list></app-submit-section-list>
+</ng-template>

@@ -1,0 +1,54 @@
+<ng-container *ngIf="isSummary else itemHeading">
+  <h2 class="govuk-heading-m">Details</h2>
+</ng-container>
+<ng-template #itemHeading>
+  <h2 class="govuk-heading-m">{{ airImprovement | airImprovementTitle: reference }}</h2>
+</ng-template>
+<dl govuk-summary-list [hasBorders]="true">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Monitoring approach</dt>
+    <dd govukSummaryListRowValue>{{ airImprovement.type | monitoringApproachDescription }}</dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Source stream category</dt>
+    <dd govukSummaryListRowValue>{{ airImprovement.categoryType | categoryTypeName }}</dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+  <div govukSummaryListRow *ngIf="airImprovement?.sourceStreamReference !== undefined">
+    <dt govukSummaryListRowKey>Source stream reference</dt>
+    <dd govukSummaryListRowValue>{{ airImprovement?.sourceStreamReference }}</dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+  <div govukSummaryListRow *ngIf="airImprovement?.sourceStreamReferences?.length > 0">
+    <dt govukSummaryListRowKey>Source stream reference</dt>
+    <dd govukSummaryListRowValue>{{ airImprovement?.sourceStreamReferences.join(',') }}</dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+  <div govukSummaryListRow *ngIf="airImprovement?.emissionSources?.length > 0">
+    <dt govukSummaryListRowKey>Emission sources</dt>
+    <dd govukSummaryListRowValue>{{ airImprovement?.emissionSources.join(',') }}</dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+  <div govukSummaryListRow *ngIf="airImprovement?.emissionPoints?.length > 0">
+    <dt govukSummaryListRowKey>Emission points</dt>
+    <dd govukSummaryListRowValue>{{ airImprovement?.emissionPoints.join(',') }}</dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+  <div govukSummaryListRow *ngIf="airImprovement?.emissionPoint !== undefined">
+    <dt govukSummaryListRowKey>Emission points</dt>
+    <dd govukSummaryListRowValue>{{ airImprovement?.emissionPoint }}</dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+  <div govukSummaryListRow *ngIf="airImprovement?.parameter !== undefined">
+    <dt govukSummaryListRowKey>Parameter</dt>
+    <dd govukSummaryListRowValue>{{ airImprovement?.parameter }}</dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+  <div govukSummaryListRow *ngIf="airImprovement?.tier !== undefined">
+    <dt govukSummaryListRowKey>Currently applied tier</dt>
+    <dd govukSummaryListRowValue>{{ airImprovement?.tier }}</dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+  <ng-content></ng-content>
+</dl>

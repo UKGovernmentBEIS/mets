@@ -1,0 +1,48 @@
+<app-request-action-heading
+  *ngIf="vm$ | async as vm"
+  [headerText]="vm.pageHeader"
+  [timelineCreationDate]="vm.timelineCreationDate"
+>
+  <p class="govuk-heading-m">Batch variation details</p>
+  <dl govuk-summary-list>
+    <ng-container>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Created by</dt>
+        <dd govukSummaryListRowValue>
+          {{ vm.payload.submitter }}
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Date created</dt>
+        <dd govukSummaryListRowValue>
+          {{ vm.timelineCreationDate | govukDate }}
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Signatory</dt>
+        <dd govukSummaryListRowValue>
+          {{ vm.payload.signatoryName }}
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Documents</dt>
+        <dd govukSummaryListRowValue>
+          <a
+            [routerLink]="['/actions', vm.requestActionId, 'file-download', 'document', vm.payload.officialNotice.uuid]"
+            govukLink
+            target="_blank"
+            >{{ vm.payload.officialNotice.name }}</a
+          >
+          <br />
+          <a
+            [routerLink]="['/actions', vm.requestActionId, 'file-download', 'document', vm.payload.document.uuid]"
+            govukLink
+            target="_blank"
+            >{{ vm.payload.document.name }}</a
+          >
+        </dd>
+      </div>
+    </ng-container>
+  </dl>
+</app-request-action-heading>

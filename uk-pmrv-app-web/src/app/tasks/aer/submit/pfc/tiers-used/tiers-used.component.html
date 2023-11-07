@@ -1,0 +1,40 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="What tiers have you used for this source stream’s calculation parameters?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <h3 class="govuk-heading-m">Activity data</h3>
+    <ng-container *ngIf="(permitParamMonitoringTier$ | async)?.activityDataTier as activityDataTier">
+      <p class="govuk-body">{{ activityDataTier | appliedTier }} is applied in your monitoring plan</p>
+    </ng-container>
+
+    <ng-container *ngIf="(sourceStreamEmission$ | async)?.massBalanceApproachUsed === true">
+      <div formControlName="activityDataTier" govuk-radio>
+        <govuk-radio-option [value]="'TIER_4'" label="Tier 4"></govuk-radio-option>
+        <govuk-radio-option [value]="'TIER_3'" label="Tier 3"></govuk-radio-option>
+        <govuk-radio-option [value]="'TIER_2'" label="Tier 2"></govuk-radio-option>
+        <govuk-radio-option [value]="'TIER_1'" label="Tier 1"></govuk-radio-option>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="(sourceStreamEmission$ | async)?.massBalanceApproachUsed === false">
+      <div formControlName="activityDataTier" govuk-radio>
+        <govuk-radio-option [value]="'TIER_2'" label="Tier 2"></govuk-radio-option>
+        <govuk-radio-option [value]="'TIER_1'" label="Tier 1"></govuk-radio-option>
+      </div>
+    </ng-container>
+
+    <h3 class="govuk-heading-m">Emission factor</h3>
+    <ng-container *ngIf="(permitParamMonitoringTier$ | async)?.emissionFactorTier as emissionFactorTier">
+      <p class="govuk-body">{{ emissionFactorTier | appliedTier }} is applied in your monitoring plan</p>
+    </ng-container>
+
+    <div formControlName="emissionFactorTier" govuk-radio>
+      <govuk-radio-option [value]="'TIER_2'" label="Tier 2"></govuk-radio-option>
+      <govuk-radio-option [value]="'TIER_1'" label="Tier 1"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_PFC' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

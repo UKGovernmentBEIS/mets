@@ -1,0 +1,28 @@
+<app-doal-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Upload additional documents"
+    submitText="Save and continue"
+  >
+    <div formControlName="exist" govuk-radio legend="Are there additional documents you would like to provide?">
+      <govuk-radio-option [value]="true" label="Yes">
+        <ng-container govukConditionalContent>
+          <h2 class="govuk-heading-m">Additional documents</h2>
+          <app-multiple-file-input
+            [baseDownloadUrl]="getBaseFileDownloadUrl()"
+            [label]="(documentsExist$ | async) ? 'Upload a different file' : 'Upload files'"
+            listTitle="Files added"
+            formControlName="documents"
+          ></app-multiple-file-input>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+
+    <label for="comment" class="govuk-label govuk-label--m">Comments on the information submitted</label>
+    <div govuk-textarea formControlName="comment" [maxLength]="10000"></div>
+  </app-wizard-step>
+
+  <app-task-return-link taskType="DOAL_APPLICATION_SUBMIT"></app-task-return-link>
+</app-doal-task>

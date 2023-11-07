@@ -1,0 +1,14 @@
+<app-aer-task>
+  <app-transfer-details-template
+    (formSubmit)="onContinue($event)"
+    [transfer]="(sourceStreamEmission$ | async)?.transfer"
+    [isEditable]="isEditable$ | async"
+    [heading]="
+      (sourceStreamEmission$ | async)?.transfer?.transferDirection === 'RECEIVED_FROM_ANOTHER_INSTALLATION'
+        ? 'Provide details of the installation you received the emissions from'
+        : 'Provide details of the installation you exported the emissions to'
+    "
+    [returnToLink]="'CALCULATION_CO2' | monitoringApproachEmissionDescription"
+    [showBackLink]="true"
+  ></app-transfer-details-template>
+</app-aer-task>

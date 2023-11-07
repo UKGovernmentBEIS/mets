@@ -1,0 +1,12 @@
+<div class="govuk-!-width-two-thirds">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Reason for determining the aviation emissions"
+    submitText="Continue"
+    [hideSubmit]="false"
+  >
+    <app-aviation-emissions-reasons-form></app-aviation-emissions-reasons-form>
+  </app-wizard-step>
+</div>
+<app-return-to-link></app-return-to-link>

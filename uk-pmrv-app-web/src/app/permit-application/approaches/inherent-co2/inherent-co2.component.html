@@ -1,0 +1,48 @@
+<app-permit-task [breadcrumb]="true">
+  <govuk-error-summary *ngIf="displayErrors$ | async" [form]="form"></govuk-error-summary>
+
+  <app-page-heading caption="Monitoring approaches">
+    {{ 'INHERENT_CO2' | monitoringApproachDescription }}
+  </app-page-heading>
+
+  <div class="govuk-body">
+    <p>
+      This is CO2 that is produced as part of a regulated activity and is contained in a gas which is part of a fuel.
+    </p>
+  </div>
+
+  <ng-container *ngIf="(installations$ | async)?.length; else noInherentCO2">
+    <app-inherent-summary-template
+      [data]="installations$ | async"
+      [isEditable]="store.isEditable$ | async"
+      [errors]="(displayErrors$ | async) ? form.errors : {}"
+    ></app-inherent-summary-template>
+
+    <div *ngIf="(store.isEditable$ | async) === true">
+      <div class="govuk-button-group">
+        <a
+          [routerLink]="['./', (installations$ | async)?.length ?? 0, 'direction']"
+          govukSecondaryButton
+          type="button"
+          id="addAnotherItem"
+        >
+          Add another item
+        </a>
+      </div>
+
+      <div class="govuk-button-group">
+        <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #noInherentCO2>
+    <div class="govuk-button-group" *ngIf="(store.isEditable$ | async) === true">
+      <a routerLink="./0/direction" govukButton type="button" id="addItem">Add an item</a>
+    </div>
+  </ng-template>
+
+  <app-list-return-link
+    [reviewGroupTitle]="'INHERENT_CO2' | monitoringApproachDescription"
+    reviewGroupUrl="inherent-co2"
+  ></app-list-return-link>
+</app-permit-task>

@@ -1,0 +1,65 @@
+<div
+  *ngIf="errorList?.length > 0"
+  aria-labelledby="error-summary-title"
+  class="govuk-error-summary"
+  role="alert"
+  tabindex="-1"
+>
+  <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+  <div class="govuk-error-summary__body">
+    <ul class="govuk-list govuk-error-summary__list">
+      <ng-container *ngFor="let errorItem of errorList">
+        <ng-container *ngIf="errorItem">
+          <li>
+            <p style="color: #d4351c; font-weight: bold">{{ errorItem?.message }}</p>
+          </li>
+        </ng-container>
+      </ng-container>
+    </ul>
+  </div>
+</div>
+
+<app-csv-data-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Fuel allocation by block hour"
+  submitText="Continue"
+  [hideSubmit]="!fileLoaded || !parsedData"
+>
+  <div class="govuk-!-width-three-quarters">
+    <p class="govuk-body">
+      Upload a comma-separated values (.csv) file of the average fuel burn ratio for each aeroplane type, for the reporting year.
+    </p>
+    <p class="govuk-body">Each row of the file should include the:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>aircraft type designator, taken from ICAO doc 8643</li>
+      <li>aircraft sub-type, leave blank if not applicable</li>
+      <li>average fuel burn ratio in tonnes per hour, rounded to at least three decimal places</li>
+    </ul>
+  </div>
+
+  <input type="file" (change)="onFileSelect($event)" style="display: none" #fileInput />
+
+  <button type="button" govukButton *ngIf="!parsedData" (click)="fileInput.click()">Choose a CSV file</button>
+  <button type="button" govukButton govukSecondaryButton *ngIf="fileLoaded && parsedData" (click)="fileInput.click()">
+    Upload your CSV file again
+  </button>
+
+  <div *ngIf="!fileLoaded || !parsedData">
+    <app-aircraft-fuel-burn-ratio-table
+      [headingText]="'Your CSV file needs to look like this example'"
+      [customColumns]="exampleTableColumns"
+      [aviationAerCorsiaAircraftTypeDetails]="exampleTableData"
+    ></app-aircraft-fuel-burn-ratio-table>
+  </div>
+
+
+  <input [hidden]="true" formArrayName="aircraftTypeDetails" />
+  <div *ngIf="fileLoaded && parsedData">
+    <app-aircraft-fuel-burn-ratio-table
+      [headingText]="fileName"
+      [aviationAerCorsiaAircraftTypeDetails]="parsedData"
+    ></app-aircraft-fuel-burn-ratio-table>
+  </div>
+</app-csv-data-wizard-step>
+<app-return-to-link></app-return-to-link>

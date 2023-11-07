@@ -1,0 +1,24 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <app-page-heading>Details of closed task</app-page-heading>
+    <ng-container *ngIf="payload$ | async as payload">
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Why have you decided to close this task</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">
+            {{ payload.reason }}
+          </dd>
+        </div>
+      </dl>
+      <dl govuk-summary-list>
+        <div govukSummaryListRow *ngIf="payload?.files?.length > 0">
+          <dt govukSummaryListRowKey>Uploaded documents</dt>
+          <dd govukSummaryListRowValue>
+            <app-summary-download-files [files]="supportingDocumentFiles$ | async"> </app-summary-download-files>
+          </dd>
+        </div>
+      </dl>
+    </ng-container>
+    <a govukLink routerLink="/dashboard"> Return to tasks </a>
+  </div>
+</div>

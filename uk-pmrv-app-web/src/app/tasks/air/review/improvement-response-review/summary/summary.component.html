@@ -1,0 +1,22 @@
+<app-air-task heading="Check your answers" returnToLink="../..">
+  <govuk-error-summary *ngIf="errors$ | async" [form]="form"></govuk-error-summary>
+  <app-air-improvement-item [airImprovement]="airImprovement" [reference]="reference"></app-air-improvement-item>
+  <app-air-operator-response-item
+    [reference]="reference"
+    [operatorAirImprovementResponse]="operatorAirImprovementResponse$ | async"
+    [attachedFiles]="operatorFiles$ | async"
+    [resolvedChangeLink]="resolvedChangeLink$ | async"
+    [isEditable]="false"
+    [isReview]="true">
+  </app-air-operator-response-item>
+  <app-air-regulator-response-item
+    [isEditable]="isEditable$ | async"
+    [reference]="reference"
+    [regulatorAirImprovementResponse]="regulatorAirImprovementResponse$ | async"
+    [attachedFiles]="regulatorFiles$ | async"
+    [errors]="errors$ | async">
+  </app-air-regulator-response-item>
+  <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+</app-air-task>

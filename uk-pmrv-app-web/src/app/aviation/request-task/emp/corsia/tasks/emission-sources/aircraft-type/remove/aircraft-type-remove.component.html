@@ -1,0 +1,7 @@
+<div class="govuk-!-width-two-thirds">
+  <h2 class="govuk-heading-l">Are you sure you want to delete this item?</h2>
+  <p class="govuk-body">Any reference to this will be removed from your application.</p>
+</div>
+<button data-testid="remove-aircraft-btn" govukWarnButton type="button" (click)="onDelete()">Yes, delete</button>
+<br />
+<a govukLink [routerLink]="['../..']">Cancel</a>

@@ -1,0 +1,10 @@
+<app-page-heading size="xl" [caption]="'Reset two-factor authentication'">
+  Are you sure you want to reset two-factor authentication for {{ userName$ | async }} ?
+</app-page-heading>
+
+<p class="govuk-body">This will send a reset 2FA email to {{ userName$ | async }}</p>
+
+<div class="govuk-button-group">
+  <button type="button" appPendingButton (click)="reset()" govukWarnButton>Yes, reset</button>
+  <a govukLink routerLink="." (click)="location.back()">Cancel</a>
+</div>

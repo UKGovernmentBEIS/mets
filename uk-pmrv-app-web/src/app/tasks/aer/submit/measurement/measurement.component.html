@@ -1,0 +1,38 @@
+<app-aer-task [breadcrumb]="true">
+  <app-page-heading>Measurement of {{ taskKey === 'MEASUREMENT_CO2' ? 'CO2' : 'N2O' }} emissions</app-page-heading>
+  <div *ngIf="aer$ | async as aer">
+    <ng-container *ngIf="(emissionPointEmissions$ | async)?.length > 0; else emptyMeasurement">
+      <p class="govuk-body">
+        Complete each section of the table summarizing the emissions from each entry. The table contains the individual
+        emission points and their emissions sources that are currently in your approved monitoring plan.
+      </p>
+
+      <app-measurement-group
+        [data]="aer"
+        [statuses]="statuses$ | async"
+        [taskKey]="taskKey"
+        [isReview]="false"
+      ></app-measurement-group>
+
+      <div *ngIf="isEditable$ | async" class="govuk-button-group" id="nonEmptyMeasurement">
+        <a
+          [routerLink]="['./', (emissionPointEmissions$ | async).length, 'emission-network']"
+          govukSecondaryButton
+          type="button"
+        >
+          Add another entry
+        </a>
+      </div>
+    </ng-container>
+  </div>
+  <ng-template #emptyMeasurement>
+    <p class="govuk-body">
+      Complete each section of the table summarizing the emissions from each entry. The table contains the individual
+      emission points and their emissions sources that are currently in your approved monitoring plan.
+    </p>
+    <div *ngIf="isEditable$ | async" class="govuk-button-group" id="emptyMeasurement">
+      <a routerLink="./0/emission-network" govukButton type="button">Add a new entry</a>
+    </div>
+  </ng-template>
+  <app-return-link></app-return-link>
+</app-aer-task>

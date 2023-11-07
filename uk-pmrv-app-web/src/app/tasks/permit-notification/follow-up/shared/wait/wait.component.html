@@ -1,0 +1,80 @@
+<ng-container *ngIf="store.requestTaskType$ | async as taskType">
+  <govuk-notification-banner *ngIf="notification" type="success">
+    <h1 class="govuk-notification-banner__heading">Details updated</h1>
+  </govuk-notification-banner>
+  <app-base-task-container-component
+    [header]="(route.data | async)?.pageTitle"
+    [customContentTemplate]="customContentTemplate"
+    [expectedTaskType]="taskType"
+    *ngIf="
+      ['PERMIT_NOTIFICATION_WAIT_FOR_FOLLOW_UP', 'PERMIT_NOTIFICATION_FOLLOW_UP_WAIT_FOR_AMENDS'].includes(taskType)
+    "
+  >
+  </app-base-task-container-component>
+
+  <ng-template #customContentTemplate>
+    <div *ngIf="taskType === 'PERMIT_NOTIFICATION_WAIT_FOR_FOLLOW_UP'; else amendsTemplate">
+      <app-follow-up-summary
+        class="govuk-!-margin-bottom-8 govuk-!-display-block"
+        [data]="data$ | async"
+        [sectionHeading]="(route.data | async)?.caption"
+        [summaryListMapper]="followUpSummaryListMapper"
+        [allowChange]="isEditable$ | async"
+      ></app-follow-up-summary>
+    </div>
+    <ng-template #amendsTemplate>
+      <govuk-warning-text> Waiting for operator amends </govuk-warning-text>
+      <app-follow-up-summary
+        class="govuk-!-display-block"
+        [data]="amendsData$ | async"
+        [sectionHeading]="(route.data | async)?.caption"
+        [summaryListMapper]="amendsSummaryListMapper"
+        [allowChange]="isEditable$ | async"
+        [files]="amendsFiles$ | async"
+      ></app-follow-up-summary>
+
+      <ng-container *ngIf="amendsReviewDecisionData$ | async as reviewDecision">
+        <h2 app-summary-header class="govuk-heading-m">Decision details</h2>
+        <dl govuk-summary-list>
+          <ng-container *ngIf="$any(reviewDecision).details?.requiredChanges?.length > 0">
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Ammends needed for follow up response</dt>
+
+              <dd govukSummaryListRowValue>
+                <ng-container
+                  *ngFor="
+                    let requiredChange of $any(reviewDecision).details.requiredChanges;
+                    let i = index;
+                    let isLast = last
+                  "
+                >
+                  <div class="pre-wrap">
+                    {{ i + 1 }}. {{ requiredChange.reason }} <br />
+                    <ng-container *ngIf="requiredChange?.files?.length > 0">
+                      <app-summary-download-files
+                        [files]="permitNotificationService.getDownloadUrlFiles(requiredChange?.files)"
+                      >
+                      </app-summary-download-files>
+                    </ng-container>
+                  </div>
+                  <br *ngIf="!isLast" />
+                </ng-container>
+              </dd>
+              <dd govukSummaryListRowActions></dd>
+            </div>
+          </ng-container>
+
+          <div govukSummaryListRow *ngIf="reviewDecision?.details?.dueDate">
+            <dt govukSummaryListRowKey>Due date</dt>
+            <dd govukSummaryListRowValue>
+              {{ reviewDecision.details.dueDate | govukDate }}
+            </dd>
+            <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+              <a govukLink [routerLink]="['./due-date']" [state]="{ changing: true }"> Change </a>
+            </dd>
+          </div>
+        </dl>
+      </ng-container>
+    </ng-template>
+  </ng-template>
+</ng-container>

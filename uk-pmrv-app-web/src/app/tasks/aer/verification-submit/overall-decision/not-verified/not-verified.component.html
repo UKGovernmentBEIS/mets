@@ -1,0 +1,22 @@
+<app-aer-task-review heading="Why can you not verify the report?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">Select all that apply</p>
+    <div formControlName="type" govuk-checkboxes>
+      <govuk-checkbox
+        *ngFor="let type of notOverallVerificationReasonTypes"
+        [value]="type"
+        [label]="type | notVerifiedReasonType"
+      ></govuk-checkbox>
+      <govuk-checkbox [value]="'ANOTHER_REASON'" label="some other reason">
+        <ng-container govukConditionalContent>
+          <div formControlName="otherReason" govuk-textarea [maxLength]="10000" label="Provide a reason"></div>
+        </ng-container>
+      </govuk-checkbox>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

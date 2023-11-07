@@ -1,0 +1,48 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="formGroup"
+  [heading]="heading"
+  submitText="Continue"
+  [hideSubmit]="isEditable === false"
+>
+  <app-verification-recommendation-item [verificationDataItem]="verificationDataItem">
+  </app-verification-recommendation-item>
+  <app-operator-response-item
+    [reference]="verificationDataItem.reference"
+    [operatorImprovementResponse]="operatorImprovementResponse"
+    [attachedFiles]="attachedFiles"
+    [isEditable]="false"
+    [isReview]="true"
+    [isAviation]="isAviation"
+  >
+  </app-operator-response-item>
+
+  <div formControlName="improvementRequired" govuk-radio legend="Is the improvement required?" legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="improvementDeadline"
+          govuk-date-input
+          label="Deadline for improvement to be completed"
+          [isRequired]="true"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+  <div
+    formControlName="improvementComments"
+    govuk-textarea
+    label="Comments on the improvement (Optional)"
+    labelSize="medium"
+    [maxLength]="10000"
+  ></div>
+  <div
+    formControlName="operatorActions"
+    govuk-textarea
+    label="Actions for the operator"
+    hint="This will appear in their account"
+    labelSize="medium"
+    [maxLength]="10000"
+  ></div>
+</app-wizard-step>

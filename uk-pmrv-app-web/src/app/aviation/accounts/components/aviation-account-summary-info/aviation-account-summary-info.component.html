@@ -1,0 +1,64 @@
+<dl govuk-summary-list *ngIf="summaryInfo">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Operator name</dt>
+    <dd govukSummaryListRowValue>{{ summaryInfo.name }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="[formRouterLink]">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Scheme</dt>
+    <dd govukSummaryListRowValue>{{ summaryInfo.emissionTradingScheme | etsName }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="[formRouterLink]">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow *ngIf="withRegistryId">
+    <dt govukSummaryListRowKey>UK ETS registry ID</dt>
+    <dd govukSummaryListRowValue>{{ summaryInfo.registryId }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="[formRouterLink]">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>SOP ID</dt>
+    <dd govukSummaryListRowValue>{{ summaryInfo.sopId }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="[formRouterLink]">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>CRCO code</dt>
+    <dd govukSummaryListRowValue>{{ summaryInfo.crcoCode }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="[formRouterLink]">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>First known aviation activity</dt>
+    <dd govukSummaryListRowValue>{{ summaryInfo.commencementDate | govukDate }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="[formRouterLink]">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Contact address</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngIf="summaryInfo.location">
+        <div>
+          {{ $any(summaryInfo.location).line1
+          }}<ng-container *ngIf="$any(summaryInfo.location).line2"
+            >, {{ $any(summaryInfo.location).line2 }}
+          </ng-container>
+        </div>
+        <div>{{ $any(summaryInfo.location).city }}</div>
+        <div>{{ $any(summaryInfo.location).state }}</div>
+        <div>{{ $any(summaryInfo.location).postcode }}</div>
+        <div>{{ $any(summaryInfo.location).country | country }}</div>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a *ngIf="isAddressEditable" govukLink [routerLink]="[formRouterLink]">Change</a>
+    </dd>
+  </div>
+</dl>

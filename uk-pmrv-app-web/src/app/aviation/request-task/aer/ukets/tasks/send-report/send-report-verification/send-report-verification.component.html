@@ -1,0 +1,15 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>Send report for verification</app-page-heading>
+  <div class="govuk-heading-m">
+    Current verifier
+    <p class="govuk-body">{{ vm.assignedVerifier }}</p>
+  </div>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    By selecting ‘Confirm and send’ you confirm that the information in your report is correct to the best of your
+    knowledge.
+  </p>
+  <div class="govuk-button-group" *ngIf="!vm.submitHidden">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and send</button>
+  </div>
+  <app-return-to-link></app-return-to-link>
+</ng-container>

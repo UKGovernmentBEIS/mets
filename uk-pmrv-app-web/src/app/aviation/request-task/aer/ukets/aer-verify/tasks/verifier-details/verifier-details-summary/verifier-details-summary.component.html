@@ -1,0 +1,22 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <app-aer-verifier-details-group-form
+    [isEditable]="vm.isEditable"
+    [verificationReport]="vm.verificationReportData"
+    [changeUrlQueryParams]="{ change: true }"
+  ></app-aer-verifier-details-group-form>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-aviation-aer-verification-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="verificationReport"
+  ></app-aviation-aer-verification-review-decision-group>
+</ng-container>
+
+<app-return-to-link></app-return-to-link>

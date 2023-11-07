@@ -1,0 +1,94 @@
+<ng-container
+  *ngIf="(isEditable$ | async) && canEdit && (isOnEditState || (isOnEditByDefaultState$ | async)); else viewDecision"
+>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <govuk-error-summary *ngIf="isErrorSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+
+    <div>
+      <h3 #conditionalHeaderAccepted class="govuk-heading-s">List changes to include in the variation schedule</h3>
+      <p class="govuk-body">The operator will see these in the official notice.</p>
+    </div>
+
+    <div formArrayName="variationScheduleItems">
+      <fieldset
+        *ngFor="let variationScheduleItem of variationScheduleItems.controls; index as i"
+        [formGroupName]="i"
+        [disabled]="(store.isEditable$ | async) === false"
+        govukFieldset
+        id="variation-schedule-items-{{ i }}"
+      >
+        <legend class="govuk-heading-s">Item {{ i + 1 }}</legend>
+        <button
+          (click)="variationScheduleItems.removeAt(i)"
+          *ngIf="variationScheduleItems.length > 0"
+          [disabled]="(store.isEditable$ | async) === false"
+          [heading]="conditionalHeaderAccepted"
+          appAddAnother
+          govukSecondaryButton
+          type="button"
+          #removeButton
+        >
+          Remove
+        </button>
+        <div govuk-textarea [maxLength]="10000" formControlName="item"></div>
+      </fieldset>
+
+      <button
+        (click)="addOtherVariationScheduleItem()"
+        [disabled]="(store.isEditable$ | async) === false"
+        govukSecondaryButton
+        type="button"
+      >
+        Add <ng-container *ngIf="variationScheduleItems.length > 0"> <span>another</span> </ng-container> item
+      </button>
+    </div>
+
+    <div
+      govuk-textarea
+      [maxLength]="10000"
+      formControlName="notes"
+      label="Notes"
+      hint="The operator cannot view this"
+    ></div>
+    <button appPendingButton govukButton type="submit">Confirm</button>
+  </form>
+</ng-container>
+
+<ng-template #viewDecision>
+  <h2
+    app-summary-header
+    class="govuk-heading-m"
+    (changeClick)="isOnEditState = true"
+    [changeRoute]="(isEditable$ | async) && canEdit ? '.' : null"
+  >
+    Decision Summary
+  </h2>
+  <dl
+    govuk-summary-list
+    class="govuk-summary-list--no-border summary-list--edge-border"
+    *ngIf="groupKey | reviewGroupVariation | async as reviewDecision"
+  >
+    <ng-container *ngIf="$any(reviewDecision)?.variationScheduleItems?.length > 0">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          <ng-container
+            *ngFor="
+              let variationScheduleItem of $any(reviewDecision).variationScheduleItems;
+              let i = index;
+              let isLast = last
+            "
+          >
+            <div>{{ i + 1 }}. {{ variationScheduleItem }} <br /></div>
+            <br *ngIf="!isLast" />
+          </ng-container>
+        </dd>
+      </div>
+    </ng-container>
+
+    <div govukSummaryListRow *ngIf="reviewDecision?.notes">
+      <dt govukSummaryListRowKey>Notes</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ reviewDecision.notes }}</dd>
+    </div>
+  </dl>
+</ng-template>

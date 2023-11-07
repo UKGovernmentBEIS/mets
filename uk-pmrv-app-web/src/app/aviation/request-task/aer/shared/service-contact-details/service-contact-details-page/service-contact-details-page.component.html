@@ -1,0 +1,24 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ 'serviceContactDetails' | i18nSelect: aerHeaderTaskMap }}</app-page-heading>
+
+  <p class="govuk-body">
+    <span>
+      You can change this information in the
+      <a govukLink [routerLink]="['/aviation/accounts', vm.accountId]"> account section </a>
+    </span>
+  </p>
+
+  <app-service-contact-details-summary-template
+    [data]="vm.contactDetails"
+  ></app-service-contact-details-summary-template>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" govukButton *ngIf="!vm.hideSubmit" type="submit">Confirm and complete</button>
+  </div>
+
+  <app-aviation-aer-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="serviceContactDetails"
+  ></app-aviation-aer-review-decision-group>
+</ng-container>
+<app-return-to-link></app-return-to-link>

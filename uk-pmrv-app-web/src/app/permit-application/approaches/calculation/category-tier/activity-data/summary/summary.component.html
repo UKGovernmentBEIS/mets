@@ -1,0 +1,39 @@
+<ng-container
+  *ngIf="('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async] as tier"
+>
+  <app-permit-task
+    [notification]="notification"
+    [breadcrumb]="[
+      { text: 'CALCULATION_CO2' | monitoringApproachDescription, link: ['calculation'] },
+      { text: tier | sourceStreamCategoryName | async, link: ['calculation', 'category-tier', index$ | async] }
+    ]"
+  >
+    <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+    <app-page-heading
+      caption="{{ 'CALCULATION_CO2' | monitoringApproachDescription }}, {{ tier | sourceStreamCategoryName | async }}"
+      >Activity Data</app-page-heading
+    >
+    <p class="govuk-body">
+      Get help with <a routerLink="../help" target="_blank" govukLink>applying tiers to activity data</a>
+    </p>
+    <p class="govuk-body">
+      Get help with
+      <a
+        href="https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/1089944/uk_ets_guidance_note_uncertainty_assessments_for_installations.pdf"
+        target="_blank"
+        rel="noreferrer noopener"
+      >
+        UK ETS guidance note: Uncertainty assessments for installations
+      </a>
+    </p>
+
+    <app-activity-data-summary-overview
+      [isChangeLinkAvailable]="(store.isEditable$ | async) === true"
+      [activityDataSectionHasBottomBorder]="true"
+      [justificationSectionHasBottomBorder]="!tier?.activityData?.isHighestRequiredTier"
+      [validMeasurementDevicesOrMethodsError]="form.errors?.validMeasurementDevicesOrMethods"
+    ></app-activity-data-summary-overview>
+
+    <a govukLink routerLink="../.."> Return to: {{ tier | sourceStreamCategoryName | async }} </a>
+  </app-permit-task>
+</ng-container>

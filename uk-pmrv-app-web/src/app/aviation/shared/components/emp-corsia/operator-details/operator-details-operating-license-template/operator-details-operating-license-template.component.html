@@ -1,0 +1,27 @@
+<app-wizard-step
+  (formSubmit)="submitForm.next(form)"
+  [formGroup]="form"
+  heading="Operating licence"
+  submitText="Continue"
+>
+  <div formControlName="licenseExist" legend="Do you have an operating licence?" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes">
+      <div govukConditionalContent>
+        <div
+          formControlName="licenseNumber"
+          govuk-text-input
+          label="Operating licence number"
+          widthClass="govuk-!-width-two-thirds"
+        ></div>
+        <div
+          [options]="issuingAuthorityOptions"
+          formControlName="issuingAuthority"
+          govuk-select
+          label="Issuing authority"
+          widthClass="govuk-!-width-two-thirds"
+        ></div>
+      </div>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+  </div>
+</app-wizard-step>

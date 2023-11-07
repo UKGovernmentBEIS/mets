@@ -1,0 +1,26 @@
+<ng-container
+  *ngIf="opinionStatement.operatorEmissionsAcceptable === false && opinionStatement.monitoringApproachTypeEmissions"
+>
+  <h2 class="govuk-heading-m">Emissions reported by the verifier</h2>
+  <govuk-table [columns]="columns" [data]="reportableEmissionRows">
+    <ng-template let-column="column" let-row="row">
+      <ng-container [ngSwitch]="column.field">
+        <ng-container *ngSwitchCase="'emissions'">
+          {{ row[column.field] }} {{ row.label !== 'Total' ? 't' : 'tCO2e' }}
+        </ng-container>
+        <ng-container *ngSwitchCase="'biomass'">
+          {{ row[column.field] }}
+          <ng-container *ngIf="row[column.field]">{{ row.label !== 'Total' ? 't' : 'tCO2e' }}</ng-container>
+        </ng-container>
+        <ng-container *ngSwitchCase="'action'">
+          <ng-container *ngIf="isEditable">
+            <a *ngIf="row[column.field]" [routerLink]="row[column.field]" govukLink>Change</a>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          {{ row[column.field] }}
+        </ng-container>
+      </ng-container>
+    </ng-template>
+  </govuk-table>
+</ng-container>

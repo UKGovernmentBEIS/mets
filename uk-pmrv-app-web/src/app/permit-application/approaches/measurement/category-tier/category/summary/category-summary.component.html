@@ -1,0 +1,50 @@
+<ng-container
+  *ngIf="
+    ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]
+      .emissionPointCategory as emissionPointCategory
+  "
+>
+  <app-permit-task
+    *ngIf="emissionPointCategory.emissionPoint | findEmissionPoint | async as emissionPoint"
+    [notification]="notification"
+    [breadcrumb]="[
+      {
+        text: 'MEASUREMENT_CO2' | monitoringApproachDescription,
+        link: ['measurement']
+      },
+      {
+        text: emissionPoint | tierEmissionPointName: emissionPointCategory,
+        link: ['measurement', 'category-tier', index$ | async]
+      }
+    ]"
+  >
+    <app-page-heading [caption]="'MEASUREMENT_CO2' | monitoringApproachDescription"
+      >Emission point category</app-page-heading
+    >
+
+    <div class="govuk-body">
+      <p>Define an emission point category by linking an emission point with its emission source.</p>
+      <p>
+        You must include the amount of carbon dioxide (CO2) or carbon dioxide equivalent (CO2e) this emission point
+        category emits and the applied monitoring approach being used at the installation.
+      </p>
+    </div>
+
+    <h2
+      app-summary-header
+      [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
+      class="govuk-heading-m"
+    >
+      <span class="govuk-visually-hidden">Emission point category</span>
+    </h2>
+
+    <app-category-summary-overview
+      [emissionPointCategory]="emissionPointCategory"
+      cssClass="summary-list--edge-border"
+    ></app-category-summary-overview>
+    <a govukLink routerLink="../..">
+      Return to:
+      {{ emissionPoint | tierEmissionPointName: emissionPointCategory }}
+    </a>
+  </app-permit-task>
+</ng-container>

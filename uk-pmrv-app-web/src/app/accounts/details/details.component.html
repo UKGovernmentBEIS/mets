@@ -1,0 +1,248 @@
+<ng-container *ngIf="currentTab === 'details'">
+  <ng-container *ngIf="permit$ | async as permit">
+    <h2 class="govuk-heading-m">Active permit</h2>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Downloadable version</dt>
+        <dd govukSummaryListRowValue>
+          <p>
+            <a [routerLink]="['permit', permit.id, 'document', permit.fileDocument?.uuid]" govukLink target="_blank">
+              {{ permit.fileDocument?.name }}
+            </a>
+          </p>
+          <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span>Attached documents</span>
+            </summary>
+            <div class="govuk-details__text">
+              <ul class="govuk-list">
+                <li *ngFor="let permitAttachment of permit.permitAttachments | keyvalue">
+                  <a [routerLink]="['permit', permit.id, 'attachment', permitAttachment.key]" govukLink target="_blank">
+                    {{ permitAttachment.value }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </details>
+        </dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Activation date</dt>
+        <dd govukSummaryListRowValue>{{ permit.activationDate | govukDate }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Permit ID</dt>
+        <dd govukSummaryListRowValue>{{ permit.id }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <ng-container *ngIf="account$ | async as account">
+    <h2 class="govuk-heading-m">Installation details</h2>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Installation name</dt>
+        <dd govukSummaryListRowValue>{{ account.name }}</dd>
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)"
+            ><a govukLink routerLink="edit/name">Change</a></ng-container
+          >
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Site name</dt>
+        <dd govukSummaryListRowValue>{{ account.siteName }}</dd>
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)"
+            ><a govukLink routerLink="edit/site-name">Change</a></ng-container
+          >
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>UK ETS Registry ID</dt>
+        <dd govukSummaryListRowValue>{{ account.registryId }}</dd>
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)">
+            <a govukLink routerLink="edit/registry-id">Change</a>
+          </ng-container>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>SOP ID</dt>
+        <dd govukSummaryListRowValue>{{ account.sopId }}</dd>
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)">
+            <a govukLink routerLink="edit/sop-id">Change</a>
+          </ng-container>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Installation Emitter Type</dt>
+        <dd govukSummaryListRowValue>{{ account.emitterType }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Installation Category</dt>
+        <dd govukSummaryListRowValue>{{ account.installationCategory | installationCategory }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Subsistence category</dt>
+        <dd govukSummaryListRowValue>{{ account.subsistenceCategory }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Application type</dt>
+        <dd govukSummaryListRowValue>{{ account.applicationType | applicationType }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <div govukSummaryListRow *ngIf="account.transferCode">
+        <dt govukSummaryListRowKey>Transfer code</dt>
+        <dd govukSummaryListRowValue>{{ account.transferCode }}</dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+      <div govukSummaryListRow>
+        <ng-container *ngIf="account.location.type === 'ONSHORE'; else offshoreDetails">
+          <dt govukSummaryListRowKey>Installation address</dt>
+          <dd govukSummaryListRowValue>
+            <div>{{ $any(account.location)?.gridReference }}</div>
+            <div>
+              {{ $any(account.location).address.line1
+              }}<ng-container *ngIf="$any(account.location).address.line2"
+                >, {{ $any(account.location).address.line2 }}
+              </ng-container>
+            </div>
+            <div>{{ $any(account.location).address.city }}</div>
+            <div>{{ $any(account.location).address.postcode }}</div>
+            <div>{{ $any(account.location).address.country | country }}</div>
+          </dd>
+        </ng-container>
+
+        <ng-template #offshoreDetails>
+          <dt govukSummaryListRowKey>Coordinates</dt>
+          <dd govukSummaryListRowValue>
+            <div>Latitude</div>
+            <div>{{ $any(account.location).latitude | coordinate }}</div>
+            <div>Longitude</div>
+            <div>{{ $any(account.location).longitude | coordinate }}</div>
+          </dd>
+        </ng-template>
+
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)"
+            ><a govukLink routerLink="edit/address">Change</a></ng-container
+          >
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Received free allocation?</dt>
+        <dd govukSummaryListRowValue>{{ account.faStatus ? 'Yes' : 'No' }}</dd>
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)">
+            <a govukLink routerLink="edit/fa-status">Change</a>
+          </ng-container>
+        </dd>
+      </div>
+    </dl>
+
+    <h2 class="govuk-heading-m">Organisation details</h2>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Operator name</dt>
+        <dd govukSummaryListRowValue>{{ account.legalEntity.name }}</dd>
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)">
+            <a govukLink routerLink="edit/legal-entity">Change</a>
+          </ng-container>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Legal status</dt>
+        <dd govukSummaryListRowValue>{{ account.legalEntity.type | legalEntityType }}</dd>
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)">
+            <a govukLink routerLink="edit/legal-entity">Change</a>
+          </ng-container>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Company registration number</dt>
+        <dd govukSummaryListRowValue>{{ account.legalEntity.referenceNumber }}</dd>
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)">
+            <a govukLink routerLink="edit/legal-entity">Change</a>
+          </ng-container>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Operator address</dt>
+        <dd govukSummaryListRowValue>
+          <div>
+            {{ account.legalEntity.address.line1
+            }}<ng-container *ngIf="account.legalEntity.address.line2"
+              >, {{ account.legalEntity.address.line2 }}
+            </ng-container>
+          </div>
+          <div>{{ account.legalEntity.address.city }}</div>
+          <div>{{ account.legalEntity.address.postcode }}</div>
+          <div>{{ account.legalEntity.address.country | country }}</div>
+        </dd>
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)">
+            <a govukLink routerLink="edit/legal-entity">Change</a>
+          </ng-container>
+        </dd>
+      </div>
+      <ng-container *ngIf="account.legalEntity.holdingCompany as hc; else noHoldingCompanyTpl">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Holding company name</dt>
+          <dd govukSummaryListRowValue>{{ hc.name }}</dd>
+          <dd govukSummaryListRowActions>
+            <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)">
+              <a govukLink routerLink="edit/legal-entity">Change</a>
+            </ng-container>
+          </dd>
+        </div>
+        <div govukSummaryListRow *ngIf="hc.registrationNumber">
+          <dt govukSummaryListRowKey>Holding company registration number</dt>
+          <dd govukSummaryListRowValue>{{ hc.registrationNumber }}</dd>
+          <dd govukSummaryListRowActions>
+            <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)">
+              <a govukLink routerLink="edit/legal-entity">Change</a>
+            </ng-container>
+          </dd>
+        </div>
+        <div govukSummaryListRow *ngIf="hc.address">
+          <dt govukSummaryListRowKey>Holding company address</dt>
+          <dd govukSummaryListRowValue>
+            <div>
+              {{ hc.address.line1 }}
+              <ng-container *ngIf="hc.address.line2"> , {{ hc.address.line2 }} </ng-container>
+            </div>
+            <div>{{ hc.address.city }}</div>
+            <div>{{ hc.address.postcode }}</div>
+          </dd>
+          <dd govukSummaryListRowActions>
+            <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)">
+              <a govukLink routerLink="edit/legal-entity">Change</a>
+            </ng-container>
+          </dd>
+        </div>
+      </ng-container>
+      <ng-template #noHoldingCompanyTpl>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Does this organisation belong to a holding company?</dt>
+          <dd govukSummaryListRowValue>No</dd>
+          <dd govukSummaryListRowActions>
+            <ng-container *ngIf="(userRoleType$ | async) === 'REGULATOR' && canChangeByStatus(account.status)">
+              <a govukLink routerLink="edit/legal-entity">Change</a>
+            </ng-container>
+          </dd>
+        </div>
+      </ng-template>
+    </dl>
+  </ng-container>
+</ng-container>

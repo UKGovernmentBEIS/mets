@@ -1,0 +1,77 @@
+<h2 class="govuk-heading-m">CERT</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Other than for data gaps, did you use the CORSIA CO2 estimation and reporting tool (CERT)
+      for your monitoring approach?
+    </dt>
+    <dd govukSummaryListRowValue>
+      {{ data.certUsed ? 'Yes' : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+  <ng-container *ngIf="data?.certDetails">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Which type of flights have you used the CERT for?</dt>
+      <dd govukSummaryListRowValue>
+        {{ data.certDetails.flightType | certDetailsFlightType }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../cert-usage'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Which version of the CERT did you use?</dt>
+      <dd govukSummaryListRowValue>
+        {{ data.certDetails.publicationYear }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../cert-usage'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+  </ng-container>
+</dl>
+
+<ng-container *ngIf="data?.fuelUseMonitoringDetails">
+  <h2 class="govuk-heading-m">Fuel use monitoring</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Which fuel density type was used to determine fuel uplift in the reporting year?</dt>
+      <dd govukSummaryListRowValue>
+        {{ data.fuelUseMonitoringDetails.fuelDensityType | fuelDensityType }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../fuel-usage'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="data.fuelUseMonitoringDetails?.identicalToProcedure !== null">
+      <dt govukSummaryListRowKey>Is the application of density data identical to the procedure used for operational and
+        safety reasons in the emissions monitoring plan?
+      </dt>
+      <dd govukSummaryListRowValue>
+        {{ data.fuelUseMonitoringDetails.identicalToProcedure ? 'Yes' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../fuel-usage'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="data.fuelUseMonitoringDetails?.blockHourUsed !== null">
+      <dt govukSummaryListRowKey>Was fuel allocation by block hour used during the reporting year?</dt>
+      <dd govukSummaryListRowValue>
+        {{ data.fuelUseMonitoringDetails.blockHourUsed ? 'Yes' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../fuel-usage'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="data?.fuelUseMonitoringDetails?.aircraftTypeDetails">
+  <h2 app-summary-header class="govuk-heading-m" [changeRoute]="isEditable ? '../fuel-allocation-block-hour' : null"
+      [queryParams]="{ change: true }">Fuel allocation by block hour</h2>
+  <app-aircraft-fuel-burn-ratio-table
+    [aviationAerCorsiaAircraftTypeDetails]="data?.fuelUseMonitoringDetails?.aircraftTypeDetails"></app-aircraft-fuel-burn-ratio-table>
+</ng-container>
+

@@ -1,0 +1,15 @@
+<div *ngIf="vm$ | async as vm" class="govuk-!-width-two-thirds">
+  <h2 class="govuk-heading-l">Add a non-conformity from the previous year that has not been resolved</h2>
+
+  <app-verifier-comment-group
+    [isEditable]="vm.isEditable"
+    [verifierComments]="vm.verifierComments"
+    [queryParams]="{ change: true }"
+  ></app-verifier-comment-group>
+
+  <div class="govuk-button-group" *ngIf="vm.verifierComments?.length > 0">
+    <button *ngIf="vm.isEditable" govukButton (click)="onSubmit()" type="button">Continue</button>
+  </div>
+</div>
+
+<app-return-to-link></app-return-to-link>

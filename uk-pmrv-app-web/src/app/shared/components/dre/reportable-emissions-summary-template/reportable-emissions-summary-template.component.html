@@ -1,0 +1,22 @@
+<govuk-table [columns]="columns" [data]="emissions">
+  <ng-template let-column="column" let-row="row" let-index="index">
+    <ng-container [ngSwitch]="column.field">
+      <ng-container *ngSwitchCase="'label'">
+        <strong>{{ row.label }}</strong>
+      </ng-container>
+      <ng-container *ngSwitchCase="'reportableEmissions'">
+        {{ row.reportableEmissions }} {{ row.label === 'Total' ? ' tCO2e' : ' t' }}
+      </ng-container>
+      <ng-container *ngSwitchCase="'sustainableBiomass'">
+        {{ row.sustainableBiomass }}{{ row.sustainableBiomass ? (row.label === 'Total' ? ' tCO2e' : ' t') : '' }}
+      </ng-container>
+      <ng-container *ngSwitchCase="'editBtn'">
+        <ng-container *ngIf="row.label !== 'Total' && editable">
+          <a govukLink [routerLink]="['..', 'reportable-emissions']" [state]="{ changing: true }"
+            >Change</a
+          ></ng-container
+        >
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</govuk-table>

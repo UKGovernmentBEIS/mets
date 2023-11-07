@@ -1,0 +1,62 @@
+<app-base-action-container-component
+  [header]="'Batch variation completed'"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="['REISSUE_COMPLETED']"
+>
+</app-base-action-container-component>
+
+<ng-template #customContentTemplate>
+  <p class="govuk-heading-m">Batch variation details</p>
+  <dl govuk-summary-list>
+    <ng-container>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Created by</dt>
+        <dd govukSummaryListRowValue>
+          {{ (payload$ | async).submitter }}
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Date created</dt>
+        <dd govukSummaryListRowValue>
+          {{ (action$ | async).creationDate | govukDate }}
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Signatory</dt>
+        <dd govukSummaryListRowValue>
+          {{ (payload$ | async).signatoryName }}
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Documents</dt>
+        <dd govukSummaryListRowValue>
+          <a
+            [routerLink]="[
+              '/actions',
+              (action$ | async).id,
+              'file-download',
+              'document',
+              (payload$ | async).officialNotice.uuid
+            ]"
+            govukLink
+            target="_blank"
+            >{{ (payload$ | async).officialNotice.name }}</a
+          >
+          <br />
+          <a
+            [routerLink]="[
+              '/actions',
+              (action$ | async).id,
+              'file-download',
+              'document',
+              (payload$ | async).document.uuid
+            ]"
+            govukLink
+            target="_blank"
+            >{{ (payload$ | async).document.name }}</a
+          >
+        </dd>
+      </div>
+    </ng-container>
+  </dl>
+</ng-template>

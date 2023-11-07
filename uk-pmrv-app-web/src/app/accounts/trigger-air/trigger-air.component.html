@@ -1,0 +1,22 @@
+<ng-container *ngIf="(isAirInitialized$ | async) === false; else initialized">
+  <app-page-heading>Trigger Annual improvement report</app-page-heading>
+  <p class="govuk-body">Are you sure you want to trigger an Annual improvement report for this installation?</p>
+  <govuk-warning-text assistiveText="Warning">You cannot undo this action</govuk-warning-text>
+  <div class="govuk-button-group">
+    <button govukButton appPendingButton type="button" (click)="onInitialize()">Confirm</button>
+  </div>
+  <a govukLink [routerLink]="['/dashboard']">Return to your tasks</a>
+</ng-container>
+<ng-template #initialized>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="Annual improvement report triggered"
+        >Your reference code is:<br />
+        {{ requestId$ | async }}</govuk-panel
+      >
+      <h3 class="govuk-heading-m">What happens next</h3>
+      <p class="govuk-body">The operator must now complete their Annual improvement report.</p>
+      <a govukLink [routerLink]="['/dashboard']">Return to your tasks</a>
+    </div>
+  </div>
+</ng-template>

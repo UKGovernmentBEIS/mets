@@ -1,0 +1,23 @@
+<ng-container *ngIf="action$ | async as action">
+  <govuk-notification-banner type="neutral">
+    <h1 class="govuk-notification-banner__heading">Permit transfer started by {{ action.submitter }}</h1>
+    <a
+      [routerLink]="['/actions', action.id, 'permit-transfer-a', 'submitted']"
+      govukLink
+      class="govuk-notification-banner__link"
+    >
+      View details
+    </a>
+  </govuk-notification-banner>
+
+  <app-base-task-container-component
+    header="Full transfer of permit"
+    [customContentTemplate]="customContentTemplate"
+    expectedTaskType="PERMIT_TRANSFER_A_WAIT_FOR_TRANSFER"
+  >
+  </app-base-task-container-component>
+
+  <ng-template #customContentTemplate>
+    <govuk-warning-text> Application is being reviewed by the new operator </govuk-warning-text>
+  </ng-template>
+</ng-container>

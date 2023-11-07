@@ -1,0 +1,31 @@
+<app-permit-task
+  [notification]="notification"
+  [breadcrumb]="[{ text: 'TRANSFERRED_CO2_N2O' | monitoringApproachDescription, link: ['transferred-co2'] }]"
+>
+  <app-page-heading [caption]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription">{{
+    taskKey$ | async | i18nSelect: headingMap
+  }}</app-page-heading>
+  <h2
+    app-summary-header
+    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
+    class="govuk-heading-m"
+  >
+    <span class="govuk-visually-hidden">{{ taskKey$ | async | i18nSelect: headingMap }}</span>
+  </h2>
+
+  <ng-container *ngIf="'TRANSFERRED_CO2_N2O' | monitoringApproachTask | async as task">
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>What approach is used to monitor the transport network?</dt>
+        <dd govukSummaryListRowValue>
+          {{ task.monitoringTransportNetworkApproach | transportApproachDescription }}
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <app-approach-return-link
+    [parentTitle]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+    reviewGroupUrl="transferred-co2"
+  ></app-approach-return-link>
+</app-permit-task>

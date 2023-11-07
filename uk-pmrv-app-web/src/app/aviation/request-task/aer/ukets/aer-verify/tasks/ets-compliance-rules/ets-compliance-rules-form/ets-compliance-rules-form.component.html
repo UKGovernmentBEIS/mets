@@ -1,0 +1,418 @@
+<!-- MonitoringPlanRequirementsGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">
+  Have the emissions monitoring plan requirements and conditions been met?
+</h2>
+
+<p class="govuk-body govuk-!-width-three-quarters">
+  You must assess whether the aircraft operator has met the requirements of the approved emissions monitoring plan,
+  especially relating to the emissions report.
+</p>
+
+<div formControlName="monitoringPlanRequirementsMet" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="monitoringPlanRequirementsNotMetReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- UkEtsOrderRequirementsGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">
+  Have the requirements of the UK ETS Order, which amends the MRR, been met?
+</h2>
+
+<p class="govuk-body govuk-!-width-three-quarters">
+  You must assess if the aircraft operator has met the requirements of the
+  <a href="https://www.legislation.gov.uk/uksi/2020/1265/contents" target="_blank" rel="noreferrer noopener">
+    UK ETS Order </a
+  >.
+</p>
+
+<div formControlName="ukEtsOrderRequirementsMet" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="ukEtsOrderRequirementsNotMetReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- DetailSourceDataVerifiedGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">Can you verify the detail and source of data?</h2>
+
+<govuk-details summary="See guidance">
+  <article>
+    <p class="govuk-body">You should carry out detailed testing which at minimum covers:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>analytical procedures</li>
+      <li>data verification</li>
+      <li>checking the monitoring approach</li>
+      <li>checking the data flow activities and the systems used, including IT systems</li>
+    </ul>
+
+    <p class="govuk-body">
+      As part of this data verification, whilst checking the aircraft operator’s emissions monitoring plan and
+      procedures, you’ll need to:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>trace the data back to the primary data source</li>
+      <li>cross check data with external data sources</li>
+      <li>perform reconciliations</li>
+      <li>check thresholds for appropriate data</li>
+      <li>carry out recalculations</li>
+    </ul>
+  </article>
+</govuk-details>
+
+<div formControlName="detailSourceDataVerified" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="partOfSiteVerification"
+        govuk-textarea
+        label="Was this part of site verification?"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="detailSourceDataNotVerifiedReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- ControlActivitiesDocumentedGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">
+  Were control activities documented, implemented, maintained and effective to reduce any risks?
+</h2>
+
+<govuk-details summary="See guidance">
+  <article>
+    <p class="govuk-body">You should carry out detailed testing which at minimum covers:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>analytical procedures</li>
+      <li>data verification</li>
+      <li>checking the monitoring approach</li>
+    </ul>
+
+    <p class="govuk-body">
+      You should also check that the control activities are well documented, implemented and maintained, and are
+      effectively reducing any inherent risks.
+    </p>
+  </article>
+</govuk-details>
+
+<div formControlName="controlActivitiesDocumented" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="controlActivitiesNotDocumentedReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- ProceduresMonitoringPlanGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">
+  Were procedures in the emissions monitoring plan documented, implemented, maintained and effective to reduce risks?
+</h2>
+
+<govuk-details summary="See guidance">
+  <article>
+    <p class="govuk-body">
+      To ensure that the emissions monitoring plan is implemented correctly, you need to check that the procedures in it
+      are effectively reducing the inherent risks and control risks.
+    </p>
+
+    <p class="govuk-body">The procedures must be:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>implemented correctly</li>
+      <li>documented correctly</li>
+      <li>maintained properly</li>
+    </ul>
+  </article>
+</govuk-details>
+
+<div formControlName="proceduresMonitoringPlanDocumented" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="proceduresMonitoringPlanNotDocumentedReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- DataVerificationCompletedGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">Has data verification been completed as required?</h2>
+
+<govuk-details summary="See guidance">
+  <article>
+    <p class="govuk-body">You must test the data in detail. This means you have to:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>trace all data back to its primary source</li>
+      <li>cross-check data with external sources</li>
+      <li>make reconciliations and recalculations</li>
+      <li>check thresholds for appropriate data</li>
+    </ul>
+
+    <p class="govuk-body">As part of this verification you’ll have to check:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>consistency of the aggregated reported data with primary source data</li>
+      <li>any measured values if the aircraft operator uses a measurement-based approach</li>
+      <li>reliability and accuracy of the data</li>
+    </ul>
+  </article>
+</govuk-details>
+
+<div formControlName="dataVerificationCompleted" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="dataVerificationNotCompletedReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- MonitoringApproachAppliedCorrectlyGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">Has the monitoring approach been applied correctly?</h2>
+
+<govuk-details summary="See guidance">
+  <article>
+    <p class="govuk-body">
+      You must check that the monitoring approach and procedures set out in the approved emissions monitoring plan have
+      been correctly applied and implemented.
+    </p>
+
+    <p class="govuk-body">
+      Where the aircraft operator has deviated, this should be reported as a non-conformity or recommended improvement.
+    </p>
+  </article>
+</govuk-details>
+
+<div formControlName="monitoringApproachAppliedCorrectly" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="monitoringApproachNotAppliedCorrectlyReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- FlightsCompletessComparedWithAirTrafficDataGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">
+  Has the completeness of flights or data been compared with air traffic data?
+</h2>
+
+<govuk-details summary="See guidance">
+  <article>
+    <p class="govuk-body">
+      You must check the route data against that submitted to the aircraft operator by ATC providers, for example route
+      charges invoices, report data obtained from Eurocontrol.
+    </p>
+  </article>
+</govuk-details>
+
+<div
+  formControlName="flightsCompletenessComparedWithAirTrafficData"
+  govuk-radio
+  class="govuk-body govuk-!-width-two-thirds"
+>
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="flightsCompletenessNotComparedWithAirTrafficDataReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- ReportedDataConsistencyChecksGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">
+  Have consistency checks been made between reported data and 'mass & balance' documentation?
+</h2>
+
+<div formControlName="reportedDataConsistencyChecksPerformed" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="reportedDataConsistencyChecksNotPerformedReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- FuelConsistencyChecksGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">
+  Have consistency checks been made between aggregate fuel consumption and fuel purchase or supply data?
+</h2>
+
+<div formControlName="fuelConsistencyChecksPerformed" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="fuelConsistencyChecksNotPerformedReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- MissingDataMethodsAppliedGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">Were methods used for applying missing data appropriate?</h2>
+
+<govuk-details summary="See guidance">
+  <article>
+    <p class="govuk-body">You must check that:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        the methods used for completing any missing data in the monitoring plan were appropriate for the specific
+        situation, and that the operator has applied them correctly
+      </li>
+
+      <li>the control activities which the operator has used to prevent missing data are effective</li>
+    </ul>
+
+    <p class="govuk-body">
+      If the aircraft operator has approval to use other methods, you must check that they have applied and documented
+      them correctly.
+    </p>
+
+    <p class="govuk-body">
+      If they do not have approval to apply the data gap method used, you must check that their approach to addressing
+      the gaps does not underestimate their emissions, and lead to material misstatements.
+    </p>
+  </article>
+</govuk-details>
+
+<div formControlName="missingDataMethodsApplied" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="missingDataMethodsNotAppliedReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- RegulatorGuidanceMetGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">
+  Has the regulator guidance on monitoring and reporting been met?
+</h2>
+
+<govuk-details summary="See guidance">
+  <article>
+    <p class="govuk-body">
+      You must apply the harmonised standards which meet the essential requirements of the EC regulations for GHG
+      accreditation and verification bodies.
+    </p>
+
+    <p class="govuk-body">You’ll also need to apply processes and arrangements for:</p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>communicating with the aircraft operator and other parties</li>
+      <li>protecting the confidentiality of information you obtain</li>
+      <li>dealing with approvals</li>
+      <li>issuing a revised verification report after you have issued it to the operator</li>
+    </ul>
+  </article>
+</govuk-details>
+
+<div formControlName="regulatorGuidanceMet" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="regulatorGuidanceNotMetReason"
+        govuk-textarea
+        label="Provide a reason"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- NonComformitiesGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">Have any non-conformities from last year been corrected?</h2>
+
+<p class="govuk-body">
+  You need to assess if the operator has corrected non-conformities from the verification report relating to the
+  previous monitoring period.
+</p>
+
+<p class="govuk-body">If they have not, will this increase the risk of misstatements?</p>
+
+<div formControlName="nonConformities" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="'YES'" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="'NO'" label="No"> </govuk-radio-option>
+  <govuk-radio-option [value]="'NOT_APPLICABLE'" label="Not applicable" [divider]="true"></govuk-radio-option>
+</div>

@@ -1,0 +1,20 @@
+<app-base-action-container-component
+  [header]="title$ | async"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="['AIR_APPLICATION_SUBMITTED']">
+</app-base-action-container-component>
+<ng-template #customContentTemplate>
+  <ng-container *ngFor="let airImprovement of airImprovements$ | async | keyvalue: originalOrder">
+    <h2 class="govuk-heading-s govuk-!-margin-0">
+      {{ airImprovement.value | airImprovementTitle: airImprovement.key }}
+    </h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        link="{{ airImprovement.key }}/summary"
+        linkText="Provide information about this improvement"
+        [hasContent]="true"
+      ></li>
+    </ul>
+  </ng-container>
+</ng-template>

@@ -1,0 +1,59 @@
+<ng-container *ngIf="uncorrectedMisstatements">
+  <h2 class="govuk-heading-m" *ngIf="headingLarge">List the uncorrected misstatements</h2>
+
+  <ng-container *ngIf="showGuardQuestion && uncorrectedMisstatements?.areThereUncorrectedMisstatements !== undefined">
+    <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>
+          Are there any misstatements that were not corrected before completing this report?
+        </dt>
+        <dd govukSummaryListRowValue>{{ uncorrectedMisstatements.areThereUncorrectedMisstatements ? 'Yes' : 'No' }}</dd>
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="isEditable">
+            <a govukLink [routerLink]="[baseChangeLink]">Change</a>
+          </ng-container>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <ng-container *ngIf="uncorrectedMisstatements?.uncorrectedMisstatements?.length > 0">
+    <govuk-table
+      [columns]="columns"
+      [data]="uncorrectedMisstatements.uncorrectedMisstatements"
+      [class.no-bottom-border]="false"
+      [caption]="showCaption ? 'List the uncorrected misstatements' : ''"
+    >
+      <ng-template let-column="column" let-index="index" let-row="row">
+        <ng-container [ngSwitch]="column.field">
+          <ng-container *ngSwitchCase="'reference'">{{ row.reference }}</ng-container>
+
+          <ng-container *ngSwitchCase="'explanation'">
+            <div class="pre-wrap">
+              {{ row.explanation }}
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'impact'">{{ row.materialEffect ? 'Material' : 'Immaterial' }} </ng-container>
+          <ng-container *ngIf="isEditable">
+            <ng-container *ngSwitchCase="'change'">
+              <a [routerLink]="[baseChangeLink, index]" govukLink>Change</a>
+            </ng-container>
+            <ng-container *ngSwitchCase="'delete'">
+              <a [routerLink]="[baseChangeLink, 'delete', index]" govukLink>Remove</a>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+    </govuk-table>
+    <div class="govuk-button-group" *ngIf="isEditable">
+      <button
+        govukSecondaryButton
+        [routerLink]="[baseChangeLink, uncorrectedMisstatements?.uncorrectedMisstatements?.length ?? 0]"
+        type="button"
+      >
+        Add another item
+      </button>
+    </div>
+  </ng-container>
+</ng-container>
+<ng-content></ng-content>

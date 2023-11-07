@@ -1,0 +1,157 @@
+<h2 class="govuk-heading-m">Verification body</h2>
+
+<div class="govuk-body govuk-!-width-three-quarters">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Company name</dt>
+      <dd govukSummaryListRowValue>{{ verificationReport.verificationBodyDetails.name }}</dd>
+    </div>
+  </dl>
+</div>
+
+<div class="govuk-body govuk-!-width-three-quarters">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Address</dt>
+      <dd govukSummaryListRowValue>
+        <div>
+          {{ verificationReport.verificationBodyDetails.address.line1 }}
+          <ng-container *ngIf="verificationReport.verificationBodyDetails.address.line2">
+            , {{ verificationReport.verificationBodyDetails.address.line2 }}
+          </ng-container>
+        </div>
+
+        <div>{{ verificationReport.verificationBodyDetails.address.city }}</div>
+        <div>{{ verificationReport.verificationBodyDetails.address.postcode }}</div>
+        <div>{{ verificationReport.verificationBodyDetails.address.country | country }}</div>
+      </dd>
+    </div>
+  </dl>
+</div>
+
+<h2 class="govuk-heading-m govuk-!-margin-top-9">Accreditation information</h2>
+
+<div class="govuk-body govuk-!-width-three-quarters">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Accreditation number</dt>
+      <dd govukSummaryListRowValue>
+        {{ verificationReport.verificationBodyDetails.accreditationReferenceNumber }}
+      </dd>
+    </div>
+  </dl>
+</div>
+
+<div class="govuk-body govuk-!-width-three-quarters">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>National accreditation body</dt>
+      <dd govukSummaryListRowValue>
+        <span *ngFor="let emissionScheme of verificationReport.verificationBodyDetails.emissionTradingSchemes">
+          {{ emissionScheme | verificationBodyType }}<br />
+        </span>
+      </dd>
+    </div>
+  </dl>
+</div>
+
+<ng-container *ngIf="showVerifierDetails">
+  <ng-container *ngIf="verificationReport.verifierContact">
+    <h2 class="govuk-heading-m govuk-!-margin-top-9">Verifier contact</h2>
+
+    <div class="govuk-body govuk-!-width-three-quarters">
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Name</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verifierContact.name }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Email</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verifierContact.email }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Telephone number</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verifierContact.phoneNumber }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="verificationReport.verificationTeamDetails">
+    <h2 class="govuk-heading-m govuk-!-margin-top-9">Verification team details</h2>
+
+    <div class="govuk-body govuk-!-width-three-quarters">
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Lead ETS Auditor</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verificationTeamDetails.leadEtsAuditor }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>ETS Auditors</dt>
+          <dd class="pre-wrap" govukSummaryListRowValue>
+            {{ verificationReport.verificationTeamDetails.etsAuditors }}
+          </dd>
+
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Technical Experts (ETS Auditor)</dt>
+          <dd class="pre-wrap" govukSummaryListRowValue>
+            {{ verificationReport.verificationTeamDetails.etsTechnicalExperts }}
+          </dd>
+
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Independent Reviewer</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verificationTeamDetails.independentReviewer }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Technical Experts (Independent Review)</dt>
+          <dd class="pre-wrap" govukSummaryListRowValue>
+            {{ verificationReport.verificationTeamDetails.technicalExperts }}
+          </dd>
+
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Name of authorised signatory</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verificationTeamDetails.authorisedSignatoryName }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-content></ng-content>

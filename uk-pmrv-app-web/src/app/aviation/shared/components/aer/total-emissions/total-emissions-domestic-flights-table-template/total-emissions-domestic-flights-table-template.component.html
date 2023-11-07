@@ -1,0 +1,41 @@
+<ng-container *ngIf="domesticFlightsTotalEmissions$ | async as emissions">
+  <p class="govuk-body govuk-!-width-two-thirds">Total domestic emissions: {{ emissions.totalEmissions }} tCO2</p>
+  <div class="overflow-auto overflow-auto-table">
+    <govuk-table
+      *ngIf="emissions.domesticFlightsEmissionsDetails?.length"
+      [columns]="columns"
+      [data]="emissions.domesticFlightsEmissionsDetails"
+    >
+      <ng-template let-column="column" let-index="index" let-row="row">
+        <div [ngSwitch]="column.field" class="cell-container">
+          <ng-container *ngSwitchCase="'country'">
+            <span data-testid="at-state">
+              {{ row.country }}
+            </span>
+          </ng-container>
+          <ng-container *ngSwitchCase="'flightsNumber'">
+            <div class="amount" data-testid="at-flights-number">
+              {{ row.flightsNumber }}
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'fuelType'">
+            <div data-testid="at-fuel-type">
+              {{ getSummaryDescription(row.fuelType) }}
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'fuelConsumption'">
+            <div class="amount" data-testid="at-fuel-consumption">
+              {{ row.fuelConsumption }}
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchCase="'emissions'">
+            <div class="amount" data-testid="at-emissions">
+              {{ row.emissions }}
+            </div>
+          </ng-container>
+          <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+        </div>
+      </ng-template>
+    </govuk-table>
+  </div>
+</ng-container>

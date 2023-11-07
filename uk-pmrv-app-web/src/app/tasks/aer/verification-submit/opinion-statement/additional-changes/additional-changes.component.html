@@ -1,0 +1,49 @@
+<app-aer-task-review heading="Additional changes not covered in the operators report" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      Changes that have occurred during the reporting year that materially affect the emissions being reported and the
+      trend from year to year, and that have not already been provided by the operator. For example, efficiency projects
+      or production changes.
+    </p>
+
+    <ng-container *ngIf="payload$ | async as payload">
+      <app-monitoring-plan-versions
+        *ngIf="payload.monitoringPlanVersions"
+        [versions]="payload.monitoringPlanVersions"
+        [noBottomBorder]="!payload.aer.aerMonitoringPlanDeviation.existChangesNotCoveredInApprovedVariations"
+        [showCaption]="false"
+      >
+      </app-monitoring-plan-versions>
+      <app-monitoring-plan-summary-template
+        [isEditable]="false"
+        [planDeviation]="payload.aer.aerMonitoringPlanDeviation"
+        [headingSmall]="false"
+      >
+      </app-monitoring-plan-summary-template>
+    </ng-container>
+
+    <div
+      formControlName="additionalChangesNotCovered"
+      govuk-radio
+      legend="Were there any additional changes not covered in the operators emission report"
+      [legendSize]="'medium'"
+    >
+      <govuk-radio-option [value]="true" label="Yes">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="additionalChangesNotCoveredDetails"
+            govuk-textarea
+            [maxLength]="10000"
+            label="Provide details"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

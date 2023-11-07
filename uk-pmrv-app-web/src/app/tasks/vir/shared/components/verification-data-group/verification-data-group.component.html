@@ -1,0 +1,13 @@
+<ng-container *ngFor="let item of verificationDataGroup">
+  <h2 class="govuk-heading-s govuk-!-margin-0">{{ item.reference | verificationReferenceTitle }}</h2>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="{{ item.reference }}/summary"
+      linkText="Respond to recommendation"
+      [status]="virRequestPayload | taskStatus: item.reference"
+      [hasContent]="true">
+      <app-verification-data-item [verificationDataItem]="item"></app-verification-data-item>
+    </li>
+  </ul>
+</ng-container>

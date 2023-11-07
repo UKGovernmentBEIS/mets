@@ -1,0 +1,35 @@
+<app-doal-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    caption="Provide information about this activity level determination"
+    heading="Were conservative estimates made to determine the activity level?"
+    submitText="Save and continue"
+    [hideSubmit]="(editable$ | async) === false"
+  >
+    <div formControlName="areConservativeEstimates" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes">
+        <ng-container govukConditionalContent>
+          <h2 class="govuk-heading-s">Explain why the estimate was made</h2>
+          <span class="govuk-body">Include:</span>
+          <ul class="govuk-list govuk-list--bullet">
+            <li>the date that the estimate was made</li>
+            <li>
+              copy and edit the following: 'We gave you notice of our estimate of the value of a parameter on [insert
+              date] because [insert text to explain why estimate was made]'
+            </li>
+          </ul>
+          <div
+            govuk-textarea
+            formControlName="explainEstimates"
+            [maxLength]="10000"
+            hint="This will be entered into the official notice"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <app-task-return-link [levelsUp]="2" taskType="DOAL_APPLICATION_SUBMIT"></app-task-return-link>
+</app-doal-task>

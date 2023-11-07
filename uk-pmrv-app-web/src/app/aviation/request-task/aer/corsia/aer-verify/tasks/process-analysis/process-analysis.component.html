@@ -1,0 +1,14 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Describe the verification activities carried out and their corresponding results"
+  submitText="Continue"
+>
+  <div
+    formControlName="verificationActivities"
+    govuk-textarea
+    hint="You should include details about the audit; if it took place on- or off-site, and the precise location. For a remote audit, give detailed procedural information on how the verification was technically conducted."
+    [maxLength]="10000"
+  ></div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

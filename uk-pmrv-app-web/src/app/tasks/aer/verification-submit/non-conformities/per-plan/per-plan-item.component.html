@@ -1,0 +1,29 @@
+<app-aer-task-review heading="Add a non-conformity with the approved monitoring plan" returnToLink="../../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">You should include:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>its nature and size</li>
+      <li>which part of the report it relates to</li>
+      <li>any discrepancies between the approved plan and actual sources, source streams and boundaries that you identified</li>
+    </ul>
+
+    <div label="Explanation" [maxLength]="10000" formControlName="explanation" govuk-textarea></div>
+
+    <p class="govuk-body">Does this have a material (significant) effect on:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>the total reported emissions</li>
+      <li>any tonne-kilometre data</li>
+      <li>any data relevant for free allocation</li>
+    </ul>
+
+    <div formControlName="materialEffect" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

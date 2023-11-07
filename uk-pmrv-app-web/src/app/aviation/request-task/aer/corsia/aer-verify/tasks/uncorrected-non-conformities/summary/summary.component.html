@@ -1,0 +1,33 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.heading }}</app-page-heading>
+
+  <h2 class="govuk-heading-m">Non-conformities with the approved monitoring plan</h2>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Have there been any uncorrected non-conformities with the approved emissions monitoring plan?
+      </dt>
+      <dd govukSummaryListRowValue>
+        {{ vm.uncorrectedNonConformities.existUncorrectedNonConformities ? 'Yes' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+        <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <app-uncorrected-item-group
+    *ngIf="vm.uncorrectedNonConformities.existUncorrectedNonConformities"
+    [isEditable]="vm.isEditable"
+    [uncorrectedItems]="vm.uncorrectedNonConformities?.uncorrectedNonConformities"
+    [baseUrl]="'../list'"
+    [queryParams]="{ change: true }"
+  ></app-uncorrected-item-group>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+</ng-container>
+<app-return-to-link></app-return-to-link>

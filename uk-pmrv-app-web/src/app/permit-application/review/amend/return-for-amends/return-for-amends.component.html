@@ -1,0 +1,55 @@
+<app-permit-task>
+  <app-request-action-heading
+    [headerText]="(store.isEditable$ | async) === true ? 'Check your answers' : header"
+    [timelineCreationDate]="store.select('requestActionCreationDate') | async"
+  >
+  </app-request-action-heading>
+
+  <div *ngFor="let decision of decisionAmends$ | async">
+    <h2 app-summary-header class="govuk-heading-m">
+      {{ decision.groupKey | i18nSelect: reviewGroupHeadings }}
+    </h2>
+    <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Changes required</dt>
+        <dd govukSummaryListRowValue>
+          <ng-container
+            *ngFor="
+              let requiredChange of $any(decision).data.details?.requiredChanges;
+              let i = index;
+              let isLast = last
+            "
+          >
+            <div class="pre-wrap">
+              {{ i + 1 }}. {{ requiredChange.reason }} <br />
+              <ng-container *ngIf="requiredChange?.files?.length > 0">
+                <app-summary-download-files
+                  [files]="store.getDownloadUrlFiles(requiredChange?.files, 'reviewAttachments')"
+                >
+                </app-summary-download-files>
+              </ng-container>
+            </div>
+            <br *ngIf="!isLast" />
+          </ng-container>
+        </dd>
+      </div>
+      <div govukSummaryListRow *ngIf="decision?.data?.details?.notes">
+        <dt govukSummaryListRowKey>Notes</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>{{ decision.data.details.notes }}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div *ngIf="(store.isEditable$ | async) === true" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onSubmit()">Confirm and complete</button>
+  </div>
+
+  <a *ngIf="isTask$ | async" govukLink [routerLink]="(store.isEditable$ | async) === true ? '..' : returnUrl">
+    Return to:
+    {{
+      returnUrl?.includes('review') || (store.isEditable$ | async) === true
+        ? 'Permit determination'
+        : 'Apply for a permit'
+    }}
+  </a>
+</app-permit-task>

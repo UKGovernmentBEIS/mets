@@ -1,0 +1,11 @@
+<dl *ngIf="data" govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Decision status</dt>
+    <dd govukSummaryListRowValue>{{ data.type | i18nSelect: aerReviewGroupDecision }}</dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="data?.details?.notes">
+    <dt govukSummaryListRowKey>Notes</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.details.notes }}</dd>
+  </div>
+</dl>

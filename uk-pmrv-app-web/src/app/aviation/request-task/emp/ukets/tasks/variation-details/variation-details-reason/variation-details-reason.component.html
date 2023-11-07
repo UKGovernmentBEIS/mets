@@ -1,0 +1,29 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Choose a reason to include in the notice"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <div hint="This will add the relevant text template to the notice" formControlName="type" govuk-radio>
+    <govuk-radio-option
+      value="FOLLOWING_IMPROVING_REPORT"
+      [label]="'FOLLOWING_IMPROVING_REPORT' | empVariationDetailsReasonType"
+    ></govuk-radio-option>
+    <govuk-radio-option
+      value="FAILED_TO_COMPLY_OR_APPLY"
+      [label]="'FAILED_TO_COMPLY_OR_APPLY' | empVariationDetailsReasonType"
+    ></govuk-radio-option>
+    <govuk-radio-option value="OTHER" [label]="'OTHER' | empVariationDetailsReasonType">
+      <div govukConditionalContent>
+        <div
+          formControlName="reasonOtherSummary"
+          govuk-textarea
+          [maxLength]="10000"
+          label="Provide a reason to include in the operator notice"
+        ></div>
+      </div>
+    </govuk-radio-option>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

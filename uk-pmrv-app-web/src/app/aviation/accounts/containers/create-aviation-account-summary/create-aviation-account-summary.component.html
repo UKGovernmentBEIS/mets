@@ -1,0 +1,10 @@
+<div>
+  <h2 class="govuk-heading-m">Check your answers</h2>
+  <app-aviation-account-summary-info
+    [formRouterLink]="'../'"
+    [summaryInfo]="info$ | async"
+    [isAddressEditable]="false"
+  ></app-aviation-account-summary-info>
+  <button appPendingButton govukButton type="button" (click)="onSubmit()">Confirm and complete</button>
+</div>
+<a govukLink routerLink="/aviation/dashboard">Return to your tasks</a>

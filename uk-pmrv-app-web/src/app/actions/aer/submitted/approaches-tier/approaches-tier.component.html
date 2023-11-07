@@ -1,0 +1,16 @@
+<app-action-task
+  [header]="heading$ | async"
+  [breadcrumb]="true"
+>
+  <div [ngSwitch]="this.taskKey">
+    <div *ngSwitchCase="'CALCULATION_CO2'">
+      <app-calculation-emissions-tier-summary
+        [payload]="payload$ | async"
+        [index]="index$ | async"
+      ></app-calculation-emissions-tier-summary>
+    </div>
+    <div *ngSwitchCase="'CALCULATION_PFC'">
+      <app-pfc-tier-summary [payload]="payload$ | async" [index]="index$ | async"> </app-pfc-tier-summary>
+    </div>
+  </div>
+</app-action-task>

@@ -1,0 +1,22 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    [heading]="
+      'What was the annual hourly average amount of ' +
+      (taskKey === 'MEASUREMENT_CO2' ? 'CO2' : 'N2O') +
+      ' in the flue gas?'
+    "
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div
+      formControlName="annualHourlyAverageGHGConcentration"
+      govuk-text-input
+      hint="This is measured in grams per normal cubic metre (g/Nm3)"
+      suffix="grams per Nm3"
+      widthClass="govuk-input--width-10"
+    ></div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

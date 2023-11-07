@@ -1,0 +1,29 @@
+<div formControlName="monitoringApproachType" govuk-radio>
+  <govuk-radio-option
+    value="CERT_MONITORING"
+    [label]="'CERT_MONITORING' | monitoringApproachCorsiaTypes"
+    hint="If you have annual emissions from international flights with an offsetting requirement of less than 50,000 tonnes of CO2"
+  >
+    <ng-container govukConditionalContent>
+      <div
+        formControlName="certEmissionsType"
+        govuk-radio
+        legend="Select the CERT input method used to estimate your emissions"
+      >
+        <govuk-radio-option
+          value="GREAT_CIRCLE_DISTANCE"
+          [label]="'GREAT_CIRCLE_DISTANCE' | monitoringApproachCorsiaTypes: false"
+        ></govuk-radio-option>
+        <govuk-radio-option
+          value="BLOCK_TIME"
+          [label]="'BLOCK_TIME' | monitoringApproachCorsiaTypes: false"
+        ></govuk-radio-option>
+      </div>
+    </ng-container>
+  </govuk-radio-option>
+  <govuk-radio-option
+    value="FUEL_USE_MONITORING"
+    [label]="'FUEL_USE_MONITORING' | monitoringApproachCorsiaTypes"
+    hint="If you have annual emissions from international flights with an offsetting requirement equal to or more than 50,000 tonnes of CO2 you must use this approach"
+  ></govuk-radio-option>
+</div>

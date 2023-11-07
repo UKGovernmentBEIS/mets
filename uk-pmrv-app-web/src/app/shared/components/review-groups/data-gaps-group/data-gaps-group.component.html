@@ -1,0 +1,65 @@
+<dl *ngIf="dataGapsInfo" govuk-summary-list [hasBorders]="true">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Was a data gap method required during the reporting year?</dt>
+    <dd govukSummaryListRowValue>{{ dataGapsInfo.dataGapRequired ? 'Yes' : 'No' }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="..">Change</a>
+    </dd>
+  </div>
+
+  <ng-container *ngIf="dataGapsInfo.dataGapRequiredDetails">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Has the data gap method already been approved by the regulator?</dt>
+      <dd govukSummaryListRowValue>{{ dataGapsInfo.dataGapRequiredDetails.dataGapApproved ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../regulator-approved">Change</a>
+      </dd>
+    </div>
+
+    <ng-container *ngIf="dataGapsInfo.dataGapRequiredDetails.dataGapApprovedDetails">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Was the method used conservative?</dt>
+        <dd govukSummaryListRowValue>
+          {{ dataGapsInfo.dataGapRequiredDetails.dataGapApprovedDetails.conservativeMethodUsed ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../conservative-method">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow *ngIf="dataGapsInfo.dataGapRequiredDetails.dataGapApprovedDetails.methodDetails">
+        <dt govukSummaryListRowKey>Provide more detail</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ dataGapsInfo.dataGapRequiredDetails.dataGapApprovedDetails.methodDetails }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../conservative-method">Change</a>
+        </dd>
+      </div>
+
+      <div
+        govukSummaryListRow
+        *ngIf="dataGapsInfo.dataGapRequiredDetails.dataGapApprovedDetails.materialMisstatement !== undefined"
+      >
+        <dt govukSummaryListRowKey>Did the method lead to a material misstatement?</dt>
+        <dd govukSummaryListRowValue>
+          {{ dataGapsInfo.dataGapRequiredDetails.dataGapApprovedDetails.materialMisstatement ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../material-misstatement">Change</a>
+        </dd>
+      </div>
+      <div
+        govukSummaryListRow
+        *ngIf="dataGapsInfo.dataGapRequiredDetails.dataGapApprovedDetails.materialMisstatementDetails"
+      >
+        <dt govukSummaryListRowKey>Provide more detail</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ dataGapsInfo.dataGapRequiredDetails.dataGapApprovedDetails.materialMisstatementDetails }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../material-misstatement">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+  </ng-container>
+</dl>

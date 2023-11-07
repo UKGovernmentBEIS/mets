@@ -1,0 +1,27 @@
+<h2 class="govuk-heading-m" *ngIf="headingText !== ''">{{ headingText }}</h2>
+
+<div class="overflow-auto overflow-auto-table">
+  <govuk-table
+    *ngIf="operatingStatePairsCorsiaDetails?.length"
+    [columns]="columns"
+    [data]="operatingStatePairsCorsiaDetails"
+  >
+    <ng-template let-column="column" let-index="index" let-row="row">
+      <div [ngSwitch]="column.field">
+        <ng-container *ngSwitchCase="'airportFrom'">
+          <span data-testid="at-airport-from">
+            {{ row.airportFrom }}
+          </span>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'airportTo'">
+          <div data-testid="at-airport-to">
+            {{ row.airportTo }}
+          </div>
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+      </div>
+    </ng-template>
+  </govuk-table>
+</div>

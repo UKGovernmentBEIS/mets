@@ -1,0 +1,15 @@
+<app-doal-task [breadcrumb]="true">
+  <app-page-heading>Check your answers</app-page-heading>
+
+  <app-operator-report-summary-template
+    [operatorActivityLevelReport]="operatorActivityLevelReport$ | async"
+    [editable]="isEditable$ | async"
+    [document]="documentFile$ | async"
+  ></app-operator-report-summary-template>
+
+  <div class="govuk-button-group" *ngIf="isEditable$ | async">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+
+  <app-task-return-link [levelsUp]="2" taskType="DOAL_APPLICATION_SUBMIT"></app-task-return-link>
+</app-doal-task>

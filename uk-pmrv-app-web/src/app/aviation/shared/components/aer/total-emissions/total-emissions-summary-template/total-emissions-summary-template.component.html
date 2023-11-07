@@ -1,0 +1,12 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Do you consider any of the data in the emissions by aerodrome pairs confidential?</dt>
+    <dd govukSummaryListRowValue>
+      {{ data.confidential ? 'Yes' : 'No' }}
+    </dd>
+    <dd></dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams" class="change-link">Change</a>
+    </dd>
+  </div>
+</dl>

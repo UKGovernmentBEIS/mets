@@ -1,0 +1,16 @@
+<div class="govuk-!-width-two-thirds">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Choose an emissions monitoring approach"
+    submitText="Continue"
+    [hideSubmit]="false"
+  >
+    <p class="govuk-body">
+      If you are eligible, you can simplify your monitoring procedures by using the CORSIA CO2 estimation and reporting
+      tool (CERT).
+    </p>
+    <app-monitoring-approach-type-form></app-monitoring-approach-type-form>
+  </app-wizard-step>
+</div>
+<app-return-to-link></app-return-to-link>

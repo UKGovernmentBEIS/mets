@@ -1,0 +1,35 @@
+<ng-container *ngIf="isSendReportAvailable$ | async; else notAvailable">
+  <ng-container *ngIf="vm$ | async as vm">
+    <app-wizard-step
+      (formSubmit)="onSubmit()"
+      [formGroup]="form"
+      submitText="Continue"
+      [hideSubmit]="vm.submitHidden"
+      [heading]="vm.header"
+    >
+      <p class="govuk-body govuk-!-width-two-thirds">
+        You can either send your emissions report to a verifier for a verification opinion or send it directly to
+        {{ vm.competentAuthority | competentAuthority }}.
+      </p>
+      <div
+        formControlName="option"
+        govuk-radio
+        legend="Do you want to send this report to a verifier?"
+        legendSize="medium"
+      >
+        <govuk-radio-option [value]="true" label="Yes, send the report to a verifier"></govuk-radio-option>
+        <govuk-radio-option
+          [value]="false"
+          label="No, send the report to a regulator without verification"
+        ></govuk-radio-option>
+      </div>
+    </app-wizard-step>
+    <app-return-to-link></app-return-to-link>
+  </ng-container>
+</ng-container>
+
+<ng-template #notAvailable>
+  <app-page-heading caption="Emissions report">Submit report</app-page-heading>
+  <p class="govuk-body">You must complete all tasks before submitting your report.</p>
+  <app-return-to-link></app-return-to-link>
+</ng-template>

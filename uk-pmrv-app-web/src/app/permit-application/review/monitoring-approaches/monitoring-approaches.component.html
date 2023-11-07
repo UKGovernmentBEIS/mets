@@ -1,0 +1,33 @@
+<ng-template #contentTpl let-showOriginal>
+  <ul app-task-item-list>
+    <li
+      *ngIf="'monitoringApproaches' | taskStatus | async as status"
+      app-task-item
+      link="../../monitoring-approaches"
+      linkText="Define monitoring approaches"
+      [status]="status"
+    >
+      <app-approaches-summary-template
+        [showOriginal]="showOriginal"
+        [hasBottomBorder]="false"
+      ></app-approaches-summary-template>
+    </li>
+  </ul>
+</ng-template>
+
+<app-permit-task-review [breadcrumb]="true" [notification]="notification" heading="Define monitoring approaches">
+  <app-highlight-diff *ngIf="showDiff$ | async">
+    <ng-container slot="previous" *ngTemplateOutlet="contentTpl; context: { $implicit: true }"></ng-container>
+    <ng-container slot="current" *ngTemplateOutlet="contentTpl; context: { $implicit: false }"></ng-container>
+  </app-highlight-diff>
+  <ng-container
+    *ngIf="(showDiff$ | async) === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: false }"
+  ></ng-container>
+
+  <app-review-group-decision-container
+    [groupKey]="groupKey$ | async"
+    (notification)="notification = $event"
+  ></app-review-group-decision-container>
+</app-permit-task-review>

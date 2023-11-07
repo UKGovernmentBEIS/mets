@@ -1,0 +1,14 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Choose an emissions monitoring approach"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    If you are eligible, you can simplify your monitoring procedures by using either the Eurocontrol Support Facility
+    data or Small Emitters Tool.
+  </p>
+  <app-monitoring-approach-type-form></app-monitoring-approach-type-form>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,26 @@
+<app-permit-task
+  [breadcrumb]="[{ text: 'TRANSFERRED_CO2_N2O' | monitoringApproachDescription, link: ['transferred-co2'] }]"
+>
+  <app-page-heading> Check your answers </app-page-heading>
+  <h2
+    app-summary-header
+    (changeClick)="changeClick()"
+    [changeRoute]="(store.isEditable$ | async) === true ? '.' : undefined"
+    class="govuk-heading-m"
+  >
+    <span class="govuk-visually-hidden">{{ taskKey$ | async | i18nSelect: headingMap }}</span>
+  </h2>
+  <app-transferred-co2-pipeline-summary-template
+    [pipelineSystems]="transportCO2AndN2OPipelineSystems$ | async"
+    cssClass="cssClass"
+  ></app-transferred-co2-pipeline-summary-template>
+  <div class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="confirm()" *ngIf="(store.isEditable$ | async) === true">
+      Confirm and complete
+    </button>
+  </div>
+</app-permit-task>
+<app-approach-return-link
+  [parentTitle]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+  reviewGroupUrl="transferred-co2"
+></app-approach-return-link>

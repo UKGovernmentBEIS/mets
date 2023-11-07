@@ -1,0 +1,24 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.heading }}</app-page-heading>
+
+  <app-verification-recommendation-item
+    [verificationDataItem]="vm.verificationDataItem"
+  ></app-verification-recommendation-item>
+
+  <app-operator-response-item
+    [reference]="vm.verificationDataItem.reference"
+    [operatorImprovementResponse]="vm.operatorImprovementResponse"
+    [attachedFiles]="vm.documentFiles"
+    [isEditable]="vm.isEditable"
+    [isAviation]="true"
+    [queryParams]="{ change: true }"
+  >
+  </app-operator-response-item>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+</ng-container>
+<app-return-to-link></app-return-to-link>

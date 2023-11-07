@@ -1,0 +1,50 @@
+<div *ngIf="data" data-testid="data-gaps-summary-template">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Systems and procedures for identifying data gaps and assessing whether the 5% data gap flight threshold has been
+        reached
+      </dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ data.dataGaps }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Secondary data sources to determine fuel consumption</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ data.secondaryDataSources }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../secondary-data-sources" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Using substitute data to estimate fuel consumption</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ data.substituteData }}
+      </dd>
+      <dd></dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../substitute-data" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="data.otherDataGapsTypes">
+      <dt govukSummaryListRowKey>Data gaps for parameters other than fuel consumption</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ data.otherDataGapsTypes }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../other-data-gaps-types" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</div>

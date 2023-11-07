@@ -1,0 +1,17 @@
+<div class="govuk-grid-row" *ngIf="vm$ | async as vm">
+  <div class="govuk-grid-column-full">
+    <app-request-action-heading
+      [headerText]="vm.header"
+      [timelineCreationDate]="vm.creationDate"
+    ></app-request-action-heading>
+
+    <ng-container [ngSwitch]="vm.requestType">
+      <ng-container *ngSwitchCase="'AVIATION_VIR'">
+        <app-vir-action-task-list [virPayload]="vm.payload"></app-vir-action-task-list>
+      </ng-container>
+      <ng-container *ngSwitchDefault>
+        <app-task-list [sections]="vm.sections" [hideSubmit]="true" [hideCancel]="true"></app-task-list>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

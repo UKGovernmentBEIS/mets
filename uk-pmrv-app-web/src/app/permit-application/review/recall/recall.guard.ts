@@ -1,0 +1,27 @@
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+
+import { map, Observable } from 'rxjs';
+
+import { recallRequestTaskActionTypes } from '../../shared/utils/permit';
+import { PermitApplicationState } from '../../store/permit-application.state';
+import { PermitApplicationStore } from '../../store/permit-application.store';
+
+@Injectable()
+export class RecallGuard implements CanActivate {
+  constructor(
+    private readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly router: Router,
+  ) {}
+
+  canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
+    return this.store.pipe(
+      map((state) => {
+        return (
+          recallRequestTaskActionTypes.some((actionType) => state.allowedRequestTaskActions.includes(actionType)) ||
+          this.router.parseUrl(`/${this.store.urlRequestType}/${route.paramMap.get('taskId')}/review`)
+        );
+      }),
+    );
+  }
+}

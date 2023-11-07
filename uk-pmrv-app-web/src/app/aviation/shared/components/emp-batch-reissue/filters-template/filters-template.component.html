@@ -1,0 +1,30 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Reporting status</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let reportingStatus of filters.reportingStatuses">
+        <div>{{ reportingStatus | i18nSelect: reportingStatusLabelMap }}</div>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'filters']">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Scheme</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let emissionTradingScheme of filters.emissionTradingSchemes">
+        <div>{{ emissionTradingScheme | i18nSelect: emissionTradingSchemeLabelMap }}</div>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'filters']">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow *ngIf="filters.numberOfEmitters !== null">
+    <dt govukSummaryListRowKey>Total emitters selected</dt>
+    <dd govukSummaryListRowValue>
+      <div>{{ filters.numberOfEmitters }}</div>
+    </dd>
+  </div>
+</dl>

@@ -1,0 +1,30 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <ng-container *ngIf="vm.isSendReportAvailable; else notAvailable">
+    <ng-container *ngIf="vm.isEditable; else notEditable">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <app-notify-operator
+            [taskId]="vm.taskId"
+            [accountId]="vm.accountId"
+            requestTaskActionType="AVIATION_VIR_NOTIFY_OPERATOR_FOR_DECISION"
+            confirmationMessage="Responses submitted"
+            confirmationText="Your responses have been successfully submitted. You can now return to your task list."
+            [referenceCode]="vm.referenceCode"
+            [pendingRfi]="vm.pendingRfi$ | async"
+          ></app-notify-operator>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #notEditable>
+      <app-page-heading>Submit responses</app-page-heading>
+      <app-return-to-link></app-return-to-link>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #notAvailable>
+    <app-page-heading>Submit responses</app-page-heading>
+    <p class="govuk-body">You need to complete all tasks before submitting the report.</p>
+    <app-return-to-link></app-return-to-link>
+  </ng-template>
+</ng-container>

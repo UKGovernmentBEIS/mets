@@ -1,0 +1,30 @@
+<app-permit-task
+  [breadcrumb]="[{ text: 'TRANSFERRED_CO2_N2O' | monitoringApproachDescription, link: ['transferred-co2'] }]"
+>
+  <app-wizard-step
+    [showBackLink]="true"
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    submitText="Continue"
+    [caption]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+    [heading]="taskKey$ | async | i18nSelect: headingMap"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <app-procedure-form formGroupName="proceduresForTransferredCO2AndN2O">
+      <ng-container>
+        <div class="govuk-body">
+          <p>
+            Provide details of the procedure that ensures the gas is transferred to an installation that has a
+            greenhouse gas emissions permit, or where emitted gas is effectively monitored and accounted for.
+          </p>
+        </div>
+      </ng-container>
+    </app-procedure-form>
+  </app-wizard-step>
+
+  <app-approach-return-link
+    [parentTitle]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+    reviewGroupUrl="transferred-co2"
+    [isNested]="true"
+  ></app-approach-return-link>
+</app-permit-task>

@@ -1,0 +1,54 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Avoiding a conflict of interest"
+  submitText="Continue"
+>
+  <h2 class="govuk-heading-m">Team leader repeat visits</h2>
+  <p class="govuk-body">
+    For every six annual verifications made, the team leader must take a three consecutive year break from providing
+    verification services for the same aeroplane operator. The six visits include any greenhouse gas verifications made
+    before the 2021 scheme year.
+  </p>
+
+  <div
+    formControlName="sixVerificationsConducted"
+    govuk-radio
+    legend="Have you conducted six or more annual verifications as a team leader for this aeroplane operator?"
+    legendSize="medium"
+  >
+    <govuk-radio-option [value]="true" label="Yes">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="breakTaken"
+          govuk-radio
+          legend="Following completion of six annual verifications as team leader, did you take a break of three-consecutive years from providing verification services for this Aeroplane Operator?"
+          legendSize="medium"
+        >
+          <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+          <govuk-radio-option [value]="false" label="No">
+            <ng-container govukConditionalContent>
+              <div
+                formControlName="reason"
+                govuk-textarea
+                [maxLength]="10000"
+                label="Provide a reason for not meeting the conflict of interest requirement"
+              ></div>
+            </ng-container>
+          </govuk-radio-option>
+        </div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="impartialityAssessmentResult"
+          govuk-textarea
+          [maxLength]="10000"
+          label="Describe the main results of impartiality and avoidance of conflict of interest assessment"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

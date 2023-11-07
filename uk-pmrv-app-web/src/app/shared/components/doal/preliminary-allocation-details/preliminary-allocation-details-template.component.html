@@ -1,0 +1,35 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  [heading]="isEditing ? 'Allocation' : 'Allocation - new item'"
+  submitText="Save and continue"
+  [hideSubmit]="isEditable === false"
+>
+  <div
+    formControlName="subInstallationName"
+    govuk-select
+    label="Select sub-installation name"
+    widthClass="govuk-!-width-two-thirds"
+  >
+    <option *ngFor="let opt of subInstallationNameLabelsMap | keyvalue" [value]="opt.key">
+      {{ opt.value }}
+    </option>
+  </div>
+
+  <div
+    [options]="years"
+    formControlName="year"
+    label="Enter year"
+    govuk-select
+    widthClass="govuk-!-width-one-quarter"
+  ></div>
+
+  <div
+    formControlName="allowances"
+    govuk-text-input
+    inputType="number"
+    label="Enter allowance"
+    hint="Must be a whole number with no decimals"
+    widthClass="govuk-!-width-one-quarter"
+  ></div>
+</app-wizard-step>

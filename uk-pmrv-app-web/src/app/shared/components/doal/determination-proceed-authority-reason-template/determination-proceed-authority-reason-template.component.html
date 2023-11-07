@@ -1,0 +1,20 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Reason for determination</dt>
+    <dd govukSummaryListRowValue>
+      <p *ngFor="let reasonItem of determination.articleReasonItems">
+        {{ reasonItem | i18nSelect: articleReasonItemsLabelsMap }}
+      </p>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'reason']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Information about the selected reasons</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">{{ determination.reason }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'reason']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>

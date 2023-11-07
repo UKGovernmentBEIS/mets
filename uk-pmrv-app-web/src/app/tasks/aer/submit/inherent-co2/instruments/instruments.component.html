@@ -1,0 +1,21 @@
+<app-aer-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Which types of measurement instruments are used?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">Select all that apply</p>
+
+    <div formControlName="measurementInstrumentOwnerTypes" govuk-checkboxes>
+      <govuk-checkbox
+        *ngFor="let radioOption of radioOptions"
+        [value]="radioOption"
+        [label]="radioOption | inherentCo2Instruments"
+      >
+      </govuk-checkbox>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'INHERENT_CO2' | monitoringApproachEmissionDescription }}</a>
+</app-aer-task>

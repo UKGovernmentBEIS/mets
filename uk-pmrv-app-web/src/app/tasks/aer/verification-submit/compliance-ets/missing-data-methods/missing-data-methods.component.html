@@ -1,0 +1,39 @@
+<app-aer-task-review heading="Were methods used for applying missing data appropriate?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <govuk-details summary="See guidance">
+      <article>
+        <p class="govuk-body">
+          You must check that:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>the methods used for completing any missing data in the monitoring plan were appropriate for the specific
+            situation, and that the operator has applied them correctly
+          </li>
+          <li>the control activities which the operator has used to prevent missing data are effective</li>
+        </ul>
+        <p class="govuk-body">
+          If the operator has approval to use other methods, you must check that they have applied and documented them
+          correctly.
+        </p>
+        <p class="govuk-body">
+          If the operator cannot get approval from the competent authority in time, you must check that their approach
+          to completing the missing data does not underestimate the emissions, and lead to material misstatements.
+        </p>
+      </article>
+    </govuk-details>
+    <div formControlName="methodsApplyingMissingDataUsed" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="methodsApplyingMissingDataNotUsedReason" govuk-textarea
+               label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

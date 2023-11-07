@@ -1,0 +1,132 @@
+<ng-container *ngIf="listCompanyData">
+  <div *ngFor="let sc of listCompanyData.subsidiaryCompanies; index as i">
+    <div class="inline-rm-btn">
+      <h2 class="govuk-heading-m">Subsidiary company {{ i + 1 }}</h2>
+
+      <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
+      <a role="button" (click)="onRemoveDataGap(i)" *ngIf="isEditable"> Remove </a>
+    </div>
+
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Subsidiary aeroplane operator name</dt>
+        <dd govukSummaryListRowValue>{{ sc.operatorName }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="linkTo + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>What call sign identification do you use for Air Traffic Control purposes?</dt>
+        <dd govukSummaryListRowValue>
+          {{ sc.flightIdentification.flightIdentificationType | flightIdentificationType }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="linkTo + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Aeroplane registration markings</dt>
+        <dd govukSummaryListRowValue>{{ sc.flightIdentification.icaoDesignators }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="linkTo + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+
+      <ng-container *ngIf="sc.airOperatingCertificate?.certificateExist">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Certificate number</dt>
+          <dd govukSummaryListRowValue>{{ sc.airOperatingCertificate.certificateNumber }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="linkTo + i + '/edit'" [queryParams]="queryParams">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Issuing authority</dt>
+          <dd govukSummaryListRowValue>{{ sc.airOperatingCertificate.issuingAuthority }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="linkTo + i + '/edit'" [queryParams]="queryParams">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow *ngIf="sc.airOperatingCertificate?.certificateFiles">
+          <dt govukSummaryListRowKey>Uploaded certificate</dt>
+          <dd govukSummaryListRowValue>
+            <app-summary-download-files
+              [files]="sc.airOperatingCertificate?.certificateFiles"
+            ></app-summary-download-files>
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="linkTo + i + '/edit'" [queryParams]="queryParams">Change</a>
+          </dd>
+        </div>
+
+        <div govukSummaryListRow *ngIf="sc.airOperatingCertificate?.restrictionsExist">
+          <dt govukSummaryListRowKey>Restrictions or obligations imposed by the certificate?</dt>
+          <dd govukSummaryListRowValue>
+            Yes <br />
+            {{ sc.airOperatingCertificate?.restrictionsDetails }}
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="linkTo + i + '/edit'" [queryParams]="queryParams">Change</a>
+          </dd>
+        </div>
+      </ng-container>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Company registration number</dt>
+        <dd govukSummaryListRowValue>{{ sc.companyRegistrationNumber }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="linkTo + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow *ngIf="sc?.registeredLocation">
+        <dt govukSummaryListRowKey>Registered address</dt>
+        <dd govukSummaryListRowValue>
+          <ul class="govuk-list">
+            <li>
+              {{ sc.registeredLocation.line1 }}
+            </li>
+            <li *ngIf="sc.registeredLocation?.line2">
+              {{ sc.registeredLocation.line2 }}
+            </li>
+            <li>
+              {{ sc.registeredLocation.city }}
+            </li>
+            <li *ngIf="sc.registeredLocation?.state">
+              {{ sc.registeredLocation.state }}
+            </li>
+            <li *ngIf="sc.registeredLocation?.postcode">
+              {{ sc.registeredLocation.postcode }}
+            </li>
+            <li>
+              {{ sc.registeredLocation.country | country }}
+            </li>
+          </ul>
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="linkTo + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Type of flights</dt>
+        <dd govukSummaryListRowValue>{{ sc.flightTypes | typeOfFlights }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="linkTo + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Describe your activities</dt>
+        <dd govukSummaryListRowValue>{{ sc.activityDescription }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="linkTo + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</ng-container>

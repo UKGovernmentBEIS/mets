@@ -1,0 +1,25 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="How do you want to calculate the activity data for this source stream?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      Activity data is the amount of fuels or materials consumed by the selected emission sources.
+    </p>
+    <div formControlName="type" govuk-radio legendSize="medium">
+      <govuk-radio-option
+        [value]="'CONTINUOUS_METERING'"
+        [label]="'CONTINUOUS_METERING' | activityCalculationMethodType"
+        hint="Select Continuous metering if there were any data gaps during the scheme year"
+      ></govuk-radio-option>
+      <govuk-radio-option
+        [value]="'AGGREGATION_OF_METERING_QUANTITIES'"
+        [label]="'AGGREGATION_OF_METERING_QUANTITIES' | activityCalculationMethodType"
+      ></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

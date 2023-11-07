@@ -1,0 +1,103 @@
+<ng-container *ngIf="determination$ | async as determination">
+  <ng-container *ngIf="isNotVariationRegulatorLed">
+    <dl govuk-summary-list [class]="cssClass" [hasBorders]="false">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Decision</dt>
+        <dd govukSummaryListRowValue>
+          {{ determinationText$ | async }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+          <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <dl govuk-summary-list [class]="cssClass" [hasBorders]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason for decision</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ determination.reason }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..', 'reason']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl *ngIf="determination.activationDate" govuk-summary-list [class]="cssClass" [hasBorders]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Permit activation date</dt>
+      <dd govukSummaryListRowValue>
+        {{ determination.activationDate | govukDate }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..', 'activation-date']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl *ngIf="determination.officialNotice" govuk-summary-list [class]="cssClass" [hasBorders]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Official notice text</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ determination.officialNotice }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..', 'official-notice']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl
+    *ngIf="(isPermitTypeHSE$ | async) && (emissionsTargets$ | async)?.length"
+    govuk-summary-list
+    [class]="cssClass"
+    [hasBorders]="false"
+  >
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Εmission targets</dt>
+      <dd govukSummaryListRowValue>
+        <div *ngFor="let emission of emissionsTargets$ | async">
+          <div>{{ emission.year }} - {{ emission.target }} tCO2e</div>
+        </div>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..', 'emissions']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl *ngIf="isVariationRegulatorLed" govuk-summary-list [class]="cssClass" [hasBorders]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason template for the official notice</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ reasonTemplate$ | async }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..', 'reason-template']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+  <dl *ngIf="determination?.logChanges" govuk-summary-list [class]="cssClass" [hasBorders]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Items added to the variation log</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ determination.logChanges }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..', 'log-changes']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+  <dl *ngIf="(variationScheduleItems$ | async)?.length" govuk-summary-list [class]="cssClass" [hasBorders]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
+      <dd govukSummaryListRowValue>
+        <ng-container *ngFor="let variationScheduleItem of variationScheduleItems$ | async; let i = index">
+          <div class="pre-wrap">{{ i + 1 }}. {{ variationScheduleItem }} <br /></div>
+        </ng-container>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

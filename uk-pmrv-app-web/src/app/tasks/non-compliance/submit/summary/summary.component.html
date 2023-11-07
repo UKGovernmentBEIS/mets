@@ -1,0 +1,129 @@
+<app-non-compliance-task [notification]="notification" [breadcrumb]="true">
+  <app-page-heading>Check your answers</app-page-heading>
+
+  <p class="govuk-heading-m">Details of breach</p>
+  <ng-container *ngIf="nonCompliance$ | async as nonCompliance">
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Reason for non-compliance</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ nonCompliance.reason | nonComplianceReason }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'details-of-breach']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list *ngIf="nonCompliance.nonComplianceDate">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>When did the operator become non-compliant?</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ nonCompliance.nonComplianceDate | govukDate }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'details-of-breach']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list *ngIf="nonCompliance.complianceDate">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>When did the operator become compliant?</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ nonCompliance.complianceDate | govukDate }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'details-of-breach']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list *ngIf="nonCompliance.comments">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Comments</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ nonCompliance.comments }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'details-of-breach']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <p class="govuk-heading-m">Selected tasks</p>
+    <dl govuk-summary-list *ngIf="requests?.length > 0">
+      <ng-container *ngFor="let source of requests; let i = index">
+        <div govukSummaryListRow>
+          <dd class="pre-wrap" govukSummaryListRowValue>
+            {{ source.id }}
+            {{ source.type | workflowType }}
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+            <a govukLink [routerLink]="['../choose-workflow', i]" [state]="{ changing: true }">Change</a>
+            &nbsp;
+            <a govukLink [routerLink]="['../choose-workflow', i, 'delete']" [state]="{ changing: true }">Remove</a>
+          </dd>
+        </div>
+      </ng-container>
+    </dl>
+    <div *ngIf="isEditable$ | async">
+      <div class="govuk-button-group">
+        <a routerLink="../choose-workflow/add" govukSecondaryButton type="button" [state]="{ changing: true }">
+          Add another item
+        </a>
+      </div>
+    </div>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Is the operator liable for a civil penalty?</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ nonCompliance.civilPenalty ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'civil-penalty']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list *ngIf="nonCompliance.noCivilPenaltyJustification">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Explanation</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ nonCompliance.noCivilPenaltyJustification }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'civil-penalty']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list *ngIf="nonCompliance.civilPenalty">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Will you issue a notice of intent to the operator?</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ nonCompliance.noticeOfIntent ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'notice-of-intent']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list *ngIf="nonCompliance.civilPenalty">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Is the operator liable for an initial notice?</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ nonCompliance.dailyPenalty ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'daily-penalty']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+
+  <div *ngIf="(currentDomain$ | async) === 'INSTALLATION'; else aviation">
+    <a govukLink routerLink="..">Return to: non compliance task</a>
+  </div>
+  <ng-template #aviation>
+    <app-return-to-link></app-return-to-link>
+  </ng-template>
+</app-non-compliance-task>

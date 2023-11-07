@@ -1,0 +1,30 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Monitoring plan changes"
+    submitText="Continue"
+    [hideSubmit]="(aerService.isEditable$ | async) === false"
+  >
+    <div *ngIf="monitoringPlanVersions$ | async as plans">
+      <ng-container *ngIf="plans.length">
+        <p class="govuk-body">
+          These are the versions of your monitoring plan which were effective during the reporting year.
+        </p>
+        <div class="overflow-auto overflow-auto-table">
+          <app-monitoring-plan-versions [versions]="monitoringPlanVersions$ | async"></app-monitoring-plan-versions>
+        </div>
+      </ng-container>
+    </div>
+    <app-boolean-radio-group
+      controlName="existChangesNotCoveredInApprovedVariations"
+      legend="Were there any additional changes not covered in the approved monitoring plans?"
+    >
+      <div govukConditionalContent>
+        <div govuk-textarea label="Provide details" [maxLength]="10000" formControlName="details"></div>
+      </div>
+    </app-boolean-radio-group>
+  </app-wizard-step>
+
+  <app-return-link></app-return-link>
+</app-aer-task>

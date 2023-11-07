@@ -1,0 +1,55 @@
+<ng-content></ng-content>
+<dl govuk-summary-list [class]="cssClass">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Regulated activity</dt>
+    <dd govukSummaryListRowValue>{{ activity.type | regulatedActivityType }} ({{ activity.type | gas }})</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="[activity.id]" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <ng-container *ngIf="hasError && !activity.capacity; else capacity">
+      <dt class="missing-row-key" govukSummaryListRowKey><span>Capacity</span></dt>
+      <dd govukSummaryListRowValue>
+        <span class="error">{{ errors.missingCapacity }}</span>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[activity.id, 'capacity']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </ng-container>
+    <ng-template #capacity>
+      <dt govukSummaryListRowKey>Capacity</dt>
+      <dd govukSummaryListRowValue>
+        {{ activity.capacity | number: '1.0-1000' }} {{ activity.capacityUnit | capacityUnit }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[activity.id, 'capacity']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </ng-template>
+  </div>
+  <div govukSummaryListRow [class]="noBottomBorder ? 'govuk-summary-list__row--no-border' : ''">
+    <ng-container *ngIf="hasError && missingCrfCode(); else crfCodes">
+      <dt class="missing-row-key" govukSummaryListRowKey><span>CRF codes</span></dt>
+      <dd govukSummaryListRowValue>
+        <div *ngIf="activity.energyCrf">{{ activity.energyCrf | activityItemName }}</div>
+        <div *ngIf="activity.industrialCrf">{{ activity.industrialCrf | activityItemName }}</div>
+        <span class="error">{{ errors.missingCrf ?? errors.missingIndustrialCrf ?? errors.missingEnergyCrf }}</span>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[activity.id, 'crf-codes']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </ng-container>
+    <ng-template #crfCodes>
+      <dt govukSummaryListRowKey>CRF codes</dt>
+      <dd govukSummaryListRowValue class="">
+        <ng-container>
+          <div *ngIf="activity.energyCrf">{{ activity.energyCrf | activityItemName }}</div>
+          <div *ngIf="activity.industrialCrf">{{ activity.industrialCrf | activityItemName }}</div>
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[activity.id, 'crf-codes']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </ng-template>
+  </div>
+</dl>

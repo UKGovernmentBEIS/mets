@@ -1,0 +1,39 @@
+<dl govuk-summary-list [class]="cssClass" [hasBorders]="false">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Source stream category</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let sourceStreamId of emissionPointCategory.sourceStreams; let isLast = last">
+        <ng-container *ngIf="'sourceStreams' | task | async | sourceStream: sourceStreamId as sourceStream">
+          {{ sourceStream.reference }} {{ (sourceStream | sourceStreamDescription) + (!isLast ? ', ' : '') }}
+        </ng-container>
+      </ng-container>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Emission sources</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let emissionSourceId of emissionPointCategory.emissionSources; let isLast = last">
+        <ng-container *ngIf="'emissionSources' | task | async | emissionSource: emissionSourceId as emissionSource">
+          {{ emissionSource.reference }}
+          {{ emissionSource.description + (!isLast ? ', ' : '') }}
+        </ng-container>
+      </ng-container>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Emission point</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngIf="emissionPointCategory.emissionPoint | findEmissionPoint | async as emissionPoint">
+        {{ emissionPoint.reference }} {{ emissionPoint.description }}
+      </ng-container>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Estimated CO2 emitted</dt>
+    <dd govukSummaryListRowValue>{{ emissionPointCategory.annualEmittedCO2Tonnes | number }} tonnes</dd>
+  </div>
+</dl>
+<ng-container *ngIf="emissionPointCategory.transfer">
+  <app-transfer-installation-summary-template [transfer]="emissionPointCategory.transfer" cssClass="cssClass">
+  </app-transfer-installation-summary-template>
+</ng-container>

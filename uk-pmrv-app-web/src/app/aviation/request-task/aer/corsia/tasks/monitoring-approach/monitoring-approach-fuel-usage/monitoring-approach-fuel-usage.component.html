@@ -1,0 +1,36 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Your use of fuel use monitoring"
+  submitText="Continue"
+  [hideSubmit]="false">
+  <div formControlName="fuelDensityType" govuk-radio
+       legend="Which fuel density type was used to determine fuel uplift in the reporting year?"
+       legendSize="medium" class="govuk-!-width-two-thirds">
+    <govuk-radio-option [value]="'ACTUAL_DENSITY'" [label]="'ACTUAL_DENSITY' | fuelDensityType"></govuk-radio-option>
+    <govuk-radio-option [value]="'ACTUAL_STANDARD_DENSITY'"
+                        [label]="'ACTUAL_STANDARD_DENSITY' | fuelDensityType"></govuk-radio-option>
+    <govuk-radio-option [value]="'STANDARD_DENSITY'"
+                        [label]="'STANDARD_DENSITY' | fuelDensityType"></govuk-radio-option>
+    <govuk-radio-option [value]="'NOT_APPLICABLE'" [label]="'NOT_APPLICABLE' | fuelDensityType"
+                        [divider]="true"></govuk-radio-option>
+  </div>
+
+  <ng-container *ngIf="form.controls.fuelDensityType.value === 'ACTUAL_DENSITY'
+  || form.controls.fuelDensityType.value === 'ACTUAL_STANDARD_DENSITY'
+  || form.controls.fuelDensityType.value === 'STANDARD_DENSITY'">
+    <div formControlName="identicalToProcedure" govuk-radio
+         legend="Is the application of density data identical to the procedure used for operational and safety reasons in the emissions monitoring plan?"
+         legendSize="medium">
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+    <div formControlName="blockHourUsed" govuk-radio
+         legend="Was fuel allocation by block hour used during the reporting year?"
+         legendSize="medium">
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </ng-container>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

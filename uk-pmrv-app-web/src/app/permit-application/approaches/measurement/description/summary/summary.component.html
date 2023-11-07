@@ -1,0 +1,25 @@
+<app-permit-task
+  [notification]="notification"
+  [breadcrumb]="[{ text: 'MEASUREMENT_CO2' | monitoringApproachDescription, link: ['measurement'] }]"
+>
+  <app-page-heading [caption]="'MEASUREMENT_CO2' | monitoringApproachDescription">
+    Approach description
+  </app-page-heading>
+
+  <app-hint></app-hint>
+
+  <h2
+    app-summary-header
+    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
+    class="govuk-heading-m"
+  >
+    <span class="govuk-visually-hidden">Approach description</span>
+  </h2>
+
+  <app-measurement-approach-description-summary-template></app-measurement-approach-description-summary-template>
+
+  <app-approach-return-link
+    [parentTitle]="'MEASUREMENT_CO2' | monitoringApproachDescription"
+    reviewGroupUrl="measurement"
+  ></app-approach-return-link>
+</app-permit-task>

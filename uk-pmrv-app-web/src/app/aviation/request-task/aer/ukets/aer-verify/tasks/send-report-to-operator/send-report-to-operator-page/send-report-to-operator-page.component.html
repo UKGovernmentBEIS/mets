@@ -1,0 +1,14 @@
+<div class="govuk-body">
+  <app-page-heading>Send verification report to the operator</app-page-heading>
+
+  <p class="govuk-body govuk-!-width-two-thirds">
+    By selecting ‘confirm and send’ you are confirming that the information you have provided in this verification
+    report is correct to the best of your knowledge.
+  </p>
+
+  <button *ngIf="isEditable$ | async" appPendingButton govukButton type="submit" (click)="onSubmit()">
+    Confirm and send
+  </button>
+</div>
+
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,21 @@
+<app-base-action-container-component
+  [header]="virTitle$ | async"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="['VIR_APPLICATION_SUBMITTED']">
+</app-base-action-container-component>
+<ng-template #customContentTemplate>
+  <ng-container *ngFor="let verificationDataSection of verificationDataGroup$ | async">
+    <ng-container *ngFor="let item of verificationDataSection | keyvalue">
+      <h2 class="govuk-heading-s govuk-!-margin-0">{{ item.value.reference | verificationReferenceTitle }}</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="{{ item.value.reference }}/summary"
+          linkText="Respond to recommendation"
+          [hasContent]="true">
+          <app-verification-data-item [verificationDataItem]="item.value"></app-verification-data-item>
+        </li>
+      </ul>
+    </ng-container>
+  </ng-container>
+</ng-template>

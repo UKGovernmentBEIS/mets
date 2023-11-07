@@ -1,0 +1,17 @@
+<app-aer-task-review
+  heading="Were there any changes identified during your review that were not reported to the regulator by the end of the reporting period?"
+  returnToLink="../.."
+>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">You should not repeat any items you have already listed in the previous question.</p>
+    <div formControlName="changesIdentified" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

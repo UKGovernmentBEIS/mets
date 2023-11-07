@@ -1,0 +1,19 @@
+<app-aer-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="What direction is the inherent CO2 travelling in?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div formControlName="inherentCO2Direction" govuk-radio>
+      <govuk-radio-option
+        *ngFor="let radioOption of radioOptions"
+        [value]="radioOption"
+        [label]="radioOption | inherentCo2Directions"
+      >
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'INHERENT_CO2' | monitoringApproachEmissionDescription }}</a>
+</app-aer-task>

@@ -1,0 +1,16 @@
+<app-aer-task-review heading="Describe the monitoring approaches used" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">If a combination of methodologies are being used please clearly define which source streams
+      relate to each methodology.</p>
+    <div
+      [maxLength]="10000"
+      formControlName="monitoringApproachDescription"
+      govuk-textarea
+    ></div>
+  </app-wizard-step>
+</app-aer-task-review>

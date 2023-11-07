@@ -1,0 +1,43 @@
+<ng-template #contentTpl let-showOriginal>
+  <ng-container *ngIf="vm$ | async as vm">
+    <app-data-gaps-summary-template
+      [data]="showOriginal ? vm.originalData : vm.data"
+      [isEditable]="vm.isEditable"
+      [corsiaMonitoringApproach]="vm.monitoringApproachType"
+    >
+    </app-data-gaps-summary-template>
+  </ng-container>
+</ng-template>
+
+<div *ngIf="vm$ | async as vm" data-testid="data-gaps-summary">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <app-highlight-diff *ngIf="vm.showDiff">
+    <ng-container slot="previous" *ngTemplateOutlet="contentTpl; context: { $implicit: true }"></ng-container>
+    <ng-container slot="current" *ngTemplateOutlet="contentTpl; context: { $implicit: false }"></ng-container>
+  </app-highlight-diff>
+  <ng-container
+    *ngIf="vm.showDiff === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: false }"
+  ></ng-container>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-emp-review-decision-group *ngIf="vm.showDecision" taskKey="dataGaps"></app-emp-review-decision-group>
+
+  <app-emp-variation-review-decision-group
+    *ngIf="vm.showVariationDecision"
+    taskKey="dataGaps"
+  ></app-emp-variation-review-decision-group>
+
+  <app-emp-variation-regulator-led-decision-group
+    *ngIf="vm.showVariationRegLedDecision"
+    taskKey="dataGaps"
+  ></app-emp-variation-regulator-led-decision-group>
+</div>
+<app-return-to-link></app-return-to-link>

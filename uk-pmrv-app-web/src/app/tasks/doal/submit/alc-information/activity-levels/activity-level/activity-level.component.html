@@ -1,0 +1,56 @@
+<app-doal-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Changes in activity level - new item"
+    submitText="Save and continue"
+    [hideSubmit]="(editable$ | async) === false"
+  >
+    <div
+      [options]="years"
+      formControlName="year"
+      label="Select year"
+      govuk-select
+      widthClass="govuk-!-width-one-quarter"
+    ></div>
+
+    <div
+      formControlName="subInstallationName"
+      govuk-select
+      label="Select sub-installation name"
+      widthClass="govuk-!-width-two-thirds"
+    >
+      <option *ngFor="let opt of subInstallationNameLabelsMap | keyvalue" [value]="opt.key">
+        {{ opt.value }}
+      </option>
+    </div>
+
+    <app-select-other formControlName="changeType" widthClass="govuk-!-width-full" label="Select change type">
+      <option *ngFor="let option of changeTypeLabelsMap | keyvalue" [value]="option.key">
+        {{ option.value }}
+      </option>
+      <option [value]="'OTHER'">Other</option>
+      <div govukConditionalContent>
+        <div formControlName="otherChangeTypeName" govuk-text-input label="Provide a short name"></div>
+      </div>
+    </app-select-other>
+
+    <div
+      formControlName="changedActivityLevel"
+      govuk-text-input
+      label="Enter changed activity level (optional)"
+      hint="Must be a percentage formatted to two decimal places, for example 20.22%"
+      widthClass="govuk-!-width-one-quarter"
+    ></div>
+
+    <div
+      govuk-textarea
+      formControlName="comments"
+      [maxLength]="10000"
+      label="Your comments on this item"
+      hint="Provide detailed information about this change"
+    ></div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="..">Return to: Information about this activity level change</a>
+</app-doal-task>

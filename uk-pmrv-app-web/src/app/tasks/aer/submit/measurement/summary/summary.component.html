@@ -1,0 +1,26 @@
+<app-aer-task>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <app-page-heading>Check your answers</app-page-heading>
+    </div>
+    <div class="govuk-grid-column-one-quarter" *ngIf="isEditable$ | async">
+      <div class="float-right">
+        <button type="button" (click)="onDelete()" govukSecondaryButton>Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <app-measurement-tier-summary
+    [isEditable]="isEditable$ | async"
+    [taskKey]="taskKey"
+    [payload]="payload$ | async"
+    [index]="index$ | async"
+  >
+  </app-measurement-tier-summary>
+
+  <div *ngIf="isEditable$ | async" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+
+  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

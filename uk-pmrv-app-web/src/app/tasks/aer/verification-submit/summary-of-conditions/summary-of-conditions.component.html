@@ -1,0 +1,16 @@
+<app-aer-task-review
+  heading="Were there any changes approved by the regulator that are not included in a re-issued permit?"
+>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">These could be things like new technical units, new processes or closure notifications.</p>
+    <div formControlName="changesNotIncludedInPermit" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

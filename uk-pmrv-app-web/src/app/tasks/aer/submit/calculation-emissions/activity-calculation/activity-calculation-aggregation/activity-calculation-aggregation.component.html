@@ -1,0 +1,62 @@
+<app-aer-task>
+  <ng-container *ngIf="form$ | async as form">
+    <app-wizard-step
+      (formSubmit)="onContinue()"
+      [formGroup]="form"
+      heading="Calculate the activity data for this source stream"
+      [hideSubmit]="(isEditable$ | async) === false"
+    >
+      <div
+        [options]="measurementUnits"
+        formControlName="measurementUnit"
+        govuk-select
+        label="Measurement units applied"
+      ></div>
+
+      <div
+        formControlName="materialOpeningQuantity"
+        govuk-text-input
+        label="Opening quantity of fuel or material"
+        widthClass="govuk-!-width-two-thirds"
+      ></div>
+      <div
+        formControlName="materialClosingQuantity"
+        govuk-text-input
+        label="Closing quantity of fuel or material"
+        widthClass="govuk-!-width-two-thirds"
+      ></div>
+      <div
+        formControlName="materialImportedOrExported"
+        govuk-radio
+        legend="Were there any imports or exports of fuel or material?"
+      >
+        <govuk-radio-option [value]="true" label="Yes">
+          <ng-container govukConditionalContent>
+            <div
+              formControlName="materialImportedQuantity"
+              govuk-text-input
+              hint="For example, deliveries into a tank or kiln"
+              label="Total imported fuel or material"
+              widthClass="govuk-!-width-two-thirds"
+            ></div>
+            <div
+              formControlName="materialExportedQuantity"
+              govuk-text-input
+              hint="For example, exports from a tank or kiln"
+              label="Total exported fuel or material"
+              widthClass="govuk-!-width-two-thirds"
+            ></div>
+          </ng-container>
+        </govuk-radio-option>
+        <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+      </div>
+
+      <p class="govuk-body">
+        Calculated activity data <br />
+        Total: {{ (totalMaterial$ | async) ?? 0 }} {{ measurementUnit$ | async }}
+      </p>
+    </app-wizard-step>
+
+    <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+  </ng-container>
+</app-aer-task>

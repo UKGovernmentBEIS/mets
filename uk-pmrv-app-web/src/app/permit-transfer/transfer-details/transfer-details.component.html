@@ -1,0 +1,72 @@
+<app-permit-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Confirm the transfer details"
+    [hideSubmit]="hideSubmit$ | async"
+    submitText="Confirm and complete"
+  >
+    <h1 class="govuk-heading-m">Transfer details</h1>
+    <app-permit-transfer-details-summary-template
+      [payload]="permitTransferDetails$ | async"
+      [allowChange]="false"
+      [files]="files$ | async"
+    ></app-permit-transfer-details-summary-template>
+
+    <h1 class="govuk-heading-m">Confirmation statement</h1>
+    <div formControlName="detailsAccepted" govuk-radio legend="I confirm that I am happy with the information provided">
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="detailsRejectedReason"
+            govuk-textarea
+            hint="This will be sent to the regulator after all sections have been reviewed"
+            label="Provide a reason"
+            [maxLength]="10000"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <div
+      formControlName="regulatedActivitiesInOperation"
+      govuk-radio
+      legend="I confirm that regulated activities are in operation at the installation"
+    >
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="regulatedActivitiesNotInOperationReason"
+            govuk-textarea
+            hint="This will be sent to the regulator after all sections have been reviewed"
+            label="Provide a reason"
+            [maxLength]="10000"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <div
+      formControlName="transferAccepted"
+      govuk-radio
+      legend="After the transfer is completed I understand that I will be the Operator of the installation and the transferred emissions equipment"
+    >
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="transferRejectedReason"
+            govuk-textarea
+            hint="This will be sent to the regulator after all sections have been reviewed"
+            label="Provide a reason"
+            [maxLength]="10000"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <app-list-return-link></app-list-return-link>
+</app-permit-task>

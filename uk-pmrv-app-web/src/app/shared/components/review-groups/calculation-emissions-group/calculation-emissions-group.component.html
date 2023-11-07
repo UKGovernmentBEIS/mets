@@ -1,0 +1,48 @@
+<govuk-table [columns]="columns" [data]="sourceStreamEmissions">
+  <ng-template let-column="column" let-row="row" let-index="index" let-isLast="isLast">
+    <ng-container [ngSwitch]="column.field">
+      <ng-container *ngSwitchCase="'sourceStreamDescription'">
+        <ng-container *ngIf="row?.sourceStreamDescription !== 'totals'; else totals">
+          <a [routerLink]="['./', index, 'summary']" govukLink>
+            <ng-container *ngIf="row?.sourceStreamDescription; else noSourceStream">
+              {{ row.sourceStreamDescription }}
+              <ng-container *ngIf="row?.parameterMonitoringTierDiffReason?.type === 'DATA_GAP'">
+                - Data gap
+              </ng-container>
+            </ng-container>
+            <ng-template #noSourceStream> Undefined </ng-template>
+          </a>
+        </ng-container>
+        <ng-template #totals> Total emissions </ng-template>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'emissionSources'">
+        {{ row.emissionSources }}
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'reportableEmissions'">
+        <ng-container *ngIf="row?.sourceStreamDescription !== 'totals'">
+          {{ row.reportableEmissions | bigNumber }}
+        </ng-container>
+        <ng-container *ngIf="row?.sourceStreamDescription === 'totals'">
+          {{ row.reportableEmissions | bigNumber }} tCO2e
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'biomassEmissions'">
+        <ng-container *ngIf="row?.sourceStreamDescription !== 'totals'">
+          {{ row.biomassEmissions | bigNumber }}
+        </ng-container>
+        <ng-container *ngIf="row?.sourceStreamDescription === 'totals'">
+          {{ row.biomassEmissions | bigNumber }} tCO2e
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'status'">
+        <govuk-tag *ngIf="row.status && !isReview" [color]="row.status | tagColor" class="app-task-list__tag">
+          {{ row.status | i18nSelect: statusMap }}
+        </govuk-tag>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</govuk-table>

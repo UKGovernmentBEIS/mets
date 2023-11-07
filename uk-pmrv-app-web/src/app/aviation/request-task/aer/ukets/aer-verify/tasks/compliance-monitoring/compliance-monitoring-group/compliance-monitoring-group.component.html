@@ -1,0 +1,84 @@
+<dl *ngIf="compliance" govuk-summary-list [hasBorders]="true">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Accuracy</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      <span *ngIf="compliance.accuracyCompliant; else accuracyNonCompliantReason">Compliant</span>
+      <ng-template #accuracyNonCompliantReason>
+        Not compliant <br />
+        {{ compliance.accuracyNonCompliantReason }}
+      </ng-template>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink=".." [queryParams]="{ change: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Completeness</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      <span *ngIf="compliance.completenessCompliant; else completenessNonCompliantReason">Compliant</span>
+      <ng-template #completenessNonCompliantReason>
+        Not compliant <br />
+        {{ compliance.completenessNonCompliantReason }}
+      </ng-template>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink=".." [queryParams]="{ change: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Consistency</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      <span *ngIf="compliance.consistencyCompliant; else consistencyNonCompliantReason">Compliant</span>
+      <ng-template #consistencyNonCompliantReason>
+        Not compliant <br />
+        {{ compliance.consistencyNonCompliantReason }}
+      </ng-template>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink=".." [queryParams]="{ change: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Comparability over time</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      <span *ngIf="compliance.comparabilityCompliant; else comparabilityNonCompliantReason">Compliant</span>
+      <ng-template #comparabilityNonCompliantReason>
+        Not compliant <br />
+        {{ compliance.comparabilityNonCompliantReason }}
+      </ng-template>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink=".." [queryParams]="{ change: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Transparency</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      <span *ngIf="compliance.transparencyCompliant; else transparencyNonCompliantReason">Compliant</span>
+      <ng-template #transparencyNonCompliantReason>
+        Not compliant <br />
+        {{ compliance.transparencyNonCompliantReason }}
+      </ng-template>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink=".." [queryParams]="{ change: true }">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Integrity of methodology</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      <span *ngIf="compliance.integrityCompliant; else integrityNonCompliantReason">Compliant</span>
+      <ng-template #integrityNonCompliantReason>
+        Not compliant <br />
+        {{ compliance.integrityNonCompliantReason }}
+      </ng-template>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink=".." [queryParams]="{ change: true }">Change</a>
+    </dd>
+  </div>
+</dl>

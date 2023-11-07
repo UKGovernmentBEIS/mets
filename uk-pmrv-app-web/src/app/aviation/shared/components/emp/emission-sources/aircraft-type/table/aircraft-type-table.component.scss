@@ -1,0 +1,22 @@
+.aircraft-table {
+  margin-bottom: 1rem;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+}
+.cell-container {
+  max-width: 230px;
+  min-width: 170px;
+}
+.amount {
+  text-align: left;
+}
+.error {
+  color: #d4351c;
+  font-weight: 700;
+}
+.missing-method {
+  padding-left: 20px;
+  border-left: 5px solid #d4351c;
+}

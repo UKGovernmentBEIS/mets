@@ -1,0 +1,117 @@
+<ng-template #contentTpl let-showOriginal>
+  <ng-container *ngIf="vm$ | async as vm">
+    <!-- Aircraft in use -->
+    <app-procedure-form-summary
+      *ngIf="vm.data.aircraftUsedDetails"
+      header="Aircraft in use"
+      [isEditable]="vm.isEditable"
+      [procedureFormData]="showOriginal ? vm.originalData.aircraftUsedDetails : vm.data.aircraftUsedDetails"
+      formRouterLink=".."
+    ></app-procedure-form-summary>
+
+    <!-- Completness of the list of flights -->
+    <app-procedure-form-summary
+      *ngIf="vm.data.flightListCompletenessDetails"
+      header="Completness of the list of flights"
+      [isEditable]="vm.isEditable"
+      [procedureFormData]="
+        showOriginal ? vm.originalData.flightListCompletenessDetails : vm.data.flightListCompletenessDetails
+      "
+      formRouterLink="../completeness-of-the-flights-list"
+    ></app-procedure-form-summary>
+
+    <!-- State pairs that you operate -->
+    <h2
+      app-summary-header
+      class="govuk-heading-m"
+      (changeClick)="vm.isEditable = true"
+      [changeRoute]="vm.isEditable ? '../list-state-pairs' : null"
+      [queryParams]="{ change: true }"
+    >
+      State pairs that you operate
+    </h2>
+
+    <app-flight-procedures-data-table
+      [operatingStatePairsCorsiaDetails]="
+        showOriginal
+          ? vm.originalData.operatingStatePairs.operatingStatePairsCorsiaDetails
+          : vm.data.operatingStatePairs.operatingStatePairsCorsiaDetails
+      "
+    ></app-flight-procedures-data-table>
+
+    <!-- Determination of international flights -->
+    <app-procedure-form-summary
+      *ngIf="vm.data.internationalFlightsDetermination"
+      header="Determination of international flights"
+      [isEditable]="vm.isEditable"
+      [procedureFormData]="
+        showOriginal ? vm.originalData.internationalFlightsDetermination : vm.data.internationalFlightsDetermination
+      "
+      formRouterLink="../determination-international-flights"
+    ></app-procedure-form-summary>
+
+    <!-- Determination of international flights with offsetting requirements -->
+    <app-procedure-form-summary
+      *ngIf="vm.data.internationalFlightsDeterminationOffset"
+      header="Determination of international flights with offsetting requirements"
+      [isEditable]="vm.isEditable"
+      [procedureFormData]="
+        showOriginal
+          ? vm.originalData.internationalFlightsDeterminationOffset
+          : vm.data.internationalFlightsDeterminationOffset
+      "
+      formRouterLink="../determination-international-flights-offset"
+    ></app-procedure-form-summary>
+
+    <!-- Determination of flights with no monitoring requirements -->
+    <app-procedure-form-summary
+      *ngIf="vm.data.internationalFlightsDeterminationNoMonitoring"
+      header="Determination of flights with no monitoring requirements"
+      [isEditable]="vm.isEditable"
+      [procedureFormData]="
+        showOriginal
+          ? vm.originalData.internationalFlightsDeterminationNoMonitoring
+          : vm.data.internationalFlightsDeterminationNoMonitoring
+      "
+      formRouterLink="../determination-international-flights-no-monitoring"
+    ></app-procedure-form-summary>
+  </ng-container>
+</ng-template>
+
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <app-highlight-diff *ngIf="vm.showDiff">
+    <ng-container slot="previous" *ngTemplateOutlet="contentTpl; context: { $implicit: true }"></ng-container>
+    <ng-container slot="current" *ngTemplateOutlet="contentTpl; context: { $implicit: false }"></ng-container>
+  </app-highlight-diff>
+
+  <ng-container
+    *ngIf="vm.showDiff === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: false }"
+  ></ng-container>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-emp-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="flightAndAircraftProcedures"
+  ></app-emp-review-decision-group>
+
+  <app-emp-variation-review-decision-group
+    *ngIf="vm.showVariationDecision"
+    taskKey="flightAndAircraftProcedures"
+  ></app-emp-variation-review-decision-group>
+
+  <app-emp-variation-regulator-led-decision-group
+    *ngIf="vm.showVariationRegLedDecision"
+    taskKey="flightAndAircraftProcedures"
+  ></app-emp-variation-regulator-led-decision-group>
+</ng-container>
+
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,101 @@
+<dl govuk-summary-list [class]="cssClass" [hasBorders]="hasBorders">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>
+      Are the emissions from this source stream exported to, or received from another installation?
+    </dt>
+    <dd govukSummaryListRowValue>
+      {{ transfer?.entryAccountingForTransfer === true ? 'Yes' : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['../transferred']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+  <ng-container *ngIf="transfer?.entryAccountingForTransfer === true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>What direction is the transferred {{ N2Otype ? 'N2O' : 'CO2' }} travelling?</dt>
+      <dd govukSummaryListRowValue>
+        {{ transfer?.transferDirection | transferredCO2N2ODirections }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../transferred']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+
+    <ng-container *ngIf="transfer?.installationEmitter as installationEmitter">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Installation emitter ID</dt>
+        <dd govukSummaryListRowValue>
+          {{ installationEmitter?.emitterId }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../transferred-details']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Contact email address</dt>
+        <dd govukSummaryListRowValue>
+          {{ installationEmitter?.email }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../transferred-details']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="transfer?.installationDetails as installationDetails">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Installation name</dt>
+        <dd govukSummaryListRowValue>
+          {{ installationDetails?.installationName }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../transferred-details']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Address</dt>
+        <dd govukSummaryListRowValue>
+          <div>
+            {{ installationDetails.line1
+            }}<ng-container *ngIf="installationDetails.line2">, {{ installationDetails.line2 }} </ng-container>
+          </div>
+          <div>{{ installationDetails.city }}</div>
+          <div>{{ installationDetails.postcode }}</div>
+        </dd>
+
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../transferred-details']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Town or city</dt>
+        <dd govukSummaryListRowValue>
+          {{ installationDetails?.city }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../transferred-details']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Post code</dt>
+        <dd govukSummaryListRowValue>
+          {{ installationDetails?.postcode }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../transferred-details']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Contact email address</dt>
+        <dd govukSummaryListRowValue>
+          {{ installationDetails?.email }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../transferred-details']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+  </ng-container>
+</dl>

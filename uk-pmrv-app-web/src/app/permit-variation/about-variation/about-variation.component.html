@@ -1,0 +1,13 @@
+<app-permit-task [breadcrumb]="true" reviewGroupTitle="About the variation" reviewGroupUrl="about">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Describe in detail what you are changing and the reasons for the changes"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <div formControlName="reason" govuk-textarea [maxLength]="10000" [hint]="hintText"></div>
+  </app-wizard-step>
+
+  <app-list-return-link reviewGroupTitle="About the variation" reviewGroupUrl="about"></app-list-return-link>
+</app-permit-task>

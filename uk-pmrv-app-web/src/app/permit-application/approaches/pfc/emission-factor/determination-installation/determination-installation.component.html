@@ -1,0 +1,22 @@
+<app-permit-task [breadcrumb]="[{ text: 'CALCULATION_PFC' | monitoringApproachDescription, link: ['pfc'] }]">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    [showBackLink]="true"
+    submitText="Continue"
+    [caption]="'CALCULATION_PFC' | monitoringApproachDescription"
+    heading="Provide details about the procedure used to determine the emission factors for CF4 and C2F6"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      Include that measurements have been, and will be, carried out for a long enough time for the measured values to
+      converge, at least for 72 hours.
+    </p>
+    <app-procedure-form></app-procedure-form>
+  </app-wizard-step>
+  <app-approach-return-link
+    [parentTitle]="'CALCULATION_PFC' | monitoringApproachDescription"
+    reviewGroupUrl="pfc"
+    [isNested]="true"
+  ></app-approach-return-link>
+</app-permit-task>

@@ -1,0 +1,14 @@
+<div
+  [maxLength]="10000"
+  formControlName="explanation"
+  govuk-textarea
+  label="Explain how you are eligible to apply your chosen approach"
+  hint="Identify the source of data used in your assessment (for example, internal fuel or flight data, Eurocontrol data) and the time period covered."
+  class="govuk-!-width-two-thirds"
+></div>
+<app-multiple-file-input
+  [baseDownloadUrl]="vm.downloadUrl"
+  label="Upload supporting evidence (optional)"
+  listTitle="Files added"
+  formControlName="supportingEvidenceFiles"
+></app-multiple-file-input>

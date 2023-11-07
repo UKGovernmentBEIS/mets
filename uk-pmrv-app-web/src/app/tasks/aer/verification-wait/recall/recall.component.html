@@ -1,0 +1,17 @@
+<ng-container *ngIf="(isConfirmed$ | async) === false; else confirmation">
+  <app-page-heading size="xl">Are you sure you want to recall the report?</app-page-heading>
+  <div class="govuk-button-group">
+    <button type="button" appPendingButton (click)="recall()" govukWarnButton>Yes, recall the report</button>
+  </div>
+  <app-return-link returnLink=".."></app-return-link>
+</ng-container>
+<ng-template #confirmation>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="The report has been recalled"></govuk-panel>
+      <h3 class="govuk-heading-m">What happens next</h3>
+      <p class="govuk-body">You can continue to edit the report from your dashboard.</p>
+      <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
+    </div>
+  </div>
+</ng-template>

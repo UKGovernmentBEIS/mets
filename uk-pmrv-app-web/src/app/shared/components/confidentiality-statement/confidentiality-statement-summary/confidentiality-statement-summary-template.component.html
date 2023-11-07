@@ -1,0 +1,34 @@
+<ng-container *ngIf="data">
+  <dl *ngIf="!data.exist; else sections" govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Is any of the information in your application commercially confidential?</dt>
+      <dd govukSummaryListRowValue>No</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="..">Change</a>
+      </dd>
+    </div>
+  </dl>
+  <ng-template #sections>
+    <dl
+      *ngFor="let section of data.confidentialSections"
+      govuk-summary-list
+      [class.dl&#45;&#45;no-bottom-border]="!hasBottomBorder"
+      [class]="cssClass"
+    >
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Section</dt>
+        <dd govukSummaryListRowValue>{{ section.section }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="..">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Explanation</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">{{ section.explanation }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="..">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-template>
+</ng-container>

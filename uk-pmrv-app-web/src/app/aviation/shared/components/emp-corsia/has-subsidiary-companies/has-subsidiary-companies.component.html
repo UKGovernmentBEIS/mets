@@ -1,0 +1,20 @@
+<app-wizard-step
+  (formSubmit)="submitForm.next(form)"
+  [formGroup]="form"
+  heading="Subsidiary company"
+  submitText="Continue"
+>
+  <div class="govuk-body">
+    <p>
+      If you are the parent company of a wholly-owned subsidiary company that is also an aeroplane operator attributed
+      to the UK for CORSIA, you may choose to be treated by your regulator as a single aeroplane operator.
+    </p>
+    <p class="govuk-!-font-weight-bold">
+      Do you wish to be regulated as a single aeroplane operator with your wholly-owned subsidiary?
+    </p>
+  </div>
+  <div formControlName="subsidiaryCompanyExist" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+  </div>
+</app-wizard-step>

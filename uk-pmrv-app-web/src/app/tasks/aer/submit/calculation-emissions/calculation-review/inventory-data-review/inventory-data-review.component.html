@@ -1,0 +1,60 @@
+<app-aer-task>
+  <ng-container *ngIf="form$ | async as form">
+    <app-wizard-step
+      (formSubmit)="onContinue()"
+      [formGroup]="form"
+      [heading]="'Review the calculated emissions and values applied by the UK greenhouse gas inventory data'"
+      [hideSubmit]="(isEditable$ | async) === false"
+    >
+      <ng-container *ngFor="let element of emissionsElements$ | async">
+        <h2 class="govuk-heading-m">{{ element.label }}</h2>
+        <ng-container *ngFor="let content of element.content">
+          <p class="govuk-body">{{ content.label }} {{ content.value }}</p>
+        </ng-container>
+      </ng-container>
+
+      <br />
+
+      <div
+        formControlName="calculationCorrect"
+        govuk-radio
+        legend="Are the calculated emissions correct?"
+        legendSize="medium"
+      >
+        <govuk-radio-option [value]="true" label="Yes, the emissions are correct"> </govuk-radio-option>
+        <govuk-radio-option [value]="false" label="No, I want to provide my own emissions figures">
+          <ng-container govukConditionalContent>
+            <div
+              formControlName="reasonForProvidingManualEmissions"
+              govuk-textarea
+              [maxLength]="10000"
+              label="Explain why you are providing your own emission figures"
+            ></div>
+            <div
+              formControlName="totalProvidedReportableEmissions"
+              govuk-text-input
+              [label]="
+                (sourceStreamEmission$ | async)?.biomassPercentages?.contains
+                  ? 'Total reportable emissions (include non-sustainable biomass)'
+                  : 'Total reportable emissions'
+              "
+              widthClass="govuk-input--width-10"
+              suffix="tonnes CO2e"
+            ></div>
+            <ng-container *ngIf="(sourceStreamEmission$ | async)?.biomassPercentages?.contains">
+              <div
+                formControlName="totalProvidedSustainableBiomassEmissions"
+                govuk-text-input
+                label="Total sustainable biomass emissions"
+                widthClass="govuk-input--width-10"
+                suffix="tonnes CO2e"
+              ></div>
+            </ng-container>
+          </ng-container>
+        </govuk-radio-option>
+      </div>
+    </app-wizard-step>
+
+    <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+  </ng-container>
+</app-aer-task>

@@ -1,0 +1,11 @@
+<app-base-task-container-component
+  [header]="aerTitle$ | async"
+  [customContentTemplate]="customContentTemplate"
+  [expectedTaskType]="requestTaskType$ | async"
+  [daysRemaining]="daysRemaining$ | async"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <govuk-warning-text> Waiting for the verifier to complete the opinion statement </govuk-warning-text>
+</ng-template>

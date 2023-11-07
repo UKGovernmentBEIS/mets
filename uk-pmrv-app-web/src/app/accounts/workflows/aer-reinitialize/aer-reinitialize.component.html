@@ -1,0 +1,19 @@
+<ng-container *ngIf="(isAerInitialized$ | async) === false; else initialized">
+  <app-page-heading size="l"
+    >Are you sure you want to return the annual emissions report to the operator?</app-page-heading
+  >
+  <div class="govuk-button-group govuk-!-margin-bottom-8">
+    <button type="button" (click)="onInitialize()" appPendingButton govukButton>Yes, return the report</button>
+  </div>
+  <a govukLink routerLink="..">Return to: Emissions report</a>
+</ng-container>
+<ng-template #initialized>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="The report has been returned to the operator"></govuk-panel>
+      <h3 class="govuk-heading-m">What happens next</h3>
+      <p class="govuk-body">The operator will receive an email notifying them the report has been returned to them.</p>
+      <a govukLink routerLink="/dashboard"> Return to dashboard </a>
+    </div>
+  </div>
+</ng-template>

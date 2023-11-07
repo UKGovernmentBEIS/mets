@@ -1,0 +1,19 @@
+<app-aer-task-review heading="Add a recommended improvement"
+                     returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">Suggest how the operator could improve their performance in monitoring and reporting
+      emissions, and why you think an improvement is relevant.</p>
+    <p class="govuk-body">Improvements can cover a wide range of issues including:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>risk assessment</li>
+      <li>data flow and control activities and procedures</li>
+      <li>accuracy of monitoring and reporting</li>
+    </ul>
+    <div label="Explanation" [maxLength]="10000" formControlName="explanation" govuk-textarea></div>
+  </app-wizard-step>
+</app-aer-task-review>

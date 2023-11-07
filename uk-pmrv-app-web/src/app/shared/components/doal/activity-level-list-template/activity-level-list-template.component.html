@@ -1,0 +1,42 @@
+<ng-container *ngIf="heading">
+  <h2 class="govuk-heading-m">{{ heading }}</h2>
+</ng-container>
+
+<ng-container *ngIf="dataSorted.length; else noResults">
+  <govuk-table [columns]="columns" [data]="dataSorted">
+    <ng-template let-column="column" let-row="row" let-index="index">
+      <ng-container [ngSwitch]="column.field">
+        <ng-container *ngSwitchCase="'year'">
+          {{ row.year }}
+        </ng-container>
+        <ng-container *ngSwitchCase="'subInstallationName'">
+          {{ row.subInstallationName | i18nSelect: subInstallationNameLabelsMap }}
+        </ng-container>
+        <ng-container *ngSwitchCase="'changeType'">
+          {{
+            row.changeType === 'OTHER' ? row.otherChangeTypeName : (row.changeType | i18nSelect: changeTypeLabelsMap)
+          }}
+        </ng-container>
+        <ng-container *ngSwitchCase="'changedActivityLevel'">
+          {{ row.changedActivityLevel }}
+        </ng-container>
+        <ng-container *ngSwitchCase="'comments'">
+          <span class="pre-wrap">{{ row.comments }}</span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'creationDate'">
+          {{ row.creationDate | govukDate }}
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'change'"
+          ><a [routerLink]="index" [state]="{ changing: true }" govukLink>Change</a></ng-container
+        >
+        <ng-container *ngSwitchCase="'delete'"
+          ><a [routerLink]="[index, 'delete']" [state]="{ changing: true }" govukLink>Delete</a></ng-container
+        >
+      </ng-container>
+    </ng-template>
+  </govuk-table>
+</ng-container>
+<ng-template #noResults>
+  <div class="govuk-body"><h2 class="govuk-heading-s">No results</h2></div>
+</ng-template>

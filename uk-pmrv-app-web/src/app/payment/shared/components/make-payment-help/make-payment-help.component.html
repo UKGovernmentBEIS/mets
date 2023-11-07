@@ -1,0 +1,36 @@
+<ng-container
+  *ngIf="
+    (requestType$ | async) === 'PERMIT_VARIATION' && ['SCOTLAND', 'WALES'].includes(competentAuthority$ | async);
+    else defaultHelp
+  "
+>
+  <ng-container *ngIf="(competentAuthority$ | async) === 'SCOTLAND'">
+    <p class="govuk-body">There are charges for variation, please contact SEPA to find out amount to be paid.</p>
+    <p class="govuk-body">
+      <a
+        class="govuk-link"
+        href="https://www.sepa.org.uk/regulations/authorisations-and-permits/charging-schemes/charging-schemes-and-summary-charging-booklets"
+        target="_blank"
+        rel="noopener noreferrer"
+        >SEPA’s charging scheme</a
+      >
+    </p>
+    <p class="govuk-body">Send an email to SEPA: emission.trading@SEPA.org.uk</p>
+    <p class="govuk-body">
+      <a class="govuk-link" href="https://webpayments.sepa.org.uk" target="_blank" rel="noopener noreferrer"
+        >Web payment link</a
+      >
+    </p>
+  </ng-container>
+  <ng-container *ngIf="(competentAuthority$ | async) === 'WALES'">
+    <p class="govuk-body">
+      There are charges for significant variations, please contact NRW to find out the amount to be paid.
+    </p>
+  </ng-container>
+</ng-container>
+
+<ng-template #defaultHelp>
+  <ng-container *ngIf="default">
+    <p class="govuk-body">{{ default }}.</p>
+  </ng-container></ng-template
+>

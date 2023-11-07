@@ -1,0 +1,28 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="!vm.isEditable"
+  [heading]="vm.pageHeader"
+  *ngIf="vm$ | async as vm"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    If the method used to complete the data gap was not approved by the regulator, you need to confirm if this method
+    was conservative.
+  </p>
+
+  <div formControlName="methodConservative" govuk-radio class="govuk-!-width-two-thirds">
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          [maxLength]="10000"
+          formControlName="noConservativeMethodDetails"
+          label="Provide more detail"
+          govuk-textarea
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

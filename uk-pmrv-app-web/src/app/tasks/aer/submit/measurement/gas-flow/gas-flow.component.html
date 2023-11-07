@@ -1,0 +1,18 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="What was the annual hourly average flue gas flow?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div
+      formControlName="annualHourlyAverageFlueGasFlow"
+      govuk-text-input
+      hint="This is measured in 1000 normal cubic metre (1000/Nm3)"
+      widthClass="govuk-input--width-10"
+      suffix="1000/Nm3"
+    ></div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

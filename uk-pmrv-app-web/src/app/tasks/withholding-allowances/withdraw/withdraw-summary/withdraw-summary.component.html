@@ -1,0 +1,12 @@
+<app-withholding-allowances-task>
+  <app-wa-withdraw-summary-template [payload]="payload$ | async" [isEditable]="isEditable$ | async">
+  </app-wa-withdraw-summary-template>
+  <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+
+  <app-task-return-link
+    [levelsUp]="1"
+    taskType="WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_APPLICATION_SUBMIT"
+  ></app-task-return-link>
+</app-withholding-allowances-task>

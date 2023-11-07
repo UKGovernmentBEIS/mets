@@ -1,0 +1,21 @@
+<app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" heading="Upload initial penalty notice">
+  <p class="govuk-body">Attach the initial notice relating to the daily penalty to be sent to the operator.</p>
+  <p class="govuk-body">If you need to add extra documents you can use the notes feature on the task list.</p>
+  <p class="govuk-body">The maximum file size we can accept is 20 megabytes (MB).</p>
+
+  <app-file-input
+    [downloadUrl]="getDownloadUrl"
+    formControlName="dailyPenaltyNotice"
+    label="Upload file"
+    listTitle="File added"
+  ></app-file-input>
+
+  <label for="comments" class="govuk-label govuk-label--m">Your comments (optional)</label>
+  <div govuk-textarea formControlName="comments" hint="The operator cannot see this" [maxLength]="10000"></div>
+</app-wizard-step>
+<div *ngIf="(currentDomain$ | async) === 'INSTALLATION'; else aviation">
+  <a govukLink routerLink="/dashboard"> Return to your tasks </a>
+</div>
+<ng-template #aviation>
+  <app-return-to-link></app-return-to-link>
+</ng-template>

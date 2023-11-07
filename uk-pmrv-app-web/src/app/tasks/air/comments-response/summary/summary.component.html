@@ -1,0 +1,31 @@
+<app-air-task heading="Check your answers" returnToLink="../..">
+  <app-air-improvement-item [airImprovement]="airImprovement" [reference]="reference"></app-air-improvement-item>
+  <app-air-operator-response-item
+    [reference]="reference"
+    [operatorAirImprovementResponse]="operatorAirImprovementResponse$ | async"
+    [attachedFiles]="operatorFiles$ | async"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-air-operator-response-item>
+  <app-air-regulator-response-item
+    [reference]="reference"
+    [regulatorAirImprovementResponse]="regulatorAirImprovementResponse$ | async"
+    [attachedFiles]="regulatorFiles$ | async"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-air-regulator-response-item>
+  <app-air-operator-followup-item
+    [reference]="reference"
+    [operatorAirImprovementFollowUpResponse]="operatorAirImprovementFollowUpResponse$ | async"
+    [isEditable]="isEditable$ | async"
+    [attachedFiles]="operatorFollowupFiles$ | async"
+    [isReview]="false"
+  >
+  </app-air-operator-followup-item>
+
+  <div *ngIf="isEditable$ | async" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+</app-air-task>

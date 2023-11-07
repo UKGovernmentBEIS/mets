@@ -1,0 +1,47 @@
+<ng-container *ngIf="(isFormSubmitted$ | async) === false; else confirmation">
+  <ng-container *ngIf="state$ | async as state">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <app-page-heading>Confirm your details</app-page-heading>
+
+        <p class="govuk-heading-m">Batch variation details</p>
+        <dl govuk-summary-list>
+          <ng-container>
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Signatory</dt>
+              <dd govukSummaryListRowValue>
+                {{ signatoryName$ | async }}
+              </dd>
+              <dd govukSummaryListRowActions>
+                <a govukLink [routerLink]="['..', 'signatory']">Change</a>
+              </dd>
+            </div>
+          </ng-container>
+        </dl>
+
+        <p class="govuk-heading-m">Selected emitters</p>
+        <app-permit-batch-reissue-filters-template
+          [filters]="filters$ | async"
+          [editable]="true"
+        ></app-permit-batch-reissue-filters-template>
+
+        <div class="govuk-button-group">
+          <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-template #confirmation>
+  <govuk-panel title="Batch variation in progress">
+    <p>
+      <strong>Your reference code is:</strong><br />
+      {{ requestId$ | async }}
+    </p>
+  </govuk-panel>
+  <p class="govuk-body">Your batch variation is in progress. It may take several minutes to complete.</p>
+  <h3 class="govuk-heading-m">What happens next</h3>
+  <p class="govuk-body">Once the batch variation is complete you will be able to download a full report.</p>
+  <p class="govuk-body">Select {{ requestId$ | async }} from your list of batch variations to find the report.</p>
+</ng-template>

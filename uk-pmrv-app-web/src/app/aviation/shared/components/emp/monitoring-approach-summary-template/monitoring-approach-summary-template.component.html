@@ -1,0 +1,38 @@
+<dl govuk-summary-list *ngIf="data.monitoringApproachType">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Monitoring approach</dt>
+    <dd govukSummaryListRowValue>
+      {{ data.monitoringApproachType | monitoringApproachType }}
+    </dd>
+    <dd></dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+
+<dl
+  govuk-summary-list
+  *ngIf="data.monitoringApproachType !== 'FUEL_USE_MONITORING' && data?.simplifiedApproach?.explanation"
+>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Simplified reporting eligibility</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.simplifiedApproach.explanation }}</dd>
+    <dd></dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../simplified-approach'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+<dl govuk-summary-list *ngIf="data.monitoringApproachType !== 'FUEL_USE_MONITORING' && files.length > 0">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Supporting evidence</dt>
+    <dd govukSummaryListRowValue>
+      <app-summary-download-files [files]="files"></app-summary-download-files>
+    </dd>
+    <dd></dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../simplified-approach'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>

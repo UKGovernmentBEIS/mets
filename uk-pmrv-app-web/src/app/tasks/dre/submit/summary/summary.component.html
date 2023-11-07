@@ -1,0 +1,17 @@
+<app-dre-task [notification]="notification" [breadcrumb]="true">
+  <govuk-error-summary *ngIf="displayErrorSummary$ | async" [form]="form"></govuk-error-summary>
+  <app-page-heading>Check your answers</app-page-heading>
+
+  <app-dre-summary-template
+    cssClass="summary-list--edge-border"
+    [dre]="dre$ | async"
+    [isEditable]="isTaskSubmitted$ | async"
+    [supportingDocumentFiles]="supportingDocumentFiles$ | async"
+  ></app-dre-summary-template>
+
+  <div class="govuk-button-group" *ngIf="isTaskSubmitted$ | async">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+
+  <a govukLink routerLink="../">Return to: {{ returnTo?.text }}</a>
+</app-dre-task>

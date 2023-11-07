@@ -1,0 +1,71 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Provide the emission calculation values for this source stream"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body"><strong>What guidance might be needed for this?</strong></p>
+    <ng-container *ngIf="methodType === 'METHOD_A'">
+      <div
+        formControlName="anodeEffectsPerCellDay"
+        govuk-text-input
+        label="Amount of anode effects per cell-day"
+        widthClass="govuk-input--width-20"
+      ></div>
+      <div
+        formControlName="averageDurationOfAnodeEffectsInMinutes"
+        govuk-text-input
+        label="Average duration of anode effects, in minutes"
+        widthClass="govuk-input--width-20"
+      ></div>
+      <div
+        formControlName="slopeCF4EmissionFactor"
+        govuk-text-input
+        label="Slope emission factor of CF4"
+        hint="Kilogrammes of CF4 emitted per tonne of aluminium produced per anode effect minute per cell-day."
+        widthClass="govuk-input--width-20"
+      ></div>
+    </ng-container>
+    <ng-container *ngIf="methodType === 'METHOD_B'">
+      <div
+        formControlName="anodeEffectsOverVoltagePerCell"
+        govuk-text-input
+        label="Anode effect overvoltage per cell, in millivolts"
+        hint="Determined as the integral of (time × voltage above the target voltage) divided by the time (duration) of data collection;"
+        widthClass="govuk-input--width-20"
+      ></div>
+      <div
+        formControlName="aluminiumAverageCurrentEfficiencyProduction"
+        govuk-text-input
+        label="Average current efficiency of aluminium production"
+        suffix="%"
+        widthClass="govuk-input--width-20"
+      ></div>
+      <div
+        formControlName="overVoltageCoefficient"
+        govuk-text-input
+        label="Overvoltage coefficient"
+        hint="Kilogrammes of CF4 per tonne of aluminium produced per mV overvoltage"
+        widthClass="govuk-input--width-20"
+      ></div>
+    </ng-container>
+
+    <div
+      formControlName="c2F6WeightFraction"
+      govuk-text-input
+      label="Weight fraction of C2F6"
+      hint="Tonnes of C2F6 emitted proportionate to the tonnes of CF4 emitted"
+      widthClass="govuk-input--width-20"
+    ></div>
+    <div
+      formControlName="percentageOfCollectionEfficiency"
+      govuk-text-input
+      label="Percentage of collection efficiency"
+      widthClass="govuk-input--width-20"
+      suffix="%"
+    ></div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_PFC' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

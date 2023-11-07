@@ -1,0 +1,24 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+  <h2 app-summary-header class="govuk-heading-m">
+    <span [class.govuk-visually-hidden]="!vm.hasDocuments"> Uploaded files </span>
+  </h2>
+  <app-documents-summary-template
+    [data]="vm.additionalDocuments"
+    [files]="vm.files"
+    [isEditable]="vm.isEditable"
+    [changeQueryParams]="{ change: true }"
+  ></app-documents-summary-template>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-aviation-aer-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="additionalDocuments"
+  ></app-aviation-aer-review-decision-group>
+</ng-container>
+<app-return-to-link></app-return-to-link>

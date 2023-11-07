@@ -1,0 +1,16 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Monitoring plan changes"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <div class="govuk-!-width-two-thirds">
+    <p class="govuk-body">
+      These are the versions of your monitoring plan which were effective during the scheme year.
+    </p>
+  </div>
+  <app-aer-monitoring-plan-versions [planVersions]="planVersions$ | async"></app-aer-monitoring-plan-versions>
+  <app-monitoring-plan-changes-form></app-monitoring-plan-changes-form>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

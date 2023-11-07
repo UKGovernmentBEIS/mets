@@ -1,0 +1,35 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Are you required to complete a {{ year }} emissions report?</dt>
+    <dd govukSummaryListRowValue>{{ reportingData.reportingRequired ? 'Yes' : 'No' }}</dd>
+
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+
+  <ng-container *ngIf="reportingData.reportingRequired === false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reasons</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ reportingData?.reportingObligationDetails.noReportingReason }}
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="files?.length > 0">
+      <dt govukSummaryListRowKey>Supporting documents</dt>
+
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="files"></app-summary-download-files>
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </ng-container>
+</dl>

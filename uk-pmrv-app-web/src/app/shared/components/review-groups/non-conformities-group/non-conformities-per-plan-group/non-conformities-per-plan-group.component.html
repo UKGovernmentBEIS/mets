@@ -1,0 +1,49 @@
+<ng-container *ngIf="uncorrectedNonConformities">
+  <h2 class="govuk-heading-m" *ngIf="headingLarge">Non-conformities with the approved monitoring plan</h2>
+
+  <ng-container *ngIf="showGuardQuestion && uncorrectedNonConformities?.areThereUncorrectedNonConformities !== undefined">
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Have there been any uncorrected non-conformities with the approved monitoring plan?
+        </dt>
+        <dd
+          govukSummaryListRowValue>{{ uncorrectedNonConformities.areThereUncorrectedNonConformities ? 'Yes' : 'No'}}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="[baseLink]">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <ng-container *ngIf="uncorrectedNonConformities?.uncorrectedNonConformities?.length > 0">
+    <govuk-table
+      [columns]="columns"
+      [data]="uncorrectedNonConformities.uncorrectedNonConformities"
+      [class.no-bottom-border]="false"
+      [caption]="showCaption ? 'Non-conformities with the approved monitoring plan' : ''"
+    >
+      <ng-template let-column="column" let-index="index" let-row="row">
+        <ng-container [ngSwitch]="column.field">
+          <ng-container *ngSwitchCase="'reference'">{{ row.reference }}</ng-container>
+          <ng-container *ngSwitchCase="'explanation'">{{ row.explanation }} </ng-container>
+          <ng-container *ngSwitchCase="'impact'">{{ row.materialEffect ? 'Material' : 'Immaterial' }} </ng-container>
+          <ng-container *ngIf="isEditable">
+            <ng-container *ngSwitchCase="'change'">
+              <a [routerLink]="[baseLink, 'per-plan', index]" govukLink>Change</a>
+            </ng-container>
+            <ng-container *ngSwitchCase="'delete'">
+              <a [routerLink]="[baseLink, 'per-plan', 'delete', index]" govukLink>Remove</a>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+    </govuk-table>
+    <div class="govuk-button-group" *ngIf="isEditable">
+      <button govukSecondaryButton
+              [routerLink]="[baseLink, 'per-plan', uncorrectedNonConformities?.uncorrectedNonConformities?.length ?? 0]"
+              type="button">
+        Add another item
+      </button>
+    </div>
+  </ng-container>
+</ng-container>

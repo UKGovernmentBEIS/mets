@@ -1,0 +1,24 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <h2 class="govuk-heading-m">Details</h2>
+
+  <app-ets-compliance-rules-group
+    [isEditable]="vm.isEditable"
+    [etsComplianceRules]="vm.etsComplianceRules"
+    [queryParams]="{ change: true }"
+  ></app-ets-compliance-rules-group>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-aviation-aer-verification-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="etsComplianceRules"
+  ></app-aviation-aer-verification-review-decision-group>
+</ng-container>
+
+<app-return-to-link></app-return-to-link>

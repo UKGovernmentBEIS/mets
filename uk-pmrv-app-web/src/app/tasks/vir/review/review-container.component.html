@@ -1,0 +1,23 @@
+<app-base-task-container-component
+  [header]="virTitle$ | async"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="VIR_APPLICATION_REVIEW"
+  [notification]="notification">
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <app-verification-data-group-review [virPayload]="virPayload$ | async">
+  </app-verification-data-group-review>
+
+  <h2 class="govuk-heading-s govuk-!-margin-0">Create report summary</h2>
+  <ul app-task-item-list>
+    <li app-task-item link="create-summary/summary" linkText="Create summary"
+        [status]="virPayload$ | async | taskStatus: 'createSummary'" [hasContent]="true"></li>
+  </ul>
+
+  <h2 class="govuk-heading-s govuk-!-margin-0">Submit</h2>
+  <ul app-task-item-list>
+    <li app-task-item link="send-report" linkText="Send to the operator"
+        [status]="virPayload$ | async | taskStatus: 'sendReport'" [hasContent]="true"></li>
+  </ul>
+</ng-template>

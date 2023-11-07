@@ -1,0 +1,19 @@
+<dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>
+      {{ improvementResponse?.type === 'NO' ? 'Operator justification' : 'Operator comments' }}
+    </dt>
+    <dd govukSummaryListRowValue [ngSwitch]="improvementResponse?.type" class="pre-wrap">
+      <ng-container *ngSwitchCase="'YES'">{{ improvementResponse?.proposal | textEllipsis }}</ng-container>
+      <ng-container *ngSwitchCase="'NO'">
+        {{
+          improvementResponse?.technicalInfeasibilityExplanation
+            ? improvementResponse?.technicalInfeasibilityExplanation
+            : ('Unreasonable cost' | textEllipsis)
+        }}
+      </ng-container>
+      <ng-container *ngSwitchCase="'ALREADY_MADE'">{{ improvementResponse?.explanation | textEllipsis }}</ng-container>
+    </dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+</dl>

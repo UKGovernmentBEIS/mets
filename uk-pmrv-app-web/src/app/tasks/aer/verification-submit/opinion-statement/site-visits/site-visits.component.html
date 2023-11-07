@@ -1,0 +1,20 @@
+<app-aer-task-review heading="Did your team conduct any site visits?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <ng-container formGroupName="siteVisit">
+      <div formControlName="siteVisitType" govuk-radio>
+        <govuk-radio-option [value]="'IN_PERSON'" label="In person site visit"></govuk-radio-option>
+        <govuk-radio-option [value]="'VIRTUAL'" label="Virtual site visit"></govuk-radio-option>
+        <govuk-radio-option
+          [value]="'NO_VISIT'"
+          label="No, we did not conduct any site visits"
+          [divider]="true"
+        ></govuk-radio-option>
+      </div>
+    </ng-container>
+  </app-wizard-step>
+</app-aer-task-review>

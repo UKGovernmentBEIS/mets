@@ -1,0 +1,8 @@
+<app-page-heading>Total emissions</app-page-heading>
+<app-total-emissions-scheme-corsia></app-total-emissions-scheme-corsia>
+<div class="govuk-button-group">
+  <button appPendingButton govukButton type="submit" *ngIf="(isEditable$ | async) === true" (click)="onSubmit()">
+    Continue
+  </button>
+</div>
+<app-return-to-link></app-return-to-link>

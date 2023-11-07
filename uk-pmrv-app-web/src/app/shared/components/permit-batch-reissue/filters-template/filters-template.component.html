@@ -1,0 +1,41 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Status</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let accountStatus of filters.accountStatuses">
+        <div>{{ accountStatus | i18nSelect: accountStatusLabelMap }}</div>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'filters']">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Permit type</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let emitterType of filters.emitterTypes">
+        <div>{{ emitterType | i18nSelect: accountTypeLabelMap }}</div>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'filters']">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow *ngIf="filters.installationCategories?.length">
+    <dt govukSummaryListRowKey>Category</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let installationCategory of filters.installationCategories">
+        <div>{{ installationCategory | i18nSelect: accountCategoryLabelMap }}</div>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'filters']">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow *ngIf="filters.numberOfEmitters !== null">
+    <dt govukSummaryListRowKey>Total emitters selected</dt>
+    <dd govukSummaryListRowValue>
+      <div>{{ filters.numberOfEmitters }}</div>
+    </dd>
+  </div>
+</dl>

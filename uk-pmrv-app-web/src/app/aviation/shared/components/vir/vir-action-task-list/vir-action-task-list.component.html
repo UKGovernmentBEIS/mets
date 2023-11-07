@@ -1,0 +1,32 @@
+<ng-container [ngSwitch]="virRequestActionPayload?.payloadType">
+  <ng-container *ngSwitchCase="'AVIATION_VIR_APPLICATION_SUBMITTED_PAYLOAD'">
+    <ng-container *ngFor="let item of verificationDataGroup">
+      <h2 class="govuk-heading-s govuk-!-margin-0">{{ item.reference | verificationReferenceTitle }}</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="vir/submitted/{{ item.reference }}"
+          linkText="Respond to recommendation"
+          [hasContent]="true"
+        >
+          <app-verification-data-item [verificationDataItem]="item"></app-verification-data-item>
+        </li>
+      </ul>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngSwitchCase="'AVIATION_VIR_APPLICATION_REVIEWED_PAYLOAD'">
+    <ng-container *ngFor="let item of operatorImprovementResponse | keyvalue">
+      <h2 class="govuk-heading-s govuk-!-margin-0">{{ item.key | verificationReferenceTitle }}</h2>
+      <ul app-task-item-list>
+        <li app-task-item link="vir/reviewed/{{ item.key }}" linkText="Respond to operator" [hasContent]="true">
+          <app-operator-response-data-item [operatorImprovementResponse]="item.value"></app-operator-response-data-item>
+        </li>
+      </ul>
+    </ng-container>
+
+    <h2 class="govuk-heading-s govuk-!-margin-0">Create report summary</h2>
+    <ul app-task-item-list>
+      <li app-task-item link="vir/reviewed/report-summary" linkText="Create summary"></li>
+    </ul>
+  </ng-container>
+</ng-container>

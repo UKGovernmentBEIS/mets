@@ -1,0 +1,20 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="How do you want to calculate the parameter values for this source stream?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      The Monitoring and Reporting Regulation allows nationally reported data to be used as default factors if the
+      source streams net calorific value is Tier 2a and the emission factor is either Tier 2 or Tier 2a.
+    </p>
+    <div formControlName="type" govuk-radio legendSize="medium">
+      <govuk-radio-option [value]="'REGIONAL_DATA'" label="Use regional data for natural gas"></govuk-radio-option>
+      <govuk-radio-option [value]="'NATIONAL_INVENTORY_DATA'" label="Use national inventory data"></govuk-radio-option>
+      <govuk-radio-option [value]="'MANUAL'" label="Calculate the values manually"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

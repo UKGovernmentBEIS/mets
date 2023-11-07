@@ -1,0 +1,8 @@
+<app-vir-task heading="Check your answers" returnToLink="../..">
+  <app-regulator-create-summary *ngIf="regulatorReviewResponse$ | async as regulatorReviewResponse"
+                                [regulatorReviewResponse]="regulatorReviewResponse"
+                                [isEditable]="isEditable$ | async"></app-regulator-create-summary>
+  <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+</app-vir-task>

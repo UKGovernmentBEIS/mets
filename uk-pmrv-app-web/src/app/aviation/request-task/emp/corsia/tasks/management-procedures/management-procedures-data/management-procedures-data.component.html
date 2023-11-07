@@ -1,0 +1,17 @@
+<div class="govuk-!-width-two-thirds">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Data management"
+    submitText="Continue"
+    [hideSubmit]="false"
+  >
+    <p class="govuk-body">
+      Describe each step in the data flow and data processing, including controls to assure data quality, from the data
+      sources to the emissions report.
+    </p>
+
+    <app-management-procedures-data-form></app-management-procedures-data-form>
+  </app-wizard-step>
+</div>
+<app-return-to-link></app-return-to-link>

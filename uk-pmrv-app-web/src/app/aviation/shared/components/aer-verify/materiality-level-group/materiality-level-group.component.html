@@ -1,0 +1,39 @@
+<h2 class="govuk-heading-m">Further information related to the assessment</h2>
+
+<div class="govuk-body govuk-!-width-two-thirds">
+  <!-- Materiality level -->
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Materiality level</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ materialityLevel.materialityDetails }}
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../']" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- Accreditation reference documents -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Accreditation reference documents</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <div *ngFor="let type of materialityLevel.accreditationReferenceDocumentTypes">
+          <span *ngIf="type === 'OTHER'; else typeValue">
+            {{ materialityLevel.otherReference }}
+            <br /><br />
+          </span>
+
+          <ng-template #typeValue>
+            {{ type | accreditationReferenceDocumentName }}
+            <br /><br />
+          </ng-template>
+        </div>
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../reference-documents']" [queryParams]="queryParams"> Change </a>
+      </dd>
+    </div>
+  </dl>
+</div>

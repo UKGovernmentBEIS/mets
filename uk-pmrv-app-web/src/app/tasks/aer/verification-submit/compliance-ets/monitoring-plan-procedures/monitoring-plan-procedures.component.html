@@ -1,0 +1,36 @@
+<app-aer-task-review
+  heading="Were procedures in the monitoring plan documented, implemented, maintained and effective to reduce risks?"
+  returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <govuk-details summary="See guidance">
+      <article>
+        <p class="govuk-body">
+          To ensure that the monitoring plan is implemented correctly, you need to check that the procedures in it (or
+          in the monitoring approach plan) are effectively reducing the inherent risks and control risks.
+        </p>
+        <p class="govuk-body">
+          The procedures must be:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>implemented correctly</li>
+          <li>documented correctly</li>
+          <li>maintained properly</li>
+        </ul>
+      </article>
+    </govuk-details>
+    <div formControlName="proceduresMonitoringPlanDocumented" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="proceduresMonitoringPlanNotDocumentedReason" govuk-textarea
+               label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

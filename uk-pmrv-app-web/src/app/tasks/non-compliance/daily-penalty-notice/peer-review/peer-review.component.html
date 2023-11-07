@@ -1,0 +1,26 @@
+<app-base-task-container-component
+  header="Peer review initial penalty: non-compliance"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <ng-container>
+    <div class="govuk-button-group">
+      <button
+        *ngIf="allowPeerReviewDecision$ | async"
+        (click)="peerReviewDecision()"
+        govukButton
+        title="Peer review decision"
+        type="button"
+      >
+        Peer review decision
+      </button>
+    </div>
+  </ng-container>
+
+  <ul app-task-item-list>
+    <li app-task-item link="../summary" linkText="Upload daily penalty notice" [status]="sectionStatus$ | async"></li>
+  </ul>
+</ng-template>

@@ -1,0 +1,41 @@
+<ng-template #contentTpl let-permitType>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      [link]="(isPermitTypeEditable$ | async) ? '../../permit-type/summary' : null"
+      linkText="Permit type"
+      [status]="permitType ? 'complete' : 'not started'"
+      [hasContent]="true"
+    >
+      <app-permit-type-summary-template
+        [permitType]="permitType"
+        [hasBottomBorder]="false"
+      ></app-permit-type-summary-template>
+    </li>
+  </ul>
+</ng-template>
+
+<app-permit-task-review [breadcrumb]="true" [notification]="notification" heading="Permit type">
+  <app-highlight-diff *ngIf="(showDiff$ | async) === true">
+    <ng-container
+      slot="current"
+      *ngTemplateOutlet="contentTpl; context: { $implicit: permitType$ | async }"
+    ></ng-container>
+    <ng-container
+      slot="previous"
+      *ngTemplateOutlet="contentTpl; context: { $implicit: originalPermitType$ | async }"
+    ></ng-container>
+  </app-highlight-diff>
+
+  <ng-container
+    *ngIf="(showDiff$ | async) === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: permitType$ | async }"
+  ></ng-container>
+
+  <app-review-group-decision-container
+    [canEdit]="isPermitTypeEditable$ | async"
+    [groupKey]="groupKey$ | async"
+    (notification)="notification = $event"
+  ></app-review-group-decision-container>
+</app-permit-task-review>

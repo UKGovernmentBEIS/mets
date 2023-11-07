@@ -1,0 +1,49 @@
+<app-base-action-container-component
+  [header]="'Batch variation completed'"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="['BATCH_REISSUE_COMPLETED']"
+>
+</app-base-action-container-component>
+
+<ng-template #customContentTemplate>
+  <p class="govuk-heading-m">Batch variation details</p>
+  <dl govuk-summary-list>
+    <ng-container>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Created by</dt>
+        <dd govukSummaryListRowValue>
+          {{ (payload$ | async).submitter }}
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Date created</dt>
+        <dd govukSummaryListRowValue>
+          {{ (action$ | async).creationDate | govukDate }}
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Signatory</dt>
+        <dd govukSummaryListRowValue>
+          {{ (payload$ | async).signatoryName }}
+        </dd>
+      </div>
+      <div govukSummaryListRow *ngIf="(payload$ | async)?.report as report">
+        <dt govukSummaryListRowKey>Batch variation report</dt>
+        <dd govukSummaryListRowValue>
+          <a
+            [routerLink]="['/actions', (action$ | async).id, 'file-download', 'document', report.uuid]"
+            govukLink
+            target="_blank"
+            >{{ report.name }}</a
+          >
+        </dd>
+      </div>
+    </ng-container>
+  </dl>
+
+  <p class="govuk-heading-m">Selected emitters</p>
+  <app-permit-batch-reissue-filters-template
+    [filters]="filters$ | async"
+    [editable]="false"
+  ></app-permit-batch-reissue-filters-template>
+</ng-template>

@@ -1,0 +1,22 @@
+<app-vir-task *ngIf="(isSubmitted$ | async) !== true; else submitted" [heading]="heading" returnToLink="../..">
+  <p class="govuk-body">
+    Are you sure you want to submit your response for this item to the Competent Authority for assessment?
+  </p>
+  <govuk-warning-text assistiveText="Warning">You cannot make changes after you click 'submit'</govuk-warning-text>
+  <div *ngIf="isEditable$ | async" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+</app-vir-task>
+
+<ng-template #submitted>
+  <govuk-panel title="Response submitted">
+    <p>Your responses have been successfully submitted to the Competent Authority for assessment</p>
+    <p>
+      <strong>Your reference code is:</strong><br />
+      {{ requestId$ | async }}
+    </p>
+  </govuk-panel>
+  <h3 class="govuk-heading-m">What happens next</h3>
+  <p class="govuk-body">Your response will be forwarded to a regulator at the Competent Authority for review.</p>
+  <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
+</ng-template>

@@ -1,0 +1,44 @@
+<div class="govuk-!-width-two-thirds" data-testid="aicraft-type-form">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="aircraftTypeForm" heading="Aircraft type details"
+    submitText="Continue" [hideSubmit]="false">
+    <h2 class="govuk-heading-m">Aircraft type</h2>
+    <div class="govuk-form-group govuk-body">
+      <div *ngIf="aircraftTypeText; else emptyAircraftType">
+        <span>{{ aircraftTypeText | aircraftTypeDescription }}
+          <a govukLink id="change-aircraft" [routerLink]="['../search']"
+            queryParamsHandling="preserve">Change</a></span>
+      </div>
+      <ng-template #emptyAircraftType>
+        <a govukLink [routerLink]="['../search']" queryParamsHandling="preserve" data-testid="choose-aircraft-type-link">Choose an aircraft type</a>
+      </ng-template>
+    </div>
+    <div class="govuk-form-group">
+      <div govuk-text-input data-testid="subtype" formControlName="subtype" label="Sub-type (optional)" hint="Only necessary if you need to clarify your selected aircraft type or account for missing
+    sub-types."></div>
+    </div>
+    <div class="govuk-form-group">
+      <h2 class="govuk-heading-m">Operation details</h2>
+      <div govuk-text-input formControlName="numberOfAircrafts"
+        label="How many of this aircraft type do you have in operation?" widthClass="govuk-!-width-one-quarter"
+        inputType="number"></div>
+    </div>
+    <div class="govuk-form-group">
+      <div govuk-checkboxes formControlName="fuelTypes" legend="What fuels are these aircraft using?"
+        legendSize="normal">
+        <govuk-checkbox *ngFor="let fuelType of fuelTypes" i [value]="fuelType.value" [label]="fuelType.description">
+        </govuk-checkbox>
+      </div>
+    </div>
+    <!-- Measuring fuel consumtion section -->
+    <div class="govuk-form-group" *ngIf="hasFuelConsumptionMeasuringMethod">
+      <h2 class="govuk-heading-m">Measuring fuel consumption</h2>
+      <div govuk-radio formControlName="fuelConsumptionMeasuringMethod"
+        legend="How will you measure fuel consumption per flight for this aircraft type?" legendSize="normal">
+        <govuk-radio-option *ngFor="let fcm of fuelConsumptionMeasuringMethods" [label]="fcm.label"
+          [value]="fcm.value"></govuk-radio-option>
+      </div>
+    </div>
+    <br />
+  </app-wizard-step>
+  <app-return-to-link></app-return-to-link>
+</div>

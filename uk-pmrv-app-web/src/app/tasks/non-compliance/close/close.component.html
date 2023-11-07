@@ -1,0 +1,28 @@
+<span class="govuk-caption-l"> Non-compliance </span>
+<app-page-heading size="l">Close task</app-page-heading>
+<p class="govuk-body">You can close this task if you believe there is nothing left for you or others to complete.</p>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+  <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+  <label for="reason" class="govuk-label govuk-label--m">Explain why you have decided to close this task</label>
+  <div govuk-textarea formControlName="reason" hint="The operator cannot view this" [maxLength]="10000"></div>
+
+  <app-multiple-file-input
+    [baseDownloadUrl]="getBaseFileDownloadUrl()"
+    label="Upload supporting documents (optional)"
+    listTitle="Uploaded files"
+    formControlName="files"
+  ></app-multiple-file-input>
+
+  <h3 class="govuk-heading-s">Close task</h3>
+  <p class="govuk-body">Are you sure you want to close this task?</p>
+  <govuk-warning-text> You cannot make changes after you click 'close task'. </govuk-warning-text>
+  <button appPendingButton govukButton type="submit">Close task</button>
+</form>
+
+<div *ngIf="(currentDomain$ | async) === 'INSTALLATION'; else aviation">
+  <a govukLink routerLink="/dashboard"> Return to your tasks </a>
+</div>
+<ng-template #aviation>
+  <app-return-to-link></app-return-to-link>
+</ng-template>

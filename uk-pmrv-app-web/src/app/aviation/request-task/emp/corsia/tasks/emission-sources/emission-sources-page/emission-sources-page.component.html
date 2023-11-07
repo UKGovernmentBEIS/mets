@@ -1,0 +1,30 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form" data-testid="emission-sources-page">
+  <govuk-error-summary [form]="form" *ngIf="aircratTypesControl.errors && aircratTypesControl.touched"></govuk-error-summary>
+  <app-page-heading>Emission sources</app-page-heading>
+  <div class="govuk-!-width-two-thirds">
+    <h1 class="govuk-heading-m">List all aircraft currently in use</h1>
+    <p class="govuk-body">
+      Include owned and leased-in aircraft which you are using this year to perform an aviation activity.
+    </p>
+  </div>
+  <app-aircraft-type-table
+    [aircraftTypes]="aircraftTypes$ | async"
+    [isFUMM]="isFUMM"
+    [isCorsia]="true"
+    data-testid="aicraft-types-table"
+  ></app-aircraft-type-table>
+  <div class="govuk-button-group">
+    <button
+      type="button"
+      govukButton
+      govuksecondarybutton
+      (click)="addAircraftType()"
+      data-testid="add-aicraft-btn"
+    >
+      Add an aircraft type
+    </button>
+  </div>
+  <button appPendingButton govukButton type="submit">Continue</button>
+</form>
+
+<app-return-to-link></app-return-to-link>

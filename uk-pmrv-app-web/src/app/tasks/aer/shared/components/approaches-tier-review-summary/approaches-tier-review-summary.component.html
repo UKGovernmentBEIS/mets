@@ -1,0 +1,23 @@
+<app-aer-task-review
+  [heading]="heading$ | async"
+  [breadcrumb]="[
+    {
+      text: this.groupKey | monitoringApproachEmissionDescription,
+      link: this.groupKey === 'CALCULATION_CO2' ? ['calculation-emissions'] : ['pfc']
+    }
+  ]"
+  linkText="{{ this.groupKey | monitoringApproachEmissionDescription }}"
+  returnToLink="../.."
+>
+  <div [ngSwitch]="this.groupKey">
+    <div *ngSwitchCase="'CALCULATION_CO2'">
+      <app-calculation-emissions-tier-summary
+        [payload]="payload$ | async"
+        [index]="index$ | async"
+      ></app-calculation-emissions-tier-summary>
+    </div>
+    <div *ngSwitchCase="'CALCULATION_PFC'">
+      <app-pfc-tier-summary [payload]="payload$ | async" [index]="index$ | async"> </app-pfc-tier-summary>
+    </div>
+  </div>
+</app-aer-task-review>

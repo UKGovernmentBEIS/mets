@@ -1,0 +1,8 @@
+<ng-container *ngIf="requestInfoId$ | async as requestInfoId">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="Return of allowances complete">Your reference code is: {{ requestInfoId }} </govuk-panel>
+    </div>
+  </div>
+</ng-container>
+<a govukLink routerLink="/dashboard">Return to: Dashboard</a>

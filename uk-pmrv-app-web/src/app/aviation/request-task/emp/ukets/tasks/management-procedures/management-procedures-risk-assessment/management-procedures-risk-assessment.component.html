@@ -1,0 +1,18 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Upload a risk assessment"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Provide the results of a risk assessment that identifies the key risks, their risk rating and control measures
+    related to your monitoring and reporting processes.
+  </p>
+  <app-file-input
+    [downloadUrl]="getDownloadUrl"
+    formControlName="riskAssessmentFile"
+    label="Upload a file"
+  ></app-file-input>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

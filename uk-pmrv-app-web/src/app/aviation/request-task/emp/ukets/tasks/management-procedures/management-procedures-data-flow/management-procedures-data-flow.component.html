@@ -1,0 +1,20 @@
+<div class="govuk-!-width-two-thirds">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Data flow activities"
+    submitText="Continue"
+    [hideSubmit]="false"
+  >
+    <p class="govuk-body">
+      Describe the procedures used to manage data flow activities, to ensure data does not contain misstatements and
+      conforms to the approved emissions monitoring plan and Order.
+    </p>
+    <p class="govuk-body">
+      If there are several procedures, give details of the overarching one that covers the main steps of data flow
+      activities and attach a diagram showing how the data management procedures link together.
+    </p>
+    <app-management-procedures-data-flow-form></app-management-procedures-data-flow-form>
+  </app-wizard-step>
+</div>
+<app-return-to-link></app-return-to-link>

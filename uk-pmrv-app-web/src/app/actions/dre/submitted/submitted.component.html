@@ -1,0 +1,16 @@
+<app-base-action-container-component
+  [header]="'Reportable emissions'"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="['DRE_APPLICATION_SUBMITTED']"
+>
+</app-base-action-container-component>
+
+<ng-template #customContentTemplate>
+  <ol class="app-task-list">
+    <li app-task-section title="Details">
+      <ul app-task-item-list>
+        <li app-task-item link="./summary" linkText="Reportable emissions"></li>
+      </ul>
+    </li>
+  </ol>
+</ng-template>

@@ -1,0 +1,40 @@
+<app-non-compliance-task>
+  <app-page-heading>Check your answers</app-page-heading>
+
+  <p class="govuk-heading-m">Upload initial penalty notice</p>
+  <ng-container *ngIf="payload$ | async as payload">
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Uploaded document</dt>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files [files]="documentFiles$ | async"> </app-summary-download-files>
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'upload-initial-notice']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list *ngIf="payload?.comments">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Comments</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ payload.comments }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'upload-initial-notice']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <div class="govuk-button-group" *ngIf="isEditable$ | async">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+
+  <div *ngIf="(currentDomain$ | async) === 'INSTALLATION'; else aviation">
+    <a govukLink [routerLink]="returnTo?.link">Return to: {{ returnTo?.text }}</a>
+  </div>
+  <ng-template #aviation>
+    <app-return-to-link></app-return-to-link>
+  </ng-template>
+</app-non-compliance-task>

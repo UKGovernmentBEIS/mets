@@ -1,0 +1,59 @@
+<ng-container
+  *ngIf="
+    ('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async]
+      .sourceStreamCategory as sourceStreamCategory
+  "
+>
+  <app-permit-task
+    *ngIf="sourceStreamCategory.sourceStream | findSourceStream | async as sourceStream"
+    [breadcrumb]="[
+      {
+        text: 'CALCULATION_CO2' | monitoringApproachDescription,
+        link: ['calculation']
+      },
+      {
+        text: sourceStream | tierSourceStreamName: sourceStreamCategory,
+        link: ['calculation', 'category-tier', index$ | async]
+      }
+    ]"
+  >
+    <ng-container
+      *ngIf="
+        ('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async] as tier
+      "
+    >
+      <app-wizard-step
+        [showBackLink]="true"
+        (formSubmit)="onContinue()"
+        [formGroup]="form"
+        caption="{{ 'CALCULATION_CO2' | monitoringApproachDescription }}, {{ tier | sourceStreamCategoryName | async }}"
+        heading="Which standard reference source you are using for {{ statusKey | subtaskName | lowercase }}?"
+        submitText="Continue"
+        [hideSubmit]="(store.isEditable$ | async) === false"
+      >
+        <div formControlName="type" govuk-radio>
+          <govuk-radio-option
+            *ngFor="let option of referenceMap | keyvalue: originalOrder"
+            [value]="option.key"
+            [label]="option.value"
+          ></govuk-radio-option>
+          <govuk-radio-option [divider]="true" value="OTHER" label="None of the above">
+            <ng-container govukConditionalContent>
+              <div
+                formControlName="otherTypeDetails"
+                govuk-text-input
+                label="Enter details of the reference source being used"
+              ></div>
+            </ng-container>
+          </govuk-radio-option>
+        </div>
+        <div
+          formControlName="defaultValue"
+          govuk-text-input
+          label="Enter a default value, including the unit type"
+        ></div>
+      </app-wizard-step>
+      <a govukLink routerLink="../..">Return to: {{ tier | sourceStreamCategoryName | async }}</a>
+    </ng-container>
+  </app-permit-task>
+</ng-container>

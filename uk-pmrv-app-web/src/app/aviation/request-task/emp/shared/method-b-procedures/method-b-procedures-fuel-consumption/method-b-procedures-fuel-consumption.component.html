@@ -1,0 +1,40 @@
+<app-procedure-form-step [form]="form" (submitForm)="onContinue()">
+  <div procedureFormPageHeader>
+    <app-page-heading caption="Method B" size="l"> Monitoring fuel consumption per flight </app-page-heading>
+
+    <p class="govuk-body">Describe how you monitor fuel consumption per flight in owned and leased-in aircraft.</p>
+    <p class="govuk-body">You should include:</p>
+
+    <ul class="govuk-body">
+      <li>the exact time when the fuel in tank measurements are taken</li>
+      <li>a description of the measurement equipment</li>
+      <li>the procedures for recording, retrieving, transmitting and storing information</li>
+      <li>how fuel uplift is determined</li>
+    </ul>
+
+    <govuk-details summary="Method B formula: FN = RN-1 - RN + UN">
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        FN = fuel consumed for the flight under consideration (flight = N) determined using Method B (in tonnes)
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        RN-1 = amount of fuel remaining in aeroplane tanks at the end of the previous flight (flight N-1) at Block-on
+        before the flight under consideration (in tonnes)
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        RN = amount of fuel remaining in aeroplane tanks at the end of the flight under consideration (flight N) at
+        Block-on after the flight (in tonnes)
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        UN = fuel uplift for the flight considered, measured in volume and multiplied with a density value (in tonnes)
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        Fuel uplift is determined by the measurement by the fuel supplier, as documented in the fuel delivery notes or
+        invoices for each flight.
+      </p>
+    </govuk-details>
+  </div>
+</app-procedure-form-step>

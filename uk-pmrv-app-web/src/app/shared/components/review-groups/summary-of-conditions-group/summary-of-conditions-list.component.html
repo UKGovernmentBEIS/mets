@@ -1,0 +1,24 @@
+<govuk-table [columns]="columns" [data]="list" [class.no-bottom-border]="false">
+  <ng-template let-column="column" let-index="index" let-row="row">
+    <ng-container [ngSwitch]="column.field">
+      <ng-container *ngSwitchCase="'reference'">{{ row.reference }}</ng-container>
+      <ng-container *ngSwitchCase="'explanation'">
+        <div class="pre-wrap">{{ row.explanation }}</div>
+      </ng-container>
+      <ng-container *ngIf="isEditable">
+        <ng-container *ngSwitchCase="'change'">
+          <a [routerLink]="[baseChangeLink, index]" govukLink>Change</a>
+        </ng-container>
+        <ng-container *ngSwitchCase="'delete'">
+          <a [routerLink]="[baseChangeLink, index, 'delete']" govukLink>Remove</a>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</govuk-table>
+<ng-container *ngIf="isEditable">
+  <div>
+    <button govukSecondaryButton [routerLink]="[baseChangeLink, list.length]" type="button">Add another item</button>
+  </div>
+  <ng-content></ng-content>
+</ng-container>

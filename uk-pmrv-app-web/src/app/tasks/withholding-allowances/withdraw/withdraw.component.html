@@ -1,0 +1,39 @@
+<app-base-task-container-component
+  header="Withdraw withholding of allowances notice"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_APPLICATION_SUBMIT"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <ng-container>
+    <div class="govuk-button-group">
+      <button
+        *ngIf="allowNotifyOperator$ | async"
+        (click)="notifyOperator()"
+        govukButton
+        title="Notify operator for decision"
+        type="button"
+      >
+        Notify Operator of decision
+      </button>
+    </div>
+  </ng-container>
+
+  <ol class="app-task-list">
+    <li app-task-section title="Withholding of allowances details">
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          [link]="
+            (canViewSectionDetails$ | async)
+              ? './summary'
+              : null
+          "
+          linkText="Provide reason for withdrawal details"
+          [status]="sectionStatus$ | async"
+        ></li>
+      </ul>
+    </li>
+  </ol>
+</ng-template>

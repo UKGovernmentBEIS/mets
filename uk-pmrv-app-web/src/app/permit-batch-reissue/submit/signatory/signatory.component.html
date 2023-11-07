@@ -1,0 +1,19 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <app-wizard-step
+      (formSubmit)="onSubmit()"
+      [formGroup]="form"
+      heading="Whose name and signature should appear on the notice?"
+      submitText="Continue"
+      [showBackLink]="true"
+    >
+      <div
+        class="govuk-body"
+        [options]="regulators$ | async"
+        formControlName="signatory"
+        govuk-select
+        widthClass="govuk-!-width-two-thirds"
+      ></div>
+    </app-wizard-step>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="govuk-!-width-two-thirds">
+    <govuk-panel title="Emissions report completed">Your reference is {{ vm.requestId }}</govuk-panel>
+  </div>
+</ng-container>
+<a govukLink routerLink="/aviation/dashboard"> Return to dashboard </a>

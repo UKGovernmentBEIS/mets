@@ -1,0 +1,21 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Total emissions"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <app-total-emissions-scheme-year-header></app-total-emissions-scheme-year-header>
+
+  <h2 id="confidentiality" class="govuk-heading-m govuk-!-width-two-thirds">Confidentiality</h2>
+  <div
+    formControlName="confidential"
+    govuk-radio
+    legend="Do you consider any of the data in the emissions by aerodrome pairs confidential?"
+    legendSize="normal"
+  >
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

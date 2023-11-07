@@ -1,0 +1,21 @@
+<app-wizard-step
+  [formGroup]="form"
+  (formSubmit)="onSubmit()"
+  heading="Confirm the type of application"
+  caption="Application type"
+>
+  <span class="govuk-caption-l">
+    Confirm whether you are applying for a new permit or whether you are applying to receive an existing permit as part
+    of a permit transfer
+  </span>
+  <div govuk-radio formControlName="applicationType">
+    <govuk-radio-option
+      *ngFor="let option of options | keyvalue"
+      [value]="option.key"
+      [label]="option.value"
+    ></govuk-radio-option>
+  </div>
+</app-wizard-step>
+<a *ngIf="!this.store.getState().isReviewed" govukLink routerLink=".."
+  >Return to: Request to open an installation account</a
+>

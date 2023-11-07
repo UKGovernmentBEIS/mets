@@ -1,0 +1,35 @@
+<app-base-task-container-component
+  header="Peer review withholding of allowances"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEW"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <ng-container>
+    <div class="govuk-button-group">
+      <button
+        *ngIf="allowPeerReviewDecision$ | async"
+        (click)="peerReviewDecision()"
+        govukButton
+        title="Peer review decision"
+        type="button"
+      >
+        Peer review decision
+      </button>
+    </div>
+  </ng-container>
+
+  <ol class="app-task-list">
+    <li app-task-section title="Withholding of allowances details">
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="./summary"
+          linkText="Provide withholding of allowances details"
+          [status]="sectionStatus$ | async"
+        ></li>
+      </ul>
+    </li>
+  </ol>
+</ng-template>

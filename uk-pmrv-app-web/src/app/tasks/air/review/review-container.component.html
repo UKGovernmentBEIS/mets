@@ -1,0 +1,24 @@
+<app-base-task-container-component
+  [header]="title$ | async"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="AIR_APPLICATION_REVIEW">
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <div class="govuk-button-group">
+    <a *ngIf="allowNotifyOperator$ | async" govukButton routerLink="./send-report">Notify operator of decision</a>
+  </div>
+
+  <app-air-improvement-data-group-review [airPayload]="payload$ | async"></app-air-improvement-data-group-review>
+
+  <h2 class="govuk-heading-s govuk-!-margin-0">Review summary</h2>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="provide-summary/summary"
+      linkText="Provide summary of improvements for official notice"
+      [status]="payload$ | async | taskStatus: 'provideSummary'"
+      [hasContent]="true">
+    </li>
+  </ul>
+</ng-template>

@@ -1,0 +1,16 @@
+<app-doal-task [breadcrumb]="true">
+  <app-page-heading>Check your answers</app-page-heading>
+
+  <h2 class="govuk-heading-m">Decision details</h2>
+
+  <app-determination-summary-template
+    [determination]="determination$ | async"
+    [editable]="editable$ | async">
+  </app-determination-summary-template>
+
+  <div class="govuk-button-group" *ngIf="editable$ | async">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+
+  <app-task-return-link taskType="DOAL_APPLICATION_SUBMIT" [levelsUp]="3"></app-task-return-link>
+</app-doal-task>

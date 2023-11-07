@@ -1,0 +1,46 @@
+<app-doal-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Provide UK ETS Authority response"
+    caption="Provide UK ETS Authority response"
+    submitText="Save and continue"
+  >
+    <div
+      formControlName="authorityRespondDate"
+      govuk-date-input
+      [max]="today"
+      label="When did the Authority respond?"
+      hint="This date cannot be in the future"
+      [isRequired]="true"
+    ></div>
+
+    <div formControlName="type" govuk-radio legend="Authority decision" legendSize="medium">
+      <govuk-radio-option value="VALID" [label]="'VALID' | authorityDecisionType"></govuk-radio-option>
+      <govuk-radio-option value="VALID_WITH_CORRECTIONS" [label]="'VALID_WITH_CORRECTIONS' | authorityDecisionType">
+        <ng-container govukConditionalContent>
+          <div
+            govuk-textarea
+            formControlName="acceptedDecisionNotice"
+            [maxLength]="10000"
+            label="Explanation of Authority decision for notice"
+            hint="This will be entered into the official notice"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option value="INVALID" [label]="'INVALID' | authorityDecisionType">
+        <ng-container govukConditionalContent>
+          <div
+            govuk-textarea
+            formControlName="rejectedDecisionNotice"
+            [maxLength]="10000"
+            label="Explanation of Authority decision for notice"
+            hint="This will be entered into the official notice"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <app-task-return-link taskType="DOAL_AUTHORITY_RESPONSE"></app-task-return-link>
+</app-doal-task>

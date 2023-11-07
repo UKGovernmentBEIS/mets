@@ -1,0 +1,61 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Monitoring approach</dt>
+    <dd govukSummaryListRowValue>
+      {{ data.monitoringApproachType | monitoringApproachType: 'aer' }}
+    </dd>
+    <dd></dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+
+<dl govuk-summary-list *ngIf="data.monitoringApproachType === 'EUROCONTROL_SMALL_EMITTERS'">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Total number of full-scope flights</dt>
+    <dd govukSummaryListRowValue>
+      <div>Jan to Apr: {{ data.numOfFlightsJanApr }} flights</div>
+      <div>May to Aug: {{ data.numOfFlightsMayAug }} flights</div>
+      <div>Sept to Dec: {{ data.numOfFlightsSepDec }} flights</div>
+      <div>Total: {{ +data.numOfFlightsJanApr + +data.numOfFlightsMayAug + +data.numOfFlightsSepDec }} flights</div>
+    </dd>
+    <dd></dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../total-number-full-scope-flights'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+
+<dl govuk-summary-list *ngIf="data.monitoringApproachType !== 'FUEL_USE_MONITORING'">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>
+      Total emissions from
+      {{
+        data?.totalEmissionsType === 'FULL_SCOPE_FLIGHTS' || data?.totalEmissions
+          ? 'full-scope flights'
+          : 'aviation activity'
+      }}
+    </dt>
+    <dd govukSummaryListRowValue *ngIf="data?.totalEmissionsType">
+      {{
+        data.totalEmissionsType === 'FULL_SCOPE_FLIGHTS'
+          ? data.fullScopeTotalEmissions
+          : data.aviationActivityTotalEmissions
+      }}
+      tonnes CO2
+    </dd>
+    <dd govukSummaryListRowValue *ngIf="data?.totalEmissions">{{ data.totalEmissions }} tonnes CO2</dd>
+    <dd></dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a
+        govukLink
+        [routerLink]="
+          data?.totalEmissionsType ? '../scheme-year-total-emissions' : '../total-number-full-scope-flights'
+        "
+        [queryParams]="changeUrlQueryParams"
+        >Change</a
+      >
+    </dd>
+  </div>
+</dl>

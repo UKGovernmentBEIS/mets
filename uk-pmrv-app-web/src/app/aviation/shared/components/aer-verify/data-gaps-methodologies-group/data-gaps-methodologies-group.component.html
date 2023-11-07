@@ -1,0 +1,49 @@
+<dl *ngIf="dataGapsMethodologies" govuk-summary-list [hasBorders]="true" class="govuk-!-width-two-thirds">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Was a data gap method required during the reporting year?</dt>
+    <dd govukSummaryListRowValue>{{ dataGapsMethodologies.methodRequired ? 'Yes' : 'No' }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink=".." [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+
+  <ng-container *ngIf="dataGapsMethodologies.methodApproved !== undefined">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Has the data gap method already been approved by the regulator?</dt>
+      <dd govukSummaryListRowValue>{{ dataGapsMethodologies.methodApproved ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../regulator-approved" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="dataGapsMethodologies.methodConservative !== undefined">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Was the method used conservative?</dt>
+      <dd govukSummaryListRowValue>
+        {{ dataGapsMethodologies.methodConservative ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="dataGapsMethodologies.noConservativeMethodDetails !== undefined">
+          {{ dataGapsMethodologies.noConservativeMethodDetails }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../method-conservative" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="dataGapsMethodologies.materialMisstatementExist !== undefined">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Did the method lead to a material misstatement?</dt>
+      <dd govukSummaryListRowValue>
+        {{ dataGapsMethodologies.materialMisstatementExist ? 'Yes' : 'No' }}
+        <p class="govuk-body pre-wrap" *ngIf="dataGapsMethodologies.materialMisstatementDetails !== undefined">
+          {{ dataGapsMethodologies.materialMisstatementDetails }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../material-misstatement" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </ng-container>
+</dl>

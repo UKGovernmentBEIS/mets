@@ -1,0 +1,44 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "lib": ["ES2022", "dom"],
+    "strictPropertyInitialization": false,
+    "strictNullChecks": false,
+    "noStrictGenericChecks": true,
+    "paths": {
+      "govuk-components": ["projects/govuk-components/src/public-api.ts"],
+      "pmrv-api": ["projects/pmrv-api/src/lib/index.ts"],
+      "@core/*": ["src/app/core/*"],
+      "@shared/*": ["src/app/shared/*"],
+      "@permit-revocation/*": ["src/app/permit-revocation/*"],
+      "@tasks/*": ["src/app/tasks/*"],
+      "@cancel-task/*": ["src/app/cancel-task/*"],
+      "@permit-notification/*": ["src/app/tasks/permit-notification/*"],
+      "@testing": ["src/testing"],
+      "@permit-application/*": ["src/app/permit-application/*"],
+      "@permit-issuance/*": ["src/app/permit-issuance/*"],
+      "@permit-transfer/*": ["src/app/permit-transfer/*"],
+      "@aviation/*": ["src/app/aviation/*"],
+      "@error/*": ["src/app/error/*"]
+    },
+    "useDefineForClassFields": false
+  },
+  "exclude": ["**/node_modules/*", "**/coverage/*", "**/dist/*", "**/node/*"],
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": false,
+    "strictTemplates": true
+  }
+}

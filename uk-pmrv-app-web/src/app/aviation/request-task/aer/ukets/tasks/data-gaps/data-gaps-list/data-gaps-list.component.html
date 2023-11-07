@@ -1,0 +1,18 @@
+<app-page-heading>List the data gaps</app-page-heading>
+
+<p class="govuk-body govuk-!-width-two-thirds">
+  Include all the data gaps that occurred during the scheme year. Each data gap must be accounted for by using the
+  approved method defined in your monitoring plan, or if this is not possible, by using the Eurocontrol Small Emitters
+  Tool.
+</p>
+
+<app-data-gaps-list-template
+  [dataGaps]="dataGaps"
+  [isEditable]="true"
+  [queryParams]="{ change: true }"
+  (removeDataGapEvent)="onRemoveDataGap($event)"
+></app-data-gaps-list-template>
+
+<div class="govuk-body govuk-!-margin-bottom-0">
+  <button appPendingButton govukButton type="button" (click)="onSubmit()">Continue</button>
+</div>

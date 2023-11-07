@@ -1,0 +1,19 @@
+<ul app-task-item-list>
+  <li app-task-item linkText="Source streams (fuels and materials)" [hasContent]="true">
+    <app-source-streams-summary-table [data]="aerData.sourceStreams"></app-source-streams-summary-table>
+  </li>
+  <li app-task-item linkText="Emission sources" [hasContent]="true">
+    <govuk-table
+      [columns]="pointsAndSourcesColumns"
+      [data]="aerData.emissionSources"
+      [class.no-bottom-border]="true"
+    ></govuk-table>
+  </li>
+  <li *ngIf="aerData.emissionPoints" app-task-item linkText="Emission points" [hasContent]="true">
+    <govuk-table
+      [columns]="pointsAndSourcesColumns"
+      [data]="aerData.emissionPoints"
+      [class.no-bottom-border]="true"
+    ></govuk-table>
+  </li>
+</ul>

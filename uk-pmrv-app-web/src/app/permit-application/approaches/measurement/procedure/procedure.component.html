@@ -1,0 +1,42 @@
+<app-permit-task [breadcrumb]="[{ text: 'MEASUREMENT_CO2' | monitoringApproachDescription, link: ['measurement'] }]">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Confirm and complete"
+    [caption]="'MEASUREMENT_CO2' | monitoringApproachDescription"
+    [heading]="taskKey$ | async | i18nSelect: headingMap"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <app-procedure-form>
+      <ng-container [ngSwitch]="taskKey$ | async">
+        <ng-container *ngSwitchCase="'monitoringApproaches.MEASUREMENT_CO2.emissionDetermination'">
+          <div class="govuk-body">
+            <p>
+              Provide details about the procedures describing the calculation formulae used and the method of data
+              aggregation.
+            </p>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'monitoringApproaches.MEASUREMENT_CO2.referencePeriodDetermination'">
+          <div class="govuk-body">
+            <p>Provide details about the procedures describing the methods used to:</p>
+            <ul>
+              <li>determine if valid hours or shorter reference periods for each parameter can be provided</li>
+              <li>substitute missing data</li>
+            </ul>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'monitoringApproaches.MEASUREMENT_CO2.corroboratingCalculations'">
+          <div class="govuk-body">
+            <p>Provide details about the procedures for carrying out corroborating calculations.</p>
+          </div>
+        </ng-container>
+      </ng-container>
+    </app-procedure-form>
+  </app-wizard-step>
+
+  <app-approach-return-link
+    [parentTitle]="'MEASUREMENT_CO2' | monitoringApproachDescription"
+    reviewGroupUrl="measurement"
+  ></app-approach-return-link>
+</app-permit-task>

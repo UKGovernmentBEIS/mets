@@ -1,0 +1,20 @@
+<ng-container *ngIf="activityLevelReport">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Do you need to upload an activity level report?</dt>
+      <dd govukSummaryListRowValue>{{ activityLevelReport?.freeAllocationOfAllowances ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink=".." [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="activityLevelReport?.freeAllocationOfAllowances">
+      <dt govukSummaryListRowKey>Document upload</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="documentFiles"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink=".." [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

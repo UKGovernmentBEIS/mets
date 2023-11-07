@@ -1,0 +1,86 @@
+<app-permit-task>
+  <app-page-heading size="xl">{{ statusKey | subtaskName }} and applying tiers</app-page-heading>
+  <p class="govuk-body">
+    The monitoring plan you create for this source stream using a calculation approach will calculate the amount of CO2e
+    emitted during the course of the year based on activity data alongside a number of other calculation parameters.
+  </p>
+
+  <ng-container [ngSwitch]="statusKey">
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Calorific'">
+      <p class="govuk-body">Net calorific value (NCV) is a parameter which can be used as part of your calculation.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Biomass_Fraction'">
+      <p class="govuk-body">Biomass fraction is a parameter which can be used as part of your calculation.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Carbon_Content'">
+      <p class="govuk-body">Carbon content is a parameter which can be used as part of your calculation.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Conversion_Factor'">
+      <p class="govuk-body">Conversion factor is a parameter which can be used as part of your calculation.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Emission_Factor'">
+      <p class="govuk-body">Emission factor is a parameter which can be used as part of your calculation.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Oxidation_Factor'">
+      <p class="govuk-body">Oxidation factor is a parameter which can be used as part of your calculation.</p>
+    </ng-container>
+  </ng-container>
+
+  <ng-container [ngSwitch]="statusKey">
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Calorific'">
+      <p class="govuk-body">
+        NCV means the specific amount of energy released as heat when a fuel or material undergoes complete combustion
+        with oxygen under standard conditions less the heat of vaporisation of any water formed.
+      </p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Biomass_Fraction'">
+      <p class="govuk-body">
+        Biomass fraction means the ratio of carbon stemming from biomass relative to the total carbon content of a fuel
+        or material, expressed as a fraction.
+      </p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Carbon_Content'">
+      <p class="govuk-body">
+        Carbon content is the analysed content of carbon in the fuel or material expressed as a percentage of the mass
+        of fuel or material.
+      </p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Conversion_Factor'">
+      <p class="govuk-body">
+        Conversion factor is the measure of the amount of carbon emitted as CO2 as a share of the total amount of carbon
+        contained in the source stream before the emitting process takes place. The conversion factor is expressed as a
+        fraction, taking account of CO emitted to the atmosphere as being the molar equivalent amount of CO2.
+      </p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Emission_Factor'">
+      <p class="govuk-body">
+        Emission factor means the average emission rate of a greenhouse gas relative to the activity data of a source
+        stream assuming complete oxidation for combustion and complete conversion for all other chemical reactions.
+      </p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'CALCULATION_CO2_Oxidation_Factor'">
+      <p class="govuk-body">
+        Oxidation factor means the ratio of carbon oxidised to CO2 as a consequence of combustion to the total carbon
+        contained in the fuel, expressed as a fraction, considering CO emitted to the atmosphere as the molar equivalent
+        amount of CO2.
+      </p>
+    </ng-container>
+  </ng-container>
+
+  <p class="govuk-body">
+    The <a govukLink routerLink=".">Monitoring and Reporting Regulations (MRR)</a>
+    list the tiers which are expected for carbon content based on considering criteria such as:
+  </p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>your installation category - Category A (low emitter), Category A, B or C</li>
+    <li>your source stream category</li>
+    <li>the particular fuel or material being used</li>
+    <li>the related regulated activity</li>
+  </ul>
+
+  <p class="govuk-body">
+    You may not be able to meet the highest tier as required in the MRR. If this is the case you will be asked in
+    another section of this permit application to justify if this is due to a technical infeasibility or unreasonable
+    cost.
+  </p>
+</app-permit-task>

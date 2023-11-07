@@ -1,0 +1,66 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Confirm monitoring approach and emissions"
+  submitText="Continue"
+>
+  <div
+    formControlName="fuelTypes"
+    govuk-checkboxes
+    legend="Confirm the standard fuels and emission factors used"
+    legendSize="medium"
+  >
+    <govuk-checkbox
+      *ngFor="let fuel of fuelTypesCorsia"
+      [value]="fuel.value"
+      [label]="fuel.description + ' at ' + fuel.consumption"
+    ></govuk-checkbox>
+  </div>
+
+  <div formControlName="monitoringApproachType" govuk-radio legend="Monitoring approach" legendSize="medium">
+    <govuk-radio-option
+      value="CERT_MONITORING"
+      [label]="'CERT_MONITORING' | monitoringApproachVerifyCorsiaType"
+    ></govuk-radio-option>
+
+    <govuk-radio-option
+      value="FUEL_USE_MONITORING"
+      [label]="'FUEL_USE_MONITORING' | monitoringApproachVerifyCorsiaType"
+    ></govuk-radio-option>
+
+    <govuk-radio-option
+      value="CERT_AND_FUEL_USE_MONITORING"
+      [label]="'CERT_AND_FUEL_USE_MONITORING' | monitoringApproachVerifyCorsiaType"
+    ></govuk-radio-option>
+  </div>
+
+  <h2 class="govuk-heading-m govuk-!-margin-0 govuk-!-width-two-thirds">Total emissions provided</h2>
+  <p class="govuk-body govuk-!-margin-top-2">Emissions from all flights: {{ totalEmissionsProvided$ | async }} tCO2</p>
+
+  <p class="govuk-body govuk-!-margin-top-2">
+    Emissions from offset flights: {{ totalOffsetEmissionsProvided$ | async }} tCO2
+  </p>
+
+  <div formControlName="emissionsCorrect" govuk-radio legend="Are the reported emissions correct?" legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes, the emissions are correct"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No, we will enter a different verified emissions figure">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="manuallyInternationalFlightsProvidedEmissions"
+          govuk-text-input
+          label="Total verified emissions for the scheme year"
+          suffix="tonnes CO2"
+        ></div>
+
+        <div
+          formControlName="manuallyOffsettingFlightsProvidedEmissions"
+          govuk-text-input
+          label="Total verified emissions from offset flights for the scheme year	"
+          suffix="tonnes CO2"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

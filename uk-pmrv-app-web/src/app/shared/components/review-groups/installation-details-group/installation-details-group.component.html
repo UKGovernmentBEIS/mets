@@ -1,0 +1,55 @@
+<ul app-task-item-list>
+  <li app-task-item linkText="Installation details" [hasContent]="true">
+    <app-installation-details-summary
+      [installationOperatorDetails]="payload.installationOperatorDetails"
+      [hideSubheadings]="true"
+      cssClass="govuk-!-margin-bottom-0 govuk-summary-list--no-border"
+    ></app-installation-details-summary>
+  </li>
+  <li app-task-item linkText="Pollutant Release and Transfer Register codes" [hasContent]="true">
+    <app-prtr-summary-template
+      [activities]="payload.aer.pollutantRegisterActivities"
+      [noBottomBorder]="true"
+      cssClass="govuk-!-margin-bottom-0 govuk-summary-list--no-border no-bottom-border"
+    ></app-prtr-summary-template>
+  </li>
+  <li app-task-item linkText="NACE codes for the main activities at the installation" [hasContent]="true">
+    <app-nace-codes-summary-template
+      [naceCodes]="payload.aer.naceCodes"
+      [noBottomBorder]="true"
+    ></app-nace-codes-summary-template>
+  </li>
+  <li app-task-item linkText="Regulated activities" [hasContent]="true">
+    <div class="govuk-!-margin-top-9">
+      <ng-container *ngFor="let activity of payload.aer.regulatedActivities | regulatedActivitiesSort; let i = index">
+        <app-aer-regulated-activities-summary-template
+          [activity]="activity"
+          [cssClass]="payload.aer.regulatedActivities.length === i + 1 ? 'govuk-!-margin-bottom-0' : ''"
+          [noBottomBorder]="payload.aer.regulatedActivities.length === i + 1"
+        >
+          <h3 class="govuk-heading-s">{{ activity.type | regulatedActivityType }}</h3>
+        </app-aer-regulated-activities-summary-template>
+      </ng-container>
+    </div>
+  </li>
+  <li app-task-item linkText="Monitoring plan changes" [hasContent]="true">
+    <div class="govuk-!-margin-top-9">
+      <app-monitoring-plan-versions
+        *ngIf="payload.monitoringPlanVersions.length"
+        [versions]="payload.monitoringPlanVersions"
+        [noBottomBorder]="!payload.aer.aerMonitoringPlanDeviation.existChangesNotCoveredInApprovedVariations"
+      ></app-monitoring-plan-versions>
+      <app-monitoring-plan-summary-template
+        *ngIf="payload.aer.aerMonitoringPlanDeviation.existChangesNotCoveredInApprovedVariations"
+        [planDeviation]="payload.aer.aerMonitoringPlanDeviation"
+        cssClass="govuk-!-margin-bottom-0 govuk-summary-list--no-border no-bottom-border"
+      ></app-monitoring-plan-summary-template>
+    </div>
+  </li>
+  <li app-task-item linkText="Monitoring approaches" [hasContent]="true">
+    <app-approaches-used-summary-template
+      [monitoringApproaches]="payload.aer.monitoringApproachEmissions"
+      cssClass="govuk-!-margin-bottom-0 govuk-summary-list--no-border no-bottom-border"
+    ></app-approaches-used-summary-template>
+  </li>
+</ul>

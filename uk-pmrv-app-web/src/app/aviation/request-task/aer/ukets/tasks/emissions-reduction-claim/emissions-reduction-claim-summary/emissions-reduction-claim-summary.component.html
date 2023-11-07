@@ -1,0 +1,22 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <ng-container *ngIf="vm.data">
+    <app-aer-emissions-reduction-claim-summary-template
+      [data]="vm.data"
+      [declarationFile]="vm.declarationFile"
+      [purchases]="vm.purchases"
+      [isEditable]="vm.isEditable"
+      [queryParams]="{ change: true }"
+    ></app-aer-emissions-reduction-claim-summary-template>
+  </ng-container>
+
+  <div class="govuk-button-group" *ngIf="!vm.hideSubmit">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+  <app-aviation-aer-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="saf"
+  ></app-aviation-aer-review-decision-group>
+</ng-container>
+<app-return-to-link></app-return-to-link>

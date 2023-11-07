@@ -1,0 +1,49 @@
+<app-dre-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Reason for determining the reportable emissions"
+    submitText="Continue"
+    [showBackLink]="true"
+  >
+    <div class="govuk-hint">The operator cannot view this</div>
+    <div
+      formControlName="type"
+      govuk-radio
+      legend="Why are you determining the reportable emissions"
+      legendSize="medium"
+    >
+      <govuk-radio-option
+        *ngFor="let option of determinationReasonTypesLabelsWithoutOtherMap | keyvalue: originalOrder"
+        [value]="option.key"
+        [label]="option.value"
+      ></govuk-radio-option>
+      <govuk-radio-option [divider]="true" value="OTHER" label="Another reason">
+        <ng-container govukConditionalContent>
+          <div formControlName="typeOtherSummary" govuk-textarea label="Provide a reason" [maxLength]="10000"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+    <div
+      formControlName="operatorAskedToResubmit"
+      govuk-radio
+      legend="Was the operator asked to resubmit the emission report?"
+      legendSize="medium"
+    >
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+    <h2 class="govuk-heading-m">Regulator comments (optional)</h2>
+    <div formControlName="regulatorComments" govuk-textarea [maxLength]="10000"></div>
+
+    <h2 class="govuk-heading-m">Supporting documents (optional)</h2>
+    <app-multiple-file-input
+      [baseDownloadUrl]="getBaseFileDownloadUrl()"
+      label="Upload a file"
+      listTitle="Files added"
+      formControlName="supportingDocuments"
+    ></app-multiple-file-input>
+  </app-wizard-step>
+
+  <a govukLink routerLink="..">Return to: reportable emissions task</a>
+</app-dre-task>

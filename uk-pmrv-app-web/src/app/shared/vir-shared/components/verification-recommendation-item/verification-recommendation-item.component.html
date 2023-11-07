@@ -1,0 +1,15 @@
+<h2 class="govuk-heading-m">Verifier's recommendation</h2>
+<dl govuk-summary-list [hasBorders]="true">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Item code</dt>
+    <dd govukSummaryListRowValue>{{ verificationDataItem.reference | verificationReferenceTitle }}</dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Verifier's recommendation</dt>
+    <dd govukSummaryListRowValue>{{ verificationDataItem.explanation }}</dd>
+  </div>
+  <div govukSummaryListRow *ngIf="verificationDataItem?.materialEffect !== undefined">
+    <dt govukSummaryListRowKey>Material?</dt>
+    <dd govukSummaryListRowValue>{{ verificationDataItem?.materialEffect ? 'Yes' : 'No' }}</dd>
+  </div>
+</dl>

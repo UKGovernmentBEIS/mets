@@ -1,0 +1,27 @@
+<app-permit-task
+  [breadcrumb]="[{ text: 'TRANSFERRED_CO2_N2O' | monitoringApproachDescription, link: ['transferred-co2'] }]"
+>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    [caption]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+    [heading]="taskKey$ | async | i18nSelect: headingMap"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <div
+      formControlName="exist"
+      govuk-radio
+      legend="Are you using any pipeline systems to transport CO2 or N20?"
+      legendSize="medium"
+      class="govuk-heading-m"
+    >
+      <govuk-radio-option label="Yes" [value]="true"></govuk-radio-option>
+      <govuk-radio-option label="No" [value]="false"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+  <app-approach-return-link
+    [parentTitle]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+    reviewGroupUrl="transferred-co2"
+  ></app-approach-return-link>
+</app-permit-task>

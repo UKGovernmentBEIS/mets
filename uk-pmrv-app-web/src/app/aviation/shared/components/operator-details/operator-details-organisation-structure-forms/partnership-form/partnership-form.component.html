@@ -1,0 +1,30 @@
+<h3 class="govuk-heading-s">Name of the partnership (optional)</h3>
+<div formControlName="partnershipName" govuk-text-input widthClass="govuk-!-width-two-thirds"></div>
+
+<fieldset govukFieldset formGroupName="organisationLocation" class="govuk-!-margin-bottom-6">
+  <legend class="govuk-heading-s">Main office address</legend>
+  <app-location-state-form></app-location-state-form>
+</fieldset>
+
+<h3 #conditionalHeader class="govuk-heading-s">List the partners</h3>
+<div formArrayName="partners">
+  <fieldset govukFieldset *ngFor="let partner of partnersControl.controls; index as i" class="govuk-!-width-two-thirds">
+    <legend class="govuk-heading-s">Name of partner</legend>
+    <button
+      (click)="partnersControl.removeAt(i)"
+      *ngIf="partnersControl.length > 1"
+      [disabled]="!isEditable"
+      [heading]="conditionalHeader"
+      appAddAnother
+      govukSecondaryButton
+      type="button"
+      #removeButton
+    >
+      Remove
+    </button>
+    <div [formControlName]="i" govuk-text-input class="govuk-!-margin-bottom-4"></div>
+  </fieldset>
+  <button (click)="addOtherRequiredChange()" [disabled]="!isEditable" govukSecondaryButton type="button">
+    Add another partner
+  </button>
+</div>

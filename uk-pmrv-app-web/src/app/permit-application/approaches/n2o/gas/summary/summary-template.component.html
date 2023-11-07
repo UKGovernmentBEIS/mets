@@ -1,0 +1,22 @@
+<dl
+  *ngIf="
+    ('MEASUREMENT_N2O' | monitoringApproachTask: !showOriginal | async)?.gasFlowCalculation?.exist === false;
+    else procedureForm
+  "
+  govuk-summary-list
+  [hasBorders]="false"
+  [class.summary-list--edge-border]="hasBottomBorder"
+>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Is gas flow determined by calculation?</dt>
+    <dd govukSummaryListRowValue>No</dd>
+  </div>
+</dl>
+
+<ng-template #procedureForm>
+  <app-procedure-form-summary
+    [details]="('MEASUREMENT_N2O' | monitoringApproachTask: !showOriginal | async)?.gasFlowCalculation?.procedureForm"
+    cssClass="summary-list--edge-border"
+    [hasBottomBorder]="hasBottomBorder"
+  ></app-procedure-form-summary>
+</ng-template>

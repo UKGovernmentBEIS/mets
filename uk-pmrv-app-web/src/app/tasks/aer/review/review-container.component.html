@@ -1,0 +1,189 @@
+<ng-container *ngIf="requestTaskType$ | async as requestTaskType">
+  <ng-container *ngIf="requestTaskType === 'AER_APPLICATION_REVIEW'">
+    <app-base-task-container-component
+      [header]="aerTitle$ | async"
+      [customContentTemplate]="customContentTemplate"
+      expectedTaskType="AER_APPLICATION_REVIEW"
+      [notification]="notification"
+      [daysRemaining]="daysRemaining$ | async"
+    >
+    </app-base-task-container-component>
+  </ng-container>
+
+  <ng-container *ngIf="requestTaskType === 'AER_WAIT_FOR_AMENDS'">
+    <app-base-task-container-component
+      [header]="aerTitle$ | async"
+      [customContentTemplate]="customContentTemplate"
+      expectedTaskType="AER_WAIT_FOR_AMENDS"
+    >
+    </app-base-task-container-component>
+  </ng-container>
+
+  <ng-template #customContentTemplate>
+    <ng-container *ngIf="requestTaskType === 'AER_WAIT_FOR_AMENDS'">
+      <govuk-warning-text> You cannot edit the report as the operator is due to amend it </govuk-warning-text>
+    </ng-container>
+
+    <ng-container *ngIf="requestTaskType === 'AER_APPLICATION_REVIEW'">
+      <div class="govuk-button-group">
+        <button
+          *ngIf="allowCompleteReview$ | async"
+          (click)="completeReview()"
+          govukButton
+          title="Complete review"
+          type="button"
+        >
+          Complete review
+        </button>
+
+        <button
+          *ngIf="allowReturnForAmends$ | async"
+          (click)="sendReturnForAmends()"
+          govukButton
+          title="Return for amends"
+          type="button"
+        >
+          Return for amends
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="baseUrl$ | async as baseUrl">
+      <ol class="app-task-list">
+        <li app-task-section title="Operator information">
+          <ul app-task-item-list>
+            <li
+              app-task-item
+              [link]="baseUrl + 'details'"
+              [linkText]="'INSTALLATION_DETAILS' | aerTaskDescription"
+              [status]="'INSTALLATION_DETAILS' | taskStatus | async"
+            ></li>
+            <li
+              app-task-item
+              [link]="baseUrl + 'fuels'"
+              [linkText]="'FUELS_AND_EQUIPMENT' | aerTaskDescription"
+              [status]="'FUELS_AND_EQUIPMENT' | taskStatus | async"
+            ></li>
+            <li
+              *ngFor="let approach of monitoringApproaches$ | async"
+              app-task-item
+              [link]="baseUrl + approach.link"
+              [linkText]="approach.linkText"
+              [status]="approach.status | taskStatus | async"
+            ></li>
+            <li
+              app-task-item
+              [link]="baseUrl + 'emissions-summary'"
+              [linkText]="'EMISSIONS_SUMMARY' | aerTaskDescription"
+              [status]="'EMISSIONS_SUMMARY' | taskStatus | async"
+            ></li>
+            <li
+              *ngIf="isGHGE$ | async"
+              app-task-item
+              [link]="baseUrl + 'activity-level-report'"
+              linkText="Activity level report"
+              [status]="'ACTIVITY_LEVEL_REPORT' | taskStatus | async"
+            ></li>
+            <li
+              app-task-item
+              [link]="baseUrl + 'additional-info'"
+              [linkText]="'ADDITIONAL_INFORMATION' | aerTaskDescription"
+              [status]="'ADDITIONAL_INFORMATION' | taskStatus | async"
+            ></li>
+          </ul>
+        </li>
+
+        <ng-container *ngIf="hasVerificationReport$ | async">
+          <li app-task-section title="Verifier assessment">
+            <ul app-task-item-list>
+              <li
+                app-task-item
+                [link]="baseUrl + 'verifier-details'"
+                linkText="Verifier details"
+                [status]="'VERIFIER_DETAILS' | taskStatus | async"
+              ></li>
+              <li
+                app-task-item
+                [link]="baseUrl + 'opinion-statement'"
+                linkText="Opinion statement"
+                [status]="'OPINION_STATEMENT' | taskStatus | async"
+              ></li>
+              <li
+                app-task-item
+                [link]="baseUrl + 'compliance-ets'"
+                linkText="Compliance with ETS rules"
+                [status]="'ETS_COMPLIANCE_RULES' | taskStatus | async"
+              ></li>
+              <li
+                app-task-item
+                [link]="baseUrl + 'compliance-monitoring'"
+                linkText="Compliance with monitoring and reporting principles"
+                [status]="'COMPLIANCE_MONITORING_REPORTING' | taskStatus | async"
+              ></li>
+              <li
+                *ngIf="isGHGE$ | async"
+                app-task-item
+                [link]="baseUrl + 'verified-activity-level-report'"
+                linkText="Verification report of the activity level report"
+                [status]="'VERIFICATION_ACTIVITY_LEVEL_REPORT' | taskStatus | async"
+              ></li>
+              <li
+                app-task-item
+                [link]="baseUrl + 'overall-decision'"
+                linkText="Overall decision"
+                [status]="'OVERALL_DECISION' | taskStatus | async"
+              ></li>
+            </ul>
+          </li>
+
+          <li app-task-section title="Verifier findings">
+            <ul app-task-item-list>
+              <li
+                app-task-item
+                [link]="baseUrl + 'misstatements'"
+                linkText="Uncorrected misstatements"
+                [status]="'UNCORRECTED_MISSTATEMENTS' | taskStatus | async"
+              ></li>
+              <li
+                app-task-item
+                [link]="baseUrl + 'non-conformities'"
+                linkText="Uncorrected non-conformities"
+                [status]="'UNCORRECTED_NON_CONFORMITIES' | taskStatus | async"
+              ></li>
+              <li
+                app-task-item
+                [link]="baseUrl + 'non-compliances'"
+                linkText="Uncorrected non-compliances"
+                [status]="'UNCORRECTED_NON_COMPLIANCES' | taskStatus | async"
+              ></li>
+              <li
+                app-task-item
+                [link]="baseUrl + 'recommended-improvements'"
+                linkText="Recommended improvements"
+                [status]="'RECOMMENDED_IMPROVEMENTS' | taskStatus | async"
+              ></li>
+              <li
+                app-task-item
+                [link]="baseUrl + 'data-gaps'"
+                linkText="Methodologies to close data gaps"
+                [status]="'CLOSE_DATA_GAPS_METHODOLOGIES' | taskStatus | async"
+              ></li>
+              <li
+                app-task-item
+                [link]="baseUrl + 'materiality-level'"
+                linkText="Materiality level and reference documents"
+                [status]="'MATERIALITY_LEVEL' | taskStatus | async"
+              ></li>
+              <li
+                app-task-item
+                [link]="baseUrl + 'summary-of-conditions'"
+                linkText="Summary of conditions, changes, clarifications and variations"
+                [status]="'SUMMARY_OF_CONDITIONS' | taskStatus | async"
+              ></li>
+            </ul>
+          </li>
+        </ng-container>
+      </ol>
+    </ng-container>
+  </ng-template>
+</ng-container>

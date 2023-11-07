@@ -1,0 +1,48 @@
+<app-withholding-allowances-task>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Provide withholding of allowances details"
+    submitText="Continue"
+    [showBackLink]="true"
+  >
+    <div
+      formControlName="year"
+      govuk-select
+      label="From which year are these allowances being withheld?"
+      widthClass="govuk-!-width-one-third"
+    >
+      <option *ngFor="let year of years" [value]="year">
+        {{ year }}
+      </option>
+    </div>
+
+    <app-select-other
+      formControlName="reasonType"
+      label="Reason for withholding allowances"
+      widthClass="govuk-!-width-full"
+    >
+      <option *ngFor="let waReason of waReasons" [value]="waReason">
+        {{ waReason | waReasonDescription }}
+      </option>
+      <div govukConditionalContent>
+        <div
+          formControlName="otherReason"
+          govuk-textarea
+          label="Specify the reason for withholding allowances"
+          [maxLength]="10000"
+        ></div>
+      </div>
+    </app-select-other>
+
+    <div
+      formControlName="regulatorComments"
+      govuk-textarea
+      label="Your comments (optional)"
+      hint="The operator cannot see this"
+      [maxLength]="10000"
+    ></div>
+  </app-wizard-step>
+
+  <app-task-return-link [levelsUp]="1" taskType="WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMIT"></app-task-return-link>
+</app-withholding-allowances-task>

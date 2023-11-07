@@ -1,0 +1,15 @@
+<div *ngIf="vm$ | async as vm" class="govuk-!-width-two-thirds">
+  <h2 class="govuk-heading-l">List the reasons for your decision</h2>
+  <p class="govuk-body">
+    On the basis of the verification work undertaken, list the reasons why the report can’t be verified as satisfactory
+  </p>
+  <app-overall-decision-list
+    [isEditable]="vm.isEditable"
+    [list]="vm.reasons"
+    [queryParams]="{ change: true }"
+  ></app-overall-decision-list>
+  <div class="govuk-button-group" *ngIf="vm.reasons?.length > 0">
+    <button *ngIf="vm.isEditable" govukButton [routerLink]="['../summary']" type="button">Continue</button>
+  </div>
+</div>
+<app-return-to-link></app-return-to-link>

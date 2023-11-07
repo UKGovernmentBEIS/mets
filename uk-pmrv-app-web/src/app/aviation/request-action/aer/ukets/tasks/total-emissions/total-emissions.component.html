@@ -1,0 +1,40 @@
+<app-request-action-task
+  *ngIf="vm$ | async as vm"
+  [header]="vm.pageHeader"
+  [requestActionType]="vm.requestActionType"
+  [breadcrumb]="true"
+>
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">Emissions for the scheme year</h2>
+  <app-total-emissions-scheme-year-summary
+    [totalEmissions$]="vm.totalEmissions$"
+  ></app-total-emissions-scheme-year-summary>
+
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">Emissions summary</h2>
+  <govuk-tabs (selectedTab)="selectedTab($event)">
+    <ng-template govukTabLazy id="standard-fuels" label="Standard fuels">
+      <app-total-emissions-standard-fuels-table-template
+        [data]="vm.aer"
+      ></app-total-emissions-standard-fuels-table-template>
+    </ng-template>
+    <ng-template govukTabLazy id="aerodrome-pairs" label="Aerodrome pairs">
+      <app-total-emissions-aerodrome-pairs-table-template
+        [data]="vm.aer"
+      ></app-total-emissions-aerodrome-pairs-table-template>
+    </ng-template>
+    <ng-template govukTabLazy id="domestic-flights" label="Domestic flights">
+      <app-total-emissions-domestic-flights-table-template
+        [data]="vm.aer"
+      ></app-total-emissions-domestic-flights-table-template>
+    </ng-template>
+    <ng-template govukTabLazy id="non-domestic-flights" label="Non-domestic flights">
+      <app-total-emissions-non-domestic-flights-table-template
+        [data]="vm.aer"
+      ></app-total-emissions-non-domestic-flights-table-template>
+    </ng-template>
+  </govuk-tabs>
+
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">Confidentiality</h2>
+  <app-total-emissions-summary-template
+    [data]="vm.totalEmissionsConfidentiality"
+  ></app-total-emissions-summary-template>
+</app-request-action-task>

@@ -1,0 +1,64 @@
+<ng-template
+  #contentTpl
+  let-showOriginal
+  let-inherentReceivingTransferringInstallations="inherentReceivingTransferringInstallations"
+>
+  <ul app-task-item-list>
+    <li
+      *ngIf="'INHERENT_CO2' | taskStatus | async as status"
+      app-task-item
+      link="../../inherent-co2/summary"
+      [linkText]="'INHERENT_CO2' | monitoringApproachDescription"
+      [status]="status"
+    >
+      <app-inherent-summary-template
+        [data]="inherentReceivingTransferringInstallations"
+        [isEditable]="false"
+      ></app-inherent-summary-template>
+    </li>
+  </ul>
+</ng-template>
+
+<app-permit-task-review
+  [breadcrumb]="true"
+  [notification]="notification"
+  [heading]="'INHERENT_CO2' | monitoringApproachDescription"
+>
+  <app-highlight-diff *ngIf="showDiff$ | async">
+    <ng-container
+      slot="previous"
+      *ngTemplateOutlet="
+        contentTpl;
+        context: {
+          $implicit: true,
+          inherentReceivingTransferringInstallations: originalInherentReceivingTransferringInstallations$ | async
+        }
+      "
+    >
+    </ng-container>
+    <ng-container
+      slot="current"
+      *ngTemplateOutlet="
+        contentTpl;
+        context: {
+          $implicit: false,
+          inherentReceivingTransferringInstallations: inherentReceivingTransferringInstallations$ | async
+        }
+      "
+    >
+    </ng-container>
+  </app-highlight-diff>
+  <ng-container
+    *ngIf="(showDiff$ | async) === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{
+      $implicit: false,
+      inherentReceivingTransferringInstallations: inherentReceivingTransferringInstallations$ | async
+    }"
+  ></ng-container>
+
+  <app-review-group-decision-container
+    [groupKey]="groupKey$ | async"
+    (notification)="notification = $event"
+  ></app-review-group-decision-container>
+</app-permit-task-review>

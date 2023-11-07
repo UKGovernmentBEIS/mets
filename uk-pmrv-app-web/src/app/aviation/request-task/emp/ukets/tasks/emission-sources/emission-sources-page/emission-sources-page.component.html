@@ -1,0 +1,62 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form" data-testid="emission-sources-page">
+  <govuk-error-summary
+    [form]="form"
+    *ngIf="aircratTypesControl.errors && aircratTypesControl.touched"
+  ></govuk-error-summary>
+
+  <app-page-heading>Emission sources</app-page-heading>
+
+  <div class="govuk-!-width-two-thirds">
+    <h1 class="govuk-heading-m">List all aircraft currently in use</h1>
+
+    <p class="govuk-body">
+      Include owned and leased-in aircraft which you are using this year to perform an aviation activity as defined in
+      schedule 1 of the UK ETS order.
+    </p>
+  </div>
+
+  <app-aircraft-type-table
+    [aircraftTypes]="aircraftTypesInUse$ | async"
+    [isFUMM]="isFUMM"
+    data-testid="aicraft-types-in-use-table"
+  ></app-aircraft-type-table>
+
+  <div class="govuk-button-group">
+    <button
+      type="button"
+      govukButton
+      govuksecondarybutton
+      (click)="addAircraftType()"
+      data-testid="add-aicraft-in-use-btn"
+    >
+      Add an aircraft type
+    </button>
+  </div>
+
+  <div class="govuk-!-width-two-thirds">
+    <h1 class="govuk-heading-m">List any additional aircraft planned to be used (optional)</h1>
+    <p class="govuk-body">Only include aircraft which you are not currently using but plan to start using this year.</p>
+  </div>
+
+  <app-aircraft-type-table
+    [aircraftTypes]="aircraftTypesToBeUsed$ | async"
+    [isFUMM]="isFUMM"
+    data-testid="aicraft-types-not-in-use-table"
+  ></app-aircraft-type-table>
+
+  <div class="govuk-button-group">
+    <button
+      type="button"
+      govukButton
+      govuksecondarybutton
+      (click)="addAircraftType(false)"
+      data-testid="add-aicraft-not-in-use-btn"
+    >
+      Add an aircraft type
+    </button>
+  </div>
+
+  <button appPendingButton govukButton type="submit">Continue</button>
+</form>
+
+<app-return-to-link></app-return-to-link>

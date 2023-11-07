@@ -1,0 +1,109 @@
+<ng-container [ngSwitch]="virRequestPayload?.payloadType">
+  <ng-container *ngSwitchCase="'AVIATION_VIR_APPLICATION_SUBMIT_PAYLOAD'">
+    <ng-container *ngFor="let item of verificationDataGroup">
+      <h2 class="govuk-heading-s govuk-!-margin-0">{{ item.reference | verificationReferenceTitle }}</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="vir/submit/{{ item.reference }}/summary"
+          linkText="Respond to recommendation"
+          [status]="virRequestPayload | virTaskStatus: item.reference"
+          [hasContent]="true"
+        >
+          <app-verification-data-item [verificationDataItem]="item"></app-verification-data-item>
+        </li>
+      </ul>
+    </ng-container>
+    <h2 class="govuk-heading-s govuk-!-margin-0">Submit</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        link="vir/submit/send-report"
+        linkText="Send to the regulator"
+        [status]="virRequestPayload | virTaskStatus: 'sendReport'"
+      ></li>
+    </ul>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'AVIATION_VIR_APPLICATION_REVIEW_PAYLOAD'">
+    <ng-container *ngFor="let item of operatorImprovementResponses | keyvalue">
+      <h2 class="govuk-heading-s govuk-!-margin-0">{{ item.key | verificationReferenceTitle }}</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="vir/review/{{ item.key }}/summary"
+          linkText="Respond to operator"
+          [status]="virRequestPayload | virTaskStatus: item.key"
+          [hasContent]="true"
+        >
+          <app-operator-response-data-item [operatorImprovementResponse]="item.value"></app-operator-response-data-item>
+        </li>
+      </ul>
+    </ng-container>
+
+    <h2 class="govuk-heading-s govuk-!-margin-0">Create report summary</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        link="vir/review/create-summary/summary"
+        linkText="Create summary"
+        [status]="virRequestPayload | virTaskStatus: 'createSummary'"
+      ></li>
+    </ul>
+
+    <h2 class="govuk-heading-s govuk-!-margin-0">Submit</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        link="vir/review/send-report"
+        linkText="Send to the operator"
+        [status]="virRequestPayload | virTaskStatus: 'sendReport'"
+      ></li>
+    </ul>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'AVIATION_VIR_RESPOND_TO_REGULATOR_COMMENTS_PAYLOAD'">
+    <ng-container *ngFor="let item of regulatorImprovementResponses | keyvalue">
+      <h2 class="govuk-heading-s govuk-!-margin-0">{{ item.key | verificationReferenceTitle }}</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="vir/respond/{{ item.key }}/summary"
+          linkText="Respond to the Regulator"
+          [status]="virRequestPayload | virTaskStatus: item.key"
+          [hasContent]="true"
+        >
+          <dl
+            *ngIf="item.value?.operatorActions"
+            govuk-summary-list
+            [hasBorders]="false"
+            class="govuk-!-margin-bottom-0"
+          >
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Actions for the operator</dt>
+              <dd govukSummaryListRowValue>{{ item.value.operatorActions | textEllipsis }}</dd>
+              <dd govukSummaryListRowActions></dd>
+            </div>
+          </dl>
+        </li>
+      </ul>
+      <h2 class="govuk-heading-s govuk-!-margin-0">{{ item.key }}: submit</h2>
+      <ul app-task-item-list *ngIf="virRequestPayload | virTaskStatus: item.key:true as submitStatus">
+        <li
+          *ngIf="submitStatus !== 'cannot start yet'; else linkAsText"
+          app-task-item
+          link="vir/respond/{{ item.key }}/send-report"
+          linkText="Send to the regulator"
+          [status]="submitStatus"
+        ></li>
+        <ng-template #linkAsText>
+          <li app-task-item linkText="Send to the regulator" [status]="submitStatus"></li>
+        </ng-template>
+      </ul>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngSwitchDefault>
+    <govuk-warning-text> Waiting for the regulator to complete the review </govuk-warning-text>
+  </ng-container>
+</ng-container>

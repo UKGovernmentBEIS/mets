@@ -1,0 +1,22 @@
+<app-aer-task-review heading="Was the method used conservative?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      If the regulator's approval cannot be obtained in time for the method used to complete the data gap, you must
+      confirm if this method is conservative and if it leads to material misstatements.
+    </p>
+
+    <div formControlName="conservativeMethodUsed" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="methodDetails" label="Provide more detail" govuk-textarea></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

@@ -1,0 +1,17 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Complete the verifier details"
+  submitText="Continue"
+>
+  <app-verification-body-details-info-template
+    [data]="verificationBodyDetails$ | async"
+  ></app-verification-body-details-info-template>
+
+  <h2 class="govuk-heading-m">Verification team leader</h2>
+  <div formControlName="name" govuk-text-input label="Name"></div>
+  <div formControlName="position" govuk-text-input label="Position"></div>
+  <div formControlName="role" govuk-text-input label="Role and expertise"></div>
+  <div formControlName="email" govuk-text-input label="Email"></div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

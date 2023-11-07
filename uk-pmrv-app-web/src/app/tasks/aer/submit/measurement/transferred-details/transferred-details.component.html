@@ -1,0 +1,14 @@
+<app-aer-task>
+  <app-transfer-details-template
+    (formSubmit)="onContinue($event)"
+    [transfer]="(emissionPointEmission$ | async)?.transfer"
+    [isEditable]="isEditable$ | async"
+    [heading]="
+      $any((emissionPointEmission$ | async)?.transfer)?.transferDirection === 'RECEIVED_FROM_ANOTHER_INSTALLATION'
+        ? 'Provide details of the installation you received the emissions from'
+        : 'Provide details of the installation you exported the emissions to'
+    "
+    [returnToLink]="taskKey | monitoringApproachEmissionDescription"
+    [showBackLink]="true"
+  ></app-transfer-details-template>
+</app-aer-task>

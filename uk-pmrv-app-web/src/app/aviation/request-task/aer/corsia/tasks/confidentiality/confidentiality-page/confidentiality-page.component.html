@@ -1,0 +1,39 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="confidentialityForm"
+    submitText="Continue"
+    [hideSubmit]="false"
+    [heading]="vm.heading"
+  >
+    <p class="govuk-body govuk-!-width-two-thirds">Each year ICAO publishes:</p>
+
+    <ul class="govuk-body govuk-!-width-two-thirds">
+      <li>
+        total annual CO2 emissions aggregated for all aeroplane operators on each state pair (identifying state pairs
+        with offsetting obligations)
+      </li>
+
+      <li>
+        for each aeroplane operator: total annual emissions on all international routes and total annual emissions on
+        routes with or without offsetting obligations
+      </li>
+    </ul>
+
+    <p class="govuk-body govuk-!-width-two-thirds">
+      Operators can request that certain data at the state pair or operator level is not published by ICAO, but your
+      regulator will determine if this data should be confidential or not.
+    </p>
+
+    <h2 class="govuk-heading-m">Your total annual emissions data</h2>
+
+    <p class="govuk-body govuk-!-width-two-thirds">
+      If you operate a very limited number of flights between state pairs you can ask ICAO not to publish your total
+      annual emissions data at the aeroplane operator level, as stated in article 31(5) of the Air Navigation Order.
+    </p>
+
+    <app-confidentiality-form [downloadUrl]="vm.downloadUrl"></app-confidentiality-form>
+  </app-wizard-step>
+</ng-container>
+
+<app-return-to-link></app-return-to-link>

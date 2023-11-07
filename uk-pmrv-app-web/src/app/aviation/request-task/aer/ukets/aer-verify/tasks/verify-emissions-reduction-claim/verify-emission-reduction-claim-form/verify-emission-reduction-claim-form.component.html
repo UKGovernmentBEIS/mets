@@ -1,0 +1,121 @@
+<p class="govuk-body">
+  <a
+    [routerLink]="['..', 'saf-summary']"
+    routerLinkActive="router-link-active"
+    target="_blank"
+    rel="noreferrer noopener"
+  >
+    View the aircraft operator's emissions reduction claim (opens in new tab)
+  </a>
+</p>
+
+<!-- BatchClaimsGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">
+  Have you reviewed all the aircraft operator’s sustainable aviation fuel (SAF) batch claims?
+</h2>
+
+<div formControlName="safBatchClaimsReviewed" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="batchReferencesNotReviewed"
+        govuk-textarea
+        label="List the batch references that were not reviewed"
+      ></div>
+
+      <div
+        [maxLength]="2000"
+        formControlName="dataSampling"
+        govuk-textarea
+        label="Describe how data sampling was carried out and what documents you reviewed"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>
+
+<!-- ReviewResultsGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">Describe the results of your review</h2>
+
+<div class="govuk-body govuk-!-width-two-thirds">
+  <p class="govuk-body">You should state if:</p>
+
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-left-3">
+    <li>the ERC is supported by sufficient and appropriate internal and external evidence</li>
+    <li>the amount of reductions from the use of eligible SAF is fair and accurate</li>
+  </ul>
+
+  <p class="govuk-body">You can report any misstatements in the verifier findings section.</p>
+
+  <div [maxLength]="2000" formControlName="reviewResults" govuk-textarea></div>
+</div>
+
+<!-- DoubleCountingConfirmationGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">Confirmation of no double-counting</h2>
+
+<div class="govuk-body govuk-!-width-two-thirds">
+  <div
+    [maxLength]="2000"
+    formControlName="noDoubleCountingConfirmation"
+    govuk-textarea
+    hint="Describe the steps you took to confirm none of the SAF included in the ERC relating to the scheme year had been sold or used elsewhere by the aircraft operator to claim an emissions reduction, or financial benefit, in any other mandatory or voluntary scheme"
+  ></div>
+</div>
+
+<!-- EvidenceCriteriaGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">
+  Do all of the batch claims reviewed contain evidence that shows the sustainability, purchase and delivery criteria
+  were met?
+</h2>
+
+<div class="govuk-body">
+  <p class="govuk-body">Valid batch claims must:</p>
+
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-left-3">
+    <li>meet the RTFO Schedule 1 sustainability criteria</li>
+    <li>be purchased in the scheme year, or up to three months beforehand</li>
+    <li>be delivered no later than 31 March of the year after the scheme year</li>
+  </ul>
+
+  <div formControlName="evidenceAllCriteriaMetExist" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          [maxLength]="2000"
+          formControlName="noCriteriaMetIssues"
+          govuk-textarea
+          label="What issues have you identified?"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</div>
+
+<!-- ComplianceWithUkEtsRequirementsGroup -->
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">
+  Was the aircraft operator’s ERC compliant with their emissions monitoring plan, the legislation and regulator
+  guidance?
+</h2>
+
+<div class="govuk-body">
+  <p class="govuk-body">This includes the requirements to ensure there has been no double-counting.</p>
+
+  <div formControlName="complianceWithUkEtsRequirementsExist" govuk-radio class="govuk-body govuk-!-width-two-thirds">
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          [maxLength]="2000"
+          formControlName="notCompliedWithUkEtsRequirementsAspects"
+          govuk-textarea
+          label="Which aspects were not complied with?"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</div>

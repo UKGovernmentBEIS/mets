@@ -1,0 +1,19 @@
+<div
+  formControlName="notCoveredChangesExist"
+  govuk-radio
+  class="govuk-!-width-two-thirds"
+  legend="Were there any changes not covered by the emissions monitoring plans in the scheme year?"
+>
+  <govuk-radio-option [value]="true" label="Yes">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="10000"
+        formControlName="details"
+        govuk-textarea
+        label="Describe the changes"
+        class="govuk-!-width-two-thirds"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+  <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+</div>

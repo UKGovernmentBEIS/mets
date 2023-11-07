@@ -1,0 +1,26 @@
+<app-request-action-task
+  *ngIf="vm$ | async as vm"
+  [header]="vm.verificationDataItem.reference | verificationReferenceTitle"
+  [requestActionType]="vm.requestActionType"
+  [breadcrumb]="true"
+>
+  <app-verification-recommendation-item [verificationDataItem]="vm.verificationDataItem">
+  </app-verification-recommendation-item>
+  <app-operator-response-item
+    [reference]="vm.verificationDataItem.reference"
+    [operatorImprovementResponse]="vm.operatorImprovementResponse"
+    [attachedFiles]="vm.documentFiles"
+    [isAviation]="true"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-operator-response-item>
+  <app-regulator-response-item
+    [reference]="vm.verificationDataItem.reference"
+    [regulatorImprovementResponse]="vm.regulatorImprovementResponse"
+    [isAviation]="true"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-regulator-response-item>
+</app-request-action-task>

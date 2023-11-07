@@ -1,0 +1,19 @@
+<dl *ngIf="data" govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+  <ng-container *ngIf="data.variationScheduleItems?.length > 0">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        <ng-container
+          *ngFor="let variationScheduleItem of data.variationScheduleItems; let i = index; let isLast = last"
+        >
+          <div>{{ i + 1 }}. {{ variationScheduleItem }} <br /></div>
+          <br *ngIf="!isLast" />
+        </ng-container>
+      </dd>
+    </div>
+  </ng-container>
+  <div govukSummaryListRow *ngIf="data.notes">
+    <dt govukSummaryListRowKey>Notes</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.notes }}</dd>
+  </div>
+</dl>

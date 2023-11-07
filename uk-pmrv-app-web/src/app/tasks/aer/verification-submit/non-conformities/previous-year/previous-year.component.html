@@ -1,0 +1,22 @@
+<app-aer-task-review heading="Are there any unresolved non-conformities from a previous year?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      Here you must report any issues which the operator cannot correct before the verification report is issued.
+    </p>
+    <p class="govuk-body">You should describe them in as much detail as possible so the regulator can understand:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>their size and nature</li>
+      <li>if there is a material impact on the reported data</li>
+      <li>which element of the report, the monitoring plan or regulations the issue relates to</li>
+    </ul>
+    <div formControlName="areTherePriorYearIssues" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

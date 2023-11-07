@@ -1,0 +1,29 @@
+<app-aer-task>
+  <ng-container *ngIf="(isSubmitted$ | async) !== true; else submitted">
+    <app-page-heading>Send report for verification</app-page-heading>
+    <div class="govuk-heading-m">
+      Current verifier
+      <p class="govuk-body">{{ assignedVerifier$ | async }}</p>
+    </div>
+    <p class="govuk-body">
+      By selecting ‘Confirm and send’ you confirm that the information in your report is correct to the best of your
+      knowledge.
+    </p>
+    <div class="govuk-button-group" *ngIf="aerService.isEditable$ | async">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and send</button>
+    </div>
+    <app-return-link returnLink="../.."></app-return-link>
+  </ng-container>
+
+  <ng-template #submitted>
+    <govuk-panel title="Report sent for verification">Your reference is {{ aerService.requestId }}</govuk-panel>
+    <span class="govuk-caption-l govuk-!-margin-bottom-8">We have sent you a confirmation email.</span>
+    <h3 class="govuk-heading-m">What happens next</h3>
+    <p class="govuk-body">Your report has been sent to {{ confirmedAssignedVerifier$ | async }}.</p>
+    <p class="govuk-body">
+      {{ confirmedAssignedVerifier$ | async }} will return the report to you once they have added an opinion statement.
+      You will then be able to submit your report to {{ aerService.competentAuthority$ | async | competentAuthority }}.
+    </p>
+    <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
+  </ng-template>
+</app-aer-task>

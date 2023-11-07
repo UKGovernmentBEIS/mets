@@ -1,0 +1,16 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Identify flights with no monitoring requirements"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Describe the procedures used to determine which flights are not subject to emissions monitoring requirements and how
+    those operations will be separated from those that are subject to these requirements.
+  </p>
+
+  <app-flight-procedures-form></app-flight-procedures-form>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

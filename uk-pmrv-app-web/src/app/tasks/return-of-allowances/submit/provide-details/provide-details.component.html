@@ -1,0 +1,30 @@
+<app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" heading="Provide details for return of allowances">
+  <label for="numberOfAllowancesToBeReturned" class="govuk-label govuk-label--m"
+    >Number of allowances to be returned</label
+  >
+  <div
+    formControlName="numberOfAllowancesToBeReturned"
+    govuk-text-input
+    hint="Must be a whole number, for example 500"
+  ></div>
+
+  <h2 class="govuk-heading-m">Which years are these allowances being returned for?</h2>
+  <div formControlName="years" govuk-checkboxes hint="Selected years will appear in the official notice">
+    <govuk-checkbox *ngFor="let year of years" [value]="year" [label]="year.toString()"></govuk-checkbox>
+  </div>
+
+  <label for="reason" class="govuk-label govuk-label--m">Reason for return of allowances</label>
+  <div govuk-textarea formControlName="reason" hint="This will appear in the official notice" [maxLength]="10000"></div>
+
+  <div
+    formControlName="dateToBeReturned"
+    label="Date allowances to be returned by"
+    hint="This date must be in the future"
+    govuk-date-input
+    [isRequired]="true"
+  ></div>
+
+  <label for="regulatorComments" class="govuk-label govuk-label--m">Your comments (optional)</label>
+  <div govuk-textarea formControlName="regulatorComments" hint="The operator cannot see this" [maxLength]="10000"></div>
+</app-wizard-step>
+<a govukLink routerLink="/dashboard"> Return to your tasks </a>

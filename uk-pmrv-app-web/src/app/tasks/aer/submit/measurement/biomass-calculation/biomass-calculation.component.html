@@ -1,0 +1,39 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Calculate the biomass values"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      The biomass fraction is the ratio of carbon stemming from biomass to the total carbon content of a fuel or
+      material, expressed as a fraction.
+    </p>
+    <p class="govuk-body">This value should relate to all biomass for which the following conditions are satisfied:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>sustainability criteria are not applicable (e.g. for solid fuels)</li>
+      <li>sustainability criteria are to be applied and those criteria are satisfied</li>
+    </ul>
+
+    <div
+      formControlName="biomassPercentage"
+      govuk-text-input
+      inputType="number"
+      label="Biomass fraction"
+      hint="The ratio of carbon stemming from biomass to the total carbon content of a fuel or material."
+      suffix="%"
+      widthClass="govuk-input--width-10"
+    ></div>
+    <div
+      formControlName="nonSustainableBiomassPercentage"
+      govuk-text-input
+      inputType="number"
+      label="Non sustainable biomass fraction"
+      hint="The ratio of carbon stemming from non-sustainable biomass to the total carbon content of a fuel or material."
+      suffix="%"
+      widthClass="govuk-input--width-10"
+    ></div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

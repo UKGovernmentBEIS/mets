@@ -1,0 +1,21 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="vm.form"
+    heading="Do you want to upload any additional documents or information to support your application?"
+    submitText="Continue"
+    [hideSubmit]="vm.submitHidden"
+  >
+    <app-boolean-radio-group controlName="exist">
+      <div govukConditionalContent>
+        <app-multiple-file-input
+          [baseDownloadUrl]="vm.downloadUrl"
+          label="Upload a file"
+          listTitle="Files added"
+          formControlName="documents"
+        ></app-multiple-file-input>
+      </div>
+    </app-boolean-radio-group>
+  </app-wizard-step>
+  <app-return-to-link></app-return-to-link>
+</ng-container>

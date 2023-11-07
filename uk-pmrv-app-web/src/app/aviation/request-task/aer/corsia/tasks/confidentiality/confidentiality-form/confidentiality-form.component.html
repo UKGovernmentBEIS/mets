@@ -1,0 +1,70 @@
+<div
+  formControlName="totalEmissionsPublished"
+  legend="Do you want to request ICAO not to publish your total annual emissions data at the operator level?"
+  govuk-radio
+  legendSize="medium"
+  class="govuk-body govuk-!-width-two-thirds"
+>
+  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+</div>
+
+<ng-container *ngIf="totalEmissionsPublishedCtrl.value === true">
+  <div
+    [maxLength]="10000"
+    formControlName="totalEmissionsExplanation"
+    govuk-textarea
+    class="govuk-!-width-two-thirds"
+    label="Identify the total emissions data figure you are requesting should not be published by ICAO and say why disclosure of this data would harm your commercial interests."
+    hint="This is emissions data from:
+    all international flights,
+    flights with or without offsetting obligations"
+  ></div>
+
+  <div class="govuk-!-width-two-thirds">
+    <app-multiple-file-input
+      [baseDownloadUrl]="downloadUrl"
+      label="Upload supporting documents (optional)"
+      listTitle="Files added"
+      formControlName="totalEmissionsDocuments"
+    ></app-multiple-file-input>
+  </div>
+</ng-container>
+
+<h2 class="govuk-heading-m">Aggregated state pair data</h2>
+
+<p class="govuk-body govuk-!-width-two-thirds">
+  If aggregated state pair data can be attributed to an identified aeroplane operator as a result of a very limited
+  number of aeroplane operators conducting flights on a state pair, you can request ICAO not to publish this data, as
+  stated in article 31(7) of the Air Navigation Order.
+</p>
+
+<div
+  formControlName="aggregatedStatePairDataPublished"
+  legend="Do you want to request ICAO not to publish your aggregated state pair data, according to Article 31(7)?"
+  govuk-radio
+  legendSize="medium"
+  class="govuk-body govuk-!-width-two-thirds"
+>
+  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+</div>
+
+<ng-container *ngIf="aggregatedStatePairDataPublishedCtrl.value === true">
+  <div
+    [maxLength]="10000"
+    formControlName="aggregatedStatePairDataExplanation"
+    govuk-textarea
+    class="govuk-!-width-two-thirds"
+    label="Identify the state pair data you are requesting should not be published by ICAO and say why disclosure of this data would harm your commercial interests"
+  ></div>
+
+  <div class="govuk-!-width-two-thirds">
+    <app-multiple-file-input
+      [baseDownloadUrl]="downloadUrl"
+      label="Upload supporting documents (optional)"
+      listTitle="Files added"
+      formControlName="aggregatedStatePairDataDocuments"
+    ></app-multiple-file-input>
+  </div>
+</ng-container>

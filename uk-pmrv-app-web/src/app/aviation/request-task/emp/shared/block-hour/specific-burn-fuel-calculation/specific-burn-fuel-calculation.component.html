@@ -1,0 +1,58 @@
+<app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" submitText="Continue" [hideSubmit]="false">
+  <div class="govuk-!-width-two-thirds">
+    <div class="govuk-caption-l">Block-hour</div>
+    <app-page-heading>Calculating the specific fuel burn</app-page-heading>
+
+    <p class="govuk-body">
+      Select at least one statement that is true for some or all of the aircraft types in your fleet which use the
+      block-hour method to calculate fuel burn. If you only know details for some flights, tick both boxes.
+    </p>
+  </div>
+
+  <div formControlName="fuelBurnCalculationTypes" govuk-checkboxes class="govuk-!-width-two-thirds">
+    <govuk-checkbox
+      [value]="'CLEAR_DISTINGUISHION'"
+      label="You can clearly distinguish between fuel uplifts for international and domestic flights on a flight by flight basis"
+    >
+      <ng-container govukConditionalContent>
+        <h1 class="govuk-heading-s">
+          List the relevant aircraft types, by ICAO designator, for which this statement is true
+        </h1>
+
+        <div
+          formControlName="clearDistinguishionIcaoAircraftDesignators"
+          govuk-textarea
+          hint="Enter one code per line. You can copy and paste from a CSV file, but check there are no commas or empty lines."
+        ></div>
+
+        <h1 class="govuk-heading-s">Assignment and adjustment for flights with zero fuel uplift</h1>
+
+        <div
+          formControlName="assignmentAndAdjustment"
+          govuk-textarea
+          [maxLength]="10000"
+          hint="Describe the data handling and calculations necessary to meet the adjustment requirements for international flights with zero uplift and the following flights."
+        ></div>
+      </ng-container>
+    </govuk-checkbox>
+
+    <govuk-checkbox
+      [value]="'NOT_CLEAR_DISTINGUISHION'"
+      label="You cannot clearly distinguish between international and domestic fuel uplifts on a flight by flight basis"
+    >
+      <ng-container govukConditionalContent>
+        <h1 class="govuk-heading-s">
+          List the relevant aircraft types, by ICAO designator, for which this statement is true
+        </h1>
+
+        <div
+          formControlName="notClearDistinguishionIcaoAircraftDesignators"
+          govuk-textarea
+          hint="Enter one code per line. You can copy and paste from a CSV file, but check there are no commas or empty lines."
+        ></div>
+      </ng-container>
+    </govuk-checkbox>
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

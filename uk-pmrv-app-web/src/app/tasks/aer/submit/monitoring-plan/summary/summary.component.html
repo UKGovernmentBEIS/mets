@@ -1,0 +1,36 @@
+<app-aer-task [breadcrumb]="true">
+  <app-page-heading>Check your answers</app-page-heading>
+  <ng-container *ngIf="payload$ | async as payload">
+    <app-monitoring-plan-versions
+      *ngIf="payload.monitoringPlanVersions?.length"
+      [versions]="payload.monitoringPlanVersions"
+      [noBottomBorder]="!payload.aer.aerMonitoringPlanDeviation?.existChangesNotCoveredInApprovedVariations"
+    ></app-monitoring-plan-versions>
+    <ng-container
+      *ngIf="payload.aer.aerMonitoringPlanDeviation?.existChangesNotCoveredInApprovedVariations; else noChanges"
+    >
+      <app-monitoring-plan-summary-template
+        [isEditable]="isEditable$ | async"
+        [planDeviation]="payload.aer.aerMonitoringPlanDeviation"
+      ></app-monitoring-plan-summary-template>
+    </ng-container>
+    <ng-template #noChanges>
+      <h3 class="govuk-heading-s">Changes not covered in the approved monitoring plans</h3>
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>
+            Were there any additional changes not covered in the approved monitoring plans?
+          </dt>
+          <dd class="pre-wrap" govukSummaryListRowValue>No</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+            <a govukLink routerLink="..">Change</a>
+          </dd>
+        </div>
+      </dl>
+    </ng-template>
+  </ng-container>
+  <div class="govuk-button-group" *ngIf="isEditable$ | async">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+  <app-return-link></app-return-link>
+</app-aer-task>

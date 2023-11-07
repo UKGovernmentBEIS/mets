@@ -1,0 +1,32 @@
+<div
+  formControlName="reportingRequired"
+  govuk-radio
+  legend="Are you required to submit a {{ year }} emissions report?"
+  legendSize="medium"
+  class="govuk-body govuk-!-width-two-thirds"
+>
+  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+</div>
+
+<ng-container *ngIf="reportingRequiredCtrl.value === false">
+  <div formGroupName="reportingObligationDetails">
+    <div
+      [maxLength]="10000"
+      formControlName="noReportingReason"
+      govuk-textarea
+      class="govuk-!-width-two-thirds"
+      label="Give reasons why you do not have to submit a report"
+      hint="This could be flight information and emissions calculations showing your full-scope activity was below the thresholds, or the aviation activity was performed by a different person."
+    ></div>
+
+    <div class="govuk-!-width-two-thirds">
+      <app-multiple-file-input
+        [baseDownloadUrl]="downloadUrl"
+        label="Upload supporting documents (optional)"
+        listTitle="Files added"
+        formControlName="supportingDocuments"
+      ></app-multiple-file-input>
+    </div>
+  </div>
+</ng-container>

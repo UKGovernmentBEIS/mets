@@ -1,0 +1,19 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <ng-container *ngIf="vm.confidentialityData">
+    <app-confidentiality-summary-template
+      [confidentialityData]="vm.confidentialityData"
+      [totalEmissionsFiles]="vm.totalEmissionsFiles"
+      [aggregatedStatePairDataFiles]="vm.aggregatedStatePairDataFiles"
+      [isEditable]="vm.isEditable"
+      [queryParams]="{ change: true }"
+    ></app-confidentiality-summary-template>
+  </ng-container>
+
+  <div class="govuk-button-group" *ngIf="!vm.hideSubmit">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+</ng-container>
+
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,47 @@
+<ng-container>
+  <h2 class="govuk-heading-m" *ngIf="header">{{ header }}</h2>
+  <dl govuk-summary-list *ngIf="procedureFormData">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Procedure description</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ procedureFormData.procedureDescription }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name of the procedure document</dt>
+      <dd govukSummaryListRowValue>{{ procedureFormData.procedureDocumentName }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Procedure reference</dt>
+      <dd govukSummaryListRowValue>{{ procedureFormData.procedureReference }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Department or role responsible for data maintenance</dt>
+      <dd govukSummaryListRowValue>{{ procedureFormData.responsibleDepartmentOrRole }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Location of records</dt>
+      <dd govukSummaryListRowValue>{{ procedureFormData.locationOfRecords }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="procedureFormData.itSystemUsed">
+      <dt govukSummaryListRowKey>IT system used</dt>
+      <dd govukSummaryListRowValue>{{ procedureFormData.itSystemUsed }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[formRouterLink]" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

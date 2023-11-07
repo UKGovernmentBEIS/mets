@@ -1,0 +1,32 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="false"
+  heading="What percentage of these flights had data gaps during the scheme year?"
+  class="govuk-!-width-two-thirds"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">The formula to calculate the data gap percentage is:</p>
+
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Flights with offsetting obligations that had data gaps ÷ total flights with offsetting obligations reported × 100
+  </p>
+
+  <p class="govuk-body govuk-!-width-two-thirds">For example, 5 ÷ 250 x 100 = 2%</p>
+
+  <div formControlName="dataGapsPercentageType" govuk-radio class="govuk-!-width-two-thirds">
+    <govuk-radio-option value="MORE_THAN_FIVE_PER_CENT" label="More than 5%"></govuk-radio-option>
+    <govuk-radio-option value="LESS_EQUAL_FIVE_PER_CENT" label="Less than or equal to 5%">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="dataGapsPercentage"
+          govuk-text-input
+          label="Enter the data gap percentage"
+          suffix="%"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,44 @@
+<app-permit-task reviewGroupTitle="Installation details" reviewGroupUrl="details" [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    caption="Installation details"
+    heading="Estimated annual CO2e"
+    submitText="Confirm and complete"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <div class="govuk-body">
+      <p>
+        Input the installation’s estimated annual carbon dioxide equivalent (CO2e) emissions. Do not include any
+        transferred CO2 in your calculations.
+      </p>
+      <p class="govuk-body">Calculating CO2 and CO2e</p>
+      <p class="govuk-body">
+        Your calculation of CO2e should be based on the average verified annual emissions of the previous trading period
+        data to enable categorisation of the installation in accordance with Article 19 of the Monitoring and Reporting
+        Regulation (MRR).
+      </p>
+      <p class="govuk-body">
+        If this data is not available, or is inappropriate, the calculation should be based on a conservative estimate
+        of annual average emissions, including transferred CO2, but excluding CO2 from biomass.
+      </p>
+    </div>
+
+    <div
+      formControlName="quantity"
+      govuk-text-input
+      inputType="number"
+      label="What is the installation’s estimated annual CO2e?"
+      suffix="tonnes CO2e"
+      widthClass="govuk-input--width-10"
+      class="govuk-!-margin-top-6"
+    ></div>
+    <ng-container *ngIf="(store | async)?.permitType === 'GHGE'">
+      <div govukInsetText *ngIf="category$ | async as category">
+        This installation is a {{ category }} emitter based on the estimate provided.
+      </div>
+    </ng-container>
+  </app-wizard-step>
+
+  <app-list-return-link reviewGroupTitle="Installation details" reviewGroupUrl="details"></app-list-return-link>
+</app-permit-task>

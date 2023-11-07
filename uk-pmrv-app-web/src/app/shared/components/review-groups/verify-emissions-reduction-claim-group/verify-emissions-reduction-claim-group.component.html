@@ -1,0 +1,99 @@
+<div class="govuk-body govuk-!-width-three-quarters">
+  <h2 class="govuk-heading-m">Details</h2>
+
+  <dl govuk-summary-list *ngIf="emissionsReductionClaimVerification as emissions">
+    <!-- BatchClaims -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Have you reviewed all the aircraft operator’s sustainable aviation fuel (SAF) batch claims?
+      </dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ emissions.safBatchClaimsReviewed ? 'Yes' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <ng-container *ngIf="!emissions.safBatchClaimsReviewed">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Batch references that were not reviewed</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          <p class="govuk-body">
+            {{ emissions.batchReferencesNotReviewed }}
+          </p>
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>How data sampling was carried out and what documents you reviewed</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          <p class="govuk-body">
+            {{ emissions.dataSampling }}
+          </p>
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+
+    <!-- ReviewResults -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Results of your review</dt>
+
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ emissions.reviewResults }}
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- DoubleCountingConfirmation -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Confirmation of no double-counting</dt>
+
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ emissions.noDoubleCountingConfirmation }}
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- EvidenceCriteria -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Do all of the batch claims reviewed contain evidence that shows the sustainability, purchase and delivery
+        criteria were met?
+      </dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ emissions.evidenceAllCriteriaMetExist ? 'Yes' : '' }}
+        <p class="govuk-body" *ngIf="!emissions.evidenceAllCriteriaMetExist">No, {{ emissions.noCriteriaMetIssues }}</p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- ComplianceWithUkEtsRequirements -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Compliance with UK ETS requirements</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ emissions.complianceWithUkEtsRequirementsExist ? 'Yes' : '' }}
+        <p class="govuk-body" *ngIf="!emissions.complianceWithUkEtsRequirementsExist">
+          No, {{ emissions.notCompliedWithUkEtsRequirementsAspects }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</div>

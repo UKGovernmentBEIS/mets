@@ -1,0 +1,66 @@
+<ng-container *ngIf="summaryOfConditionsInfo">
+  <h2 class="govuk-heading-m">Approved changes not included in a re-issued permit</h2>
+  <dl
+    *ngIf="summaryOfConditionsInfo.changesNotIncludedInPermit !== undefined"
+    govuk-summary-list
+    class="govuk-summary-list--no-border summary-list--edge-border govuk-!-margin-bottom-3"
+  >
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Were there any changes approved by the regulator that are not included in a re-issued permit?
+      </dt>
+      <dd govukSummaryListRowValue>
+        <ng-container>
+          <ng-container *ngIf="summaryOfConditionsInfo.changesNotIncludedInPermit; else noChanges">Yes</ng-container>
+          <ng-template #noChanges>No</ng-template>
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions>
+        <ng-container *ngIf="isEditable">
+          <a govukLink routerLink="..">Change</a>
+        </ng-container>
+      </dd>
+    </div>
+  </dl>
+  <app-summary-of-conditions-list
+    *ngIf="summaryOfConditionsInfo.changesNotIncludedInPermit"
+    [isEditable]="isEditable"
+    [list]="summaryOfConditionsInfo?.approvedChangesNotIncluded ?? []"
+    baseChangeLink="../not-included-list"
+  ></app-summary-of-conditions-list>
+
+  <ng-container *ngIf="summaryOfConditionsInfo.changesIdentified !== undefined">
+    <h2 class="govuk-heading-m">Changes not reported to the regulator by the end of the reporting year</h2>
+    <dl
+      *ngIf="summaryOfConditionsInfo.changesIdentified !== undefined"
+      govuk-summary-list
+      class="govuk-summary-list--no-border summary-list--edge-border govuk-!-margin-bottom-3"
+    >
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>
+          Were there any changes identified during your review that were not reported to the regulator by the end of the
+          reporting period?
+        </dt>
+        <dd govukSummaryListRowValue>
+          <ng-container>
+            <ng-container *ngIf="summaryOfConditionsInfo.changesIdentified; else noChanges">Yes</ng-container>
+            <ng-template #noChanges>No</ng-template>
+          </ng-container>
+        </dd>
+        <dd govukSummaryListRowActions>
+          <ng-container *ngIf="isEditable">
+            <a govukLink routerLink="../identified-changes">Change</a>
+          </ng-container>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <app-summary-of-conditions-list
+    *ngIf="summaryOfConditionsInfo.changesIdentified"
+    [isEditable]="isEditable"
+    [list]="summaryOfConditionsInfo?.notReportedChanges ?? []"
+    baseChangeLink="../identified-changes-list"
+  ></app-summary-of-conditions-list>
+</ng-container>
+<ng-content></ng-content>

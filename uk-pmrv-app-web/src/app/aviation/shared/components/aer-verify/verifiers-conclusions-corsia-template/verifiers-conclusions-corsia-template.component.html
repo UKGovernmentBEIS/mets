@@ -1,0 +1,30 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Data quality and materiality</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.dataQualityMateriality }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>What is the materiality threshold for this operator?</dt>
+    <dd govukSummaryListRowValue>{{ data.materialityThresholdType | materialityThresholdType }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Is this materiality threshold being met in the emissions report?</dt>
+    <dd govukSummaryListRowValue>{{ data.materialityThresholdMet === true ? 'Yes' : 'No' }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Conclusion relating to the operator's emissions report</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.emissionsReportConclusion }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../emissions-report" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+</dl>

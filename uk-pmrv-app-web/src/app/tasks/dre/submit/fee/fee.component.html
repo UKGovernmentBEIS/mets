@@ -1,0 +1,34 @@
+<app-dre-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Calculate the operator’s fee"
+    submitText="Continue"
+    [showBackLink]="true"
+  >
+    <div class="govuk-hint">A payment task will be created after you send the official notice to the operator</div>
+
+    <div
+      formControlName="totalBillableHours"
+      govuk-text-input
+      label="Total billable hours"
+      widthClass="govuk-!-width-one-quarter"
+    ></div>
+
+    <div
+      formControlName="hourlyRate"
+      govuk-text-input
+      label="Hourly rate"
+      prefix="£"
+      suffix="per hour"
+      widthClass="govuk-!-width-one-quarter"
+    ></div>
+
+    <label for="dueDate" class="govuk-label">Set a due date for the payment</label>
+    <div formControlName="dueDate" govuk-date-input [isRequired]="true"></div>
+
+    <p class="govuk-body">Total operator fee: {{ totalFee$ | async }} £</p>
+  </app-wizard-step>
+
+  <a govukLink routerLink="..">Return to: reportable emissions task</a>
+</app-dre-task>

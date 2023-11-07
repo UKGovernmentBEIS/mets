@@ -1,0 +1,13 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Do you need to charge the operator a fee?"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <div formControlName="chargeOperator" govuk-radio [isInline]="false" legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,17 @@
+<ng-container *ngIf="payload?.withholdingWithdrawal as withholdingWithdrawal">
+  <app-page-heading *ngIf="isEditable">Check your answers</app-page-heading>
+
+  <h2 class="govuk-heading-m">Reason for withdrawal details</h2>
+
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow *ngIf="withholdingWithdrawal.reason">
+      <dt govukSummaryListRowKey>Why are allowances being returned?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <span>{{ withholdingWithdrawal.reason }}</span>
+      </dd>
+      <dd govukSummaryListRowActions>
+        <a *ngIf="isEditable" govukLink [routerLink]="['..', 'reason']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

@@ -1,0 +1,16 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Details about the completeness of the flights list"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Describe the procedures used to keep an up to date record of the flights list operated under the unique designator
+    by aerodrome pair, to ensure data is not duplicated.
+  </p>
+
+  <app-flight-procedures-form></app-flight-procedures-form>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

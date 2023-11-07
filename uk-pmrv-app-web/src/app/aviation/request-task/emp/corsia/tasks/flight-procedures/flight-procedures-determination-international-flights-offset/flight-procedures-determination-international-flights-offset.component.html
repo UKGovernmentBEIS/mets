@@ -1,0 +1,16 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Identify international flights with offsetting requirements"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Describe the procedures used to determine which international flights are subject to the carbon offsetting
+    requirements under CORSIA.
+  </p>
+
+  <app-flight-procedures-form></app-flight-procedures-form>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,25 @@
+<div
+  class="govuk-!-width-two-thirds"
+  formControlName="monitoringApproachType"
+  govuk-radio
+  [isInline]="false"
+  legendSize="medium"
+>
+  <govuk-radio-option
+    value="EUROCONTROL_SUPPORT_FACILITY"
+    hint="If your annual emissions are less than 25,000 tCO2 from full-scope flights or less than 3,000 tCO2 from aviation activity"
+    [label]="'EUROCONTROL_SUPPORT_FACILITY' | monitoringApproachType: 'aer'"
+  >
+  </govuk-radio-option>
+  <govuk-radio-option
+    value="EUROCONTROL_SMALL_EMITTERS"
+    hint="If your annual emissions are less than 25,000 tCO2 from full-scope flights or you operate less than 243 full-scope flights in a 4-month period, for 3 consecutive periods (Jan-Apr, May-Aug, Sep-Dec)"
+    [label]="'EUROCONTROL_SMALL_EMITTERS' | monitoringApproachType: 'aer'"
+  ></govuk-radio-option>
+  <govuk-radio-option
+    value="FUEL_USE_MONITORING"
+    hint="If you're not eligible to use one of the simplified approaches above, you'll need to calculate emissions based on fuel consumption. You can still use this method if you are eligible for a simplified approach."
+    [label]="'FUEL_USE_MONITORING' | monitoringApproachType: 'aer'"
+    [divider]="true"
+  ></govuk-radio-option>
+</div>

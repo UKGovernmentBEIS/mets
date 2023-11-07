@@ -1,0 +1,13 @@
+<govuk-table [columns]="columns" [data]="data" [class.no-bottom-border]="noBottomBorder">
+  <ng-template let-column="column" let-row="row">
+    <ng-container [ngSwitch]="column.field">
+      <ng-container *ngSwitchCase="'mainActivity'"><strong>Main activity</strong></ng-container>
+      <ng-container *ngSwitchCase="'label'">{{ row.label }}</ng-container>
+      <ng-container *ngIf="isEditable">
+        <ng-container *ngSwitchCase="'delete'">
+          <a [routerLink]="['delete', row.code]" govukLink>Delete</a>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</govuk-table>

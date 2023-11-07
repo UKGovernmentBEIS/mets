@@ -1,0 +1,52 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <!-- Emission details -->
+  <app-opinion-statement-emission-details-summary-template
+    [fuelTypes]="fuelTypes"
+    [monitoringApproachType]="vm.opinionStatement.monitoringApproachType"
+    [isEditable]="vm.isEditable"
+    [queryParams]="{ change: true }"
+  ></app-opinion-statement-emission-details-summary-template>
+
+  <!-- Total emissions -->
+  <app-opinion-statement-total-emissions-summary-template
+    [totalEmissionsProvided]="totalEmissionsProvided"
+    [emissionsCorrect]="vm.opinionStatement.emissionsCorrect"
+    [manuallyProvidedEmissions]="vm.opinionStatement.manuallyProvidedEmissions"
+    [isEditable]="vm.isEditable"
+    [queryParams]="{ change: true }"
+  ></app-opinion-statement-total-emissions-summary-template>
+
+  <!-- Monitoring plan -->
+  <app-aer-monitoring-plan-versions [planVersions]="[]"></app-aer-monitoring-plan-versions>
+
+  <!-- Changes not covered in EMP -->
+  <app-opinion-statement-changes-not-covered-in-emp-summary-template
+    [aerMonitoringPlanChanges]="aerMonitoringPlanChanges"
+    [additionalChangesNotCovered]="vm.opinionStatement.additionalChangesNotCovered"
+    [additionalChangesNotCoveredDetails]="vm.opinionStatement.additionalChangesNotCoveredDetails"
+    [isEditable]="vm.isEditable"
+    [queryParams]="{ change: true }"
+  ></app-opinion-statement-changes-not-covered-in-emp-summary-template>
+
+  <!-- Site verification -->
+  <app-opinion-statement-site-verification-summary-template
+    [siteVisit]="vm.opinionStatement.siteVisit"
+    [isEditable]="vm.isEditable"
+    [queryParams]="{ change: true }"
+  ></app-opinion-statement-site-verification-summary-template>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-aviation-aer-verification-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="opinionStatement"
+  ></app-aviation-aer-verification-review-decision-group>
+</ng-container>
+
+<app-return-to-link></app-return-to-link>

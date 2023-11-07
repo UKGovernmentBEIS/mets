@@ -1,0 +1,22 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <app-verify-emissions-reduction-claim-group
+    [isEditable]="vm.isEditable"
+    [emissionsReductionClaimVerification]="vm.emissionsReductionClaimVerification"
+    [queryParams]="{ change: true }"
+  ></app-verify-emissions-reduction-claim-group>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-aviation-aer-verification-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="emissionsReductionClaimVerification"
+  ></app-aviation-aer-verification-review-decision-group>
+</ng-container>
+
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,23 @@
+<app-aer-task-review heading="Have the monitoring plan requirements and conditions been met?">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      You must assess whether the operator has met the requirements of the approved permit or monitoring plan, especially relating to the emissions report.
+    </p>
+    <p class="govuk-body">
+      If any non-conformities are also non-compliance issues with the MRR, you must select ‘no’ here and on the ‘EU Regulation on Monitoring and Reporting’ question.
+    </p>
+    <div formControlName="monitoringPlanRequirementsMet" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="monitoringPlanRequirementsNotMetReason" govuk-textarea label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

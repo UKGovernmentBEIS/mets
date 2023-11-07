@@ -1,0 +1,50 @@
+<ng-container>
+  <h2 class="govuk-heading-m">Details</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow *ngIf="data">
+      <dt govukSummaryListRowKey>
+        Will you be making an emissions reduction claim as a result of the purchase and delivery of SAF?
+      </dt>
+      <dd govukSummaryListRowValue>{{ data.exist ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="data?.exist">
+      <dt govukSummaryListRowKey>Declaration of no double counting</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="[declarationFile]"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../declaration'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="data?.exist">
+  <h2 class="govuk-heading-m">SAF batch claims for the scheme year</h2>
+  <app-emissions-reduction-claim-list-template
+    [data]="purchases"
+    [isEditable]="isEditable"
+    [queryParams]="queryParams"
+  ></app-emissions-reduction-claim-list-template>
+
+  <ng-container *ngIf="data?.safDetails">
+    <h2 class="govuk-heading-m">Totals</h2>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Total mass of sustainable aviation fuel claimed</dt>
+        <dd govukSummaryListRowValue>{{ data.safDetails?.totalSafMass | bigNumber }} tonnes</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Emissions factor applied</dt>
+        <dd govukSummaryListRowValue>{{ data.safDetails?.emissionsFactor }} tCO2 per tonne of fuel</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Total emissions reduction claim for the scheme Year</dt>
+        <dd govukSummaryListRowValue>{{ data.safDetails?.totalEmissionsReductionClaim | bigNumber }} tCO2</dd>
+      </div>
+    </dl>
+  </ng-container>
+</ng-container>

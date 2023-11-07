@@ -1,0 +1,46 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="formGroup"
+  [heading]="heading"
+  submitText="Continue"
+  [hideSubmit]="isEditable === false"
+>
+  <app-verification-recommendation-item [verificationDataItem]="verificationDataItem">
+  </app-verification-recommendation-item>
+  <div
+    formControlName="isAddressed"
+    govuk-radio
+    [legend]="'Have you addressed this recommendation or do you plan to in future?'"
+    [legendSize]="'medium'"
+  >
+    <govuk-radio-option [value]="true" label="Yes">
+      <ng-container govukConditionalContent>
+        <div
+          [maxLength]="10000"
+          formControlName="addressedDescription"
+          govuk-textarea
+          label="Tell us how this recommendation will be (or has been) addressed"
+          labelSize="medium"
+        ></div>
+        <div
+          formControlName="addressedDate"
+          govuk-date-input
+          label="Tell us when the recommendation will be addressed"
+          hint="If already addressed, provide the date that work was completed"
+          [isRequired]="true"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          [maxLength]="10000"
+          formControlName="addressedDescription2"
+          govuk-textarea
+          label="Tell us why you have chosen not to address this recommendation"
+          labelSize="medium"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</app-wizard-step>

@@ -1,0 +1,19 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    caption="Apply regional data for natural gas"
+    heading="What conditions was the gas for this source stream metered?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div formControlName="fuelMeteringConditionType" govuk-radio legendSize="medium">
+      <govuk-radio-option
+        [value]="'CELSIUS_15'"
+        [label]="'CELSIUS_15' | fuelMeteringConditionType"
+      ></govuk-radio-option>
+      <govuk-radio-option [value]="'CELSIUS_0'" [label]="'CELSIUS_0' | fuelMeteringConditionType"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

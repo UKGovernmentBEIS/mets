@@ -1,0 +1,32 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="What tier have you used for this entry?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <ng-container *ngIf="(permitParamMonitoringTier$ | async)?.length">
+      <p class="govuk-body">
+        {{ permitParamMonitoringTier$ | async | appliedTier }} is applied in your monitoring plan
+      </p>
+    </ng-container>
+
+    <ng-container *ngIf="taskKey === 'MEASUREMENT_CO2'">
+      <div formControlName="tier" govuk-radio>
+        <govuk-radio-option [value]="'TIER_4'" label="Tier 4"></govuk-radio-option>
+        <govuk-radio-option [value]="'TIER_3'" label="Tier 3"></govuk-radio-option>
+        <govuk-radio-option [value]="'TIER_2'" label="Tier 2"></govuk-radio-option>
+        <govuk-radio-option [value]="'TIER_1'" label="Tier 1"></govuk-radio-option>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="taskKey === 'MEASUREMENT_N2O'">
+      <div formControlName="tier" govuk-radio>
+        <govuk-radio-option [value]="'TIER_3'" label="Tier 3"></govuk-radio-option>
+        <govuk-radio-option [value]="'TIER_2'" label="Tier 2"></govuk-radio-option>
+        <govuk-radio-option [value]="'TIER_1'" label="Tier 1"></govuk-radio-option>
+      </div>
+    </ng-container>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

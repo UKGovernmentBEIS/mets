@@ -1,0 +1,57 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <app-page-heading>Details of conclusion of non-compliance</app-page-heading>
+    <h2 class="govuk-heading-m">Details</h2>
+    <ng-container *ngIf="payload$ | async as payload">
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Has compliance been restored?</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">
+            {{ payload.complianceRestored ? 'Yes' : 'No' }}
+          </dd>
+        </div>
+      </dl>
+      <dl govuk-summary-list *ngIf="payload?.complianceRestored">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>When did the operator become compliant?</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">
+            {{ payload.complianceRestoredDate | date: 'd MMMM yyyy' }}
+          </dd>
+        </div>
+      </dl>
+      <dl govuk-summary-list *ngIf="payload?.comments">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Your comments on the status of compliance</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">
+            {{ payload.comments }}
+          </dd>
+        </div>
+      </dl>
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Withdraw and reissue penalty notice?</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">
+            {{ payload.reissuePenalty ? 'Yes' : 'No' }}
+          </dd>
+        </div>
+      </dl>
+      <dl govuk-summary-list *ngIf="payload?.operatorPaid !== null">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Has the operator paid this penalty?</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">
+            {{ payload.operatorPaid ? 'Yes' : 'No' }}
+          </dd>
+        </div>
+      </dl>
+      <dl govuk-summary-list *ngIf="payload?.operatorPaid">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>When did the operator pay?</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">
+            {{ payload.operatorPaidDate | date: 'd MMMM yyyy' }}
+          </dd>
+        </div>
+      </dl>
+    </ng-container>
+    <a govukLink routerLink="../../../..">Return to: Non-compliance</a>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<ng-template #contentTpl let-showOriginal>
+  <ul app-task-item-list>
+    <li
+      *ngIf="'confidentialityStatement' | taskStatus | async as status"
+      app-task-item
+      link="../../confidentiality-statement/summary"
+      linkText="Commercially confidential sections"
+      [status]="status"
+      [hasContent]="true"
+    >
+      <app-confidentiality-statement-summary-template
+        [data]="'confidentialityStatement' | task: !showOriginal | async"
+        [hasBottomBorder]="false"
+        cssClass="govuk-!-margin-bottom-0 govuk-summary-list--no-border"
+      ></app-confidentiality-statement-summary-template>
+    </li>
+  </ul>
+</ng-template>
+
+<app-permit-task-review [breadcrumb]="true" [notification]="notification" heading="Confidentiality">
+  <app-highlight-diff *ngIf="showDiff$ | async">
+    <ng-container slot="previous" *ngTemplateOutlet="contentTpl; context: { $implicit: true }"></ng-container>
+    <ng-container slot="current" *ngTemplateOutlet="contentTpl; context: { $implicit: false }"></ng-container>
+  </app-highlight-diff>
+  <ng-container
+    *ngIf="(showDiff$ | async) === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: false }"
+  ></ng-container>
+
+  <app-review-group-decision-container
+    [groupKey]="groupKey$ | async"
+    (notification)="notification = $event"
+  ></app-review-group-decision-container>
+</app-permit-task-review>

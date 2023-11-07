@@ -1,0 +1,19 @@
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">Emissions for the scheme year</h2>
+
+<app-total-emissions-scheme-year-summary [totalEmissions$]="totalEmissions$"></app-total-emissions-scheme-year-summary>
+
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">Emissions summary</h2>
+<govuk-tabs (selectedTab)="selectedTab($event)">
+  <ng-template govukTabLazy id="standard-fuels" label="Standard fuels">
+    <app-total-emissions-standard-fuels-table></app-total-emissions-standard-fuels-table>
+  </ng-template>
+  <ng-template govukTabLazy id="aerodrome-pairs" label="Aerodrome pairs">
+    <app-total-emissions-aerodrome-pairs-table></app-total-emissions-aerodrome-pairs-table>
+  </ng-template>
+  <ng-template govukTabLazy id="domestic-flights" label="Domestic flights">
+    <app-total-emissions-domestic-flights-table></app-total-emissions-domestic-flights-table>
+  </ng-template>
+  <ng-template govukTabLazy id="non-domestic-flights" label="Non-domestic flights">
+    <app-total-emissions-non-domestic-flights-table></app-total-emissions-non-domestic-flights-table>
+  </ng-template>
+</govuk-tabs>

@@ -1,0 +1,32 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="When you need to apply"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <div class="govuk-!-width-two-thirds">
+    <p class="govuk-body">
+      You must apply for an emissions monitoring plan within 42 days of becoming a UK ETS aircraft operator.
+    </p>
+    <p class="govuk-body">
+      This is when you have carried out an aviation activity in Schedule 1 of the UK ETS Order and:
+    </p>
+
+    <h2 class="govuk-heading-s">For commercial aircraft operators <span>(both points apply)</span></h2>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        In a calendar year you operated 243 or more UK ETS full-scope flights in any 4-month period (January to April,
+        May to August, September to December)
+      </li>
+      <li>Your emissions from UK ETS full-scope flights are 10,000 or more tonnes of CO2</li>
+    </ul>
+    <h2 class="govuk-heading-s">For non-commercial aircraft operators</h2>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Your annual emissions from UK ETS full-scope flights are 1000 or more tonnes of CO2</li>
+    </ul>
+    <h2 class="govuk-heading-s">When did you become a UK ETS aircraft operator?</h2>
+  </div>
+  <app-application-timeframe-apply-form></app-application-timeframe-apply-form>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

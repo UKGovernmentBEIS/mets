@@ -1,0 +1,21 @@
+<dl govuk-summary-list *ngIf="totalEmissions$ | async as totalEmissions">
+  <div govukSummaryListRow class="emissions-num-flights">
+    <dt govukSummaryListRowKey>Number of flights covered by UK ETS</dt>
+    <dd govukSummaryListRowValue>{{ totalEmissions.numFlightsCoveredByUkEts }}</dd>
+  </div>
+
+  <div govukSummaryListRow class="emissions-standard-fuels">
+    <dt govukSummaryListRowKey>Emissions from standard fuels</dt>
+    <dd govukSummaryListRowValue>{{ totalEmissions.standardFuelEmissions | bigNumber }} tCO2</dd>
+  </div>
+
+  <div *ngIf="totalEmissions.reductionClaimEmissions" govukSummaryListRow class="emissions-reduction-claim">
+    <dt govukSummaryListRowKey>Emissions reduction claim</dt>
+    <dd govukSummaryListRowValue>{{ totalEmissions.reductionClaimEmissions | bigNumber }} tCO2</dd>
+  </div>
+
+  <div govukSummaryListRow class="emissions-scheme-year">
+    <dt govukSummaryListRowKey>Emissions for the scheme year</dt>
+    <dd govukSummaryListRowValue>{{ totalEmissions.totalEmissions | bigNumber }} tCO2</dd>
+  </div>
+</dl>

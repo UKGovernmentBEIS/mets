@@ -1,0 +1,26 @@
+<app-permit-task
+  [breadcrumb]="[
+    {
+      text: 'MEASUREMENT_N2O' | monitoringApproachDescription,
+      link: ['nitrous-oxide']
+    }
+  ]"
+>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Confirm and complete"
+    [caption]="'MEASUREMENT_N2O' | monitoringApproachDescription"
+    [heading]="taskKey$ | async | i18nSelect: heading"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <app-procedure-form>
+      <app-template [taskKey]="taskKey$ | async"></app-template>
+    </app-procedure-form>
+  </app-wizard-step>
+
+  <app-approach-return-link
+    [parentTitle]="'MEASUREMENT_N2O' | monitoringApproachDescription"
+    reviewGroupUrl="nitrous-oxide"
+  ></app-approach-return-link>
+</app-permit-task>

@@ -1,0 +1,17 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading size="l"> Subsidiary companies </app-page-heading>
+  <app-operator-details-subsidiary-list
+    [subsidiaryCompanyData]="vm"
+    [isEditable]="vm.isEditable"
+    [queryParams]="queryParams"
+    linkTo="../"
+    (removeSubsidiaryItem)="handleSubsidiaryList($event)"
+  ></app-operator-details-subsidiary-list>
+
+  <button govukSecondaryButton type="button" routerLink="../add" [queryParams]="queryParams" *ngIf="vm.isEditable">
+    Add another subsidiary company
+  </button>
+  <div>
+    <button appPendingButton govukButton type="button" *ngIf="vm" routerLink="../../summary">Continue</button>
+  </div>
+</ng-container>

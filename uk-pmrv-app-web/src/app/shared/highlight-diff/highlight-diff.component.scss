@@ -1,0 +1,23 @@
+ins.diffmod,
+del.diffmod,
+ins.diffins,
+del.diffdel {
+  padding: 1px 5px 1px 4px;
+  border-radius: 5px;
+}
+
+del.diffmod + ins.diffmod,
+del.diffdel + ins.diffins {
+  margin-left: 10px;
+}
+
+ins.diffmod,
+ins.diffins {
+  text-decoration: none;
+  background-color: #acf2bd;
+}
+
+del.diffmod,
+del.diffdel {
+  background-color: #fdb9c0;
+}

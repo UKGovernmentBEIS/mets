@@ -1,0 +1,17 @@
+<app-vir-task heading="Create summary">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false">
+    <p class="govuk-body">Here you can give a short summary response to the operator's proposed improvements.</p>
+    <div
+      formControlName="reportSummary"
+      govuk-textarea
+      label="Report summary"
+      hint="This text will be added to the improvement response letter"
+      labelSize="medium"
+      [maxLength]="10000">
+    </div>
+  </app-wizard-step>
+</app-vir-task>

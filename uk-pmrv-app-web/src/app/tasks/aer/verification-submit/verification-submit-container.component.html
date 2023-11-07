@@ -1,0 +1,135 @@
+<app-base-task-container-component
+  [header]="aerTitle$ | async"
+  [customContentTemplate]="customContentTemplate"
+  [expectedTaskType]="requestTaskType$ | async"
+  [notification]="notification"
+  [daysRemaining]="daysRemaining$ | async"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <ol class="app-task-list">
+    <li app-task-section title="Operator information">
+      <ul app-task-item-list>
+        <li app-task-item link="./details" linkText="Installation details" [status]="'complete'"></li>
+        <li app-task-item link="./fuels" linkText="Fuels and equipment inventory" [status]="'complete'"></li>
+        <li
+          *ngFor="let approach of monitoringApproaches$ | async"
+          app-task-item
+          [link]="approach.link"
+          [linkText]="approach.linkText"
+          [status]="'complete'"
+        ></li>
+        <li app-task-item link="./emissions-summary" linkText="Emissions summary"></li>
+        <li
+          *ngIf="isGHGE$ | async"
+          app-task-item
+          link="./activity-level-report"
+          linkText="Activity level report"
+          [status]="'complete'"
+        ></li>
+        <li app-task-item link="./additional-info" linkText="Additional information" [status]="'complete'"></li>
+      </ul>
+    </li>
+
+    <li app-task-section title="Verifier assessment">
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="./verifier-details/summary"
+          linkText="Verifier details"
+          [status]="'verificationTeamDetails' | taskStatus | async"
+        ></li>
+        <li
+          app-task-item
+          link="./opinion-statement/summary"
+          linkText="Opinion statement"
+          [status]="'opinionStatement' | taskStatus | async"
+        ></li>
+        <li
+          app-task-item
+          link="./compliance-ets/summary"
+          linkText="Compliance with ETS rules"
+          [status]="'etsComplianceRules' | taskStatus | async"
+        ></li>
+        <li
+          app-task-item
+          link="./compliance-monitoring/summary"
+          linkText="Compliance with monitoring and reporting principles"
+          [status]="'complianceMonitoringReporting' | taskStatus | async"
+        ></li>
+        <li
+          *ngIf="isGHGE$ | async"
+          app-task-item
+          link="./verified-activity-level-report/summary"
+          linkText="Verification report of the activity level report"
+          [status]="'activityLevelReport' | taskStatus | async"
+        ></li>
+        <li
+          app-task-item
+          link="./overall-decision/summary"
+          linkText="Overall decision"
+          [status]="'overallAssessment' | taskStatus | async"
+        ></li>
+      </ul>
+    </li>
+
+    <li app-task-section title="Verifier findings">
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="./misstatements/summary"
+          linkText="Uncorrected misstatements"
+          [status]="'uncorrectedMisstatements' | taskStatus | async"
+        ></li>
+        <li
+          app-task-item
+          link="./non-conformities/summary"
+          linkText="Uncorrected non-conformities"
+          [status]="'uncorrectedNonConformities' | taskStatus | async"
+        ></li>
+        <li
+          app-task-item
+          link="./non-compliances/summary"
+          linkText="Uncorrected non-compliances"
+          [status]="'uncorrectedNonCompliances' | taskStatus | async"
+        ></li>
+        <li
+          app-task-item
+          link="./recommended-improvements/summary"
+          linkText="Recommended improvements"
+          [status]="'recommendedImprovements' | taskStatus | async"
+        ></li>
+        <li
+          app-task-item
+          link="./data-gaps/summary"
+          linkText="Methodologies to close data gaps"
+          [status]="'methodologiesToCloseDataGaps' | taskStatus | async"
+        ></li>
+        <li
+          app-task-item
+          link="./materiality-level/summary"
+          linkText="Materiality level and reference documents"
+          [status]="'materialityLevel' | taskStatus | async"
+        ></li>
+        <li
+          app-task-item
+          link="./summary-of-conditions/summary"
+          linkText="Summary of conditions, changes, clarifications and variations"
+          [status]="'summaryOfConditions' | taskStatus | async"
+        ></li>
+      </ul>
+    </li>
+
+    <li app-task-section title="Complete report">
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="./send-report"
+          linkText="Send report to operator"
+          [status]="'sendReport' | taskStatus | async"
+        ></li>
+      </ul>
+    </li>
+  </ol>
+</ng-template>

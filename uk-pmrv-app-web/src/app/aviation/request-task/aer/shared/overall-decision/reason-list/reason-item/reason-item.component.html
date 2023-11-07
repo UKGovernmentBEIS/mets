@@ -1,0 +1,11 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Save and continue"
+  [hideSubmit]="!vm.isEditable"
+  heading="Add a reason"
+  *ngIf="vm$ | async as vm"
+>
+  <div [maxLength]="10000" formControlName="reason" govuk-textarea class="govuk-!-width-two-thirds"></div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

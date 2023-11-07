@@ -1,0 +1,17 @@
+<h2 class="govuk-heading-m" *ngIf="headingText">{{ headingText }}</h2>
+<div class="overflow-auto overflow-auto-table">
+  <govuk-table
+    *ngIf="aviationAerCorsiaAircraftTypeDetails?.length"
+    [columns]="columns"
+    [data]="aviationAerCorsiaAircraftTypeDetails"
+  >
+    <ng-template let-column="column" let-row="row">
+      <div [ngSwitch]="column.field" class="cell-container">
+        <ng-container *ngSwitchCase="'designator'">{{ row.designator }}</ng-container>
+        <ng-container *ngSwitchCase="'subtype'">{{ row.subtype }}</ng-container>
+        <ng-container *ngSwitchCase="'fuelBurnRatio'">{{ row.fuelBurnRatio }}</ng-container>
+        <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+      </div>
+    </ng-template>
+  </govuk-table>
+</div>

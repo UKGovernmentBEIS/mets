@@ -1,0 +1,22 @@
+<div class="overflow-auto overflow-auto-table">
+  <govuk-table [columns]="tableColumns" [data]="items">
+    <ng-template let-column="column" let-row="row">
+      <ng-container [ngSwitch]="column.field">
+        <ng-container *ngSwitchCase="'taskType'">
+          <a [routerLink]="row | itemLink" govukLink>
+            {{ row[column.field] | itemName: row.requestId?.split('-')[1] }}
+          </a>
+          <div>
+            <govuk-tag *ngIf="row.isNew">New</govuk-tag>
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'requestType'">{{ row[column.field] | itemType }}</ng-container>
+        <ng-container *ngSwitchCase="'taskAssignee'">
+          {{ !row[column.field] ? unassignedLabel : (row[column.field] | userFullName) }}
+        </ng-container>
+        <ng-container *ngSwitchCase="'daysRemaining'">{{ row[column.field] | daysRemaining }}</ng-container>
+        <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+      </ng-container>
+    </ng-template>
+  </govuk-table>
+</div>

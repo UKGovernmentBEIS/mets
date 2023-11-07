@@ -1,0 +1,33 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  [heading]="heading"
+  [submitText]="submitText"
+  [hideSubmit]="isEditable === false"
+  [showBackLink]="true"
+>
+  <div formControlName="installationDetailsType" govuk-radio>
+    <govuk-radio-option
+      [value]="'INSTALLATION_EMITTER'"
+      label="Installation emitter ID"
+      hint="If they are registered for a greenhouse gas emissions permit they will have an ID. For example, EM12345."
+    >
+      <ng-container govukConditionalContent>
+        <div formControlName="emitterId" govuk-text-input label="Installation emitter ID"></div>
+        <div formControlName="email" govuk-text-input label="Contact email address"></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="'INSTALLATION_DETAILS'" label="Installation name, address and contact email">
+      <ng-container govukConditionalContent>
+        <div formControlName="installationName" govuk-text-input label="Installation name"></div>
+        <div formControlName="line1" govuk-text-input label="Address line 1"></div>
+        <div formControlName="line2" govuk-text-input label="Address line 2(optional)"></div>
+        <div formControlName="city" govuk-text-input label="Town or city"></div>
+        <div formControlName="postcode" govuk-text-input label="Post code" widthClass="govuk-!-width-one-third"></div>
+        <div formControlName="email2" govuk-text-input label="Contact email address"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</app-wizard-step>
+
+<a govukLink routerLink="../..">Return to: {{ returnToLink }}</a>

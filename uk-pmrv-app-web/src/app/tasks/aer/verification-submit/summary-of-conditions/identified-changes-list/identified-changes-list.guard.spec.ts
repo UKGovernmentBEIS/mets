@@ -1,0 +1,75 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+
+import { firstValueFrom, Observable } from 'rxjs';
+
+import { IdentifiedChangesListGuard } from '@tasks/aer/verification-submit/summary-of-conditions/identified-changes-list/identified-changes-list.guard';
+import { mockStateBuild } from '@tasks/aer/verification-submit/testing/mock-state';
+import {
+  mockState,
+  mockVerificationApplyPayload,
+} from '@tasks/aer/verification-submit/testing/mock-verification-apply-action';
+import { CommonTasksStore } from '@tasks/store/common-tasks.store';
+import { KeycloakService } from 'keycloak-angular';
+
+describe('IdentifiedChangesListGuard', () => {
+  let guard: IdentifiedChangesListGuard;
+  let router: Router;
+  let store: CommonTasksStore;
+
+  const activatedRouteSnapshot = new ActivatedRouteSnapshot();
+  activatedRouteSnapshot.params = { taskId: 1 };
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      providers: [KeycloakService],
+    });
+
+    guard = TestBed.inject(IdentifiedChangesListGuard);
+    router = TestBed.inject(Router);
+    store = TestBed.inject(CommonTasksStore);
+  });
+
+  it('should be created', () => {
+    expect(guard).toBeTruthy();
+  });
+
+  it('should activate', async () => {
+    store.setState(mockState);
+    await expect(
+      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>),
+    ).resolves.toEqual(true);
+  });
+
+  it('should redirect', async () => {
+    store.setState(
+      mockStateBuild({
+        summaryOfConditions: {
+          ...mockVerificationApplyPayload.verificationReport.summaryOfConditions,
+          notReportedChanges: null,
+        },
+      }),
+    );
+    await expect(
+      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>),
+    ).resolves.toEqual(
+      router.parseUrl('/tasks/1/aer/verification-submit/summary-of-conditions/identified-changes-list/0'),
+    );
+
+    store.setState(
+      mockStateBuild({
+        summaryOfConditions: {
+          ...mockVerificationApplyPayload.verificationReport.summaryOfConditions,
+          changesIdentified: false,
+          notReportedChanges: null,
+        },
+      }),
+    );
+    await expect(
+      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>),
+    ).resolves.toEqual(router.parseUrl('/tasks/1/aer/verification-submit/summary-of-conditions/summary'));
+  });
+});

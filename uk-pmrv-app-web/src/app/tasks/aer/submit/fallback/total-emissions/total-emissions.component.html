@@ -1,0 +1,54 @@
+<app-aer-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Calculate the total emissions for your fall back approach"
+    [hideSubmit]="(isEditable$ | async) === false"
+    [showBackLink]="true"
+  >
+    <div
+      formControlName="totalFossilEmissions"
+      govuk-text-input
+      label="Total fossil emissions"
+      labelSize="medium"
+      suffix="tonnes CO2e"
+      [widthClass]="'govuk-input--width-20'"
+    ></div>
+    <div
+      formControlName="totalFossilEnergyContent"
+      govuk-text-input
+      label="Total fossil energy content"
+      labelSize="medium"
+      suffix="terajoules"
+      [widthClass]="'govuk-input--width-20'"
+    ></div>
+    <div
+      formControlName="totalSustainableBiomassEmissions"
+      govuk-text-input
+      *ngIf="containsBiomass$ | async"
+      label="Total sustainable biomass emissions"
+      labelSize="medium"
+      suffix="tonnes CO2e"
+      [widthClass]="'govuk-input--width-20'"
+    ></div>
+    <div
+      formControlName="totalEnergyContentFromBiomass"
+      govuk-text-input
+      *ngIf="containsBiomass$ | async"
+      label="Total energy content from biomass"
+      labelSize="medium"
+      suffix="terajoules"
+      [widthClass]="'govuk-input--width-20'"
+    ></div>
+    <div
+      formControlName="totalNonSustainableBiomassEmissions"
+      govuk-text-input
+      *ngIf="containsBiomass$ | async"
+      label="Total non sustainable biomass emissions"
+      labelSize="medium"
+      suffix="tonnes CO2e"
+      [widthClass]="'govuk-input--width-20'"
+    ></div>
+  </app-wizard-step>
+  <app-return-link returnLink="../.."></app-return-link>
+</app-aer-task>

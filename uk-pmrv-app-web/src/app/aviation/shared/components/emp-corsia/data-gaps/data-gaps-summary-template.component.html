@@ -1,0 +1,98 @@
+<div *ngIf="data" data-testid="data-gaps-summary-template">
+  <ng-container *ngIf="isCert; else FUM">
+    <dl govuk-summary-list data-testid="data-gaps-summary-template-cert">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Secondary data sources</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          {{ data.secondaryDataSources }}
+        </dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../secondary-data-sources" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Handling of data gaps and erroneous data values</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          {{ data.dataGaps }}
+        </dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>
+          Does the existing data management system allow for data gaps when secondary data sources exist?
+        </dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          {{ data.secondarySourcesDataGapsExist ? 'Yes' : 'No' }}
+        </dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../secondary-data-sources-exist" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow *ngIf="data.secondarySourcesDataGapsExist">
+        <dt govukSummaryListRowKey>Describe the conditions where this occurs</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          {{ data.secondarySourcesDataGapsConditions }}
+        </dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../secondary-data-sources-exist" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+  <ng-template #FUM>
+    <dl govuk-summary-list data-testid="data-gaps-summary-template-fum">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>
+          Systems and procedures for identifying data gaps and assessing whether the 5% data gap flight threshold has
+          been reached
+        </dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          {{ data.dataGaps }}
+        </dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Secondary data sources</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          {{ data.secondaryDataSources }}
+        </dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../secondary-data-sources" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>
+          Does the existing data management system allow for data gaps when secondary data sources exist?
+        </dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          {{ data.secondarySourcesDataGapsExist ? 'Yes' : 'No' }}
+        </dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../secondary-data-sources-exist" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow *ngIf="data.secondarySourcesDataGapsExist">
+        <dt govukSummaryListRowKey>Describe the conditions where this occurs</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          {{ data.secondarySourcesDataGapsConditions }}
+        </dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../secondary-data-sources-exist" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-template>
+</div>

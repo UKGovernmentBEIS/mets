@@ -1,0 +1,37 @@
+<p class="govuk-heading-m">Reason for determining the reportable emissions</p>
+<app-determination-reason-summary-template
+  cssClass="summary-list--edge-border"
+  [dre]="dre"
+  [editable]="isEditable"
+  [supportingDocumentFiles]="supportingDocumentFiles"
+>
+</app-determination-reason-summary-template>
+
+<p class="govuk-heading-m">Monitoring approaches</p>
+<app-monitoring-approaches-summary-template
+  [approachEmissions]="dre.monitoringApproachReportingEmissions"
+  [editable]="isEditable"
+></app-monitoring-approaches-summary-template>
+
+<p class="govuk-heading-m">Reportable emissions</p>
+<app-reportable-emissions-summary-template
+  [approachEmissions]="dre.monitoringApproachReportingEmissions"
+  [editable]="isEditable"
+></app-reportable-emissions-summary-template>
+
+<p class="govuk-heading-m">Sources of information used</p>
+<app-information-sources-summary-template
+  [data]="dre.informationSources"
+  [editable]="isEditable"
+  [baseChangeLink]="'../information-sources'"
+></app-information-sources-summary-template>
+<div *ngIf="isEditable">
+  <div class="govuk-button-group">
+    <a routerLink="../information-sources/add" govukSecondaryButton type="button" [state]="{ changing: true }">
+      Add another item
+    </a>
+  </div>
+</div>
+
+<p class="govuk-heading-m">Operator fee</p>
+<app-fee-summary-template [fee]="dre.fee" [editable]="isEditable"> </app-fee-summary-template>

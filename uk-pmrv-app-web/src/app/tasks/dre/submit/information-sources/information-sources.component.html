@@ -1,0 +1,38 @@
+<app-dre-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="List the information sources you've used to arrive at the updated emissions"
+    submitText="Continue"
+    [hideSubmit]="(informationSources$ | async).length === 0"
+    [showBackLink]="true"
+  >
+    <div class="govuk-hint">
+      These could be things like emails or data received from the operator, or the emissions report.
+    </div>
+
+    <ng-container *ngIf="(informationSources$ | async).length > 0">
+      <app-information-sources-summary-template
+        [data]="informationSources$ | async"
+        [editable]="dreService.isEditable$ | async"
+        [baseChangeLink]="'./'"
+      ></app-information-sources-summary-template>
+    </ng-container>
+
+    <ng-container *ngIf="(informationSources$ | async).length; else noInformationSource">
+      <div *ngIf="dreService.isEditable$ | async">
+        <div class="govuk-button-group">
+          <a routerLink="./add" govukSecondaryButton type="button" [state]="{ changing: true }"> Add another item </a>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-template #noInformationSource>
+      <div class="govuk-button-group" *ngIf="dreService.isEditable$ | async">
+        <a routerLink="./add" govukButton type="button" [state]="{ changing: true }">Add an item</a>
+      </div>
+    </ng-template>
+  </app-wizard-step>
+
+  <a govukLink routerLink="..">Return to: reportable emissions task</a>
+</app-dre-task>

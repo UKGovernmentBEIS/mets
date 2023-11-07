@@ -1,0 +1,23 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Time allocation and scope of the verification"
+  submitText="Continue"
+>
+  <h2 class="govuk-heading-m">Total time of the verification</h2>
+  <p class="govuk-body">
+    You must include the dates the verification was made and the total time required in working days. This should
+    include any revisions.
+  </p>
+  <div formControlName="verificationTotalTime" govuk-textarea [maxLength]="10000"></div>
+
+  <h2 class="govuk-heading-m">Scope of the verification</h2>
+  <p class="govuk-body">You must include:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>the time period covered by the verification</li>
+    <li>any verification boundaries (organisational or physical, for example ‘all operator flights’)</li>
+    <li>number of site visits and what elements, if any, were conducted remotely</li>
+  </ul>
+  <div formControlName="verificationScope" govuk-textarea [maxLength]="10000"></div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

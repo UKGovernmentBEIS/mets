@@ -1,0 +1,18 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="What was the total production of primary aluminium for this source stream?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div
+      formControlName="totalPrimaryAluminium"
+      govuk-text-input
+      label="What guidance might be needed for this?"
+      widthClass="govuk-input--width-20"
+      suffix="tonnes"
+    ></div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_PFC' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

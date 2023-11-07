@@ -1,0 +1,26 @@
+<app-non-compliance-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Provide details of breach"
+    submitText="Save and Continue"
+    [showBackLink]="true"
+  >
+    <div
+      formControlName="dailyPenalty"
+      govuk-radio
+      legend="Is the operator liable for an initial notice (daily penalty)?"
+      legendSize="medium"
+    >
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <div *ngIf="(currentDomain$ | async) === 'INSTALLATION'; else aviation">
+    <a govukLink routerLink="..">Return to: non compliance task</a>
+  </div>
+  <ng-template #aviation>
+    <app-return-to-link></app-return-to-link>
+  </ng-template>
+</app-non-compliance-task>

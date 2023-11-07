@@ -1,0 +1,10 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Calculate the operator’s fee"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <app-aviation-emissions-charges-calculate-form [form]="form"></app-aviation-emissions-charges-calculate-form>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

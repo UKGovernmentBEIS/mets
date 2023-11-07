@@ -1,0 +1,35 @@
+<app-aer-task-review heading="Does the operator need to comply with uncertainty thresholds?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <govuk-details summary="See guidance">
+      <article>
+        <p class="govuk-body">If the operator needs to comply with the uncertainty thresholds for activity data and
+          calculation factors, you must confirm that they have used valid information used in the monitoring plan.</p>
+        <p class="govuk-body">If they have not used a tier-based approach you must check that they have:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>assessed and quantified the uncertainty</li>
+          <li>met the required overall uncertainty threshold for the annual level of GHG emissions</li>
+          <li>used valid information in the monitoring plan</li>
+          <li>used an overall approach in line with Article 22(b) of Commission Implementing Regulation (EU) 2018/2066
+          </li>
+          <li>provided evidence to show they have met the conditions for the fall-back approach used</li>
+        </ul>
+        <p class="govuk-body">If the operator needs to make a simplified uncertainty assessment, you need to confirm
+          that they are using valid information.</p>
+      </article>
+    </govuk-details>
+    <div formControlName="uncertaintyAssessment" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="uncertaintyAssessmentNotUsedReason" govuk-textarea
+               label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

@@ -1,0 +1,30 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <ng-container *ngIf="dataGaps as dataGaps">
+    <h2 class="govuk-heading-m">Summary</h2>
+
+    <app-data-gaps-summary-template
+      [data]="dataGaps"
+      [affectedFlightsDataGaps]="affectedFlightsDataGaps"
+      [isEditable]="vm.isEditable"
+      [changeUrlQueryParams]="{ change: true }"
+    ></app-data-gaps-summary-template>
+  </ng-container>
+
+  <ng-container *ngIf="dataGaps?.dataGapsDetails?.dataGaps">
+    <app-data-gaps-list-template
+      [dataGaps]="dataGaps.dataGapsDetails.dataGaps"
+      [queryParams]="{ change: true }"
+      [isEditable]="vm.isEditable"
+      (removeDataGapEvent)="onRemoveDataGap($event)"
+    ></app-data-gaps-list-template>
+  </ng-container>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit || isDataGapRemoved">
+      Confirm and complete
+    </button>
+  </div>
+</ng-container>
+<app-return-to-link></app-return-to-link>

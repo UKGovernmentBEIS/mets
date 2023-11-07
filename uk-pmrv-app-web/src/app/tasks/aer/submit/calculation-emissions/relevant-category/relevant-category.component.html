@@ -1,0 +1,30 @@
+<app-aer-task>
+  <ng-container *ngIf="form$ | async as form">
+    <app-wizard-step
+      (formSubmit)="onContinue()"
+      [formGroup]="form"
+      caption="Apply national inventory data"
+      heading="Select the relevant category for the main activity at the installation"
+      [hideSubmit]="(isEditable$ | async) === false"
+    >
+      <ng-container *ngIf="(nationalInventoryData$ | async)?.sectors as sectors">
+        <div [formControlName]="'sector'" govuk-radio>
+          <ng-container *ngFor="let sector of sectors">
+            <govuk-radio-option [value]="sector.name" [label]="sector.name + ' ' + sector.displayName">
+              <ng-container govukConditionalContent>
+                <span class="govuk-body">Select the relevant greenhouse gas fuel</span>
+                <div [formControlName]="'sector_' + sector.name" govuk-radio>
+                  <ng-container *ngFor="let fuel of sector.fuels">
+                    <govuk-radio-option [value]="fuel.name" [label]="fuel.name"></govuk-radio-option>
+                  </ng-container>
+                </div>
+              </ng-container>
+            </govuk-radio-option>
+          </ng-container>
+        </div>
+      </ng-container>
+    </app-wizard-step>
+
+    <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+  </ng-container>
+</app-aer-task>

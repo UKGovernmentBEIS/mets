@@ -1,0 +1,7 @@
+<app-page-heading size="l"> Are you sure you want to delete this note? </app-page-heading>
+
+<div class="govuk-button-group govuk-!-margin-bottom-8">
+  <button type="button" (click)="onDelete()" appPendingButton govukWarnButton>Yes, delete this note</button>
+</div>
+
+<a govukLink routerLink="/accounts/{{ accountId$ | async }}" fragment="notes">Return to: Account notes</a>

@@ -1,0 +1,17 @@
+FROM nginx:1.24
+ENV XAUTH $HOME/.Xauthority
+
+RUN apt-get update
+RUN apt-get install -y apache2-utils
+RUN rm /etc/nginx/conf.d/default.conf
+RUN rm /etc/nginx/nginx.conf
+COPY confs/nginx.conf /etc/nginx/nginx.conf
+COPY confs/page.conf /etc/nginx/conf.d/page.conf
+
+COPY uk-pmrv-maintenance-page-web /usr/share/nginx/maintenance
+COPY uk-pmrv-maintenance-page-web/resources /usr/share/nginx/resources
+COPY uk-pmrv-maintenance-page-web/resources /usr/share/nginx/assets
+COPY uk-pmrv-maintenance-page-web/resources/img /usr/share/nginx/assets/fonts
+COPY uk-pmrv-maintenance-page-web/resources/img /usr/share/nginx/assets/images
+COPY uk-pmrv-maintenance-page-web/resources/css /usr/share/nginx/maintenance/css
+COPY uk-pmrv-maintenance-page-web/resources/img /usr/share/nginx/maintenance/img

@@ -1,0 +1,33 @@
+<ng-container *ngIf="activities?.exist === false; else list">
+  <dl govuk-summary-list [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Are emissions from the installation reported under the Pollutant Release and Transfer Register?
+      </dt>
+      <dd govukSummaryListRowValue>No</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+<ng-template #list>
+  <h2 *ngIf="isEditable" class="govuk-heading-m">EPRTR codes added</h2>
+  <govuk-table [columns]="columns" [data]="activityItems" [class.no-bottom-border]="noBottomBorder">
+    <ng-template let-column="column" let-row="row" let-index="index">
+      <ng-container [ngSwitch]="column.field">
+        <ng-container *ngSwitchCase="'description'"><strong>Main activity</strong></ng-container>
+        <ng-container *ngSwitchCase="'activity'">{{ row.activity | activityItemName }}</ng-container>
+        <ng-container *ngIf="isEditable">
+          <ng-container *ngSwitchCase="'delete'">
+            <a [routerLink]="['../activity', index, 'delete']" govukLink>Delete</a>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-template>
+  </govuk-table>
+
+  <ng-container *ngIf="isEditable">
+    <button govukSecondaryButton (click)="addAnother()" type="button">Add another</button>
+  </ng-container>
+</ng-template>

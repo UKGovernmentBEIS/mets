@@ -1,0 +1,53 @@
+import { Inject, Injectable } from '@angular/core';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { CanActivate } from '@angular/router';
+
+import { combineLatest, mapTo, Observable, take, tap } from 'rxjs';
+
+import { HoldingCompanyFormComponent } from '@shared/holding-company-form';
+
+import { INSTALLATION_FORM } from '../factories/installation-form.factory';
+import { LEGAL_ENTITY_FORM, legalEntityInitialValue } from '../factories/legal-entity-form.factory';
+import {
+  ApplicationSectionType,
+  InstallationSection,
+  LegalEntitySection,
+} from '../store/installation-account-application.state';
+import { InstallationAccountApplicationStore } from '../store/installation-account-application.store';
+
+@Injectable()
+export class FormGuard implements CanActivate {
+  constructor(
+    private readonly store: InstallationAccountApplicationStore,
+    private fb: UntypedFormBuilder,
+    @Inject(INSTALLATION_FORM) private readonly installationForm: UntypedFormGroup,
+    @Inject(LEGAL_ENTITY_FORM) private readonly legalEntityForm: UntypedFormGroup,
+  ) {}
+
+  canActivate(): Observable<boolean> {
+    return combineLatest([
+      this.store.getTask(ApplicationSectionType.installation),
+      this.store.getTask(ApplicationSectionType.legalEntity),
+      this.store.select('isReviewed'),
+    ]).pipe(
+      take(1),
+      tap(
+        ([installationSection, legalEntitySection, isReviewed]: [InstallationSection, LegalEntitySection, boolean]) => {
+          this.installationForm.reset(installationSection.value);
+          if (legalEntitySection.value?.detailsGroup?.belongsToHoldingCompany) {
+            (this.legalEntityForm.get('detailsGroup') as UntypedFormGroup).addControl(
+              'holdingCompanyGroup',
+              this.fb.group(HoldingCompanyFormComponent.controlsFactory()),
+            );
+          }
+          this.legalEntityForm.reset({ ...legalEntityInitialValue, ...legalEntitySection.value });
+          if (isReviewed) {
+            this.installationForm.get('installationTypeGroup').disable();
+            this.installationForm.get('locationGroup').disable();
+          }
+        },
+      ),
+      mapTo(true),
+    );
+  }
+}

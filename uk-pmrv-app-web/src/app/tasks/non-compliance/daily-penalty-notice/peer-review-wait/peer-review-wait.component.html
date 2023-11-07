@@ -1,0 +1,14 @@
+<app-base-task-container-component
+  header="Initial penalty notice sent to peer reviewer: non-compliance"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="NON_COMPLIANCE_DAILY_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <govuk-warning-text> Waiting for peer review, you cannot make any changes</govuk-warning-text>
+
+  <ul app-task-item-list>
+    <li app-task-item link="../summary" linkText="Upload daily penalty notice" [status]="sectionStatus$ | async"></li>
+  </ul>
+</ng-template>

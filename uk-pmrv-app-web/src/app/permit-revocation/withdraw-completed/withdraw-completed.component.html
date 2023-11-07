@@ -1,0 +1,7 @@
+<app-request-action-heading
+  [headerText]="(route.data | async)?.pageTitle"
+  [timelineCreationDate]="creationDate$ | async"
+>
+</app-request-action-heading>
+<app-withdraw-summary sectionHeading="Details"></app-withdraw-summary>
+<app-official-notice-recipients [noticeRecipientsData]="noticeRecipients$ | async"></app-official-notice-recipients>

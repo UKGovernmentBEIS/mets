@@ -1,0 +1,36 @@
+<h2 class="govuk-heading-m">Total emissions</h2>
+
+<div class="govuk-body govuk-!-width-two-thirds">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total emissions reported by the operator</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <p class="govuk-body">{{ totalEmissionsProvided }} tCO2</p>
+      </dd>
+
+      <dd govukSummaryListRowActions></dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Are the reported emissions correct?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ emissionsCorrect ? 'Yes' : 'No' }}
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../']" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="!emissionsCorrect">
+      <dt govukSummaryListRowKey>Total verified aviation emissions for the scheme year</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <p class="govuk-body">{{ manuallyProvidedEmissions }} tCO2</p>
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../']" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</div>

@@ -1,0 +1,42 @@
+<app-permit-task
+  [breadcrumb]="
+    (emissionPointCategory$ | async)
+      ? [
+          {
+            text: 'MEASUREMENT_CO2' | monitoringApproachDescription,
+            link: ['measurement']
+          },
+          {
+            text:
+              (emissionPointCategory$ | async).emissionPoint
+              | findEmissionPoint
+              | async
+              | tierEmissionPointName: (emissionPointCategory$ | async),
+            link: ['measurement', 'category-tier', index$ | async]
+          }
+        ]
+      : [
+          {
+            text: 'MEASUREMENT_CO2' | monitoringApproachDescription,
+            link: ['measurement']
+          },
+          {
+            text: 'Add an emission point category',
+            link: ['measurement', 'category-tier', index$ | async]
+          }
+        ]
+  "
+>
+  <app-transfer-details-template
+    (formSubmit)="onSubmit($event)"
+    [transfer]="(emissionPointCategory$ | async)?.transfer"
+    [isEditable]="store.isEditable$ | async"
+    [heading]="
+      (emissionPointCategory$ | async)?.transfer?.transferDirection === 'RECEIVED_FROM_ANOTHER_INSTALLATION'
+        ? 'Provide details of the installation you received the emissions from'
+        : 'Provide details of the installation you exported the emissions to'
+    "
+    [returnToLink]="index$ | async | emissionPointCategoryName: 'MEASUREMENT_CO2' | async"
+    [showBackLink]="true"
+  ></app-transfer-details-template>
+</app-permit-task>

@@ -1,0 +1,26 @@
+<app-aer-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Activity level report"
+    [hideSubmit]="(isEditable$ | async) === false"
+    [showBackLink]="true"
+  >
+    <p class="govuk-body">Installations which receive free allocation must provide an activity level report.</p>
+
+    <app-boolean-radio-group
+      controlName="freeAllocationOfAllowances"
+      legend="Do you need to upload an activity level report?"
+    >
+      <div govukConditionalContent>
+        <app-file-input
+          [downloadUrl]="getDownloadUrl"
+          formControlName="file"
+          label="Upload a file"
+          listTitle="File added"
+        ></app-file-input>
+      </div>
+    </app-boolean-radio-group>
+  </app-wizard-step>
+  <app-return-link></app-return-link>
+</app-aer-task>

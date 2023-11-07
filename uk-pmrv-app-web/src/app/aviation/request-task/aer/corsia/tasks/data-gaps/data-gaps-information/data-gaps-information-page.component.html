@@ -1,0 +1,15 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="false"
+  heading="Add data gap information"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Each data gap must be accounted for by using the approved method defined in your emissions monitoring plan.
+  </p>
+
+  <app-data-gaps-information-form [isCorsia]="true"></app-data-gaps-information-form>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

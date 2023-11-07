@@ -1,0 +1,64 @@
+<app-air-task heading="Respond to regulator" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <app-air-improvement-item [airImprovement]="airImprovement" [reference]="reference"></app-air-improvement-item>
+    <app-air-operator-response-item
+      [reference]="reference"
+      [operatorAirImprovementResponse]="operatorAirImprovementResponse$ | async"
+      [attachedFiles]="operatorFiles$ | async"
+      [isEditable]="false"
+      [isReview]="true"
+    >
+    </app-air-operator-response-item>
+    <app-air-regulator-response-item
+      [reference]="reference"
+      [regulatorAirImprovementResponse]="regulatorAirImprovementResponse$ | async"
+      [attachedFiles]="regulatorFiles$ | async"
+      [isEditable]="false"
+      [isReview]="true"
+    >
+    </app-air-regulator-response-item>
+    <div
+      formControlName="improvementCompleted"
+      govuk-radio
+      [legend]="'Is the required improvement complete?'"
+      [legendSize]="'medium'"
+    >
+      <govuk-radio-option [value]="true" label="Yes">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="dateCompleted"
+            govuk-date-input
+            label="When was the improvement completed?"
+            hint="This date cannot be in the future"
+            [max]="today"
+            [isRequired]="true"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div
+            [maxLength]="10000"
+            formControlName="reason"
+            govuk-textarea
+            label="Tell us about your response to this improvement"
+            hint="Provide justification or evidence to support your answer"
+            labelSize="medium"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+    <app-multiple-file-input
+      [baseDownloadUrl]="getDownloadUrl()"
+      label="Upload files (optional)"
+      headerSize="m"
+      listTitle="Uploaded attachments"
+      formControlName="files"
+    ></app-multiple-file-input>
+  </app-wizard-step>
+</app-air-task>

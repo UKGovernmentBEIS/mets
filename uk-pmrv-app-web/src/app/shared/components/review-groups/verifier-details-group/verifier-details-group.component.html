@@ -1,0 +1,125 @@
+<ul app-task-item-list>
+  <li app-task-item linkText="Verification body" [hasContent]="true">
+    <dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0 govuk-summary-list--no-border">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Company name</dt>
+        <dd govukSummaryListRowValue>{{ verificationReport.verificationBodyDetails.name }}</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Address</dt>
+        <dd govukSummaryListRowValue>
+          <div>
+            {{ verificationReport.verificationBodyDetails.address.line1 }}
+            <ng-container *ngIf="verificationReport.verificationBodyDetails.address.line2">
+              , {{ verificationReport.verificationBodyDetails.address.line2 }}
+            </ng-container>
+          </div>
+          <div>{{ verificationReport.verificationBodyDetails.address.city }}</div>
+          <div>{{ verificationReport.verificationBodyDetails.address.postcode }}</div>
+          <div>{{ verificationReport.verificationBodyDetails.address.country | country }}</div>
+        </dd>
+      </div>
+    </dl>
+  </li>
+  <li app-task-item linkText="Accreditation information" [hasContent]="true">
+    <dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0 govuk-summary-list--no-border">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Accreditation number</dt>
+        <dd govukSummaryListRowValue>{{ verificationReport.verificationBodyDetails.accreditationReferenceNumber }}</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>National accreditation body</dt>
+        <dd govukSummaryListRowValue>
+          <span *ngFor="let emissionScheme of verificationReport.verificationBodyDetails.emissionTradingSchemes">
+            {{ emissionScheme | verificationBodyType }}<br />
+          </span>
+        </dd>
+      </div>
+    </dl>
+  </li>
+  <ng-container *ngIf="showVerifierDetails">
+    <li *ngIf="verificationReport.verifierContact" app-task-item linkText="Verifier contact" [hasContent]="true">
+      <dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0 govuk-summary-list--no-border">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Name</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verifierContact.name }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink routerLink="..">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Email</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verifierContact.email }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink routerLink="..">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Telephone number</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verifierContact.phoneNumber }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink routerLink="..">Change</a>
+          </dd>
+        </div>
+      </dl>
+    </li>
+    <li
+      *ngIf="verificationReport.verificationTeamDetails"
+      app-task-item
+      linkText="Verification team details"
+      [hasContent]="true"
+    >
+      <dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0 govuk-summary-list--no-border">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Lead ETS Auditor</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verificationTeamDetails.leadEtsAuditor }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink routerLink="..">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>ETS Auditors</dt>
+          <dd class="pre-wrap" govukSummaryListRowValue>
+            {{ verificationReport.verificationTeamDetails.etsAuditors }}
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink routerLink="..">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Technical Experts (ETS Auditor)</dt>
+          <dd class="pre-wrap" govukSummaryListRowValue>
+            {{ verificationReport.verificationTeamDetails.etsTechnicalExperts }}
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink routerLink="..">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Independent Reviewer</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verificationTeamDetails.independentReviewer }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink routerLink="..">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Technical Experts (Independent Review)</dt>
+          <dd class="pre-wrap" govukSummaryListRowValue>
+            {{ verificationReport.verificationTeamDetails.technicalExperts }}
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink routerLink="..">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Name of authorised signatory</dt>
+          <dd govukSummaryListRowValue>{{ verificationReport.verificationTeamDetails.authorisedSignatoryName }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink routerLink="..">Change</a>
+          </dd>
+        </div>
+      </dl>
+    </li>
+  </ng-container>
+</ul>
+<ng-content></ng-content>

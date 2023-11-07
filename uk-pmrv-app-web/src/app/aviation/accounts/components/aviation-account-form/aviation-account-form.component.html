@@ -1,0 +1,36 @@
+<div formControlName="name" govuk-text-input label="Operator name" widthClass="govuk-!-width-two-thirds"></div>
+<div
+  *ngIf="withEmissionTradingScheme"
+  formControlName="emissionTradingScheme"
+  govuk-radio
+  legend="What scheme will they be reporting under?"
+>
+  <govuk-radio-option value="UK_ETS_AVIATION" label="UK ETS"></govuk-radio-option>
+  <govuk-radio-option value="CORSIA" label="CORSIA"></govuk-radio-option>
+</div>
+<div
+  *ngIf="withRegistryId"
+  formControlName="registryId"
+  govuk-text-input
+  label="UK ETS registry ID (optional)"
+  widthClass="govuk-!-width-two-thirds"
+></div>
+<div formControlName="sopId" govuk-text-input label="SOP ID (optional)" widthClass="govuk-!-width-two-thirds"></div>
+<div
+  formControlName="crcoCode"
+  govuk-text-input
+  label="Central Route Charges Office number (CRCO)"
+  widthClass="govuk-!-width-two-thirds"
+></div>
+<p class="govuk-body">Date of first known aviation activity</p>
+<div formControlName="commencementDate" govuk-date-input></div>
+
+<ng-container *ngIf="withLocation">
+  <div formControlName="hasContactAddress" govuk-checkboxes>
+    <govuk-checkbox [value]="true" label="Add a contact address (optional)">
+      <ng-container govukConditionalContent>
+        <app-location-state-form formGroupName="location"></app-location-state-form>
+      </ng-container>
+    </govuk-checkbox>
+  </div>
+</ng-container>

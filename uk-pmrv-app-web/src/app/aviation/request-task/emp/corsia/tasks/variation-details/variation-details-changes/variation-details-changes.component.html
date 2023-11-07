@@ -1,0 +1,62 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Describe the changes"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <div class="govuk-!-width-two-thirds">
+    <h2 class="govuk-heading-m">Material or significant changes</h2>
+    <div class="govuk-hint">
+      You must apply at least 14 days before you make any of these changes, for which you may be charged a fee.
+    </div>
+  </div>
+  <div class="govuk-form-group govuk-!-width-two-thirds">
+    <div govuk-checkboxes formControlName="materialChanges">
+      <govuk-checkbox
+        *ngFor="let changeKey of materialChangesKeys"
+        [value]="changeKey"
+        [label]="materialChanges[changeKey]"
+      >
+      </govuk-checkbox>
+    </div>
+
+    <div
+      govuk-checkboxes
+      formControlName="otherChanges"
+      legend="Other changes requiring a variation"
+      hint="You may be charged a fee for these changes"
+      legendSize="medium"
+    >
+      <govuk-checkbox
+        *ngFor="let changeKey of otherChangesKeys"
+        [value]="changeKey"
+        [label]="otherChanges[changeKey]"
+      ></govuk-checkbox>
+    </div>
+
+    <div
+      govuk-checkboxes
+      formControlName="nonMaterialChanges"
+      legend="Non-material changes"
+      hint="You should inform us either before, or within 14 days of any changes that would affect our regulatory oversight"
+      legendSize="medium"
+    >
+      <govuk-checkbox
+        *ngFor="let changeKey of nonMaterialChangesKeys"
+        [value]="changeKey"
+        [label]="nonMaterialChanges[changeKey]"
+      ></govuk-checkbox>
+    </div>
+  </div>
+  <div class="govuk-form-group">
+    <div
+      [maxLength]="10000"
+      formControlName="reason"
+      govuk-textarea
+      label="Summarise what you are changing and the reasons for the changes"
+      class="govuk-!-width-two-thirds"
+    ></div>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

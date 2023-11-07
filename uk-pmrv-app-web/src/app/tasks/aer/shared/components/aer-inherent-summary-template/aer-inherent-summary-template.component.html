@@ -1,0 +1,106 @@
+<ng-container *ngFor="let installation of inherentInstallations; let i = index">
+  <dl govuk-summary-list class="govuk-!-margin-bottom-0">
+    <div govukSummaryListRow>
+      <dt
+        [class.missing-row-key]="errors?.notAllWizardsCompleted && !isWizardComplete(installation)"
+        govukSummaryListRowKey
+      >
+        <h2 class="govuk-heading-m"><span>Item</span></h2>
+      </dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        <ng-container *ngIf="errors?.notAllWizardsCompleted && !isWizardComplete(installation)">
+          <span class="error">This item is not complete. Select ‘change’ to complete the remaining questions.</span>
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable === true">
+        <a govukLink [routerLink]="[i, 'delete']">Remove</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl govuk-summary-list [hasBorders]="true" [class.summary-list--edge-border]="true" class="govuk-!-margin-bottom-6">
+    <div govukSummaryListRow *ngIf="installation?.inherentCO2Direction">
+      <dt govukSummaryListRowKey>Direction of travel</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ installation?.inherentCO2Direction | inherentCo2Directions }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable === true">
+        <a govukLink [routerLink]="[i, 'direction']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <ng-container
+      *ngIf="
+        $any(installation?.inherentReceivingTransferringInstallationDetailsType)
+          ?.installationEmitter as installationEmitter
+      "
+    >
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Installation emitter ID</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          {{ installationEmitter.emitterId }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable === true">
+          <a govukLink [routerLink]="[i, 'details']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Contact email address</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          {{ installationEmitter.email }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable === true">
+          <a govukLink [routerLink]="[i, 'details']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+    <ng-container
+      *ngIf="
+        $any(installation?.inherentReceivingTransferringInstallationDetailsType)
+          ?.installationDetails as installationDetails
+      "
+    >
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Installation name</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          {{ installationDetails.installationName }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable === true">
+          <a govukLink [routerLink]="[i, 'details']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Installation address</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>
+          <div>
+            {{ installationDetails.line1 }}
+            <ng-container *ngIf="installationDetails.line2">, {{ installationDetails.line2 }}</ng-container>
+          </div>
+          <div>{{ installationDetails.city }}</div>
+          <div>{{ installationDetails.postcode }}</div>
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable === true">
+          <a govukLink [routerLink]="[i, 'details']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+    <div govukSummaryListRow *ngIf="installation?.measurementInstrumentOwnerTypes">
+      <dt govukSummaryListRowKey>Measurement devices used</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        <ng-container *ngFor="let instrument of installation?.measurementInstrumentOwnerTypes">
+          {{ instrument | inherentCo2Instruments }}
+          <br />
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable === true">
+        <a govukLink [routerLink]="[i, 'instruments']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="installation?.totalEmissions">
+      <dt govukSummaryListRowKey>Reportable emissions</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ installation?.totalEmissions }} tCO2e</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable === true">
+        <a govukLink [routerLink]="[i, 'emissions']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

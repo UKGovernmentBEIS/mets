@@ -1,0 +1,34 @@
+<ng-container *ngIf="data">
+  <ng-container *ngIf="data.exist; else noAbbreviations">
+    <dl *ngFor="let definition of data.abbreviationDefinitions" govuk-summary-list [class]="cssClass">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Abbreviation, acronym or terminology</dt>
+        <dd govukSummaryListRowValue>{{ definition.abbreviation }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink=".." [queryParams]="changeUrlQueryParams">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Definition</dt>
+        <dd govukSummaryListRowValue>{{ definition.definition }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink=".." [queryParams]="changeUrlQueryParams">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+  <ng-template #noAbbreviations>
+    <dl govuk-summary-list [class]="cssClass">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>
+          Are you using any abbreviations, acronyms or terminology in your permit application which may require
+          definition?
+        </dt>
+        <dd govukSummaryListRowValue>No</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink=".." [queryParams]="changeUrlQueryParams">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-template>
+</ng-container>

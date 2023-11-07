@@ -1,0 +1,41 @@
+<app-permit-task
+  [notification]="notification"
+  [breadcrumb]="true"
+  reviewGroupTitle="Permit type"
+  reviewGroupUrl="permit-type"
+>
+  <app-page-heading caption="Permit type">Define permit type</app-page-heading>
+  <p class="govuk-body">
+    Based on the information you gave, this installation can apply for a Hospital and Small Emitter (HSE) permit or a
+    full Greenhouse Gas Emissions (GHGE) permit.
+  </p>
+  <p class="govuk-body">Ultra small emitters</p>
+  <p class="govuk-body">
+    You are an ultra small emitter if your installation emits less than 2,500 tonnes of carbon dioxide equivalent
+    (CO2eq) in the relevant period.
+  </p>
+  <p class="govuk-body">Applying for an HSE permit</p>
+  <p class="govuk-body">
+    You can only apply for an HSE permit if you have HSE status for the relevant allocation period.
+  </p>
+  <p class="govuk-body">Applying for a GHGE permit</p>
+  <p class="govuk-body">
+    Installations which carry out regulated activities and are not eligible for HSE status must have a GHGE permit.
+  </p>
+  <h2
+    app-summary-header
+    [changeRoute]="
+      (store.isEditable$ | async) === true &&
+      !['PERMIT_VARIATION_APPLICATION_SUBMIT', 'PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT'].includes(
+        (store | async)?.requestTaskType
+      )
+        ? '..'
+        : undefined
+    "
+    class="govuk-heading-m"
+  >
+    Permit type
+  </h2>
+  <app-permit-type-summary-template [permitType]="permitType"></app-permit-type-summary-template>
+  <app-list-return-link reviewGroupTitle="Permit type" reviewGroupUrl="permit-type"></app-list-return-link>
+</app-permit-task>

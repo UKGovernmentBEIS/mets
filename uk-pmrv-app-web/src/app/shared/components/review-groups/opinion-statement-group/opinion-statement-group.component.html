@@ -1,0 +1,82 @@
+<app-installation-details-summary
+  *ngIf="payload?.installationOperatorDetails"
+  [installationOperatorDetails]="payload.installationOperatorDetails"
+  [hideSubheadings]="false"
+  [hasBorders]="true"
+>
+</app-installation-details-summary>
+
+<app-aer-regulated-activities-group
+  *ngIf="opinionStatement?.regulatedActivities"
+  [regulatedActivities]="opinionStatement.regulatedActivities"
+  [isEditable]="isEditable"
+  addRouterLink="../add"
+  deleteRouterLink="../delete"
+>
+</app-aer-regulated-activities-group>
+
+<app-aer-combustion-sources-group
+  *ngIf="opinionStatement?.combustionSources"
+  [combustionSources]="opinionStatement.combustionSources"
+  [isEditable]="isEditable"
+  addRouterLink="../combustion-sources/add"
+  deleteRouterLink="../combustion-sources/delete"
+>
+</app-aer-combustion-sources-group>
+
+<app-aer-process-sources-group
+  *ngIf="opinionStatement?.processSources"
+  [processSources]="opinionStatement.processSources"
+  [isEditable]="isEditable"
+  addRouterLink="../process-sources/add"
+  deleteRouterLink="../process-sources/delete"
+>
+</app-aer-process-sources-group>
+
+<app-aer-emission-details-group
+  *ngIf="
+    opinionStatement?.monitoringApproachDescription !== null || opinionStatement?.emissionFactorsDescription !== null
+  "
+  [monitoringApproachDescription]="opinionStatement.monitoringApproachDescription"
+  [emissionFactorsDescription]="opinionStatement.emissionFactorsDescription"
+  [isEditable]="isEditable"
+  monitoringChangeLink="../monitoring-approaches"
+  emissionFactorsChangeLink="../emission-factors"
+>
+</app-aer-emission-details-group>
+
+<ng-container *ngIf="aerVerified">
+  <h2 class="govuk-heading-m">Emissions reported by the operator</h2>
+  <app-emissions-summary-group [data]="aerVerified"></app-emissions-summary-group>
+</ng-container>
+
+<app-aer-verifiers-emissions-assessment-group
+  *ngIf="opinionStatement"
+  [opinionStatement]="opinionStatement"
+  [isEditable]="isEditable"
+>
+</app-aer-verifiers-emissions-assessment-group>
+
+<app-monitoring-plan-versions
+  *ngIf="payload?.monitoringPlanVersions as monitoringPlanVersions"
+  [versions]="monitoringPlanVersions"
+  [showCaption]="false"
+>
+</app-monitoring-plan-versions>
+
+<app-monitoring-plan-summary-template
+  *ngIf="payload?.aer?.aerMonitoringPlanDeviation"
+  [isEditable]="false"
+  [planDeviation]="payload.aer.aerMonitoringPlanDeviation"
+  [headingSmall]="false"
+  [opinionStatement]="opinionStatement"
+  [opinionStatementEditable]="isEditable"
+>
+</app-monitoring-plan-summary-template>
+
+<app-aer-site-visit-group
+  *ngIf="opinionStatement?.siteVisit"
+  [siteVisit]="opinionStatement.siteVisit"
+  [isEditable]="isEditable"
+>
+</app-aer-site-visit-group>

@@ -1,0 +1,36 @@
+<app-aer-task [breadcrumb]="true">
+  <govuk-error-summary *ngIf="displayErrors$ | async" [form]="form"></govuk-error-summary>
+  <app-page-heading>{{ 'INHERENT_CO2' | monitoringApproachEmissionDescription }}</app-page-heading>
+  <p class="govuk-body">This is CO2 which is part of a source stream.</p>
+
+  <ng-container *ngIf="inherentInstallations$ | async as inherentInstallations; else noInherentCO2">
+    <ng-container *ngIf="inherentInstallations?.length; else noInherentCO2">
+      <app-aer-inherent-summary-template
+        [inherentInstallations]="inherentInstallations"
+        [isEditable]="isEditable$ | async"
+        [errors]="displayErrors$ | async"
+        [isWizardComplete]="isWizardComplete"
+      >
+      </app-aer-inherent-summary-template>
+
+      <div *ngIf="(isEditable$ | async) === true">
+        <div class="govuk-button-group">
+          <a govukSecondaryButton [routerLink]="['./', inherentInstallations?.length ?? 0, 'direction']" type="button"
+            >Add another item</a
+          >
+        </div>
+
+        <div class="govuk-button-group">
+          <button govukButton appPendingButton (click)="onSubmit()" type="button">Confirm and complete</button>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+  <ng-template #noInherentCO2>
+    <div class="govuk-button-group" *ngIf="(isEditable$ | async) === true">
+      <a govukButton routerLink="./0/direction" type="button">Add a new entry</a>
+    </div>
+  </ng-template>
+
+  <app-return-link></app-return-link>
+</app-aer-task>

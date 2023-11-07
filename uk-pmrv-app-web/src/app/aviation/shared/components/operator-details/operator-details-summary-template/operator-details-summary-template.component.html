@@ -1,0 +1,301 @@
+<ng-container *ngIf="data?.operatorName">
+  <h2 class="govuk-heading-m">Operator details</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Aircraft operator name</dt>
+      <dd govukSummaryListRowValue>{{ data.operatorName }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="!isCorsia">
+      <dt govukSummaryListRowKey>CRCO code</dt>
+      <dd govukSummaryListRowValue>{{ $any(data).crcoCode }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable"></dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="data?.flightIdentification as flightIdentification">
+  <h2 class="govuk-heading-m">Flight identification</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>What call sign identification do you use for Air Traffic Control purposes?</dt>
+      <dd govukSummaryListRowValue>
+        {{ flightIdentification.flightIdentificationType | operatorDetailsFlightIdentificationType }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../flight-identification'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="flightIdentification.icaoDesignators">
+      <dt govukSummaryListRowKey>ICAO designators used</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ flightIdentification.icaoDesignators }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../flight-identification'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="flightIdentification.aircraftRegistrationMarkings">
+      <dt govukSummaryListRowKey>Aircraft registration markings</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ flightIdentification.aircraftRegistrationMarkings }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../flight-identification'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="data?.airOperatingCertificate as airOperatingCertificate">
+  <h2 class="govuk-heading-m">Air operating certificate</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Do you have an Air Operator Certificate (AOC) or equivalent?</dt>
+      <dd govukSummaryListRowValue>{{ airOperatingCertificate.certificateExist ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../air-operating-certificate'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <ng-container *ngIf="airOperatingCertificate.certificateExist">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Certificate number</dt>
+        <dd govukSummaryListRowValue>{{ airOperatingCertificate.certificateNumber }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../air-operating-certificate'" [queryParams]="changeUrlQueryParams">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Issuing authority</dt>
+        <dd govukSummaryListRowValue>{{ airOperatingCertificate.issuingAuthority }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../air-operating-certificate'" [queryParams]="changeUrlQueryParams">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Uploaded files</dt>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files [files]="certificationFiles"></app-summary-download-files>
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../air-operating-certificate'" [queryParams]="changeUrlQueryParams">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow *ngIf="isCorsia">
+        <dt govukSummaryListRowKey>Restrictions or obligations imposed by the certificate?</dt>
+        <dd govukSummaryListRowValue>{{ $any(airOperatingCertificate).restrictionsExist ? 'Yes' : 'No' }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../air-operating-certificate'" [queryParams]="changeUrlQueryParams">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="$any(data)?.operatingLicense as operatingLicense">
+  <h2 class="govuk-heading-m">Air operating licence</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Do you have an operating licence?</dt>
+      <dd govukSummaryListRowValue>{{ operatingLicense.licenseExist ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../operating-license'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <ng-container *ngIf="operatingLicense.licenseExist">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Operating licence number</dt>
+        <dd govukSummaryListRowValue>{{ operatingLicense.licenseNumber }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../operating-license'" [queryParams]="changeUrlQueryParams">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Issuing authority</dt>
+        <dd govukSummaryListRowValue>{{ operatingLicense.issuingAuthority }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../operating-license'" [queryParams]="changeUrlQueryParams">Change</a>
+        </dd>
+      </div>
+    </ng-container>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="data?.organisationStructure as organisationStructure">
+  <h2 class="govuk-heading-m">Organisation details</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>What is the legal status of your organisation?</dt>
+      <dd govukSummaryListRowValue>{{ organisationStructure.legalStatusType | operatorDetailsLegalStatusType }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../organisation-structure'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <ng-container [ngSwitch]="organisationStructure.legalStatusType">
+      <ng-container *ngSwitchCase="'LIMITED_COMPANY'">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Company registration number</dt>
+          <dd govukSummaryListRowValue>{{ $any(organisationStructure).registrationNumber }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../organisation-structure'" [queryParams]="changeUrlQueryParams">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Registered address</dt>
+          <dd govukSummaryListRowValue>
+            <div>
+              {{ organisationStructure.organisationLocation.line1 }}
+              <ng-container *ngIf="organisationStructure.organisationLocation.line2">
+                , {{ organisationStructure.organisationLocation.line2 }}
+              </ng-container>
+            </div>
+            <div>{{ organisationStructure.organisationLocation.city }}</div>
+            <div>{{ organisationStructure.organisationLocation.state }}</div>
+            <div>{{ organisationStructure.organisationLocation.postcode }}</div>
+            <div>{{ organisationStructure.organisationLocation.country | country }}</div>
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../organisation-structure'" [queryParams]="changeUrlQueryParams">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow *ngIf="evidenceFiles.length > 0">
+          <dt govukSummaryListRowKey>Proof of registered address</dt>
+          <dd govukSummaryListRowValue>
+            <app-summary-download-files [files]="evidenceFiles"></app-summary-download-files>
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../organisation-structure'" [queryParams]="changeUrlQueryParams">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Do you want to provide a different contact address?</dt>
+          <dd govukSummaryListRowValue>
+            {{ $any(organisationStructure).differentContactLocationExist ? 'Yes' : 'No' }}
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../organisation-structure'" [queryParams]="changeUrlQueryParams">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow *ngIf="$any(organisationStructure).differentContactLocationExist">
+          <dt govukSummaryListRowKey>Contact address</dt>
+          <dd govukSummaryListRowValue>
+            <div>
+              {{ $any(organisationStructure).differentContactLocation.line1 }}
+              <ng-container *ngIf="$any(organisationStructure).differentContactLocation.line2">
+                , {{ $any(organisationStructure).differentContactLocation.line2 }}
+              </ng-container>
+            </div>
+            <div>{{ $any(organisationStructure).differentContactLocation.city }}</div>
+            <div>{{ $any(organisationStructure).differentContactLocation.state }}</div>
+            <div>{{ $any(organisationStructure).differentContactLocation.postcode }}</div>
+            <div>{{ $any(organisationStructure).differentContactLocation.country | country }}</div>
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../organisation-structure'" [queryParams]="changeUrlQueryParams">Change</a>
+          </dd>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'INDIVIDUAL'">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Full name</dt>
+          <dd govukSummaryListRowValue>{{ $any(organisationStructure).fullName }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../organisation-structure'" [queryParams]="changeUrlQueryParams">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Contact address</dt>
+          <dd govukSummaryListRowValue>
+            <div>
+              {{ organisationStructure.organisationLocation.line1 }}
+              <ng-container *ngIf="organisationStructure.organisationLocation.line2">
+                , {{ organisationStructure.organisationLocation.line2 }}
+              </ng-container>
+            </div>
+            <div>{{ organisationStructure.organisationLocation.city }}</div>
+            <div>{{ organisationStructure.organisationLocation.state }}</div>
+            <div>{{ organisationStructure.organisationLocation.postcode }}</div>
+            <div>{{ organisationStructure.organisationLocation.country | country }}</div>
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../organisation-structure'" [queryParams]="changeUrlQueryParams">Change</a>
+          </dd>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'PARTNERSHIP'">
+        <div govukSummaryListRow *ngIf="$any(organisationStructure).partnershipName">
+          <dt govukSummaryListRowKey>Name of partnership</dt>
+          <dd govukSummaryListRowValue>{{ $any(organisationStructure).partnershipName }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../organisation-structure'" [queryParams]="changeUrlQueryParams">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Main office address</dt>
+          <dd govukSummaryListRowValue>
+            <div>
+              {{ organisationStructure.organisationLocation.line1 }}
+              <ng-container *ngIf="organisationStructure.organisationLocation.line2">
+                , {{ organisationStructure.organisationLocation.line2 }}
+              </ng-container>
+            </div>
+            <div>{{ organisationStructure.organisationLocation.city }}</div>
+            <div>{{ organisationStructure.organisationLocation.state }}</div>
+            <div>{{ organisationStructure.organisationLocation.postcode }}</div>
+            <div>{{ organisationStructure.organisationLocation.country | country }}</div>
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../organisation-structure'" [queryParams]="changeUrlQueryParams">Change</a>
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>List the partners</dt>
+          <dd govukSummaryListRowValue>
+            <div *ngFor="let partner of $any(organisationStructure).partners">{{ partner }}</div>
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="'../organisation-structure'" [queryParams]="changeUrlQueryParams">Change</a>
+          </dd>
+        </div>
+      </ng-container>
+    </ng-container>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="$any(data)?.activitiesDescription as activitiesDescription">
+  <h2 class="govuk-heading-m">Description of your activities</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Type of operator</dt>
+      <dd govukSummaryListRowValue>{{ activitiesDescription.operatorType | activitiesDescription }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../activities-description'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Type of flights</dt>
+      <dd govukSummaryListRowValue>
+        <div *ngFor="let flightType of activitiesDescription.flightTypes">{{ flightType | activitiesDescription }}</div>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../activities-description'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="!isCorsia">
+      <dt govukSummaryListRowKey>Scope of operation</dt>
+      <dd govukSummaryListRowValue>
+        <div *ngFor="let operationScope of $any(activitiesDescription).operationScopes">
+          {{ operationScope | activitiesDescription }}
+        </div>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../activities-description'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Describe your activities</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ activitiesDescription.activityDescription }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../activities-description'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

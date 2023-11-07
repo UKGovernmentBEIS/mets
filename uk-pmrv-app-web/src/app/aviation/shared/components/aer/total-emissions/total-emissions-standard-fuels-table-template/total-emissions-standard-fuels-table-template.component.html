@@ -1,0 +1,30 @@
+<div class="overflow-auto overflow-auto-table">
+  <govuk-table
+    *ngIf="(standardFuelsTotalEmissions$ | async)?.length"
+    [columns]="columns"
+    [data]="standardFuelsTotalEmissions$ | async"
+  >
+    <ng-template let-column="column" let-index="index" let-row="row">
+      <div [ngSwitch]="column.field" class="cell-container">
+        <ng-container *ngSwitchCase="'fuelType'">
+          <span data-testid="at-fuel-type">
+            {{ getSummaryDescription(row.fuelType) }}
+          </span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'emissionsFactor'">
+          <div class="amount" data-testid="at-emissions-factor">{{ row.emissionsFactor }} tCO2/t fuel</div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'netCalorificValue'">
+          <div class="amount" data-testid="at-net-calorific-value">{{ row.netCalorificValue }} GJ/t fuel</div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'fuelConsumption'">
+          <div class="amount" data-testid="at-fuel-consumption">{{ row.fuelConsumption }} t</div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'emissions'">
+          <div class="amount" data-testid="at-emissions">{{ row.emissions }} tCO2</div>
+        </ng-container>
+        <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+      </div>
+    </ng-template>
+  </govuk-table>
+</div>

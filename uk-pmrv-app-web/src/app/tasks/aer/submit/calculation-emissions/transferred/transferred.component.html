@@ -1,0 +1,53 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Transferred CO2"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      You need to subtract from your emissions any CO2 originating from fossil carbon if you transfer it to:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>a capture installation, for transport and long-term geological storage in a storage site</li>
+      <li>a transport network for long-term geological storage in a storage site</li>
+      <li>a storage site permitted in accordance with the CCS licensing regime</li>
+    </ul>
+    <p class="govuk-body">
+      You'll also need to subtract it if you transfer it out of the installation and use it to produce precipitate
+      calcium carbonate, in which the used CO2 is chemically bound.
+    </p>
+
+    <div
+      formControlName="entryAccountingForTransfer"
+      govuk-radio
+      legend="Are the emissions from this source stream exported to, or received from another installation?"
+    >
+      <govuk-radio-option [value]="true" label="Yes">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="transferDirection"
+            govuk-radio
+            legend="What direction is the transferred CO2 travelling?"
+          >
+            <govuk-radio-option
+              value="EXPORTED_TO_LONG_TERM_FACILITY"
+              [label]="'EXPORTED_TO_LONG_TERM_FACILITY' | transferredCO2N2ODirections"
+            ></govuk-radio-option>
+            <govuk-radio-option
+              value="EXPORTED_FOR_PRECIPITATED_CALCIUM"
+              [label]="'EXPORTED_FOR_PRECIPITATED_CALCIUM' | transferredCO2N2ODirections"
+            ></govuk-radio-option>
+            <govuk-radio-option
+              value="RECEIVED_FROM_ANOTHER_INSTALLATION"
+              [label]="'RECEIVED_FROM_ANOTHER_INSTALLATION' | transferredCO2N2ODirections"
+            ></govuk-radio-option>
+          </div>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

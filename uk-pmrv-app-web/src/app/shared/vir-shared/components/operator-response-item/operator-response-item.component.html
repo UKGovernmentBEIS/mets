@@ -1,0 +1,71 @@
+<ng-container *ngIf="operatorImprovementResponse">
+  <h2 class="govuk-heading-m">{{ isReview ? "Operator's response" : 'Your response' }}</h2>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Addressed?</dt>
+      <dd govukSummaryListRowValue>
+        {{ operatorImprovementResponse?.isAddressed ? 'Yes - has been addressed or will be in the future' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="isAviation ? ['../..', reference] : ['../..', reference, 'recommendation-response']"
+          [queryParams]="queryParams"
+          >Change</a
+        >
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        <ng-container *ngIf="isAviation">
+          <ng-container *ngIf="operatorImprovementResponse.isAddressed">
+            Tell us how this recommendation will be (or has been) addressed
+          </ng-container>
+          <ng-container *ngIf="!operatorImprovementResponse.isAddressed">
+            Tell us why you have chosen not to address this recommendation
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!isAviation"> Operator response </ng-container>
+      </dt>
+      <dd govukSummaryListRowValue>{{ operatorImprovementResponse?.addressedDescription }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="isAviation ? ['../..', reference] : ['../..', reference, 'recommendation-response']"
+          [queryParams]="queryParams"
+          >Change</a
+        >
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="operatorImprovementResponse?.isAddressed">
+      <dt govukSummaryListRowKey>Date of improvement</dt>
+      <dd govukSummaryListRowValue>{{ operatorImprovementResponse?.addressedDate | govukDate }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="isAviation ? ['../..', reference] : ['../..', reference, 'recommendation-response']"
+          [queryParams]="queryParams"
+          >Change</a
+        >
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Evidence uploaded?</dt>
+      <dd govukSummaryListRowValue>{{ operatorImprovementResponse?.uploadEvidence ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', reference, 'upload-evidence-question']" [queryParams]="queryParams"
+          >Change</a
+        >
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="operatorImprovementResponse?.uploadEvidence">
+      <dt govukSummaryListRowKey>Uploaded files</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="attachedFiles"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', reference, 'upload-evidence-files']" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

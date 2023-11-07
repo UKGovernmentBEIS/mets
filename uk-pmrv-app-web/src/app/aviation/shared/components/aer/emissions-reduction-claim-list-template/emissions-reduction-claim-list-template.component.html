@@ -1,0 +1,34 @@
+<div>
+  <govuk-table *ngIf="purchases?.length" [columns]="columns" [data]="purchases">
+    <ng-template let-column="column" let-index="index" let-row="row">
+      <div [ngSwitch]="column.field">
+        <ng-container *ngSwitchCase="'safMass'">
+          <div class="amount">{{ row[column.field] }} t</div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'evidenceFiles'">
+          <div>
+            <app-summary-download-files [files]="data[index].files"></app-summary-download-files>
+          </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'actions'">
+          <div *ngIf="isEditable" class="actions">
+            <a govukLink [routerLink]="['../', 'add-batch-item']" [queryParams]="setQueryParams(index)">Change</a>
+            <a
+              class="govuk-!-padding-left-3"
+              govukLink
+              [routerLink]="['../', 'remove-batch-item']"
+              [queryParams]="setQueryParams(index)"
+              >Remove</a
+            >
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+      </div>
+    </ng-template>
+  </govuk-table>
+
+  <div class="govuk-button-group" *ngIf="isEditable">
+    <button type="button" govukButton govuksecondarybutton (click)="addAnotherBatch()">Add another batch</button>
+  </div>
+</div>

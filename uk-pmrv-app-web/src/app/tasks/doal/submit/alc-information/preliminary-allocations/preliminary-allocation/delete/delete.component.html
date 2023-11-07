@@ -1,0 +1,8 @@
+<app-page-heading size="xl"> Are you sure you want to delete this item? </app-page-heading>
+
+<p class="govuk-body">Any reference to this item will be removed from your application.</p>
+
+<div class="govuk-button-group" *ngIf="editable$ | async">
+  <button type="button" appPendingButton (click)="delete()" govukWarnButton>Yes, delete</button>
+  <a routerLink="../.." govukLink>Cancel</a>
+</div>
