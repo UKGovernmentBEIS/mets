@@ -1,0 +1,10 @@
+<div class="govuk-!-padding-bottom-5">
+  <h2 class="govuk-heading-m">Monitoring plan versions</h2>
+  <dl govuk-summary-list *ngIf="planVersions?.length > 0">
+    <div govukSummaryListRow *ngFor="let mp of planVersions">
+      <dt govukSummaryListRowKey>{{ mp.empId }} v{{ mp.empConsolidationNumber }}</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ mp.empApprovalDate | govukDate }}</dd>
+    </div>
+  </dl>
+  <p class="govuk-body" *ngIf="planVersions?.length === 0">No monitoring plans.</p>
+</div>

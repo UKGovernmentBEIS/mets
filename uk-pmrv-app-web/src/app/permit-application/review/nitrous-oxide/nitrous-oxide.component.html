@@ -1,0 +1,226 @@
+<ng-template #contentTpl let-showOriginal let-appliedTiers="appliedTiers">
+  <h2 class="govuk-heading-m">Nitrous oxide emission points</h2>
+
+  <ul app-task-item-list>
+    <div class="overflow-auto">
+      <ng-container *ngIf="appliedTiers?.length > 0; else addNew">
+        <govuk-table [columns]="columns" [data]="appliedTiers">
+          <ng-template let-column="column" let-row="row" let-index="index">
+            <ng-container [ngSwitch]="column.field">
+              <ng-container *ngSwitchCase="'category'">
+                <a govukLink [routerLink]="['../../nitrous-oxide/category-tier', index]">
+                  <ng-container
+                    *ngIf="
+                      row?.emissionPointCategory?.emissionPoint
+                        | findEmissionPoint: !showOriginal
+                        | async as emissionPoint;
+                      else noEmissionPoint
+                    "
+                  >
+                    {{ row | emissionPointCategoryName | async }}
+                  </ng-container>
+                  <ng-template #noEmissionPoint>
+                    UNDEFINED: {{ row?.emissionPointCategory?.categoryType | categoryTypeName }}
+                  </ng-template>
+                </a>
+              </ng-container>
+              <ng-container *ngSwitchCase="'emissions'">
+                {{ row?.emissionPointCategory?.annualEmittedCO2Tonnes | number }} t
+              </ng-container>
+              <ng-container *ngSwitchCase="'measuredEmissions'">
+                {{ row?.measuredEmissions?.tier | appliedTier }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'status'">
+                <govuk-tag
+                  [color]="'MEASUREMENT_N2O_Category_Tier' | taskStatus: index | async | tagColor"
+                  class="app-task-list__tag"
+                >
+                  {{ 'MEASUREMENT_N2O_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
+                </govuk-tag>
+              </ng-container>
+            </ng-container>
+          </ng-template>
+        </govuk-table>
+        <a
+          *ngIf="(store.isEditable$ | async) === true"
+          govukLink
+          [routerLink]="['../../nitrous-oxide/category-tier', appliedTiers?.length]"
+        >
+          Add an emission point category
+        </a>
+      </ng-container>
+      <ng-template #addNew>
+        <li
+          *ngIf="(store.isEditable$ | async) === true"
+          app-task-item
+          link="../../nitrous-oxide/category-tier/0"
+          linkText="Add an emission point category"
+          [status]="emissionPointCategoriesStatus$ | async"
+        ></li>
+      </ng-template>
+    </div>
+  </ul>
+
+  <h2 class="govuk-heading-m">{{ 'MEASUREMENT_N2O' | monitoringApproachDescription }} details</h2>
+
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="../../nitrous-oxide/description/summary"
+      linkText="Approach description"
+      [status]="'MEASUREMENT_N2O_Description' | taskStatus | async"
+    >
+      <app-n2o-approach-description-summary-template
+        [showOriginal]="showOriginal"
+        [hasBottomBorder]="false"
+      ></app-n2o-approach-description-summary-template>
+    </li>
+    <li
+      app-task-item
+      link="../../nitrous-oxide/emission/summary"
+      linkText="Emission determination procedure"
+      [status]="'MEASUREMENT_N2O_Emission' | taskStatus | async"
+    >
+      <app-procedure-form-summary
+        [details]="
+          'monitoringApproaches.MEASUREMENT_N2O.emissionDetermination' | taskProcedureForm: !showOriginal | async
+        "
+        cssClass="govuk-!-margin-bottom-0"
+        [hasBottomBorder]="false"
+      ></app-procedure-form-summary>
+    </li>
+    <li
+      app-task-item
+      link="../../nitrous-oxide/reference/summary"
+      linkText="Determination of reference period"
+      [status]="'MEASUREMENT_N2O_Reference' | taskStatus | async"
+    >
+      <app-procedure-form-summary
+        [details]="
+          'monitoringApproaches.MEASUREMENT_N2O.referenceDetermination' | taskProcedureForm: !showOriginal | async
+        "
+        cssClass="govuk-!-margin-bottom-0"
+        [hasBottomBorder]="false"
+      ></app-procedure-form-summary>
+    </li>
+    <li
+      app-task-item
+      link="../../nitrous-oxide/operational/summary"
+      linkText="Operational management"
+      [status]="'MEASUREMENT_N2O_Operational' | taskStatus | async"
+    >
+      <app-procedure-form-summary
+        [details]="
+          'monitoringApproaches.MEASUREMENT_N2O.operationalManagement' | taskProcedureForm: !showOriginal | async
+        "
+        cssClass="govuk-!-margin-bottom-0"
+        [hasBottomBorder]="false"
+      ></app-procedure-form-summary>
+    </li>
+    <li
+      app-task-item
+      link="../../nitrous-oxide/emissions/summary"
+      linkText="Determination of nitrous oxide emissions"
+      [status]="'MEASUREMENT_N2O_Emissions' | taskStatus | async"
+    >
+      <app-procedure-form-summary
+        [details]="
+          'monitoringApproaches.MEASUREMENT_N2O.nitrousOxideEmissionsDetermination'
+            | taskProcedureForm: !showOriginal
+            | async
+        "
+        cssClass="govuk-!-margin-bottom-0"
+        [hasBottomBorder]="false"
+      ></app-procedure-form-summary>
+    </li>
+    <li
+      app-task-item
+      link="../../nitrous-oxide/concentration/summary"
+      linkText="Determination of nitrous oxide concentration"
+      [status]="'MEASUREMENT_N2O_Concentration' | taskStatus | async"
+    >
+      <app-procedure-form-summary
+        [details]="
+          'monitoringApproaches.MEASUREMENT_N2O.nitrousOxideConcentrationDetermination'
+            | taskProcedureForm: !showOriginal
+            | async
+        "
+        cssClass="govuk-!-margin-bottom-0"
+        [hasBottomBorder]="false"
+      ></app-procedure-form-summary>
+    </li>
+    <li
+      app-task-item
+      link="../../nitrous-oxide/product/summary"
+      linkText="Determination of the quantity of product produced"
+      [status]="'MEASUREMENT_N2O_Product' | taskStatus | async"
+    >
+      <app-procedure-form-summary
+        [details]="
+          'monitoringApproaches.MEASUREMENT_N2O.quantityProductDetermination' | taskProcedureForm: !showOriginal | async
+        "
+        cssClass="govuk-!-margin-bottom-0"
+        [hasBottomBorder]="false"
+      ></app-procedure-form-summary>
+    </li>
+    <li
+      app-task-item
+      link="../../nitrous-oxide/materials/summary"
+      linkText="Quantity of materials"
+      [status]="'MEASUREMENT_N2O_Materials' | taskStatus | async"
+    >
+      <app-procedure-form-summary
+        [details]="'monitoringApproaches.MEASUREMENT_N2O.quantityMaterials' | taskProcedureForm: !showOriginal | async"
+        cssClass="govuk-!-margin-bottom-0"
+        [hasBottomBorder]="false"
+      ></app-procedure-form-summary>
+    </li>
+    <li
+      app-task-item
+      link="../../nitrous-oxide/gas/summary"
+      linkText="Calculation of gas flow"
+      [status]="'MEASUREMENT_N2O_Gas' | taskStatus | async"
+    >
+      <app-n2o-approach-gas-summary-template
+        [showOriginal]="showOriginal"
+        [hasBottomBorder]="false"
+      ></app-n2o-approach-gas-summary-template>
+    </li>
+  </ul>
+</ng-template>
+
+<app-permit-task-review
+  [breadcrumb]="true"
+  [notification]="notification"
+  [heading]="'MEASUREMENT_N2O' | monitoringApproachDescription"
+>
+  <app-site-emissions></app-site-emissions>
+
+  <app-highlight-diff *ngIf="(showDiff$ | async) === true">
+    <ng-container
+      slot="previous"
+      *ngTemplateOutlet="
+        contentTpl;
+        context: { $implicit: true, appliedTiers: originalEmissionPointCategoryAppliedTiers$ | async }
+      "
+    ></ng-container>
+    <ng-container
+      slot="current"
+      *ngTemplateOutlet="
+        contentTpl;
+        context: { $implicit: false, appliedTiers: emissionPointCategoryAppliedTiers$ | async }
+      "
+    ></ng-container>
+  </app-highlight-diff>
+
+  <ng-container
+    *ngIf="(showDiff$ | async) === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: false, appliedTiers: emissionPointCategoryAppliedTiers$ | async }"
+  ></ng-container>
+
+  <app-review-group-decision-container
+    [groupKey]="groupKey$ | async"
+    (notification)="notification = $event"
+  ></app-review-group-decision-container>
+</app-permit-task-review>

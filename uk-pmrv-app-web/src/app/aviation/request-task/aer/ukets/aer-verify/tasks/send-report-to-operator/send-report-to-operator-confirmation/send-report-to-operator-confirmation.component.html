@@ -1,0 +1,21 @@
+<div class="govuk-!-width-two-thirds">
+  <govuk-panel title="Verification report sent to operator">
+    <p>
+      <strong>Your reference code is:</strong><br />
+      {{ (requestId$ | async).id }}
+    </p>
+  </govuk-panel>
+
+  <span class="govuk-caption-l govuk-!-margin-bottom-8">We have sent you a confirmation email.</span>
+
+  <h3 class="govuk-heading-m">What happens next</h3>
+
+  <p class="govuk-body">The operator can either:</p>
+
+  <ul class="govuk-list govuk-list--bullet">
+    <li>submit the report to the regulator</li>
+    <li>make changes and repeat the submission process</li>
+  </ul>
+
+  <a govukLink [routerLink]="'/aviation/dashboard'">Return to your tasks</a>
+</div>

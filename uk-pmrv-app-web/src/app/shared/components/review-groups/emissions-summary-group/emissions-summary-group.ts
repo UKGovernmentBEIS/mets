@@ -1,0 +1,69 @@
+import BigNumber from 'bignumber.js';
+
+import { SourceStream } from 'pmrv-api';
+
+export const combustionCalculationSourceStreamTypes: SourceStream['type'][] = [
+  'COMBUSTION_COMMERCIAL_STANDARD_FUELS',
+  'COMBUSTION_OTHER_GASEOUS_LIQUID_FUELS',
+  'COMBUSTION_SOLID_FUELS',
+  'COMBUSTION_FLARES',
+  'OTHER',
+  'COMBUSTION_GAS_PROCESSING_TERMINALS',
+  'COKE_FUEL_AS_PROCESS_INPUT',
+  'IRON_STEEL_FUEL_AS_PROCESS_INPUT',
+  'AMMONIA_FUEL_AS_PROCESS_INPUT',
+  'HYDROGEN_AND_SYNTHESIS_GAS_FUEL_AS_PROCESS_INPUT',
+];
+
+export const processCalculationSourceStreamTypes: SourceStream['type'][] = [
+  'REFINERIES_HYDROGEN_PRODUCTION',
+  'CEMENT_CLINKER_CKD',
+  'CERAMICS_SCRUBBING',
+  'COKE_CARBONATE_INPUT_METHOD_A',
+  'COKE_OXIDE_OUTPUT_METHOD_B',
+  'METAL_ORE_CARBONATE_INPUT',
+  'IRON_STEEL_CARBONATE_INPUT',
+  'CEMENT_CLINKER_KILN_INPUT_BASED_METHOD_A',
+  'CEMENT_CLINKER_CLINKER_OUTPUT_METHOD_B',
+  'CEMENT_CLINKER_NON_CARBONATE_CARBON',
+  'LIME_DOLOMITE_MAGNESITE_CARBONATES_METHOD_A',
+  'LIME_DOLOMITE_MAGNESITE_KILN_DUST_METHOD_B',
+  'LIME_DOLOMITE_MAGNESITE_ALKALI_EARTH_OXIDE_METHOD_B',
+  'GLASS_AND_MINERAL_WOOL_CARBONATES_INPUT',
+  'CERAMICS_CARBON_INPUTS_METHOD_A',
+  'CERAMICS_ALKALI_OXIDE_METHOD_B',
+  'PULP_PAPER_MAKE_UP_CHEMICALS',
+  'NON_FERROUS_SEC_ALUMINIUM_PROCESS_EMISSIONS',
+  'COMBUSTION_SCRUBBING_CARBONATE',
+  'COMBUSTION_SCRUBBING_GYPSUM',
+  'COMBUSTION_SCRUBBING_UREA',
+  'PRIMARY_ALUMINIUM_PFC',
+];
+
+export const massBalanceCalculationSourceStreamTypes: SourceStream['type'][] = [
+  'REFINERIES_MASS_BALANCE',
+  'COKE_MASS_BALANCE',
+  'METAL_ORE_MASS_BALANCE',
+  'IRON_STEEL_MASS_BALANCE',
+  'CARBON_BLACK_MASS_BALANCE_METHODOLOGY',
+  'HYDROGEN_AND_SYNTHESIS_GAS_MASS_BALANCE_METHODOLOGY',
+  'BULK_ORGANIC_CHEMICALS_MASS_BALANCE_METHODOLOGY',
+  'NON_FERROUS_SEC_ALUMINIUM_MASS_BALANCE_METHODOLOGY',
+  'SODA_ASH_SODIUM_BICARBONATE_MASS_BALANCE_METHODOLOGY',
+  'PRIMARY_ALUMINIUM_MASS_BALANCE_METHODOLOGY',
+  'REFINERIES_CATALYTIC_CRACKER_REGENERATION',
+];
+
+export function getNonSustainableBiomassEmissions(
+  reportableEmissions,
+  sustainableBiomassEmissions,
+  nonSustainableBiomassPercentage,
+) {
+  const bigReportableEmissions = new BigNumber(reportableEmissions);
+  const bigSustainableBiomassEmissions = new BigNumber(sustainableBiomassEmissions);
+  const bigNonSustainableBiomassPercentage = new BigNumber(nonSustainableBiomassPercentage);
+  return bigReportableEmissions
+    .plus(bigSustainableBiomassEmissions)
+    .multipliedBy(bigNonSustainableBiomassPercentage)
+    .dividedBy(100);
+}

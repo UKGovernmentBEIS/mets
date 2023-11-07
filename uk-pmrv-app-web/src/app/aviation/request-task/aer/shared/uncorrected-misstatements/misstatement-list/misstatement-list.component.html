@@ -1,0 +1,14 @@
+<div *ngIf="vm$ | async as vm" class="govuk-!-width-two-thirds">
+  <h2 class="govuk-heading-l">Misstatements not corrected before issuing this report</h2>
+
+  <app-uncorrected-item-group
+    [isEditable]="vm.isEditable"
+    [uncorrectedItems]="vm.uncorrectedMisstatements?.uncorrectedMisstatements ?? []"
+    [queryParams]="{ change: true }"
+    explanationHeader="Description"
+  ></app-uncorrected-item-group>
+  <div class="govuk-button-group" *ngIf="vm.uncorrectedMisstatements?.uncorrectedMisstatements?.length > 0">
+    <button *ngIf="vm.isEditable" govukButton [routerLink]="['../summary']" type="button">Continue</button>
+  </div>
+</div>
+<app-return-to-link></app-return-to-link>

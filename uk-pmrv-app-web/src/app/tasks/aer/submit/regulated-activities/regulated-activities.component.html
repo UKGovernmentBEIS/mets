@@ -1,0 +1,48 @@
+<app-aer-task [breadcrumb]="true">
+  <govuk-error-summary *ngIf="displayErrorSummary$ | async" [form]="form"></govuk-error-summary>
+  <app-page-heading> Regulated activities</app-page-heading>
+  <p class="govuk-body">
+    You must list all regulated activities that take place at your installation and add Common Reporting Format (CRF)
+    codes for each one.
+  </p>
+
+  <ng-container *ngIf="'regulatedActivities' | task | async as regulatedActivities; else startAdding">
+    <ng-container *ngIf="regulatedActivities.length > 0; else startAdding">
+      <ng-container *ngFor="let activity of regulatedActivities | regulatedActivitiesSort">
+        <app-aer-regulated-activities-summary-template
+          [activity]="activity"
+          [errors]="form.errors"
+          [isEditable]="aerService.isEditable$ | async"
+          [hasError]="displayErrorSummary$ | async"
+        >
+          <h2 class="govuk-heading-m">
+            <a
+              *ngIf="(aerService.isEditable$ | async) === true"
+              (click)="delete(activity.id)"
+              [routerLink]=""
+              govukLink
+              class="govuk-!-font-size-19 govuk-!-font-weight-regular float-right"
+            >
+              Delete
+            </a>
+            <span>{{ activity.type | regulatedActivityType }}</span>
+          </h2>
+        </app-aer-regulated-activities-summary-template>
+      </ng-container>
+      <ng-container *ngIf="(aerService.isEditable$ | async) === true">
+        <button govukSecondaryButton routerLink="add" type="button">Add another regulated activity</button>
+        <div class="govuk-button-group">
+          <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+        </div>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #startAdding>
+    <div class="govuk-button-group" *ngIf="(aerService.isEditable$ | async) === true">
+      <button govukButton routerLink="add" type="button">Add a regulated activity</button>
+    </div>
+  </ng-template>
+
+  <app-return-link></app-return-link>
+</app-aer-task>

@@ -1,0 +1,17 @@
+<app-base-task-container-component
+  [header]="(route.data | async)?.pageTitle"
+  [customContentTemplate]="customContentTemplate"
+  [expectedTaskType]="expectedType"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      linkText="Provide conclusion of non-compliance"
+      link="./summary"
+      [status]="sectionStatus$ | async"
+    ></li>
+  </ul>
+</ng-template>

@@ -1,0 +1,23 @@
+<app-base-task-container-component
+  [header]="title$ | async"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="AIR_APPLICATION_SUBMIT"
+  [notification]="notification"
+  [daysRemaining]="daysRemaining$ | async"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <app-air-improvement-data-group [airPayload]="airPayload$ | async"></app-air-improvement-data-group>
+
+  <h2 class="govuk-heading-s govuk-!-margin-0">Submit</h2>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="send-report"
+      linkText="Send to the regulator"
+      [status]="airPayload$ | async | taskStatus: 'sendReport'"
+      [hasContent]="true"
+    ></li>
+  </ul>
+</ng-template>

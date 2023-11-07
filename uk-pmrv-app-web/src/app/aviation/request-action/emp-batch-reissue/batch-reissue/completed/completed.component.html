@@ -1,0 +1,47 @@
+<app-request-action-heading
+  *ngIf="vm$ | async as vm"
+  [headerText]="vm.pageHeader"
+  [timelineCreationDate]="vm.timelineCreationDate"
+>
+  <p class="govuk-heading-m">Batch variation details</p>
+  <dl govuk-summary-list>
+    <ng-container>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Created by</dt>
+        <dd govukSummaryListRowValue>
+          {{ vm.payload.submitter }}
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Date created</dt>
+        <dd govukSummaryListRowValue>
+          {{ vm.timelineCreationDate | govukDate }}
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Signatory</dt>
+        <dd govukSummaryListRowValue>
+          {{ vm.payload.signatoryName }}
+        </dd>
+      </div>
+
+      <div govukSummaryListRow *ngIf="vm.payload.report as report">
+        <dt govukSummaryListRowKey>Batch variation report</dt>
+        <dd govukSummaryListRowValue>
+          <a
+            [routerLink]="['/actions', vm.requestActionId, 'file-download', 'document', report.uuid]"
+            govukLink
+            target="_blank"
+            >{{ report.name }}</a
+          >
+        </dd>
+      </div>
+    </ng-container>
+  </dl>
+
+  <p class="govuk-heading-m">Selected emitters</p>
+  <app-emp-batch-reissue-filters-template
+    [filters]="vm.filters"
+    [editable]="false"
+  ></app-emp-batch-reissue-filters-template>
+</app-request-action-heading>

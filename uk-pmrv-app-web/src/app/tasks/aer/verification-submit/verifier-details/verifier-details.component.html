@@ -1,0 +1,37 @@
+<app-aer-task-review heading="Complete the verification details" linkText="Emissions report">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <app-verifier-details-group
+      [showVerifierDetails]="false"
+      [isEditable]="isEditable$ | async"
+      [verificationReport]="verificationReportData$ | async"
+    >
+      <h2 class="govuk-heading-m">Verifier contact</h2>
+      <div formControlName="name" govuk-text-input label="Name"></div>
+      <div formControlName="email" govuk-text-input label="Email"></div>
+      <div formControlName="phoneNumber" govuk-text-input label="Telephone number"></div>
+
+      <h2 class="govuk-heading-m">Verification team details</h2>
+      <div formControlName="leadEtsAuditor" govuk-text-input label="Lead ETS Auditor"></div>
+      <div [maxLength]="10000" formControlName="etsAuditors" govuk-textarea label="ETS Auditors"></div>
+      <div
+        [maxLength]="10000"
+        formControlName="etsTechnicalExperts"
+        govuk-textarea
+        label="Technical Experts (ETS Auditor)"
+      ></div>
+      <div formControlName="independentReviewer" govuk-text-input label="Independent Reviewer"></div>
+      <div
+        [maxLength]="10000"
+        formControlName="technicalExperts"
+        govuk-textarea
+        label="Technical Experts (Independent Review)"
+      ></div>
+      <div formControlName="authorisedSignatoryName" govuk-text-input label="Name of authorised signatory"></div>
+    </app-verifier-details-group>
+  </app-wizard-step>
+</app-aer-task-review>

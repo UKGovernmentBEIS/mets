@@ -1,0 +1,17 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Have there been any data gaps during the scheme year?</dt>
+    <dd govukSummaryListRowValue>{{ data.exist ? 'Yes' : 'No' }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../../data-gaps'" [queryParams]="{ change: true }">Change</a>
+    </dd>
+  </div>
+
+  <ng-container *ngIf="data.exist">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Percentage of flights affected by data gaps</dt>
+      <dd govukSummaryListRowValue>{{ data.affectedFlightsPercentage }} %</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+  </ng-container>
+</dl>

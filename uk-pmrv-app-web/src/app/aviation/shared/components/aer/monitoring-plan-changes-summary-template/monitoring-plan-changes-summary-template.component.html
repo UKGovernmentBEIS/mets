@@ -1,0 +1,27 @@
+<h2 class="govuk-heading-m govuk-!-width-two-thirds">Changes not covered by the emissions monitoring plans</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>
+      Were there any changes not covered by the emissions monitoring plans in the reporting year?
+    </dt>
+    <dd govukSummaryListRowValue>
+      {{ data.notCoveredChangesExist ? 'Yes' : 'No' }}
+    </dd>
+    <dd></dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+<dl govuk-summary-list *ngIf="data.notCoveredChangesExist">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Changes reported by the operator</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ data?.details }}
+    </dd>
+    <dd></dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+</dl>

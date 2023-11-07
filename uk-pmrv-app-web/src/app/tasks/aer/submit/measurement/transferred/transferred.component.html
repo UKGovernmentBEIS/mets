@@ -1,0 +1,117 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    [heading]="taskKey === 'MEASUREMENT_CO2' ? 'Transferred CO2' : 'Transferred N2O'"
+  >
+    <ng-container *ngIf="taskKey === 'MEASUREMENT_CO2'">
+      <p class="govuk-body">
+        You need to subtract from your emissions any CO2 originating from fossil carbon if you transfer it to:
+      </p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>a capture installation, for transport and long-term geological storage in a storage site</li>
+        <li>a transport network for long-term geological storage in a storage site</li>
+        <li>a storage site permitted in accordance with the CCS licensing regime</li>
+      </ul>
+      <p class="govuk-body">
+        You'll also need to subtract it if you transfer it out of the installation and use it to produce precipitate
+        calcium carbonate, in which the used CO2 is chemically bound.
+      </p>
+    </ng-container>
+
+    <ng-container *ngIf="taskKey === 'MEASUREMENT_N2O'">
+      <p class="govuk-body">
+        If you do not emit N2O but transfer any that originates from activities in
+        <a
+          href="https://www.legislation.gov.uk/ukdsi/2020/9780348209761/schedule/2"
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          Schedule 2 of the Greenhouse Gas ETS Order 2020
+        </a>
+        to an installation that monitors and reports emissions according to the MRR, you do not need to count is as an
+        emission.
+      </p>
+      <p class="govuk-body">
+        If you receive N2O from a research, testing or development installation, or one that exclusively uses biomass,
+        you must monitor the relevant gas streams using the same methodologies, as if the N2O was generated within your
+        installation.
+      </p>
+      <p class="govuk-body">
+        N2O must be counted as emissions of the originating installation, if it is bottled or used as a gas in products
+        so that it is:
+      </p>
+
+      <ul class="govuk-list govuk-list--bullet">
+        <li>emitted outside the installation</li>
+        <li>transferred out of the installation to entities not covered by the Order</li>
+      </ul>
+      <p class="govuk-body">
+        It does not have to be counted if the originating installation can prove to the regulator that is has been
+        destroyed using suitable equipment.
+      </p>
+    </ng-container>
+    <div
+      formControlName="entryAccountingForTransfer"
+      govuk-radio
+      [legend]="
+        taskKey === 'MEASUREMENT_CO2'
+          ? 'Are the emissions from this source stream exported to, or received from another installation?'
+          : 'Are the emissions from this entry accounting for transferred N2O?'
+      "
+    >
+      <ng-container *ngIf="taskKey === 'MEASUREMENT_CO2'">
+        <govuk-radio-option [value]="true" label="Yes">
+          <ng-container govukConditionalContent>
+            <div
+              formControlName="transferDirection"
+              govuk-radio
+              [legend]="
+                taskKey === 'MEASUREMENT_CO2'
+                  ? 'What direction is the transferred CO2 travelling?'
+                  : 'What direction is the transferred N20 travelling?'
+              "
+            >
+              <govuk-radio-option
+                value="EXPORTED_TO_LONG_TERM_FACILITY"
+                [label]="'EXPORTED_TO_LONG_TERM_FACILITY' | transferredCO2N2ODirections"
+              ></govuk-radio-option>
+              <govuk-radio-option
+                value="EXPORTED_FOR_PRECIPITATED_CALCIUM"
+                [label]="'EXPORTED_FOR_PRECIPITATED_CALCIUM' | transferredCO2N2ODirections"
+              ></govuk-radio-option>
+              <govuk-radio-option
+                value="RECEIVED_FROM_ANOTHER_INSTALLATION"
+                [label]="'RECEIVED_FROM_ANOTHER_INSTALLATION' | transferredCO2N2ODirections"
+              ></govuk-radio-option>
+            </div>
+          </ng-container>
+        </govuk-radio-option>
+      </ng-container>
+
+      <ng-container *ngIf="taskKey === 'MEASUREMENT_N2O'">
+        <govuk-radio-option [value]="true" label="Yes">
+          <ng-container govukConditionalContent>
+            <div
+              formControlName="transferDirection"
+              govuk-radio
+              legend="What direction is the transferred N2O travelling?"
+            >
+              <govuk-radio-option
+                value="EXPORTED_TO_LONG_TERM_FACILITY"
+                [label]="'EXPORTED_TO_LONG_TERM_FACILITY' | transferredCO2N2ODirections"
+              ></govuk-radio-option>
+              <govuk-radio-option
+                value="RECEIVED_FROM_ANOTHER_INSTALLATION"
+                [label]="'RECEIVED_FROM_ANOTHER_INSTALLATION' | transferredCO2N2ODirections"
+              ></govuk-radio-option>
+            </div>
+          </ng-container>
+        </govuk-radio-option>
+      </ng-container>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

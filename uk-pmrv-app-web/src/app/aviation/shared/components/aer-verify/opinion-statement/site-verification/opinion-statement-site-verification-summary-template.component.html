@@ -1,0 +1,58 @@
+<h2 class="govuk-heading-m">Site verification</h2>
+
+<div class="govuk-body govuk-!-width-two-thirds">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey class="pre-wrap">What kind of site visit did your team make?</dt>
+      <dd govukSummaryListRowValue>
+        {{ siteVisit.type === 'VIRTUAL' ? 'Virtual site visit' : 'In person site visit' }}
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../site-visit']" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- Virtual site visit -->
+    <div govukSummaryListRow *ngIf="siteVisit.type === 'VIRTUAL'">
+      <dt govukSummaryListRowKey>Reasons for making a virtual site visit</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <p class="govuk-body">
+          {{ siteVisit['reason'] }}
+        </p>
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../site-visit/virtual']" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- In person site visit -->
+    <div govukSummaryListRow *ngIf="siteVisit.type === 'IN_PERSON'">
+      <dt govukSummaryListRowKey>Site visits</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <ng-container *ngFor="let vd of siteVisit['visitDates']">
+          <p class="govuk-body">{{ vd['startDate'] | govukDate }} for {{ vd['numberOfDays'] }} days</p>
+        </ng-container>
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../site-visit/in-person']" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- Team members involved -->
+    <div govukSummaryListRow *ngIf="siteVisit.type === 'IN_PERSON'">
+      <dt govukSummaryListRowKey>Team members involved</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <p class="govuk-body">
+          {{ siteVisit['teamMembers'] }}
+        </p>
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../site-visit/in-person']" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</div>

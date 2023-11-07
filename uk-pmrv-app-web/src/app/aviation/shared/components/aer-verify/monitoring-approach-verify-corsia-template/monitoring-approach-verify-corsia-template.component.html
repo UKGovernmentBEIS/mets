@@ -1,0 +1,58 @@
+<h2 class="govuk-heading-m">Emission details</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Standard fuels and emission factors</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>
+      <div *ngFor="let ft of fuelTypes">{{ ft.description }} at {{ ft.consumption }}</div>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Monitoring approach</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>
+      {{ opinionStatement.monitoringApproachType | monitoringApproachVerifyCorsiaType }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+
+<h2 class="govuk-heading-m">Total emissions</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Emissions from all flights</dt>
+    <dd govukSummaryListRowValue>{{ totalEmissionsProvided }}</dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Emissions from offset flights</dt>
+    <dd govukSummaryListRowValue>{{ totalOffsetEmissionsProvided }}</dd>
+    <dd govukSummaryListRowActions></dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Are the reported emissions correct?</dt>
+    <dd govukSummaryListRowValue>{{ opinionStatement.emissionsCorrect === true ? 'Yes' : 'No' }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <ng-container *ngIf="!opinionStatement.emissionsCorrect">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total verified emissions for the scheme year</dt>
+      <dd govukSummaryListRowValue>{{ opinionStatement.manuallyInternationalFlightsProvidedEmissions }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total verified emissions from offset flights for the scheme year</dt>
+      <dd govukSummaryListRowValue>{{ opinionStatement.manuallyOffsettingFlightsProvidedEmissions }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </ng-container>
+</dl>

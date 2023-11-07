@@ -1,0 +1,23 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <ng-container *ngIf="vm.data">
+    <app-monitoring-approach-summary-template
+      [data]="vm.data"
+      [isEditable]="vm.isEditable"
+      [changeUrlQueryParams]="{ change: true }"
+    ></app-monitoring-approach-summary-template>
+  </ng-container>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-aviation-aer-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="monitoringApproach"
+  ></app-aviation-aer-review-decision-group>
+</ng-container>
+<app-return-to-link></app-return-to-link>

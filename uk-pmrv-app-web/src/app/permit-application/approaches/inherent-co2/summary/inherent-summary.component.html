@@ -1,0 +1,26 @@
+<app-permit-task [notification]="notification" [breadcrumb]="true">
+  <app-page-heading caption="Monitoring approaches">{{
+    'INHERENT_CO2' | monitoringApproachDescription
+  }}</app-page-heading>
+
+  <div class="govuk-body">
+    <p>
+      This is CO2 that is produced as part of a regulated activity and is contained in a gas which is part of a fuel.
+    </p>
+  </div>
+
+  <h2
+    app-summary-header
+    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
+    class="govuk-heading-m"
+  >
+    <span class="govuk-visually-hidden">List of Inherent CO2</span>
+  </h2>
+
+  <app-inherent-summary-template [data]="installations$ | async" [isEditable]="false"></app-inherent-summary-template>
+
+  <app-list-return-link
+    [reviewGroupTitle]="'INHERENT_CO2' | monitoringApproachDescription"
+    reviewGroupUrl="inherent-co2"
+  ></app-list-return-link>
+</app-permit-task>

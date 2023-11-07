@@ -1,0 +1,79 @@
+<ng-container *ngIf="data?.fuelBurnCalculationTypes">
+  <h2 class="govuk-heading-m">Calculating the specific fuel burn</h2>
+
+  <dl govuk-summary-list>
+    <div govukSummaryListRow *ngIf="data?.clearDistinguishionIcaoAircraftDesignators">
+      <dt govukSummaryListRowKey>
+        Aircraft types using block hour that you can clearly distinguish between fuel uplifts for international and
+        domestic flights on a flight by flight basis
+      </dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ data.clearDistinguishionIcaoAircraftDesignators }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="data?.assignmentAndAdjustment">
+      <dt govukSummaryListRowKey>Assignment and adjustment for flights with zero fuel uplift</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ data.assignmentAndAdjustment }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="data?.notClearDistinguishionIcaoAircraftDesignators">
+      <dt govukSummaryListRowKey>
+        Aircraft types using block hour that you cannot clearly distinguish between international and national fuel
+        uplifts on a flight by flight basis
+      </dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ data.notClearDistinguishionIcaoAircraftDesignators }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="data?.blockHoursMeasurement">
+  <app-procedure-form-summary
+    header="Measurement of the block hours per flight"
+    [isEditable]="isEditable"
+    [procedureFormData]="data.blockHoursMeasurement"
+    formRouterLink="../block-hours-measurement"
+  ></app-procedure-form-summary>
+</ng-container>
+
+<ng-container *ngIf="data?.fuelUpliftSupplierRecordType">
+  <h2 class="govuk-heading-m">Fuel uplift supplier records</h2>
+
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Records used</dt>
+      <dd govukSummaryListRowValue>
+        {{ data.fuelUpliftSupplierRecordType | fuelUpliftSupplierRecordType }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../fuel-uplift-supplier-records'" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="data?.fuelDensity">
+  <app-procedure-form-summary
+    header="Measuring fuel density"
+    [isEditable]="isEditable"
+    [procedureFormData]="data.fuelDensity"
+    formRouterLink="../fuel-density"
+  ></app-procedure-form-summary>
+</ng-container>

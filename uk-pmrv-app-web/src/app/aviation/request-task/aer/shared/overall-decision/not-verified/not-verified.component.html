@@ -1,0 +1,66 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="!vm.isEditable"
+  [heading]="vm.pageHeader"
+  *ngIf="vm$ | async as vm"
+>
+  <p class="govuk-hint">Select all options that apply.</p>
+  <div formControlName="type" govuk-checkboxes class="govuk-!-width-two-thirds">
+    <govuk-checkbox
+      [value]="'UNCORRECTED_MATERIAL_MISSTATEMENT'"
+      label="An uncorrected material misstatement (individual or in aggregate)"
+    >
+    </govuk-checkbox>
+    <govuk-checkbox
+      [value]="'UNCORRECTED_MATERIAL_NON_CONFORMITY'"
+      label="An uncorrected material non-conformity (individual or in aggregate)"
+    >
+    </govuk-checkbox>
+
+    <govuk-checkbox
+      [value]="'VERIFICATION_DATA_OR_INFORMATION_LIMITATIONS'"
+      label="Limitations in the data or information made available for verification"
+    >
+      <ng-container govukConditionalContent>
+        <h1 class="govuk-heading-s">Provide more details</h1>
+        <div formControlName="verificationDetails" govuk-textarea [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-checkbox>
+    <govuk-checkbox
+      [value]="'SCOPE_LIMITATIONS_DUE_TO_LACK_OF_CLARITY'"
+      label="Limitations of scope due to lack of clarity"
+    >
+      <ng-container govukConditionalContent>
+        <h1 class="govuk-heading-s">Provide more details</h1>
+        <div formControlName="clarityDetails" govuk-textarea [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-checkbox>
+    <govuk-checkbox
+      [value]="'SCOPE_LIMITATIONS_OF_APPROVED_MONITORING_PLAN'"
+      label="Limitations of scope of the approved emissions monitoring plan"
+    >
+      <ng-container govukConditionalContent>
+        <h1 class="govuk-heading-s">Provide more details</h1>
+        <div formControlName="empLimitationDetails" govuk-textarea [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-checkbox>
+    <govuk-checkbox
+      [value]="'NOT_APPROVED_MONITORING_PLAN_BY_REGULATOR'"
+      label="The emissions monitoring plan is not approved by the regulator"
+    >
+      <ng-container govukConditionalContent>
+        <h1 class="govuk-heading-s">Provide more details</h1>
+        <div formControlName="empNotApprovedDetails" govuk-textarea [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-checkbox>
+    <govuk-checkbox [value]="'ANOTHER_REASON'" label="Another reason">
+      <ng-container govukConditionalContent>
+        <h1 class="govuk-heading-s">Provide a reason</h1>
+        <div formControlName="otherDetails" govuk-textarea [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-checkbox>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

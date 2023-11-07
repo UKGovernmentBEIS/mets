@@ -1,0 +1,25 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <div
+      formControlName="numOfFlightsJanApr"
+      govuk-text-input
+      label="Number of flights from 1 January to 30 April"
+    ></div>
+    <div formControlName="numOfFlightsMayAug" govuk-text-input label="Number of flights from 1 May to 31 August"></div>
+    <div
+      formControlName="numOfFlightsSepDec"
+      govuk-text-input
+      label="Number of flights from 1 September to 31 December"
+    ></div>
+
+    <p class="govuk-body govuk-!-width-two-thirds">Total number of flights: {{ totalNumberOfFlights }}</p>
+
+    <div class="govuk-heading-m">Total emissions from full-scope flights</div>
+    <div
+      formControlName="totalEmissions"
+      govuk-text-input
+      label="Enter your annual emissions from full-scope flights"
+      suffix="tonnes CO2"
+    ></div>
+  </div>
+</div>

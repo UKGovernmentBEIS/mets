@@ -1,0 +1,30 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Verify the emissions reduction claim"
+  submitText="Continue"
+>
+  <p class="govuk-body">
+    <a [routerLink]="['operator']" routerLinkActive="router-link-active" target="_blank" rel="noreferrer noopener">
+      View the operator's emission reduction claim
+    </a>
+  </p>
+  <h2 class="govuk-heading-m">Provide the results of your verification</h2>
+  <p class="govuk-body">
+    Explain what CORSIA eligible fuel (CEF) information was reviewed, and if direct access to the fuel producer was
+    required and provided.
+  </p>
+  <p class="govuk-body">You should also confirm whether or not:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>you had sufficient access to internal and external records relating to the CEF claim</li>
+    <li>any reduction arising from the CEF claim was calculated in accordance with the Air Navigation Order</li>
+  </ul>
+
+  <div
+    formControlName="reviewResults"
+    govuk-textarea
+    [maxLength]="10000"
+    label="Describe the results of your review"
+  ></div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

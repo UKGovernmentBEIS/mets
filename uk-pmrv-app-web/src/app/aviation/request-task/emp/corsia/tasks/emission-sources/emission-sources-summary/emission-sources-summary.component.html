@@ -1,0 +1,66 @@
+<ng-template #contentTpl let-showOriginal>
+  <ng-container *ngIf="vm$ | async as vm">
+    <app-aircraft-type-table
+      [editable]="vm.editable"
+      [isCorsia]="true"
+      [aircraftTypes]="showOriginal ? vm.originalAircraftTypesInUse : aircraftTypes"
+      [isFUMM]="isFUMM"
+    ></app-aircraft-type-table>
+
+    <div class="govuk-button-group">
+      <button type="button" *ngIf="vm.editable" govukButton govuksecondarybutton (click)="addAircraftType()">
+        Add an aircraft type
+      </button>
+    </div>
+
+    <app-emission-factors-summary
+      [fuelTypes]="showOriginal ? vm.originalFuelTypes : fuelTypes"
+      [editable]="vm.editable"
+    ></app-emission-factors-summary>
+
+    <div *ngIf="multipleMethodsExplanation || vm.originalMultipleMethodsExplanation">
+      <app-multiple-methods-summary-template
+        [editable]="vm.editable"
+        [multipleMethodsExplanation]="showOriginal ? vm.originalMultipleMethodsExplanation : multipleMethodsExplanation"
+      >
+      </app-multiple-methods-summary-template>
+    </div>
+  </ng-container>
+</ng-template>
+
+<div *ngIf="vm$ | async as vm" data-testid="emission-sources-summary-page">
+  <govuk-error-summary [form]="form"></govuk-error-summary>
+
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <h1 class="govuk-heading-m">Aircraft currently in use</h1>
+
+  <app-highlight-diff *ngIf="vm.showDiff">
+    <ng-container slot="previous" *ngTemplateOutlet="contentTpl; context: { $implicit: true }"></ng-container>
+    <ng-container slot="current" *ngTemplateOutlet="contentTpl; context: { $implicit: false }"></ng-container>
+  </app-highlight-diff>
+
+  <ng-container
+    *ngIf="vm.showDiff === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: false }"
+  ></ng-container>
+
+  <div class="govuk-button-group" *ngIf="!vm.hideSubmit">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+
+  <app-emp-review-decision-group *ngIf="vm.showDecision" taskKey="emissionSources"></app-emp-review-decision-group>
+
+  <app-emp-variation-review-decision-group
+    *ngIf="vm.showVariationDecision"
+    taskKey="emissionSources"
+  ></app-emp-variation-review-decision-group>
+
+  <app-emp-variation-regulator-led-decision-group
+    *ngIf="vm.showVariationRegLedDecision"
+    taskKey="emissionSources"
+  ></app-emp-variation-regulator-led-decision-group>
+</div>
+
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,43 @@
+<ng-container *ngIf="(isEditable$ | async) && ((canEdit$ | async) || isOnEditState); else viewDecision">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+    <h2 class="govuk-heading-m">What is your decision on the information submitted?</h2>
+
+    <div formControlName="decision" govuk-radio>
+      <govuk-radio-option value="ACCEPTED" label="Accepted"> </govuk-radio-option>
+    </div>
+    <div
+      govuk-textarea
+      [maxLength]="10000"
+      formControlName="notes"
+      label="Notes"
+      hint="The operator cannot view this"
+    ></div>
+    <button appPendingButton govukButton type="submit">Confirm</button>
+  </form>
+</ng-container>
+
+<ng-template #viewDecision>
+  <h2
+    app-summary-header
+    class="govuk-heading-m"
+    (changeClick)="isOnEditState = true"
+    [changeRoute]="(isEditable$ | async) ? '.' : null"
+  >
+    Decision Summary
+  </h2>
+  <dl
+    *ngIf="decisionData$ | async as decisionData"
+    govuk-summary-list
+    class="govuk-summary-list--no-border summary-list--edge-border"
+  >
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Decision status</dt>
+      <dd govukSummaryListRowValue>{{ decisionData.type | reviewGroupDecision }}</dd>
+    </div>
+    <div govukSummaryListRow *ngIf="decisionData?.details?.notes">
+      <dt govukSummaryListRowKey>Notes</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ decisionData.details.notes }}</dd>
+    </div>
+  </dl>
+</ng-template>

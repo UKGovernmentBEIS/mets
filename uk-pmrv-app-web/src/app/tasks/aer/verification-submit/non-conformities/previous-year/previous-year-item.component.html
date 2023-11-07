@@ -1,0 +1,17 @@
+<app-aer-task-review heading="Add a non-conformity from the previous year that has not been resolved" returnToLink="../../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">You should describe each issue in as much detail as possible so the regulator can understand:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>their size and nature</li>
+      <li>if there is a material impact on the reported data</li>
+      <li>which element of the report, the monitoring plan or regulations the issue relates to</li>
+    </ul>
+
+    <div label="Explanation" [maxLength]="10000" formControlName="explanation" govuk-textarea></div>
+  </app-wizard-step>
+</app-aer-task-review>

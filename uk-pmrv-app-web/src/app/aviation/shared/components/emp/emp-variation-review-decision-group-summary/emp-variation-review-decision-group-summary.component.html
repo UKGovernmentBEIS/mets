@@ -1,0 +1,50 @@
+<dl *ngIf="data" govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Decision status</dt>
+    <dd govukSummaryListRowValue>{{ data.type | i18nSelect: empVariationReviewGroupDecision }}</dd>
+  </div>
+
+  <ng-container *ngIf="$any(data).details?.variationScheduleItems?.length > 0">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        <ng-container
+          *ngFor="
+            let variationScheduleItem of $any(data).details.variationScheduleItems;
+            let i = index;
+            let isLast = last
+          "
+        >
+          <div>{{ i + 1 }}. {{ variationScheduleItem }} <br /></div>
+          <br *ngIf="!isLast" />
+        </ng-container>
+      </dd>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="$any(data).details?.requiredChanges?.length > 0">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Changes required by operator</dt>
+
+      <dd govukSummaryListRowValue>
+        <ng-container
+          *ngFor="let requiredChange of $any(data).details.requiredChanges; let i = index; let isLast = last"
+        >
+          <div class="pre-wrap">
+            {{ i + 1 }}. {{ requiredChange.reason }} <br />
+            <ng-container *ngIf="requiredChange?.files?.length > 0">
+              <app-summary-download-files [files]="getDownloadUrlFiles(requiredChange?.files)">
+              </app-summary-download-files>
+            </ng-container>
+          </div>
+          <br *ngIf="!isLast" />
+        </ng-container>
+      </dd>
+    </div>
+  </ng-container>
+
+  <div govukSummaryListRow *ngIf="data?.details?.notes">
+    <dt govukSummaryListRowKey>Notes</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.details.notes }}</dd>
+  </div>
+</dl>

@@ -1,0 +1,60 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="changesGroup"
+  submitText="Continue"
+  [hideSubmit]="false"
+  [heading]="'Other changes not covered in the approved emissions monitoring plans'"
+>
+  <!-- AerMonitoringPlanVersions -->
+  <app-aer-monitoring-plan-versions [planVersions]="aerMonitoringPlanVersions"></app-aer-monitoring-plan-versions>
+
+  <!-- AerMonitoringPlanChanges -->
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">Changes not covered by the emissions monitoring plans</h2>
+
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Were there any changes not covered by the emissions monitoring plans in the reporting year?
+      </dt>
+
+      <dd govukSummaryListRowValue>
+        {{ notCoveredChangesProvided ? 'Yes' : 'No' }}
+      </dd>
+      <dd></dd>
+    </div>
+  </dl>
+
+  <dl govuk-summary-list *ngIf="notCoveredChangesProvided">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Changes reported by the operator</dt>
+      <dd govukSummaryListRowValue>
+        {{ notCoveredChangesProvided }}
+      </dd>
+      <dd></dd>
+    </div>
+  </dl>
+
+  <!-- AdditionalChangesNotCovered -->
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">
+    Were there any changes agreed with the regulator that were not covered in the approved emissions monitoring plans?
+  </h2>
+
+  <div formControlName="additionalChangesNotCovered" govuk-radio class="govuk-!-width-two-thirds">
+    <govuk-radio-option [value]="true" label="Yes">
+      <ng-container govukConditionalContent>
+        <ng-container *ngIf="additionalChangesNotCoveredCtrl.value === true">
+          <div
+            [maxLength]="2000"
+            formControlName="additionalChangesNotCoveredDetails"
+            govuk-textarea
+            label="List what has been agreed, plus the date and type of communication"
+          ></div>
+        </ng-container>
+      </ng-container>
+    </govuk-radio-option>
+
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

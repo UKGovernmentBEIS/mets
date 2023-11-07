@@ -1,0 +1,27 @@
+<dl govuk-summary-list [hasBorders]="true">
+  <div govukSummaryListRow *ngIf="overallAssessment">
+    <dt govukSummaryListRowKey>Decision</dt>
+    <dd govukSummaryListRowValue>{{ overallAssessment.type | verificationDecisionType: isCorsia }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+    </dd>
+  </div>
+  <div *ngIf="notVerifiedReasons" govukSummaryListRow>
+    <dt govukSummaryListRowKey>Reason</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>
+      <ng-container *ngFor="let reason of notVerifiedReasons; let isLast = last">
+        <div>{{ reason.type | notVerifiedDecisionReasonType: reason.details }} <br /></div>
+        <br *ngIf="!isLast" />
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../not-verified" [queryParams]="{ change: true }">Change</a>
+    </dd>
+  </div>
+</dl>
+<app-overall-decision-list
+  *ngIf="reasons"
+  [isEditable]="isEditable"
+  [list]="reasons"
+  [queryParams]="{ change: true }"
+></app-overall-decision-list>

@@ -1,0 +1,37 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Describe the verification activities carried out and their corresponding results</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.verificationActivities }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Strategic analysis and risk assessment</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.strategicAnalysis }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../strategic-analysis" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Data sampling</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.dataSampling }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../data-sampling" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Results of data sampling</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.dataSamplingResults }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../data-sampling" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Compliance with the emissions monitoring plan</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.emissionsMonitoringPlanCompliance }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../compliance" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+</dl>

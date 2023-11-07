@@ -1,0 +1,29 @@
+<h2 class="govuk-heading-m">Emission details</h2>
+
+<div class="govuk-body govuk-!-width-two-thirds">
+  <dl govuk-summary-list class="">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Standard fuels and emission factors</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <ng-container *ngFor="let ft of fuelTypes">
+          <p class="govuk-body">{{ ft.key }} at {{ ft.value }}</p>
+        </ng-container>
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../']" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Monitoring approach</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <p class="govuk-body">{{ monitoringApproachType | monitoringApproachType: 'aer' }}</p>
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../']" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</div>

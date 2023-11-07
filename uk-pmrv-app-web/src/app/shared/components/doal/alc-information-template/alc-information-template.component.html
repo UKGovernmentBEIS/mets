@@ -1,0 +1,61 @@
+<h2 class="govuk-heading-m">Decision details</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Were conservative estimates made to determine the activity level?</dt>
+    <dd govukSummaryListRowValue>
+      {{ data.areConservativeEstimates ? 'Yes' : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'estimates']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="data.areConservativeEstimates">
+    <dt govukSummaryListRowKey>Why the estimate was made</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ data.explainEstimates }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'estimates']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="data.commentsForUkEtsAuthority">
+    <dt govukSummaryListRowKey>Comments</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ data.commentsForUkEtsAuthority }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'comments']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>
+
+<dl govuk-summary-list [hasBorders]="false">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey><h2 class="govuk-heading-m">Activity level details</h2></dt>
+
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'activity-levels']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>
+<app-doal-activity-level-list-template
+  [data]="data.activityLevels"
+  [historical]="false"
+  [editable]="false"
+></app-doal-activity-level-list-template>
+
+<dl govuk-summary-list [hasBorders]="false">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey><h2 class="govuk-heading-m">Allocation for each sub-installation details</h2></dt>
+
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'preliminary-allocations']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>
+<app-doal-preliminary-allocation-list-template
+  [data]="data.preliminaryAllocations"
+  [editable]="false"
+></app-doal-preliminary-allocation-list-template>

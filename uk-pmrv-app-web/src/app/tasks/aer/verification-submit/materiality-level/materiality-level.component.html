@@ -1,0 +1,19 @@
+<app-aer-task-review heading="Materiality level">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      Provide any other relevant details or criteria around the work performed or the basis of the opinion, so the
+      operator can understand its depth and scope (see Article 23 of the AVR.)
+    </p>
+    <p class="govuk-body">
+      For example, if you had to check 100% of data because non-conformities were found during the verification, this
+      may be helpful for the operator to understand.
+    </p>
+
+    <div [maxLength]="10000" formControlName="materialityDetails" govuk-textarea></div>
+  </app-wizard-step>
+</app-aer-task-review>

@@ -1,0 +1,14 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="siteVisitGroup"
+  submitText="Continue"
+  [hideSubmit]="false"
+  [heading]="'What kind of site visit did your team make?'"
+>
+  <div formControlName="type" govuk-radio class="govuk-!-width-two-thirds">
+    <govuk-radio-option [value]="'IN_PERSON'" label="In-person site visit"> </govuk-radio-option>
+    <govuk-radio-option [value]="'VIRTUAL'" label="Virtual site visit"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

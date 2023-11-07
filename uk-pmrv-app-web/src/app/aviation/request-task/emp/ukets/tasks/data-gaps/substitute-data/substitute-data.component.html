@@ -1,0 +1,22 @@
+<app-wizard-step [formGroup]="form" (ngSubmit)="onSubmit()" data-testid="substitute-data">
+  <div class="govuk-!-width-two-thirds">
+    <app-page-heading>
+      Using substitute data to estimate fuel consumption
+    </app-page-heading>
+
+    <p class="govuk-body">
+      Describe the surrogate method you will use to estimate fuel consumption where data is missing.
+    </p>
+    <p class="govuk-body">
+      If primary or secondary data is missing, you must substitute it with data calculated using a surrogate method that
+      your regulator approves (for example, a conservative estimate of fuel consumption based on historic averages for
+      the same route).
+    </p>
+    <div formControlName="substituteData" govuk-textarea [maxLength]="2000"></div>
+    <p class="govuk-body">
+      If substitute data cannot be calculated using this method then you can use the Eurocontrol Small Emitters Tool to
+      calculate your emissions.
+    </p>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,39 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <app-wizard-step
+      (formSubmit)="onSubmit()"
+      [formGroup]="form"
+      heading="Choose an emitter group"
+      submitText="Continue"
+      [showBackLink]="true"
+    >
+      <div class="govuk-hint">
+        Select at least one from each section. Emitters that meet the selected criteria will be included in the batch
+        variation.
+      </div>
+
+      <div class="govuk-checkboxes">
+        <div class="govuk-grid-column-full">
+          <div class="govuk-heading-m">Reporting status</div>
+          <div formControlName="reportingStatuses" govuk-checkboxes>
+            <govuk-checkbox
+              *ngFor="let option of reportingStatusLabelMap | keyvalue: originalOrder"
+              [value]="option.key"
+              [label]="option.value"
+            ></govuk-checkbox>
+          </div>
+        </div>
+        <div class="govuk-grid-column-full">
+          <div class="govuk-heading-m">Scheme</div>
+          <div formControlName="emissionTradingSchemes" govuk-checkboxes>
+            <govuk-checkbox
+              *ngFor="let option of emissionTradingSchemeLabelMap | keyvalue: originalOrder"
+              [value]="option.key"
+              [label]="option.value"
+            ></govuk-checkbox>
+          </div>
+        </div>
+      </div>
+    </app-wizard-step>
+  </div>
+</div>

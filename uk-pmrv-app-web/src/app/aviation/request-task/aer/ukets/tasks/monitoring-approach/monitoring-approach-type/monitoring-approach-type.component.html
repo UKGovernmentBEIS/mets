@@ -1,0 +1,14 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Select your emissions monitoring approach"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Identify the approach you have used in the scheme year. You must have monitored in line with your approved
+    monitoring plan and with the Monitoring and Reporting Regulations 2018, as amended by the Order.
+  </p>
+  <app-monitoring-approach-type-form></app-monitoring-approach-type-form>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

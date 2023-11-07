@@ -1,0 +1,8 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <ng-container *ngIf="vm.isTaskReassigned; else mainView">
+    <app-assignment-confirmation [user]="vm.taskReassignedTo"></app-assignment-confirmation>
+  </ng-container>
+  <ng-template #mainView>
+    <app-assignment [noBorder]="true" [info]="vm.info" (submitted)="assignTask($event)"></app-assignment>
+  </ng-template>
+</ng-container>

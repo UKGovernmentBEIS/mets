@@ -1,0 +1,25 @@
+<div class="overflow-auto overflow-auto-table">
+  <ng-container *ngIf="pageItems$ | async as pageItems">
+    <govuk-table *ngIf="pageItems.length" [columns]="columns" [data]="pageItems">
+      <ng-template let-column="column" let-row="row">
+        <div [ngSwitch]="column.field" class="cell-container">
+          <ng-container *ngSwitchCase="'departureState'">{{ row.departureState }}</ng-container>
+          <ng-container *ngSwitchCase="'arrivalState'">{{ row.arrivalState }}</ng-container>
+          <ng-container *ngSwitchCase="'flightsNumber'"
+            ><div class="govuk-!-text-align-left">{{ row.flightsNumber }}</div></ng-container
+          >
+          <ng-container *ngSwitchCase="'fuelType'">{{ getSummaryDescription(row.fuelType, true) }}</ng-container>
+          <ng-container *ngSwitchCase="'offset'">{{ row.offset ? 'Yes' : 'No' }}</ng-container>
+          <ng-container *ngSwitchCase="'fuelConsumption'">{{ row.fuelConsumption }} t</ng-container>
+          <ng-container *ngSwitchCase="'emissions'">{{ row.emissions }} tCO2</ng-container>
+          <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+        </div>
+      </ng-template>
+    </govuk-table>
+    <app-pagination
+      [count]="totalNumOfItems$ | async"
+      (currentPageChange)="currentPage$.next($event)"
+      [pageSize]="pageSize"
+    ></app-pagination>
+  </ng-container>
+</div>

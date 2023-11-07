@@ -1,0 +1,29 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Decision</dt>
+    <dd govukSummaryListRowValue>
+      {{ data.type | empReviewDeterminationType }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..']" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow *ngIf="data.reason">
+    <dt govukSummaryListRowKey>Reason for decision</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>
+      {{ data.reason }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..', 'reason']" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow *ngIf="variationScheduleItems?.length > 0 && data.type === 'APPROVED'">
+    <dt govukSummaryListRowKey>Items added to the variation schedule</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>
+      <ng-container *ngFor="let variationScheduleItem of variationScheduleItems; let i = index">
+        <div>{{ i + 1 }}. {{ variationScheduleItem }} <br /></div>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable"></dd>
+  </div>
+</dl>

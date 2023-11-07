@@ -1,0 +1,37 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="CORSIA eligible fuels reduction claim"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    If you want to make an emissions reduction claim arising from CORSIA eligible fuels (CEF), the fuel must:
+  </p>
+  <ul class="govuk-body govuk-!-width-two-thirds">
+    <li>
+      meet the CORSIA
+      <a
+        govukLink
+        href="https://www.icao.int/environmental-protection/CORSIA/Pages/CORSIA-Eligible-Fuels.aspx"
+        rel="noreferrer noopener"
+        target="_blank"
+        >sustainability criteria</a
+      >
+    </li>
+
+    <li>
+      have been produced by a fuel producer that is certified by an ICAO approved
+      <a
+        govukLink
+        href="https://www.icao.int/environmental-protection/CORSIA/Pages/CORSIA-Eligible-Fuels.aspx"
+        rel="noreferrer noopener"
+        target="_blank"
+        >Sustainable Certification Scheme</a
+      >
+    </li>
+  </ul>
+
+  <app-emissions-reduction-claim-form></app-emissions-reduction-claim-form>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,41 @@
+<app-base-action-container-component
+  [header]="virTitle$ | async"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="['VIR_APPLICATION_REVIEWED']"
+>
+</app-base-action-container-component>
+<ng-template #customContentTemplate>
+  <h2 app-summary-header class="govuk-heading-m">Details</h2>
+  <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Verifier improvement report</dt>
+      <dd govukSummaryListRowValue>
+        <a govukLink [routerLink]="'response-list'">Verifier improvement report</a>
+      </dd>
+    </div>
+  </dl>
+
+  <h2 app-summary-header class="govuk-heading-m">Official notice recipients</h2>
+  <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+    <div govukSummaryListRow *ngIf="notificationUsers$ | async as notificationUsers">
+      <dt govukSummaryListRowKey>Users</dt>
+      <dd govukSummaryListRowValue>
+        <div *ngFor="let user of notificationUsers">
+          {{ user }}
+        </div>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="signatoryName$ | async as signatoryName">
+      <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+      <dd govukSummaryListRowValue>
+        {{ signatoryName }}
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Official notice</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="officialNoticeFiles$ | async"></app-summary-download-files>
+      </dd>
+    </div>
+  </dl>
+</ng-template>

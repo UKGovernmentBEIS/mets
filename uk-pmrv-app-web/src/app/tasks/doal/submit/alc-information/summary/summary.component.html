@@ -1,0 +1,16 @@
+<app-doal-task [breadcrumb]="true">
+  <app-page-heading caption="Provide information about this activity level determination"
+    >Confirm your answers</app-page-heading
+  >
+  <app-doal-alc-information-template
+    *ngIf="activityLevelChangeInformation$ | async as alc"
+    [data]="alc"
+    [editable]="editable$ | async"
+  ></app-doal-alc-information-template>
+
+  <div class="govuk-button-group" *ngIf="editable$ | async">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+
+  <app-task-return-link [levelsUp]="2" taskType="DOAL_APPLICATION_SUBMIT"></app-task-return-link>
+</app-doal-task>

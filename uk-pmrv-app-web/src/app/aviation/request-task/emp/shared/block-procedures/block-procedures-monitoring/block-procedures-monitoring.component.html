@@ -1,0 +1,36 @@
+<app-procedure-form-step [form]="form" (submitForm)="onSubmit()">
+  <div procedureFormPageHeader>
+    <div class="govuk-caption-l">Block-off / Block-on</div>
+
+    <app-page-heading>Monitoring fuel consumption per flight</app-page-heading>
+
+    <p class="govuk-body govuk-!-width-two-thirds">
+      Describe how you monitor fuel consumption per flight in owned and leased-in aircraft.
+    </p>
+
+    <p class="govuk-body govuk-!-width-two-thirds">You should include:</p>
+
+    <ul class="govuk-body">
+      <li>the exact time when the fuel in tank measurements are taken</li>
+      <li>a description of the measurement equipment</li>
+      <li>the procedures for recording, retrieving, transmitting and storing information</li>
+    </ul>
+
+    <govuk-details summary="Block-off / Block-on formula: FN = TN - RN">
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        FN = Fuel consumed for the flight under consideration (= flight N) determined using Block-off / Block-on Method
+        (in tonnes);
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        TN = Amount of fuel contained in aeroplane tanks at Block-off for the flight under consideration i.e., flight N
+        (in tonnes);
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        RN = Amount of fuel remaining in aeroplane tanks at Block-on of the flight under consideration i.e., flight N
+        (in tonnes).
+      </p>
+    </govuk-details>
+  </div>
+</app-procedure-form-step>

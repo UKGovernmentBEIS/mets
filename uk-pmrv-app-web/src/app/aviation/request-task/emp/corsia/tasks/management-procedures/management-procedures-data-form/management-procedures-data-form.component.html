@@ -1,0 +1,7 @@
+<div formControlName="description" govuk-textarea label="Procedure description" [maxLength]="10000"></div>
+<app-file-input
+  [downloadUrl]="getDownloadUrl"
+  formControlName="dataFlowDiagram"
+  label="Upload a data flow diagram"
+  text="Attach a diagram that summarises the data sources, who is responsible for retrieving and processing the data, and the systems used to store the data."
+></app-file-input>

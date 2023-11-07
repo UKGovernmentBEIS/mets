@@ -1,0 +1,49 @@
+<app-base-task-container-component
+  header="Withholding of allowances"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMIT"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <ng-container>
+    <div class="govuk-button-group">
+      <button
+        *ngIf="allowNotifyOperator$ | async"
+        (click)="notifyOperator()"
+        govukButton
+        title="Notify Operator for decision"
+        type="button"
+      >
+        Notify Operator of decision
+      </button>
+
+      <button
+        *ngIf="allowSendPeerReview$ | async"
+        (click)="sendPeerReview()"
+        govukButton
+        title="Send for peer review"
+        type="button"
+      >
+        Send for peer review
+      </button>
+    </div>
+  </ng-container>
+
+  <ol class="app-task-list">
+    <li app-task-section title="Withholding of allowances details">
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          [link]="
+            (canViewSectionDetails$ | async)
+              ? './summary'
+              : null
+          "
+          linkText="Provide withholding of allowances details"
+          [status]="sectionStatus$ | async"
+        ></li>
+      </ul>
+    </li>
+  </ol>
+</ng-template>

@@ -1,0 +1,21 @@
+<app-page-heading>Check your answers</app-page-heading>
+<h2 app-summary-header (changeClick)="changeClick()" [changeRoute]="'..'" class="govuk-heading-m">
+  <span class="govuk-visually-hidden">Check your answers</span>
+</h2>
+<dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Decision</dt>
+    <dd govukSummaryListRowValue>{{ type | determinationAssessment }}</dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Supporting notes</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ notes }}</dd>
+  </div>
+</dl>
+<div class="govuk-button-group">
+  <button appPendingButton govukButton type="button" (click)="onSubmit()">Confirm and complete</button>
+</div>
+
+<ng-container *ngIf="returnTo$ | async as returnTo">
+  <a govukLink routerLink="../.."> Return to: {{ returnTo }}</a>
+</ng-container>

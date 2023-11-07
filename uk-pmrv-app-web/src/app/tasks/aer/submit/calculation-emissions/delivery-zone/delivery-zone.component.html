@@ -1,0 +1,35 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    [submitText]="'Continue'"
+    caption="Apply regional data for natural gas"
+    heading="Find your local delivery zone"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      If your postcode cannot be found, or is in 2 different local delivery zones, contact your local gas supplier.
+    </p>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <div *ngIf="parameterCalculationMethod$ | async as parameterCalculationMethod">
+          <h2 class="govuk-heading-m govuk-!-font-weight-regular">Installation postcode</h2>
+          <p class="govuk-body">
+            {{ parameterCalculationMethod?.postCode }}
+            <a govukLink [routerLink]="['..', 'installation-postcode']" [state]="{ changing: true }">Change</a>
+          </p>
+        </div>
+        <ng-container *ngIf="deliveryZones$ | async as deliveryZones">
+          <h2 class="govuk-heading-m govuk-!-font-weight-regular">Select local delivery zone</h2>
+          <div formControlName="localZoneCode" govuk-select>
+            <option *ngFor="let option of deliveryZones" [value]="option.code">
+              {{ option.name }}
+            </option>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

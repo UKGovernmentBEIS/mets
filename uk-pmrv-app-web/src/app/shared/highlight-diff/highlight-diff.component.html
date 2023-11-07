@@ -1,0 +1,9 @@
+<div #current class="govuk-!-display-none">
+  <ng-content select="[slot=current]"></ng-content>
+</div>
+
+<div #previous class="govuk-!-display-none">
+  <ng-content select="[slot=previous]"></ng-content>
+</div>
+
+<div class="highlight" (click)="onClickDiff($event)" (keydown)="onClickDiff($event)" [innerHtml]="diff"></div>

@@ -1,0 +1,20 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="What date range does this entry cover?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div formControlName="fullYearCovered" govuk-radio legendSize="medium">
+      <govuk-radio-option [value]="true" label="the whole year"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="part of the year">
+        <ng-container govukConditionalContent>
+          <div formControlName="coverageStartDate" govuk-date-input label="Start date" [isRequired]="true"></div>
+          <div formControlName="coverageEndDate" govuk-date-input label="End date" [isRequired]="true"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

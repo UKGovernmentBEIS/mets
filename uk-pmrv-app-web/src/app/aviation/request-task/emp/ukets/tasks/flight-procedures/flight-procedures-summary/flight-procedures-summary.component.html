@@ -1,0 +1,69 @@
+<ng-template #contentTpl let-showOriginal>
+  <ng-container *ngIf="vm$ | async as vm">
+    <app-procedure-form-summary
+      *ngIf="vm.data.aircraftUsedDetails"
+      header="Aircraft in use"
+      [isEditable]="vm.isEditable"
+      [procedureFormData]="showOriginal ? vm.originalData.aircraftUsedDetails : vm.data.aircraftUsedDetails"
+      formRouterLink=".."
+    ></app-procedure-form-summary>
+
+    <app-procedure-form-summary
+      *ngIf="vm.data.flightListCompletenessDetails"
+      header="Completeness of the list of flights"
+      [isEditable]="vm.isEditable"
+      [procedureFormData]="
+        showOriginal ? vm.originalData.flightListCompletenessDetails : vm.data.flightListCompletenessDetails
+      "
+      formRouterLink="../completeness-of-the-flights-list"
+    ></app-procedure-form-summary>
+
+    <app-procedure-form-summary
+      *ngIf="vm.data.ukEtsFlightsCoveredDetails"
+      header="Flights Covered by the UK ETS"
+      [isEditable]="vm.isEditable"
+      [procedureFormData]="
+        showOriginal ? vm.originalData.ukEtsFlightsCoveredDetails : vm.data.ukEtsFlightsCoveredDetails
+      "
+      formRouterLink="../flights-covered-by-the-UK-ETS"
+    ></app-procedure-form-summary>
+  </ng-container>
+</ng-template>
+
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <app-highlight-diff *ngIf="vm.showDiff">
+    <ng-container slot="previous" *ngTemplateOutlet="contentTpl; context: { $implicit: true }"></ng-container>
+    <ng-container slot="current" *ngTemplateOutlet="contentTpl; context: { $implicit: false }"></ng-container>
+  </app-highlight-diff>
+
+  <ng-container
+    *ngIf="vm.showDiff === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: false }"
+  ></ng-container>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-emp-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="flightAndAircraftProcedures"
+  ></app-emp-review-decision-group>
+
+  <app-emp-variation-review-decision-group
+    *ngIf="vm.showVariationDecision"
+    taskKey="flightAndAircraftProcedures"
+  ></app-emp-variation-review-decision-group>
+
+  <app-emp-variation-regulator-led-decision-group
+    *ngIf="vm.showVariationRegLedDecision"
+    taskKey="flightAndAircraftProcedures"
+  ></app-emp-variation-regulator-led-decision-group>
+</ng-container>
+
+<app-return-to-link></app-return-to-link>

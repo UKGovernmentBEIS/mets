@@ -1,0 +1,32 @@
+<ng-container *ngIf="(transferSubmitted$ | async) === false; else transferSubmitted">
+  <app-permit-task [breadcrumb]="true">
+    <app-page-heading>Send your application to regulator</app-page-heading>
+    <ng-container *ngIf="allowSubmission$ | async; else submissionNotAllowed">
+      <p class="govuk-body">
+        By sending this application you are confirming that, to the best of your knowledge, the details you are
+        providing are correct.
+      </p>
+      <div class="govuk-button-group">
+        <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and send</button>
+      </div>
+    </ng-container>
+    <ng-template #submissionNotAllowed>
+      <p class="govuk-body">All tasks must be completed before you can submit your application.</p>
+    </ng-template>
+    <a govukLink routerLink="../">Return to: Full transfer of permit</a>
+  </app-permit-task>
+</ng-container>
+
+<ng-template #transferSubmitted>
+  <app-confirmation-shared
+    title="Permit transfer sent"
+    titleContent="Your transfer reference is {{ requestId$ | async }}"
+    [whatHappensNextTemplate]="whatHappensNextTemplate"
+  ></app-confirmation-shared>
+  <ng-template #notificationTemplate></ng-template>
+  <ng-template #whatHappensNextTemplate>
+    <p class="govuk-body">We’ve sent your application to {{ competentAuthority$ | async | competentAuthority }}</p>
+    <br />
+    <p class="govuk-body">The regulator will make a decision and respond within 2 calendar months.</p>
+  </ng-template>
+</ng-template>

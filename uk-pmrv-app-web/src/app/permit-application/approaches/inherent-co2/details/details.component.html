@@ -1,0 +1,15 @@
+<app-permit-task [breadcrumb]="[{ text: 'INHERENT_CO2' | monitoringApproachDescription, link: ['inherent-co2'] }]">
+  <app-transfer-details-template
+    (formSubmit)="onContinue($event)"
+    [transfer]="transfer$ | async"
+    [isEditable]="store.isEditable$ | async"
+    [heading]="
+      ('INHERENT_CO2' | monitoringApproachTask | async)?.inherentReceivingTransferringInstallations[(index$ | async)]
+        ?.inherentCO2Direction === 'RECEIVED_FROM_ANOTHER_INSTALLATION'
+        ? 'Provide details of the installation you received the emissions from'
+        : 'Provide details of the installation you exported the emissions to'
+    "
+    [returnToLink]="'INHERENT_CO2' | monitoringApproachDescription"
+    [showBackLink]="true"
+  ></app-transfer-details-template>
+</app-permit-task>

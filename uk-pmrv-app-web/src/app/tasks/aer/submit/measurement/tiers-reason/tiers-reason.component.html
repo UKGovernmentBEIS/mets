@@ -1,0 +1,42 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Why could you not use the tiers applied in your monitoring plan?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div formControlName="type" govuk-radio legendSize="medium">
+      <govuk-radio-option [value]="'DATA_GAP'" label="Due to a data gap">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="reasonDataGap"
+            govuk-textarea
+            [maxLength]="10000"
+            label="Describe the reasons and methods used during the data gap"
+          ></div>
+          <ng-container *ngIf="usersToNotify$ | async as usersToNotify">
+            <div
+              govuk-checkboxes
+              formControlName="relatedNotifications"
+              legend="Select any notifications related to this issue (optional)"
+              legendSize="normal"
+            >
+              <govuk-checkbox
+                *ngFor="let userToNotify of usersToNotify"
+                [value]="userToNotify"
+                [label]="userToNotify"
+              ></govuk-checkbox>
+            </div>
+          </ng-container>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="'OTHER'" label="Some other reason">
+        <ng-container govukConditionalContent>
+          <div formControlName="reasonOther" govuk-textarea [maxLength]="10000" label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

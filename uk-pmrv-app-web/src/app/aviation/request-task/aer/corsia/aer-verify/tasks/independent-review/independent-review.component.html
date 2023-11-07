@@ -1,0 +1,30 @@
+<app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" heading="Independent review" submitText="Continue">
+  <h2 class="govuk-heading-m">Results of the independent review</h2>
+  <p class="govuk-body">The review should ensure that:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>the verification process has been carried out in accordance with the relevant standards</li>
+    <li>
+      the evidence gathered is appropriate and sufficient to enable the verification body to issue a verification report
+      with reasonable assurance
+    </li>
+  </ul>
+
+  <div formControlName="reviewResults" govuk-textarea [maxLength]="10000"></div>
+
+  <h2 class="govuk-heading-m">Independent reviewer details</h2>
+  <div formControlName="name" govuk-text-input label="Name"></div>
+  <div formControlName="position" govuk-text-input label="Position"></div>
+  <div formControlName="email" govuk-text-input label="Email"></div>
+  <div formControlName="line1" govuk-text-input label="Address line 1"></div>
+  <div formControlName="line2" govuk-text-input label="Address line 2"></div>
+  <div formControlName="city" govuk-text-input label="Town or city"></div>
+  <div formControlName="state" govuk-text-input label="State, province or region (optional)"></div>
+  <div
+    formControlName="postcode"
+    govuk-text-input
+    label="Postal or zip code (optional)"
+    widthClass="govuk-!-width-one-third"
+  ></div>
+  <div [options]="countriesOptions$ | async" formControlName="country" govuk-select label="Country"></div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

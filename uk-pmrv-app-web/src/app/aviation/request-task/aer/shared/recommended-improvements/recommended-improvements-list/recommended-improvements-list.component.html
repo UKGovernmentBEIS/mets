@@ -1,0 +1,13 @@
+<div *ngIf="vm$ | async as vm" class="govuk-!-width-two-thirds">
+  <h2 class="govuk-heading-l">Recommended improvements</h2>
+
+  <app-recommended-improvements-group-template
+    [isEditable]="vm.isEditable"
+    [verifierComments]="vm.recommendedImprovements?.recommendedImprovements ?? []"
+    [queryParams]="{ change: true }"
+  ></app-recommended-improvements-group-template>
+  <div class="govuk-button-group" *ngIf="vm.recommendedImprovements?.recommendedImprovements?.length > 0">
+    <button *ngIf="vm.isEditable" govukButton [routerLink]="['../summary']" type="button">Continue</button>
+  </div>
+</div>
+<app-return-to-link></app-return-to-link>

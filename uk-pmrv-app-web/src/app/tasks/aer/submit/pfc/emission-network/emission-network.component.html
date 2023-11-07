@@ -1,0 +1,62 @@
+<app-aer-task>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <app-wizard-step
+        (formSubmit)="onContinue()"
+        [formGroup]="form"
+        heading="Define the emission network"
+        [hideSubmit]="(isEditable$ | async) === false"
+      >
+        <div formControlName="sourceStream" govuk-select label="Source stream" widthClass="govuk-!-width-full">
+          <option *ngFor="let sourceStream of 'sourceStreams' | task | async" [value]="sourceStream.id">
+            {{ sourceStream.reference }} {{ sourceStream | sourceStreamDescription }}
+          </option>
+        </div>
+        <div app-multi-select formControlName="emissionSources" label="Emission sources">
+          <div
+            *ngFor="let emissionSource of 'emissionSources' | task | async"
+            [itemValue]="emissionSource.id"
+            [label]="emissionSource.reference + ' ' + emissionSource.description"
+            app-multi-select-item
+            itemName="emissionSources"
+          ></div>
+        </div>
+        <div
+          formControlName="calculationMethod"
+          legend="What method are you using to calculate emissions of CF4 and C2F6?"
+          govuk-radio
+          legendSize="medium"
+        >
+          <govuk-radio-option
+            [value]="'SLOPE'"
+            label="Method A (Slope)"
+            hint="Where the anode effect minutes per cell-day are recorded"
+          ></govuk-radio-option>
+          <govuk-radio-option
+            [value]="'OVERVOLTAGE'"
+            label="Method B (Overvoltage)"
+            hint="Where the anode effect overvoltage is recorded"
+          >
+          </govuk-radio-option>
+        </div>
+        <div
+          formControlName="massBalanceApproachUsed"
+          legend="Are you using a mass balance approach to identify the activity data?"
+          govuk-radio
+          legendSize="medium"
+        >
+          <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+          <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+        </div>
+      </app-wizard-step>
+    </div>
+
+    <div
+      class="govuk-grid-column-one-quarter"
+      *ngIf="(isEditable$ | async) === true && !!(sourceStreamEmission$ | async)"
+    >
+      <button type="button" (click)="onDelete()" govukSecondaryButton>Delete</button>
+    </div>
+  </div>
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_PFC' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

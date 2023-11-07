@@ -1,0 +1,12 @@
+<app-aer-task [breadcrumb]="true">
+  <app-transfer-details-template
+    (formSubmit)="onContinue($event)"
+    [transfer]="transfer$ | async"
+    [isEditable]="isEditable$ | async"
+    [heading]="heading$ | async"
+    [returnToLink]="'INHERENT_CO2' | monitoringApproachDescription"
+    [showBackLink]="true"
+    submitText="Continue"
+  >
+  </app-transfer-details-template>
+</app-aer-task>

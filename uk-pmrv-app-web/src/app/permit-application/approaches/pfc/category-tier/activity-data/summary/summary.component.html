@@ -1,0 +1,26 @@
+<ng-container
+  *ngIf="('CALCULATION_PFC' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async] as tier"
+>
+  <app-permit-task
+    [notification]="notification"
+    [breadcrumb]="[
+      { text: 'CALCULATION_PFC' | monitoringApproachDescription, link: ['pfc'] },
+      { text: tier | sourceStreamCategoryName | async, link: ['pfc', 'category-tier', index$ | async] }
+    ]"
+  >
+    <app-page-heading
+      caption="{{ 'CALCULATION_PFC' | monitoringApproachDescription }}, {{ tier | sourceStreamCategoryName | async }}"
+      >Activity Data</app-page-heading
+    >
+    <app-activity-data-template></app-activity-data-template>
+
+    <app-activity-data-summary-overview
+      [isChangeLinkAvailable]="(store.isEditable$ | async) === true"
+      [activityDataSectionHasBottomBorder]="true"
+      [justificationSectionHasBottomBorder]="!tier?.activityData?.isHighestRequiredTier"
+    ></app-activity-data-summary-overview>
+
+    <a govukLink routerLink="../.."> Return to: {{ tier | sourceStreamCategoryName | async }} </a>
+  </app-permit-task>
+  <ng-container> </ng-container
+></ng-container>

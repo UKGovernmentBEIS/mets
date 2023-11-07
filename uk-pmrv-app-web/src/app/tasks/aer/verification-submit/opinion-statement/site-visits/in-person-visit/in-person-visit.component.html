@@ -1,0 +1,39 @@
+<app-aer-task-review heading="In person site visit details" returnToLink="../../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div formArrayName="visitDates" class="container">
+      <ng-container *ngFor="let date of visitDatesForms.controls; index as i">
+        <button
+          govukSecondaryButton
+          type="button"
+          [disabled]="(isEditable$ | async) === false"
+          *ngIf="visitDatesForms.controls.length > 1"
+          class="float-right"
+          (click)="removeVisitDate(i)"
+        >
+          Remove
+        </button>
+        <div [formControlName]="i" govuk-date-input label="Date of visit" [isRequired]="true"></div>
+      </ng-container>
+      <button
+        *ngIf="isEditable$ | async as isEditable"
+        govukSecondaryButton
+        type="button"
+        (click)="addVisitDate(isEditable)"
+      >
+        Add another date
+      </button>
+    </div>
+    <div
+      formControlName="teamMembers"
+      govuk-textarea
+      label="What team members conducted the site visit?"
+      hint="Include the names of the lead auditors and any technical experts involved in site visits"
+      [maxLength]="10000"
+    ></div>
+  </app-wizard-step>
+</app-aer-task-review>

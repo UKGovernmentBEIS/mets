@@ -1,0 +1,16 @@
+export const noSelection = 'Please select yes or no';
+export const maxDescription = 'The description should not be more than 10000 characters';
+export const noRegulatedActivitySelected = 'Select an activity';
+export const duplicatedActivitySelected = 'You have already added this regulated activity';
+export const noCombustionSourceText = 'Enter a combustion source';
+export const noProcessSourceText = 'Enter a process source';
+export const noMonitoringApproachDescription = 'Enter the description of the monitoring approach';
+export const noEmissionFactorDescription = 'Enter the description of the emission factor';
+export const additionalChangesNotCoveredDetailsDescription = 'Enter details';
+export const noSiteVisitSelection = "Please select 'In person', 'Virtual' or 'No' visit";
+export const noTeamMembersDescription = 'Enter the names of the people involved in the site visit';
+export const noDate = 'Enter a date';
+export const todayOrPastDate = 'The date must be today or in the past';
+export const noDuplicatedDate = 'You cannot enter the same date more than once';
+export const noSiteVisitReason = 'Please give the reasons for not conducting a site visit';
+export const noVirtualVisitReason = 'Please give the reasons for conducting a virtual site visit';

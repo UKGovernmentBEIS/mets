@@ -1,0 +1,40 @@
+<app-doal-task [breadcrumb]="true">
+  <app-page-heading caption="Provide information about this activity level determination"
+    >Provide updated activity level (optional)</app-page-heading
+  >
+
+  <div class="govuk-hint">This will be entered into the official notice</div>
+
+  <app-doal-activity-level-list-template
+    [data]="historicalActivityLevels$ | async"
+    [historical]="true"
+    [editable]="false"
+    heading="History of activity level changes"
+  ></app-doal-activity-level-list-template>
+
+  <app-doal-activity-level-list-template
+    [data]="activityLevels$ | async"
+    [historical]="false"
+    [editable]="true"
+    heading="New activity level changes"
+  ></app-doal-activity-level-list-template>
+
+  <ng-container *ngIf="(activityLevels$ | async).length; else noActivityLevel">
+    <div class="govuk-button-group">
+      <a routerLink="./add" govukSecondaryButton type="button"> Add another item </a>
+    </div>
+  </ng-container>
+
+  <ng-template #noActivityLevel>
+    <div class="govuk-button-group" *ngIf="isEditable$ | async">
+      <a routerLink="./add" govukButton type="button">Add an item</a>
+    </div>
+  </ng-template>
+
+  <button appPendingButton govukButton type="button" (click)="onSubmit()" *ngIf="isEditable$ | async">
+    Save and continue
+  </button>
+
+  <br />
+  <app-task-return-link [levelsUp]="2" taskType="DOAL_APPLICATION_SUBMIT"></app-task-return-link>
+</app-doal-task>

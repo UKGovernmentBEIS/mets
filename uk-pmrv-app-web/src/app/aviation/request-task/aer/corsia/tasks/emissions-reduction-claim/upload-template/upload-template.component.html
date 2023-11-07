@@ -1,0 +1,54 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Upload a template and supporting documents"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    You need to download the most up-to-date version of the CEF template from the ICAO website, complete it and upload
+    it here with all supporting documents:
+  </p>
+  <ul class="govuk-body govuk-!-width-two-thirds">
+    <li>
+      <a
+        govukLink
+        href="https://www.icao.int/environmental-protection/CORSIA/Pages/Templates.aspx"
+        rel="noreferrer noopener"
+        target="_blank"
+        >Template of CORSIA eligible fuels supplementary information to the Emissions Report</a
+      >
+    </li>
+  </ul>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Guidance about CEF claims is available on the ICAO website:
+    <a
+      govukLink
+      href="https://www.icao.int/environmental-protection/CORSIA/Pages/CORSIA-Eligible-Fuels.aspx"
+      rel="noreferrer noopener"
+      target="_blank"
+      >CORSIA eligible fuels</a
+    >
+  </p>
+  <h2 class="govuk-heading-m">Upload the CEF template</h2>
+  <div class="govuk-!-width-two-thirds">
+    <app-multiple-file-input
+      [baseDownloadUrl]="downloadUrl"
+      listTitle="Files added"
+      [label]="null"
+      formControlName="cefFiles"
+    ></app-multiple-file-input>
+  </div>
+
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">
+    Enter the total emissions reduction claimed, from the template
+  </h2>
+  <div
+    class="govuk-!-width-two-thirds"
+    formControlName="totalEmissions"
+    govuk-text-input
+    hint="You should take this from the ‘summary’ section."
+    suffix="tonnes CO2"
+  ></div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,53 @@
+<app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" heading="Provide conclusion of non-compliance">
+  <div formControlName="complianceRestored" govuk-radio legend="Has compliance been restored?" legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="complianceRestoredDate"
+          label="When did the operator become compliant?"
+          hint="This date cannot be in the future"
+          govuk-date-input
+          [max]="today"
+          [isRequired]="true"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+  </div>
+
+  <label for="comments" class="govuk-label govuk-label--m">Your comments on the status of compliance</label>
+  <div govuk-textarea formControlName="comments" hint="The operator cannot see this" [maxLength]="10000"></div>
+
+  <div
+    formControlName="reissuePenalty"
+    govuk-radio
+    legend="Withdraw and reissue penalty notice?"
+    legendSize="medium"
+    hint="This will start a new task to upload a replacement penalty notice"
+  >
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="operatorPaid"
+    govuk-radio
+    legend="Has the operator paid this penalty? (optional)"
+    legendSize="medium"
+  >
+    <govuk-radio-option [value]="true" label="Yes">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="operatorPaidDate"
+          label="When did the operator pay?"
+          hint="This date cannot be in the future"
+          govuk-date-input
+          [max]="today"
+          [isRequired]="true"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+  </div>
+</app-wizard-step>
+<a govukLink [routerLink]="isAviation + '/dashboard'"> Return to your tasks </a>

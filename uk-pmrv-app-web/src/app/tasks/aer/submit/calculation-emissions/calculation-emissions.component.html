@@ -1,0 +1,40 @@
+<app-aer-task [breadcrumb]="true">
+  <app-page-heading
+    >Calculation <span *ngIf="(sourceStreamEmissions$ | async)?.length > 0">of </span>emissions</app-page-heading
+  >
+  <div *ngIf="aer$ | async as aer">
+    <ng-container *ngIf="(sourceStreamEmissions$ | async)?.length > 0; else emptyCalculation">
+      <p class="govuk-body">
+        Complete each section of the table which summarises the emissions from fossil fuels or other materials for each
+        regulated activity.
+      </p>
+
+      <app-calculation-emissions-group
+        [data]="aer"
+        [statuses]="statuses$ | async"
+        [isReview]="false"
+      ></app-calculation-emissions-group>
+
+      <div *ngIf="isEditable$ | async" class="govuk-button-group" id="nonEmptyCalculation">
+        <a
+          [routerLink]="['./', (sourceStreamEmissions$ | async).length, 'emission-network']"
+          govukSecondaryButton
+          type="button"
+        >
+          Add another source stream
+        </a>
+      </div>
+    </ng-container>
+  </div>
+  <ng-template #emptyCalculation>
+    <p class="govuk-body">
+      Complete the table summarising the emissions from fossil fuels and/or materials for each regulated activity. The
+      table is pre-populated with the individual source streams and their related emissions sources currently in your
+      approved monitoring plan.
+    </p>
+    <div *ngIf="isEditable$ | async" class="govuk-button-group" id="emptyCalculation">
+      <a routerLink="./0/emission-network" govukButton type="button">Add a source stream</a>
+    </div>
+  </ng-template>
+  <app-return-link></app-return-link>
+</app-aer-task>

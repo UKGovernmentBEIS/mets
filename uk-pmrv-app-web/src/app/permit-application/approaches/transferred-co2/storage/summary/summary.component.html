@@ -1,0 +1,35 @@
+<app-permit-task
+  [notification]="notification"
+  [breadcrumb]="[{ text: 'TRANSFERRED_CO2_N2O' | monitoringApproachDescription, link: ['transferred-co2'] }]"
+>
+  <app-page-heading [caption]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription">{{
+    taskKey$ | async | i18nSelect: headingMap
+  }}</app-page-heading>
+
+  <h2
+    app-summary-header
+    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
+    class="govuk-heading-m"
+  >
+    <span class="govuk-visually-hidden">{{ taskKey$ | async | i18nSelect: headingMap }}</span>
+  </h2>
+
+  <dl *ngIf="(storage$ | async)?.exist === false; else procedureForm" govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Does your installation conduct any geological storage?</dt>
+      <dd govukSummaryListRowValue>No</dd>
+    </div>
+  </dl>
+
+  <ng-template #procedureForm>
+    <app-procedure-form-summary
+      [details]="(storage$ | async)?.procedureForm"
+      cssClass="summary-list--edge-border"
+    ></app-procedure-form-summary>
+  </ng-template>
+
+  <app-approach-return-link
+    [parentTitle]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+    reviewGroupUrl="transferred-co2"
+  ></app-approach-return-link>
+</app-permit-task>

@@ -1,0 +1,108 @@
+<ul app-task-item-list>
+  <li
+    app-task-item
+    link="permit-type"
+    [linkText]="'PERMIT_TYPE' | i18nSelect: linkText"
+    [status]="'PERMIT_TYPE' | reviewGroupStatusWrapper: statusResolverPipe | async"
+  ></li>
+  <li
+    app-task-item
+    link="details"
+    [linkText]="'INSTALLATION_DETAILS' | i18nSelect: linkText"
+    [status]="'INSTALLATION_DETAILS' | reviewGroupStatusWrapper: statusResolverPipe | async"
+  ></li>
+  <li
+    app-task-item
+    link="fuels"
+    [linkText]="'FUELS_AND_EQUIPMENT' | i18nSelect: linkText"
+    [status]="'FUELS_AND_EQUIPMENT' | reviewGroupStatusWrapper: statusResolverPipe | async"
+  ></li>
+  <li
+    app-task-item
+    link="monitoring-approaches"
+    [linkText]="'DEFINE_MONITORING_APPROACHES' | i18nSelect: linkText"
+    [status]="'DEFINE_MONITORING_APPROACHES' | reviewGroupStatusWrapper: statusResolverPipe | async"
+  ></li>
+
+  <ng-container *ngIf="'monitoringApproaches' | task | async as task">
+    <li
+      *ngIf="task.CALCULATION_CO2"
+      app-task-item
+      link="calculation"
+      [linkText]="'CALCULATION_CO2' | i18nSelect: linkText"
+      [status]="'CALCULATION_CO2' | reviewGroupStatusWrapper: statusResolverPipe | async"
+    ></li>
+    <li
+      *ngIf="task.MEASUREMENT_CO2"
+      app-task-item
+      link="measurement"
+      [linkText]="'MEASUREMENT_CO2' | i18nSelect: linkText"
+      [status]="'MEASUREMENT_CO2' | reviewGroupStatusWrapper: statusResolverPipe | async"
+    ></li>
+    <li
+      *ngIf="task.FALLBACK"
+      app-task-item
+      link="fall-back"
+      [linkText]="'FALLBACK' | i18nSelect: linkText"
+      [status]="'FALLBACK' | reviewGroupStatusWrapper: statusResolverPipe | async"
+    ></li>
+    <li
+      *ngIf="task.MEASUREMENT_N2O"
+      app-task-item
+      link="nitrous-oxide"
+      [linkText]="'MEASUREMENT_N2O' | i18nSelect: linkText"
+      [status]="'MEASUREMENT_N2O' | reviewGroupStatusWrapper: statusResolverPipe | async"
+    ></li>
+    <li
+      *ngIf="task.CALCULATION_PFC"
+      app-task-item
+      link="pfc"
+      [linkText]="'CALCULATION_PFC' | i18nSelect: linkText"
+      [status]="'CALCULATION_PFC' | reviewGroupStatusWrapper: statusResolverPipe | async"
+    ></li>
+    <li
+      *ngIf="task.INHERENT_CO2"
+      app-task-item
+      link="inherent-co2"
+      [linkText]="'INHERENT_CO2' | i18nSelect: linkText"
+      [status]="'INHERENT_CO2' | reviewGroupStatusWrapper: statusResolverPipe | async"
+    ></li>
+    <li
+      *ngIf="task.TRANSFERRED_CO2_N2O"
+      app-task-item
+      link="transferred-co2"
+      [linkText]="'TRANSFERRED_CO2_N2O' | i18nSelect: linkText"
+      [status]="'TRANSFERRED_CO2_N2O' | reviewGroupStatusWrapper: statusResolverPipe | async"
+    ></li>
+  </ng-container>
+  <li
+    app-task-item
+    link="uncertainty-analysis"
+    [linkText]="'UNCERTAINTY_ANALYSIS' | i18nSelect: linkText"
+    [status]="'UNCERTAINTY_ANALYSIS' | reviewGroupStatusWrapper: statusResolverPipe | async"
+  ></li>
+  <li
+    app-task-item
+    link="management-procedures"
+    [linkText]="'MANAGEMENT_PROCEDURES' | i18nSelect: linkText"
+    [status]="'MANAGEMENT_PROCEDURES' | reviewGroupStatusWrapper: statusResolverPipe | async"
+  ></li>
+  <li
+    app-task-item
+    link="monitoring-methodology-plan"
+    [linkText]="'MONITORING_METHODOLOGY_PLAN' | i18nSelect: linkText"
+    [status]="'MONITORING_METHODOLOGY_PLAN' | reviewGroupStatusWrapper: statusResolverPipe | async"
+  ></li>
+  <li
+    app-task-item
+    link="additional-info"
+    [linkText]="'ADDITIONAL_INFORMATION' | i18nSelect: linkText"
+    [status]="'ADDITIONAL_INFORMATION' | reviewGroupStatusWrapper: statusResolverPipe | async"
+  ></li>
+  <li
+    app-task-item
+    link="confidentiality"
+    [linkText]="'CONFIDENTIALITY_STATEMENT' | i18nSelect: linkText"
+    [status]="'CONFIDENTIALITY_STATEMENT' | reviewGroupStatusWrapper: statusResolverPipe | async"
+  ></li>
+</ul>

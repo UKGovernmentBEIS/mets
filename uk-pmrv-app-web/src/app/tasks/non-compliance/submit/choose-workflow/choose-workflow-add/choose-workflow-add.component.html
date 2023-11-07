@@ -1,0 +1,26 @@
+<app-non-compliance-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Choose task or workflow"
+    submitText="Save and Continue"
+    [showBackLink]="true"
+    [hideSubmit]="requests?.length === 0"
+  >
+    <div *ngIf="requests?.length > 0; else noRequests">
+      <h2 class="govuk-heading-s">Which task does this non-compliance refer to?</h2>
+      <div formControlName="selectedRequests" govuk-select widthClass="govuk-!-width-full">
+        <option *ngFor="let option of requests" [value]="option.id">
+          {{ option.id }}
+          {{ option.type | workflowType }}
+        </option>
+      </div>
+    </div>
+    <ng-template #noRequests>
+      <h2 class="govuk-heading-s">There are no tasks or workflows to select.</h2>
+      <button appPendingButton govukButton type="button" (click)="onContinue()">Continue</button>
+    </ng-template>
+  </app-wizard-step>
+
+  <a govukLink routerLink="..">Return to: non compliance task</a>
+</app-non-compliance-task>

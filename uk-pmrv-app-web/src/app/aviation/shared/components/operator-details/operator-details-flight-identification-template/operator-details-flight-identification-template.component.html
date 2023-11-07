@@ -1,0 +1,37 @@
+<app-wizard-step
+  (formSubmit)="submitForm.next(form)"
+  [formGroup]="form"
+  heading="Flight identification"
+  submitText="Continue"
+>
+  <h3 class="govuk-heading-s">{{ header }}</h3>
+  <div formControlName="flightIdentificationType" govuk-radio class="govuk-!-width-two-thirds">
+    <govuk-radio-option
+      value="INTERNATIONAL_CIVIL_AVIATION_ORGANISATION"
+      [label]="'INTERNATIONAL_CIVIL_AVIATION_ORGANISATION' | operatorDetailsFlightIdentificationType: isCorsia"
+    >
+      <div govukConditionalContent>
+        <h3 class="govuk-heading-s">List the ICAO designators used</h3>
+        <div
+          govuk-textarea
+          [maxLength]="100"
+          formControlName="icaoDesignators"
+          hint="Enter one code per line. You can copy and paste from a CSV file, but check there are no commas or empty lines."
+        ></div>
+      </div>
+    </govuk-radio-option>
+    <govuk-radio-option
+      value="AIRCRAFT_REGISTRATION_MARKINGS"
+      [label]="'AIRCRAFT_REGISTRATION_MARKINGS' | operatorDetailsFlightIdentificationType: isCorsia"
+    >
+      <div govukConditionalContent>
+        <h3 class="govuk-heading-s">{{ markingsHeader }}</h3>
+        <div
+          govuk-textarea
+          formControlName="aircraftRegistrationMarkings"
+          hint="Enter one code per line. You can copy and paste from a CSV file, but check there are no commas or empty lines."
+        ></div>
+      </div>
+    </govuk-radio-option>
+  </div>
+</app-wizard-step>

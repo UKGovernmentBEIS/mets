@@ -1,0 +1,57 @@
+<app-air-task heading="Review information about this improvement" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <app-air-improvement-item [airImprovement]="airImprovement" [reference]="reference"></app-air-improvement-item>
+    <app-air-operator-response-item
+      [reference]="reference"
+      [operatorAirImprovementResponse]="operatorAirImprovementResponse$ | async"
+      [attachedFiles]="documentFiles$ | async"
+      [resolvedChangeLink]="resolvedChangeLink$ | async"
+      [isEditable]="false"
+      [isReview]="true"
+    >
+    </app-air-operator-response-item>
+
+    <div formControlName="improvementRequired" govuk-radio legend="Is the improvement required?" legendSize="medium">
+      <govuk-radio-option [value]="true" label="Yes">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="improvementDeadline"
+            govuk-date-input
+            label="Completion date for improvement"
+            hint="This will create a task for the operator to respond by this date"
+            [isRequired]="true"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+    <div
+      formControlName="officialResponse"
+      govuk-textarea
+      label="Text for improvement response notice"
+      hint="This will be entered into the schedule of the official notice"
+      labelSize="medium"
+      [maxLength]="10000"
+    ></div>
+    <div
+      formControlName="comments"
+      govuk-textarea
+      label="Your comments"
+      hint="The operator cannot see this"
+      labelSize="medium"
+      [maxLength]="10000"
+    ></div>
+    <app-multiple-file-input
+      [baseDownloadUrl]="getDownloadUrl()"
+      label="Upload files (optional)"
+      headerSize="m"
+      listTitle="Uploaded attachments"
+      formControlName="files"
+    ></app-multiple-file-input>
+  </app-wizard-step>
+</app-air-task>

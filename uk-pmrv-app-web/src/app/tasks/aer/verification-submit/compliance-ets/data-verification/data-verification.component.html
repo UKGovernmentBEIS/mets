@@ -1,0 +1,46 @@
+<app-aer-task-review heading="Has data verification been completed as required?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <govuk-details summary="See guidance">
+      <article>
+        <p class="govuk-body">You must test the data in detail. This means you have to:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>trace all data back to its primary source</li>
+          <li>cross-check data with external sources</li>
+          <li>make reconciliations and recalculations</li>
+          <li>check thresholds for appropriate data</li>
+        </ul>
+        <p class="govuk-body">As part of this verification, for the monitoring plan or monitoring approach plan, you’ll
+          have to check:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>the boundaries of the installation (for the emissions report)</li>
+          <li>consistency of the aggregated reported data with primary source data</li>
+          <li>any measured values if the operator uses a <a
+            href="https://www.legislation.gov.uk/eur/2018/2066/article/46#" class="govuk-link" rel="noreferrer noopener"
+            target="_blank">measurement-based approach</a></li>
+          <li>reliability and accuracy of the data</li>
+        </ul>
+        <p class="govuk-body">If you’re verifying a <strong>baseline data</strong>, <strong>new entrant data</strong> or <strong>annual activity
+          level</strong> report,
+          you’ll also have to check:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>the boundaries of the installation and its sub-installations</li>
+          <li>completeness of source streams and emission sources</li>
+        </ul>
+      </article>
+    </govuk-details>
+    <div formControlName="dataVerificationCompleted" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="dataVerificationNotCompletedReason" govuk-textarea
+               label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

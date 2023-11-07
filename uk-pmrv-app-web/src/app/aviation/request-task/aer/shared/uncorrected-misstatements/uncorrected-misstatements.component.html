@@ -1,0 +1,15 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="!vm.isEditable"
+  [heading]="vm.pageHeader"
+  *ngIf="vm$ | async as vm"
+>
+  <p class="govuk-body">These could be things like data errors, omissions or misrepresentations.</p>
+  <div formControlName="exist" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

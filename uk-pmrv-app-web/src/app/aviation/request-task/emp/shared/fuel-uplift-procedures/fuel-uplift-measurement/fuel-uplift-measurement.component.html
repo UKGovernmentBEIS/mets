@@ -1,0 +1,42 @@
+<app-procedure-form-step [form]="form" (submitForm)="onSubmit()">
+  <div procedureFormPageHeader>
+    <div class="govuk-caption-l">Fuel uplift</div>
+
+    <app-page-heading>Measurement of the block hours per flight</app-page-heading>
+
+    <p class="govuk-body govuk-!-width-two-thirds">
+      Describe how you monitor fuel consumption per flight in owned and leased-in aircraft.
+    </p>
+
+    <p class="govuk-body govuk-!-width-two-thirds">You should include:</p>
+
+    <ul class="govuk-body">
+      <li>
+        the exact points in time for the measurement of block hours per flight necessary to calculate the fuel
+        consumption per flight for international flights with zero uplift, and for the following flights
+      </li>
+
+      <li>a description of the measurement equipment</li>
+      <li>the procedures for recording, retrieving, transmitting and storing information</li>
+      <li>reference to any corresponding documentation</li>
+    </ul>
+
+    <govuk-details summary="Fuel uplift formula: FN = UN">
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        FN = fuel consumed for the flight under consideration (flight = N) determined using fuel uplift (in tonnes) UN =
+        fuel uplift for the flight considered, measured in volume and multiplied with a density value (in tonnes)
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        For flights without a fuel uplift, you should use the following formula to allocate fuel use from the prior fuel
+        uplift proportionally to block-hour:
+      </p>
+
+      <div class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        <p>FN = UN * [BHN / ( BHN + BHN+1 + ...+ BHN+n)]</p>
+        <p>FN+1 = UN * [BHN+1 / (BHN + BHN+1 + ...+ BHN+n)]</p>
+        <p>FN+n = UN * [BHN+n / (BHN + BHN+1 + ...+ BHN+n)]</p>
+      </div>
+    </govuk-details>
+  </div>
+</app-procedure-form-step>

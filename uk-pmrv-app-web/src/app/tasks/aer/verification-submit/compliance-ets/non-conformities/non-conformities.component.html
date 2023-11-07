@@ -1,0 +1,21 @@
+<app-aer-task-review heading="Have any non-conformities from last year been corrected?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      You need to assess if the operator has corrected non-conformities from the verification report relating to the
+      previous monitoring period.
+    </p>
+    <p class="govuk-body">
+      If they have not, will this increase the risk of misstatements?
+    </p>
+    <div formControlName="nonConformities" govuk-radio>
+      <govuk-radio-option [value]="'YES'" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="'NO'" label="No"></govuk-radio-option>
+      <govuk-radio-option [value]="'NOT_APPLICABLE'" label="Not applicable" [divider]="true"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

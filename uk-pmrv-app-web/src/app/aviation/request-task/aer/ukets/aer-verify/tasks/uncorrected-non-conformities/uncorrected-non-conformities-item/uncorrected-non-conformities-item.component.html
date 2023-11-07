@@ -1,0 +1,31 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="false"
+  heading="Add a non-conformity with the approved emissions monitoring plan"
+>
+  <p class="govuk-body">You should include:</p>
+  <ul class="govuk-list govuk-list--bullet govuk-!-width-two-thirds">
+    <li>its nature and size</li>
+    <li>which part of the report it relates to</li>
+    <li>any discrepancies between the approved plan and source streams</li>
+  </ul>
+
+  <div
+    label="Description"
+    [maxLength]="10000"
+    formControlName="explanation"
+    govuk-textarea
+    class="govuk-!-width-two-thirds"
+  ></div>
+
+  <p class="govuk-body govuk-!-width-two-thirds">Does this have a material effect on the total emissions reported?</p>
+
+  <div formControlName="materialEffect" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

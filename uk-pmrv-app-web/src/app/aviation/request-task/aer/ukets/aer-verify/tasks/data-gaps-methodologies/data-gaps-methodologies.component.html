@@ -1,0 +1,23 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="!vm.isEditable"
+  [heading]="vm.pageHeader"
+  *ngIf="vm$ | async as vm"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    If the aircraft operator has missing data and cannot calculate their emissions, they must use an estimation method
+    that does not lead to an underestimation of emissions for the respective time period.
+  </p>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Where applicable, the regulator will have approved an estimation methodology in the emissions monitoring plan that
+    should have been applied.
+  </p>
+
+  <div formControlName="methodRequired" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

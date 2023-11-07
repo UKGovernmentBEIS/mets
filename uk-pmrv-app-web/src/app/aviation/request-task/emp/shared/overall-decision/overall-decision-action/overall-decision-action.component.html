@@ -1,0 +1,74 @@
+<app-wizard-step [formGroup]="form" heading="Overall decision" [hideSubmit]="true" [showBackLink]="true">
+  <h2 class="govuk-heading-m">Available actions</h2>
+  <div class="govuk-hint">These are based on the current status of the review.</div>
+
+  <ng-container *ngIf="(isEditable$ | async) === true; else nonEditable">
+    <div class="govuk-button-group">
+      <button
+        *ngIf="(isApprovedDisplayed$ | async) === true"
+        appPendingButton
+        govukButton
+        type="button"
+        (click)="onContinue('APPROVED')"
+      >
+        {{ 'APPROVED' | empReviewDeterminationType }}
+      </button>
+
+      <button
+        *ngIf="(isRejectDisplayed$ | async) === true"
+        appPendingButton
+        govukButton
+        type="button"
+        (click)="onContinue('REJECTED')"
+      >
+        {{ 'REJECTED' | empReviewDeterminationType }}
+      </button>
+
+      <button govukSecondaryButton appPendingButton type="button" (click)="onContinue('DEEMED_WITHDRAWN')">
+        {{ 'DEEMED_WITHDRAWN' | empReviewDeterminationType }}
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #nonEditable>
+    <ng-container *ngIf="(isApprovedDisplayed$ | async) === true">
+      <p class="govuk-body"><strong>Approve</strong></p>
+    </ng-container>
+
+    <ng-container *ngIf="(isRejectDisplayed$ | async) === true">
+      <p class="govuk-body"><strong>Reject</strong></p>
+    </ng-container>
+
+    <p class="govuk-body"><strong>Withdraw</strong></p>
+  </ng-template>
+
+  <ng-container
+    *ngIf="
+      (isApprovedDisplayed$ | async) === false ||
+      (requestType === 'EMP_VARIATION_UKETS_APPLICATION_REVIEW' && (isRejectDisplayed$ | async) === false) ||
+      (isEditable$ | async) === false
+    "
+  >
+    <h2 class="govuk-heading-m">Unavailable actions</h2>
+
+    <ng-container *ngIf="(isApprovedDisplayed$ | async) === false">
+      <p class="govuk-body">
+        <strong>Approve</strong>
+      </p>
+
+      <div class="govuk-hint">All sections must have a decision of ‘accepted’.</div>
+    </ng-container>
+
+    <ng-container
+      *ngIf="requestType === 'EMP_VARIATION_UKETS_APPLICATION_REVIEW' && (isRejectDisplayed$ | async) === false"
+    >
+      <p class="govuk-body">
+        <strong>Reject</strong>
+      </p>
+
+      <div class="govuk-hint">All sections must have a decision with one or more marked as ‘rejected’.</div>
+    </ng-container>
+  </ng-container>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

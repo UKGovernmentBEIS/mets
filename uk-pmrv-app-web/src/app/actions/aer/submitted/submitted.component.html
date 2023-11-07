@@ -1,0 +1,164 @@
+<app-base-action-container-component
+  [header]="aerTitle$ | async"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="[
+    'AER_APPLICATION_VERIFICATION_SUBMITTED',
+    'AER_APPLICATION_SUBMITTED',
+    'AER_APPLICATION_SENT_TO_VERIFIER',
+    'AER_APPLICATION_AMENDS_SUBMITTED',
+    'AER_APPLICATION_AMENDS_SENT_TO_VERIFIER',
+    'AER_APPLICATION_COMPLETED'
+  ]"
+>
+</app-base-action-container-component>
+<ng-template #customContentTemplate>
+  <ng-container *ngIf="(isVerificationSubmitted$ | async) === false; else verificationSubmitted">
+    <ol class="app-task-list">
+      <li app-task-section title="Installation details">
+        <ul app-task-item-list>
+          <li app-task-item link="./installation-details" linkText="Installation and operator details"></li>
+          <li app-task-item link="./prtr" linkText="Pollutant Release and Transfer Register codes (PRTR)"></li>
+          <li app-task-item link="./nace-codes" linkText="NACE codes"></li>
+          <li
+            app-task-item
+            link="./regulated-activities"
+            linkText="Regulated activities carried out at the installation"
+          ></li>
+          <li app-task-item link="./monitoring-plan" linkText="Monitoring plan versions during the reporting year"></li>
+          <li
+            app-task-item
+            link="./monitoring-approaches"
+            linkText="Monitoring approaches used during the reporting year"
+          ></li>
+        </ul>
+      </li>
+
+      <li app-task-section title="Fuels and equipment inventory">
+        <ul app-task-item-list>
+          <li app-task-item link="./source-streams" linkText="Source streams (fuels and materials)"></li>
+          <li app-task-item link="./emission-sources" linkText="Emission sources"></li>
+          <li
+            *ngIf="isMeasurementOrN2OApproachesSelected$ | async"
+            app-task-item
+            link="./emission-points"
+            linkText="Emission points"
+          ></li>
+        </ul>
+      </li>
+
+      <li app-task-section title="Total emissions for the year">
+        <ul app-task-item-list>
+          <li
+            *ngFor="let approach of monitoringApproaches$ | async"
+            app-task-item
+            [link]="approach.link"
+            [linkText]="approach.linkText"
+          ></li>
+          <li app-task-item link="./emissions-summary" linkText="Emissions summary"></li>
+        </ul>
+      </li>
+
+      <li app-task-section title="Additional information">
+        <ul app-task-item-list>
+          <li app-task-item link="./abbreviations" linkText="Abbreviations and definitions"></li>
+          <li app-task-item link="./additional-documents" linkText="Additional documents and information"></li>
+          <li app-task-item link="./confidentiality-statement" linkText="Confidentiality statement"></li>
+        </ul>
+      </li>
+
+      <li app-task-section title="Activity level report" *ngIf="isGHGE$ | async">
+        <ul app-task-item-list>
+          <li app-task-item link="./activity-level-report" linkText="Activity level report"></li>
+        </ul>
+      </li>
+
+      <ng-container *ngIf="hasVerificationReport$ | async">
+        <li app-task-section title="Verifier assessment">
+          <ul app-task-item-list>
+            <li app-task-item link="./verifier-details" linkText="Verifier details"></li>
+            <li app-task-item link="./opinion-statement" linkText="Opinion statement"></li>
+            <li app-task-item link="./compliance-ets" linkText="Compliance with ETS rules"></li>
+            <li
+              app-task-item
+              link="./compliance-monitoring"
+              linkText="Compliance with monitoring and reporting principles"
+            ></li>
+            <li app-task-item link="./overall-decision" linkText="Overall decision"></li>
+          </ul>
+        </li>
+
+        <li app-task-section title="Verifier findings">
+          <ul app-task-item-list>
+            <li app-task-item link="./misstatements" linkText="Uncorrected misstatements"></li>
+            <li app-task-item link="./non-conformities" linkText="Uncorrected non-conformities"></li>
+            <li app-task-item link="./non-compliances" linkText="Uncorrected non-compliances"></li>
+            <li app-task-item link="./recommended-improvements" linkText="Recommended improvements"></li>
+            <li app-task-item link="./data-gaps" linkText="Methodologies to close data gaps"></li>
+            <li app-task-item link="./materiality-level" linkText="Materiality level and reference documents"></li>
+            <li
+              app-task-item
+              link="./summary-of-conditions"
+              linkText="Summary of conditions, changes, clarifications and variations"
+            ></li>
+          </ul>
+        </li>
+      </ng-container>
+    </ol>
+  </ng-container>
+</ng-template>
+
+<ng-template #verificationSubmitted>
+  <ol class="app-task-list">
+    <li app-task-section title="Operator information">
+      <ul app-task-item-list>
+        <li app-task-item link="./details" linkText="Installation details"></li>
+        <li app-task-item link="./fuels" linkText="Fuels and equipment inventory"></li>
+        <li
+          *ngFor="let approach of monitoringApproaches$ | async"
+          app-task-item
+          [link]="approach.link"
+          [linkText]="approach.linkText"
+        ></li>
+        <li app-task-item link="./emissions-summary" linkText="Emissions summary"></li>
+        <li *ngIf="isGHGE$ | async" app-task-item link="./activity-level-report" linkText="Activity level report"></li>
+        <li app-task-item link="./additional-info" linkText="Additional information"></li>
+      </ul>
+    </li>
+
+    <li app-task-section title="Verifier assessment">
+      <ul app-task-item-list>
+        <li app-task-item link="./verifier-details" linkText="Verifier details"></li>
+        <li app-task-item link="./opinion-statement" linkText="Opinion statement"></li>
+        <li app-task-item link="./compliance-ets" linkText="Compliance with ETS rules"></li>
+        <li
+          app-task-item
+          link="./compliance-monitoring"
+          linkText="Compliance with monitoring and reporting principles"
+        ></li>
+        <li
+          *ngIf="isGHGE$ | async"
+          app-task-item
+          link="./verified-activity-level-report"
+          linkText="Verification report of the activity level report"
+        ></li>
+        <li app-task-item link="./overall-decision" linkText="Overall decision"></li>
+      </ul>
+    </li>
+
+    <li app-task-section title="Verifier findings">
+      <ul app-task-item-list>
+        <li app-task-item link="./misstatements" linkText="Uncorrected misstatements"></li>
+        <li app-task-item link="./non-conformities" linkText="Uncorrected non-conformities"></li>
+        <li app-task-item link="./non-compliances" linkText="Uncorrected non-compliances"></li>
+        <li app-task-item link="./recommended-improvements" linkText="Recommended improvements"></li>
+        <li app-task-item link="./data-gaps" linkText="Methodologies to close data gaps"></li>
+        <li app-task-item link="./materiality-level" linkText="Materiality level and reference documents"></li>
+        <li
+          app-task-item
+          link="./summary-of-conditions"
+          linkText="Summary of conditions, changes, clarifications and variations"
+        ></li>
+      </ul>
+    </li>
+  </ol>
+</ng-template>

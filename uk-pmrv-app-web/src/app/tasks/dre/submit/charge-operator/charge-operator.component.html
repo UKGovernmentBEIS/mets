@@ -1,0 +1,16 @@
+<app-dre-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Do you need to charge the operator a fee?"
+    submitText="Continue"
+    [showBackLink]="true"
+  >
+    <div formControlName="chargeOperator" govuk-radio legendSize="medium">
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="..">Return to: reportable emissions task</a>
+</app-dre-task>

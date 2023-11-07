@@ -1,0 +1,8 @@
+<app-operator-details-air-operating-certificate-template
+  [form]="form"
+  [downloadUrl]="downloadUrl"
+  (submitForm)="onSubmit()"
+  [issuingAuthorityOptions]="issuingAuthorityOptions$ | async"
+  [isCorsia]="true"
+></app-operator-details-air-operating-certificate-template>
+<app-return-to-link></app-return-to-link>

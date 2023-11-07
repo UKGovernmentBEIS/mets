@@ -1,0 +1,22 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Transfer details"
+  [hideSubmit]="hideSubmit$ | async"
+>
+  <h2 class="govuk-heading-m">Provide a reason for the transfer</h2>
+  <div
+    govuk-textarea
+    [maxLength]="10000"
+    formControlName="reason"
+    hint="For example, a new legal entity is taking over the installation"
+  ></div>
+  <h2 class="govuk-heading-m">Upload any supporting documents (optional)</h2>
+  <app-multiple-file-input
+    [baseDownloadUrl]="getDownloadUrl()"
+    label="Upload a file"
+    listTitle="Files added"
+    formControlName="reasonAttachments"
+  ></app-multiple-file-input>
+</app-wizard-step>
+<a govukLink routerLink="..">Return to: Permit transfer application</a>

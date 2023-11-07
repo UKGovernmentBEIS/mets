@@ -1,0 +1,44 @@
+<app-base-action-container-component
+  [header]="(route.data | async)?.pageTitle"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="['PERMIT_NOTIFICATION_FOLLOW_UP_RETURNED_FOR_AMENDS']"
+>
+</app-base-action-container-component>
+<ng-template #customContentTemplate>
+  <h2 class="govuk-heading-m">Details of the amends needed</h2>
+  <p class="govuk-body">The following notes are from the regulator explaining the things you need to change.</p>
+
+  <ng-container *ngIf="data$ | async as reviewDecision">
+    <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+      <ng-container *ngIf="$any(reviewDecision).requiredChanges?.length > 0">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Regulators Comments</dt>
+
+          <dd govukSummaryListRowValue>
+            <ng-container
+              *ngFor="let requiredChange of $any(reviewDecision).requiredChanges; let i = index; let isLast = last"
+            >
+              <div class="pre-wrap">
+                {{ i + 1 }}. {{ requiredChange.reason }} <br />
+                <ng-container *ngIf="requiredChange?.files?.length > 0">
+                  <app-summary-download-files
+                    [files]="permitNotificationService.getDownloadUrlFiles(requiredChange?.files)"
+                  >
+                  </app-summary-download-files>
+                </ng-container>
+              </div>
+              <br *ngIf="!isLast" />
+            </ng-container>
+          </dd>
+        </div>
+      </ng-container>
+
+      <div govukSummaryListRow *ngIf="reviewDecision?.dueDate">
+        <dt govukSummaryListRowKey>Changes due by</dt>
+        <dd govukSummaryListRowValue>
+          {{ reviewDecision.dueDate | govukDate }}
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+</ng-template>

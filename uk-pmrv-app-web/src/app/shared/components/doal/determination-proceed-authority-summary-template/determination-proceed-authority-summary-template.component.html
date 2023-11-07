@@ -1,0 +1,19 @@
+<app-determination-proceed-authority-reason-template
+  [determination]="determination"
+  [editable]="editable"
+></app-determination-proceed-authority-reason-template>
+
+<app-determination-proceed-authority-withholding-template
+  [determination]="determination"
+  [editable]="editable"
+></app-determination-proceed-authority-withholding-template>
+
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Send official notice?</dt>
+    <dd govukSummaryListRowValue>{{ determination.needsOfficialNotice ? 'Yes' : 'No' }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'official-notice']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>

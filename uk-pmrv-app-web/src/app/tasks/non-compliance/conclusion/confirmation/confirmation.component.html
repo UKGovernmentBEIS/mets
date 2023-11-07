@@ -1,0 +1,14 @@
+<ng-container *ngIf="requestInfoId$ | async as requestInfoId">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="Conclusion of non-compliance complete"
+        >Your reference code is: {{ requestInfoId }}
+      </govuk-panel>
+    </div>
+  </div>
+  <h3 class="govuk-heading-m">What happens next</h3>
+  <p *ngIf="reissuePenalty$ | async" class="govuk-body">
+    You can now send a re-issued notice to the operator from your task dashboard.
+  </p>
+</ng-container>
+<a govukLink [routerLink]="isAviation + '/dashboard'">Return to: Dashboard</a>

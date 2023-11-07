@@ -1,0 +1,35 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ 'serviceContactDetails' | i18nSelect: empHeaderTaskMap }}</app-page-heading>
+
+  <p *ngIf="!vm.showDecision" class="govuk-body">
+    <span>
+      You can change this information in the
+      <a govukLink [routerLink]="['/aviation/accounts', vm.accountId]"> account section </a>
+    </span>
+  </p>
+
+  <app-service-contact-details-summary-template
+    [data]="vm.contactDetails"
+  ></app-service-contact-details-summary-template>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" govukButton *ngIf="!vm.hideSubmit" type="submit">Confirm and complete</button>
+  </div>
+
+  <app-emp-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="serviceContactDetails"
+  ></app-emp-review-decision-group>
+
+  <app-emp-variation-review-decision-group
+    *ngIf="vm.showVariationDecision"
+    taskKey="serviceContactDetails"
+  ></app-emp-variation-review-decision-group>
+
+  <app-emp-variation-regulator-led-decision-group
+    *ngIf="vm.showVariationRegLedDecision"
+    taskKey="serviceContactDetails"
+  ></app-emp-variation-regulator-led-decision-group>
+</ng-container>
+
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,40 @@
+<app-base-action-container-component
+  [header]="(route.data | async)?.pageTitle"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="[actionType]"
+>
+</app-base-action-container-component>
+
+<ng-template #customContentTemplate>
+  <ng-container *ngIf="actionType === 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMITTED'">
+    <app-wa-summary-template [payload]="payload$ | async" [isEditable]="false"> </app-wa-summary-template>
+  </ng-container>
+  <ng-container *ngIf="actionType === 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN'">
+    <app-wa-withdraw-summary-template [payload]="payload$ | async" [isEditable]="false">
+    </app-wa-withdraw-summary-template>
+  </ng-container>
+</ng-template>
+
+<h2 app-summary-header class="govuk-heading-m">Official notice recipients</h2>
+<dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+  <div govukSummaryListRow *ngIf="notificationUsers$ | async as notificationUsers">
+    <dt govukSummaryListRowKey>Users</dt>
+    <dd govukSummaryListRowValue>
+      <div *ngFor="let user of notificationUsers">
+        {{ user }}
+      </div>
+    </dd>
+  </div>
+  <div govukSummaryListRow *ngIf="signatoryName$ | async as signatoryName">
+    <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+    <dd govukSummaryListRowValue>
+      {{ signatoryName }}
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Official notice</dt>
+    <dd govukSummaryListRowValue>
+      <app-summary-download-files [files]="officialNoticeFiles$ | async"></app-summary-download-files>
+    </dd>
+  </div>
+</dl>

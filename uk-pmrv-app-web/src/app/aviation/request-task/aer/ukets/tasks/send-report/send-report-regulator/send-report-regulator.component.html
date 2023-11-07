@@ -1,0 +1,18 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.header }}</app-page-heading>
+
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Your report will be sent directly to the {{ vm.competentAuthority | competentAuthority }}.
+  </p>
+  <p class="govuk-body">By selecting ‘Confirm and send’ you confirm that:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>you have followed the Monitoring and Reporting Regulations 2018</li>
+    <li>you have followed the emissions monitoring plan</li>
+    <li>the information in your report is correct to the best of your knowledge</li>
+  </ul>
+
+  <div class="govuk-button-group" *ngIf="!vm.submitHidden">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and send</button>
+  </div>
+  <app-return-to-link></app-return-to-link>
+</ng-container>

@@ -1,0 +1,34 @@
+<app-request-action-heading
+  *ngIf="vm$ | async as vm"
+  [headerText]="vm.pageHeader"
+  [timelineCreationDate]="vm.creationDate"
+>
+  <app-verification-recommendation-item
+    [verificationDataItem]="vm.verificationDataItem"
+  ></app-verification-recommendation-item>
+
+  <app-operator-response-item
+    [reference]="vm.verificationDataItem.reference"
+    [operatorImprovementResponse]="vm.operatorImprovementResponse"
+    [attachedFiles]="vm.documentFiles"
+    [isEditable]="false"
+    [isAviation]="true"
+    [isReview]="true"
+  ></app-operator-response-item>
+
+  <app-regulator-response-item
+    [reference]="vm.verificationDataItem.reference"
+    [regulatorImprovementResponse]="vm.regulatorImprovementResponse"
+    [isEditable]="false"
+    [isAviation]="true"
+    [isReview]="true"
+  ></app-regulator-response-item>
+
+  <app-operator-followup-item
+    [reference]="vm.verificationDataItem.reference"
+    [operatorImprovementFollowUpResponse]="vm.operatorImprovementFollowUpResponse"
+    [isEditable]="false"
+    [isAviation]="true"
+    [isReview]="true"
+  ></app-operator-followup-item>
+</app-request-action-heading>

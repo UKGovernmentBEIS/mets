@@ -1,0 +1,36 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <ng-container *ngIf="(isSubmitted$ | async) !== true; else submitted">
+    <app-page-heading>{{ vm.header }}</app-page-heading>
+
+    <div class="govuk-!-width-two-thirds">
+      <p class="govuk-body">
+        Your report will be sent directly to the {{ vm.competentAuthority | competentAuthority }}
+      </p>
+      <p class="govuk-body">By selecting ‘Confirm and send’ you confirm that:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>you have followed the Air Navigation Order 2021</li>
+        <li>you have followed the emissions monitoring plan</li>
+        <li>the information in your report is correct to the best of your knowledge</li>
+      </ul>
+    </div>
+
+    <div class="govuk-button-group" *ngIf="vm.isEditable">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and send</button>
+    </div>
+    <app-return-to-link></app-return-to-link>
+  </ng-container>
+
+  <ng-template #submitted>
+    <div class="govuk-!-width-two-thirds">
+      <govuk-panel [title]="vm.submittedHeader">
+        <p>
+          <strong>Your reference code is:</strong><br />
+          {{ vm.requestId }}
+        </p>
+      </govuk-panel>
+      <h3 class="govuk-heading-m">What happens next</h3>
+      <p class="govuk-body">Your report has been sent to the {{ vm.competentAuthority | competentAuthority }}.</p>
+    </div>
+    <a govukLink [routerLink]="'/aviation/dashboard'">Return to: Dashboard</a>
+  </ng-template>
+</ng-container>

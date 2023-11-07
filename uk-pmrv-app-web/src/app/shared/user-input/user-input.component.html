@@ -1,0 +1,48 @@
+<div
+  autoComplete="given-name"
+  formControlName="firstName"
+  govuk-text-input
+  label="First name"
+  widthClass="govuk-!-width-one-third"
+></div>
+<div
+  autoComplete="family-name"
+  formControlName="lastName"
+  govuk-text-input
+  label="Last name"
+  widthClass="govuk-!-width-one-third"
+></div>
+<ng-container [ngSwitch]="phoneType">
+  <ng-container *ngSwitchCase="'full'">
+    <div app-phone-input formControlName="phoneNumber" label="Telephone number"></div>
+    <div app-phone-input formControlName="mobileNumber" label="Mobile number (optional)"></div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'national'">
+    <div
+      autoComplete="tel-national"
+      formControlName="phoneNumber"
+      govuk-text-input
+      inputType="tel"
+      label="Telephone number"
+      widthClass="govuk-!-width-one-third"
+    ></div>
+    <div
+      autoComplete="mobile tel-national"
+      formControlName="mobileNumber"
+      govuk-text-input
+      inputType="tel"
+      label="Mobile number (optional)"
+      widthClass="govuk-!-width-one-third"
+    ></div>
+  </ng-container>
+</ng-container>
+
+<label for="email" id="l.email" class="govuk-label">Email address</label>
+
+<span class="govuk-hint" id="email-hint">
+  All system alerts, notices, and official communications will be sent by email. <br />
+  <a class="govuk-link" href="/contact-us" target="_blank" rel="noreferrer noopener"> Contact your regulator </a>
+  if you require a specific notice to be sent by post.
+</span>
+
+<div autoComplete="email" formControlName="email" govuk-text-input widthClass="govuk-!-width-two-thirds"></div>

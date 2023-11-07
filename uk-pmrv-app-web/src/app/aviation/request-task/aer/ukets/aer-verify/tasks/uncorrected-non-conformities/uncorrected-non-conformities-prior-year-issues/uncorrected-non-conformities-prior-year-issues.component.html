@@ -1,0 +1,19 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="false"
+  [heading]="'Are there any non-conformities from the previous year that have not been resolved?'"
+  class="govuk-!-width-two-thirds"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    You must report any issues which the aircraft operator cannot correct before the verification report is issued.
+  </p>
+
+  <div formControlName="existPriorYearIssues" govuk-radio class="govuk-!-width-two-thirds">
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

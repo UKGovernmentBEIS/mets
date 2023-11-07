@@ -1,0 +1,18 @@
+<app-page-heading>List the data gaps</app-page-heading>
+
+<p class="govuk-body govuk-!-width-two-thirds">
+  Each data gap must be accounted for by using the approved data gap method defined in your emissions monitoring plan.
+</p>
+
+<app-data-gaps-list-template
+  [dataGaps]="dataGaps"
+  [isEditable]="true"
+  [queryParams]="{ change: true }"
+  (removeDataGapEvent)="onRemoveDataGap($event)"
+></app-data-gaps-list-template>
+
+<div class="govuk-body govuk-!-margin-bottom-0">
+  <button appPendingButton govukButton type="button" (click)="onSubmit()">Continue</button>
+</div>
+
+<app-return-to-link></app-return-to-link>

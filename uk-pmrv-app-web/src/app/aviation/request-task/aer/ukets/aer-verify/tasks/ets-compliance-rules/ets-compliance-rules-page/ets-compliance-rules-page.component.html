@@ -1,0 +1,12 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="false"
+  [heading]="'etsComplianceRules' | i18nSelect: aerVerifyHeaderTaskMap"
+  class="govuk-!-width-two-thirds"
+>
+  <app-ets-compliance-rules-form></app-ets-compliance-rules-form>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

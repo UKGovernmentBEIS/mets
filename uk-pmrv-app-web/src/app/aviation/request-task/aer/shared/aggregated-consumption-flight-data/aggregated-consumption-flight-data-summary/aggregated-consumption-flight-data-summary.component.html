@@ -1,0 +1,29 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <ng-container *ngIf="vm.data">
+    <h2
+      app-summary-header
+      class="govuk-heading-m"
+      [changeRoute]="vm.isEditable ? '../' : null"
+      [queryParams]="{ change: true }"
+    >
+      Aggregated Emissions Data uploaded data
+    </h2>
+    <app-flight-data-table
+      [headingText]="'File uploaded'"
+      [emissionDataDetails]="vm.data.aggregatedEmissionDataDetails"
+    ></app-flight-data-table>
+    <div class="govuk-button-group">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+        Confirm and complete
+      </button>
+    </div>
+
+    <app-aviation-aer-review-decision-group
+      *ngIf="vm.showDecision"
+      taskKey="aggregatedEmissionsData"
+    ></app-aviation-aer-review-decision-group>
+  </ng-container>
+</ng-container>
+<app-return-to-link></app-return-to-link>

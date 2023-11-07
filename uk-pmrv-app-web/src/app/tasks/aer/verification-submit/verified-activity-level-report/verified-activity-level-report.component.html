@@ -1,0 +1,17 @@
+<app-aer-task-review [breadcrumb]="true" heading="Verification report of the activity level report">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="(isEditable$ | async) === false">
+    <app-boolean-radio-group
+      controlName="freeAllocationOfAllowances"
+      legend="Do you need to upload a verification report?"
+    >
+      <div govukConditionalContent>
+        <app-file-input
+          [downloadUrl]="getDownloadUrl"
+          formControlName="file"
+          label="Upload a file"
+          listTitle="File added"
+        ></app-file-input>
+      </div>
+    </app-boolean-radio-group>
+  </app-wizard-step>
+</app-aer-task-review>

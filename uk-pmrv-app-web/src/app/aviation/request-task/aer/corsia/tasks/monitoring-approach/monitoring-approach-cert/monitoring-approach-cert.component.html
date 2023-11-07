@@ -1,0 +1,16 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Other than for data gaps, did you use the CORSIA CO2 estimation and reporting tool (CERT) for your monitoring approach?"
+  submitText="Continue"
+  [hideSubmit]="false">
+  <div
+    class="govuk-!-width-two-thirds"
+    formControlName="certUsed"
+    govuk-radio
+    legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

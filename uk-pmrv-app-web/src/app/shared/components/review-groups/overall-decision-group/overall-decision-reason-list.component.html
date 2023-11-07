@@ -1,0 +1,37 @@
+<ng-container *ngIf="data.length > 0; else startAdding">
+  <govuk-table [columns]="columns" [data]="data" [class.no-bottom-border]="false">
+    <ng-template let-column="column" let-index="index" let-row="row">
+      <ng-container [ngSwitch]="column.field">
+        <ng-container *ngSwitchCase="'reason'">
+          <div class="pre-wrap">
+            {{ row.reason }}
+          </div>
+        </ng-container>
+        <ng-container *ngIf="isEditable">
+          <ng-container *ngSwitchCase="'change'">
+            <a [routerLink]="['../reason-list', index]" [queryParams]="queryParams" govukLink>Change</a>
+          </ng-container>
+          <ng-container *ngSwitchCase="'delete'">
+            <a [routerLink]="['../reason-list', index, 'delete']" [queryParams]="queryParams" govukLink>Remove</a>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ng-template>
+  </govuk-table>
+  <button
+    *ngIf="isEditable"
+    govukSecondaryButton
+    [queryParams]="queryParams"
+    [routerLink]="['../reason-list', data.length]"
+    type="button"
+  >
+    Add a reason
+  </button>
+</ng-container>
+<ng-template #startAdding>
+  <div class="govuk-button-group" *ngIf="isEditable">
+    <button govukButton [routerLink]="['../reason-list', data.length]" [queryParams]="queryParams" type="button">
+      Add a reason
+    </button>
+  </div>
+</ng-template>

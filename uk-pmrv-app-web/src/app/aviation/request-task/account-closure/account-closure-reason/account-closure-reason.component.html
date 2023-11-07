@@ -1,0 +1,36 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="govuk-grid-row">
+    <div [class]="(vm.hasRelatedActions$ | async) === true ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
+      <app-wizard-step
+        (formSubmit)="onContinue()"
+        [formGroup]="(vm$ | async).form"
+        heading="Close Account"
+        submitText="Continue"
+        [hideSubmit]="false"
+      >
+        <app-task-header-info [assignee]="vm.requestTask.assigneeFullName"></app-task-header-info>
+
+        <p class="govuk-body">
+          The account will be permanently closed down. You will not be able to reverse this action.
+        </p>
+        <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Reason for closing this account</h2>
+        <div
+          formControlName="reason"
+          [maxLength]="10000"
+          govuk-textarea
+          hint="The operator will be able to view this"
+        ></div>
+      </app-wizard-step>
+
+      <a govukLink [routerLink]="['/aviation/dashboard']">Return to your tasks</a>
+    </div>
+    <div *ngIf="vm.hasRelatedActions$ | async" class="govuk-grid-column-one-third">
+      <app-related-actions
+        [isAssignable$]="vm.isAssignable$"
+        [taskId$]="vm.taskId$"
+        [allowedActions$]="vm.relatedActions$"
+        baseUrl="/aviation"
+      ></app-related-actions>
+    </div>
+  </div>
+</ng-container>

@@ -1,0 +1,128 @@
+<app-aer-task-review heading="Compliance with the Monitoring and Reporting Principles">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      Some principles are aspirational and you may not be able to confirm absolute compliance. Some are reliant on
+      others being met before compliance can be confirmed.
+    </p>
+
+    <h2 class="govuk-heading-m">Accuracy</h2>
+    <p class="govuk-body">Operators shall:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>ensure that emission determination is neither systematically nor knowingly inaccurate</li>
+      <li>identify and reduce any source of inaccuracies as far as possible</li>
+      <li>
+        exercise due diligence to ensure that the calculation and measurement of emissions exhibit the highest
+        achievable accuracy
+      </li>
+    </ul>
+    <div formControlName="accuracy" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="accuracyReason" govuk-textarea label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-m">Completeness</h2>
+    <p class="govuk-body">
+      Monitoring and reporting shall be complete and cover all process and combustion emissions from all emission
+      sources and source streams from regulated activities, and of all greenhouse gases specified in relation to those
+      activities, while avoiding double-counting.
+    </p>
+    <p class="govuk-body">
+      Operators need to take appropriate measures to prevent any data gaps in the reporting period.
+    </p>
+    <div formControlName="completeness" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="completenessReason" govuk-textarea label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-m">Consistency, comparability and transparency</h2>
+    <p class="govuk-body">
+      Monitoring and reporting need to be consistent and comparable over time. For that reason, operators shall use the
+      same monitoring methodologies and data sets, subject to changes and exemptions approved by the competent
+      authority.
+    </p>
+    <p class="govuk-body">
+      Operators need to obtain, record, compile, analyse and document monitoring data, including assumptions,
+      references, activity data and calculation factors, in a transparent manner that enables the reproduction of the
+      determination of emissions by the verifier and the competent authority.
+    </p>
+
+    <h2 class="govuk-heading-m">Consistency</h2>
+    <div formControlName="consistency" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="consistencyReason" govuk-textarea label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-m">Comparability over time</h2>
+    <div formControlName="comparability" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="comparabilityReason" govuk-textarea label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-m">Transparency</h2>
+    <div formControlName="transparency" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="transparencyReason" govuk-textarea label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-m">Integrity of methodology</h2>
+    <p class="govuk-body">
+      Operators shall enable reasonable assurance of the integrity of emission data to be reported. They shall determine
+      emissions using the appropriate monitoring methodologies set out in
+      <a href="https://www.legislation.gov.uk/eur/2018/2066/contents#" rel="noreferrer noopener" target="_blank"
+        >the Regulations</a
+      >.
+    </p>
+    <p class="govuk-body">Reported emission data and related disclosures shall:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>
+        be free from
+        <a
+          href="https://eur-lex.europa.eu/legal-content/en/ALL/?uri=CELEX%3A32018R2067#d1e384-94-1"
+          rel="noreferrer noopener"
+          target="_blank"
+          >material misstatement</a
+        >
+      </li>
+      <li>avoid bias in the selection and presentation of information</li>
+      <li>provide a credible and balanced account of an installation's emissions</li>
+    </ul>
+    <p class="govuk-body">
+      In selecting a monitoring methodology, the improvements from greater accuracy must be balanced against additional
+      costs. Monitoring and reporting of emissions must aim for the highest achievable accuracy, unless this is
+      technically not feasible or incurs unreasonable costs.
+    </p>
+    <div formControlName="integrity" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="integrityReason" govuk-textarea label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

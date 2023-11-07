@@ -1,0 +1,16 @@
+<app-aer-task-review heading="Reasons for not conducting a site visit" returnToLink="../../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">If the site visit was waived under Article 31 and 32, please say why and specify which
+      criteria in Article 32 were used.</p>
+    <div
+      formControlName="reason"
+      govuk-textarea
+      [maxLength]="10000"
+    ></div>
+  </app-wizard-step>
+</app-aer-task-review>

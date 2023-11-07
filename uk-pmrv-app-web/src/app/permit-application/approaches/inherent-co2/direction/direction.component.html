@@ -1,0 +1,29 @@
+<app-permit-task [breadcrumb]="[{ text: 'INHERENT_CO2' | monitoringApproachDescription, link: ['inherent-co2'] }]">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    submitText="Save and continue"
+    heading="What direction is the inherent CO2 travelling in?"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <div formControlName="inherentCO2Direction" govuk-radio>
+      <govuk-radio-option
+        value="EXPORTED_TO_ETS_INSTALLATION"
+        [label]="'EXPORTED_TO_ETS_INSTALLATION' | inherentCo2Directions"
+      ></govuk-radio-option>
+      <govuk-radio-option
+        value="EXPORTED_TO_NON_ETS_CONSUMER"
+        [label]="'EXPORTED_TO_NON_ETS_CONSUMER' | inherentCo2Directions"
+      ></govuk-radio-option>
+      <govuk-radio-option
+        value="RECEIVED_FROM_ANOTHER_INSTALLATION"
+        [label]="'RECEIVED_FROM_ANOTHER_INSTALLATION' | inherentCo2Directions"
+      ></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <app-approach-return-link
+    [parentTitle]="'INHERENT_CO2' | monitoringApproachDescription"
+    reviewGroupUrl="inherent-co2"
+  ></app-approach-return-link>
+</app-permit-task>

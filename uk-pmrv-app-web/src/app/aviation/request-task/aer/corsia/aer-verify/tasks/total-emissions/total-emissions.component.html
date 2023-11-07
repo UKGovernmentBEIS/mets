@@ -1,0 +1,28 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.heading }}</app-page-heading>
+
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">Emissions for the scheme year</h2>
+  <app-total-emissions-corsia-scheme-year-summary
+    [totalEmissions]="vm.totalEmissions"
+  ></app-total-emissions-corsia-scheme-year-summary>
+
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">Emissions summary</h2>
+  <govuk-tabs (selectedTab)="selectedTab($event)">
+    <ng-template govukTabLazy id="standard-fuels" label="Standard fuels">
+      <app-total-emissions-corsia-standard-fuels-table-template
+        [aviationAerCorsia]="vm.aviationAerCorsia"
+      ></app-total-emissions-corsia-standard-fuels-table-template>
+    </ng-template>
+    <ng-template govukTabLazy id="aerodrome-pairs" label="Aerodrome pairs">
+      <app-total-emissions-corsia-aerodrome-pairs-table-template
+        [aviationAerCorsia]="vm.aviationAerCorsia"
+      ></app-total-emissions-corsia-aerodrome-pairs-table-template>
+    </ng-template>
+    <ng-template govukTabLazy id="state-pairs" label="State pairs">
+      <app-total-emissions-corsia-state-pairs-table-template
+        [corsiaRequestTaskPayload]="vm.corsiaRequestTaskPayload"
+      ></app-total-emissions-corsia-state-pairs-table-template>
+    </ng-template>
+  </govuk-tabs>
+</ng-container>
+<app-return-to-link></app-return-to-link>

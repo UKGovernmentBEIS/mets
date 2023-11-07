@@ -1,0 +1,26 @@
+<app-permit-task [breadcrumb]="[{ text: 'INHERENT_CO2' | monitoringApproachDescription, link: ['inherent-co2'] }]">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    submitText="Save and continue"
+    [heading]="
+      ('INHERENT_CO2' | monitoringApproachTask | async)?.inherentReceivingTransferringInstallations[(index$ | async)]
+        ?.inherentCO2Direction === 'RECEIVED_FROM_ANOTHER_INSTALLATION'
+        ? 'Calculate the total emissions received from the installation'
+        : 'Calculate the total emissions exported to the installation'
+    "
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <div
+      formControlName="totalEmissions"
+      govuk-text-input
+      suffix="tonnes CO2e"
+      widthClass="govuk-input--width-20"
+    ></div>
+  </app-wizard-step>
+
+  <app-approach-return-link
+    [parentTitle]="'INHERENT_CO2' | monitoringApproachDescription"
+    reviewGroupUrl="inherent-co2"
+  ></app-approach-return-link>
+</app-permit-task>

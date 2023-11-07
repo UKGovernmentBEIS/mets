@@ -1,0 +1,25 @@
+<app-base-action-container-component
+  [header]="actionType$ | async | itemActionType"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="[
+    'DOAL_APPLICATION_ACCEPTED',
+    'DOAL_APPLICATION_ACCEPTED_WITH_CORRECTIONS',
+    'DOAL_APPLICATION_REJECTED'
+  ]"
+>
+</app-base-action-container-component>
+
+<ng-template #customContentTemplate>
+  <ol class="app-task-list">
+    <li app-task-section title="Enter details">
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="./date-submitted"
+          linkText="Provide the date application was submitted to UK authorities"
+        ></li>
+        <li app-task-item link="./response" linkText="Provide UK ETS Authority response"></li>
+      </ul>
+    </li>
+  </ol>
+</ng-template>

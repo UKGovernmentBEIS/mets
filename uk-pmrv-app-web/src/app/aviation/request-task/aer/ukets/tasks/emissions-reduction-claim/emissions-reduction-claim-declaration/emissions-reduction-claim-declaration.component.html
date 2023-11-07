@@ -1,0 +1,24 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Declaration of no double counting"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <div class="govuk-!-width-two-thirds">
+    <p class="govuk-body">
+      You must upload a copy (signed by an authorised person) of a document titled ‘Declaration of no double counting’,
+      on company headed paper.
+    </p>
+    <p class="govuk-body">This must state that no SAF included in your claim has been:</p>
+    <ul class="govuk-body">
+      <li>relied on by you to obtain an emissions reduction or financial benefit in another scheme</li>
+      <li>transferred for value to someone else</li>
+    </ul>
+    <p class="govuk-body">Your regulator can provide you with an example of the declaration content</p>
+  </div>
+
+  <h2 class="govuk-heading-m">Upload a file</h2>
+  <app-file-input [downloadUrl]="getDownloadUrl" formControlName="noDoubleCountingDeclarationFile"></app-file-input>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

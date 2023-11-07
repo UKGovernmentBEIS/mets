@@ -1,0 +1,15 @@
+<app-dre-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Add an item"
+    submitText="Continue"
+    [showBackLink]="true"
+  >
+    <div class="govuk-hint">The operator will see this in the official notice.</div>
+
+    <div formControlName="informationSource" govuk-textarea [maxLength]="10000"></div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="..">Return to: reportable emissions task</a>
+</app-dre-task>

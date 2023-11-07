@@ -1,0 +1,45 @@
+<ng-container *ngIf="regulatorAirImprovementResponse">
+  <h2 class="govuk-heading-m">{{ isReview ? "Regulator's response" : 'Your response' }}</h2>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Is the improvement required?</dt>
+      <dd govukSummaryListRowValue>{{ regulatorAirImprovementResponse?.improvementRequired ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', reference, 'improvement-response-review']">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="regulatorAirImprovementResponse?.improvementRequired">
+      <dt govukSummaryListRowKey [class.missing-row-key]="errors?.invalidDate"><span>Completion date</span></dt>
+      <dd govukSummaryListRowValue>
+        {{ regulatorAirImprovementResponse?.improvementDeadline | govukDate }}
+        <div *ngIf="errors?.invalidDate" class="error">{{ errors?.invalidDate }}</div>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', reference, 'improvement-response-review']">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="regulatorAirImprovementResponse?.officialResponse">
+      <dt govukSummaryListRowKey>Text for improvement response letter</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ regulatorAirImprovementResponse?.officialResponse }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', reference, 'improvement-response-review']">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="regulatorAirImprovementResponse?.comments">
+      <dt govukSummaryListRowKey>Comments</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ regulatorAirImprovementResponse?.comments }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', reference, 'improvement-response-review']">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="regulatorAirImprovementResponse?.files?.length > 0">
+      <dt govukSummaryListRowKey>Uploaded files</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="attachedFiles"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', reference, 'improvement-response-review']">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

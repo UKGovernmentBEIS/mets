@@ -1,0 +1,47 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Results of the independent review</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.reviewResults }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Name</dt>
+    <dd govukSummaryListRowValue>{{ data.name }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Position</dt>
+    <dd govukSummaryListRowValue>{{ data.position }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Email</dt>
+    <dd govukSummaryListRowValue>{{ data.email }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Address</dt>
+    <dd govukSummaryListRowValue>
+      <div>
+        {{ data.line1 }}
+        <ng-container *ngIf="data.line2"> , {{ data.line2 }} </ng-container>
+      </div>
+
+      <div>{{ data.state }}</div>
+      <div>{{ data.city }}</div>
+      <div>{{ data.postcode }}</div>
+      <div>{{ data.country | country }}</div>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+</dl>

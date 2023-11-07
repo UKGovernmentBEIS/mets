@@ -1,0 +1,13 @@
+<app-wizard-step [formGroup]="form" (ngSubmit)="onSubmit()" data-testid="other-data-gaps-types">
+  <div class="govuk-!-width-two-thirds">
+    <app-page-heading>
+      Data gaps for parameters other than fuel consumption (optional)
+    </app-page-heading>
+
+    <p class="govuk-body">
+     Describe how you deal with data gaps for parameters other than fuel consumption, such as missing route and aircraft data.
+    </p>
+    <div formControlName="otherDataGapsTypes" govuk-textarea [maxLength]="2000"></div>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

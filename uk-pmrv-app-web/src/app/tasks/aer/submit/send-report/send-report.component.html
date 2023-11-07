@@ -1,0 +1,34 @@
+<ng-container *ngIf="isSendReportAvailable$ | async; else notAvailable">
+  <app-aer-task>
+    <app-wizard-step
+      (formSubmit)="onSubmit()"
+      [formGroup]="form"
+      heading="Send report"
+      submitText="Continue"
+      [hideSubmit]="(aerService.isEditable$ | async) === false"
+    >
+      <p class="govuk-body">
+        As a HSE permit holder, you can either send your emissions report to a verifier for a verification opinion or
+        directly to {{ aerService.competentAuthority$ | async | competentAuthority }}.
+      </p>
+      <div
+        formControlName="option"
+        govuk-radio
+        legend="Do you want to send this report for verification?"
+        legendSize="medium"
+      >
+        <govuk-radio-option [value]="true" label="Yes, send report for verification"></govuk-radio-option>
+        <govuk-radio-option [value]="false" label="No, send report to regulator"></govuk-radio-option>
+      </div>
+    </app-wizard-step>
+    <app-return-link></app-return-link>
+  </app-aer-task>
+</ng-container>
+
+<ng-template #notAvailable>
+  <app-aer-task [breadcrumb]="true">
+    <app-page-heading caption="Emissions report">Submit report</app-page-heading>
+    <p class="govuk-body">You must complete all tasks before submitting your report.</p>
+    <app-return-link></app-return-link>
+  </app-aer-task>
+</ng-template>

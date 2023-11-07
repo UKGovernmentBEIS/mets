@@ -1,0 +1,10 @@
+<app-aer-task-review heading="Add a reason" returnToLink="../../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div [maxLength]="10000" formControlName="reason" govuk-textarea></div>
+  </app-wizard-step>
+</app-aer-task-review>

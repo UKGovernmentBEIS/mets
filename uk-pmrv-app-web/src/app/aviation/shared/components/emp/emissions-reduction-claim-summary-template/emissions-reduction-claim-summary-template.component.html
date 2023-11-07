@@ -1,0 +1,40 @@
+<ng-container *ngIf="data">
+  <!-- eslint-disable-next-line @angular-eslint/template/eqeqeq -->
+  <ng-container *ngIf="data.exist != null">
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Are you intending to make an emissions reduction claim?</dt>
+        <dd govukSummaryListRowValue *ngIf="data.exist">Yes</dd>
+        <dd govukSummaryListRowValue *ngIf="!data.exist">No</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink=".." [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+  <ng-container *ngIf="data.exist">
+    <app-procedure-form-summary
+      *ngIf="data.safMonitoringSystemsAndProcesses"
+      header="SAF monitoring systems and processes"
+      [isEditable]="isEditable"
+      [procedureFormData]="data.safMonitoringSystemsAndProcesses"
+      formRouterLink="../saf-monitoring-systems-processes"
+    ></app-procedure-form-summary>
+
+    <app-procedure-form-summary
+      *ngIf="data.rtfoSustainabilityCriteria"
+      header="Meet the RTFO sustainability criteria"
+      [isEditable]="isEditable"
+      [procedureFormData]="data.rtfoSustainabilityCriteria"
+      formRouterLink="../rtfo-sustainability-criteria"
+    ></app-procedure-form-summary>
+
+    <app-procedure-form-summary
+      *ngIf="data.safDuplicationPrevention"
+      header="Avoid double counting of SAF"
+      [isEditable]="isEditable"
+      [procedureFormData]="data.safDuplicationPrevention"
+      formRouterLink="../saf-duplication-prevention"
+    ></app-procedure-form-summary>
+  </ng-container>
+</ng-container>

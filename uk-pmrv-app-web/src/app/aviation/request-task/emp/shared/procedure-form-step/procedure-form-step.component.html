@@ -1,0 +1,13 @@
+<div class="govuk-!-width-two-thirds">
+  <ng-content select="[procedureFormPageHeader]"></ng-content>
+
+  <app-wizard-step
+    (formSubmit)="submitForm.next(form)"
+    [formGroup]="form"
+    [submitText]="submitText"
+    [hideSubmit]="hideSubmit"
+  >
+    <app-procedure-form></app-procedure-form>
+  </app-wizard-step>
+  <app-return-to-link></app-return-to-link>
+</div>

@@ -1,0 +1,43 @@
+<ng-container *ngIf="operatorImprovementFollowUpResponse">
+  <h2 class="govuk-heading-m">{{ isReview ? "Operator's response to regulator's comments" : 'Your response' }}</h2>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Improvement complete?</dt>
+      <dd govukSummaryListRowValue>
+        {{ operatorImprovementFollowUpResponse?.improvementCompleted ? 'Yes' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="isAviation ? ['../..', reference] : ['../..', reference, 'operator-followup']"
+          [queryParams]="queryParams"
+          >Change</a
+        >
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="operatorImprovementFollowUpResponse?.dateCompleted">
+      <dt govukSummaryListRowKey>Date of improvement completion</dt>
+      <dd govukSummaryListRowValue>{{ operatorImprovementFollowUpResponse?.dateCompleted | govukDate }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="isAviation ? ['../..', reference] : ['../..', reference, 'operator-followup']"
+          [queryParams]="queryParams"
+          >Change</a
+        >
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="operatorImprovementFollowUpResponse?.reason">
+      <dt govukSummaryListRowKey>Reason for not addressing the recommendation</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ operatorImprovementFollowUpResponse?.reason }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a
+          govukLink
+          [routerLink]="isAviation ? ['../..', reference] : ['../..', reference, 'operator-followup']"
+          [queryParams]="queryParams"
+          >Change</a
+        >
+      </dd>
+    </div>
+  </dl>
+</ng-container>

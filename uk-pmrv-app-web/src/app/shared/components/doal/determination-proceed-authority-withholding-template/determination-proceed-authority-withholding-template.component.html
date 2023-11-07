@@ -1,0 +1,29 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Has a withholding of allowances notice been issued?</dt>
+    <dd govukSummaryListRowValue>{{ determination.hasWithholdingOfAllowances ? 'Yes' : 'No' }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'withholding']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+  <ng-container *ngIf="determination.hasWithholdingOfAllowances === true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>When was the notice issued?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ determination.withholdingAllowancesNotice.noticeIssuedDate | govukDate }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="['..', 'withholding']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Comments on the withholding of allowances notice</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ determination.withholdingAllowancesNotice.withholdingOfAllowancesComment }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="['..', 'withholding']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </ng-container>
+</dl>

@@ -1,0 +1,23 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+  <app-aer-monitoring-plan-versions [planVersions]="vm.planVersions"></app-aer-monitoring-plan-versions>
+
+  <ng-container *ngIf="vm.data">
+    <app-aer-monitoring-plan-changes-summary-template
+      [data]="vm.data"
+      [isEditable]="vm.isEditable"
+      [queryParams]="{ change: true }"
+    ></app-aer-monitoring-plan-changes-summary-template>
+
+    <div class="govuk-button-group">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+        Confirm and complete
+      </button>
+    </div>
+  </ng-container>
+  <app-aviation-aer-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="aerMonitoringPlanChanges"
+  ></app-aviation-aer-review-decision-group>
+</ng-container>
+<app-return-to-link></app-return-to-link>

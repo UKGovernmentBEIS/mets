@@ -1,0 +1,37 @@
+<ng-container *ngIf="operatorAirImprovementFollowUpResponse">
+  <h2 class="govuk-heading-m">{{ isReview ? "Operator's response to regulator's comments" : 'Your response' }}</h2>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Is the required improvement complete?</dt>
+      <dd govukSummaryListRowValue>
+        {{ operatorAirImprovementFollowUpResponse?.improvementCompleted ? 'Yes' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', reference, 'operator-followup']">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="operatorAirImprovementFollowUpResponse?.dateCompleted">
+      <dt govukSummaryListRowKey>When was the improvement completed?</dt>
+      <dd govukSummaryListRowValue>{{ operatorAirImprovementFollowUpResponse?.dateCompleted | govukDate }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', reference, 'operator-followup']">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="operatorAirImprovementFollowUpResponse?.reason">
+      <dt govukSummaryListRowKey>Tell us about your response to this improvement</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ operatorAirImprovementFollowUpResponse?.reason }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', reference, 'operator-followup']">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="operatorAirImprovementFollowUpResponse?.files?.length > 0">
+      <dt govukSummaryListRowKey>Uploaded files</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="attachedFiles"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', reference, 'operator-followup']">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

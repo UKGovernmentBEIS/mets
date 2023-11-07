@@ -1,0 +1,17 @@
+<app-doal-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    caption="Proceed to UK ETS authority"
+    heading="Will you send a preliminary allocation letter?"
+    submitText="Save and continue"
+    [hideSubmit]="(editable$ | async) === false"
+  >
+    <div formControlName="needsOfficialNotice" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <app-task-return-link taskType="DOAL_APPLICATION_SUBMIT" [levelsUp]="3"></app-task-return-link>
+</app-doal-task>

@@ -1,0 +1,13 @@
+<app-aer-task-review heading="Review the regulated activities" returnToLink="..">
+  <p class="govuk-body">
+    Review the regulated activities provided by the operator and make any changes if needed.
+  </p>
+  <app-aer-regulated-activities-group
+    [regulatedActivities]="regulatedActivities$ | async"
+    [isEditable]="isEditable$ | async"
+  >
+  </app-aer-regulated-activities-group>
+  <div class="govuk-button-group" *ngIf="isEditable$ | async">
+    <button appPendingButton govukButton type="button" (click)="onContinue()">Continue</button>
+  </div>
+</app-aer-task-review>

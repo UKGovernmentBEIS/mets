@@ -1,0 +1,153 @@
+<app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" heading="Add a subsidiary company" submitText="Continue">
+  <div
+    formControlName="operatorName"
+    govuk-text-input
+    label="Subsidiary aeroplane operator name"
+    class="govuk-!-width-two-thirds"
+  ></div>
+
+  <h3 class="govuk-heading-m">Flight identification</h3>
+
+  <div formGroupName="flightIdentification">
+    <div
+      formControlName="flightIdentificationType"
+      govuk-radio
+      legend="What call sign identification do you use for Air Traffic Control purposes?"
+      class="govuk-!-width-two-thirds"
+    >
+      <govuk-radio-option
+        value="INTERNATIONAL_CIVIL_AVIATION_ORGANISATION"
+        [label]="'INTERNATIONAL_CIVIL_AVIATION_ORGANISATION' | operatorDetailsFlightIdentificationType: true"
+      >
+        <div govukConditionalContent>
+          <h3 class="govuk-heading-s">List the ICAO designators used</h3>
+          <div
+            govuk-textarea
+            [maxLength]="100"
+            formControlName="icaoDesignators"
+            hint="Enter one code per line. You can copy and paste from a CSV file, but check there are no commas or empty lines."
+          ></div>
+        </div>
+      </govuk-radio-option>
+      <govuk-radio-option
+        value="AIRCRAFT_REGISTRATION_MARKINGS"
+        [label]="'AIRCRAFT_REGISTRATION_MARKINGS' | operatorDetailsFlightIdentificationType: true"
+      >
+        <div govukConditionalContent>
+          <h3 class="govuk-heading-s">List the ICAO designators used</h3>
+          <div
+            govuk-textarea
+            formControlName="aircraftRegistrationMarkings"
+            hint="Enter one code per line. You can copy and paste from a CSV file, but check there are no commas or empty lines."
+          ></div>
+        </div>
+      </govuk-radio-option>
+    </div>
+  </div>
+
+  <div formGroupName="airOperatingCertificate">
+    <h3 class="govuk-heading-m govuk-!-width-two-thirds">Air Operator Certificate</h3>
+
+    <div
+      formControlName="certificateExist"
+      govuk-radio
+      legend="Do you have an Air Operator Certificate (AOC) or equivalent, such as an Air Carrier Operating Certificate?"
+      class="govuk-!-width-two-thirds"
+    >
+      <govuk-radio-option [value]="true" label="Yes">
+        <div govukConditionalContent>
+          <div formControlName="certificateNumber" govuk-text-input label="Certificate number"></div>
+          <div
+            [options]="issuingAuthorityOptions$ | async"
+            formControlName="issuingAuthority"
+            govuk-select
+            label="Issuing authority"
+          ></div>
+          <app-multiple-file-input
+            [baseDownloadUrl]="downloadUrl"
+            label="Upload a file"
+            listTitle="Files added"
+            formControlName="certificateFiles"
+          ></app-multiple-file-input>
+
+          <h3 class="govuk-heading-s">Are there any restrictions or obligations imposed by the certificate?</h3>
+          <div
+            formControlName="restrictionsExist"
+            govuk-radio
+            hint="Describe any time-based, regional or other restrictions, and any obligations that have been imposed."
+          >
+            <govuk-radio-option [value]="true" label="Yes">
+              <div govukConditionalContent>
+                <div
+                  govuk-textarea
+                  formControlName="restrictionsDetails"
+                  hint="Provide information about the restrictions and obligations that have been imposed"
+                  rows="5"
+                ></div>
+              </div>
+            </govuk-radio-option>
+            <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+          </div>
+        </div>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+    </div>
+  </div>
+
+  <h3 class="govuk-heading-m">Subsidiary company address</h3>
+  <div
+    formControlName="companyRegistrationNumber"
+    govuk-text-input
+    label="Company registration number"
+    class="govuk-!-width-two-thirds"
+  ></div>
+  <div formGroupName="registeredLocation">
+    <h3 class="govuk-heading-m">Registered address</h3>
+    <p class="govuk-body">This is the address provided when registering the company.</p>
+
+    <div formControlName="line1" govuk-text-input label="Address line 1" widthClass="govuk-!-width-two-thirds"></div>
+    <div
+      formControlName="line2"
+      govuk-text-input
+      label="Address line 2 (optional)"
+      widthClass="govuk-!-width-two-thirds"
+    ></div>
+    <div formControlName="city" govuk-text-input label="Town or city" widthClass="govuk-!-width-two-thirds"></div>
+    <div
+      formControlName="state"
+      govuk-text-input
+      label="State, province or region (optional)"
+      widthClass="govuk-!-width-two-thirds"
+    ></div>
+    <div
+      formControlName="postcode"
+      govuk-text-input
+      label="Postal or zip code (Optional)"
+      widthClass="govuk-!-width-one-third"
+    ></div>
+    <div
+      [options]="countriesOptions$ | async"
+      formControlName="country"
+      govuk-select
+      label="Country"
+      widthClass="govuk-!-width-two-thirds"
+    ></div>
+  </div>
+
+  <h3 class="govuk-heading-m">Description of your activities</h3>
+  <h3 class="govuk-heading-s">Type of flights</h3>
+  <div formControlName="flightTypes" govuk-checkboxes>
+    <govuk-checkbox label="Scheduled flights" value="SCHEDULED"></govuk-checkbox>
+    <govuk-checkbox label="Non-scheduled flights" value="NON_SCHEDULED"></govuk-checkbox>
+  </div>
+
+  <h3 class="govuk-heading-s">Describe your activities</h3>
+  <div class="govuk-!-width-two-thirds">
+    <div
+      govuk-textarea
+      [maxLength]="10000"
+      formControlName="activityDescription"
+      hint="Include geographical scope, typical leasing arrangements if applicable and purpose of your flights, for example transport of passengers, cargo and executives"
+    ></div>
+  </div>
+</app-wizard-step>

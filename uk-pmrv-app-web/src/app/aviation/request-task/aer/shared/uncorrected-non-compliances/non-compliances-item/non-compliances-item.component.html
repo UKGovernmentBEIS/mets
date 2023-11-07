@@ -1,0 +1,40 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Save and continue"
+  [hideSubmit]="!vm.isEditable"
+  [heading]="vm.pageHeader"
+  *ngIf="vm$ | async as vm"
+>
+  <p class="govuk-body">Give as much detail as possible, including:</p>
+  <ng-container *ngIf="vm.isCorsia">
+    <ul class="govuk-list govuk-list--bullet govuk-!-width-two-thirds">
+      <li>the nature and size of the non-compliance</li>
+      <li>which element of the ANO it relates to</li>
+    </ul>
+  </ng-container>
+  <ng-container *ngIf="!vm.isCorsia">
+    <ul class="govuk-list govuk-list--bullet govuk-!-width-two-thirds">
+      <li>the nature and size of the non-compliance</li>
+      <li>which element of the MRR it relates to</li>
+    </ul>
+  </ng-container>
+
+  <div
+    label="Description"
+    [maxLength]="10000"
+    formControlName="explanation"
+    govuk-textarea
+    class="govuk-!-width-two-thirds"
+  ></div>
+
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Does this have a material (significant) effect on the total emissions reported?
+  </p>
+
+  <div formControlName="materialEffect" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

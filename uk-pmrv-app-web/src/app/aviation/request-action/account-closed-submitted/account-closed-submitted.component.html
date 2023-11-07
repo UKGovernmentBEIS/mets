@@ -1,0 +1,22 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-request-action-heading [headerText]="vm.pageHeader" [timelineCreationDate]="vm.creationDate">
+  </app-request-action-heading>
+
+  <ng-container *ngIf="vm.data">
+    <h2 class="govuk-heading-m">Details</h2>
+    <dl govuk-summary-list [hasBorders]="true">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Reason</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>{{ vm.data.reason }}</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Closed by</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>{{ vm.submitter }}</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Date</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>{{ vm.creationDate | govukDate: 'datetime' }}</dd>
+      </div>
+    </dl>
+  </ng-container>
+</ng-container>

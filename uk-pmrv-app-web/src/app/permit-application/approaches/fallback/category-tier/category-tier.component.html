@@ -1,0 +1,45 @@
+<app-permit-task [breadcrumb]="[{ text: 'FALLBACK' | monitoringApproachDescription, link: ['fall-back'] }]">
+  <ng-container *ngIf="(isEditable$ | async) === false; else start">
+    <app-page-heading [caption]="'FALLBACK' | monitoringApproachDescription">
+      Add a source stream category
+    </app-page-heading>
+    <p class="govuk-body">Other tasks must be completed before you can start:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Source streams (fuels and materials)</li>
+      <li>Emission sources</li>
+      <li>Measurement devices</li>
+    </ul>
+  </ng-container>
+
+  <ng-template #start>
+    <app-page-heading [caption]="'FALLBACK' | monitoringApproachDescription">
+      <ng-container
+        *ngIf="('FALLBACK' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers as tiers; else addStream"
+      >
+        <ng-container *ngIf="tiers && tiers[index$ | async]; else addStream">
+          {{ tiers[index$ | async] | sourceStreamCategoryName | async }}
+          <button *ngIf="(store.isEditable$ | async) === true" routerLink="delete" govukSecondaryButton type="button">
+            Delete
+          </button>
+        </ng-container>
+      </ng-container>
+      <ng-template #addStream>
+        <ng-container *ngIf="(store.isEditable$ | async) === true">Add a source stream category</ng-container>
+      </ng-template>
+    </app-page-heading>
+    <h2 class="govuk-heading-m">Define the source stream category</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        link="category/summary"
+        linkText="Source stream category"
+        [status]="'FALLBACK_Category' | taskStatus: (index$ | async) | async"
+      ></li>
+    </ul>
+  </ng-template>
+
+  <app-approach-return-link
+    [parentTitle]="'FALLBACK' | monitoringApproachDescription"
+    reviewGroupUrl="fall-back"
+  ></app-approach-return-link>
+</app-permit-task>

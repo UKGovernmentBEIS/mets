@@ -1,0 +1,46 @@
+<app-request-action-heading
+  *ngIf="vm$ | async as vm"
+  [headerText]="vm.pageHeader"
+  [timelineCreationDate]="vm.creationDate"
+>
+  <ng-container *ngIf="vm.data">
+    <app-aviation-emissions-summary-template
+      [data]="vm.data"
+      [files]="vm.files"
+      [isEditable]="false"
+      [changeUrlQueryParams]="{ change: true }"
+    ></app-aviation-emissions-summary-template>
+  </ng-container>
+
+  <h2 app-summary-header class="govuk-heading-m">Recipients</h2>
+
+  <dl govuk-summary-list class="govuk-!-margin-bottom-6">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Users</dt>
+      <dd govukSummaryListRowValue *ngIf="vm?.usersInfo">
+        <div *ngFor="let user of vm.operators">
+          {{ user | userInfoResolver: vm.usersInfo }}
+        </div>
+      </dd>
+      <dd govukSummaryListRowValue *ngIf="!vm?.usersInfo">No users exist</dd>
+      <dd></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+      <dd govukSummaryListRowValue *ngIf="vm?.usersInfo">
+        {{ vm.signatory | userInfoResolver: vm.usersInfo }}
+      </dd>
+      <dd govukSummaryListRowValue *ngIf="!vm?.usersInfo">No users exist</dd>
+      <dd></dd>
+    </div>
+    <div govukSummaryListRow *ngIf="vm.officialNotice">
+      <dt govukSummaryListRowKey>Official notice</dt>
+      <dd govukSummaryListRowValue>
+        <a [routerLink]="[vm.downloadUrl, vm.officialNotice.uuid]" govukLink target="_blank">
+          {{ vm.officialNotice.name }}
+        </a>
+      </dd>
+      <dd></dd>
+    </div>
+  </dl>
+</app-request-action-heading>

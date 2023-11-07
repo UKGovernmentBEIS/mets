@@ -1,0 +1,8 @@
+<h2 class="govuk-heading-m">What is your decision on the information submitted?</h2>
+
+<div formControlName="type" govuk-radio>
+  <govuk-radio-option value="ACCEPTED" label="Accepted"> </govuk-radio-option>
+</div>
+<h2 class="govuk-heading-m" style="margin-bottom: 0">Notes</h2>
+
+<div govuk-textarea [maxLength]="10000" formControlName="notes" hint="The operator cannot view this"></div>

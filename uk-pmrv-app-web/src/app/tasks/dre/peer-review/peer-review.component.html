@@ -1,0 +1,26 @@
+<app-base-task-container-component
+  [header]="header$ | async"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="DRE_APPLICATION_PEER_REVIEW"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <ng-container>
+    <div class="govuk-button-group">
+      <button
+        *ngIf="allowPeerReviewDecision$ | async"
+        (click)="peerReviewDecision()"
+        govukButton
+        title="Peer review decision"
+        type="button"
+      >
+        Peer review decision
+      </button>
+    </div>
+  </ng-container>
+
+  <ul app-task-item-list>
+    <li app-task-item link="summary" linkText="Reportable emissions" [status]="sectionStatus$ | async"></li>
+  </ul>
+</ng-template>

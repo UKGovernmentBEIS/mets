@@ -1,0 +1,21 @@
+<h2 class="govuk-heading-m">Emission details</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Monitoring approaches used</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ monitoringApproachDescription ? monitoringApproachDescription : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="monitoringChangeLink">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Emission factors</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ emissionFactorsDescription ? emissionFactorsDescription : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="emissionFactorsChangeLink">Change</a>
+    </dd>
+  </div>
+</dl>

@@ -1,0 +1,65 @@
+<dl govuk-summary-list *ngIf="materialChangesText?.length">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Material or significant changes</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let change of materialChangesText">
+        <p>{{ change }}</p>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+<dl govuk-summary-list *ngIf="otherChangesText?.length">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Other changes requiring a variation</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let change of otherChangesText">
+        <p>{{ change }}</p>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+<dl govuk-summary-list *ngIf="nonMaterialChangesText?.length">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Non-material changes</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let change of nonMaterialChangesText">
+        <p>{{ change }}</p>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+<dl govuk-summary-list *ngIf="variationDetails.reason">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Summarise what you are changing and the reasons for the changes</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>
+      {{ variationDetails?.reason }}
+    </dd>
+    <dd></dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+    </dd>
+  </div>
+</dl>
+<ng-container *ngIf="variationRegulatorLedReason">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason to include in the notice</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ variationRegulatorLedReason }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../reason'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

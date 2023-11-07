@@ -1,0 +1,45 @@
+<h2 class="govuk-heading-m">{{ headingText }}</h2>
+<div class="overflow-auto overflow-auto-table">
+  <govuk-table
+    *ngIf="aviationAerAircraftDataDetails?.length"
+    [columns]="columns"
+    [data]="aviationAerAircraftDataDetails"
+  >
+    <ng-template let-column="column" let-index="index" let-row="row">
+      <div [ngSwitch]="column.field" class="cell-container">
+        <ng-container *ngSwitchCase="'aircraftTypeDesignator'">
+          <span data-testid="aircraftTypeDesignator">
+            {{ row.aircraftTypeDesignator }}
+          </span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'subType'">
+          <span data-testid="subType">
+            {{ row.subType }}
+          </span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'registrationNumber'">
+          <span data-testid="registrationNumber">
+            {{ row.registrationNumber }}
+          </span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'ownerOrLessor'">
+          <span data-testid="ownerOrLessor">
+            {{ row.ownerOrLessor }}
+          </span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'startDate'">
+          <span data-testid="startDate">
+            {{ row.startDate === 'Start date (optional)' ? row.startDate : (row.startDate | date: 'dd/MM/yyyy') }}
+          </span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'endDate'">
+          <span data-testid="endDate">
+            {{ row.endDate === 'End date (optional)' ? row.endDate : (row.endDate | date: 'dd/MM/yyyy') }}
+          </span>
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+      </div>
+    </ng-template>
+  </govuk-table>
+</div>

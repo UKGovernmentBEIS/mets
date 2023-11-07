@@ -1,0 +1,44 @@
+<ng-container *ngIf="permitVariationDetailsExists()">
+  <dl govuk-summary-list [hasBorders]="false" [class.summary-list--edge-border]="hasBottomBorder">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Description of changes</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ permitVariationDetails?.reason }}</dd>
+      <dd govukSummaryListRowActions *ngIf="showChangeLink">
+        <a govukLink [routerLink]="['../..', 'about']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="nonSignificantChangesText.length">
+      <dt govukSummaryListRowKey>Non-significant changes to the Monitoring Plan or the Monitoring Methodology Plan</dt>
+      <dd govukSummaryListRowValue>
+        <ng-container *ngFor="let change of nonSignificantChangesText">
+          <p>{{ change }}</p>
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="showChangeLink">
+        <a govukLink [routerLink]="['..', 'changes']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="significantChangesMonitoringPlanText.length">
+      <dt govukSummaryListRowKey>Significant modifications to the Monitoring Plan</dt>
+      <dd govukSummaryListRowValue>
+        <ng-container *ngFor="let change of significantChangesMonitoringPlanText">
+          <p>{{ change }}</p>
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="showChangeLink">
+        <a govukLink [routerLink]="['..', 'changes']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="significantChangesMonitoringMethodologyPlanText.length">
+      <dt govukSummaryListRowKey>Significant modifications to the Monitoring Methodology Plan</dt>
+      <dd govukSummaryListRowValue>
+        <ng-container *ngFor="let change of significantChangesMonitoringMethodologyPlanText">
+          <p>{{ change }}</p>
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="showChangeLink">
+        <a govukLink [routerLink]="['..', 'changes']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

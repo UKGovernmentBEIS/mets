@@ -1,0 +1,30 @@
+<app-action-task [header]="airTitle$ | async" [breadcrumb]="true">
+  <ng-container *ngIf="airPayload$ | async as payload">
+    <ng-container *ngFor="let airImprovement of payload?.airImprovements | keyvalue">
+      <h2 class="govuk-heading-s govuk-!-margin-0">
+        {{ airImprovement.value | airImprovementTitle: airImprovement.key }}
+      </h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="{{ airImprovement.key }}/summary"
+          linkText="Review information about this improvement"
+          [hasContent]="true"
+        >
+          <app-air-operator-response-data-item
+            [operatorImprovementResponse]="payload?.operatorImprovementResponses?.[airImprovement.key]"
+          ></app-air-operator-response-data-item>
+        </li>
+      </ul>
+    </ng-container>
+    <h2 class="govuk-heading-s govuk-!-margin-0">Review summary</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        link="provide-summary"
+        linkText="Provide summary of improvements for official notice"
+        [hasContent]="true"
+      ></li>
+    </ul>
+  </ng-container>
+</app-action-task>

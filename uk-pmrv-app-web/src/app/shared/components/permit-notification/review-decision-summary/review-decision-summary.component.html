@@ -1,0 +1,30 @@
+<ng-container *ngIf="reviewDecision">
+  <dl govuk-summary-list id="summary-review-decision" class="govuk-summary-list--no-border summary-list--edge-border">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Decision status</dt>
+      <dd govukSummaryListRowValue>{{ reviewDecision.type | reviewGroupDecision }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Official Notice text</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ reviewDecision.details?.officialNotice }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Is an operator follow up required</dt>
+      <dd govukSummaryListRowValue>{{ reviewDecision.details?.followUp?.followUpResponseRequired ? 'Yes' : 'No' }}</dd>
+    </div>
+    <div govukSummaryListRow *ngIf="reviewDecision.details?.followUp?.followUpResponseRequired">
+      <dt govukSummaryListRowKey>Explain what the operator should cover in their response</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ reviewDecision.details.followUp.followUpRequest }}</dd>
+    </div>
+    <div govukSummaryListRow *ngIf="reviewDecision.details?.followUp?.followUpResponseRequired">
+      <dt govukSummaryListRowKey>Date response</dt>
+      <dd govukSummaryListRowValue>
+        {{ reviewDecision.details?.followUp?.followUpResponseExpirationDate | govukDate }}
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="notesVisible && reviewDecision?.details?.notes">
+      <dt govukSummaryListRowKey>Notes</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ reviewDecision.details.notes }}</dd>
+    </div>
+  </dl>
+</ng-container>

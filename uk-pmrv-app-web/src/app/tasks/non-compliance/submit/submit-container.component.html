@@ -1,0 +1,17 @@
+<app-base-task-container-component
+  [header]="(route.data | async)?.pageTitle"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="NON_COMPLIANCE_APPLICATION_SUBMIT"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      [link]="(canViewSectionDetails$ | async) ? './summary' : null"
+      linkText="Provide details of breach"
+      [status]="sectionStatus$ | async"
+    ></li>
+  </ul>
+</ng-template>

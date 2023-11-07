@@ -1,0 +1,43 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Describe the changes"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <div class="govuk-!-width-two-thirds">
+    <h2 class="govuk-heading-m">Select the changes you want to make</h2>
+    <h2 class="govuk-heading-m">Significant changes</h2>
+    <div class="govuk-hint">
+      You must apply for this variation at least 14 days before you make any of these significant changes. A fee may be
+      charged for significant changes.
+    </div>
+  </div>
+  <div class="govuk-form-group">
+    <div govuk-checkboxes formControlName="significantChanges">
+      <govuk-checkbox
+        *ngFor="let changeKey of significantChangesKeys"
+        [value]="changeKey"
+        [label]="significantChanges[changeKey]"
+      >
+      </govuk-checkbox>
+    </div>
+    <div govuk-checkboxes formControlName="nonSignificantChanges" legend="Non-significant changes" legendSize="medium">
+      <govuk-checkbox
+        *ngFor="let changeKey of nonSignificantChangesKeys"
+        [value]="changeKey"
+        [label]="nonSignificantChanges[changeKey]"
+      ></govuk-checkbox>
+    </div>
+  </div>
+  <div class="govuk-form-group">
+    <div
+      [maxLength]="10000"
+      formControlName="reason"
+      govuk-textarea
+      label="Explain what you are changing and the reasons for the changes"
+      class="govuk-!-width-two-thirds"
+    ></div>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

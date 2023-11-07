@@ -1,0 +1,68 @@
+<ng-container *ngIf="(isSubmitted$ | async) === false; else completed">
+  <app-request-action-heading [headerText]="pageHeader" [timelineCreationDate]="creationDate ? creationDate : ''">
+  </app-request-action-heading>
+
+  <div *ngFor="let decision of decisionAmends">
+    <h2 app-summary-header class="govuk-heading-m" *ngIf="!isAer">
+      {{ decision.groupKey | i18nSelect: empHeaderTaskMap }}
+    </h2>
+
+    <h2 app-summary-header class="govuk-heading-m" *ngIf="isAer">
+      {{ decision.groupKey | i18nSelect: aerHeaderTaskMap }}
+    </h2>
+
+    <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Changes required</dt>
+        <dd govukSummaryListRowValue>
+          <ng-container
+            *ngFor="
+              let requiredChange of $any(decision).data.details?.requiredChanges;
+              let i = index;
+              let isLast = last
+            "
+          >
+            <div class="pre-wrap">
+              {{ i + 1 }}. {{ requiredChange.reason }} <br />
+              <ng-container *ngIf="requiredChange?.files?.length > 0">
+                <app-summary-download-files
+                  [files]="getDownloadUrlFiles(requiredChange?.files, reviewAttachments, downloadBaseUrl)"
+                >
+                </app-summary-download-files>
+              </ng-container>
+            </div>
+
+            <br *ngIf="!isLast" />
+          </ng-container>
+        </dd>
+      </div>
+    </dl>
+  </div>
+
+  <ng-container *ngIf="requestTaskType">
+    <div class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onSubmit()">Confirm and complete</button>
+    </div>
+
+    <app-return-to-link></app-return-to-link>
+  </ng-container>
+</ng-container>
+
+<ng-template #completed>
+  <div class="govuk-grid-row">
+    <govuk-panel title="Returned to operator for changes"></govuk-panel>
+
+    <span class="govuk-body"
+      >The {{ !isAer ? 'application' : 'report' }} has been returned to the operator so they can make the necessary
+      changes.
+    </span>
+
+    <h3 class="govuk-heading-m">What happens next</h3>
+
+    <p class="govuk-body">
+      They will return the {{ !isAer ? 'application' : 'report' }} to you when the changes have been made.
+    </p>
+
+    <a govukLink routerLink="/aviation/dashboard"> Return to dashboard </a>
+  </div>
+</ng-template>

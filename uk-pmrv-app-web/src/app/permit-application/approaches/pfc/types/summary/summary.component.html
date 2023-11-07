@@ -1,0 +1,23 @@
+<app-permit-task
+  [notification]="notification"
+  [breadcrumb]="[{ text: 'CALCULATION_PFC' | monitoringApproachDescription, link: ['pfc'] }]"
+>
+  <app-page-heading [caption]="'CALCULATION_PFC' | monitoringApproachDescription"
+    >Cell and anode types</app-page-heading
+  >
+
+  <h2
+    app-summary-header
+    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
+    class="govuk-heading-m"
+  >
+    Cell and anode types
+  </h2>
+
+  <app-pfc-approach-types-summary-template></app-pfc-approach-types-summary-template>
+
+  <app-approach-return-link
+    [parentTitle]="'CALCULATION_PFC' | monitoringApproachDescription"
+    reviewGroupUrl="pfc"
+  ></app-approach-return-link>
+</app-permit-task>

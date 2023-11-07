@@ -1,0 +1,17 @@
+<app-wizard-step
+  (formSubmit)="submitForm.next(form)"
+  [formGroup]="form"
+  heading="Operator details"
+  submitText="Continue"
+>
+  <div
+    formControlName="operatorName"
+    govuk-text-input
+    label="Aircraft operator name"
+    class="govuk-!-width-two-thirds"
+  ></div>
+  <div *ngIf="!isCorsia">
+    <label class="govuk-label" for="crcoCode">Central Route Charging Office (CRCO) code</label>
+    <p class="govuk-body govuk-!-width-two-thirds">{{ form.controls.crcoCode.value }}</p>
+  </div>
+</app-wizard-step>

@@ -1,0 +1,15 @@
+<app-aer-task [breadcrumb]="true">
+  <app-page-heading>Check your answers</app-page-heading>
+
+  <app-fallback-emissions-group
+    [isEditable]="isEditable$ | async"
+    [fallbackEmissions]="fallbackEmissions$ | async"
+    [sourceStreams]="sourceStreams$ | async"
+    [documentFiles]="documentFiles$ | async"
+  ></app-fallback-emissions-group>
+
+  <div class="govuk-button-group" *ngIf="isEditable$ | async">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+  <app-return-link></app-return-link>
+</app-aer-task>

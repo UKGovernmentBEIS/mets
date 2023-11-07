@@ -1,0 +1,38 @@
+<app-withholding-allowances-task>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    caption="Withholding of allowances"
+    heading="Close task"
+    submitText="Close task"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div class="govuk-body">
+      You can close this task if you believe there is nothing left for you, or others, to complete
+    </div>
+
+    <div
+      govuk-textarea
+      formControlName="reason"
+      label="Explain why you have decided to close this task"
+      hint="The operator cannot view this"
+      [maxLength]="10000"
+    ></div>
+
+    <app-multiple-file-input
+      [baseDownloadUrl]="getBaseFileDownloadUrl()"
+      label="Upload supporting documents (optional)"
+      listTitle="Uploaded files"
+      formControlName="files"
+    ></app-multiple-file-input>
+
+    <h3 class="govuk-heading-s">Close task</h3>
+    <p class="govuk-body">Are you sure you want to close this task?</p>
+    <govuk-warning-text> You cannot make changes after you click 'close task'. </govuk-warning-text>
+  </app-wizard-step>
+
+  <app-task-return-link
+    taskType="WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_APPLICATION_SUBMIT"
+    [levelsUp]="1"
+  ></app-task-return-link>
+</app-withholding-allowances-task>

@@ -1,0 +1,197 @@
+<div class="govuk-body govuk-!-width-three-quarters">
+  <dl govuk-summary-list *ngIf="etsComplianceRules as rules">
+    <!-- MonitoringPlanRequirementsMet -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Emissions monitoring plan requirements and conditions met?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.monitoringPlanRequirementsMet ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="!rules.monitoringPlanRequirementsMet">
+          {{ rules.monitoringPlanRequirementsNotMetReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- UkEtsOrderRequirementsMet -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>ETS Order requirements met?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.ukEtsOrderRequirementsMet ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="!rules.ukEtsOrderRequirementsMet">
+          {{ rules.ukEtsOrderRequirementsNotMetReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- DetailSourceDataVerified -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Data detail and source verified?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.detailSourceDataVerified ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="rules.detailSourceDataVerified">
+          {{ rules.partOfSiteVerification }}
+        </p>
+        <p class="govuk-body" *ngIf="!rules.detailSourceDataVerified">
+          {{ rules.detailSourceDataNotVerifiedReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- ControlActivitiesDocumented -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Control activities documented, implemented, maintained and effective to reduce risks?
+      </dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.controlActivitiesDocumented ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="!rules.controlActivitiesDocumented">
+          {{ rules.controlActivitiesNotDocumentedReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- ProceduresMonitoringPlanDocumented -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Procedures in EMP documented, implemented, maintained and effective to reduce risks?
+      </dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.proceduresMonitoringPlanDocumented ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="!rules.proceduresMonitoringPlanDocumented">
+          {{ rules.proceduresMonitoringPlanNotDocumentedReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- DataVerificationCompleted -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Data verification completed as required?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.dataVerificationCompleted ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="!rules.dataVerificationCompleted">
+          {{ rules.dataVerificationNotCompletedReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- MonitoringApproachAppliedCorrectly -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Correct application of monitoring approach?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.monitoringApproachAppliedCorrectly ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="!rules.monitoringApproachAppliedCorrectly">
+          {{ rules.monitoringApproachNotAppliedCorrectlyReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- FlightsCompletenessComparedWithAirTrafficData -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Comparison of completeness of flights or data with air traffic data?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.flightsCompletenessComparedWithAirTrafficData ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="!rules.flightsCompletenessComparedWithAirTrafficData">
+          {{ rules.flightsCompletenessNotComparedWithAirTrafficDataReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- ReportedDataConsistencyChecksPerformed -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Consistency checks made between reported data and ‘mass and balance’ documentation?
+      </dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.reportedDataConsistencyChecksPerformed ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="!rules.reportedDataConsistencyChecksPerformed">
+          {{ rules.reportedDataConsistencyChecksNotPerformedReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- FuelConsistencyChecksPerformed -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Consistency checks made between aggregate fuel consumption and fuel purchase or supply data?
+      </dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.fuelConsistencyChecksPerformed ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="!rules.fuelConsistencyChecksPerformed">
+          {{ rules.fuelConsistencyChecksNotPerformedReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- MissingDataMethodsApplied -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Appropriate methods used for applying missing data?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.missingDataMethodsApplied ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="!rules.missingDataMethodsApplied">
+          {{ rules.missingDataMethodsNotAppliedReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- RegulatorGuidanceMet -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Regulator guidance on monitoring and reporting met?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ rules.regulatorGuidanceMet ? 'Yes' : 'No' }}
+        <p class="govuk-body" *ngIf="!rules.regulatorGuidanceMet">
+          {{ rules.regulatorGuidanceNotMetReason }}
+        </p>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+
+    <!-- NonConformities -->
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Corrected non-conformities from last year?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <ng-container [ngSwitch]="rules.nonConformities">
+          <ng-container *ngSwitchCase="'YES'">Yes</ng-container>
+          <ng-container *ngSwitchCase="'NOT_APPLICABLE'">Not applicable</ng-container>
+          <ng-container *ngSwitchDefault>No</ng-container>
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</div>

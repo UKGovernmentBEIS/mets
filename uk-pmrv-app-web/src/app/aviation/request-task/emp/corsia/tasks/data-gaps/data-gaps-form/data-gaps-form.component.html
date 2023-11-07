@@ -1,0 +1,47 @@
+<div class="govuk-!-width-two-thirds" data-testid="data-gaps">
+  <app-wizard-step [formGroup]="form" (ngSubmit)="onSubmit()" [heading]="heading">
+    <ng-container *ngIf="isCert; else FUM">
+      <p class="govuk-body">
+        Describe the method that will be used to fill data gaps if a secondary data reference source is not available.
+      </p>
+      <div formControlName="dataGaps" govuk-textarea [maxLength]="10000"></div>
+    </ng-container>
+
+    <ng-template #FUM>
+      <p class="govuk-body">
+        Describe the systems and procedures used to identify data gaps and continually assess if the 5% data gap flight
+        threshold on offsetting routes has been reached.
+      </p>
+
+      <govuk-details summary="What is the 5% data gap flight threshold?">
+        <p class="govuk-!-padding-bottom-3">
+          The number of flights where data gaps occurred should not exceed 5% of the number of flights with offsetting
+          obligations over the monitoring year.
+        </p>
+
+        <div>
+          If you exceed the threshold, you must:
+          <ul>
+            <li>tell your regulator what remedial action you are taking to address the frequency of data gaps</li>
+            <li>
+              state the percentage of flights with data gaps in your annual emissions report, and provide an explanation
+            </li>
+          </ul>
+        </div>
+      </govuk-details>
+
+      <div class="govuk-body">
+        <p>The procedure should show how, on an ongoing basis, you:</p>
+
+        <ul>
+          <li>monitor for data gaps, so you can define these when primary and secondary data is missing</li>
+          <li>monitor the number against the threshold, and inform your regulator if this is reached</li>
+        </ul>
+      </div>
+
+      <div formControlName="dataGaps" govuk-textarea [maxLength]="10000"></div>
+    </ng-template>
+  </app-wizard-step>
+
+  <app-return-to-link></app-return-to-link>
+</div>

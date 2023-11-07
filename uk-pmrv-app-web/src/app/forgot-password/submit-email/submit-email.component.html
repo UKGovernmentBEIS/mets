@@ -1,0 +1,19 @@
+<ng-container *ngIf="!isEmailSent; else emailSent">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <h1 class="govuk-heading-l">Reset my password</h1>
+    <p class="govuk-body">We'll send you a link to reset your password. The link will expire after 20 minutes.</p>
+    <div
+      autoComplete="submit-email"
+      formControlName="email"
+      govuk-text-input
+      inputType="email"
+      label="Email address"
+    ></div>
+    <button govukButton type="submit">Confirm</button>
+  </form>
+  <app-back-to-top></app-back-to-top>
+</ng-container>
+
+<ng-template #emailSent>
+  <app-email-sent [email]="form.get('email').value" (retry)="retryResetPassword()"> </app-email-sent>
+</ng-template>

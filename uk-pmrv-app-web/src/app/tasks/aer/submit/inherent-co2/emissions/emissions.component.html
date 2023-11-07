@@ -1,0 +1,16 @@
+<app-aer-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    [heading]="heading$ | async"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div
+      formControlName="totalEmissions"
+      govuk-text-input
+      suffix="tonnes CO2e"
+      widthClass="govuk-input--width-20"
+    ></div>
+  </app-wizard-step>
+  <a govukLink routerLink="../..">Return to: {{ 'INHERENT_CO2' | monitoringApproachEmissionDescription }}</a>
+</app-aer-task>

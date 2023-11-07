@@ -1,0 +1,198 @@
+<ng-template #contentTpl let-showOriginal>
+  <h2 class="govuk-heading-m">{{ 'TRANSFERRED_CO2_N2O' | monitoringApproachDescription }} details</h2>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="../../transferred-co2/deductions/summary"
+      linkText="Deductions to amount of transferred CO2"
+      [status]="'TRANSFERRED_CO2_N2O_Deductions' | taskStatus | async"
+    >
+      <ng-container
+        *ngIf="
+          ('TRANSFERRED_CO2_N2O' | monitoringApproachTask: !showOriginal | async)
+            ?.deductionsToAmountOfTransferredCO2 as task
+        "
+      >
+        <dl
+          *ngIf="task.exist === false; else procedureForm"
+          govuk-summary-list
+          class="govuk-summary-list--no-border govuk-!-margin-bottom-0"
+        >
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Is any part of the transferred CO2 generated from biomass?</dt>
+            <dd govukSummaryListRowValue>No</dd>
+          </div>
+        </dl>
+        <ng-template #procedureForm>
+          <app-procedure-form-summary
+            [details]="task.procedureForm"
+            [hasBottomBorder]="false"
+            cssClass="govuk-!-margin-bottom-0"
+          >
+          </app-procedure-form-summary>
+        </ng-template>
+      </ng-container>
+    </li>
+
+    <li
+      app-task-item
+      link="../../transferred-co2/approach/summary"
+      linkText="Monitoring approach for the transport network"
+      [status]="'TRANSFERRED_CO2_N2O_Transport_Network_Approach' | taskStatus | async"
+    >
+      <ng-container *ngIf="'TRANSFERRED_CO2_N2O' | monitoringApproachTask: !showOriginal | async as task">
+        <ng-container *ngIf="('TRANSFERRED_CO2_N2O_Transport_Network_Approach' | taskStatus | async) === 'complete'">
+          <dl govuk-summary-list class="govuk-summary-list--no-border govuk-!-margin-bottom-0">
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>What approach is used to monitor the transport network?</dt>
+              <dd govukSummaryListRowValue>
+                {{ task.monitoringTransportNetworkApproach?.replace('_', ' ') }}
+              </dd>
+            </div>
+          </dl>
+        </ng-container>
+      </ng-container>
+    </li>
+
+    <li
+      app-task-item
+      link="../../transferred-co2/pipeline/summary"
+      linkText="Pipeline systems to transport CO2 or N2O"
+      [status]="'TRANSFERRED_CO2_N2O_Pipeline' | taskStatus | async"
+    >
+      <ng-container *ngIf="'TRANSFERRED_CO2_N2O' | monitoringApproachTask: !showOriginal | async as task">
+        <ng-container *ngIf="('TRANSFERRED_CO2_N2O_Pipeline' | taskStatus | async) === 'complete'">
+          <dl govuk-summary-list class="govuk-summary-list--no-border govuk-!-margin-bottom-0">
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Are you using any pipeline systems to transport CO2 or N20?</dt>
+              <dd govukSummaryListRowValue>{{ task.transportCO2AndN2OPipelineSystems.exist ? 'Yes' : 'No' }}</dd>
+            </div>
+          </dl>
+
+          <ng-container *ngIf="task.transportCO2AndN2OPipelineSystems.exist">
+            <dl
+              *ngIf="
+                task.transportCO2AndN2OPipelineSystems.procedureForLeakageEvents.exist === false;
+                else procedureForm
+              "
+              govuk-summary-list
+              class="govuk-summary-list--no-border govuk-!-margin-bottom-0"
+            >
+              <div govukSummaryListRow>
+                <dt govukSummaryListRowKey>
+                  Is there a procedure for preventing, detecting and quantifying leakage events from the transport
+                  network?
+                </dt>
+                <dd govukSummaryListRowValue>No</dd>
+              </div>
+            </dl>
+            <ng-template #procedureForm>
+              <app-procedure-form-summary
+                [details]="task.transportCO2AndN2OPipelineSystems.procedureForLeakageEvents.procedureForm"
+                [hasBottomBorder]="false"
+                cssClass="govuk-!-margin-bottom-0"
+              >
+              </app-procedure-form-summary>
+            </ng-template>
+            <dl
+              *ngIf="
+                task.transportCO2AndN2OPipelineSystems?.temperaturePressure?.exist === false;
+                else measurementDevices
+              "
+              govuk-summary-list
+            >
+              <div govukSummaryListRow>
+                <dt govukSummaryListRowKey>
+                  Is any equipment used for temperature and pressure measurement in the transport network?
+                </dt>
+                <dd govukSummaryListRowValue>No</dd>
+              </div>
+            </dl>
+
+            <ng-template #measurementDevices>
+              <dl
+                *ngFor="let detail of task.transportCO2AndN2OPipelineSystems?.temperaturePressure?.measurementDevices"
+                govuk-summary-list
+                [hasBorders]="false"
+              >
+                <div govukSummaryListRow>
+                  <dt govukSummaryListRowKey>Reference</dt>
+                  <dd class="pre-wrap" govukSummaryListRowValue>{{ detail.reference }}</dd>
+                </div>
+                <div govukSummaryListRow>
+                  <dt govukSummaryListRowKey>Type of measurement device</dt>
+                  <dd govukSummaryListRowValue>
+                    {{ detail.type === 'OTHER' ? detail.otherTypeName : (detail.type | measurementDevicesType) }}
+                  </dd>
+                </div>
+                <div govukSummaryListRow>
+                  <dt govukSummaryListRowKey>Location</dt>
+                  <dd govukSummaryListRowValue>{{ detail.location }}</dd>
+                </div>
+              </dl>
+            </ng-template>
+
+            <app-procedure-form-summary
+              [details]="task.transportCO2AndN2OPipelineSystems.proceduresForTransferredCO2AndN2O"
+              [hasBottomBorder]="false"
+              cssClass="govuk-!-margin-bottom-0"
+            >
+            </app-procedure-form-summary>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </li>
+
+    <li
+      app-task-item
+      link="../../transferred-co2/storage/summary"
+      linkText="Geological storage of CO2 or N2O"
+      [status]="'TRANSFERRED_CO2_N2O_Storage' | taskStatus | async"
+    >
+      <ng-container
+        *ngIf="('TRANSFERRED_CO2_N2O' | monitoringApproachTask: !showOriginal | async)?.geologicalStorage as task"
+      >
+        <dl
+          *ngIf="task.exist === false; else procedureForm"
+          govuk-summary-list
+          class="govuk-summary-list--no-border govuk-!-margin-bottom-0"
+        >
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Does your installation conduct any geological storage?</dt>
+            <dd govukSummaryListRowValue>No</dd>
+          </div>
+        </dl>
+        <ng-template #procedureForm>
+          <app-procedure-form-summary
+            [details]="task.procedureForm"
+            [hasBottomBorder]="false"
+            cssClass="govuk-!-margin-bottom-0"
+          >
+          </app-procedure-form-summary>
+        </ng-template>
+      </ng-container>
+    </li>
+  </ul>
+</ng-template>
+
+<app-permit-task-review
+  [breadcrumb]="true"
+  [notification]="notification"
+  [heading]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+>
+  <app-highlight-diff *ngIf="(showDiff$ | async) === true">
+    <ng-container slot="previous" *ngTemplateOutlet="contentTpl; context: { $implicit: true }"></ng-container>
+    <ng-container slot="current" *ngTemplateOutlet="contentTpl; context: { $implicit: false }"></ng-container>
+  </app-highlight-diff>
+
+  <ng-container
+    *ngIf="(showDiff$ | async) === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: false }"
+  ></ng-container>
+
+  <app-review-group-decision-container
+    [groupKey]="groupKey$ | async"
+    (notification)="notification = $event"
+  ></app-review-group-decision-container>
+</app-permit-task-review>

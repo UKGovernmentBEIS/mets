@@ -1,0 +1,17 @@
+<div formControlName="dateOfStart" govuk-date-input></div>
+
+<h2 class="govuk-heading-s">Are you submitting your application within 42 days of this date?</h2>
+<div formControlName="submittedOnTime" govuk-radio>
+  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="false" label="No">
+    <ng-container govukConditionalContent>
+      <div
+        [maxLength]="2000"
+        formControlName="reasonForLateSubmission"
+        govuk-textarea
+        label="Reason for late submission"
+        class="govuk-!-width-two-thirds"
+      ></div>
+    </ng-container>
+  </govuk-radio-option>
+</div>

@@ -1,0 +1,35 @@
+.gem-c-cookie-banner {
+    font-size: 1rem;
+    line-height: 1.25;
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 400;
+    padding: 10px 0;
+    background-color: #f3f2f1;
+}
+
+.gem-c-cookie-banner__hide-button {
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.25;
+    outline: 0;
+    border: 0;
+    background: none;
+    text-decoration: underline;
+    color: #1d70b8;
+    padding: 0;
+    cursor: pointer;
+}
+
+.govuk-cookie-button {
+    width: 100%;
+    padding-left: inherit;
+}
+
+.govuk-grid-column-one-half-from-desktop {
+    padding-left: 0;
+    padding-right: 10px;
+}

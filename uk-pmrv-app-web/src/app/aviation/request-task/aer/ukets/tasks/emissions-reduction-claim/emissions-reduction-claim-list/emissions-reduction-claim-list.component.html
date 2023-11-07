@@ -1,0 +1,10 @@
+<app-page-heading size="xl">List the SAF batch claims for the scheme year</app-page-heading>
+<app-emissions-reduction-claim-list-template
+  [data]="purchases"
+  [isEditable]="true"
+  [queryParams]="{ change: true }"
+></app-emissions-reduction-claim-list-template>
+
+<button *ngIf="purchases.length" type="button" appPendingButton govukButton (click)="onContinue()">Continue</button>
+<br />
+<app-return-to-link></app-return-to-link>

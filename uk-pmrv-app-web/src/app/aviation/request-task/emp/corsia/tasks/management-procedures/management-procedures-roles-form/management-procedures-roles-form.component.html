@@ -1,0 +1,18 @@
+<div formArrayName="monitoringReportingRoles">
+  <fieldset govukFieldset *ngFor="let _ of managementProceduresRolesCtrl.controls; index as i" [formGroupName]="i">
+    <legend govukLegend>Role {{ i + 1 }}</legend>
+    <button
+      (click)="removeManagementProceduresRole(i)"
+      *ngIf="managementProceduresRolesCtrl.length > 1"
+      [heading]="heading"
+      appAddAnother
+      govukSecondaryButton
+      type="button"
+    >
+      Remove
+    </button>
+    <div govuk-text-input formControlName="jobTitle" label="Job title"></div>
+    <div govuk-text-input formControlName="mainDuties" label="Main duties"></div>
+  </fieldset>
+  <button (click)="addManagementProceduresRole()" govukSecondaryButton type="button">Add another</button>
+</div>

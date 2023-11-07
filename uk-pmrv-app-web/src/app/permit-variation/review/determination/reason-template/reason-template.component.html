@@ -1,0 +1,35 @@
+<app-permit-task [breadcrumb]="true">
+  <app-wizard-step
+    [showBackLink]="true"
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <span class="govuk-caption-l">{{ determination$ | async }}</span>
+
+    <app-page-heading>Choose a reason template to include in the official notice to the operator</app-page-heading>
+    <div class="govuk-hint">This will add the relevant text template to the official notice</div>
+
+    <div formControlName="reasonTemplate" govuk-radio>
+      <govuk-radio-option
+        *ngFor="let option of reasonTemplateOptions"
+        [label]="option | i18nSelect: reasonTemplatesMap"
+        [value]="option"
+      >
+      </govuk-radio-option>
+      <govuk-radio-option [value]="'OTHER'" label="A different reason">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="reasonTemplateOtherSummary"
+            govuk-textarea
+            [maxLength]="10000"
+            label="Provide a reason to be included in the operator notice"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: Permit variation</a>
+</app-permit-task>

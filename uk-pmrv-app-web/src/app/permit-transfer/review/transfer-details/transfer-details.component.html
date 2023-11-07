@@ -1,0 +1,24 @@
+<app-permit-task-review [breadcrumb]="true" [notification]="notification" heading="Transfer details">
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="../../transfer-details/summary"
+      linkText="Confirm the transfer details"
+      [status]="transferDetailsStatus$ | async"
+      [hasContent]="true"
+    >
+      <app-transfer-details-summary-details-template
+        [hasBottomBorder]="false"
+        [showChangeLink]="false"
+        [transferDetailsConfirmation]="transferDetailsConfirmation$ | async"
+      ></app-transfer-details-summary-details-template>
+    </li>
+  </ul>
+  <app-review-group-decision
+    [canEdit]="isPermitTypeEditable$ | async"
+    [groupKey]="groupKey$ | async"
+    [reviewGroupStatus$]="confirmTransferDetailsReviewStatus$"
+    [reviewGroupDecision]="permitTransferDetailsConfirmationDecision$ | async"
+    (notification)="notification = $event"
+  ></app-review-group-decision>
+</app-permit-task-review>

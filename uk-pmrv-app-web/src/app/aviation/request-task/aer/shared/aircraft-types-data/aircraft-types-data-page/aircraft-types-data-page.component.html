@@ -1,0 +1,64 @@
+<div
+  *ngIf="errorList?.length > 0"
+  aria-labelledby="error-summary-title"
+  class="govuk-error-summary"
+  role="alert"
+  tabindex="-1"
+>
+  <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+  <div class="govuk-error-summary__body">
+    <ul class="govuk-list govuk-error-summary__list">
+      <ng-container *ngFor="let errorItem of errorList">
+        <ng-container *ngIf="errorItem">
+          <li>
+            <p style="color: #d4351c; font-weight: bold">{{ errorItem?.message }}</p>
+          </li>
+        </ng-container>
+      </ng-container>
+    </ul>
+  </div>
+</div>
+
+<app-csv-data-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Aircraft types data"
+  submitText="Continue"
+  [hideSubmit]="!fileLoaded || !parsedData"
+>
+  <div class="govuk-!-width-three-quarters">
+    <p class="govuk-body">
+      Upload a comma-separated values (.csv) file of the aircraft types which you have operated during the scheme year
+      on {{ scheme$ | async }} flights. This should include owned and leased-in aircraft.
+    </p>
+    <p class="govuk-body">
+      You can upload your own data by using the
+      <a class="govuk-link" href="#" rel="noreferrer noopener">aircraft types data template</a> or if you use simplified
+      reporting, upload the Eurocontrol aggregated aircraft data file.
+    </p>
+  </div>
+
+  <input type="file" (change)="onFileSelect($event)" style="display: none" #fileInput />
+
+  <button type="button" govukButton *ngIf="!parsedData" (click)="fileInput.click()">Choose a CSV file</button>
+  <button type="button" govukButton govukSecondaryButton *ngIf="fileLoaded && parsedData" (click)="fileInput.click()">
+    Upload your CSV file again
+  </button>
+
+  <div *ngIf="!fileLoaded || !parsedData">
+    <app-aircraft-types-data-table
+      [headingText]="'Your CSV file needs to look like this example'"
+      [customColumns]="exampleTableColumns"
+      [aviationAerAircraftDataDetails]="exampleTableData"
+    ></app-aircraft-types-data-table>
+  </div>
+
+  <input type="text" [hidden]="true" formControlName="aviationAerAircraftDataDetails" />
+  <div *ngIf="fileLoaded && parsedData">
+    <app-aircraft-types-data-table
+      [headingText]="fileName"
+      [aviationAerAircraftDataDetails]="parsedData"
+    ></app-aircraft-types-data-table>
+  </div>
+</app-csv-data-wizard-step>
+<app-return-to-link></app-return-to-link>

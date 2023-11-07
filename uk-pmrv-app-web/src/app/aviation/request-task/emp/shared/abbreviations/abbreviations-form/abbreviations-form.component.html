@@ -1,0 +1,30 @@
+<div
+  formControlName="exist"
+  govuk-radio
+  [isInline]="true"
+  legend="Are you using any abbreviations or terminology in your application which need explanation?"
+  legendSize="medium"
+>
+  <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+  <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+</div>
+<div *ngIf="existCtrl.value === true">
+  <div formArrayName="abbreviationDefinitions">
+    <fieldset govukFieldset *ngFor="let _ of abbreviationDefinitionsCtrl.controls; index as i" [formGroupName]="i">
+      <legend govukLegend>Definition {{ i + 1 }}</legend>
+      <button
+        (click)="removeAbbreviationDefinitionCtrl(i)"
+        *ngIf="abbreviationDefinitionsCtrl.length > 1"
+        [heading]="heading"
+        appAddAnother
+        govukSecondaryButton
+        type="button"
+      >
+        Remove
+      </button>
+      <div govuk-text-input formControlName="abbreviation" label="Abbreviation or term used"></div>
+      <div govuk-text-input formControlName="definition" label="Definition"></div>
+    </fieldset>
+    <button (click)="addAbbreviationDefinitionCtrl()" govukSecondaryButton type="button">Add another</button>
+  </div>
+</div>

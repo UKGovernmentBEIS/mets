@@ -1,0 +1,64 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="false"
+  [heading]="'Select the reference documents that are appropriate to the accreditation you hold'"
+  class="govuk-!-width-two-thirds"
+>
+  <h1 class="govuk-heading-m govuk-!-width-two-thirds">For UK Emissions Trading Scheme (ETS)</h1>
+
+  <!-- For accredited verifiers -->
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">For accredited verifiers</h2>
+
+  <div formControlName="aviationAerUkeEtsForAccreditedVerifiers" govuk-checkboxes class="govuk-!-width-two-thirds">
+    <govuk-checkbox
+      *ngFor="let type of aviationAerUkeEtsForAccreditedVerifiers"
+      [value]="type"
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
+  </div>
+
+  <!-- For accredited verifiers that are also financial assurance providers -->
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">
+    For accredited verifiers that are also financial assurance providers
+  </h2>
+
+  <div
+    formControlName="aviationAerUkeEtsForAccreditedVerifiersAndFinancialAssuranceProviders"
+    govuk-checkboxes
+    class="govuk-!-width-two-thirds"
+  >
+    <govuk-checkbox
+      *ngFor="let type of aviationAerUkeEtsForAccreditedVerifiersAndFinancialAssuranceProviders"
+      [value]="type"
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
+  </div>
+
+  <!-- Rules of the UK ETS -->
+  <h1 class="govuk-heading-m govuk-!-width-two-thirds">Rules of the UK ETS</h1>
+
+  <div formControlName="aviationAerUkeEtsRulesUkEts" govuk-checkboxes class="govuk-!-width-two-thirds">
+    <govuk-checkbox
+      *ngFor="let type of aviationAerUkeEtsRulesUkEts"
+      [value]="type"
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
+  </div>
+
+  <!-- Other Reference -->
+  <div formControlName="aviationAerUkeEtsRulesUkEtsOther" govuk-checkboxes class="govuk-!-width-two-thirds">
+    <govuk-checkbox
+      *ngFor="let type of aviationAerUkeEtsRulesUkEtsOther"
+      [value]="type"
+      [label]="type | accreditationReferenceDocumentName"
+    >
+      <ng-container govukConditionalContent>
+        <div formControlName="otherReference" govuk-textarea [maxLength]="10000" label="Reference details"></div>
+      </ng-container>
+    </govuk-checkbox>
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

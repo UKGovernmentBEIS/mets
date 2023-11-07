@@ -1,0 +1,24 @@
+<ng-container formGroupName="dataFlowActivities">
+  <app-procedure-form></app-procedure-form>
+  <div formControlName="diagramReference" govuk-text-input label="Diagram reference (optional)"></div>
+  <div
+    formControlName="otherStandardsApplied"
+    govuk-text-input
+    label="List of EN or other standards applied (optional)"
+    hint="For example, ‘EN’ or ‘ISO14001’."
+  ></div>
+  <div formControlName="primaryDataSources" govuk-text-input label="Primary data sources"></div>
+  <div
+    formControlName="processingSteps"
+    govuk-textarea
+    label="Describe the processing steps for each data flow activity"
+    hint="These steps should cover the sources of primary data to annual emissions reporting. Include any relevant electronic data processing, calculations and storage systems and confirm how outputs of activities are recorded."
+    [maxLength]="10000"
+  ></div>
+  <app-file-input
+    [downloadUrl]="getDownloadUrl"
+    formControlName="diagramAttachmentId"
+    label="Upload a data flow diagram"
+    text="Attach a diagram that summarises the data sources, who is responsible for retrieving and processing the data, and the systems used to store the data."
+  ></app-file-input>
+</ng-container>

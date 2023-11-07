@@ -1,0 +1,19 @@
+<app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" submitText="Continue" [hideSubmit]="false">
+  <div class="govuk-!-width-two-thirds">
+    <div class="govuk-caption-l">Block-hour</div>
+    <app-page-heading>Which fuel uplift supplier records will be used?</app-page-heading>
+  </div>
+  <!-- <div [maxLength]="2000" formControlName="zeroFuelUplift" govuk-textarea class="govuk-!-width-two-thirds"></div> -->
+
+  <div formControlName="fuelUpliftSupplierRecordType" govuk-radio>
+    <govuk-radio-option
+      value="FUEL_DELIVERY_NOTES"
+      [label]="'FUEL_DELIVERY_NOTES' | fuelUpliftSupplierRecordType"
+    ></govuk-radio-option>
+
+    <govuk-radio-option value="FUEL_INVOICES" [label]="'FUEL_INVOICES' | fuelUpliftSupplierRecordType">
+    </govuk-radio-option>
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

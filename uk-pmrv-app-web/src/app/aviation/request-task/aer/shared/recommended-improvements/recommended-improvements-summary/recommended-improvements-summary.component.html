@@ -1,0 +1,33 @@
+<div *ngIf="vm$ | async as vm" class="govuk-!-width-two-thirds">
+  <app-page-heading>Check your answers</app-page-heading>
+  <h2 class="govuk-heading-m">Recommended improvements</h2>
+
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Are there any recommended improvements?</dt>
+      <dd govukSummaryListRowValue>{{ vm.data?.exist ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+        <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <app-recommended-improvements-group-template
+    [isEditable]="vm.isEditable"
+    [verifierComments]="vm.data?.recommendedImprovements"
+    [baseUrl]="'../list'"
+    [queryParams]="{ change: true }"
+    *ngIf="vm.data?.exist"
+  ></app-recommended-improvements-group-template>
+  <div *ngIf="!vm.hideSubmit" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+
+  <app-aviation-aer-verification-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="recommendedImprovements"
+  ></app-aviation-aer-verification-review-decision-group>
+  <div>
+    <app-return-to-link></app-return-to-link>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+<app-permit-task [breadcrumb]="[{ text: 'FALLBACK' | monitoringApproachDescription, link: ['fall-back'] }]">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Confirm and complete"
+    [caption]="'FALLBACK' | monitoringApproachDescription"
+    heading="Annual uncertainty analysis"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <p class="govuk-body">Provide details about the procedures used to carry out the annual uncertainty analysis.</p>
+
+    <app-procedure-form></app-procedure-form>
+  </app-wizard-step>
+
+  <app-approach-return-link
+    [parentTitle]="'FALLBACK' | monitoringApproachDescription"
+    reviewGroupUrl="fall-back"
+  ></app-approach-return-link>
+</app-permit-task>

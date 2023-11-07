@@ -1,0 +1,12 @@
+{
+  "name": "govuk-components",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@angular/common": "^15.2.5",
+    "@angular/core": "^15.2.5",
+    "govuk-frontend": "^3.9.1"
+  },
+  "dependencies": {
+    "tslib": "^2.4.0"
+  }
+}

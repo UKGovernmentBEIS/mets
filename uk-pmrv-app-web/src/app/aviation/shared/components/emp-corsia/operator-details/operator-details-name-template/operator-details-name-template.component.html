@@ -1,0 +1,13 @@
+<app-wizard-step
+  (formSubmit)="submitForm.next(form)"
+  [formGroup]="form"
+  heading="Operator details"
+  submitText="Continue"
+>
+  <div
+    formControlName="operatorName"
+    govuk-text-input
+    label="Aircraft operator name"
+    class="govuk-!-width-two-thirds"
+  ></div>
+</app-wizard-step>

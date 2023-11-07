@@ -1,0 +1,14 @@
+<dl govuk-summary-list>
+  <ng-container *ngFor="let source of data; let i = index">
+    <div govukSummaryListRow>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ source }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="[baseChangeLink, i]" [state]="{ changing: true }">Change</a>
+        &nbsp;
+        <a govukLink [routerLink]="[baseChangeLink, i, 'delete']" [state]="{ changing: true }">Remove</a>
+      </dd>
+    </div>
+  </ng-container>
+</dl>

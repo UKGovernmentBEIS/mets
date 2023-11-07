@@ -1,0 +1,45 @@
+<app-aer-task-review heading="Has the monitoring approach been applied correctly?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <govuk-details summary="See guidance">
+      <article>
+        <p class="govuk-body">
+          You must check that the monitoring approach (and specific details) and the sampling plan have been correctly
+          applied and implemented.
+        </p>
+        <p class="govuk-body">
+          If CO2 is transferred and measured by both the transferring and receiving installation, you need to check if:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>differences between the measured values at both installations can be explained by the uncertainty of the
+            measurement systems
+          </li>
+          <li>the correct arithmetic average of the measured values has been used in the emission reports of both
+            installations
+          </li>
+        </ul>
+        <p class="govuk-body">
+          If the differences cannot be explained, you must check if:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>adjustments were made to align the differences between the measured values</li>
+          <li>those adjustments were conservative</li>
+          <li>the competent authority has granted approval for those adjustments</li>
+        </ul>
+      </article>
+    </govuk-details>
+    <div formControlName="monitoringApproachAppliedCorrectly" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="monitoringApproachNotAppliedCorrectlyReason" govuk-textarea
+               label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

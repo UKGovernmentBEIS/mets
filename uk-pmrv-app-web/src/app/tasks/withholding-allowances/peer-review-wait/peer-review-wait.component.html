@@ -1,0 +1,14 @@
+<app-base-task-container-component
+  header="Withholding of allowances"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="WITHHOLDING_OF_ALLOWANCES_WAIT_FOR_PEER_REVIEW"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <govuk-warning-text> Waiting for peer review, you cannot make any changes</govuk-warning-text>
+
+  <ul app-task-item-list>
+    <li app-task-item link="./summary" linkText="Provide withholding of allowances details" [status]="'complete'"></li>
+  </ul>
+</ng-template>

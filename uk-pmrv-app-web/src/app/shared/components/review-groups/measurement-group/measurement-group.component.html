@@ -1,0 +1,52 @@
+<govuk-table [columns]="columns" [data]="emissionPointEmissions">
+  <ng-template let-column="column" let-row="row" let-index="index" let-isLast="isLast">
+    <ng-container [ngSwitch]="column.field">
+      <ng-container *ngSwitchCase="'emissionPointDescription'">
+        <ng-container *ngIf="row?.emissionPointDescription !== 'totals'; else totals">
+          <a [routerLink]="['./', index, 'summary']" govukLink>
+            <ng-container *ngIf="row?.emissionPointDescription; else noEmissionPoint">
+              {{ row.emissionPointDescription }}
+              <ng-container *ngIf="row?.parameterMonitoringTierDiffReason?.type === 'DATA_GAP'">
+                - Data gap
+              </ng-container>
+            </ng-container>
+            <ng-template #noEmissionPoint> Undefined </ng-template>
+          </a>
+        </ng-container>
+        <ng-template #totals> Total emissions </ng-template>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'sourceStreams'">
+        {{ row.sourceStreams }}
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'emissionSources'">
+        {{ row.emissionSources }}
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'reportableEmissions'">
+        <ng-container *ngIf="row?.emissionPointDescription !== 'totals'">
+          {{ row.reportableEmissions | bigNumber }}
+        </ng-container>
+        <ng-container *ngIf="row?.emissionPointDescription === 'totals'">
+          {{ row.reportableEmissions | bigNumber }} tCO2e
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'biomassEmissions'">
+        <ng-container *ngIf="row?.emissionPointDescription !== 'totals'">
+          {{ row.biomassEmissions | bigNumber }}
+        </ng-container>
+        <ng-container *ngIf="row?.emissionPointDescription === 'totals'">
+          {{ row.biomassEmissions | bigNumber }} tCO2e
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'status'">
+        <govuk-tag *ngIf="row.status && !isReview" [color]="row.status | tagColor" class="app-task-list__tag">
+          {{ row.status | i18nSelect: statusMap }}
+        </govuk-tag>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</govuk-table>

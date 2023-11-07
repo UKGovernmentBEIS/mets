@@ -1,0 +1,94 @@
+<app-permit-task [breadcrumb]="[{ text: 'MEASUREMENT_CO2' | monitoringApproachDescription, link: ['measurement'] }]">
+  <ng-container *ngIf="(isEditable$ | async) === false; else start">
+    <app-page-heading [caption]="'MEASUREMENT_CO2' | monitoringApproachDescription">
+      Add an emission point category
+    </app-page-heading>
+    <p class="govuk-body">Other tasks must be completed before you can start:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Source streams (fuels and materials)</li>
+      <li>Emission sources</li>
+      <li>Emission points</li>
+    </ul>
+  </ng-container>
+
+  <ng-template #start>
+    <app-page-heading [caption]="'MEASUREMENT_CO2' | monitoringApproachDescription">
+      <ng-container
+        *ngIf="
+          ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers as tiers;
+          else addStream
+        "
+      >
+        <ng-container *ngIf="tiers && tiers[index$ | async]; else addStream">
+          {{ tiers[index$ | async] | emissionPointCategoryName | async }}
+          <button *ngIf="(store.isEditable$ | async) === true" routerLink="delete" govukSecondaryButton type="button">
+            Delete
+          </button>
+        </ng-container>
+      </ng-container>
+      <ng-template #addStream>
+        <ng-container *ngIf="(store.isEditable$ | async) === true">Add an emission point category</ng-container>
+      </ng-template>
+    </app-page-heading>
+    <h2 class="govuk-heading-m">Define the emission point category</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        link="category/summary"
+        linkText="Emission point category"
+        [status]="'MEASUREMENT_CO2_Category' | taskStatus: (index$ | async) | async"
+      >
+        <app-category-summary-overview
+          *ngIf="('MEASUREMENT_CO2_Category' | taskStatus: (index$ | async) | async) === 'complete'"
+          [emissionPointCategory]="
+            ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]
+              .emissionPointCategory
+          "
+          cssClass="govuk-!-margin-bottom-0"
+        >
+        </app-category-summary-overview>
+      </li>
+    </ul>
+
+    <h2 class="govuk-heading-m">Define measurement approach and apply monitoring tiers</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        link="emissions/summary"
+        linkText="Measured emissions"
+        [status]="'MEASUREMENT_CO2_Measured_Emissions' | taskStatus: (index$ | async) | async"
+      >
+        <app-measured-emissions-overview
+          *ngIf="('MEASUREMENT_CO2_Measured_Emissions' | taskStatus: (index$ | async) | async) === 'complete'"
+          [measuredEmissions]="
+            ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]
+              .measuredEmissions
+          "
+          cssClass="govuk-!-margin-bottom-0"
+        >
+        </app-measured-emissions-overview>
+      </li>
+      <li
+        app-task-item
+        link="./applied-standard/summary"
+        linkText="Applied standard"
+        [status]="'MEASUREMENT_CO2_Applied_Standard' | taskStatus: (index$ | async) | async"
+      >
+        <app-applied-standard-form-summary
+          *ngIf="('MEASUREMENT_CO2_Applied_Standard' | taskStatus: (index$ | async) | async) === 'complete'"
+          [appliedStandard]="
+            ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]
+              .appliedStandard
+          "
+          cssClass="govuk-!-margin-bottom-0"
+        >
+        </app-applied-standard-form-summary>
+      </li>
+    </ul>
+  </ng-template>
+
+  <app-approach-return-link
+    [parentTitle]="'MEASUREMENT_CO2' | monitoringApproachDescription"
+    reviewGroupUrl="measurement"
+  ></app-approach-return-link>
+</app-permit-task>

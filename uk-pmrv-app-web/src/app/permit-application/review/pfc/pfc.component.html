@@ -1,0 +1,162 @@
+<ng-template #contentTpl let-showOriginal let-appliedTiers="appliedTiers" let-sumOfAnnualEmitted="sumOfAnnualEmitted">
+  <h2 class="govuk-heading-m">Perfluorocarbons emission sources</h2>
+
+  <ul app-task-item-list>
+    <div class="overflow-auto">
+      <ng-container *ngIf="appliedTiers?.length > 0; else addNew">
+        <govuk-table [columns]="columns" [data]="appliedTiers">
+          <ng-template let-column="column" let-row="row" let-index="index">
+            <ng-container [ngSwitch]="column.field">
+              <ng-container *ngSwitchCase="'category'">
+                <a govukLink [routerLink]="['../../pfc/category-tier', index]">
+                  <ng-container
+                    *ngIf="
+                      row?.sourceStreamCategory?.sourceStream | findSourceStream: !showOriginal | async as sourceStream;
+                      else noSourceStream
+                    "
+                  >
+                    {{ sourceStream | tierSourceStreamName: row.sourceStreamCategory }}
+                  </ng-container>
+                  <ng-template #noSourceStream>
+                    UNDEFINED: {{ row?.sourceStreamCategory?.categoryType | categoryTypeName }}
+                  </ng-template>
+                </a>
+              </ng-container>
+              <ng-container *ngSwitchCase="'emissions'">
+                {{ row?.sourceStreamCategory?.annualEmittedCO2Tonnes | number }} t ({{
+                  (row?.sourceStreamCategory?.annualEmittedCO2Tonnes ?? 0) / sumOfAnnualEmitted | percent
+                }})
+              </ng-container>
+              <ng-container *ngSwitchCase="'status'">
+                <govuk-tag
+                  [color]="'CALCULATION_PFC_Category_Tier' | taskStatus: index | async | tagColor"
+                  class="app-task-list__tag"
+                >
+                  {{ 'CALCULATION_PFC_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
+                </govuk-tag>
+              </ng-container>
+            </ng-container>
+          </ng-template>
+        </govuk-table>
+        <a
+          *ngIf="(store.isEditable$ | async) === true"
+          govukLink
+          [routerLink]="['../../pfc/category-tier', appliedTiers?.length]"
+        >
+          Add a source stream category
+        </a>
+      </ng-container>
+
+      <ng-template #addNew>
+        <li
+          *ngIf="(store.isEditable$ | async) === true"
+          app-task-item
+          link="../../pfc/category-tier/0"
+          linkText="Add a source stream category"
+          [status]="sourceStreamCategoriesStatus$ | async"
+        ></li>
+      </ng-template>
+    </div>
+  </ul>
+
+  <h2 class="govuk-heading-m">{{ 'CALCULATION_PFC' | monitoringApproachDescription }} details</h2>
+
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="../../pfc/description/summary"
+      linkText="Approach description"
+      [status]="'CALCULATION_PFC_Description' | taskStatus | async"
+    >
+      <app-pfc-approach-description-summary-template
+        [showOriginal]="showOriginal"
+        [hasBottomBorder]="false"
+      ></app-pfc-approach-description-summary-template>
+    </li>
+    <li
+      app-task-item
+      link="../../pfc/types/summary"
+      linkText="Cell and anode types"
+      [status]="'CALCULATION_PFC_Types' | taskStatus | async"
+    >
+      <app-pfc-approach-types-summary-template
+        [showOriginal]="showOriginal"
+        [hasBottomBorder]="false"
+      ></app-pfc-approach-types-summary-template>
+    </li>
+    <li
+      app-task-item
+      link="../../pfc/efficiency/summary"
+      linkText="Collection efficiency"
+      [status]="'CALCULATION_PFC_Efficiency' | taskStatus | async"
+    >
+      <app-procedure-form-summary
+        [details]="('CALCULATION_PFC' | monitoringApproachTask: !showOriginal | async)?.collectionEfficiency"
+        cssClass="summary-list--edge-border"
+        [hasBottomBorder]="false"
+      ></app-procedure-form-summary>
+    </li>
+    <li
+      app-task-item
+      link="../../pfc/emission-factor/summary"
+      linkText="Tier 2 - Emission factor"
+      [status]="'CALCULATION_PFC_Tier2EmissionFactor' | taskStatus | async"
+    >
+      <app-emission-factor-summary-details
+        *ngIf="('CALCULATION_PFC_Tier2EmissionFactor' | taskStatus | async) === 'complete'"
+        [emissionFactor]="('CALCULATION_PFC' | monitoringApproachTask: !showOriginal | async)?.tier2EmissionFactor"
+        [changePerStage]="false"
+        [hasBottomBorder]="false"
+        cssClass="summary-list--edge-border"
+      ></app-emission-factor-summary-details>
+    </li>
+  </ul>
+</ng-template>
+
+<app-permit-task-review
+  [breadcrumb]="true"
+  [notification]="notification"
+  [heading]="'CALCULATION_PFC' | monitoringApproachDescription"
+>
+  <app-site-emissions></app-site-emissions>
+
+  <app-highlight-diff *ngIf="(showDiff$ | async) === true">
+    <ng-container
+      slot="previous"
+      *ngTemplateOutlet="
+        contentTpl;
+        context: {
+          $implicit: true,
+          appliedTiers: originalSourceStreamCategoryAppliedTiers$ | async,
+          sumOfAnnualEmitted: originalSumOfAnnualEmitted$ | async
+        }
+      "
+    ></ng-container>
+    <ng-container
+      slot="current"
+      *ngTemplateOutlet="
+        contentTpl;
+        context: {
+          $implicit: false,
+          appliedTiers: sourceStreamCategoryAppliedTiers$ | async,
+          sumOfAnnualEmitted: sumOfAnnualEmitted$ | async
+        }
+      "
+    ></ng-container>
+  </app-highlight-diff>
+
+  <ng-container
+    *ngIf="(showDiff$ | async) === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{
+      $implicit: false,
+      appliedTiers: sourceStreamCategoryAppliedTiers$ | async,
+      sumOfAnnualEmitted: sumOfAnnualEmitted$ | async
+    }"
+  ></ng-container>
+
+  <app-review-group-decision-container
+    [groupKey]="groupKey$ | async"
+    (notification)="notification = $event"
+  ></app-review-group-decision-container>
+</app-permit-task-review>

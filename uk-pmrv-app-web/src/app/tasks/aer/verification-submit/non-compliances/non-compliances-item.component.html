@@ -1,0 +1,31 @@
+<app-aer-task-review heading="Add a non-compliance with the monitoring and reporting regulations"
+                     returnToLink="../.." linkText="Emissions report">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">Give as much detail as possible, including:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>the nature and size of the non-compliance</li>
+      <li>which element of the MRR it relates to</li>
+    </ul>
+    <p class="govuk-body">Read about <a
+      href="https://ec.europa.eu/clima/system/files/2016-11/avr_classification_reporting_issues_en.pdf"
+      class="govuk-link" rel="noreferrer noopener" target="_blank">how to classify and report non-compliances</a> (EC
+      website PDF).</p>
+    <div label="Explanation" [maxLength]="10000" formControlName="explanation" govuk-textarea></div>
+
+    <p class="govuk-body">Does this have a material (significant) effect on:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>the total reported emissions</li>
+      <li>any tonne-kilometre data</li>
+      <li>any data relevant for free allocation</li>
+    </ul>
+    <div formControlName="materialEffect" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

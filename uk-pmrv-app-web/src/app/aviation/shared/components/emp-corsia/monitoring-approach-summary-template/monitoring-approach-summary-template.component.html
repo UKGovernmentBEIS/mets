@@ -1,0 +1,48 @@
+<div class="govuk-!-width-three-quarters">
+  <dl govuk-summary-list *ngIf="$any(data)?.emissionsMonitoringApproach?.monitoringApproachType">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Monitoring approach</dt>
+      <dd govukSummaryListRowValue>
+        {{ $any(data).emissionsMonitoringApproach.monitoringApproachType | monitoringApproachCorsiaTypes }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="$any(data)?.emissionsMonitoringApproach?.certEmissionsType">
+      <dt govukSummaryListRowKey>CERT input method used to estimate your emissions</dt>
+      <dd govukSummaryListRowValue>
+        {{ $any(data).emissionsMonitoringApproach.certEmissionsType | monitoringApproachCorsiaTypes: false }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl govuk-summary-list *ngIf="$any(data)?.simplifiedApproach?.explanation">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Explain how you are eligible to apply this approach</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ $any(data).simplifiedApproach.explanation }}</dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../simplified-approach'" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+    <div
+      govukSummaryListRow
+      *ngIf="files?.length > 0 && $any(data).simplifiedApproach?.supportingEvidenceFiles.length > 0"
+    >
+      <dt govukSummaryListRowKey>Supporting evidence</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="files"></app-summary-download-files>
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../simplified-approach'" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</div>

@@ -1,0 +1,59 @@
+<dl govuk-summary-list [class]="cssClass">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Are you using any pipeline systems to transport CO2 or N20?</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ pipelineSystems.exist ? 'Yes' : 'No' }}</dd>
+  </div>
+</dl>
+<ng-container *ngIf="pipelineSystems.exist">
+  <dl *ngIf="pipelineSystems.procedureForLeakageEvents.exist === false; else procedureForm" govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Is there a procedure for preventing, detecting and quantifying leakage events from the transport network?
+      </dt>
+      <dd govukSummaryListRowValue>No</dd>
+    </div>
+  </dl>
+
+  <ng-template #procedureForm>
+    <app-procedure-form-summary
+      [details]="pipelineSystems.procedureForLeakageEvents.procedureForm"
+      cssClass="summary-list--edge-border"
+    ></app-procedure-form-summary>
+  </ng-template>
+
+  <dl *ngIf="pipelineSystems?.temperaturePressure?.exist === false; else measurementDevices" govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Is any equipment used for temperature and pressure measurement in the transport network?
+      </dt>
+      <dd govukSummaryListRowValue>No</dd>
+    </div>
+  </dl>
+
+  <ng-template #measurementDevices>
+    <dl
+      *ngFor="let detail of pipelineSystems?.temperaturePressure?.measurementDevices"
+      govuk-summary-list
+      [hasBorders]="false"
+    >
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Reference</dt>
+        <dd class="pre-wrap" govukSummaryListRowValue>{{ detail.reference }}</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Type of measurement device</dt>
+        <dd govukSummaryListRowValue>
+          {{ detail.type === 'OTHER' ? detail.otherTypeName : (detail.type | measurementDevicesType) }}
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Location</dt>
+        <dd govukSummaryListRowValue>{{ detail.location }}</dd>
+      </div>
+    </dl>
+  </ng-template>
+  <app-procedure-form-summary
+    [details]="pipelineSystems?.proceduresForTransferredCO2AndN2O"
+    cssClass="summary-list--edge-border"
+  ></app-procedure-form-summary>
+</ng-container>

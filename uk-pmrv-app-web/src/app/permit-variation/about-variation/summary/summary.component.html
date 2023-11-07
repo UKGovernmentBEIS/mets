@@ -1,0 +1,21 @@
+<app-permit-task [breadcrumb]="true" reviewGroupTitle="About variation" reviewGroupUrl="about">
+  <div class="govuk-grid-row" *ngIf="notificationBanner">
+    <div class="govuk-grid-column-full">
+      <govuk-notification-banner type="success">
+        <h1 class="govuk-notification-banner__heading">Details updated</h1>
+      </govuk-notification-banner>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <app-page-heading>About the variation</app-page-heading>
+      <app-about-variation-summary-details
+        [showChangeLink]="(store.isEditable$ | async) === true"
+        [permitVariationDetails]="permitVariationDetails$ | async"
+      ></app-about-variation-summary-details>
+    </div>
+  </div>
+
+  <app-list-return-link reviewGroupTitle="About the variation" reviewGroupUrl="about"></app-list-return-link>
+</app-permit-task>

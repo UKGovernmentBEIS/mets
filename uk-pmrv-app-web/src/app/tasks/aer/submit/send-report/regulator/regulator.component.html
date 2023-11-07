@@ -1,0 +1,28 @@
+<app-aer-task>
+  <ng-container *ngIf="(isSubmitted$ | async) !== true; else submitted">
+    <app-page-heading>Send report to regulator</app-page-heading>
+    <p class="govuk-body">
+      Your report will be sent directly to {{ aerService.competentAuthority$ | async | competentAuthority }}.
+    </p>
+    <p class="govuk-body">By selecting ‘Confirm and send’ you confirm that:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>you have complied with the Monitoring and Reporting Regulations 2018</li>
+      <li>you have complied with all aspects of the monitoring plan</li>
+      <li>the information in your report is correct to the best of your knowledge</li>
+    </ul>
+    <div class="govuk-button-group" *ngIf="aerService.isEditable$ | async">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and send</button>
+    </div>
+    <app-return-link returnLink="../.."></app-return-link>
+  </ng-container>
+
+  <ng-template #submitted>
+    <govuk-panel title="Report sent to regulator">Your reference is {{ aerService.requestId }}</govuk-panel>
+    <span class="govuk-caption-l govuk-!-margin-bottom-8">We have sent you a confirmation email.</span>
+    <h3 class="govuk-heading-m">What happens next</h3>
+    <p class="govuk-body">
+      Your report has been sent to {{ aerService.competentAuthority$ | async | competentAuthority }}.
+    </p>
+    <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
+  </ng-template>
+</app-aer-task>

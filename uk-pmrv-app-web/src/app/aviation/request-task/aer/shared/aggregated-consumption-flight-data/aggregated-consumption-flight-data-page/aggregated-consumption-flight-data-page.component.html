@@ -1,0 +1,67 @@
+<div
+  *ngIf="errorList?.length > 0"
+  aria-labelledby="error-summary-title"
+  class="govuk-error-summary"
+  role="alert"
+  tabindex="-1"
+>
+  <h2 class="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+  <div class="govuk-error-summary__body">
+    <ul class="govuk-list govuk-error-summary__list">
+      <ng-container *ngFor="let errorItem of errorList">
+        <ng-container *ngIf="errorItem">
+          <li>
+            <p style="color: #d4351c; font-weight: bold">{{ errorItem?.message }}</p>
+          </li>
+        </ng-container>
+      </ng-container>
+    </ul>
+  </div>
+</div>
+
+<app-csv-data-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Aggregated consumption and flight data"
+  submitText="Continue"
+  [hideSubmit]="!fileLoaded || !parsedData"
+>
+  <div class="govuk-!-width-three-quarters">
+    <p class="govuk-body">
+      Upload a comma-separated values (.csv) file of fuel consumption in tonnes per aerodrome pair, which you have
+      operated during the scheme year.
+    </p>
+    <p class="govuk-body">
+      You can upload your own data by using the
+      <a class="govuk-link" href="#" rel="noreferrer noopener">aerodrome pair data template</a>, or if you qualify for
+      simplified reporting, upload the Eurocontrol aggregated emissions data file.
+    </p>
+    <p class="govuk-body">
+      Your data must only include flights within the scope of UK ETS, as defined in Schedule 1 of the Order.
+    </p>
+  </div>
+  <input type="file" (change)="onFileSelect($event)" style="display: none" #fileInput />
+
+  <button type="button" govukButton *ngIf="!parsedData" (click)="fileInput.click()">Choose a CSV file</button>
+  <button type="button" govukButton govukSecondaryButton *ngIf="fileLoaded && parsedData" (click)="fileInput.click()">
+    Upload your CSV file again
+  </button>
+
+  <div *ngIf="!fileLoaded || !parsedData">
+    <app-flight-data-table
+      [headingText]="'Your CSV file needs to look like this example'"
+      [customColumns]="exampleTableColumns"
+      [emissionDataDetails]="exampleTableData"
+    ></app-flight-data-table>
+  </div>
+
+  <input type="text" [hidden]="true" formControlName="aggregatedEmissionDataDetails" />
+  <div *ngIf="fileLoaded && parsedData">
+    <app-flight-data-table
+      [headingText]="fileName"
+      [emissionDataDetails]="parsedData"
+      [isCorsia]="isCorsia$ | async"
+    ></app-flight-data-table>
+  </div>
+</app-csv-data-wizard-step>
+<app-return-to-link></app-return-to-link>

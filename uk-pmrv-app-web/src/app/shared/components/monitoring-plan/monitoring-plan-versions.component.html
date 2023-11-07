@@ -1,0 +1,17 @@
+<h2 *ngIf="!showCaption" class="govuk-heading-m">Monitoring Plan Versions</h2>
+<govuk-table
+  [columns]="tableColumns"
+  [data]="data"
+  [caption]="showCaption ? 'Monitoring Plan Versions' : ''"
+  [class.no-bottom-border]="noBottomBorder"
+>
+  <ng-template let-column="column" let-row="row">
+    <ng-container [ngSwitch]="column.field">
+      <ng-container *ngSwitchCase="'permitIdVersioned'"
+        ><strong>{{ row[column.field] }}</strong></ng-container
+      >
+      <ng-container *ngSwitchCase="'endDate'">{{ row[column.field] | govukDate }}</ng-container>
+      <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+    </ng-container>
+  </ng-template>
+</govuk-table>

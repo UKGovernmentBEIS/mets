@@ -1,0 +1,59 @@
+<ng-container *ngIf="payload as returnOfAllowances">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Number of allowances to be returned</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ returnOfAllowances.numberOfAllowancesToBeReturned }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..', 'provide-details']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Which years are these allowances being returned for?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <div *ngFor="let year of returnOfAllowances.years">
+          {{ year }}
+        </div>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..', 'provide-details']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason for return of allowances</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ returnOfAllowances.reason }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..', 'provide-details']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Date allowances to be returned by</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ returnOfAllowances.dateToBeReturned | govukDate }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..', 'provide-details']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+  <dl govuk-summary-list *ngIf="returnOfAllowances?.regulatorComments">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Your comments</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ returnOfAllowances.regulatorComments }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..', 'provide-details']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

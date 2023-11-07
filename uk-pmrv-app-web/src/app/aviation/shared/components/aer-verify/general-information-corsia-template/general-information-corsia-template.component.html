@@ -1,0 +1,16 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Verification criteria</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.verificationCriteria }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Information and data used by the operator</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>{{ data.operatorData }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+</dl>

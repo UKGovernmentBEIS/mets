@@ -1,0 +1,12 @@
+<app-action-task [header]="verificationDataItem.reference | verificationReferenceTitle" [breadcrumb]="true">
+  <app-verification-recommendation-item
+    [verificationDataItem]="verificationDataItem">
+  </app-verification-recommendation-item>
+  <app-operator-response-item
+    [reference]="reference"
+    [operatorImprovementResponse]="operatorImprovementResponse$ | async"
+    [attachedFiles]="documentFiles$ | async"
+    [isEditable]="false">
+  </app-operator-response-item>
+</app-action-task>
+

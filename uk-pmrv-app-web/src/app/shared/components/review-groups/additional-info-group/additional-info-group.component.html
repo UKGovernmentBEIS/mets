@@ -1,0 +1,25 @@
+<ul app-task-item-list>
+  <li app-task-item linkText="Abbreviations and definitions" [hasContent]="true">
+    <app-abbreviations-summary-template
+      [data]="aerData.abbreviations"
+      [hasBottomBorder]="false"
+      cssClass="govuk-!-margin-bottom-0 govuk-summary-list--no-border"
+    ></app-abbreviations-summary-template>
+  </li>
+  <li app-task-item linkText="Additional documents and information" [hasContent]="true">
+    <app-documents-summary-template
+      [data]="aerData.additionalDocuments"
+      [files]="additionalDocumentFiles"
+      [hasBottomBorder]="false"
+      cssClass="govuk-!-margin-bottom-0"
+    ></app-documents-summary-template>
+  </li>
+  <li app-task-item linkText="Confidentiality statement" [hasContent]="true">
+    <app-confidentiality-statement-summary-template
+      [data]="aerData.confidentialityStatement"
+      [hasBottomBorder]="false"
+      cssClass="govuk-!-margin-bottom-0 govuk-summary-list--no-border"
+    ></app-confidentiality-statement-summary-template>
+  </li>
+</ul>
+

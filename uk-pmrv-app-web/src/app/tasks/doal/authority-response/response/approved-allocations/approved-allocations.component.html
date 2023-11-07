@@ -1,0 +1,24 @@
+<app-doal-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Authority approved allocations"
+    caption="Provide information about this activity level determination"
+    submitText="Save and continue"
+  >
+    <p class="govuk-body">The commission approved allocations will appear in the official notice.</p>
+
+    <app-doal-total-preliminary-allocation-list-template
+      [data]="preliminaryAllocations$ | async"
+    ></app-doal-total-preliminary-allocation-list-template>
+
+    <app-multiple-file-input
+      [baseDownloadUrl]="getBaseFileDownloadUrl()"
+      [label]="(documentsExist$ | async) ? 'Upload a different file' : 'Upload files'"
+      listTitle="Files added"
+      formControlName="documents"
+    ></app-multiple-file-input>
+  </app-wizard-step>
+
+  <app-task-return-link [levelsUp]="2" taskType="DOAL_AUTHORITY_RESPONSE"></app-task-return-link>
+</app-doal-task>

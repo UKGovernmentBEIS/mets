@@ -1,0 +1,79 @@
+<ng-container *ngIf="operatorAirImprovementResponse">
+  <h2 class="govuk-heading-m">{{ isReview ? "Operator's response" : 'Your response' }}</h2>
+  <dl govuk-summary-list [hasBorders]="true">
+
+    <div govukSummaryListRow *ngIf="operatorAirImprovementResponse?.type">
+      <dt govukSummaryListRowKey>Are improvements to meet the highest tier being proposed?</dt>
+      <dd govukSummaryListRowValue>{{ operatorAirImprovementResponse.type | operatorAirResponseType }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../improvement-question']">Change</a>
+      </dd>
+    </div>
+
+
+    <div govukSummaryListRow *ngIf="operatorAirImprovementResponse?.proposal">
+      <dt govukSummaryListRowKey>Proposals for attaining the highest tier</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ operatorAirImprovementResponse?.proposal }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[resolvedChangeLink]">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="operatorAirImprovementResponse?.proposedDate">
+      <dt govukSummaryListRowKey>Proposed date for improvement</dt>
+      <dd govukSummaryListRowValue>{{ operatorAirImprovementResponse?.proposedDate | govukDate }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[resolvedChangeLink]">Change</a>
+      </dd>
+    </div>
+
+
+    <div govukSummaryListRow
+         *ngIf="operatorAirImprovementResponse?.isCostUnreasonable || operatorAirImprovementResponse?.isTechnicallyInfeasible">
+      <dt govukSummaryListRowKey>Justification for not meeting the highest tier</dt>
+      <dd govukSummaryListRowValue>
+        <ng-container *ngIf="operatorAirImprovementResponse?.isCostUnreasonable">Unreasonable cost<br /></ng-container>
+        <ng-container *ngIf="operatorAirImprovementResponse?.isTechnicallyInfeasible">Technical infeasibility
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[resolvedChangeLink]">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="operatorAirImprovementResponse?.technicalInfeasibilityExplanation">
+      <dt govukSummaryListRowKey>Explain why it is technically infeasible to meet the highest tier</dt>
+      <dd govukSummaryListRowValue
+          class="pre-wrap">{{ operatorAirImprovementResponse?.technicalInfeasibilityExplanation }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[resolvedChangeLink]">Change</a>
+      </dd>
+    </div>
+
+
+    <div govukSummaryListRow *ngIf="operatorAirImprovementResponse?.explanation">
+      <dt govukSummaryListRowKey>Tell us about this improvement</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ operatorAirImprovementResponse?.explanation }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[resolvedChangeLink]">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="operatorAirImprovementResponse?.improvementDate">
+      <dt govukSummaryListRowKey>Date improvement was made</dt>
+      <dd govukSummaryListRowValue>{{ operatorAirImprovementResponse?.improvementDate | govukDate}}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[resolvedChangeLink]">Change</a>
+      </dd>
+    </div>
+
+
+    <div govukSummaryListRow *ngIf="operatorAirImprovementResponse?.files?.length > 0">
+      <dt govukSummaryListRowKey>Uploaded files</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="attachedFiles"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="[resolvedChangeLink]">Change</a>
+      </dd>
+    </div>
+
+  </dl>
+</ng-container>

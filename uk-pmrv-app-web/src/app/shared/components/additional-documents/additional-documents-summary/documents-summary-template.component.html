@@ -1,0 +1,23 @@
+<ng-container *ngIf="data">
+  <dl *ngIf="!hasAttachments; else attachments" govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Additional documents or information</dt>
+      <dd govukSummaryListRowValue>No</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink=".." [queryParams]="changeQueryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+  <ng-template #attachments>
+    <dl govuk-summary-list [class.dl--no-bottom-border]="!hasBottomBorder" [class]="cssClass">
+      <div govukSummaryListRow>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files [files]="files"> </app-summary-download-files>
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink=".." [queryParams]="changeQueryParams">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-template>
+</ng-container>

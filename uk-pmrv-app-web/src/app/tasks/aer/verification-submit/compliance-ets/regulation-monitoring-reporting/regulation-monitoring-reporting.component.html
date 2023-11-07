@@ -1,0 +1,27 @@
+<app-aer-task-review heading="Has the EU regulation on monitoring and reporting been met?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      If the operator is claiming an emission factor of zero on biofuels, bioliquids and biomass fuels used for
+      combustion, they must meet the sustainability or greenhouse gas emissions saving criteria in paragraphs 2 to 7 and
+      10 of Article 29 of the Renewable Energy Directive.
+    </p>
+    <div formControlName="euRegulationMonitoringReportingMet" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div
+            [maxLength]="10000"
+            formControlName="euRegulationMonitoringReportingNotMetReason"
+            govuk-textarea
+            label="Provide a reason"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

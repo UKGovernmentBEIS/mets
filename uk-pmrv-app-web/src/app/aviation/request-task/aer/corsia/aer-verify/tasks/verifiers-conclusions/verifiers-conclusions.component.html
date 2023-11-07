@@ -1,0 +1,35 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Data quality and materiality"
+  submitText="Continue"
+>
+  <div formControlName="dataQualityMateriality" govuk-textarea [maxLength]="10000"></div>
+
+  <div
+    formControlName="materialityThresholdType"
+    govuk-radio
+    legend="What is the materiality threshold for this operator?"
+    legendSize="medium"
+  >
+    <govuk-radio-option
+      [value]="'THRESHOLD_2_PER_CENT'"
+      [label]="'THRESHOLD_2_PER_CENT' | materialityThresholdType"
+    ></govuk-radio-option>
+    <govuk-radio-option
+      [value]="'THRESHOLD_5_PER_CENT'"
+      [label]="'THRESHOLD_5_PER_CENT' | materialityThresholdType"
+    ></govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="materialityThresholdMet"
+    govuk-radio
+    legend="Is this materiality threshold being met in the emissions report?"
+    legendSize="medium"
+  >
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

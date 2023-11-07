@@ -1,0 +1,27 @@
+<div *ngIf="(isRecallSubmitted$ | async) === false; else confirmationTemplate">
+  <app-page-heading size="xl"> Are you sure you want to recall the application? </app-page-heading>
+
+  <p class="govuk-body">Any changes the operator made will be lost.</p>
+
+  <div class="govuk-button-group">
+    <button type="button" appPendingButton (click)="recall()" govukWarnButton>Yes, recall the application</button>
+  </div>
+</div>
+
+<ng-template #confirmationTemplate>
+  <app-confirmation-shared
+    title="Application recalled from the operator"
+    [whatHappensNextTemplate]="whatHappensNextTemplate"
+    returnToLink="/aviation/dashboard"
+  ></app-confirmation-shared>
+</ng-template>
+
+<ng-template #whatHappensNextTemplate>
+  <p class="govuk-body">Their task list will show that you are deciding the result of the application.</p>
+
+  <h3 class="govuk-heading-m">What happens next</h3>
+
+  <p class="govuk-body">
+    You can continue with the application review, and both your timelines will display this event.
+  </p>
+</ng-template>

@@ -1,0 +1,34 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Save and continue"
+  [hideSubmit]="!vm.isEditable"
+  heading="Add a misstatement not corrected before issuing this report"
+  *ngIf="vm$ | async as vm"
+>
+  <p class="govuk-body">You should state:</p>
+  <ul class="govuk-list govuk-list--bullet govuk-!-width-two-thirds">
+    <li>the nature and size of the misstatement</li>
+    <li>if it is higher than it should be (overstated) or lower (understated)</li>
+    <li>which part of the report it relates to</li>
+    <li>why it has a material effect, if applicable</li>
+  </ul>
+
+  <div
+    label="Description"
+    [maxLength]="10000"
+    formControlName="explanation"
+    govuk-textarea
+    class="govuk-!-width-two-thirds"
+  ></div>
+
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Does this have a material (significant) effect on the total emissions reported?
+  </p>
+
+  <div formControlName="materialEffect" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

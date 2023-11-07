@@ -1,0 +1,83 @@
+<ng-container *ngIf="store | async as state">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <app-page-heading>Details of return of allowances</app-page-heading>
+      <h2 class="govuk-heading-m">Details</h2>
+      <ng-container *ngIf="payload$ | async as payload">
+        <dl govuk-summary-list>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Number of allowances to be returned</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ payload.numberOfAllowancesToBeReturned }}
+            </dd>
+          </div>
+        </dl>
+        <dl govuk-summary-list>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Which years are these allowances being returned for?</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              <div *ngFor="let year of payload.years">
+                {{ year }}
+              </div>
+            </dd>
+          </div>
+        </dl>
+        <dl govuk-summary-list>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Reason for return of allowances</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ payload.reason }}
+            </dd>
+          </div>
+        </dl>
+        <dl govuk-summary-list>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Date allowances to be returned by</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ payload.dateToBeReturned | govukDate }}
+            </dd>
+          </div>
+        </dl>
+        <dl govuk-summary-list *ngIf="payload?.regulatorComments">
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Your comments</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ payload.regulatorComments }}
+            </dd>
+          </div>
+        </dl>
+
+        <h2 app-summary-header class="govuk-heading-m">Recipients</h2>
+        <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Users</dt>
+            <dd govukSummaryListRowValue>
+              <div *ngFor="let user of operators$ | async">
+                {{ user | userInfoResolver: state.action.payload['usersInfo'] }}
+              </div>
+            </dd>
+          </div>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+            <dd govukSummaryListRowValue>
+              {{ signatory$ | async | userInfoResolver: state.action.payload['usersInfo'] }}
+            </dd>
+          </div>
+          <div govukSummaryListRow *ngIf="officialNotice$ | async as officialNotice">
+            <dt govukSummaryListRowKey>Official notice</dt>
+            <dd govukSummaryListRowValue>
+              <a
+                [routerLink]="['/', 'actions', actionId$ | async, 'file-download', 'document', officialNotice.uuid]"
+                govukLink
+                target="_blank"
+              >
+                {{ officialNotice.name }}
+              </a>
+            </dd>
+          </div>
+        </dl>
+      </ng-container>
+      <a govukLink routerLink="../../../..">Return to: Return of allowances</a>
+    </div>
+  </div>
+</ng-container>

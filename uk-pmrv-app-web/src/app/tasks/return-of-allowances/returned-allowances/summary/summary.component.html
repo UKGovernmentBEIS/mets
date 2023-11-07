@@ -1,0 +1,46 @@
+<app-page-heading>Check your answers</app-page-heading>
+
+<p class="govuk-heading-m">Provide status of recovered allowances</p>
+<ng-container *ngIf="payload$ | async as payload">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Have allowances been returned?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ payload.isAllowancesReturned ? 'Yes' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+        <a govukLink [routerLink]="['..', 'provide-returned-details']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl govuk-summary-list *ngIf="payload?.returnedAllowancesDate">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Date allowances were returned</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ payload.returnedAllowancesDate | govukDate }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+        <a govukLink [routerLink]="['..', 'provide-returned-details']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl govuk-summary-list *ngIf="payload?.regulatorComments">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Comments</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ payload.regulatorComments }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+        <a govukLink [routerLink]="['..', 'provide-returned-details']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<div class="govuk-button-group" *ngIf="isEditable$ | async">
+  <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+</div>
+
+<a govukLink routerLink="..">Return to: Returned allowances</a>

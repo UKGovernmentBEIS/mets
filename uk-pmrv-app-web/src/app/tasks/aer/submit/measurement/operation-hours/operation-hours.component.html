@@ -1,0 +1,12 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="How many hours was this emission network operating during the reporting period?"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div formControlName="operationalHours" govuk-text-input widthClass="govuk-input--width-10"></div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

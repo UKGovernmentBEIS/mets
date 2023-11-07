@@ -1,0 +1,18 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.heading }}</app-page-heading>
+
+  <app-monitoring-approach-verify-corsia-template
+    [opinionStatement]="vm.opinionStatement"
+    [totalEmissionsProvided]="vm.totalEmissionsProvided"
+    [totalOffsetEmissionsProvided]="vm.totalOffsetEmissionsProvided"
+    [isEditable]="vm.isEditable"
+    [queryParams]="{ change: true }"
+  ></app-monitoring-approach-verify-corsia-template>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+</ng-container>
+<app-return-to-link></app-return-to-link>

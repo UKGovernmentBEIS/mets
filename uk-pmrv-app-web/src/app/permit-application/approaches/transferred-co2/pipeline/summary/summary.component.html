@@ -1,0 +1,27 @@
+<app-permit-task
+  [notification]="notification"
+  [breadcrumb]="[{ text: 'TRANSFERRED_CO2_N2O' | monitoringApproachDescription, link: ['transferred-co2'] }]"
+>
+  <app-page-heading [caption]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription">{{
+    taskKey$ | async | i18nSelect: headingMap
+  }}</app-page-heading>
+
+  <h2
+    app-summary-header
+    (changeClick)="changeClick()"
+    [changeRoute]="(store.isEditable$ | async) === true ? '.' : undefined"
+    class="govuk-heading-m"
+  >
+    <span class="govuk-visually-hidden">{{ taskKey$ | async | i18nSelect: headingMap }}</span>
+  </h2>
+
+  <app-transferred-co2-pipeline-summary-template
+    [pipelineSystems]="transportCO2AndN2OPipelineSystems$ | async"
+    cssClass="cssClass"
+  ></app-transferred-co2-pipeline-summary-template>
+
+  <app-approach-return-link
+    [parentTitle]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+    reviewGroupUrl="transferred-co2"
+  ></app-approach-return-link>
+</app-permit-task>

@@ -1,0 +1,24 @@
+<app-air-task *ngIf="(isSubmitted$ | async) !== true; else submitted" heading="Send report to the regulator">
+  <ng-container *ngIf="isSendReportAvailable$ | async; else notAvailable">
+    <p class="govuk-body">{{ title$ | async }}</p>
+    <govuk-warning-text assistiveText="Warning">You cannot make changes after you submit this report.</govuk-warning-text>
+    <div *ngIf="isEditable$ | async" class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onSubmit()">Submit</button>
+    </div>
+  </ng-container>
+  <ng-template #notAvailable>
+    <p class="govuk-body">All tasks must be completed before you can submit your report.</p>
+  </ng-template>
+</app-air-task>
+
+<ng-template #submitted>
+  <govuk-panel title="Annual improvement report submitted">
+    <p>
+      <strong>Your reference code is:</strong><br />
+      {{ requestId$ | async }}
+    </p>
+  </govuk-panel>
+  <h3 class="govuk-heading-m">What happens next</h3>
+  <p class="govuk-body">The regulator will review your report and will contact you if necessary.</p>
+  <a govukLink routerLink="/dashboard">Return to your tasks</a>
+</ng-template>

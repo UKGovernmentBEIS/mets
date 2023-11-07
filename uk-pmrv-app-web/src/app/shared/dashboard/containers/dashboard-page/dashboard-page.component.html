@@ -1,0 +1,54 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading size="xl">Tasks</app-page-heading>
+
+  <govuk-tabs (selectedTab)="selectTab($event)">
+    <ng-template govukTab id="assigned-to-me" label="Assigned to me">
+      <ng-container
+        *ngTemplateOutlet="
+          tabTemplate;
+          context: { unassigned: 'Regulator', tab: 'assigned-to-me', header: 'Assigned to me' }
+        "
+      ></ng-container>
+    </ng-template>
+    <ng-template govukTab id="assigned-to-others" label="Assigned to others">
+      <ng-container
+        *ngTemplateOutlet="tabTemplate; context: { tab: 'assigned-to-others', header: 'Assigned to others' }"
+      ></ng-container>
+    </ng-template>
+    <ng-template *ngIf="vm.role !== 'OPERATOR'" govukTab id="unassigned" label="Unassigned">
+      <ng-container
+        *ngTemplateOutlet="tabTemplate; context: { unassigned: 'Unassigned', tab: 'unassigned', header: 'Unassigned' }"
+      ></ng-container>
+    </ng-template>
+  </govuk-tabs>
+
+  <ng-template #tabTemplate let-unassigned="unassigned" let-tab="tab" let-header="header">
+    <h2 class="govuk-heading-m">{{ header }}</h2>
+    <div *ngIf="vm.activeTab === tab">
+      <app-workflow-items-list
+        [items]="vm.items"
+        [tableColumns]="vm.tableColumns"
+        [unassignedLabel]="unassigned"
+      ></app-workflow-items-list>
+    </div>
+
+    <ng-container *ngIf="vm.total > vm.pageSize">
+      <app-pagination
+        (currentPageChange)="changePage($event)"
+        [count]="vm.total"
+        [pageSize]="vm.pageSize"
+        *ngIf="vm.activeTab === tab"
+      ></app-pagination>
+    </ng-container>
+  </ng-template>
+
+  <div *ngIf="vm.role === 'OPERATOR' && vm.domain === 'INSTALLATION'">
+    <h2 class="govuk-heading-m">Actions</h2>
+    <a govukLink routerLink="/" (click)="addAnotherInstallation()"> Add another installation </a>
+  </div>
+
+  <div *ngIf="vm.role === 'REGULATOR' && vm.domain === 'AVIATION'">
+    <h2 class="govuk-heading-m">Actions</h2>
+    <a govukLink routerLink="/aviation/accounts/create">Add an operator account</a>
+  </div>
+</ng-container>

@@ -1,0 +1,55 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="inPersonSiteVisitGroup"
+  submitText="Continue"
+  [hideSubmit]="false"
+  [heading]="'In-person site visit details'"
+  class="govuk-!-width-two-thirds"
+>
+  <!-- VisitDates -->
+  <div formArrayName="visitDates" class="govuk-!-width-two-thirds">
+    <fieldset govukFieldset *ngFor="let _ of visitDatesCtrl.controls; index as i" [formGroupName]="i">
+      <legend govukLegend>Site visit</legend>
+      <button
+        (click)="removeVisitDatesCtrl(i)"
+        *ngIf="visitDatesCtrl.length > 1"
+        [heading]="heading"
+        appAddAnother
+        govukSecondaryButton
+        type="button"
+      >
+        Remove
+      </button>
+
+      <!-- StartDate -->
+      <p class="govuk-body govuk-!-margin-bottom-0">When did the site visit begin?</p>
+      <div formControlName="startDate" govuk-date-input></div>
+
+      <!-- NumberOfDays -->
+      <div
+        formControlName="numberOfDays"
+        govuk-text-input
+        inputType="number"
+        label="How many days were your team on site?"
+        widthClass="govuk-input--width-4"
+      ></div>
+    </fieldset>
+  </div>
+
+  <!-- TeamMembers -->
+  <div class="govuk-body">
+    <h2 class="govuk-heading-m govuk-!-margin-bottom-2">Which team members made the site visit?</h2>
+
+    <div
+      [maxLength]="2000"
+      formControlName="teamMembers"
+      govuk-textarea
+      hint="Include the names of the lead auditors and any technical experts involved"
+      class="govuk-!-width-two-thirds"
+    ></div>
+
+    <button (click)="addVisitDatesCtrl()" govukSecondaryButton type="button">Add another visit</button>
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

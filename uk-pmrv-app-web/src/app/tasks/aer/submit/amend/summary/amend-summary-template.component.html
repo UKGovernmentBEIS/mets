@@ -1,0 +1,38 @@
+<app-page-heading>Amends needed for {{ section | amendHeading }}</app-page-heading>
+
+<p class="govuk-body">
+  The following notes are from the regulator explaining the things you need to change in this section.
+</p>
+
+<div *ngFor="let decision of aerService.reviewGroupsForAmend$ | async">
+  <ng-container *ngIf="amendTasksPerReviewGroup[section] | includes: decision">
+    <h2 app-summary-header class="govuk-heading-m">
+      {{ decision | aerTaskDescription }}
+    </h2>
+
+    <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Changes required</dt>
+        <dd govukSummaryListRowValue>
+          <ng-container
+            *ngFor="
+              let requiredChange of $any((aerService.reviewGroupsForAmendData$ | async)?.[decision])?.details
+                ?.requiredChanges;
+              let i = index;
+              let isLast = last
+            "
+          >
+            <div>
+              {{ i + 1 }}. {{ requiredChange?.reason }} <br />
+              <ng-container *ngIf="requiredChange?.files?.length > 0">
+                <app-summary-download-files [files]="aerService.getDownloadUrlFiles(requiredChange?.files)">
+                </app-summary-download-files>
+              </ng-container>
+            </div>
+            <br *ngIf="!isLast" />
+          </ng-container>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+</div>

@@ -1,0 +1,24 @@
+<ng-container *ngIf="(route.data | async)?.pageTitle as pageTitle">
+  <app-page-heading size="l">{{ pageTitle }}</app-page-heading>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <govuk-error-summary *ngIf="isErrorSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+
+    <label for="note" class="govuk-label govuk-label--m">Note</label>
+    <div
+      formControlName="note"
+      govuk-textarea
+      [maxLength]="10000"
+      hint="This will only be visible to other regulators"
+    ></div>
+
+    <app-multiple-file-input
+      [baseDownloadUrl]="fileDowloadUrl$ | async"
+      [listTitle]="'Uploaded files'"
+      label="Upload a file"
+      formControlName="files"
+    ></app-multiple-file-input>
+
+    <button appPendingButton govukButton type="submit">Confirm and complete</button>
+  </form>
+</ng-container>

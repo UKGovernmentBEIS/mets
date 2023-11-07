@@ -1,0 +1,139 @@
+<app-permit-task [breadcrumb]="true">
+  <app-page-heading caption="Monitoring approaches">{{
+    'MEASUREMENT_N2O' | monitoringApproachDescription
+  }}</app-page-heading>
+
+  <p class="govuk-body">Create an annual emissions monitoring plan for all your nitrous oxide emissions.</p>
+
+  <app-site-emissions></app-site-emissions>
+
+  <h2 class="govuk-heading-m">Nitrous oxide emission point categories</h2>
+  <ul app-task-item-list>
+    <ng-container *ngIf="(emissionPointCategoryAppliedTiers$ | async)?.length > 0; else addNew">
+      <govuk-table [columns]="columns" [data]="emissionPointCategoryAppliedTiers$ | async">
+        <ng-template let-column="column" let-row="row" let-index="index">
+          <ng-container [ngSwitch]="column.field">
+            <ng-container *ngSwitchCase="'category'">
+              <a govukLink [routerLink]="['./category-tier', index]">
+                <ng-container
+                  *ngIf="
+                    row?.emissionPointCategory?.emissionPoint | findEmissionPoint | async as emissionPoint;
+                    else noSourceStream
+                  "
+                >
+                  {{ emissionPoint.reference }}
+                  {{ emissionPoint.description }}:
+                  {{ row?.emissionPointCategory?.categoryType | categoryTypeName }}
+                </ng-container>
+                <ng-template #noSourceStream>
+                  UNDEFINED: {{ row?.emissionPointCategory?.categoryType | categoryTypeName }}
+                </ng-template>
+              </a>
+            </ng-container>
+            <ng-container *ngSwitchCase="'emissions'">
+              <div
+                *ngIf="
+                  row?.emissionPointCategory?.transfer?.entryAccountingForTransfer &&
+                    row?.emissionPointCategory?.transfer?.transferDirection !== 'RECEIVED_FROM_ANOTHER_INSTALLATION';
+                  else receivedTransfer
+                "
+              >
+                {{ row?.emissionPointCategory?.annualEmittedCO2Tonnes | negativeNumber | number }} t
+              </div>
+              <ng-template #receivedTransfer>
+                {{ row?.emissionPointCategory?.annualEmittedCO2Tonnes | number }} t ({{
+                  (row?.emissionPointCategory?.annualEmittedCO2Tonnes ?? 0) / (sumOfAnnualEmitted$ | async) | percent
+                }})
+              </ng-template>
+            </ng-container>
+            <ng-container *ngSwitchCase="'status'">
+              <govuk-tag
+                [color]="'MEASUREMENT_N2O_Category_Tier' | taskStatus: index | async | tagColor"
+                class="app-task-list__tag"
+              >
+                {{ 'MEASUREMENT_N2O_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
+              </govuk-tag>
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </govuk-table>
+      <a
+        *ngIf="(store.isEditable$ | async) === true"
+        govukLink
+        [routerLink]="['category-tier', (emissionPointCategoryAppliedTiers$ | async)?.length]"
+      >
+        Add an emission point category
+      </a>
+    </ng-container>
+
+    <ng-template #addNew>
+      <li
+        *ngIf="(store.isEditable$ | async) === true"
+        app-task-item
+        link="category-tier/0"
+        linkText="Add an emission point category"
+        [status]="sourceStreamCategoriesStatus$ | async"
+      ></li>
+    </ng-template>
+  </ul>
+
+  <h2 class="govuk-heading-m">{{ 'MEASUREMENT_N2O' | monitoringApproachDescription }} details</h2>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="./description/summary"
+      linkText="Approach description"
+      [status]="'MEASUREMENT_N2O_Description' | taskStatus | async"
+    ></li>
+    <li
+      app-task-item
+      link="./emission/summary"
+      linkText="Emission determination procedure"
+      [status]="'MEASUREMENT_N2O_Emission' | taskStatus | async"
+    ></li>
+    <li
+      app-task-item
+      link="./reference/summary"
+      linkText="Determination of reference period"
+      [status]="'MEASUREMENT_N2O_Reference' | taskStatus | async"
+    ></li>
+    <li
+      app-task-item
+      link="./operational/summary"
+      linkText="Operational management"
+      [status]="'MEASUREMENT_N2O_Operational' | taskStatus | async"
+    ></li>
+    <li
+      app-task-item
+      link="./emissions/summary"
+      linkText="Determination of nitrous oxide emissions"
+      [status]="'MEASUREMENT_N2O_Emissions' | taskStatus | async"
+    ></li>
+    <li
+      app-task-item
+      link="./concentration/summary"
+      linkText="Determination of nitrous oxide concentration"
+      [status]="'MEASUREMENT_N2O_Concentration' | taskStatus | async"
+    ></li>
+    <li
+      app-task-item
+      link="./product/summary"
+      linkText="Determination of the quantity of product produced"
+      [status]="'MEASUREMENT_N2O_Product' | taskStatus | async"
+    ></li>
+    <li
+      app-task-item
+      link="./materials/summary"
+      linkText="Quantity of materials"
+      [status]="'MEASUREMENT_N2O_Materials' | taskStatus | async"
+    ></li>
+    <li
+      app-task-item
+      link="./gas/summary"
+      linkText="Calculation of gas flow"
+      [status]="'MEASUREMENT_N2O_Gas' | taskStatus | async"
+    ></li>
+  </ul>
+
+  <app-list-return-link></app-list-return-link>
+</app-permit-task>

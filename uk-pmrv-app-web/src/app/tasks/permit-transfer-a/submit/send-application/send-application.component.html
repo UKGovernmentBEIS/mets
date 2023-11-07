@@ -1,0 +1,45 @@
+<div *ngIf="errorMessage$ | async as errorMessage; else sendApplication" class="govuk-grid-row errorContent">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-m">{{ errorMessage$ | async }}</h2>
+  </div>
+</div>
+
+<ng-template #sendApplication>
+  <ng-container *ngIf="isNotSubmitted$ | async; else isSubmitted">
+    <app-page-heading>Send to the new operator</app-page-heading>
+
+    <app-permit-transfer-details-summary-template
+      [payload]="payload$ | async"
+      [allowChange]="false"
+      [files]="files$ | async"
+    ></app-permit-transfer-details-summary-template>
+
+    <h2 class="govuk-heading-m">Now send your transfer application</h2>
+    <p class="govuk-body">
+      By submitting this application you are confirming that, to the best of your knowledge, the details you are
+      providing are correct.
+    </p>
+    <div class="govuk-button-group" *ngIf="permitTransferAService.isEditable$ | async">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and send</button>
+    </div>
+  </ng-container>
+  <ng-template #isSubmitted>
+    <app-confirmation-shared
+      title="Permit transfer sent"
+      titleContent="Your transfer reference is {{ requestId$ | async }}"
+      [whatHappensNextTemplate]="whatHappensNextTemplate"
+    ></app-confirmation-shared>
+    <ng-template #notificationTemplate></ng-template>
+    <ng-template #whatHappensNextTemplate>
+      <p class="govuk-body">
+        We have sent your full transfer application to the operator who sent you the transfer code.
+        <br />
+        They will now be responsible for checking the permit.
+      </p>
+      <br />
+      <p class="govuk-body">
+        You can view updates on your timeline. We will send an email when the permit is approved.
+      </p>
+    </ng-template>
+  </ng-template>
+</ng-template>

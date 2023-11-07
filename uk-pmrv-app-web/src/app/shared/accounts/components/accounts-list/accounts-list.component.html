@@ -1,0 +1,15 @@
+<ul class="govuk-list">
+  <li *ngFor="let account of accounts" class="search-results-list_item">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        <a routerLink="." (click)="clickAccount($event, account)" govukLink>{{ account.name }}</a>
+        <div>{{ account.emitterId }}</div>
+      </div>
+      <div class="govuk-grid-column-one-quarter">
+        <span class="govuk-tag govuk-tag--grey status-tag">
+          <strong>{{ account.status | accountStatus }}</strong>
+        </span>
+      </div>
+    </div>
+  </li>
+</ul>

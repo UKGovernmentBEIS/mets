@@ -1,0 +1,34 @@
+<app-permit-task
+  [breadcrumb]="[{ text: 'TRANSFERRED_CO2_N2O' | monitoringApproachDescription, link: ['transferred-co2'] }]"
+>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Confirm and complete"
+    [caption]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+    [heading]="taskKey$ | async | i18nSelect: headingMap"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <div class="govuk-body">
+      <p>
+        Each transport network needs to have a minimum of one start and one end point. Each point needs to be connected
+        to other installations that capture, transport or store CO2 geologically
+      </p>
+    </div>
+
+    <div
+      formControlName="monitoringTransportNetworkApproach"
+      govuk-radio
+      legend="What approach is used to monitor the transport network?"
+      legendSize="medium"
+    >
+      <govuk-radio-option *ngFor="let option of approachOptions" [label]="option.label" [value]="option.value">
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <app-approach-return-link
+    [parentTitle]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+    reviewGroupUrl="transferred-co2"
+  ></app-approach-return-link>
+</app-permit-task>

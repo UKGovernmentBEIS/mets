@@ -1,0 +1,16 @@
+<app-aer-task-review heading="Describe the emission factors used" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">State what type of factor is being used for the different types of fuels/materials. For
+      example, default or activity-specific</p>
+    <div
+      [maxLength]="10000"
+      formControlName="emissionFactorsDescription"
+      govuk-textarea
+    ></div>
+  </app-wizard-step>
+</app-aer-task-review>

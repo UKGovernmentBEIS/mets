@@ -1,0 +1,60 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <h2 class="govuk-heading-m">Non-conformities with the approved monitoring plan</h2>
+
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Have there been any uncorrected non-conformities with the approved emissions monitoring plan?
+      </dt>
+      <dd govukSummaryListRowValue>
+        {{ vm.uncorrectedNonConformities?.existUncorrectedNonConformities ? 'Yes' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+        <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <app-uncorrected-item-group
+    [isEditable]="vm.isEditable"
+    [uncorrectedItems]="vm.uncorrectedNonConformities.uncorrectedNonConformities"
+    [baseUrl]="'../uncorrected-list'"
+    [queryParams]="{ change: true }"
+    *ngIf="vm.uncorrectedNonConformities.existUncorrectedNonConformities"
+  ></app-uncorrected-item-group>
+
+  <h2 class="govuk-heading-m">Non-conformities from the previous year that have not been resolved</h2>
+
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Are there any non-conformities from the previous year that have not been resolved?</dt>
+      <dd govukSummaryListRowValue>{{ vm.uncorrectedNonConformities?.existPriorYearIssues ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+        <a govukLink routerLink="../prior-year-issues" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <app-verifier-comment-group
+    [isEditable]="vm.isEditable"
+    [verifierComments]="vm.uncorrectedNonConformities.priorYearIssues"
+    [baseUrl]="'../prior-year-issues-list'"
+    [queryParams]="{ change: true }"
+    *ngIf="vm.uncorrectedNonConformities.existPriorYearIssues"
+  ></app-verifier-comment-group>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-aviation-aer-verification-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="uncorrectedNonConformities"
+  ></app-aviation-aer-verification-review-decision-group>
+</ng-container>
+
+<app-return-to-link></app-return-to-link>

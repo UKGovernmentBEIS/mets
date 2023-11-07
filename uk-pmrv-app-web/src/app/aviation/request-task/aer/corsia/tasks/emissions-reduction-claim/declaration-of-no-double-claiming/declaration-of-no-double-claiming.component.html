@@ -1,0 +1,34 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Declaration of no double claiming"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    You must upload a copy (signed by an authorised person) of a document titled ‘Declaration of no double counting’ on
+    company headed paper.
+  </p>
+  <p class="govuk-body govuk-!-width-two-thirds">This must state that no CEF included in your claim has been:</p>
+  <ul class="govuk-body govuk-!-width-two-thirds">
+    <li>
+      claimed by this aeroplane operator under any other schemes it has participated in during the current compliance
+      period and the compliance period immediately preceding it
+    </li>
+    <li>sold by the aeroplane operator to someone else</li>
+  </ul>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Your regulator can provide you with an example of the declaration content.
+  </p>
+
+  <h2 class="govuk-heading-m">Upload a file</h2>
+  <div class="govuk-!-width-two-thirds">
+    <app-multiple-file-input
+      [baseDownloadUrl]="downloadUrl"
+      listTitle="Files added"
+      [label]="null"
+      formControlName="noDoubleCountingDeclarationFiles"
+    ></app-multiple-file-input>
+  </div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,12 @@
+<ng-container *ngIf="regulatorAirReviewResponse">
+  <h2 class="govuk-heading-m" *ngIf="!isReview">Details</h2>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Text for official letter</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ regulatorAirReviewResponse?.reportSummary }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['../..', 'provide-summary']">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

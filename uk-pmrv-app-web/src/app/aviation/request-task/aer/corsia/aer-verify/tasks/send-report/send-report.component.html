@@ -1,0 +1,34 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <ng-container *ngIf="(isSubmitted$ | async) !== true; else submitted">
+    <app-page-heading>Send verification report to the operator</app-page-heading>
+
+    <p class="govuk-body">
+      By selecting ‘confirm and send’ you are confirming that the information you have provided in this verification
+      report is correct to the best of your knowledge.
+    </p>
+
+    <div *ngIf="vm.isEditable" class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onSubmit()">Confirm and complete</button>
+    </div>
+
+    <app-return-to-link></app-return-to-link>
+  </ng-container>
+
+  <ng-template #submitted>
+    <govuk-panel title="Verification report sent to operator">
+      <p>
+        <strong>Your reference code is:</strong><br />
+        {{ vm.requestId }}
+      </p>
+    </govuk-panel>
+
+    <h3 class="govuk-heading-m">What happens next</h3>
+    <p class="govuk-body">The operator can either:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>submit the report to the regulator</li>
+      <li>make changes and repeat the submission process</li>
+    </ul>
+
+    <a govukLink routerLink="/aviation/dashboard">Return to: Dashboard</a>
+  </ng-template>
+</ng-container>

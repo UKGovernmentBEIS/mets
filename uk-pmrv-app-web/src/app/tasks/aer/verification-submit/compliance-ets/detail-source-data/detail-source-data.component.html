@@ -1,0 +1,45 @@
+<app-aer-task-review heading="Can you verify the detail and source of data?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <govuk-details summary="See guidance">
+      <article>
+        <p class="govuk-body">
+          You should carry out detailed testing which at minimum covers:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>analytical procedures</li>
+          <li>data verification</li>
+          <li>checking the monitoring approach</li>
+          <li>checking the data flow activities and the systems used, including IT systems</li>
+        </ul>
+        <p class="govuk-body">As part of this data verification, whilst checking the operator’s monitoring plan and
+          procedures, you’ll need to:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>trace the data back to the primary data source</li>
+          <li>cross check data with external data sources</li>
+          <li>perform reconciliations</li>
+          <li>check thresholds for appropriate data</li>
+          <li>carry out recalculations</li>
+        </ul>
+      </article>
+    </govuk-details>
+    <div formControlName="detailSourceDataVerified" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="partOfSiteVerification" govuk-textarea
+               label="Was this part of site verification?"></div>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="detailSourceDataNotVerifiedReason" govuk-textarea
+               label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

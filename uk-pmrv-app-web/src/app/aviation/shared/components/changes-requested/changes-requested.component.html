@@ -1,0 +1,48 @@
+<govuk-error-summary *ngIf="displayErrorSummary$ | async" [form]="form"></govuk-error-summary>
+
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <div *ngFor="let data of vm.data; let i = index">
+    <h2 app-summary-header class="govuk-heading-m">{{ data.sectionName }}</h2>
+
+    <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Changes required</dt>
+        <dd govukSummaryListRowValue>
+          <ng-container
+            *ngFor="
+              let requiredChange of $any(data).sectionData.details.requiredChanges;
+              let i = index;
+              let isLast = last
+            "
+          >
+            <div class="pre-wrap">
+              {{ i + 1 }}. {{ requiredChange.reason }} <br />
+              <ng-container *ngIf="requiredChange?.files?.length > 0">
+                <app-summary-download-files [files]="getDownloadUrlFiles(requiredChange?.files)">
+                </app-summary-download-files>
+              </ng-container>
+            </div>
+            <br *ngIf="!isLast" />
+          </ng-container>
+        </dd>
+      </div>
+    </dl>
+  </div>
+
+  <form (ngSubmit)="confirm()" [formGroup]="form" *ngIf="vm.isEditable">
+    <div formControlName="changes" govuk-checkboxes>
+      <govuk-checkbox
+        [value]="true"
+        label="I have made changes and want to mark this task as complete"
+      ></govuk-checkbox>
+    </div>
+
+    <div *ngIf="vm.isEditable" class="govuk-button-group">
+      <button appPendingButton govukButton type="submit">Confirm and Complete</button>
+    </div>
+  </form>
+
+  <app-return-to-link></app-return-to-link>
+</ng-container>

@@ -1,0 +1,29 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="virtualSiteVisitGroup"
+  submitText="Continue"
+  [hideSubmit]="false"
+  [heading]="'Virtual site visit details'"
+  class="govuk-!-width-two-thirds"
+>
+  <h2 class="govuk-heading-m govuk-!-width-two-thirds">Reasons for making a virtual visit</h2>
+
+  <div class="govuk-body govuk-!-width-three-quarters">
+    <p class="govuk-body">You must state:</p>
+
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-left-3">
+      <li>how the visit and verification were made from a technical perspective</li>
+      <li>the measures taken to reduce the the verification risk to an acceptable level</li>
+      <li>the result of the risk analysis which meant a virtual verification could take place</li>
+    </ul>
+
+    <p class="govuk-body">
+      You also need to state if a generic authorisation for the visit was issued in accordance with Article 34b of the
+      Accreditation and Verification Regulations.
+    </p>
+
+    <div [maxLength]="2000" formControlName="reason" govuk-textarea></div>
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

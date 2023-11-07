@@ -1,0 +1,31 @@
+<app-air-task heading="Provide information about this improvement" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div
+      formControlName="explanation"
+      govuk-textarea
+      label="Tell us about this improvement"
+      labelSize="medium"
+      hint="Explain what improvements you have made"
+      [maxLength]="10000"
+    ></div>
+    <div
+      formControlName="improvementDate"
+      govuk-date-input
+      label="Date improvement was made (optional)"
+      hint="This date cannot be in the future"
+      [max]="today"
+    ></div>
+    <app-multiple-file-input
+      [baseDownloadUrl]="getDownloadUrl()"
+      label="Upload files (optional)"
+      headerSize="m"
+      listTitle="Uploaded attachments"
+      formControlName="files"
+    ></app-multiple-file-input>
+  </app-wizard-step>
+</app-air-task>

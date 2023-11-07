@@ -1,0 +1,17 @@
+<app-aer-task-review heading="What is your assessment of this report?">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div formControlName="type" govuk-radio>
+      <govuk-radio-option
+        *ngFor="let option of overallAssessmentTypes"
+        [label]="option | overallAssessmentType"
+        [value]="option"
+      >
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

@@ -1,0 +1,29 @@
+<app-doal-action-task header="Provide determination of activity level" [actionType]="requestActionType$ | async">
+  <h2 class="govuk-heading-m">Decision details</h2>
+  <ng-container *ngIf="determination$ | async as determination">
+    <ng-container *ngIf="(requestActionType$ | async) === 'DOAL_APPLICATION_PROCEEDED_TO_AUTHORITY'; else closed">
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Decision</dt>
+          <dd govukSummaryListRowValue>Proceed to UK ETS authority</dd>
+        </div>
+      </dl>
+      <app-doal-determination-proceed-authority-summary-template
+        [determination]="determination"
+        [editable]="false"
+      ></app-doal-determination-proceed-authority-summary-template>
+    </ng-container>
+    <ng-template #closed>
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Decision</dt>
+          <dd govukSummaryListRowValue>Closed</dd>
+        </div>
+      </dl>
+      <app-doal-determination-close-summary-template
+        [determination]="determination"
+        [editable]="false"
+      ></app-doal-determination-close-summary-template>
+    </ng-template>
+  </ng-container>
+</app-doal-action-task>

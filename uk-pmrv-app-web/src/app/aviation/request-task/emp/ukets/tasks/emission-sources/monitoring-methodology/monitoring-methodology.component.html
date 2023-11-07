@@ -1,0 +1,12 @@
+<div class="govuk-grid-row" data-testid="monitoring-methodology">
+  <div class="govuk-grid-column-three-quarters">
+    <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" heading="Monitoring approach for additional aircraft"
+      submitText="Continue" [hideSubmit]="false">
+      <p class="govuk-body">
+        Describe the procedures you use to define the monitoring approach for additional aircraft types which enter your
+        fleet, as these aircraft must also be monitored properly.
+      </p>
+      <app-procedure-form></app-procedure-form>
+    </app-wizard-step>
+    <app-return-to-link></app-return-to-link>
+  </div>

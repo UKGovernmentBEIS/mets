@@ -1,0 +1,72 @@
+<app-page-heading
+  >Select the reference documents that are appropriate to the accreditation held by the verifier</app-page-heading
+>
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="(isEditable$ | async) === false"
+>
+  <h2 class="govuk-heading-l">For UK Emissions Trading Scheme (ETS)</h2>
+  <h3 class="govuk-heading-m">Conduct of the verification</h3>
+  <h2 class="govuk-heading-s">For accredited verifiers</h2>
+  <div formControlName="ukEtsVerificationConductAccreditedVerifiers" govuk-checkboxes>
+    <govuk-checkbox
+      *ngFor="let type of ukEtsVerificationConductAccreditedVerifiers"
+      [value]="type"
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
+  </div>
+  <h2 class="govuk-heading-s">For accredited verifiers that are also financial assurance providers</h2>
+  <div formControlName="ukEtsVerificationConductAccreditedVerifiersAndAssuranceProviders" govuk-checkboxes>
+    <govuk-checkbox
+      *ngFor="let type of ukEtsVerificationConductAccreditedVerifiersAndAssuranceProviders"
+      [value]="type"
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
+  </div>
+  <h2 class="govuk-heading-s">Rules of the UK ETS</h2>
+  <div formControlName="ukEtsVerificationRules" govuk-checkboxes>
+    <govuk-checkbox
+      *ngFor="let type of ukEtsVerificationRules"
+      [value]="type"
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
+  </div>
+
+  <h2 class="govuk-heading-l">For EU Emissions Trading Scheme (Northern Ireland)</h2>
+  <h2 class="govuk-heading-m">Verification conduct</h2>
+  <h2 class="govuk-heading-s">For accredited verifiers</h2>
+  <div formControlName="euEtsVerificationConductAccreditedVerifiers" govuk-checkboxes>
+    <govuk-checkbox
+      *ngFor="let type of euEtsVerificationConductAccreditedVerifiers"
+      [value]="type"
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
+  </div>
+  <h2 class="govuk-heading-s">For accredited verifiers that are also financial assurance providers</h2>
+  <div formControlName="euEtsVerificationConductAccreditedVerifiersAndAssuranceProviders" govuk-checkboxes>
+    <govuk-checkbox
+      *ngFor="let type of euEtsVerificationConductAccreditedVerifiersAndAssuranceProviders"
+      [value]="type"
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
+  </div>
+  <h2 class="govuk-heading-s">Rules of the EU ETS</h2>
+  <div formControlName="euEtsVerificationRules" govuk-checkboxes>
+    <govuk-checkbox
+      *ngFor="let type of euEtsVerificationRules"
+      [value]="type"
+      [label]="type | accreditationReferenceDocumentName"
+    ></govuk-checkbox>
+  </div>
+
+  <div formControlName="otherReferences" govuk-checkboxes>
+    <govuk-checkbox [value]="'OTHER'" [label]="'OTHER' | accreditationReferenceDocumentName">
+      <ng-container govukConditionalContent>
+        <div formControlName="otherReference" govuk-textarea [maxLength]="10000" label="Provide details"></div>
+      </ng-container>
+    </govuk-checkbox>
+  </div>
+</app-wizard-step>
+<app-return-link returnLink="../.."></app-return-link>

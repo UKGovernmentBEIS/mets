@@ -1,0 +1,48 @@
+<ng-container *ngIf="payload?.withholdingOfAllowances as withholdingOfAllowances">
+  <app-page-heading *ngIf="isEditable">Check your answers</app-page-heading>
+
+  <h2 class="govuk-heading-m">Withholding of allowances details</h2>
+
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>From which year are these allowances being withheld?</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <span>{{ withholdingOfAllowances.year }}</span>
+      </dd>
+      <dd govukSummaryListRowActions>
+        <a *ngIf="isEditable" govukLink [routerLink]="['..', 'recovery-details']" [state]="{ changing: true }"
+          >Change</a
+        >
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason for withholding allowances</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <span>
+          <ng-container *ngIf="withholdingOfAllowances.reasonType !== 'OTHER'">
+            {{ withholdingOfAllowances.reasonType | waReasonDescription }}
+          </ng-container>
+          <ng-container *ngIf="withholdingOfAllowances.reasonType === 'OTHER'">
+            {{ withholdingOfAllowances?.otherReason }}
+          </ng-container>
+        </span>
+      </dd>
+      <dd govukSummaryListRowActions>
+        <a *ngIf="isEditable" govukLink [routerLink]="['..', 'recovery-details']" [state]="{ changing: true }"
+          >Change</a
+        >
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="withholdingOfAllowances.regulatorComments">
+      <dt govukSummaryListRowKey>Your comments</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <span>{{ withholdingOfAllowances.regulatorComments }}</span>
+      </dd>
+      <dd govukSummaryListRowActions>
+        <a *ngIf="isEditable" govukLink [routerLink]="['..', 'recovery-details']" [state]="{ changing: true }"
+          >Change</a
+        >
+      </dd>
+    </div>
+  </dl>
+</ng-container>

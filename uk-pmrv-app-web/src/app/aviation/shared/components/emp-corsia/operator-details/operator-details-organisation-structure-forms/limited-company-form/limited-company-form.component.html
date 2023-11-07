@@ -1,0 +1,31 @@
+<h3 class="govuk-heading-s">Company registration number</h3>
+<div formControlName="registrationNumber" govuk-text-input widthClass="govuk-!-width-two-thirds"></div>
+
+<fieldset govukFieldset formGroupName="organisationLocation" class="govuk-!-margin-bottom-6">
+  <legend class="govuk-heading-s">
+    Registered address
+    <p class="govuk-body govuk-!-margin-bottom-0">This is the address provided when registering the company.</p>
+  </legend>
+  <app-location-state-form></app-location-state-form>
+</fieldset>
+
+<app-multiple-file-input
+  [baseDownloadUrl]="downloadUrl"
+  label="Upload proof of registered address"
+  listTitle="Files added"
+  formControlName="evidenceFiles"
+  hint="For example, a screenshot from your company register"
+></app-multiple-file-input>
+
+<h3 class="govuk-heading-s">Do you want to provide a different contact address?</h3>
+<div formControlName="differentContactLocationExist" govuk-radio>
+  <govuk-radio-option [value]="true" label="Yes">
+    <div govukConditionalContent>
+      <fieldset govukFieldset formGroupName="differentContactLocation" class="govuk-!-margin-bottom-6">
+        <legend class="govuk-heading-s">Contact address</legend>
+        <app-location-state-form></app-location-state-form>
+      </fieldset>
+    </div>
+  </govuk-radio-option>
+  <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+</div>

@@ -1,0 +1,15 @@
+<div *ngIf="vm$ | async as vm" class="govuk-!-width-two-thirds">
+  <h2 class="govuk-heading-l">Non-conformities with the approved emissions monitoring plan</h2>
+
+  <app-uncorrected-item-group
+    [isEditable]="vm.isEditable"
+    [uncorrectedItems]="vm.uncorrectedNonConformities"
+    [queryParams]="{ change: true }"
+  ></app-uncorrected-item-group>
+
+  <div class="govuk-button-group" *ngIf="vm.uncorrectedNonConformities?.length > 0">
+    <button *ngIf="vm.isEditable" govukButton (click)="onSubmit()" type="button">Continue</button>
+  </div>
+</div>
+
+<app-return-to-link></app-return-to-link>

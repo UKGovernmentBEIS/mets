@@ -1,0 +1,9 @@
+<app-aer-task-review heading="List the reasons for your decision" returnToLink="../..">
+  <p class="govuk-body">
+    On the basis of the verification work undertaken, list the reasons why the report can’t be verified as satisfactory
+  </p>
+  <app-overall-decision-list [isEditable]="isEditable$ | async" [list]="reasons$ | async"></app-overall-decision-list>
+  <div class="govuk-button-group" *ngIf="(reasons$ | async)?.length > 0">
+    <button *ngIf="isEditable$ | async" govukButton [routerLink]="['../summary']" type="button">Continue</button>
+  </div>
+</app-aer-task-review>

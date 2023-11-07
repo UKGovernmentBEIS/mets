@@ -1,0 +1,21 @@
+<app-base-task-container-component
+  [header]="(route.data | async)?.pageTitle"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_SUBMIT"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <ol class="app-task-list">
+    <li app-task-section title="Enter details">
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          linkText="Have allowances been returned?"
+          [link]="(canViewSectionDetails$ | async) ? './summary' : null"
+          [status]="sectionStatus$ | async"
+        ></li>
+      </ul>
+    </li>
+  </ol>
+</ng-template>

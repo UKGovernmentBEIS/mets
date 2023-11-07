@@ -1,0 +1,19 @@
+<ng-container *ngIf="data">
+  <ng-container>
+    <app-procedure-form-summary
+      *ngIf="data.fuelConsumptionPerFlight"
+      header="Monitoring fuel consumption per flight"
+      [isEditable]="isEditable"
+      [procedureFormData]="data.fuelConsumptionPerFlight"
+      formRouterLink="../"
+    ></app-procedure-form-summary>
+
+    <app-procedure-form-summary
+      *ngIf="data.fuelDensity"
+      header="Measuring fuel density"
+      [isEditable]="isEditable"
+      [procedureFormData]="data.fuelDensity"
+      formRouterLink="../fuel-density"
+    ></app-procedure-form-summary>
+  </ng-container>
+</ng-container>

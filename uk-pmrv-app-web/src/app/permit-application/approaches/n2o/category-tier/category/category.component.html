@@ -1,0 +1,146 @@
+<app-permit-task
+  [breadcrumb]="
+    (emissionPointCategory$ | async)
+      ? [
+          {
+            text: 'MEASUREMENT_N2O' | monitoringApproachDescription,
+            link: ['nitrous-oxide']
+          },
+          {
+            text:
+              emissionPoint$
+              | async
+              | findEmissionPoint
+              | async
+              | tierEmissionPointName: (emissionPointCategory$ | async),
+            link: ['nitrous-oxide', 'category-tier', index$ | async]
+          }
+        ]
+      : [
+          {
+            text: 'MEASUREMENT_N2O' | monitoringApproachDescription,
+            link: ['nitrous-oxide']
+          },
+          {
+            text: 'Add an emission point category',
+            link: ['nitrous-oxide', 'category-tier', index$ | async]
+          }
+        ]
+  "
+>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    [caption]="'MEASUREMENT_N2O' | monitoringApproachDescription"
+    heading="Emission point category"
+    submitText="Save and Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <p class="govuk-body">Define an emission point category by linking an emission point with its emission source.</p>
+    <p class="govuk-body">
+      You must include the amount of carbon dioxide (CO2) or carbon dioxide equivalent (CO2e) this emission point
+      category emits and the applied monitoring approach being used at the installation.
+    </p>
+
+    <div app-multi-select formControlName="sourceStreams" label="Source streams">
+      <div
+        *ngFor="let sourceStream of 'sourceStreams' | task | async"
+        [itemValue]="sourceStream.id"
+        [label]="sourceStream.reference + ' ' + (sourceStream | sourceStreamDescription)"
+        app-multi-select-item
+        itemName="sourceStreams"
+      ></div>
+    </div>
+    <div app-multi-select formControlName="emissionSources" label="Emission sources">
+      <div
+        *ngFor="let emissionSource of 'emissionSources' | task | async"
+        [itemValue]="emissionSource.id"
+        [label]="emissionSource.reference + ' ' + emissionSource.description"
+        app-multi-select-item
+        itemName="emissionSources"
+      ></div>
+    </div>
+    <div formControlName="emissionPoint" govuk-select label="Emission point" widthClass="govuk-!-width-full">
+      <option *ngFor="let emissionPoint of 'emissionPoints' | task | async" [value]="emissionPoint.id">
+        {{ emissionPoint.reference }} {{ emissionPoint.description }}
+      </option>
+    </div>
+    <div class="govuk-hint">
+      Abated emissions must be monitored using a measurement based approach. Temporary occurrences of unabated emissions
+      must use a calculation method based on a mass balance approach, and must be added using the calculation approach
+      when you define your installation's monitoring approaches.
+      <p>This applies to emissions of N2O from the production of:</p>
+      <ul>
+        <li>adipic acid</li>
+        <li>caprolactum</li>
+        <li>glyoxal</li>
+        <li>glyoxylic acid</li>
+      </ul>
+      Emissions of N2O from nitric acid production must be monitored using a measurement based approach.
+    </div>
+    <div formControlName="emissionType" govuk-radio>
+      <govuk-radio-option
+        *ngFor="let option of emissionTypeOptions"
+        [hint]="option.hint"
+        [label]="option.label"
+        [value]="option.value"
+      >
+      </govuk-radio-option>
+    </div>
+    <div formControlName="monitoringApproachType" govuk-radio legend="What monitoring approach is applied?">
+      <govuk-radio-option
+        *ngFor="let option of monitoringApproachTypeOptions"
+        [label]="option.label"
+        [value]="option.value"
+      >
+      </govuk-radio-option>
+    </div>
+    <div
+      formControlName="annualEmittedCO2Tonnes"
+      govuk-text-input
+      inputType="number"
+      label="Estimated tonnes of CO2 emitted from this emission point category"
+      hint="Include carbon dioxide equivalent (CO2e)"
+      suffix="Tonnes"
+      widthClass="govuk-input--width-10"
+    ></div>
+    <div formControlName="categoryType" govuk-radio legend="What category does this emission point fit in?">
+      <govuk-radio-option
+        *ngFor="let option of categoryTypeOptions"
+        [label]="option | categoryTypeName"
+        [value]="option"
+      >
+      </govuk-radio-option>
+    </div>
+    <div
+      *ngIf="hasTransfer$ | async"
+      formControlName="entryAccountingForTransfer"
+      govuk-radio
+      legend="Are the emissions from this emission point exported to, or received from another installation?"
+    >
+      <govuk-radio-option [value]="true" label="Yes">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="transferDirection"
+            govuk-radio
+            legend="What direction is the transferred N2O travelling?"
+          >
+            <govuk-radio-option
+              value="EXPORTED_TO_LONG_TERM_FACILITY"
+              label="Exported to a long-term geological storage related facility"
+            ></govuk-radio-option>
+            <govuk-radio-option
+              value="RECEIVED_FROM_ANOTHER_INSTALLATION"
+              label="Received from another installation"
+            ></govuk-radio-option>
+          </div>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="..">
+    Return to: {{ index$ | async | emissionPointCategoryName: 'MEASUREMENT_N2O' | async }}
+  </a>
+</app-permit-task>

@@ -1,0 +1,24 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+
+  <ng-container *ngIf="vm.variationDetails">
+    <app-variation-details-summary-template
+      [variationDetails]="vm.variationDetails"
+      [variationRegulatorLedReason]="vm.variationRegulatorLedReason"
+      [isEditable]="vm.isEditable"
+      [changeUrlQueryParams]="{ change: true }"
+    ></app-variation-details-summary-template>
+
+    <div class="govuk-button-group">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+        Confirm and complete
+      </button>
+    </div>
+
+    <app-emp-variation-review-decision-group
+      *ngIf="vm.showVariationDecision"
+      taskKey="empVariationDetails"
+    ></app-emp-variation-review-decision-group>
+  </ng-container>
+</ng-container>
+<app-return-to-link></app-return-to-link>

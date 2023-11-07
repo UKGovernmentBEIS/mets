@@ -1,0 +1,4 @@
+<app-wizard-step [showBackLink]="true" (formSubmit)="onContinue()" [formGroup]="form" heading="Add an operator account">
+  <app-aviation-account-form formGroupName="account"></app-aviation-account-form>
+</app-wizard-step>
+<a govukLink routerLink="../../dashboard">Return to your tasks</a>

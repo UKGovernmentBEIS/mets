@@ -1,0 +1,25 @@
+<app-vir-task *ngIf="(isSubmitted$ | async) !== true; else submitted" heading="Submit responses">
+  <ng-container *ngIf="isSendReportAvailable$ | async; else notAvailable">
+    <p class="govuk-body">Are you sure you want to submit this form to the Competent Authority for assessment?</p>
+    <govuk-warning-text assistiveText="Warning">You cannot make changes after you click 'submit'</govuk-warning-text>
+    <div *ngIf="isEditable$ | async" class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+    </div>
+  </ng-container>
+  <ng-template #notAvailable>
+    <p class="govuk-body">You need to complete all tasks before submitting the report.</p>
+  </ng-template>
+</app-vir-task>
+
+<ng-template #submitted>
+  <govuk-panel title="Responses submitted">
+    <p>Your responses have been successfully submitted to the Competent Authority for assessment</p>
+    <p>
+      <strong>Your reference code is:</strong><br />
+      {{ requestId$ | async }}
+    </p>
+  </govuk-panel>
+  <h3 class="govuk-heading-m">What happens next</h3>
+  <p class="govuk-body">We will review what you have told us and will reply to you in due course.</p>
+  <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
+</ng-template>

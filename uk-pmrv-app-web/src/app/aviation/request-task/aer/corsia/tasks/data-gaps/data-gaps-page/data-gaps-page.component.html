@@ -1,0 +1,35 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="false"
+  heading="Did any flights with offsetting obligations have data gaps during the scheme year?"
+  class="govuk-!-width-two-thirds"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    A data gap is where the CO2 emissions from a flight cannot be determined from primary data sources or reconstructed
+    from secondary data sources.
+  </p>
+
+  <govuk-details summary="Data gap threshold and what you must do">
+    <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3 govuk-!-width-two-thirds">
+      The number of flights where data gaps occurred should not exceed 5% of the number of flights with offsetting
+      obligations over the monitoring year.
+    </p>
+
+    <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3 govuk-!-width-two-thirds">
+      If you <b>exceed the 5% threshold</b>, you must tell your regulator what remedial action you are taking to address
+      the frequency of the data gaps. This must be done outside of the reporting process or as a separate communication
+      to your regulator.
+    </p>
+
+    <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3 govuk-!-width-two-thirds">
+      If you <b>do not exceed the 5% threshold</b> and are using a fuel use monitoring method, you need to account for
+      the data gaps using the ICAO CORSIA CO2 estimation and reporting tool (CERT) .
+    </p>
+  </govuk-details>
+
+  <app-data-gaps-exist-form></app-data-gaps-exist-form>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

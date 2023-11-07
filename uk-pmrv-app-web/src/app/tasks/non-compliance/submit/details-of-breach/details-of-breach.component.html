@@ -1,0 +1,34 @@
+<app-non-compliance-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Provide details of breach"
+    submitText="Save and Continue"
+    [showBackLink]="true"
+  >
+    <h2 class="govuk-heading-s">Choose reason for non-compliance</h2>
+    <div formControlName="reason" govuk-select widthClass="govuk-!-width-full">
+      <option *ngFor="let option of reasonOptions" [value]="option">
+        {{ option | nonComplianceReason }}
+      </option>
+    </div>
+
+    <h2 class="govuk-heading-s">When did the operator become non-compliant? (optional)</h2>
+    <div class="govuk-hint">This should be the date that the breach started</div>
+    <div formControlName="nonComplianceDate" govuk-date-input></div>
+
+    <h2 class="govuk-heading-s">When did the operator become compliant? (optional)</h2>
+    <div class="govuk-hint">Leave blank if the operator is still non-compliant</div>
+    <div formControlName="complianceDate" govuk-date-input></div>
+
+    <h2 class="govuk-heading-s">Your comments (optional)</h2>
+    <div class="govuk-hint">The operator cannot see this</div>
+    <div formControlName="comments" govuk-textarea [maxLength]="10000"></div>
+  </app-wizard-step>
+  <div *ngIf="(currentDomain$ | async) === 'INSTALLATION'; else aviation">
+    <a govukLink routerLink="..">Return to: non compliance task</a>
+  </div>
+  <ng-template #aviation>
+    <app-return-to-link></app-return-to-link>
+  </ng-template>
+</app-non-compliance-task>

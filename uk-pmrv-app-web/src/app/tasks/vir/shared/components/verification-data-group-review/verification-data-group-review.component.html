@@ -1,0 +1,13 @@
+<ng-container *ngFor="let item of virPayload.operatorImprovementResponses | keyvalue">
+  <h2 class="govuk-heading-s govuk-!-margin-0">{{ item.key | verificationReferenceTitle }}</h2>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="{{ item.key }}/summary"
+      linkText="Respond to operator"
+      [status]="virPayload | taskStatus: item.key"
+      [hasContent]="true">
+      <app-operator-response-data-item [operatorImprovementResponse]="item.value"></app-operator-response-data-item>
+    </li>
+  </ul>
+</ng-container>

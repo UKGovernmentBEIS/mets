@@ -1,0 +1,44 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Did any flights with offsetting obligations have data gaps during the scheme year?</dt>
+    <dd govukSummaryListRowValue>{{ data.exist ? 'Yes' : 'No' }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="'../'" [queryParams]="{ change: true }">Change</a>
+    </dd>
+  </div>
+
+  <ng-container *ngIf="data?.dataGapsDetails?.dataGapsPercentageType">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        What percentage of flights with offsetting obligations had data gaps during the scheme year?
+      </dt>
+      <dd govukSummaryListRowValue>
+        {{
+          data.dataGapsDetails.dataGapsPercentageType === 'LESS_EQUAL_FIVE_PER_CENT'
+            ? data.dataGapsDetails.dataGapsPercentage + '%'
+            : 'More than 5%'
+        }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../threshold'" [queryParams]="{ change: true }">Change</a>
+      </dd>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="data?.dataGapsDetails?.dataGapsPercentageType === 'MORE_THAN_FIVE_PER_CENT'">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total affected flights</dt>
+      <dd govukSummaryListRowValue>
+        {{ affectedFlightsDataGaps }}
+      </dd>
+
+      <dd govukSummaryListRowActions *ngIf="isEditable"></dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Percentage of flights affected by data gaps</dt>
+      <dd govukSummaryListRowValue>{{ data.dataGapsDetails.affectedFlightsPercentage }} %</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+  </ng-container>
+</dl>

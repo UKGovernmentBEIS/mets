@@ -1,0 +1,16 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Provide a reason to include in the notice"
+  submitText="Continue"
+  [hideSubmit]="false"
+>
+  <div class="govuk-hint">This will add the relevant text template to the notice</div>
+  <div
+    formControlName="reasonRegulatorLed"
+    govuk-textarea
+    [maxLength]="10000"
+    label="Provide a reason to include in the operator notice"
+  ></div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

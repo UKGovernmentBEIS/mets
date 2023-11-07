@@ -1,0 +1,37 @@
+<ng-container
+  *ngIf="('MEASUREMENT_N2O' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async] as tier"
+>
+  <app-permit-task
+    [notification]="notification"
+    [breadcrumb]="[
+      {
+        text: 'MEASUREMENT_N2O' | monitoringApproachDescription,
+        link: ['nitrous-oxide']
+      },
+      {
+        text: tier | emissionPointCategoryName | async,
+        link: ['nitrous-oxide', 'category-tier', index$ | async]
+      }
+    ]"
+  >
+    <app-page-heading
+      caption="{{ 'MEASUREMENT_N2O' | monitoringApproachDescription }}, {{ tier | emissionPointCategoryName | async }}"
+      >Applied standard
+    </app-page-heading>
+
+    <h2
+      app-summary-header
+      [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
+      class="govuk-heading-m"
+    >
+      <span class="govuk-visually-hidden">Applied standard</span>
+    </h2>
+
+    <app-applied-standard-form-summary
+      [appliedStandard]="tier.appliedStandard"
+      cssClass="summary-list--edge-border"
+    ></app-applied-standard-form-summary>
+
+    <a govukLink routerLink="../.."> Return to: {{ tier | emissionPointCategoryName | async }} </a>
+  </app-permit-task>
+</ng-container>

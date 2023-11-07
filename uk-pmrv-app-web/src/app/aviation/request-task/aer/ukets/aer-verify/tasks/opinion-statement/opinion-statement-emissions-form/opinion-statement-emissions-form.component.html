@@ -1,0 +1,72 @@
+<!-- FuelTypes -->
+<h2 class="govuk-heading-m govuk-!-margin-0 govuk-!-width-two-thirds">
+  Confirm the standard fuels and emission factors used
+</h2>
+
+<div formControlName="fuelTypes" govuk-checkboxes>
+  <govuk-checkbox
+    [value]="'JET_KEROSENE'"
+    label="Jet kerosene (Jet A1 or Jet A) at 3.15 tCO2 per tonne of fuel"
+  ></govuk-checkbox>
+
+  <govuk-checkbox [value]="'JET_GASOLINE'" label="Jet gasoline (Jet B) at 3.10 tCO2 per tonne of fuel"></govuk-checkbox>
+
+  <govuk-checkbox
+    [value]="'AVIATION_GASOLINE'"
+    label="Aviation gasoline (AV gas) at 3.10 tCO2 per tonne of fuel"
+  ></govuk-checkbox>
+</div>
+
+<!-- MonitoringApproachType -->
+<h2 class="govuk-heading-m govuk-!-margin-0 govuk-!-width-two-thirds">
+  Confirm the emissions monitoring approach used
+</h2>
+
+<div
+  class="govuk-!-width-two-thirds"
+  formControlName="monitoringApproachType"
+  govuk-radio
+  [isInline]="false"
+  legendSize="medium"
+>
+  <govuk-radio-option value="EUROCONTROL_SUPPORT_FACILITY" [label]="'Unmodified Eurocontrol Support Facility data'">
+  </govuk-radio-option>
+
+  <govuk-radio-option
+    value="EUROCONTROL_SMALL_EMITTERS"
+    [label]="'Flight data using the Eurocontrol Small Emitters Tool'"
+  ></govuk-radio-option>
+
+  <govuk-radio-option value="FUEL_USE_MONITORING" [label]="'Fuel use monitoring'"></govuk-radio-option>
+</div>
+
+<!-- TotalEmissionsProvided -->
+<h2 class="govuk-heading-m govuk-!-margin-0 govuk-!-width-two-thirds">Total emissions reported by the operator</h2>
+
+<p class="govuk-body govuk-!-margin-top-2">{{ totalEmissionsProvided }} tCO2</p>
+
+<!-- EmissionsCorrect -->
+<h2 class="govuk-heading-m govuk-!-margin-0 govuk-!-width-two-thirds">Are the reported emissions correct?</h2>
+
+<div
+  class="govuk-!-width-two-thirds"
+  formControlName="emissionsCorrect"
+  govuk-radio
+  [isInline]="false"
+  legendSize="medium"
+>
+  <govuk-radio-option [value]="true" [label]="'Yes, the emissions are correct'"> </govuk-radio-option>
+
+  <govuk-radio-option [value]="false" [label]="'No, we will enter a different verified emissions figure'">
+    <ng-container govukConditionalContent>
+      <ng-container *ngIf="emissionsCorrectCtrl.value === false">
+        <div
+          formControlName="manuallyProvidedEmissions"
+          govuk-text-input
+          label="Total verified emissions for the scheme year"
+          suffix="tonnes CO2"
+        ></div>
+      </ng-container>
+    </ng-container>
+  </govuk-radio-option>
+</div>

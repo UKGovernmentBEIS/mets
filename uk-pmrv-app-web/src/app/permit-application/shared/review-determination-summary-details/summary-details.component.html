@@ -1,0 +1,68 @@
+<ng-container *ngIf="determination$ | async as determination">
+  <dl govuk-summary-list [class]="cssClass" [hasBorders]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Decision</dt>
+      <dd govukSummaryListRowValue>
+        {{ determinationText$ | async }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl govuk-summary-list [class]="cssClass" [hasBorders]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason for decision</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ determination.reason }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..', 'reason']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl *ngIf="determination.activationDate" govuk-summary-list [class]="cssClass" [hasBorders]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Permit effective date</dt>
+      <dd govukSummaryListRowValue>
+        {{ determination.activationDate | govukDate }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..', 'activation-date']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl *ngIf="determination.officialNotice" govuk-summary-list [class]="cssClass" [hasBorders]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Official notice text</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>
+        {{ determination.officialNotice }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..', 'official-notice']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <dl
+    *ngIf="(isPermitTypeHSE$ | async) && (emissionsTargets$ | async)?.length"
+    govuk-summary-list
+    [class]="cssClass"
+    [hasBorders]="false"
+  >
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Εmission targets</dt>
+      <dd govukSummaryListRowValue>
+        <div *ngFor="let emission of emissionsTargets$ | async">
+          <div>{{ emission.year }} - {{ emission.target }} tCO2e</div>
+        </div>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
+        <a govukLink [routerLink]="['..', 'emissions']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

@@ -1,0 +1,40 @@
+<app-air-task heading="Provide information about this improvement" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div
+      formControlName="justification"
+      govuk-checkboxes
+      legendSize="medium"
+      legend="Justification for not meeting the highest tier"
+    >
+      <ng-container govukLegend>
+        <span class="govuk-visually-hidden">Unreasonable cost</span>
+      </ng-container>
+      <govuk-checkbox [value]="'isCostUnreasonable'" label="Unreasonable cost"></govuk-checkbox>
+      <ng-container govukLegend>
+        <span class="govuk-visually-hidden">Technical infeasibility</span>
+      </ng-container>
+      <govuk-checkbox [value]="'isTechnicallyInfeasible'" label="Technical infeasibility">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="technicalInfeasibilityExplanation"
+            govuk-textarea
+            [maxLength]="10000"
+            label="Explain why it is not technically feasible to meet the highest tier, as set out in Article 17 of the Monitoring and Reporting Regulations (MRR)"
+          ></div>
+        </ng-container>
+      </govuk-checkbox>
+    </div>
+    <app-multiple-file-input
+      [baseDownloadUrl]="getDownloadUrl()"
+      label="Upload files (optional)"
+      headerSize="m"
+      listTitle="Uploaded attachments"
+      formControlName="files"
+    ></app-multiple-file-input>
+  </app-wizard-step>
+</app-air-task>

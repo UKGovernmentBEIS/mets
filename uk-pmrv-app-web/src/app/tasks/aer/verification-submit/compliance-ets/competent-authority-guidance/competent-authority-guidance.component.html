@@ -1,0 +1,31 @@
+<app-aer-task-review heading="Has the competent authority guidance on monitoring and reporting been met?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <govuk-details summary="See guidance">
+      <article>
+        <p class="govuk-body">You must apply the harmonised standards which meet the essential requirements of the EC
+          regulations for GHG accreditation and verification bodies.</p>
+        <p class="govuk-body">You’ll also need to apply processes and arrangements for:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>communicating with the operator and other parties</li>
+          <li>protecting the confidentiality of information you obtain</li>
+          <li>dealing with approvals</li>
+          <li>issuing a revised verification report after you have issued it to the operator</li>
+        </ul>
+      </article>
+    </govuk-details>
+    <div formControlName="competentAuthorityGuidanceMet" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="competentAuthorityGuidanceNotMetReason" govuk-textarea
+               label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

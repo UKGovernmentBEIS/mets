@@ -1,0 +1,98 @@
+<ng-container *ngIf="store | async as state">
+  <app-request-action-heading [headerText]="header$ | async" [timelineCreationDate]="state.requestActionCreationDate">
+  </app-request-action-heading>
+
+  <ng-container *ngIf="state.determination">
+    <h2 app-summary-header class="govuk-heading-m">Decision details</h2>
+    <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+      <div govukSummaryListRow *ngIf="permitDocument$ | async as permitDocument">
+        <dt govukSummaryListRowKey>Permit</dt>
+        <dd govukSummaryListRowValue>
+          <a
+            [routerLink]="[
+              '/',
+              urlRequestType,
+              'action',
+              actionId$ | async,
+              'file-download',
+              'document',
+              permitDocument.uuid
+            ]"
+            govukLink
+            target="_blank"
+          >
+            {{ permitDocument.name }}
+          </a>
+        </dd>
+      </div>
+      <div *ngIf="isDeterminationGranted$ | async" govukSummaryListRow>
+        <dt govukSummaryListRowKey>Permit application</dt>
+        <dd govukSummaryListRowValue>
+          <a govukLink [routerLink]="permitLink$ | async">Permit application</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Decision</dt>
+        <dd govukSummaryListRowValue>{{ decision$ | async }}</dd>
+      </div>
+      <div *ngIf="state.determination.reason" govukSummaryListRow>
+        <dt govukSummaryListRowKey>Reason for decision</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">{{ state.determination.reason }}</dd>
+      </div>
+      <ng-container *ngIf="isDeterminationGranted$ | async">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Permit effective date</dt>
+          <dd govukSummaryListRowValue>{{ state.determination.activationDate | govukDate: 'date' }}</dd>
+        </div>
+        <ng-container *ngIf="state.permitType === 'HSE'">
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Emission targets</dt>
+            <dd govukSummaryListRowValue>
+              <div *ngFor="let emissionTarget of emissionsTargets$ | async">
+                <div>{{ emissionTarget.year }} - {{ emissionTarget.target }} tCO2e</div>
+              </div>
+            </dd>
+          </div>
+        </ng-container>
+      </ng-container>
+    </dl>
+  </ng-container>
+
+  <h2 app-summary-header class="govuk-heading-m">Recipients</h2>
+  <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Users</dt>
+      <dd govukSummaryListRowValue>
+        <div *ngFor="let user of operators$ | async">
+          {{ user | userInfoResolver: state.usersInfo }}
+        </div>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+      <dd govukSummaryListRowValue>
+        {{ signatory$ | async | userInfoResolver: state.usersInfo }}
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="officialNotice$ | async as officialNotice">
+      <dt govukSummaryListRowKey>Official notice</dt>
+      <dd govukSummaryListRowValue>
+        <a
+          [routerLink]="[
+            '/',
+            urlRequestType,
+            'action',
+            actionId$ | async,
+            'file-download',
+            'document',
+            officialNotice.uuid
+          ]"
+          govukLink
+          target="_blank"
+        >
+          {{ officialNotice.name }}
+        </a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

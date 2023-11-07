@@ -1,0 +1,29 @@
+<div
+  formControlName="type"
+  govuk-radio
+  [isInline]="false"
+  legend="Why are you determining the aviation emissions?"
+  legendSize="medium"
+>
+  <govuk-radio-option
+    value="VERIFIED_REPORT_NOT_SUBMITTED_IN_ACCORDANCE_WITH_ORDER"
+    [label]="'VERIFIED_REPORT_NOT_SUBMITTED_IN_ACCORDANCE_WITH_ORDER' | determinationReasonType"
+  >
+  </govuk-radio-option>
+  <govuk-radio-option
+    value="CORRECTING_NON_MATERIAL_MISSTATEMENT"
+    [label]="'CORRECTING_NON_MATERIAL_MISSTATEMENT' | determinationReasonType"
+  ></govuk-radio-option>
+  <govuk-radio-option
+    value="IMPOSING_OR_CONSIDERING_IMPOSING_CIVIL_PENALTY_IN_ACCORDANCE_WITH_ORDER"
+    [label]="'IMPOSING_OR_CONSIDERING_IMPOSING_CIVIL_PENALTY_IN_ACCORDANCE_WITH_ORDER' | determinationReasonType"
+  ></govuk-radio-option>
+</div>
+
+<div class="govuk-heading-m">Further details (optional)</div>
+<div
+  formControlName="furtherDetails"
+  govuk-textarea
+  [maxLength]="10000"
+  hint="Provide more information about why you are making a determination. The operator cannot view this."
+></div>

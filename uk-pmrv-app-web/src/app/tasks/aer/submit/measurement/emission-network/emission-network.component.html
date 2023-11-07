@@ -1,0 +1,48 @@
+<app-aer-task>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <app-wizard-step
+        (formSubmit)="onContinue()"
+        [formGroup]="form"
+        heading="Define the emission network"
+        [hideSubmit]="(isEditable$ | async) === false"
+      >
+        <div formControlName="emissionPoint" govuk-select label="Emission point" widthClass="govuk-!-width-full">
+          <option *ngFor="let emissionPoint of 'emissionPoints' | task | async" [value]="emissionPoint.id">
+            {{ emissionPoint.reference }} {{ emissionPoint.description }}
+          </option>
+        </div>
+        <div app-multi-select formControlName="sourceStreams" label="Source streams">
+          <div
+            *ngFor="let sourceStream of 'sourceStreams' | task | async"
+            [itemValue]="sourceStream.id"
+            [label]="sourceStream.reference + ' ' + (sourceStream.description | sourceStreamDescription)"
+            app-multi-select-item
+            itemName="emissionSources"
+          ></div>
+        </div>
+        <div app-multi-select formControlName="emissionSources" label="Emission sources">
+          <div
+            *ngFor="let emissionSource of 'emissionSources' | task | async"
+            [itemValue]="emissionSource.id"
+            [label]="emissionSource.reference + ' ' + emissionSource.description"
+            app-multi-select-item
+            itemName="emissionSources"
+          ></div>
+        </div>
+        <div formControlName="containsBiomass" legend="Does this  contain biomass?" govuk-radio legendSize="medium">
+          <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+          <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+        </div>
+      </app-wizard-step>
+    </div>
+
+    <div
+      class="govuk-grid-column-one-quarter"
+      *ngIf="(isEditable$ | async) === true && !!(emissionPointEmissions$ | async)"
+    >
+      <button type="button" (click)="onDelete()" govukSecondaryButton>Delete</button>
+    </div>
+  </div>
+  <a govukLink routerLink="../..">Return to: {{ taskKey | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

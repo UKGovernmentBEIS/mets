@@ -1,0 +1,26 @@
+<app-permit-task [breadcrumb]="[{ text: 'INHERENT_CO2' | monitoringApproachDescription, link: ['inherent-co2'] }]">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    submitText="Save and continue"
+    heading="Which types of measurement instruments are used?"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <p class="govuk-body">Select all that apply</p>
+    <div formControlName="measurementInstrumentOwnerTypes" govuk-checkboxes>
+      <govuk-checkbox
+        [label]="'INSTRUMENTS_BELONGING_TO_YOUR_INSTALLATION' | inherentCo2Instruments"
+        value="INSTRUMENTS_BELONGING_TO_YOUR_INSTALLATION"
+      ></govuk-checkbox>
+      <govuk-checkbox
+        [label]="'INSTRUMENTS_BELONGING_TO_THE_OTHER_INSTALLATION' | inherentCo2Instruments"
+        value="INSTRUMENTS_BELONGING_TO_THE_OTHER_INSTALLATION"
+      ></govuk-checkbox>
+    </div>
+  </app-wizard-step>
+
+  <app-approach-return-link
+    [parentTitle]="'INHERENT_CO2' | monitoringApproachDescription"
+    reviewGroupUrl="inherent-co2"
+  ></app-approach-return-link>
+</app-permit-task>

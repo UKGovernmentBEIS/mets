@@ -1,0 +1,51 @@
+<app-base-task-container-component
+  [header]="virTitle$ | async"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="VIR_RESPOND_TO_REGULATOR_COMMENTS"
+  [notification]="notification"
+  [daysRemaining]="daysRemaining$ | async"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <ng-container *ngIf="regulatorImprovementResponses$ | async as regulatorImprovementResponses">
+    <ng-container *ngFor="let item of regulatorImprovementResponses | keyvalue">
+      <h2 class="govuk-heading-s govuk-!-margin-0">{{ item.key | verificationReferenceTitle }}</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="{{ item.key }}/summary"
+          linkText="Respond to the Regulator"
+          [status]="virPayload$ | async | taskStatus: item.key"
+          [hasContent]="true"
+        >
+          <dl
+            *ngIf="item.value?.operatorActions"
+            govuk-summary-list
+            [hasBorders]="false"
+            class="govuk-!-margin-bottom-0"
+          >
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Regulator's response</dt>
+              <dd govukSummaryListRowValue>{{ item.value.operatorActions | textEllipsis }}</dd>
+              <dd govukSummaryListRowActions></dd>
+            </div>
+          </dl>
+        </li>
+      </ul>
+      <h2 class="govuk-heading-s govuk-!-margin-0">{{ item.key }}: submit</h2>
+      <ul app-task-item-list *ngIf="virPayload$ | async | submitRespondStatus: item.key as submitStatus">
+        <li
+          *ngIf="submitStatus !== 'cannot start yet'; else linkAsText"
+          app-task-item
+          link="{{ item.key }}/send-report"
+          linkText="Send to the regulator"
+          [status]="submitStatus"
+        ></li>
+        <ng-template #linkAsText>
+          <li app-task-item linkText="Send to the regulator" [status]="submitStatus"></li>
+        </ng-template>
+      </ul>
+    </ng-container>
+  </ng-container>
+</ng-template>

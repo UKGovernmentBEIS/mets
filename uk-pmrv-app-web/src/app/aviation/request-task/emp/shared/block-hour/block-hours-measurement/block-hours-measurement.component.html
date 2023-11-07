@@ -1,0 +1,83 @@
+<app-procedure-form-step [form]="form" (submitForm)="onSubmit()">
+  <div procedureFormPageHeader>
+    <div class="govuk-caption-l">Block-hour</div>
+    <app-page-heading>Measurement of the block hours per flight</app-page-heading>
+
+    <p class="govuk-body">Describe how you monitor fuel consumption per flight in owned and leased-in aircraft.</p>
+    <p class="govuk-body">You should include:</p>
+
+    <ul class="govuk-body">
+      <li>the exact points in time for the measurement of block hours per flight</li>
+      <li>a description of the measurement equipment</li>
+      <li>the procedures for recording, retrieving, transmitting and storing information</li>
+      <li>reference to any corresponding documentation</li>
+    </ul>
+
+    <govuk-details summary="Formula for calculating  the average fuel burn ratio per aircraft type">
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">AFBR (AO, AT) = Σ U (AO, AT, N) / Σ BH (AO, AT, N)</p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3 govuk-heading-s">
+        If you can clearly distinguish between international and domestic fuel uplifts:
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        AFBR (AO, AT) = Average fuel burn ratios for aeroplane operator (AO) and aeroplane type (AT) (in tonnes per
+        hour);
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        U (AO, AT, N) = Fuel uplifted for the international flight N for aeroplane operator (AO) and aeroplane type (AT)
+        determined using monitoring method Fuel Uplift (in tonnes);
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        BH (AO, AT, N) = Block hour for the international flight N for aeroplane operator (AO) and aeroplane type (AT)
+        (in hours).
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3 govuk-heading-s">
+        If you cannot clearly distinguish between international and domestic fuel uplifts:
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        AFBR (AO, AT) = Average fuel burn ratios for aeroplane operator (AO) and aeroplane type (AT) (in tonnes per
+        hour);
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        U (AO, AT, N) = Fuel uplifted for the international, and domestic flight N for aeroplane operator (AO) and
+        aeroplane type (AT) determined using monitoring method Fuel Uplift (in tonnes);
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        BH (AO, AT, N) = Block hour for the international and domestic flight N for aeroplane operator (AO) and
+        aeroplane type (AT) (in hours).
+      </p>
+    </govuk-details>
+
+    <govuk-details summary="Formula for calculating fuel consumption per flight">
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        The aeroplane operator shall compute the fuel consumption for each international flight by multiplying the
+        aeroplane operator specific average fuel burn ratios with the flight’s block hour according to the following
+        formula;
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">FN = AFBR (AO, AT) * BH (AO, AT, N)</p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        FN = Fuel allocated to the international flight under consideration (i.e., flight N) using the Fuel Allocation
+        Block Hour method (in tonnes);
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        AFBR (AO, AT) = Average fuel burn ratios for aeroplane operator (AO) and aeroplane type (AT) (in tonnes per
+        hour);
+      </p>
+
+      <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+        BH (AO, AT, N) = Block hour for the international flight under consideration (= flight N) for aeroplane operator
+        (AO) and aeroplane type (AT) (in hours).
+      </p>
+    </govuk-details>
+  </div>
+</app-procedure-form-step>

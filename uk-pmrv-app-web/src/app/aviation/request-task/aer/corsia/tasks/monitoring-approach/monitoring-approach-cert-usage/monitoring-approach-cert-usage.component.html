@@ -1,0 +1,21 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Your use of the CERT"
+  submitText="Continue"
+  [hideSubmit]="false">
+  <div formControlName="flightType" govuk-radio legend="Which type of flights have you used the CERT for?"
+       legendSize="medium" class="govuk-!-width-two-thirds">
+    <govuk-radio-option [value]="'ALL_INTERNATIONAL_FLIGHTS'"
+                        [label]="'ALL_INTERNATIONAL_FLIGHTS' | certDetailsFlightType"></govuk-radio-option>
+    <govuk-radio-option [value]="'INTERNATIONAL_FLIGHTS_WITH_NO_OFFSETTING_OBLIGATIONS'"
+                        [label]="'INTERNATIONAL_FLIGHTS_WITH_NO_OFFSETTING_OBLIGATIONS'| certDetailsFlightType"></govuk-radio-option>
+    <govuk-radio-option [value]="'INTERNATIONAL_FLIGHTS_WITH_OFFSETTING_OBLIGATIONS'"
+                        [label]="'INTERNATIONAL_FLIGHTS_WITH_OFFSETTING_OBLIGATIONS'| certDetailsFlightType"></govuk-radio-option>
+  </div>
+  <div formControlName="publicationYear" govuk-text-input inputType="number"
+       label="Which version of the CERT did you use?" [labelSize]="'medium'"
+       hint="This should be the year of publication"
+       [widthClass]="'govuk-!-width-one-quarter'"></div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

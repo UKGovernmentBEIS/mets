@@ -1,0 +1,48 @@
+<div class="govuk-!-width-two-thirds">
+  <div
+    formControlName="totalReportableEmissions"
+    govuk-text-input
+    label="Total aviation emissions"
+    legendSize="medium"
+    suffix="tonnes CO2"
+  ></div>
+  <div
+    formControlName="type"
+    govuk-radio
+    [isInline]="false"
+    legend="How have you calculated the emissions?"
+    legendSize="medium"
+  >
+    <govuk-radio-option
+      value="EUROCONTROL_SUPPORT_FACILITY"
+      [label]="'EUROCONTROL_SUPPORT_FACILITY' | aviationDreEmissionsType"
+    >
+    </govuk-radio-option>
+    <govuk-radio-option
+      value="VERIFIED_ANNUAL_EMISSIONS_REPORT_SUBMITTED_LATE"
+      [label]="'VERIFIED_ANNUAL_EMISSIONS_REPORT_SUBMITTED_LATE' | aviationDreEmissionsType"
+    ></govuk-radio-option>
+    <govuk-radio-option
+      value="OTHER_DATASOURCE"
+      [label]="'OTHER_DATASOURCE' | aviationDreEmissionsType"
+      [divider]="true"
+    >
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="otherDataSourceExplanation"
+          govuk-textarea
+          [maxLength]="10000"
+          hint="Explain how you calculated the emissions"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <app-multiple-file-input
+    [baseDownloadUrl]="vm.downloadUrl"
+    label="Supporting documents (optional)"
+    listTitle="Files added"
+    formControlName="supportingDocuments"
+    hint="The operator will be able to view uploaded documents"
+  ></app-multiple-file-input>
+</div>

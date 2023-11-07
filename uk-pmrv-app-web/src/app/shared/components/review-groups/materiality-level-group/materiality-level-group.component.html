@@ -1,0 +1,27 @@
+<dl *ngIf="materialityLevelInfo" govuk-summary-list [hasBorders]="true">
+  <div *ngIf="materialityLevelInfo.materialityDetails" govukSummaryListRow>
+    <dt govukSummaryListRowKey>Materiality level</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">{{ materialityLevelInfo.materialityDetails }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="..">Change</a>
+    </dd>
+  </div>
+  <div *ngIf="materialityLevelInfo.accreditationReferenceDocumentTypes?.length > 0" govukSummaryListRow>
+    <dt govukSummaryListRowKey>Accreditation reference documents</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      <div *ngFor="let type of materialityLevelInfo.accreditationReferenceDocumentTypes">
+        <span *ngIf="type === 'OTHER'; else typeValue">
+          {{ materialityLevelInfo.otherReference }}
+          <br /><br />
+        </span>
+        <ng-template #typeValue>
+          {{ type | accreditationReferenceDocumentName }}
+          <br /><br />
+        </ng-template>
+      </div>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../reference-documents">Change</a>
+    </dd>
+  </div>
+</dl>

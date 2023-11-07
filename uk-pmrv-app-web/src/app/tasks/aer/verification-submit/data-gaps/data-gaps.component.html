@@ -1,0 +1,21 @@
+<app-aer-task-review heading="Was a data gap method required during the reporting year?">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">
+      If the operator has missing data and cannot calculate their emissions, they must use an estimation method to give
+      prudent replacement data for this time period.
+    </p>
+    <p class="govuk-body">
+      They need to document the estimation method and submit a revised monitoring plan to the regulator for approval.
+    </p>
+
+    <div formControlName="dataGapRequired" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

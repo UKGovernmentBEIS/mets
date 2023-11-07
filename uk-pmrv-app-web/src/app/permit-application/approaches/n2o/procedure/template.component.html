@@ -1,0 +1,60 @@
+<ng-container [ngSwitch]="taskKey">
+  <ng-container *ngSwitchCase="'monitoringApproaches.MEASUREMENT_N2O.emissionDetermination'">
+    <div class="govuk-body">
+      <p>
+        Provide details about the procedures describing the calculation formulae used to determine the annual nitrous
+        oxide emissions and the method of data aggregation.
+      </p>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'monitoringApproaches.MEASUREMENT_N2O.referenceDetermination'">
+    <div class="govuk-body">
+      <p>Provide details about the procedures describing the methods used to:</p>
+      <ul>
+        <li>determine if valid hours or shorter reference periods for each parameter can be provided</li>
+        <li>substitute missing data</li>
+      </ul>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'monitoringApproaches.MEASUREMENT_N2O.operationalManagement'">
+    <div class="govuk-body">
+      <p>
+        Give details about the procedures, describing how the installation operates with variable loads and how the
+        operational management is carried out.
+      </p>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'monitoringApproaches.MEASUREMENT_N2O.nitrousOxideEmissionsDetermination'">
+    <div class="govuk-body">
+      <p>
+        Provide details about the procedures describing the calculation method used to determine nitrous oxide emissions
+        from periodic, unabated sources in nitric acid, adipic acid, caprolactam, glyoxal and glyoxylic acid production.
+      </p>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'monitoringApproaches.MEASUREMENT_N2O.nitrousOxideConcentrationDetermination'">
+    <div class="govuk-body">
+      <p>
+        Provide details about the method and parameters used to determine the MEASUREMENT_N2O concentration in the flue
+        gas from each emission source, its operating range and uncertainty and any alternative methods applied if
+        concentrations fall outside the operating range and the situations when this may occur.
+      </p>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'monitoringApproaches.MEASUREMENT_N2O.quantityProductDetermination'">
+    <div class="govuk-body">
+      <p>
+        Provide details about the method and parameters used to determine the quantity of product produced as an hourly
+        load expressed as nitric acid (100%), glyoxal and glyoxylic acid and caprolactam per hour.
+      </p>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'monitoringApproaches.MEASUREMENT_N2O.quantityMaterials'">
+    <div class="govuk-body">
+      <p>
+        Provide details about the method and parameters used to determine the quantity of materials used in the
+        production process and the maximum quantity of material use at full capacity.
+      </p>
+    </div>
+  </ng-container>
+</ng-container>

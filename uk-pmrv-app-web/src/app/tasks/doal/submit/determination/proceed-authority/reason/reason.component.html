@@ -1,0 +1,62 @@
+<app-doal-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Choose one or more reasons to support your determination"
+    caption="Proceed to UK ETS authority"
+    submitText="Save and continue"
+    [hideSubmit]="(editable$ | async) === false"
+  >
+    <div formControlName="articleReasonGroupType" govuk-radio>
+      <govuk-radio-option
+        [label]="'ARTICLE_6A_REASONS' | i18nSelect: articleReasonGroupTypeLabelsMap"
+        value="ARTICLE_6A_REASONS"
+      >
+        <ng-container govukConditionalContent>
+          <div govuk-checkboxes formControlName="article6aReasons">
+            <govuk-checkbox
+              *ngFor="let reason of article6AReasons"
+              [value]="reason"
+              [label]="reason | i18nSelect: articleReasonItemsLabelsMap"
+            ></govuk-checkbox>
+          </div>
+        </ng-container>
+      </govuk-radio-option>
+
+      <govuk-radio-option
+        [label]="'ARTICLE_34H_REASONS' | i18nSelect: articleReasonGroupTypeLabelsMap"
+        value="ARTICLE_34H_REASONS"
+      >
+        <ng-container govukConditionalContent>
+          <div govuk-checkboxes formControlName="article34HReasonItems">
+            <govuk-checkbox
+              *ngFor="let reason of article34HReasons"
+              [value]="reason"
+              [label]="reason | i18nSelect: articleReasonItemsLabelsMap"
+            ></govuk-checkbox>
+          </div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-m">Information about the selected reasons</h2>
+    <p class="govuk-body">If Article 6a reasons are selected provide specific details of the adjustment.</p>
+    <p class="govuk-body">
+      If Article 34H errors are selected include the reasons for these errors, as well as details about how they have
+      been corrected, for example:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>determining HALs</li>
+      <li>calculating preliminary allocations</li>
+      <li>calculating final allocation or making a conservative estimate</li>
+    </ul>
+    <div
+      govuk-textarea
+      formControlName="reason"
+      [maxLength]="10000"
+      hint="This will be entered into the official notice"
+    ></div>
+  </app-wizard-step>
+
+  <app-task-return-link taskType="DOAL_APPLICATION_SUBMIT" [levelsUp]="3"></app-task-return-link>
+</app-doal-task>

@@ -1,0 +1,79 @@
+<app-non-compliance-task>
+  <app-page-heading>Check your answers</app-page-heading>
+
+  <p class="govuk-heading-m">Conclusion of non-compliance status</p>
+  <ng-container *ngIf="payload$ | async as payload">
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Has compliance been restored?</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ payload.complianceRestored ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'provide-conclusion']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list *ngIf="payload?.complianceRestored">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>When did the operator become compliant?</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ payload.complianceRestoredDate | date: 'd MMMM yyyy' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'provide-conclusion']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Your comments on the status of compliance</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ payload.comments }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'provide-conclusion']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Withdraw and reissue penalty notice?</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ payload.reissuePenalty ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'provide-conclusion']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list *ngIf="payload?.operatorPaid !== null">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Has the operator paid this penalty?</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ payload.operatorPaid ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'provide-conclusion']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list *ngIf="payload?.operatorPaid">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>When did the operator pay?</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ payload.operatorPaidDate | date: 'd MMMM yyyy' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
+          <a govukLink [routerLink]="['..', 'provide-conclusion']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <div class="govuk-button-group" *ngIf="isEditable$ | async">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+
+  <a govukLink routerLink="..">Return to: non-compliance</a>
+</app-non-compliance-task>

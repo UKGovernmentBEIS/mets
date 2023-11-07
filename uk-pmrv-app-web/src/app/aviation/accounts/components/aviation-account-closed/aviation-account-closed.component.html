@@ -1,0 +1,20 @@
+<div>
+  <h2 class="govuk-heading-m">Account closed</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow id="aviation-account-closureReason">
+      <dt govukSummaryListRowKey>Reason</dt>
+      <dd govukSummaryListRowValue>{{ accountInfo?.closureReason }}</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+    <div govukSummaryListRow id="aviation-account-closedByName">
+      <dt govukSummaryListRowKey>Closed by</dt>
+      <dd govukSummaryListRowValue>{{ accountInfo?.closedByName }}</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+    <div govukSummaryListRow id="aviation-account-closingDate">
+      <dt govukSummaryListRowKey>Date</dt>
+      <dd govukSummaryListRowValue>{{ accountInfo?.closingDate | govukDate: 'datetime' }}</dd>
+      <dd govukSummaryListRowActions></dd>
+    </div>
+  </dl>
+</div>

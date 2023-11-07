@@ -1,0 +1,35 @@
+<app-aer-task-review
+  heading="Were control activities documented, implemented, maintained and effective to reduce any risks?" returnToLink="../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <govuk-details summary="See guidance">
+      <article>
+        <p class="govuk-body">
+          You should carry out detailed testing which at minimum covers:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>analytical procedures</li>
+          <li>data verification</li>
+          <li>checking the monitoring approach</li>
+        </ul>
+        <p class="govuk-body">
+          You should also check that the control activities are well documented, implemented and maintained, and are
+          effectively reducing any inherent risks.
+        </p>
+      </article>
+    </govuk-details>
+    <div formControlName="controlActivitiesDocumented" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div [maxLength]="10000" formControlName="controlActivitiesNotDocumentedReason" govuk-textarea
+               label="Provide a reason"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

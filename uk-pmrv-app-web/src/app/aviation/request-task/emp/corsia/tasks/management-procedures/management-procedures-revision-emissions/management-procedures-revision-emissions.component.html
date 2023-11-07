@@ -1,0 +1,18 @@
+<div class="govuk-!-width-two-thirds">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Revisions of emissions monitoring plan"
+    submitText="Continue"
+    [hideSubmit]="false"
+  >
+    <p class="govuk-body">Describe the procedures for identifying, in the emissions monitoring plan:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>material (significant) changes that need revision and resubmission</li>
+      <li>non-material changes for disclosure in the emissions report</li>
+    </ul>
+
+    <div formControlName="description" govuk-textarea label="Procedure description" [maxLength]="10000"></div>
+  </app-wizard-step>
+</div>
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,12 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Simplified approaches"
+    submitText="Continue"
+    [hideSubmit]="false"
+  >
+    <app-simplified-approach-form [vm]="vm"></app-simplified-approach-form>
+  </app-wizard-step>
+</ng-container>
+<app-return-to-link></app-return-to-link>

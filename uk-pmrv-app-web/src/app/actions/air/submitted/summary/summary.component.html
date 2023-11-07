@@ -1,0 +1,9 @@
+<app-action-task [header]="airImprovement | airImprovementTitle: reference" [breadcrumb]="breadcrumbs">
+  <app-air-improvement-item [reference]="reference" [airImprovement]="airImprovement"> </app-air-improvement-item>
+  <app-air-operator-response-item
+    [reference]="reference"
+    [operatorAirImprovementResponse]="operatorAirImprovementResponse$ | async"
+    [attachedFiles]="documentFiles$ | async"
+  >
+  </app-air-operator-response-item>
+</app-action-task>

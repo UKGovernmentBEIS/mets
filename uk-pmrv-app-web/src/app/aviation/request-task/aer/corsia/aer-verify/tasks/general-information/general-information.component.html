@@ -1,0 +1,31 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Verification criteria and operator data"
+  submitText="Continue"
+>
+  <h2 class="govuk-heading-m">Verification criteria</h2>
+  <p class="govuk-body">Specify the criteria that the emissions report was verified against.</p>
+  <p class="govuk-body">This could be:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>the active version of the EMP</li>
+    <li>the Air Navigation Order</li>
+    <li>the CORSIA Implementation Elements</li>
+    <li>the Environmental Technical Manual (‘Doc 9501’, ‘Volume IV’ etc.)</li>
+  </ul>
+  <div formControlName="verificationCriteria" govuk-textarea [maxLength]="10000"></div>
+
+  <h2 class="govuk-heading-m">Information and data used by the operator</h2>
+  <p class="govuk-body">
+    Specify which data and documents provided by the aeroplane operator were used by the verification body to carry out
+    the verification activities.
+  </p>
+  <p class="govuk-body">This could include:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>the list of flight activities exported from the Operational Management System as of dd/mm/yy</li>
+    <li>flight logs and ACARS messages of the following flights</li>
+    <li>instructions for flight crews for use of fuel density information as contained in document xyz</li>
+  </ul>
+  <div formControlName="operatorData" govuk-textarea [maxLength]="10000"></div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

@@ -1,0 +1,26 @@
+<app-aer-task-review *ngIf="(isSubmitted$ | async) !== true; else submitted" heading="Send report to operator">
+  <ng-container *ngIf="isSendReportAvailable$ | async; else notAvailable">
+    <p class="govuk-body">
+      By selecting ‘confirm and complete’ you are confirming that the information you have provided in this verification
+      report is correct to the best of your knowledge.
+    </p>
+    <div *ngIf="isEditable$ | async" class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+    </div>
+  </ng-container>
+  <ng-template #notAvailable>
+    <p class="govuk-body">You need to complete all tasks before submitting the report.</p>
+  </ng-template>
+</app-aer-task-review>
+
+<ng-template #submitted>
+  <govuk-panel title="Report sent to operator">Your reference is {{ requestId$ | async }}</govuk-panel>
+  <span class="govuk-caption-l govuk-!-margin-bottom-8">We have sent you a confirmation email.</span>
+  <h3 class="govuk-heading-m">What happens next</h3>
+  <p class="govuk-body">The operator will either:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>submit the report to the regulator</li>
+    <li>make changes and repeat the submission process</li>
+  </ul>
+  <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
+</ng-template>

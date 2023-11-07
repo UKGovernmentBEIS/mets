@@ -1,0 +1,15 @@
+<app-vir-task heading="Check your answers" returnToLink="../..">
+  <app-verification-recommendation-item
+    [verificationDataItem]="verificationDataItem"
+  ></app-verification-recommendation-item>
+  <app-operator-response-item
+    [reference]="reference"
+    [operatorImprovementResponse]="operatorImprovementResponse$ | async"
+    [attachedFiles]="documentFiles$ | async"
+    [isEditable]="isEditable$ | async"
+  >
+  </app-operator-response-item>
+  <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+</app-vir-task>

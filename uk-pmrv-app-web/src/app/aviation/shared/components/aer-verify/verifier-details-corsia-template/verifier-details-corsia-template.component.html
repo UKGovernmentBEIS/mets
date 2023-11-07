@@ -1,0 +1,82 @@
+<app-verification-body-details-info-template
+  *ngIf="verificationBodyDetails"
+  [data]="verificationBodyDetails"
+></app-verification-body-details-info-template>
+
+<ng-container *ngIf="verifierDetails?.verificationTeamLeader as verificationTeamLeader">
+  <h2 class="govuk-heading-m">Verification team leader</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name</dt>
+      <dd govukSummaryListRowValue>{{ verificationTeamLeader.name }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Position</dt>
+      <dd govukSummaryListRowValue>{{ verificationTeamLeader.position }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Role and expertise</dt>
+      <dd govukSummaryListRowValue>{{ verificationTeamLeader.role }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Email</dt>
+      <dd govukSummaryListRowValue>{{ verificationTeamLeader.email }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="verifierDetails?.interestConflictAvoidance as interestConflictAvoidance">
+  <h2 class="govuk-heading-m">Avoiding a conflict of interest</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Have you conducted six or more annual verifications as a team leader for this aeroplane operator?
+      </dt>
+      <dd govukSummaryListRowValue>
+        {{ interestConflictAvoidance.sixVerificationsConducted === true ? 'Yes' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../conflict-interest" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+    <!-- eslint-disable-next-line @angular-eslint/template/eqeqeq -->
+    <div govukSummaryListRow *ngIf="interestConflictAvoidance.breakTaken != null">
+      <dt govukSummaryListRowKey>
+        Following completion of six annual verifications as team leader, did you take a break of three-consecutive years
+        from providing verification services for this Aeroplane Operator?
+      </dt>
+      <dd govukSummaryListRowValue>{{ interestConflictAvoidance.breakTaken === true ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../conflict-interest" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="interestConflictAvoidance.breakTaken === false">
+      <dt govukSummaryListRowKey>Provide a reason for not meeting the conflict of interest requirement</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ interestConflictAvoidance.reason }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../conflict-interest" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="interestConflictAvoidance.sixVerificationsConducted === false">
+      <dt govukSummaryListRowKey>
+        Describe the main results of impartiality and avoidance of conflict of interest assessment
+      </dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ interestConflictAvoidance.impartialityAssessmentResult }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../conflict-interest" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

@@ -1,0 +1,13 @@
+<app-aer-task-review
+  heading="Add a change not reported to the regulator by the end of the reporting period?"
+  returnToLink="../../.."
+>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div label="Explanation" [maxLength]="10000" formControlName="explanation" govuk-textarea></div>
+  </app-wizard-step>
+</app-aer-task-review>

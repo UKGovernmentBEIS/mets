@@ -1,0 +1,24 @@
+<ng-container *ngIf="isSendReportAvailable$ | async; else notAvailable">
+  <ng-container *ngIf="isEditable$ | async; else notEditable">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <app-notify-operator
+          [taskId]="taskId$ | async"
+          [accountId]="accountId$ | async"
+          requestTaskActionType="AIR_NOTIFY_OPERATOR_FOR_DECISION"
+          confirmationMessage = "Notification sent successfully"
+          [referenceCode]="referenceCode"
+          [pendingRfi]="pendingRfi$ | async"
+        ></app-notify-operator>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #notEditable>
+    <app-air-task heading="Submit responses"></app-air-task>
+  </ng-template>
+</ng-container>
+<ng-template #notAvailable>
+  <app-air-task heading="Submit responses">
+    <p class="govuk-body">You need to complete all tasks before submitting the report.</p>
+  </app-air-task>
+</ng-template>

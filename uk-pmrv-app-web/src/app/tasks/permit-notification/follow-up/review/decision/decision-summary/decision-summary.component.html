@@ -1,0 +1,44 @@
+<dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Decision status</dt>
+    <dd govukSummaryListRowValue>
+      {{ reviewDecision?.type === 'ACCEPTED' ? 'Accepted' : 'Operator amends needed' }}
+    </dd>
+  </div>
+
+  <ng-container *ngIf="$any(reviewDecision)?.details?.requiredChanges?.length > 0">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Changes required by operator</dt>
+
+      <dd govukSummaryListRowValue>
+        <ng-container
+          *ngFor="let requiredChange of $any(reviewDecision).details.requiredChanges; let i = index; let isLast = last"
+        >
+          <div class="pre-wrap">
+            {{ i + 1 }}. {{ requiredChange.reason }} <br />
+            <ng-container *ngIf="requiredChange?.files?.length > 0">
+              <app-summary-download-files
+                [files]="permitNotificationService.getDownloadUrlFiles(requiredChange?.files)"
+              >
+              </app-summary-download-files>
+            </ng-container>
+          </div>
+          <br *ngIf="!isLast" />
+        </ng-container>
+      </dd>
+    </div>
+  </ng-container>
+
+  <div govukSummaryListRow *ngIf="reviewDecision?.details?.dueDate">
+    <dt govukSummaryListRowKey>New due date for the response</dt>
+    <dd govukSummaryListRowValue>
+      {{ reviewDecision.details.dueDate | govukDate }}
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="reviewDecision?.details?.notes" class="pre-wrap">
+    <dt govukSummaryListRowKey>Notes</dt>
+    <dd govukSummaryListRowValue>{{ reviewDecision.details.notes }}</dd>
+    <dd govukSummaryListRowValue></dd>
+  </div>
+</dl>

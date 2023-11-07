@@ -1,0 +1,25 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading size="l">Reporting status history</app-page-heading>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <ng-container *ngIf="vm.reportingStatusHistory?.length; else noResults">
+        <app-account-reporting-status-history-list
+          [history]="vm.reportingStatusHistory"
+        ></app-account-reporting-status-history-list>
+        <app-pagination
+          *ngIf="vm.total > vm.pageSize"
+          [count]="vm.total"
+          (currentPageChange)="onPageChange($event)"
+          [pageSize]="vm.pageSize"
+        ></app-pagination>
+      </ng-container>
+      <ng-template #noResults>
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-full">
+            <p class="govuk-body no-results" tabindex="-1">There are no results to show</p>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ng-container>

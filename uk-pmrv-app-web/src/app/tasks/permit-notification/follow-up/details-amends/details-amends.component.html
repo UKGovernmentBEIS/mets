@@ -1,0 +1,55 @@
+<ng-container *ngIf="data$ | async as data">
+  <govuk-error-summary *ngIf="displayErrorSummary$ | async" [form]="form"></govuk-error-summary>
+  <app-page-heading size="l">{{ (route.data | async)?.pageTitle }}</app-page-heading>
+  <p class="govuk-body">The following notes are from the regulator explaining the things you need to change.</p>
+
+  <ng-container *ngIf="data$ | async as reviewDecision">
+    <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Regulators comments</dt>
+
+        <dd govukSummaryListRowValue>
+          <ng-container
+            *ngFor="
+              let requiredChange of $any(reviewDecision).details?.requiredChanges;
+              let i = index;
+              let isLast = last
+            "
+          >
+            <div class="pre-wrap">
+              {{ i + 1 }}. {{ requiredChange.reason }} <br />
+              <ng-container *ngIf="requiredChange?.files?.length > 0">
+                <app-summary-download-files
+                  [files]="permitNotificationService.getDownloadUrlFiles(requiredChange?.files)"
+                >
+                </app-summary-download-files>
+              </ng-container>
+            </div>
+            <br *ngIf="!isLast" />
+          </ng-container>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow *ngIf="reviewDecision?.details?.dueDate">
+        <dt govukSummaryListRowKey>Changes due by</dt>
+        <dd govukSummaryListRowValue>
+          {{ reviewDecision.details.dueDate | govukDate }}
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <form (ngSubmit)="submit()" [formGroup]="form" *ngIf="(showForm$ | async) && (isEditable$ | async)">
+    <div formControlName="changes" govuk-checkboxes>
+      <ng-container govukLegend>
+        <span class="govuk-visually-hidden">I have made changes and want to mark this task as complete</span>
+      </ng-container>
+      <govuk-checkbox
+        [value]="true"
+        label="I have made changes and want to mark this task as complete"
+      ></govuk-checkbox>
+    </div>
+    <button appPendingButton govukButton type="submit">Confirm and Complete</button>
+  </form>
+  <a govukLink routerLink="../">Return to: Follow up response to a notification</a>
+</ng-container>

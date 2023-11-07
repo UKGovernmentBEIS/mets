@@ -1,0 +1,34 @@
+<ng-container *ngIf="!isPasswordReset; else passwordReset">
+  <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Submit"
+    heading="Enter the code shown in the authenticator app"
+  >
+    <div
+      formControlName="otp"
+      govuk-text-input
+      label="Enter the 6-digit code"
+      widthClass="govuk-!-width-one-third"
+    ></div>
+  </app-wizard-step>
+</ng-container>
+
+<ng-template #passwordReset>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div class="govuk-panel govuk-panel--confirmation">
+        <div class="govuk-panel__body">You have successfully reset your password</div>
+      </div>
+      <p class="govuk-body">We have sent a confirmation email to {{ email$ | async }}</p>
+      <h2 class="govuk-heading-m">What happens next</h2>
+      <p class="govuk-body">
+        You can
+        <a govukLink [routerLink]="[]" (click)="onSignInAgain()">sign in to the UK ETS reporting service</a>
+        with your new password.
+      </p>
+      <app-back-to-top></app-back-to-top>
+    </div>
+  </div>
+</ng-template>

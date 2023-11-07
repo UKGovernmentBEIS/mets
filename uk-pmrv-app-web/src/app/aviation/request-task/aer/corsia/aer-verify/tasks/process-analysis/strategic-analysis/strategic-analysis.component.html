@@ -1,0 +1,14 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Strategic analysis and risk assessment"
+  submitText="Continue"
+>
+  <div
+    formControlName="strategicAnalysis"
+    govuk-textarea
+    hint="Enter the results of your strategic analysis and risk assessments and state how they were used to prepare your verification plan."
+    [maxLength]="10000"
+  ></div>
+</app-wizard-step>
+<app-return-to-link></app-return-to-link>

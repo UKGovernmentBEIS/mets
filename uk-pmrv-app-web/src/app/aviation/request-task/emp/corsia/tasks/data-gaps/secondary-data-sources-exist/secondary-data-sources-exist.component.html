@@ -1,0 +1,28 @@
+<div class="govuk-!-width-two-thirds">
+  <app-wizard-step
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    heading="Data gaps despite secondary sources"
+    data-testid="secondary-data-sources-exist"
+  >
+    <div
+      formControlName="secondarySourcesDataGapsExist"
+      govuk-radio
+      hint="Does the existing data management system allow for data gaps when secondary data sources exist?"
+    >
+      <govuk-radio-option [value]="true" label="Yes">
+        <div govukConditionalContent>
+          <div
+            govuk-textarea
+            formControlName="secondarySourcesDataGapsConditions"
+            label="Describe the conditions where this occurs"
+            hint="For example, cost, time to resolve, data availability or quality."
+            rows="5"
+          ></div>
+        </div>
+      </govuk-radio-option>
+
+      <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</div>

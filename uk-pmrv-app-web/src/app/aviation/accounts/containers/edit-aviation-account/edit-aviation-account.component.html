@@ -1,0 +1,14 @@
+<app-wizard-step
+  [showBackLink]="true"
+  (formSubmit)="onContinue()"
+  [formGroup]="form"
+  heading="Edit aviation operator details"
+>
+  <app-aviation-account-form
+    [withEmissionTradingScheme]="false"
+    [withRegistryId]="checkForUkAviation"
+    [withLocation]="true"
+    formGroupName="account"
+  ></app-aviation-account-form>
+</app-wizard-step>
+<a govukLink routerLink="../">Return to aviation operator's details</a>

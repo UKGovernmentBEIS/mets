@@ -1,0 +1,56 @@
+<app-aer-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Define the emission network used in your fallback approach"
+    [hideSubmit]="(isEditable$ | async) === false"
+    [showBackLink]="true"
+  >
+    <p class="govuk-body">
+      You may use a fallback approach - one not based on tiers - for certain source streams or emission sources.
+    </p>
+
+    <p class="govuk-body">
+      You must be able to show that using the calculation or measurement approach would not be technically possible or
+      you would incur unreasonable costs.
+    </p>
+
+    <p class="govuk-body">
+      You’ll also need to show that by using this approach, the overall uncertainty thresholds for the installation’s
+      greenhouse gas levels do not exceed:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+      <li>7.5% for category A installations</li>
+      <li>5% for category B installations</li>
+      <li>2.5% for category C installations</li>
+    </ul>
+
+    <p class="govuk-body">Each year you must assess and quantify any uncertainties used to calculate emissions.</p>
+
+    <div
+      app-multi-select
+      formControlName="sourceStreams"
+      label="Select the source streams used in your fall back approach"
+    >
+      <div
+        *ngFor="let sourceStream of 'sourceStreams' | task | async"
+        [itemValue]="sourceStream.id"
+        [label]="sourceStream.reference + ' ' + (sourceStream.description | sourceStreamDescription)"
+        app-multi-select-item
+      ></div>
+    </div>
+
+    <div
+      formControlName="contains"
+      govuk-radio
+      legend="Does any of the selected source streams contain biomass?"
+      [legendSize]="'medium'"
+    >
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <app-return-link></app-return-link>
+</app-aer-task>

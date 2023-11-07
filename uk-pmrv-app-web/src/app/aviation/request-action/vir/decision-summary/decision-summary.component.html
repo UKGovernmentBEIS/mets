@@ -1,0 +1,41 @@
+<app-request-action-heading
+  *ngIf="vm$ | async as vm"
+  [headerText]="vm.pageHeader"
+  [timelineCreationDate]="vm.creationDate"
+>
+  <h2 app-summary-header class="govuk-heading-m">Details</h2>
+  <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Verifier improvement report</dt>
+      <dd govukSummaryListRowValue>
+        <a govukLink [routerLink]="['../..']">Verifier improvement report</a>
+      </dd>
+    </div>
+  </dl>
+
+  <h2 app-summary-header class="govuk-heading-m">Official notice recipients</h2>
+  <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Users</dt>
+      <dd govukSummaryListRowValue>
+        <div *ngFor="let user of operators$ | async">
+          {{ user | userInfoResolver: vm.usersInfo }}
+        </div>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+      <dd govukSummaryListRowValue>
+        {{ signatory$ | async | userInfoResolver: vm.usersInfo }}
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="vm.officialNotice">
+      <dt govukSummaryListRowKey>Official notice</dt>
+      <dd govukSummaryListRowValue>
+        <a [routerLink]="[vm.downloadUrl, vm.officialNotice.uuid]" govukLink target="_blank">
+          {{ vm.officialNotice.name }}
+        </a>
+      </dd>
+    </div>
+  </dl>
+</app-request-action-heading>

@@ -1,0 +1,23 @@
+main {
+  // header: 100px
+  // footer: 310px
+  min-height: calc(100vh - 100px - 310px);
+  outline: none;
+}
+
+select.domain-picker {
+  display: inline-block !important;
+  font-size: 1.2rem;
+  border: none;
+  background: #0b0c0c;
+  color: white;
+  cursor: pointer;
+
+  option {
+    border: none;
+  }
+
+  //select.govuk-select {
+  //  font-size: 1rem;
+  //}
+}

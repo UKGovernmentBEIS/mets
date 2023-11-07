@@ -1,0 +1,160 @@
+<div class="govuk-grid-row" *ngIf="vm$ | async as vm">
+  <div [class]="(vm.hasRelatedActions$ | async) ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
+    <app-page-heading size="l">
+      {{ vm.header }}
+
+      <app-task-header-info
+        [assignee]="vm.requestTask.assigneeFullName"
+        [daysRemaining]="vm.requestTask.daysRemaining"
+      ></app-task-header-info>
+    </app-page-heading>
+
+    <ng-container *ngIf="vm.showDeadlineMessage">
+      <ng-container [ngSwitch]="vm.requestTask.type">
+        <ng-container
+          *ngSwitchCase="'EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT'"
+          [ngTemplateOutlet]="uketsApplicationDeadlineMsg"
+        ></ng-container>
+
+        <ng-container
+          *ngSwitchCase="'EMP_ISSUANCE_CORSIA_APPLICATION_SUBMIT'"
+          [ngTemplateOutlet]="corsiaApplicationDeadlineMsg"
+        ></ng-container>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="vm.awaitForVerifierMsg">
+      <p class="govuk-body">
+        <govuk-warning-text>{{ vm.awaitForVerifierMsg }}</govuk-warning-text>
+      </p>
+    </ng-container>
+
+    <div class="govuk-button-group" *ngIf="vm.showReviewButtons">
+      <button
+        *ngIf="vm.showNotifyOperator"
+        (click)="notifyOperator(vm.requestTask.type)"
+        govukButton
+        title="Notify Operator of decision"
+        type="button"
+      >
+        Notify Operator of decision
+      </button>
+
+      <button
+        *ngIf="vm.showSendForPeerReview"
+        (click)="sendPeerReview(vm.requestTask.type)"
+        govukButton
+        title="Send for peer review"
+        type="button"
+      >
+        Send for peer review
+      </button>
+
+      <button
+        *ngIf="vm.isAnySectionForAmends && vm.showReturnForAmends"
+        (click)="returnForAmends(vm.requestTask.type)"
+        govukButton
+        title="Return for changes"
+        type="button"
+      >
+        Return for changes
+      </button>
+
+      <button
+        *ngIf="vm.isCompleteReportDisplayed"
+        (click)="completeReport()"
+        govukButton
+        title="Complete Report"
+        type="button"
+      >
+        Complete Report
+      </button>
+    </div>
+
+    <div class="govuk-button-group" *ngIf="vm.showStartPeerReview">
+      <button (click)="startPeerReview()" govukButton title="Start peer review" type="button">Start peer review</button>
+    </div>
+
+    <ng-container [ngSwitch]="vm.requestType">
+      <ng-container *ngSwitchCase="'AVIATION_VIR'">
+        <app-vir-task-list [virPayload]="vm.requestTask.payload"></app-vir-task-list>
+      </ng-container>
+
+      <ng-container *ngSwitchDefault>
+        <app-task-list
+          [sections]="vm.sections"
+          [hideSubmit]="true"
+          (submitApplication)="onSubmit()"
+          submitLabel="Submit"
+          [hideCancel]="true"
+        ></app-task-list>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="vm.relatedTasks?.length > 0">
+      <app-related-tasks [items]="vm.relatedTasks"></app-related-tasks>
+    </ng-container>
+
+    <ng-container *ngIf="vm.timeline?.length">
+      <app-timeline>
+        <app-timeline-item
+          *ngFor="let action of vm.timeline"
+          [action]="action"
+          [link]="action | timelineItemLink: false:true"
+        ></app-timeline-item>
+      </app-timeline>
+    </ng-container>
+  </div>
+
+  <div *ngIf="vm.hasRelatedActions$ | async" class="govuk-grid-column-one-third">
+    <app-related-actions
+      [isAssignable$]="vm.isAssignable$"
+      [taskId$]="vm.taskId$"
+      [allowedActions$]="vm.relatedActions$"
+      [requestInfo$]="vm.requestInfo$"
+      baseUrl="/aviation"
+    ></app-related-actions>
+  </div>
+</div>
+
+<ng-template #uketsApplicationDeadlineMsg>
+  <p class="govuk-body">You must apply within 42 days of becoming a UK ETS aircraft operator.</p>
+
+  <govuk-details summary="How do I know when this is?">
+    <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+      You will become a UK ETS aircraft operator when you have performed an aviation activity in Schedule 1 of the UK
+      ETS Order and:
+    </p>
+
+    <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+      <strong>For commercial aircraft operators</strong> (both points apply)
+    </p>
+
+    <ul>
+      <li>
+        in a calendar year you operated 243 or more UK ETS full-scope flights in any 4-month period (Jan-Apr, May-Aug,
+        Sep-Dec)
+      </li>
+
+      <li>your emissions from UK ETS full-scope flights are 10,000 or more tonnes of CO2</li>
+    </ul>
+
+    <p><strong>For non-commercial aircraft operators</strong></p>
+
+    <ul>
+      <li>your annual emissions from UK ETS full-scope flights are 1000 or more tonnes of CO2</li>
+    </ul>
+  </govuk-details>
+</ng-template>
+
+<ng-template #corsiaApplicationDeadlineMsg>
+  <p class="govuk-body">You must apply within 3 months of becoming an aeroplane operator within the scope of CORSIA.</p>
+
+  <govuk-details summary="How do I know when this is?">
+    <span class="govuk-!-padding-bottom-3">
+      You become an aeroplane operator within the scope of CORSIA from the point where your annual CO2 emissions from
+      international flights using aeroplanes with a maximum certified take-off mass greater than 5,700kg exceed 10,000
+      tonnes.
+    </span>
+  </govuk-details>
+</ng-template>

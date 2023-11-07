@@ -1,0 +1,44 @@
+<app-aer-task [breadcrumb]="true">
+  <app-page-heading>Monitoring approaches used during the reporting year</app-page-heading>
+
+  <ng-container *ngIf="(monitoringApproaches$ | async).length === 0; else approaches">
+    <app-approaches-template></app-approaches-template>
+    <div class="govuk-button-group" *ngIf="(aerService.isEditable$ | async) === true">
+      <button *ngIf="(aerService.isEditable$ | async) === true" govukButton routerLink="add" type="button">
+        Add monitoring approaches
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #approaches>
+    <p class="govuk-body">List the monitoring approaches that have been used during the reporting year.</p>
+    <p class="govuk-body">The table is pre-populated with approaches currently in the approved permit.</p>
+    <h2 app-summary-header class="govuk-heading-m">
+      You have added {{ (monitoringApproaches$ | async).length }} monitoring
+      {{ (monitoringApproaches$ | async).length > 1 ? 'approaches' : 'approach' }}
+    </h2>
+    <ng-container *ngIf="monitoringApproaches$ | async as monitoringApproach">
+      <dl govuk-summary-list [hasBorders]="false">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Approaches used</dt>
+
+          <ng-container *ngFor="let monitoringApproach of monitoringApproaches$ | async">
+            <div govukSummaryListRow>
+              <dd govukSummaryListRowValue>{{ monitoringApproach | monitoringApproachDescription }}</dd>
+            </div>
+          </ng-container>
+          <dd govukSummaryListRowActions *ngIf="aerService.isEditable$ | async">
+            <a [routerLink]="['add']" govukLink>Change</a>
+          </dd>
+        </div>
+      </dl>
+    </ng-container>
+
+    <ng-container *ngIf="(aerService.isEditable$ | async) === true">
+      <div class="govuk-button-group">
+        <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+      </div>
+    </ng-container>
+  </ng-template>
+  <app-return-link></app-return-link>
+</app-aer-task>

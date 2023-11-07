@@ -1,0 +1,24 @@
+<dl govuk-summary-list *ngIf="totalEmissions">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Emissions from all international flights</dt>
+    <dd govukSummaryListRowValue>{{ totalEmissions.allFlightsEmissions }} tCO2 from {{ totalEmissions.allFlightsNumber }}
+      flights
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Emissions from flights with offsetting requirements</dt>
+    <dd govukSummaryListRowValue>{{ totalEmissions.offsetFlightsEmissions }} tCO2 from {{ totalEmissions.offsetFlightsNumber }}
+      flights
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Emissions from flights with no offsetting requirements</dt>
+    <dd govukSummaryListRowValue>{{ totalEmissions.nonOffsetFlightsEmissions }} tCO2 from {{ totalEmissions.nonOffsetFlightsNumber }}
+      flights
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Emissions reduction claim from CORSIA eligible fuels</dt>
+    <dd govukSummaryListRowValue>{{ totalEmissions.emissionsReductionClaim }} tCO2</dd>
+  </div>
+</dl>

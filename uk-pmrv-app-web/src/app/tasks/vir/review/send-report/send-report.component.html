@@ -1,0 +1,25 @@
+<ng-container *ngIf="isSendReportAvailable$ | async; else notAvailable">
+  <ng-container *ngIf="isEditable$ | async; else notEditable">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <app-notify-operator
+          [taskId]="taskId$ | async"
+          [accountId]="accountId$ | async"
+          requestTaskActionType="VIR_NOTIFY_OPERATOR_FOR_DECISION"
+          confirmationMessage = "Responses submitted"
+          confirmationText = "Your responses have been successfully submitted. You can now return to your task list."
+          [referenceCode]="referenceCode"
+          [pendingRfi]="pendingRfi$ | async"
+        ></app-notify-operator>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #notEditable>
+    <app-vir-task heading="Submit responses"></app-vir-task>
+  </ng-template>
+</ng-container>
+<ng-template #notAvailable>
+  <app-vir-task heading="Submit responses">
+    <p class="govuk-body">You need to complete all tasks before submitting the report.</p>
+  </app-vir-task>
+</ng-template>

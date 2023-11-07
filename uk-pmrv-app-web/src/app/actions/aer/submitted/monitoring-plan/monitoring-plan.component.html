@@ -1,0 +1,27 @@
+<app-action-task header="Monitoring plan versions during the reporting year" [breadcrumb]="true">
+  <ng-container *ngIf="payload$ | async as payload">
+    <app-monitoring-plan-versions
+      *ngIf="payload.monitoringPlanVersions.length"
+      [versions]="payload.monitoringPlanVersions"
+      [noBottomBorder]="!payload.aer.aerMonitoringPlanDeviation.existChangesNotCoveredInApprovedVariations"
+    ></app-monitoring-plan-versions>
+    <ng-container
+      *ngIf="payload.aer.aerMonitoringPlanDeviation.existChangesNotCoveredInApprovedVariations; else noChanges"
+    >
+      <app-monitoring-plan-summary-template
+        [planDeviation]="payload.aer.aerMonitoringPlanDeviation"
+      ></app-monitoring-plan-summary-template>
+    </ng-container>
+    <ng-template #noChanges>
+      <h3 class="govuk-heading-s">Changes not covered in the approved monitoring plans</h3>
+      <dl govuk-summary-list>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>
+            Were there any additional changes not covered in the approved monitoring plans?
+          </dt>
+          <dd class="pre-wrap" govukSummaryListRowValue>No</dd>
+        </div>
+      </dl>
+    </ng-template>
+  </ng-container>
+</app-action-task>

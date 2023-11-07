@@ -1,0 +1,16 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="false"
+  heading="Add data gap information"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">
+    Each data gap must be accounted for by using the approved method defined in your monitoring plan, or if this is not
+    possible, by using the Eurocontrol small emitters tool.
+  </p>
+
+  <app-data-gaps-information-form></app-data-gaps-information-form>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

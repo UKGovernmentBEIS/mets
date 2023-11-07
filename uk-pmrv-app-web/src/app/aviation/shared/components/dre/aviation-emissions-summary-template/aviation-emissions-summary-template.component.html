@@ -1,0 +1,139 @@
+<ng-container *ngIf="data?.determinationReason?.type">
+  <h2 class="govuk-heading-m">Reason for determining the aviation emissions</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Why are you determining the aviation emissions?</dt>
+      <dd govukSummaryListRowValue>
+        {{ data.determinationReason.type | determinationReasonType }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="data?.determinationReason?.furtherDetails">
+      <dt govukSummaryListRowKey>Regulator comments</dt>
+      <dd govukSummaryListRowValue>
+        {{ data.determinationReason.furtherDetails }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="data?.calculationApproach?.type">
+  <h2 class="govuk-heading-m">Aviation emissions</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total aviation emissions</dt>
+      <dd govukSummaryListRowValue>{{ data.totalReportableEmissions }} tCO2</dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../aviation-emissions'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>How have you calculated the emissions?</dt>
+      <dd govukSummaryListRowValue *ngIf="data.calculationApproach.type !== 'OTHER_DATASOURCE'">
+        {{ data.calculationApproach.type | aviationDreEmissionsType }}
+      </dd>
+      <dd govukSummaryListRowValue *ngIf="data.calculationApproach.type === 'OTHER_DATASOURCE'">
+        {{ data.calculationApproach.otherDataSourceExplanation }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../aviation-emissions'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Supporting documents</dt>
+      <dd govukSummaryListRowValue *ngIf="data?.supportingDocuments?.length === 0">None</dd>
+      <dd govukSummaryListRowValue *ngIf="data?.supportingDocuments?.length">
+        <app-summary-download-files [files]="files"> </app-summary-download-files>
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../aviation-emissions" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="data?.fee?.chargeOperator || data?.fee">
+  <h2 class="govuk-heading-m">Operator fee</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Do you need to charge the operator a fee?</dt>
+      <dd govukSummaryListRowValue>
+        {{ data.fee.chargeOperator ? 'Yes' : 'No' }}
+      </dd>
+      <dd></dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="'../aviation-emissions-charges'" [queryParams]="changeUrlQueryParams">Change</a>
+      </dd>
+    </div>
+
+    <ng-container *ngIf="data.fee?.feeDetails">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Billable hours</dt>
+        <dd govukSummaryListRowValue>{{ data.fee.feeDetails.totalBillableHours }} hours</dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../aviation-emissions-charges-calculate'" [queryParams]="changeUrlQueryParams"
+            >Change</a
+          >
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Hourly rate</dt>
+        <dd govukSummaryListRowValue>&pound;{{ data.fee.feeDetails.hourlyRate }} per hour</dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../aviation-emissions-charges-calculate'" [queryParams]="changeUrlQueryParams"
+            >Change</a
+          >
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Payment due date</dt>
+        <dd govukSummaryListRowValue>
+          {{ data.fee.feeDetails.dueDate | date: 'd MMMM yyyy' }}
+        </dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../aviation-emissions-charges-calculate'" [queryParams]="changeUrlQueryParams"
+            >Change</a
+          >
+        </dd>
+      </div>
+      <div govukSummaryListRow *ngIf="data.fee.feeDetails?.comments">
+        <dt govukSummaryListRowKey>Regulator comments</dt>
+        <dd govukSummaryListRowValue>
+          {{ data.fee.feeDetails.comments }}
+        </dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../aviation-emissions-charges-calculate'" [queryParams]="changeUrlQueryParams"
+            >Change</a
+          >
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Total operator fee</dt>
+        <dd govukSummaryListRowValue>
+          {{
+            +data.fee.feeDetails.totalBillableHours * +data.fee.feeDetails.hourlyRate | currency: 'GBP':'symbol':'1.2-2'
+          }}
+        </dd>
+        <dd></dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable"></dd>
+      </div>
+    </ng-container>
+  </dl>
+</ng-container>

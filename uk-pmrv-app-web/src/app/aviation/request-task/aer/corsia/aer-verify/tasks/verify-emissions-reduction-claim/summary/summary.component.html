@@ -1,0 +1,16 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.heading }}</app-page-heading>
+
+  <app-emissions-reduction-claim-corsia-template
+    [data]="vm.emissionsReductionClaimVerification"
+    [isEditable]="vm.isEditable"
+    [queryParams]="{ change: true }"
+  ></app-emissions-reduction-claim-corsia-template>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+</ng-container>
+<app-return-to-link></app-return-to-link>

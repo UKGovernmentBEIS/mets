@@ -1,0 +1,13 @@
+<app-aer-task-review heading="List the installations process sources" returnToLink="../..">
+  <p class="govuk-body">For example, calcination of lime or waste gas scrubbing.</p>
+  <app-aer-process-sources-group
+    [processSources]="processSources$ | async"
+    [isEditable]="isEditable$ | async"
+    addRouterLink="add"
+    deleteRouterLink="delete"
+  >
+  </app-aer-process-sources-group>
+  <div class="govuk-button-group" *ngIf="isEditable$ | async">
+    <button appPendingButton govukButton type="button" (click)="onContinue()">Continue</button>
+  </div>
+</app-aer-task-review>

@@ -1,0 +1,35 @@
+<h2 class="govuk-heading-m">{{ headingText }}</h2>
+<div class="overflow-auto overflow-auto-table">
+  <govuk-table *ngIf="emissionDataDetails?.length" [columns]="columns" [data]="emissionDataDetails">
+    <ng-template let-column="column" let-index="index" let-row="row">
+      <div [ngSwitch]="column.field" class="cell-container">
+        <ng-container *ngSwitchCase="'airportFrom'">
+          <span data-testid="at-airport-from">
+            {{ row.airportFrom.icao }}
+          </span>
+        </ng-container>
+        <ng-container *ngSwitchCase="'airportTo'">
+          <div class="amount" data-testid="at-airport-to">
+            {{ row.airportTo.icao }}
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'fuelType'">
+          <div data-testid="at-fuel-type">
+            {{ getSummaryDescription(row.fuelType, isCorsia) }}
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'fuelConsumption'">
+          <div class="amount" data-testid="at-fuel-consumption">
+            {{ row.fuelConsumption }}
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'flightsNumber'">
+          <div class="amount" data-testid="at-flights-number">
+            {{ row.flightsNumber }}
+          </div>
+        </ng-container>
+        <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+      </div>
+    </ng-template>
+  </govuk-table>
+</div>

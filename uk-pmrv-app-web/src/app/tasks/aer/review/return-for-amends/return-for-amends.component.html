@@ -1,0 +1,64 @@
+<ng-container *ngIf="(isSubmitted$ | async) === false; else completed">
+  <app-request-action-heading [headerText]="'Check your answers'" [timelineCreationDate]="">
+  </app-request-action-heading>
+
+  <div *ngFor="let decision of decisionAmends$ | async">
+    <h2 app-summary-header class="govuk-heading-m">
+      {{ decision.groupKey | aerTaskDescription }}
+    </h2>
+
+    <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Changes required</dt>
+        <dd govukSummaryListRowValue>
+          <ng-container
+            *ngFor="
+              let requiredChange of $any(decision).data.details?.requiredChanges;
+              let i = index;
+              let isLast = last
+            "
+          >
+            <div class="pre-wrap">
+              {{ i + 1 }}. {{ requiredChange.reason }} <br />
+              <ng-container *ngIf="requiredChange?.files?.length > 0">
+                <app-summary-download-files [files]="aerService.getDownloadUrlFiles(requiredChange?.files)">
+                </app-summary-download-files>
+              </ng-container>
+            </div>
+            <br *ngIf="!isLast" />
+          </ng-container>
+        </dd>
+      </div>
+      <div govukSummaryListRow *ngIf="decision?.data?.details?.notes">
+        <dt govukSummaryListRowKey>Notes</dt>
+        <dd govukSummaryListRowValue>{{ decision.data.details.notes }}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div *ngIf="(store.isEditable$ | async) === true" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onSubmit()">Confirm and complete</button>
+  </div>
+
+  <a govukLink [routerLink]="'..'"> Return to: Emissions report </a>
+</ng-container>
+
+<ng-template #completed>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="Report returned to the operator for amends."
+        >Your reference is {{ requestId$ | async }}</govuk-panel
+      >
+      <span class="govuk-caption-l govuk-!-margin-bottom-8"
+        >They will receive an email about the changes required.</span
+      >
+      <h3 class="govuk-heading-m">What happens next</h3>
+      <p class="govuk-body">
+        Whilst the operator is making changes to the report you cannot make further changes or continue with your
+        review.
+      </p>
+      <p class="govuk-body">You can also recall the application at any time</p>
+      <a govukLink routerLink="/dashboard"> Return to dashboard </a>
+    </div>
+  </div>
+</ng-template>

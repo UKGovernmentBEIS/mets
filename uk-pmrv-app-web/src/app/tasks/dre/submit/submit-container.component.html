@@ -1,0 +1,43 @@
+<app-base-task-container-component
+  [header]="header$ | async"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="DRE_APPLICATION_SUBMIT"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <div class="govuk-button-group">
+    <button
+      *ngIf="allowNotifyOperator$ | async"
+      (click)="notifyOperator()"
+      govukButton
+      title="Notify Operator for decision"
+      type="button"
+    >
+      Notify Operator of decision
+    </button>
+
+    <button
+      *ngIf="allowSendPeerReview$ | async"
+      (click)="sendPeerReview()"
+      govukButton
+      title="Send for peer review"
+      type="button"
+    >
+      Send for peer review
+    </button>
+  </div>
+
+  <ol class="app-task-list">
+    <li app-task-section title="Details">
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          [link]="(canViewSectionDetails$ | async) ? './summary' : null"
+          linkText="Reportable emissions"
+          [status]="sectionStatus$ | async"
+        ></li>
+      </ul>
+    </li>
+  </ol>
+</ng-template>

@@ -1,0 +1,61 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <div
+      [maxLength]="2000"
+      formControlName="reason"
+      govuk-textarea
+      label="Reason for the data gap"
+      hint="For example, data was missing, or recorded data was incorrect."
+    ></div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <div
+      formControlName="type"
+      govuk-text-input
+      label="Type of data gap"
+      hint="For example, density measurement not available, or fuel uplift not available."
+    ></div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <div
+      [maxLength]="2000"
+      formControlName="replacementMethod"
+      govuk-textarea
+      label="Replacement method for determining surrogate data"
+      [hint]="
+        isCorsia
+          ? 'Reference the procedures in your emissions monitoring plan'
+          : 'Reference the procedure in your monitoring plan or in the small emitters tool.'
+      "
+    ></div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <div
+      formControlName="flightsAffected"
+      govuk-text-input
+      [inputType]="'number'"
+      label="Number of flights affected by the data gap"
+    ></div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <div
+      formControlName="totalEmissions"
+      govuk-text-input
+      [inputType]="'number'"
+      suffix="tonnes CO2"
+      label="Total emissions affected by the data gap"
+    ></div>
+  </div>
+</div>

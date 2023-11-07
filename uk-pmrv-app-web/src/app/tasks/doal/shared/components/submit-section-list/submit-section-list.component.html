@@ -1,0 +1,46 @@
+<ol class="app-task-list">
+  <li app-task-section title="Upload activity level documentation">
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="(canViewSectionDetails$('operatorActivityLevelReport') | async) ? './operator-report/summary' : null"
+        linkText="Upload operator activity level report"
+        [status]="getSectionStatus$('operatorActivityLevelReport') | async"
+      ></li>
+      <li
+        app-task-item
+        [link]="
+            (canViewSectionDetails$('verificationReportOfTheActivityLevelReport') | async)
+              ? './verification-report/summary'
+              : null
+          "
+        linkText="Upload verification report of the activity level report"
+        [status]="getSectionStatus$('verificationReportOfTheActivityLevelReport') | async"
+      ></li>
+      <li
+        app-task-item
+        [link]="(canViewSectionDetails$('additionalDocuments') | async) ? './additional-documents/summary' : null"
+        linkText="Upload additional documents"
+        [status]="getSectionStatus$('additionalDocuments') | async"
+      ></li>
+    </ul>
+  </li>
+  <li app-task-section title="Provide your determination">
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="
+            (canViewSectionDetails$('activityLevelChangeInformation') | async) ? './alc-information/summary' : null
+          "
+        linkText="Provide information about this activity level change"
+        [status]="getSectionStatus$('activityLevelChangeInformation') | async"
+      ></li>
+      <li
+        app-task-item
+        [link]="(canViewSectionDetails$('determination') | async) ? (determinationUrl$ | async) : null"
+        linkText="Provide determination of activity level"
+        [status]="getSectionStatus$('determination') | async"
+      ></li>
+    </ul>
+  </li>
+</ol>

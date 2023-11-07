@@ -1,0 +1,33 @@
+<app-request-action-task
+  *ngIf="vm$ | async as vm"
+  [header]="vm.pageHeader"
+  [requestActionType]="vm.requestActionType"
+  [breadcrumb]="true"
+>
+  <ng-container *ngIf="(isCorsia$ | async) === true; else ukets">
+    <app-corsia-variation-details-summary-template
+      [variationDetails]="vm.data"
+      [variationRegulatorLedReason]="vm.reasonRegulatorLed"
+    ></app-corsia-variation-details-summary-template>
+  </ng-container>
+
+  <ng-template #ukets>
+    <app-variation-details-summary-template
+      [variationDetails]="vm.data"
+      [variationRegulatorLedReason]="vm.reasonRegulatorLed"
+    ></app-variation-details-summary-template>
+  </ng-template>
+
+  <app-emp-variation-review-decision-group-summary
+    *ngIf="vm.showDecision"
+    [data]="vm.reviewDecision"
+    [attachments]="vm.reviewAttachments"
+    [downloadBaseUrl]="vm.downloadBaseUrl"
+  ></app-emp-variation-review-decision-group-summary>
+  <app-emp-variation-review-decision-group-summary
+    *ngIf="vm.showVariationDecision"
+    [data]="vm.variationDecision"
+    [attachments]="vm.reviewAttachments"
+    [downloadBaseUrl]="vm.downloadBaseUrl"
+  ></app-emp-variation-review-decision-group-summary>
+</app-request-action-task>

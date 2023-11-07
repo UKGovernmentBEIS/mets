@@ -1,0 +1,75 @@
+<ng-container *ngIf="data">
+  <ng-container *ngIf="data?.monitoringReportingRoles">
+    <h2 class="govuk-heading-m">Monitoring and reporting roles</h2>
+    <dl *ngFor="let role of $any(data.monitoringReportingRoles)" govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ role.jobTitle }}</dt>
+        <dd govukSummaryListRowValue>{{ role.mainDuties }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink=".." [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+  <ng-container *ngIf="data?.dataManagement">
+    <h2 class="govuk-heading-m">Data management</h2>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Procedure description</dt>
+        <dd govukSummaryListRowValue [style.white-space]="'pre-line'">{{ data.dataManagement.description }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../data-management" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+    <dl govuk-summary-list *ngIf="dataFlowDiagramFile">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Data flow diagram</dt>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files [files]="dataFlowDiagramFile"> </app-summary-download-files>
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../data-management" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+  <ng-container *ngIf="data?.recordKeepingAndDocumentation">
+    <h2 class="govuk-heading-m">Documentation and record keeping plan</h2>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Procedure description</dt>
+        <dd govukSummaryListRowValue [style.white-space]="'pre-line'">
+          {{ data.recordKeepingAndDocumentation.description }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../documentation-record" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+  <ng-container *ngIf="data?.riskExplanation">
+    <h2 class="govuk-heading-m">Explanation of risks</h2>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Procedure description</dt>
+        <dd govukSummaryListRowValue [style.white-space]="'pre-line'">{{ data.riskExplanation.description }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../explanation-risks" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+  <ng-container *ngIf="data?.empRevisions">
+    <h2 class="govuk-heading-m">Revisions of emissions monitoring plan</h2>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Procedure description</dt>
+        <dd govukSummaryListRowValue [style.white-space]="'pre-line'">{{ data.empRevisions.description }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink routerLink="../revision-emissions-monitoring-plan" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+</ng-container>

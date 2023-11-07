@@ -1,0 +1,19 @@
+<govuk-panel class="govuk-!-width-two-thirds" style="font-weight: bold">
+  <span *ngIf="VARIATION_OPERATOR_LED_SUBMIT_TASK_TYPES.includes(taskType | async)">Variation application </span>
+  <span *ngIf="EMP_SUBMIT_TASK_TYPES.includes(taskType | async)"> Application </span>
+  <span> sent to regulator</span>
+</govuk-panel>
+<p class="govuk-body govuk-!-width-two-thirds">
+  Your
+  <span *ngIf="EMP_SUBMIT_TASK_TYPES.includes(taskType | async)"> emissions monitoring plan </span>
+  <span *ngIf="VARIATION_OPERATOR_LED_SUBMIT_TASK_TYPES.includes(taskType | async)"> variation </span>
+  application has been sent to your regulator.
+</p>
+<h3 class="govuk-heading-m">What happens next</h3>
+<p class="govuk-body">
+  The regulator will review your
+  <span *ngIf="VARIATION_OPERATOR_LED_SUBMIT_TASK_TYPES.includes(taskType | async)"> variation </span>
+  application and contact you in due course.
+</p>
+<p class="govuk-body">If you have to pay a fee you will see a new task on your task list.</p>
+<a govukLink [routerLink]="['/aviation/dashboard']">Return to your tasks</a>

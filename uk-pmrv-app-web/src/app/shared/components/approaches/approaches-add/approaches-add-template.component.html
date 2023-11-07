@@ -1,0 +1,84 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  caption="Monitoring approaches"
+  heading="Add monitoring approaches"
+  [submitText]="submitText"
+>
+  <ng-content select="[heading]"></ng-content>
+
+  <div *ngIf="monitoringApproaches" formControlName="monitoringApproaches" govuk-checkboxes>
+    <ng-container govukLegend>
+      <span class="govuk-visually-hidden">Monitoring approaches</span>
+    </ng-container>
+    <govuk-checkbox
+      [label]="'CALCULATION_CO2' | monitoringApproachDescription"
+      hint="Based on knowing the amount of a fuel or material which is releasing carbon and calculating CO2 emissions using a formula"
+      value="CALCULATION_CO2"
+    >
+      <div govukConditionalContent>
+        <div class="govuk-grid-row">
+          <div
+            govuk-radio
+            formControlName="hasTransferCalculationCO2"
+            hint="Do you need to account for any CO2 exported to, or received from another installation?"
+            legendSize="medium"
+          >
+            <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+            <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+          </div>
+        </div></div
+    ></govuk-checkbox>
+    <govuk-checkbox
+      [label]="'MEASUREMENT_CO2' | monitoringApproachDescription"
+      hint="Based on direct measurement of CO2 emissions released from a fuel or material"
+      value="MEASUREMENT_CO2"
+      ><div govukConditionalContent>
+        <div class="govuk-grid-row">
+          <div
+            govuk-radio
+            formControlName="hasTransferMeasurementCO2"
+            hint="Do you need to account for any CO2 exported to, or received from another installation?"
+            legendSize="medium"
+          >
+            <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+            <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+          </div>
+        </div></div
+    ></govuk-checkbox>
+    <govuk-checkbox
+      [label]="'INHERENT_CO2' | monitoringApproachDescription"
+      hint="This is CO2 that is produced by a regulated activity and contained in a gas which is part of a fuel"
+      value="INHERENT_CO2"
+    ></govuk-checkbox>
+    <govuk-checkbox
+      [label]="'MEASUREMENT_N2O' | monitoringApproachDescription"
+      hint="Based on direct measurement of N2O emissions released from a fuel or material"
+      value="MEASUREMENT_N2O"
+      ><div govukConditionalContent>
+        <div class="govuk-grid-row">
+          <div
+            govuk-radio
+            formControlName="hasTransferMeasurementN2O"
+            hint="Do you need to account for any N2O exported to, or received from another installation?"
+            legendSize="medium"
+          >
+            <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+            <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+          </div>
+        </div></div
+    ></govuk-checkbox>
+    <govuk-checkbox
+      [label]="'CALCULATION_PFC' | monitoringApproachDescription"
+      hint="Emissions of PFC require a separate plan in addition to your plan for other emissions"
+      value="CALCULATION_PFC"
+    ></govuk-checkbox>
+    <govuk-checkbox
+      [label]="'FALLBACK' | monitoringApproachDescription"
+      hint="Based on estimates used only if it is not possible to determine CO2 emissions by calculation or measurement"
+      value="FALLBACK"
+    ></govuk-checkbox>
+  </div>
+</app-wizard-step>
+
+<ng-content select="[returnTo]"></ng-content>

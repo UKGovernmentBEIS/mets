@@ -1,0 +1,51 @@
+<h2 class="govuk-heading-m">UK ETS authority response details</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>When did the Authority respond?</dt>
+    <dd govukSummaryListRowValue>{{ data.authorityRespondDate | govukDate }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Authority decision</dt>
+    <dd govukSummaryListRowValue>{{ data.type | authorityDecisionType }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+  <div *ngIf="data.decisionNotice" govukSummaryListRow>
+    <dt govukSummaryListRowKey>Explanation of Authority decision for notice</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">{{ data.decisionNotice }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+  <div *ngIf="documents?.length > 0" govukSummaryListRow>
+    <dt govukSummaryListRowKey>Uploaded files</dt>
+    <dd govukSummaryListRowValue>
+      <app-summary-download-files [files]="documents"> </app-summary-download-files>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['../approved-allocations']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>
+<ng-container *ngIf="data.type !== 'INVALID'">
+  <h2
+    app-summary-header
+    class="govuk-heading-m"
+    [changeRoute]="editable === true ? ['../preliminary-allocations'] : null"
+  >
+    Provide authority approved allocation for each sub-installation
+  </h2>
+  <app-doal-preliminary-allocation-list-template
+    [data]="data.preliminaryAllocations"
+    [editable]="false"
+  ></app-doal-preliminary-allocation-list-template>
+
+  <h2 class="govuk-heading-m">Authority approved allocations</h2>
+  <app-doal-total-preliminary-allocation-list-template
+    [data]="data.preliminaryAllocations"
+  ></app-doal-total-preliminary-allocation-list-template>
+</ng-container>

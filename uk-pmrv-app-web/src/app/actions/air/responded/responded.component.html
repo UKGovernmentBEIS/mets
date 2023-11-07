@@ -1,0 +1,36 @@
+<app-base-action-container-component
+  header="Follow up response"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="['AIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS']"
+>
+</app-base-action-container-component>
+<ng-template #customContentTemplate>
+  <app-air-improvement-item
+    [reference]="reference$ | async"
+    [airImprovement]="airImprovement$ | async"
+  ></app-air-improvement-item>
+  <app-air-operator-response-item
+    [reference]="reference$ | async"
+    [operatorAirImprovementResponse]="operatorAirImprovementResponse$ | async"
+    [attachedFiles]="operatorFiles$ | async"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-air-operator-response-item>
+  <app-air-regulator-response-item
+    [reference]="reference$ | async"
+    [regulatorAirImprovementResponse]="regulatorAirImprovementResponse$ | async"
+    [attachedFiles]="regulatorFiles$ | async"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-air-regulator-response-item>
+  <app-air-operator-followup-item
+    [reference]="reference$ | async"
+    [operatorAirImprovementFollowUpResponse]="operatorAirImprovementFollowUpResponse$ | async"
+    [attachedFiles]="operatorFollowupFiles$ | async"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-air-operator-followup-item>
+</ng-template>

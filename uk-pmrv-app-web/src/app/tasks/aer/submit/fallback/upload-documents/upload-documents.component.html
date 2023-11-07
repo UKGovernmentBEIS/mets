@@ -1,0 +1,23 @@
+<app-aer-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Upload your documents"
+    [hideSubmit]="(isEditable$ | async) === false"
+    [showBackLink]="true"
+  >
+    <p class="govuk-body">
+      Your document (ideally a spreadsheet) should show how you’ve calculated the uncertainty around each parameter used
+      to determine the emissions.
+    </p>
+    <app-multiple-file-input
+      [baseDownloadUrl]="getDownloadUrl()"
+      label="Upload files"
+      headerSize="s"
+      listTitle="Uploaded attachments"
+      formControlName="files"
+    >
+    </app-multiple-file-input>
+  </app-wizard-step>
+  <app-return-link returnLink="../.."></app-return-link>
+</app-aer-task>

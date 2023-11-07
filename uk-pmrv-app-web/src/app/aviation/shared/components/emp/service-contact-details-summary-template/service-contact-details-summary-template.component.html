@@ -1,0 +1,16 @@
+<dl govuk-summary-list *ngIf="data">
+  <div govukSummaryListRow class="full-name">
+    <dt govukSummaryListRowKey>Full name</dt>
+    <dd govukSummaryListRowValue>{{ data.name }}</dd>
+  </div>
+
+  <div govukSummaryListRow class="role">
+    <dt govukSummaryListRowKey>Role</dt>
+    <dd govukSummaryListRowValue>{{ data.roleCode | userRole }}</dd>
+  </div>
+
+  <div govukSummaryListRow class="email">
+    <dt govukSummaryListRowKey>Email address</dt>
+    <dd govukSummaryListRowValue>{{ data.email }}</dd>
+  </div>
+</dl>

@@ -1,0 +1,68 @@
+<ng-container *ngIf="currentTab === 'details'">
+  <app-aviation-account-closed
+    id="aviation-account-closed"
+    [accountInfo]="accountInfo$ | async"
+    *ngIf="(accountInfo$ | async).status === 'CLOSED'"
+  ></app-aviation-account-closed>
+
+  <div class="live-account-content" *ngIf="accountEmp$ | async as accountEmp">
+    <h2 class="govuk-heading-m">Active emissions plan</h2>
+
+    <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Downloadable version</dt>
+        <dd govukSummaryListRowValue>
+          <p>
+            <a
+              [routerLink]="['file-download', 'document', accountEmp.id, accountEmp.fileDocument?.uuid]"
+              govukLink
+              target="_blank"
+            >
+              {{ accountEmp.fileDocument?.name }}
+            </a>
+          </p>
+          <details
+            *ngIf="(accountEmp.empAttachments | keyvalue).length > 0"
+            class="govuk-details"
+            data-module="govuk-details"
+          >
+            <summary class="govuk-details__summary">
+              <span>Attached documents</span>
+            </summary>
+            <div class="govuk-details__text">
+              <ul class="govuk-list">
+                <li *ngFor="let empAttachments of accountEmp.empAttachments | keyvalue">
+                  <a
+                    [routerLink]="['file-download', 'attachment', accountEmp.id, empAttachments.key]"
+                    govukLink
+                    target="_blank"
+                  >
+                    {{ empAttachments.value }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </details>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Emissions plan ID</dt>
+        <dd govukSummaryListRowValue>{{ accountEmp.id }}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div>
+    <h2 class="govuk-heading-m">Aviation operator details</h2>
+    <app-aviation-account-summary-info
+      [summaryInfo]="accountInfo$ | async"
+      [editable]="(userRoleType$ | async) === 'REGULATOR' && (accountInfo$ | async).status !== 'CLOSED'"
+      [withRegistryId]="(accountInfo$ | async)?.emissionTradingScheme === 'UK_ETS_AVIATION'"
+    ></app-aviation-account-summary-info>
+  </div>
+  <app-account-reporting-status
+    [userRoleType]="userRoleType$ | async"
+    [accountInfo]="accountInfo$ | async"
+  ></app-account-reporting-status>
+</ng-container>

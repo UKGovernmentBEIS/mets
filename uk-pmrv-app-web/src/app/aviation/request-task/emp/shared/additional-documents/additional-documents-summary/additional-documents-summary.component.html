@@ -1,0 +1,47 @@
+<ng-template #contentTpl let-showOriginal>
+  <ng-container *ngIf="vm$ | async as vm">
+    <app-documents-summary-template
+      *ngIf="vm.additionalDocuments.exist !== null"
+      [data]="showOriginal ? vm.originalAddDocs : vm.additionalDocuments"
+      [files]="showOriginal ? vm.originalFiles : vm.files"
+      [isEditable]="vm.isEditable"
+      [changeQueryParams]="{ change: true }"
+    ></app-documents-summary-template>
+  </ng-container>
+</ng-template>
+
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
+  <h2 app-summary-header class="govuk-heading-m">
+    <span [class.govuk-visually-hidden]="!vm.hasDocuments"> Uploaded files </span>
+  </h2>
+
+  <app-highlight-diff *ngIf="vm.showDiff">
+    <ng-container slot="previous" *ngTemplateOutlet="contentTpl; context: { $implicit: true }"></ng-container>
+    <ng-container slot="current" *ngTemplateOutlet="contentTpl; context: { $implicit: false }"></ng-container>
+  </app-highlight-diff>
+  <ng-container
+    *ngIf="vm.showDiff === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: false }"
+  ></ng-container>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-emp-review-decision-group *ngIf="vm.showDecision" taskKey="additionalDocuments"></app-emp-review-decision-group>
+
+  <app-emp-variation-review-decision-group
+    *ngIf="vm.showVariationDecision"
+    taskKey="additionalDocuments"
+  ></app-emp-variation-review-decision-group>
+
+  <app-emp-variation-regulator-led-decision-group
+    *ngIf="vm.showVariationRegLedDecision"
+    taskKey="additionalDocuments"
+  ></app-emp-variation-regulator-led-decision-group>
+</ng-container>
+<app-return-to-link></app-return-to-link>

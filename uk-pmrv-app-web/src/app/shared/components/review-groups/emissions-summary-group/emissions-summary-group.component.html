@@ -1,0 +1,27 @@
+<govuk-table [columns]="columns" [data]="emissionsSummary">
+  <ng-template let-column="column" let-row="row" let-index="index">
+    <ng-container [ngSwitch]="column.field">
+      <ng-container *ngSwitchCase="'approaches'">
+        {{ row.approaches }}
+      </ng-container>
+      <ng-container *ngSwitchCase="'totalReportableEmissions'">
+        {{ row.totalReportableEmissions | bigNumber }}
+
+        <ng-container *ngIf="row.approaches !== 'Total'"> t </ng-container>
+        <ng-container *ngIf="row.approaches === 'Total'"> tCO2e </ng-container>
+
+        <ng-container
+          *ngIf="row.totalNonSustainableBiomassEmissions && row.totalNonSustainableBiomassEmissions !== '0'"
+        >
+          (includes {{ row.totalNonSustainableBiomassEmissions | bigNumber }} t non-sustainable biomass)
+        </ng-container>
+      </ng-container>
+      <ng-container *ngSwitchCase="'totalBiomassEmissions'">
+        {{ row.totalBiomassEmissions | bigNumber }}
+
+        <ng-container *ngIf="row.approaches !== 'Total'"> t </ng-container>
+        <ng-container *ngIf="row.approaches === 'Total'"> tCO2e </ng-container>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+</govuk-table>

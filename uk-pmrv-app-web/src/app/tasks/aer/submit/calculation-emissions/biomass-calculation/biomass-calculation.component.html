@@ -1,0 +1,29 @@
+<app-aer-task>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Calculate the biomass values for this source stream"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div
+      formControlName="biomassPercentage"
+      govuk-text-input
+      inputType="number"
+      label="Sustainable biomass percentage"
+      hint="The ratio of carbon stemming from biomass to the total carbon content of a fuel or material."
+      suffix="%"
+      widthClass="govuk-input--width-10"
+    ></div>
+    <div
+      formControlName="nonSustainableBiomassPercentage"
+      govuk-text-input
+      inputType="number"
+      label="Non sustainable biomass percentage"
+      hint="The ratio of carbon stemming from non-sustainable biomass to the total carbon content of a fuel or material."
+      suffix="%"
+      widthClass="govuk-input--width-10"
+    ></div>
+  </app-wizard-step>
+
+  <a govukLink routerLink="../..">Return to: {{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </a>
+</app-aer-task>

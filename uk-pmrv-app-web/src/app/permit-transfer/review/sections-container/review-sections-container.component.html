@@ -1,0 +1,109 @@
+<div class="govuk-grid-row">
+  <div [class]="(isRelatedActionsSectionVisible$ | async) ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
+    <app-page-heading size="xl">
+      {{ header$ | async }}
+      <app-task-header-info
+        *ngIf="isTask$ | async"
+        [assignee]="(store.select('assignee') | async).assigneeFullName"
+        [daysRemaining]="store.select('daysRemaining') | async"
+      ></app-task-header-info>
+    </app-page-heading>
+    <ng-container *ngIf="info$ | async as info">
+      <ng-container [ngSwitch]="requestTaskType$ | async">
+        <govuk-warning-text *ngSwitchCase="'PERMIT_TRANSFER_B_WAIT_FOR_REVIEW'">
+          Waiting for the regulator to make a determination
+        </govuk-warning-text>
+        <govuk-warning-text *ngSwitchCase="'PERMIT_TRANSFER_B_WAIT_FOR_PEER_REVIEW'">
+          Waiting for peer review, you cannot make any changes
+        </govuk-warning-text>
+        <govuk-warning-text *ngSwitchCase="'PERMIT_TRANSFER_B_WAIT_FOR_AMENDS'">
+          You cannot make a determination while the permit is being amended. To make changes recall permit.
+        </govuk-warning-text>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="isPermitReviewSectionsVisible$ | async">
+      <div class="govuk-button-group">
+        <button
+          *ngIf="(isDeterminationCompleted$ | async) && (isNotifyOperatorActionAllowed$ | async)"
+          (click)="notifyOperator()"
+          govukButton
+          title="Notify Operator for decision"
+          type="button"
+        >
+          Notify Operator of decision
+        </button>
+
+        <button
+          *ngIf="(isDeterminationCompleted$ | async) && (isPeerReviewActionAllowed$ | async)"
+          (click)="sendPeerReview()"
+          govukButton
+          title="Send for peer review"
+          type="button"
+        >
+          Send for peer review
+        </button>
+
+        <button
+          *ngIf="
+            (isAnyForAmends$ | async) &&
+            (allowedRequestTaskActions$ | async)?.includes('PERMIT_TRANSFER_B_REVIEW_RETURN_FOR_AMENDS')
+          "
+          (click)="sendReturnForAmends()"
+          govukButton
+          title="Return for amends"
+          type="button"
+        >
+          Return for amends
+        </button>
+      </div>
+
+      <div class="govuk-button-group" *ngIf="isPeerReviewSubmitActionAllowed$ | async">
+        <button (click)="peerReviewDecision()" govukButton title="Peer review decision" type="button">
+          Peer review decision
+        </button>
+      </div>
+
+      <h2 class="govuk-heading-m">Transfer details</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="transfer-details"
+          linkText="Confirm the transfer details"
+          [status]="confirmTransferDetailsReviewStatus$ | async"
+        ></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">Permit details</h2>
+      <app-review-sections [statusResolverPipe]="statusResolverPipe"></app-review-sections>
+      <h2 class="govuk-heading-m">Decision</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          [link]="(determinationStatus$ | async) === 'cannot start yet' ? '' : 'determination/summary'"
+          linkText="Overall decision"
+          [status]="determinationStatus$ | async"
+        ></li>
+      </ul>
+    </ng-container>
+
+    <ng-container *ngIf="relatedTasks$ | async as relatedTasks">
+      <app-related-tasks *ngIf="relatedTasks.length > 0" [items]="relatedTasks"></app-related-tasks>
+    </ng-container>
+
+    <app-timeline *ngIf="isTask$ | async">
+      <app-timeline-item
+        *ngFor="let action of requestActions$ | async"
+        [action]="action"
+        [link]="action | timelineItemLink"
+        [state]="navigationState"
+      ></app-timeline-item>
+    </app-timeline>
+  </div>
+  <div *ngIf="isRelatedActionsSectionVisible$ | async" class="govuk-grid-column-one-third">
+    <app-related-actions
+      [isAssignable$]="store.isAssignableAndCapable$"
+      [taskId$]="taskId$"
+      [allowedActions$]="store.select('allowedRequestTaskActions')"
+    ></app-related-actions>
+  </div>
+</div>

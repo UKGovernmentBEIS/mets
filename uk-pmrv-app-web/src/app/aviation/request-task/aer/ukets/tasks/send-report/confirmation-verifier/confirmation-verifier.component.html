@@ -1,0 +1,16 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <div class="govuk-!-width-two-thirds">
+    <govuk-panel title="Report sent for verification">Your reference is {{ vm.requestId }}</govuk-panel>
+    <span class="govuk-caption-l govuk-!-margin-bottom-8">We have sent you a confirmation email.</span>
+    <h3 class="govuk-heading-m">What happens next</h3>
+    <p class="govuk-body">
+      Your report has been sent to {{ vm.assignedVerifier }}. You can recall your report at any time before
+      {{ vm.assignedVerifier }} returns it to you.
+    </p>
+    <p class="govuk-body">
+      {{ vm.assignedVerifier }} will return the report to you once they have added an opinion statement. You will then
+      be able to submit your report to the {{ vm.competentAuthority | competentAuthority }}.
+    </p>
+    <a govukLink routerLink="/aviation/dashboard">Return to: Dashboard</a>
+  </div>
+</ng-container>

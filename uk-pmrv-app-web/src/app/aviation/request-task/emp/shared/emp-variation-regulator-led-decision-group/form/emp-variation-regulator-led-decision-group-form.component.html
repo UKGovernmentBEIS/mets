@@ -1,0 +1,57 @@
+<div>
+  <h2 #conditionalHeaderAccepted class="govuk-heading-m">List changes to include in the variation schedule</h2>
+  <p class="govuk-body">The operator will see these in the official notice.</p>
+
+  <div *ngIf="variationScheduleItemsCtrl; else addNew" formArrayName="variationScheduleItems">
+    <fieldset
+      *ngFor="let variationScheduleItem of variationScheduleItemsCtrl.controls; index as i"
+      [formGroupName]="i"
+      [disabled]="(isEditable$ | async) === false"
+      govukFieldset
+      id="variation-schedule-items-{{ i }}"
+    >
+      <legend class="govuk-heading-s">Item {{ i + 1 }}</legend>
+      <button
+        (click)="removeVariationScheduleItems(i)"
+        *ngIf="variationScheduleItemsCtrl.length > 0"
+        [disabled]="(isEditable$ | async) === false"
+        [heading]="conditionalHeaderAccepted"
+        appAddAnother
+        govukSecondaryButton
+        type="button"
+        #removeButton
+      >
+        Remove
+      </button>
+      <div govuk-textarea [maxLength]="10000" formControlName="item"></div>
+    </fieldset>
+
+    <button
+      (click)="addOtherVariationScheduleItem()"
+      [disabled]="(isEditable$ | async) === false"
+      govukSecondaryButton
+      type="button"
+    >
+      Add another item
+    </button>
+  </div>
+
+  <ng-template #addNew>
+    <button
+      (click)="addVariationScheduleItem()"
+      [disabled]="(isEditable$ | async) === false"
+      govukSecondaryButton
+      type="button"
+    >
+      Add item
+    </button>
+  </ng-template>
+</div>
+
+<div
+  govuk-textarea
+  [maxLength]="10000"
+  formControlName="notes"
+  label="Notes"
+  hint="The operator cannot view this"
+></div>

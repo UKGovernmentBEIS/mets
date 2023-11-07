@@ -1,0 +1,9 @@
+<app-air-task heading="Check your answers" returnToLink="../..">
+  <app-air-regulator-provide-summary
+    [regulatorAirReviewResponse]="regulatorAirReviewResponse$ | async"
+    [isEditable]="isEditable$ | async">
+  </app-air-regulator-provide-summary>
+  <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+</app-air-task>

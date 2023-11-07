@@ -1,0 +1,21 @@
+<app-aer-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Describe the fall back approach used"
+    [hideSubmit]="(isEditable$ | async) === false"
+    [showBackLink]="true"
+  >
+    <p class="govuk-body">
+      You must be able to show that it would not be technically feasible or would incur unreasonable costs for you to
+      apply:
+    </p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>at least tier 1 from the calculation-based approach for one or more source streams</li>
+      <li>a measurement-based approach for at leat one emissions source related to the same source streams</li>
+    </ul>
+
+    <div [maxLength]="10000" formControlName="description" govuk-textarea></div>
+  </app-wizard-step>
+  <app-return-link returnLink="../.."></app-return-link>
+</app-aer-task>

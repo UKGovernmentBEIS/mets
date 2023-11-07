@@ -1,0 +1,34 @@
+<app-base-action-container-component
+  [header]="virTitle$ | async"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="['VIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS']">
+</app-base-action-container-component>
+<ng-template #customContentTemplate>
+  <app-verification-recommendation-item [verificationDataItem]="verificationDataItem$ | async">
+  </app-verification-recommendation-item>
+
+  <app-operator-response-item
+    [reference]="reference$ | async"
+    [operatorImprovementResponse]="operatorImprovementResponse$ | async"
+    [attachedFiles]="documentFiles$ | async"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-operator-response-item>
+
+  <app-regulator-response-item
+    [reference]="reference$ | async"
+    [regulatorImprovementResponse]="regulatorImprovementResponse$ | async"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-regulator-response-item>
+
+  <app-operator-followup-item
+    [reference]="reference$ | async"
+    [operatorImprovementFollowUpResponse]="operatorImprovementFollowUpResponse$ | async"
+    [isEditable]="false"
+    [isReview]="true"
+  >
+  </app-operator-followup-item>
+</ng-template>

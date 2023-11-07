@@ -1,0 +1,38 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>
+      Will you be making a claim for emissions reductions from the use of CORSIA eligible fuels?
+    </dt>
+    <dd govukSummaryListRowValue>{{ emissionsReductionClaim.exist ? 'Yes' : 'No' }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
+    </dd>
+  </div>
+  <ng-container *ngIf="emissionsReductionClaim.exist">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>CEF template</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="cefFiles"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../upload-template" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total emissions reduction claimed, from the template</dt>
+      <dd govukSummaryListRowValue>{{ emissionsReductionClaim.emissionsReductionClaimDetails.totalEmissions }}</dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../upload-template" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Declaration of no double claiming</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="declarationFiles"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink routerLink="../declaration-of-no-double-claiming" [queryParams]="queryParams">Change</a>
+      </dd>
+    </div>
+  </ng-container>
+</dl>

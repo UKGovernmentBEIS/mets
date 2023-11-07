@@ -1,0 +1,50 @@
+<app-wizard-step
+  (formSubmit)="submitForm.next(form)"
+  [formGroup]="form"
+  heading="Air Operating Certificate"
+  submitText="Continue"
+>
+  <h3 class="govuk-heading-s govuk-!-width-two-thirds">
+    Do you have an Air Operator Certificate (AOC) or equivalent, such as an Air Carrier Operating Certificate?
+  </h3>
+  <div formControlName="certificateExist" govuk-radio class="govuk-!-width-two-thirds">
+    <govuk-radio-option [value]="true" label="Yes">
+      <div govukConditionalContent>
+        <div formControlName="certificateNumber" govuk-text-input label="Certificate number"></div>
+        <div
+          [options]="issuingAuthorityOptions"
+          formControlName="issuingAuthority"
+          govuk-select
+          label="Issuing authority"
+        ></div>
+        <app-multiple-file-input
+          [baseDownloadUrl]="downloadUrl"
+          label="Upload a file"
+          listTitle="Files added"
+          formControlName="certificateFiles"
+        ></app-multiple-file-input>
+        <div>
+          <h3 class="govuk-heading-s">Are there any restrictions or obligations imposed by the certificate?</h3>
+          <div
+            formControlName="restrictionsExist"
+            govuk-radio
+            hint="Describe any time-based, regional or other restrictions, and any obligations that have been imposed."
+          >
+            <govuk-radio-option [value]="true" label="Yes">
+              <div govukConditionalContent>
+                <div
+                  govuk-textarea
+                  formControlName="restrictionsDetails"
+                  hint="Provide information about the restrictions and obligations that have been imposed"
+                  rows="5"
+                ></div>
+              </div>
+            </govuk-radio-option>
+            <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+          </div>
+        </div>
+      </div>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+  </div>
+</app-wizard-step>

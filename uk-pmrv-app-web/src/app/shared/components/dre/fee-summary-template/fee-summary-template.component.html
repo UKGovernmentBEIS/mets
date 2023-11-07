@@ -1,0 +1,39 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Do you need to charge the operator a fee?</dt>
+    <dd govukSummaryListRowValue>{{ fee.chargeOperator ? 'Yes' : 'No' }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'charge-operator']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+  <ng-container *ngIf="fee.chargeOperator">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Billable hours</dt>
+      <dd govukSummaryListRowValue>{{ fee.feeDetails.totalBillableHours }} hours</dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="['..', 'fee']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Hourly rate</dt>
+      <dd govukSummaryListRowValue>£{{ fee.feeDetails.hourlyRate }} per hour</dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="['..', 'fee']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Payment due date</dt>
+      <dd govukSummaryListRowValue>{{ fee.feeDetails.dueDate | govukDate }}</dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="['..', 'fee']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total operator fee</dt>
+      <dd govukSummaryListRowValue>£{{ totalFee }}</dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="['..', 'fee']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </ng-container>
+</dl>

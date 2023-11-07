@@ -1,0 +1,9 @@
+<app-aer-task [breadcrumb]="true">
+  <app-page-heading>Emissions summary</app-page-heading>
+
+  <div *ngIf="aerPayload$ | async as aerPayload">
+    <app-emissions-summary-group [data]="aerPayload"></app-emissions-summary-group>
+  </div>
+
+  <app-return-link></app-return-link>
+</app-aer-task>

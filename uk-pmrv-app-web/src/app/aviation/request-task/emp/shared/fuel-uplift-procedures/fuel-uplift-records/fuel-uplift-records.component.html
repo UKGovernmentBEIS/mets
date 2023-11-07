@@ -1,0 +1,10 @@
+<app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" submitText="Continue" [hideSubmit]="false">
+  <div class="govuk-!-width-two-thirds">
+    <div class="govuk-caption-l">Fuel uplift</div>
+    <app-page-heading>Which fuel uplift supplier records will be used?</app-page-heading>
+  </div>
+
+  <app-fuel-uplift-records-form></app-fuel-uplift-records-form>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

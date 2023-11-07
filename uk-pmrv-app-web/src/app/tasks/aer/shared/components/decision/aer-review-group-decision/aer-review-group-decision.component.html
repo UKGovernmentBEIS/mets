@@ -1,0 +1,116 @@
+<ng-container *ngIf="(isEditable$ | async) && ((canEdit$ | async) || isOnEditState); else viewDecision">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+    <h2 class="govuk-heading-m">What is your decision on the information submitted?</h2>
+
+    <div formControlName="decision" govuk-radio>
+      <govuk-radio-option value="ACCEPTED" label="Accepted"> </govuk-radio-option>
+      <govuk-radio-option value="OPERATOR_AMENDS_NEEDED" label="Operator amends needed">
+        <div govukConditionalContent>
+          <div>
+            <h3 #conditionalHeader class="govuk-heading-s">Changes required by the operator</h3>
+            <p class="govuk-body">This will be sent to the operator after all sections have been reviewed</p>
+          </div>
+
+          <div formArrayName="requiredChanges">
+            <fieldset
+              *ngFor="let requiredChange of requiredChanges.controls; index as i"
+              [formGroupName]="i"
+              [disabled]="(isEditable$ | async) === false"
+              govukFieldset
+              id="required=changes-{{ i }}"
+            >
+              <legend class="govuk-heading-s">Required change {{ i + 1 }}</legend>
+              <button
+                (click)="requiredChanges.removeAt(i)"
+                *ngIf="requiredChanges.length > 1"
+                [disabled]="(isEditable$ | async) === false"
+                [heading]="conditionalHeader"
+                appAddAnother
+                govukSecondaryButton
+                type="button"
+                #removeButton
+              >
+                Remove
+              </button>
+              <div govuk-textarea [maxLength]="10000" formControlName="reason"></div>
+
+              <app-multiple-file-input
+                [baseDownloadUrl]="getDownloadUrl()"
+                [label]="(uploadedFiles[i] | async) === true ? 'Upload a different file' : 'Upload a file (optional)'"
+                headerSize="s"
+                [listTitle]="'Uploaded attachments for the operator'"
+                formControlName="files"
+              ></app-multiple-file-input>
+            </fieldset>
+
+            <button
+              (click)="addOtherRequiredChange()"
+              [disabled]="(isEditable$ | async) === false"
+              govukSecondaryButton
+              type="button"
+            >
+              Add another required change
+            </button>
+          </div>
+        </div>
+      </govuk-radio-option>
+    </div>
+
+    <div
+      govuk-textarea
+      [maxLength]="10000"
+      formControlName="notes"
+      label="Notes"
+      hint="The operator cannot view this"
+    ></div>
+    <button appPendingButton govukButton type="submit">Confirm</button>
+  </form>
+</ng-container>
+
+<ng-template #viewDecision>
+  <h2
+    app-summary-header
+    class="govuk-heading-m"
+    (changeClick)="isOnEditState = true"
+    [changeRoute]="(isEditable$ | async) ? '.' : null"
+  >
+    Decision Summary
+  </h2>
+  <dl
+    *ngIf="decisionData$ | async as decisionData"
+    govuk-summary-list
+    class="govuk-summary-list--no-border summary-list--edge-border"
+  >
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Decision status</dt>
+      <dd govukSummaryListRowValue>{{ decisionData.type | reviewGroupDecision }}</dd>
+    </div>
+
+    <ng-container *ngIf="$any(decisionData).details?.requiredChanges?.length > 0">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Changes required by operator</dt>
+
+        <dd govukSummaryListRowValue>
+          <ng-container
+            *ngFor="let requiredChange of $any(decisionData).details.requiredChanges; let i = index; let isLast = last"
+          >
+            <div class="pre-wrap">
+              {{ i + 1 }}. {{ requiredChange.reason }} <br />
+              <ng-container *ngIf="requiredChange?.files?.length > 0">
+                <app-summary-download-files [files]="aerService.getDownloadUrlFiles(requiredChange?.files)">
+                </app-summary-download-files>
+              </ng-container>
+            </div>
+            <br *ngIf="!isLast" />
+          </ng-container>
+        </dd>
+      </div>
+    </ng-container>
+
+    <div govukSummaryListRow *ngIf="decisionData?.details?.notes">
+      <dt govukSummaryListRowKey>Notes</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ decisionData.details.notes }}</dd>
+    </div>
+  </dl>
+</ng-template>

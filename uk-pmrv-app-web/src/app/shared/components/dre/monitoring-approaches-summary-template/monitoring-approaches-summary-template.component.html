@@ -1,0 +1,13 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Approaches used</dt>
+    <dd govukSummaryListRowValue>
+      <ng-container *ngFor="let approach of selectedMonitoringApproaches">
+        <p>{{ approach }}</p>
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'monitoring-approaches']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>

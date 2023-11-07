@@ -1,0 +1,21 @@
+<ng-container *ngIf="(isEditable$ | async) && ((canEdit$ | async) || isOnEditState); else viewDecision">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+    <app-emp-variation-regulator-led-decision-group-form></app-emp-variation-regulator-led-decision-group-form>
+    <button appPendingButton govukButton type="submit">Confirm and complete</button>
+  </form>
+</ng-container>
+
+<ng-template #viewDecision>
+  <h2
+    app-summary-header
+    class="govuk-heading-m"
+    (changeClick)="isOnEditState = true"
+    [changeRoute]="(isEditable$ | async) ? '.' : null"
+  >
+    List changes to include in the variation schedule
+  </h2>
+  <app-emp-variation-regulator-led-decision-group-summary
+    [data]="decisionData$ | async"
+  ></app-emp-variation-regulator-led-decision-group-summary>
+</ng-template>

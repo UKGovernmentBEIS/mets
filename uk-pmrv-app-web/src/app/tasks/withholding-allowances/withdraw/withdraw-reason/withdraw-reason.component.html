@@ -1,0 +1,21 @@
+<app-withholding-allowances-task>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Provide reason for withdrawal details"
+    submitText="Continue"
+    [showBackLink]="true"
+  >
+    <div
+      formControlName="reason"
+      govuk-textarea
+      label="Why are you withdrawing the withholding of allowances notice?"
+      [maxLength]="10000"
+    ></div>
+  </app-wizard-step>
+
+  <app-task-return-link
+    [levelsUp]="1"
+    taskType="WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_APPLICATION_SUBMIT"
+  ></app-task-return-link>
+</app-withholding-allowances-task>

@@ -1,0 +1,22 @@
+<ng-container formGroupName="environmentalManagementSystem">
+  <app-boolean-radio-group
+    controlName="exist"
+    legend="Does the organisation have a documented environmental management system?"
+  >
+    <div govukConditionalContent>
+      <div formControlName="certified" govuk-radio legend="Is the system externally certified?">
+        <govuk-radio-option [value]="true" label="Yes">
+          <ng-container govukConditionalContent>
+            <div
+              formControlName="certificationStandard"
+              govuk-text-input
+              hint="For example, ‘BS EN ISO14001: 2015’."
+              label="Standard to which the system is certified"
+            ></div>
+          </ng-container>
+        </govuk-radio-option>
+        <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+      </div>
+    </div>
+  </app-boolean-radio-group>
+</ng-container>

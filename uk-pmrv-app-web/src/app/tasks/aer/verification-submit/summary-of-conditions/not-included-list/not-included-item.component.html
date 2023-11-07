@@ -1,0 +1,10 @@
+<app-aer-task-review heading="Add an approved change not included in a re-issued permit" returnToLink="../../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <div label="Explanation" [maxLength]="10000" formControlName="explanation" govuk-textarea></div>
+  </app-wizard-step>
+</app-aer-task-review>

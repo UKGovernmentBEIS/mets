@@ -1,0 +1,29 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <ng-container *ngIf="(isSubmitted$ | async) !== true; else submitted">
+    <app-page-heading>{{ vm.heading }}</app-page-heading>
+    <p class="govuk-body">
+      Are you sure you want to submit your response for this item to your regulator for assessment?
+    </p>
+    <govuk-warning-text assistiveText="Warning">You cannot make changes after you click 'submit'</govuk-warning-text>
+    <div *ngIf="vm.isEditable" class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+    </div>
+
+    <app-return-to-link></app-return-to-link>
+  </ng-container>
+
+  <ng-template #submitted>
+    <govuk-panel title="Response submitted">
+      <p>Your responses have been successfully submitted to your regulator for assessment</p>
+      <p>
+        <strong>Your reference code is:</strong><br />
+        {{ vm.requestId }}
+      </p>
+    </govuk-panel>
+    <h3 class="govuk-heading-m">What happens next</h3>
+    <p class="govuk-body">
+      Your regulator will review your responses and confirm any improvement requirement, where applicable.
+    </p>
+    <a govukLink routerLink="/aviation/dashboard">Return to: Dashboard</a>
+  </ng-template>
+</ng-container>

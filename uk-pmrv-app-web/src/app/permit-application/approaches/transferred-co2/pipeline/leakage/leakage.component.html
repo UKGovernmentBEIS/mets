@@ -1,0 +1,38 @@
+<app-permit-task
+  [breadcrumb]="[{ text: 'TRANSFERRED_CO2_N2O' | monitoringApproachDescription, link: ['transferred-co2'] }]"
+>
+  <app-wizard-step
+    [showBackLink]="true"
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    submitText="Continue"
+    [caption]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+    [heading]="taskKey$ | async | i18nSelect: headingMap"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <app-boolean-radio-group
+      controlName="exist"
+      legend="Is there a procedure for preventing, detecting and quantifying leakage events from the transport network?"
+    >
+      <div govukConditionalContent>
+        <app-procedure-form formGroupName="procedureForm">
+          <ng-container>
+            <div class="govuk-body">
+              <h2>Provide details</h2>
+              <p>
+                Provide details about the procedure for preventing, detecting and quantification of leakage events from
+                transport networks.
+              </p>
+            </div>
+          </ng-container>
+        </app-procedure-form>
+      </div>
+    </app-boolean-radio-group>
+  </app-wizard-step>
+
+  <app-approach-return-link
+    [parentTitle]="'TRANSFERRED_CO2_N2O' | monitoringApproachDescription"
+    reviewGroupUrl="transferred-co2"
+    [isNested]="true"
+  ></app-approach-return-link>
+</app-permit-task>

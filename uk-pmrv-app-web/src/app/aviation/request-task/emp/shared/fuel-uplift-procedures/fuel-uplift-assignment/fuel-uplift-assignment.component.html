@@ -1,0 +1,16 @@
+<app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" submitText="Continue" [hideSubmit]="false">
+  <div class="govuk-!-width-two-thirds">
+    <div class="govuk-caption-l">Fuel uplift</div>
+
+    <app-page-heading>Assignment and adjustment for flights with zero fuel uplift</app-page-heading>
+
+    <p class="govuk-body">
+      Describe the data handling and calculations necessary to meet the adjustment requirement for international flights
+      with zero fuel uplift, and for the following flights.
+    </p>
+  </div>
+
+  <div [maxLength]="2000" formControlName="zeroFuelUplift" govuk-textarea class="govuk-!-width-two-thirds"></div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

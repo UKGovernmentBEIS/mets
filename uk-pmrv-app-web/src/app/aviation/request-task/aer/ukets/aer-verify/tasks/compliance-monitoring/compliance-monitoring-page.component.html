@@ -1,0 +1,151 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="!vm.isEditable"
+  *ngIf="vm$ | async as vm"
+>
+  <div class="govuk-!-width-two-thirds">
+    <app-page-heading>Compliance with the monitoring and reporting principles</app-page-heading>
+    <p class="govuk-body">
+      Some principles are aspirational and you may not be able to confirm absolute compliance. Some are reliant on
+      others being met before compliance can be confirmed.
+    </p>
+
+    <h2 class="govuk-heading-m">Accuracy</h2>
+    <p class="govuk-body">Aircraft operators shall:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>ensure that emission determination is neither systematically nor knowingly inaccurate</li>
+      <li>identify and reduce any source of inaccuracies as far as possible</li>
+      <li>
+        exercise due diligence to ensure that the calculation and measurement of emissions exhibit the highest
+        achievable accuracy
+      </li>
+    </ul>
+    <div formControlName="accuracyCompliant" govuk-radio>
+      <govuk-radio-option [value]="true" label="Compliant"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="Not Compliant">
+        <ng-container govukConditionalContent>
+          <div
+            [maxLength]="10000"
+            formControlName="accuracyNonCompliantReason"
+            govuk-textarea
+            label="Provide a reason"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-m">Completeness</h2>
+    <p class="govuk-body">
+      Monitoring and reporting shall be complete cover all flights performed by the aircraft operator that are defined
+      as an aviation activity listed in Schedule 1 of the ETS Order. The emissions data for the flights shall be
+      complete, while avoiding double-counting.
+    </p>
+    <p class="govuk-body">
+      Aircraft operators need to take appropriate measures to prevent any data gaps in the reporting period.
+    </p>
+    <div formControlName="completenessCompliant" govuk-radio>
+      <govuk-radio-option [value]="true" label="Compliant"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="Not Compliant">
+        <ng-container govukConditionalContent>
+          <div
+            [maxLength]="10000"
+            formControlName="completenessNonCompliantReason"
+            govuk-textarea
+            label="Provide a reason"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-m">Consistency, comparability and transparency</h2>
+    <p class="govuk-body">
+      Monitoring and reporting need to be consistent and comparable over time. For that reason, aircraft operators shall
+      use the same monitoring methodologies and data sets, subject to changes and exemptions approved by the regulator.
+    </p>
+    <p class="govuk-body">
+      Aircraft operators need to obtain, record, compile, analyse and document monitoring data, including assumptions,
+      references, activity data and calculation factors, in a transparent manner that enables the reproduction of the
+      determination of emissions by the verifier and the regulator.
+    </p>
+
+    <h2 class="govuk-heading-m">Consistency</h2>
+    <div formControlName="consistencyCompliant" govuk-radio>
+      <govuk-radio-option [value]="true" label="Compliant"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="Not Compliant">
+        <ng-container govukConditionalContent>
+          <div
+            [maxLength]="10000"
+            formControlName="consistencyNonCompliantReason"
+            govuk-textarea
+            label="Provide a reason"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-m">Comparability over time</h2>
+    <div formControlName="comparabilityCompliant" govuk-radio>
+      <govuk-radio-option [value]="true" label="Compliant"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="Not Compliant">
+        <ng-container govukConditionalContent>
+          <div
+            [maxLength]="10000"
+            formControlName="comparabilityNonCompliantReason"
+            govuk-textarea
+            label="Provide a reason"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-m">Transparency</h2>
+    <div formControlName="transparencyCompliant" govuk-radio>
+      <govuk-radio-option [value]="true" label="Compliant"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="Not Compliant">
+        <ng-container govukConditionalContent>
+          <div
+            [maxLength]="10000"
+            formControlName="transparencyNonCompliantReason"
+            govuk-textarea
+            label="Provide a reason"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-m">Integrity of methodology</h2>
+    <p class="govuk-body">
+      Aircraft operators shall enable reasonable assurance of the integrity of emission data to be reported. They shall
+      determine emissions using the appropriate monitoring methodologies set out in the Regulations.
+    </p>
+    <p class="govuk-body">Reported emission data and related disclosures shall:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>be free from material misstatement</li>
+      <li>avoid bias in the selection and presentation of information</li>
+      <li>provide a credible and balanced account of an aircraft's emissions</li>
+    </ul>
+    <p class="govuk-body">
+      In selecting a monitoring methodology, the improvements from greater accuracy must be balanced against additional
+      costs. Monitoring and reporting of emissions must aim for the highest achievable accuracy, unless this is
+      technically not feasible or incurs unreasonable costs.
+    </p>
+    <div formControlName="integrityCompliant" govuk-radio>
+      <govuk-radio-option [value]="true" label="Compliant"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="Not Compliant">
+        <ng-container govukConditionalContent>
+          <div
+            [maxLength]="10000"
+            formControlName="integrityNonCompliantReason"
+            govuk-textarea
+            label="Provide a reason"
+          ></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </div>
+</app-wizard-step>
+<div>
+  <app-return-to-link></app-return-to-link>
+</div>

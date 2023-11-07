@@ -1,0 +1,15 @@
+<app-aer-task-review heading="List the installations combustion sources (fuel types)" returnToLink="../..">
+  <p class="govuk-body">
+    For example, refinery fuel, gas or diesel. You do not have to list all the individual emission sources.
+  </p>
+  <app-aer-combustion-sources-group
+    [combustionSources]="combustionSources$ | async"
+    [isEditable]="isEditable$ | async"
+    addRouterLink="add"
+    deleteRouterLink="delete"
+  >
+  </app-aer-combustion-sources-group>
+  <div class="govuk-button-group" *ngIf="isEditable$ | async">
+    <button appPendingButton govukButton type="button" (click)="onContinue()">Continue</button>
+  </div>
+</app-aer-task-review>

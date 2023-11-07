@@ -1,0 +1,19 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  submitText="Continue"
+  [hideSubmit]="false"
+  heading="Have there been any fuel use data gaps during the scheme year?"
+  class="govuk-!-width-two-thirds"
+>
+  <p class="govuk-body govuk-!-width-two-thirds">You must list all data gaps that occurred during the scheme year.</p>
+
+  <p class="govuk-body govuk-!-width-two-thirds">
+    When primary fuel use data is unavailable for one or more flights, you must substitute it with approved data sources
+    as outlined in your emissions monitoring plan
+  </p>
+
+  <app-data-gaps-exist-form></app-data-gaps-exist-form>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

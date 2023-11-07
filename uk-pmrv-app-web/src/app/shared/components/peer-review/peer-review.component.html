@@ -1,0 +1,30 @@
+<ng-container *ngIf="(isFormSubmitted$ | async) === false; else confirmation">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Send for peer review"
+    submitText="Confirm and complete"
+  >
+    <div [options]="assignees$ | async" formControlName="assignees" govuk-select label="Select a peer reviewer"></div>
+
+    <div govukInsetText *ngIf="(pendingRfi$ | async) === true">
+      Clicking 'confirm and complete' will automatically cancel the active request for information.
+    </div>
+  </app-wizard-step>
+
+  <ng-container *ngIf="returnTo$ | async as returnTo">
+    <a govukLink [routerLink]="returnTo.link"> Return to: {{ returnTo.text }} </a>
+  </ng-container>
+</ng-container>
+
+<ng-template #confirmation>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="Sent to {{ assignee$ | async }} for peer review">
+        <br /><strong>Your reference code is:</strong><br />{{ requestId$ | async }}
+      </govuk-panel>
+
+      <a govukLink routerLink="{{ isAviation }}/dashboard"> Return to dashboard </a>
+    </div>
+  </div>
+</ng-template>

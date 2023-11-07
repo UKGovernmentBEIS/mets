@@ -1,0 +1,46 @@
+<app-permit-task
+  [breadcrumb]="[
+    {
+      text: 'MEASUREMENT_CO2' | monitoringApproachDescription,
+      link: ['measurement']
+    },
+    {
+      text: index$ | async | emissionPointCategoryName: 'MEASUREMENT_CO2' | async,
+      link: ['measurement', 'category-tier', index$ | async]
+    }
+  ]"
+>
+  <ng-container *ngIf="cannotStartYet$ | async; else edit">
+    <app-page-heading caption="Monitoring approach, Measurement"> Applied standard </app-page-heading>
+    <p class="govuk-body">Other tasks must be completed before you can start:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Emission point category</li>
+    </ul>
+    <a govukLink routerLink=".."
+      >Return to: {{ index$ | async | emissionPointCategoryName: 'MEASUREMENT_CO2' | async }}</a
+    >
+  </ng-container>
+
+  <ng-template #edit>
+    <ng-container
+      *ngIf="
+        ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async] as tier
+      "
+    >
+      <app-wizard-step
+        (formSubmit)="onSubmit()"
+        [formGroup]="form"
+        caption="{{ 'MEASUREMENT_CO2' | monitoringApproachDescription }}, {{
+          tier | emissionPointCategoryName | async
+        }}"
+        heading="Applied standard"
+        submitText="Confirm and complete"
+        [hideSubmit]="(store.isEditable$ | async) === false"
+      >
+        <app-applied-standard-form> </app-applied-standard-form>
+      </app-wizard-step>
+
+      <a govukLink routerLink="..">Return to: {{ tier | emissionPointCategoryName | async }}</a>
+    </ng-container>
+  </ng-template>
+</app-permit-task>

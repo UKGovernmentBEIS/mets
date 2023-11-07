@@ -1,0 +1,62 @@
+<ng-container *ngIf="dataGaps">
+  <div *ngFor="let dg of dataGaps; index as i">
+    <div class="inline-rm-btn">
+      <h2 class="govuk-heading-m">Data gap {{ i + 1 }}</h2>
+
+      <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events -->
+      <a role="button" (click)="onRemoveDataGap(i)" *ngIf="isEditable"> Remove </a>
+    </div>
+
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Reason for the data gap</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">{{ dg.reason }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../data-gaps-list/' + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Type of data gap</dt>
+        <dd govukSummaryListRowValue>{{ dg.type }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../data-gaps-list/' + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Replacement method for determining surrogate data</dt>
+        <dd govukSummaryListRowValue>{{ dg.replacementMethod }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../data-gaps-list/' + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Number of flights</dt>
+        <dd govukSummaryListRowValue>{{ dg.flightsAffected }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../data-gaps-list/' + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Total emissions</dt>
+        <dd govukSummaryListRowValue>{{ dg.totalEmissions }} tonnes CO2</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="'../data-gaps-list/' + i + '/edit'" [queryParams]="queryParams">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</ng-container>
+
+<button
+  govukSecondaryButton
+  type="button"
+  [routerLink]="'../data-gaps-list/add-data-gap-information'"
+  [queryParams]="queryParams"
+  *ngIf="isEditable"
+>
+  Add another data gap
+</button>

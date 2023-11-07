@@ -1,0 +1,33 @@
+<app-aer-task-review heading="Add a misstatement not corrected before completing this report" returnToLink="../../..">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false"
+  >
+    <p class="govuk-body">You should state:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>the nature and size of the misstatement</li>
+      <li>if it is higher than it should be (overstated) or lower (understated)</li>
+      <li>which part of the report it relates to</li>
+      <li>why it has a material effect (if applicable)</li>
+    </ul>
+    <p class="govuk-body">
+      You should not include any uncertainty which is allowed under the MRR (ie any relating to the relevant tier).
+    </p>
+
+    <div label="Explanation" [maxLength]="10000" formControlName="explanation" govuk-textarea></div>
+
+    <p class="govuk-body">Does this have a material (significant) effect on:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>the total reported emissions</li>
+      <li>any tonne-kilometre data</li>
+      <li>any data relevant for free allocation</li>
+    </ul>
+
+    <div formControlName="materialEffect" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-aer-task-review>

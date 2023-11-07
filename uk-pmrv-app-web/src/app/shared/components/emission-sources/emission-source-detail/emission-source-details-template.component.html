@@ -1,0 +1,23 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  [heading]="isEditing ? 'Edit emission source' : 'Add an emission source'"
+  [caption]="caption"
+  submitText="Save and continue"
+>
+  <p class="govuk-body">
+    Certain activities that result in greenhouse gas emissions may be excluded under the Greenhouse Gas Emissions
+    Trading Scheme Order 2020, for example truly mobile sources such as vehicle emissions. Excluded activities must be
+    identified in the monitoring plan if fuels or materials used by these activities is accounted for by measurement
+    devices that also supply regulated activities.
+  </p>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+      <div formControlName="reference" govuk-text-input hint="For example, ‘S1’" label="Reference"></div>
+    </div>
+    <div class="govuk-grid-column-two-thirds">
+      <div formControlName="description" govuk-text-input hint="For example, ‘Boiler‘" label="Description"></div>
+    </div>
+  </div>
+</app-wizard-step>
+<a govukLink routerLink="..">Return to: Emission sources</a>

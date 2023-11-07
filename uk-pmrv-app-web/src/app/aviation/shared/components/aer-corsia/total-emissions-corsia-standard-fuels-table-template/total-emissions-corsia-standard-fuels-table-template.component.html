@@ -1,0 +1,23 @@
+<div class="overflow-auto overflow-auto-table">
+  <govuk-table
+    *ngIf="(standardFuelsTotalEmissions$ | async)?.length"
+    [columns]="columns"
+    [data]="standardFuelsTotalEmissions$ | async"
+  >
+    <ng-template let-column="column" let-row="row">
+      <div [ngSwitch]="column.field" class="cell-container">
+        <ng-container *ngSwitchCase="'fuelType'">{{ getSummaryDescription(row.fuelType, true) }}</ng-container>
+        <ng-container *ngSwitchCase="'emissionsFactor'">
+          <div class="govuk-!-text-align-left">{{ row.emissionsFactor }} tCO2/t fuel</div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'fuelConsumption'">
+          <div class="govuk-!-text-align-left">{{ row.fuelConsumption }} t</div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'emissions'">
+          <div class="govuk-!-text-align-left">{{ row.emissions }} tCO2</div>
+        </ng-container>
+        <ng-container *ngSwitchDefault>{{ row[column.field] }}</ng-container>
+      </div>
+    </ng-template>
+  </govuk-table>
+</div>

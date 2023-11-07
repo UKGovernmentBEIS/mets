@@ -1,0 +1,50 @@
+<dl govuk-summary-list>
+  <ng-container *ngIf="dre.determinationReason">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason for determining the reportable emissions</dt>
+      <dd govukSummaryListRowValue *ngIf="dre.determinationReason.type === 'OTHER'" class="pre-wrap">
+        {{ dre.determinationReason.typeOtherSummary }}
+      </dd>
+      <dd govukSummaryListRowValue *ngIf="dre.determinationReason.type !== 'OTHER'">
+        {{ dre.determinationReason.type | i18nSelect: determinationReasonTypesLabelsMap }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="['..', 'determination-reason']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Was the operator asked to resubmit the emission report?</dt>
+      <dd govukSummaryListRowValue>{{ dre.determinationReason.operatorAskedToResubmit ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="['..', 'determination-reason']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow *ngIf="dre.determinationReason.regulatorComments">
+      <dt govukSummaryListRowKey>Regulator comments</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ dre.determinationReason.regulatorComments }}</dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="['..', 'determination-reason']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Supporting documents</dt>
+      <dd govukSummaryListRowValue>
+        <ng-container *ngIf="supportingDocumentFiles?.length === 0; else supportingDocuments"> None </ng-container>
+        <ng-template #supportingDocuments>
+          <app-summary-download-files [files]="supportingDocumentFiles"> </app-summary-download-files>
+        </ng-template>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="['..', 'determination-reason']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </ng-container>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Reason to be included in the official notice</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">{{ dre.officialNoticeReason }}</dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'official-notice-reason']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>

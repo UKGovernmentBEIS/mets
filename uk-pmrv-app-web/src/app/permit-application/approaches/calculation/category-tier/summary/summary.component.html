@@ -1,0 +1,19 @@
+<ng-container
+  *ngIf="('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async] as tier"
+>
+  <app-permit-task
+    [notification]="notification"
+    [breadcrumb]="[
+      { text: 'CALCULATION_CO2' | monitoringApproachDescription, link: ['calculation'] },
+      { text: tier | sourceStreamCategoryName | async, link: ['calculation', 'category-tier', index$ | async] }
+    ]"
+  >
+    <app-page-heading
+      caption="{{ 'CALCULATION_CO2' | monitoringApproachDescription }}, {{ tier | sourceStreamCategoryName | async }}"
+    >
+      {{ statusKey | subtaskName }}
+    </app-page-heading>
+    <app-calculation-category-tier-subtasks-summary-template></app-calculation-category-tier-subtasks-summary-template>
+    <a govukLink routerLink="../..">Return to: {{ tier | sourceStreamCategoryName | async }}</a>
+  </app-permit-task>
+</ng-container>

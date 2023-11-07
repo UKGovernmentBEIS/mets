@@ -1,0 +1,60 @@
+<ng-container
+  *ngIf="
+    ('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async]
+      .sourceStreamCategory as sourceStreamCategory
+  "
+>
+  <app-permit-task
+    *ngIf="sourceStreamCategory.sourceStream | findSourceStream | async as sourceStream"
+    [breadcrumb]="[
+      {
+        text: 'CALCULATION_CO2' | monitoringApproachDescription,
+        link: ['calculation']
+      },
+      {
+        text: sourceStream | tierSourceStreamName: sourceStreamCategory,
+        link: ['calculation', 'category-tier', index$ | async]
+      }
+    ]"
+  >
+    <ng-container
+      *ngIf="
+        ('CALCULATION_CO2' | monitoringApproachTask | async).sourceStreamCategoryAppliedTiers[index$ | async] as tier
+      "
+    >
+      <app-wizard-step
+        [showBackLink]="true"
+        (formSubmit)="onContinue()"
+        [formGroup]="form"
+        caption="{{ 'CALCULATION_CO2' | monitoringApproachDescription }}, {{ tier | sourceStreamCategoryName | async }}"
+        heading="1/3 rule for  sampled emissions"
+        submitText="Continue"
+        [hideSubmit]="(store.isEditable$ | async) === false"
+      >
+        <p class="govuk-body">Get help with <a govukLink routerLink=".">1/3 rule for sampled emissions.</a></p>
+
+        <div
+          formControlName="oneThirdRule"
+          govuk-radio
+          legend="Are you applying the 1/3 rule to reduce your sampled emissions to once a year?"
+          legendSize="medium"
+        >
+          <govuk-radio-option [value]="true" label="Yes"> </govuk-radio-option>
+          <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+        </div>
+
+        <app-multiple-file-input
+          [baseDownloadUrl]="getDownloadUrl()"
+          [label]="
+            (isFileUploaded$ | async)
+              ? 'Upload a different file'
+              : 'Upload any supporting files or completed templates (optional)'
+          "
+          formControlName="oneThirdRuleFiles"
+          listTitle="Upload any supporting files or completed templates (optional)"
+        ></app-multiple-file-input>
+      </app-wizard-step>
+      <a govukLink routerLink="../..">Return to: {{ tier | sourceStreamCategoryName | async }}</a>
+    </ng-container>
+  </app-permit-task>
+</ng-container>

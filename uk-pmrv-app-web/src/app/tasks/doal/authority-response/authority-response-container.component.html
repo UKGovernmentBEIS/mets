@@ -1,0 +1,39 @@
+<app-base-task-container-component
+  header="Provide UK ETS Authority response for activity Level Change"
+  [customContentTemplate]="customContentTemplate"
+  expectedTaskType="DOAL_AUTHORITY_RESPONSE"
+>
+</app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <div class="govuk-button-group">
+    <button
+      *ngIf="allowNotifyOperator$ | async"
+      (click)="notifyOperator()"
+      govukButton
+      title="Notify Operator for decision"
+      type="button"
+    >
+      Notify Operator
+    </button>
+  </div>
+
+  <ol class="app-task-list">
+    <li app-task-section title="Enter details">
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          [link]="(canViewSectionDetails$('dateSubmittedToAuthority') | async) ? './date-submitted/summary' : null"
+          linkText="Provide the date application was submitted to UK authorities"
+          [status]="getSectionStatus$('dateSubmittedToAuthority') | async"
+        ></li>
+        <li
+          app-task-item
+          [link]="(canViewSectionDetails$('authorityResponse') | async) ? './response/summary' : null"
+          linkText="Provide UK ETS Authority response"
+          [status]="getSectionStatus$('authorityResponse') | async"
+        ></li>
+      </ul>
+    </li>
+  </ol>
+</ng-template>

@@ -1,0 +1,45 @@
+<dl govuk-summary-list [hasBorders]="false" [class.summary-list--edge-border]="hasBottomBorder">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Consent with the information provided</dt>
+    <dd govukSummaryListRowValue>
+      {{ transferDetailsConfirmation.detailsAccepted ? 'Yes' : 'No' }}
+      <div class="pre-wrap govuk-!-margin-top-6" *ngIf="!transferDetailsConfirmation.detailsAccepted">
+        {{ transferDetailsConfirmation.detailsRejectedReason }}
+      </div>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="showChangeLink">
+      <a govukLink routerLink=".." [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>
+
+<dl govuk-summary-list [hasBorders]="false" [class.summary-list--edge-border]="hasBottomBorder">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Regulated activities in operation</dt>
+    <dd govukSummaryListRowValue>
+      {{ transferDetailsConfirmation.regulatedActivitiesInOperation ? 'Yes' : 'No' }}
+      <div class="pre-wrap govuk-!-margin-top-6" *ngIf="!transferDetailsConfirmation.regulatedActivitiesInOperation">
+        {{ transferDetailsConfirmation.regulatedActivitiesNotInOperationReason }}
+      </div>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="showChangeLink">
+      <a govukLink routerLink=".." [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>
+<dl govuk-summary-list [hasBorders]="false" [class.summary-list--edge-border]="hasBottomBorder">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>
+      Consent that I will be the operator of the installation and transferres emissions equipment
+    </dt>
+    <dd govukSummaryListRowValue>
+      {{ transferDetailsConfirmation.transferAccepted ? 'Yes' : 'No' }}
+      <div class="pre-wrap govuk-!-margin-top-6" *ngIf="!transferDetailsConfirmation.transferAccepted">
+        {{ transferDetailsConfirmation.transferRejectedReason }}
+      </div>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="showChangeLink">
+      <a govukLink routerLink=".." [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>

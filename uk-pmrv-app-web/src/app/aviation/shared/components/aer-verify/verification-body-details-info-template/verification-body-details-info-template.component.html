@@ -1,0 +1,26 @@
+<h2 class="govuk-heading-m">Verification body</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Company name</dt>
+    <dd govukSummaryListRowValue>{{ data.name }}</dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Address</dt>
+    <dd govukSummaryListRowValue>
+      <div>
+        {{ data.address.line1 }}
+        <ng-container *ngIf="data.address.line2"> , {{ data.address.line2 }} </ng-container>
+      </div>
+
+      <div>{{ data.address.city }}</div>
+      <div>{{ data.address.postcode }}</div>
+      <div>{{ data.address.country | country }}</div>
+    </dd>
+  </div>
+  <div govukSummaryListRow *ngIf="data.accreditationReferenceNumber">
+    <dt govukSummaryListRowKey>Accreditation number</dt>
+    <dd govukSummaryListRowValue>
+      {{ data.accreditationReferenceNumber }}
+    </dd>
+  </div>
+</dl>

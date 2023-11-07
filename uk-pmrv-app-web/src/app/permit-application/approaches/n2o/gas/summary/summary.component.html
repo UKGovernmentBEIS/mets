@@ -1,0 +1,29 @@
+<app-permit-task
+  [notification]="notification"
+  [breadcrumb]="[{ text: 'MEASUREMENT_N2O' | monitoringApproachDescription, link: ['nitrous-oxide'] }]"
+>
+  <app-page-heading [caption]="'MEASUREMENT_N2O' | monitoringApproachDescription"
+    >Calculation of gas flow</app-page-heading
+  >
+
+  <div class="govuk-body">
+    <p>
+      Where gas flow is determined by calculation, give details about the written procedure for the calculation,
+      including the essential parameters and operations performed.
+    </p>
+  </div>
+
+  <h2
+    app-summary-header
+    [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
+    class="govuk-heading-m"
+  >
+    <span class="govuk-visually-hidden">Calculation of gas flow</span>
+  </h2>
+
+  <app-n2o-approach-gas-summary-template></app-n2o-approach-gas-summary-template>
+  <app-approach-return-link
+    [parentTitle]="'MEASUREMENT_N2O' | monitoringApproachDescription"
+    reviewGroupUrl="nitrous-oxide"
+  ></app-approach-return-link>
+</app-permit-task>

@@ -1,0 +1,25 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <app-page-heading>Details of initial penalty</app-page-heading>
+    <h2 class="govuk-heading-m">Details</h2>
+    <ng-container *ngIf="payload$ | async as payload">
+      <dl govuk-summary-list *ngIf="payload.comments">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Comments</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">
+            {{ payload.comments }}
+          </dd>
+        </div>
+      </dl>
+      <dl govuk-summary-list>
+        <div govukSummaryListRow *ngIf="payload?.dailyPenaltyNotice">
+          <dt govukSummaryListRowKey>Uploaded document</dt>
+          <dd govukSummaryListRowValue>
+            <app-summary-download-files [files]="documentFiles$ | async"> </app-summary-download-files>
+          </dd>
+        </div>
+      </dl>
+    </ng-container>
+    <a govukLink routerLink="../../../..">Return to: Non-compliance</a>
+  </div>
+</div>
