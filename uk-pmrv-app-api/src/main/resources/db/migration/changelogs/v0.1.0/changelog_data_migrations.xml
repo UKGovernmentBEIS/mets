@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_data_migrations.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+
+    <changeSet id="0_1_0_RENAME_LOCATION_TABLE" author="P70453">
+        <preConditions onFail="MARK_RAN"><tableExists tableName="location"/></preConditions>
+        <renameTable newTableName="account_location" oldTableName="location" />
+        <rollback>
+            <renameTable newTableName="location" oldTableName="account_location" />
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_RENAME_LOCATION_SEQUENCE" author="P70453">
+        <preConditions onFail="MARK_RAN"><sequenceExists sequenceName="location_seq"/></preConditions>
+        <renameSequence newSequenceName="account_location_seq" oldSequenceName="location_seq" />
+        <rollback>
+            <renameSequence newSequenceName="location_seq" oldSequenceName="account_location_seq" />
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_RENAME_LEGAL_ENTITY_TABLE" author="P70453">
+        <preConditions onFail="MARK_RAN"><tableExists tableName="legal_entity"/></preConditions>
+        <renameTable newTableName="account_legal_entity" oldTableName="legal_entity" />
+        <rollback>
+            <renameTable newTableName="legal_entity" oldTableName="account_legal_entity" />
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_RENAME_LEGAL_ENTITY_SEQUENCE" author="P70453">
+        <preConditions onFail="MARK_RAN"><sequenceExists sequenceName="legal_entity_seq"/></preConditions>
+        <renameSequence newSequenceName="account_legal_entity_seq" oldSequenceName="legal_entity_seq" />
+        <rollback>
+            <renameSequence newSequenceName="legal_entity_seq" oldSequenceName="account_legal_entity_seq" />
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_DROP_UNIQUE_CONSTRAINT_LEGAL_ENTITY" author="P70383">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="1">
+                select count(constraint_name) from information_schema.constraint_column_usage where table_name = 'account_legal_entity' and constraint_name = 'legal_entity_name_uc'
+            </sqlCheck>
+        </preConditions>
+        <dropUniqueConstraint tableName="account_legal_entity" constraintName="legal_entity_name_uc"/>
+    </changeSet>
+
+    <changeSet id="0_1_0_CHANGE_LEGAL_ENTITY_VARIABLES_VARCHAR_LENGTH" author="P70383">
+        <modifyDataType tableName="account_legal_entity" columnName="type" newDataType="varchar(256)"/>
+        <modifyDataType tableName="account_legal_entity" columnName="name" newDataType="varchar(256)"/>
+        <modifyDataType tableName="account_legal_entity" columnName="status" newDataType="varchar(256)"/>
+        <rollback>
+            <modifyDataType tableName="account_legal_entity" columnName="type" newDataType="varchar(255)"/>
+            <modifyDataType tableName="account_legal_entity" columnName="name" newDataType="varchar(255)"/>
+            <modifyDataType tableName="account_legal_entity" columnName="status" newDataType="varchar(255)"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CHANGE_ACCOUNT_LOCATION_VARIABLES_VARCHAR_LENGTH" author="P70383">
+        <modifyDataType tableName="account_location" columnName="type" newDataType="varchar(256)"/>
+        <modifyDataType tableName="account_location" columnName="grid_reference" newDataType="varchar(256)"/>
+        <modifyDataType tableName="account_location" columnName="line1" newDataType="varchar(256)"/>
+        <modifyDataType tableName="account_location" columnName="line2" newDataType="varchar(256)"/>
+        <modifyDataType tableName="account_location" columnName="city" newDataType="varchar(256)"/>
+        <modifyDataType tableName="account_location" columnName="latitude" newDataType="varchar(256)"/>
+        <modifyDataType tableName="account_location" columnName="longitude" newDataType="varchar(256)"/>
+        <rollback>
+            <modifyDataType tableName="account_location" columnName="type" newDataType="varchar(255)"/>
+            <modifyDataType tableName="account_location" columnName="grid_reference" newDataType="varchar(255)"/>
+            <modifyDataType tableName="account_location" columnName="line1" newDataType="varchar(255)"/>
+            <modifyDataType tableName="account_location" columnName="line2" newDataType="varchar(255)"/>
+            <modifyDataType tableName="account_location" columnName="city" newDataType="varchar(255)"/>
+            <modifyDataType tableName="account_location" columnName="latitude" newDataType="varchar(255)"/>
+            <modifyDataType tableName="account_location" columnName="longitude" newDataType="varchar(255)"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CHANGE_LEGAL_ENTITY_VARIABLES_VARCHAR_LENGTH_REVERT" author="P70605">
+        <modifyDataType tableName="account_legal_entity" columnName="type" newDataType="varchar(255)"/>
+        <modifyDataType tableName="account_legal_entity" columnName="name" newDataType="varchar(255)"/>
+        <modifyDataType tableName="account_legal_entity" columnName="status" newDataType="varchar(255)"/>
+        <rollback>
+            <modifyDataType tableName="account_legal_entity" columnName="type" newDataType="varchar(256)"/>
+            <modifyDataType tableName="account_legal_entity" columnName="name" newDataType="varchar(256)"/>
+            <modifyDataType tableName="account_legal_entity" columnName="status" newDataType="varchar(256)"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CHANGE_ACCOUNT_LOCATION_VARIABLES_VARCHAR_LENGTH_REVERT" author="P70605">
+        <modifyDataType tableName="account_location" columnName="type" newDataType="varchar(255)"/>
+        <modifyDataType tableName="account_location" columnName="grid_reference" newDataType="varchar(255)"/>
+        <modifyDataType tableName="account_location" columnName="line1" newDataType="varchar(255)"/>
+        <modifyDataType tableName="account_location" columnName="line2" newDataType="varchar(255)"/>
+        <modifyDataType tableName="account_location" columnName="city" newDataType="varchar(255)"/>
+        <modifyDataType tableName="account_location" columnName="latitude" newDataType="varchar(255)"/>
+        <modifyDataType tableName="account_location" columnName="longitude" newDataType="varchar(255)"/>
+        <rollback>
+            <modifyDataType tableName="account_location" columnName="type" newDataType="varchar(256)"/>
+            <modifyDataType tableName="account_location" columnName="grid_reference" newDataType="varchar(256)"/>
+            <modifyDataType tableName="account_location" columnName="line1" newDataType="varchar(256)"/>
+            <modifyDataType tableName="account_location" columnName="line2" newDataType="varchar(256)"/>
+            <modifyDataType tableName="account_location" columnName="city" newDataType="varchar(256)"/>
+            <modifyDataType tableName="account_location" columnName="latitude" newDataType="varchar(256)"/>
+            <modifyDataType tableName="account_location" columnName="longitude" newDataType="varchar(256)"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_LEGAL_ENTITY_ADD_HOLDING_COMPANY_REFERENCE" author="P63757">
+        <comment>Add holding company columns to legal entity table</comment>
+        <sql>
+            ALTER TABLE ACCOUNT_LEGAL_ENTITY
+                ADD COLUMN holding_company_id bigint,
+                ADD CONSTRAINT holding_company_id_fk FOREIGN KEY (holding_company_id) REFERENCES account_holding_company (id);
+
+            COMMENT ON COLUMN ACCOUNT_LEGAL_ENTITY.holding_company_id IS 'The foreign key reference to the account holding company table';
+        </sql>
+
+        <rollback>
+            <sql>
+                ALTER TABLE ACCOUNT_LEGAL_ENTITY
+                DROP COLUMN IF EXISTS holding_company_id,
+                DROP CONSTRAINT IF EXISTS holding_company_id_fk;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_INITIALIZE_ACCOUNT_INSTALLATION_TABLE" author="pafilisa@unisystems.gr">
+        <validCheckSum>1:any</validCheckSum>
+        <comment>Initialize the account_installation table with the appropriate data</comment>
+        <sql>
+            insert into account_installation(id, status, site_name, emitter_type, installation_category, application_type, transfer_code, transfer_code_status)
+            select id, status, site_name, emitter_type, installation_category, application_type, transfer_code, transfer_code_status
+            from account;
+        </sql>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_state_in_ACCOUNT_LOCATION" author="P70383">
+        <addColumn tableName="account_location">
+            <column name="state" type="varchar(255)" remarks="The state">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE account_location
+                DROP COLUMN IF EXISTS state;
+            </sql>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

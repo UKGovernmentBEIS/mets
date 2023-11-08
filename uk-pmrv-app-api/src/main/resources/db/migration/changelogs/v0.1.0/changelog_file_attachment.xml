@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+		logicalFilePath="v0.1.0/changelog_file_attachment.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+        
+	<changeSet id="0_1_0_FILE_ATTACHMENT_CREATE_SEQUENCE" author="P35066">
+        <createSequence sequenceName="file_attachment_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS file_attachment_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_FILE_ATTACHMENT_CREATE_TABLE" author="P35066">
+        <createTable tableName="file_attachment" remarks="The table that contain attachment files">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="file_attachment_pk" nullable="false"/>
+            </column>
+            <column name="uuid" type="varchar(255)" remarks="The file attachment uuid">
+                <constraints nullable="false" unique="true" uniqueConstraintName="file_attachment_uuid_uq" />
+            </column>
+            <column name="file_name" type="varchar(255)" remarks="The file name">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_content" type="bytea" remarks="The attachment binary content">
+            	<constraints nullable="false" />
+            </column>
+            <column name="file_size" type="bigint" remarks="The size of the file in bytes">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_type" type="varchar(255)" remarks="The mime type of the file">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="varchar(255)" remarks="The status of the attachment">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_by" type="varchar(255)" remarks="The creator of the entry">
+                <constraints nullable="false" />
+            </column>
+            <column name="last_updated_on" type="timestamp" remarks="When the attachment last updated">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS file_attachment CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_FILE_DOCUMENT_CREATE_SEQUENCE" author="pafilisa@unisystems.gr">
+        <createSequence sequenceName="file_document_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS file_document_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_FILE_DOCUMENT_CREATE_TABLE" author="pafilisa@unisystems.gr">
+        <createTable tableName="file_document" remarks="The table that contain document files">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="file_document_pk" nullable="false"/>
+            </column>
+            <column name="uuid" type="varchar(255)" remarks="The file document uuid">
+                <constraints nullable="false" unique="true" uniqueConstraintName="file_document_uuid_uq" />
+            </column>
+            <column name="file_name" type="varchar(255)" remarks="The file name">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_content" type="bytea" remarks="The document binary content">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_size" type="bigint" remarks="The size of the file in bytes">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_type" type="varchar(255)" remarks="The mime type of the file">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="varchar(255)" remarks="The status of the document file">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_by" type="varchar(255)" remarks="The creator of the entry">
+                <constraints nullable="false" />
+            </column>
+            <column name="last_updated_on" type="timestamp" remarks="When the document file last updated">
+                <constraints nullable="false" />
+            </column>
+            <column name="document_template_id" type="bigint" remarks="The document template the file is related to">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS file_document;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_FILE_DOCUMENT_UNIQUE_CONSTRAINT" author="pafilisa@unisystems.gr">
+        <addUniqueConstraint tableName="file_document" columnNames="document_template_id, status" constraintName="file_document_uc"/>
+        <rollback>
+            <dropUniqueConstraint tableName="file_document" constraintName="file_document_uc"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_DROP_FILE_DOCUMENT_UNIQUE_CONSTRAINT" author="pafilisa@unisystems.gr">
+        <dropUniqueConstraint tableName="file_document" constraintName="file_document_uc"/>
+        <rollback>
+            <addUniqueConstraint tableName="file_document" columnNames="document_template_id, status" constraintName="file_document_uc"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_FILE_DOCUMENT_UNIQUE_CONSTRAINT_DEFERRABLE" author="pafilisa@unisystems.gr">
+        <addUniqueConstraint tableName="file_document" columnNames="document_template_id, status" constraintName="file_document_uc_deferrable"
+                             deferrable="true" initiallyDeferred="true"/>
+        <rollback>
+            <dropUniqueConstraint tableName="file_document" constraintName="file_document_uc_deferrable"/>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_file_document_template_create_sequence" author="P35066">
+        <createSequence sequenceName="file_document_template_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                drop sequence if exists file_document_template_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_file_document_template_create_table" author="P35066">
+        <createTable tableName="file_document_template" remarks="The table that contain document template files">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="file_document_template_pk" nullable="false"/>
+            </column>
+            <column name="uuid" type="varchar(255)" remarks="The file document template uuid">
+                <constraints nullable="false" unique="true" uniqueConstraintName="file_document_templ_uuid_uq" />
+            </column>
+            <column name="file_name" type="varchar(255)" remarks="The file name">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_content" type="bytea" remarks="The document binary content">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_size" type="bigint" remarks="The size of the file in bytes">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_type" type="varchar(255)" remarks="The mime type of the file">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="varchar(255)" remarks="The status of the document file">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_by" type="varchar(255)" remarks="The creator of the entry">
+                <constraints nullable="false" />
+            </column>
+            <column name="last_updated_on" type="timestamp" remarks="When the document file last updated">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                drop table if exists file_document_template;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_FILE_NOTE_CREATE_SEQUENCE" author="P70605">
+        <createSequence sequenceName="file_note_seq" minValue="0" maxValue="999999999999999999" incrementBy="1" startValue="1"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS file_note_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_FILE_NOTE_CREATE_TABLE" author="P70605">
+        <createTable tableName="file_note">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="file_note_pk" nullable="false"/>
+            </column>
+            <column name="uuid" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="file_note_uuid_uq" />
+            </column>
+            <column name="file_name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_content" type="bytea">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_size" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_type" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_by" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="last_updated_on" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS file_note CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_FILE_NOTE_ADD_STATUS_DATE_IDX" author="P70605">
+        <createIndex indexName="file_note_status_date_idx" tableName="file_note">
+            <column name="status"/>
+            <column name="last_updated_on"/>
+        </createIndex>
+        <rollback>
+            <sql>
+                DROP INDEX IF EXISTS file_note_status_date_idx CASCADE
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_FILE_NOTE_ADD_COLUMNS_ACCOUNT_ID_REQUEST_ID" author="P70605">
+
+        <addColumn tableName="file_note">
+            <column name="account_id" type="bigint"/>
+        </addColumn>
+        <addColumn tableName="file_note">
+            <column name="request_id" type="varchar(20)"/>
+        </addColumn>
+        <sql>
+            ALTER TABLE file_note ADD CONSTRAINT file_note_account_id_request_id_constraint
+                CHECK ((account_id IS NULL AND request_id IS NOT NULL)
+                    OR (account_id IS NOT NULL AND request_id  IS NULL))
+        </sql>
+        
+        <rollback>
+            <sql>
+                ALTER TABLE file_note
+                DROP CONSTRAINT IF EXISTS file_note_account_id_request_id_constraint;
+                
+                ALTER TABLE file_note
+                DROP COLUMN IF EXISTS account_id,
+                DROP COLUMN IF EXISTS request_id;
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

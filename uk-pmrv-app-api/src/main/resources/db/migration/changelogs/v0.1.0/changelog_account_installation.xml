@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_account_installation.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_ACCOUNT_INSTALLATION_CREATE_TABLE" author="pafilisa@unisystems.gr">
+        <validCheckSum>1:any</validCheckSum>
+        <createTable tableName="account_installation"
+                     remarks="Represents an installation account">
+            <column name="id" type="bigint" remarks="The account id">
+                <constraints foreignKeyName="account_installation_account_fk" references="account(id)" nullable="false"
+                             primaryKey="true" primaryKeyName="account_installation_pk" />
+            </column>
+            <column name="status" type="varchar(255)" remarks="The installation account status">
+                <constraints nullable="false" />
+            </column>
+            <column name="site_name" type="varchar(255)" remarks="The site name of the installation account">
+                <constraints nullable="false" />
+            </column>
+            <column name="emitter_type" type="varchar(255)" remarks="The emitter type of the installation account">
+                <constraints nullable="true" />
+            </column>
+            <column name="installation_category" type="varchar(255)" remarks="The category of the installation account">
+                <constraints nullable="true" />
+            </column>
+            <column name="application_type" type="varchar(255)" remarks="The application type of the installation account">
+                <constraints nullable="false" />
+            </column>
+            <column name="transfer_code" type="varchar(9)" remarks="The transfer code of the installation account">
+                <constraints nullable="true" />
+            </column>
+            <column name="transfer_code_status" type="varchar(255)" remarks="The transfer code status of the installation account">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS account_installation CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_UNIQUE_CONSTRAINT_ON_TRANSFER_CODE" author="pafilisa@unisystems.gr">
+        <addUniqueConstraint tableName="account_installation"
+                             columnNames="transfer_code"
+                             constraintName="account_installation_transfer_code_uc"/>
+        <rollback>
+            <dropUniqueConstraint tableName="account_installation" constraintName="account_installation_transfer_code_uc"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_INDEX_FOR_INSTALLATION_ACCOUNT_SEARCHABLE_COLUMNS" author="dimopoulosc@unisystems.gr">
+        <sql>
+            CREATE INDEX trgm_gin_idx_account_site_name ON account_installation USING gin (site_name gin_trgm_ops);
+        </sql>
+        <rollback>
+            <sql>
+                DROP INDEX trgm_gin_idx_account_site_name;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_RENAME_INDEX_trgm_gin_idx_account_site_name_TO_trgm_gin_idx_account_installation_site_name" author="pafilisa@unisystems.gr">
+        <sql>
+            ALTER INDEX IF EXISTS trgm_gin_idx_account_site_name RENAME TO trgm_gin_idx_account_installation_site_name;
+        </sql>
+        <rollback>
+            <sql>
+                ALTER INDEX IF EXISTS trgm_gin_idx_account_installation_site_name RENAME TO trgm_gin_idx_account_site_name;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ACCOUNT_INSTALLATION_ADD_FA_STATUS_COLUMN" author="P63757">
+        <sql>
+            ALTER TABLE account_installation ADD COLUMN IF NOT EXISTS fa_status BOOLEAN;
+            UPDATE account_installation SET fa_status = false;
+            ALTER TABLE account_installation ALTER COLUMN fa_status SET DEFAULT FALSE;
+            ALTER TABLE account_installation ALTER COLUMN fa_status SET NOT NULL;
+        </sql>
+        <rollback>
+            <dropColumn tableName="account_installation">
+                <column name="fa_status"/>
+            </dropColumn>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

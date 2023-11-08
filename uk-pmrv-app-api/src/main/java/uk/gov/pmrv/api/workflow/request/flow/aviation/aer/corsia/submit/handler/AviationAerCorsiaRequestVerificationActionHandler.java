@@ -1,0 +1,43 @@
+package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.handler;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.pmrv.api.workflow.request.WorkflowService;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerApplicationRequestVerificationRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerOutcome;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.service.RequestAviationAerCorsiaSubmitService;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
+import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
+
+import java.util.List;
+import java.util.Map;
+
+@Component
+@RequiredArgsConstructor
+public class AviationAerCorsiaRequestVerificationActionHandler
+        implements RequestTaskActionHandler<AviationAerApplicationRequestVerificationRequestTaskActionPayload> {
+
+    private final RequestTaskService requestTaskService;
+    private final RequestAviationAerCorsiaSubmitService requestAviationAerCorsiaSubmitService;
+    private final WorkflowService workflowService;
+    @Override
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser, AviationAerApplicationRequestVerificationRequestTaskActionPayload payload) {
+        RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
+
+        requestAviationAerCorsiaSubmitService.sendToVerifier(payload, requestTask, pmrvUser);
+
+        // Complete task
+        workflowService.completeTask(requestTask.getProcessTaskId(),
+                Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
+                        BpmnProcessConstants.AVIATION_AER_OUTCOME, AviationAerOutcome.VERIFICATION_REQUESTED));
+    }
+
+    @Override
+    public List<RequestTaskActionType> getTypes() {
+        return List.of(RequestTaskActionType.AVIATION_AER_CORSIA_REQUEST_VERIFICATION);
+    }
+}

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_aviation_reporting.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+
+    <changeSet id="0_1_0_CREATE_AVIATION_RPT_REPORTABLE_EMISSIONS_SEQUENCE" author="pafilisa@unisystems.gr">
+        <createSequence sequenceName="aviation_rpt_reportable_emissions_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS aviation_rpt_reportable_emissions_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_AVIATION_RPT_REPORTABLE_EMISSIONS_TABLE" author="P70383">
+        <comment>Create aviation reportable emissions TABLE</comment>
+        <createTable tableName="aviation_rpt_reportable_emissions" remarks="Represents yearly reportable emissions">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="aviation_rpt_reportable_emissions_pk" nullable="false"/>
+            </column>
+            <column name="account_id" type="bigint" remarks="The account id">
+                <constraints nullable="false" />
+            </column>
+            <column name="year" type="int" remarks="The year">
+                <constraints nullable="false" />
+            </column>
+            <column name="emissions" type="numeric" remarks="The reportable emissions">
+                <constraints nullable="false" />
+            </column>
+            <column name="is_from_dre" type="boolean" defaultValueBoolean="false" remarks="The indication that emissions are derived from dre"/>
+        </createTable>
+        <addUniqueConstraint tableName="aviation_rpt_reportable_emissions" columnNames="account_id, year"
+                             constraintName="aviation_rpt_reportable_emissions_uc"/>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS aviation_rpt_reportable_emissions CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_CREATE_AVIATION_RPT_AER_TABLE" author="P70605">
+        <createTable tableName="aviation_rpt_aer">
+            <column name="id" type="varchar(20)">
+                <constraints primaryKey="true" primaryKeyName="aviation_rpt_aer_pk" nullable="false"/>
+            </column>
+            <column name="data" type="jsonb">
+                <constraints nullable="false" />
+            </column>
+            <column name="account_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="year" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS aviation_rpt_aer CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_REPORTABLE_EMISSIONS_COLUMN_ON_AVIATION_RPT_AER" author="P70605">
+        <sql>
+            ALTER TABLE aviation_rpt_aer ADD COLUMN reportable_emissions NUMERIC
+                GENERATED ALWAYS AS ((data ->> 'reportableEmissions')::float) STORED;
+        </sql>
+        <rollback>
+            <dropColumn tableName="aviation_rpt_aer" columnName="reportable_emissions"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_IS_EXEMPTED_COLUMN_ON_AVIATION_RPT_REPORTABLE_EMISSIONS_TABLE" author="pafilisa@unisystems.gr">
+        <preConditions onFail="WARN">
+            <sqlCheck expectedResult="1">SELECT count(*) FROM information_schema.tables where table_name = 'aviation_rpt_reportable_emissions';</sqlCheck>
+        </preConditions>
+
+        <comment>Update aviation_rpt_reportable_emissions TABLE</comment>
+
+        <addColumn tableName="aviation_rpt_reportable_emissions">
+            <column name="is_exempted" type="boolean" defaultValueBoolean="false" remarks="The indication whether the account is exempted from reporting emissions"/>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="aviation_rpt_reportable_emissions" columnName="is_exempted"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_CORSIA_COLUMNS_ON_AVIATION_RPT_REPORTABLE_EMISSIONS_TABLE" author="P70383">
+        <preConditions onFail="WARN">
+            <sqlCheck expectedResult="1">SELECT count(*) FROM information_schema.tables where table_name = 'aviation_rpt_reportable_emissions';</sqlCheck>
+        </preConditions>
+
+        <comment>Update aviation_rpt_reportable_emissions TABLE with CORSIA columns</comment>
+
+        <addColumn tableName="aviation_rpt_reportable_emissions">
+            <column name="offset_emissions" type="numeric" remarks="The reportable corsia offset emissions"/>
+            <column name="reduction_claim_emissions" type="numeric" remarks="The reportable corsia reduction claim emissions"/>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="aviation_rpt_reportable_emissions" columnName="offset_emissions"/>
+            <dropColumn tableName="aviation_rpt_reportable_emissions" columnName="reduction_claim_emissions"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_MODIFY_REPORTABLE_EMISSIONS_COLUMN_GENERATED_EXPRESSION_ON_AVIATION_RPT_AER" author="pafilisa@unisystems.gr">
+        <sql>
+            ALTER TABLE aviation_rpt_aer DROP COLUMN IF EXISTS reportable_emissions CASCADE;
+
+            ALTER TABLE aviation_rpt_aer ADD COLUMN reportable_emissions NUMERIC
+                GENERATED ALWAYS AS ((data -> 'reportableEmissions' ->> 'reportableEmissions')::float) STORED;
+        </sql>
+        <rollback>
+            ALTER TABLE aviation_rpt_aer DROP COLUMN IF EXISTS reportable_emissions CASCADE;
+
+            ALTER TABLE aviation_rpt_aer ADD COLUMN reportable_emissions NUMERIC
+            GENERATED ALWAYS AS ((data ->> 'reportableEmissions')::float) STORED;
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1it3uvr" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="PROCESS_RETURN_OF_ALLOWANCES" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0ek7428</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="RETURN_OF_ALLOWANCES_APPLICATION_SUBMIT" name="Regulator: Submit return of allowances">
+      <bpmn:incoming>Flow_0ek7428</bpmn:incoming>
+      <bpmn:incoming>Flow_1t6k6c3</bpmn:incoming>
+      <bpmn:outgoing>Flow_1yexxql</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:callActivity id="Activity_13xtd55" name="Peer Review" calledElement="PROCESS_APPLICATION_PEER_REVIEW">
+      <bpmn:extensionElements>
+        <camunda:in source="requestId" target="requestId" />
+        <camunda:in businessKey="#{businessKey}" />
+        <camunda:in source="requestType" target="requestType" />
+        <camunda:out source="returnOfAllowancesSubmitOutcome" target="returnOfAllowancesSubmitOutcome" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1kkkd9q</bpmn:incoming>
+      <bpmn:outgoing>Flow_05y5hlq</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_05y5hlq" sourceRef="Activity_13xtd55" targetRef="Gateway_0gp5v7b" />
+    <bpmn:exclusiveGateway id="Gateway_1qcrh8k" name="what is the submit outcome?">
+      <bpmn:incoming>Flow_1yexxql</bpmn:incoming>
+      <bpmn:outgoing>Flow_0suq32d</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1x956ei</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1kkkd9q</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Activity_0z0vquu" name="Add cancelled request action" camunda:delegateExpression="#{returnOfAllowancesAddCancelledRequestActionHandler}">
+      <bpmn:incoming>Flow_0suq32d</bpmn:incoming>
+      <bpmn:incoming>Flow_164xnn8</bpmn:incoming>
+      <bpmn:outgoing>Flow_153hgay</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1rg847a" name="Update Workflow status to CANCELLED" camunda:delegateExpression="#{requestUpdateStatusHandler}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="requestStatus">CANCELLED</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_153hgay</bpmn:incoming>
+      <bpmn:outgoing>Flow_02iy4ya</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0suq32d" name="cancelled" sourceRef="Gateway_1qcrh8k" targetRef="Activity_0z0vquu">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${returnOfAllowancesSubmitOutcome=='CANCELLED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_153hgay" sourceRef="Activity_0z0vquu" targetRef="Activity_1rg847a" />
+    <bpmn:endEvent id="Event_07xbtfl">
+      <bpmn:incoming>Flow_02iy4ya</bpmn:incoming>
+      <bpmn:incoming>Flow_19bexp3</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_02iy4ya" sourceRef="Activity_1rg847a" targetRef="Event_07xbtfl" />
+    <bpmn:userTask id="RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_SUBMIT" name="Regulator: Provide returned allowances details">
+      <bpmn:incoming>Flow_0njmw42</bpmn:incoming>
+      <bpmn:outgoing>Flow_1cvdm3v</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_0mspg8o" name="Update Workflow status to COMPLETED" camunda:delegateExpression="#{requestUpdateStatusHandler}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="requestStatus">COMPLETED</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1cvdm3v</bpmn:incoming>
+      <bpmn:outgoing>Flow_19bexp3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1cvdm3v" sourceRef="RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_SUBMIT" targetRef="Activity_0mspg8o" />
+    <bpmn:sequenceFlow id="Flow_19bexp3" sourceRef="Activity_0mspg8o" targetRef="Event_07xbtfl" />
+    <bpmn:sequenceFlow id="Flow_0ek7428" sourceRef="StartEvent_1" targetRef="RETURN_OF_ALLOWANCES_APPLICATION_SUBMIT" />
+    <bpmn:sequenceFlow id="Flow_1yexxql" sourceRef="RETURN_OF_ALLOWANCES_APPLICATION_SUBMIT" targetRef="Gateway_1qcrh8k" />
+    <bpmn:sequenceFlow id="Flow_1x956ei" name="submitted" sourceRef="Gateway_1qcrh8k" targetRef="Activity_1ekynst">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${returnOfAllowancesSubmitOutcome=='SUBMITTED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1kkkd9q" name="peer review required" sourceRef="Gateway_1qcrh8k" targetRef="Activity_13xtd55">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${returnOfAllowancesSubmitOutcome=='PEER_REVIEW_REQUIRED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_0gp5v7b" name="what is the peer review outcome" default="Flow_1t6k6c3">
+      <bpmn:incoming>Flow_05y5hlq</bpmn:incoming>
+      <bpmn:outgoing>Flow_1t6k6c3</bpmn:outgoing>
+      <bpmn:outgoing>Flow_164xnn8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1t6k6c3" sourceRef="Gateway_0gp5v7b" targetRef="RETURN_OF_ALLOWANCES_APPLICATION_SUBMIT" />
+    <bpmn:serviceTask id="Activity_1ekynst" name="Handle notify operator of return of allowances" camunda:delegateExpression="#{returnOfAllowancesSubmittedHandler}">
+      <bpmn:incoming>Flow_1x956ei</bpmn:incoming>
+      <bpmn:outgoing>Flow_0njmw42</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0njmw42" sourceRef="Activity_1ekynst" targetRef="RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_SUBMIT" />
+    <bpmn:sequenceFlow id="Flow_164xnn8" name="cancelled" sourceRef="Gateway_0gp5v7b" targetRef="Activity_0z0vquu">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${returnOfAllowancesSubmitOutcome=='CANCELLED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_RETURN_OF_ALLOWANCES">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="282" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1j0zav7_di" bpmnElement="RETURN_OF_ALLOWANCES_APPLICATION_SUBMIT">
+        <dc:Bounds x="270" y="260" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_13xtd55_di" bpmnElement="Activity_13xtd55">
+        <dc:Bounds x="550" y="110" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1qcrh8k_di" bpmnElement="Gateway_1qcrh8k" isMarkerVisible="true">
+        <dc:Bounds x="575" y="275" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="488" y="255.5" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0z0vquu_di" bpmnElement="Activity_0z0vquu">
+        <dc:Bounds x="930" y="370" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1rg847a_di" bpmnElement="Activity_1rg847a">
+        <dc:Bounds x="1120" y="370" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_07xbtfl_di" bpmnElement="Event_07xbtfl">
+        <dc:Bounds x="1452" y="282" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gqumbs_di" bpmnElement="RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_SUBMIT">
+        <dc:Bounds x="930" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0mspg8o_di" bpmnElement="Activity_0mspg8o">
+        <dc:Bounds x="1120" y="260" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0gp5v7b_di" bpmnElement="Gateway_0gp5v7b" isMarkerVisible="true">
+        <dc:Bounds x="425" y="385" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="411" y="444.5" width="78" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ekynst_di" bpmnElement="Activity_1ekynst">
+        <dc:Bounds x="750" y="260" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_05y5hlq_di" bpmnElement="Flow_05y5hlq">
+        <di:waypoint x="550" y="150" />
+        <di:waypoint x="450" y="150" />
+        <di:waypoint x="450" y="385" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0suq32d_di" bpmnElement="Flow_0suq32d">
+        <di:waypoint x="600" y="325" />
+        <di:waypoint x="600" y="410" />
+        <di:waypoint x="930" y="410" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="616" y="393" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_153hgay_di" bpmnElement="Flow_153hgay">
+        <di:waypoint x="1030" y="410" />
+        <di:waypoint x="1120" y="410" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02iy4ya_di" bpmnElement="Flow_02iy4ya">
+        <di:waypoint x="1220" y="410" />
+        <di:waypoint x="1470" y="410" />
+        <di:waypoint x="1470" y="318" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cvdm3v_di" bpmnElement="Flow_1cvdm3v">
+        <di:waypoint x="1030" y="300" />
+        <di:waypoint x="1120" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19bexp3_di" bpmnElement="Flow_19bexp3">
+        <di:waypoint x="1220" y="300" />
+        <di:waypoint x="1452" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ek7428_di" bpmnElement="Flow_0ek7428">
+        <di:waypoint x="215" y="300" />
+        <di:waypoint x="270" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yexxql_di" bpmnElement="Flow_1yexxql">
+        <di:waypoint x="370" y="300" />
+        <di:waypoint x="575" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1x956ei_di" bpmnElement="Flow_1x956ei">
+        <di:waypoint x="625" y="300" />
+        <di:waypoint x="750" y="300" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="614" y="282" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1kkkd9q_di" bpmnElement="Flow_1kkkd9q">
+        <di:waypoint x="600" y="275" />
+        <di:waypoint x="600" y="190" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="611" y="230" width="57" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1t6k6c3_di" bpmnElement="Flow_1t6k6c3">
+        <di:waypoint x="425" y="410" />
+        <di:waypoint x="320" y="410" />
+        <di:waypoint x="320" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0njmw42_di" bpmnElement="Flow_0njmw42">
+        <di:waypoint x="850" y="300" />
+        <di:waypoint x="930" y="300" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_164xnn8_di" bpmnElement="Flow_164xnn8">
+        <di:waypoint x="475" y="410" />
+        <di:waypoint x="930" y="410" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="506" y="393" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

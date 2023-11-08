@@ -1,0 +1,9 @@
+FROM eclipse-temurin:17-jdk
+RUN apt-get update
+RUN apt-get install -y openssh-client
+COPY target/uk-pmrv-app-admin-env_version.jar /opt/applications/uk-pmrv-app-admin/
+RUN groupadd -g 499 pmrv && \
+    useradd -r -u 499 -g pmrv pmrv
+USER pmrv
+WORKDIR /opt/applications/uk-pmrv-app-admin/
+CMD ["java", "-XX:+PrintFlagsFinal", "-Xmx500m", "-jar", "uk-pmrv-app-admin-env_version.jar"]

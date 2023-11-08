@@ -1,0 +1,36 @@
+package uk.gov.pmrv.api.workflow.request.core.domain.enumeration;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum RequestCreateActionType {
+
+    INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION(RequestType.INSTALLATION_ACCOUNT_OPENING),
+    PERMIT_SURRENDER(RequestType.PERMIT_SURRENDER),
+    PERMIT_REVOCATION(RequestType.PERMIT_REVOCATION),
+    PERMIT_VARIATION(RequestType.PERMIT_VARIATION),
+    PERMIT_TRANSFER_A(RequestType.PERMIT_TRANSFER_A),
+    PERMIT_NOTIFICATION(RequestType.PERMIT_NOTIFICATION),
+    PERMIT_BATCH_REISSUE(RequestType.PERMIT_BATCH_REISSUE),
+    NON_COMPLIANCE(RequestType.NON_COMPLIANCE),
+    NER(RequestType.NER),
+    DOAL(RequestType.DOAL),
+    AER(RequestType.AER),
+    DRE(RequestType.DRE),
+    WITHHOLDING_OF_ALLOWANCES(RequestType.WITHHOLDING_OF_ALLOWANCES),
+    RETURN_OF_ALLOWANCES(RequestType.RETURN_OF_ALLOWANCES),
+    AIR(RequestType.AIR),
+
+    EMP_BATCH_REISSUE(RequestType.EMP_BATCH_REISSUE),
+    AVIATION_ACCOUNT_CLOSURE(RequestType.AVIATION_ACCOUNT_CLOSURE),
+    EMP_VARIATION_UKETS(RequestType.EMP_VARIATION_UKETS),
+    AVIATION_DRE_UKETS(RequestType.AVIATION_DRE_UKETS),
+    AVIATION_NON_COMPLIANCE(RequestType.AVIATION_NON_COMPLIANCE),
+    
+    EMP_VARIATION_CORSIA(RequestType.EMP_VARIATION_CORSIA),
+    ;
+
+    private final RequestType type;
+}

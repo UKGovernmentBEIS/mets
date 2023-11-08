@@ -1,0 +1,45 @@
+package uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.service;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesRequestPayload;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class WithholdingOfAllowancesApplicationCancelledServiceTest {
+
+    @Mock
+    private RequestService requestService;
+
+    @InjectMocks
+    private WithholdingOfAllowancesApplicationCancelledService service;
+
+    @Test
+    void cancel_shouldAddActionToRequestWithCancelledType() {
+        String requestId = "123";
+        Request request = Request.builder()
+            .payload(WithholdingOfAllowancesRequestPayload.builder()
+                .regulatorAssignee("assignee")
+                .build())
+            .build();
+
+        when(requestService.findRequestById(requestId)).thenReturn(request);
+
+        service.cancel(requestId);
+
+        verify(requestService).addActionToRequest(
+            request,
+            null,
+            RequestActionType.WITHHOLDING_OF_ALLOWANCES_APPLICATION_CANCELLED,
+            "assignee"
+        );
+    }
+}

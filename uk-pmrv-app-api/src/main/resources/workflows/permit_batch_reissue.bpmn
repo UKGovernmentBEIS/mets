@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1my6vh1" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="PROCESS_PERMIT_BATCH_REISSUE" name="Permit Batch Reissue Process" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1opujsq</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_0lpi6k4" name="trigger permit reissue" camunda:asyncBefore="true" camunda:delegateExpression="#{permitBatchTriggerPermitReissueHandler}">
+      <bpmn:incoming>Flow_1v0rz0n</bpmn:incoming>
+      <bpmn:outgoing>Flow_0s0zu9j</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="accountIds" camunda:elementVariable="accountId" />
+    </bpmn:serviceTask>
+    <bpmn:intermediateCatchEvent id="Event_088wx5f" name="permit batch reissue completed">
+      <bpmn:incoming>Flow_0s0zu9j</bpmn:incoming>
+      <bpmn:outgoing>Flow_1etgsy1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1usn66g" messageRef="Message_2k0597j" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="Activity_0xd0pff" name="permit batch reissue completed" camunda:delegateExpression="#{permitBatchReissueCompletedHandler}">
+      <bpmn:incoming>Flow_1v51yh4</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tc33w4</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1opujsq" sourceRef="StartEvent_1" targetRef="Activity_131ih32" />
+    <bpmn:sequenceFlow id="Flow_0s0zu9j" sourceRef="Activity_0lpi6k4" targetRef="Event_088wx5f" />
+    <bpmn:sequenceFlow id="Flow_1etgsy1" sourceRef="Event_088wx5f" targetRef="Activity_1v1o7ti" />
+    <bpmn:sequenceFlow id="Flow_1tc33w4" sourceRef="Activity_0xd0pff" targetRef="Event_05qh1be" />
+    <bpmn:subProcess id="Activity_16k96ry" triggeredByEvent="true">
+      <bpmn:startEvent id="Event_1izrf0m" name="permit reissue completed message" isInterrupting="false">
+        <bpmn:outgoing>Flow_0hq1tls</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1drmfto" messageRef="Message_3h3btcu" />
+      </bpmn:startEvent>
+      <bpmn:serviceTask id="Activity_1q4stws" name="permit reissue completed" camunda:delegateExpression="#{permitBatchPermitReissueCompletedHandler}">
+        <bpmn:incoming>Flow_0hq1tls</bpmn:incoming>
+        <bpmn:outgoing>Flow_19tev9h</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_0hq1tls" sourceRef="Event_1izrf0m" targetRef="Activity_1q4stws" />
+      <bpmn:exclusiveGateway id="Gateway_1sr4tz1" name="batch permit reissue completed ?" default="Flow_0yobfps">
+        <bpmn:incoming>Flow_19tev9h</bpmn:incoming>
+        <bpmn:outgoing>Flow_1128ib6</bpmn:outgoing>
+        <bpmn:outgoing>Flow_0yobfps</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_19tev9h" sourceRef="Activity_1q4stws" targetRef="Gateway_1sr4tz1" />
+      <bpmn:endEvent id="Event_0v91jk3">
+        <bpmn:incoming>Flow_0yobfps</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:endEvent id="Event_0yhcv20" name="batch permit reissue completed">
+        <bpmn:incoming>Flow_1128ib6</bpmn:incoming>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1exlnja" messageRef="Message_2k0597j" camunda:delegateExpression="#{msgThrowHandler}" />
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1128ib6" name="yes" sourceRef="Gateway_1sr4tz1" targetRef="Event_0yhcv20">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${accountIds.size() == batchAccountsCompleted}</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_0yobfps" sourceRef="Gateway_1sr4tz1" targetRef="Event_0v91jk3" />
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_06vywy1" sourceRef="Activity_131ih32" targetRef="Gateway_1wifmxg" />
+    <bpmn:serviceTask id="Activity_131ih32" name="permit batch reissue submitted" camunda:delegateExpression="#{permitBatchReissueSubmittedHandler}">
+      <bpmn:incoming>Flow_1opujsq</bpmn:incoming>
+      <bpmn:outgoing>Flow_06vywy1</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_05qh1be">
+      <bpmn:incoming>Flow_1tc33w4</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_0ph2k5r" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1v51yh4" sourceRef="Activity_1v1o7ti" targetRef="Activity_0xd0pff" />
+    <bpmn:serviceTask id="Activity_1v1o7ti" name="generate report" camunda:asyncBefore="true" camunda:delegateExpression="#{permitBatchReissueGenerateReportHandler}">
+      <bpmn:incoming>Flow_1etgsy1</bpmn:incoming>
+      <bpmn:incoming>Flow_18vyfjp</bpmn:incoming>
+      <bpmn:outgoing>Flow_1v51yh4</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_1wifmxg" name="check accounts size" default="Flow_18vyfjp">
+      <bpmn:incoming>Flow_06vywy1</bpmn:incoming>
+      <bpmn:outgoing>Flow_1v0rz0n</bpmn:outgoing>
+      <bpmn:outgoing>Flow_18vyfjp</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1v0rz0n" sourceRef="Gateway_1wifmxg" targetRef="Activity_0lpi6k4">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${accountIds.size() &gt; 0}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_18vyfjp" sourceRef="Gateway_1wifmxg" targetRef="Activity_1v1o7ti" />
+  </bpmn:process>
+  <bpmn:message id="Message_2k0597j" name="batchPermitReissueCompleted" />
+  <bpmn:message id="Message_3h3btcu" name="permitReissueCompleted" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_PERMIT_BATCH_REISSUE">
+      <bpmndi:BPMNEdge id="Flow_1v51yh4_di" bpmnElement="Flow_1v51yh4">
+        <di:waypoint x="990" y="240" />
+        <di:waypoint x="1060" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06vywy1_di" bpmnElement="Flow_06vywy1">
+        <di:waypoint x="370" y="240" />
+        <di:waypoint x="455" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tc33w4_di" bpmnElement="Flow_1tc33w4">
+        <di:waypoint x="1160" y="240" />
+        <di:waypoint x="1222" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1etgsy1_di" bpmnElement="Flow_1etgsy1">
+        <di:waypoint x="818" y="240" />
+        <di:waypoint x="890" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0s0zu9j_di" bpmnElement="Flow_0s0zu9j">
+        <di:waypoint x="690" y="240" />
+        <di:waypoint x="782" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1opujsq_di" bpmnElement="Flow_1opujsq">
+        <di:waypoint x="188" y="240" />
+        <di:waypoint x="270" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v0rz0n_di" bpmnElement="Flow_1v0rz0n">
+        <di:waypoint x="505" y="240" />
+        <di:waypoint x="590" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18vyfjp_di" bpmnElement="Flow_18vyfjp">
+        <di:waypoint x="480" y="215" />
+        <di:waypoint x="480" y="80" />
+        <di:waypoint x="940" y="80" />
+        <di:waypoint x="940" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_12mkita_di" bpmnElement="Event_088wx5f">
+        <dc:Bounds x="782" y="222" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="755" y="180" width="90" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_11sj2co_di" bpmnElement="Activity_0xd0pff">
+        <dc:Bounds x="1060" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0evljui_di" bpmnElement="Activity_131ih32">
+        <dc:Bounds x="270" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1wifmxg_di" bpmnElement="Gateway_1wifmxg" isMarkerVisible="true">
+        <dc:Bounds x="455" y="215" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="442" y="275" width="77" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1979u9q_di" bpmnElement="Event_05qh1be">
+        <dc:Bounds x="1222" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_18l63n2_di" bpmnElement="Activity_1v1o7ti">
+        <dc:Bounds x="890" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qdyazh_di" bpmnElement="Activity_0lpi6k4">
+        <dc:Bounds x="590" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0dt37u3_di" bpmnElement="Activity_16k96ry" isExpanded="true">
+        <dc:Bounds x="370" y="480" width="760" height="270" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0yobfps_di" bpmnElement="Flow_0yobfps">
+        <di:waypoint x="800" y="615" />
+        <di:waypoint x="800" y="670" />
+        <di:waypoint x="962" y="670" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1128ib6_di" bpmnElement="Flow_1128ib6">
+        <di:waypoint x="825" y="590" />
+        <di:waypoint x="962" y="590" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="881" y="572" width="17" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19tev9h_di" bpmnElement="Flow_19tev9h">
+        <di:waypoint x="690" y="590" />
+        <di:waypoint x="775" y="590" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hq1tls_di" bpmnElement="Flow_0hq1tls">
+        <di:waypoint x="496" y="590" />
+        <di:waypoint x="590" y="590" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_15568ib_di" bpmnElement="Event_1izrf0m">
+        <dc:Bounds x="460" y="572" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="443" y="528" width="70" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0itubo7_di" bpmnElement="Activity_1q4stws">
+        <dc:Bounds x="590" y="550" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1sr4tz1_di" bpmnElement="Gateway_1sr4tz1" isMarkerVisible="true">
+        <dc:Bounds x="775" y="565" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="755" y="534" width="90" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0v91jk3_di" bpmnElement="Event_0v91jk3">
+        <dc:Bounds x="962" y="652" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0f30rx9_di" bpmnElement="Event_0yhcv20">
+        <dc:Bounds x="962" y="572" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="936" y="541" width="90" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

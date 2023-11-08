@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_schema_cleanup.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_DROP_NOTIFICATION_SYSTEM_MESSAGE_TABLE" author="pafilisa@unisystems.gr" logicalFilePath="v0.1.0/changelog_notification_system_message.xml">
+        <sql>
+            DROP TABLE IF EXISTS notification_system_message;
+        </sql>
+
+        <rollback>
+            <sql>
+                CREATE TABLE notification_system_message (
+                id bigint,
+                type VARCHAR(255) NOT NULL,
+                subject VARCHAR(255) NOT NULL,
+                text TEXT NOT NULL,
+                creation_date TIMESTAMP NOT NULL,
+                competent_authority VARCHAR(255),
+                account_id bigint,
+                receiver VARCHAR(255) NOT NULL,
+                verification_body_id bigint);
+
+                ALTER TABLE notification_system_message ADD CONSTRAINT notification_system_message_pk PRIMARY KEY (id);
+
+                COMMENT ON TABLE notification_system_message IS 'Stores information about created notification system messages';
+                COMMENT ON COLUMN notification_system_message.type IS 'The notification system message type';
+                COMMENT ON COLUMN notification_system_message.subject IS 'The notification system message subject';
+                COMMENT ON COLUMN notification_system_message.text IS 'The notification system message text';
+                COMMENT ON COLUMN notification_system_message.creation_date IS 'The date-time that the notification system message was created';
+                COMMENT ON COLUMN notification_system_message.competent_authority IS 'The competent authority the notification system message is related to';
+                COMMENT ON COLUMN notification_system_message.account_id IS 'The account id the notification system message is related to';
+                COMMENT ON COLUMN notification_system_message.receiver IS 'The receiver (user id) of the notification system message';
+                COMMENT ON COLUMN notification_system_message.verification_body_id IS 'The verification body id the the notification system message is related to';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_DROP_NOTIFICATION_SYSTEM_MESSAGE_SEQUENCE" author="pafilisa@unisystems.gr" logicalFilePath="v0.1.0/changelog_notification_system_message.xml">
+        <sql>
+            DROP SEQUENCE IF EXISTS notification_system_message_seq;
+        </sql>
+
+        <rollback>
+            <sql>
+                CREATE SEQUENCE notification_system_message_seq MINVALUE 0 MAXVALUE 999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 1 NO CYCLE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_DROP_AER_TABLE" author="pafilisa@unisystems.gr">
+        <sql>
+            DROP TABLE IF EXISTS aer;
+        </sql>
+
+        <rollback>
+            <createTable tableName="aer" remarks="Represents an aer">
+                <column name="id" type="varchar(20)" remarks="Primary key">
+                    <constraints primaryKey="true" primaryKeyName="aer_pk" nullable="false"/>
+                </column>
+                <column name="data" type="jsonb" remarks="aer representation as json">
+                    <constraints nullable="false" />
+                </column>
+                <column name="account_id" type="bigint" remarks="The aer's account id">
+                    <constraints nullable="false" />
+                </column>
+                <column name="year" type="int" remarks="The aer's year">
+                    <constraints nullable="false" />
+                </column>
+            </createTable>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_DROP_AER_SEQUENCE" author="pafilisa@unisystems.gr">
+        <sql>
+            DROP SEQUENCE IF EXISTS aer_seq;
+        </sql>
+
+        <rollback>
+            <createSequence sequenceName="aer_seq" minValue="0" maxValue="999999999999999999"
+                            incrementBy="1" startValue="1" cycle="false"/>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_ACCOUNT_TABLE_DROP_COLUMNS" author="pafilisa@unisystems.gr">
+        <validCheckSum>1:any</validCheckSum>
+        <dropColumn tableName="account">
+            <column name="status"/>
+        </dropColumn>
+        <dropColumn tableName="account">
+            <column name="site_name"/>
+        </dropColumn>
+        <dropColumn tableName="account">
+            <column name="emitter_type"/>
+        </dropColumn>
+        <dropColumn tableName="account">
+            <column name="installation_category"/>
+        </dropColumn>
+        <dropColumn tableName="account">
+            <column name="application_type"/>
+        </dropColumn>
+        <dropColumn tableName="account">
+            <column name="transfer_code"/>
+        </dropColumn>
+        <dropColumn tableName="account">
+            <column name="transfer_code_status"/>
+        </dropColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE account ADD COLUMN status VARCHAR(255);
+                COMMENT ON COLUMN account.status IS 'The account status';
+
+                ALTER TABLE account ADD COLUMN site_name VARCHAR(255);
+                COMMENT ON COLUMN account.site_name IS 'The site name of the installation account';
+
+                ALTER TABLE account ADD COLUMN emitter_type VARCHAR(255);
+                COMMENT ON COLUMN account.emitter_type IS 'The emitter type of the (installation) account';
+
+                ALTER TABLE account ADD COLUMN installation_category VARCHAR(255);
+                COMMENT ON COLUMN account.installation_category IS 'The category of the (installation) account';
+
+                ALTER TABLE account ADD COLUMN application_type VARCHAR(255);
+                ALTER TABLE account ADD COLUMN transfer_code VARCHAR(9);
+                ALTER TABLE account ADD COLUMN transfer_code_status VARCHAR(255);
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

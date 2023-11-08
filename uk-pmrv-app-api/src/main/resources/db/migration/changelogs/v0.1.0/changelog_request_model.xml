@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_request_model.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_CREATE_TABLE_REQUEST" author="pafilisa@unisystems.gr" context="migrate">
+        <validCheckSum>8:24b8fa8c5bd1ccfa5f682e9434254dbe</validCheckSum>
+        <comment>Initialise REQUEST entity</comment>
+        <createSequence sequenceName="request_seq" />
+        <createTable tableName="request" remarks="Represents a request">
+            <column name="id" type="varchar(20)" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="request_pk" nullable="false"/>
+            </column>
+            <column name="type" type="varchar(255)" remarks="The request type">
+                <constraints nullable="false" />
+            </column>
+            <column name="status" type="varchar(255)" remarks="The request status">
+                <constraints nullable="false" />
+            </column>
+            <column name="process_instance_id" type="varchar(255)" remarks="The id of the process instance that was started for this request" />
+            <column name="competent_authority" type="varchar(255)" remarks="The competent authority issuing the request">
+                <constraints nullable="false" />
+            </column>
+            <column name="account_id" type="bigint" remarks="The account id the request is related to" />
+            <column name="verification_body_id" type="bigint" remarks="The verification body id the request is related to" />
+            <column name="payload" type="jsonb" remarks="The request payload" />
+            <column name="metadata" type="jsonb" remarks="The request metadata details" />
+            <column name="creation_date" type="timestamp" remarks="The date-time that the request was submitted">
+                <constraints nullable="false" />
+            </column>
+            <column name="submission_date" type="timestamp" remarks="The submission date of the request (when the initial task of the flow was completed)" />
+            <column name="end_date" type="timestamp" remarks="The end date of the request (when the last task of the flow was completed)" />
+        </createTable>
+        <createIndex indexName="idx_request_process_instance_id" tableName="request" unique="true">
+            <column name="process_instance_id"/>
+        </createIndex>
+        <createIndex indexName="request_account_id_idx" tableName="request">
+            <column name="account_id"/>
+        </createIndex>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS request CASCADE;
+                DROP SEQUENCE IF EXISTS request_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_TABLE_REQUEST_ACTION" author="pafilisa@unisystems.gr" context="migrate">
+        <validCheckSum>8:246bff9f10267f720440c767256f4650</validCheckSum>
+        <comment>Initialise REQUEST_ACTION entity</comment>
+        <createSequence sequenceName="request_action_seq" />
+        <createTable tableName="request_action" remarks="Represents a timeline event">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="request_action_pk" nullable="false"/>
+            </column>
+            <column name="type" type="varchar(255)" remarks="The request action type">
+                <constraints nullable="false" />
+            </column>
+            <column name="payload" type="jsonb" remarks="The data that were submitted with this action" />
+            <column name="submitter_id" type="varchar(255)" remarks="The user id that last modified the request action" />
+            <column name="submitter" type="varchar(512)" />
+            <column name="creation_date" type="timestamp" remarks="The creation time of the request action">
+                <constraints nullable="false" />
+            </column>
+            <column name="request_id" type="varchar(20)" remarks="Foreign key to REQUEST table">
+                <constraints nullable="false" foreignKeyName="request_action_request_fk" referencedTableName="request" referencedColumnNames="id" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS request_action CASCADE;
+                DROP SEQUENCE IF EXISTS request_action_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_REQUEST_TASK" author="kliropog">
+        <validCheckSum>8:37d4e54c3b2eed293eb0656ed14ca8db</validCheckSum>
+        <comment>Initialise REQUEST_TASK entity</comment>
+        <createSequence sequenceName="request_task_seq" />
+        <createTable tableName="request_task" remarks="Represents a request task">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="request_task_pk" nullable="false"/>
+            </column>
+            <column name="request_id" type="varchar(20)" remarks="The request the task is related to (foreign key to request table)">
+                <constraints foreignKeyName="request_task_request_fk" references="request(id)" nullable="false"/>
+            </column>
+            <column name="process_task_id" type="varchar(64)" remarks="The bpmn process task id">
+                <constraints nullable="false" />
+            </column>
+            <column name="type" type="varchar(255)" remarks="The type of the task">
+                <constraints nullable="false" />
+            </column>
+            <column name="assignee" type="varchar(255)" remarks="The assignee user of the task" />
+            <column name="start_date" type="timestamp" remarks="The start date time of the task">
+                <constraints nullable="false" />
+            </column>
+            <column name="due_date" type="date" remarks="The due date of the task" />
+            <column name="pause_date" type="date" remarks="The pause date"/>
+            <column name="end_date" type="timestamp" remarks="The start date time of the task" />
+            <column name="payload" type="jsonb" remarks="The request task payload" />
+            <column name="version" type="bigint" remarks="The version number (optimistic locking)" />
+        </createTable>
+        <addUniqueConstraint tableName="request_task" columnNames="process_task_id" constraintName="request_task_uc"/>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS request_task CASCADE;
+                DROP SEQUENCE IF EXISTS request_task_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_REQUEST_TASK_drop_end_date" author="p70453">
+        <comment>Drop end_date column from REQUEST_TASK Table</comment>
+        <dropColumn tableName="request_task">
+            <column name="end_date"/>
+        </dropColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE request_task ADD COLUMN end_date timestamp;
+                COMMENT ON COLUMN request_task.end_date IS 'The end date time of the task';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_REQUEST_TASK_HISTORY" author="p70453">
+        <comment>Initialise REQUEST_TASK_HISTORY entity</comment>
+        <createTable tableName="request_task_history" remarks="Represents a request task">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="request_task_history_pk" nullable="false"/>
+            </column>
+            <column name="request_id" type="varchar(20)" remarks="The request the task is related to (foreign key to request table)">
+                <constraints foreignKeyName="request_task_history_request_fk" references="request(id)" nullable="false"/>
+            </column>
+            <column name="process_task_id" type="varchar(64)" remarks="The bpmn process task id">
+                <constraints nullable="false" />
+            </column>
+            <column name="type" type="varchar(255)" remarks="The type of the task">
+                <constraints nullable="false" />
+            </column>
+            <column name="assignee" type="varchar(255)" remarks="The assignee user of the task" />
+            <column name="start_date" type="timestamp" remarks="The start date time of the task">
+                <constraints nullable="false" />
+            </column>
+            <column name="due_date" type="date" remarks="The due date of the task" />
+            <column name="pause_date" type="date" remarks="The pause date"/>
+            <column name="end_date" type="timestamp" remarks="The end date time of the task" />
+            <column name="payload" type="jsonb" remarks="The request task payload" />
+        </createTable>
+        <addUniqueConstraint tableName="request_task_history" columnNames="process_task_id" constraintName="request_task_history_uc"/>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS request_task_history CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_OPENED_ITEM" author="p70366">
+        <validCheckSum>8:e421ec1c2fa3d0cebed0d5c6304bd31e</validCheckSum>
+        <createTable tableName="request_task_visit" remarks="Represents an opened dashboard item">
+            <column name="task_id" type="bigint" remarks="The task id that the opened item is related to (foreign key to request_task table)">
+                <constraints foreignKeyName="request_task_visit_request_task_fk" references="request_task(id)" nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(64)" remarks="The user id to which the opened item is related to">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addPrimaryKey
+                columnNames="task_id, user_id"
+                constraintName="request_task_visit_pk"
+                tableName="request_task_visit" />
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS request_task_visit CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_REQUEST_SEQUENCE_TABLE" author="P62629">
+        <validCheckSum>8:adbefaf9f49bce0cf63d415bbae91aa9</validCheckSum>
+        <comment>Initialise REQUEST_SEQUENCE entity</comment>
+        <createSequence sequenceName="request_sequence_seq" />
+        <createTable tableName="request_sequence" remarks="Represents a request sequence">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="request_sequence_pk" nullable="false"/>
+            </column>
+            <column name="account_id" type="bigint" remarks="The account id related to the request">
+                <constraints nullable="false"/>
+            </column>
+            <column name="version" type="bigint" remarks="The version number (optimistic locking)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="sequence" type="bigint"
+                    remarks="The sequence, specific to each request type (e.g. incrementing number or year etc.)">
+            </column>
+            <column name="type" type="varchar(255)" remarks="The request type">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS request_sequence CASCADE;
+                DROP SEQUENCE IF EXISTS request_sequence_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_TABLE_REQUEST_NOTE" author="P70605">
+        <createSequence sequenceName="request_note_seq"/>
+        <createTable tableName="request_note">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="request_note_pk" nullable="false"/>
+            </column>
+            <column name="request_id" type="varchar(20)">
+                <constraints foreignKeyName="request_id_fk" references="request(id)" nullable="false"/>
+            </column>
+            <column name="payload" type="jsonb">
+                <constraints nullable="false"/>
+            </column>
+            <column name="submitter" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="submitter_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_updated_on" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS request_note CASCADE;
+                DROP SEQUENCE IF EXISTS request_note_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_request_sequence_add_business_identifier_column" author="P35066">
+        <addColumn tableName="request_sequence">
+            <column name="business_identifier" type="varchar(255)" remarks="The business identifier">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <dropNotNullConstraint tableName="request_sequence" columnName="account_id"/>
+        <sql>
+        	update request_sequence
+        	set business_identifier = account_id::text;
+        	
+        	insert into request_sequence(id, account_id, version, sequence, type, business_identifier)
+        	values(nextval('request_sequence_seq'), 0, 0, nextval('request_sequence_seq'), 'SYSTEM_MESSAGE_NOTIFICATION', null);
+        	
+        	alter table request_sequence
+  			drop column if exists account_id;
+        </sql>
+        <rollback>
+        	<sql>
+        		alter table request_sequence
+        		add account_id bigint;
+        		
+        		update request_sequence
+        	    set account_id = NULLIF(business_identifier, '')::int;
+        	
+                alter table request_sequence
+                drop column if exists business_identifier;
+                
+                delete from request_sequence
+                where type = 'SYSTEM_MESSAGE_NOTIFICATION';
+                
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_fix_request_sequence_value_for_SYSTEM_MESSAGE_NOTIFICATION_request_type" author="P35066">
+    	<sql>
+    		with request_tmp as (
+			    select coalesce(max(id::int), 0) as max_system_message_id 
+				from request 
+				where type = 'SYSTEM_MESSAGE_NOTIFICATION'
+			)
+			update request_sequence 
+			set sequence = request_tmp.max_system_message_id
+			from request_tmp
+			where type = 'SYSTEM_MESSAGE_NOTIFICATION';
+    	</sql>
+    	<rollback>
+    	</rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_drop_request_seq" author="P35066">
+    	<sql>
+    		drop sequence if exists request_seq;
+    	</sql>
+    	<rollback>
+    		<createSequence sequenceName="request_seq" />
+    		<sql>
+    			select pg_catalog.setval('request_seq', (select coalesce(max(id::int), 0) from request where type = 'SYSTEM_MESSAGE_NOTIFICATION'), true);
+    		</sql>
+    	</rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_Update_request_type_for_verifier_to_NEW_VERIFICATION_BODY_EMITTER" author="apostolouk@unisystems.gr">
+        <comment>Migration for verifier request types to new_verification_body_emitter</comment>
+        <sql>
+            update request_task
+            set type = 'NEW_VERIFICATION_BODY_EMITTER'
+            where type = 'NEW_VERIFICATION_BODY_INSTALLATION';
+        </sql>
+
+        <rollback>
+            <sql>
+                update request_task
+            	set type = 'NEW_VERIFICATION_BODY_INSTALLATION'
+            	where type = 'NEW_VERIFICATION_BODY_EMITTER';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+</databaseChangeLog>

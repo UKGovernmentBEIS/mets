@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_account_aviation.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_ACCOUNT_AVIATION_CREATE_TABLE" author="pafilisa@unisystems.gr">
+        <createTable tableName="account_aviation"
+                     remarks="Represents an aviation account">
+            <column name="id" type="bigint" remarks="The account id">
+                <constraints foreignKeyName="account_aviation_account_fk" references="account(id)" nullable="false"
+                             primaryKey="true" primaryKeyName="account_aviation_pk" />
+            </column>
+            <column name="status" type="varchar(255)" remarks="The aviation account status">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS account_aviation CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ACCOUNT_ADD_CENTRAL_ROUTE_CHARGES_OFFICE_CODE_COLUMN" author="pafilisa@unisystems.gr">
+        <addColumn tableName="account_aviation">
+            <column name="central_route_charges_office_code" type="varchar(255)" remarks="The central route charges office code">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE account_aviation
+                DROP COLUMN IF EXISTS central_route_charges_office_code;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_INDEX_FOR_AVIATION_ACCOUNT_SEARCHABLE_COLUMNS" author="dimopoulosc@unisystems.gr">
+        <sql>
+            CREATE INDEX trgm_gin_idx_account_crco_code ON account_aviation USING gin (central_route_charges_office_code gin_trgm_ops);
+        </sql>
+        <rollback>
+            <sql>
+                DROP INDEX trgm_gin_idx_account_crco_code;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_RENAME_INDEX_trgm_gin_idx_account_crco_code_TO_trgm_gin_idx_account_aviation_crco_code" author="pafilisa@unisystems.gr">
+        <sql>
+            ALTER INDEX IF EXISTS trgm_gin_idx_account_crco_code RENAME TO trgm_gin_idx_account_aviation_crco_code;
+        </sql>
+        <rollback>
+            <sql>
+                ALTER INDEX IF EXISTS trgm_gin_idx_account_aviation_crco_code RENAME TO trgm_gin_idx_account_crco_code;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_ACCOUNT_AVIATION_REPORTING_STATUS_SEQUENCE" author="pafilisa@unisystems.gr">
+        <createSequence sequenceName="account_aviation_reporting_status_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS account_aviation_reporting_status_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_ACCOUNT_AVIATION_REPORTING_STATUS_TABLE" author="pafilisa@unisystems.gr">
+        <createTable tableName="account_aviation_reporting_status"
+                     remarks="Represents an aviation account reporting status entry">
+            <column name="id" type="bigint" remarks="The reporting status entry id">
+                <constraints primaryKey="true" primaryKeyName="account_aviation_reporting_status_pk" nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)" remarks="The reporting status">
+                <constraints nullable="false" />
+            </column>
+            <column name="reason" type="varchar(2000)" remarks="The reason for entering a new reporting status"/>
+            <column name="submitter_id" type="varchar(255)" remarks="The id of the user that submitted the reporting status entry">
+                <constraints nullable="false" />
+            </column>
+            <column name="submitter_name" type="varchar(512)" remarks="The full name of the user that submitted the reporting status entry">
+                <constraints nullable="false" />
+            </column>
+            <column name="submission_date" type="timestamp" remarks="The submission date and time of the reporting status entry">
+                <constraints nullable="false" />
+            </column>
+            <column name="account_id" type="bigint" remarks="The aviation account id to which the reporting status entry refers to">
+                <constraints nullable="false" foreignKeyName="account_aviation_reporting_status_account_fk" referencedTableName="account_aviation" referencedColumnNames="id" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS account_aviation_reporting_status CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_AVIATION_ACCOUNT_ADD_ACCOUNT_CLOSURE_COLUMNS" author="apostolouk@unisystems.gr">
+        <addColumn tableName="account_aviation">
+            <column name="closing_date" type="timestamp" remarks="The closing date of the account">
+            </column>
+            <column name="closed_by" type="varchar(255)" remarks="The id of the user who closed the account">
+            </column>
+            <column name="closed_by_name" type="varchar(512)" remarks="The name of the user who closed the account">
+            </column>
+            <column name="closure_reason" type="varchar(10000)" remarks="The reason why the account was closed">
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE account_aviation
+                DROP COLUMN IF EXISTS closing_date, closed_by, closed_by_name, closure_reason;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_rename_aviation_account_reporting_status" author="P35066">
+    	<sql>
+    		alter sequence account_aviation_reporting_status_seq rename to account_aviation_reporting_status_history_seq;
+    		alter table account_aviation_reporting_status rename to account_aviation_reporting_status_history;
+    	</sql>
+        <rollback>
+            <sql>
+                alter table account_aviation_reporting_status_history rename to account_aviation_reporting_status;
+            	alter sequence account_aviation_reporting_status_history_seq rename to account_aviation_reporting_status_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_add_reporting_status_column_in_aviation_account" author="P35066">
+        <addColumn tableName="account_aviation">
+            <column name="reporting_status" type="varchar(255)" remarks="The reporting status of the account">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                alter table account_aviation
+                drop column if exists reporting_status;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_populate_account_aviation_reporting_status" author="P35066">
+        <sql>
+            with list as
+			(
+			  select distinct on (account_id) account_id, submission_date, status
+			           from account_aviation_reporting_status_history
+			           order by account_id, submission_date desc
+			)
+			update account_aviation as acc
+			set reporting_status = l.status
+			from list as l
+			where acc.id = l.account_id;
+        </sql>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_not_null_constraint_in_account_aviation_reporting_status" author="P35066" >
+        <addNotNullConstraint tableName="account_aviation" columnName="reporting_status" />
+        <rollback>
+            <dropNotNullConstraint tableName="account_aviation" columnName="reporting_status"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ACCOUNT_ADD_TRANSFER_CODE_AND_STATUS_COLUMNS" author="P70605">
+        <addColumn tableName="account_aviation">
+            <column name="created_date" type="timestamp"/>
+        </addColumn>
+        <addColumn tableName="account_aviation">
+            <column name="created_by" type="varchar(255)"/>
+        </addColumn>
+        <addColumn tableName="account_aviation">
+            <column name="last_updated_date" type="timestamp"/>
+        </addColumn>
+        <addColumn tableName="account_aviation">
+            <column name="last_updated_by" type="varchar(255)"/>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="account_aviation">
+                <column name="created_date"/>
+            </dropColumn>
+            <dropColumn tableName="account_aviation">
+                <column name="created_by"/>
+            </dropColumn>
+            <dropColumn tableName="account_aviation">
+                <column name="last_updated_date"/>
+            </dropColumn>
+            <dropColumn tableName="account_aviation">
+                <column name="last_updated_by"/>
+            </dropColumn>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

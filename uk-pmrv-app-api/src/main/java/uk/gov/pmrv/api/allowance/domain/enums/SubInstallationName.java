@@ -1,0 +1,71 @@
+package uk.gov.pmrv.api.allowance.domain.enums;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum SubInstallationName {
+
+    ADIPIC_ACID("Adipic acid"),
+    ALUMINIUM("Aluminium"),
+    AMMONIA("Ammonia"),
+    AROMATICS("Aromatics"),
+    BOTTLES_AND_JARS_OF_COLOURED_GLASS("Bottles and jars of coloured glass"),
+    BOTTLES_AND_JARS_OF_COLOURLESS_GLASS("Bottles and jars of colourless glass"),
+    CARBON_BLACK("Carbon black"),
+    COATED_CARBON_BOARD("Coated carbon board"),
+    COATED_FINE_PAPER("Coated fine paper"),
+    COKE("Coke"),
+    CONTINUOUS_FILAMENT_GLASS_FIBRE("Continuous filament glass fibre"),
+    DISTRICT_HEATING("District heating"),
+    DOLIME("Dolime"),
+    DRIED_SECONDARY_GYPSUM("Dried secondary gypsum"),
+    EAF_CARBON_STEEL("EAF carbon steel"),
+    EAF_HIGH_CARBON_STEEL("EAF high carbon steel"),
+    E_PVC("E-PVC"),
+    ETHYLENE_OXIDE_ETHYLENE_GLYCOLS("Ethylene oxide / ethylene glycols"),
+    FACING_BRICKS("Facing bricks"),
+    FLOAT_GLASS("Float glass"),
+    FUEL_CL("Fuel (CL)"),
+    FUEL_NON_CL("Fuel (non-CL)"),
+    GREY_CEMENT_CLINKER("Grey cement clinker"),
+    HEAT_CL("Heat (CL)"),
+    HEAT_NON_CL("Heat (non-CL)"),
+    HOT_METAL("Hot metal"),
+    HYDROGEN("Hydrogen"),
+    IRON_CASTING("Iron casting"),
+    LIME("Lime"),
+    LONG_FIBRE_KRAFT_PULP("Long fibre kraft pulp"),
+    MINERAL_WOOL("Mineral wool"),
+    NEWSPRINT("Newsprint"),
+    NITRIC_ACID("Nitric acid"),
+    PAVERS("Pavers"),
+    PHENOL_ACETONE("Phenol / acetone"),
+    PLASTER("Plaster"),
+    PLASTERBOARD("Plasterboard"),
+    PRE_BAKE_ANODE("Pre-bake anode"),
+    PROCESS_EMISSIONS_CL("Process emissions (CL)"),
+    PROCESS_EMISSIONS_NON_CL("Process emissions (non-CL)"),
+    RECOVERED_PAPER_PULP("Recovered paper pulp"),
+    REFINERY_PRODUCTS("Refinery products"),
+    ROOF_TILES("Roof tiles"),
+    SHORT_FIBRE_KRAFT_PULP("Short fibre kraft pulp"),
+    SINTERED_DOLIME("Sintered dolime"),
+    SINTERED_ORE("Sintered ore"),
+    SODA_ASH("Soda ash"),
+    SPRAY_DRIED_POWDER("Spray dried powder"),
+    S_PVC("S-PVC"),
+    STEAM_CRACKING("Steam cracking"),
+    STYRENE("Styrene"),
+    SULPHITE_PULP_THERMOMECHANICAL_PULP_AND_MECHANICAL_PULP("Sulphite pulp, thermomechanical pulp, and mechanical pulp"),
+    SYTHESIS_GAS("Sythesis gas"),
+    TESTLINER_AND_FLUTING("Testliner and fluting"),
+    TISSUE("Tissue"),
+    UNCOATED_CARBON_BOARD("Uncoated carbon board"),
+    UNCOATED_FINE_PAPER("Uncoated fine paper"),
+    VINYL_CHLORIDE_MONOMER("Vinyl chloride monomer"),
+    WHITE_CEMENT_CLINKER("White cement clinker");
+
+    private final String description;
+}
