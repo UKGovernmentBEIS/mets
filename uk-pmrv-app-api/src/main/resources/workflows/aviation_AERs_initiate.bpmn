@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_09hc6y8" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="PROCESS_AVIATION_AER_INITIATE" name="Initiate AER Process for aviation accounts" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="initiate">
+      <bpmn:outgoing>Flow_0dxofed</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0mqsv8a">
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R/2024-01-01T00:10:00/P1Y</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="INITIATE_AVIATION_AERs" name="Initiate Aviation AERs" camunda:delegateExpression="#{initiateAviationAersHandler}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="accountIds">
+            <camunda:list />
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1vc6u6t</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ijas6o</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics camunda:asyncBefore="true" camunda:collection="accounts" camunda:elementVariable="accountId" />
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0dxofed" sourceRef="initiate" targetRef="Activity_00ly68k" />
+    <bpmn:endEvent id="Event_1xbvtyg">
+      <bpmn:incoming>Flow_0ijas6o</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0ijas6o" sourceRef="INITIATE_AVIATION_AERs" targetRef="Event_1xbvtyg" />
+    <bpmn:serviceTask id="Activity_00ly68k" name="Collect accounts for AER" camunda:delegateExpression="#{collectAviationAccountsForAerHandler}">
+      <bpmn:incoming>Flow_0dxofed</bpmn:incoming>
+      <bpmn:outgoing>Flow_1vc6u6t</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1vc6u6t" sourceRef="Activity_00ly68k" targetRef="INITIATE_AVIATION_AERs" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_AVIATION_AER_INITIATE">
+      <bpmndi:BPMNEdge id="Flow_0ijas6o_di" bpmnElement="Flow_0ijas6o">
+        <di:waypoint x="551" y="117" />
+        <di:waypoint x="622" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dxofed_di" bpmnElement="Flow_0dxofed">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="270" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vc6u6t_di" bpmnElement="Flow_1vc6u6t">
+        <di:waypoint x="370" y="117" />
+        <di:waypoint x="451" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0hciwmu_di" bpmnElement="initiate">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16ycbko_di" bpmnElement="INITIATE_AVIATION_AERs">
+        <dc:Bounds x="451" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_00ly68k_di" bpmnElement="Activity_00ly68k">
+        <dc:Bounds x="270" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1xbvtyg_di" bpmnElement="Event_1xbvtyg">
+        <dc:Bounds x="622" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_payload_modifications.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_MODIFY_DOAL_APPLICATION_CLOSED_PAYLOAD" author="P70605">
+        
+        <sql>
+            UPDATE request_action
+            SET payload = (payload || jsonb_build_object ('doal', jsonb_build_object('determination', payload->'determination'))) - 'determination'
+            WHERE payload->>'payloadType' = 'DOAL_APPLICATION_CLOSED_PAYLOAD';
+        </sql>
+
+        <rollback>
+            UPDATE request_action
+            SET payload = (payload || jsonb_build_object ('determination', payload->'doal'->'determination')) - 'doal'
+            WHERE payload->>'payloadType' = 'DOAL_APPLICATION_CLOSED_PAYLOAD';
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_aviation_rpt_countries.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_CREATE_AVIATION_RPT_COUNTRIES_SEQUENCE" author="P70605">
+        <createSequence sequenceName="aviation_rpt_countries_seq" 
+                        minValue="0" 
+                        maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS aviation_rpt_countries_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_AVIATION_RPT_COUNTRIES_TABLE" author="P70605">
+        <createTable tableName="aviation_rpt_countries">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="aviation_rpt_countries_pk" nullable="false"/>
+            </column>
+            <column name="year" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="is_chapter_3" type="boolean">
+                <constraints nullable="false" />
+            </column>
+            <column name="state" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="country" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS aviation_rpt_countries CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_UNIQUE_CONSTRAINT_YEAR_COUNTRY" author="P70605">
+        <addUniqueConstraint tableName="aviation_rpt_countries" columnNames="year,country" constraintName="year_country_uc"/>
+        <rollback>
+            <dropUniqueConstraint tableName="aviation_rpt_countries" constraintName="year_country_uc"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_POPULATE_AVIATION_RPT_COUNTRIES_TABLE" author="P70605">
+        <sql>
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Afghanistan','Afghanistan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Albania','Albania');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Algeria','Algeria');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Andorra','Andorra');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Angola','Angola');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Antigua and Barbuda','Antigua and Barbuda');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Argentina','Argentina');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Armenia','Armenia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Australia','Australia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Australia','Norfolk Island');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Austria','Austria');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Azerbaijan','Azerbaijan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Bahamas','Bahamas');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Bahrain','Bahrain');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Bangladesh','Bangladesh');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Barbados','Barbados');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Belarus','Belarus');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Belgium','Belgium');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Belize','Belize');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Benin','Benin');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Bhutan','Bhutan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Bolivia (Plurinational State of)','Bolivia (Plurinational State of)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Bosnia and Herzegovina','Bosnia and Herzegovina');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Botswana','Botswana');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Brazil','Brazil');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Brunei Darussalam','Brunei Darussalam');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Bulgaria','Bulgaria');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Burkina Faso','Burkina Faso');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Burundi','Burundi');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Cabo Verde','Cabo Verde');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Cambodia','Cambodia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Cameroon','Cameroon');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Canada','Canada');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Central African Republic','Central African Republic');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Chad','Chad');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Chile','Chile');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'China','China');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'China','Hong Kong');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'China','Macao');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'China','Taiwan, Province Of China');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Colombia','Colombia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Comoros','Comoros');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Congo','Congo');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Cook Islands','Cook Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Costa Rica','Costa Rica');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Côte d''Ivoire','Côte d''Ivoire');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Croatia','Croatia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Cuba','Cuba');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Cyprus','Cyprus');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Czechia','Czechia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Democratic People''s Republic of Korea','Democratic People''s Republic of Korea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Democratic Republic of the Congo','Democratic Republic of the Congo');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Denmark','Denmark');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Denmark','Faroe Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Denmark','Greenland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Djibouti','Djibouti');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Dominica','Dominica');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Dominican Republic','Dominican Republic');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Ecuador','Ecuador');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Egypt','Egypt');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'El Salvador','El Salvador');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Equatorial Guinea','Equatorial Guinea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Eritrea','Eritrea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Estonia','Estonia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Eswatini','Eswatini');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Ethiopia','Ethiopia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Fiji','Fiji');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Finland','Åland Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Finland','Finland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'France','France');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'France','French Guiana');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'France','French Polynesia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'France','Guadeloupe');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'France','Martinique');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'France','Mayotte');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'France','New Caledonia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'France','Réunion');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'France','Saint Barthélemy');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'France','Saint Martin (French Part)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'France','Saint Pierre and Miquelon');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'France','Wallis And Futuna');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Gabon','Gabon');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Gambia','Gambia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Georgia','Georgia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Germany','Germany');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Ghana','Ghana');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Greece','Greece');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Grenada','Grenada');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Guatemala','Guatemala');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Guinea','Guinea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Guinea-Bissau','Guinea-Bissau');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Guyana','Guyana');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Haiti','Haiti');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Honduras','Honduras');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Hungary','Hungary');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Iceland','Iceland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'India','India');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Indonesia','Indonesia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Iran (Islamic Republic of)','Iran (Islamic Republic of)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Iraq','Iraq');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Ireland','Ireland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Israel','Israel');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Italy','Italy');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Jamaica','Jamaica');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Japan','Japan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Jordan','Jordan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Kazakhstan','Kazakhstan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Kenya','Kenya');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Kiribati','Kiribati');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Kuwait','Kuwait');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Kyrgyzstan','Kyrgyzstan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Lao People''s Democratic Republic','Lao People''s Democratic Republic');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Latvia','Latvia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Lebanon','Lebanon');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Lesotho','Lesotho');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Liberia','Liberia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Libya','Libya');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Lithuania','Lithuania');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Luxembourg','Luxembourg');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Madagascar','Madagascar');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Malawi','Malawi');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Malaysia','Malaysia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Maldives','Maldives');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Mali','Mali');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Malta','Malta');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Marshall Islands','Marshall Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Mauritania','Mauritania');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Mauritius','Mauritius');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Mexico','Mexico');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Micronesia (Federated States of)','Micronesia (Federated States of)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Monaco','Monaco');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Mongolia','Mongolia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Montenegro','Montenegro');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Morocco','Morocco');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Mozambique','Mozambique');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Myanmar','Myanmar');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Namibia','Namibia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Nauru','Nauru');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Nepal','Nepal');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Netherlands','Aruba');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Netherlands','Bonaire, Sint Eustatius And Saba');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Netherlands','Curaçao');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Netherlands','Netherlands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Netherlands','Netherlands Antilles');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Netherlands','Sint Maarten (Dutch Part)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'New Zealand','New Zealand');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'New Zealand','Niue');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'New Zealand','Tokelau');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Nicaragua','Nicaragua');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Niger','Niger');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Nigeria','Nigeria');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'North Macedonia','North Macedonia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Norway','Jan Mayen');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Norway','Norway');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Norway','Svalbard');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Oman','Oman');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Pakistan','Pakistan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Palau','Palau');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Panama','Panama');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Papua New Guinea','Papua New Guinea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Paraguay','Paraguay');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Peru','Peru');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Philippines','Philippines');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Poland','Poland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Portugal','Azores');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Portugal','Madeira');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Portugal','Portugal');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Qatar','Qatar');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Republic of Korea','Republic of Korea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Republic of Moldova','Republic of Moldova');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Romania','Romania');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Russian Federation','Russian Federation');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Rwanda','Rwanda');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Saint Kitts and Nevis','Saint Kitts and Nevis');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Saint Lucia','Saint Lucia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Saint Vincent and the Grenadines','Saint Vincent and the Grenadines');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Samoa','Samoa');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'San Marino','San Marino');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Sao Tome and Principe','Sao Tome and Principe');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Saudi Arabia','Saudi Arabia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Senegal','Senegal');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Serbia','Serbia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Seychelles','Seychelles');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Sierra Leone','Sierra Leone');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Singapore','Singapore');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Slovakia','Slovakia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Slovenia','Slovenia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Solomon Islands','Solomon Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Somalia','Somalia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'South Africa','South Africa');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'South Sudan','South Sudan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Spain','Canary Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Spain','Ceuta');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Spain','Melilla');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Spain','Spain');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Sri Lanka','Sri Lanka');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Sudan','Sudan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Suriname','Suriname');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Sweden','Sweden');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Switzerland','Switzerland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Syrian Arab Republic','Syrian Arab Republic');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Tajikistan','Tajikistan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Thailand','Thailand');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Timor-Leste','Timor-Leste');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Togo','Togo');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Tonga','Tonga');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Trinidad and Tobago','Trinidad and Tobago');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Tunisia','Tunisia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Türkiye','Türkiye');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Turkmenistan','Turkmenistan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Tuvalu','Tuvalu');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Uganda','Uganda');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Ukraine','Ukraine');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'United Arab Emirates','United Arab Emirates');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Akrotiri And Dhekelia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Anguilla');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Bermuda');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','British Indian Ocean Territory');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','British Virgin Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Cayman Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Falkland Islands (Malvinas)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Gibraltar');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Guernsey');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Isle of Man');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Jersey');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Montserrat');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Pitcairn');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Saint Helena, Ascension And Tristan Da Cunha');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','South Georgia and the South Sandwich Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United Kingdom','Turks and Caicos Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'United Kingdom','United Kingdom');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'United Republic of Tanzania','United Republic of Tanzania');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United States','American Samoa');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United States','Guam');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United States','Northern Mariana Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United States','Puerto Rico');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'United States','United States');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'United States','Virgin Islands, U.S.');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Uruguay','Uruguay');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Uzbekistan','Uzbekistan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Vanuatu','Vanuatu');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Venezuela (Bolivarian Republic of)','Venezuela (Bolivarian Republic of)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Viet Nam','Viet Nam');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Yemen','Yemen');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,TRUE,'Zambia','Zambia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2021,FALSE,'Zimbabwe','Zimbabwe');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Afghanistan','Afghanistan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Albania','Albania');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Algeria','Algeria');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Andorra','Andorra');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Angola','Angola');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Antigua and Barbuda','Antigua and Barbuda');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Argentina','Argentina');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Armenia','Armenia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Australia','Australia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Australia','Norfolk Island');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Austria','Austria');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Azerbaijan','Azerbaijan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Bahamas','Bahamas');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Bahrain','Bahrain');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Bangladesh','Bangladesh');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Barbados','Barbados');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Belarus','Belarus');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Belgium','Belgium');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Belize','Belize');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Benin','Benin');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Bhutan','Bhutan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Bolivia (Plurinational State of)','Bolivia (Plurinational State of)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Bosnia and Herzegovina','Bosnia and Herzegovina');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Botswana','Botswana');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Brazil','Brazil');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Brunei Darussalam','Brunei Darussalam');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Bulgaria','Bulgaria');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Burkina Faso','Burkina Faso');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Burundi','Burundi');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Cabo Verde','Cabo Verde');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Cambodia','Cambodia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Cameroon','Cameroon');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Canada','Canada');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Central African Republic','Central African Republic');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Chad','Chad');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Chile','Chile');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'China','China');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'China','Hong Kong');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'China','Macao');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'China','Taiwan, Province Of China');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Colombia','Colombia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Comoros','Comoros');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Congo','Congo');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Cook Islands','Cook Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Costa Rica','Costa Rica');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Côte d''Ivoire','Côte d''Ivoire');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Croatia','Croatia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Cuba','Cuba');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Cyprus','Cyprus');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Czechia','Czechia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Democratic People''s Republic of Korea','Democratic People''s Republic of Korea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Democratic Republic of the Congo','Democratic Republic of the Congo');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Denmark','Denmark');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Denmark','Faroe Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Denmark','Greenland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Djibouti','Djibouti');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Dominica','Dominica');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Dominican Republic','Dominican Republic');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Ecuador','Ecuador');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Egypt','Egypt');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'El Salvador','El Salvador');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Equatorial Guinea','Equatorial Guinea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Eritrea','Eritrea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Estonia','Estonia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Eswatini','Eswatini');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Ethiopia','Ethiopia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Fiji','Fiji');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Finland','Åland Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Finland','Finland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'France','France');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'France','French Guiana');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'France','French Polynesia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'France','Guadeloupe');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'France','Martinique');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'France','Mayotte');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'France','New Caledonia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'France','Réunion');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'France','Saint Barthélemy');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'France','Saint Martin (French Part)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'France','Saint Pierre and Miquelon');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'France','Wallis And Futuna');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Gabon','Gabon');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Gambia','Gambia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Georgia','Georgia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Germany','Germany');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Ghana','Ghana');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Greece','Greece');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Grenada','Grenada');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Guatemala','Guatemala');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Guinea','Guinea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Guinea-Bissau','Guinea-Bissau');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Guyana','Guyana');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Haiti','Haiti');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Honduras','Honduras');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Hungary','Hungary');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Iceland','Iceland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'India','India');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Indonesia','Indonesia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Iran (Islamic Republic of)','Iran (Islamic Republic of)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Iraq','Iraq');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Ireland','Ireland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Israel','Israel');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Italy','Italy');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Jamaica','Jamaica');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Japan','Japan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Jordan','Jordan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Kazakhstan','Kazakhstan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Kenya','Kenya');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Kiribati','Kiribati');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Kuwait','Kuwait');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Kyrgyzstan','Kyrgyzstan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Lao People''s Democratic Republic','Lao People''s Democratic Republic');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Latvia','Latvia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Lebanon','Lebanon');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Lesotho','Lesotho');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Liberia','Liberia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Libya','Libya');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Lithuania','Lithuania');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Luxembourg','Luxembourg');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Madagascar','Madagascar');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Malawi','Malawi');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Malaysia','Malaysia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Maldives','Maldives');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Mali','Mali');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Malta','Malta');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Marshall Islands','Marshall Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Mauritania','Mauritania');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Mauritius','Mauritius');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Mexico','Mexico');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Micronesia (Federated States of)','Micronesia (Federated States of)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Monaco','Monaco');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Mongolia','Mongolia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Montenegro','Montenegro');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Morocco','Morocco');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Mozambique','Mozambique');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Myanmar','Myanmar');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Namibia','Namibia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Nauru','Nauru');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Nepal','Nepal');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Netherlands','Aruba');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Netherlands','Bonaire, Sint Eustatius And Saba');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Netherlands','Curaçao');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Netherlands','Netherlands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Netherlands','Netherlands Antilles');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Netherlands','Sint Maarten (Dutch Part)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'New Zealand','New Zealand');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'New Zealand','Niue');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'New Zealand','Tokelau');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Nicaragua','Nicaragua');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Niger','Niger');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Nigeria','Nigeria');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'North Macedonia','North Macedonia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Norway','Jan Mayen');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Norway','Norway');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Norway','Svalbard');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Oman','Oman');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Pakistan','Pakistan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Palau','Palau');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Panama','Panama');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Papua New Guinea','Papua New Guinea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Paraguay','Paraguay');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Peru','Peru');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Philippines','Philippines');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Poland','Poland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Portugal','Azores');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Portugal','Madeira');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Portugal','Portugal');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Qatar','Qatar');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Republic of Korea','Republic of Korea');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Republic of Moldova','Republic of Moldova');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Romania','Romania');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Russian Federation','Russian Federation');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Rwanda','Rwanda');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Saint Kitts and Nevis','Saint Kitts and Nevis');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Saint Lucia','Saint Lucia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Saint Vincent and the Grenadines','Saint Vincent and the Grenadines');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Samoa','Samoa');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'San Marino','San Marino');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Sao Tome and Principe','Sao Tome and Principe');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Saudi Arabia','Saudi Arabia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Senegal','Senegal');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Serbia','Serbia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Seychelles','Seychelles');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Sierra Leone','Sierra Leone');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Singapore','Singapore');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Slovakia','Slovakia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Slovenia','Slovenia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Solomon Islands','Solomon Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Somalia','Somalia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'South Africa','South Africa');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'South Sudan','South Sudan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Spain','Canary Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Spain','Ceuta');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Spain','Melilla');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Spain','Spain');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Sri Lanka','Sri Lanka');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Sudan','Sudan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Suriname','Suriname');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Sweden','Sweden');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Switzerland','Switzerland');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Syrian Arab Republic','Syrian Arab Republic');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Tajikistan','Tajikistan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Thailand','Thailand');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Timor-Leste','Timor-Leste');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Togo','Togo');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Tonga','Tonga');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Trinidad and Tobago','Trinidad and Tobago');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Tunisia','Tunisia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Türkiye','Türkiye');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Turkmenistan','Turkmenistan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Tuvalu','Tuvalu');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Uganda','Uganda');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Ukraine','Ukraine');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'United Arab Emirates','United Arab Emirates');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Akrotiri And Dhekelia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Anguilla');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Bermuda');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','British Indian Ocean Territory');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','British Virgin Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Cayman Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Falkland Islands (Malvinas)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Gibraltar');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Guernsey');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Isle of Man');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Jersey');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Montserrat');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Pitcairn');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Saint Helena, Ascension And Tristan Da Cunha');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','South Georgia and the South Sandwich Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United Kingdom','Turks and Caicos Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'United Kingdom','United Kingdom');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'United Republic of Tanzania','United Republic of Tanzania');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United States','American Samoa');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United States','Guam');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United States','Northern Mariana Islands');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United States','Puerto Rico');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'United States','United States');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'United States','Virgin Islands, U.S.');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Uruguay','Uruguay');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Uzbekistan','Uzbekistan');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Vanuatu','Vanuatu');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Venezuela (Bolivarian Republic of)','Venezuela (Bolivarian Republic of)');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Viet Nam','Viet Nam');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Yemen','Yemen');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'Zambia','Zambia');
+        insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, FALSE,'Zimbabwe','Zimbabwe');
+        </sql>
+
+        <rollback>
+            <sql>
+                TRUNCATE TABLE aviation_rpt_countries;
+            </sql>
+        </rollback>
+        
+    </changeSet>
+
+    <changeSet id="0_1_0_POPULATE_AVIATION_RPT_COUNTRIES_TABLE_2023" author="P70605">
+
+        <sql>
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Afghanistan','Afghanistan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Albania','Albania');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Algeria','Algeria');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Andorra','Andorra');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Angola','Angola');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Antigua and Barbuda','Antigua and Barbuda');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Argentina','Argentina');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Armenia','Armenia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Australia','Australia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Australia','Norfolk Island');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Austria','Austria');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Azerbaijan','Azerbaijan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Bahamas','Bahamas');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Bahrain','Bahrain');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Bangladesh','Bangladesh');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Barbados','Barbados');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Belarus','Belarus');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Belgium','Belgium');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Belize','Belize');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Benin','Benin');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Bhutan','Bhutan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Bolivia (Plurinational State of)','Bolivia (Plurinational State of)');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Bosnia and Herzegovina','Bosnia and Herzegovina');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Botswana','Botswana');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Brazil','Brazil');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Brunei Darussalam','Brunei Darussalam');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Bulgaria','Bulgaria');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Burkina Faso','Burkina Faso');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Burundi','Burundi');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Cabo Verde','Cabo Verde');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Cambodia','Cambodia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Cameroon','Cameroon');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Canada','Canada');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Central African Republic','Central African Republic');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Chad','Chad');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Chile','Chile');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'China','China');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'China','Hong Kong');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'China','Macao');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'China','Taiwan, Province Of China');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Colombia','Colombia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Comoros','Comoros');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Congo','Congo');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Cook Islands','Cook Islands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Costa Rica','Costa Rica');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Côte d''Ivoire','Côte d''Ivoire');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Croatia','Croatia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Cuba','Cuba');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Cyprus','Cyprus');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Czechia','Czechia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Democratic People''s Republic of Korea','Democratic People''s Republic of Korea');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Democratic Republic of the Congo','Democratic Republic of the Congo');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Denmark','Denmark');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Denmark','Faroe Islands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Denmark','Greenland');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Djibouti','Djibouti');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Dominica','Dominica');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Dominican Republic','Dominican Republic');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Ecuador','Ecuador');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Egypt','Egypt');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'El Salvador','El Salvador');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Equatorial Guinea','Equatorial Guinea');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Eritrea','Eritrea');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Estonia','Estonia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Eswatini','Eswatini');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Ethiopia','Ethiopia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Fiji','Fiji');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Finland','Åland Islands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Finland','Finland');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'France','France');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'France','French Guiana');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'France','French Polynesia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'France','Guadeloupe');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'France','Martinique');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'France','Mayotte');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'France','New Caledonia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'France','Réunion');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'France','Saint Barthélemy');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'France','Saint Martin (French Part)');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'France','Saint Pierre and Miquelon');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'France','Wallis And Futuna');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Gabon','Gabon');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Gambia','Gambia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Georgia','Georgia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Germany','Germany');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Ghana','Ghana');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Greece','Greece');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Grenada','Grenada');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Guatemala','Guatemala');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Guinea','Guinea');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Guinea-Bissau','Guinea-Bissau');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Guyana','Guyana');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Haiti','Haiti');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Honduras','Honduras');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Hungary','Hungary');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Iceland','Iceland');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'India','India');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Indonesia','Indonesia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Iran (Islamic Republic of)','Iran (Islamic Republic of)');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Iraq','Iraq');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Ireland','Ireland');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Israel','Israel');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Italy','Italy');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Jamaica','Jamaica');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Japan','Japan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Jordan','Jordan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Kazakhstan','Kazakhstan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Kenya','Kenya');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Kiribati','Kiribati');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Kuwait','Kuwait');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Kyrgyzstan','Kyrgyzstan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Lao People''s Democratic Republic','Lao People''s Democratic Republic');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Latvia','Latvia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Lebanon','Lebanon');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Lesotho','Lesotho');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Liberia','Liberia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Libya','Libya');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Lithuania','Lithuania');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Luxembourg','Luxembourg');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Madagascar','Madagascar');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Malawi','Malawi');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Malaysia','Malaysia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Maldives','Maldives');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Mali','Mali');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Malta','Malta');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Marshall Islands','Marshall Islands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Mauritania','Mauritania');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Mauritius','Mauritius');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Mexico','Mexico');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Micronesia (Federated States of)','Micronesia (Federated States of)');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Monaco','Monaco');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Mongolia','Mongolia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Montenegro','Montenegro');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Morocco','Morocco');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Mozambique','Mozambique');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Myanmar','Myanmar');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Namibia','Namibia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Nauru','Nauru');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Nepal','Nepal');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Netherlands','Aruba');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Netherlands','Bonaire, Sint Eustatius And Saba');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Netherlands','Curaçao');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Netherlands','Netherlands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Netherlands','Netherlands Antilles');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Netherlands','Sint Maarten (Dutch Part)');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'New Zealand','New Zealand');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'New Zealand','Niue');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'New Zealand','Tokelau');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Nicaragua','Nicaragua');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Niger','Niger');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Nigeria','Nigeria');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'North Macedonia','North Macedonia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Norway','Jan Mayen');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Norway','Norway');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Norway','Svalbard');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Oman','Oman');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Pakistan','Pakistan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Palau','Palau');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Panama','Panama');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Papua New Guinea','Papua New Guinea');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Paraguay','Paraguay');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Peru','Peru');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Philippines','Philippines');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Poland','Poland');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Portugal','Azores');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Portugal','Madeira');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Portugal','Portugal');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Qatar','Qatar');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Republic of Korea','Republic of Korea');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Republic of Moldova','Republic of Moldova');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Romania','Romania');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Russian Federation','Russian Federation');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Rwanda','Rwanda');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Saint Kitts and Nevis','Saint Kitts and Nevis');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Saint Lucia','Saint Lucia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Saint Vincent and the Grenadines','Saint Vincent and the Grenadines');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Samoa','Samoa');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'San Marino','San Marino');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Sao Tome and Principe','Sao Tome and Principe');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Saudi Arabia','Saudi Arabia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Senegal','Senegal');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Serbia','Serbia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Seychelles','Seychelles');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Sierra Leone','Sierra Leone');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Singapore','Singapore');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Slovakia','Slovakia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Slovenia','Slovenia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Solomon Islands','Solomon Islands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Somalia','Somalia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'South Africa','South Africa');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'South Sudan','South Sudan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Spain','Canary Islands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Spain','Ceuta');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Spain','Melilla');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Spain','Spain');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Sri Lanka','Sri Lanka');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Sudan','Sudan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Suriname','Suriname');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Sweden','Sweden');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Switzerland','Switzerland');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Syrian Arab Republic','Syrian Arab Republic');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Tajikistan','Tajikistan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Thailand','Thailand');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Timor-Leste','Timor-Leste');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Togo','Togo');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Tonga','Tonga');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Trinidad and Tobago','Trinidad and Tobago');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Tunisia','Tunisia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Türkiye','Türkiye');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Turkmenistan','Turkmenistan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Tuvalu','Tuvalu');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Uganda','Uganda');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Ukraine','Ukraine');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'United Arab Emirates','United Arab Emirates');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Akrotiri And Dhekelia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Anguilla');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Bermuda');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','British Indian Ocean Territory');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','British Virgin Islands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Cayman Islands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Falkland Islands (Malvinas)');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Gibraltar');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Guernsey');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Isle of Man');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Jersey');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Montserrat');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Pitcairn');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Saint Helena, Ascension And Tristan Da Cunha');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','South Georgia and the South Sandwich Islands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United Kingdom','Turks and Caicos Islands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'United Kingdom','United Kingdom');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'United Republic of Tanzania','United Republic of Tanzania');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United States','American Samoa');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United States','Guam');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United States','Northern Mariana Islands');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United States','Puerto Rico');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'United States','United States');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'United States','Virgin Islands, U.S.');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Uruguay','Uruguay');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Uzbekistan','Uzbekistan');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Vanuatu','Vanuatu');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Venezuela (Bolivarian Republic of)','Venezuela (Bolivarian Republic of)');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Viet Nam','Viet Nam');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, FALSE,'Yemen','Yemen');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Zambia','Zambia');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'Zimbabwe','Zimbabwe');
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM TABLE aviation_rpt_countries WHERE YEAR = 2023;
+            </sql>
+        </rollback>
+
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_AVIATION_RPT_COUNTRIES_TABLE_2023" author="P63757">
+        <sql>
+            UPDATE aviation_rpt_countries SET is_chapter_3 = TRUE WHERE YEAR = 2023 AND country = 'Iraq';
+        </sql>
+
+        <rollback>
+            <sql>
+                UPDATE aviation_rpt_countries SET is_chapter_3 = FALSE WHERE YEAR = 2023 AND country = 'Iraq';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_AVIATION_RPT_COUNTRIES_TABLE_CHAPTER_3_STATES" author="dimopoulosc@unisystems.gr">
+        <sql>
+            UPDATE aviation_rpt_countries SET is_chapter_3 = TRUE
+            WHERE state in (select distinct state
+                            from aviation_rpt_countries
+                            where is_chapter_3 = TRUE);
+        </sql>
+
+        <rollback>
+            <sql>
+                UPDATE aviation_rpt_countries SET is_chapter_3 = FALSE
+                WHERE state in (select distinct state
+                                        from aviation_rpt_countries
+                                        where is_chapter_3 = TRUE) and state != country
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_populate_aviation_rpt_countries_table_with_missing_countries_for_2022_and_2023" author="pafilisa@unisystems.gr">
+
+        <sql>
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'United Kingdom','Canton Island');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2022, TRUE,'United Kingdom','British Antarctic Territory');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'United Kingdom','Canton Island');
+            insert into aviation_rpt_countries(id, year, is_chapter_3, state, country) values (nextval('aviation_rpt_countries_seq'),2023, TRUE,'United Kingdom','British Antarctic Territory');
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE
+                FROM aviation_rpt_countries
+                WHERE country in ('Canton Island', 'British Antarctic Territory')
+                  AND year in (2022, 2023);
+            </sql>
+        </rollback>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_competent_authority.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_create_competent_authority_table" author="P35066">
+        <comment>Create competent_authority table</comment>
+        <createTable tableName="competent_authority" remarks="Represents a competent_authority">
+            <column name="id" type="varchar(20)" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="competent_authority_pk" nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+            	drop table if exists competent_authority;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_populate_competent_authority_entries" author="P35066">
+        <sql>
+            insert into competent_authority(id) values ('ENGLAND');
+            insert into competent_authority(id) values ('NORTHERN_IRELAND');
+            insert into competent_authority(id) values ('OPRED');
+            insert into competent_authority(id) values ('SCOTLAND');
+            insert into competent_authority(id) values ('WALES');
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from competent_authority;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CompetentAuthority_add_email_column" author="P70453">
+        <addColumn tableName="competent_authority">
+            <column name="email" type="varchar(255)" remarks="The Competent authority email">
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE competent_authority
+                DROP COLUMN IF EXISTS email;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CompetentAuthority_add_name_column" author="P70453">
+        <addColumn tableName="competent_authority">
+            <column name="name" type="varchar(255)" remarks="The Competent authority name">
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE competent_authority
+                DROP COLUMN IF EXISTS name;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_competent_authority" author="P70453">
+        <comment>Add email and name in Competent Authorities</comment>
+        <sql>
+            update competent_authority
+            set email = 'ethelp@environment-agency.gov.uk', name = 'Environment Agency'
+            where id = 'ENGLAND';
+
+            update competent_authority
+            set email = 'emissions.trading@daera-ni.gov.uk', name = 'Northern Ireland Environment Agency'
+            where id = 'NORTHERN_IRELAND';
+
+            update competent_authority
+            set email = 'opred@energysecurity.gov.uk', name = 'Offshore Petroleum Regulator for Environment &amp; Decommissioning'
+            where id = 'OPRED';
+
+            update competent_authority
+            set email = 'emission.trading@sepa.org.uk', name = 'Scottish Environment Protection Agency'
+            where id = 'SCOTLAND';
+
+            update competent_authority
+            set email = 'GHGHelp@naturalresourceswales.gov.uk', name = 'Natural Resources Wales'
+            where id = 'WALES';
+
+            alter table competent_authority alter column email set not null;
+            alter table competent_authority alter column name set not null;
+        </sql>
+        <rollback>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_OPRED_name" author="P70453">
+        <comment>Add email and name in Competent Authorities</comment>
+        <sql>
+            update competent_authority
+            set name = 'Secretary of State for Energy Security &amp; Net Zero'
+            where id = 'OPRED';
+        </sql>
+        <rollback>
+            update competent_authority
+            set name = 'Offshore Petroleum Regulator for Environment &amp; Decommissioning'
+            where id = 'OPRED';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_competent_authority_aviation_email" author="P70383">
+        <addColumn tableName="competent_authority">
+            <column name="aviation_email" type="varchar(255)" remarks="The Competent authority aviation email">
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE competent_authority
+                DROP COLUMN IF EXISTS aviation_email;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_competent_authority_aviation_emails" author="P70383">
+        <comment>Add email and name in Competent Authorities</comment>
+        <sql>
+            update competent_authority
+            set aviation_email = 'etaviationhelp@environment-agency.gov.uk'
+            where id = 'ENGLAND';
+
+            update competent_authority
+            set aviation_email = 'emissions.trading@daera-ni.gov.uk'
+            where id = 'NORTHERN_IRELAND';
+
+            update competent_authority
+            set aviation_email = 'opred@energysecurity.gov.uk'
+            where id = 'OPRED';
+
+            update competent_authority
+            set aviation_email = 'emission.trading@sepa.org.uk'
+            where id = 'SCOTLAND';
+
+            update competent_authority
+            set aviation_email = 'GHGHelp@cyfoethnaturiolcymru.gov.uk'
+            where id = 'WALES';
+
+            alter table competent_authority alter column aviation_email set not null;
+        </sql>
+        <rollback>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

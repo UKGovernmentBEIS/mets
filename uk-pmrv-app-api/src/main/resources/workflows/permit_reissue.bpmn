@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1srehre" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="PROCESS_PERMIT_REISSUE" name="Permit Reissue Process" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1hiqvh9</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_1e66bwi" name="Reissue completed successfully" camunda:delegateExpression="#{permitReissueMarkAsCompletedHandler}">
+      <bpmn:incoming>Flow_1nz40up</bpmn:incoming>
+      <bpmn:outgoing>Flow_06i99dp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_1fw5ib6" name="Reissue failed" camunda:delegateExpression="#{permitReissueMarkAsFailedHandler}">
+      <bpmn:incoming>Flow_1v46q7k</bpmn:incoming>
+      <bpmn:outgoing>Flow_1q13759</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1hiqvh9" sourceRef="StartEvent_1" targetRef="Activity_022wprc" />
+    <bpmn:endEvent id="Event_0grjtyr" name="reissue completed" camunda:asyncBefore="true">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="processToMessageBusinessKey">${batchRequestBusinessKey}</camunda:inputParameter>
+          <camunda:inputParameter name="variables">
+            <camunda:map>
+              <camunda:entry key="reissueRequestSucceeded">${reissueRequestSucceeded}</camunda:entry>
+              <camunda:entry key="accountId">${accountId}</camunda:entry>
+              <camunda:entry key="reissueRequestId">${requestId}</camunda:entry>
+            </camunda:map>
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1q13759</bpmn:incoming>
+      <bpmn:incoming>Flow_06i99dp</bpmn:incoming>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0405bn7" messageRef="Message_0cd90hc" camunda:delegateExpression="#{msgOtherProcessHandler}" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1q13759" sourceRef="Activity_1fw5ib6" targetRef="Event_0grjtyr" />
+    <bpmn:sequenceFlow id="Flow_06i99dp" sourceRef="Activity_1e66bwi" targetRef="Event_0grjtyr" />
+    <bpmn:sequenceFlow id="Flow_1nz40up" sourceRef="Activity_022wprc" targetRef="Activity_1e66bwi" />
+    <bpmn:serviceTask id="Activity_022wprc" name="Do reissue permit" camunda:asyncBefore="true" camunda:delegateExpression="#{permitReissueDoReissueHandler}">
+      <bpmn:incoming>Flow_1hiqvh9</bpmn:incoming>
+      <bpmn:outgoing>Flow_1nz40up</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="Event_15b3rt0" name="Reissue failed" attachedToRef="Activity_022wprc">
+      <bpmn:outgoing>Flow_1v46q7k</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_19ii2kd" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_1v46q7k" sourceRef="Event_15b3rt0" targetRef="Activity_1fw5ib6" />
+  </bpmn:process>
+  <bpmn:message id="Message_0cd90hc" name="permitReissueCompleted" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_PERMIT_REISSUE">
+      <bpmndi:BPMNEdge id="Flow_06i99dp_di" bpmnElement="Flow_06i99dp">
+        <di:waypoint x="720" y="120" />
+        <di:waypoint x="850" y="120" />
+        <di:waypoint x="850" y="220" />
+        <di:waypoint x="962" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1q13759_di" bpmnElement="Flow_1q13759">
+        <di:waypoint x="720" y="310" />
+        <di:waypoint x="850" y="310" />
+        <di:waypoint x="850" y="220" />
+        <di:waypoint x="962" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1hiqvh9_di" bpmnElement="Flow_1hiqvh9">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="360" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nz40up_di" bpmnElement="Flow_1nz40up">
+        <di:waypoint x="460" y="120" />
+        <di:waypoint x="620" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v46q7k_di" bpmnElement="Flow_1v46q7k">
+        <di:waypoint x="410" y="178" />
+        <di:waypoint x="410" y="310" />
+        <di:waypoint x="620" y="310" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0ho2ema_di" bpmnElement="Activity_022wprc">
+        <dc:Bounds x="360" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1x9shc1_di" bpmnElement="Activity_1fw5ib6">
+        <dc:Bounds x="620" y="270" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_03w03k3_di" bpmnElement="Event_0grjtyr">
+        <dc:Bounds x="962" y="202" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="935" y="248" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0gxgp57_di" bpmnElement="Activity_1e66bwi">
+        <dc:Bounds x="620" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_036xldn_di" bpmnElement="Event_15b3rt0">
+        <dc:Bounds x="392" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="435" y="173" width="70" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

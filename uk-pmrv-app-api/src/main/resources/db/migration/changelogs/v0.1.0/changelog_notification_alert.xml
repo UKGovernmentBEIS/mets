@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+		logicalFilePath="v0.1.0/changelog_notification_alert.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_CREATE_TABLE_NOTIFICATION_ALERT" author="apostolouk@unisystems.gr" context="migrate">
+
+        <comment>CREATE notification_alert TABLE</comment>
+        <sql>
+            CREATE SEQUENCE notification_alert_seq MINVALUE 0 MAXVALUE 999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 1 NO CYCLE;
+
+            CREATE TABLE notification_alert (
+            id bigint,
+            subject VARCHAR(255) NOT NULL,
+            body TEXT NOT NULL,
+            active_from TIMESTAMP NOT NULL,
+            active_until TIMESTAMP NOT NULL,
+            created_by VARCHAR(255),
+            creation_date TIMESTAMP);
+
+            ALTER TABLE notification_alert ADD CONSTRAINT notification_alert_pk PRIMARY KEY (id);
+
+            COMMENT ON TABLE notification_alert IS 'Stores notification alerts to be displayed in the UI banner';
+            COMMENT ON COLUMN notification_alert.subject IS 'The notification alert header to be displayed in the notification banner';
+            COMMENT ON COLUMN notification_alert.body IS 'The notification alert text to be displayed in the notification banner';
+            COMMENT ON COLUMN notification_alert.active_from IS 'The date that the notification alert will start being active';
+            COMMENT ON COLUMN notification_alert.active_until IS 'The date that the notification alert will stop being active';
+            COMMENT ON COLUMN notification_alert.created_by IS 'The creator of the notification alert';
+            COMMENT ON COLUMN notification_alert.creation_date IS 'The date the notification alert was created';
+
+        </sql>
+
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS notification_alert CASCADE;
+                DROP SEQUENCE IF EXISTS notification_alert_seq;
+            </sql>
+        </rollback>
+
+    </changeSet>
+
+</databaseChangeLog>

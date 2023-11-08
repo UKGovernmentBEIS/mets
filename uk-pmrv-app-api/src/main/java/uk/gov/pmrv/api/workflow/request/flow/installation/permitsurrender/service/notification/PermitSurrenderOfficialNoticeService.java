@@ -1,0 +1,120 @@
+package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.notification;
+
+import java.util.ArrayList;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import uk.gov.pmrv.api.common.config.RegistryConfig;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateGenerationContextActionType;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeGeneratorService;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderRequestPayload;
+
+@Service
+@RequiredArgsConstructor
+public class PermitSurrenderOfficialNoticeService {
+
+    private final RequestService requestService;
+    private final DecisionNotificationUsersService decisionNotificationUsersService;
+    private final OfficialNoticeSendService officialNoticeSendService;
+    private final OfficialNoticeGeneratorService officialNoticeGeneratorService;
+    private final RegistryConfig registryConfig;
+    
+    @Transactional
+    public void generateAndSaveGrantedOfficialNotice(String requestId) {
+        final Request request = requestService.findRequestById(requestId);
+        final PermitSurrenderRequestPayload requestPayload = (PermitSurrenderRequestPayload) request.getPayload();
+        
+        //generate
+        final FileInfoDTO officialNotice = officialNoticeGeneratorService.generate(request,
+            DocumentTemplateGenerationContextActionType.PERMIT_SURRENDER_GRANTED,
+            DocumentTemplateType.PERMIT_SURRENDERED_NOTICE,
+            AccountType.INSTALLATION,
+            requestPayload.getReviewDecisionNotification(),
+            "permit_surrender_notice.pdf");
+        
+        //save to payload
+        requestPayload.setOfficialNotice(officialNotice);
+    }
+    
+    @Transactional
+    public void generateAndSaveRejectedOfficialNotice(String requestId) {
+        final Request request = requestService.findRequestById(requestId);
+        final PermitSurrenderRequestPayload requestPayload = (PermitSurrenderRequestPayload) request.getPayload();
+        
+        //generate
+        final FileInfoDTO officialNotice = officialNoticeGeneratorService.generate(request,
+            DocumentTemplateGenerationContextActionType.PERMIT_SURRENDER_REJECTED,
+            DocumentTemplateType.PERMIT_SURRENDER_REJECTED_NOTICE,
+            AccountType.INSTALLATION,
+            requestPayload.getReviewDecisionNotification(),
+            "permit_surrender_refused_notice.pdf");
+        
+        //save to payload
+        requestPayload.setOfficialNotice(officialNotice);
+    }
+    
+    @Transactional
+    public void generateAndSaveDeemedWithdrawnOfficialNotice(String requestId) {
+        final Request request = requestService.findRequestById(requestId);
+        final PermitSurrenderRequestPayload requestPayload = (PermitSurrenderRequestPayload) request.getPayload();
+        
+        //generate
+        final FileInfoDTO officialNotice = officialNoticeGeneratorService.generate(request,
+            DocumentTemplateGenerationContextActionType.PERMIT_SURRENDER_DEEMED_WITHDRAWN,
+            DocumentTemplateType.PERMIT_SURRENDER_DEEMED_WITHDRAWN_NOTICE,
+            AccountType.INSTALLATION,
+            requestPayload.getReviewDecisionNotification(),
+            "permit_surrender_deemed_withdrawn_notice.pdf");
+        
+        //save to payload
+        requestPayload.setOfficialNotice(officialNotice);
+    }
+    
+    @Transactional
+    public FileInfoDTO generateCessationOfficialNotice(Request request, DecisionNotification cessationDecisionNotification) {
+        return officialNoticeGeneratorService.generate(request,
+            DocumentTemplateGenerationContextActionType.PERMIT_SURRENDER_CESSATION,
+            DocumentTemplateType.PERMIT_SURRENDER_CESSATION,
+            AccountType.INSTALLATION,
+            cessationDecisionNotification,
+            "permit_surrender_cessation_complete_notice.pdf");
+    }
+
+    public void sendReviewDeterminationOfficialNoticeForGranted(Request request) {
+        List<String> additionalRecipients = new ArrayList<>();
+        additionalRecipients.add(registryConfig.getEmail());
+
+        sendReviewDeterminationOfficialNotice(request, additionalRecipients);
+    }
+    
+    public void sendReviewDeterminationOfficialNotice(Request request) {
+        sendReviewDeterminationOfficialNotice(request, new ArrayList<>());
+    }
+
+    public void sendOfficialNotice(Request request, FileInfoDTO officialNotice, DecisionNotification decisionNotification ) {
+        sendOfficialNotice(request, officialNotice, decisionNotification, new ArrayList<>());
+    }
+
+    private void sendReviewDeterminationOfficialNotice(Request request, List<String> additionalRecipients) {
+        final PermitSurrenderRequestPayload requestPayload = (PermitSurrenderRequestPayload) request.getPayload();
+        final FileInfoDTO officialNotice = requestPayload.getOfficialNotice();
+        final DecisionNotification decisionNotification = requestPayload.getReviewDecisionNotification();
+
+        sendOfficialNotice(request, officialNotice, decisionNotification, additionalRecipients);
+    }
+
+    private void sendOfficialNotice(Request request, FileInfoDTO officialNotice, DecisionNotification decisionNotification,
+                                   List<String> ccRecipientsEmails) {
+        ccRecipientsEmails.addAll(decisionNotificationUsersService.findUserEmails(decisionNotification));
+        officialNoticeSendService.sendOfficialNotice(List.of(officialNotice), request, ccRecipientsEmails);
+    }
+}

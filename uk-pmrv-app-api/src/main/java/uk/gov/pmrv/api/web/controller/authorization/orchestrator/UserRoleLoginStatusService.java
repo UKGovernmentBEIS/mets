@@ -1,0 +1,11 @@
+package uk.gov.pmrv.api.web.controller.authorization.orchestrator;
+
+import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.UserDomainsLoginStatusInfo;
+
+public interface UserRoleLoginStatusService {
+
+    UserDomainsLoginStatusInfo getUserDomainsLoginStatusInfo(String userId);
+
+    RoleType getRoleType();
+}

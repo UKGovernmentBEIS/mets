@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_allowance.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_CREATE_ALLOWANCE_ALLOCATION_SEQUENCE" author="P70383">
+        <createSequence sequenceName="allowance_allocation_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS allowance_allocation_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_ALLOWANCE_ALLOCATION_TABLE" author="P70383">
+        <comment>Create allowance_allocation TABLE</comment>
+        <createTable tableName="allowance_allocation" remarks="Represents allowance allocations">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="allowance_allocation_pk" nullable="false"/>
+            </column>
+            <column name="account_id" type="bigint" remarks="The account id where allowances allocation belongs to (foreign key to account table)">
+                <constraints foreignKeyName="allowance_allocation_account_fk" references="account(id)" nullable="false" />
+            </column>
+            <column name="year" type="int" remarks="The year">
+                <constraints nullable="false" />
+            </column>
+            <column name="sub_installation_name" type="varchar(255)" remarks="Name of sub-installation name">
+                <constraints nullable="false" />
+            </column>
+            <column name="allocation" type="int" remarks="The number of allocation">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="allowance_allocation" columnNames="account_id,year,sub_installation_name" constraintName="allowance_allocation_account_per_allowance_uc"/>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS allowance_allocation CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_ALLOWANCE_ACTIVITY_LEVEL_SEQUENCE" author="P70383">
+        <createSequence sequenceName="allowance_activity_level_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS allowance_activity_level_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_ALLOWANCE_ACTIVITY_LEVEL_TABLE" author="P70383">
+        <comment>Create allowance_activity_level TABLE</comment>
+        <createTable tableName="allowance_activity_level" remarks="Represents allowance activity levels">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="allowance_activity_level_pk" nullable="false"/>
+            </column>
+            <column name="account_id" type="bigint" remarks="The account id where activity levels belongs to (foreign key to account table)">
+                <constraints foreignKeyName="allowance_activity_level_account_fk" references="account(id)" nullable="false" />
+            </column>
+            <column name="year" type="int" remarks="The year">
+                <constraints nullable="false" />
+            </column>
+            <column name="sub_installation_name" type="varchar(255)" remarks="Name of sub-installation name">
+                <constraints nullable="false" />
+            </column>
+            <column name="change_type" type="varchar(255)" remarks="Name of change type">
+                <constraints nullable="false" />
+            </column>
+            <column name="amount" type="varchar(255)" remarks="Amount of change type">
+                <constraints nullable="true" />
+            </column>
+            <column name="comments" type="varchar(10000)" remarks="Comments">
+                <constraints nullable="false" />
+            </column>
+            <column name="creation_date" type="timestamp" remarks="The date-time that the activity level was submitted">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS allowance_activity_level CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ALLOWANCE_ACTIVITY_LEVEL_ADD_ACCOUNT_IDX" author="P70383">
+        <comment>Add AccountId index in allowance_activity_level table</comment>
+        <createIndex indexName="allowance_activity_level_accountId_idx" tableName="allowance_activity_level">
+            <column name="account_id" />
+        </createIndex>
+        <rollback>
+            <sql>
+                DROP INDEX IF EXISTS allowance_activity_level_accountId_idx CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_ALLOWANCE_ACTIVITY_LEVEL_TABLE_ADD_OTHER_CHANGE_TYPE_NAME" author="P70383">
+        <addColumn tableName="allowance_activity_level">
+            <column name="other_change_type_name" type="varchar(255)" remarks="The other change type name">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE allowance_activity_level
+                DROP COLUMN IF EXISTS other_change_type_name
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_ALLOWANCE_ACTIVITY_LEVEL_TABLE_DROP_ACCOUNT_ID_FOREIGN_KEY" author="P70383">
+        <dropForeignKeyConstraint baseTableName="allowance_activity_level" constraintName="allowance_activity_level_account_fk"/>
+        <rollback>
+            <addForeignKeyConstraint baseTableName="allowance_activity_level" baseColumnNames="account_id" constraintName="allowance_activity_level_account_fk" referencedTableName="account" referencedColumnNames="id"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_ALLOWANCE_ALLOCATION_TABLE_DROP_ACCOUNT_ID_FOREIGN_KEY" author="P70383">
+        <dropForeignKeyConstraint baseTableName="allowance_allocation" constraintName="allowance_allocation_account_fk"/>
+        <rollback>
+            <addForeignKeyConstraint baseTableName="allowance_allocation" baseColumnNames="account_id" constraintName="allowance_allocation_account_fk" referencedTableName="account" referencedColumnNames="id"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

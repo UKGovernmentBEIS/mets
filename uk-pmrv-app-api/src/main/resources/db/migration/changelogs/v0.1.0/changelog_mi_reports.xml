@@ -1,0 +1,818 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_mi_reports.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_CREATE_MI_REPORT_TABLE" author="cgeorgoulis">
+        <comment>Create MI REPORT TABLE</comment>
+        <sql>
+            create table mi_report
+            (
+                id integer constraint mi_report_pkey primary key,
+                competent_authority varchar,
+                type      varchar
+            );
+
+            create unique index comp_auth_mi_rep_type_uniq
+                on mi_report (competent_authority, type);
+            COMMENT ON TABLE mi_report IS 'Stores mi report type, competent authority combinations';
+        </sql>
+
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS mi_report CASCADE;
+            </sql>
+        </rollback>
+
+    </changeSet>
+
+    <changeSet id="0_1_0_POPULATE_MI_REPORT_TABLE" author="cgeorgoulis">
+        <comment>Populate MI REPORT TABLE</comment>
+        <sql>
+            insert into mi_report
+            select row_number() over (), *
+            from (VALUES ('ENGLAND'),
+                         ('NORTHERN_IRELAND'),
+                         ('OPRED'),
+                         ('SCOTLAND'),
+                         ('WALES')) t1,
+                 (VALUES ('LIST_OF_ACCOUNTS_USERS_CONTACTS'),
+                         ('LIST_OF_ACCOUNTS_REGULATORS'),
+                         ('LIST_OF_VERIFICATION_BODIES_AND_USERS'),
+                         ('LIST_OF_ACCOUNTS'),
+                         ('COMPLETED_WORK')) t2;
+        </sql>
+
+        <rollback>
+            <sql>
+                truncate mi_report cascade;
+            </sql>
+        </rollback>
+
+    </changeSet>
+    <changeSet id="0_1_0_delete_obsolete_report_types" author="P70605">
+        <sql>
+            delete
+            from mi_report
+            where type in ('LIST_OF_ACCOUNTS_REGULATORS', 'LIST_OF_VERIFICATION_BODIES_AND_USERS', 'LIST_OF_ACCOUNTS');
+        </sql>
+        <rollback>
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="ENGLAND" />
+                <column name="type" value="LIST_OF_ACCOUNTS_REGULATORS" />
+            </insert>
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="ENGLAND" />
+                <column name="type" value="LIST_OF_VERIFICATION_BODIES_AND_USERS" />
+            </insert>
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="ENGLAND" />
+                <column name="type" value="LIST_OF_ACCOUNTS" />
+            </insert>
+
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="NORTHERN_IRELAND" />
+                <column name="type" value="LIST_OF_ACCOUNTS_REGULATORS" />
+            </insert>
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="NORTHERN_IRELAND" />
+                <column name="type" value="LIST_OF_VERIFICATION_BODIES_AND_USERS" />
+            </insert>
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="NORTHERN_IRELAND" />
+                <column name="type" value="LIST_OF_ACCOUNTS" />
+            </insert>
+
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="OPRED" />
+                <column name="type" value="LIST_OF_ACCOUNTS_REGULATORS" />
+            </insert>
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="OPRED" />
+                <column name="type" value="LIST_OF_VERIFICATION_BODIES_AND_USERS" />
+            </insert>
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="OPRED" />
+                <column name="type" value="LIST_OF_ACCOUNTS" />
+            </insert>
+
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="SCOTLAND" />
+                <column name="type" value="LIST_OF_ACCOUNTS_REGULATORS" />
+            </insert>
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="SCOTLAND" />
+                <column name="type" value="LIST_OF_VERIFICATION_BODIES_AND_USERS" />
+            </insert>
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="SCOTLAND" />
+                <column name="type" value="LIST_OF_ACCOUNTS" />
+            </insert>
+
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="WALES" />
+                <column name="type" value="LIST_OF_ACCOUNTS_REGULATORS" />
+            </insert>
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="WALES" />
+                <column name="type" value="LIST_OF_VERIFICATION_BODIES_AND_USERS" />
+            </insert>
+            <insert tableName="mi_report">
+                <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+                <column name="competent_authority" value="WALES" />
+                <column name="type" value="LIST_OF_ACCOUNTS" />
+            </insert>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_regulator_outstanding_request_tasks_report_type" author="P70605">
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="ENGLAND" />
+            <column name="type" value="REGULATOR_OUTSTANDING_REQUEST_TASKS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="NORTHERN_IRELAND" />
+            <column name="type" value="REGULATOR_OUTSTANDING_REQUEST_TASKS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="OPRED" />
+            <column name="type" value="REGULATOR_OUTSTANDING_REQUEST_TASKS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="SCOTLAND" />
+            <column name="type" value="REGULATOR_OUTSTANDING_REQUEST_TASKS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="WALES" />
+            <column name="type" value="REGULATOR_OUTSTANDING_REQUEST_TASKS" />
+        </insert>
+        <rollback>
+            <sql>
+                delete
+                from mi_report
+                where type = 'REGULATOR_OUTSTANDING_REQUEST_TASKS';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_account_and_assigned_regulator_contact_site_report_type" author="P70605">
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="ENGLAND" />
+            <column name="type" value="LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="NORTHERN_IRELAND" />
+            <column name="type" value="LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="OPRED" />
+            <column name="type" value="LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="SCOTLAND" />
+            <column name="type" value="LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="WALES" />
+            <column name="type" value="LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS" />
+        </insert>
+        <rollback>
+            <sql>
+                delete
+                from mi_report
+                where type = 'LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_verification_body_and_users_report_type" author="P70605">
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="ENGLAND" />
+            <column name="type" value="LIST_OF_VERIFICATION_BODY_USERS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="NORTHERN_IRELAND" />
+            <column name="type" value="LIST_OF_VERIFICATION_BODY_USERS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="OPRED" />
+            <column name="type" value="LIST_OF_VERIFICATION_BODY_USERS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="SCOTLAND" />
+            <column name="type" value="LIST_OF_VERIFICATION_BODY_USERS" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="WALES" />
+            <column name="type" value="LIST_OF_VERIFICATION_BODY_USERS" />
+        </insert>
+        <rollback>
+            <sql>
+                delete
+                from mi_report
+                where type = 'LIST_OF_VERIFICATION_BODY_USERS';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_custom_report_type" author="P70605">
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="ENGLAND" />
+            <column name="type" value="CUSTOM" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="NORTHERN_IRELAND" />
+            <column name="type" value="CUSTOM" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="OPRED" />
+            <column name="type" value="CUSTOM" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="SCOTLAND" />
+            <column name="type" value="CUSTOM" />
+        </insert>
+        <insert tableName="mi_report">
+            <column name="id" valueComputed="(SELECT MAX(id) + 1 FROM mi_report)" />
+            <column name="competent_authority" value="WALES" />
+            <column name="type" value="CUSTOM" />
+        </insert>
+        <rollback>
+            <sql>
+                delete
+                from mi_report
+                where type = 'CUSTOM';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_ca_reporting_schemas" author="P70453">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS sch_report_sepa;
+            CREATE SCHEMA IF NOT EXISTS sch_report_opred;
+            CREATE SCHEMA IF NOT EXISTS sch_report_nrw;
+            CREATE SCHEMA IF NOT EXISTS sch_report_niea;
+            CREATE SCHEMA IF NOT EXISTS sch_report_ea;
+        </sql>
+        <rollback>
+            <sql>
+                DROP SCHEMA sch_report_ea CASCADE;
+                DROP SCHEMA sch_report_niea CASCADE;
+                DROP SCHEMA sch_report_opred CASCADE;
+                DROP SCHEMA sch_report_sepa CASCADE;
+                DROP SCHEMA sch_report_nrw CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_ca_reporting_users_and_permissions" author="P70453">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            CREATE USER usr_report_sepa WITH PASSWORD '${report_user_password_sepa}';
+            CREATE USER usr_report_opred WITH PASSWORD '${report_user_password_opred}';
+            CREATE USER usr_report_nrw WITH PASSWORD '${report_user_password_nrw}';
+            CREATE USER usr_report_niea WITH PASSWORD '${report_user_password_niea}';
+            CREATE USER usr_report_ea WITH PASSWORD '${report_user_password_ea}';
+
+            GRANT CONNECT ON DATABASE pmrv TO usr_report_sepa;
+            GRANT CONNECT ON DATABASE pmrv TO usr_report_opred;
+            GRANT CONNECT ON DATABASE pmrv TO usr_report_nrw;
+            GRANT CONNECT ON DATABASE pmrv TO usr_report_niea;
+            GRANT CONNECT ON DATABASE pmrv TO usr_report_ea;
+
+            GRANT USAGE ON SCHEMA sch_report_sepa TO usr_report_sepa;
+            GRANT USAGE ON SCHEMA sch_report_opred TO usr_report_opred;
+            GRANT USAGE ON SCHEMA sch_report_nrw TO usr_report_nrw;
+            GRANT USAGE ON SCHEMA sch_report_niea TO usr_report_niea;
+            GRANT USAGE ON SCHEMA sch_report_ea TO usr_report_ea;
+
+            GRANT SELECT ON ALL TABLES IN SCHEMA sch_report_sepa TO usr_report_sepa;
+            GRANT SELECT ON ALL TABLES IN SCHEMA sch_report_opred TO usr_report_opred;
+            GRANT SELECT ON ALL TABLES IN SCHEMA sch_report_nrw TO usr_report_nrw;
+            GRANT SELECT ON ALL TABLES IN SCHEMA sch_report_niea TO usr_report_niea;
+            GRANT SELECT ON ALL TABLES IN SCHEMA sch_report_ea TO usr_report_ea;
+
+            ALTER DEFAULT PRIVILEGES IN SCHEMA sch_report_sepa GRANT SELECT ON TABLES TO usr_report_sepa;
+            ALTER DEFAULT PRIVILEGES IN SCHEMA sch_report_opred GRANT SELECT ON TABLES TO usr_report_opred;
+            ALTER DEFAULT PRIVILEGES IN SCHEMA sch_report_nrw GRANT SELECT ON TABLES TO usr_report_nrw;
+            ALTER DEFAULT PRIVILEGES IN SCHEMA sch_report_niea GRANT SELECT ON TABLES TO usr_report_niea;
+            ALTER DEFAULT PRIVILEGES IN SCHEMA sch_report_ea GRANT SELECT ON TABLES TO usr_report_ea;
+        </sql>
+        <rollback>
+            <sql>
+                REVOKE CONNECT ON DATABASE pmrv FROM usr_report_sepa;
+                REVOKE CONNECT ON DATABASE pmrv FROM usr_report_opred;
+                REVOKE CONNECT ON DATABASE pmrv FROM usr_report_nrw;
+                REVOKE CONNECT ON DATABASE pmrv FROM usr_report_niea;
+                REVOKE CONNECT ON DATABASE pmrv FROM usr_report_ea;
+
+                REVOKE ALL ON ALL TABLES IN SCHEMA sch_report_ea FROM usr_report_ea;
+                REVOKE ALL ON ALL TABLES IN SCHEMA sch_report_niea FROM usr_report_niea;
+                REVOKE ALL ON ALL TABLES IN SCHEMA sch_report_opred FROM usr_report_opred;
+                REVOKE ALL ON ALL TABLES IN SCHEMA sch_report_sepa FROM usr_report_sepa;
+                REVOKE ALL ON ALL TABLES IN SCHEMA sch_report_nrw FROM usr_report_nrw;
+
+                DROP OWNED BY usr_report_sepa;
+                DROP OWNED BY usr_report_opred;
+                DROP OWNED BY usr_report_nrw;
+                DROP OWNED BY usr_report_niea;
+                DROP OWNED BY usr_report_ea;
+
+                DROP USER usr_report_sepa;
+                DROP USER usr_report_opred;
+                DROP USER usr_report_nrw;
+                DROP USER usr_report_niea;
+                DROP USER usr_report_ea;
+
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_views" author="P70453" runOrder="first" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            drop view if exists sch_report_sepa.verification_body_emission_trading_scheme cascade;
+            drop view if exists sch_report_sepa.verification_body cascade;
+            drop view if exists sch_report_sepa.rpt_aer cascade;
+            drop view if exists sch_report_sepa.request_task_visit cascade;
+            drop view if exists sch_report_sepa.request_task cascade;
+            drop view if exists sch_report_sepa.request_action cascade;
+            drop view if exists sch_report_sepa.request cascade;
+            drop view if exists sch_report_sepa.permit cascade;
+            drop view if exists sch_report_sepa.au_authority_permission cascade;
+            drop view if exists sch_report_sepa.au_authority cascade;
+            drop view if exists sch_report_sepa.au_role cascade;
+            drop view if exists sch_report_sepa.au_role_permission cascade;
+            drop view if exists sch_report_sepa.account_location cascade;
+            drop view if exists sch_report_sepa.account_legal_entity cascade;
+            drop view if exists sch_report_sepa.account_identifier cascade;
+            drop view if exists sch_report_sepa.account_holding_company cascade;
+            drop view if exists sch_report_sepa.account_contact cascade;
+            drop view if exists sch_report_sepa.account_ca_external_contacts cascade;
+            drop view if exists sch_report_sepa.account cascade;
+            drop view if exists sch_report_sepa.account_installation cascade;
+            drop view if exists sch_report_sepa.account_aviation cascade;
+            drop view if exists sch_report_sepa.emp cascade;
+            drop view if exists sch_report_sepa.rpt_reportable_emissions cascade;
+            drop view if exists sch_report_sepa.aviation_rpt_reportable_emissions cascade;
+            drop view if exists sch_report_sepa.rpt_charging_zone cascade;
+            drop view if exists sch_report_sepa.rpt_ipcc_sector cascade;
+            drop view if exists sch_report_sepa.rpt_national_inventory_data cascade;
+            drop view if exists sch_report_sepa.rpt_post_code cascade;
+            drop view if exists sch_report_sepa.rpt_regional_inventory_data cascade;
+            drop view if exists sch_report_sepa.aviation_rpt_airports cascade;
+            drop view if exists sch_report_sepa.aviation_rpt_countries cascade;
+            drop view if exists sch_report_sepa.aviation_rpt_aer cascade;
+            drop view if exists sch_report_sepa.allowance_activity_level cascade;
+            drop view if exists sch_report_sepa.allowance_allocation cascade;
+
+            drop view if exists sch_report_opred.verification_body_emission_trading_scheme cascade;
+            drop view if exists sch_report_opred.verification_body cascade;
+            drop view if exists sch_report_opred.rpt_aer cascade;
+            drop view if exists sch_report_opred.request_task_visit cascade;
+            drop view if exists sch_report_opred.request_task cascade;
+            drop view if exists sch_report_opred.request_action cascade;
+            drop view if exists sch_report_opred.request cascade;
+            drop view if exists sch_report_opred.permit cascade;
+            drop view if exists sch_report_opred.au_authority_permission cascade;
+            drop view if exists sch_report_opred.au_authority cascade;
+            drop view if exists sch_report_opred.au_role cascade;
+            drop view if exists sch_report_opred.au_role_permission cascade;
+            drop view if exists sch_report_opred.account_location cascade;
+            drop view if exists sch_report_opred.account_legal_entity cascade;
+            drop view if exists sch_report_opred.account_identifier cascade;
+            drop view if exists sch_report_opred.account_holding_company cascade;
+            drop view if exists sch_report_opred.account_contact cascade;
+            drop view if exists sch_report_opred.account_ca_external_contacts cascade;
+            drop view if exists sch_report_opred.account cascade;
+            drop view if exists sch_report_opred.account_installation cascade;
+            drop view if exists sch_report_opred.account_aviation cascade;
+            drop view if exists sch_report_opred.emp cascade;
+            drop view if exists sch_report_opred.rpt_reportable_emissions cascade;
+            drop view if exists sch_report_opred.aviation_rpt_reportable_emissions cascade;
+            drop view if exists sch_report_opred.rpt_charging_zone cascade;
+            drop view if exists sch_report_opred.rpt_ipcc_sector cascade;
+            drop view if exists sch_report_opred.rpt_national_inventory_data cascade;
+            drop view if exists sch_report_opred.rpt_post_code cascade;
+            drop view if exists sch_report_opred.rpt_regional_inventory_data cascade;
+            drop view if exists sch_report_opred.aviation_rpt_airports cascade;
+            drop view if exists sch_report_opred.aviation_rpt_countries cascade;
+            drop view if exists sch_report_opred.aviation_rpt_aer cascade;
+            drop view if exists sch_report_opred.allowance_activity_level cascade;
+            drop view if exists sch_report_opred.allowance_allocation cascade;
+
+            drop view if exists sch_report_nrw.verification_body_emission_trading_scheme cascade;
+            drop view if exists sch_report_nrw.verification_body cascade;
+            drop view if exists sch_report_nrw.rpt_aer cascade;
+            drop view if exists sch_report_nrw.request_task_visit cascade;
+            drop view if exists sch_report_nrw.request_task cascade;
+            drop view if exists sch_report_nrw.request_action cascade;
+            drop view if exists sch_report_nrw.request cascade;
+            drop view if exists sch_report_nrw.permit cascade;
+            drop view if exists sch_report_nrw.au_authority_permission cascade;
+            drop view if exists sch_report_nrw.au_authority cascade;
+            drop view if exists sch_report_nrw.au_role cascade;
+            drop view if exists sch_report_nrw.au_role_permission cascade;
+            drop view if exists sch_report_nrw.account_location cascade;
+            drop view if exists sch_report_nrw.account_legal_entity cascade;
+            drop view if exists sch_report_nrw.account_identifier cascade;
+            drop view if exists sch_report_nrw.account_holding_company cascade;
+            drop view if exists sch_report_nrw.account_contact cascade;
+            drop view if exists sch_report_nrw.account_ca_external_contacts cascade;
+            drop view if exists sch_report_nrw.account cascade;
+            drop view if exists sch_report_nrw.account_installation cascade;
+            drop view if exists sch_report_nrw.account_aviation cascade;
+            drop view if exists sch_report_nrw.emp cascade;
+            drop view if exists sch_report_nrw.rpt_reportable_emissions cascade;
+            drop view if exists sch_report_nrw.aviation_rpt_reportable_emissions cascade;
+            drop view if exists sch_report_nrw.rpt_charging_zone cascade;
+            drop view if exists sch_report_nrw.rpt_ipcc_sector cascade;
+            drop view if exists sch_report_nrw.rpt_national_inventory_data cascade;
+            drop view if exists sch_report_nrw.rpt_post_code cascade;
+            drop view if exists sch_report_nrw.rpt_regional_inventory_data cascade;
+            drop view if exists sch_report_nrw.aviation_rpt_airports cascade;
+            drop view if exists sch_report_nrw.aviation_rpt_countries cascade;
+            drop view if exists sch_report_nrw.aviation_rpt_aer cascade;
+            drop view if exists sch_report_nrw.allowance_activity_level cascade;
+            drop view if exists sch_report_nrw.allowance_allocation cascade;
+
+            drop view if exists sch_report_niea.verification_body_emission_trading_scheme cascade;
+            drop view if exists sch_report_niea.verification_body cascade;
+            drop view if exists sch_report_niea.rpt_aer cascade;
+            drop view if exists sch_report_niea.request_task_visit cascade;
+            drop view if exists sch_report_niea.request_task cascade;
+            drop view if exists sch_report_niea.request_action cascade;
+            drop view if exists sch_report_niea.request cascade;
+            drop view if exists sch_report_niea.permit cascade;
+            drop view if exists sch_report_niea.au_authority_permission cascade;
+            drop view if exists sch_report_niea.au_authority cascade;
+            drop view if exists sch_report_niea.au_role cascade;
+            drop view if exists sch_report_niea.au_role_permission cascade;
+            drop view if exists sch_report_niea.account_location cascade;
+            drop view if exists sch_report_niea.account_legal_entity cascade;
+            drop view if exists sch_report_niea.account_identifier cascade;
+            drop view if exists sch_report_niea.account_holding_company cascade;
+            drop view if exists sch_report_niea.account_contact cascade;
+            drop view if exists sch_report_niea.account_ca_external_contacts cascade;
+            drop view if exists sch_report_niea.account cascade;
+            drop view if exists sch_report_niea.account_installation cascade;
+            drop view if exists sch_report_niea.account_aviation cascade;
+            drop view if exists sch_report_niea.emp cascade;
+            drop view if exists sch_report_niea.rpt_reportable_emissions cascade;
+            drop view if exists sch_report_niea.aviation_rpt_reportable_emissions cascade;
+            drop view if exists sch_report_niea.rpt_charging_zone cascade;
+            drop view if exists sch_report_niea.rpt_ipcc_sector cascade;
+            drop view if exists sch_report_niea.rpt_national_inventory_data cascade;
+            drop view if exists sch_report_niea.rpt_post_code cascade;
+            drop view if exists sch_report_niea.rpt_regional_inventory_data cascade;
+            drop view if exists sch_report_niea.aviation_rpt_airports cascade;
+            drop view if exists sch_report_niea.aviation_rpt_countries cascade;
+            drop view if exists sch_report_niea.aviation_rpt_aer cascade;
+            drop view if exists sch_report_niea.allowance_activity_level cascade;
+            drop view if exists sch_report_niea.allowance_allocation cascade;
+
+            drop view if exists sch_report_ea.verification_body_emission_trading_scheme cascade;
+            drop view if exists sch_report_ea.verification_body cascade;
+            drop view if exists sch_report_ea.rpt_aer cascade;
+            drop view if exists sch_report_ea.request_task_visit cascade;
+            drop view if exists sch_report_ea.request_task cascade;
+            drop view if exists sch_report_ea.request_action cascade;
+            drop view if exists sch_report_ea.request cascade;
+            drop view if exists sch_report_ea.permit cascade;
+            drop view if exists sch_report_ea.au_authority_permission cascade;
+            drop view if exists sch_report_ea.au_authority cascade;
+            drop view if exists sch_report_ea.au_role cascade;
+            drop view if exists sch_report_ea.au_role_permission cascade;
+            drop view if exists sch_report_ea.account_location cascade;
+            drop view if exists sch_report_ea.account_legal_entity cascade;
+            drop view if exists sch_report_ea.account_identifier cascade;
+            drop view if exists sch_report_ea.account_holding_company cascade;
+            drop view if exists sch_report_ea.account_contact cascade;
+            drop view if exists sch_report_ea.account_ca_external_contacts cascade;
+            drop view if exists sch_report_ea.account cascade;
+            drop view if exists sch_report_ea.account_installation cascade;
+            drop view if exists sch_report_ea.account_aviation cascade;
+            drop view if exists sch_report_ea.emp cascade;
+            drop view if exists sch_report_ea.rpt_reportable_emissions cascade;
+            drop view if exists sch_report_ea.aviation_rpt_reportable_emissions cascade;
+            drop view if exists sch_report_ea.rpt_charging_zone cascade;
+            drop view if exists sch_report_ea.rpt_ipcc_sector cascade;
+            drop view if exists sch_report_ea.rpt_national_inventory_data cascade;
+            drop view if exists sch_report_ea.rpt_post_code cascade;
+            drop view if exists sch_report_ea.rpt_regional_inventory_data cascade;
+            drop view if exists sch_report_ea.aviation_rpt_airports cascade;
+            drop view if exists sch_report_ea.aviation_rpt_countries cascade;
+            drop view if exists sch_report_ea.aviation_rpt_aer cascade;
+            drop view if exists sch_report_ea.allowance_activity_level cascade;
+            drop view if exists sch_report_ea.allowance_allocation cascade;
+        </sql>
+        <rollback>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_ca_reporting_views" author="P70453" runOrder="last" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            create or replace view sch_report_sepa.account as select s.* from account s where s.competent_authority = 'SCOTLAND';
+            create or replace view sch_report_sepa.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'SCOTLAND';
+            create or replace view sch_report_sepa.account_installation as select acc_inst.* from account_installation acc_inst join account acc on acc.id=acc_inst.id where acc.competent_authority = 'SCOTLAND';
+            create or replace view sch_report_sepa.account_location as select s.* from account_location s where exists (select null from account_legal_entity le where le.location_id = s.id) or exists (select null from account a where a.location_id = s.id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.account_contact as select s.* from account_contact s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.account_legal_entity as select s.* from account_legal_entity s;
+            create or replace view sch_report_sepa.account_holding_company as select s.* from account_holding_company s;
+            create or replace view sch_report_sepa.account_identifier as select s.* from account_identifier s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.account_ca_external_contacts as select s.* from account_ca_external_contacts s where s.competent_authority = 'SCOTLAND';
+            create or replace view sch_report_sepa.verification_body as select s.* from verification_body s;
+            create or replace view sch_report_sepa.verification_body_emission_trading_scheme as select s.* from verification_body_emission_trading_scheme s;
+            create or replace view sch_report_sepa.au_authority as select s.* from au_authority s where s.competent_authority = 'SCOTLAND' or s.verification_body_id is not null or exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.au_authority_permission as select s.* from au_authority_permission s where exists (select null from au_authority aa where aa.id = s.authority_id and (aa.competent_authority = 'SCOTLAND' or aa.verification_body_id is not null or exists (select null from account a where a.id = aa.account_id and a.competent_authority = 'SCOTLAND')));
+            create or replace view sch_report_sepa.au_role as select s.* from au_role s;
+            create or replace view sch_report_sepa.au_role_permission as select s.* from au_role_permission s;
+            create or replace view sch_report_sepa.request as select id, type, status, creation_date, competent_authority, account_id, verification_body_id, payload, submission_date, metadata, end_date from request s where s.competent_authority = 'SCOTLAND';
+            create or replace view sch_report_sepa.request_action as select s.* from request_action s where exists (select null from request r where r.id = s.request_id and r.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.request_task as select id, request_id, type, assignee, due_date, start_date, pause_date, payload, version from request_task s where exists (select null from request r where r.id = s.request_id and r.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.request_task_visit as select s.* from request_task_visit s where exists (select null from request_task rt join request r on r.id = rt.request_id where rt.id = s.task_id and r.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.permit as select s.* from permit s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.rpt_aer as select s.* from rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.aviation_rpt_reportable_emissions as select s.* from aviation_rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.rpt_charging_zone as select s.* from rpt_charging_zone s;
+            create or replace view sch_report_sepa.rpt_ipcc_sector as select s.* from rpt_ipcc_sector s;
+            create or replace view sch_report_sepa.rpt_national_inventory_data as select s.* from rpt_national_inventory_data s;
+            create or replace view sch_report_sepa.rpt_post_code as select s.* from rpt_post_code s;
+            create or replace view sch_report_sepa.rpt_regional_inventory_data as select s.* from rpt_regional_inventory_data s;
+            create or replace view sch_report_sepa.aviation_rpt_airports as select s.* from aviation_rpt_airports s;
+            create or replace view sch_report_sepa.aviation_rpt_countries as select s.* from aviation_rpt_countries s;
+            create or replace view sch_report_sepa.aviation_rpt_aer as select s.* from aviation_rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+
+            create or replace view sch_report_opred.account as select s.* from account s where s.competent_authority = 'OPRED';
+            create or replace view sch_report_opred.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'OPRED';
+            create or replace view sch_report_opred.account_installation as select acc_inst.* from account_installation acc_inst join account acc on acc.id=acc_inst.id where acc.competent_authority = 'OPRED';
+            create or replace view sch_report_opred.account_location as select s.* from account_location s where exists (select null from account_legal_entity le where le.location_id = s.id) or exists (select null from account a where a.location_id = s.id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.account_contact as select s.* from account_contact s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.account_legal_entity as select s.* from account_legal_entity s;
+            create or replace view sch_report_opred.account_holding_company as select s.* from account_holding_company s;
+            create or replace view sch_report_opred.account_identifier as select s.* from account_identifier s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.account_ca_external_contacts as select s.* from account_ca_external_contacts s where s.competent_authority = 'OPRED';
+            create or replace view sch_report_opred.verification_body as select s.* from verification_body s;
+            create or replace view sch_report_opred.verification_body_emission_trading_scheme as select s.* from verification_body_emission_trading_scheme s;
+            create or replace view sch_report_opred.au_authority as select s.* from au_authority s where s.competent_authority = 'OPRED' or s.verification_body_id is not null or exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.au_authority_permission as select s.* from au_authority_permission s where exists (select null from au_authority aa where aa.id = s.authority_id and (aa.competent_authority = 'OPRED' or aa.verification_body_id is not null or exists (select null from account a where a.id = aa.account_id and a.competent_authority = 'OPRED')));
+            create or replace view sch_report_opred.au_role as select s.* from au_role s;
+            create or replace view sch_report_opred.au_role_permission as select s.* from au_role_permission s;
+            create or replace view sch_report_opred.request as select id, type, status, creation_date, competent_authority, account_id, verification_body_id, payload, submission_date, metadata, end_date from request s where s.competent_authority = 'OPRED';
+            create or replace view sch_report_opred.request_action as select s.* from request_action s where exists (select null from request r where r.id = s.request_id and r.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.request_task as select id, request_id, type, assignee, due_date, start_date, pause_date, payload, version from request_task s where exists (select null from request r where r.id = s.request_id and r.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.request_task_visit as select s.* from request_task_visit s where exists (select null from request_task rt join request r on r.id = rt.request_id where rt.id = s.task_id and r.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.permit as select s.* from permit s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.rpt_aer as select s.* from rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.aviation_rpt_reportable_emissions as select s.* from aviation_rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.rpt_charging_zone as select s.* from rpt_charging_zone s;
+            create or replace view sch_report_opred.rpt_ipcc_sector as select s.* from rpt_ipcc_sector s;
+            create or replace view sch_report_opred.rpt_national_inventory_data as select s.* from rpt_national_inventory_data s;
+            create or replace view sch_report_opred.rpt_post_code as select s.* from rpt_post_code s;
+            create or replace view sch_report_opred.rpt_regional_inventory_data as select s.* from rpt_regional_inventory_data s;
+            create or replace view sch_report_opred.aviation_rpt_airports as select s.* from aviation_rpt_airports s;
+            create or replace view sch_report_opred.aviation_rpt_countries as select s.* from aviation_rpt_countries s;
+            create or replace view sch_report_opred.aviation_rpt_aer as select s.* from aviation_rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+
+            create or replace view sch_report_nrw.account as select s.* from account s where s.competent_authority = 'WALES';
+            create or replace view sch_report_nrw.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'WALES';
+            create or replace view sch_report_nrw.account_installation as select acc_inst.* from account_installation acc_inst join account acc on acc.id=acc_inst.id where acc.competent_authority = 'WALES';
+            create or replace view sch_report_nrw.account_location as select s.* from account_location s where exists (select null from account_legal_entity le where le.location_id = s.id) or exists (select null from account a where a.location_id = s.id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.account_contact as select s.* from account_contact s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.account_legal_entity as select s.* from account_legal_entity s;
+            create or replace view sch_report_nrw.account_holding_company as select s.* from account_holding_company s;
+            create or replace view sch_report_nrw.account_identifier as select s.* from account_identifier s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.account_ca_external_contacts as select s.* from account_ca_external_contacts s where s.competent_authority = 'WALES';
+            create or replace view sch_report_nrw.verification_body as select s.* from verification_body s;
+            create or replace view sch_report_nrw.verification_body_emission_trading_scheme as select s.* from verification_body_emission_trading_scheme s;
+            create or replace view sch_report_nrw.au_authority as select s.* from au_authority s where s.competent_authority = 'WALES' or s.verification_body_id is not null or exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.au_authority_permission as select s.* from au_authority_permission s where exists (select null from au_authority aa where aa.id = s.authority_id and (aa.competent_authority = 'WALES' or aa.verification_body_id is not null or exists (select null from account a where a.id = aa.account_id and a.competent_authority = 'WALES')));
+            create or replace view sch_report_nrw.au_role as select s.* from au_role s;
+            create or replace view sch_report_nrw.au_role_permission as select s.* from au_role_permission s;
+            create or replace view sch_report_nrw.request as select id, type, status, creation_date, competent_authority, account_id, verification_body_id, payload, submission_date, metadata, end_date from request s where s.competent_authority = 'WALES';
+            create or replace view sch_report_nrw.request_action as select s.* from request_action s where exists (select null from request r where r.id = s.request_id and r.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.request_task as select id, request_id, type, assignee, due_date, start_date, pause_date, payload, version from request_task s where exists (select null from request r where r.id = s.request_id and r.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.request_task_visit as select s.* from request_task_visit s where exists (select null from request_task rt join request r on r.id = rt.request_id where rt.id = s.task_id and r.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.permit as select s.* from permit s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.rpt_aer as select s.* from rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.aviation_rpt_reportable_emissions as select s.* from aviation_rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.rpt_charging_zone as select s.* from rpt_charging_zone s;
+            create or replace view sch_report_nrw.rpt_ipcc_sector as select s.* from rpt_ipcc_sector s;
+            create or replace view sch_report_nrw.rpt_national_inventory_data as select s.* from rpt_national_inventory_data s;
+            create or replace view sch_report_nrw.rpt_post_code as select s.* from rpt_post_code s;
+            create or replace view sch_report_nrw.rpt_regional_inventory_data as select s.* from rpt_regional_inventory_data s;
+            create or replace view sch_report_nrw.aviation_rpt_airports as select s.* from aviation_rpt_airports s;
+            create or replace view sch_report_nrw.aviation_rpt_countries as select s.* from aviation_rpt_countries s;
+            create or replace view sch_report_nrw.aviation_rpt_aer as select s.* from aviation_rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+
+            create or replace view sch_report_niea.account as select s.* from account s where s.competent_authority = 'NORTHERN_IRELAND';
+            create or replace view sch_report_niea.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'NORTHERN_IRELAND';
+            create or replace view sch_report_niea.account_installation as select acc_inst.* from account_installation acc_inst join account acc on acc.id=acc_inst.id where acc.competent_authority = 'NORTHERN_IRELAND';
+            create or replace view sch_report_niea.account_location as select s.* from account_location s where exists (select null from account_legal_entity le where le.location_id = s.id) or exists (select null from account a where a.location_id = s.id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.account_contact as select s.* from account_contact s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.account_legal_entity as select s.* from account_legal_entity s;
+            create or replace view sch_report_niea.account_holding_company as select s.* from account_holding_company s;
+            create or replace view sch_report_niea.account_identifier as select s.* from account_identifier s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.account_ca_external_contacts as select s.* from account_ca_external_contacts s where s.competent_authority = 'NORTHERN_IRELAND';
+            create or replace view sch_report_niea.verification_body as select s.* from verification_body s;
+            create or replace view sch_report_niea.verification_body_emission_trading_scheme as select s.* from verification_body_emission_trading_scheme s;
+            create or replace view sch_report_niea.au_authority as select s.* from au_authority s where s.competent_authority = 'NORTHERN_IRELAND' or s.verification_body_id is not null or exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.au_authority_permission as select s.* from au_authority_permission s where exists (select null from au_authority aa where aa.id = s.authority_id and (aa.competent_authority = 'NORTHERN_IRELAND' or aa.verification_body_id is not null or exists (select null from account a where a.id = aa.account_id and a.competent_authority = 'NORTHERN_IRELAND')));
+            create or replace view sch_report_niea.au_role as select s.* from au_role s;
+            create or replace view sch_report_niea.au_role_permission as select s.* from au_role_permission s;
+            create or replace view sch_report_niea.request as select id, type, status, creation_date, competent_authority, account_id, verification_body_id, payload, submission_date, metadata, end_date from request s where s.competent_authority = 'NORTHERN_IRELAND';
+            create or replace view sch_report_niea.request_action as select s.* from request_action s where exists (select null from request r where r.id = s.request_id and r.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.request_task as select id, request_id, type, assignee, due_date, start_date, pause_date, payload, version from request_task s where exists (select null from request r where r.id = s.request_id and r.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.request_task_visit as select s.* from request_task_visit s where exists (select null from request_task rt join request r on r.id = rt.request_id where rt.id = s.task_id and r.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.permit as select s.* from permit s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.rpt_aer as select s.* from rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.aviation_rpt_reportable_emissions as select s.* from aviation_rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.rpt_charging_zone as select s.* from rpt_charging_zone s;
+            create or replace view sch_report_niea.rpt_ipcc_sector as select s.* from rpt_ipcc_sector s;
+            create or replace view sch_report_niea.rpt_national_inventory_data as select s.* from rpt_national_inventory_data s;
+            create or replace view sch_report_niea.rpt_post_code as select s.* from rpt_post_code s;
+            create or replace view sch_report_niea.rpt_regional_inventory_data as select s.* from rpt_regional_inventory_data s;
+            create or replace view sch_report_niea.aviation_rpt_airports as select s.* from aviation_rpt_airports s;
+            create or replace view sch_report_niea.aviation_rpt_countries as select s.* from aviation_rpt_countries s;
+            create or replace view sch_report_niea.aviation_rpt_aer as select s.* from aviation_rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+
+            create or replace view sch_report_ea.account as select s.* from account s where s.competent_authority = 'ENGLAND';
+            create or replace view sch_report_ea.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'ENGLAND';
+            create or replace view sch_report_ea.account_installation as select acc_inst.* from account_installation acc_inst join account acc on acc.id=acc_inst.id where acc.competent_authority = 'ENGLAND';
+            create or replace view sch_report_ea.account_location as select s.* from account_location s where exists (select null from account_legal_entity le where le.location_id = s.id) or exists (select null from account a where a.location_id = s.id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.account_contact as select s.* from account_contact s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.account_legal_entity as select s.* from account_legal_entity s;
+            create or replace view sch_report_ea.account_holding_company as select s.* from account_holding_company s;
+            create or replace view sch_report_ea.account_identifier as select s.* from account_identifier s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.account_ca_external_contacts as select s.* from account_ca_external_contacts s where s.competent_authority = 'ENGLAND';
+            create or replace view sch_report_ea.verification_body as select s.* from verification_body s;
+            create or replace view sch_report_ea.verification_body_emission_trading_scheme as select s.* from verification_body_emission_trading_scheme s;
+            create or replace view sch_report_ea.au_authority as select s.* from au_authority s where s.competent_authority = 'ENGLAND' or s.verification_body_id is not null or exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.au_authority_permission as select s.* from au_authority_permission s where exists (select null from au_authority aa where aa.id = s.authority_id and (aa.competent_authority = 'ENGLAND' or aa.verification_body_id is not null or exists (select null from account a where a.id = aa.account_id and a.competent_authority = 'ENGLAND')));
+            create or replace view sch_report_ea.au_role as select s.* from au_role s;
+            create or replace view sch_report_ea.au_role_permission as select s.* from au_role_permission s;
+            create or replace view sch_report_ea.request as select id, type, status, creation_date, competent_authority, account_id, verification_body_id, payload, submission_date, metadata, end_date from request s where s.competent_authority = 'ENGLAND';
+            create or replace view sch_report_ea.request_action as select s.* from request_action s where exists (select null from request r where r.id = s.request_id and r.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.request_task as select id, request_id, type, assignee, due_date, start_date, pause_date, payload, version from request_task s where exists (select null from request r where r.id = s.request_id and r.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.request_task_visit as select s.* from request_task_visit s where exists (select null from request_task rt join request r on r.id = rt.request_id where rt.id = s.task_id and r.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.permit as select s.* from permit s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.rpt_aer as select s.* from rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.aviation_rpt_reportable_emissions as select s.* from aviation_rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.rpt_charging_zone as select s.* from rpt_charging_zone s;
+            create or replace view sch_report_ea.rpt_ipcc_sector as select s.* from rpt_ipcc_sector s;
+            create or replace view sch_report_ea.rpt_national_inventory_data as select s.* from rpt_national_inventory_data s;
+            create or replace view sch_report_ea.rpt_post_code as select s.* from rpt_post_code s;
+            create or replace view sch_report_ea.rpt_regional_inventory_data as select s.* from rpt_regional_inventory_data s;
+            create or replace view sch_report_ea.aviation_rpt_airports as select s.* from aviation_rpt_airports s;
+            create or replace view sch_report_ea.aviation_rpt_countries as select s.* from aviation_rpt_countries s;
+            create or replace view sch_report_ea.aviation_rpt_aer as select s.* from aviation_rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+
+        </sql>
+        <rollback changeSetId="0_1_0_drop_views" changeSetAuthor="P70453"/>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_reporting_user_password" author="P70453" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            ALTER USER usr_report_ea WITH PASSWORD '${report_user_password_ea}';
+            ALTER USER usr_report_sepa WITH PASSWORD '${report_user_password_sepa}';
+            ALTER USER usr_report_niea WITH PASSWORD '${report_user_password_niea}';
+            ALTER USER usr_report_opred WITH PASSWORD '${report_user_password_opred}';
+            ALTER USER usr_report_nrw WITH PASSWORD '${report_user_password_nrw}';
+        </sql>
+        <rollback>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_MI_REPORT_ADD_NOT_NULL_CONSTRAINT_ON_COLUMNS" author="pafilisa@unisystems.gr">
+        <sql>
+            ALTER TABLE mi_report ALTER COLUMN competent_authority SET NOT NULL;
+            ALTER TABLE mi_report ALTER COLUMN type SET NOT NULL;
+        </sql>
+
+        <rollback>
+            <sql>
+                ALTER TABLE mi_report ALTER COLUMN competent_authority DROP NOT NULL;
+                ALTER TABLE mi_report ALTER COLUMN type DROP NOT NULL;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_MI_REPORT_TABLE_ADD_OPERATOR_TYPE_COLUMN" author="pafilisa@unisystems.gr">
+        <preConditions onFail="WARN">
+            <sqlCheck expectedResult="1">SELECT count(*) FROM information_schema.tables where table_name = 'mi_report';</sqlCheck>
+        </preConditions>
+
+        <sql>
+            ALTER TABLE mi_report ADD COLUMN operator_type varchar(255);
+            UPDATE mi_report SET operator_type = 'INSTALLATION';
+            ALTER TABLE mi_report ALTER COLUMN operator_type SET NOT NULL;
+        </sql>
+
+        <rollback>
+            <sql>
+                ALTER TABLE mi_report
+                DROP COLUMN IF EXISTS operator_type;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_DROP_INDEX_comp_auth_mi_rep_type_uniq" author="pafilisa@unisystems.gr">
+        <dropIndex indexName="comp_auth_mi_rep_type_uniq" tableName="mi_report"/>
+
+        <rollback>
+            <createIndex indexName="comp_auth_mi_rep_type_uniq" tableName="mi_report" unique="true">
+                <column name="competent_authority"/>
+                <column name="type"/>
+            </createIndex>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_UNIQUE_INDEX_ON_MI_REPORT" author="pafilisa@unisystems.gr">
+        <createIndex indexName="mi_report_uq" tableName="mi_report" unique="true">
+            <column name="competent_authority"/>
+            <column name="type"/>
+            <column name="operator_type"/>
+        </createIndex>
+        <rollback>
+            <dropIndex indexName="mi_report_uq" tableName="mi_report"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_POPULATE_MI_REPORT_TYPES_FOR_AVIATION" author="pafilisa@unisystems.gr">
+        <sql>
+            INSERT INTO mi_report(id, competent_authority, type, operator_type)
+            SELECT (SELECT max(id) FROM mi_report) + row_number() over () as id, competent_authority, type, 'AVIATION'
+            FROM mi_report;
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM mi_report WHERE operator_type = 'AVIATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_rename_mi_report_operator_type_column_to_account_type" author="pafilisa@unisystems.gr">
+        <renameColumn tableName="mi_report" oldColumnName="operator_type" newColumnName="account_type"/>
+        <rollback>
+            <renameColumn tableName="mi_report" oldColumnName="account_type" newColumnName="operator_type"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

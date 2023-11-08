@@ -1,0 +1,42 @@
+package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.handler;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.handler.PermitSurrenderApplicationPeerReviewInitializer;
+
+class PermitSurrenderApplicationPeerReviewInitializerTest {
+
+    private final PermitSurrenderApplicationPeerReviewInitializer initializer = new PermitSurrenderApplicationPeerReviewInitializer();
+
+    @Test
+    void initializePayload() {
+        Request request = Request.builder()
+            .id("1")
+            .type(RequestType.PERMIT_SURRENDER)
+            .status(RequestStatus.IN_PROGRESS)
+            .payload(PermitSurrenderRequestPayload.builder()
+                .payloadType(RequestPayloadType.PERMIT_SURRENDER_REQUEST_PAYLOAD)
+                .build())
+            .build();
+
+        RequestTaskPayload requestTaskPayload = initializer.initializePayload(request);
+        assertThat(requestTaskPayload.getPayloadType()).isEqualTo(RequestTaskPayloadType.PERMIT_SURRENDER_APPLICATION_PEER_REVIEW_PAYLOAD);
+        assertThat(requestTaskPayload).isInstanceOf(PermitSurrenderApplicationReviewRequestTaskPayload.class);
+    }
+
+    @Test
+    void getRequestTaskTypes() {
+        assertThat(initializer.getRequestTaskTypes())
+            .containsExactly(RequestTaskType.PERMIT_SURRENDER_APPLICATION_PEER_REVIEW);
+    }
+}

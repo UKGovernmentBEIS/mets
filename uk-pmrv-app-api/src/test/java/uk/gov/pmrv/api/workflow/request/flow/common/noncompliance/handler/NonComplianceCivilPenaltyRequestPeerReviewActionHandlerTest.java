@@ -1,0 +1,113 @@
+package uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.handler;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.pmrv.api.workflow.request.WorkflowService;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCustomContext;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
+import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceCivilPenaltyRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceOutcome;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.service.NonComplianceCivilPenaltyApplyService;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.validation.NonCompliancePeerReviewValidator;
+
+@ExtendWith(MockitoExtension.class)
+class NonComplianceCivilPenaltyRequestPeerReviewActionHandlerTest {
+
+    @InjectMocks
+    private NonComplianceCivilPenaltyRequestPeerReviewActionHandler handler;
+
+    @Mock
+    private RequestTaskService requestTaskService;
+
+    @Mock
+    private NonCompliancePeerReviewValidator validator;
+
+    @Mock
+    private NonComplianceCivilPenaltyApplyService applyService;
+
+    @Mock
+    private RequestService requestService;
+
+    @Mock
+    private WorkflowService workflowService;
+
+    @Test
+    void process() {
+
+        final Long requestTaskId = 1L;
+        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final String selectedPeerReviewer = "selectedPeerReviewer";
+        final PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
+            .peerReviewer(selectedPeerReviewer)
+            .build();
+        final NonComplianceCivilPenaltyRequestTaskPayload taskPayload =
+            NonComplianceCivilPenaltyRequestTaskPayload.builder()
+                .payloadType(RequestTaskPayloadType.NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW_PAYLOAD)
+                .build();
+        final RequestTask requestTask = RequestTask.builder()
+            .id(requestTaskId)
+            .request(Request.builder().id("2").type(RequestType.NON_COMPLIANCE).build())
+            .type(RequestTaskType.NON_COMPLIANCE_CIVIL_PENALTY)
+            .payload(taskPayload)
+            .processTaskId("processTaskId")
+            .build();
+
+        when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
+
+        handler.process(
+            requestTaskId,
+            RequestTaskActionType.NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW,
+            pmrvUser,
+            taskActionPayload);
+
+        verify(requestTaskService, times(1)).findTaskById(requestTaskId);
+        verify(validator, times(1))
+            .validateCivilPenaltyPeerReview(taskPayload,
+                RequestTaskType.NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW,
+                taskActionPayload,
+                pmrvUser);
+        verify(applyService, times(1))
+            .saveRequestPeerReviewAction(requestTask, selectedPeerReviewer);
+        verify(requestService, times(1)).addActionToRequest(
+            requestTask.getRequest(),
+            null,
+            RequestActionType.NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_REQUESTED,
+            pmrvUser.getUserId()
+        );
+        verify(workflowService, times(1)).completeTask(
+            requestTask.getProcessTaskId(),
+            Map.of(
+                BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
+                BpmnProcessConstants.NON_COMPLIANCE_OUTCOME, NonComplianceOutcome.PEER_REVIEW_REQUIRED,
+                BpmnProcessConstants.REQUEST_TYPE_DYNAMIC_TASK_PREFIX,
+                RequestCustomContext.NON_COMPLIANCE_CIVIL_PENALTY.getCode()
+            )
+        );
+    }
+
+    @Test
+    void getTypes() {
+        assertThat(handler.getTypes()).containsExactly(
+            RequestTaskActionType.NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW);
+    }
+}
