@@ -3,9 +3,9 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -24,12 +24,12 @@ public class EmpIssuanceUkEtsReviewRequestPeerReviewValidatorService {
     private final EmpTradingSchemeValidatorService<EmissionsMonitoringPlanUkEtsContainer> empUkEtsValidatorService;
     private static final EmpUkEtsReviewMapper EMP_UKETS_REVIEW_MAPPER = Mappers.getMapper(EmpUkEtsReviewMapper.class);
 
-    public void validate(RequestTask requestTask, String selectedPeerReviewer, PmrvUser pmrvUser) {
+    public void validate(RequestTask requestTask, String selectedPeerReviewer, AppUser appUser) {
 
         peerReviewerTaskAssignmentValidator.validate(
             RequestTaskType.EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW,
             selectedPeerReviewer,
-            pmrvUser);
+            appUser);
 
         EmpIssuanceUkEtsApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
             (EmpIssuanceUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload();

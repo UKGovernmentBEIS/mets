@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -38,7 +38,7 @@ class EmpVariationCorsiaSaveRegulatorLedActionHandlerTest {
 		
 		Long requestTaskId = 1L;
 		RequestTaskActionType requestTaskActionType = RequestTaskActionType.EMP_VARIATION_CORSIA_SAVE_APPLICATION_REGULATOR_LED;
-		PmrvUser pmrvUser = PmrvUser.builder().build();
+		AppUser appUser = AppUser.builder().build();
 		EmpVariationCorsiaSaveApplicationRegulatorLedRequestTaskActionPayload payload = EmpVariationCorsiaSaveApplicationRegulatorLedRequestTaskActionPayload.builder()
 				.emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
 						.abbreviations(EmpAbbreviations.builder()
@@ -51,7 +51,7 @@ class EmpVariationCorsiaSaveRegulatorLedActionHandlerTest {
 		
 		when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 		
-		cut.process(requestTaskId, requestTaskActionType, pmrvUser, payload);
+		cut.process(requestTaskId, requestTaskActionType, appUser, payload);
 		
 		verify(requestTaskService, times(1)).findTaskById(requestTaskId);
 		verify(regulatorLedService, times(1)).saveEmpVariation(payload, requestTask);

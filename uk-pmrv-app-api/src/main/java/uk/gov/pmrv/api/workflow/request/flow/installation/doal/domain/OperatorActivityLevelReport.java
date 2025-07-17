@@ -3,7 +3,6 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

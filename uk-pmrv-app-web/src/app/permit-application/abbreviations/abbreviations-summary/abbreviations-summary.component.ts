@@ -15,5 +15,8 @@ export class AbbreviationsSummaryComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
   hasAbbreviations$: Observable<boolean> = this.store.getTask('abbreviations').pipe(map((item) => !!item?.exist));
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly router: Router) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly router: Router,
+  ) {}
 }

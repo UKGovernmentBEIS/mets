@@ -1,13 +1,14 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 
-import { combineLatest, map, switchMap } from 'rxjs';
+import { combineLatest, map, of, switchMap } from 'rxjs';
 
 import { getTaskStatusByTaskCompletionState } from '@aviation/request-task/aer/shared/util/aer.util';
+import { amendsRequestedTaskActionTypes } from '@aviation/request-task/util';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { notFoundVerificationBodyError } from '@tasks/aer/error/business-errors';
 
-import { AccountVerificationBodyService, AviationAerCorsiaApplicationSubmitRequestTaskPayload } from 'pmrv-api';
+import { AccountVerificationBodyService } from 'pmrv-api';
 
 import { requestTaskQuery, RequestTaskStore } from '../../../../store';
 import { aerQuery } from '../../../shared/aer.selectors';
@@ -22,28 +23,28 @@ export const canActivateSendReportVerifier = (route: ActivatedRouteSnapshot) => 
   const accountVerificationBodyService = inject(AccountVerificationBodyService);
   const businessErrorService = inject(BusinessErrorService);
 
-  const statusOkAsVerifier$ = store.pipe(
-    aerQuery.selectPayload,
-    map(
-      (payload: AviationAerCorsiaApplicationSubmitRequestTaskPayload) =>
-        getTaskStatusByTaskCompletionState('sendReport', payload, false, true) !== 'cannot start yet' &&
-        !payload?.verificationPerformed,
-    ),
-  );
-
   const verifierBodyExists$ = store.pipe(
     requestTaskQuery.selectRequestInfo,
     switchMap((info) => accountVerificationBodyService.getVerificationBodyOfAccount(info.accountId)),
     map((vb) => !!vb),
   );
 
-  return combineLatest([statusOkAsVerifier$, verifierBodyExists$]).pipe(
-    map(([statusOkAsVerifier, verifierBodyExists]) => {
-      return statusOkAsVerifier
+  return combineLatest([
+    store.pipe(aerQuery.selectPayload),
+    store.pipe(requestTaskQuery.selectRequestTaskType),
+    verifierBodyExists$,
+  ]).pipe(
+    switchMap(([payload, taskType, verifierBodyExists]) => {
+      return getTaskStatusByTaskCompletionState(
+        'sendReport',
+        payload,
+        amendsRequestedTaskActionTypes.includes(taskType),
+        true,
+      ) !== 'cannot start yet' && !payload?.verificationPerformed
         ? verifierBodyExists
-          ? true
+          ? of(true)
           : businessErrorService.showError(notFoundVerificationBodyError())
-        : router.parseUrl(`aviation/tasks/${route.params.taskId}`);
+        : of(router.parseUrl(`aviation/tasks/${route.params.taskId}`));
     }),
   );
 };
@@ -55,18 +56,17 @@ export const canActivateSendReportRegulator: CanActivateFn = (route: ActivatedRo
   const store = inject(RequestTaskStore);
   const router = inject(Router);
 
-  const statusOkForRegulator$ = store.pipe(
-    aerQuery.selectPayload,
-    map(
-      (payload: AviationAerCorsiaApplicationSubmitRequestTaskPayload) =>
-        getTaskStatusByTaskCompletionState('sendReport', payload, false, true) !== 'cannot start yet' &&
-        (payload?.verificationPerformed || !payload?.reportingRequired),
-    ),
-  );
-
-  return combineLatest([statusOkForRegulator$]).pipe(
-    map(([statusOkForRegulator]) => {
-      return statusOkForRegulator ? true : router.parseUrl(`aviation/tasks/${route.params.taskId}`);
+  return combineLatest([store.pipe(aerQuery.selectPayload), store.pipe(requestTaskQuery.selectRequestTaskType)]).pipe(
+    map(([payload, taskType]) => {
+      return getTaskStatusByTaskCompletionState(
+        'sendReport',
+        payload,
+        amendsRequestedTaskActionTypes.includes(taskType),
+        true,
+      ) !== 'cannot start yet' &&
+        (payload?.verificationPerformed || !payload?.reportingRequired)
+        ? true
+        : router.parseUrl(`aviation/tasks/${route.params.taskId}`);
     }),
   );
 };

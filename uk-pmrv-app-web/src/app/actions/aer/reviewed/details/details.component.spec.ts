@@ -1,9 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { ActivatedRouteStub, BasePage } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { CommonActionsStore } from '../../../store/common-actions.store';
 import { AerModule } from '../../aer.module';
@@ -37,8 +35,8 @@ describe('DetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [KeycloakService, { provide: ActivatedRoute, useValue: route }],
-      imports: [AerModule, RouterTestingModule],
+      providers: [{ provide: ActivatedRoute, useValue: route }],
+      imports: [AerModule],
     }).compileComponents();
   });
 
@@ -64,16 +62,16 @@ describe('DetailsComponent', () => {
       ['Installation name', 'onshore permit installation'],
       ['Site name', 'site name'],
       ['Installation address', `NN166712 Korinthou 4, Neo Psychiko, line 2 legal testAthens15452`],
+      ['Company registration number', '88888'],
       ['Operator name', 'onshore permit'],
       ['Legal status', 'Limited Company'],
-      ['Company registration number', '88888'],
       ['Operator address', 'Korinthou 3, Neo Psychiko, line 2 legal test Athens15451'],
       ['Are emissions from the installation reported under the Pollutant Release and Transfer Register?', 'No'],
       ['Regulated activity', 'Ammonia production (Carbon dioxide)'],
       ['Capacity', '100 kVA'],
       ['CRF codes', '1.A.1.a Public Electricity and Heat Production2.A.4 Other Process uses of Carbonates'],
       ['Changes reported by the operator', 'the details of the deviation'],
-      ['Approaches used', 'Calculation of CO2 Measurement of CO2 Fallback approach Inherent CO2 emissions'],
+      ['Approaches used', 'Calculation of CO2  Measurement of CO2  Fallback approach  Inherent CO2 emissions'],
       ['Decision status', 'Accepted'],
       ['Notes', 'Notes'],
     ]);

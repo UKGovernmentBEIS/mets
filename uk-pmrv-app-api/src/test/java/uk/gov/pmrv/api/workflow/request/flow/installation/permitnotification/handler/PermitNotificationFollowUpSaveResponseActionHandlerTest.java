@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -39,7 +39,7 @@ class PermitNotificationFollowUpSaveResponseActionHandlerTest {
                 .response("the response")
                 .files(Set.of(file))
                 .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final String processTaskId = "processTaskId";
         final RequestTask requestTask = RequestTask.builder()
             .id(1L)
@@ -52,7 +52,7 @@ class PermitNotificationFollowUpSaveResponseActionHandlerTest {
         // Invoke
         handler.process(requestTask.getId(),
             RequestTaskActionType.PERMIT_NOTIFICATION_FOLLOW_UP_SAVE_RESPONSE,
-            pmrvUser,
+            appUser,
             cancelPayload);
 
         // Verify

@@ -3,7 +3,7 @@ import { map, OperatorFunction, pipe } from 'rxjs';
 import { AccountType, AuthState, DomainsLoginStatuses, LoginStatus } from '@core/store/auth/auth.state';
 import { KeycloakProfile } from 'keycloak-js';
 
-import { ApplicationUserDTO, TermsDTO } from 'pmrv-api';
+import { UserDTO, UserTermsVersionDTO } from 'pmrv-api';
 
 import { UserState } from './auth.state';
 
@@ -12,9 +12,9 @@ export const selectSwitchingDomain: OperatorFunction<AuthState, AccountType> = p
   map((state) => state.switchingDomain),
 );
 export const selectUserProfile: OperatorFunction<AuthState, KeycloakProfile> = map((state) => state.userProfile);
-export const selectTerms: OperatorFunction<AuthState, TermsDTO> = map((state) => state.terms);
+export const selectUserTerms: OperatorFunction<AuthState, UserTermsVersionDTO> = map((state) => state.userTerms);
 export const selectIsLoggedIn: OperatorFunction<AuthState, boolean> = map((state) => state.isLoggedIn);
-export const selectUser: OperatorFunction<AuthState, ApplicationUserDTO> = map((state) => state.user);
+export const selectUser: OperatorFunction<AuthState, UserDTO> = map((state) => state.user);
 export const selectUserState: OperatorFunction<AuthState, UserState> = map((state) => state.userState);
 export const selectDomainsLoginStatuses: OperatorFunction<AuthState, DomainsLoginStatuses> = pipe(
   selectUserState,

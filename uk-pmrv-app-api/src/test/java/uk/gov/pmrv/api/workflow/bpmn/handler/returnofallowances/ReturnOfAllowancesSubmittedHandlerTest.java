@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ReturnOfAllowancesSubmittedHandlerTest {
+class ReturnOfAllowancesSubmittedHandlerTest {
 
     @Mock
     private ReturnOfAllowancesSubmittedService service;
@@ -23,7 +23,7 @@ public class ReturnOfAllowancesSubmittedHandlerTest {
     private ReturnOfAllowancesSubmittedHandler handler;
 
     @Test
-    public void execute() {
+    void execute() {
         String requestId = "request123";
         DelegateExecution execution = Mockito.mock(DelegateExecution.class);
         when(execution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);

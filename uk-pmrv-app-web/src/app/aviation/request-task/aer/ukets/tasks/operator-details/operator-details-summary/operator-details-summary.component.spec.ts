@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { AerRequestTaskPayload, RequestTaskStore } from '@aviation/request-task/store';
-import { AerStoreDelegate } from '@aviation/request-task/store/delegates';
+import { AerUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { parseCsv } from '@aviation/request-task/util';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
@@ -92,7 +92,7 @@ describe('OperatorDetailsSummaryComponent', () => {
       produce(store.getState(), (state) => {
         state.requestTaskItem = {
           requestTask: {
-            payload: AerStoreDelegate.INITIAL_STATE as AerRequestTaskPayload,
+            payload: AerUkEtsStoreDelegate.INITIAL_STATE as AerRequestTaskPayload,
           },
         };
       }),

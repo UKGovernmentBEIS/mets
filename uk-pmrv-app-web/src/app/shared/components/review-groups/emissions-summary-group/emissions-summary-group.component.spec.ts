@@ -16,7 +16,9 @@ describe('EmissionsSummaryGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    template: ` <app-emissions-summary-group [data]="data"></app-emissions-summary-group> `,
+    template: `
+      <app-emissions-summary-group [data]="data"></app-emissions-summary-group>
+    `,
   })
   class TestComponent {
     data = {
@@ -459,7 +461,7 @@ describe('EmissionsSummaryGroupComponent', () => {
       ['Measurement of transferred CO2', '-37.026  t', '0  t'],
       ['Calculation of PFC', '11332812  t', '0  t'],
       ['Fallback', '9.9  t  (includes 8.8 t non-sustainable biomass)', '3.3  t'],
-      ['Total', '11333648.874  tCO2e', '48.3  tCO2e'],
+      ['Total', '11333649  tCO2e', '48  tCO2e'],
       ['Inherent CO2', '66.66667  t', '0  t'],
     ]);
   });

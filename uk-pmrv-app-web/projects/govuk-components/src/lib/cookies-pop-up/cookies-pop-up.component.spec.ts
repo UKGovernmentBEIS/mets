@@ -3,19 +3,16 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { CookiesPopUpComponent } from './cookies-pop-up.component';
 
-
 describe('CookiesPopUpComponent', () => {
   let component: CookiesPopUpComponent;
   let fixture: ComponentFixture<CookiesPopUpComponent>;
 
-  beforeEach(
-    waitForAsync(() => {
-      TestBed.configureTestingModule({
-        declarations: [CookiesPopUpComponent],
-        imports: [RouterTestingModule],
-      }).compileComponents();
-    })
-  );
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [CookiesPopUpComponent],
+      imports: [RouterTestingModule],
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(CookiesPopUpComponent);

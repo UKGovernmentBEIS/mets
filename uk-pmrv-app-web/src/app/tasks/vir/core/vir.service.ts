@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { first, map, Observable, switchMap, tap } from 'rxjs';
+import { first, Observable, switchMap, tap } from 'rxjs';
 
-import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
 import {
@@ -11,13 +10,10 @@ import {
   taskSubmitNotFoundError,
 } from '@shared/errors/request-task-error';
 import { AttachedFile } from '@shared/types/attached-file.type';
+import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 import { CommonTasksState } from '@tasks/store/common-tasks.state';
-import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 import {
-  RequestMetadata,
-  RequestTaskItemDTO,
-  TasksService,
   VirApplicationRespondToRegulatorCommentsRequestTaskPayload,
   VirApplicationReviewRequestTaskPayload,
   VirApplicationSubmitRequestTaskPayload,
@@ -30,13 +26,7 @@ import {
 @Injectable({
   providedIn: 'root',
 })
-export class VirService {
-  constructor(
-    private readonly store: CommonTasksStore,
-    private readonly tasksService: TasksService,
-    private readonly businessErrorService: BusinessErrorService,
-  ) {}
-
+export class VirService extends TasksHelperService {
   get payload$(): Observable<
     | VirApplicationSubmitRequestTaskPayload
     | VirApplicationReviewRequestTaskPayload
@@ -45,24 +35,8 @@ export class VirService {
     return this.store.payload$;
   }
 
-  get requestTaskItem$(): Observable<RequestTaskItemDTO> {
-    return this.store.requestTaskItem$;
-  }
-
   get requestId() {
     return this.store.requestId;
-  }
-
-  get isEditable$(): Observable<boolean> {
-    return this.store.isEditable$;
-  }
-
-  get requestMetadata$(): Observable<RequestMetadata> {
-    return this.store.requestMetadata$;
-  }
-
-  get daysRemaining$() {
-    return this.store.requestTaskItem$.pipe(map((task) => task.requestTask.daysRemaining));
   }
 
   postVirTaskSave(
@@ -135,16 +109,11 @@ export class VirService {
     );
   }
 
-  createBaseFileDownloadUrl(): string {
-    const requestTaskId = this.store.requestTaskId;
-    return `/tasks/${requestTaskId}/file-download/`;
-  }
-
   getDownloadUrlFiles(files: string[]): AttachedFile[] {
     const attachments: { [key: string]: string } = (
       this.store.getValue().requestTaskItem.requestTask.payload as VirApplicationSubmitRequestTaskPayload
     )?.virAttachments;
-    const url = this.createBaseFileDownloadUrl();
+    const url = this.getBaseFileDownloadUrl();
     return (
       files?.map((id) => ({
         downloadUrl: url + `${id}`,

@@ -1,22 +1,22 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.common.service.notification;
 
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.config.CompetentAuthorityProperties;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.utils.DateService;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountWithoutLeHoldingCompanyDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.common.config.AppProperties;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
-import uk.gov.pmrv.api.common.service.DateService;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.AccountTemplateParams;
 import uk.gov.pmrv.api.notification.template.installation.domain.InstallationAccountTemplateParams;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.user.regulator.service.RegulatorUserAuthService;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.CompetentAuthorityDTOByRequestResolverDelegator;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateCommonParamsAbstractProvider;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateLocationInfoResolver;
 
@@ -29,15 +29,17 @@ public class InstallationDocumentTemplateCommonParamsProvider extends DocumentTe
     private final AccountContactQueryService accountContactQueryService;
     private final UserAuthService userAuthService;
 
-
-    public InstallationDocumentTemplateCommonParamsProvider(RegulatorUserAuthService regulatorUserAuthService, UserAuthService userAuthService,
-                                                            AppProperties appProperties, DateService dateService,
-                                                            CompetentAuthorityService competentAuthorityService,
+    public InstallationDocumentTemplateCommonParamsProvider(RegulatorUserAuthService regulatorUserAuthService,
+                                                            UserAuthService userAuthService,
+                                                            CompetentAuthorityProperties competentAuthorityProperties,
+                                                            DateService dateService,
                                                             InstallationAccountQueryService installationAccountQueryService,
                                                             PermitQueryService permitQueryService,
                                                             DocumentTemplateLocationInfoResolver documentTemplateLocationInfoResolver,
-                                                            AccountContactQueryService accountContactQueryService) {
-        super(regulatorUserAuthService, userAuthService, appProperties, dateService, competentAuthorityService);
+                                                            AccountContactQueryService accountContactQueryService,
+                                                            CompetentAuthorityDTOByRequestResolverDelegator competentAuthorityDTOByRequestResolverDelegator
+                                                            ) {
+        super(regulatorUserAuthService, userAuthService, competentAuthorityProperties, dateService, competentAuthorityDTOByRequestResolverDelegator);
         this.installationAccountQueryService = installationAccountQueryService;
         this.permitQueryService = permitQueryService;
         this.documentTemplateLocationInfoResolver = documentTemplateLocationInfoResolver;
@@ -83,4 +85,5 @@ public class InstallationDocumentTemplateCommonParamsProvider extends DocumentTe
 	public AccountType getAccountType() {
 		return AccountType.INSTALLATION;
 	}
+
 }

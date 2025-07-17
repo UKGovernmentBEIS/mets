@@ -31,4 +31,5 @@ public class EtsMeasEmissionPointCategory {
     private final String laboratoryName;
     private final boolean measurementLabIsoAccredited;
     private final String measurementQualityAssuranceMeasures;
+
 }

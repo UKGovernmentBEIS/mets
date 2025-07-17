@@ -3,7 +3,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.servic
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -37,23 +37,23 @@ public class PermitTransferBReviewService {
     @Transactional
     public void saveRequestPeerReviewAction(final RequestTask requestTask,
                                             final String selectedPeerReview,
-                                            final PmrvUser pmrvUser) {
+                                            final AppUser appUser) {
 
-        final PermitTransferBRequestPayload requestPayload = this.updatePermitTransferBRequestPayload(requestTask, pmrvUser);
+        final PermitTransferBRequestPayload requestPayload = this.updatePermitTransferBRequestPayload(requestTask, appUser);
         requestPayload.setRegulatorPeerReviewer(selectedPeerReview);
     }
     
 
     @Transactional
     public PermitTransferBRequestPayload updatePermitTransferBRequestPayload(final RequestTask requestTask,
-                                                                             final PmrvUser pmrvUser) {
+                                                                             final AppUser appUser) {
 
         final Request request = requestTask.getRequest();
         final PermitTransferBApplicationReviewRequestTaskPayload taskPayload =
             (PermitTransferBApplicationReviewRequestTaskPayload) requestTask.getPayload();
         final PermitTransferBRequestPayload requestPayload = (PermitTransferBRequestPayload) request.getPayload();
 
-        requestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+        requestPayload.setRegulatorReviewer(appUser.getUserId());
         requestPayload.setPermitType(taskPayload.getPermitType());
         requestPayload.setPermit(taskPayload.getPermit());
         requestPayload.setPermitSectionsCompleted(taskPayload.getPermitSectionsCompleted());
@@ -70,11 +70,11 @@ public class PermitTransferBReviewService {
     @Transactional
     public void savePermitTransferBDecisionNotification(final RequestTask requestTask,
                                                         final DecisionNotification permitDecisionNotification,
-                                                        final PmrvUser pmrvUser) {
+                                                        final AppUser appUser) {
 
         final Request request = requestTask.getRequest();
         final PermitTransferBRequestPayload requestPayload = (PermitTransferBRequestPayload) request.getPayload();
         requestPayload.setDecisionNotification(permitDecisionNotification);
-        this.updatePermitTransferBRequestPayload(requestTask, pmrvUser);
+        this.updatePermitTransferBRequestPayload(requestTask, appUser);
     }
 }

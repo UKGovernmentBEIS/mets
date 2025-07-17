@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { first, map, Observable } from 'rxjs';
 
@@ -9,8 +9,11 @@ import { transferDetailsStatus } from '../transfer-status';
 @Injectable({
   providedIn: 'root',
 })
-export class TransferDetailsGuard implements CanActivate {
-  constructor(private readonly router: Router, private readonly store: PermitTransferStore) {}
+export class TransferDetailsGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly store: PermitTransferStore,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, routerState: RouterStateSnapshot): Observable<boolean | UrlTree> {
     return (

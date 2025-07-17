@@ -5,8 +5,8 @@ import { of } from 'rxjs';
 
 import { PermitNotificationSharedModule } from '@shared/components/permit-notification/permit-notification-shared.module';
 import { SharedModule } from '@shared/shared.module';
+import { addDays, format } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import {
   PermitNotificationFollowUpApplicationReviewRequestTaskPayload,
@@ -144,7 +144,7 @@ describe('DesicionComponent', () => {
             followUpFiles: [],
             followUpRequest: 'sedfsdf',
             followUpResponse: 'the response 22',
-            followUpResponseExpirationDate: moment().add(1, 'd').utc(true).format('YYYY-MM-DD'),
+            followUpResponseExpirationDate: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
             permitNotificationType: 'OTHER_FACTOR',
             reviewDecision: mockReviewAcceptedDecision,
             reviewSectionsCompleted: {},
@@ -197,7 +197,7 @@ describe('DesicionComponent', () => {
 
   it('should update and submit form decision as amends needed', () => {
     let requiredChanges = null;
-    const oneWeekAfter = moment().add(7, 'd').utc(true).format('YYYY-MM-DD');
+    const oneWeekAfter = format(addDays(new Date(), 7), 'yyyy-MM-dd');
     const date = oneWeekAfter.split('-');
     const year = date[0];
     const month = date[1];

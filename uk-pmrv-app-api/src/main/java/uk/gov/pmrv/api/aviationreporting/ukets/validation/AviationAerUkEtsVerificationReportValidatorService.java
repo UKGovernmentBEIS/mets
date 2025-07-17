@@ -8,8 +8,8 @@ import org.springframework.validation.annotation.Validated;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerValidationResult;
 import uk.gov.pmrv.api.aviationreporting.common.validation.AviationAerValidatorHelper;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class AviationAerUkEtsVerificationReportValidatorService {
         boolean isValid = verificationReportValidationResults.stream().allMatch(AviationAerValidationResult::isValid);
 
         if (!isValid) {
-            throw new BusinessException(ErrorCode.INVALID_AVIATION_AER_VERIFICATION_REPORT,
+            throw new BusinessException(MetsErrorCode.INVALID_AVIATION_AER_VERIFICATION_REPORT,
                 AviationAerValidatorHelper.extractAviationAerViolations(verificationReportValidationResults));
         }
     }

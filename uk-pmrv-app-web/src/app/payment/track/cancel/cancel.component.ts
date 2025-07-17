@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { BehaviorSubject, first, map, takeUntil } from 'rxjs';
+import { BehaviorSubject, first, map } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
-import { BackLinkService } from '@shared/back-link/back-link.service';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { GovukValidators } from 'govuk-components';
 
@@ -32,33 +33,24 @@ export class CancelComponent implements OnInit {
     readonly store: PaymentStore,
     private readonly fb: UntypedFormBuilder,
     private readonly pendingRequest: PendingRequestService,
-    private readonly destroy$: DestroySubject,
-    private readonly backLinkService: BackLinkService,
+    private readonly breadcrumbService: BreadcrumbService,
+    private readonly router: Router,
   ) {}
 
   ngOnInit(): void {
-    this.confirmed$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
-      if (res) {
-        this.backLinkService.hide();
-      } else {
-        this.backLinkService.show();
-      }
+    this.store.pipe(first()).subscribe((state) => {
+      this.form = this.fb.group({
+        reason: [
+          { value: null, disabled: !state.isEditable },
+          {
+            validators: [
+              GovukValidators.required('Enter the reason that no payment is required'),
+              GovukValidators.maxLength(10000, 'The no payment reason should not be more than 10000 characters'),
+            ],
+          },
+        ],
+      });
     });
-
-    this.store.pipe(first()).subscribe(
-      (state) =>
-        (this.form = this.fb.group({
-          reason: [
-            { value: null, disabled: !state.isEditable },
-            {
-              validators: [
-                GovukValidators.required('Enter the reason that no payment is required'),
-                GovukValidators.maxLength(10000, 'The no payment reason should not be more than 10000 characters'),
-              ],
-            },
-          ],
-        })),
-    );
   }
 
   submitForm(): void {
@@ -66,7 +58,10 @@ export class CancelComponent implements OnInit {
       this.store
         .postTrackPaymentCancel({ ...this.form.value })
         .pipe(this.pendingRequest.trackRequest())
-        .subscribe(() => this.confirmed$.next(true));
+        .subscribe(() => {
+          this.confirmed$.next(true);
+          this.breadcrumbService.showDashboardBreadcrumb(this.router.url);
+        });
     } else {
       this.isSummaryDisplayed$.next(true);
       this.form.markAllAsTouched();

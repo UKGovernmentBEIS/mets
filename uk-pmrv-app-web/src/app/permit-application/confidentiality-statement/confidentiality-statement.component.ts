@@ -1,6 +1,8 @@
 /* eslint-disable @angular-eslint/component-max-inline-declarations */
 import {
+  AfterContentChecked,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
@@ -28,16 +30,14 @@ import { confidentialityStatementFormProvider } from './confidentiality-statemen
         (formSubmit)="onSubmit()"
         [form]="form"
         [isEditable]="store.isEditable$ | async"
-        [caption]="'Confidentiality statement'"
-      >
-      </app-confidentiality-statement-template>
+        [caption]="'Confidentiality statement'"></app-confidentiality-statement-template>
       <app-list-return-link reviewGroupTitle="Confidentiality" reviewGroupUrl="confidentiality"></app-list-return-link>
     </app-permit-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [confidentialityStatementFormProvider, DestroySubject],
 })
-export class ConfidentialityStatementComponent extends SectionComponent {
+export class ConfidentialityStatementComponent extends SectionComponent implements AfterContentChecked {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;
   @ViewChildren('removeButton') removeButtons: QueryList<ElementRef<HTMLButtonElement>>;
@@ -48,8 +48,13 @@ export class ConfidentialityStatementComponent extends SectionComponent {
     readonly pendingRequest: PendingRequestService,
     readonly router: Router,
     readonly route: ActivatedRoute,
+    private cd: ChangeDetectorRef,
   ) {
     super(store, router, route);
+  }
+
+  ngAfterContentChecked(): void {
+    this.cd.detectChanges();
   }
 
   onSubmit(): void {

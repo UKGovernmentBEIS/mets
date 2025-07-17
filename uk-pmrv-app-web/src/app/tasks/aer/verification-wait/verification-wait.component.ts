@@ -20,5 +20,8 @@ export class VerificationWaitComponent {
   );
   readonly daysRemaining$ = this.store.pipe(map((state) => state.requestTaskItem.requestTask.daysRemaining));
 
-  constructor(private readonly aerService: AerService, private readonly store: CommonTasksStore) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly store: CommonTasksStore,
+  ) {}
 }

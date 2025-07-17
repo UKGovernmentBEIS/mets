@@ -28,7 +28,8 @@ class AviationAerCorsiaVerificationPerformedRequestTaskActionValidatorTest {
     @Test
     void getTypes() {
         assertThat(validator.getTypes()).containsExactlyInAnyOrder(
-                RequestTaskActionType.AVIATION_AER_CORSIA_SUBMIT_APPLICATION
+                RequestTaskActionType.AVIATION_AER_CORSIA_SUBMIT_APPLICATION,
+                RequestTaskActionType.AVIATION_AER_CORSIA_SUBMIT_APPLICATION_AMEND
         );
     }
 

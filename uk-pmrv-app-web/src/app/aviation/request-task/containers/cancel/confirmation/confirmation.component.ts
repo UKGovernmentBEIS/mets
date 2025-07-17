@@ -11,7 +11,7 @@ import { BaseSuccessComponent } from '@shared/base-success/base-success.componen
       </div>
     </div>
     <p class="govuk-body">It has been removed from your task dashboard.</p>
-    <a govukLink routerLink="/aviation/dashboard"> Return to dashboard </a>
+    <a govukLink routerLink="/aviation/dashboard">Return to dashboard</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

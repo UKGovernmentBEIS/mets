@@ -18,11 +18,9 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocation;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service.PermitRevokedService;
+import uk.gov.pmrv.api.workflow.utils.DateUtils;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 
@@ -55,13 +53,10 @@ class PermitRevokedServiceTest {
     }
 
     @Test
-    void getAerVariables() {
+    void constructAerVariables() {
         final String requestId = "1";
         LocalDate reportLocalDate = LocalDate.now();
-        Date reportDate = Date.from(reportLocalDate
-                .atTime(LocalTime.MIN)
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
+        Date reportDate = DateUtils.atEndOfDay(reportLocalDate);
 
         PermitRevocationRequestPayload requestPayload = PermitRevocationRequestPayload.builder()
                 .payloadType(RequestPayloadType.PERMIT_REVOCATION_REQUEST_PAYLOAD)
@@ -78,7 +73,7 @@ class PermitRevokedServiceTest {
         when(requestService.findRequestById(requestId)).thenReturn(request);
 
         // Invoke
-        Map<String, Object> result = service.getAerVariables(requestId);
+        Map<String, Object> result = service.constructAerVariables(requestId);
 
         // Verify
         assertThat(result).isEqualTo(Map.of(

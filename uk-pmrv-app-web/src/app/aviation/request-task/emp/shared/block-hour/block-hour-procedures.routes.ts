@@ -44,7 +44,7 @@ export const EMP_BLOCK_HOUR_PROCEDURES_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Block hour procedures summary' },
+        data: { breadcrumb: 'Block hour procedures' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () =>
           import('./block-hour-summary/block-hour-summary.component').then((c) => c.BlockHourSummaryComponent),

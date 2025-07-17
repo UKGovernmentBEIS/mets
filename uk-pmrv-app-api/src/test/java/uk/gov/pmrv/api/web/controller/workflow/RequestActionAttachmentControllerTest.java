@@ -13,16 +13,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.token.FileToken;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.token.FileToken;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 import uk.gov.pmrv.api.workflow.request.application.attachment.requestaction.RequestActionAttachmentService;
 
 import java.util.UUID;
@@ -49,15 +49,15 @@ class RequestActionAttachmentControllerTest {
     private RequestActionAttachmentService requestActionAttachmentService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
@@ -68,7 +68,7 @@ class RequestActionAttachmentControllerTest {
         controller = (RequestActionAttachmentController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .build();
     }
@@ -95,12 +95,12 @@ class RequestActionAttachmentControllerTest {
     void generateRequestActionGetFileAttachmentToken_forbidden() throws Exception {
         Long requestActionId = 1L;
         UUID attachmentUuid = UUID.randomUUID();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "generateRequestActionGetFileAttachmentToken", String.valueOf(requestActionId));
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "generateRequestActionGetFileAttachmentToken", String.valueOf(requestActionId), null, null);
 
         mockMvc.perform(MockMvcRequestBuilders
             .get(BASE_PATH + "/" + requestActionId)

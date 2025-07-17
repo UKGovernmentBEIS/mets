@@ -1,4 +1,13 @@
-import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterContentChecked,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -20,7 +29,7 @@ import { AbbreviationsFormProvider } from '../abbreviations-form.provider';
   imports: [SharedModule, AbbreviationsFormComponent, ReturnToLinkComponent],
   templateUrl: './abbreviations-page.component.html',
 })
-export class AbbreviationsPageComponent implements OnInit, OnDestroy {
+export class AbbreviationsPageComponent implements OnInit, OnDestroy, AfterContentChecked {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;
 
   private router = inject(Router);
@@ -33,8 +42,14 @@ export class AbbreviationsPageComponent implements OnInit, OnDestroy {
   form = this.formProvider.form;
   readonly empHeaderTaskMap = empHeaderTaskMap;
 
+  constructor(private cd: ChangeDetectorRef) {}
+
   ngOnInit(): void {
     this.backLinkService.show('..');
+  }
+
+  ngAfterContentChecked(): void {
+    this.cd.detectChanges();
   }
 
   ngOnDestroy(): void {

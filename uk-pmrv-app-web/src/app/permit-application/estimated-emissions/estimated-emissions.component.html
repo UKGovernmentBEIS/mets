@@ -5,8 +5,7 @@
     caption="Installation details"
     heading="Estimated annual CO2e"
     submitText="Confirm and complete"
-    [hideSubmit]="(store.isEditable$ | async) === false"
-  >
+    [hideSubmit]="(store.isEditable$ | async) === false">
     <div class="govuk-body">
       <p>
         Input the installation’s estimated annual carbon dioxide equivalent (CO2e) emissions. Do not include any
@@ -31,9 +30,8 @@
       label="What is the installation’s estimated annual CO2e?"
       suffix="tonnes CO2e"
       widthClass="govuk-input--width-10"
-      class="govuk-!-margin-top-6"
-    ></div>
-    <ng-container *ngIf="(store | async)?.permitType === 'GHGE'">
+      class="govuk-!-margin-top-6"></div>
+    <ng-container *ngIf="(store | async)?.permitType === 'GHGE' || (store | async)?.permitType === 'WASTE'">
       <div govukInsetText *ngIf="category$ | async as category">
         This installation is a {{ category }} emitter based on the estimate provided.
       </div>

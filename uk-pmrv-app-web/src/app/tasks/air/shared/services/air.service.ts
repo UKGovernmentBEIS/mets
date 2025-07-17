@@ -12,6 +12,7 @@ import {
 } from '@shared/errors/request-task-error';
 import { ItemNamePipe } from '@shared/pipes/item-name.pipe';
 import { AttachedFile } from '@shared/types/attached-file.type';
+import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 import { CommonTasksState } from '@tasks/store/common-tasks.state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
@@ -24,38 +25,26 @@ import {
   AirSaveRespondToRegulatorCommentsRequestTaskActionPayload,
   AirSaveReviewRequestTaskActionPayload,
   AirSubmitRespondToRegulatorCommentsRequestTaskActionPayload,
-  RequestMetadata,
-  RequestTaskItemDTO,
   TasksService,
 } from 'pmrv-api';
 
 @Injectable()
-export class AirService {
+export class AirService extends TasksHelperService {
   constructor(
-    private readonly store: CommonTasksStore,
-    private readonly tasksService: TasksService,
-    private readonly businessErrorService: BusinessErrorService,
+    store: CommonTasksStore,
+    tasksService: TasksService,
+    businessErrorService: BusinessErrorService,
     private readonly itemNamePipe: ItemNamePipe,
-  ) {}
+  ) {
+    super(store, tasksService, businessErrorService);
+  }
 
   get payload$(): Observable<AirApplicationSubmitRequestTaskPayload> {
     return this.store.payload$ as Observable<AirApplicationSubmitRequestTaskPayload>;
   }
 
-  get requestTaskItem$(): Observable<RequestTaskItemDTO> {
-    return this.store.requestTaskItem$;
-  }
-
   get requestId() {
     return this.store.requestId;
-  }
-
-  get isEditable$(): Observable<boolean> {
-    return this.store.isEditable$;
-  }
-
-  get requestMetadata$(): Observable<RequestMetadata> {
-    return this.store.requestMetadata$;
   }
 
   get title$(): Observable<string> {
@@ -64,10 +53,6 @@ export class AirService {
         this.itemNamePipe.transform(requestTaskItem?.requestTask?.type, (metadata as AirRequestMetadata)?.year),
       ),
     );
-  }
-
-  get daysRemaining$() {
-    return this.store.requestTaskItem$.pipe(map((task) => task.requestTask.daysRemaining));
   }
 
   postAirTaskSave(
@@ -146,18 +131,13 @@ export class AirService {
     );
   }
 
-  createBaseFileDownloadUrl(): string {
-    const requestTaskId = this.store.requestTaskId;
-    return `/tasks/${requestTaskId}/file-download/`;
-  }
-
   getOperatorDownloadUrlFiles(files: string[]): AttachedFile[] {
     const attachments: { [key: string]: string } = (
       this.store.getValue().requestTaskItem.requestTask.payload as
         | AirApplicationRespondToRegulatorCommentsRequestTaskPayload
         | AirApplicationSubmitRequestTaskPayload
     )?.airAttachments;
-    const url = this.createBaseFileDownloadUrl();
+    const url = this.getBaseFileDownloadUrl();
     return (
       files?.map((id) => ({
         downloadUrl: url + `${id}`,
@@ -170,7 +150,7 @@ export class AirService {
     const attachments: { [key: string]: string } = (
       this.store.getValue().requestTaskItem.requestTask.payload as AirApplicationReviewRequestTaskPayload
     )?.reviewAttachments;
-    const url = this.createBaseFileDownloadUrl();
+    const url = this.getBaseFileDownloadUrl();
     return (
       files?.map((id) => ({
         downloadUrl: url + `${id}`,

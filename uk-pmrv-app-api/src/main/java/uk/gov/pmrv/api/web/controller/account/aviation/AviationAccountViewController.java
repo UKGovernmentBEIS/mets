@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.Authorized;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.orchestrator.account.aviation.service.AviationAccountEmpQueryOrchestrator;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.dto.AviationAccountEmpDTO;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.dto.AviationAccountHeaderInfoDTO;
-import uk.gov.pmrv.api.web.security.Authorized;
+import uk.gov.pmrv.api.web.orchestrator.account.aviation.service.AviationAccountEmpQueryOrchestrator;
 
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.FORBIDDEN;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
@@ -45,9 +45,9 @@ public class AviationAccountViewController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#accountId")
     public ResponseEntity<AviationAccountEmpDTO> getAviationAccountById(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @Parameter(description = "The account id") @PathVariable("id") Long accountId) {
-        return new ResponseEntity<>(orchestrator.getAviationAccountWithEMP(accountId, pmrvUser), HttpStatus.OK);
+        return new ResponseEntity<>(orchestrator.getAviationAccountWithEMP(accountId, appUser), HttpStatus.OK);
     }
 
     @GetMapping("/{id}/header-info")

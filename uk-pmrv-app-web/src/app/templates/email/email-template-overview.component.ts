@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, pluck } from 'rxjs';
+import { map, Observable } from 'rxjs';
+
+import { BackLinkService } from '@shared/back-link/back-link.service';
 
 import { NotificationTemplateDTO } from 'pmrv-api';
-
-import { BackLinkService } from '../../shared/back-link/back-link.service';
 
 @Component({
   selector: 'app-email-template-overview',
@@ -14,7 +14,7 @@ import { BackLinkService } from '../../shared/back-link/back-link.service';
 })
 export class EmailTemplateOverviewComponent implements OnInit {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
-  emailTemplate$: Observable<NotificationTemplateDTO> = this.route.data.pipe(pluck('emailTemplate'));
+  emailTemplate$: Observable<NotificationTemplateDTO> = this.route.data.pipe(map((x) => x?.emailTemplate));
 
   constructor(
     private readonly route: ActivatedRoute,

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.dto.AviationAerCorsiaEmissionsCalculationDTO;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.dto.AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.totalemissions.AviationAerCorsiaAerodromePairsTotalEmissions;
@@ -33,13 +34,12 @@ import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.StandardFue
 import uk.gov.pmrv.api.aviationreporting.ukets.service.AviationAerUkEtsSubmittedEmissionsCalculationService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 
 import java.util.List;
 
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.VERIFIER;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.VERIFIER;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.BAD_REQUEST;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
@@ -139,7 +139,7 @@ public class AviationReportingController {
     @AuthorizedRole(roleType = {OPERATOR, REGULATOR, VERIFIER})
     public ResponseEntity<AviationAerCorsiaTotalEmissions> getTotalEmissionsCorsia(
             @RequestBody @Valid @Parameter(description = "DTO containing emission data and emissions reduction claim data is required", required = true)
-            AviationAerCorsiaEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO) {
+            AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO) {
         AviationAerCorsiaTotalEmissions totalEmissions = aviationAerCorsiaEmissionsCalculationService
                 .calculateTotalEmissions(aviationAerCorsiaEmissionsCalculationDTO);
         return new ResponseEntity<>(totalEmissions, HttpStatus.OK);
@@ -154,7 +154,7 @@ public class AviationReportingController {
     @AuthorizedRole(roleType = {OPERATOR, REGULATOR, VERIFIER})
     public ResponseEntity<List<AviationAerCorsiaAerodromePairsTotalEmissions>> getAerodromePairsEmissionsCorsia(
             @RequestBody @Valid @Parameter(description = "DTO containing emission data and emissions reduction claim data is required", required = true)
-            AviationAerCorsiaEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO) {
+            AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO) {
         List<AviationAerCorsiaAerodromePairsTotalEmissions> totalEmissions = aviationAerCorsiaEmissionsCalculationService
                 .calculateAerodromePairsTotalEmissions(aviationAerCorsiaEmissionsCalculationDTO);
         return new ResponseEntity<>(totalEmissions, HttpStatus.OK);

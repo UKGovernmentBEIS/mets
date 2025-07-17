@@ -1,16 +1,14 @@
 package uk.gov.pmrv.api.permit.domain.monitoringapproaches.common;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 
 @Data
 @Builder

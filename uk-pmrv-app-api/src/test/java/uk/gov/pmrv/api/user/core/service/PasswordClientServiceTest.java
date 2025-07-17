@@ -13,16 +13,15 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import uk.gov.pmrv.api.common.config.AppProperties;
+import org.springframework.web.util.UriComponentsBuilder;
+import uk.gov.netz.api.restclient.RestClientApi;
 import uk.gov.pmrv.api.user.core.domain.dto.validation.PasswordClientService;
+import uk.gov.pmrv.api.user.core.domain.dto.validation.PwnedPasswordProperties;
 import uk.gov.pmrv.api.user.core.domain.enumeration.RestEndPointEnum;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -34,12 +33,12 @@ class PasswordClientServiceTest {
     private PasswordClientService passwordClientService;
 
     @Mock
-    private AppProperties appProperties;
+    private PwnedPasswordProperties pwnedPasswordProperties;
 
     @Mock
     private RestTemplate restTemplate;
 
-    private static final String baseUrl = "url";
+    private static final String baseUrl = "https://api.pwnedpasswords.com";
 
     private static final String strongPasswordHashPrefix = "c7481";
 
@@ -50,22 +49,28 @@ class PasswordClientServiceTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(Collections.singletonList(MediaType.parseMediaType("text/plain")));
 
-        Map<String, Object> requestParams = new HashMap<>(){{
-            put(RestEndPointEnum.PWNED_PASSWORDS.getParameters().get(0), strongPasswordHashPrefix);
-        }};
+        when(pwnedPasswordProperties.getServiceUrl()).thenReturn(baseUrl);
 
-        when(appProperties.getClient()).thenReturn(mock(AppProperties.Client.class));
-        when(appProperties.getClient().getPasswordUrl()).thenReturn(baseUrl);
-        when(restTemplate.exchange(baseUrl + RestEndPointEnum.PWNED_PASSWORDS.getEndPoint(), RestEndPointEnum.PWNED_PASSWORDS.getMethod(),
-                new HttpEntity<>(httpHeaders), new ParameterizedTypeReference<String>() {}, requestParams))
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(baseUrl)
+                        .path(RestEndPointEnum.PWNED_PASSWORDS.getPath())
+                        .build(strongPasswordHashPrefix))
+                .restEndPoint(RestEndPointEnum.PWNED_PASSWORDS)
+                .headers(httpHeaders)
+                .restTemplate(restTemplate)
+                .build();
+
+        when(restTemplate.exchange(appRestApi.getUri(), RestEndPointEnum.PWNED_PASSWORDS.getMethod(),
+                new HttpEntity<>(httpHeaders), new ParameterizedTypeReference<String>() {}))
                 .thenReturn(new ResponseEntity<>(strongPasswordResponse, HttpStatus.OK));
 
         passwordClientService.searchPassword(strongPasswordHashPrefix);
 
-        verify(appProperties.getClient(), times(1)).getPasswordUrl();
-        verify(restTemplate, times(1)).exchange(baseUrl + RestEndPointEnum.PWNED_PASSWORDS.getEndPoint(),
+        verify(pwnedPasswordProperties, times(1)).getServiceUrl();
+        verify(restTemplate, times(1)).exchange(appRestApi.getUri(),
                 RestEndPointEnum.PWNED_PASSWORDS.getMethod(), new HttpEntity<>(httpHeaders),
-                new ParameterizedTypeReference<String>() {}, requestParams);
+                new ParameterizedTypeReference<String>() {});
     }
 
     @Test
@@ -73,21 +78,27 @@ class PasswordClientServiceTest {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(Collections.singletonList(MediaType.parseMediaType("text/plain")));
 
-        Map<String, Object> requestParams = new HashMap<>(){{
-            put(RestEndPointEnum.PWNED_PASSWORDS.getParameters().get(0), strongPasswordHashPrefix);
-        }};
+        when(pwnedPasswordProperties.getServiceUrl()).thenReturn(baseUrl);
 
-        when(appProperties.getClient()).thenReturn(mock(AppProperties.Client.class));
-        when(appProperties.getClient().getPasswordUrl()).thenReturn(baseUrl);
-        when(restTemplate.exchange(baseUrl + RestEndPointEnum.PWNED_PASSWORDS.getEndPoint(), RestEndPointEnum.PWNED_PASSWORDS.getMethod(),
-                new HttpEntity<>(httpHeaders), new ParameterizedTypeReference<String>() {}, requestParams))
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(baseUrl)
+                        .path(RestEndPointEnum.PWNED_PASSWORDS.getPath())
+                        .build(strongPasswordHashPrefix))
+                .restEndPoint(RestEndPointEnum.PWNED_PASSWORDS)
+                .headers(httpHeaders)
+                .restTemplate(restTemplate)
+                .build();
+
+        when(restTemplate.exchange(appRestApi.getUri(), RestEndPointEnum.PWNED_PASSWORDS.getMethod(),
+                new HttpEntity<>(httpHeaders), new ParameterizedTypeReference<String>() {}))
                 .thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
 
         assertThrows(Exception.class, () -> passwordClientService.searchPassword(strongPasswordHashPrefix));
 
-        verify(appProperties.getClient(), times(1)).getPasswordUrl();
-        verify(restTemplate, times(1)).exchange(baseUrl + RestEndPointEnum.PWNED_PASSWORDS.getEndPoint(),
+        verify(pwnedPasswordProperties, times(1)).getServiceUrl();
+        verify(restTemplate, times(1)).exchange(appRestApi.getUri(),
                 RestEndPointEnum.PWNED_PASSWORDS.getMethod(), new HttpEntity<>(httpHeaders),
-                new ParameterizedTypeReference<String>() {}, requestParams);
+                new ParameterizedTypeReference<String>() {});
     }
 }

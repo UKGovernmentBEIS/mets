@@ -16,18 +16,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityInfoDTO;
 import uk.gov.pmrv.api.account.service.LegalEntityService;
 import uk.gov.pmrv.api.account.service.LegalEntityValidationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 
 import java.util.List;
 
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.ACCOUNT_LEGAL_ENTITY_BAD_REQUEST;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.FORBIDDEN;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
@@ -55,8 +55,8 @@ public class LegalEntityController {
     @Operation(summary = "Retrieves all legal entities associated with the user")
     @ApiResponse(responseCode = "200", description = OK, content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = LegalEntityInfoDTO.class))))
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    public ResponseEntity<List<LegalEntityInfoDTO>> getCurrentUserLegalEntities(@Parameter(hidden = true) PmrvUser pmrvUser) {
-        return new ResponseEntity<>(legalEntityService.getUserLegalEntities(pmrvUser),
+    public ResponseEntity<List<LegalEntityInfoDTO>> getCurrentUserLegalEntities(@Parameter(hidden = true) AppUser appUser) {
+        return new ResponseEntity<>(legalEntityService.getUserLegalEntities(appUser),
                 HttpStatus.OK);
     }
 
@@ -73,9 +73,9 @@ public class LegalEntityController {
     @ApiResponse(responseCode = "404", description = NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = {OPERATOR, REGULATOR})
-    public ResponseEntity<LegalEntityDTO> getLegalEntityById(@Parameter(hidden = true) PmrvUser pmrvUser,
+    public ResponseEntity<LegalEntityDTO> getLegalEntityById(@Parameter(hidden = true) AppUser appUser,
                                                              @Parameter(description = "The legal entity id") @PathVariable("id") Long id) {
-        return new ResponseEntity<>(legalEntityService.getUserLegalEntityDTOById(id, pmrvUser),
+        return new ResponseEntity<>(legalEntityService.getUserLegalEntityDTOById(id, appUser),
                 HttpStatus.OK);
     }
 
@@ -84,9 +84,9 @@ public class LegalEntityController {
     @ApiResponse(responseCode = "200", description = OK)
     @ApiResponse(responseCode = "400", description = ACCOUNT_LEGAL_ENTITY_BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    public ResponseEntity<Boolean> isExistingLegalEntityName(@Parameter(hidden = true) PmrvUser pmrvUser,
+    public ResponseEntity<Boolean> isExistingLegalEntityName(@Parameter(hidden = true) AppUser appUser,
                                                              @RequestParam("name") @Parameter(name = "name", description = "The legal entity name to check")  String legalEntityName) {
-        boolean exists = legalEntityValidationService.isExistingActiveLegalEntityName(legalEntityName, pmrvUser);
+        boolean exists = legalEntityValidationService.isExistingActiveLegalEntityName(legalEntityName, appUser);
         return new ResponseEntity<>(exists, HttpStatus.OK);
     }
 }

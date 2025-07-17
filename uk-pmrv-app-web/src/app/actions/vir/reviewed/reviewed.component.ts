@@ -33,5 +33,8 @@ export class ReviewedComponent {
     map((payload) => this.userInfoResolverPipe.transform(payload?.decisionNotification?.signatory, payload.usersInfo)),
   );
 
-  constructor(private readonly virService: VirService, private readonly userInfoResolverPipe: UserInfoResolverPipe) {}
+  constructor(
+    private readonly virService: VirService,
+    private readonly userInfoResolverPipe: UserInfoResolverPipe,
+  ) {}
 }

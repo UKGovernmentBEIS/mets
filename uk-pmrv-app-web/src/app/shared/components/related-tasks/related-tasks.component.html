@@ -11,7 +11,7 @@
           Days Remaining: {{ item.daysRemaining | daysRemaining }}
         </p>
         <a
-          [routerLink]="item | itemLink: this.router.url.includes('workflows')"
+          [routerLink]="item | itemLink: (isAviation$ | async):this.router.url.includes('workflows')"
           [state]="{ isWorkflow: true }"
           class="govuk-button govuk-button--secondary"
           >View task</a

@@ -18,7 +18,7 @@ export class ReviewGroupVariationPipe implements PipeTransform {
       map((state) =>
         key === 'ABOUT_VARIATION'
           ? state.permitVariationDetailsReviewDecision
-          : state.reviewGroupDecisions[key] ?? null,
+          : (state.reviewGroupDecisions[key] ?? null),
       ),
     );
   }

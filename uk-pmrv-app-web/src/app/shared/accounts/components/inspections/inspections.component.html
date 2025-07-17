@@ -1,0 +1,77 @@
+<form [formGroup]="searchForm">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-quarter">
+      <div class="govuk-grid-row">
+        <div class="govuk-checkboxes govuk-checkboxes--small">
+          <div class="govuk-grid-column-full">
+            <div class="govuk-heading-m">Inspections</div>
+            <div class="govuk-heading-s">Type</div>
+            <div formControlName="types" govuk-checkboxes>
+              <govuk-checkbox
+                *ngFor="let type of inspectionsTypesMap | keyvalue: originalOrder"
+                [value]="type.value"
+                [label]="type.key"
+              ></govuk-checkbox>
+            </div>
+          </div>
+          <div class="govuk-grid-column-full">
+            <div class="govuk-heading-s">Status</div>
+            <div formControlName="statuses" govuk-checkboxes>
+              <govuk-checkbox
+                *ngFor="let type of inspectionsStatusesMap | keyvalue: originalOrder"
+                [value]="type.key"
+                [label]="type.value"
+              ></govuk-checkbox>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-grid-column-three-quarters" *ngIf="currentPageData$ | async as inspections">
+      <ng-container *ngFor="let inspection of inspections">
+        <div class="govuk-!-margin-bottom-9">
+          <ul class="govuk-list">
+            <li class="search-results-list_item">
+              <div class="govuk-heading-m">{{ inspection.year }}</div>
+            </li>
+          </ul>
+          <ul class="govuk-list">
+            <li *ngFor="let details of inspection.details" class="search-results-list_item govuk-!-margin-bottom-3">
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-three-quarters">
+                  <div class="govuk-!-margin-bottom-3">
+                    <a [routerLink]="['workflows', details.id]" govukLink class="govuk-!-margin-bottom-3">
+                      {{ details.id }}
+                      @if (details.requestType === 'INSTALLATION_AUDIT') {
+                        {{ $any(details.requestMetadata).year }}
+                      }
+                      {{ details.requestType | i18nSelect: inspectionsTypesTagsMap }}
+                    </a>
+                  </div>
+
+                  <div class="govuk-!-margin-bottom-0 govuk-body-s">
+                    Created: {{ details.creationDate | govukDate }}
+                  </div>
+                </div>
+                <div class="govuk-grid-column-one-quarter">
+                  <span
+                    class="search-results-list_item_status govuk-tag govuk-tag--{{ details.requestStatus | tagColor }}"
+                  >
+                    <strong>{{ details.requestStatus | i18nSelect: inspectionsStatusesTagMap }}</strong>
+                  </span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </ng-container>
+
+      <app-pagination
+        *ngIf="(totalDataNumber$ | async) > 0 && showPagination$ | async"
+        [count]="totalDataNumber$ | async"
+        (currentPageChange)="page$.next($event)"
+        [pageSize]="itemsPerPage"
+      ></app-pagination>
+    </div>
+  </div>
+</form>

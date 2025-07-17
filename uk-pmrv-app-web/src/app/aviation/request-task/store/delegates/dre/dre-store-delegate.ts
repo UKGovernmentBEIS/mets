@@ -1,6 +1,6 @@
 import { Observable, tap } from 'rxjs';
 
-import { getSaveRequestTaskActionTypeForRequestTaskType } from "@aviation/request-task/util";
+import { getSaveRequestTaskActionTypeForRequestTaskType } from '@aviation/request-task/util';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
@@ -19,7 +19,10 @@ export class DreStoreDelegate implements RequestTaskStoreDelegate {
     dre: null,
   };
 
-  constructor(private store: RequestTaskStore, private readonly businessErrorService: BusinessErrorService) {}
+  constructor(
+    private store: RequestTaskStore,
+    private readonly businessErrorService: BusinessErrorService,
+  ) {}
 
   get payload(): DreRequestTaskPayload | null {
     return this.store.getState().requestTaskItem?.requestTask?.payload as DreRequestTaskPayload;
@@ -74,6 +77,10 @@ export class DreStoreDelegate implements RequestTaskStoreDelegate {
       draft.sectionCompleted = status === 'complete' ? true : false;
 
       delete draft.dreAttachments;
+
+      if (draft.sendEmailNotification) {
+        delete draft.sendEmailNotification;
+      }
     });
 
     const reqBody: RequestTaskActionProcessDTO = {

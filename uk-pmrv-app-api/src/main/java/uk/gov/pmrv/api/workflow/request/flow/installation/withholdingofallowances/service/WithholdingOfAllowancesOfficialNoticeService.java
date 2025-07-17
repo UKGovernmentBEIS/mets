@@ -3,9 +3,8 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowanc
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.common.config.RegistryConfig;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -16,7 +15,6 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Officia
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesRequestPayload;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -27,7 +25,6 @@ public class WithholdingOfAllowancesOfficialNoticeService {
     private final DecisionNotificationUsersService decisionNotificationUsersService;
     private final OfficialNoticeSendService officialNoticeSendService;
     private final OfficialNoticeGeneratorService officialNoticeGeneratorService;
-    private final RegistryConfig registryConfig;
 
     @Transactional
     public FileInfoDTO generateWithholdingOfAllowancesOfficialNotice(String requestId) {
@@ -57,15 +54,8 @@ public class WithholdingOfAllowancesOfficialNoticeService {
 
     public void sendOfficialNotice(Request request, FileInfoDTO officialNotice,
                                    DecisionNotification decisionNotification) {
-        List<String> additionalRecipients = new ArrayList<>();
-        additionalRecipients.add(registryConfig.getEmail());
-
-        sendOfficialNotice(request, officialNotice, decisionNotification, additionalRecipients);
+		officialNoticeSendService.sendOfficialNotice(List.of(officialNotice), request,
+				decisionNotificationUsersService.findUserEmails(decisionNotification));
     }
 
-    private void sendOfficialNotice(Request request, FileInfoDTO officialNotice,
-                                    DecisionNotification decisionNotification, List<String> ccRecipientsEmails) {
-        ccRecipientsEmails.addAll(decisionNotificationUsersService.findUserEmails(decisionNotification));
-        officialNoticeSendService.sendOfficialNotice(List.of(officialNotice), request, ccRecipientsEmails);
-    }
 }

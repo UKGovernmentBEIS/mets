@@ -1,26 +1,17 @@
 package uk.gov.pmrv.api.account.installation.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.Permission;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.dto.AccountSearchCriteria;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountSearchResults;
@@ -37,14 +28,25 @@ import uk.gov.pmrv.api.account.installation.repository.InstallationAccountReposi
 import uk.gov.pmrv.api.account.installation.transform.InstallationAccountMapper;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.account.service.VerifierAccountAccessByAccountTypeService;
-import uk.gov.pmrv.api.authorization.core.domain.Permission;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class InstallationAccountQueryServiceTest {
@@ -196,10 +198,10 @@ class InstallationAccountQueryServiceTest {
         Long accountId2 = 2L;
         String accountName1 = "account1";
         String accountName2 = "account2";
-        PmrvUser operatorUser = PmrvUser.builder().userId("userId").roleType(RoleType.OPERATOR).build();
+        AppUser operatorUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.OPERATOR).build();
         operatorUser.setAuthorities(List.of(
-            PmrvAuthority.builder().accountId(accountId1).code("operator").build(),
-            PmrvAuthority.builder().accountId(accountId2).code("operator").build()
+            AppAuthority.builder().accountId(accountId1).code("operator").build(),
+            AppAuthority.builder().accountId(accountId2).code("operator").build()
         ));
 
         AccountSearchCriteria criteria = AccountSearchCriteria.builder().build();
@@ -232,9 +234,9 @@ class InstallationAccountQueryServiceTest {
         String accountName1 = "account1";
         String accountName2 = "account2";
         CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
-        PmrvUser regulatorUser = PmrvUser.builder().userId("userId").roleType(RoleType.REGULATOR).build();
+        AppUser regulatorUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.REGULATOR).build();
         regulatorUser.setAuthorities(List.of(
-            PmrvAuthority.builder().competentAuthority(ca).permissions(List.of(Permission.PERM_CA_USERS_EDIT)).build()
+            AppAuthority.builder().competentAuthority(ca).permissions(List.of(Permission.PERM_CA_USERS_EDIT)).build()
         ));
 
         AccountSearchCriteria criteria = AccountSearchCriteria.builder().build();
@@ -269,9 +271,9 @@ class InstallationAccountQueryServiceTest {
         List<Long> accountIds = new ArrayList<>(accountIdsSet);
         String accountName1 = "account1";
         String accountName2 = "account2";
-        PmrvUser verifierUser = PmrvUser.builder().userId("userId").roleType(RoleType.VERIFIER).build();
+        AppUser verifierUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.VERIFIER).build();
         verifierUser.setAuthorities(List.of(
-                PmrvAuthority.builder().verificationBodyId(vbId).build()
+                AppAuthority.builder().verificationBodyId(vbId).build()
         ));
 
         AccountSearchCriteria criteria = AccountSearchCriteria.builder().build();
@@ -308,9 +310,9 @@ class InstallationAccountQueryServiceTest {
         String accountName1 = "account1";
         String accountName2 = "account2";
         Long vbId = 1L;
-        PmrvUser verifierUser = PmrvUser.builder().userId("userId").roleType(RoleType.VERIFIER).build();
+        AppUser verifierUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.VERIFIER).build();
         verifierUser.setAuthorities(List.of(
-            PmrvAuthority.builder()
+            AppAuthority.builder()
                 .verificationBodyId(vbId).permissions(List.of(Permission.PERM_CA_USERS_EDIT)).build()
         ));
 
@@ -400,7 +402,7 @@ class InstallationAccountQueryServiceTest {
         when(accountQueryService.isExistingActiveAccountName(name)).thenReturn(true);
 
         BusinessException be = assertThrows(BusinessException.class, () -> service.validateAccountNameExistence(name));
-        assertEquals(ErrorCode.ACCOUNT_ALREADY_EXISTS, be.getErrorCode());
+        assertEquals(MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS, be.getErrorCode());
 
         verify(accountQueryService, times(1)).isExistingActiveAccountName(name);
     }

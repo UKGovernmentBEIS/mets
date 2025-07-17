@@ -7,8 +7,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanEntity;
+import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmissionsMonitoringPlanDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmpAccountDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmpDetailsDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightIdentification;
@@ -22,6 +24,11 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.Org
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OrganisationStructure;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.PartnershipOrganisation;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.repository.EmissionsMonitoringPlanRepository;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaDTO;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.AirOperatingCertificateCorsia;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.EmpCorsiaOperatorDetails;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEts;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsDTO;
@@ -29,8 +36,8 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.Acti
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.AirOperatingCertificate;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.EmpOperatorDetails;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.OperatingLicense;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentService;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.documents.service.FileDocumentService;
 
 import java.util.Map;
 import java.util.Optional;
@@ -59,7 +66,7 @@ class EmissionsMonitoringPlanQueryServiceTest {
 
 
     @Test
-    void getEmissionsMonitoringPlanDTOByAccountId() {
+    void getEmissionsMonitoringPlanDetailsDTOByAccountId() {
         Long accountId = 1L;
         String empId = "empId";
         String fileDocumentId = "fileDocumentId";
@@ -136,35 +143,35 @@ class EmissionsMonitoringPlanQueryServiceTest {
 
         assertThat(result).isEmpty();
     }
-    
+
     @Test
     void getEmpAccountsByAccountIds() {
-    	Set<Long> accountIds = Set.of(1L, 2L);
-    	EmpAccountDTO emp1 = new EmpAccountDTO() {
-			@Override
-			public String getEmpId() {return "emp1";}
-			@Override
-			public Long getAccountId() {return 1L;}
-		};
-		
-		EmpAccountDTO emp2 = new EmpAccountDTO() {
-			@Override
-			public String getEmpId() {return "emp2";}
-			@Override
-			public Long getAccountId() {return 2L;}
-		};
-		
-    	Set<EmpAccountDTO> empAccountDTOs = Set.of(emp1, emp2);
-    	
-    	when(emissionsMonitoringPlanRepository.findAllByAccountIdIn(accountIds)).thenReturn(empAccountDTOs);
-    	
-    	Map<Long, EmpAccountDTO> result = emissionsMonitoringPlanQueryService.getEmpAccountsByAccountIds(accountIds);
-    	
-    	assertThat(result).containsAllEntriesOf(Map.of(
-    			1L, emp1,
-    			2L, emp2));
-    	
-    	verify(emissionsMonitoringPlanRepository, times(1)).findAllByAccountIdIn(accountIds);
+        Set<Long> accountIds = Set.of(1L, 2L);
+        EmpAccountDTO emp1 = new EmpAccountDTO() {
+            @Override
+            public String getEmpId() {return "emp1";}
+            @Override
+            public Long getAccountId() {return 1L;}
+        };
+
+        EmpAccountDTO emp2 = new EmpAccountDTO() {
+            @Override
+            public String getEmpId() {return "emp2";}
+            @Override
+            public Long getAccountId() {return 2L;}
+        };
+
+        Set<EmpAccountDTO> empAccountDTOs = Set.of(emp1, emp2);
+
+        when(emissionsMonitoringPlanRepository.findAllByAccountIdIn(accountIds)).thenReturn(empAccountDTOs);
+
+        Map<Long, EmpAccountDTO> result = emissionsMonitoringPlanQueryService.getEmpAccountsByAccountIds(accountIds);
+
+        assertThat(result).containsAllEntriesOf(Map.of(
+                1L, emp1,
+                2L, emp2));
+
+        verify(emissionsMonitoringPlanRepository, times(1)).findAllByAccountIdIn(accountIds);
     }
 
     @Test
@@ -312,17 +319,110 @@ class EmissionsMonitoringPlanQueryServiceTest {
         assertEquals(organisationStructure, operatorDetailsOptional.get().getOrganisationStructure());
         assertEquals(activitiesDescription, operatorDetailsOptional.get().getActivitiesDescription());
     }
-    
+
     @Test
     void getEmissionsMonitoringPlanConsolidationNumberByAccountId() {
-    	Long accountId = 1L;
-    	EmissionsMonitoringPlanEntity empEntity = new EmissionsMonitoringPlanEntity("1", accountId, EmissionsMonitoringPlanUkEtsContainer.builder().build(), null);
-    	
-    	when(emissionsMonitoringPlanRepository.findByAccountId(accountId)).thenReturn(Optional.of(empEntity));
-    	
-    	int result = emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanConsolidationNumberByAccountId(accountId);
-    	assertThat(result).isEqualTo(1);
-    	verify(emissionsMonitoringPlanRepository, times(1)).findByAccountId(accountId);
+        Long accountId = 1L;
+        EmissionsMonitoringPlanEntity empEntity = new EmissionsMonitoringPlanEntity("1", accountId, EmissionsMonitoringPlanUkEtsContainer.builder().build(), null);
+
+        when(emissionsMonitoringPlanRepository.findByAccountId(accountId)).thenReturn(Optional.of(empEntity));
+
+        int result = emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanConsolidationNumberByAccountId(accountId);
+        assertThat(result).isEqualTo(1);
+        verify(emissionsMonitoringPlanRepository, times(1)).findByAccountId(accountId);
+    }
+
+    @Test
+    void getEmissionsMonitoringPlanDTOByAccountId_ukets() {
+        Long accountId = 1L;
+        String empId = "empId";
+        String fileDocumentId = "fileDocumentId";
+        String operatorName = "operator name";
+        String crcoCode = "crco code";
+        final FlightIdentification flightIdentification = createFlightIdentification(FlightIdentificationType.INTERNATIONAL_CIVIL_AVIATION_ORGANISATION, "icao Designators", Set.of());
+        final AirOperatingCertificate airOperatingCertificate = createAirOperatingCertificate(Boolean.TRUE, "certificate number", "issuing authority", Set.of(UUID.randomUUID()));
+        final LimitedCompanyOrganisation organisationStructure = (LimitedCompanyOrganisation) createOrganisationStructure(OrganisationLegalStatusType.LIMITED_COMPANY);
+        EmissionsMonitoringPlanEntity empEntity = EmissionsMonitoringPlanEntity.builder()
+                .id(empId)
+                .accountId(accountId)
+                .fileDocumentUuid(fileDocumentId)
+                .empContainer(EmissionsMonitoringPlanUkEtsContainer.builder()
+                        .emissionsMonitoringPlan(EmissionsMonitoringPlanUkEts.builder()
+                                .operatorDetails(EmpOperatorDetails.builder()
+                                        .operatorName(operatorName)
+                                        .crcoCode(crcoCode)
+                                        .flightIdentification(flightIdentification)
+                                        .airOperatingCertificate(airOperatingCertificate)
+                                        .organisationStructure(organisationStructure)
+                                        .build())
+                                .build())
+                        .build())
+                .build();
+        when(emissionsMonitoringPlanRepository.findByAccountId(accountId)).thenReturn(Optional.of(empEntity));
+        final Optional<EmissionsMonitoringPlanDTO> actual = emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanDTOByAccountId(accountId, EmissionTradingScheme.UK_ETS_AVIATION);
+        assertTrue(actual.isPresent());
+        assertEquals(empId, actual.get().getId());
+        assertEquals(accountId, actual.get().getAccountId());
+        final Optional<EmpOperatorDetails> operatorDetailsOptional = actual.map(emissionsMonitoringPlanUkEtsDTO ->
+                        ((EmissionsMonitoringPlanUkEtsDTO)emissionsMonitoringPlanUkEtsDTO).getEmpContainer())
+                .map(EmissionsMonitoringPlanUkEtsContainer::getEmissionsMonitoringPlan)
+                .map(EmissionsMonitoringPlanUkEts::getOperatorDetails);
+        assertTrue(operatorDetailsOptional.isPresent());
+        assertEquals(operatorName, operatorDetailsOptional.get().getOperatorName());
+        assertEquals(crcoCode, operatorDetailsOptional.get().getCrcoCode());
+        assertEquals(flightIdentification, operatorDetailsOptional.get().getFlightIdentification());
+        assertEquals(airOperatingCertificate, operatorDetailsOptional.get().getAirOperatingCertificate());
+        assertEquals(organisationStructure, operatorDetailsOptional.get().getOrganisationStructure());
+        assertNull(operatorDetailsOptional.get().getActivitiesDescription());
+        assertNull(operatorDetailsOptional.get().getOperatingLicense());
+    }
+
+    @Test
+    void getEmissionsMonitoringPlanDTOByAccountId_corsia() {
+        Long accountId = 1L;
+        String empId = "empId";
+        String fileDocumentId = "fileDocumentId";
+        String operatorName = "operator name";
+        String crcoCode = "crco code";
+        final FlightIdentification flightIdentification = createFlightIdentification(FlightIdentificationType.INTERNATIONAL_CIVIL_AVIATION_ORGANISATION, "icao Designators", Set.of());
+        final AirOperatingCertificateCorsia airOperatingCertificate = AirOperatingCertificateCorsia.builder()
+                .certificateExist(Boolean.TRUE)
+                .certificateNumber("certificate number")
+                .issuingAuthority("issuing authority")
+                .certificateFiles(Set.of(UUID.randomUUID()))
+                .build();
+
+        final LimitedCompanyOrganisation organisationStructure = (LimitedCompanyOrganisation) createOrganisationStructure(OrganisationLegalStatusType.LIMITED_COMPANY);
+        EmissionsMonitoringPlanEntity empEntity = EmissionsMonitoringPlanEntity.builder()
+                .id(empId)
+                .accountId(accountId)
+                .fileDocumentUuid(fileDocumentId)
+                .empContainer(EmissionsMonitoringPlanCorsiaContainer.builder()
+                        .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
+                                .operatorDetails(EmpCorsiaOperatorDetails.builder()
+                                        .operatorName(operatorName)
+                                        .flightIdentification(flightIdentification)
+                                        .airOperatingCertificate(airOperatingCertificate)
+                                        .organisationStructure(organisationStructure)
+                                        .build())
+                                .build())
+                        .build())
+                .build();
+        when(emissionsMonitoringPlanRepository.findByAccountId(accountId)).thenReturn(Optional.of(empEntity));
+        final Optional<EmissionsMonitoringPlanDTO> actual = emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanDTOByAccountId(accountId, EmissionTradingScheme.CORSIA);
+        assertTrue(actual.isPresent());
+        assertEquals(empId, actual.get().getId());
+        assertEquals(accountId, actual.get().getAccountId());
+        final Optional<EmpCorsiaOperatorDetails> operatorDetailsOptional = actual.map(emissionsMonitoringPlanCorsiaDTO ->
+                        ((EmissionsMonitoringPlanCorsiaDTO)emissionsMonitoringPlanCorsiaDTO).getEmpContainer())
+                .map(EmissionsMonitoringPlanCorsiaContainer::getEmissionsMonitoringPlan)
+                .map(EmissionsMonitoringPlanCorsia::getOperatorDetails);
+        assertTrue(operatorDetailsOptional.isPresent());
+        assertEquals(operatorName, operatorDetailsOptional.get().getOperatorName());
+        assertEquals(flightIdentification, operatorDetailsOptional.get().getFlightIdentification());
+        assertEquals(airOperatingCertificate, operatorDetailsOptional.get().getAirOperatingCertificate());
+        assertEquals(organisationStructure, operatorDetailsOptional.get().getOrganisationStructure());
+        assertNull(operatorDetailsOptional.get().getActivitiesDescription());
     }
 
     private FlightIdentification createFlightIdentification(FlightIdentificationType flightIdentificationType, String icaoDesignators,

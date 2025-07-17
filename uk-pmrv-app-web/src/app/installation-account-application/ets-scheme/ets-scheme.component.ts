@@ -21,8 +21,7 @@ import { etsSchemeMap } from './ets-scheme';
       [formGroup]="form"
       (formSubmit)="onSubmit()"
       heading="What emissions trading scheme will this installation be part of?"
-      caption="ETS Scheme"
-    >
+      caption="ETS Scheme">
       <div govuk-radio formControlName="etsSchemeType" hint="Select one option">
         <ng-container govukLegend>
           <span class="govuk-visually-hidden">What emissions trading scheme will this installation be part of?</span>
@@ -30,13 +29,12 @@ import { etsSchemeMap } from './ets-scheme';
         <govuk-radio-option
           *ngFor="let option of options | keyvalue: originalOrder"
           [value]="option.key"
-          [label]="option.value"
-        ></govuk-radio-option>
+          [label]="option.value"></govuk-radio-option>
       </div>
     </app-wizard-step>
-    <a *ngIf="!this.store.getState().isReviewed" govukLink routerLink=".."
-      >Return to: Request to open an installation account</a
-    >
+    <a *ngIf="!this.store.getState().isReviewed" govukLink routerLink="..">
+      Return to: Request to open an installation account
+    </a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],

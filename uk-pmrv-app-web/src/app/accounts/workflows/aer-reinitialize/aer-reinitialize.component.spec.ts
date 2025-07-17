@@ -16,6 +16,8 @@ describe('AerReinitializeComponent', () => {
   let component: AerReinitializeComponent;
   let fixture: ComponentFixture<AerReinitializeComponent>;
 
+  const accountId = 13;
+
   const requestService = mockClass(RequestsService);
 
   class Page extends BasePage<AerReinitializeComponent> {
@@ -35,7 +37,7 @@ describe('AerReinitializeComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: {
-            paramMap: of(convertToParamMap({ 'request-id': 'AEM00001-2022', accountId: '13' })),
+            paramMap: of(convertToParamMap({ 'request-id': 'AEM00001-2022', accountId })),
           },
         },
         { provide: RequestsService, useValue: requestService },
@@ -71,7 +73,7 @@ describe('AerReinitializeComponent', () => {
           requestId: 'AEM00001-2022',
         },
       },
-      13,
+      String(accountId),
     );
 
     expect(page.confirmationMessage).toBeTruthy();

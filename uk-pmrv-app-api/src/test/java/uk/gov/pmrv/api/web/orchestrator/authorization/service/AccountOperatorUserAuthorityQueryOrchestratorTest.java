@@ -5,15 +5,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.dto.UserAuthoritiesDTO;
+import uk.gov.netz.api.authorization.core.domain.dto.UserAuthorityDTO;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserAuthoritiesDTO;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserAuthorityDTO;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.operator.service.OperatorUserInfoService;
-import uk.gov.pmrv.api.web.orchestrator.authorization.service.AccountOperatorUserAuthorityQueryOrchestrator;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.AccountOperatorsUsersAuthoritiesInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.UserAuthorityInfoDTO;
 
@@ -22,12 +21,11 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus.ACTIVE;
+import static uk.gov.netz.api.authorization.core.domain.AuthorityStatus.ACTIVE;
 
 @ExtendWith(MockitoExtension.class)
 class AccountOperatorUserAuthorityQueryOrchestratorTest {
@@ -44,14 +42,14 @@ class AccountOperatorUserAuthorityQueryOrchestratorTest {
     private OperatorAuthorityQueryService operatorAuthorityQueryService;
 
     @Test
-    void getAccountAuthorities_has_edit_user_scope_on_account() {
-        PmrvUser authUser = new PmrvUser();
+    void getAccountAuthorities() {
+        AppUser authUser = new AppUser();
         Long accountId = 1L;
         String user = "user";
 
-        UserInfoDTO userInfo = UserInfoDTO.builder().userId(user).locked(true).build();
+        UserInfoDTO userInfo = UserInfoDTO.builder().userId(user).build();
         UserAuthorityInfoDTO accountOperatorUserAuthorityInfo =
-            UserAuthorityInfoDTO.builder().userId(user).authorityStatus(ACTIVE).locked(true).build();
+            UserAuthorityInfoDTO.builder().userId(user).authorityStatus(ACTIVE).build();
 
         Map<AccountContactType, String> contactTypes = Map.of(
                 AccountContactType.PRIMARY, "primary",
@@ -66,7 +64,7 @@ class AccountOperatorUserAuthorityQueryOrchestratorTest {
                         .editable(true)
                         .build();
         when(operatorAuthorityQueryService.getAccountAuthorities(authUser, accountId)).thenReturn(accountOperatorAuthorities);
-        when(operatorUserInfoService.getOperatorUsersInfo(authUser, accountId, List.of(user))).thenReturn(List.of(userInfo));
+        when(operatorUserInfoService.getOperatorUsersInfo(List.of(user))).thenReturn(List.of(userInfo));
         when(accountContactQueryService.findOperatorContactTypesByAccount(accountId)).thenReturn(contactTypes);
 
         AccountOperatorsUsersAuthoritiesInfoDTO
@@ -78,46 +76,8 @@ class AccountOperatorUserAuthorityQueryOrchestratorTest {
         assertThat(result.getContactTypes()).isEqualTo(contactTypes);
 
         verify(operatorAuthorityQueryService, times(1)).getAccountAuthorities(authUser, accountId);
-        verify(operatorUserInfoService, times(1)).getOperatorUsersInfo(authUser, accountId, List.of(user));
+        verify(operatorUserInfoService, times(1)).getOperatorUsersInfo(List.of(user));
         verify(accountContactQueryService, times(1)).findOperatorContactTypesByAccount(accountId);
     }
 
-    @Test
-    void getAccountAuthorities_has_not_edit_user_scope_on_account() {
-        PmrvUser authUser = new PmrvUser();
-        Long accountId = 1L;
-        String user = "user";
-
-        UserInfoDTO userInfo = UserInfoDTO.builder().userId(user).build();
-        UserAuthorityInfoDTO accountOperatorUserAuthorityInfo =
-            UserAuthorityInfoDTO.builder().userId(user).build();
-
-        Map<AccountContactType, String> contactTypes = Map.of(
-                AccountContactType.PRIMARY, "primary",
-                AccountContactType.SERVICE, "service"
-        );
-
-        UserAuthorityDTO accountOperatorAuthority =
-            UserAuthorityDTO.builder().userId(user).build();
-        UserAuthoritiesDTO accountOperatorAuthorities =
-            UserAuthoritiesDTO.builder()
-                        .authorities(List.of(accountOperatorAuthority))
-                        .editable(false)
-                        .build();
-        when(operatorAuthorityQueryService.getAccountAuthorities(authUser, accountId)).thenReturn(accountOperatorAuthorities);
-        when(operatorUserInfoService.getOperatorUsersInfo(authUser, accountId, List.of(user))).thenReturn(List.of(userInfo));
-        when(accountContactQueryService.findOperatorContactTypesByAccount(accountId)).thenReturn(contactTypes);
-
-        AccountOperatorsUsersAuthoritiesInfoDTO
-            result = service.getAccountOperatorsUsersAuthoritiesInfo(authUser, accountId);
-
-        assertFalse(result.isEditable());
-        assertThat(result.getAuthorities()).hasSize(1);
-        assertEquals(accountOperatorUserAuthorityInfo, result.getAuthorities().get(0));
-        assertThat(result.getContactTypes()).isEqualTo(contactTypes);
-
-        verify(operatorAuthorityQueryService, times(1)).getAccountAuthorities(authUser, accountId);
-        verify(operatorUserInfoService, times(1)).getOperatorUsersInfo(authUser, accountId, List.of(user));
-        verify(accountContactQueryService, times(1)).findOperatorContactTypesByAccount(accountId);
-    }
 }

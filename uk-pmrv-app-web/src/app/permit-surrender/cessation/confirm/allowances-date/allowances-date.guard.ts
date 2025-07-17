@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -9,8 +9,11 @@ import { areAllowancesDatePreviousStepsValid, initialStep, isWizardComplete } fr
 @Injectable({
   providedIn: 'root',
 })
-export class AllowancesDateGuard implements CanActivate {
-  constructor(private readonly store: PermitSurrenderStore, private readonly router: Router) {}
+export class AllowancesDateGuard {
+  constructor(
+    private readonly store: PermitSurrenderStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return (

@@ -60,7 +60,7 @@ export const EMP_MANAGEMENT_PROCEDURES_ROUTES: Routes = [
       },
       {
         path: 'data-flow',
-        data: { backlink: '../appropriateness' },
+        data: { pageTitle: 'Data flow activities', backlink: '../appropriateness' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./management-procedures-data-flow/management-procedures-data-flow.component').then(
@@ -143,7 +143,7 @@ export const EMP_MANAGEMENT_PROCEDURES_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { breadcrumb: 'Management procedures summary' },
+        data: { breadcrumb: 'Management procedures' },
         loadComponent: () =>
           import('./management-procedures-summary/management-procedures-summary.component').then(
             (c) => c.ManagementProceduresSummaryComponent,

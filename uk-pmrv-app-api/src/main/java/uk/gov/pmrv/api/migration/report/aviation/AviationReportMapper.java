@@ -1,11 +1,12 @@
 package uk.gov.pmrv.api.migration.report.aviation;
 
+import org.springframework.jdbc.core.RowMapper;
+import uk.gov.pmrv.api.aviationreporting.common.domain.verification.AviationAerVerificationDecisionType;
+
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Year;
-import org.springframework.jdbc.core.RowMapper;
-import uk.gov.pmrv.api.aviationreporting.common.domain.verification.AviationAerVerificationDecisionType;
 
 public class AviationReportMapper implements RowMapper<AviationReport> {
 

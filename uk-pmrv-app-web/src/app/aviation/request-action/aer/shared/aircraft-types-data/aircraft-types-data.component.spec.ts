@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import AircraftTypesDataComponent from '@aviation/request-action/aer/shared/aircraft-types-data/aircraft-types-data.component';
 import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
-import { AerRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
+import { AerUkEtsRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage } from '@testing';
@@ -52,7 +52,7 @@ describe('AircraftTypesDataComponent', () => {
               ],
             },
           },
-        } as AerRequestActionPayload,
+        } as AerUkEtsRequestActionPayload,
       },
       regulatorViewer: false,
     });

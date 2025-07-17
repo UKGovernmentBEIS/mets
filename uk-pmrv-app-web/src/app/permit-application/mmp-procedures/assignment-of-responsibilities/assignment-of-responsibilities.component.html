@@ -1,0 +1,28 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true"
+>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    caption="Monitoring Methodology Plan"
+    heading="Assignment of responsibilities"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <div class="govuk-!-width-two-thirds">
+      <p class="govuk-body">
+        Provide a reference to the procedure for managing the assignment of responsibilities for monitoring and
+        reporting within the installation, and for managing the competences of responsible personnel.
+      </p>
+
+      <app-mmp-procedure-form></app-mmp-procedure-form>
+    </div>
+  </app-wizard-step>
+
+  <app-list-return-link
+    reviewGroupTitle="Monitoring methodology"
+    reviewGroupUrl="monitoring-methodology-plan"
+  ></app-list-return-link>
+</app-permit-task>

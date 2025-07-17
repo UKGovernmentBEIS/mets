@@ -24,6 +24,11 @@ import { EmpFuelUpliftMethodProcedures } from 'pmrv-api';
 import { empQuery } from '../../emp.selectors';
 import { EmpReviewDecisionGroupComponent } from '../../emp-review-decision-group/emp-review-decision-group.component';
 import { EmpVariationReviewDecisionGroupComponent } from '../../emp-variation-review-decision-group/emp-variation-review-decision-group.component';
+import {
+  issuanceReviewRequestTaskTypes,
+  variationOperatorLedReviewRequestTaskTypes,
+  variationSubmitRegulatorLedRequestTaskTypes,
+} from '../../util/emp.util';
 import { FuelUpliftProceduresFormProvider } from '../fuel-uplift-procedures-form.provider';
 
 interface ViewModel {
@@ -55,6 +60,7 @@ interface ViewModel {
 })
 export class FuelUpliftSummaryComponent {
   form = this.formProvider.form;
+  isCorsia$ = this.store.pipe(empQuery.selectIsCorsia);
 
   vm$: Observable<ViewModel> = combineLatest([
     this.store.pipe(requestTaskQuery.selectRequestTaskType),
@@ -70,7 +76,9 @@ export class FuelUpliftSummaryComponent {
         hideSubmit:
           !isEditable ||
           ['complete', 'cannot start yet'].includes(taskStatus) ||
-          ['EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT'].includes(type), //TODO consider corsia as well
+          variationSubmitRegulatorLedRequestTaskTypes.includes(type) ||
+          variationOperatorLedReviewRequestTaskTypes.includes(type) ||
+          issuanceReviewRequestTaskTypes.includes(type),
         showDecision: showReviewDecisionComponent.includes(type),
         showVariationDecision: showVariationReviewDecisionComponent.includes(type),
         showVariationRegLedDecision: showVariationRegLedDecisionComponent.includes(type),

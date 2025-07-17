@@ -85,17 +85,21 @@ describe('CategoryTierComponent', () => {
   describe('for emission point categories that can start', () => {
     beforeEach(() => {
       store = TestBed.inject(PermitApplicationStore);
-      store.setState(
-        mockStateBuild(mockState, {
+      store.setState({
+        ...mockStateBuild(mockState, {
           ...mockState.permitSectionsCompleted,
           MEASUREMENT_CO2_Category: [true],
           MEASUREMENT_CO2_Measured_Emissions: [false],
           MEASUREMENT_CO2_Applied_Standard: [false],
+          MEASUREMENT_CO2_Biomass_Fraction: [false],
           emissionPoints: [true],
           emissionSources: [true],
           sourceStreams: [true],
         }),
-      );
+        features: {
+          wastePermitEnabled: true,
+        },
+      });
     });
     beforeEach(createComponent);
 
@@ -109,11 +113,13 @@ describe('CategoryTierComponent', () => {
         'Emission point category',
         'Measured emissions',
         'Applied standard',
+        'Biomass fraction',
       ]);
 
       expect(page.tasks.map((el) => el.querySelector('govuk-tag').textContent.trim())).toEqual([
         'completed',
         'cannot start yet',
+        'not started',
         'not started',
       ]);
 
@@ -130,17 +136,21 @@ describe('CategoryTierComponent', () => {
   describe('for emission point categories that can start but emission sources are in pending status', () => {
     beforeEach(() => {
       store = TestBed.inject(PermitApplicationStore);
-      store.setState(
-        mockStateBuild(mockState, {
+      store.setState({
+        ...mockStateBuild(mockState, {
           ...mockState.permitSectionsCompleted,
           MEASUREMENT_CO2_Category: [true],
           MEASUREMENT_CO2_Measured_Emissions: [false],
           MEASUREMENT_CO2_Applied_Standard: [true],
+          MEASUREMENT_CO2_Biomass_Fraction: [false],
           emissionPoints: [true],
           emissionSources: [false],
           sourceStreams: [true],
         }),
-      );
+        features: {
+          wastePermitEnabled: true,
+        },
+      });
     });
     beforeEach(createComponent);
 
@@ -159,6 +169,7 @@ describe('CategoryTierComponent', () => {
         ['Emission point category', 'completed'],
         ['Measured emissions', 'cannot start yet'],
         ['Applied standard', 'completed'],
+        ['Biomass fraction', 'not started'],
       ]);
     });
   });
@@ -166,8 +177,8 @@ describe('CategoryTierComponent', () => {
   describe('for emission point categories that needs review', () => {
     beforeEach(() => {
       store = TestBed.inject(PermitApplicationStore);
-      store.setState(
-        mockStateBuild(
+      store.setState({
+        ...mockStateBuild(
           {
             monitoringApproaches: {
               MEASUREMENT_CO2: {
@@ -193,9 +204,13 @@ describe('CategoryTierComponent', () => {
             MEASUREMENT_CO2_Category: [true],
             MEASUREMENT_CO2_Measured_Emissions: [false],
             MEASUREMENT_CO2_Applied_Standard: [false],
+            MEASUREMENT_CO2_Biomass_Fraction: [false],
           },
         ),
-      );
+        features: {
+          wastePermitEnabled: true,
+        },
+      });
     });
     beforeEach(createComponent);
 
@@ -209,6 +224,7 @@ describe('CategoryTierComponent', () => {
         'Emission point category needs review',
         'Measured emissions cannot start yet',
         'Applied standard cannot start yet',
+        'Biomass fraction not started',
       ]);
     });
   });
@@ -216,8 +232,8 @@ describe('CategoryTierComponent', () => {
   describe('for emission point categories with deleted emission points', () => {
     beforeEach(() => {
       store = TestBed.inject(PermitApplicationStore);
-      store.setState(
-        mockStateBuild(
+      store.setState({
+        ...mockStateBuild(
           {
             emissionSources: [],
           },
@@ -226,9 +242,13 @@ describe('CategoryTierComponent', () => {
             MEASUREMENT_CO2_Category: [true],
             MEASUREMENT_CO2_Measured_Emissions: [false],
             MEASUREMENT_CO2_Applied_Standard: [false],
+            MEASUREMENT_CO2_Biomass_Fraction: [false],
           },
         ),
-      );
+        features: {
+          wastePermitEnabled: true,
+        },
+      });
     });
     beforeEach(createComponent);
 
@@ -242,6 +262,7 @@ describe('CategoryTierComponent', () => {
         'Emission point category needs review',
         'Measured emissions cannot start yet',
         'Applied standard cannot start yet',
+        'Biomass fraction not started',
       ]);
     });
   });

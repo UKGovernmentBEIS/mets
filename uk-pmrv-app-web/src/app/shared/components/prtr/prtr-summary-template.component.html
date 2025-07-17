@@ -17,7 +17,7 @@
     <ng-template let-column="column" let-row="row" let-index="index">
       <ng-container [ngSwitch]="column.field">
         <ng-container *ngSwitchCase="'description'"><strong>Main activity</strong></ng-container>
-        <ng-container *ngSwitchCase="'activity'">{{ row.activity | activityItemName }}</ng-container>
+        <ng-container *ngSwitchCase="'activity'">{{ row.activity | prtrActivityItemName }}</ng-container>
         <ng-container *ngIf="isEditable">
           <ng-container *ngSwitchCase="'delete'">
             <a [routerLink]="['../activity', index, 'delete']" govukLink>Delete</a>

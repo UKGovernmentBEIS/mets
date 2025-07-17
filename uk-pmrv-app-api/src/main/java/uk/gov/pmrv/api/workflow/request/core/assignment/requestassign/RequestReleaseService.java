@@ -4,13 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.rules.domain.ResourceType;
-import uk.gov.pmrv.api.authorization.rules.services.AuthorizationRulesQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 @Service
 @RequiredArgsConstructor
@@ -20,25 +19,25 @@ public class RequestReleaseService {
     
     @Transactional
     public void releaseRequest(RequestTask requestTask) {
-        if(RequestTaskType.getPeerReviewTypes().contains(requestTask.getType())) {
+        if(requestTask.getType().isPeerReview()) {
             return;
         }
-        Request request = requestTask.getRequest();
+            Request request = requestTask.getRequest();
         String requestTaskAssignee = requestTask.getAssignee();
 
-        RoleType requestTaskRoleType = authorizationRulesQueryService
+        String requestTaskRoleType = authorizationRulesQueryService
             .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name())
             .orElse(null);
 
         if (requestTaskRoleType != null) {
             switch (requestTaskRoleType) {
-                case OPERATOR:
+                case RoleTypeConstants.OPERATOR:
                     releaseRequestFromOperatorAssignee(request, requestTaskAssignee);
                     break;
-                case REGULATOR:
+                case RoleTypeConstants.REGULATOR:
                     releaseRequestFromRegulatorAssignee(request, requestTaskAssignee);
                     break;
-                case VERIFIER:
+                case RoleTypeConstants.VERIFIER:
                     //TODO: implement this one later
                     break;
                 default:

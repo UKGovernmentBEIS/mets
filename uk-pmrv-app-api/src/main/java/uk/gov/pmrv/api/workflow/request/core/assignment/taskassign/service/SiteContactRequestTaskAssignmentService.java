@@ -1,21 +1,21 @@
 package uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service;
 
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
-import uk.gov.pmrv.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestTaskRepository;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -31,9 +31,7 @@ public class SiteContactRequestTaskAssignmentService {
     private final RequestTaskReleaseService requestTaskReleaseService;
 
     public void assignTasksOfDeletedUserToSiteContactOrRelease(String userDeleted, AccountContactType accountContactType) {
-        List<RequestTask> requestTasks =
-            requestTaskRepository
-                .findByAssigneeAndRequestStatus(userDeleted, RequestStatus.IN_PROGRESS);
+        List<RequestTask> requestTasks = requestTaskRepository.findByAssignee(userDeleted);
 
         if (!requestTasks.isEmpty()) {
             Set<Long> accountIds =

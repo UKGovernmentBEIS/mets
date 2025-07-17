@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -266,9 +266,7 @@ export class AviationAccountReportingStatusService {
     }
 
     return this.httpClient.post<any>(
-      `${this.configuration.basePath}/v1.0/aviation/accounts/reporting-status-history/${encodeURIComponent(
-        String(accountId),
-      )}`,
+      `${this.configuration.basePath}/v1.0/aviation/accounts/reporting-status-history/${encodeURIComponent(String(accountId))}`,
       aviationAccountReportingStatusHistoryCreationDTO,
       {
         responseType: <any>responseType_,

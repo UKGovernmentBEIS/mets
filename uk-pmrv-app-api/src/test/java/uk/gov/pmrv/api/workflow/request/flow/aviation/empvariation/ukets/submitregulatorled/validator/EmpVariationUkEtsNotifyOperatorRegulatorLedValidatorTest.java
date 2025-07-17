@@ -14,9 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsDetails;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.submitregulatorled.domain.EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload;
@@ -54,16 +54,16 @@ class EmpVariationUkEtsNotifyOperatorRegulatorLedValidatorTest {
 						.build())
 				.build();
 		
-		PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+		AppUser appUser = AppUser.builder().userId("userId").build();
 		
 		when(decisionNotificationUsersValidator.areUsersValid(requestTask, taskActionPayload.getDecisionNotification(),
-				pmrvUser)).thenReturn(true);
+				appUser)).thenReturn(true);
 		
-		cut.validate(requestTask, taskActionPayload, pmrvUser);
+		cut.validate(requestTask, taskActionPayload, appUser);
 		
 		verify(empValidator, times(1)).validateEmp(taskPayload);
 		verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask,
-				taskActionPayload.getDecisionNotification(), pmrvUser);
+				taskActionPayload.getDecisionNotification(), appUser);
 	}
 	
 	@Test
@@ -84,16 +84,16 @@ class EmpVariationUkEtsNotifyOperatorRegulatorLedValidatorTest {
 						.build())
 				.build();
 		
-		PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+		AppUser appUser = AppUser.builder().userId("userId").build();
 		
 		when(decisionNotificationUsersValidator.areUsersValid(requestTask, taskActionPayload.getDecisionNotification(),
-				pmrvUser)).thenReturn(false);
+				appUser)).thenReturn(false);
 		
-		BusinessException be = assertThrows(BusinessException.class, () -> cut.validate(requestTask, taskActionPayload, pmrvUser));
+		BusinessException be = assertThrows(BusinessException.class, () -> cut.validate(requestTask, taskActionPayload, appUser));
 		assertThat(be.getErrorCode()).isEqualTo(ErrorCode.FORM_VALIDATION);
 		
 		verify(empValidator, times(1)).validateEmp(taskPayload);
 		verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask,
-				taskActionPayload.getDecisionNotification(), pmrvUser);
+				taskActionPayload.getDecisionNotification(), appUser);
 	}
 }

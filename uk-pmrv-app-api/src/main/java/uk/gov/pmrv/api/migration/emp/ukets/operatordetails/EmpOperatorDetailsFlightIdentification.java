@@ -26,5 +26,6 @@ public class EmpOperatorDetailsFlightIdentification implements EmpUkEtsSection {
 
     private ServiceContactDetails serviceContactDetails;
 
+    @Builder.Default
     private Map<String, List<EtsFileAttachment>> attachments = new HashMap<>();
 }

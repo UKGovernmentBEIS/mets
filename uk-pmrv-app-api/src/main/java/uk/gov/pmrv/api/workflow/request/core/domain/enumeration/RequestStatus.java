@@ -14,4 +14,5 @@ public enum RequestStatus {
 
     EXEMPT,
     MIGRATED,
+    NOT_REQUIRED,
 }

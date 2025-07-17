@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { filter, map, Observable } from 'rxjs';
+import { combineLatest, filter, map, Observable } from 'rxjs';
 
 import { AerApplicationCompletedRequestActionPayload } from 'pmrv-api';
 
@@ -14,7 +14,16 @@ import { monitoringApproachMap } from '../core/monitoringApproaches';
 })
 export class ReviewedComponent {
   payload$ = this.aerService.getPayload() as Observable<AerApplicationCompletedRequestActionPayload>;
-  aerTitle$ = this.payload$.pipe(map((payload) => payload.reportingYear + ' emissions report reviewed'));
+
+  requestAction$ = this.aerService.requestAction$;
+  aerTitle$ = combineLatest([this.requestAction$, this.payload$]).pipe(
+    map(([requestAction, payload]) => {
+      return requestAction?.type === 'AER_APPLICATION_REVIEW_SKIPPED'
+        ? payload.reportingYear + ' completed without review'
+        : payload.reportingYear + ' emissions report reviewed';
+    }),
+  );
+
   monitoringApproaches$ = this.payload$.pipe(
     filter((payload) => !!payload.aer.monitoringApproachEmissions),
     map(

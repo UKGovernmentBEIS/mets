@@ -1,0 +1,6 @@
+@use 'govuk-frontend/govuk/base' as govuk;
+
+.error {
+  color: govuk.$govuk-error-colour;
+  font-weight: bold;
+}

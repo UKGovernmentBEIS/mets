@@ -1,14 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
-
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -17,12 +11,17 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInfoResolver;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.FollowUp;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationAcceptedDecisionDetails;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationReviewSubmittedDecisionRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationFollowUpReviewDecisionType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationFollowupRequiredChangesDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.mapper.PermitNotificationMapper;
+import uk.gov.pmrv.api.workflow.utils.DateUtils;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +43,11 @@ public class PermitNotificationReviewSubmittedService {
             RequestActionType.PERMIT_NOTIFICATION_APPLICATION_REJECTED);
     }
 
+    public void executeCompletedPostActions(String requestId) {
+        executePostActionsCompletedNotification(requestId, RequestActionPayloadType.PERMIT_NOTIFICATION_APPLICATION_CESSATION_COMPLETED_PAYLOAD,
+            RequestActionType.PERMIT_NOTIFICATION_APPLICATION_CESSATION_COMPLETED);
+    }
+
     private void executePostActions(String requestId, RequestActionPayloadType actionPayloadType, RequestActionType actionType) {
         Request request = requestService.findRequestById(requestId);
         PermitNotificationRequestPayload requestPayload = (PermitNotificationRequestPayload) request.getPayload();
@@ -61,6 +65,29 @@ public class PermitNotificationReviewSubmittedService {
         requestService.addActionToRequest(request, actionPayload, actionType, requestPayload.getRegulatorReviewer());
 
         // send official notice 
+        noticeService.sendOfficialNotice(request);
+    }
+
+    private void executePostActionsCompletedNotification(String requestId, RequestActionPayloadType actionPayloadType, RequestActionType actionType) {
+        Request request = requestService.findRequestById(requestId);
+        PermitNotificationRequestPayload requestPayload = (PermitNotificationRequestPayload) request.getPayload();
+
+        PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload actionPayload = permitNotificationMapper
+            .toPermitNotificationApplicationReviewCompletedDecisionRequestActionPayload(requestPayload, actionPayloadType);
+
+        DecisionNotification reviewDecisionNotification = requestPayload.getReviewDecisionNotification();
+
+        actionPayload.setUsersInfo(requestActionUserInfoResolver
+            .getUsersInfo(reviewDecisionNotification.getOperators(), reviewDecisionNotification.getSignatory(), request)
+        );
+
+        actionPayload.setPermitNotification(requestPayload.getPermitNotification());
+        actionPayload.setPermitNotificationAttachments(requestPayload.getPermitNotificationAttachments());
+
+        // Add action
+        requestService.addActionToRequest(request, actionPayload, actionType, requestPayload.getRegulatorReviewer());
+
+        // send official notice
         noticeService.sendOfficialNotice(request);
     }
     
@@ -89,7 +116,7 @@ public class PermitNotificationReviewSubmittedService {
 				? expirationDateFromFollowUpResponseReview
 				: expirationDateFromInitialReview;
 		
-        return Date.from(expirationDate.atTime(LocalTime.MIN).atZone(ZoneId.systemDefault()).toInstant());
+        return DateUtils.atEndOfDay(expirationDate);
     }
 
     public void executeFollowUpCompletedPostActions(final String requestId) {

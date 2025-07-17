@@ -1,11 +1,9 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.ner.handler;
 
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -23,6 +21,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.ner.mapper.NerMapper;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.service.NerApplyReviewService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.validation.NerReviewReturnForAmendsValidator;
 
+import java.util.List;
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class NerReviewReturnForAmendsActionHandler implements RequestTaskActionHandler<RequestTaskActionEmptyPayload> {
@@ -38,7 +39,7 @@ public class NerReviewReturnForAmendsActionHandler implements RequestTaskActionH
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final RequestTaskActionEmptyPayload payload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -49,10 +50,10 @@ public class NerReviewReturnForAmendsActionHandler implements RequestTaskActionH
         amendsValidator.validate(taskPayload);
 
         // update request payload
-        applyReviewService.updateRequestPayload(requestTask, pmrvUser);
+        applyReviewService.updateRequestPayload(requestTask, appUser);
 
         // add timeline action
-        this.createRequestAction(requestTask.getRequest(), pmrvUser, taskPayload);
+        this.createRequestAction(requestTask.getRequest(), appUser, taskPayload);
 
         // close task
         workflowService.completeTask(
@@ -67,7 +68,7 @@ public class NerReviewReturnForAmendsActionHandler implements RequestTaskActionH
     }
 
     private void createRequestAction(final Request request,
-                                     final PmrvUser pmrvUser,
+                                     final AppUser appUser,
                                      final NerApplicationReviewRequestTaskPayload taskPayload) {
 
         final NerApplicationReturnedForAmendsRequestActionPayload requestActionPayload = NER_MAPPER
@@ -77,7 +78,7 @@ public class NerReviewReturnForAmendsActionHandler implements RequestTaskActionH
             request,
             requestActionPayload,
             RequestActionType.NER_APPLICATION_RETURNED_FOR_AMENDS,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
     }
 }

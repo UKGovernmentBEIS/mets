@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute, Route } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable, of } from 'rxjs';
 
@@ -24,8 +23,7 @@ describe('RelatedActionsComponent', () => {
       <app-related-actions
         [taskId$]="taskId$"
         [isAssignable$]="isAssignable$"
-        [allowedActions$]="allowedActions$"
-      ></app-related-actions>
+        [allowedActions$]="allowedActions$"></app-related-actions>
     `,
   })
   class TestComponent {
@@ -42,7 +40,7 @@ describe('RelatedActionsComponent', () => {
 
   const setupTestingModule = async (withChangeAssigneeRoute = false) => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, SharedModule],
+      imports: [SharedModule],
       declarations: [RelatedActionsComponent, TestComponent],
       providers: [{ provide: ActivatedRoute, useValue: constructRoute(withChangeAssigneeRoute) }],
     }).compileComponents();
@@ -86,6 +84,7 @@ describe('RelatedActionsComponent', () => {
       'PERMIT_NOTIFICATION_FOLLOW_UP_RECALL_FROM_AMENDS',
       'AER_SAVE_APPLICATION',
       'AVIATION_ACCOUNT_CLOSURE_CANCEL_APPLICATION',
+      'BDR_VERIFICATION_RETURN_TO_OPERATOR',
     ]);
     fixture.detectChanges();
 
@@ -96,6 +95,7 @@ describe('RelatedActionsComponent', () => {
       ['http://localhost/', 'Recall the permit'],
       ['http://localhost/', 'Recall your response'],
       ['http://localhost/aviation/tasks/1/cancel', 'Cancel this task'],
+      ['http://localhost/', 'Return to operator for changes'],
     ]);
   });
 

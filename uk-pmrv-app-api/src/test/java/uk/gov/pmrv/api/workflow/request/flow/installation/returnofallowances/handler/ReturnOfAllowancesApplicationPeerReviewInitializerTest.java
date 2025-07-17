@@ -14,10 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ReturnOfAllowancesApplicationPeerReviewInitializerTest {
+class ReturnOfAllowancesApplicationPeerReviewInitializerTest {
 
     @Test
-    public void initializePayload() {
+    void initializePayload() {
         Request request = new Request();
         ReturnOfAllowancesRequestPayload requestPayload = new ReturnOfAllowancesRequestPayload();
         request.setPayload(requestPayload);
@@ -32,7 +32,7 @@ public class ReturnOfAllowancesApplicationPeerReviewInitializerTest {
     }
 
     @Test
-    public void getRequestTaskTypes() {
+    void getRequestTaskTypes() {
         ReturnOfAllowancesApplicationPeerReviewInitializer initializer = new ReturnOfAllowancesApplicationPeerReviewInitializer();
 
         Set<RequestTaskType> taskTypes = initializer.getRequestTaskTypes();

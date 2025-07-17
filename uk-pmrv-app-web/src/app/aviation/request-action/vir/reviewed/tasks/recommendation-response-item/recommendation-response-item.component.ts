@@ -31,7 +31,10 @@ interface ViewModel {
 export class RecommendationResponseItemComponent {
   verificationDataItem = this.route.snapshot.data.verificationDataItem as VerificationDataItem;
 
-  constructor(public store: RequestActionStore, private readonly route: ActivatedRoute) {}
+  constructor(
+    public store: RequestActionStore,
+    private readonly route: ActivatedRoute,
+  ) {}
 
   vm$: Observable<ViewModel> = combineLatest([
     this.store.pipe(virQuery.selectRequestActionPayload),

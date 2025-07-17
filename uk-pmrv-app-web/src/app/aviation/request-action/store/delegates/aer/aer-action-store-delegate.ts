@@ -1,11 +1,11 @@
 import { RequestActionStore } from '../../request-action.store';
-import { AerRequestActionPayload } from '../../request-action.types';
+import { AerUkEtsRequestActionPayload } from '../../request-action.types';
 
 export class AerActionStoreDelegate {
   constructor(private store: RequestActionStore) {}
 
-  get payload(): AerRequestActionPayload | null {
-    return this.store.getState().requestActionItem?.payload as AerRequestActionPayload;
+  get payload(): AerUkEtsRequestActionPayload | null {
+    return this.store.getState().requestActionItem?.payload as AerUkEtsRequestActionPayload;
   }
 
   get baseFileAttachmentDownloadUrl(): string {

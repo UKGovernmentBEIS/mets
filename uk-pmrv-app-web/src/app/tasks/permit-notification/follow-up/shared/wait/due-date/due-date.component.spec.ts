@@ -5,8 +5,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { SharedModule } from '@shared/shared.module';
+import { addDays, format } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import { PermitNotificationWaitForFollowUpRequestTaskPayload, RequestActionsService, TasksService } from 'pmrv-api';
 
@@ -62,7 +62,7 @@ describe('Due Date Component', () => {
     }
   }
 
-  const followUpResponseExpirationDate = moment().add(5, 'd').utc(true).format('YYYY-MM-DD');
+  const followUpResponseExpirationDate = format(new Date(addDays(new Date(), 5).toISOString()), 'yyyy-MM-dd');
 
   const route = new ActivatedRouteStub({ taskId: 63 }, null, {
     pageTitle: 'Edit follow up response deadline',
@@ -140,7 +140,7 @@ describe('Due Date Component', () => {
     page.dueDateDay = days;
     page.submitButton.click();
     fixture.detectChanges();
-    const dateMsg = moment(followUpResponseExpirationDate).format('DD MMM YYYY');
+    const dateMsg = format(new Date(followUpResponseExpirationDate), 'dd MMM yyyy');
     expect(page.errorSummary).toBeTruthy();
     expect(page.errors.map((error) => error.textContent.trim())).toEqual([`The date must be after ${dateMsg}`]);
     expect(tasksService.processRequestTaskAction).not.toHaveBeenCalled();
@@ -151,7 +151,8 @@ describe('Due Date Component', () => {
 
     const navigateSpy = jest.spyOn(router, 'navigate');
     const timelineSpy = jest.spyOn(store, 'updateTimelineActions');
-    const today = moment().add(6, 'd').utc(true).format('YYYY-MM-DD');
+    const today = format(new Date(addDays(new Date(), 6).toISOString()), 'yyyy-MM-dd');
+
     const date = today.split('-');
     const year = date[0];
     const month = date[1];

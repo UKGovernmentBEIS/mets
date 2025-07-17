@@ -1,5 +1,5 @@
 import { Component, HostBinding, Input, Optional, Self } from '@angular/core';
-import { ControlValueAccessor, NgControl,UntypedFormControl } from '@angular/forms';
+import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 
 import { FormService } from '../form/form.service';
 
@@ -32,7 +32,10 @@ export class FileUploadComponent implements ControlValueAccessor {
   isLabelHidden = true;
   currentLabel = 'Legend';
 
-  constructor(@Self() @Optional() public ngControl: NgControl, private formService: FormService) {
+  constructor(
+    @Self() @Optional() public ngControl: NgControl,
+    private formService: FormService,
+  ) {
     ngControl.valueAccessor = this;
   }
 

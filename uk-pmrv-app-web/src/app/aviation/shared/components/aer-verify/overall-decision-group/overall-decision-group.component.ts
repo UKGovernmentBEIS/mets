@@ -4,7 +4,6 @@ import { RouterLinkWithHref } from '@angular/router';
 
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { NotVerifiedDecisionReasonTypePipe } from '@aviation/shared/pipes/not-verified-reason.pipe';
-import { AviationOverallDecisionTypePipe } from '@aviation/shared/pipes/overall-decision-type.pipe';
 import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
@@ -26,7 +25,6 @@ import {
     SharedModule,
     ReturnToLinkComponent,
     RouterLinkWithHref,
-    AviationOverallDecisionTypePipe,
     NotVerifiedDecisionReasonTypePipe,
   ],
   standalone: true,
@@ -43,11 +41,11 @@ export class OverallDecisionGroupComponent implements OnInit, OnChanges {
   reasons: Array<string>;
   notVerifiedReasons: Array<AviationAerNotVerifiedDecisionReason>;
 
-  ngOnInit(): void {
+  ngOnChanges() {
     this.initializeReasons();
   }
 
-  ngOnChanges() {
+  ngOnInit(): void {
     this.initializeReasons();
   }
 

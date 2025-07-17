@@ -1,18 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.air.mapper;
 
-import java.time.Year;
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationRespondToRegulatorCommentsRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationRespondedToRegulatorCommentsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationReviewedRequestActionPayload;
@@ -21,6 +14,14 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.OperatorAirImprovementFollowUpResponse;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.RegulatorAirImprovementResponse;
+
+import java.time.Year;
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface AirMapper {

@@ -3,25 +3,22 @@ package uk.gov.pmrv.api.web.controller.workflow;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.framework.DefaultAopProxyFactory;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.AvailableRequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
@@ -45,10 +42,10 @@ class AvailableRequestControllerTest {
     private AvailableRequestController controller;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private AvailableRequestService availableRequestService;
@@ -57,7 +54,7 @@ class AvailableRequestControllerTest {
     public void setUp() {
 
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
@@ -68,7 +65,7 @@ class AvailableRequestControllerTest {
         controller = (AvailableRequestController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .build();
     }
@@ -76,36 +73,36 @@ class AvailableRequestControllerTest {
     @Test
     void getAvailableAccountWorkflows() throws Exception {
         final Long accountId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("id").build();
+        final AppUser appUser = AppUser.builder().userId("id").build();
         final Map<RequestCreateActionType, RequestCreateValidationResult> results =
                 Map.of(RequestCreateActionType.PERMIT_SURRENDER,
                         RequestCreateValidationResult.builder().valid(true).build());
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(availableRequestService.getAvailableAccountWorkflows(accountId, pmrvUser)).thenReturn(results);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(availableRequestService.getAvailableAccountWorkflows(accountId, appUser)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_PATH + "/permit/" + accountId))
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"PERMIT_SURRENDER\":{\"valid\":true}}"));
 
-        verify(availableRequestService, times(1)).getAvailableAccountWorkflows(accountId, pmrvUser);
+        verify(availableRequestService, times(1)).getAvailableAccountWorkflows(accountId, appUser);
     }
 
     @Test
     void getAvailableAerWorkflows() throws Exception {
         final String requestId = "AEM-1";
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("id").build();
+        final AppUser appUser = AppUser.builder().userId("id").build();
         final Map<RequestCreateActionType, RequestCreateValidationResult> results =
                 Map.of(RequestCreateActionType.AER,
                         RequestCreateValidationResult.builder().valid(true).build());
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(availableRequestService.getAvailableAerWorkflows(requestId, pmrvUser)).thenReturn(results);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(availableRequestService.getAvailableAerWorkflows(requestId, appUser)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_PATH + "/reporting/aer/" + requestId))
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"AER\":{\"valid\":true}}"));
 
-        verify(availableRequestService, times(1)).getAvailableAerWorkflows(requestId, pmrvUser);
+        verify(availableRequestService, times(1)).getAvailableAerWorkflows(requestId, appUser);
     }
 }

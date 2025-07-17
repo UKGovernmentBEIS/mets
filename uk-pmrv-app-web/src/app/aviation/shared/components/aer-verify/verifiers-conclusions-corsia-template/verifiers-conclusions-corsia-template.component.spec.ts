@@ -45,8 +45,8 @@ describe('VerifiersConclusionsCorsiaTemplateComponent', () => {
   it('should show summary details', () => {
     expect(page.summaryValues).toHaveLength(4);
     expect(page.summaryValues).toEqual([
-      ['Data quality and materiality', 'My quality of data'],
-      ['What is the materiality threshold for this operator?', '2%'],
+      ['Conclusions on data quality', 'My quality of data'],
+      ['Materiality threshold', '2%'],
       ['Is this materiality threshold being met in the emissions report?', 'Yes'],
       [`Conclusion relating to the operator's emissions report`, 'My conclusion'],
     ]);

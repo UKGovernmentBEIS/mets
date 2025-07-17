@@ -7,8 +7,8 @@ import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
@@ -50,7 +50,7 @@ public class AviationAerCreationService {
     private Request createRequestAviationAer(Long accountId, EmissionTradingScheme emissionTradingScheme, Year reportingYear) {
         RequestParams requestParams = getRequestParamsBuilderService(emissionTradingScheme)
             .map(service -> service.buildRequestParams(accountId, reportingYear))
-            .orElseThrow(() -> new BusinessException(ErrorCode.NO_AVIATION_AER_SERVICE_FOUND));
+            .orElseThrow(() -> new BusinessException(MetsErrorCode.NO_AVIATION_AER_SERVICE_FOUND));
 
         return startProcessRequestService.startProcess(requestParams);
     }
@@ -64,7 +64,7 @@ public class AviationAerCreationService {
     private void validateAccountStatus(Long accountId) {
         RequestCreateValidationResult validationResult = aviationAerCreationValidatorService.validateAccountStatus(accountId);
         if(!validationResult.isValid()) {
-            throw new BusinessException(ErrorCode.AVIATION_AER_CREATION_NOT_ALLOWED_INVALID_ACCOUNT_STATUS, validationResult);
+            throw new BusinessException(MetsErrorCode.AVIATION_AER_CREATION_NOT_ALLOWED_INVALID_ACCOUNT_STATUS, validationResult);
         }
     }
 
@@ -72,7 +72,7 @@ public class AviationAerCreationService {
         RequestCreateValidationResult validationResult =
             aviationAerCreationValidatorService.validateReportingYear(accountId, reportingYear);
         if(!validationResult.isValid()) {
-            throw new BusinessException(ErrorCode.AVIATION_AER_ALREADY_EXISTS_FOR_REPORTING_YEAR, validationResult);
+            throw new BusinessException(MetsErrorCode.AVIATION_AER_ALREADY_EXISTS_FOR_REPORTING_YEAR, validationResult);
         }
     }
 }

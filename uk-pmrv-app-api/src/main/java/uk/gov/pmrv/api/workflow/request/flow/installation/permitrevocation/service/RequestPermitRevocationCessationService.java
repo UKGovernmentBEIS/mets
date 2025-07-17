@@ -3,9 +3,9 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.serv
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountStatusService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -48,7 +48,7 @@ public class RequestPermitRevocationCessationService {
 
     @Transactional
     public void executeNotifyOperatorActions(final RequestTask requestTask,
-                                             final PmrvUser pmrvUser,
+                                             final AppUser appUser,
                                              final NotifyOperatorForDecisionRequestTaskActionPayload taskActionPayload) {
     	final PermitCessationSubmitRequestTaskPayload requestTaskPayload =
                 (PermitCessationSubmitRequestTaskPayload) requestTask.getPayload();
@@ -56,7 +56,7 @@ public class RequestPermitRevocationCessationService {
         final Request request = requestTask.getRequest();
         final PermitRevocationRequestPayload requestPayload = (PermitRevocationRequestPayload) request.getPayload();
         
-        cessationNotifyOperatorValidator.validate(requestTask, pmrvUser, taskActionPayload);
+        cessationNotifyOperatorValidator.validate(requestTask, appUser, taskActionPayload);
 
         installationAccountStatusService.handleRevocationCessationCompleted(request.getAccountId());
         

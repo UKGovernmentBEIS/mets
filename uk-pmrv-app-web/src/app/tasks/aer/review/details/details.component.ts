@@ -21,5 +21,8 @@ export class DetailsComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
   payload$: Observable<AerApplicationReviewRequestTaskPayload> = this.aerService.getPayload();
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

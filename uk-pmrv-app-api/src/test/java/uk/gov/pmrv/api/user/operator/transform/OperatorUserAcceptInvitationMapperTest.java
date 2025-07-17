@@ -1,16 +1,15 @@
 package uk.gov.pmrv.api.user.operator.transform;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import uk.gov.pmrv.api.authorization.core.domain.dto.AuthorityInfoDTO;
-import uk.gov.pmrv.api.user.operator.domain.OperatorInvitedUserInfoDTO;
-import uk.gov.pmrv.api.user.operator.domain.OperatorUserAcceptInvitationDTO;
-import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
+import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.pmrv.api.user.core.domain.enumeration.UserInvitationStatus;
-import uk.gov.pmrv.api.user.operator.transform.OperatorUserAcceptInvitationMapper;
+import uk.gov.pmrv.api.user.operator.domain.OperatorInvitedUserInfoDTO;
+import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
+import uk.gov.pmrv.api.user.operator.domain.OperatorUserWithAuthorityDTO;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class OperatorUserAcceptInvitationMapperTest {
 
@@ -23,12 +22,12 @@ class OperatorUserAcceptInvitationMapperTest {
 	
 	@Test
 	void toOperatorInvitedUserInfoDTO() {
-        OperatorUserAcceptInvitationDTO operatorUserAcceptInvitation =
-            OperatorUserAcceptInvitationDTO.builder()
+        OperatorUserWithAuthorityDTO operatorUserAcceptInvitation =
+            OperatorUserWithAuthorityDTO.builder()
                 .firstName("firstName")
                 .lastName("lastName")
                 .email("email")
-                .accountInstallationName("accountInstallationName")
+                .accountName("accountName")
                 .build();
         String roleCode = "roleCode";
         UserInvitationStatus userInvitationStatus = UserInvitationStatus.ACCEPTED;
@@ -39,17 +38,18 @@ class OperatorUserAcceptInvitationMapperTest {
         assertThat(expectedDto.getFirstName()).isEqualTo(operatorUserAcceptInvitation.getFirstName());
         assertThat(expectedDto.getLastName()).isEqualTo(operatorUserAcceptInvitation.getLastName());
         assertThat(expectedDto.getEmail()).isEqualTo(operatorUserAcceptInvitation.getEmail());
-        assertThat(expectedDto.getAccountInstallationName()).isEqualTo(operatorUserAcceptInvitation.getAccountInstallationName());
+        assertThat(expectedDto.getAccountName()).isEqualTo(operatorUserAcceptInvitation.getAccountName());
         assertThat(expectedDto.getRoleCode()).isEqualTo(roleCode);
         assertThat(expectedDto.getInvitationStatus()).isEqualTo(userInvitationStatus);
     }
 
     @Test
-    void toOperatorUserAcceptInvitationDTO() {
+    void toOperatorUserWithAuthorityDTO() {
         OperatorUserDTO operatorUser = OperatorUserDTO.builder()
             .email("email")
             .firstName("firstName")
             .lastName("lastName")
+            .enabled(true)
             .build();
 
         AuthorityInfoDTO authorityInfo = AuthorityInfoDTO.builder()
@@ -57,18 +57,17 @@ class OperatorUserAcceptInvitationMapperTest {
             .accountId(2L)
             .build();
 
-        String accountInstallationName = "accountInstallationName";
+        String accountName = "accountName";
 
 
-        OperatorUserAcceptInvitationDTO expectedDto = mapper
-            .toOperatorUserAcceptInvitationDTO(operatorUser, authorityInfo, accountInstallationName);
+        OperatorUserWithAuthorityDTO expectedDto = mapper
+            .toOperatorUserWithAuthorityDTO(operatorUser, authorityInfo, accountName);
 
         assertThat(expectedDto.getEmail()).isEqualTo(operatorUser.getEmail());
         assertThat(expectedDto.getFirstName()).isEqualTo(operatorUser.getFirstName());
         assertThat(expectedDto.getLastName()).isEqualTo(operatorUser.getLastName());
         assertThat(expectedDto.getUserAuthorityId()).isEqualTo(authorityInfo.getId());
-        assertThat(expectedDto.getAccountId()).isEqualTo(authorityInfo.getAccountId());
-        assertThat(expectedDto.getAccountInstallationName()).isEqualTo(accountInstallationName);
-        assertThat(expectedDto.getUserAuthenticationStatus()).isEqualTo(operatorUser.getStatus());
+        assertThat(expectedDto.getAccountName()).isEqualTo(accountName);
+        assertThat(expectedDto.isEnabled()).isTrue();
     }
 }

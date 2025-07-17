@@ -21,7 +21,10 @@ export class RequestNotesComponent {
     switchMap(([requestId, page]) => this.requestNotesService.getNotesByRequestId(requestId, page - 1, this.pageSize)),
   );
 
-  constructor(private readonly requestNotesService: RequestNotesService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly requestNotesService: RequestNotesService,
+    private readonly route: ActivatedRoute,
+  ) {}
 
   getDownloadUrlFiles(note: RequestNoteDto): { downloadUrl: string; fileName: string }[] {
     const files = note.payload.files || {};

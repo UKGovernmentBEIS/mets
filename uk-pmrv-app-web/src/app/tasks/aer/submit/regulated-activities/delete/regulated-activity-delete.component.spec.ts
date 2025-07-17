@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -9,7 +8,6 @@ import { AerService } from '@tasks/aer/core/aer.service';
 import { RegulatedActivityDeleteComponent } from '@tasks/aer/submit/regulated-activities/delete/regulated-activity-delete.component';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { ActivatedRouteStub, BasePage, MockType } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { TasksService } from 'pmrv-api';
 
@@ -40,9 +38,8 @@ describe('RegulatedActivityDeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
+      imports: [AerModule],
       providers: [
-        KeycloakService,
         { provide: ActivatedRoute, useValue: route },
         { provide: TasksService, useValue: tasksService },
       ],
@@ -65,7 +62,7 @@ describe('RegulatedActivityDeleteComponent', () => {
   });
 
   it('should display the regulated activity name', () => {
-    expect(page.header.textContent).toContain('Are you sure you want to delete  ‘Ammonia production’?');
+    expect(page.header.textContent.trim()).toContain('Are you sure you want to delete ‘Ammonia production’?');
   });
 
   it('should delete the regulated activity', () => {

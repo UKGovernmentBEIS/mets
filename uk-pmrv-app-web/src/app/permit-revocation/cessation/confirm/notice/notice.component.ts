@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -8,6 +8,7 @@ import {
   PERMIT_REVOCATION_CESSATION_TASK_FORM,
   permitRevocationCessationFormProvider,
 } from '@permit-revocation/cessation/confirm/core/factory/cessation-form-provider';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { PendingRequestService } from '../../../../core/guards/pending-request.service';
 import { PendingRequest } from '../../../../core/interfaces/pending-request.interface';
@@ -21,19 +22,16 @@ import { OfficialNoticeTypeMap } from '../core/cessation';
       (formSubmit)="onContinue()"
       [formGroup]="form"
       submitText="Continue"
-      [hideSubmit]="(store.isEditable$ | async) === false"
-    >
+      [hideSubmit]="(store.isEditable$ | async) === false">
       <span class="govuk-caption-l">Confirm cessation of regulated activities</span>
       <app-page-heading>What text should appear in the official notice following the cessation?</app-page-heading>
       <div govuk-radio formControlName="noticeType" hint="Explain how this is used and where its included">
         <govuk-radio-option
           [label]="officialNoticeTypeMap['SATISFIED_WITH_REQUIREMENTS_COMPLIANCE']"
-          value="SATISFIED_WITH_REQUIREMENTS_COMPLIANCE"
-        ></govuk-radio-option>
+          value="SATISFIED_WITH_REQUIREMENTS_COMPLIANCE"></govuk-radio-option>
         <govuk-radio-option
           [label]="officialNoticeTypeMap['NO_PROSPECT_OF_FURTHER_ALLOWANCES']"
-          value="NO_PROSPECT_OF_FURTHER_ALLOWANCES"
-        ></govuk-radio-option>
+          value="NO_PROSPECT_OF_FURTHER_ALLOWANCES"></govuk-radio-option>
       </div>
     </app-wizard-step>
     <a govukLink routerLink="../..">Return to: Cessation</a>
@@ -41,7 +39,7 @@ import { OfficialNoticeTypeMap } from '../core/cessation';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [permitRevocationCessationFormProvider],
 })
-export class NoticeComponent implements PendingRequest {
+export class NoticeComponent implements PendingRequest, OnInit {
   readonly officialNoticeTypeMap = OfficialNoticeTypeMap;
 
   constructor(
@@ -50,6 +48,7 @@ export class NoticeComponent implements PendingRequest {
     readonly pendingRequest: PendingRequestService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
 
   onContinue(): void {
@@ -75,5 +74,9 @@ export class NoticeComponent implements PendingRequest {
         )
         .subscribe(() => navigateToNextStep());
     }
+  }
+
+  ngOnInit(): void {
+    this.breadcrumbService.addToLastBreadcrumbAndShow('cessation');
   }
 }

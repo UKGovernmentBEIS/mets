@@ -20,7 +20,7 @@ export const AER_CORSIA_TIME_ALLOCATION_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Time allocation and scope summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Time allocation and scope' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./summary/summary.component').then((c) => c.SummaryComponent),
       },

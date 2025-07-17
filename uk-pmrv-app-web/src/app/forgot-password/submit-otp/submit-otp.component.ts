@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -43,6 +44,7 @@ export class SubmitOtpComponent implements OnInit {
     private readonly fb: UntypedFormBuilder,
     private readonly backLinkService: BackLinkService,
     private readonly store: ResetPasswordStore,
+    @Inject(APP_BASE_HREF) private baseHref: string,
   ) {}
 
   ngOnInit(): void {
@@ -80,6 +82,6 @@ export class SubmitOtpComponent implements OnInit {
   }
 
   onSignInAgain(): void {
-    this.authService.login({ redirectUri: location.origin });
+    this.authService.login({ redirectUri: this.authService.baseRedirectUri });
   }
 }

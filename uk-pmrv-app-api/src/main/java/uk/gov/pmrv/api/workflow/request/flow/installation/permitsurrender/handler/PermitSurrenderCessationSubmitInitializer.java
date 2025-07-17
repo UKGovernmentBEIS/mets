@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.handler;
 
-import java.util.Set;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
@@ -11,6 +10,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.c
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderReviewDeterminationGrant;
+
+import java.util.Set;
 
 @Service
 public class PermitSurrenderCessationSubmitInitializer implements InitializeRequestTaskHandler {

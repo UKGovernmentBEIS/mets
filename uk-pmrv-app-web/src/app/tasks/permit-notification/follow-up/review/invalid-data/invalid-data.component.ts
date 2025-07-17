@@ -7,7 +7,7 @@ import { FOLLOW_UP_REVIEW_DECISION_FORM, followUpReviewDecisionFormProvider } fr
   selector: 'app-permit-notification-follow-up-review-invalid-data',
   template: `
     <govuk-error-summary [form]="form"></govuk-error-summary>
-    <a govukLink routerLink=".."> Return to permit notification follow up</a>
+    <a govukLink routerLink="..">Return to permit notification follow up</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [followUpReviewDecisionFormProvider],

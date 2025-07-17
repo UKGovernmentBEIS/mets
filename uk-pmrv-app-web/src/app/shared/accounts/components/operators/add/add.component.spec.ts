@@ -112,17 +112,7 @@ describe('AddComponent', () => {
 
     jest
       .spyOn(operatorUsersInvitationService, 'inviteOperatorUserToAccount')
-      .mockReturnValue(throwError(() => new HttpErrorResponse({ status: 400, error: { code: 'AUTHORITY1000' } })));
-    page.emailValue = 'john@doe3.com';
-    page.submitButton.click();
-    fixture.detectChanges();
-
-    expect(page.confirmationTitle).toBeFalsy();
-    expect(page.errorSummary).toBeTruthy();
-
-    jest
-      .spyOn(operatorUsersInvitationService, 'inviteOperatorUserToAccount')
-      .mockReturnValue(throwError(() => new HttpErrorResponse({ status: 400, error: { code: 'USER1001' } })));
+      .mockReturnValue(throwError(() => new HttpErrorResponse({ status: 400, error: { code: 'USER1003' } })));
     page.emailValue = 'john@doe5.com';
     page.submitButton.click();
     fixture.detectChanges();

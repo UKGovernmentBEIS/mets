@@ -1,10 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.vir.handler;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
-
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -15,9 +13,9 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.NotifyOperatorForDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.ReviewOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.RegulatorImprovementResponse;
+import uk.gov.pmrv.api.workflow.request.flow.common.vir.validation.VirReviewNotifyOperatorValidator;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.service.VirReviewService;
-import uk.gov.pmrv.api.workflow.request.flow.common.vir.validation.VirReviewNotifyOperatorValidator;
 
 import java.util.List;
 import java.util.Map;
@@ -32,18 +30,18 @@ public class VirReviewNotifyOperatorActionHandler implements RequestTaskActionHa
     private final WorkflowService workflowService;
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser,
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser,
                         NotifyOperatorForDecisionRequestTaskActionPayload payload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         final VirApplicationReviewRequestTaskPayload taskPayload = (VirApplicationReviewRequestTaskPayload) requestTask.getPayload();
 
         // Validate review and action payload
-        virReviewNotifyOperatorValidator.validate(requestTask, payload, pmrvUser);
+        virReviewNotifyOperatorValidator.validate(requestTask, payload, appUser);
 
         // Submit review
         final DecisionNotification decisionNotification = payload.getDecisionNotification();
-        virReviewService.submitReview(requestTask, decisionNotification, pmrvUser);
+        virReviewService.submitReview(requestTask, decisionNotification, appUser);
 
         // Complete task
         boolean virNeedsImprovements = taskPayload.getRegulatorReviewResponse().getRegulatorImprovementResponses()

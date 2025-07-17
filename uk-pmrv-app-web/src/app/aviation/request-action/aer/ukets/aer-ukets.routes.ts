@@ -1,7 +1,6 @@
 import { inject } from '@angular/core';
 import { CanDeactivateFn, Routes } from '@angular/router';
 
-import { AerReturnForAmendsComponent } from '@aviation/request-action/aer/ukets/return-for-amends/aer-return-for-amends.component';
 import { RequestActionStore } from '@aviation/request-action/store';
 
 const canDeactivateAer: CanDeactivateFn<any> = () => {
@@ -189,10 +188,6 @@ export const AER_UKETS_ROUTES: Routes = [
               import('@aviation/request-action/aer/ukets/tasks/materiality-level/materiality-level.component'),
           },
         ],
-      },
-      {
-        path: 'return-for-amends',
-        component: AerReturnForAmendsComponent,
       },
     ],
   },

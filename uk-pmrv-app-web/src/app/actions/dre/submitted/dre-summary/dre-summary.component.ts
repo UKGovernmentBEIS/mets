@@ -17,8 +17,7 @@ import { DreService } from '../../core/dre.service';
           cssClass="summary-list--edge-border"
           [dre]="dre$ | async"
           [isEditable]="false"
-          [supportingDocumentFiles]="supportingDocumentFiles$ | async"
-        ></app-dre-summary-template>
+          [supportingDocumentFiles]="supportingDocumentFiles$ | async"></app-dre-summary-template>
         <app-official-notice-recipients [action]="action$ | async"></app-official-notice-recipients>
       </div>
     </div>
@@ -32,7 +31,10 @@ export class DreSummaryComponent {
 
   action$ = this.store.pipe(map((store) => store.action));
 
-  constructor(private readonly dreService: DreService, private readonly store: CommonActionsStore) {}
+  constructor(
+    private readonly dreService: DreService,
+    private readonly store: CommonActionsStore,
+  ) {}
 
   get supportingDocumentFiles$() {
     return this.dre$.pipe(

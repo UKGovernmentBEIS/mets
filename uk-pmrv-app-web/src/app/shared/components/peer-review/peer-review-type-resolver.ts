@@ -56,6 +56,20 @@ export function resolveRequestTaskActionType(
       return 'NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW';
     case 'AVIATION_NON_COMPLIANCE_CIVIL_PENALTY':
       return 'NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW';
+    case 'INSTALLATION_AUDIT_APPLICATION_SUBMIT':
+      return 'INSTALLATION_AUDIT_REQUEST_PEER_REVIEW';
+    case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT':
+      return 'INSTALLATION_ONSITE_INSPECTION_REQUEST_PEER_REVIEW';
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT':
+      return 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_REQUEST_PEER_REVIEW';
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT':
+      return 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_REQUEST_PEER_REVIEW';
+    case 'BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+      return 'BDR_REQUEST_PEER_REVIEW';
+    case 'PERMANENT_CESSATION_APPLICATION_SUBMIT':
+      return 'PERMANENT_CESSATION_REQUEST_PEER_REVIEW';
+    case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
+      return 'AVIATION_DOE_CORSIA_REQUEST_PEER_REVIEW';
 
     default:
       return null;
@@ -114,6 +128,20 @@ export function resolveRequestTaskActionPayloadType(
       return 'NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW_PAYLOAD';
     case 'AVIATION_NON_COMPLIANCE_CIVIL_PENALTY':
       return 'NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW_PAYLOAD';
+    case 'INSTALLATION_AUDIT_APPLICATION_SUBMIT':
+      return 'INSTALLATION_AUDIT_REQUEST_PEER_REVIEW_PAYLOAD';
+    case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT':
+      return 'INSTALLATION_ONSITE_INSPECTION_REQUEST_PEER_REVIEW_PAYLOAD';
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT':
+      return 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_REQUEST_PEER_REVIEW_PAYLOAD';
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT':
+      return 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_REQUEST_PEER_REVIEW_PAYLOAD';
+    case 'BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+      return 'BDR_REQUEST_PEER_REVIEW_PAYLOAD';
+    case 'PERMANENT_CESSATION_APPLICATION_SUBMIT':
+      return 'PERMANENT_CESSATION_REQUEST_PEER_REVIEW_PAYLOAD';
+    case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
+      return 'AVIATION_DOE_CORSIA_REQUEST_PEER_REVIEW_PAYLOAD';
 
     default:
       return null;
@@ -179,6 +207,10 @@ export function resolveReturnToText(
           return { text: 'Notice of intent', link: '../../..' };
         case 'AVIATION_NON_COMPLIANCE_CIVIL_PENALTY':
           return { text: 'Penalty notice', link: '../../..' };
+        case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT':
+          return { text: 'Calculate annual offsetting requirements', link: '../../..' };
+        case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT':
+          return { text: 'Calculate 3-year period offsetting requirements', link: '../../..' };
 
         default:
           return { text: 'Review emissions monitoring plan application', link: '../../..' };
@@ -190,8 +222,15 @@ export function resolveReturnToText(
       return { text: 'Withholding of allowances', link: '..' };
     case 'return-of-allowances':
       return { text: 'Return of allowances', link: '..' };
-    default:
-      return null;
+    case 'inspection':
+      switch (requestTaskType) {
+        case 'INSTALLATION_AUDIT_APPLICATION_SUBMIT':
+          return { text: 'Create audit report', link: '..' };
+        case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT':
+          return { text: 'Create an on-site inspection', link: '..' };
+        default:
+          return null;
+      }
   }
 }
 

@@ -1,49 +1,58 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <govuk-panel title="You have appointed a new verifier">{{ verificationAccount }}</govuk-panel>
-    <ng-container *ngIf="(currentDomain$ | async) === 'INSTALLATION'; else aviation">
-      <p class="govuk-body">
-        The verifier organisation has been informed that they now have read-only access to your permit account.
-      </p>
+    <ng-container *ngIf="verificationBodyId === -1">
+      <govuk-panel title="You have no verification body appointed"></govuk-panel>
       <h3 class="govuk-heading-m">What happens next</h3>
-      <p class="govuk-body">
-        Your appointed verifier will be able to review your activities within your permit account in preparation for
-        verification of your Annual Emissions Monitoring (AEM) report.
-      </p>
-      <p class="govuk-body">
-        The primary contact on your account will receive an email on Jan 1st each year giving notice that a task has
-        appeared on the permit account dashboard to produce and submit an AEM report by March 31st.
-      </p>
-      <p class="govuk-body">
-        When the AEM report has been submitted the verifier will receive a task on their dashboard to verify the AEM
-        report.
-      </p>
-      <p class="govuk-body">
-        An operator admin user on your account can change verifiers by selecting the users and contacts option from the
-        dashboard.
-      </p>
+      <p class="govuk-body">You can appoint a verifier in the users and contacts section of your account.</p>
     </ng-container>
-    <ng-template #aviation>
-      <p class="govuk-body">
-        The verifier organisation has been informed that they now have read-only access to your account.
-      </p>
-      <h3 class="govuk-heading-m">What happens next</h3>
-      <p class="govuk-body">
-        Your appointed verifier will be able to review activities within your account so they can prepare your Annual
-        Emissions Report (AER).
-      </p>
-      <p class="govuk-body">
-        The primary contact on your account will receive an email on 1 January each year giving notice that a task has
-        appeared on the account dashboard to produce and submit an AER by 31 March.
-      </p>
-      <p class="govuk-body">
-        When the AER has been submitted the verifier will receive a task on their dashboard to verify the report.
-      </p>
-      <p class="govuk-body">
-        An operator admin user on your account can change verifiers by selecting the users and contacts option from the
-        dashboard.
-      </p>
-    </ng-template>
+
+    <ng-container *ngIf="verificationBodyId !== -1">
+      <govuk-panel title="You have appointed a new verifier">{{ verificationAccount }}</govuk-panel>
+      <ng-container *ngIf="(currentDomain$ | async) === 'INSTALLATION'; else aviation">
+        <p class="govuk-body">
+          The verifier organisation has been informed that they now have read-only access to your permit account.
+        </p>
+        <h3 class="govuk-heading-m">What happens next</h3>
+        <p class="govuk-body">
+          Your appointed verifier will be able to review your activities within your permit account in preparation for
+          verification of your Annual Emissions Monitoring (AEM) report.
+        </p>
+        <p class="govuk-body">
+          The primary contact on your account will receive an email on Jan 1st each year giving notice that a task has
+          appeared on the permit account dashboard to produce and submit an AEM report by March 31st.
+        </p>
+        <p class="govuk-body">
+          When the AEM report has been submitted the verifier will receive a task on their dashboard to verify the AEM
+          report.
+        </p>
+        <p class="govuk-body">
+          An operator admin user on your account can change verifiers by selecting the users and contacts option from
+          the dashboard.
+        </p>
+      </ng-container>
+      <ng-template #aviation>
+        <p class="govuk-body">
+          The verifier organisation has been informed that they now have read-only access to your account.
+        </p>
+        <h3 class="govuk-heading-m">What happens next</h3>
+        <p class="govuk-body">
+          Your appointed verifier will be able to review activities within your account so they can prepare your Annual
+          Emissions Report (AER).
+        </p>
+        <p class="govuk-body">
+          The primary contact on your account will receive an email on 1 January each year giving notice that a task has
+          appeared on the account dashboard to produce and submit an AER by 31 March.
+        </p>
+        <p class="govuk-body">
+          When the AER has been submitted the verifier will receive a task on their dashboard to verify the report.
+        </p>
+        <p class="govuk-body">
+          An operator admin user on your account can change verifiers by selecting the users and contacts option from
+          the dashboard.
+        </p>
+      </ng-template>
+    </ng-container>
+
     <a [routerLink]="[(domainUrlPrefix$ | async) + '/accounts', accountId$ | async]" fragment="users" govukLink>
       Return to the users, contacts and verifiers page
     </a>

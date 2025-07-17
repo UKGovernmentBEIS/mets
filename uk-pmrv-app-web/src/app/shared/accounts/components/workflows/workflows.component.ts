@@ -22,7 +22,7 @@ import {
   InstallationAccountPermitDTO,
   RequestDetailsDTO,
   RequestDetailsSearchResults,
-  RequestSearchByAccountCriteria,
+  RequestSearchCriteria,
   RequestsService,
 } from 'pmrv-api';
 
@@ -35,13 +35,11 @@ import { workflowTypesDomainMap } from './workflowTypesMap';
 @Component({
   selector: 'app-workflows',
   templateUrl: './workflows.component.html',
-  styles: [
-    `
-      span.search-results-list_item_status {
-        float: right;
-      }
-    `,
-  ],
+  styles: `
+    span.search-results-list_item_status {
+      float: right;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })
@@ -68,8 +66,8 @@ export class WorkflowsComponent implements OnInit {
     workflowStatuses: [[], { updateOn: 'change' }],
   });
 
-  private searchTypes$ = new BehaviorSubject<RequestDetailsDTO['requestType'][]>([]);
-  private searchStatuses$ = new BehaviorSubject<RequestSearchByAccountCriteria['requestStatuses'][]>([]);
+  private readonly searchTypes$ = new BehaviorSubject<RequestDetailsDTO['requestType'][]>([]);
+  private readonly searchStatuses$ = new BehaviorSubject<RequestSearchCriteria['requestStatuses'][]>([]);
   private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain);
 
   constructor(
@@ -118,8 +116,9 @@ export class WorkflowsComponent implements OnInit {
       this.page$.pipe(distinctUntilChanged()),
     ]).pipe(
       switchMap(([accountId, types, statuses, page]) =>
-        this.requestsService.getRequestDetailsByAccountId({
-          accountId: accountId,
+        this.requestsService.getRequestDetailsByResource({
+          resourceType: 'ACCOUNT',
+          resourceId: String(accountId),
           category: 'PERMIT',
           requestTypes: types.reduce((acc, val) => acc.concat(val), []),
           requestStatuses: statuses.reduce((acc, val) => acc.concat(val), []),

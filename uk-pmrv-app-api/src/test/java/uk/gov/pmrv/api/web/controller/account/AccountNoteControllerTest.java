@@ -1,21 +1,6 @@
 package uk.gov.pmrv.api.web.controller.account;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,29 +17,45 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.note.NotePayload;
+import uk.gov.netz.api.common.note.NoteRequest;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileUuidDTO;
+import uk.gov.netz.api.files.notes.service.FileNoteService;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
+import uk.gov.netz.api.token.FileToken;
 import uk.gov.pmrv.api.account.domain.dto.AccountNoteDto;
 import uk.gov.pmrv.api.account.domain.dto.AccountNoteRequest;
 import uk.gov.pmrv.api.account.domain.dto.AccountNoteResponse;
 import uk.gov.pmrv.api.account.service.AccountNoteService;
 import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.common.note.NotePayload;
-import uk.gov.pmrv.api.common.note.NoteRequest;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileUuidDTO;
-import uk.gov.pmrv.api.files.notes.service.FileNoteService;
-import uk.gov.pmrv.api.token.FileToken;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
+
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class AccountNoteControllerTest {
@@ -67,7 +68,7 @@ class AccountNoteControllerTest {
     private AccountNoteController controller;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent appSecurityComponent;
 
     @Mock
     private AccountNoteService accountNoteService;
@@ -79,15 +80,15 @@ class AccountNoteControllerTest {
     private RoleAuthorizationService roleAuthorizationService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
     @BeforeEach
     public void setUp() {
         
-        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
@@ -102,7 +103,7 @@ class AccountNoteControllerTest {
         conversionService.addConverter(new StringToAccountTypeEnumConverter());
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
             .setConversionService(conversionService)
                 .build();
@@ -112,7 +113,7 @@ class AccountNoteControllerTest {
     void getAccountNotes() throws Exception {
         
         final long accountId = 1L;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
 
         final AccountNoteResponse response = AccountNoteResponse.builder()
             .totalItems(10L)
@@ -124,7 +125,7 @@ class AccountNoteControllerTest {
             )
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(accountNoteService.getAccountNotesByAccountId(accountId, 0, 2)).thenReturn(response);
 
         mockMvc.perform(MockMvcRequestBuilders.get(ACCOUNT_NOTE_CONTROLLER_PATH + "?accountId=1&page=0&size=2")
@@ -136,7 +137,7 @@ class AccountNoteControllerTest {
             .andExpect(jsonPath("$.accountNotes[1].accountId").value(1L))
             .andExpect(jsonPath("$.accountNotes[1].payload.note").value("note 2"));
 
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(accountNoteService, times(1)).getAccountNotesByAccountId(accountId, 0, 2);
     }
 
@@ -144,11 +145,11 @@ class AccountNoteControllerTest {
     void getAccountNoteById() throws Exception {
 
         final long noteId = 1L;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         
         final AccountNoteDto accountNoteDto = AccountNoteDto.builder().accountId(2L).payload(NotePayload.builder().note("the note").build()).build();
         
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(accountNoteService.getNote(noteId)).thenReturn(accountNoteDto);
 
         mockMvc.perform(MockMvcRequestBuilders.get(ACCOUNT_NOTE_CONTROLLER_PATH + "/1")
@@ -158,19 +159,19 @@ class AccountNoteControllerTest {
             .andExpect(jsonPath("$.accountId").value(2L))
             .andExpect(jsonPath("$.payload.note").value("the note"));
 
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(accountNoteService, times(1)).getNote(noteId);
     }
 
     @Test
     void getAccountNotes_forbidden() throws Exception {
 
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "getNotesByAccountId", Long.toString(1L));
+            .when(appUserAuthorizationService)
+            .authorize(user, "getNotesByAccountId", Long.toString(1L), null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -184,11 +185,11 @@ class AccountNoteControllerTest {
     @Test
     void createAccountNote() throws Exception {
         
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         final AccountNoteRequest accountNoteRequest = AccountNoteRequest.builder()
             .accountId(1L)
@@ -207,11 +208,11 @@ class AccountNoteControllerTest {
     @Test
     void createAccountNote_bad_request() throws Exception {
         
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         final AccountNoteRequest accountNoteRequest = AccountNoteRequest.builder()
             .accountId(1L)
@@ -230,7 +231,7 @@ class AccountNoteControllerTest {
     @Test
     void uploadAccountNoteFile() throws Exception {
         
-        final PmrvUser authUser = PmrvUser.builder().userId("id").build();
+        final AppUser authUser = AppUser.builder().userId("id").build();
         final String noteName = "file";
         final String noteOriginalFileName = "filename.txt";
         final String noteContentType = "text/plain";
@@ -247,8 +248,8 @@ class AccountNoteControllerTest {
         final UUID noteUuid = UUID.randomUUID();
         final Long accountId = 1L;
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
-        when(fileNoteService.uploadAccountFile(authUser, fileDTO, accountId))
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
+        when(fileNoteService.uploadAccountFile(authUser.getUserId(), fileDTO, accountId))
             .thenReturn(FileUuidDTO.builder().uuid(noteUuid.toString()).build());
 
         mockMvc.perform(
@@ -259,20 +260,20 @@ class AccountNoteControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.uuid").value(noteUuid.toString()));
 
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
     }
 
     @Test
     void uploadAccountNoteFile_forbidden() throws Exception {
 
-        final PmrvUser authUser = PmrvUser.builder().userId("id").build();
+        final AppUser authUser = AppUser.builder().userId("id").build();
 
         final MockMultipartFile noteFile = new MockMultipartFile("file", "filename.txt", "text/plain", "content".getBytes());
        
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(authUser, "uploadAccountNoteFile", "1");
+            .when(appUserAuthorizationService)
+            .authorize(authUser, "uploadAccountNoteFile", "1", null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.multipart(ACCOUNT_NOTE_CONTROLLER_PATH + "/upload/account/" + 1)
@@ -280,18 +281,18 @@ class AccountNoteControllerTest {
             )
             .andExpect(status().isForbidden());
 
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verifyNoInteractions(fileNoteService);
     }
 
     @Test
     void updateAccountNote() throws Exception {
 
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         final NoteRequest noteRequest = NoteRequest.builder()
             .note("the note")
@@ -309,8 +310,8 @@ class AccountNoteControllerTest {
     @Test
     void updateAccountNote_forbidden() throws Exception {
 
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
         final NoteRequest noteRequest = NoteRequest.builder()
@@ -318,28 +319,28 @@ class AccountNoteControllerTest {
             .files(Set.of(UUID.randomUUID()))
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "updateAccountNote", "1");
+            .when(appUserAuthorizationService)
+            .authorize(user, "updateAccountNote", "1", null, null);
 
         mockMvc.perform(MockMvcRequestBuilders.put(ACCOUNT_NOTE_CONTROLLER_PATH + "/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(noteRequest)))
             .andExpect(status().isForbidden());
 
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verifyNoInteractions(accountNoteService);
     }
 
     @Test
     void deleteAccountNote() throws Exception {
 
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders.delete(ACCOUNT_NOTE_CONTROLLER_PATH + "/1"))
             .andExpect(status().isNoContent());

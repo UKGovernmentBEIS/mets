@@ -29,7 +29,7 @@
         <dt govukSummaryListRowKey>Batch variation report</dt>
         <dd govukSummaryListRowValue>
           <a
-            [routerLink]="['/actions', vm.requestActionId, 'file-download', 'document', report.uuid]"
+            [routerLink]="['/aviation', 'actions', vm.requestActionId, 'file-download', 'document', report.uuid]"
             govukLink
             target="_blank"
             >{{ report.name }}</a

@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,17 +9,33 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AirImprovement } from './airImprovement';
+import { AirImprovementCalculationCO2 } from './airImprovementCalculationCO2';
+import { AirImprovementCalculationPFC } from './airImprovementCalculationPFC';
+import { AirImprovementFallback } from './airImprovementFallback';
+import { AirImprovementMeasurement } from './airImprovementMeasurement';
 import { DecisionNotification } from './decisionNotification';
 import { FileInfoDTO } from './fileInfoDTO';
-import { OperatorAirImprovementResponse } from './operatorAirImprovementResponse';
+import { OperatorAirImprovementAlreadyMadeResponse } from './operatorAirImprovementAlreadyMadeResponse';
+import { OperatorAirImprovementNoResponse } from './operatorAirImprovementNoResponse';
+import { OperatorAirImprovementYesResponse } from './operatorAirImprovementYesResponse';
 import { RegulatorAirReviewResponse } from './regulatorAirReviewResponse';
 import { RequestActionUserInfo } from './requestActionUserInfo';
 
 export interface AirApplicationReviewedRequestActionPayloadAllOf {
-  airImprovements?: { [key: string]: AirImprovement };
+  airImprovements?: {
+    [key: string]:
+      | AirImprovementCalculationCO2
+      | AirImprovementCalculationPFC
+      | AirImprovementFallback
+      | AirImprovementMeasurement;
+  };
   reportingYear?: number;
-  operatorImprovementResponses?: { [key: string]: OperatorAirImprovementResponse };
+  operatorImprovementResponses?: {
+    [key: string]:
+      | OperatorAirImprovementAlreadyMadeResponse
+      | OperatorAirImprovementNoResponse
+      | OperatorAirImprovementYesResponse;
+  };
   airAttachments?: { [key: string]: string };
   airSectionsCompleted?: { [key: string]: boolean };
   regulatorReviewResponse?: RegulatorAirReviewResponse;

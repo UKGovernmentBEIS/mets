@@ -6,54 +6,80 @@
           <div class="govuk-grid-column-full">
             <div class="govuk-heading-m">Reports</div>
             <div class="govuk-heading-s">Type</div>
-            <div formControlName="reportsTypes" govuk-checkboxes>
+            <div formControlName="types" govuk-checkboxes>
               <govuk-checkbox
-                *ngFor="let type of reportTypesPerDomain | keyvalue: originalOrder"
+                *ngFor="let type of reportsTypesMap | keyvalue: originalOrder"
                 [value]="type.value"
-                [label]="type.key"
-              ></govuk-checkbox>
+                [label]="type.key"></govuk-checkbox>
             </div>
           </div>
           <div class="govuk-grid-column-full">
             <div class="govuk-heading-s">Status</div>
-            <div formControlName="reportsStatuses" govuk-checkboxes>
+            <div formControlName="statuses" govuk-checkboxes>
               <govuk-checkbox
-                *ngFor="let type of reportStatusesPerDomain | keyvalue: originalOrder"
+                *ngFor="let type of reportsStatusesMap | keyvalue: originalOrder"
                 [value]="type.key"
-                [label]="type.value"
-              ></govuk-checkbox>
+                [label]="type.value"></govuk-checkbox>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="govuk-grid-column-three-quarters" *ngIf="reports$ | async as reports">
+    <div class="govuk-grid-column-three-quarters" *ngIf="currentPageData$ | async as reports">
       <ng-container *ngFor="let report of reports">
         <div class="govuk-!-margin-bottom-9">
           <ul class="govuk-list">
             <li class="search-results-list_item">
               <div class="govuk-heading-m">{{ report.year }}</div>
               <div>
-                <ng-container *ngIf="!report?.isExempt && report.reportableEmissions">
-                  {{ report.reportableEmissions | bigNumber }}
-                  {{ domain === 'AVIATION' ? 'tCO2 emissions' : 'tCO2e reportable emissions' }}
-                  <ng-container *ngIf="report.reportableOffsetEmissions">
-                    from all international flights<br />{{ report.reportableOffsetEmissions | bigNumber }} tCO2
-                    emissions from flights with offsetting requirements <br />{{
-                      report.reportableReductionClaimEmissions | bigNumber
-                    }}
-                    tCO2 emissions claimed from CORSIA eligible fuels
+                <ng-container *ngIf="!report?.isExempt">
+                  <ng-container
+                    *ngIf="
+                      report.reportableEmissions &&
+                        !report.reportableOffsetEmissions &&
+                        !report.reportableReductionClaimEmissions &&
+                        !report.hasDoeCorsia;
+                      else offsettingEmissions
+                    ">
+                    {{ report.reportableEmissions | bigNumber }}
+                    {{ domain === 'AVIATION' ? 'tCO2 emissions' : 'tCO2e reportable emissions' }}
                   </ng-container>
+                  <ng-template #offsettingEmissions>
+                    <ng-container *ngIf="report.reportableEmissions">
+                      <b>Emissions from all international flights:</b>
+                      &nbsp;
+                      {{ report.reportableEmissions | bigNumber }} tCO2
+                      <br />
+                    </ng-container>
+                    <ng-container *ngIf="report.reportableOffsetEmissions">
+                      <b>Emissions from flights with offsetting requirements:</b>
+                      &nbsp;
+                      {{ report.reportableOffsetEmissions | bigNumber }} tCO2
+                      <br />
+                    </ng-container>
+                    <ng-container *ngIf="report.reportableReductionClaimEmissions">
+                      <b>Emissions claimed from CORSIA eligible fuels:</b>
+                      &nbsp;
+                      {{ report.reportableReductionClaimEmissions | bigNumber }} tCO2
+                    </ng-container>
+                  </ng-template>
                 </ng-container>
-                <ng-container *ngIf="report?.isExempt"> Emissions not required </ng-container>
-                <ng-container *ngIf="!report?.isExempt && !report.reportableEmissions">
+                <ng-container *ngIf="report?.isExempt">Emissions not required</ng-container>
+                <ng-container
+                  *ngIf="
+                    !report?.isExempt &&
+                    !report.reportableEmissions &&
+                    !report.reportableOffsetEmissions &&
+                    !report.reportableReductionClaimEmissions &&
+                    !report?.hasEmissionReportNotRequired
+                  ">
                   No emissions reported
                 </ng-container>
               </div>
             </li>
           </ul>
           <ul class="govuk-list">
-            <li *ngFor="let details of report.reportsDetails" class="search-results-list_item govuk-!-margin-bottom-3">
+            <li *ngFor="let details of report.details" class="search-results-list_item govuk-!-margin-bottom-3">
               <div class="govuk-grid-row">
                 <div class="govuk-grid-column-three-quarters">
                   <div class="govuk-!-margin-bottom-3">
@@ -63,8 +89,13 @@
                       {{ details.requestType | i18nSelect: reportsTypesTagsMap }}
                     </a>
                   </div>
-                  <div class="govuk-!-margin-bottom-2 pre-wrap">
+                  <div class="govuk-!-margin-bottom-2 pre-wrap" *ngIf="details.requestStatus !== 'NOT_REQUIRED'">
                     {{ details.requestMetadata | reportingSubheading }}
+                  </div>
+                  <div
+                    class="govuk-!-margin-bottom-2 pre-wrap"
+                    *ngIf="details?.requestMetadata?.type === 'AER' && details.requestStatus === 'NOT_REQUIRED'">
+                    0 tCO2
                   </div>
                   <div class="govuk-!-margin-bottom-0 govuk-body-s">
                     Created on {{ details.creationDate | govukDate }}
@@ -72,8 +103,7 @@
                 </div>
                 <div class="govuk-grid-column-one-quarter">
                   <span
-                    class="search-results-list_item_status govuk-tag govuk-tag--{{ details.requestStatus | tagColor }}"
-                  >
+                    class="search-results-list_item_status govuk-tag govuk-tag--{{ details.requestStatus | tagColor }}">
                     <strong>{{ details.requestStatus | i18nSelect: reportsStatusesTagMap }}</strong>
                   </span>
                 </div>
@@ -84,11 +114,10 @@
       </ng-container>
 
       <app-pagination
-        *ngIf="(totalReportsNumber$ | async) > 0 && showPagination$ | async"
-        [count]="totalReportsNumber$ | async"
+        *ngIf="(totalDataNumber$ | async) > 0 && showPagination$ | async"
+        [count]="totalDataNumber$ | async"
         (currentPageChange)="page$.next($event)"
-        [pageSize]="pageSize"
-      ></app-pagination>
+        [pageSize]="itemsPerPage"></app-pagination>
     </div>
   </div>
 </form>

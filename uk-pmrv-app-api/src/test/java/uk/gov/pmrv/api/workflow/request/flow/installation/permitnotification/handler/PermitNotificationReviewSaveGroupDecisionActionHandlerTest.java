@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -40,7 +40,7 @@ class PermitNotificationReviewSaveGroupDecisionActionHandlerTest {
     void process() {
         final Long requestTaskId = 1L;
         final RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_NOTIFICATION_SAVE_REVIEW_GROUP_DECISION;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        final AppUser appUser = AppUser.builder().userId("user").build();
         final PermitNotificationSaveReviewGroupDecisionRequestTaskActionPayload payload = PermitNotificationSaveReviewGroupDecisionRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.PERMIT_NOTIFICATION_SAVE_REVIEW_GROUP_DECISION_PAYLOAD)
                 .reviewDecision(PermitNotificationReviewDecision.builder()
@@ -63,7 +63,7 @@ class PermitNotificationReviewSaveGroupDecisionActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(requestTaskId, requestTaskActionType, pmrvUser, payload);
+        handler.process(requestTaskId, requestTaskActionType, appUser, payload);
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(requestTask.getId());

@@ -19,6 +19,6 @@ export function getSectionStatus(
   return payload?.sectionsCompleted['DETAILS_CHANGE']
     ? 'complete'
     : payload?.sectionsCompleted['DETAILS_CHANGE'] === false
-    ? 'in progress'
-    : 'not started';
+      ? 'in progress'
+      : 'not started';
 }

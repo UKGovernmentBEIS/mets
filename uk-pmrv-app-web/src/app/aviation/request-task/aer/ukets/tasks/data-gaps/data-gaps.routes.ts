@@ -46,7 +46,7 @@ export const AER_DATA_GAPS_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Data gaps' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Data gaps' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./data-gaps-summary/data-gaps-summary.component'),
       },

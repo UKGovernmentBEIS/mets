@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -31,13 +31,13 @@ public class EmpIssuanceCorsiaReviewNotifyOperatorActionHandler
 
     @Override
     public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType,
-                        PmrvUser pmrvUser, EmpIssuanceCorsiaNotifyOperatorForDecisionRequestTaskActionPayload payload) {
+                        AppUser appUser, EmpIssuanceCorsiaNotifyOperatorForDecisionRequestTaskActionPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
-        reviewNotifyOperatorValidatorService.validate(requestTask, payload, pmrvUser);
+        reviewNotifyOperatorValidatorService.validate(requestTask, payload, appUser);
 
         DecisionNotification decisionNotification = payload.getDecisionNotification();
-        requestEmpCorsiaReviewService.saveDecisionNotification(requestTask, decisionNotification, pmrvUser);
+        requestEmpCorsiaReviewService.saveDecisionNotification(requestTask, decisionNotification, appUser);
 
         // complete task
         EmpIssuanceCorsiaApplicationReviewRequestTaskPayload taskPayload =

@@ -1,4 +1,6 @@
 import {
+  AviationAerCorsia3YearPeriodCreateActionPayload,
+  AviationAerCorsiaAnnualOffsettingCreateActionPayload,
   ReportRelatedRequestCreateActionPayload,
   RequestCreateActionEmptyPayload,
   RequestCreateActionProcessDTO,
@@ -10,6 +12,10 @@ export const requestCreateActionTypeLabelMap: Partial<
   AER: 'Return to operator for changes',
   DRE: 'Determine reportable emissions',
   AVIATION_DRE_UKETS: 'Determine aviation emissions',
+  AVIATION_AER_CORSIA_ANNUAL_OFFSETTING: 'Calculate annual offsetting requirements',
+  AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING: 'Calculate 3-year period offsetting requirements',
+  BDR: 'Reopen BDR workflow',
+  AVIATION_DOE_CORSIA: 'Initiate estimation of emissions',
 };
 
 export function createRequestCreateActionProcessDTO(
@@ -20,6 +26,8 @@ export function createRequestCreateActionProcessDTO(
     case 'AER':
     case 'DRE':
     case 'AVIATION_DRE_UKETS':
+    case 'BDR':
+    case 'AVIATION_DOE_CORSIA':
       return {
         requestCreateActionType,
         requestCreateActionPayload: {
@@ -27,6 +35,23 @@ export function createRequestCreateActionProcessDTO(
           requestId: requestId,
         } as ReportRelatedRequestCreateActionPayload,
       };
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING':
+      return {
+        requestCreateActionType,
+        requestCreateActionPayload: {
+          payloadType: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_CREATE_ACTION_PAYLOAD',
+          requestId: requestId,
+        } as AviationAerCorsiaAnnualOffsettingCreateActionPayload,
+      };
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING':
+      return {
+        requestCreateActionType,
+        requestCreateActionPayload: {
+          payloadType: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_CREATE_ACTION_PAYLOAD',
+          requestId: requestId,
+        } as AviationAerCorsia3YearPeriodCreateActionPayload,
+      };
+
     default:
       return {
         requestCreateActionType,

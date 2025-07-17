@@ -1,10 +1,10 @@
 package uk.gov.pmrv.api.migration.emp.corsia.managementprocedures;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.stream.Stream;
-
-import org.springframework.jdbc.core.RowMapper;
 
 public class EtsEmpManagementProceduresCorsiaRowMapper implements RowMapper<EtsEmpManagementProceduresCorsia> {
 	

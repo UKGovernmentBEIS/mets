@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.validation.PermitValidatorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -43,7 +43,7 @@ public class PermitVariationSubmitService {
 	}
 	
 	@Transactional
-	public void submitPermitVariation(RequestTask requestTask, PmrvUser authUser) {
+	public void submitPermitVariation(RequestTask requestTask, AppUser authUser) {
 		PermitVariationApplicationSubmitRequestTaskPayload taskPayload = (PermitVariationApplicationSubmitRequestTaskPayload) requestTask
 				.getPayload();
 		final Request request = requestTask.getRequest();

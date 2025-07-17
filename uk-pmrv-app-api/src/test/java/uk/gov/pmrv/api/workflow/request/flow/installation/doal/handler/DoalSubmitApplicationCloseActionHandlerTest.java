@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -48,7 +48,7 @@ class DoalSubmitApplicationCloseActionHandlerTest {
     @Test
     void doProcess() {
         final Long requestTaskId = 1L;
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final RequestTaskActionEmptyPayload payload = RequestTaskActionEmptyPayload.builder().build();
 
         final String processTaskId = "processTaskId";

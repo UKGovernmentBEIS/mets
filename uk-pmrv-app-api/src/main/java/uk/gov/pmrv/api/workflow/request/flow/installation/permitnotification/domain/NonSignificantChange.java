@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import java.util.List;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -9,6 +8,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

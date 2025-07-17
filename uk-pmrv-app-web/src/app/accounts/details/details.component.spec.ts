@@ -2,11 +2,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { of } from 'rxjs';
+
 import { AuthService } from '@core/services/auth.service';
 import { CountryService } from '@core/services/country.service';
 import { AuthStore, UserState } from '@core/store/auth';
 import { SharedModule } from '@shared/shared.module';
-import { ActivatedRouteStub, BasePage, CountryServiceStub } from '@testing';
+import { ActivatedRouteStub, BasePage, CountryServiceStub, mockClass } from '@testing';
+
+import { CompanyInformationService } from 'pmrv-api';
 
 import { SharedUserModule } from '../../shared-user/shared-user.module';
 import { mockedAccountPermit } from '../testing/mock-data';
@@ -19,6 +23,7 @@ describe('DetailsComponent', () => {
   let authStore: AuthStore;
   let authService: Partial<jest.Mocked<AuthService>>;
   let activatedRouteStub: ActivatedRouteStub;
+  const companyInformationService = mockClass(CompanyInformationService);
 
   class Page extends BasePage<DetailsComponent> {
     get heading() {
@@ -32,6 +37,10 @@ describe('DetailsComponent', () => {
     get actions() {
       return this.queryAll<HTMLElement>('dl dd.govuk-summary-list__actions');
     }
+
+    get checkboxes() {
+      return this.queryAll<HTMLInputElement>('.govuk-checkboxes__input');
+    }
   }
 
   const createModule = async () => {
@@ -42,10 +51,25 @@ describe('DetailsComponent', () => {
         { provide: CountryService, useClass: CountryServiceStub },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: AuthService, useValue: authService },
+        { provide: CompanyInformationService, useValue: companyInformationService },
       ],
     }).compileComponents();
 
     authStore = TestBed.inject(AuthStore);
+
+    companyInformationService.getCompanyProfileByRegistrationNumber.mockReturnValue(
+      of({
+        name: 'COMPANY 91634248 LIMITED',
+        registrationNumber: '91634248',
+        address: {
+          line1: 'Companies House',
+          line2: 'Crownway',
+          city: 'Cardiff',
+          country: 'United Kingdom',
+          postcode: 'CF14 3UZ',
+        },
+      }),
+    );
   };
 
   const createComponent = () => {
@@ -98,15 +122,16 @@ describe('DetailsComponent', () => {
         'Category A (Low emitter)',
         'A',
         'New Permit',
-        'NN166712 linetown1231Greece',
+        'NN166712 line town1231Greece',
         'Yes',
 
+        '11111',
         'leName',
         'Limited Company',
-        '11111',
-        'linetown1231Greece',
+        'line town1231Greece',
 
         'TEST_HC',
+        '',
         'TEST_REG_NUM',
         'TEST_ADDR_LINE1 TEST_CITYTEST_POSTCODE',
       ]);
@@ -152,15 +177,16 @@ describe('DetailsComponent', () => {
         'Category A (Low emitter)',
         'A',
         'New Permit',
-        'NN166712 linetown1231Greece',
+        'NN166712 line town1231Greece',
         'Yes',
 
+        '11111',
         'leName',
         'Limited Company',
-        '11111',
-        'linetown1231Greece',
+        'line town1231Greece',
 
         'TEST_HC',
+        '',
         'TEST_REG_NUM',
         'TEST_ADDR_LINE1 TEST_CITYTEST_POSTCODE',
       ]);
@@ -212,15 +238,16 @@ describe('DetailsComponent', () => {
         'Category A (Low emitter)',
         'A',
         'New Permit',
-        'NN166712 linetown1231Greece',
+        'NN166712 line town1231Greece',
         'Yes',
 
+        '11111',
         'leName',
         'Limited Company',
-        '11111',
-        'linetown1231Greece',
+        'line town1231Greece',
 
         'TEST_HC',
+        '',
         'TEST_REG_NUM',
         'TEST_ADDR_LINE1 TEST_CITYTEST_POSTCODE',
       ]);
@@ -228,6 +255,42 @@ describe('DetailsComponent', () => {
 
     it('should render the edit links', () => {
       expect(Array.from(page.actions).filter((action) => action.textContent.trim() === 'Change').length).toEqual(13);
+    });
+
+    it('should render the companies house details', () => {
+      page.checkboxes[0].click();
+      fixture.detectChanges();
+
+      expect(page.accountDetails.map((dd) => dd.textContent.trim())).toEqual([
+        'permitDoc.pdf Attached documents att1.pdf  att2.pdf',
+        '1 Jan 2023',
+        'permitId',
+
+        'accountName',
+        'siteName',
+        '222',
+        '111',
+        'GHGE',
+        'Category A (Low emitter)',
+        'A',
+        'New Permit',
+        'NN166712 line town1231Greece',
+        'Yes',
+        '11111',
+        '91634248',
+        'leName',
+        'COMPANY 91634248 LIMITED',
+        'Limited Company',
+        '',
+        'line town1231Greece',
+        'Companies House  , Crownway CardiffCF14 3UZUnited Kingdom',
+        'TEST_HC',
+        '',
+        'TEST_REG_NUM',
+        '',
+        'TEST_ADDR_LINE1 TEST_CITYTEST_POSTCODE',
+        '',
+      ]);
     });
   });
 
@@ -266,15 +329,16 @@ describe('DetailsComponent', () => {
         'Category A (Low emitter)',
         'A',
         'New Permit',
-        'NN166712 linetown1231Greece',
+        'NN166712 line town1231Greece',
         'Yes',
 
+        '11111',
         'leName',
         'Limited Company',
-        '11111',
-        'linetown1231Greece',
+        'line town1231Greece',
 
         'TEST_HC',
+        '',
         'TEST_REG_NUM',
         'TEST_ADDR_LINE1 TEST_CITYTEST_POSTCODE',
       ]);
@@ -320,15 +384,16 @@ describe('DetailsComponent', () => {
         'Category A (Low emitter)',
         'A',
         'New Permit',
-        'NN166712 linetown1231Greece',
+        'NN166712 line town1231Greece',
         'Yes',
 
+        '11111',
         'leName',
         'Limited Company',
-        '11111',
-        'linetown1231Greece',
+        'line town1231Greece',
 
         'TEST_HC',
+        '',
         'TEST_REG_NUM',
         'TEST_ADDR_LINE1 TEST_CITYTEST_POSTCODE',
       ]);

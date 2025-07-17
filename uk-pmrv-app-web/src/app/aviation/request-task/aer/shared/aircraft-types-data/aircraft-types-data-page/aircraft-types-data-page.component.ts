@@ -22,7 +22,7 @@ import {
 } from '@aviation/shared/validators';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
-import moment from 'moment';
+import { format, isValid, parse } from 'date-fns';
 import Papa from 'papaparse';
 
 import { AviationAerAircraftDataDetails } from 'pmrv-api';
@@ -119,6 +119,7 @@ export class AircraftTypesDataPageComponent implements OnInit {
 
     if (this.errorList.length === 0) {
       Papa.parse(this.uploadedFile, {
+        skipEmptyLines: true,
         complete: (result) => {
           this.processCSVData(result.data);
         },
@@ -134,17 +135,16 @@ export class AircraftTypesDataPageComponent implements OnInit {
     }
 
     let tempData = data.map((row) => {
+      const parsedStartDate = parse(row[4], 'dd/MM/yyyy', new Date());
+      const parsedEndDate = parse(row[5], 'dd/MM/yyyy', new Date());
+
       return {
         aircraftTypeDesignator: row[0],
         subType: row[1],
         registrationNumber: row[2],
         ownerOrLessor: row[3],
-        startDate: moment(row[4], 'DD/MM/YYYY', true).isValid()
-          ? moment(row[4], 'DD/MM/YYYY', true).format('YYYY-MM-DD')
-          : row[4],
-        endDate: moment(row[5], 'DD/MM/YYYY', true).isValid()
-          ? moment(row[5], 'DD/MM/YYYY', true).format('YYYY-MM-DD')
-          : row[5],
+        startDate: isValid(parsedStartDate) ? format(parsedStartDate, 'yyyy-MM-dd') : row[4],
+        endDate: isValid(parsedEndDate) ? format(parsedEndDate, 'yyyy-MM-dd') : row[5],
       } as AviationAerAircraftDataDetails;
     });
 
@@ -176,6 +176,7 @@ export class AircraftTypesDataPageComponent implements OnInit {
             this.cd.detectChanges();
           });
         this.formProvider.getAircraftDataDetailsControl().setValue(tempData);
+        this.formProvider.getAircraftDataDetailsControl().updateValueAndValidity();
       });
   }
 }

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -33,21 +33,21 @@ export default class OpinionStatementVisitFormComponent {
   onSubmit() {
     if (this.siteVisitGroup.invalid) return;
 
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
-      .saveAerVerify({ opinionStatement: this.formProvider.getFormValue() }, 'in progress')
+    const value = this.formProvider.getFormValue();
+
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
+      .saveAerVerify({ opinionStatement: value }, 'in progress')
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
         let path = '';
 
         if (this.siteVisitGroup.value.type === 'IN_PERSON') {
-          this.formProvider.addInPersonSiteGroup();
           path = 'in-person';
         } else {
-          this.formProvider.addVirtualSiteGroup();
           path = 'virtual';
         }
 
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setOpinionStatement(this.formProvider.getFormValue());
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setOpinionStatement(value);
         this.router.navigate([path], { relativeTo: this.route });
       });
   }

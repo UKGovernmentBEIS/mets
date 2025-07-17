@@ -1,15 +1,15 @@
 package uk.gov.pmrv.api.user.regulator.transform;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.mapstruct.factory.Mappers;
-import uk.gov.pmrv.api.user.regulator.domain.RegulatorInvitedUserDetailsDTO;
 import uk.gov.pmrv.api.user.core.domain.enumeration.KeycloakUserAttributes;
-import uk.gov.pmrv.api.user.regulator.transform.RegulatorInviteUserMapper;
+import uk.gov.pmrv.api.user.regulator.domain.RegulatorInvitedUserDetailsDTO;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class RegulatorInviteUserMapperTest {
 
@@ -25,6 +25,7 @@ class RegulatorInviteUserMapperTest {
         RegulatorInvitedUserDetailsDTO regulatorInvitedUserDetails =
             RegulatorInvitedUserDetailsDTO.builder()
                 .firstName("fn")
+                .enabled(true)
                 .lastName("ln")
                 .email("em@em.gr")
                 .jobTitle("title")
@@ -35,6 +36,7 @@ class RegulatorInviteUserMapperTest {
         UserRepresentation userRepresentation = mapper.toUserRepresentation(regulatorInvitedUserDetails);
 
         assertNotNull(userRepresentation);
+        assertThat(userRepresentation.isEnabled()).isNull();
         assertEquals(userRepresentation.getEmail(), regulatorInvitedUserDetails.getEmail());
         assertEquals(userRepresentation.getUsername(), regulatorInvitedUserDetails.getEmail());
         assertEquals(userRepresentation.getFirstName(), regulatorInvitedUserDetails.getFirstName());

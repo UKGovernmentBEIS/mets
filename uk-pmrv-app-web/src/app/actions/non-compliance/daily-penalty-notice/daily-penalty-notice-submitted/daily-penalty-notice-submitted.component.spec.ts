@@ -1,29 +1,80 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { SharedModule } from '@shared/shared.module';
+import { of } from 'rxjs';
 
-import { ActionSharedModule } from '../../../shared/action-shared-module';
+import { NonComplianceService } from '@actions/non-compliance/core/non-compliance.service';
+import { ActionSharedModule } from '@actions/shared/action-shared-module';
+import { SharedModule } from '@shared/shared.module';
+import { ActivatedRouteStub, BasePage } from '@testing';
+
+import { CaExternalContactsService } from 'pmrv-api';
+
 import { DailyPenaltyNoticeSubmittedComponent } from './daily-penalty-notice-submitted.component';
+import { mockExternalContacts, mockPayload } from './testing/mock-daily-penalty-notice-submitted';
 
 describe('DailyPenaltyNoticeSubmittedComponent', () => {
+  let page: Page;
   let component: DailyPenaltyNoticeSubmittedComponent;
   let fixture: ComponentFixture<DailyPenaltyNoticeSubmittedComponent>;
+
+  const route = new ActivatedRouteStub({ taskId: 14 }, null, {
+    pageTitle: 'Daily penalty notice submitted',
+    actionType: 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED',
+  });
+
+  class Page extends BasePage<DailyPenaltyNoticeSubmittedComponent> {
+    get heading(): string {
+      return this.query<HTMLHeadingElement>('h1').textContent.trim();
+    }
+
+    get data() {
+      return this.queryAll<HTMLElement>('h2, dl dt, dl dd div').map((item) => item.textContent.trim());
+    }
+  }
+
+  const nonComplianceService = {
+    getPayload: jest.fn().mockReturnValue(of(mockPayload)),
+  };
+
+  const externalContactsService = {
+    getCaExternalContacts: jest.fn().mockReturnValue(of(mockExternalContacts)),
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [DailyPenaltyNoticeSubmittedComponent],
       imports: [ActionSharedModule, SharedModule, RouterTestingModule],
+      providers: [
+        { provide: ActivatedRoute, useValue: route },
+        { provide: NonComplianceService, useValue: nonComplianceService },
+        { provide: CaExternalContactsService, useValue: externalContactsService },
+      ],
     }).compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DailyPenaltyNoticeSubmittedComponent);
     component = fixture.componentInstance;
+    page = new Page(fixture);
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create', async () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should show task details', async () => {
+    expect(page.heading).toEqual('Details of initial penalty');
+    expect(page.data).toEqual([
+      'Details',
+      'Comments',
+      'Uploaded document',
+      'Recipients',
+      'Users',
+      'Mock user name, Operator admin - Primary contact, Service contact, Financial contact',
+      'Installation 5 Account - External contact',
+    ]);
   });
 });

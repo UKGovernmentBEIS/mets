@@ -28,7 +28,7 @@ export const EMP_VARIATION_DETAILS_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { breadcrumb: 'Describe the changes summary' },
+        data: { breadcrumb: 'Describe the changes' },
         loadComponent: () =>
           import('./variation-details-summary/variation-details-summary.component').then(
             (c) => c.VariationDetailsSummaryComponent,

@@ -1,22 +1,24 @@
 package uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.rules.services.resource.RequestTaskAuthorizationResourceService;
-import uk.gov.pmrv.api.authorization.rules.services.resource.ResourceCriteria;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.user.core.domain.model.UserInfo;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.resource.RequestTaskAuthorizationResourceService;
+import uk.gov.netz.api.authorization.rules.services.resource.ResourceCriteria;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.dto.AssigneeUserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.transform.AssigneeUserInfoMapper;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Service responsible for performing query assignments on {@link RequestTask} objects.
@@ -34,26 +36,24 @@ public class RequestTaskAssignmentQueryService {
     /**
      * Retrieves all user that have the authority to be assigned to the provided task id.
      * @param taskId the task Id
-     * @param authenticatedUser the user {@link PmrvUser} that performs the action
-     * @return {@link List} of {@link UserInfo}
+     * @param authenticatedUser the user {@link AppUser} that performs the action
+     * @return {@link List} of {@link AssigneeUserInfoDTO}
      */
     @Transactional(readOnly = true)
-    public List<AssigneeUserInfoDTO> getCandidateAssigneesByTaskId(Long taskId, PmrvUser authenticatedUser) {
+    public List<AssigneeUserInfoDTO> getCandidateAssigneesByTaskId(Long taskId, AppUser authenticatedUser) {
         RequestTask requestTask = requestTaskService.findTaskById(taskId);
 
         requestTaskAssignmentValidationService.validateTaskAssignmentCapability(requestTask);
-        
-        ResourceCriteria resourceCriteria = 
+
+        ResourceCriteria resourceCriteria =
                 ResourceCriteria.builder()
-                    .accountId(requestTask.getRequest().getAccountId())
-                    .competentAuthority(requestTask.getRequest().getCompetentAuthority())
-                    .verificationBodyId(requestTask.getRequest().getVerificationBodyId())
-                    .build();
+                        .requestResources(requestTask.getRequest().getRequestResourcesMap())
+                        .build();
 
         List<String> candidateAssignees = getCandidateAssigneesByCriteriaAndRoleType(
-            requestTask.getType(),
-            resourceCriteria,
-            authenticatedUser.getRoleType());
+                requestTask.getType(),
+                resourceCriteria,
+                authenticatedUser.getRoleType());
 
         if(isPeerReviewTask(requestTask.getType())) {
             candidateAssignees.remove(requestTask.getRequest().getPayload().getRegulatorReviewer());
@@ -63,17 +63,18 @@ public class RequestTaskAssignmentQueryService {
     }
 
     @Transactional(readOnly = true)
-    public List<AssigneeUserInfoDTO> getCandidateAssigneesByTaskType(RequestTaskType taskType, PmrvUser authenticatedUser) {
+    public List<AssigneeUserInfoDTO> getCandidateAssigneesByTaskType(RequestTaskType taskType, AppUser authenticatedUser) {
         requestTaskAssignmentValidationService.validateTaskAssignmentCapability(taskType);
 
         ResourceCriteria resourceCriteria = ResourceCriteria.builder()
-            .competentAuthority(authenticatedUser.getCompetentAuthority())
-            .build();
+                .requestResources(Map.of(
+                        ResourceType.CA, authenticatedUser.getCompetentAuthority().name()))
+                .build();
 
         List<String> candidateAssignees = getCandidateAssigneesByCriteriaAndRoleType(
-            taskType,
-            resourceCriteria,
-            authenticatedUser.getRoleType());
+                taskType,
+                resourceCriteria,
+                authenticatedUser.getRoleType());
 
         if(isPeerReviewTask(taskType)) {
             candidateAssignees.remove(authenticatedUser.getUserId());
@@ -84,20 +85,22 @@ public class RequestTaskAssignmentQueryService {
 
 
     private List<String> getCandidateAssigneesByCriteriaAndRoleType(RequestTaskType requestTaskType,
-                                                                    ResourceCriteria resourceCriteria, RoleType roleType) {
+                                                                    ResourceCriteria resourceCriteria, String roleType) {
         return requestTaskAuthorizationResourceService.findUsersWhoCanExecuteRequestTaskTypeByAccountCriteriaAndRoleType(
-            requestTaskType.name(),
-            resourceCriteria,
-            roleType);
+                requestTaskType.name(),
+                resourceCriteria,
+                roleType);
     }
 
     private boolean isPeerReviewTask(RequestTaskType requestTaskType) {
-        return RequestTaskType.getPeerReviewTypes().contains(requestTaskType);
+        return requestTaskType.isPeerReview();
     }
 
     private List<AssigneeUserInfoDTO> getCandidateAssigneesUserInfo(List<String> candidateAssignees) {
         return userAuthService.getUsers(candidateAssignees).stream()
-            .map(assigneeUserInfoMapper::toAssigneeUserInfoDTO)
-            .collect(Collectors.toList());
+                .map(assigneeUserInfoMapper::toAssigneeUserInfoDTO)
+                .sorted(Comparator.comparing(AssigneeUserInfoDTO::getFirstName, String.CASE_INSENSITIVE_ORDER)
+                        .thenComparing(AssigneeUserInfoDTO::getLastName, String.CASE_INSENSITIVE_ORDER))
+                .collect(Collectors.toList());
     }
 }

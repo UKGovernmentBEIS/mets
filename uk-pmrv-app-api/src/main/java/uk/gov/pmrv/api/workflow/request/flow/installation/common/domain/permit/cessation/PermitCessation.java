@@ -1,8 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Max;
@@ -15,6 +13,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @Builder

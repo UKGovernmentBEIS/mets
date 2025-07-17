@@ -15,6 +15,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountCreationDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountSearchResults;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountSearchResultsInfoDTO;
@@ -22,20 +31,10 @@ import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountCreationService;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.account.domain.dto.AccountSearchCriteria;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -48,9 +47,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.VERIFIER;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.VERIFIER;
 
 @ExtendWith(MockitoExtension.class)
 class AviationAccountControllerTest {
@@ -67,7 +66,7 @@ class AviationAccountControllerTest {
     private AviationAccountQueryService aviationAccountQueryService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent appSecurityComponent;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -77,7 +76,7 @@ class AviationAccountControllerTest {
 
     @BeforeEach
     public void setUp() {
-        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
+        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(appSecurityComponent);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
@@ -90,7 +89,7 @@ class AviationAccountControllerTest {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .build();
     }
@@ -101,9 +100,9 @@ class AviationAccountControllerTest {
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.CORSIA;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.of(2022, 12, 11);
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.SCOTLAND).build()))
+            .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.SCOTLAND).build()))
             .build();
         AviationAccountCreationDTO accountCreationDTO = AviationAccountCreationDTO.builder()
             .name(accountName)
@@ -112,7 +111,7 @@ class AviationAccountControllerTest {
             .commencementDate(commencementDate)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post(CONTROLLER_PATH)
@@ -120,15 +119,15 @@ class AviationAccountControllerTest {
                     .content(objectMapper.writeValueAsString(accountCreationDTO)))
             .andExpect(status().isNoContent());
 
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(aviationAccountCreationService, times(1)).createAccount(accountCreationDTO, pmrvUser);
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(aviationAccountCreationService, times(1)).createAccount(accountCreationDTO, appUser);
     }
 
     @Test
     void createAviationAccount_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.OPERATOR)
+            .roleType(OPERATOR)
             .build();
         AviationAccountCreationDTO accountCreationDTO = AviationAccountCreationDTO.builder()
             .name("accountName")
@@ -137,10 +136,10 @@ class AviationAccountControllerTest {
             .commencementDate(LocalDate.of(2022, 12, 11))
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[] {RoleType.REGULATOR});
+            .evaluate(appUser, new String[] {REGULATOR});
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -157,12 +156,12 @@ class AviationAccountControllerTest {
         String accountName = "accountName";
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.NORTHERN_IRELAND;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(competentAuthority).build()))
+            .authorities(List.of(AppAuthority.builder().competentAuthority(competentAuthority).build()))
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(aviationAccountQueryService.isExistingAccountName(accountName, competentAuthority, emissionTradingScheme, null))
             .thenReturn(true);
 
@@ -183,12 +182,12 @@ class AviationAccountControllerTest {
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.NORTHERN_IRELAND;
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
                 .userId("authUserId")
-                .authorities(List.of(PmrvAuthority.builder().competentAuthority(competentAuthority).build()))
+                .authorities(List.of(AppAuthority.builder().competentAuthority(competentAuthority).build()))
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(aviationAccountQueryService.isExistingAccountName(accountName, competentAuthority, emissionTradingScheme, accountId))
                 .thenReturn(true);
 
@@ -209,15 +208,15 @@ class AviationAccountControllerTest {
         String accountName = "accountName";
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
 
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.OPERATOR)
+            .roleType(OPERATOR)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[] {RoleType.REGULATOR});
+            .evaluate(appUser, new String[] {REGULATOR});
 
         mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/name")
                 .param("name", accountName)
@@ -233,12 +232,12 @@ class AviationAccountControllerTest {
         String crcoCode = "crcoCode";
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.NORTHERN_IRELAND;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(competentAuthority).build()))
+            .authorities(List.of(AppAuthority.builder().competentAuthority(competentAuthority).build()))
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(aviationAccountQueryService.isExistingCrcoCode(crcoCode, competentAuthority, emissionTradingScheme, null))
             .thenReturn(true);
 
@@ -259,12 +258,12 @@ class AviationAccountControllerTest {
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.NORTHERN_IRELAND;
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
                 .userId("authUserId")
-                .authorities(List.of(PmrvAuthority.builder().competentAuthority(competentAuthority).build()))
+                .authorities(List.of(AppAuthority.builder().competentAuthority(competentAuthority).build()))
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(aviationAccountQueryService.isExistingCrcoCode(crcoCode, competentAuthority, emissionTradingScheme, accountId))
                 .thenReturn(true);
 
@@ -285,15 +284,15 @@ class AviationAccountControllerTest {
         String crcoCode = "crcoCode";
         EmissionTradingScheme emissionTradingScheme = EmissionTradingScheme.UK_ETS_AVIATION;
 
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.VERIFIER)
+            .roleType(VERIFIER)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[] {RoleType.REGULATOR});
+            .evaluate(appUser, new String[] {REGULATOR});
 
         mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/crco-code")
                 .param("code", crcoCode)
@@ -306,7 +305,7 @@ class AviationAccountControllerTest {
 
     @Test
     void getCurrentUserAccounts() throws Exception {
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final AccountSearchCriteria criteria = AccountSearchCriteria.builder()
                 .term("key")
                 .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
@@ -317,7 +316,7 @@ class AviationAccountControllerTest {
                         new AviationAccountSearchResultsInfoDTO(2L, "account2", "EM00010", AviationAccountStatus.LIVE.name()));
         final AviationAccountSearchResults results = AviationAccountSearchResults.builder().accounts(accounts).total(2L).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(aviationAccountQueryService.getAviationAccountsByUserAndSearchCriteria(user, criteria)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -340,15 +339,15 @@ class AviationAccountControllerTest {
 
     @Test
     void getCurrentUserAccounts_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final AccountSearchCriteria criteria = AccountSearchCriteria.builder()
                 .term("key")
                 .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(user, new RoleType[]{OPERATOR, REGULATOR, VERIFIER});
+                .evaluate(user, new String[]{OPERATOR, REGULATOR, VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get(CONTROLLER_PATH)

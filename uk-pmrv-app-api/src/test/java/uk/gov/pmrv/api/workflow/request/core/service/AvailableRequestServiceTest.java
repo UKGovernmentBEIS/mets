@@ -3,17 +3,15 @@ package uk.gov.pmrv.api.workflow.request.core.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.resource.AccountRequestAuthorizationResourceService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.rules.services.resource.AccountRequestAuthorizationResourceService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
@@ -84,7 +82,7 @@ class AvailableRequestServiceTest {
     void getAvailableAccountWorkflows() {
         when(enabledWorkflowValidator.isWorkflowEnabled(any(RequestType.class))).thenReturn(true);
 
-        final PmrvUser user = PmrvUser.builder().userId("user").build();
+        final AppUser user = AppUser.builder().userId("user").build();
         final long accountId = 1L;
         final AccountType accountType = AccountType.INSTALLATION;
         final RequestCreateValidationResult result = RequestCreateValidationResult.builder().valid(true).build();
@@ -119,7 +117,7 @@ class AvailableRequestServiceTest {
         when(enabledWorkflowValidator.isWorkflowEnabled(RequestType.PERMIT_SURRENDER)).thenReturn(false);
         when(enabledWorkflowValidator.isWorkflowEnabled(RequestType.INSTALLATION_ACCOUNT_OPENING)).thenReturn(true);
 
-        final PmrvUser user = PmrvUser.builder().userId("user").build();
+        final AppUser user = AppUser.builder().userId("user").build();
         final long accountId = 1L;
         final AccountType accountType = AccountType.INSTALLATION;
         final RequestCreateValidationResult result = RequestCreateValidationResult.builder().valid(true).build();
@@ -151,7 +149,7 @@ class AvailableRequestServiceTest {
     void getAvailableAccountWorkflows_excludeNotAvailable() {
         when(enabledWorkflowValidator.isWorkflowEnabled(any(RequestType.class))).thenReturn(true);
 
-        final PmrvUser user = PmrvUser.builder().userId("user").build();
+        final AppUser user = AppUser.builder().userId("user").build();
         final long accountId = 1L;
         final AccountType accountType = AccountType.INSTALLATION;
         final RequestCreateValidationResult result = RequestCreateValidationResult.builder().isAvailable(false).build();
@@ -186,7 +184,7 @@ class AvailableRequestServiceTest {
     @Test
     void getAvailableAerWorkflows() {
         final String requestId = "AEM-1";
-        final PmrvUser user = PmrvUser.builder().userId("user").build();
+        final AppUser user = AppUser.builder().userId("user").build();
         final long accountId = 1L;
 
         final Set<String> actionTypes = Set.of(RequestCreateActionType.AER.name(),
@@ -231,7 +229,7 @@ class AvailableRequestServiceTest {
     @Test
     void getAvailableAerWorkflows_request_not_found() {
         final String requestId = "AEM-1";
-        final PmrvUser user = PmrvUser.builder().userId("user").build();
+        final AppUser user = AppUser.builder().userId("user").build();
 
         when(requestRepository.findById(requestId)).thenReturn(Optional.empty());
 

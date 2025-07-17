@@ -1,0 +1,25 @@
+<app-permit-task
+  [breadcrumb]="
+    (requestTaskType$ | async)
+      ? [
+          {
+            text: 'Fuels and equipment inventory',
+            link: ['fuels'],
+          },
+        ]
+      : [
+          {
+            text: 'Source streams (fuels and materials)',
+            link: ['source-streams'],
+          },
+        ]
+  "
+>
+  <app-source-streams-details-template
+    (formSubmit)="onSubmit()"
+    [form]="form"
+    [isEditing]="isEditing$ | async"
+    [showUpstream]="true"
+  >
+  </app-source-streams-details-template>
+</app-permit-task>

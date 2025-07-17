@@ -16,7 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.domain.abbreviations.AbbreviationDefinition;
@@ -96,7 +96,7 @@ class PermitTransferBApplyServiceTest {
     @Test
     void applySubmitAction() {
 
-        final PmrvUser user = PmrvUser.builder().userId("user").build();
+        final AppUser user = AppUser.builder().userId("user").build();
 
         final long accountId = 1L;
         final Request request = Request.builder()

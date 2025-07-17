@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.envpermitandlicences.EnvironmentalPermitsAndLicences;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -42,12 +42,12 @@ class PermitApplySaveActionHandlerTest {
                     .build();
         
         RequestTask requestTask = RequestTask.builder().id(1L).build();
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
         
         //invoke
-        handler.process(requestTask.getId(), RequestTaskActionType.PERMIT_ISSUANCE_SAVE_APPLICATION, pmrvUser, permitApplySavePayload);
+        handler.process(requestTask.getId(), RequestTaskActionType.PERMIT_ISSUANCE_SAVE_APPLICATION, appUser, permitApplySavePayload);
         
         //verify
         verify(requestPermitApplyService, times(1)).applySaveAction(permitApplySavePayload, requestTask);

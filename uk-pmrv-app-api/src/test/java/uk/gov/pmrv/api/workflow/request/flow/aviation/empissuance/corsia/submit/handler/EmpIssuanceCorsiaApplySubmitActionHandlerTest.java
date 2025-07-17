@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -43,7 +43,7 @@ class EmpIssuanceCorsiaApplySubmitActionHandlerTest {
         Request request = Request.builder().id("requestId").build();
         RequestTask requestTask = RequestTask.builder().id(requestTaskId).request(request).processTaskId(processTaskId).build();
         RequestTaskActionEmptyPayload emptyPayload = RequestTaskActionEmptyPayload.builder().payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD).build();
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 

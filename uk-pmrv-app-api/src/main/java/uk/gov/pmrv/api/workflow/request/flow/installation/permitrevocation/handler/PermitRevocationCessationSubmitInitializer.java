@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.handler;
 
-import java.util.Set;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
@@ -10,6 +9,8 @@ import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandle
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationContainer;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
+
+import java.util.Set;
 
 @Service
 public class PermitRevocationCessationSubmitInitializer implements InitializeRequestTaskHandler {

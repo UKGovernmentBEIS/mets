@@ -6,13 +6,14 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.notification.mail.config.property.NotificationProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.token.JwtTokenService;
-import uk.gov.pmrv.api.token.JwtTokenActionEnum;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.notificationapi.mail.config.property.NotificationProperties;
+import uk.gov.netz.api.token.JwtProperties;
+import uk.gov.netz.api.token.JwtTokenAction;
+import uk.gov.netz.api.token.JwtTokenService;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.user.NavigationOutcomes;
-import uk.gov.pmrv.api.token.JwtProperties;
 import uk.gov.pmrv.api.user.core.domain.dto.TokenDTO;
 import uk.gov.pmrv.api.user.core.domain.model.UserNotificationWithRedirectionLinkInfo;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
@@ -24,7 +25,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.CHANGE_2FA;
 
 @ExtendWith(MockitoExtension.class)
 class UserSecuritySetupServiceTest {
@@ -49,7 +49,7 @@ class UserSecuritySetupServiceTest {
 
     @Test
     void requestTwoFactorAuthChange() {
-        PmrvUser pmrvUser = PmrvUser.builder().email("email").build();
+        AppUser appUser = AppUser.builder().email("email").build();
         String contactUsLink = "/contact-us";
         String otp = "otp";
         String accessToken = "accessToken";
@@ -62,7 +62,7 @@ class UserSecuritySetupServiceTest {
         when(notificationProperties.getEmail()).thenReturn(notificationEmail);
         when(notificationEmail.getContactUsLink()).thenReturn(contactUsLink);
 
-        userSecuritySetupService.requestTwoFactorAuthChange(pmrvUser, accessToken, otp);
+        userSecuritySetupService.requestTwoFactorAuthChange(appUser, accessToken, otp);
 
         verify(userAuthService, times(1)).validateAuthenticatedUserOtp(otp, accessToken);
         ArgumentCaptor<UserNotificationWithRedirectionLinkInfo> notificationInfoCaptor =
@@ -71,17 +71,17 @@ class UserSecuritySetupServiceTest {
 
         UserNotificationWithRedirectionLinkInfo notificationInfo = notificationInfoCaptor.getValue();
 
-        assertThat(notificationInfo.getTemplateName()).isEqualTo(CHANGE_2FA);
-        assertThat(notificationInfo.getUserEmail()).isEqualTo(pmrvUser.getEmail());
-        assertThat(notificationInfo.getLinkParamName()).isEqualTo(EmailNotificationTemplateConstants.CHANGE_2FA_LINK);
+        assertThat(notificationInfo.getTemplateName()).isEqualTo(PmrvNotificationTemplateName.CHANGE_2FA);
+        assertThat(notificationInfo.getUserEmail()).isEqualTo(appUser.getEmail());
+        assertThat(notificationInfo.getLinkParamName()).isEqualTo(PmrvEmailNotificationTemplateConstants.CHANGE_2FA_LINK);
         assertThat(notificationInfo.getLinkPath()).isEqualTo(NavigationOutcomes.CHANGE_2FA_URL);
         assertThat(notificationInfo.getNotificationParams()).hasSize(2);
         assertThat(notificationInfo.getNotificationParams())
                 .isEqualTo(Map.of(
-                        EmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink,
-                        EmailNotificationTemplateConstants.EXPIRATION_MINUTES, 60L));
+                		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink,
+                		PmrvEmailNotificationTemplateConstants.EXPIRATION_MINUTES, 60L));
         assertThat(notificationInfo.getTokenParams())
-            .isEqualTo(expectedTokenParams(pmrvUser.getEmail(), expirationInterval));
+            .isEqualTo(expectedTokenParams(appUser.getEmail(), expirationInterval));
     }
 
     @Test
@@ -89,7 +89,7 @@ class UserSecuritySetupServiceTest {
         TokenDTO token = TokenDTO.builder().token("token").build();
         String userEmail = "email";
 
-        when(jwtTokenService.resolveTokenActionClaim(token.getToken(), JwtTokenActionEnum.CHANGE_2FA)).thenReturn(userEmail);
+        when(jwtTokenService.resolveTokenActionClaim(token.getToken(), JwtTokenAction.CHANGE_2FA)).thenReturn(userEmail);
 
         userSecuritySetupService.deleteOtpCredentials(token);
 
@@ -108,7 +108,7 @@ class UserSecuritySetupServiceTest {
 
     private UserNotificationWithRedirectionLinkInfo.TokenParams expectedTokenParams(String claimValue, Long expirationInterval) {
         return UserNotificationWithRedirectionLinkInfo.TokenParams.builder()
-            .jwtTokenAction(JwtTokenActionEnum.CHANGE_2FA)
+            .jwtTokenAction(JwtTokenAction.CHANGE_2FA)
             .claimValue(claimValue)
             .expirationInterval(expirationInterval)
             .build();

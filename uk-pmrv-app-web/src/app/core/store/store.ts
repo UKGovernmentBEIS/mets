@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable, pluck } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 export abstract class Store<T> extends BehaviorSubject<T> {
   protected constructor(protected readonly initialState?: T) {
@@ -19,7 +19,7 @@ export abstract class Store<T> extends BehaviorSubject<T> {
   }
 
   select<K extends keyof T>(name: K): Observable<T[K]> {
-    return this.pipe(pluck(name));
+    return this.pipe(map((x) => x?.[name]));
   }
 
   reset(): void {

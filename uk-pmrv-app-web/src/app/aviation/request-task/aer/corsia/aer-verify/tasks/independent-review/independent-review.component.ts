@@ -28,7 +28,7 @@ export class IndependentReviewComponent {
     .pipe(
       map((countries) =>
         countries
-          .map((country) => ({ text: country.name, value: country.code } as GovukSelectOption<string>))
+          .map((country) => ({ text: country.name, value: country.code }) as GovukSelectOption<string>)
           .sort((a, b) => a.text.localeCompare(b.text)),
       ),
     );

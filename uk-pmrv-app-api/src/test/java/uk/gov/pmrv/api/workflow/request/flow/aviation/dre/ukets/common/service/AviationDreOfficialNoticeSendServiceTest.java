@@ -7,24 +7,24 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.documents.service.FileDocumentService;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityDTO;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentService;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.domain.AviationDreUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.AviationAccountCompetentAuthorityDTOByRequestResolver;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
 
@@ -58,13 +58,13 @@ class AviationDreOfficialNoticeSendServiceTest {
     private DecisionNotificationUsersService decisionNotificationUsersService;
 
     @Mock
-    private NotificationEmailService notificationEmailService;
+    private NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
 
     @Mock
     private FileDocumentService fileDocumentService;
 
     @Mock
-    private CompetentAuthorityService competentAuthorityService;
+    private AviationAccountCompetentAuthorityDTOByRequestResolver caResolver;
 
     @Test
     void sendOfficialNotice() {
@@ -103,7 +103,7 @@ class AviationDreOfficialNoticeSendServiceTest {
         when(requestAccountContactQueryService.getRequestAccountServiceContact(request)).thenReturn(Optional.of(accountServiceContact));
         when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(ccRecipientsEmails);
         when(fileDocumentService.getFileDTO(officialNoticeFileInfoDTO.getUuid())).thenReturn(officialNoticeFileDTO);
-        when(competentAuthorityService.getCompetentAuthority(CompetentAuthorityEnum.WALES,AccountType.AVIATION)).thenReturn(competentAuthority);
+        when(caResolver.resolveCA(request)).thenReturn(competentAuthority);
 
         //invoke
         officialNoticeSendService.sendOfficialNotice(requestId);
@@ -113,21 +113,21 @@ class AviationDreOfficialNoticeSendServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountServiceContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(fileDocumentService, times(1)).getFileDTO(officialNoticeFileInfoDTO.getUuid());
-        verify(competentAuthorityService, times(1)).getCompetentAuthority(CompetentAuthorityEnum.WALES,AccountType.AVIATION);
+        verify(caResolver, times(1)).resolveCA(request);
 
-        ArgumentCaptor<EmailData> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
+        ArgumentCaptor<EmailData<PmrvEmailNotificationTemplateData>> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
         verify(notificationEmailService, times(1)).notifyRecipients(emailDataCaptor.capture(),
             Mockito.eq(toRecipientEmails), Mockito.eq((ccRecipientsEmails)));
-        EmailData emailDataCaptured = emailDataCaptor.getValue();
+        EmailData<PmrvEmailNotificationTemplateData> emailDataCaptured = emailDataCaptor.getValue();
         assertThat(emailDataCaptured).isEqualTo(EmailData.builder()
-            .notificationTemplateData(EmailNotificationTemplateData.builder()
-                .templateName(NotificationTemplateName.GENERIC_EMAIL)
+            .notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
+                .templateName(PmrvNotificationTemplateName.GENERIC_EMAIL.getName())
                 .competentAuthority(CompetentAuthorityEnum.WALES)
                 .accountType(AccountType.AVIATION)
                 .templateParams(Map.of(
-                    EmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
-                    EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
-                    EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
+                		PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
+                		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
+                		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
                 ))
                 .build())
             .attachments(Map.of(officialNoticeFileInfoDTO.getName(), officialNoticeFileDTO.getFileContent())).build());
@@ -169,7 +169,7 @@ class AviationDreOfficialNoticeSendServiceTest {
         verifyNoMoreInteractions(requestAccountContactQueryService);
         verifyNoInteractions(fileDocumentService);
         verifyNoInteractions(notificationEmailService);
-        verifyNoInteractions(competentAuthorityService);
+        verifyNoInteractions(caResolver);
     }
 
     @Test
@@ -207,7 +207,7 @@ class AviationDreOfficialNoticeSendServiceTest {
         when(requestAccountContactQueryService.getRequestAccountPrimaryContact(request)).thenReturn(Optional.empty());
         when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(ccRecipientsEmails);
         when(fileDocumentService.getFileDTO(officialNoticeFileInfoDTO.getUuid())).thenReturn(officialNoticeFileDTO);
-        when(competentAuthorityService.getCompetentAuthority(CompetentAuthorityEnum.WALES,AccountType.AVIATION)).thenReturn(competentAuthority);
+        when(caResolver.resolveCA(request)).thenReturn(competentAuthority);
 
         //invoke
         officialNoticeSendService.sendOfficialNotice(requestId);
@@ -216,20 +216,20 @@ class AviationDreOfficialNoticeSendServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(fileDocumentService, times(1)).getFileDTO(officialNoticeFileInfoDTO.getUuid());
-        verify(competentAuthorityService, times(1)).getCompetentAuthority(CompetentAuthorityEnum.WALES,AccountType.AVIATION);
+        verify(caResolver, times(1)).resolveCA(request);
 
-        ArgumentCaptor<EmailData> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
+        ArgumentCaptor<EmailData<PmrvEmailNotificationTemplateData>> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
         verify(notificationEmailService, times(1))
             .notifyRecipients(emailDataCaptor.capture(), Mockito.eq(Collections.emptyList()), Mockito.eq((ccRecipientsEmails)));
-        EmailData emailDataCaptured = emailDataCaptor.getValue();
+        EmailData<PmrvEmailNotificationTemplateData> emailDataCaptured = emailDataCaptor.getValue();
         assertThat(emailDataCaptured).isEqualTo(EmailData.builder()
-            .notificationTemplateData(EmailNotificationTemplateData.builder()
-                .templateName(NotificationTemplateName.GENERIC_EMAIL)
+            .notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
+                .templateName(PmrvNotificationTemplateName.GENERIC_EMAIL.getName())
                 .competentAuthority(CompetentAuthorityEnum.WALES)
                 .accountType(AccountType.AVIATION)
                 .templateParams(Map.of(
-                    EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
-                    EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
+                		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
+                		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
                 ))
                 .build())
             .attachments(Map.of(officialNoticeFileInfoDTO.getName(), officialNoticeFileDTO.getFileContent())).build());

@@ -85,7 +85,7 @@ export class OperatorFollowupComponent implements AfterViewInit, PendingRequest 
   }
 
   getDownloadUrl() {
-    return this.airService.createBaseFileDownloadUrl();
+    return this.airService.getBaseFileDownloadUrl();
   }
 
   private getFormData(): OperatorAirImprovementFollowUpResponse {

@@ -3,11 +3,10 @@ package uk.gov.pmrv.api.workflow.request.application.item.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.workflow.request.application.authorization.OperatorAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
@@ -27,25 +26,25 @@ public class ItemAssignedToOthersOperatorService implements ItemAssignedToOthers
     private final OperatorAuthorityResourceAdapter operatorAuthorityResourceAdapter;
 
     @Override
-    public ItemDTOResponse getItemsAssignedToOthers(PmrvUser pmrvUser, AccountType accountType, PagingRequest paging) {
+    public ItemDTOResponse getItemsAssignedToOthers(AppUser appUser, AccountType accountType, PagingRequest paging) {
         Map<Long, Set<RequestTaskType>> userScopedRequestTaskTypes = operatorAuthorityResourceAdapter
-            .getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType);
+            .getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
 
         if (ObjectUtils.isEmpty(userScopedRequestTaskTypes)) {
             return ItemDTOResponse.emptyItemDTOResponse();
         }
 
         ItemPage itemPage = itemOperatorRepository.findItems(
-            pmrvUser.getUserId(),
+            appUser.getUserId(),
             ItemAssignmentType.OTHERS,
             userScopedRequestTaskTypes,
             paging);
 
-        return itemResponseService.toItemDTOResponse(itemPage, accountType, pmrvUser);
+        return itemResponseService.toItemDTOResponse(itemPage, accountType, appUser);
     }
 
     @Override
-    public RoleType getRoleType() {
-        return RoleType.OPERATOR;
+    public String getRoleType() {
+        return RoleTypeConstants.OPERATOR;
     }
 }

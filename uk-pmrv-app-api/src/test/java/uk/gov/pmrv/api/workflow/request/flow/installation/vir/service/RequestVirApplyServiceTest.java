@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.common.reporting.verification.UncorrectedItem;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -77,7 +77,7 @@ class RequestVirApplyServiceTest {
     @Test
     void submitVir() {
         final String userId = "userId";
-        final PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        final AppUser appUser = AppUser.builder().userId(userId).build();
         final  Map<String, OperatorImprovementResponse> operatorImprovementResponses = Map.of(
                 "A1", OperatorImprovementResponse.builder().build());
         final VirVerificationData verificationData = VirVerificationData.builder()
@@ -113,7 +113,7 @@ class RequestVirApplyServiceTest {
                 .build();
 
         // Invoke
-        requestVirApplyService.applySubmitAction(requestTask, pmrvUser);
+        requestVirApplyService.applySubmitAction(requestTask, appUser);
 
         // Verify
         verify(virSubmitValidatorService, times(1)).validate(operatorImprovementResponses, verificationData);

@@ -54,12 +54,13 @@ export function getMeasurementStatus(taskKey, payload: AerApplicationSubmitReque
     !payload.aerSectionsCompleted['emissionPoints']?.[0]
     ? 'cannot start yet'
     : emissionPointEmissionsStatuses.find((status) => status === 'needs review')
-    ? 'needs review'
-    : !!emissionPointEmissionsStatuses.length && emissionPointEmissionsStatuses.every((status) => status === 'complete')
-    ? 'complete'
-    : emissionPointEmissionsStatuses.length
-    ? 'in progress'
-    : 'not started';
+      ? 'needs review'
+      : !!emissionPointEmissionsStatuses.length &&
+          emissionPointEmissionsStatuses.every((status) => status === 'complete')
+        ? 'complete'
+        : emissionPointEmissionsStatuses.length
+          ? 'in progress'
+          : 'not started';
 }
 
 export function getCompletionStatus(taskKey, payload, index, status) {

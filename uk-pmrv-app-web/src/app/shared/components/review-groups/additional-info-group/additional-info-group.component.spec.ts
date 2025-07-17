@@ -14,7 +14,9 @@ describe('AdditionalInfoGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    template: ` <app-additional-info-group [aerData]="aerData"></app-additional-info-group> `,
+    template: `
+      <app-additional-info-group [aerData]="aerData"></app-additional-info-group>
+    `,
   })
   class TestComponent {
     aerData = mockAerApplyPayload.aer;

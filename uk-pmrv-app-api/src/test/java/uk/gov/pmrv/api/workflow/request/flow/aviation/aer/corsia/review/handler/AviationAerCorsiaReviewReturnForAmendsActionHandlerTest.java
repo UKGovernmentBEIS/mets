@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsia;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -61,7 +61,7 @@ class AviationAerCorsiaReviewReturnForAmendsActionHandlerTest {
     @Test
     void process() {
         Long requestTaskId = 1L;
-        PmrvUser user = PmrvUser.builder().userId("userId").build();
+        AppUser user = AppUser.builder().userId("userId").build();
         RequestTaskActionEmptyPayload taskActionEmptyPayload = RequestTaskActionEmptyPayload.builder().build();
 
         Request request = Request.builder().id("REQ-ID").build();

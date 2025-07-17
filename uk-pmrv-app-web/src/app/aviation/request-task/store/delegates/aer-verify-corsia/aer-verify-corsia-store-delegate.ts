@@ -53,7 +53,10 @@ export class AerVerifyCorsiaStoreDelegate implements RequestTaskStoreDelegate {
     return `/aviation/tasks/${this.store.requestTaskId}/file-download/attachment`;
   }
 
-  constructor(private store: RequestTaskStore, private readonly businessErrorService: BusinessErrorService) {}
+  constructor(
+    private store: RequestTaskStore,
+    private readonly businessErrorService: BusinessErrorService,
+  ) {}
 
   init() {
     if (
@@ -87,6 +90,10 @@ export class AerVerifyCorsiaStoreDelegate implements RequestTaskStoreDelegate {
 
       delete draft.verificationReport.verificationBodyDetails;
       delete draft.verificationReport.verificationBodyId;
+
+      if (draft.sendEmailNotification) {
+        delete draft.sendEmailNotification;
+      }
     });
 
     const { verificationReport, verificationSectionsCompleted } = payloadToUpdate;

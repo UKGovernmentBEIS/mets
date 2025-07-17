@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmpDetailsDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.dto.AviationAccountEmpDTO;
@@ -24,8 +24,8 @@ public class AviationAccountEmpQueryOrchestrator {
     private final EmissionsMonitoringPlanQueryService empQueryService;
     private static final AviationAccountHeaderInfoMapper ACCOUNT_HEADER_INFO_MAPPER = Mappers.getMapper(AviationAccountHeaderInfoMapper .class);
 
-    public AviationAccountEmpDTO getAviationAccountWithEMP(Long accountId, PmrvUser pmrvUser) {
-        final AviationAccountDTO aviationAccountDTO = aviationAccountQueryService.getAviationAccountDTOByIdAndUser(accountId, pmrvUser);
+    public AviationAccountEmpDTO getAviationAccountWithEMP(Long accountId, AppUser appUser) {
+        final AviationAccountDTO aviationAccountDTO = aviationAccountQueryService.getAviationAccountDTOByIdAndUser(accountId, appUser);
         final Optional<EmpDetailsDTO> empDetailsDTO = empQueryService.getEmissionsMonitoringPlanDetailsDTOByAccountId(accountId);
 
         return AviationAccountEmpDTO.builder()

@@ -6,16 +6,17 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.notification.mail.config.property.NotificationProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.token.JwtTokenService;
-import uk.gov.pmrv.api.token.JwtTokenActionEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.notificationapi.mail.config.property.NotificationProperties;
+import uk.gov.netz.api.token.JwtProperties;
+import uk.gov.netz.api.token.JwtTokenAction;
+import uk.gov.netz.api.token.JwtTokenService;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.user.NavigationOutcomes;
-import uk.gov.pmrv.api.token.JwtProperties;
 import uk.gov.pmrv.api.user.core.domain.dto.ResetPasswordDTO;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.domain.model.UserNotificationWithRedirectionLinkInfo;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
@@ -30,8 +31,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants.RESET_PASSWORD_LINK;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.RESET_PASSWORD_REQUEST;
 
 @ExtendWith(MockitoExtension.class)
 class UserResetPasswordServiceTest {
@@ -83,14 +82,14 @@ class UserResetPasswordServiceTest {
 
         UserNotificationWithRedirectionLinkInfo notificationInfo = notificationInfoCaptor.getValue();
 
-        assertThat(notificationInfo.getTemplateName()).isEqualTo(RESET_PASSWORD_REQUEST);
+        assertThat(notificationInfo.getTemplateName()).isEqualTo(PmrvNotificationTemplateName.RESET_PASSWORD_REQUEST);
         assertThat(notificationInfo.getUserEmail()).isEqualTo(EMAIL);
-        assertThat(notificationInfo.getLinkParamName()).isEqualTo(RESET_PASSWORD_LINK);
+        assertThat(notificationInfo.getLinkParamName()).isEqualTo(PmrvEmailNotificationTemplateConstants.RESET_PASSWORD_LINK);
         assertThat(notificationInfo.getLinkPath()).isEqualTo(NavigationOutcomes.RESET_PASSWORD_URL);
         assertThat(notificationInfo.getNotificationParams())
         .isEqualTo(Map.of(
-                EmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink,
-                EmailNotificationTemplateConstants.EXPIRATION_MINUTES, 20L));
+        		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink,
+                PmrvEmailNotificationTemplateConstants.EXPIRATION_MINUTES, 20L));
         assertThat(notificationInfo.getTokenParams())
             .isEqualTo(expectedTokenParams(EMAIL, expirationInterval));
     }
@@ -114,7 +113,7 @@ class UserResetPasswordServiceTest {
     
     @Test
 	void verifyRegistrationToken() {
-    	when(jwtTokenService.resolveTokenActionClaim(TOKEN, JwtTokenActionEnum.RESET_PASSWORD))
+    	when(jwtTokenService.resolveTokenActionClaim(TOKEN, JwtTokenAction.RESET_PASSWORD))
     		.thenReturn(EMAIL);
     	
     	String result = userResetPasswordService.verifyToken(TOKEN);
@@ -122,12 +121,12 @@ class UserResetPasswordServiceTest {
     	// verify
     	assertThat(result).isEqualTo(EMAIL);
     	
-    	verify(jwtTokenService, times(1)).resolveTokenActionClaim(TOKEN, JwtTokenActionEnum.RESET_PASSWORD);
+    	verify(jwtTokenService, times(1)).resolveTokenActionClaim(TOKEN, JwtTokenAction.RESET_PASSWORD);
 	}
 	
 	@Test
 	void verifyRegistrationToken_link_expired() {	
-		when(jwtTokenService.resolveTokenActionClaim(TOKEN, JwtTokenActionEnum.RESET_PASSWORD))
+		when(jwtTokenService.resolveTokenActionClaim(TOKEN, JwtTokenAction.RESET_PASSWORD))
     	    .thenThrow(new BusinessException(ErrorCode.VERIFICATION_LINK_EXPIRED));
     	
     	BusinessException ex = assertThrows(BusinessException.class, () -> {
@@ -135,7 +134,7 @@ class UserResetPasswordServiceTest {
     	});
     	assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.VERIFICATION_LINK_EXPIRED);
 
-    	verify(jwtTokenService, times(1)).resolveTokenActionClaim(TOKEN, JwtTokenActionEnum.RESET_PASSWORD);
+    	verify(jwtTokenService, times(1)).resolveTokenActionClaim(TOKEN, JwtTokenAction.RESET_PASSWORD);
 	}
 	
 	@Test
@@ -143,7 +142,7 @@ class UserResetPasswordServiceTest {
 		UserInfoDTO user = buildMockUser();
 		ResetPasswordDTO resetPasswordDTO = buildMockPasswordDTO();
 		
-    	when(jwtTokenService.resolveTokenActionClaim(TOKEN, JwtTokenActionEnum.RESET_PASSWORD))
+    	when(jwtTokenService.resolveTokenActionClaim(TOKEN, JwtTokenAction.RESET_PASSWORD))
     		.thenReturn(EMAIL);
     	when(userAuthService.getUserByEmail(anyString())).thenReturn(Optional.of(user));
     	
@@ -168,7 +167,7 @@ class UserResetPasswordServiceTest {
 	void resetPassword_user_not_exist() {
 		ResetPasswordDTO resetPasswordDTO = buildMockPasswordDTO();
 		
-    	when(jwtTokenService.resolveTokenActionClaim(TOKEN, JwtTokenActionEnum.RESET_PASSWORD))
+    	when(jwtTokenService.resolveTokenActionClaim(TOKEN, JwtTokenAction.RESET_PASSWORD))
     		.thenReturn(EMAIL);
     	doThrow(new BusinessException(ErrorCode.USER_NOT_EXIST))
 	       .when(userAuthService)
@@ -206,7 +205,7 @@ class UserResetPasswordServiceTest {
 	
 	private UserNotificationWithRedirectionLinkInfo.TokenParams expectedTokenParams(String claimValue, Long expirationInterval) {
         return UserNotificationWithRedirectionLinkInfo.TokenParams.builder()
-            .jwtTokenAction(JwtTokenActionEnum.RESET_PASSWORD)
+            .jwtTokenAction(JwtTokenAction.RESET_PASSWORD)
             .claimValue(claimValue)
             .expirationInterval(expirationInterval)
             .build();

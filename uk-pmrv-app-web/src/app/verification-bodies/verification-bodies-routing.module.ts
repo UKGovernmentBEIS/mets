@@ -55,7 +55,7 @@ const routes: Routes = [
       },
       {
         path: 'verifiers',
-        loadChildren: () => import('../verifiers/verifiers.module').then(m => m.VerifiersModule),
+        loadChildren: () => import('../verifiers/verifiers.module').then((m) => m.VerifiersModule),
       },
     ],
   },

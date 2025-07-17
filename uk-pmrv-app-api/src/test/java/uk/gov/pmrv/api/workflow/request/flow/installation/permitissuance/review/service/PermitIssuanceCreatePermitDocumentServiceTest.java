@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -9,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.domain.dto.PermitEntityDto;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;

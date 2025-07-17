@@ -11,7 +11,10 @@ import { isWizardCompleted } from '../submit.wizard';
   providedIn: 'root',
 })
 export class SummaryGuard {
-  constructor(private router: Router, private readonly store: EmpBatchReissueStore) {}
+  constructor(
+    private router: Router,
+    private readonly store: EmpBatchReissueStore,
+  ) {}
 
   canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     const firstWizardStep = `${state.url.slice(0, state.url.lastIndexOf('/'))}/filters`;

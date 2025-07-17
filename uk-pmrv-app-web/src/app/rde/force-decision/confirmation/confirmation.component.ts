@@ -8,7 +8,7 @@ import { RdeStore } from '../../store/rde.store';
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <govuk-panel title="Extension request {{ decision === 'ACCEPTED' ? 'approved' : 'rejected' }}"> </govuk-panel>
+        <govuk-panel title="Extension request {{ decision === 'ACCEPTED' ? 'approved' : 'rejected' }}"></govuk-panel>
       </div>
     </div>
     <div class="govuk-!-margin-top-6">
@@ -19,7 +19,7 @@ import { RdeStore } from '../../store/rde.store';
         </p>
       </ng-container>
     </div>
-    <a govukLink [routerLink]="isAviation + '/dashboard'"> Return to dashboard </a>
+    <a govukLink [routerLink]="isAviation + '/dashboard'">Return to dashboard</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -27,5 +27,8 @@ export class ConfirmationComponent {
   decision = this.router.getCurrentNavigation().extras?.state?.decision;
   isAviation = this.router.url.includes('/aviation/') ? '/aviation' : '';
 
-  constructor(private readonly router: Router, readonly store: RdeStore) {}
+  constructor(
+    private readonly router: Router,
+    readonly store: RdeStore,
+  ) {}
 }

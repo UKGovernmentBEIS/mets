@@ -24,7 +24,7 @@ export class DetailsOfChangeComponent implements PendingRequest {
   notificationTypeOptions: PermitNotification['type'][] = [
     'TEMPORARY_FACTOR',
     'TEMPORARY_CHANGE',
-    'TEMPORARY_SUSPENSION',
+    'CESSATION',
     'NON_SIGNIFICANT_CHANGE',
   ];
 

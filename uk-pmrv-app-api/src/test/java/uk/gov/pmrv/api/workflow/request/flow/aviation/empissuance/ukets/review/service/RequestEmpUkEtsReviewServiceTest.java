@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviationDefinition;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
@@ -336,7 +336,7 @@ class RequestEmpUkEtsReviewServiceTest {
     @Test
     void saveDecisionNotification() {
         String reviewer = "regUser";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(reviewer).build();
+        AppUser appUser = AppUser.builder().userId(reviewer).build();
         EmpIssuanceUkEtsRequestPayload requestPayload = EmpIssuanceUkEtsRequestPayload.builder()
             .payloadType(RequestPayloadType.EMP_ISSUANCE_UKETS_REQUEST_PAYLOAD)
             .build();
@@ -379,7 +379,7 @@ class RequestEmpUkEtsReviewServiceTest {
             .build();
 
         //invoke
-        requestEmpUkEtsReviewService.saveDecisionNotification(requestTask, decisionNotification, pmrvUser);
+        requestEmpUkEtsReviewService.saveDecisionNotification(requestTask, decisionNotification, appUser);
 
         EmpIssuanceUkEtsRequestPayload updatedRequestPayload = (EmpIssuanceUkEtsRequestPayload) request.getPayload();
 
@@ -400,7 +400,7 @@ class RequestEmpUkEtsReviewServiceTest {
     void saveRequestPeerReviewAction() {
         String selectedPeerReviewer = "peerReviewer";
         String reviewer = "reviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(reviewer).build();
+        AppUser appUser = AppUser.builder().userId(reviewer).build();
         EmpIssuanceUkEtsRequestPayload requestPayload = EmpIssuanceUkEtsRequestPayload.builder()
             .payloadType(RequestPayloadType.EMP_ISSUANCE_UKETS_REQUEST_PAYLOAD)
             .build();
@@ -444,7 +444,7 @@ class RequestEmpUkEtsReviewServiceTest {
             .request(request)
             .build();
 
-        requestEmpUkEtsReviewService.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, pmrvUser);
+        requestEmpUkEtsReviewService.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, appUser);
 
         EmpIssuanceUkEtsRequestPayload updatedRequestPayload = (EmpIssuanceUkEtsRequestPayload) request.getPayload();
 
@@ -464,7 +464,7 @@ class RequestEmpUkEtsReviewServiceTest {
     @Test
     void saveRequestReturnForAmends() {
         String reviewer = "reviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(reviewer).build();
+        AppUser appUser = AppUser.builder().userId(reviewer).build();
         EmpIssuanceUkEtsRequestPayload requestPayload = EmpIssuanceUkEtsRequestPayload.builder()
             .payloadType(RequestPayloadType.EMP_ISSUANCE_UKETS_REQUEST_PAYLOAD)
             .build();
@@ -504,7 +504,7 @@ class RequestEmpUkEtsReviewServiceTest {
             .request(request)
             .build();
 
-        requestEmpUkEtsReviewService.saveRequestReturnForAmends(requestTask, pmrvUser);
+        requestEmpUkEtsReviewService.saveRequestReturnForAmends(requestTask, appUser);
 
         EmpIssuanceUkEtsRequestPayload updatedRequestPayload = (EmpIssuanceUkEtsRequestPayload) request.getPayload();
 
@@ -570,7 +570,7 @@ class RequestEmpUkEtsReviewServiceTest {
     void submitAmend() {
         String operator = "operator";
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId(operator).build();
+        AppUser appUser = AppUser.builder().userId(operator).build();
         EmissionsMonitoringPlanUkEts monitoringPlan = EmissionsMonitoringPlanUkEts.builder()
                 .operatorDetails(EmpOperatorDetails.builder()
                         .build())
@@ -634,7 +634,7 @@ class RequestEmpUkEtsReviewServiceTest {
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(aviationAccountInfo);
 
         // Invoke
-        requestEmpUkEtsReviewService.submitAmend(actionPayload, requestTask, pmrvUser);
+        requestEmpUkEtsReviewService.submitAmend(actionPayload, requestTask, appUser);
 
         // Verify
         assertThat(requestTask.getRequest().getPayload()).isInstanceOf(EmpIssuanceUkEtsRequestPayload.class);

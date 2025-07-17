@@ -1,14 +1,13 @@
 package uk.gov.pmrv.api.workflow.bpmn.handler.permitsurrender;
 
-import java.util.Date;
-
+import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.PermitSurrenderReviewGrantedService;
+
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +24,6 @@ public class PermitSurrenderGrantedHandler implements JavaDelegate {
         execution.setVariable(BpmnProcessConstants.SURRENDER_REMINDER_NOTICE_DATE, noticeReminderDate);
 
         // Add variables for triggering AER
-        service.getAerVariables(requestId).forEach(execution::setVariable);
+        service.constructAerVariables(requestId).forEach(execution::setVariable);
     }
 }

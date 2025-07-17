@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -15,7 +15,7 @@ import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
 export interface PermitTransferBSaveApplicationRequestTaskActionPayload extends RequestTaskActionPayload {
   permitTransferDetailsConfirmation?: PermitTransferDetailsConfirmation;
-  permitType?: 'GHGE' | 'HSE';
+  permitType?: 'GHGE' | 'HSE' | 'WASTE';
   permit?: Permit;
   permitSectionsCompleted?: { [key: string]: Array<boolean> };
 }

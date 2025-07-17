@@ -1,20 +1,18 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.vir.validation;
 
 
-import lombok.RequiredArgsConstructor;
-
-import org.apache.commons.collections.CollectionUtils;
-
-import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.OperatorImprovementResponse;
-import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.VirVerificationData;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.OperatorImprovementResponse;
+import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.VirVerificationData;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +35,7 @@ public class VirSubmitValidatorService {
         Collection<String> difference = CollectionUtils.disjunction(references, operatorImprovementResponseMap.keySet());
 
         if(!difference.isEmpty()) {
-            throw new BusinessException(ErrorCode.INVALID_VIR, difference.toArray());
+            throw new BusinessException(MetsErrorCode.INVALID_VIR, difference.toArray());
         }
     }
 }

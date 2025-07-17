@@ -1,5 +1,5 @@
 <ng-container *ngIf="vm$ | async as vm">
-  <app-page-heading>Check your answers</app-page-heading>
+  <app-page-heading> {{ vm.pageHeader }}</app-page-heading>
   <app-compliance-monitoring-group-template
     [isEditable]="vm.isEditable"
     [compliance]="vm.verificationReportData?.complianceMonitoringReportingRules"

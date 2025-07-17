@@ -6,8 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentTemplateService;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.documents.service.FileDocumentTemplateService;
 import uk.gov.pmrv.api.notification.template.domain.DocumentTemplate;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 

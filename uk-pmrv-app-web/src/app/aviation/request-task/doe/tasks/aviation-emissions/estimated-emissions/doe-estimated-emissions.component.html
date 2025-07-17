@@ -1,0 +1,92 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Estimated or corrected emissions"
+    caption="Aviation emissions"
+    submitText="Continue"
+    [hideSubmit]="false">
+    <ng-container *ngIf="form.get('emissionsAllInternationalFlights')">
+      <h2 class="govuk-heading-m govuk-!-width-two-thirds">Total emissions on all international flights</h2>
+      <div class="govuk-hint govuk-!-width-two-thirds">
+        Emissions from all international flights must be equal to or greater than emissions from flights with offsetting
+        requirements
+      </div>
+      <div
+        [ngClass]="{
+          'govuk-form-group--error':
+            form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async,
+        }"
+        class="govuk-!-width-two-thirds">
+        <div
+          *ngIf="form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async"
+          [ngClass]="{
+            'govuk-error-message':
+              form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async,
+          }">
+          {{ form?.errors?.lowerThanInternational }}
+        </div>
+      </div>
+      <div
+        formControlName="emissionsAllInternationalFlights"
+        govuk-text-input
+        class="govuk-!-width-one-third"
+        suffix="tonnes CO2"></div>
+    </ng-container>
+
+    <ng-container *ngIf="form.get('emissionsFlightsWithOffsettingRequirements')">
+      <h2 class="govuk-heading-m govuk-!-width-two-thirds">Emissions from flights with offsetting requirements</h2>
+      <div class="govuk-hint govuk-!-width-two-thirds">
+        Emissions from flights with offsetting requirements must be equal to or less than emissions from all
+        international flights
+      </div>
+      <div
+        [ngClass]="{
+          'govuk-form-group--error':
+            form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async,
+        }"
+        class="govuk-!-width-two-thirds">
+        <div
+          *ngIf="form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async"
+          [ngClass]="{
+            'govuk-error-message':
+              form?.errors?.lowerThanInternational && this.wizardStepComponent?.isSummaryDisplayedSubject | async,
+          }">
+          {{ form?.errors?.lowerThanInternational }}
+        </div>
+      </div>
+      <div
+        formControlName="emissionsFlightsWithOffsettingRequirements"
+        govuk-text-input
+        class="govuk-!-width-one-third"
+        suffix="tonnes CO2"></div>
+    </ng-container>
+
+    <ng-container *ngIf="form.get('emissionsClaimFromCorsiaEligibleFuels')">
+      <h2 class="govuk-heading-m govuk-!-width-two-thirds">Emissions related to a claim from CORSIA eligible fuels</h2>
+      <div
+        formControlName="emissionsClaimFromCorsiaEligibleFuels"
+        class="govuk-!-width-one-third"
+        govuk-text-input
+        suffix="tonnes CO2"></div>
+    </ng-container>
+
+    <h2 class="govuk-heading-m govuk-!-width-two-thirds">How have you estimated or corrected the emissions?</h2>
+    <div
+      formControlName="calculationApproach"
+      govuk-textarea
+      class="govuk-!-width-two-thirds"
+      [maxLength]="10000"
+      hint="The operator will see this text in the notice."></div>
+
+    <div class="govuk-!-width-two-thirds">
+      <app-multiple-file-input
+        [baseDownloadUrl]="vm.downloadUrl"
+        label="Supporting documents (optional)"
+        listTitle="Files added"
+        formControlName="supportingDocuments"
+        hint="The operator will be able to view uploaded documents"></app-multiple-file-input>
+    </div>
+  </app-wizard-step>
+</ng-container>
+<app-return-to-link></app-return-to-link>

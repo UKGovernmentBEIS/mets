@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanValidationResult;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
@@ -29,7 +29,7 @@ public class EmpUkEtsValidatorService implements EmpTradingSchemeValidatorServic
         boolean isValid = empValidationResults.stream().allMatch(EmissionsMonitoringPlanValidationResult::isValid);
 
         if(!isValid) {
-            throw new BusinessException(ErrorCode.INVALID_EMP, extractEmissionsMonitoringPlanViolations(empValidationResults));
+            throw new BusinessException(MetsErrorCode.INVALID_EMP, extractEmissionsMonitoringPlanViolations(empValidationResults));
         }
     }
 

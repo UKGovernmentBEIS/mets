@@ -1,26 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  combineLatest,
-  first,
-  map,
-  MonoTypeOperatorFunction,
-  pipe,
-  switchMap,
-  switchMapTo,
-  withLatestFrom,
-} from 'rxjs';
+import { combineLatest, first, map, switchMap, withLatestFrom } from 'rxjs';
 
+import { BackLinkService } from '@shared/back-link/back-link.service';
 import cleanDeep from 'clean-deep';
 
-import {
-  OperatorInvitedUserInfoDTO,
-  OperatorUserRegistrationWithCredentialsDTO,
-  OperatorUsersRegistrationService,
-} from 'pmrv-api';
+import { OperatorUserRegistrationWithCredentialsDTO, OperatorUsersRegistrationService } from 'pmrv-api';
 
-import { BackLinkService } from '../../shared/back-link/back-link.service';
 import { UserRegistrationStore } from '../store/user-registration.store';
 
 @Component({
@@ -48,7 +35,8 @@ export class SummaryComponent implements OnInit {
 
   registerUser(): void {
     this.isSubmitDisabled = true;
-    const isNoPasswordInvitation = this.store.getState().invitationStatus === 'PENDING_USER_REGISTRATION_NO_PASSWORD';
+    const isNoPasswordInvitation =
+      this.store.getState().invitationStatus === 'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD';
 
     combineLatest([this.store.select('userRegistrationDTO'), this.store.select('password'), this.store.select('token')])
       .pipe(
@@ -57,30 +45,14 @@ export class SummaryComponent implements OnInit {
         withLatestFrom(this.store.select('isInvited')),
         switchMap(([user, isInvited]: [OperatorUserRegistrationWithCredentialsDTO, boolean]) =>
           isNoPasswordInvitation
-            ? this.operatorUsersRegistrationService
-                .registerNewUserFromInvitation(user)
-                .pipe(this.acceptInvitation(user))
+            ? this.operatorUsersRegistrationService.acceptAuthorityAndEnableInvitedUserWithoutCredentials(user)
             : isInvited
-            ? this.operatorUsersRegistrationService
-                .registerNewUserFromInvitationWithCredentials(user)
-                .pipe(this.acceptInvitation(user))
-            : this.operatorUsersRegistrationService.registerUser(user),
+              ? this.operatorUsersRegistrationService.acceptAuthorityAndEnableInvitedUserWithCredentials(user)
+              : this.operatorUsersRegistrationService.registerUser(user),
         ),
       )
       .subscribe(() =>
         this.router.navigate([isNoPasswordInvitation ? '../../invitation' : '../success'], { relativeTo: this.route }),
       );
-  }
-
-  private acceptInvitation(
-    user: OperatorUserRegistrationWithCredentialsDTO,
-  ): MonoTypeOperatorFunction<OperatorInvitedUserInfoDTO> {
-    return pipe(
-      switchMapTo(
-        this.operatorUsersRegistrationService.acceptOperatorInvitation({
-          token: user.emailToken,
-        }),
-      ),
-    );
   }
 }

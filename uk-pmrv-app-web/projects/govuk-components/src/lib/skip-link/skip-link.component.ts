@@ -13,16 +13,14 @@ import { filter, map } from 'rxjs';
       </a>
     </div>
   `,
-  styles: [
-    `
-      div {
-        float: left;
-        margin: 0.3em 0 0 0.3em;
-        z-index: 1;
-        position: absolute;
-      }
-    `,
-  ],
+  styles: `
+    div {
+      float: left;
+      margin: 0.3em 0 0 0.3em;
+      z-index: 1;
+      position: absolute;
+    }
+  `,
 })
 export class SkipLinkComponent {
   @Input() anchor = 'main-content';

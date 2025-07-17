@@ -14,18 +14,18 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.token.FileToken;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmpAttachmentService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmpDocumentService;
-import uk.gov.pmrv.api.token.FileToken;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.Collections;
 import java.util.UUID;
@@ -54,16 +54,16 @@ class EmpControllerTest {
     private EmpDocumentService empDocumentService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @BeforeEach
     void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver =
                 new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(empController);
         aspectJProxyFactory.addAspect(aspect);
@@ -75,7 +75,7 @@ class EmpControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(empController)
                 .addFilters(new FilterChainProxy(Collections.emptyList()))
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .build();
     }
@@ -103,12 +103,12 @@ class EmpControllerTest {
     void generateGetEmpAttachmentToken_forbidden() throws Exception {
         Long empId = 1L;
         UUID attachmentUuid = UUID.randomUUID();
-        PmrvUser authUser = PmrvUser.builder().userId("userId").build();
+        AppUser authUser = AppUser.builder().userId("userId").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(authUser, "generateGetEmpAttachmentToken", String.valueOf(empId));
+                .when(appUserAuthorizationService)
+                .authorize(authUser, "generateGetEmpAttachmentToken", String.valueOf(empId), null, null);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get(EMP_CONTROLLER_PATH + "/" + empId + "/attachments")
@@ -141,12 +141,12 @@ class EmpControllerTest {
     void generateGetEmpDocumentToken_forbidden() throws Exception {
         Long empId = 1L;
         UUID documentUuid = UUID.randomUUID();
-        PmrvUser authUser = PmrvUser.builder().userId("userId").build();
+        AppUser authUser = AppUser.builder().userId("userId").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(authUser, "generateGetEmpDocumentToken", String.valueOf(empId));
+                .when(appUserAuthorizationService)
+                .authorize(authUser, "generateGetEmpDocumentToken", String.valueOf(empId), null, null);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get(EMP_CONTROLLER_PATH + "/" + empId + "/document")

@@ -24,19 +24,22 @@ import {
 export class TotalEmissionsCorsiaStandardFuelsTableTemplateComponent {
   private aviationReportingService = inject(AviationReportingService);
 
+  @Input() standardFuelsTotalEmissions$: Observable<AviationAerCorsiaStandardFuelsTotalEmissions[]>;
+
   @Input() set aviationAerCorsia(aviationAerCorsia: AviationAerCorsia) {
-    const aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO = {
-      aggregatedEmissionsData: aviationAerCorsia?.aggregatedEmissionsData,
-      emissionsReductionClaim:
-        aviationAerCorsia?.emissionsReductionClaim?.emissionsReductionClaimDetails?.totalEmissions,
-    };
-    this.standardFuelsTotalEmissions$ = this.aviationReportingService
-      .getStandardFuelsEmissionsCorsia(aviationAerCorsiaEmissionsCalculationDTO)
-      .pipe(shareReplay(1));
+    if (!this.standardFuelsTotalEmissions$) {
+      const aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO = {
+        aggregatedEmissionsData: aviationAerCorsia?.aggregatedEmissionsData,
+        emissionsReductionClaim:
+          aviationAerCorsia?.emissionsReductionClaim?.emissionsReductionClaimDetails?.totalEmissions,
+      };
+      this.standardFuelsTotalEmissions$ = this.aviationReportingService
+        .getStandardFuelsEmissionsCorsia(aviationAerCorsiaEmissionsCalculationDTO)
+        .pipe(shareReplay(1));
+    }
   }
 
   getSummaryDescription = getSummaryDescription;
-  standardFuelsTotalEmissions$: Observable<AviationAerCorsiaStandardFuelsTotalEmissions[]>;
   columns: GovukTableColumn<AviationAerCorsiaStandardFuelsTotalEmissions>[] = [
     { header: 'Fuel type', field: 'fuelType' },
     { header: 'Emissions factor', field: 'emissionsFactor' },

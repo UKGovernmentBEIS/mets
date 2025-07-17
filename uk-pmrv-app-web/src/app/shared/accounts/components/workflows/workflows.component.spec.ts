@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -69,7 +68,7 @@ describe('WorkflowsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [WorkflowsComponent],
-      imports: [RouterTestingModule, SharedModule],
+      imports: [SharedModule],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: RequestsService, useValue: requestsService },
@@ -83,7 +82,7 @@ describe('WorkflowsComponent', () => {
   describe('search filtering by type', () => {
     beforeEach(async () => {
       authStore.setCurrentDomain('INSTALLATION');
-      requestsService.getRequestDetailsByAccountId.mockReturnValue(
+      requestsService.getRequestDetailsByResource.mockReturnValue(
         of({ requestDetails: [mockWorkflowResults.requestDetails[0]], total: 1 } as RequestDetailsSearchResults),
       );
     });
@@ -98,11 +97,12 @@ describe('WorkflowsComponent', () => {
       page.permitApplicationTypeCheckbox.click();
       fixture.detectChanges();
 
-      expect(requestsService.getRequestDetailsByAccountId).toHaveBeenCalledTimes(1);
-      expect(requestsService.getRequestDetailsByAccountId).toHaveBeenLastCalledWith({
-        accountId: mockedAccount.id,
+      expect(requestsService.getRequestDetailsByResource).toHaveBeenCalledTimes(1);
+      expect(requestsService.getRequestDetailsByResource).toHaveBeenLastCalledWith({
+        resourceType: 'ACCOUNT',
+        resourceId: String(mockedAccount.id),
         category: 'PERMIT',
-        requestTypes: ['PERMIT_NOTIFICATION'],
+        requestTypes: ['PERMIT_REISSUE'],
         requestStatuses: [],
         pageNumber: 0,
         pageSize: 30,
@@ -118,7 +118,7 @@ describe('WorkflowsComponent', () => {
   describe('search filtering by status', () => {
     beforeEach(async () => {
       authStore.setCurrentDomain('INSTALLATION');
-      requestsService.getRequestDetailsByAccountId.mockReturnValue(
+      requestsService.getRequestDetailsByResource.mockReturnValue(
         of({ requestDetails: [mockWorkflowResults.requestDetails[0]], total: 1 } as RequestDetailsSearchResults),
       );
     });
@@ -133,9 +133,10 @@ describe('WorkflowsComponent', () => {
       page.cancelledStatusCheckbox.click();
       fixture.detectChanges();
 
-      expect(requestsService.getRequestDetailsByAccountId).toHaveBeenCalledTimes(1);
-      expect(requestsService.getRequestDetailsByAccountId).toHaveBeenLastCalledWith({
-        accountId: mockedAccount.id,
+      expect(requestsService.getRequestDetailsByResource).toHaveBeenCalledTimes(1);
+      expect(requestsService.getRequestDetailsByResource).toHaveBeenLastCalledWith({
+        resourceType: 'ACCOUNT',
+        resourceId: String(mockedAccount.id),
         category: 'PERMIT',
         requestTypes: [],
         requestStatuses: ['CANCELLED'],
@@ -154,7 +155,7 @@ describe('WorkflowsComponent', () => {
     beforeEach(async () => {
       store.setCurrentAccount(mockedAviationAccount);
       authStore.setCurrentDomain('AVIATION');
-      requestsService.getRequestDetailsByAccountId.mockReturnValue(
+      requestsService.getRequestDetailsByResource.mockReturnValue(
         of({ requestDetails: [mockWorkflowEMPResults.requestDetails[0]], total: 1 } as RequestDetailsSearchResults),
       );
     });
@@ -167,15 +168,16 @@ describe('WorkflowsComponent', () => {
 
     it('should filter results upon checking type', () => {
       expect(page.checkboxes.length).toEqual(11);
-      expect(page.checkbox_labels[0].innerHTML).toContain('Application');
+      expect(page.checkbox_labels[0].innerHTML).toContain('Account closure');
       page.checkboxes[0].click();
       fixture.detectChanges();
 
-      expect(requestsService.getRequestDetailsByAccountId).toHaveBeenCalledTimes(1);
-      expect(requestsService.getRequestDetailsByAccountId).toHaveBeenLastCalledWith({
-        accountId: mockedAviationAccount.aviationAccount.id,
+      expect(requestsService.getRequestDetailsByResource).toHaveBeenCalledTimes(1);
+      expect(requestsService.getRequestDetailsByResource).toHaveBeenLastCalledWith({
+        resourceType: 'ACCOUNT',
+        resourceId: String(mockedAviationAccount.aviationAccount.id),
         category: 'PERMIT',
-        requestTypes: ['EMP_ISSUANCE_UKETS', 'EMP_ISSUANCE_CORSIA'],
+        requestTypes: ['AVIATION_ACCOUNT_CLOSURE'],
         requestStatuses: [],
         pageNumber: 0,
         pageSize: 30,

@@ -1,0 +1,29 @@
+<app-bdr-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Upload the baseline data report file"
+    caption="Provide the baseline data report and details"
+    [hideSubmit]="(isEditable$ | async) === false"
+    [showBackLink]="false">
+    <div class="govuk-!-width-three-quarters">
+      <app-file-input
+        [downloadUrl]="getDocumentDownloadUrl"
+        formControlName="bdrFile"
+        label="Upload baseline data report"
+        hint="Please note the name of your file will change once it is uploaded to the METS workflow. This is to ensure it follows a consistent naming convention for use by regulators and the UK ETS Authority."
+        listTitle="Upload baseline data report added"
+        [showFilesizeHint]="false"
+        [fileNameTransformer]="renameFile.bind(this)" />
+    </div>
+    <div class="govuk-!-width-three-quarters">
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload supporting files"
+        headerSize="s"
+        listTitle="Uploaded attachments"
+        formControlName="files"></app-multiple-file-input>
+    </div>
+  </app-wizard-step>
+  <app-bdr-return-link returnLink="../" title="Complete baseline data report"></app-bdr-return-link>
+</app-bdr-task>

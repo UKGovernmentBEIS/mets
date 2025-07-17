@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { first, map, Observable } from 'rxjs';
 
@@ -10,8 +10,11 @@ import { emissionPointEmissionsStatus } from '../measurement-status';
 @Injectable({
   providedIn: 'root',
 })
-export class WizardStepGuard implements CanActivate {
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+export class WizardStepGuard {
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     return (

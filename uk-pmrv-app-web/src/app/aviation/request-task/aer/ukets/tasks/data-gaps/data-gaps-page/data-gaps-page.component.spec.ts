@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AerRequestTaskPayload, RequestTaskStore } from '@aviation/request-task/store';
-import { AerStoreDelegate } from '@aviation/request-task/store/delegates';
+import { AerUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { screen } from '@testing-library/angular';
@@ -35,7 +35,7 @@ describe('DataGapsPageComponent', () => {
         state.requestTaskItem = {
           requestTask: {
             type: 'AVIATION_AER_UKETS_APPLICATION_SUBMIT',
-            payload: AerStoreDelegate.INITIAL_STATE as AerRequestTaskPayload,
+            payload: AerUkEtsStoreDelegate.INITIAL_STATE as AerRequestTaskPayload,
           },
         };
       }),

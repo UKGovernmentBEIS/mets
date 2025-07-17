@@ -1,13 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.handler;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import org.springframework.stereotype.Component;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -18,6 +15,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationSaveReviewDeterminationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.service.PermitVariationReviewService;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ public class PermitVariationReviewSaveDeterminationActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final PermitVariationSaveReviewDeterminationRequestTaskActionPayload payload) {
         final PermitVariationDeterminateable determination = payload.getDetermination();
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);

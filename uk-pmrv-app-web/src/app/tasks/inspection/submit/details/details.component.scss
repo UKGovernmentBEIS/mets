@@ -1,0 +1,10 @@
+@use 'govuk-frontend/govuk/base' as govuk;
+
+.officer-select {
+  border-bottom: 1px solid govuk.$govuk-border-colour;
+  padding-bottom: 20px;
+}
+
+.extra-officer-fieldset {
+  margin-top: 0;
+}

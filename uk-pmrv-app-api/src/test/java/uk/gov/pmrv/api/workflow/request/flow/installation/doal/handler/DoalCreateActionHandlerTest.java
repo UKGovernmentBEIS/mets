@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionPayloadType;
@@ -41,12 +41,11 @@ class DoalCreateActionHandlerTest {
         final String requestId = "DOAL00001-2023-1";
         final Long accountId = 1L;
         final Year year = Year.of(2023);
-        final RequestCreateActionType type = RequestCreateActionType.DOAL;
         final DoalRequestCreateActionPayload payload = DoalRequestCreateActionPayload.builder()
                 .payloadType(RequestCreateActionPayloadType.DOAL_REQUEST_CREATE_ACTION_PAYLOAD)
                 .year(year)
                 .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("regulator").build();
+        final AppUser appUser = AppUser.builder().userId("regulator").build();
 
         final RequestParams requestParams = RequestParams.builder()
                 .type(RequestType.DOAL)
@@ -57,7 +56,7 @@ class DoalCreateActionHandlerTest {
                         .build())
                 .requestPayload(DoalRequestPayload.builder()
                         .payloadType(RequestPayloadType.DOAL_REQUEST_PAYLOAD)
-                        .regulatorAssignee(pmrvUser.getUserId())
+                        .regulatorAssignee(appUser.getUserId())
                         .reportingYear(year)
                         .build())
                 .build();
@@ -65,14 +64,14 @@ class DoalCreateActionHandlerTest {
         when(startProcessRequestService.startProcess(requestParams))
                 .thenReturn(Request.builder().id(requestId).build());
 
-        String result = handler.process(accountId, type, payload, pmrvUser);
+        String result = handler.process(accountId, payload, appUser);
 
         assertThat(result).isEqualTo(requestId);
         verify(startProcessRequestService, times(1)).startProcess(requestParams);
     }
 
     @Test
-    void getType() {
-        assertThat(handler.getType()).isEqualTo(RequestCreateActionType.DOAL);
+    void getRequestCreateActionType() {
+        assertThat(handler.getRequestCreateActionType()).isEqualTo(RequestCreateActionType.DOAL);
     }
 }

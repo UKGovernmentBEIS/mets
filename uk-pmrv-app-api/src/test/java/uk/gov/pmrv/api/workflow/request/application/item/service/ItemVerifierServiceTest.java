@@ -5,9 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.application.authorization.VerifierAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
@@ -57,7 +58,7 @@ class ItemVerifierServiceTest {
         final Request request = Request.builder().id(requestId).accountId(accountId).type(RequestType.PERMIT_ISSUANCE).build();
         final AccountType accountType = AccountType.INSTALLATION;
         String userId = "verifierUser";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(userId).roleType(RoleType.VERIFIER).build();
+        AppUser appUser = AppUser.builder().userId(userId).roleType(RoleTypeConstants.VERIFIER).build();
         Map<Long, Set<RequestTaskType>> scopedRequestTaskTypes =
             Map.of(verificationBodyId, Set.of(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_SUBMIT));
 
@@ -73,24 +74,24 @@ class ItemVerifierServiceTest {
 
         // Mock
         when(requestService.findRequestById(requestId)).thenReturn(request);
-        when(verifierAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType))
+        when(verifierAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(appUser, accountType))
             .thenReturn(scopedRequestTaskTypes);
         when(itemByRequestVerifierRepository.findItemsByRequestId(scopedRequestTaskTypes, requestId)).thenReturn(expectedItemPage);
-        when(itemResponseService.toItemDTOResponse(expectedItemPage, accountType, pmrvUser)).thenReturn(expectedItemDTOResponse);
+        when(itemResponseService.toItemDTOResponse(expectedItemPage, accountType, appUser)).thenReturn(expectedItemDTOResponse);
 
         // Invoke
-        ItemDTOResponse actualItemDTOResponse = itemVerifierService.getItemsByRequest(pmrvUser, requestId);
+        ItemDTOResponse actualItemDTOResponse = itemVerifierService.getItemsByRequest(appUser, requestId);
 
         // Assert
         assertEquals(expectedItemDTOResponse, actualItemDTOResponse);
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(verifierAuthorityResourceAdapter, times(1))
-            .getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType);
+            .getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
         verify(itemByRequestVerifierRepository, times(1))
             .findItemsByRequestId(scopedRequestTaskTypes, requestId);
         verify(itemResponseService, times(1))
-            .toItemDTOResponse(expectedItemPage, accountType, pmrvUser);
+            .toItemDTOResponse(expectedItemPage, accountType, appUser);
     }
 
     @Test
@@ -100,28 +101,28 @@ class ItemVerifierServiceTest {
         final Request request = Request.builder().id(requestId).accountId(accountId).type(RequestType.PERMIT_ISSUANCE).build();
         final AccountType accountType = AccountType.INSTALLATION;
         String userId = "verifierUser";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(userId).roleType(RoleType.VERIFIER).build();
+        AppUser appUser = AppUser.builder().userId(userId).roleType(RoleTypeConstants.VERIFIER).build();
         Map<Long, Set<RequestTaskType>> scopedRequestTaskTypes = Map.of();
 
         // Mock
         when(requestService.findRequestById(requestId)).thenReturn(request);
-        when(verifierAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType))
+        when(verifierAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(appUser, accountType))
             .thenReturn(scopedRequestTaskTypes);
 
         // Invoke
-        ItemDTOResponse actualItemDTOResponse = itemVerifierService.getItemsByRequest(pmrvUser, requestId);
+        ItemDTOResponse actualItemDTOResponse = itemVerifierService.getItemsByRequest(appUser, requestId);
 
         // Assert
         assertThat(actualItemDTOResponse).isEqualTo(ItemDTOResponse.emptyItemDTOResponse());
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(verifierAuthorityResourceAdapter, times(1))
-            .getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType);
+            .getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
         verifyNoInteractions(itemByRequestVerifierRepository, itemResponseService);
     }
 
     @Test
     void getRoleType() {
-        assertEquals(RoleType.VERIFIER, itemVerifierService.getRoleType());
+        assertEquals(RoleTypeConstants.VERIFIER, itemVerifierService.getRoleType());
     }
 }

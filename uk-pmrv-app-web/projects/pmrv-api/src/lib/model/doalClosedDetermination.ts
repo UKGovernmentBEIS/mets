@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,4 +11,4 @@
  */
 import { DoalDetermination } from './doalDetermination';
 
-export type DoalClosedDetermination = DoalDetermination;
+export interface DoalClosedDetermination extends DoalDetermination {}

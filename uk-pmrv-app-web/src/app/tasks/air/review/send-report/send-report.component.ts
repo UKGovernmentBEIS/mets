@@ -7,6 +7,7 @@ import { DestroySubject } from '@core/services/destroy-subject.service';
 import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 import { reviewWizardComplete } from '@tasks/air/review/review.wizard';
 import { AirService } from '@tasks/air/shared/services/air.service';
+import { getPreviewDocumentsInfo } from '@tasks/air/shared/utils/previewDocumentsAir.util';
 
 import { AirApplicationReviewRequestTaskPayload, RequestItemsService } from 'pmrv-api';
 
@@ -33,6 +34,7 @@ export class SendReportComponent implements OnInit, OnDestroy {
     map((payload) => reviewWizardComplete(payload)),
   );
   isEditable$ = this.airService.isEditable$;
+  previewDocuments = getPreviewDocumentsInfo('AIR_NOTIFY_OPERATOR_FOR_DECISION');
 
   ngOnInit(): void {
     this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((paramMap) => {

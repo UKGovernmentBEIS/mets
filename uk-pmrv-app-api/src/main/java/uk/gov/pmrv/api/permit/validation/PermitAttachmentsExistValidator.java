@@ -1,16 +1,14 @@
 package uk.gov.pmrv.api.permit.validation;
 
-import java.util.List;
-import java.util.Optional;
-
 import jakarta.validation.Valid;
-
-import org.springframework.stereotype.Component;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitValidationResult;
 import uk.gov.pmrv.api.permit.domain.PermitViolation;
+
+import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

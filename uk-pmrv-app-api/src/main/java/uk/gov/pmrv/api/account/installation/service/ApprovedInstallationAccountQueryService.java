@@ -7,14 +7,14 @@ import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.repository.InstallationAccountRepository;
 import uk.gov.pmrv.api.account.installation.transform.InstallationAccountMapper;
 import uk.gov.pmrv.api.account.service.ApprovedAccountTypeQueryService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;

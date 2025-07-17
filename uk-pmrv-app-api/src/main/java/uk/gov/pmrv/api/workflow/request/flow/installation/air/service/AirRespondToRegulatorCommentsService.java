@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -52,7 +52,7 @@ public class AirRespondToRegulatorCommentsService {
     @Transactional
     public void applySubmitAction(final AirSubmitRespondToRegulatorCommentsRequestTaskActionPayload payload,
                                   final RequestTask requestTask,
-                                  final PmrvUser pmrvUser) {
+                                  final AppUser appUser) {
 
         final Request request = requestTask.getRequest();
         final AirApplicationRespondToRegulatorCommentsRequestTaskPayload taskPayload =
@@ -89,7 +89,7 @@ public class AirRespondToRegulatorCommentsService {
                 request,
                 actionPayload,
                 RequestActionType.AIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS,
-                pmrvUser.getUserId());
+                appUser.getUserId());
 
         // Remove reference
         taskPayload.getRespondedItems().add(reference);

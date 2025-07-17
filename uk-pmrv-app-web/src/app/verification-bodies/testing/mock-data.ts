@@ -54,7 +54,6 @@ export const verificationBodyContacts: UsersAuthoritiesInfoDTO = {
       firstName: 'John',
       lastName: 'Cash',
       authorityStatus: 'ACTIVE',
-      locked: false,
       authorityCreationDate: '2020-01-01T12:38:12.846716Z',
     },
     {
@@ -64,7 +63,6 @@ export const verificationBodyContacts: UsersAuthoritiesInfoDTO = {
       firstName: 'Jim',
       lastName: 'Cash',
       authorityStatus: 'ACTIVE',
-      locked: false,
       authorityCreationDate: '2020-01-03T12:38:12.846716Z',
     },
   ] as UserAuthorityInfoDTO[],

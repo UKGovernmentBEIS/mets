@@ -13,7 +13,10 @@ import { CommonActionsStore } from '../../store/common-actions.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PeerReviewDecisionComponent {
-  constructor(readonly route: ActivatedRoute, private readonly commonActionStore: CommonActionsStore) {}
+  constructor(
+    readonly route: ActivatedRoute,
+    private readonly commonActionStore: CommonActionsStore,
+  ) {}
 
   submitter$ = this.commonActionStore.requestAction$.pipe(map((a) => a.submitter));
 

@@ -29,11 +29,13 @@ describe('NitrousOxideComponent', () => {
 
   @Component({
     selector: 'app-review-group-decision-container',
-    template: `<div>
-      Review group decision component.
-      <div>Key:{{ groupKey }}</div>
-      <div>Can edit:{{ canEdit }}</div>
-    </div>`,
+    template: `
+      <div>
+        Review group decision component.
+        <div>Key:{{ groupKey }}</div>
+        <div>Can edit:{{ canEdit }}</div>
+      </div>
+    `,
   })
   class MockDecisionComponent {
     @Input() groupKey: PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload['group'];

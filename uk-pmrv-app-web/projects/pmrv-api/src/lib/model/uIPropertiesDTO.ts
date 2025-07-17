@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,8 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { NotificationAlertDTO } from './notificationAlertDTO';
 
 export interface UIPropertiesDTO {
   features?: { [key: string]: boolean };
   analytics?: { [key: string]: string };
+  keycloakServerUrl?: string;
+  notificationAlerts?: Array<NotificationAlertDTO>;
 }

@@ -22,7 +22,9 @@ describe('DataGapsGroupComponent', () => {
   }
 
   @Component({
-    template: ` <app-data-gaps-group [isEditable]="isEditable" [dataGapsInfo]="dataGapsInfo"></app-data-gaps-group> `,
+    template: `
+      <app-data-gaps-group [isEditable]="isEditable" [dataGapsInfo]="dataGapsInfo"></app-data-gaps-group>
+    `,
   })
   class TestComponent {
     isEditable = false;

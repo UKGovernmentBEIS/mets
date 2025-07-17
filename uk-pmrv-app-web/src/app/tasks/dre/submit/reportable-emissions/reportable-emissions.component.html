@@ -206,8 +206,8 @@
     </ng-container>
 
     <h2 class="govuk-heading-m">Calculated emissions</h2>
-    <p class="govuk-body">Reportable emissions: {{ totalReportableEmissions$ | async }} tonnes CO2e</p>
-    <p class="govuk-body">Sustainable biomass: {{ totalSustainableBiomassEmissions$ | async }} tonnes CO2e</p>
+    <p class="govuk-body">Reportable emissions: {{ totalReportableEmissions$ | async | bigNumber : 0 }} tonnes CO2e</p>
+    <p class="govuk-body">Sustainable biomass: {{ totalSustainableBiomassEmissions$ | async | bigNumber : 0  }} tonnes CO2e</p>
   </app-wizard-step>
 
   <a govukLink routerLink="..">Return to: reportable emissions task</a>

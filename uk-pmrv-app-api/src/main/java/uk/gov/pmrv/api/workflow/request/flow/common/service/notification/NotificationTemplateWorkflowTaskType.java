@@ -24,8 +24,13 @@ public enum NotificationTemplateWorkflowTaskType {
     AIR_SUBMIT("Submission"),
     AIR_RESPOND_TO_REGULATOR_COMMENTS("Follow up Action"),
     AER("Submission"),
-    
+
+    INSTALLATION_INSPECTION_OPERATOR_RESPOND("Operator Response"),
+
+    BDR("Submission"),
+
     PAYMENT("Payment"),
+
 
     EMP_ISSUANCE_UKETS("EMP determination"),
     EMP_VARIATION_UKETS("EMP variation determination"),

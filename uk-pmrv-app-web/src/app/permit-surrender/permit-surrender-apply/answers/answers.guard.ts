@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -9,8 +9,11 @@ import { allStepsAreValid } from '../wizard-status';
 @Injectable({
   providedIn: 'root',
 })
-export class AnswersGuard implements CanActivate {
-  constructor(private readonly router: Router, private readonly store: PermitSurrenderStore) {}
+export class AnswersGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly store: PermitSurrenderStore,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): true | Observable<true | UrlTree> {
     return this.store.pipe(

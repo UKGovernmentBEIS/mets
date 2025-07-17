@@ -1,10 +1,9 @@
 <app-base-task-container-component
-  header="Notification permit peer review"
+  [header]="permitNotificationTitle()"
   [daysRemaining]="daysRemaining$ | async"
   [customContentTemplate]="customContentTemplate"
-  expectedTaskType="PERMIT_NOTIFICATION_APPLICATION_PEER_REVIEW"
->
-</app-base-task-container-component>
+  [previewDocuments]="previewDocuments$ | async"
+  expectedTaskType="PERMIT_NOTIFICATION_APPLICATION_PEER_REVIEW"></app-base-task-container-component>
 
 <ng-template #customContentTemplate>
   <ng-container>
@@ -14,8 +13,7 @@
         (click)="peerReviewDecision()"
         govukButton
         title="Peer review decision"
-        type="button"
-      >
+        type="button">
         Peer review decision
       </button>
     </div>
@@ -26,7 +24,6 @@
       app-task-item
       link="../review/decision"
       linkText="Details of the Change"
-      [status]="'DETAILS_CHANGE' | reviewNotificationStatus | async"
-    ></li>
+      [status]="'DETAILS_CHANGE' | reviewNotificationStatus | async"></li>
   </ul>
 </ng-template>

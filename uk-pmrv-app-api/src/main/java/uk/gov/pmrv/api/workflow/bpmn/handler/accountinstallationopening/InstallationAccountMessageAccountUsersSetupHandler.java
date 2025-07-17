@@ -1,11 +1,10 @@
 package uk.gov.pmrv.api.workflow.bpmn.handler.accountinstallationopening;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.handler.InstallationAccountMessageAccountUsersSetupService;
-
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
+import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.handler.InstallationAccountMessageAccountUsersSetupService;
 
 import static uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants.REQUEST_ID;
 

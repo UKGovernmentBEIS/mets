@@ -1,17 +1,15 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.notification;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
@@ -21,6 +19,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferARequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBRequestPayload;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -101,7 +101,7 @@ public class PermitTransferAOfficialNoticeService {
 
         final TemplateParams
             templateParams = constructTemplateParams(request, accountPrimaryContact, ccRecipientsEmails, type, requestPayload);
-        return documentFileGeneratorService.generateFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
+        return documentFileGeneratorService.generateAndSaveFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
     }
 
     private TemplateParams constructTemplateParams(final Request request,
@@ -125,18 +125,10 @@ public class PermitTransferAOfficialNoticeService {
     }
 
     public void sendOfficialNotice(final String requestId) {
-
         final Request request = requestService.findRequestById(requestId);
         final PermitTransferARequestPayload requestPayload = (PermitTransferARequestPayload) request.getPayload();
-
-        final String serviceContact =
-            requestAccountContactQueryService.getRequestAccountContact(request, AccountContactType.SERVICE)
-                .map(UserInfoDTO::getEmail)
-                .orElse(null);
-
-        final List<String> toRecipientsEmails = serviceContact != null ? List.of(serviceContact) : List.of();
-
         final List<FileInfoDTO> attachments = List.of(requestPayload.getOfficialNotice());
-        officialNoticeSendService.sendOfficialNotice(attachments, request, toRecipientsEmails, List.of());
+        
+        officialNoticeSendService.sendOfficialNotice(attachments, request);
     }
 }

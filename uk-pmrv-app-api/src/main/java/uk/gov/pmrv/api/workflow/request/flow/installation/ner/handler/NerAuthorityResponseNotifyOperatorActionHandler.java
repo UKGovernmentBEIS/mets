@@ -1,10 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.ner.handler;
 
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -18,6 +16,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.Autho
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.service.NerAuthorityResponseService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.validation.NerAuthorityResponseValidator;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.validation.NerReviewValidator;
+
+import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class NerAuthorityResponseNotifyOperatorActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final NotifyOperatorForDecisionRequestTaskActionPayload payload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -42,9 +43,9 @@ public class NerAuthorityResponseNotifyOperatorActionHandler
         final DecisionNotification decisionNotification = payload.getDecisionNotification();
 
         authorityResponseValidator.validateAuthorityResponse(taskPayload);
-        reviewValidator.validateNotifyUsers(requestTask, decisionNotification, pmrvUser);
+        reviewValidator.validateNotifyUsers(requestTask, decisionNotification, appUser);
 
-        authorityResponseService.saveAuthorityDecisionNotification(requestTask, decisionNotification, pmrvUser);
+        authorityResponseService.saveAuthorityDecisionNotification(requestTask, decisionNotification, appUser);
         final AuthorityResponseType authorityResponseType = taskPayload.getAuthorityResponse().getType();
 
         workflowService.completeTask(

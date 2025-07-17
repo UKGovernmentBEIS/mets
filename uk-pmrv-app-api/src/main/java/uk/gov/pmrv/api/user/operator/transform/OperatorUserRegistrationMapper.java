@@ -1,18 +1,16 @@
 package uk.gov.pmrv.api.user.operator.transform;
 
-import org.keycloak.representations.idm.CredentialRepresentation;
+import jakarta.validation.Valid;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.util.ObjectUtils;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.user.core.domain.enumeration.KeycloakUserAttributes;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserRegistrationDTO;
-import uk.gov.pmrv.api.user.operator.domain.OperatorUserRegistrationWithCredentialsDTO;
 
-import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,41 +21,13 @@ public interface OperatorUserRegistrationMapper {
 	
 	@Mapping(source = "email", target = "username")
     @Mapping(source = "email", target = "email")
-    UserRepresentation toUserRepresentation(@Valid OperatorUserRegistrationWithCredentialsDTO operatorUserRegistrationWithCredentialsDTO, String email);
+	UserRepresentation toUserRepresentation(@Valid OperatorUserRegistrationDTO operatorUserRegistrationDTO,
+			String email);
 
-	@Mapping(source = "email", target = "username")
-	@Mapping(source = "email", target = "email")
-	@Mapping(source = "userId", target = "id")
-	UserRepresentation toUserRepresentation(
-        OperatorUserRegistrationWithCredentialsDTO operatorUserRegistrationWithCredentialsDTO, String email, String userId);
-
-    @AfterMapping
-    default void populateAttributesToUserRepresentation(
-        OperatorUserRegistrationWithCredentialsDTO operatorUserRegistrationWithCredentialsDTO, @MappingTarget UserRepresentation userRepresentation) {
-        populateUserRepresentationAttributes(operatorUserRegistrationWithCredentialsDTO, userRepresentation);
-
-        /* Set credentials */
-        CredentialRepresentation credentials = new CredentialRepresentation();
-        credentials.setTemporary(false);
-        credentials.setType(CredentialRepresentation.PASSWORD);
-        credentials.setValue(operatorUserRegistrationWithCredentialsDTO.getPassword());
-        userRepresentation.setCredentials(asList(credentials));
-    }
-
-    @Mapping(source = "email", target = "username")
-    @Mapping(source = "email", target = "email")
-    @Mapping(source = "userId", target = "id")
-    UserRepresentation toUserRepresentation(OperatorUserRegistrationDTO operatorUserRegistrationDTO, String email, String userId);
-
-    @AfterMapping
-    default void populateAttributesToUserRepresentation(OperatorUserRegistrationDTO operatorUserRegistrationDTO,
-                                                        @MappingTarget UserRepresentation userRepresentation) {
-        populateUserRepresentationAttributes(operatorUserRegistrationDTO, userRepresentation);
-    }
-
-    private void populateUserRepresentationAttributes(OperatorUserRegistrationDTO operatorUserRegistrationDTO,
-                                                      UserRepresentation userRepresentation) {
-        Map<String, List<String>> attributes = new HashMap<>();
+	@AfterMapping
+	default void populateAttributesToUserRepresentation(OperatorUserRegistrationDTO operatorUserRegistrationDTO,
+			@MappingTarget UserRepresentation userRepresentation) {
+    	Map<String, List<String>> attributes = new HashMap<>();
 
         attributes.put(KeycloakUserAttributes.PHONE_NUMBER_CODE.getName(),
             asList(operatorUserRegistrationDTO.getPhoneNumber().getCountryCode()));
@@ -71,13 +41,14 @@ public interface OperatorUserRegistrationMapper {
             (Objects.isNull(operatorUserRegistrationDTO.getMobileNumber()) ||
                 ObjectUtils.isEmpty(operatorUserRegistrationDTO.getMobileNumber().getNumber())) ? null
                 : asList(operatorUserRegistrationDTO.getMobileNumber().getNumber()));
-        attributes.put(KeycloakUserAttributes.TERMS_VERSION.getName(),
-            ObjectUtils.isEmpty(operatorUserRegistrationDTO.getTermsVersion()) ? null
-                : asList(String.valueOf(operatorUserRegistrationDTO.getTermsVersion())));
 
-        userRepresentation.setAttributes(attributes);
+        if(userRepresentation.getAttributes() == null) {
+        	userRepresentation.setAttributes(new HashMap<>());
+        }
+        
+        userRepresentation.getAttributes().putAll(attributes);
     }
-    
+
     private <T> List<T> asList(T value){
     	return List.of(value);
     }

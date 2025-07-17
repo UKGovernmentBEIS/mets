@@ -14,8 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -84,7 +84,7 @@ class NonComplianceNoticeOfIntentNotifyOperatorActionHandlerTest {
             NonComplianceNotifyOperatorRequestTaskActionPayload.builder()
                 .decisionNotification(decisionNotification)
                 .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final Map<String, RequestActionUserInfo> userInfo =
             Map.of("operator", RequestActionUserInfo.builder().name("operator name").build());
         final NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload actionPayload =
@@ -102,12 +102,12 @@ class NonComplianceNoticeOfIntentNotifyOperatorActionHandlerTest {
         
         handler.process(requestTaskId,
             RequestTaskActionType.NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR,
-            pmrvUser,
+            appUser,
             taskActionPayload
         );
 
         verify(validator, times(1)).validateNoticeOfIntent(taskPayload);
-        verify(validator, times(1)).validateUsers(requestTask, operators, Set.of(), pmrvUser);
+        verify(validator, times(1)).validateUsers(requestTask, operators, Set.of(), appUser);
         verify(validator, times(1)).validateContactAddress(request);
         verify(requestService, times(1)).addActionToRequest(
             request,

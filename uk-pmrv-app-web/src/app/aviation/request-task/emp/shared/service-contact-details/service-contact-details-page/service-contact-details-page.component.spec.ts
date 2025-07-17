@@ -11,7 +11,7 @@ import {
 } from '@aviation/request-task/store/request-task.types';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { SharedModule } from '@shared/shared.module';
-import { ActivatedRouteStub, mockClass } from '@testing';
+import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
 
 import { TasksService } from 'pmrv-api';
 
@@ -23,11 +23,18 @@ export class FixNavigationTriggeredOutsideAngularZoneNgModule {
   constructor(_router: Router) {}
 }
 
+class Page extends BasePage<ServiceContactDetailsPageComponent> {
+  get body() {
+    return this.query<HTMLElement>('.govuk-body');
+  }
+}
+
 // UKETS
 describe('ServiceContactDetailsPageComponent for UKETS', () => {
   let component: ServiceContactDetailsPageComponent;
   let fixture: ComponentFixture<ServiceContactDetailsPageComponent>;
   let store: RequestTaskStore;
+  let page: Page;
 
   const route = new ActivatedRouteStub();
   const tasksService = mockClass(TasksService);
@@ -45,12 +52,19 @@ describe('ServiceContactDetailsPageComponent for UKETS', () => {
     store = TestBed.inject(RequestTaskStore);
     setupStore(store, true);
     fixture = TestBed.createComponent(ServiceContactDetailsPageComponent);
+    page = new Page(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('body should be correct', () => {
+    expect(page.body.textContent).toContain(
+      'You can change this information in the users and contacts section, but will not see the changes until you submit the application.',
+    );
   });
 
   it('should submit task status', () => {
@@ -65,6 +79,7 @@ describe('ServiceContactDetailsPageComponent for CORSIA', () => {
   let component: ServiceContactDetailsPageComponent;
   let fixture: ComponentFixture<ServiceContactDetailsPageComponent>;
   let store: RequestTaskStore;
+  let page: Page;
 
   const route = new ActivatedRouteStub();
   const tasksService = mockClass(TasksService);
@@ -82,12 +97,19 @@ describe('ServiceContactDetailsPageComponent for CORSIA', () => {
     store = TestBed.inject(RequestTaskStore);
     setupStore(store, true);
     fixture = TestBed.createComponent(ServiceContactDetailsPageComponent);
+    page = new Page(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('body should be correct', () => {
+    expect(page.body.textContent).toContain(
+      'You can change this information in the users and contacts section, but will not see the changes until you submit the application.',
+    );
   });
 
   it('should submit task status', () => {
@@ -99,6 +121,7 @@ describe('ServiceContactDetailsPageComponent for CORSIA', () => {
 
 function setupStore(store: RequestTaskStore, isCorsia: boolean) {
   const payload = {
+    emissionsMonitoringPlan: { operatorDetails: {} },
     serviceContactDetails: {
       name: 'Din Djarin',
       roleCode: 'operator_admin',
@@ -118,6 +141,7 @@ function setupStore(store: RequestTaskStore, isCorsia: boolean) {
       },
       requestInfo: {
         id: '2',
+        accountId: 2,
         type: isCorsia ? 'EMP_ISSUANCE_CORSIA' : 'EMP_ISSUANCE_UKETS',
       },
     },

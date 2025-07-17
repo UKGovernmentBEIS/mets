@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.domain.AviationAerUkEtsReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerReviewDecision;
 
@@ -22,14 +21,9 @@ import java.util.UUID;
 @SuperBuilder
 public class AviationAerUkEtsApplicationCompletedRequestActionPayload extends AviationAerUkEtsApplicationSubmittedRequestActionPayload {
 
-    private AviationAerUkEtsVerificationReport verificationReport;
-
     @Builder.Default
     private Map<AviationAerUkEtsReviewGroup, AerReviewDecision> reviewGroupDecisions = new EnumMap<>(AviationAerUkEtsReviewGroup.class);
 
     @Builder.Default
     private Map<UUID, String> reviewAttachments = new HashMap<>();
-
-    @Builder.Default
-    private Map<UUID, String> verificationAttachments = new HashMap<>();
 }

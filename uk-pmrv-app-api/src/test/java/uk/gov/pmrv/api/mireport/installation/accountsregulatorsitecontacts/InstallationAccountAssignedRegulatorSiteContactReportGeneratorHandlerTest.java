@@ -1,23 +1,24 @@
 package uk.gov.pmrv.api.mireport.installation.accountsregulatorsitecontacts;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.mireport.MiReportType;
+import uk.gov.netz.api.mireport.accountsregulatorsitecontacts.AccountAssignedRegulatorSiteContact;
+import uk.gov.netz.api.mireport.accountsregulatorsitecontacts.AccountAssignedRegulatorSiteContactsMiReportResult;
+import uk.gov.netz.api.mireport.domain.EmptyMiReportParams;
+import uk.gov.netz.api.userinfoapi.UserInfo;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
-import uk.gov.pmrv.api.mireport.common.MiReportType;
-import uk.gov.pmrv.api.mireport.common.accountsregulatorsitecontacts.AccountAssignedRegulatorSiteContact;
-import uk.gov.pmrv.api.mireport.common.accountsregulatorsitecontacts.AccountAssignedRegulatorSiteContactsMiReportResult;
-import uk.gov.pmrv.api.mireport.common.domain.dto.EmptyMiReportParams;
-import uk.gov.pmrv.api.user.core.domain.model.UserInfo;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
-import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -60,19 +61,24 @@ class InstallationAccountAssignedRegulatorSiteContactReportGeneratorHandlerTest 
         when(userAuthService.getUsers(List.of(userId))).thenReturn(List.of(createUserInfo(userId, firstName, lastName,
                 "email")));
 
-        AccountAssignedRegulatorSiteContactsMiReportResult miReportResult =
+        AccountAssignedRegulatorSiteContactsMiReportResult<InstallationAccountAssignedRegulatorSiteContact> miReportResult =
                 (AccountAssignedRegulatorSiteContactsMiReportResult) generator.generateMiReport(entityManager, reportParams);
 
         assertNotNull(miReportResult);
         assertEquals(MiReportType.LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS, miReportResult.getReportType());
         assertEquals(2, miReportResult.getResults().size());
-        AccountAssignedRegulatorSiteContact accountAssignedRegulatorSiteContact1 = miReportResult.getResults().get(0);
-        AccountAssignedRegulatorSiteContact accountAssignedRegulatorSiteContact2 = miReportResult.getResults().get(1);
+        InstallationAccountAssignedRegulatorSiteContact accountAssignedRegulatorSiteContact1 = miReportResult.getResults().get(0);
+        InstallationAccountAssignedRegulatorSiteContact accountAssignedRegulatorSiteContact2 = miReportResult.getResults().get(1);
         assertEquals(userId, accountAssignedRegulatorSiteContact1.getUserId());
         assertEquals("fname lname", accountAssignedRegulatorSiteContact1.getAssignedRegulatorName());
         assertNull(accountAssignedRegulatorSiteContact2.getUserId());
         assertNull(accountAssignedRegulatorSiteContact2.getAssignedRegulatorName());
 
+    }
+
+    @Test
+    void getColumnNames() {
+        assertThat(generator.getColumnNames()).containsExactlyElementsOf(InstallationAccountAssignedRegulatorSiteContact.getColumnNames());
     }
 
     private UserInfo createUserInfo(String id, String firstName, String lastName, String email) {
@@ -85,10 +91,10 @@ class InstallationAccountAssignedRegulatorSiteContactReportGeneratorHandlerTest 
                 .build();
     }
 
-    private AccountAssignedRegulatorSiteContact createAccountAssignedRegulatorSiteContact(String emitterId, AccountType accountType,
+    private InstallationAccountAssignedRegulatorSiteContact createAccountAssignedRegulatorSiteContact(String emitterId, AccountType accountType,
                                                                                           String accountName, InstallationAccountStatus accountStatus,
                                                                                           String legalEntityName, String userId) {
-        return AccountAssignedRegulatorSiteContact.builder()
+        return InstallationAccountAssignedRegulatorSiteContact.builder()
                 .accountId(emitterId)
                 .accountType(accountType.getName())
                 .accountName(accountName)

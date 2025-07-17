@@ -72,7 +72,7 @@ describe('AirOperatorResponseItemComponent', () => {
       '3 Jun 2040',
       'Change',
       'Uploaded files',
-      '100.png200.png',
+      '100.png  200.png',
       'Change',
     ]);
   });
@@ -99,7 +99,7 @@ describe('AirOperatorResponseItemComponent', () => {
       'Test description 2',
       'Change',
       'Uploaded files',
-      '100.png200.png',
+      '100.png  200.png',
       'Change',
     ]);
   });
@@ -125,7 +125,7 @@ describe('AirOperatorResponseItemComponent', () => {
       '3 Jun 2020',
       'Change',
       'Uploaded files',
-      '100.png200.png',
+      '100.png  200.png',
       'Change',
     ]);
   });

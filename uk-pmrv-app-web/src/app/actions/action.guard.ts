@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, UrlTree } from '@angular/router';
 
-import { filter, mapTo, Observable, tap } from 'rxjs';
+import { filter, map, Observable, tap } from 'rxjs';
 
 import { IncorporateHeaderStore } from '../shared/incorporate-header/store/incorporate-header.store';
 import { CommonActionsStore } from './store/common-actions.store';
 
 @Injectable({ providedIn: 'root' })
-export class ActionGuard implements CanActivate, CanDeactivate<boolean> {
+export class ActionGuard {
   constructor(
     private readonly store: CommonActionsStore,
     private readonly incorporateHeaderStore: IncorporateHeaderStore,
@@ -27,7 +27,7 @@ export class ActionGuard implements CanActivate, CanDeactivate<boolean> {
           accountId: this.store.getState().action.requestAccountId,
         });
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 

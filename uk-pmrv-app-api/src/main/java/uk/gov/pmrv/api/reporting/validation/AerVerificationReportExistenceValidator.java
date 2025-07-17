@@ -7,8 +7,8 @@ import org.springframework.util.ObjectUtils;
 
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.reporting.domain.AerContainer;
 import uk.gov.pmrv.api.reporting.domain.AerValidationResult;
 import uk.gov.pmrv.api.reporting.domain.AerViolation;
@@ -27,7 +27,7 @@ public class AerVerificationReportExistenceValidator {
                 .getInstallationAccountInfoDTOById(accountId).getEmitterType();
 
         if(emitterType.equals(EmitterType.GHGE) && ObjectUtils.isEmpty(aerContainer.getVerificationReport())) {
-            throw new BusinessException(ErrorCode.INVALID_AER,
+            throw new BusinessException(MetsErrorCode.INVALID_AER,
                     AerValidationResult.builder().valid(false).aerViolations(List.of(
                             new AerViolation(AerVerificationReport.class.getSimpleName(),
                                     AerViolation.AerViolationMessage.NO_VERIFICATION_REPORT_FOUND))).build()

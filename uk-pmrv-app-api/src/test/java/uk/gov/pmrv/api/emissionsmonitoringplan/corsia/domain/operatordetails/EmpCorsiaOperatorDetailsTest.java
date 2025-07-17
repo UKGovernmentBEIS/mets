@@ -11,6 +11,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,9 +30,9 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.Lim
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OperatorType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OrganisationLegalStatusType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.PartnershipOrganisation;
-import uk.gov.pmrv.api.referencedata.domain.Country;
-import uk.gov.pmrv.api.referencedata.service.CountryService;
-import uk.gov.pmrv.api.referencedata.service.CountryValidator;
+import uk.gov.netz.api.referencedata.domain.Country;
+import uk.gov.netz.api.referencedata.service.CountryService;
+import uk.gov.netz.api.referencedata.service.CountryValidator;
 
 @ExtendWith(MockitoExtension.class)
 class EmpCorsiaOperatorDetailsTest {
@@ -1162,6 +1164,107 @@ class EmpCorsiaOperatorDetailsTest {
         assertEquals(1, violations.size());
     }
     
+    @Test
+    void getAttachmentIds_without_subsidiaries() {
+        UUID certificateId = UUID.randomUUID();
+        final EmpCorsiaOperatorDetails operatorDetails = createOperatorDetails(certificateId);
+
+        assertThat(operatorDetails.getAttachmentIds()).containsOnly(certificateId);
+    }
+    
+    @Test
+    void getAttachmentIds_with_subsidiaries_no_certificates() {
+        UUID certificateId = UUID.randomUUID();
+        final EmpCorsiaOperatorDetails operatorDetails = createOperatorDetails(certificateId);
+        operatorDetails.setSubsidiaryCompanyExist(Boolean.TRUE);
+        operatorDetails.setSubsidiaryCompanies(List.of(SubsidiaryCompanyCorsia.builder()
+                .operatorName("operator2")
+                .flightIdentification(FlightIdentification.builder()
+                    .flightIdentificationType(FlightIdentificationType.INTERNATIONAL_CIVIL_AVIATION_ORGANISATION)
+                    .icaoDesignators("designator")
+                    .build())
+                .airOperatingCertificate(AirOperatingCertificateCorsia.builder()
+                    .certificateExist(Boolean.FALSE)
+                    .build())
+                .companyRegistrationNumber("123456")
+                .registeredLocation(LocationOnShoreStateDTO.builder()
+                    .type(LocationType.ONSHORE_STATE)
+                    .line1("line1")
+                    .city("city")
+                    .state("state")
+                    .postcode("postcode")
+                    .country("GR")
+                    .build())
+                .flightTypes(Set.of(FlightType.SCHEDULED))
+                .activityDescription("activity description")
+            .build()));
+
+        assertThat(operatorDetails.getAttachmentIds()).containsOnly(certificateId);
+    }
+    
+    @Test
+    void getAttachmentIds_with_subsidiaries_with_certificates() {
+        UUID certificateId1 = UUID.randomUUID();
+        UUID certificateId2 = UUID.randomUUID();
+        UUID certificateId3 = UUID.randomUUID();
+        UUID certificateId4 = UUID.randomUUID();
+        final EmpCorsiaOperatorDetails operatorDetails = createOperatorDetails(certificateId1);
+        operatorDetails.setSubsidiaryCompanyExist(Boolean.TRUE);
+        operatorDetails.setSubsidiaryCompanies(List.of(SubsidiaryCompanyCorsia.builder()
+                .operatorName("operator2")
+                .flightIdentification(FlightIdentification.builder()
+                    .flightIdentificationType(FlightIdentificationType.INTERNATIONAL_CIVIL_AVIATION_ORGANISATION)
+                    .icaoDesignators("designator")
+                    .build())
+                .airOperatingCertificate(AirOperatingCertificateCorsia.builder()
+                    .certificateExist(Boolean.TRUE)
+                    .certificateNumber("certificate number")
+                    .issuingAuthority("Greece - Hellenic Civil Aviation Authority")
+                    .certificateFiles(Set.of(certificateId2))
+                    .restrictionsExist(Boolean.FALSE)
+                    .build())
+                .companyRegistrationNumber("123456")
+                .registeredLocation(LocationOnShoreStateDTO.builder()
+                    .type(LocationType.ONSHORE_STATE)
+                    .line1("line1")
+                    .city("city")
+                    .state("state")
+                    .postcode("postcode")
+                    .country("GR")
+                    .build())
+                .flightTypes(Set.of(FlightType.SCHEDULED))
+                .activityDescription("activity description")
+            .build(), 
+            SubsidiaryCompanyCorsia.builder()
+            .operatorName("operator2")
+            .flightIdentification(FlightIdentification.builder()
+                .flightIdentificationType(FlightIdentificationType.INTERNATIONAL_CIVIL_AVIATION_ORGANISATION)
+                .icaoDesignators("designator")
+                .build())
+            .airOperatingCertificate(AirOperatingCertificateCorsia.builder()
+                .certificateExist(Boolean.TRUE)
+                .certificateNumber("certificate number")
+                .issuingAuthority("Greece - Hellenic Civil Aviation Authority")
+                .certificateFiles(Set.of(certificateId3, certificateId4))
+                .restrictionsExist(Boolean.FALSE)
+                .build())
+            .companyRegistrationNumber("123456")
+            .registeredLocation(LocationOnShoreStateDTO.builder()
+                .type(LocationType.ONSHORE_STATE)
+                .line1("line1")
+                .city("city")
+                .state("state")
+                .postcode("postcode")
+                .country("GR")
+                .build())
+            .flightTypes(Set.of(FlightType.SCHEDULED))
+            .activityDescription("activity description")
+        .build()));
+
+        assertThat(operatorDetails.getAttachmentIds())
+        	.containsExactlyInAnyOrder(certificateId1, certificateId2, certificateId3, certificateId4);
+    }
+    
     private LocationOnShoreStateDTO createLocation(String line1, String line2, String city, String country, String state, String postcode, LocationType type) {
         return LocationOnShoreStateDTO.builder()
             .line1(line1)
@@ -1173,4 +1276,34 @@ class EmpCorsiaOperatorDetailsTest {
             .type(type)
             .build();
     }
+    
+    private EmpCorsiaOperatorDetails createOperatorDetails(UUID certificateId) {
+		return EmpCorsiaOperatorDetails.builder()
+                .operatorName("operator name")
+                .flightIdentification(FlightIdentification.builder()
+                    .flightIdentificationType(FlightIdentificationType.INTERNATIONAL_CIVIL_AVIATION_ORGANISATION)
+                    .icaoDesignators("BAW,SHT")
+                    .build())
+                .airOperatingCertificate(AirOperatingCertificateCorsia.builder()
+                    .certificateExist(Boolean.TRUE)
+                    .certificateNumber("certificate number")
+                    .issuingAuthority("Greece - Hellenic Civil Aviation Authority")
+                    .certificateFiles(Set.of(certificateId))
+                    .restrictionsExist(Boolean.FALSE)
+                    .build())
+                .organisationStructure(LimitedCompanyOrganisation.builder()
+                    .legalStatusType(OrganisationLegalStatusType.LIMITED_COMPANY)
+                    .registrationNumber("registration number")
+                    .organisationLocation(createLocation("line1", "line2", "city", "GR", "state", "postcode", LocationType.ONSHORE))
+                    .differentContactLocationExist(Boolean.TRUE)
+                    .differentContactLocation(createLocation("line1", "line2", "city", "GR", "state", "postcode", LocationType.ONSHORE))
+                    .build())
+                .activitiesDescription(ActivitiesDescriptionCorsia.builder()
+                    .operatorType(OperatorType.COMMERCIAL)
+                    .flightTypes(Set.of(FlightType.SCHEDULED))
+                    .activityDescription("activity description")
+                    .build())
+                .subsidiaryCompanyExist(Boolean.FALSE)
+                .build();
+	}
 }

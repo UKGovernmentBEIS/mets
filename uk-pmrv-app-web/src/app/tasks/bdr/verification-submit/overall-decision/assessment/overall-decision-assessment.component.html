@@ -1,0 +1,25 @@
+<app-bdr-task-review [breadcrumb]="true" heading="What is your assessment of this report?" caption="Overall decision">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()">
+    <div formControlName="type" govuk-radio>
+      <govuk-radio-option
+        [label]="'VERIFIED_AS_SATISFACTORY' | verificationDecisionType"
+        [value]="'VERIFIED_AS_SATISFACTORY'"></govuk-radio-option>
+      <govuk-radio-option
+        [label]="'VERIFIED_WITH_COMMENTS' | verificationDecisionType"
+        [value]="'VERIFIED_WITH_COMMENTS'">
+        <ng-container govukConditionalContent>
+          <div formControlName="reasons" [maxLength]="10000" govuk-textarea label="Your comments"></div>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [label]="'NOT_VERIFIED' | verificationDecisionType" [value]="'NOT_VERIFIED'">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="reasonsNotVerified"
+            [maxLength]="10000"
+            govuk-textarea
+            label="Explain why this report cannot be verified"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-bdr-task-review>

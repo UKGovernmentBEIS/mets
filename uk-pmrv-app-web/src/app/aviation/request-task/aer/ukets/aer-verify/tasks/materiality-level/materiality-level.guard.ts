@@ -6,7 +6,7 @@ import { map, take, tap } from 'rxjs';
 import { aerVerifyQuery } from '@aviation/request-task/aer/ukets/aer-verify/aer-verify.selector';
 import { MaterialityLevelFormProvider } from '@aviation/request-task/aer/ukets/aer-verify/tasks/materiality-level/materiality-level-form.provider';
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 
 export const canActivateMaterialityLevel: CanActivateFn = () => {
@@ -21,13 +21,13 @@ export const canActivateMaterialityLevel: CanActivateFn = () => {
       if (!verificationReport) {
         store.setPayload({
           ...payload,
-          materialityLevel: AerVerifyStoreDelegate.INITIAL_STATE.verificationReport?.materialityLevel,
+          materialityLevel: AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport?.materialityLevel,
         } as any);
       }
 
       if (!verificationReport?.materialityLevel) {
-        (store.aerVerifyDelegate as AerVerifyStoreDelegate).setMaterialityLevel(
-          AerVerifyStoreDelegate.INITIAL_STATE.verificationReport.materialityLevel,
+        (store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setMaterialityLevel(
+          AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport.materialityLevel,
         );
       }
 

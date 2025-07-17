@@ -52,7 +52,7 @@ export class BlockHourProceduresFormProvider
   }
 
   disableSpecificBurnFuelConditionally(myform: FormGroup<EmpBlockHourMethodProceduresFormModel>) {
-    const { fuelBurnCalculationTypes } = myform.value?.specificBurnFuel;
+    const { fuelBurnCalculationTypes } = myform.value?.specificBurnFuel || {};
 
     if (fuelBurnCalculationTypes?.includes('CLEAR_DISTINGUISHION')) {
       myform.controls.specificBurnFuel.controls.assignmentAndAdjustment.enable();
@@ -96,10 +96,10 @@ export class BlockHourProceduresFormProvider
       ...formValue,
       ...specificBurnFuel,
       clearDistinguishionIcaoAircraftDesignators: specificBurnFuel.clearDistinguishionIcaoAircraftDesignators
-        ? parseCsv(specificBurnFuel.clearDistinguishionIcaoAircraftDesignators)
+        ? parseCsv(specificBurnFuel.clearDistinguishionIcaoAircraftDesignators, true)
         : null,
       notClearDistinguishionIcaoAircraftDesignators: specificBurnFuel.notClearDistinguishionIcaoAircraftDesignators
-        ? parseCsv(specificBurnFuel.notClearDistinguishionIcaoAircraftDesignators)
+        ? parseCsv(specificBurnFuel.notClearDistinguishionIcaoAircraftDesignators, true)
         : null,
     } as EmpBlockHourMethodProcedures;
   }

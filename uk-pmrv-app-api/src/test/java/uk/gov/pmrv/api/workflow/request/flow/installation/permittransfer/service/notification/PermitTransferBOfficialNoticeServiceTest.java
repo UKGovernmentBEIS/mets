@@ -17,12 +17,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
 import uk.gov.pmrv.api.permit.domain.PermitType;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -96,7 +96,7 @@ class PermitTransferBOfficialNoticeServiceTest {
             .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocumentAsync(
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(
             DocumentTemplateType.PERMIT_TRANSFER_ACCEPTED, templateParams, fileName))
             .thenReturn(CompletableFuture.completedFuture(officialDocFileInfoDTO));
 
@@ -110,7 +110,7 @@ class PermitTransferBOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocumentAsync(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
             DocumentTemplateType.PERMIT_TRANSFER_ACCEPTED, templateParams, fileName);
     }
 
@@ -151,7 +151,7 @@ class PermitTransferBOfficialNoticeServiceTest {
                 .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(
+        when(documentFileGeneratorService.generateAndSaveFileDocument(
                 DocumentTemplateType.PERMIT_TRANSFER_REFUSED, templateParams, fileName))
                 .thenReturn(officialDocFileInfoDTO);
 
@@ -163,7 +163,7 @@ class PermitTransferBOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
                 DocumentTemplateType.PERMIT_TRANSFER_REFUSED, templateParams, fileName);
 
         assertThat(requestPayload.getOfficialNotice()).isEqualTo(officialDocFileInfoDTO);
@@ -206,7 +206,7 @@ class PermitTransferBOfficialNoticeServiceTest {
                 .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(
+        when(documentFileGeneratorService.generateAndSaveFileDocument(
                 DocumentTemplateType.PERMIT_TRANSFER_DEEMED_WITHDRAWN, templateParams, fileName))
                 .thenReturn(officialDocFileInfoDTO);
 
@@ -218,7 +218,7 @@ class PermitTransferBOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
                 DocumentTemplateType.PERMIT_TRANSFER_DEEMED_WITHDRAWN, templateParams, fileName);
 
         assertThat(requestPayload.getOfficialNotice()).isEqualTo(officialDocFileInfoDTO);

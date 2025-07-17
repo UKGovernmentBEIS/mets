@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service;
 
 import org.springframework.stereotype.Service;
-
 import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;

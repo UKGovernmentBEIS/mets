@@ -1,0 +1,19 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true"
+>
+  <ng-container *ngIf="connection$ | async as connection">
+    <app-page-heading size="xl">
+      Are you sure you want to delete
+      <span class="nowrap"> '{{ +connection?.connectionNo + 1 }}' ?</span>
+    </app-page-heading>
+
+    <p class="govuk-body">Any reference to this item will be removed from your application.</p>
+
+    <div class="govuk-button-group">
+      <button (click)="delete()" appPendingButton govukWarnButton type="button">Yes, delete</button>
+      <a govukLink routerLink="../..">Cancel</a>
+    </div>
+  </ng-container>
+</app-permit-task>

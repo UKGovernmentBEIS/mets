@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,26 +9,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CertMonitoringApproach } from './certMonitoringApproach';
 import { EmpAbbreviations } from './empAbbreviations';
 import { EmpAdditionalDocuments } from './empAdditionalDocuments';
 import { EmpBlockHourMethodProcedures } from './empBlockHourMethodProcedures';
 import { EmpBlockOnBlockOffMethodProcedures } from './empBlockOnBlockOffMethodProcedures';
 import { EmpCorsiaOperatorDetails } from './empCorsiaOperatorDetails';
 import { EmpDataGapsCorsia } from './empDataGapsCorsia';
-import { EmpEmissionsMonitoringApproachCorsia } from './empEmissionsMonitoringApproachCorsia';
 import { EmpEmissionSourcesCorsia } from './empEmissionSourcesCorsia';
 import { EmpFlightAndAircraftProceduresCorsia } from './empFlightAndAircraftProceduresCorsia';
 import { EmpFuelUpliftMethodProcedures } from './empFuelUpliftMethodProcedures';
 import { EmpManagementProceduresCorsia } from './empManagementProceduresCorsia';
 import { EmpMethodAProcedures } from './empMethodAProcedures';
 import { EmpMethodBProcedures } from './empMethodBProcedures';
+import { FuelMonitoringApproachCorsia } from './fuelMonitoringApproachCorsia';
 
 export interface EmissionsMonitoringPlanCorsia {
   abbreviations: EmpAbbreviations;
   additionalDocuments: EmpAdditionalDocuments;
   flightAndAircraftProcedures: EmpFlightAndAircraftProceduresCorsia;
   emissionSources: EmpEmissionSourcesCorsia;
-  emissionsMonitoringApproach: EmpEmissionsMonitoringApproachCorsia;
+  emissionsMonitoringApproach: CertMonitoringApproach | FuelMonitoringApproachCorsia;
   managementProcedures: EmpManagementProceduresCorsia;
   operatorDetails: EmpCorsiaOperatorDetails;
   methodAProcedures?: EmpMethodAProcedures;

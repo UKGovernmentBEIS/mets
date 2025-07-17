@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -11,8 +11,11 @@ import { DoalApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 @Injectable({
   providedIn: 'root',
 })
-export class SendPeerReviewGuard implements CanActivate {
-  constructor(private readonly store: CommonTasksStore, private readonly router: Router) {}
+export class SendPeerReviewGuard {
+  constructor(
+    private readonly store: CommonTasksStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return this.store.pipe(

@@ -19,7 +19,7 @@ export const methodsFormProvider = {
 
     const disabled = !state.isEditable;
 
-    const payload: AerApplicationSubmitRequestTaskPayload = state.requestTaskItem.requestTask.payload;
+    const payload = state.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload;
 
     const sourceStreamEmission = route.snapshot.paramMap.get('index')
       ? (payload.aer.monitoringApproachEmissions.CALCULATION_PFC as CalculationOfPfcEmissions)?.sourceStreamEmissions[
@@ -93,7 +93,7 @@ export const methodsFormProvider = {
             GovukValidators.required('Enter a value'),
             GovukValidators.maxDecimalsValidator(5),
             GovukValidators.positiveNumber(),
-            GovukValidators.max(100, `Enter a number between 0.00001 and 100`),
+            GovukValidators.max(100, `Enter a number between 0.00001 and 100`), // TODO replace with GovukValidators.minMaxRangeNumberValidator(0.00001, 100),
           ],
         },
       ],

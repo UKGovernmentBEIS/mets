@@ -1,15 +1,5 @@
 package uk.gov.pmrv.api.web.controller.notification;
 
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.UUID;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,18 +13,27 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.token.FileToken;
 import uk.gov.pmrv.api.notification.template.service.DocumentTemplateFileService;
-import uk.gov.pmrv.api.token.FileToken;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
+
+import java.util.UUID;
+
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class DocumentTemplateFileControllerTest {
@@ -50,16 +49,16 @@ class DocumentTemplateFileControllerTest {
     private DocumentTemplateFileService documentTemplateFileService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
         AuthorizedAspect
-            authorizedAspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+            authorizedAspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(documentTemplateFileController);
         aspectJProxyFactory.addAspect(authorizedAspect);
@@ -71,7 +70,7 @@ class DocumentTemplateFileControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(documentTemplateFileController)
             .setControllerAdvice(new ExceptionControllerAdvice())
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .build()
         ;
     }
@@ -100,12 +99,12 @@ class DocumentTemplateFileControllerTest {
     void generateGetDocumentTemplateFileToken_forbidden() throws Exception {
         Long documentTemplateId = 1L;
         UUID fileUuid = UUID.randomUUID();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "generateGetDocumentTemplateFileToken", String.valueOf(documentTemplateId));
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "generateGetDocumentTemplateFileToken", String.valueOf(documentTemplateId), null, null);
 
         mockMvc.perform(MockMvcRequestBuilders
             .get(DOCUMENT_TEMPLATE_FILES_CONTROLLER_PATH + "/" + documentTemplateId)

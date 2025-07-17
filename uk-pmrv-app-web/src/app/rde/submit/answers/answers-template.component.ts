@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, Observable, pluck } from 'rxjs';
+import { combineLatest, first, map, Observable } from 'rxjs';
 
 import { RequestActionUserInfo } from 'pmrv-api';
 
@@ -19,11 +19,17 @@ export class AnswersTemplateComponent implements OnInit {
   }>;
   operators$: Observable<string[]>;
 
-  constructor(readonly store: RdeStore, private readonly route: ActivatedRoute, private readonly router: Router) {}
+  constructor(
+    readonly store: RdeStore,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+  ) {}
 
   ngOnInit(): void {
-    this.signatory$ = this.store.pipe(pluck('rdePayload', 'signatory'));
-    this.usersInfo$ = this.store.pipe(pluck('usersInfo')) as Observable<{ [key: string]: RequestActionUserInfo }>;
+    this.signatory$ = this.store.pipe(map((state) => state?.rdePayload?.signatory));
+    this.usersInfo$ = this.store.pipe(map((state) => state?.usersInfo)) as Observable<{
+      [key: string]: RequestActionUserInfo;
+    }>;
     this.operators$ = combineLatest([this.usersInfo$, this.signatory$]).pipe(
       first(),
       map(([usersInfo, signatory]) => Object.keys(usersInfo).filter((userId) => userId !== signatory)),

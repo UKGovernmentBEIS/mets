@@ -6,9 +6,10 @@ import { map, Observable } from 'rxjs';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SourceStreamDescriptionPipe } from '@shared/pipes/source-streams-description.pipe';
 
-import { AerApplicationVerificationSubmitRequestTaskPayload, InherentCO2Emissions } from 'pmrv-api';
+import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 import { AerService } from '../../core/aer.service';
+import { getInherentInstallations } from './inherent-co2';
 
 @Component({
   selector: 'app-inherent-co2',
@@ -21,15 +22,10 @@ import { AerService } from '../../core/aer.service';
 })
 export class InherentCo2Component {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
+
   inherentInstallations$ = (
     this.aerService.getPayload() as Observable<AerApplicationVerificationSubmitRequestTaskPayload>
-  ).pipe(
-    map((payload) =>
-      (
-        payload.aer?.monitoringApproachEmissions?.['INHERENT_CO2'] as InherentCO2Emissions
-      )?.inherentReceivingTransferringInstallations.map((item) => item.inherentReceivingTransferringInstallation),
-    ),
-  );
+  ).pipe(map((payload) => getInherentInstallations(payload)));
 
   constructor(
     readonly pendingRequest: PendingRequestService,

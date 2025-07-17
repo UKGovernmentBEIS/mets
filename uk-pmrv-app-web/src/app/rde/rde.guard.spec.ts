@@ -60,13 +60,16 @@ describe('RdeGuard', () => {
           daysRemaining: 10,
           assigneeFullName: 'John Doe',
           assigneeUserId: '100',
+          assignable: true,
         },
         requestInfo: {
           id: '2',
           accountId: 3,
           type: 'PERMIT_ISSUANCE',
           competentAuthority: 'ENGLAND',
+          paymentCompleted: true,
         },
+        userAssignCapable: true,
       }),
     );
     const resetSpy = jest.spyOn(store, 'reset');
@@ -86,6 +89,10 @@ describe('RdeGuard', () => {
       isEditable: false,
       requestType: 'PERMIT_ISSUANCE',
       competentAuthority: 'ENGLAND',
+      assignable: true,
+      userAssignCapable: true,
+      allowedRequestTaskActions: [],
+      paymentCompleted: true,
     });
   });
 });

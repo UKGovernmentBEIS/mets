@@ -16,10 +16,13 @@ import { AuthService } from '../../core/services/auth.service';
     <p class="govuk-body" [ngSwitch]="errorCode">
       <ng-container *ngSwitchCase="'USER1001'">
         Please use the registered e-mail address to
-        <a [routerLink]="[]" govukLink (click)="signIn()">sign in</a> to the system.
+        <a [routerLink]="[]" govukLink (click)="signIn()">sign in</a>
+        to the system.
       </ng-container>
       <ng-container *ngSwitchDefault>
-        You need to go <a govukLink routerLink="..">back</a> and start the registration process again.
+        You need to go
+        <a govukLink routerLink="..">back</a>
+        and start the registration process again.
       </ng-container>
     </p>
   `,
@@ -42,9 +45,6 @@ export class InvalidEmailLinkComponent implements OnInit {
     let message;
 
     switch (this.errorCode) {
-      case 'USER1001':
-        message = 'The email address has already been registered';
-        break;
       case 'EMAIL1001':
         message = 'The email verification link has expired';
         break;
@@ -53,6 +53,12 @@ export class InvalidEmailLinkComponent implements OnInit {
         break;
       case 'FORM1001':
         message = 'Form validation failed';
+        break;
+      case 'USER1001':
+      case 'USER1003':
+      case 'USER1005':
+      case 'AUTHORITY1016':
+        message = 'A sign in cannot be created';
         break;
       default:
         message = 'Invalid token';

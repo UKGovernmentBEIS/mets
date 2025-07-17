@@ -12,8 +12,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
     <app-page-heading>Activity level report</app-page-heading>
     <app-activity-level-report-group
       [activityLevelReport]="activityLevelReport$ | async"
-      [documentFiles]="documentFiles$ | async"
-    ></app-activity-level-report-group>
+      [documentFiles]="documentFiles$ | async"></app-activity-level-report-group>
     <app-return-link></app-return-link>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

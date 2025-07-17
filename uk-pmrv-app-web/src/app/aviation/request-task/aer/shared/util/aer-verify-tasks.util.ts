@@ -36,7 +36,9 @@ export const aerVerifyCorsiaHeaderTaskMap: Partial<Record<AerVerifyCorsiaTaskKey
 export function getVerifierAssessmentTasks(
   isCorsia: boolean,
   safExistInVerificationReport?: boolean,
+  isReview?: boolean,
 ): TaskSection<any>[] {
+  const prefixedLink = isReview ? 'aer-review-corsia' : 'aer-verify-corsia';
   return [
     {
       title: 'Verifier assessment',
@@ -45,22 +47,22 @@ export function getVerifierAssessmentTasks(
             {
               name: 'verifierDetails',
               linkText: aerVerifyCorsiaHeaderTaskMap['verifierDetails'],
-              link: 'aer-verify-corsia/verifier-details',
+              link: `${prefixedLink}/verifier-details`,
             },
             {
               name: 'timeAllocationScope',
               linkText: aerVerifyCorsiaHeaderTaskMap['timeAllocationScope'],
-              link: 'aer-verify-corsia/time-allocation',
+              link: `${prefixedLink}/time-allocation`,
             },
             {
               name: 'generalInformation',
               linkText: aerVerifyCorsiaHeaderTaskMap['generalInformation'],
-              link: 'aer-verify-corsia/general-information',
+              link: `${prefixedLink}/general-information`,
             },
             {
               name: 'processAnalysis',
               linkText: aerVerifyCorsiaHeaderTaskMap['processAnalysis'],
-              link: 'aer-verify-corsia/process-analysis',
+              link: `${prefixedLink}/process-analysis`,
             },
           ]
         : [
@@ -84,13 +86,15 @@ export function getVerifierAssessmentTasks(
               linkText: aerVerifyHeaderTaskMap['complianceMonitoringReportingRules'],
               link: 'aer-verify/compliance-monitoring',
             },
-            safExistInVerificationReport
-              ? {
-                  name: 'emissionsReductionClaimVerification',
-                  linkText: aerVerifyHeaderTaskMap['emissionsReductionClaimVerification'],
-                  link: 'aer-verify/verify-emissions-reduction-claim',
-                }
-              : null,
+            ...(safExistInVerificationReport
+              ? [
+                  {
+                    name: 'emissionsReductionClaimVerification',
+                    linkText: aerVerifyHeaderTaskMap['emissionsReductionClaimVerification'],
+                    link: 'aer-verify/verify-emissions-reduction-claim',
+                  },
+                ]
+              : []),
             {
               name: 'overallDecision',
               linkText: aerVerifyHeaderTaskMap['overallDecision'],
@@ -101,7 +105,8 @@ export function getVerifierAssessmentTasks(
   ];
 }
 
-export function getAerVerifyCorsiaVerifiedEmissions(aer: AviationAerCorsia): TaskSection<any>[] {
+export function getAerVerifyCorsiaVerifiedEmissions(aer: AviationAerCorsia, isReview?: boolean): TaskSection<any>[] {
+  const prefixedLink = isReview ? 'aer-review-corsia' : 'aer-verify-corsia';
   return [
     {
       title: 'Verified emissions',
@@ -109,22 +114,24 @@ export function getAerVerifyCorsiaVerifiedEmissions(aer: AviationAerCorsia): Tas
         {
           name: 'opinionStatement',
           linkText: aerVerifyCorsiaHeaderTaskMap['opinionStatement'],
-          link: 'aer-verify-corsia/verify-monitoring-approach',
+          link: `${prefixedLink}/verify-monitoring-approach`,
         },
-        aer.emissionsReductionClaim.emissionsReductionClaimDetails
-          ? {
-              name: 'emissionsReductionClaimVerification',
-              linkText: aerVerifyCorsiaHeaderTaskMap['emissionsReductionClaimVerification'],
-              link: 'aer-verify-corsia/verify-emissions-reduction-claim',
-            }
-          : null,
+        ...(aer.emissionsReductionClaim.emissionsReductionClaimDetails
+          ? [
+              {
+                name: 'emissionsReductionClaimVerification',
+                linkText: aerVerifyCorsiaHeaderTaskMap['emissionsReductionClaimVerification'],
+                link: `${prefixedLink}/verify-emissions-reduction-claim`,
+              },
+            ]
+          : []),
       ],
     },
   ];
 }
 
-export function getAerVerifyVerifierFindings(isCorsia: boolean): TaskSection<any>[] {
-  const prefixedLink = isCorsia ? 'aer-verify-corsia' : 'aer-verify';
+export function getAerVerifyVerifierFindings(isCorsia: boolean, isReview?: boolean): TaskSection<any>[] {
+  const prefixedLink = isReview ? 'aer-review-corsia' : isCorsia ? 'aer-verify-corsia' : 'aer-verify';
 
   return [
     {
@@ -169,25 +176,26 @@ export function getAerVerifyVerifierFindings(isCorsia: boolean): TaskSection<any
   ];
 }
 
-export function getAerVerifyCorsiaVerifierSummary(): TaskSection<any>[] {
+export function getAerVerifyCorsiaVerifierSummary(isReview?: boolean): TaskSection<any>[] {
+  const prefixedLink = isReview ? 'aer-review-corsia' : 'aer-verify-corsia';
   return [
     {
-      title: 'Verifier Summary',
+      title: 'Verifier summary',
       tasks: [
         {
           name: 'verifiersConclusions',
           linkText: aerVerifyCorsiaHeaderTaskMap['verifiersConclusions'],
-          link: 'aer-verify-corsia/verifiers-conclusions',
+          link: `${prefixedLink}/verifiers-conclusions`,
         },
         {
           name: 'overallDecision',
           linkText: aerVerifyCorsiaHeaderTaskMap['overallDecision'],
-          link: 'aer-verify-corsia/overall-decision',
+          link: `${prefixedLink}/overall-decision`,
         },
         {
           name: 'independentReview',
           linkText: aerVerifyCorsiaHeaderTaskMap['independentReview'],
-          link: 'aer-verify-corsia/independent-review',
+          link: `${prefixedLink}/independent-review`,
         },
       ],
     },

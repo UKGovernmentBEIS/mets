@@ -2,12 +2,13 @@ package uk.gov.pmrv.api.workflow.payment.client.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.ZonedDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

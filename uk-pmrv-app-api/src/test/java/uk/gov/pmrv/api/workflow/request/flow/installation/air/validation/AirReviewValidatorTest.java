@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.OperatorAirImprovementResponse;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.OperatorAirImprovementYesResponse;
@@ -58,7 +58,7 @@ class AirReviewValidatorTest {
             () -> validator.validate(taskPayload));
 
         // Verify
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AIR_REVIEW);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AIR_REVIEW);
         assertThat(be.getData()).containsExactly(2);
     }
 }

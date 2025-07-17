@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -86,23 +86,23 @@ export class UIConfigurationService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getUIFlags(): Observable<UIPropertiesDTO>;
-  public getUIFlags(
+  public getUIConfiguration(): Observable<UIPropertiesDTO>;
+  public getUIConfiguration(
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpResponse<UIPropertiesDTO>>;
-  public getUIFlags(
+  public getUIConfiguration(
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpEvent<UIPropertiesDTO>>;
-  public getUIFlags(
+  public getUIConfiguration(
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<UIPropertiesDTO>;
-  public getUIFlags(
+  public getUIConfiguration(
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },

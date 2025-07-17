@@ -2,10 +2,10 @@ package uk.gov.pmrv.api.emissionsmonitoringplan.common.validation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanContainer;
 
 import java.util.List;

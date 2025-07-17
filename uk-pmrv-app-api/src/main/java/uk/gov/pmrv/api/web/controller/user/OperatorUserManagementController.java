@@ -17,15 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 import uk.gov.pmrv.api.user.operator.service.OperatorUserManagementService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
 
 @RestController
 @RequestMapping(path = "/v1.0/operator-users")
@@ -59,7 +58,6 @@ public class OperatorUserManagementController {
     /**
      * Updates logged in operator user.
      *
-     * @param pmrvUser {@link PmrvUser}
      * @param operatorUserDTO {@link OperatorUserDTO}
      * @return {@link OperatorUserDTO}
      */
@@ -71,9 +69,8 @@ public class OperatorUserManagementController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = OPERATOR)
     public ResponseEntity<OperatorUserDTO> updateCurrentOperatorUser(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
             @RequestBody @Valid @Parameter(description = "The modified operator user", required = true) OperatorUserDTO operatorUserDTO) {
-        operatorUserManagementService.updateOperatorUser(pmrvUser, operatorUserDTO);
+        operatorUserManagementService.updateOperatorUser(operatorUserDTO);
         return new ResponseEntity<>(operatorUserDTO, HttpStatus.OK);
     }
 

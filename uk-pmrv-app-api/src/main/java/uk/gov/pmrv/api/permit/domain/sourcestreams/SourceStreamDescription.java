@@ -17,6 +17,7 @@ public enum SourceStreamDescription {
     BLENDED_FUEL_GAS("Blended Fuel Gas"),
     CARBON_MONOXIDE("Carbon Monoxide"),
     CHARCOAL("Charcoal"),
+    CLINICAL_WASTE("Clinical Waste"),
     COAL("Coal"),
     COAL_TAR("Coal Tar"),
     COKE("Coke"),
@@ -24,6 +25,7 @@ public enum SourceStreamDescription {
     COKE_OVEN_GAS("Coke Oven Gas"),
     COKING_COAL("Coking Coal"),
     COLLIERY_METHANE("Colliery Methane"),
+    COMMERCIAL_INDUSTRIAL_WASTE("Commercial and Industrial Waste"),
     CRUDE_OIL("Crude Oil"),
     ETHANE("Ethane"),
     FUEL_GAS("Fuel Gas"),
@@ -32,6 +34,7 @@ public enum SourceStreamDescription {
     GAS_DIESEL_OIL("Gas/Diesel Oil"),
     GAS_OIL("Gas/Oil"),
     GAS_WORKS("Gas Works"),
+    HAZARDOUS_WASTE("Hazardous Waste"),
     HIGH_PRESSURE_FLARE_GAS("High Pressure Flare Gas"),
     IMPORT_FUEL_GAS("Import Fuel Gas"),
     INDUSTRIAL_WASTES("Industrial Wastes"),
@@ -77,13 +80,16 @@ public enum SourceStreamDescription {
     SLUDGE_GAS("Sludge Gas"),
     SOUR_GAS("Sour Gas"),
     SOUR_GAS_FLARE("Sour Gas Flare"),
+    SDF("SDF"),
     SSF("SSF"),
+    SRF("SRF"),
     SUB_BITUMINOUS_COAL("Sub-Bituminous Coal"),
     WASTE_OILS("Waste Oils"),
     WASTE_SOLVENTS("Waste Solvents"),
     WASTE_TYRES("Waste Tyres"),
     WHITE_SPIRIT_SBP("White Spirit & SBP"),
-    WOOD_WOOD_WASTE("Wood/Wood Waste");
+    WOOD_WOOD_WASTE("Wood/Wood Waste"),
+    VENTED_GAS("Vented Gas");
 
     private String description;
 }

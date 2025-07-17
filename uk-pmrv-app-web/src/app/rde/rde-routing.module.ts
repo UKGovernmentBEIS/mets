@@ -5,6 +5,7 @@ import { PaymentNotCompletedComponent } from '@shared/components/payment-not-com
 import { FileDownloadComponent } from '@shared/file-download/file-download.component';
 import { PaymentCompletedGuard } from '@shared/guards/payment-completed.guard';
 import { ItemActionTypePipe } from '@shared/pipes/item-action-type.pipe';
+import { TaskGuard } from '@tasks/task.guard';
 
 import { PendingRequestGuard } from '../core/guards/pending-request.guard';
 import { ConfirmationComponent as ForceDecisionConfirmationComponent } from './force-decision/confirmation/confirmation.component';
@@ -67,9 +68,22 @@ const routes: Routes = [
     children: [
       {
         path: 'responses',
-        component: ResponsesComponent,
-        data: { pageTitle: 'Determination extension response' },
-        canDeactivate: [PendingRequestGuard],
+        children: [
+          {
+            path: '',
+
+            component: ResponsesComponent,
+            data: { pageTitle: 'Determination extension response' },
+            canDeactivate: [PendingRequestGuard],
+          },
+          {
+            path: 'change-assignee',
+            canActivate: [TaskGuard],
+            canDeactivate: [TaskGuard],
+            loadChildren: () =>
+              import('../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+          },
+        ],
       },
       {
         path: 'respond-confirmation',
@@ -107,8 +121,20 @@ const routes: Routes = [
       },
       {
         path: 'manual-approval',
-        data: { pageTitle: 'Determination extension - Force decision' },
-        component: ForceDecisionComponent,
+        children: [
+          {
+            path: '',
+            data: { pageTitle: 'Determination extension - Force decision' },
+            component: ForceDecisionComponent,
+          },
+          {
+            path: 'change-assignee',
+            canActivate: [TaskGuard],
+            canDeactivate: [TaskGuard],
+            loadChildren: () =>
+              import('../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+          },
+        ],
       },
       {
         path: 'manual-approval-confirmation',

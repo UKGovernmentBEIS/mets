@@ -1,9 +1,5 @@
 package uk.gov.pmrv.api.migration.permit;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +7,11 @@ import org.springframework.boot.actuate.autoconfigure.endpoint.condition.Conditi
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @Service

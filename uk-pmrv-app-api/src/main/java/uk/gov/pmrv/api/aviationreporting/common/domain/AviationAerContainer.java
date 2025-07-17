@@ -16,7 +16,7 @@ import uk.gov.pmrv.api.aviationreporting.corsia.domain.totalemissions.AviationAe
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsContainer;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsTotalReportableEmissions;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.AviationAerUkEtsSubmittedEmissions;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
 import java.time.Year;

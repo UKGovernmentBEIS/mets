@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.account.service.CaExternalContactService;
-import uk.gov.pmrv.api.user.core.domain.model.UserInfo;
+import uk.gov.netz.api.userinfoapi.UserInfo;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.operator.event.OperatorAuthorityDeletionEvent;
+import uk.gov.netz.api.authorization.operator.event.OperatorAuthorityDeletionEvent;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.operator.OperatorRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.service.SystemMessageNotificationRequestService;
 

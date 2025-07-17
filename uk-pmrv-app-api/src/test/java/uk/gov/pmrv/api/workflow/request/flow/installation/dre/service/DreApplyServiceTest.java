@@ -18,9 +18,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
@@ -112,16 +112,16 @@ class DreApplyServiceTest {
 				.operators(operators)
 				.build();
     	
-    	PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+    	AppUser appUser = AppUser.builder().userId("user").build();
     	
-    	when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser))
+    	when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser))
     		.thenReturn(true);
 
         // Invoke
-        cut.applySubmitNotify(requestTask, decisionNotification, pmrvUser);
+        cut.applySubmitNotify(requestTask, decisionNotification, appUser);
         
         verify(dreValidatorService, times(1)).validateDre(dre);
-        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, pmrvUser);
+        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, appUser);
         assertThat(requestPayload.getDre()).isEqualTo(dre);
         assertThat(requestPayload.isSectionCompleted()).isEqualTo(true);
         assertThat(requestPayload.getDreAttachments()).containsExactlyEntriesOf(Map.of(att1, "atta1.pdf"));
@@ -165,24 +165,25 @@ class DreApplyServiceTest {
 				.operators(operators)
 				.build();
     	
-    	PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+    	AppUser appUser = AppUser.builder().userId("user").build();
     	
-    	when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser))
+    	when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser))
     		.thenReturn(false);
 
         // Invoke
-        BusinessException be = assertThrows(BusinessException.class, () -> cut.applySubmitNotify(requestTask, decisionNotification, pmrvUser));
+        BusinessException be = assertThrows(BusinessException.class, () -> cut.applySubmitNotify(requestTask, decisionNotification, appUser));
 
         assertThat(be.getErrorCode()).isEqualTo(ErrorCode.FORM_VALIDATION);
         verify(dreValidatorService, times(1)).validateDre(dre);
-        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, pmrvUser);
+        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, appUser);
     }
     
     @Test
     void requestPeerReview() {
     	String peerReviewer = "peerreviewer";
-    	
-    	UUID att1 = UUID.randomUUID();
+		AppUser appUser = AppUser.builder().userId("user").build();
+
+		UUID att1 = UUID.randomUUID();
     	Dre dre = Dre.builder()
 				.determinationReason(DreDeterminationReason.builder()
 						.operatorAskedToResubmit(true)
@@ -210,7 +211,7 @@ class DreApplyServiceTest {
         		.payload(requestTaskPayload).build();
     	
         // Invoke
-        cut.requestPeerReview(requestTask, peerReviewer);
+        cut.requestPeerReview(requestTask, peerReviewer, appUser);
         
         assertThat(requestPayload.getRegulatorPeerReviewer()).isEqualTo(peerReviewer);
         assertThat(requestPayload.getDre()).isEqualTo(dre);

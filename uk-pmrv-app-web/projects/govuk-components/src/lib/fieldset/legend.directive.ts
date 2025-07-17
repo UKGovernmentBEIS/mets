@@ -7,7 +7,10 @@ import { LegendSizeType } from './legend-size.type';
 export class LegendDirective implements AfterContentInit {
   @Input() size: LegendSizeType;
 
-  constructor(private readonly fieldset: FieldsetDirective, private readonly elementRef: ElementRef) {}
+  constructor(
+    private readonly fieldset: FieldsetDirective,
+    private readonly elementRef: ElementRef,
+  ) {}
 
   @HostBinding('class') get sizeClass() {
     switch (this.size) {

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import ReportingObligationComponent from '@aviation/request-action/aer/shared/reporting-obligation/reporting-obligation.component';
 import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
-import { AerRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
+import { AerUkEtsRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage } from '@testing';
@@ -43,7 +43,7 @@ describe('ReportingObligationComponent', () => {
         payload: {
           reportingYear: 2023,
           reportingRequired: true,
-        } as AerRequestActionPayload,
+        } as AerUkEtsRequestActionPayload,
       },
       regulatorViewer: false,
     });

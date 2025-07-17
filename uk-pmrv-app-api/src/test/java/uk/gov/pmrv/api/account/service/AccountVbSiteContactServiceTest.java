@@ -9,6 +9,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.Scope;
+import uk.gov.netz.api.authorization.rules.services.resource.VerificationBodyAuthorizationResourceService;
+import uk.gov.netz.api.authorization.rules.services.resource.VerifierAuthorityResourceService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactVbInfoDTO;
@@ -16,15 +23,8 @@ import uk.gov.pmrv.api.account.domain.dto.AccountContactVbInfoResponse;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
-import uk.gov.pmrv.api.authorization.rules.domain.Scope;
-import uk.gov.pmrv.api.authorization.rules.services.resource.VerificationBodyAuthorizationResourceService;
-import uk.gov.pmrv.api.authorization.rules.services.resource.VerifierAuthorityResourceService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -58,8 +58,8 @@ class AccountVbSiteContactServiceTest {
     void getAccountsAndVbSiteContacts() {
         final Long vbId = 1L;
         final AccountType accountType = AccountType.INSTALLATION;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.VERIFIER)
-                .authorities(List.of(PmrvAuthority.builder().verificationBodyId(vbId).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER)
+                .authorities(List.of(AppAuthority.builder().verificationBodyId(vbId).build())).build();
         List<AccountContactVbInfoDTO> contacts = List.of(
             new AccountContactVbInfoDTO(1L, "name", EmissionTradingScheme.UK_ETS_INSTALLATIONS, "userId"));
         Page<AccountContactVbInfoDTO> pagedAccounts = new PageImpl<>(contacts);
@@ -89,8 +89,8 @@ class AccountVbSiteContactServiceTest {
     void getAccountsAndVbSiteContacts_not_editable() {
         final Long vbId = 1L;
         final AccountType accountType = AccountType.INSTALLATION;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.VERIFIER)
-                .authorities(List.of(PmrvAuthority.builder().verificationBodyId(vbId).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER)
+                .authorities(List.of(AppAuthority.builder().verificationBodyId(vbId).build())).build();
         List<AccountContactVbInfoDTO> contacts = List.of(
             new AccountContactVbInfoDTO(1L, "name", EmissionTradingScheme.EU_ETS_INSTALLATIONS, "userId"));
         Page<AccountContactVbInfoDTO> pagedAccounts = new PageImpl<>(contacts);
@@ -121,8 +121,8 @@ class AccountVbSiteContactServiceTest {
     void getAccountsAndVbSiteContacts_no_contacts() {
         final Long vbId = 1L;
         final AccountType accountType = AccountType.INSTALLATION;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.VERIFIER)
-                .authorities(List.of(PmrvAuthority.builder().verificationBodyId(vbId).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER)
+                .authorities(List.of(AppAuthority.builder().verificationBodyId(vbId).build())).build();
         Page<AccountContactVbInfoDTO> pagedAccounts = new PageImpl<>(List.of());
 
         AccountContactVbInfoResponse expected = AccountContactVbInfoResponse.builder()
@@ -154,8 +154,8 @@ class AccountVbSiteContactServiceTest {
         final Long vbId = 1L;
         final AccountType accountType = AccountType.INSTALLATION;
 
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.VERIFIER)
-                .authorities(List.of(PmrvAuthority.builder().verificationBodyId(vbId).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER)
+                .authorities(List.of(AppAuthority.builder().verificationBodyId(vbId).build())).build();
         List<AccountContactDTO> vbSiteContactsUpdate = List.of(AccountContactDTO.builder().accountId(accountId).userId(newUser).build());
         Map<AccountContactType, String> accountContacts = new HashMap<>(){{ put(AccountContactType.VB_SITE, oldUser); }};
 
@@ -186,8 +186,8 @@ class AccountVbSiteContactServiceTest {
         final Long vbId = 1L;
         final AccountType accountType = AccountType.INSTALLATION;
 
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.VERIFIER)
-                .authorities(List.of(PmrvAuthority.builder().verificationBodyId(vbId).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER)
+                .authorities(List.of(AppAuthority.builder().verificationBodyId(vbId).build())).build();
         List<AccountContactDTO> vbSiteContactsUpdate = List.of(AccountContactDTO.builder().accountId(accountId).userId(newUser).build());
 
         // Mock
@@ -211,8 +211,8 @@ class AccountVbSiteContactServiceTest {
         final Long vbId = 1L;
         final AccountType accountType = AccountType.INSTALLATION;
 
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.VERIFIER)
-                .authorities(List.of(PmrvAuthority.builder().verificationBodyId(vbId).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER)
+                .authorities(List.of(AppAuthority.builder().verificationBodyId(vbId).build())).build();
         List<AccountContactDTO> vbSiteContactsUpdate = List.of(AccountContactDTO.builder().accountId(accountId).userId(newUser).build());
 
         // Mock

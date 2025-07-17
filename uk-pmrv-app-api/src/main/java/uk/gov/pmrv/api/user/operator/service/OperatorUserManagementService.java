@@ -2,11 +2,10 @@ package uk.gov.pmrv.api.user.operator.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.dto.AuthorityRoleDTO;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.dto.AuthorityRoleDTO;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.user.core.service.UserSecuritySetupService;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
 public class OperatorUserManagementService {
 
     private final OperatorUserAuthService operatorUserAuthService;
-    private final OperatorAuthorityService operatorAuthorityService;
+    private final OperatorAuthorityQueryService operatorAuthorityQueryService;
     private final UserSecuritySetupService userSecuritySetupService;
 
     /**
@@ -34,14 +33,8 @@ public class OperatorUserManagementService {
         return operatorUserAuthService.getOperatorUserById(userId);
     }
     
-    /**
-     * Updates operator user details.
-     *
-     * @param pmrvUser {@link PmrvUser}
-     * @param operatorUserDTO {@link OperatorUserDTO}
-     */
-    public void updateOperatorUser(PmrvUser pmrvUser, OperatorUserDTO operatorUserDTO) {
-        operatorUserAuthService.updateOperatorUser(pmrvUser.getUserId(), operatorUserDTO);
+    public void updateOperatorUser(OperatorUserDTO operatorUserDTO) {
+        operatorUserAuthService.updateUser( operatorUserDTO);
     }
 
     /**
@@ -55,7 +48,7 @@ public class OperatorUserManagementService {
         validateOperatorUserAuthorityToAccount(userId, accountId);
 
         // Update user
-        operatorUserAuthService.updateOperatorUser(userId, operatorUserDTO);
+        operatorUserAuthService.updateUser(operatorUserDTO);
     }
     
 	public void resetOperator2Fa(Long accountId, String userId) {
@@ -64,7 +57,7 @@ public class OperatorUserManagementService {
 	}
 
     private void validateOperatorUserAuthorityToAccount(String userId, Long accountId) {
-        List<String> operatorUserIds = operatorAuthorityService.findOperatorUserAuthorityRoleListByAccount(accountId)
+        List<String> operatorUserIds = operatorAuthorityQueryService.findOperatorUserAuthorityRoleListByAccount(accountId)
                 .stream().map(AuthorityRoleDTO::getUserId).collect(Collectors.toList());
 
         // Check if user id exists on account's users

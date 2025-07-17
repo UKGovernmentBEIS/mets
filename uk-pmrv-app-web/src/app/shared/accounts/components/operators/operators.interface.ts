@@ -12,5 +12,4 @@ export interface OperatorRecord {
   roleCode: string;
   roleName: string;
   authorityStatus: 'ACTIVE' | 'DISABLED' | 'PENDING';
-  locked: boolean;
 }

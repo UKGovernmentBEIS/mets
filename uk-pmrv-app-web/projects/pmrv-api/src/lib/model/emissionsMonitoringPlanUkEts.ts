@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -15,7 +15,6 @@ import { EmpApplicationTimeframeInfo } from './empApplicationTimeframeInfo';
 import { EmpBlockHourMethodProcedures } from './empBlockHourMethodProcedures';
 import { EmpBlockOnBlockOffMethodProcedures } from './empBlockOnBlockOffMethodProcedures';
 import { EmpDataGaps } from './empDataGaps';
-import { EmpEmissionsMonitoringApproach } from './empEmissionsMonitoringApproach';
 import { EmpEmissionSources } from './empEmissionSources';
 import { EmpEmissionsReductionClaim } from './empEmissionsReductionClaim';
 import { EmpFlightAndAircraftProcedures } from './empFlightAndAircraftProcedures';
@@ -24,6 +23,9 @@ import { EmpManagementProcedures } from './empManagementProcedures';
 import { EmpMethodAProcedures } from './empMethodAProcedures';
 import { EmpMethodBProcedures } from './empMethodBProcedures';
 import { EmpOperatorDetails } from './empOperatorDetails';
+import { FuelMonitoringApproach } from './fuelMonitoringApproach';
+import { SmallEmittersMonitoringApproach } from './smallEmittersMonitoringApproach';
+import { SupportFacilityMonitoringApproach } from './supportFacilityMonitoringApproach';
 
 export interface EmissionsMonitoringPlanUkEts {
   abbreviations: EmpAbbreviations;
@@ -32,7 +34,10 @@ export interface EmissionsMonitoringPlanUkEts {
   flightAndAircraftProcedures: EmpFlightAndAircraftProcedures;
   emissionSources: EmpEmissionSources;
   emissionsReductionClaim: EmpEmissionsReductionClaim;
-  emissionsMonitoringApproach: EmpEmissionsMonitoringApproach;
+  emissionsMonitoringApproach:
+    | FuelMonitoringApproach
+    | SmallEmittersMonitoringApproach
+    | SupportFacilityMonitoringApproach;
   managementProcedures: EmpManagementProcedures;
   operatorDetails: EmpOperatorDetails;
   methodAProcedures?: EmpMethodAProcedures;

@@ -1,36 +1,37 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, Observable, pluck, switchMap } from 'rxjs';
+import { first, map, Observable, switchMap } from 'rxjs';
 
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { PendingRequest } from '@core/interfaces/pending-request.interface';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 
 import { PermitSurrenderReviewDeterminationReject } from 'pmrv-api';
 
-import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
-import { PendingRequest } from '../../../../../core/interfaces/pending-request.interface';
 import { PermitSurrenderStore } from '../../../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-answers',
-  template: `<app-page-heading>Check your answers</app-page-heading>
+  template: `
+    <app-page-heading>Check your answers</app-page-heading>
     <app-reject-determination-summary-details
-      [rejectDetermination]="rejectDetermination$ | async"
-    ></app-reject-determination-summary-details>
+      [rejectDetermination]="rejectDetermination$ | async"></app-reject-determination-summary-details>
     <div class="govuk-button-group">
       <button appPendingButton govukButton type="button" (click)="confirm()" *ngIf="isEditable$ | async">
         Confirm and complete
       </button>
     </div>
-    <a govukLink routerLink="../../..">Return to: Permit surrender review</a> `,
+    <a govukLink routerLink="../../..">Return to: Permit surrender review</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })
 export class AnswersComponent implements PendingRequest {
   rejectDetermination$ = this.store.pipe(
-    pluck('reviewDetermination'),
+    map((state) => state?.reviewDetermination),
   ) as Observable<PermitSurrenderReviewDeterminationReject>;
-  isEditable$ = this.store.pipe(pluck('isEditable'));
+  isEditable$ = this.store.pipe(map((state) => state?.isEditable));
 
   constructor(
     readonly pendingRequest: PendingRequestService,

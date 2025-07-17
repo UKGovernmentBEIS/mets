@@ -2,15 +2,17 @@ package uk.gov.pmrv.api.account.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityStatus;
 import uk.gov.pmrv.api.account.repository.LegalEntityRepository;
 import uk.gov.pmrv.api.account.transform.LegalEntityMapper;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,17 +29,17 @@ public class LegalEntityService {
     /**
      * Returns the related legal entities for the authenticated user.
      *
-     * @param pmrvUser {@link PmrvUser}
+     * @param appUser {@link AppUser}
      * @return List of {@link LegalEntityInfoDTO}
      */
-    public List<LegalEntityInfoDTO> getUserLegalEntities(PmrvUser pmrvUser) {
+    public List<LegalEntityInfoDTO> getUserLegalEntities(AppUser appUser) {
         final List<LegalEntity> legalEntities;
-        switch (pmrvUser.getRoleType()) {
-            case REGULATOR:
+        switch (appUser.getRoleType()) {
+            case RoleTypeConstants.REGULATOR:
                 legalEntities = legalEntityRepository.findAllByStatusOrderByName(LegalEntityStatus.ACTIVE);
                 break;
-            case OPERATOR:
-                legalEntities = legalEntityRepository.findActiveLegalEntitiesByAccountsOrderByName(pmrvUser.getAccounts());
+            case RoleTypeConstants.OPERATOR:
+                legalEntities = legalEntityRepository.findActiveLegalEntitiesByAccountsOrderByName(appUser.getAccounts());
                 break;
             default:
                 legalEntities = Collections.emptyList();
@@ -57,19 +59,19 @@ public class LegalEntityService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
     }
 
-    LegalEntity getUserLegalEntityById(Long legalEntityId, PmrvUser pmrvUser) {
+    LegalEntity getUserLegalEntityById(Long legalEntityId, AppUser appUser) {
         LegalEntity legalEntity = getLegalEntityById(legalEntityId);
 
-        switch (pmrvUser.getRoleType()) {
-            case REGULATOR:
+        switch (appUser.getRoleType()) {
+            case RoleTypeConstants.REGULATOR:
                 break;
-            case OPERATOR:
-                if(!legalEntityRepository.existsLegalEntityInAnyOfAccounts(legalEntity.getId(), pmrvUser.getAccounts())) {
-                    throw new BusinessException(ErrorCode.LEGAL_ENTITY_NOT_ASSOCIATED_WITH_USER);
+            case RoleTypeConstants.OPERATOR:
+                if(!legalEntityRepository.existsLegalEntityInAnyOfAccounts(legalEntity.getId(), appUser.getAccounts())) {
+                    throw new BusinessException(MetsErrorCode.LEGAL_ENTITY_NOT_ASSOCIATED_WITH_USER);
                 }
                 break;
             default:
-                throw new BusinessException(ErrorCode.LEGAL_ENTITY_NOT_ASSOCIATED_WITH_USER);
+                throw new BusinessException(MetsErrorCode.LEGAL_ENTITY_NOT_ASSOCIATED_WITH_USER);
         }
 
         return legalEntity;
@@ -79,11 +81,11 @@ public class LegalEntityService {
      * Returns the requested legal entity associated with the user account.
      *
      * @param legalEntityId Legal entity id
-     * @param pmrvUser {@link PmrvUser}
+     * @param appUser {@link AppUser}
      * @return {@link LegalEntityDTO}
      */
-    public LegalEntityDTO getUserLegalEntityDTOById(Long legalEntityId, PmrvUser pmrvUser) {
-        LegalEntity legalEntity = getUserLegalEntityById(legalEntityId, pmrvUser);
+    public LegalEntityDTO getUserLegalEntityDTOById(Long legalEntityId, AppUser appUser) {
+        LegalEntity legalEntity = getUserLegalEntityById(legalEntityId, appUser);
         return legalEntityMapper.toLegalEntityDTO(legalEntity);
     }
 
@@ -104,19 +106,19 @@ public class LegalEntityService {
         return legalEntityRepository.save(le);
     }
 
-    public LegalEntity resolveLegalEntity(LegalEntityDTO legalEntityDTO, PmrvUser authUser) {
+    public LegalEntity resolveLegalEntity(LegalEntityDTO legalEntityDTO, AppUser authUser) {
         if(legalEntityDTO.getId() != null) {
             return getUserLegalEntityById(legalEntityDTO.getId(), authUser);
         } else {
             if (legalEntityValidationService.isExistingActiveLegalEntityName(legalEntityDTO.getName(), authUser)) {
-                throw new BusinessException(ErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
+                throw new BusinessException(MetsErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
             }
             return legalEntityRepository.findByNameAndStatus(legalEntityDTO.getName(), LegalEntityStatus.PENDING)
                     .orElseGet(() -> createLegalEntity(legalEntityDTO, LegalEntityStatus.PENDING));
         }
     }
 
-    public LegalEntity resolveAmendedLegalEntity(LegalEntityDTO newLegalEntityDTO, LegalEntity currentLegalEntity, PmrvUser authUser) {
+    public LegalEntity resolveAmendedLegalEntity(LegalEntityDTO newLegalEntityDTO, LegalEntity currentLegalEntity, AppUser authUser) {
         if (newLegalEntityDTO.getId() != null ||
                 !Objects.equals(newLegalEntityDTO.getName(), currentLegalEntity.getName())) {
             return resolveLegalEntity(newLegalEntityDTO, authUser);
@@ -132,7 +134,7 @@ public class LegalEntityService {
         }
 
         if (legalEntityValidationService.isExistingActiveLegalEntityName(latestLegalEntityDTO.getName())) {
-            throw new BusinessException(ErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
+            throw new BusinessException(MetsErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
         }
 
         // If LE status is changed from another installation account create a new one

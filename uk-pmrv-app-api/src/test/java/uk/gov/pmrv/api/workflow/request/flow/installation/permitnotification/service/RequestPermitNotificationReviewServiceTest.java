@@ -1,15 +1,15 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
@@ -32,6 +32,9 @@ class RequestPermitNotificationReviewServiceTest {
 
     @InjectMocks
     private RequestPermitNotificationReviewService service;
+
+    @Mock
+    private PermitNotificationReviewDecisionValidatorService decisionValidatorService;
 
     @Test
     void saveReviewDecision() {
@@ -85,10 +88,7 @@ class RequestPermitNotificationReviewServiceTest {
                 .type(RequestTaskType.PERMIT_NOTIFICATION_APPLICATION_REVIEW)
                 .build();
 
-        // Invoke
         service.saveReviewDecision(actionPayload, requestTask);
-
-        // Verify
         assertThat(((PermitNotificationApplicationReviewRequestTaskPayload) requestTask.getPayload()).getReviewDecision())
                 .isEqualTo(actionPayload.getReviewDecision());
     }
@@ -96,7 +96,7 @@ class RequestPermitNotificationReviewServiceTest {
     @Test
     void saveRequestPeerReviewAction() {
         String selectedPeerReview = "selectedPeerReview";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("regulator").build();
+        AppUser appUser = AppUser.builder().userId("regulator").build();
         PermitNotificationApplicationReviewRequestTaskPayload taskPayload = PermitNotificationApplicationReviewRequestTaskPayload.builder()
                 .payloadType(RequestTaskPayloadType.PERMIT_NOTIFICATION_APPLICATION_REVIEW_PAYLOAD)
                 .reviewDecision(PermitNotificationReviewDecision.builder()
@@ -125,13 +125,13 @@ class RequestPermitNotificationReviewServiceTest {
                 .build();
 
         // Invoke
-        service.saveRequestPeerReviewAction(requestTask, selectedPeerReview, pmrvUser);
+        service.saveRequestPeerReviewAction(requestTask, selectedPeerReview, appUser);
 
         // Verify
         assertThat(((PermitNotificationApplicationReviewRequestTaskPayload) requestTask.getPayload()).getReviewDecision())
                 .isEqualTo(taskPayload.getReviewDecision());
         assertThat(requestTask.getRequest().getPayload().getRegulatorReviewer())
-                .isEqualTo(pmrvUser.getUserId());
+                .isEqualTo(appUser.getUserId());
         assertThat(requestTask.getRequest().getPayload().getRegulatorPeerReviewer())
                 .isEqualTo(selectedPeerReview);
     }

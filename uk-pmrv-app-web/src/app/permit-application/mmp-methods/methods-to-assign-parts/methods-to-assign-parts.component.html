@@ -1,0 +1,33 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true"
+>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Methods to assign parts of installations and their emissions to sub-installations"
+    caption="Monitoring methodology plan"
+    submitText="Continue"
+  >
+    <p class="govuk-body">
+      Describe the methods used to assign parts of installations and their emissions to the respective
+      sub-installations. This is in line with Annex VI section 2(d) of the FAR.
+    </p>
+    <p class="govuk-body">
+      Your description should take into account the provisions set out in section 3.2.1 of Annex VII of the FAR.
+    </p>
+    <p class="govuk-body">
+      If the relevant methods are already described in sufficient detail in the sub-installations section, note this
+      here.
+    </p>
+
+    <div formControlName="assignParts" [maxLength]="10000" govuk-textarea></div>
+  </app-wizard-step>
+
+  <app-list-return-link
+    reviewGroupTitle="Monitoring methodology"
+    reviewGroupUrl="monitoring-methodology-plan"
+    [innerRoute]="true"
+  ></app-list-return-link>
+</app-permit-task>

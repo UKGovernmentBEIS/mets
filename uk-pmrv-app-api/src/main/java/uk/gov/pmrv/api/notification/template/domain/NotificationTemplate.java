@@ -34,11 +34,10 @@ import org.hibernate.Length;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.notification.template.domain.converter.NotificationTemplateNameConverter;
 import uk.gov.pmrv.api.notification.template.domain.dto.TemplateInfoDTO;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -93,7 +92,7 @@ public class NotificationTemplate {
     @NotNull
     @Convert(converter = NotificationTemplateNameConverter.class)
     @Column(name = "name")
-    private NotificationTemplateName name;
+    private PmrvNotificationTemplateName name;
 
     @NotNull
     @Column(name = "subject")
@@ -119,9 +118,8 @@ public class NotificationTemplate {
     @Column(name = "workflow")
     private String workflow;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "role_type")
-    private RoleType roleType;
+    private String roleType;
 
     @Column(name = "is_managed", columnDefinition = "boolean default false")
     private boolean managed;

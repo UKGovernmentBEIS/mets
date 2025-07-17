@@ -22,15 +22,13 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
           govukButton
           type="button"
           (click)="confirm()"
-          *ngIf="(store.isEditable$ | async) === true"
-        >
+          *ngIf="(store.isEditable$ | async) === true">
           Confirm and complete
         </button>
       </div>
       <app-list-return-link
         reviewGroupTitle="Uncertainty analysis"
-        reviewGroupUrl="uncertainty-analysis"
-      ></app-list-return-link>
+        reviewGroupUrl="uncertainty-analysis"></app-list-return-link>
     </app-permit-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

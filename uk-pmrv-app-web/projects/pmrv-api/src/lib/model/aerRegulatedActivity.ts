@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -13,7 +13,9 @@
 export interface AerRegulatedActivity {
   id: string;
   type:
+    | 'WASTE'
     | 'COMBUSTION'
+    | 'UPSTREAM_GHG_REMOVAL'
     | 'MINERAL_OIL_REFINING'
     | 'COKE_PRODUCTION'
     | 'ORE_ROASTING_OR_SINTERING'
@@ -42,7 +44,7 @@ export interface AerRegulatedActivity {
     | 'TRANSPORT_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE'
     | 'STORAGE_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE';
   capacity?: string;
-  capacityUnit:
+  capacityUnit?:
     | 'MW_TH'
     | 'KW_TH'
     | 'MVA'

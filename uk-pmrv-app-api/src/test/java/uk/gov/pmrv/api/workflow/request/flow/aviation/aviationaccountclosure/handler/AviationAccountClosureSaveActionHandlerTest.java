@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -44,13 +44,13 @@ class AviationAccountClosureSaveActionHandlerTest {
                 .build();
 
         final RequestTask requestTask = RequestTask.builder().id(1L).build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
 
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.AVIATION_ACCOUNT_CLOSURE_SAVE_APPLICATION,
-            pmrvUser,
+            appUser,
             actionPayload);
 
         verify(requestAviationAccountClosureService, times(1)).applySavePayload(actionPayload, requestTask);

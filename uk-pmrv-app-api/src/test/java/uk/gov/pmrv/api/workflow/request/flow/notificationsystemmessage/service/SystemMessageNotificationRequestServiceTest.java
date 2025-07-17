@@ -5,10 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserRoleTypeDTO;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.authorization.core.domain.dto.UserRoleTypeDTO;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.notification.message.domain.SystemMessageNotificationInfo;
 import uk.gov.pmrv.api.notification.message.domain.enumeration.SystemMessageNotificationType;
 import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
@@ -31,7 +31,7 @@ import java.util.List;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus.IN_PROGRESS;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.ACCOUNT_USERS_SETUP;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType.SYSTEM_MESSAGE_NOTIFICATION;
@@ -75,7 +75,7 @@ class SystemMessageNotificationRequestServiceTest {
                         .build();
         final UserRoleTypeDTO recipientUserRoleType = UserRoleTypeDTO.builder()
             .userId(notificationMessageRecipient)
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .build();
 
         final SystemMessageNotificationRequestPayload requestPayload = SystemMessageNotificationRequestPayload.builder()

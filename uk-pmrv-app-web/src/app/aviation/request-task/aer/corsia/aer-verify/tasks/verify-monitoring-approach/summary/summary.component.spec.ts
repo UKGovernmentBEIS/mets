@@ -102,8 +102,8 @@ describe('SummaryComponent', () => {
         `Jet kerosene (Jet A1 or Jet A) at 3.16 tCO2 per tonne of fuelJet gasoline (Jet B) at 3.10 tCO2 per tonne of fuel`,
       ],
       ['Monitoring approach', 'CERT only'],
-      ['Emissions from all flights', '1200'],
-      ['Emissions from offset flights', '1000'],
+      ['Emissions from all flights', '1200 tCO2'],
+      ['Emissions from offset flights', '1000 tCO2'],
       ['Are the reported emissions correct?', 'Yes'],
     ]);
   });

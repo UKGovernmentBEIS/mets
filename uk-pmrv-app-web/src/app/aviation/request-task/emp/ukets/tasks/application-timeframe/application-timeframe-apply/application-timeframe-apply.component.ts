@@ -20,16 +20,14 @@ import { ApplicationTimeframeFormProvider } from '../application-timeframe-form.
   imports: [GovukComponentsModule, SharedModule, ApplicationTimeframeApplyFormComponent, ReturnToLinkComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
-  styles: [
-    `
-      .govuk-heading-s span {
-        font-weight: normal;
-      }
-      .govuk-body {
-        margin-bottom: 0;
-      }
-    `,
-  ],
+  styles: `
+    .govuk-heading-s span {
+      font-weight: normal;
+    }
+    .govuk-body {
+      margin-bottom: 0;
+    }
+  `,
 })
 export class ApplicationTimeframeApplyComponent {
   form = this.formProvider.form;

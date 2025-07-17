@@ -12,9 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import uk.gov.pmrv.api.notification.alert.service.NotificationAlertService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
+import uk.gov.pmrv.api.web.orchestrator.uiconfiguration.UIPropertiesDTO;
+import uk.gov.pmrv.api.web.orchestrator.uiconfiguration.UIPropertiesResolver;
 
 @RestController
 @RequestMapping(path = "/ui-configuration")
@@ -23,17 +23,12 @@ import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 @SecurityRequirements
 public class UIConfigurationController {
 
-	private final NotificationAlertService notificationAlertService;
-    private final UIProperties uiProperties;
+	private final UIPropertiesResolver uiPropertiesResolver;
 
     @GetMapping
     @Operation(summary = "Retrieves configuration for UI features")
     @ApiResponse(responseCode = "200", description = SwaggerApiInfo.OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UIPropertiesDTO.class))})
     public ResponseEntity<UIPropertiesDTO> getUIConfiguration() {
-        return ResponseEntity.ok().body(UIPropertiesDTO.builder()
-                .features(uiProperties.getFeatures())
-                .analytics(uiProperties.getAnalytics())
-                .notificationAlerts(notificationAlertService.getNotificationAlerts())
-                .build());
+        return ResponseEntity.ok().body(uiPropertiesResolver.resolve());
     }
 }

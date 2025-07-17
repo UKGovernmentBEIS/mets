@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,11 +9,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { CalculationParameterMonitoringTier } from './calculationParameterMonitoringTier';
+import { CalculationActivityDataMonitoringTier } from './calculationActivityDataMonitoringTier';
+import { CalculationBiomassFractionMonitoringTier } from './calculationBiomassFractionMonitoringTier';
+import { CalculationCarbonContentMonitoringTier } from './calculationCarbonContentMonitoringTier';
+import { CalculationConversionFactorMonitoringTier } from './calculationConversionFactorMonitoringTier';
+import { CalculationEmissionFactorMonitoringTier } from './calculationEmissionFactorMonitoringTier';
+import { CalculationNetCalorificValueMonitoringTier } from './calculationNetCalorificValueMonitoringTier';
+import { CalculationOxidationFactorMonitoringTier } from './calculationOxidationFactorMonitoringTier';
 import { PermitOriginatedCalculationPfcParameterMonitoringTier } from './permitOriginatedCalculationPfcParameterMonitoringTier';
 
 export interface MonitoringApproachMonitoringTiers {
-  calculationSourceStreamParamMonitoringTiers?: { [key: string]: Array<CalculationParameterMonitoringTier> };
+  calculationSourceStreamParamMonitoringTiers?: {
+    [key: string]: Array<
+      | CalculationActivityDataMonitoringTier
+      | CalculationBiomassFractionMonitoringTier
+      | CalculationCarbonContentMonitoringTier
+      | CalculationConversionFactorMonitoringTier
+      | CalculationEmissionFactorMonitoringTier
+      | CalculationNetCalorificValueMonitoringTier
+      | CalculationOxidationFactorMonitoringTier
+    >;
+  };
   measurementCO2EmissionPointParamMonitoringTiers?: { [key: string]: 'TIER_1' | 'TIER_2' | 'TIER_3' | 'TIER_4' };
   measurementN2OEmissionPointParamMonitoringTiers?: { [key: string]: 'TIER_1' | 'TIER_2' | 'TIER_3' };
   calculationPfcSourceStreamParamMonitoringTiers?: {

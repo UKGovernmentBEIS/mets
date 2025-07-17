@@ -20,5 +20,8 @@ export class ConfidentialityStatementSummaryComponent {
     map((item) => !!item.exist),
   );
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly router: Router) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly router: Router,
+  ) {}
 }

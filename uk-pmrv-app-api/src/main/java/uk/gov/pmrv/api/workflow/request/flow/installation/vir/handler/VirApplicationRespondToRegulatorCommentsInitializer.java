@@ -1,8 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.vir.handler;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -14,6 +11,10 @@ import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.RegulatorImprovem
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirApplicationRespondToRegulatorCommentsRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.mapper.VirMapper;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class VirApplicationRespondToRegulatorCommentsInitializer implements InitializeRequestTaskHandler {

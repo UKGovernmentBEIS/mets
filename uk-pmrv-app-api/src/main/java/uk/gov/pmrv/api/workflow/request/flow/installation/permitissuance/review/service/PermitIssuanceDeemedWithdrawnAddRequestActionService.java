@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service;
 
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInf
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationDeemedWithdrawnRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.mapper.PermitReviewMapper;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

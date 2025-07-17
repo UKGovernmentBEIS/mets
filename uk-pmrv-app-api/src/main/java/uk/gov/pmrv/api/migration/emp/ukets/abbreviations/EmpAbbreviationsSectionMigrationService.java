@@ -1,17 +1,10 @@
 package uk.gov.pmrv.api.migration.emp.ukets.abbreviations;
 
-import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
@@ -21,15 +14,27 @@ import uk.gov.pmrv.api.migration.emp.common.abbreviations.EtsEmpAbbreviationRowM
 import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanMigrationContainer;
 import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanSectionMigrationService;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
+
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class EmpAbbreviationsSectionMigrationService implements EmissionsMonitoringPlanSectionMigrationService<EmpAbbreviations>{
 
 	private final JdbcTemplate migrationJdbcTemplate;
 	private final EmpAbbreviationsMigrationMapper empAbbreviationsMigrationMapper;
 
-    private static final String QUERY_BASE  = "with XMLNAMESPACES (\r\n"
+	public EmpAbbreviationsSectionMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+												   EmpAbbreviationsMigrationMapper empAbbreviationsMigrationMapper) {
+		this.migrationJdbcTemplate = migrationJdbcTemplate;
+		this.empAbbreviationsMigrationMapper = empAbbreviationsMigrationMapper;
+	}
+
+	private static final String QUERY_BASE  = "with XMLNAMESPACES (\r\n"
     		+ "	'urn:www-toplev-com:officeformsofd' AS fd\r\n"
     		+ "), r1 as (\r\n"
     		+ "    select F.fldEmitterID, e.fldEmitterDisplayID, F.fldFormStatusTypeID, FD.fldFormID, FD.fldMajorVersion, fd.fldMinorVersion, FD.fldDateUpdated, FD.fldFormDataID, FD.fldSubmittedXML,\r\n"

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerStoreDelegate } from '@aviation/request-task/store/delegates';
+import { AerUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { ActivatedRouteStub, mockClass } from '@testing';
@@ -80,7 +80,7 @@ describe('DataGapsListComponent', () => {
           type: 'AVIATION_AER_UKETS_APPLICATION_SUBMIT',
           payload: {
             aer: {
-              ...AerStoreDelegate.INITIAL_STATE,
+              ...AerUkEtsStoreDelegate.INITIAL_STATE,
               dataGaps,
               aggregatedEmissionsData,
             },

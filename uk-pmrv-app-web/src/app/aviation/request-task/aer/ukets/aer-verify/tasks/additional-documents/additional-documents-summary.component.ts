@@ -3,8 +3,8 @@ import { FormGroup } from '@angular/forms';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
-import { requestTaskQuery, RequestTaskStore } from "@aviation/request-task/store";
-import { getSummaryHeaderForTaskType } from "@aviation/request-task/util";
+import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
+import { getSummaryHeaderForTaskType } from '@aviation/request-task/util';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { FileUpload } from '@shared/file-input/file-upload-event';
 import { SharedModule } from '@shared/shared.module';
@@ -29,14 +29,13 @@ interface ViewModel {
       <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
 
       <h2 app-summary-header class="govuk-heading-m">
-        <span [class.govuk-visually-hidden]="!vm.hasDocuments"> Uploaded files </span>
+        <span [class.govuk-visually-hidden]="!vm.hasDocuments">Uploaded files</span>
       </h2>
 
       <app-documents-summary-template
         [data]="vm.additionalDocuments"
         [files]="vm.files"
-        [isEditable]="false"
-      ></app-documents-summary-template>
+        [isEditable]="false"></app-documents-summary-template>
     </ng-container>
     <app-return-to-link></app-return-to-link>
   `,

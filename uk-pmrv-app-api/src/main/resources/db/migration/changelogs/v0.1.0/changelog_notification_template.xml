@@ -1138,6 +1138,25 @@ This is an automatic email - please do not reply to this address.'
             <renameSequence newSequenceName="document_template_seq" oldSequenceName="notification_document_template_seq" />
         </rollback>
     </changeSet>
+    
+    <changeSet id="0_1_0_add_document_template_id_column_in_file_document" author="P35066">
+    	<preConditions onFail="MARK_RAN">
+            <not>
+	            <columnExists tableName="notification_document_template" columnName="file_document_template_id"/>
+	        </not>
+        </preConditions>
+        <comment>Applies in new deployments only so as to allow the pmrv liquibase scripts integrated smoothly with the netz-files ddl scripts</comment>
+    	<addColumn tableName="file_document">
+            <column name="document_template_id" type="bigint" remarks="The document template the file is related to">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="file_document">
+	            <column name="document_template_id"/>
+	        </dropColumn>
+        </rollback>
+    </changeSet>
 
     <changeSet id="0_1_0_reference_file_document_in_document_template_table" author="P35066">
     	<addColumn tableName="notification_document_template">
@@ -20253,4 +20272,128 @@ This is an automatic email - please do not reply to this address.'
         <rollback></rollback>
     </changeSet>
 
+    <changeSet id="0_1_0_update_emp_corsia_pdf_to_fix_issue_cert_monitoring_approach_england" author="P63979">
+        <validCheckSum>1:any</validCheckSum>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="EMP_CORSIA"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_monitoring_plan_template_METS_final.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_update_emp_corsia_pdf_to_add_additional_corsia_fuel_types_england" author="apostolouk@unisystems.gr">
+        <validCheckSum>1:any</validCheckSum>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="EMP_CORSIA"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_monitoring_plan_template_METS_final.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_rde_template_for_aviation_england" author="P70605">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="IN_RDE"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="UK ETS Request_for_time_extension_notice_20210401 AV.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_rfi_template_for_aviation_england" author="P70605">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="IN_RFI"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="P3 Request for further information notice_L25 AV.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_rde_template_for_aviation_northern_ireland" author="P70605">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="IN_RDE"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L026 P3 Request for time extension notice AV.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_rfi_template_for_aviation_northern_ireland" author="P70605">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="IN_RFI"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L025 P3 Request for further information notice AV.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_rde_template_for_aviation_scotland" author="P70605">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="IN_RDE"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L026 P3 AV Request for time extension notice AV.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_rde_template_for_aviation_wales" author="P70605">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="IN_RDE"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L026 P3 Request for time extension notice AV.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_rfi_template_for_aviation_wales" author="P70605">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="IN_RFI"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L025 P3 Request for further information notice AV.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_emp_corsia_pdf_content_fixes_england" author="P63979">
+        <validCheckSum>1:any</validCheckSum>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="EMP_CORSIA"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_monitoring_plan_template_METS_final.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_emp_corsia_pdf_amendments_and_fixes_england" author="dimopoulosc@unisystems.gr">
+        <validCheckSum>1:any</validCheckSum>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="EMP_CORSIA"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_monitoring_plan_template_METS_final.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_fix_emp_corsia_pdf_issues_england" author="dimopoulosc@unisystems.gr">
+        <validCheckSum>1:any</validCheckSum>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="EMP_CORSIA"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_monitoring_plan_template_METS_final.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
 </databaseChangeLog>

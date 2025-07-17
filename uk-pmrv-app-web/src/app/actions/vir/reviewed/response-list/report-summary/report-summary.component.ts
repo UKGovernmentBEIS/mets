@@ -13,8 +13,7 @@ import { VirService } from '../../../core/vir.service';
       <app-regulator-create-summary
         [regulatorReviewResponse]="regulatorReviewResponse$ | async"
         [isEditable]="false"
-        [isReview]="true"
-      ></app-regulator-create-summary>
+        [isReview]="true"></app-regulator-create-summary>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

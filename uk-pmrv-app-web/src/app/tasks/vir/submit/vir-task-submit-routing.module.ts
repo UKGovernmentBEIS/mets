@@ -21,6 +21,11 @@ const routes: Routes = [
         component: SubmitContainerComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'send-report',
         data: { pageTitle: 'Send report' },
         component: SendReportComponent,

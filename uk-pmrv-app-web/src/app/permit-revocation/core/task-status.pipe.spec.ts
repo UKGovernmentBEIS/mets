@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { firstValueFrom } from 'rxjs';
 
 import { mockTaskState } from '@permit-revocation/testing/mock-state';
-import moment from 'moment';
+import { addDays, format, startOfDay } from 'date-fns';
 
 import { TasksService } from 'pmrv-api';
 
@@ -16,24 +16,17 @@ describe('TaskStatusPipe', () => {
   let pipe: TaskStatusPipe;
   let store: PermitRevocationStore;
 
-  const effectiveDate = (format: string): string => {
-    const add28Days = moment().add(28, 'd');
-    const setHours = add28Days.set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-    setHours.toISOString();
-
-    const effectiveDate = moment(setHours).format(format);
-    return effectiveDate;
-  };
+  const effectiveDate = (formatStr: string): string => format(startOfDay(addDays(new Date(), 28)), formatStr);
 
   const today = (daysAdded?: number): string => {
-    return moment().add(daysAdded, 'd').format('YYYY-MM-DD');
+    return format(addDays(new Date(), daysAdded ?? 0), 'yyyy-MM-dd');
   };
 
   const validPermitRevocation = {
     reason: 'Because i have to',
     activitiesStopped: true,
     stoppedDate: today(),
-    effectiveDate: effectiveDate('YYYY-MM-DD'),
+    effectiveDate: effectiveDate('yyyy-MM-dd'),
     surrenderRequired: true,
     surrenderDate: today(),
     annualEmissionsReportRequired: true,
@@ -126,7 +119,7 @@ describe('TaskStatusPipe', () => {
       ...mockTaskState,
       permitRevocation: {
         ...validPermitRevocation,
-        effectiveDate: moment().add(27, 'd').format('YYYY-MM-DD'),
+        effectiveDate: format(addDays(new Date(), 27), 'yyyy-MM-dd'),
       },
     });
     await expect(firstValueFrom(pipe.transform('REVOCATION_APPLY'))).resolves.toEqual('needs review');
@@ -137,8 +130,8 @@ describe('TaskStatusPipe', () => {
       ...mockTaskState,
       permitRevocation: {
         ...validPermitRevocation,
-        effectiveDate: effectiveDate('YYYY-MM-DD'),
-        feeDate: effectiveDate('YYYY-MM-DD'),
+        effectiveDate: effectiveDate('yyyy-MM-dd'),
+        feeDate: effectiveDate('yyyy-MM-dd'),
       },
     });
     await expect(firstValueFrom(pipe.transform('REVOCATION_APPLY'))).resolves.toEqual('needs review');
@@ -149,8 +142,8 @@ describe('TaskStatusPipe', () => {
       ...mockTaskState,
       permitRevocation: {
         ...validPermitRevocation,
-        feeDate: moment().add(27, 'd').format('YYYY-MM-DD'),
-        effectiveDate: moment().add(27, 'd').format('YYYY-MM-DD'),
+        feeDate: format(addDays(new Date(), 27), 'yyyy-MM-dd'),
+        effectiveDate: format(addDays(new Date(), 27), 'yyyy-MM-dd'),
       },
     });
     await expect(firstValueFrom(pipe.transform('REVOCATION_APPLY'))).resolves.toEqual('needs review');

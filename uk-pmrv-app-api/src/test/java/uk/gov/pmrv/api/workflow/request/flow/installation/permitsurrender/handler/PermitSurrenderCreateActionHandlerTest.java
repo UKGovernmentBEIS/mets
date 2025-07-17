@@ -12,8 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionPayloadType;
@@ -36,16 +36,15 @@ class PermitSurrenderCreateActionHandlerTest {
     private StartProcessRequestService startProcessRequestService;
     
     @Test
-    void getType() {
-        assertThat(handler.getType()).isEqualTo(RequestCreateActionType.PERMIT_SURRENDER);
+    void getRequestCreateActionType() {
+        assertThat(handler.getRequestCreateActionType()).isEqualTo(RequestCreateActionType.PERMIT_SURRENDER);
     }
     
     @Test
     void process() {
         Long accountId = 1L;
-        RequestCreateActionType type = RequestCreateActionType.PERMIT_SURRENDER;
         RequestCreateActionEmptyPayload payload = RequestCreateActionEmptyPayload.builder().payloadType(RequestCreateActionPayloadType.EMPTY_PAYLOAD).build();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").authorities(List.of(PmrvAuthority.builder()
+        AppUser appUser = AppUser.builder().userId("user").authorities(List.of(AppAuthority.builder()
                 .accountId(accountId).build()))
                 .build();
 
@@ -54,7 +53,7 @@ class PermitSurrenderCreateActionHandlerTest {
             .accountId(accountId)
             .requestPayload(PermitSurrenderRequestPayload.builder()
                 .payloadType(RequestPayloadType.PERMIT_SURRENDER_REQUEST_PAYLOAD)
-                .operatorAssignee(pmrvUser.getUserId())
+                .operatorAssignee(appUser.getUserId())
                 .build())
             .requestMetadata(PermitSurrenderRequestMetadata.builder()
                     .type(RequestMetadataType.PERMIT_SURRENDER)
@@ -63,7 +62,7 @@ class PermitSurrenderCreateActionHandlerTest {
         
         when(startProcessRequestService.startProcess(expectedRequestParams)).thenReturn(Request.builder().id("requestId").build());
 
-        final String requestId = handler.process(accountId, type, payload, pmrvUser);
+        final String requestId = handler.process(accountId, payload, appUser);
 
         verify(startProcessRequestService, times(1)).startProcess(expectedRequestParams);
         

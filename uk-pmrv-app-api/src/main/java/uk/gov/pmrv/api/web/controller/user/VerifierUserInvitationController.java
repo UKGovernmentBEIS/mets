@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.Authorized;
 import uk.gov.pmrv.api.user.verifier.domain.AdminVerifierUserInvitationDTO;
 import uk.gov.pmrv.api.user.verifier.domain.VerifierUserInvitationDTO;
 import uk.gov.pmrv.api.user.verifier.service.VerifierUserInvitationService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
 
 /**
  * Controller for adding verifier users.
@@ -38,12 +38,13 @@ public class VerifierUserInvitationController {
     @PostMapping
     @Operation(summary = "Invite new verifier user to the verification body")
     @ApiResponse(responseCode = "204", description = SwaggerApiInfo.NO_CONTENT)
+    @ApiResponse(responseCode = "400", description = SwaggerApiInfo.INVITE_VERIFIER_USER_TO_VB_BAD_REQUEST ,content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @ApiResponse(responseCode = "404", description = SwaggerApiInfo.BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<Void> inviteVerifierUser(
-            @Parameter(hidden = true) PmrvUser currentUser,
+            @Parameter(hidden = true) AppUser currentUser,
             @RequestBody @Valid @Parameter(description = "The verifier user information", required = true)
                     VerifierUserInvitationDTO verifierUserInvitation) {
         verifierUserInvitationService.inviteVerifierUser(currentUser, verifierUserInvitation);
@@ -53,13 +54,14 @@ public class VerifierUserInvitationController {
     @PostMapping("/vb/{id}")
     @Operation(summary = "Invite new admin verifier user to the verification body")
     @ApiResponse(responseCode = "204", description = SwaggerApiInfo.NO_CONTENT)
+    @ApiResponse(responseCode = "400", description = SwaggerApiInfo.INVITE_ADMIN_VERIFIER_TO_VB_BAD_REQUEST ,content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @ApiResponse(responseCode = "404", description = SwaggerApiInfo.INVITE_ADMIN_VERIFIER_TO_VB_BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<Void> inviteVerifierAdminUserByVerificationBodyId(
             @PathVariable("id") @Parameter(description = "The verification body id") Long verificationBodyId,
-            @Parameter(hidden = true) PmrvUser currentUser,
+            @Parameter(hidden = true) AppUser currentUser,
             @RequestBody @Valid @Parameter(description = "The verifier user information", required = true)
                     AdminVerifierUserInvitationDTO adminVerifierUserInvitationDTO) {
         verifierUserInvitationService.inviteVerifierAdminUser(currentUser, adminVerifierUserInvitationDTO, verificationBodyId);

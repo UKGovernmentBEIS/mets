@@ -14,7 +14,7 @@ import { GovukValidators } from 'govuk-components';
 import { AviationAerSafPurchase } from 'pmrv-api';
 
 import {
-  aerEmissionsReductionClaimFormProvider,
+  AerEmissionsReductionClaimFormProvider,
   AviationAerSafPurchaseFormModel,
   SustainabilityCriteriaEvidenceType,
 } from '../emissions-reduction-claim-form.provider';
@@ -28,7 +28,7 @@ export class aerEmissionsReductionClaimBatchItemFormProvider
   private requestTaskFileService = inject(RequestTaskFileService);
   private store = inject(RequestTaskStore);
   private route = inject(ActivatedRoute);
-  private parentFormProvider = inject<aerEmissionsReductionClaimFormProvider>(TASK_FORM_PROVIDER);
+  private parentFormProvider = inject<AerEmissionsReductionClaimFormProvider>(TASK_FORM_PROVIDER);
 
   private destroy$ = new Subject<void>();
 

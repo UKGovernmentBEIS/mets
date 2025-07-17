@@ -1,0 +1,148 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    [heading]="'Calculation of historical activity levels for aromatics'"
+    [caption]="'Aromatics'"
+    submitText="Continue">
+    <div class="govuk-!-width-two-thirds">
+      <h2 class="govuk-heading-m">Select the relevant CO2 weighted tonne (CWT) functions for this sub-installation</h2>
+      <div class="govuk-caption-m">
+        For the definition and boundaries of each CWT function please see Annex II point 1 of the FAR.
+      </div>
+
+      <div app-multi-select formControlName="relevantCWTFunctions">
+        <div
+          *ngFor="let cwtFunction of relevantCWTFunctions | calculationAromaticsRelevantCWTFunctions"
+          [itemValue]="cwtFunction.key"
+          [label]="cwtFunction.description"
+          app-multi-select-item
+          itemName="relevantCWTFunctions"></div>
+      </div>
+
+      @if (form.get('relevantCWTFunctions').value !== null && form.get('relevantCWTFunctions').value?.length > 0) {
+        <h2 class="govuk-heading-m">Data sources for the quantities of supplemental feed</h2>
+
+        <p class="govuk-caption-m">
+          Add the data sources used for the quantities of the supplemental feed in line with section 4.4 of Annex VII of
+          the FAR.
+        </p>
+
+        <div formArrayName="dataSources" *ngIf="dataSourcesFormArray">
+          <fieldset
+            *ngFor="let dataSource of dataSourcesFormArray?.controls; index as i"
+            [formGroupName]="i"
+            govukFieldset
+            id="dataSource-def-{{ i }}">
+            <legend govukLegend>Data source {{ i + 1 }}</legend>
+            <button
+              (click)="dataSourcesFormArray.removeAt(i)"
+              *ngIf="dataSourcesFormArray.length > 1"
+              appAddAnother
+              govukSecondaryButton
+              type="button"
+              #removeButton>
+              Remove
+            </button>
+
+            <div
+              [ngClass]="{
+                'govuk-form-group--error':
+                  dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async,
+              }">
+              <div
+                *ngIf="
+                  dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async
+                "
+                [ngClass]="{
+                  'govuk-error-message':
+                    dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject
+                    | async,
+                }">
+                {{ dataSource?.errors?.atLeastOneRequired }}
+              </div>
+
+              <div [id]="'l.dataSources.' + i">
+                <ng-container
+                  *ngFor="let cwtFunction of relevantCWTFunctions | calculationAromaticsRelevantCWTFunctions">
+                  @if (form.get('relevantCWTFunctions').value?.includes(cwtFunction['key'])) {
+                    <div class="govuk-label">{{ cwtFunction['description'] }}</div>
+                    <div class="govuk-caption-m govuk-!-padding-bottom-1">
+                      Basis (kt/a): {{ cwtFunction['basis'] | specialProductsBasisDescription }}, CWT factor:
+                      {{ cwtFunction['cwtFactor'] | number: '1.2-2' }}
+                    </div>
+                    <div [formControlName]="cwtFunction['key']" govuk-select widthClass="govuk-!-width-full">
+                      @if (i === 0) {
+                        <option [value]="''">Select an option</option>
+                      } @else {
+                        <option [value]="''">Select an option if relevant</option>
+                      }
+                      <option *ngFor="let dataSource44Type of dataSource44Types" [value]="dataSource44Type">
+                        {{ dataSource44Type | productBenchmark44DataSource }}
+                      </option>
+                    </div>
+                  }
+                </ng-container>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <button
+          (click)="addDataSource()"
+          govukSecondaryButton
+          type="button"
+          *ngIf="dataSourcesFormArray?.controls.length < 6">
+          Add a data source
+        </button>
+      }
+
+      <h2 class="govuk-heading-m">Description of methodology applied for each data source</h2>
+      <app-include-answer-details></app-include-answer-details>
+      <div formControlName="methodologyAppliedDescription" govuk-textarea [maxLength]="10000" rows="10"></div>
+
+      <div formGroupName="hierarchicalOrder">
+        <div
+          formControlName="followed"
+          govuk-radio
+          legend="Has the hierarchical order been followed?"
+          hint="Select yes if the data source with the highest rank within the hierarchy has been used, as set out in section 4 of Annex VII of the FAR."
+          [legendSize]="'medium'">
+          <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+          <govuk-radio-option [value]="false" label="No">
+            <ng-container govukConditionalContent>
+              <div
+                formControlName="notFollowingHierarchicalOrderReason"
+                govuk-radio
+                legend="Reason for not following the hierarchy">
+                <govuk-radio-option
+                  [value]="'OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY'"
+                  label="Other data sources lead to lower uncertainty according to the simplified uncertainty assessment in line with Article 7(2) of the FAR"></govuk-radio-option>
+                <govuk-radio-option
+                  [value]="'USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE'"
+                  label="Use of better data sources is technically infeasible"></govuk-radio-option>
+                <govuk-radio-option
+                  [value]="'USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS'"
+                  label="Use of better data sources would incur unreasonable costs"></govuk-radio-option>
+              </div>
+              <div
+                formControlName="notFollowingHierarchicalOrderDescription"
+                label="Provide more details on any deviation from the hierarchy"
+                govuk-textarea
+                [maxLength]="10000"
+                rows="10"></div>
+            </ng-container>
+          </govuk-radio-option>
+        </div>
+      </div>
+
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload supporting files (optional)"
+        formControlName="supportingFiles"
+        listTitle="Uploaded files"></app-multiple-file-input>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+</app-permit-task>

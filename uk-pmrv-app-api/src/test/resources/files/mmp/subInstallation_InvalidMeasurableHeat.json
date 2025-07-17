@@ -1,0 +1,54 @@
+{
+  "subInstallationNo": "1",
+  "subInstallationType": "PROCESS_EMISSIONS_CL",
+  "description": "sample_description",
+  "annualLevel": {
+    "annualLevelType": "ACTIVITY_PROCESS",
+    "methodologyAppliedDescription": "desc",
+    "hierarchicalOrder": {
+      "followed": true
+    },
+    "trackingMethodologyDescription": "desc",
+    "supportingFiles": []
+  },
+  "importedMeasurableHeatFlow": {
+    "exist": false
+  },
+  "directlyAttributableEmissions": {
+    "directlyAttributableEmissionsType": "FALLBACK_APPROACH",
+    "attribution": "a",
+    "supportingFiles": []
+  },
+  "fuelInputAndRelevantEmissionFactor": {
+    "fuelInputAndRelevantEmissionFactorType": "PRODUCT_BENCHMARK",
+    "exist": false,
+    "dataSources": null
+  },
+  "importedExportedMeasurableHeat": {
+    "fuelBurnCalculationTypes": [
+      "NO_MEASURABLE_HEAT"
+    ],
+    "dataSources": []
+  },
+  "wasteGasBalance": {
+    "wasteGasActivities": [
+      "NO_WASTE_GAS_ACTIVITIES"
+    ],
+    "dataSources": []
+  },
+  "measurableHeat" : {
+    "measurableHeatProduced": {
+      "dataSources": [
+        {
+          "dataSourceNo": "0",
+          "heatProduced": "LEGAL_METROLOGICAL_CONTROL_READING"
+        }
+      ],
+      "methodologyAppliedDescription": "desc",
+      "hierarchicalOrder": {
+        "followed": true
+      },
+      "supportingFiles": []
+    }
+  }
+}

@@ -1,13 +1,11 @@
 package uk.gov.pmrv.api.permit.domain.additionaldocuments;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.permit.domain.PermitSection;
 
 import java.util.Set;

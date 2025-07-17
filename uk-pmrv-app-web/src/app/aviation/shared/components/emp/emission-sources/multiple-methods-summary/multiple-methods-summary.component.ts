@@ -15,9 +15,9 @@ import { GovukComponentsModule } from 'govuk-components';
         <dt govukSummaryListRowKey>Reason for using more than one method to measure fuel consumption</dt>
         <dd govukSummaryListRowValue class="pre-wrap">{{ multipleMethodsExplanation }}</dd>
         <dd govukSummaryListRowActions>
-          <a govukLink *ngIf="editable" [routerLink]="['../multiple-methods']" [queryParams]="{ change: 'true' }"
-            >Change</a
-          >
+          <a govukLink *ngIf="editable" [routerLink]="['../multiple-methods']" [queryParams]="{ change: 'true' }">
+            Change
+          </a>
         </dd>
       </div>
     </dl>

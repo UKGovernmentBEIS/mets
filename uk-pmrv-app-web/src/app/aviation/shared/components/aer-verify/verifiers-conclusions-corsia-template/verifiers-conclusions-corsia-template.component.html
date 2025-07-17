@@ -1,13 +1,13 @@
 <dl govuk-summary-list>
   <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>Data quality and materiality</dt>
+    <dt govukSummaryListRowKey>Conclusions on data quality</dt>
     <dd class="pre-wrap" govukSummaryListRowValue>{{ data.dataQualityMateriality }}</dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
       <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
     </dd>
   </div>
   <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>What is the materiality threshold for this operator?</dt>
+    <dt govukSummaryListRowKey>Materiality threshold</dt>
     <dd govukSummaryListRowValue>{{ data.materialityThresholdType | materialityThresholdType }}</dd>
     <dd govukSummaryListRowActions *ngIf="isEditable">
       <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>

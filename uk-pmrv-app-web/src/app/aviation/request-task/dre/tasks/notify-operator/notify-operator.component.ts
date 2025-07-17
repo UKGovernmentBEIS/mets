@@ -4,17 +4,21 @@ import { ActivatedRoute, RouterLinkWithHref } from '@angular/router';
 import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
+import { DocumentFilenameAndDocumentType } from '@shared/interfaces/previewDocumentFilenameAndDocumentType';
 import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
 
 import { AviationAccountViewService, RequestInfoDTO } from 'pmrv-api';
 
+import { getPreviewDocumentsInfoDre } from '../../util/previewDocuments-dre.util';
+
 interface ViewModel {
   taskId: number;
   accountId: number;
   hasLocation: boolean;
   referenceCode: string;
+  previewDocuments: DocumentFilenameAndDocumentType[];
 }
 
 @Component({
@@ -38,19 +42,15 @@ export class DreNotifyOperatorComponent {
           accountId,
           hasLocation: !!(account && account?.aviationAccount?.location),
           referenceCode: requestInfo.id,
+          previewDocuments: getPreviewDocumentsInfoDre('AVIATION_DRE_UKETS_SUBMIT_NOTIFY_OPERATOR'),
         })),
       ),
     ),
   );
 
-  readonly isForSubmission$ = this.requestStore.pipe(
-    requestTaskQuery.selectRelatedActions,
-    map((relatedActions) => relatedActions.includes('AVIATION_DRE_UKETS_SUBMIT_NOTIFY_OPERATOR')),
-  );
-
   constructor(
     private readonly route: ActivatedRoute,
-    private requestStore: RequestTaskStore,
+    private readonly requestStore: RequestTaskStore,
     private readonly accountViewService: AviationAccountViewService,
   ) {}
 }

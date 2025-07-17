@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,14 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AuthorityResponse } from './authorityResponse';
+import { GrantAuthorityResponse } from './grantAuthorityResponse';
 import { PreliminaryAllocation } from './preliminaryAllocation';
+import { RejectAuthorityResponse } from './rejectAuthorityResponse';
 import { RequestTaskPayload } from './requestTaskPayload';
 
 export interface NerAuthorityResponseRequestTaskPayload extends RequestTaskPayload {
   originalPreliminaryAllocations?: Array<PreliminaryAllocation>;
   submittedToAuthorityDate: string;
-  authorityResponse: AuthorityResponse;
+  authorityResponse: GrantAuthorityResponse | RejectAuthorityResponse;
   nerSectionsCompleted?: { [key: string]: boolean };
   nerAttachments?: { [key: string]: string };
 }

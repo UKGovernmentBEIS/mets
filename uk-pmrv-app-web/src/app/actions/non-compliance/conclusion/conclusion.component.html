@@ -52,6 +52,6 @@
         </div>
       </dl>
     </ng-container>
-    <a govukLink routerLink="../../../..">Return to: Non-compliance</a>
+    <a govukLink [routerLink]="(isAviation$ | async) ? '../..' : '../../../..'">Return to: Non-compliance</a>
   </div>
 </div>

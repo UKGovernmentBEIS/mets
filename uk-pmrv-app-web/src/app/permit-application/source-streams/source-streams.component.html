@@ -12,25 +12,10 @@
         You have added {{ sourceStreams.length }} source {{ sourceStreams.length > 1 ? 'streams' : 'stream' }}
       </h2>
 
-      <ng-container *ngFor="let sourceStream of sourceStreams">
-        <dl appGroupedSummaryList govuk-summary-list>
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Source stream</dt>
-            <dd govukSummaryListRowValue>
-              {{ sourceStream.reference }}
-              {{ sourceStream | sourceStreamDescription }}
-            </dd>
-            <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
-              <a [routerLink]="sourceStream.id" govukLink>Change</a> |
-              <a [routerLink]="['delete', sourceStream.id]" govukLink>Delete</a>
-            </dd>
-          </div>
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Type</dt>
-            <dd govukSummaryListRowValue>{{ sourceStream.type | sourceStreamType }}</dd>
-          </div>
-        </dl>
-      </ng-container>
+      <app-source-streams-table
+        [data]="'sourceStreams' | task | async"
+        [isEditable]="store.isEditable$ | async"
+      ></app-source-streams-table>
 
       <ng-container *ngIf="(store.isEditable$ | async) === true">
         <button govukSecondaryButton routerLink="add" type="button">Add another source stream</button>

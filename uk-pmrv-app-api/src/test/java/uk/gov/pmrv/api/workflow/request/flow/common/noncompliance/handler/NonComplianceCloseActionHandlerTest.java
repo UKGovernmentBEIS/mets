@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -49,11 +49,11 @@ class NonComplianceCloseActionHandlerTest {
             .build();
         final NonComplianceCloseApplicationRequestTaskActionPayload taskActionPayload =
             NonComplianceCloseApplicationRequestTaskActionPayload.builder().build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        handler.process(requestTaskId, RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION, pmrvUser, taskActionPayload);
+        handler.process(requestTaskId, RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION, appUser, taskActionPayload);
         
         verify(applyService, times(1)).applyCloseAction(requestTask, taskActionPayload);
         verify(workflowService, times(1)).completeTask(

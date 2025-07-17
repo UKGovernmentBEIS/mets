@@ -16,7 +16,7 @@ import { catchNotFoundRequest, ErrorCode } from '../../../../error/not-found-err
   selector: 'app-permit-notification-follow-up-recall-from-amends',
   template: `
     <div *ngIf="(isRecallSubmitted$ | async) === false; else confirmationTemplate">
-      <app-page-heading size="xl"> Are you sure you want to recall your response ? </app-page-heading>
+      <app-page-heading size="xl">Are you sure you want to recall your response ?</app-page-heading>
       <div class="govuk-button-group">
         <button type="button" appPendingButton (click)="recall()" govukWarnButton>Yes, Recall your response</button>
       </div>

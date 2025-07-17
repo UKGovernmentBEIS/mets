@@ -1,5 +1,7 @@
 package uk.gov.pmrv.api.account.domain.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -8,9 +10,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.account.domain.dto.validation.Latitude;
 import uk.gov.pmrv.api.account.domain.dto.validation.Longitude;
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * The Location OffShore DTO type of address.

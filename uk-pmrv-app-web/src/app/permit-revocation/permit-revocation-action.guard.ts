@@ -1,17 +1,16 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
-import { mapTo, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 
 import { PermitRevocationState } from '@permit-revocation/store/permit-revocation.state';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
+import { IncorporateHeaderStore } from '@shared/incorporate-header/store/incorporate-header.store';
 
 import { RequestActionsService } from 'pmrv-api';
 
-import { IncorporateHeaderStore } from '../shared/incorporate-header/store/incorporate-header.store';
-
 @Injectable({ providedIn: 'root' })
-export class PermitRevocationActionGuard implements CanActivate {
+export class PermitRevocationActionGuard {
   constructor(
     private readonly store: PermitRevocationStore,
     private readonly incorporateHeaderStore: IncorporateHeaderStore,
@@ -43,7 +42,7 @@ export class PermitRevocationActionGuard implements CanActivate {
           accountId: requestAction.requestAccountId,
         });
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 

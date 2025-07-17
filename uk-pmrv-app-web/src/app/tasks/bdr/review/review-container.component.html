@@ -1,0 +1,126 @@
+<ng-container *ngIf="requestTaskType() as requestTaskType">
+  <ng-container *ngIf="requestTaskType === 'BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT'">
+    <app-base-task-container-component
+      [header]="title()"
+      [customContentTemplate]="customContentTemplate"
+      expectedTaskType="BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT"
+      [notification]="notification"
+      [daysRemaining]="daysRemaining()"></app-base-task-container-component>
+  </ng-container>
+
+  <ng-container *ngIf="requestTaskType === 'BDR_WAIT_FOR_AMENDS'">
+    <app-base-task-container-component
+      [header]="title()"
+      [customContentTemplate]="customContentTemplate"
+      expectedTaskType="BDR_WAIT_FOR_AMENDS"></app-base-task-container-component>
+  </ng-container>
+
+  <ng-container *ngIf="requestTaskType === 'BDR_WAIT_FOR_PEER_REVIEW'">
+    <app-base-task-container-component
+      [header]="title()"
+      [customContentTemplate]="customContentTemplate"
+      expectedTaskType="BDR_WAIT_FOR_PEER_REVIEW"></app-base-task-container-component>
+  </ng-container>
+
+  <ng-container *ngIf="requestTaskType === 'BDR_APPLICATION_PEER_REVIEW'">
+    <app-base-task-container-component
+      [header]="title()"
+      [customContentTemplate]="customContentTemplate"
+      expectedTaskType="BDR_APPLICATION_PEER_REVIEW"></app-base-task-container-component>
+  </ng-container>
+
+  <ng-template #customContentTemplate>
+    @switch (requestTaskType) {
+      @case ('BDR_WAIT_FOR_AMENDS') {
+        <govuk-warning-text>You cannot edit the report as the operator is due to amend it</govuk-warning-text>
+      }
+
+      @case ('BDR_WAIT_FOR_PEER_REVIEW') {
+        <govuk-warning-text>Waiting for peer review, you cannot make any changes</govuk-warning-text>
+      }
+
+      @case ('BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT') {
+        <div class="govuk-button-group">
+          <button
+            *ngIf="allowCompleteReview$ | async"
+            (click)="completeReview()"
+            govukButton
+            title="Complete"
+            type="button">
+            Complete
+          </button>
+          <button
+            *ngIf="allowReturnForAmends$ | async"
+            (click)="sendReturnForAmends()"
+            govukButton
+            title="Return for amendments"
+            type="button">
+            Return for amendments
+          </button>
+          <button
+            *ngIf="allowSendForPeerReview$ | async"
+            (click)="sendForPeerReview()"
+            govukButton
+            title="Send for peer review"
+            type="button">
+            Send for peer review
+          </button>
+        </div>
+      }
+
+      @case ('BDR_APPLICATION_PEER_REVIEW') {
+        <div class="govuk-button-group">
+          <button
+            *ngIf="allowPeerReviewDecision$ | async"
+            (click)="peerReviewDecision()"
+            govukButton
+            title="Peer review decision"
+            type="button">
+            Peer review decision
+          </button>
+        </div>
+      }
+    }
+
+    <ng-container *ngIf="baseUrl() as baseUrl">
+      <ul class="app-task-list">
+        <li app-task-section title="Baseline data report details">
+          <ul app-task-item-list>
+            <li
+              app-task-item
+              [link]="baseUrl + 'baseline'"
+              [linkText]="'Baseline data report and details'"
+              [status]="'BDR' | taskStatus | async"></li>
+          </ul>
+        </li>
+
+        <ng-container *ngIf="hasVerificationReport()">
+          <li app-task-section title="Verification opinion statement">
+            <ul app-task-item-list>
+              <li
+                app-task-item
+                [link]="baseUrl + 'opinion-statement'"
+                linkText="BDR verification opinion statement"
+                [status]="'OPINION_STATEMENT' | taskStatus | async"></li>
+              <li
+                app-task-item
+                [link]="baseUrl + 'overall-decision'"
+                linkText="Overall decision"
+                [status]="'OVERALL_DECISION' | taskStatus | async"></li>
+            </ul>
+          </li>
+        </ng-container>
+
+        <li app-task-section title="Outcome of regulator review">
+          <ul app-task-item-list>
+            <li
+              app-task-item
+              [link]="sectionsCompleted() ? baseUrl + 'outcome' : null"
+              linkText="Outcome of regulator review"
+              [status]="'outcome' | taskStatus | async"></li>
+          </ul>
+        </li>
+      </ul>
+    </ng-container>
+  </ng-template>
+</ng-container>

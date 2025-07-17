@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -41,12 +41,12 @@ class WithholdingOfAllowanceWithdrawalCloseActionHandlerTest {
     void process() {
         Long requestTaskId = 123L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_CLOSE_APPLICATION;
-        PmrvUser pmrvUser = mock(PmrvUser.class);
+        AppUser appUser = mock(AppUser.class);
         WithholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload taskActionPayload = mock(WithholdingOfAllowancesWithdrawalCloseApplicationRequestTaskActionPayload.class);
         RequestTask requestTask = mock(RequestTask.class);
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        handler.process(requestTaskId, requestTaskActionType, pmrvUser, taskActionPayload);
+        handler.process(requestTaskId, requestTaskActionType, appUser, taskActionPayload);
 
         verify(withholdingOfAllowancesWithdrawalService).applyCloseAction(requestTask, taskActionPayload);
         verify(workflowService).completeTask(

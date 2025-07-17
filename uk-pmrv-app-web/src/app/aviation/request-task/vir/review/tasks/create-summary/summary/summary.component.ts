@@ -30,8 +30,7 @@ interface ViewModel {
       <app-regulator-create-summary
         [regulatorReviewResponse]="vm.regulatorReviewResponse"
         [isEditable]="vm.isEditable"
-        [queryParams]="{ change: true }"
-      ></app-regulator-create-summary>
+        [queryParams]="{ change: true }"></app-regulator-create-summary>
       <div class="govuk-button-group">
         <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
           Confirm and complete

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
@@ -35,14 +35,14 @@ class WithholdingOfAllowancesApplySaveActionHandlerTest {
     void process_shouldCallApplySavePayload() {
         Long requestTaskId = 123L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.WITHHOLDING_OF_ALLOWANCES_SAVE_APPLICATION;
-        PmrvUser pmrvUser = mock(PmrvUser.class);
+        AppUser appUser = mock(AppUser.class);
         WithholdingOfAllowancesSaveApplicationRequestTaskActionPayload actionPayload =
             mock(WithholdingOfAllowancesSaveApplicationRequestTaskActionPayload.class);
         RequestTask requestTask = mock(RequestTask.class);
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        actionHandler.process(requestTaskId, requestTaskActionType, pmrvUser, actionPayload);
+        actionHandler.process(requestTaskId, requestTaskActionType, appUser, actionPayload);
 
         verify(withHoldingOfAllowancesService).applySavePayload(actionPayload, requestTask);
     }

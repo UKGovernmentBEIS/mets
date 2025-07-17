@@ -24,6 +24,7 @@ import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -45,11 +46,12 @@ public class AviationAerCorsiaSubmittedEmissionsCalculationService implements Av
     @Override
     public AviationAerCorsiaSubmittedEmissions calculateSubmittedEmissions(AviationAerCorsiaContainer aerContainer) {
         AviationAerCorsia aer = aerContainer.getAer();
-        AviationAerCorsiaEmissionsCalculationDTO emissionsCalculationDTO = AviationAerCorsiaEmissionsCalculationDTO.builder()
+        AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO emissionsCalculationDTO = AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO.builder()
                 .aggregatedEmissionsData(aer.getAggregatedEmissionsData())
                 .emissionsReductionClaim(aer.getEmissionsReductionClaim().getEmissionsReductionClaimDetails() != null ?
                         aer.getEmissionsReductionClaim().getEmissionsReductionClaimDetails().getTotalEmissions() :
                         BigDecimal.ZERO)
+                .year(aerContainer.getReportingYear())
                 .build();
         AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO flightsEmissionsCalculationDTO =
                 AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO.builder()
@@ -59,16 +61,17 @@ public class AviationAerCorsiaSubmittedEmissionsCalculationService implements Av
                         .build();
 
         return AviationAerCorsiaSubmittedEmissions.builder()
-                .totalEmissions(calculateTotalSubmittedEmissions(aerContainer.getAer()))
+                .totalEmissions(calculateTotalSubmittedEmissions(aerContainer.getAer(), aerContainer.getReportingYear()))
                 .aerodromePairsTotalEmissions(calculateAerodromePairsTotalEmissions(emissionsCalculationDTO))
                 .standardFuelsTotalEmissions(calculateStandardFuelsTotalEmissions(emissionsCalculationDTO))
                 .flightsEmissions(calculateInternationalFlightsEmissions(flightsEmissionsCalculationDTO))
                 .build();
     }
 
-    public AviationAerCorsiaTotalEmissions calculateTotalSubmittedEmissions(AviationAerCorsia aer) {
-        AviationAerCorsiaEmissionsCalculationDTO calculationDTO = AviationAerCorsiaEmissionsCalculationDTO.builder()
-            .aggregatedEmissionsData(aer.getAggregatedEmissionsData())
+    public AviationAerCorsiaTotalEmissions calculateTotalSubmittedEmissions(AviationAerCorsia aer, Year yearOfReport) {
+        AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO calculationDTO = AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO.builder()
+                .year(yearOfReport)
+                .aggregatedEmissionsData(aer.getAggregatedEmissionsData())
             .emissionsReductionClaim(aer.getEmissionsReductionClaim().getEmissionsReductionClaimDetails() != null ?
                 aer.getEmissionsReductionClaim().getEmissionsReductionClaimDetails().getTotalEmissions() :
                 BigDecimal.ZERO)
@@ -77,7 +80,7 @@ public class AviationAerCorsiaSubmittedEmissionsCalculationService implements Av
         return calculateTotalEmissions(calculationDTO);
     }
 
-    public AviationAerCorsiaTotalEmissions calculateTotalEmissions(AviationAerCorsiaEmissionsCalculationDTO
+    public AviationAerCorsiaTotalEmissions calculateTotalEmissions(AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO
                                                                        emissionsCalculationDTO) {
 
         final Set<AviationAerCorsiaAggregatedEmissionDataDetails> aggregatedEmissionDataDetails =
@@ -87,7 +90,7 @@ public class AviationAerCorsiaSubmittedEmissionsCalculationService implements Av
         final BigDecimal totalEmissions = calculateTotalEmissions(aggregatedEmissionDataDetails);
 
         final Set<AviationAerCorsiaAggregatedEmissionDataDetails> offsettingAggregatedEmissionDataDetails =
-            findOffsettingFlights(aggregatedEmissionDataDetails);
+            findOffsettingFlights(aggregatedEmissionDataDetails, emissionsCalculationDTO.getYear());
         final Integer offsettingTotalFlights = calculateTotalFlights(offsettingAggregatedEmissionDataDetails);
         final BigDecimal offsettingTotalEmissions = calculateTotalEmissions(offsettingAggregatedEmissionDataDetails);
 
@@ -110,7 +113,7 @@ public class AviationAerCorsiaSubmittedEmissionsCalculationService implements Av
 
     }
 
-    public List<AviationAerCorsiaAerodromePairsTotalEmissions> calculateAerodromePairsTotalEmissions(AviationAerCorsiaEmissionsCalculationDTO
+    public List<AviationAerCorsiaAerodromePairsTotalEmissions> calculateAerodromePairsTotalEmissions(AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO
                                                                                                          emissionsCalculationDTO) {
 
         final Set<AviationAerCorsiaAggregatedEmissionDataDetails> aggregatedEmissionDataDetails
@@ -119,7 +122,7 @@ public class AviationAerCorsiaSubmittedEmissionsCalculationService implements Av
         List<AviationAerCorsiaAerodromePairsTotalEmissions> aerodromePairsTotalEmissions = new ArrayList<>();
 
         final Set<String> icaoCodes = getIcaoCodes(aggregatedEmissionDataDetails);
-        final List<String> chapter3IcaoCodes = airportsService.findChapter3Icaos(icaoCodes);
+        final List<String> chapter3IcaoCodes = airportsService.findChapter3Icaos(icaoCodes, emissionsCalculationDTO.getYear());
 
         final Map<AviationRptAirportsDTO, Map<AviationRptAirportsDTO, Set<AviationAerCorsiaAggregatedEmissionDataDetails>>> aggregatedEmissionsPerAirportPair
             = aggregatedEmissionDataDetails.stream()
@@ -160,9 +163,9 @@ public class AviationAerCorsiaSubmittedEmissionsCalculationService implements Av
     }
 
     public Set<AviationAerCorsiaAggregatedEmissionDataDetails> findOffsettingFlights(Set<AviationAerCorsiaAggregatedEmissionDataDetails>
-                                                                                         aggregatedEmissionDataDetails) {
+                                                                                         aggregatedEmissionDataDetails, Year yearOfReport) {
         final Set<String> icaoCodes = getIcaoCodes(aggregatedEmissionDataDetails);
-        final List<String> chapter3IcaoCodes = airportsService.findChapter3Icaos(icaoCodes);
+        final List<String> chapter3IcaoCodes = airportsService.findChapter3Icaos(icaoCodes, yearOfReport);
         return aggregatedEmissionDataDetails.stream()
             .filter(details -> isOffset(details, chapter3IcaoCodes))
             .collect(Collectors.toSet());
@@ -223,7 +226,7 @@ public class AviationAerCorsiaSubmittedEmissionsCalculationService implements Av
             aviationAerEmissionsCalculationDTO.getAggregatedEmissionsData().getAggregatedEmissionDataDetails();
 
         final Set<String> icaoCodes = getIcaoCodes(aggregatedEmissionDataDetails);
-        final List<String> chapter3IcaoCodes = airportsService.findChapter3Icaos(icaoCodes);
+        final List<String> chapter3IcaoCodes = airportsService.findChapter3Icaos(icaoCodes, aviationAerEmissionsCalculationDTO.getYear());
 
         final Map<AviationAerCorsiaDepartureArrivalStateFuelUsedTriplet, List<AviationAerCorsiaAggregatedEmissionDataDetails>> corsiaDepartureArrivalStateFuelUsedTripletMap = aggregatedEmissionDataDetails.stream()
             .collect(Collectors.groupingBy(details -> AviationAerCorsiaDepartureArrivalStateFuelUsedTriplet.builder()

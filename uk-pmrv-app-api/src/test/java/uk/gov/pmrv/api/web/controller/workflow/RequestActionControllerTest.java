@@ -13,15 +13,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 import uk.gov.pmrv.api.workflow.request.application.requestaction.RequestActionQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionInfoDTO;
@@ -50,10 +50,10 @@ class RequestActionControllerTest {
     private RequestActionController controller;
     
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
     
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
     
     @Mock
     private RequestActionQueryService requestActionQueryService;
@@ -61,7 +61,7 @@ class RequestActionControllerTest {
     @BeforeEach
     void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
@@ -72,14 +72,14 @@ class RequestActionControllerTest {
         controller = (RequestActionController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .build();
     }
 
     @Test
     void getRequestActionById() throws Exception {
-        PmrvUser user = PmrvUser.builder().userId("user").build();
+        AppUser user = AppUser.builder().userId("user").build();
         Long requestActionId = 1L;
         RequestActionDTO requestActionDTO = RequestActionDTO.builder().id(requestActionId)
                 .submitter("fn ln").build();
@@ -97,13 +97,13 @@ class RequestActionControllerTest {
     
     @Test
     void getRequestActionById_forbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().userId("user").build();
+        AppUser user = AppUser.builder().userId("user").build();
         Long requestActionId = 1L;
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(user, "getRequestActionById", String.valueOf(requestActionId));
+                .when(appUserAuthorizationService)
+                .authorize(user, "getRequestActionById", String.valueOf(requestActionId), null, null);
 
         mockMvc.perform(
                     MockMvcRequestBuilders.get(BASE_PATH + "/" + requestActionId)
@@ -116,11 +116,11 @@ class RequestActionControllerTest {
 
     @Test
     void getRequestActionsByRequestId() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("id").build();
+        AppUser appUser = AppUser.builder().userId("id").build();
 
         RequestActionInfoDTO requestActionInfoDTO = RequestActionInfoDTO.builder().id(1L).build();
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(requestActionQueryService.getRequestActionsByRequestId("2", pmrvUser)).thenReturn(List.of(requestActionInfoDTO));
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(requestActionQueryService.getRequestActionsByRequestId("2", appUser)).thenReturn(List.of(requestActionInfoDTO));
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(BASE_PATH)
@@ -132,12 +132,12 @@ class RequestActionControllerTest {
 
     @Test
     void getRequestActionsByRequestId_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("id").build();
+        AppUser appUser = AppUser.builder().userId("id").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(pmrvUser, "getRequestActionsByRequestId", "2");
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "getRequestActionsByRequestId", "2", null, null);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(BASE_PATH)

@@ -1,29 +1,31 @@
 package uk.gov.pmrv.api.workflow.utils;
 
-import static java.time.temporal.ChronoUnit.DAYS;
+import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Date;
-import lombok.experimental.UtilityClass;
-import org.apache.commons.lang3.ObjectUtils;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @UtilityClass
 public class DateUtils {
 
-    public Long getDaysRemaining(LocalDate pauseDate, LocalDate dueDate) {
-        if(!ObjectUtils.isEmpty(dueDate)) {
-            pauseDate = ObjectUtils.isEmpty(pauseDate) ? LocalDate.now() : pauseDate;
-            return DAYS.between(pauseDate, dueDate);
-        }
-        return null;
+    public Long getTaskExpirationDaysRemaining(LocalDate taskPauseDate, LocalDate taskDueDate) {
+    	if(ObjectUtils.isEmpty(taskDueDate)) {
+    		return null;
+    	}
+    	
+		return DAYS.between(ObjectUtils.isEmpty(taskPauseDate) ? LocalDate.now() : taskPauseDate, taskDueDate);
     }
 
-    public Date convertLocalDateToDate(LocalDate localDate) {
-        return Date.from(localDate
-            .atTime(LocalTime.MIN)
+    public Date atEndOfDay(LocalDate date) {
+        return Date.from(date
+            .atTime(LocalTime.MAX)
             .atZone(ZoneId.systemDefault())
             .toInstant());
     }
+    
 }

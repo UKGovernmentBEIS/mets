@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -74,7 +74,7 @@ class ItemByRequestRegulatorRepositoryIT extends AbstractContainerBaseTest {
         assertEquals(item2.getTaskType(), requestTask2.getType());
         assertEquals(item2.getTaskAssigneeId(), requestTask2.getAssignee());
         assertEquals(item2.getTaskDueDate(), requestTask2.getDueDate());
-        assertEquals(item2.getAccountId(), 1L);
+        assertEquals(1L, item2.getAccountId());
         
         Item item1 = itemPage.getItems().get(1);
         assertThat(item1.getRequestId()).isEqualTo(request1.getId());
@@ -86,13 +86,13 @@ class ItemByRequestRegulatorRepositoryIT extends AbstractContainerBaseTest {
         assertEquals(item1.getTaskType(), requestTask1.getType());
         assertEquals(item1.getTaskAssigneeId(), requestTask1.getAssignee());
         assertEquals(item1.getTaskDueDate(), requestTask1.getDueDate());
-        assertEquals(item1.getAccountId(), 1L);
+        assertEquals(1L, item1.getAccountId());
     }
 
     private Request createRequest(Long accountId, RequestType type, RequestStatus status, CompetentAuthorityEnum ca, LocalDateTime creationDate) {
         Request request =
                 Request.builder()
-                        .id(RandomStringUtils.random(5))
+                        .id(RandomStringUtils.insecure().next(5))
                         .competentAuthority(ca)
                         .type(type)
                         .status(status)

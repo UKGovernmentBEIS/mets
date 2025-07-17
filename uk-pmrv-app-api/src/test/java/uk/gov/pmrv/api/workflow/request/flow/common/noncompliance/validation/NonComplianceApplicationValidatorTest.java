@@ -14,9 +14,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.application.taskview.RequestInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -66,17 +67,17 @@ class NonComplianceApplicationValidatorTest {
         final RequestTask requestTask = RequestTask.builder().build();
         final Set<Long> externalContacts = Set.of(1L, 2L);
         final Set<String> operators = Set.of("op1", "op2");
-        final PmrvUser pmrvUser = PmrvUser.builder().build();    
+        final AppUser appUser = AppUser.builder().build();
         final DecisionNotification  decisionNotification = DecisionNotification.builder()
             .operators(operators)
             .externalContacts(externalContacts)
             .build();
         
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser)).thenReturn(true);
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser)).thenReturn(true);
         
-        validator.validateUsers(requestTask, operators, externalContacts, pmrvUser);
+        validator.validateUsers(requestTask, operators, externalContacts, appUser);
         
-        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, pmrvUser);
+        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, appUser);
     }
 
     @Test
@@ -85,19 +86,19 @@ class NonComplianceApplicationValidatorTest {
         final RequestTask requestTask = RequestTask.builder().build();
         final Set<Long> externalContacts = Set.of(1L, 2L);
         final Set<String> operators = Set.of("op1", "op2");     
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final DecisionNotification  decisionNotification = DecisionNotification.builder()
             .operators(operators)
             .externalContacts(externalContacts)
             .build();
 
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser)).thenReturn(false);
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser)).thenReturn(false);
 
-        final BusinessException be = assertThrows(BusinessException.class, () -> validator.validateUsers(requestTask, operators, externalContacts, pmrvUser));
+        final BusinessException be = assertThrows(BusinessException.class, () -> validator.validateUsers(requestTask, operators, externalContacts, appUser));
 
         assertEquals(ErrorCode.FORM_VALIDATION, be.getErrorCode());
 
-        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, pmrvUser);
+        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, appUser);
     }
     
     @Test
@@ -121,7 +122,7 @@ class NonComplianceApplicationValidatorTest {
 
         final BusinessException be = assertThrows(BusinessException.class, () -> validator.validateContactAddress(request));
 
-        assertEquals(ErrorCode.AVIATION_ACCOUNT_LOCATION_NOT_EXIST, be.getErrorCode());
+        assertEquals(MetsErrorCode.AVIATION_ACCOUNT_LOCATION_NOT_EXIST, be.getErrorCode());
 
         verify(decisionNotificationUsersValidator, times(1)).shouldHaveContactAddress(request);
     }

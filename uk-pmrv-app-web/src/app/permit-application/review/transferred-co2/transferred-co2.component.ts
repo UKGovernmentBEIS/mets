@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { pluck } from 'rxjs';
+import { map } from 'rxjs';
 
 import { PermitApplicationStore } from '@permit-application/store/permit-application.store';
 
@@ -15,7 +15,7 @@ import { PermitApplicationState } from '../../store/permit-application.state';
 export class TransferredCO2Component {
   showDiff$ = this.store.showDiff$;
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
-  groupKey$ = this.route.data.pipe(pluck('groupKey'));
+  groupKey$ = this.route.data.pipe(map((x) => x?.groupKey));
 
   constructor(
     private readonly router: Router,

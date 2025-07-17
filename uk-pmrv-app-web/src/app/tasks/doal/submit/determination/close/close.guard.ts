@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -10,8 +10,11 @@ import { DoalApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 import { isDeterminationPopulated } from '../../doal.wizard';
 
 @Injectable({ providedIn: 'root' })
-export class CloseGuard implements CanActivate {
-  constructor(private readonly store: CommonTasksStore, private readonly router: Router) {}
+export class CloseGuard {
+  constructor(
+    private readonly store: CommonTasksStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(_route: ActivatedRouteSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> {
     return (

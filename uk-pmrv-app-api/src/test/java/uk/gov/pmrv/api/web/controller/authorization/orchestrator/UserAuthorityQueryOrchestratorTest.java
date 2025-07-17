@@ -5,9 +5,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.user.core.service.UserLoginDomainService;
 import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.LoginStatus;
 import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.UserDomainsLoginStatusInfo;
@@ -15,7 +15,7 @@ import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.UserStateDT
 
 import java.util.EnumMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,8 +35,8 @@ class UserAuthorityQueryOrchestratorTest {
     @Test
     void getUserState() {
         String userId = "userId";
-        RoleType roleType = RoleType.REGULATOR;
-        PmrvUser user = PmrvUser.builder()
+        String roleType = RoleTypeConstants.REGULATOR;
+        AppUser user = AppUser.builder()
             .userId(userId)
             .roleType(roleType)
             .build();

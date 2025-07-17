@@ -1,13 +1,10 @@
 package uk.gov.pmrv.api.migration.permit.additionaldocuments;
 
 import lombok.RequiredArgsConstructor;
-
 import org.mapstruct.factory.Mappers;
-
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachment;

@@ -77,7 +77,7 @@ describe('SummaryComponent', () => {
     expect(page.summaryValues).toEqual([
       ['Will you be making a claim for emissions reductions from the use of CORSIA eligible fuels?', 'Yes'],
       ['CEF template', 'cefFile.png'],
-      ['Total emissions reduction claimed, from the template', '1000'],
+      ['Total emissions reduction claimed, from the template', '1000 tonnes CO2'],
       ['Declaration of no double claiming', 'declarationFile.png'],
     ]);
   });

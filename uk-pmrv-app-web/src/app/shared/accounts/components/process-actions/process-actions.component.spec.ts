@@ -1,6 +1,5 @@
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -8,8 +7,7 @@ import { AuthService } from '@core/services/auth.service';
 import { AuthStore, UserState } from '@core/store/auth';
 import { ProcessActionsComponent } from '@shared/accounts';
 import { ItemLinkPipe } from '@shared/pipes/item-link.pipe';
-import { SharedModule } from '@shared/shared.module';
-import { ActivatedRouteStub, BasePage } from '@testing';
+import { ActivatedRouteStub, BasePage, RouterStubComponent } from '@testing';
 
 import { ItemDTOResponse, RequestCreateActionProcessResponseDTO, RequestItemsService, RequestsService } from 'pmrv-api';
 
@@ -65,8 +63,8 @@ const createComponent = () => {
 const createModule = async () => {
   await TestBed.configureTestingModule({
     declarations: [ProcessActionsComponent],
-    imports: [RouterTestingModule, SharedModule],
     providers: [
+      provideRouter([{ path: 'dashboard', component: RouterStubComponent }]),
       { provide: ActivatedRoute, useValue: activatedRouteStub },
       { provide: RequestsService, useValue: requestService },
       { provide: RequestItemsService, useValue: requestItemsService },
@@ -130,7 +128,7 @@ describe('ProcessActionsComponent', () => {
         expect(requestService.processRequestCreateAction).toHaveBeenCalledTimes(1);
         expect(requestService.processRequestCreateAction).toHaveBeenCalledWith(
           createRequestPayload(expectedRequestType),
-          0,
+          String(0),
         );
 
         expect(requestItemsService.getItemsByRequest).toHaveBeenCalledTimes(1);
@@ -210,7 +208,7 @@ describe('ProcessActionsComponent', () => {
         expect(requestService.processRequestCreateAction).toHaveBeenCalledTimes(1);
         expect(requestService.processRequestCreateAction).toHaveBeenCalledWith(
           createRequestPayload(expectedRequestType),
-          0,
+          String(0),
         );
 
         expect(requestItemsService.getItemsByRequest).toHaveBeenCalledTimes(1);

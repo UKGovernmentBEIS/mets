@@ -7,7 +7,7 @@ import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 import { AerVerificationReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-verification-review-decision-group/aer-verification-review-decision-group.component';
 import { recommendedImprovementsQuery } from '@aviation/request-task/aer/shared/recommended-improvements/recommended-improvements.selector';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { showReviewDecisionComponent } from '@aviation/request-task/util';
+import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
 import { RecommendedImprovementsGroupComponent } from '@aviation/shared/components/aer-verify/recommended-improvements-group/recommended-improvements-group.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -51,7 +51,7 @@ export class RecommendedImprovementsSummaryComponent {
     map(([type, recommendedImprovements, isEditable, taskStatus]) => {
       return {
         data: recommendedImprovements,
-        pageHeader: 'Check Your Answers',
+        pageHeader: getSummaryHeaderForTaskType(type, 'recommendedImprovements'),
         isEditable,
         hideSubmit:
           !isEditable ||

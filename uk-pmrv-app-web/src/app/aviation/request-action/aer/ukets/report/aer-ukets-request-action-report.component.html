@@ -1,0 +1,414 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <h2 class="govuk-heading-l">{{ vm.header }}</h2>
+
+  <p class="govuk-caption-m">{{ vm.creationDate | govukDate: 'datetime' }}</p>
+  <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible" />
+
+  <ng-container *ngFor="let section of vm.sections; let i = index">
+    <h2 class="govuk-heading-l">{{ i + 1 }}. {{ section.title }}</h2>
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+    <!-- SECTION TITLE SWITCH -->
+    <div [ngSwitch]="section.title">
+      <div *ngSwitchCase="'Reporting obligation'">
+        <ng-container *ngFor="let task of section.tasks">
+          <h2 class="govuk-heading-m govuk-!-margin-top-6">{{ task.linkText }}</h2>
+          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+          <div [ngSwitch]="task.name">
+            <div *ngSwitchCase="'reportingObligation'">
+              <app-reporting-obligation-summary-template
+                [reportingData]="vm.reportingData"
+                [year]="vm.year"
+                [files]="vm.reportingFiles"
+              ></app-reporting-obligation-summary-template>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <!-- VERIFIER ASSESSMENT -->
+      <div *ngSwitchCase="'Verifier assessment'">
+        <ng-container *ngFor="let task of section.tasks">
+          <h2 class="govuk-heading-m govuk-!-margin-top-6">{{ task.linkText }}</h2>
+          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+          <!-- TASK NAME SWITCH -->
+          <div [ngSwitch]="task.name">
+            <!-- VERIFICATION REPORT -->
+            <div *ngSwitchCase="'verificationReport'">
+              <app-aer-verifier-details-group-form
+                [verificationReport]="$any(vm.payload).verificationReport"
+              ></app-aer-verifier-details-group-form>
+            </div>
+
+            <!-- OPINION STATEMENT -->
+            <div *ngSwitchCase="'opinionStatement'">
+              <app-opinion-statement-emission-details-summary-template
+                [fuelTypes]="vm.fuelTypes"
+                [monitoringApproachType]="$any(vm.payload).verificationReport.opinionStatement.monitoringApproachType"
+              ></app-opinion-statement-emission-details-summary-template>
+
+              <app-opinion-statement-total-emissions-summary-template
+                [totalEmissionsProvided]="$any(vm.payload).totalEmissionsProvided"
+                [emissionsCorrect]="$any(vm.payload).verificationReport.opinionStatement.emissionsCorrect"
+                [manuallyProvidedEmissions]="
+                  $any(vm.payload).verificationReport.opinionStatement.manuallyProvidedEmissions
+                "
+              ></app-opinion-statement-total-emissions-summary-template>
+
+              <app-aer-monitoring-plan-versions
+                [planVersions]="$any(vm.payload)?.aerMonitoringPlanVersions"
+              ></app-aer-monitoring-plan-versions>
+
+              <app-opinion-statement-changes-not-covered-in-emp-summary-template
+                [aerMonitoringPlanChanges]="$any(vm.payload).aer.aerMonitoringPlanChanges"
+                [additionalChangesNotCovered]="
+                  $any(vm.payload).verificationReport.opinionStatement.additionalChangesNotCovered
+                "
+                [additionalChangesNotCoveredDetails]="
+                  $any(vm.payload).verificationReport.opinionStatement.additionalChangesNotCoveredDetails
+                "
+              ></app-opinion-statement-changes-not-covered-in-emp-summary-template>
+
+              <app-opinion-statement-site-verification-summary-template
+                [siteVisit]="$any(vm.payload).verificationReport.opinionStatement.siteVisit"
+              ></app-opinion-statement-site-verification-summary-template>
+            </div>
+
+            <!-- ETS COMPLIANCE RULES -->
+            <div *ngSwitchCase="'etsComplianceRules'">
+              <app-ets-compliance-rules-group
+                [etsComplianceRules]="$any(vm.payload).verificationReport.etsComplianceRules"
+              ></app-ets-compliance-rules-group>
+            </div>
+
+            <!-- COMPLIANCE MONITORING REPORTING RULES -->
+            <div *ngSwitchCase="'complianceMonitoringReportingRules'">
+              <app-compliance-monitoring-group-template
+                [compliance]="$any(vm.payload).verificationReport.complianceMonitoringReportingRules"
+              ></app-compliance-monitoring-group-template>
+            </div>
+
+            <!-- VERIFY EMISSIONS REDUCTION CLAIM -->
+            <div *ngSwitchCase="'emissionsReductionClaimVerification'">
+              <app-verify-emissions-reduction-claim-group
+                [emissionsReductionClaimVerification]="
+                  $any(vm.payload).verificationReport.emissionsReductionClaimVerification
+                "
+              ></app-verify-emissions-reduction-claim-group>
+            </div>
+
+            <!-- OVERALL DECISION -->
+            <div *ngSwitchCase="'overallDecision'">
+              <app-aviation-overall-decision-group
+                [overallAssessment]="$any(vm.payload).verificationReport.overallDecision"
+                [isCorsia]="false"
+              ></app-aviation-overall-decision-group>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- VERIFIER FINDINGS -->
+      <div *ngSwitchCase="'Verifier findings'">
+        <ng-container *ngFor="let task of section.tasks">
+          <h2 class="govuk-heading-m govuk-!-margin-top-6">{{ task.linkText }}</h2>
+          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+          <div [ngSwitch]="task.name">
+            <!-- UNCORRECTED MISSTATEMETS -->
+            <div *ngSwitchCase="'uncorrectedMisstatements'">
+              <h2 class="govuk-heading-s">Misstatements not corrected before issuing this report</h2>
+              <dl govuk-summary-list [hasBorders]="true">
+                <div govukSummaryListRow>
+                  <dt govukSummaryListRowKey>
+                    Are there any misstatements that were not corrected before issuing this report?
+                  </dt>
+                  <dd govukSummaryListRowValue>
+                    {{ $any(vm.payload).verificationReport.uncorrectedMisstatements.exist ? 'Yes' : 'No' }}
+                  </dd>
+                </div>
+              </dl>
+
+              <app-uncorrected-item-group
+                [uncorrectedItems]="
+                  $any(vm.payload).verificationReport.uncorrectedMisstatements?.uncorrectedMisstatements
+                "
+                explanationHeader="Description"
+                *ngIf="$any(vm.payload).verificationReport.uncorrectedMisstatements.exist"
+              ></app-uncorrected-item-group>
+            </div>
+
+            <!-- UNCORRECTED NON CONFORMITIES -->
+            <div *ngSwitchCase="'uncorrectedNonConformities'">
+              <h2 class="govuk-heading-s">Non-conformities with the approved monitoring plan</h2>
+
+              <dl govuk-summary-list [hasBorders]="true">
+                <div govukSummaryListRow>
+                  <dt govukSummaryListRowKey>
+                    Have there been any uncorrected non-conformities with the approved emissions monitoring plan?
+                  </dt>
+                  <dd govukSummaryListRowValue>
+                    {{
+                      $any(vm.payload).verificationReport.uncorrectedNonConformities?.existUncorrectedNonConformities
+                        ? 'Yes'
+                        : 'No'
+                    }}
+                  </dd>
+                </div>
+              </dl>
+
+              <app-uncorrected-item-group
+                [uncorrectedItems]="
+                  $any(vm.payload).verificationReport.uncorrectedNonConformities.uncorrectedNonConformities
+                "
+                *ngIf="$any(vm.payload).verificationReport.uncorrectedNonConformities.existUncorrectedNonConformities"
+              ></app-uncorrected-item-group>
+
+              <h2 class="govuk-heading-s">Non-conformities from the previous year that have not been resolved</h2>
+
+              <dl govuk-summary-list [hasBorders]="true">
+                <div govukSummaryListRow>
+                  <dt govukSummaryListRowKey>
+                    Are there any non-conformities from the previous year that have not been resolved?
+                  </dt>
+                  <dd govukSummaryListRowValue>
+                    {{
+                      $any(vm.payload).verificationReport.uncorrectedNonConformities?.existPriorYearIssues
+                        ? 'Yes'
+                        : 'No'
+                    }}
+                  </dd>
+                </div>
+              </dl>
+
+              <app-verifier-comment-group
+                [verifierComments]="$any(vm.payload).verificationReport.uncorrectedNonConformities.priorYearIssues"
+                *ngIf="$any(vm.payload).verificationReport.uncorrectedNonConformities.existPriorYearIssues"
+              ></app-verifier-comment-group>
+            </div>
+
+            <!-- UNCORRECTED NON COMPLIANCES -->
+            <div *ngSwitchCase="'uncorrectedNonCompliances'">
+              <h2 class="govuk-heading-s">Non-compliances with the monitoring and reporting regulations</h2>
+              <dl govuk-summary-list [hasBorders]="true">
+                <div govukSummaryListRow>
+                  <dt govukSummaryListRowKey>
+                    Have there been any uncorrected non-compliances with the monitoring and reporting regulations?
+                  </dt>
+                  <dd govukSummaryListRowValue>
+                    {{ $any(vm.payload).verificationReport.uncorrectedNonCompliances?.exist ? 'Yes' : 'No' }}
+                  </dd>
+                </div>
+              </dl>
+
+              <app-uncorrected-item-group
+                [uncorrectedItems]="
+                  $any(vm.payload).verificationReport.uncorrectedNonCompliances?.uncorrectedNonCompliances
+                "
+                *ngIf="$any(vm.payload).verificationReport.uncorrectedNonCompliances?.exist"
+              ></app-uncorrected-item-group>
+            </div>
+
+            <!-- RECOMMENDED IMPROVEMENTS -->
+            <div *ngSwitchCase="'recommendedImprovements'">
+              <h2 class="govuk-heading-m">Recommended improvements</h2>
+              <dl govuk-summary-list [hasBorders]="true">
+                <div govukSummaryListRow>
+                  <dt govukSummaryListRowKey>Are there any recommended improvements?</dt>
+                  <dd govukSummaryListRowValue>
+                    {{ $any(vm.payload).verificationReport.recommendedImprovements?.exist ? 'Yes' : 'No' }}
+                  </dd>
+                </div>
+              </dl>
+
+              <app-recommended-improvements-group-template
+                [verifierComments]="
+                  $any(vm.payload).verificationReport.recommendedImprovements?.recommendedImprovements
+                "
+                *ngIf="$any(vm.payload).verificationReport.recommendedImprovements?.exist"
+              ></app-recommended-improvements-group-template>
+            </div>
+
+            <!-- DATA GAPS METHODOLOGIES -->
+            <div *ngSwitchCase="'dataGapsMethodologies'">
+              <app-data-gaps-methodologies-group
+                [dataGapsMethodologies]="$any(vm.payload).verificationReport.dataGapsMethodologies"
+              ></app-data-gaps-methodologies-group>
+            </div>
+
+            <!-- MATERIALITY LEVEL -->
+            <div *ngSwitchCase="'materialityLevel'">
+              <app-aer-verify-materiality-level-group
+                [materialityLevel]="$any(vm.payload).verificationReport.materialityLevel"
+              ></app-aer-verify-materiality-level-group>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- IDENTIFICATION -->
+      <div *ngSwitchCase="'Identification'">
+        <ng-container *ngFor="let task of section.tasks">
+          <h2 class="govuk-heading-m govuk-!-margin-top-6">{{ task.linkText }}</h2>
+          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+          <div [ngSwitch]="task.name">
+            <!-- SERVICE CONTACT DETAILS -->
+            <div *ngSwitchCase="'serviceContactDetails'">
+              <dl govuk-summary-list>
+                <div govukSummaryListRow class="full-name">
+                  <dt govukSummaryListRowKey>Full name</dt>
+                  <dd govukSummaryListRowValue>{{ $any(vm.payload).serviceContactDetails.name }}</dd>
+                </div>
+
+                <div govukSummaryListRow class="role">
+                  <dt govukSummaryListRowKey>Role</dt>
+                  <dd govukSummaryListRowValue>{{ $any(vm.payload).serviceContactDetails.roleCode | userRole }}</dd>
+                </div>
+
+                <div govukSummaryListRow class="email">
+                  <dt govukSummaryListRowKey>Email address</dt>
+                  <dd govukSummaryListRowValue>{{ $any(vm.payload).serviceContactDetails.email }}</dd>
+                </div>
+              </dl>
+            </div>
+
+            <!-- OPERATOR DETAILS -->
+            <div *ngSwitchCase="'operatorDetails'">
+              <app-operator-details-summary-template
+                [data]="$any(vm.payload).aer.operatorDetails"
+                [certificationFiles]="vm.certificationFiles"
+                [evidenceFiles]="vm.evidenceFiles"
+              ></app-operator-details-summary-template>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- EMISSIONS OVERVIEW -->
+      <div *ngSwitchCase="'Emissions overview'">
+        <ng-container *ngFor="let task of section.tasks">
+          <h2 class="govuk-heading-m govuk-!-margin-top-6">{{ task.linkText }}</h2>
+          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+          <div [ngSwitch]="task.name">
+            <!-- MONITORING PLAN CHANGES -->
+            <div *ngSwitchCase="'aerMonitoringPlanChanges'">
+              <app-aer-monitoring-plan-versions
+                [planVersions]="$any(vm.payload).aerMonitoringPlanVersions"
+              ></app-aer-monitoring-plan-versions>
+
+              <app-aer-monitoring-plan-changes-summary-template
+                [data]="$any(vm.payload).aer.aerMonitoringPlanChanges"
+              ></app-aer-monitoring-plan-changes-summary-template>
+            </div>
+
+            <!-- MONITORING APPROACH -->
+            <div *ngSwitchCase="'monitoringApproach'">
+              <app-monitoring-approach-summary-template
+                [data]="$any(vm.payload).aer.monitoringApproach"
+              ></app-monitoring-approach-summary-template>
+            </div>
+
+            <!-- AGGREGATED EMISSIONS DATA -->
+            <div *ngSwitchCase="'aggregatedEmissionsData'">
+              <app-flight-data-table
+                [emissionDataDetails]="$any(vm.payload).aer.aggregatedEmissionsData.aggregatedEmissionDataDetails"
+                [isCorsia]="false"
+              ></app-flight-data-table>
+            </div>
+
+            <!-- AIRCRAFT DATA -->
+            <div *ngSwitchCase="'aviationAerAircraftData'">
+              <app-aircraft-types-data-table
+                [aviationAerAircraftDataDetails]="
+                  $any(vm.payload).aer.aviationAerAircraftData.aviationAerAircraftDataDetails
+                "
+              ></app-aircraft-types-data-table>
+            </div>
+
+            <!-- EMISSIONS REDUCTION CLAIM -->
+            <div *ngSwitchCase="'saf'">
+              <app-aer-emissions-reduction-claim-summary-template
+                [data]="$any(vm.payload).aer.saf"
+                [declarationFile]="vm.declarationFile"
+                [purchases]="vm.purchases"
+              ></app-aer-emissions-reduction-claim-summary-template>
+            </div>
+
+            <!-- DATA GAPS -->
+            <div *ngSwitchCase="'dataGaps'">
+              <app-data-gaps-summary-template [data]="$any(vm.payload).aer.dataGaps"></app-data-gaps-summary-template>
+
+              <ng-container *ngIf="$any(vm.payload).aer.dataGaps.exist">
+                <app-data-gaps-list-template
+                  [dataGaps]="$any(vm.payload).aer.dataGaps.dataGaps"
+                ></app-data-gaps-list-template>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- ADDITIONAL INFORMATION -->
+      <div *ngSwitchCase="'Additional information'">
+        <ng-container *ngFor="let task of section.tasks">
+          <h2 class="govuk-heading-m govuk-!-margin-top-6">{{ task.linkText }}</h2>
+          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+          <div [ngSwitch]="task.name">
+            <!-- ADDITIONAL DOCUMENTS -->
+            <div *ngSwitchCase="'additionalDocuments'">
+              <app-documents-summary-template
+                [data]="$any(vm.payload).aer.additionalDocuments"
+                [files]="vm.additionalDocumentsFiles"
+              ></app-documents-summary-template>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+      <!-- EMISSIONS FOR THE SCHEME YEAR -->
+      <div *ngSwitchCase="'Emissions for the scheme year'">
+        <ng-container *ngFor="let task of section.tasks">
+          <h2 class="govuk-heading-m govuk-!-margin-top-6">{{ task.linkText }}</h2>
+          <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+          <div [ngSwitch]="task.name">
+            <!-- TOTAL EMISSIONS CONFIDENTIALITY -->
+            <div *ngSwitchCase="'aviationAerTotalEmissionsConfidentiality'">
+              <h2 class="govuk-heading-m govuk-!-width-two-thirds">Emissions for the scheme year</h2>
+              <app-total-emissions-scheme-year-summary
+                [totalEmissions$]="vm.totalEmissions$"
+              ></app-total-emissions-scheme-year-summary>
+
+              <h3 class="govuk-heading-m govuk-!-margin-top-6">Standard fuels</h3>
+              <app-total-emissions-standard-fuels-table-template
+                [standardFuelsTotalEmissions$]="vm.standardFuels$"
+              ></app-total-emissions-standard-fuels-table-template>
+              <h3 class="govuk-heading-m govuk-!-margin-top-6">Aerodrome pairs</h3>
+              <app-total-emissions-aerodrome-pairs-table-template
+                [showAllData]="true"
+                [aerodromePairsTotalEmissions$]="vm.aerodromePairs$"
+              ></app-total-emissions-aerodrome-pairs-table-template>
+              <h3 class="govuk-heading-m govuk-!-margin-top-6">Domestic flights</h3>
+              <app-total-emissions-domestic-flights-table-template
+                [domesticFlightsTotalEmissions$]="vm.domesticFlights$"
+              ></app-total-emissions-domestic-flights-table-template>
+              <h3 class="govuk-heading-m govuk-!-margin-top-6">Non-domestic flights</h3>
+              <app-total-emissions-non-domestic-flights-table-template
+                [showAllData]="true"
+                [nonDomesticFlightsTotalEmissions$]="vm.nonDomesticFlights$"
+              ></app-total-emissions-non-domestic-flights-table-template>
+
+              <app-total-emissions-summary-template
+                [data]="$any(vm.payload).aer.aviationAerTotalEmissionsConfidentiality"
+              ></app-total-emissions-summary-template>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

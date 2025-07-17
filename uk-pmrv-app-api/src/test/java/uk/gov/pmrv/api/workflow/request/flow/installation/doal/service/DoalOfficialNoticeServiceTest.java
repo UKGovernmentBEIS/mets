@@ -7,11 +7,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -102,7 +102,7 @@ class DoalOfficialNoticeServiceTest {
                 .thenReturn(ccRecipientsEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(paramsSourceData))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(DocumentTemplateType.DOAL_SUBMITTED,
+        when(documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.DOAL_SUBMITTED,
                 templateParams, "Activity_level_determination_preliminary_allocation_letter.pdf")).thenReturn(officialNotice);
 
         // Invoke
@@ -119,7 +119,7 @@ class DoalOfficialNoticeServiceTest {
         verify(documentTemplateOfficialNoticeParamsProvider, times(1))
                 .constructTemplateParams(paramsSourceData);
         verify(documentFileGeneratorService, times(1))
-                .generateFileDocument(DocumentTemplateType.DOAL_SUBMITTED, templateParams, "Activity_level_determination_preliminary_allocation_letter.pdf");
+                .generateAndSaveFileDocument(DocumentTemplateType.DOAL_SUBMITTED, templateParams, "Activity_level_determination_preliminary_allocation_letter.pdf");
     }
 
     @Test
@@ -167,7 +167,7 @@ class DoalOfficialNoticeServiceTest {
                 .thenReturn(ccRecipientsEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(paramsSourceData))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(DocumentTemplateType.DOAL_ACCEPTED,
+        when(documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.DOAL_ACCEPTED,
                 templateParams, "Activity_level_determination_approved_by_Authority_notice.pdf")).thenReturn(officialNotice);
 
         // Invoke
@@ -184,7 +184,7 @@ class DoalOfficialNoticeServiceTest {
         verify(documentTemplateOfficialNoticeParamsProvider, times(1))
                 .constructTemplateParams(paramsSourceData);
         verify(documentFileGeneratorService, times(1))
-                .generateFileDocument(DocumentTemplateType.DOAL_ACCEPTED, templateParams, "Activity_level_determination_approved_by_Authority_notice.pdf");
+                .generateAndSaveFileDocument(DocumentTemplateType.DOAL_ACCEPTED, templateParams, "Activity_level_determination_approved_by_Authority_notice.pdf");
     }
 
     @Test
@@ -232,7 +232,7 @@ class DoalOfficialNoticeServiceTest {
                 .thenReturn(ccRecipientsEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(paramsSourceData))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(DocumentTemplateType.DOAL_REJECTED,
+        when(documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.DOAL_REJECTED,
                 templateParams, "Activity_level_determination_not_approved_by_Authority_notice.pdf")).thenReturn(officialNotice);
 
         // Invoke
@@ -249,7 +249,7 @@ class DoalOfficialNoticeServiceTest {
         verify(documentTemplateOfficialNoticeParamsProvider, times(1))
                 .constructTemplateParams(paramsSourceData);
         verify(documentFileGeneratorService, times(1))
-                .generateFileDocument(DocumentTemplateType.DOAL_REJECTED, templateParams, "Activity_level_determination_not_approved_by_Authority_notice.pdf");
+                .generateAndSaveFileDocument(DocumentTemplateType.DOAL_REJECTED, templateParams, "Activity_level_determination_not_approved_by_Authority_notice.pdf");
     }
 
     @Test

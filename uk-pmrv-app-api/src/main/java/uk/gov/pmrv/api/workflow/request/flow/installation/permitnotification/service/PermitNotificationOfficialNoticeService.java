@@ -3,18 +3,18 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.se
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
@@ -35,7 +35,7 @@ public class PermitNotificationOfficialNoticeService {
 
     private final RequestAccountContactQueryService requestAccountContactQueryService;
     private final DecisionNotificationUsersService decisionNotificationUsersService;
-    private final NotificationEmailService notificationEmailService;
+    private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
     private final RequestService requestService;
     private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
     private final DocumentFileGeneratorService documentFileGeneratorService;
@@ -53,15 +53,15 @@ public class PermitNotificationOfficialNoticeService {
 
         // notify 
         notificationEmailService.notifyRecipients(
-            EmailData.builder()
-                .notificationTemplateData(EmailNotificationTemplateData.builder()
-                    .templateName(NotificationTemplateName.PERMIT_NOTIFICATION_OPERATOR_RESPONSE)
+            EmailData.<PmrvEmailNotificationTemplateData>builder()
+                .notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
+                    .templateName(PmrvNotificationTemplateName.PERMIT_NOTIFICATION_OPERATOR_RESPONSE.getName())
                     .competentAuthority(request.getCompetentAuthority())
                     .accountType(request.getType().getAccountType())
                     .templateParams(
                         Map.of(
-                            EmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
-                            EmailNotificationTemplateConstants.WORKFLOW_ID, request.getId()
+                        		PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
+                        		PmrvEmailNotificationTemplateConstants.WORKFLOW_ID, request.getId()
                         )).build())
                 .build(),
             List.of(accountPrimaryContact.getEmail()),
@@ -76,24 +76,13 @@ public class PermitNotificationOfficialNoticeService {
     }
 
     @Transactional
+    public void generateAndSaveCompletedOfficialNotice(final String requestId) {
+        generateAndSaveGrantedOrCompletedOfficialNotice(requestId);
+    }
+
+    @Transactional
     public void generateAndSaveGrantedOfficialNotice(final String requestId) {
-        
-        final Request request = requestService.findRequestById(requestId);
-        final PermitNotificationRequestPayload requestPayload = (PermitNotificationRequestPayload) request.getPayload();
-        final UserInfoDTO accountPrimaryContact = requestAccountContactQueryService.getRequestAccountPrimaryContact(request)
-            .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
-        final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getReviewDecisionNotification());
-
-        //generate
-        final FileInfoDTO officialNotice = this.generateOfficialNotice(request,
-            accountPrimaryContact,
-            ccRecipientsEmails,
-            DocumentTemplateGenerationContextActionType.PERMIT_NOTIFICATION_GRANTED,
-            DocumentTemplateType.PERMIT_NOTIFICATION_ACCEPTED,
-            "Permit Notification Acknowledgement Letter.pdf");
-
-        //save to payload
-        requestPayload.setOfficialNotice(officialNotice);
+        generateAndSaveGrantedOrCompletedOfficialNotice(requestId);
     }
 
     @Transactional
@@ -112,6 +101,25 @@ public class PermitNotificationOfficialNoticeService {
             DocumentTemplateGenerationContextActionType.PERMIT_NOTIFICATION_REJECTED,
             DocumentTemplateType.PERMIT_NOTIFICATION_REFUSED,
             "Permit Notification Refusal Letter.pdf");
+
+        //save to payload
+        requestPayload.setOfficialNotice(officialNotice);
+    }
+
+    private void generateAndSaveGrantedOrCompletedOfficialNotice(final String requestId){
+        final Request request = requestService.findRequestById(requestId);
+        final PermitNotificationRequestPayload requestPayload = (PermitNotificationRequestPayload) request.getPayload();
+        final UserInfoDTO accountPrimaryContact = requestAccountContactQueryService.getRequestAccountPrimaryContact(request)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
+        final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getReviewDecisionNotification());
+
+        //generate
+        final FileInfoDTO officialNotice = this.generateOfficialNotice(request,
+                accountPrimaryContact,
+                ccRecipientsEmails,
+                DocumentTemplateGenerationContextActionType.PERMIT_NOTIFICATION_GRANTED,
+                DocumentTemplateType.PERMIT_NOTIFICATION_ACCEPTED,
+                "Permit Notification Acknowledgement Letter.pdf");
 
         //save to payload
         requestPayload.setOfficialNotice(officialNotice);
@@ -136,6 +144,6 @@ public class PermitNotificationOfficialNoticeService {
                 .ccRecipientsEmails(ccRecipientsEmails)
                 .build()
         );
-        return documentFileGeneratorService.generateFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
+        return documentFileGeneratorService.generateAndSaveFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
     }
 }

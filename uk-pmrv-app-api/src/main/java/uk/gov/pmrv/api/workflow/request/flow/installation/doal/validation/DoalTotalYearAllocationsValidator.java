@@ -2,12 +2,10 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.doal.validation;
 
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
-
 import org.springframework.stereotype.Service;
-
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalViolation;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.utils.DoalTotalAllocationsUtils;
 
@@ -23,7 +21,7 @@ public class DoalTotalYearAllocationsValidator {
         MapDifference<Year, Integer> differences = Maps.difference(totalAllocationsPerYearGenerated, totalAllocationsPerYear);
 
         if(!differences.areEqual()) {
-            throw new BusinessException(ErrorCode.INVALID_DOAL,
+            throw new BusinessException(MetsErrorCode.INVALID_DOAL,
                     DoalViolation.INVALID_TOTAL_ALLOCATIONS_PER_YEAR.getMessage(),
                     differences.entriesDiffering());
         }

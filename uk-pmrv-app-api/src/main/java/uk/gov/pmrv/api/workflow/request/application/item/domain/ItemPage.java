@@ -1,8 +1,9 @@
 package uk.gov.pmrv.api.workflow.request.application.item.domain;
 
-import java.util.List;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Builder

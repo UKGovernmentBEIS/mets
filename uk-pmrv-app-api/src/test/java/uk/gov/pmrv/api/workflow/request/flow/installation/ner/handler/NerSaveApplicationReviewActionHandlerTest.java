@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
@@ -39,7 +39,7 @@ class NerSaveApplicationReviewActionHandlerTest {
             NerSaveApplicationReviewRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.NER_SAVE_APPLICATION_REVIEW_PAYLOAD)
                 .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final String processTaskId = "processTaskId";
         final Request request = Request.builder().id("1").build();
         final RequestTask requestTask =
@@ -49,7 +49,7 @@ class NerSaveApplicationReviewActionHandlerTest {
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.NER_SAVE_APPLICATION_REVIEW,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(applyService, times(1)).applySaveAction(requestTask, taskActionPayload);

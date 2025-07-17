@@ -1,17 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.service;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.service.DateService;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.utils.DateService;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.permit.domain.dto.PermitEntityDto;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -22,6 +16,11 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestInfo;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.mapper.PermitVariationMapper;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor

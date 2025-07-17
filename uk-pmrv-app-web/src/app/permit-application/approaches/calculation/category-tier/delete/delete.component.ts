@@ -17,7 +17,7 @@ import { deleteReturnUrl } from '../../../approaches';
   template: `
     <app-page-heading size="xl">
       Are you sure you want to delete
-      <span class="nowrap"> ‘{{ index$ | async | sourceStreamCategoryName: 'CALCULATION_CO2' | async }}’? </span>
+      <span class="nowrap">‘{{ index$ | async | sourceStreamCategoryName: 'CALCULATION_CO2' | async }}’?</span>
     </app-page-heading>
 
     <p class="govuk-body">All the information within this source stream category will be deleted.</p>
@@ -27,13 +27,11 @@ import { deleteReturnUrl } from '../../../approaches';
       <a routerLink=".." govukLink>Cancel</a>
     </div>
   `,
-  styles: [
-    `
-      .nowrap {
-        white-space: nowrap;
-      }
-    `,
-  ],
+  styles: `
+    .nowrap {
+      white-space: nowrap;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteComponent implements PendingRequest {

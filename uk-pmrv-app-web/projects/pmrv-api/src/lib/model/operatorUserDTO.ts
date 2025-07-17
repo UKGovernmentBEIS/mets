@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -15,8 +15,6 @@ export interface OperatorUserDTO {
   email: string;
   firstName: string;
   lastName: string;
-  termsVersion?: number;
-  status?: 'REGISTERED' | 'PENDING' | 'DELETED';
   phoneNumber?: PhoneNumberDTO;
   mobileNumber?: PhoneNumberDTO;
 }

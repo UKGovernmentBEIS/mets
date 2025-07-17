@@ -3,17 +3,19 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/for
 
 import { Subject, takeUntil } from 'rxjs';
 
+import { RequestTaskStore } from '@aviation/request-task/store';
 import { RequestTaskFileService } from '@shared/services/request-task-file-service/request-task-file.service';
 
 import { GovukValidators } from 'govuk-components';
 
 import {
+  EmpVariationCorsiaApplicationReviewRequestTaskPayload,
   EmpVariationReviewDecision,
   EmpVariationUkEtsApplicationReviewRequestTaskPayload,
   ReviewDecisionRequiredChange,
 } from 'pmrv-api';
 
-import { RequestTaskStore } from '../../../store';
+import { uploadReviewGroupDecisionAttachmentActionTypeByRequestTaskTypeMap } from '../util/emp.util';
 
 @Injectable()
 export class EmpVariationReviewDecisionGroupFormProvider {
@@ -139,10 +141,13 @@ export class EmpVariationReviewDecisionGroupFormProvider {
         this.store.requestTaskId,
         decisionRequiredChange?.files ?? [],
         (
-          this.store.getState().requestTaskItem?.requestTask
-            ?.payload as EmpVariationUkEtsApplicationReviewRequestTaskPayload
-        )?.reviewAttachments, //TODO consider corsia as well
-        'EMP_VARIATION_UKETS_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT',
+          this.store.getState().requestTaskItem?.requestTask?.payload as
+            | EmpVariationUkEtsApplicationReviewRequestTaskPayload
+            | EmpVariationCorsiaApplicationReviewRequestTaskPayload
+        )?.reviewAttachments,
+        uploadReviewGroupDecisionAttachmentActionTypeByRequestTaskTypeMap(
+          this.store.getState().requestTaskItem?.requestTask?.type,
+        ),
         false,
         !this.store.getState().isEditable,
       ),

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { first, map, Observable, switchMap, tap } from 'rxjs';
 
@@ -7,13 +7,13 @@ import { AuthStore, selectUserId } from '@core/store/auth';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchBadRequest, ErrorCodes } from '@error/business-errors';
 
-import { ApplicationUserDTO, UsersService, VerifierUserDTO, VerifierUsersService } from 'pmrv-api';
+import { UserDTO, UsersService, VerifierUserDTO, VerifierUsersService } from 'pmrv-api';
 
 import { viewNotFoundVerifierError } from '../errors/business-error';
 
 @Injectable({ providedIn: 'root' })
-export class DetailsGuard implements CanActivate, Resolve<ApplicationUserDTO | VerifierUserDTO> {
-  private verifier: ApplicationUserDTO | VerifierUserDTO;
+export class DetailsGuard {
+  private verifier: UserDTO | VerifierUserDTO;
 
   constructor(
     private readonly verifierUsersService: VerifierUsersService,
@@ -42,7 +42,7 @@ export class DetailsGuard implements CanActivate, Resolve<ApplicationUserDTO | V
     );
   }
 
-  resolve(): ApplicationUserDTO | VerifierUserDTO {
+  resolve(): UserDTO | VerifierUserDTO {
     return this.verifier;
   }
 }

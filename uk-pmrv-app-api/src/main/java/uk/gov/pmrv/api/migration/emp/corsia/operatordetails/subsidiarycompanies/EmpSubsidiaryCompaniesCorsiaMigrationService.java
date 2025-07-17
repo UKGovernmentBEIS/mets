@@ -1,6 +1,23 @@
 package uk.gov.pmrv.api.migration.emp.corsia.operatordetails.subsidiarycompanies;
 
-import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+import uk.gov.pmrv.api.account.domain.Account;
+import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.SubsidiaryCompanyCorsia;
+import uk.gov.netz.api.files.attachments.domain.FileAttachment;
+import uk.gov.pmrv.api.migration.MigrationEndpoint;
+import uk.gov.pmrv.api.migration.emp.common.attachments.FileAttachmentUtil;
+import uk.gov.pmrv.api.migration.emp.corsia.EmissionsMonitoringPlanCorsiaSectionMigrationService;
+import uk.gov.pmrv.api.migration.emp.corsia.EmissionsMonitoringPlanMigrationCorsiaContainer;
+import uk.gov.pmrv.api.migration.emp.corsia.operatordetails.EmpOperatorDetailsCorsiaMigrationMapper;
+import uk.gov.pmrv.api.migration.emp.corsia.operatordetails.EmpOperatorDetailsFlightIdentificationCorsia;
+import uk.gov.netz.api.referencedata.domain.Country;
+import uk.gov.netz.api.referencedata.repository.CountryRepository;
 
 import java.io.File;
 import java.util.List;
@@ -9,33 +26,21 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.account.domain.Account;
-import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.SubsidiaryCompanyCorsia;
-import uk.gov.pmrv.api.files.attachments.domain.FileAttachment;
-import uk.gov.pmrv.api.migration.MigrationEndpoint;
-import uk.gov.pmrv.api.migration.emp.common.attachments.FileAttachmentUtil;
-import uk.gov.pmrv.api.migration.emp.corsia.EmissionsMonitoringPlanCorsiaSectionMigrationService;
-import uk.gov.pmrv.api.migration.emp.corsia.EmissionsMonitoringPlanMigrationCorsiaContainer;
-import uk.gov.pmrv.api.migration.emp.corsia.operatordetails.EmpOperatorDetailsCorsiaMigrationMapper;
-import uk.gov.pmrv.api.migration.emp.corsia.operatordetails.EmpOperatorDetailsFlightIdentificationCorsia;
-import uk.gov.pmrv.api.referencedata.domain.Country;
-import uk.gov.pmrv.api.referencedata.repository.CountryRepository;
+import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
 
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class EmpSubsidiaryCompaniesCorsiaMigrationService 
 	implements EmissionsMonitoringPlanCorsiaSectionMigrationService<EmpOperatorDetailsFlightIdentificationCorsia> {
 
 	private final JdbcTemplate migrationJdbcTemplate;
 	private final CountryRepository countryRepository;
+
+	public EmpSubsidiaryCompaniesCorsiaMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+														CountryRepository countryRepository) {
+		this.migrationJdbcTemplate = migrationJdbcTemplate;
+		this.countryRepository = countryRepository;
+	}
 
 	private static final String BLANK_FILE_PATH = "migration" + File.separator + "attachments" + File.separator + "Blank file AOC not required.pdf";
     private static final String QUERY_BASE  = "select * from (values\r\n"
@@ -47,14 +52,14 @@ public class EmpSubsidiaryCompaniesCorsiaMigrationService
 	public void populateSection(Map<String, Account> accountsToMigrate,
 			Map<Long, EmissionsMonitoringPlanMigrationCorsiaContainer> emps) {        
         String query = constructSectionQuery(QUERY_BASE, List.of());
-        Map<String, Set<SubsidiaryCompanyCorsia>> sections = executeQuery(query)
+        Map<String, List<SubsidiaryCompanyCorsia>> sections = executeQuery(query)
         		.stream()
                 .collect(Collectors.groupingBy(EtsEmpOperatorDetailsSubsidiaryCompaniesCorsia::getFldEmitterID))
                 .entrySet()
               .stream()
               .collect(Collectors.toMap(Map.Entry::getKey, entry -> EmpOperatorDetailsCorsiaMigrationMapper.toSubsidiaryCompanies(entry.getValue())));       
         // replace country name with country code
-        sections.values().stream().forEach(set -> set.stream().forEach(company -> replaceCountryNameWithCode(company.getRegisteredLocation())));
+        sections.values().forEach(set -> set.forEach(company -> replaceCountryNameWithCode(company.getRegisteredLocation())));
         
         sections
             .forEach((etsAccId, section) -> {
@@ -66,7 +71,7 @@ public class EmpSubsidiaryCompaniesCorsiaMigrationService
             	// subsidiary companies don't have attachments in etswap, set blank file
             	EmissionsMonitoringPlanMigrationCorsiaContainer empMigrationContainer = emps.get(accountsToMigrate.get(etsAccId).getId());
                 EmissionsMonitoringPlanCorsiaContainer empContainer = empMigrationContainer.getEmpContainer();
-            	section.stream().forEach(company -> {
+            	section.forEach(company -> {
             		FileAttachment blankFileAttachment = FileAttachmentUtil.getFileAttachment(BLANK_FILE_PATH);
             		UUID blankFileAttachmentUuid = UUID.fromString(blankFileAttachment.getUuid());
             		company.getAirOperatingCertificate().setCertificateFiles(Set.of(blankFileAttachmentUuid));

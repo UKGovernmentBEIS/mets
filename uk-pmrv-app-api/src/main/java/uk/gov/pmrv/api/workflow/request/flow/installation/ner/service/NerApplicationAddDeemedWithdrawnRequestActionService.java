@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.ner.service;
 
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -13,6 +12,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInf
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationEndedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.mapper.NerMapper;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

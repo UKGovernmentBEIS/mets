@@ -4,7 +4,6 @@ import { CanDeactivateFn, Routes } from '@angular/router';
 import { RequestActionStore } from '@aviation/request-action/store';
 import { DecisionSummaryComponent } from '@aviation/request-action/vir/decision-summary/decision-summary.component';
 import { ReferenceItemResolver } from '@aviation/request-action/vir/reference-item.resolver';
-import { RespondedComponent } from '@aviation/request-action/vir/responded/responded.component';
 import { RecommendationResponseItemComponent } from '@aviation/request-action/vir/reviewed/tasks/recommendation-response-item/recommendation-response-item.component';
 import { ReportSummaryComponent } from '@aviation/request-action/vir/reviewed/tasks/report-summary/report-summary.component';
 import { ReferenceItemComponent } from '@aviation/request-action/vir/submitted/tasks/reference-item/reference-item.component';
@@ -51,10 +50,6 @@ export const VIR_ROUTES: Routes = [
             component: RecommendationResponseItemComponent,
           },
         ],
-      },
-      {
-        path: 'responded',
-        component: RespondedComponent,
       },
     ],
   },

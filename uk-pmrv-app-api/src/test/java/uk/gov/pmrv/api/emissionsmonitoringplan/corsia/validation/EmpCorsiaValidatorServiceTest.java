@@ -17,8 +17,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanValidationResult;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanViolation;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.blockhour.EmpBlockHourMethodProcedures;
@@ -29,7 +29,6 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.methodb.EmpMethodBP
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsources.EmpEmissionSourcesCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.EmpCorsiaOperatorDetails;
-import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.validation.EmpBlockHourMethodProceduresSectionValidator;
 
 @ExtendWith(MockitoExtension.class)
 class EmpCorsiaValidatorServiceTest {
@@ -130,7 +129,7 @@ class EmpCorsiaValidatorServiceTest {
         verify(blockOnBlockOffMethodProceduresSectionValidator, times(1)).validate(empContainer);
         verify(fuelUpliftMethodProceduresSectionValidator, times(1)).validate(empContainer);
         verify(blockHourMethodProceduresSectionValidator, times(1)).validate(empContainer);
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_EMP);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_EMP);
     }
 
     @Test

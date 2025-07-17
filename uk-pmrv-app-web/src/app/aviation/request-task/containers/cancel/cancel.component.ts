@@ -21,7 +21,7 @@ interface ViewModel {
 @Component({
   selector: 'app-cancel-task-aviation',
   template: `
-    <app-page-heading size="xl"> Are you sure you want to cancel this task? </app-page-heading>
+    <app-page-heading size="xl">Are you sure you want to cancel this task?</app-page-heading>
     <p class="govuk-body">This task and its data will be deleted.</p>
     <div class="govuk-button-group">
       <button type="button" appPendingButton (click)="cancel()" govukWarnButton>Yes, cancel this task</button>

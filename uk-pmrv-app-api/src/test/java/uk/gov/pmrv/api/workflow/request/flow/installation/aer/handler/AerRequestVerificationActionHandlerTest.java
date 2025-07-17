@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -46,7 +46,7 @@ class AerRequestVerificationActionHandlerTest {
     @Test
     void process() {
         final long taskId = 1L;
-        final PmrvUser user = PmrvUser.builder().build();
+        final AppUser user = AppUser.builder().build();
         final AerApplicationRequestVerificationRequestTaskActionPayload payload = AerApplicationRequestVerificationRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.AER_REQUEST_VERIFICATION_PAYLOAD).build();
         final String processId = "processId";

@@ -10,7 +10,10 @@ import { isFiltersWizardStepCompleted } from '@aviation/workflows/emp-batch-reis
   providedIn: 'root',
 })
 export class SignatoryGuard {
-  constructor(private router: Router, private readonly store: EmpBatchReissueStore) {}
+  constructor(
+    private router: Router,
+    private readonly store: EmpBatchReissueStore,
+  ) {}
 
   canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     const firstWizardStep = `${state.url.slice(0, state.url.lastIndexOf('/'))}/filters`;

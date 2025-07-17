@@ -10,9 +10,11 @@ import { ManagementProceduresRolesFormComponent } from './management-procedures-
 
 @Component({
   selector: 'app-mock-parent',
-  template: ` <form [formGroup]="form">
-    <app-management-procedures-roles-form [heading]="heading"></app-management-procedures-roles-form>
-  </form>`,
+  template: `
+    <form [formGroup]="form">
+      <app-management-procedures-roles-form [heading]="heading"></app-management-procedures-roles-form>
+    </form>
+  `,
   standalone: true,
   imports: [ReactiveFormsModule, ManagementProceduresRolesFormComponent],
   providers: [{ provide: TASK_FORM_PROVIDER, useClass: ManagementProceduresFormProvider }],

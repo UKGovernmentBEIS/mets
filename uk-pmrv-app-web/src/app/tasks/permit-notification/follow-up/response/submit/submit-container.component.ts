@@ -12,14 +12,15 @@ import { PermitNotificationService } from '../../../core/permit-notification.ser
 
 @Component({
   selector: 'app-submit-container',
-  template: `<app-submit
-    [allowSubmit]="allowSubmit$ | async"
-    [isEditable]="store.isEditable$ | async"
-    [isActionSubmitted]="isActionSubmitted$ | async"
-    [returnUrlConfig]="{ text: 'follow up response', url: '..' }"
-    [competentAuthority]="competentAuthority$ | async"
-    (submitClicked)="onSubmit()"
-  ></app-submit>`,
+  template: `
+    <app-submit
+      [allowSubmit]="allowSubmit$ | async"
+      [isEditable]="store.isEditable$ | async"
+      [isActionSubmitted]="isActionSubmitted$ | async"
+      [returnUrlConfig]="{ text: 'follow up response', url: '..' }"
+      [competentAuthority]="competentAuthority$ | async"
+      (submitClicked)="onSubmit()"></app-submit>
+  `,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -18,9 +18,11 @@ async function setup() {
 
 @Component({
   selector: 'app-mock-parent',
-  template: ` <form [formGroup]="form">
-    <app-reporting-obligation-form [year]="header"></app-reporting-obligation-form>
-  </form>`,
+  template: `
+    <form [formGroup]="form">
+      <app-reporting-obligation-form [year]="header"></app-reporting-obligation-form>
+    </form>
+  `,
   standalone: true,
   imports: [ReactiveFormsModule, ReportingObligationFormComponent],
   providers: [{ provide: TASK_FORM_PROVIDER, useClass: ReportingObligationFormProvider }],

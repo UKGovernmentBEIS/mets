@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -53,7 +53,7 @@ class NerReviewNotifyOperatorActionHandlerTest {
     void process() {
         
         final Long requestTaskId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final DecisionNotification decisionNotification = DecisionNotification.builder().build();
         final NotifyOperatorForDecisionRequestTaskActionPayload taskActionPayload = NotifyOperatorForDecisionRequestTaskActionPayload.builder()
             .decisionNotification(decisionNotification)
@@ -76,16 +76,16 @@ class NerReviewNotifyOperatorActionHandlerTest {
         handler.process(
             requestTaskId,
             RequestTaskActionType.NER_NOTIFY_OPERATOR_FOR_DECISION,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(reviewValidator, times(1))
             .validateReviewTaskPayload(requestTaskPayload, paymentAmount);
         verify(reviewValidator, times(1))
-            .validateReviewNotifyUsers(requestTask, decisionNotification, pmrvUser);
+            .validateReviewNotifyUsers(requestTask, decisionNotification, appUser);
         verify(applyReviewService, times(1))
-            .saveDecisionNotification(requestTask, decisionNotification, pmrvUser);
+            .saveDecisionNotification(requestTask, decisionNotification, appUser);
         verify(workflowService, times(1)).completeTask(
             requestTask.getProcessTaskId(),
             Map.of(

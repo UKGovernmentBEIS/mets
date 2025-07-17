@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration.notes.account;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
-import org.springframework.jdbc.core.RowMapper;
 
 public class AccountNoteFileMapper implements RowMapper<AccountNoteFileRow> {
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
 import { map } from 'rxjs';
 
@@ -12,8 +12,11 @@ import { RequestTaskActionProcessDTO } from 'pmrv-api';
 @Injectable({
   providedIn: 'root',
 })
-export class NotifyOperatorGuard implements CanActivate {
-  constructor(private readonly store: PermitRevocationStore, private readonly router: Router) {}
+export class NotifyOperatorGuard {
+  constructor(
+    private readonly store: PermitRevocationStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot) {
     const requestTaskActionType: RequestTaskActionProcessDTO['requestTaskActionType'] =

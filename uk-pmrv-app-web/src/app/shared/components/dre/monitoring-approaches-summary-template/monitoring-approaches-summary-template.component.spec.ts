@@ -16,10 +16,11 @@ describe('MonitoringApproachesSummaryTemplateComponent', () => {
   let hostComponent: TestComponent;
 
   @Component({
-    template: ` <app-monitoring-approaches-summary-template
-      [approachEmissions]="dre.monitoringApproachReportingEmissions"
-      [editable]="editable"
-    ></app-monitoring-approaches-summary-template>`,
+    template: `
+      <app-monitoring-approaches-summary-template
+        [approachEmissions]="dre.monitoringApproachReportingEmissions"
+        [editable]="editable"></app-monitoring-approaches-summary-template>
+    `,
   })
   class TestComponent {
     editable = false;

@@ -13,20 +13,10 @@
         You have added {{ emissionSources.length }} emission {{ emissionSources.length > 1 ? 'sources' : 'source' }}
       </h2>
 
-      <govuk-table [columns]="columns" [data]="'emissionSources' | task | async" [class.no-bottom-border]="false">
-        <ng-template let-column="column" let-row="row">
-          <ng-container [ngSwitch]="column.field">
-            <ng-container *ngSwitchCase="'reference'">{{ row.reference }}</ng-container>
-            <ng-container *ngSwitchCase="'description'">{{ row.description }} </ng-container>
-            <ng-container *ngIf="(aerService.isEditable$ | async) === true">
-              <ng-container *ngSwitchCase="'change'"><a [routerLink]="row.id" govukLink>Change</a></ng-container>
-              <ng-container *ngSwitchCase="'delete'"
-                ><a [routerLink]="['delete', row.id]" govukLink>Delete</a></ng-container
-              >
-            </ng-container>
-          </ng-container>
-        </ng-template>
-      </govuk-table>
+      <app-emission-source-table
+        [data]="'emissionSources' | task | async"
+        [isEditable]="aerService.isEditable$ | async"
+      ></app-emission-source-table>
 
       <ng-container *ngIf="(aerService.isEditable$ | async) === true">
         <button govukSecondaryButton routerLink="add" type="button">Add another emission source</button>

@@ -5,9 +5,10 @@ import jakarta.validation.constraints.NotEmpty;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsia;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerDataReviewDecision;
@@ -68,7 +69,7 @@ public class RequestAviationAerCorsiaReviewValidatorService {
                 .anyMatch(reviewDecision -> reviewDecision.getType().equals(AerDataReviewDecisionType.OPERATOR_AMENDS_NEEDED));
 
         if (!amendExists) {
-            throw new BusinessException(ErrorCode.INVALID_AVIATION_AER_REVIEW);
+            throw new BusinessException(MetsErrorCode.INVALID_AVIATION_AER_REVIEW);
         }
     }
 }

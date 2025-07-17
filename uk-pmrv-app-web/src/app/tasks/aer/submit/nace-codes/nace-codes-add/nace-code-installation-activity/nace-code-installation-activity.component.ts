@@ -44,7 +44,19 @@ export class NaceCodeInstallationActivityComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const activity = this.form.value.installationActivityChild ?? this.form.value.installationActivity;
+    const activity =
+      (this.form.value.installationActivityChild0 ||
+        this.form.value.installationActivityChild1 ||
+        this.form.value.installationActivityChild2 ||
+        this.form.value.installationActivityChild3 ||
+        this.form.value.installationActivityChild4 ||
+        this.form.value.installationActivityChild5 ||
+        this.form.value.installationActivityChild6 ||
+        this.form.value.installationActivityChild7 ||
+        this.form.value.installationActivityChild8 ||
+        this.form.value.installationActivityChild9) ??
+      this.form.value.installationActivity;
+
     this.aerService
       .getTask('naceCodes')
       .pipe(
@@ -72,8 +84,12 @@ export class NaceCodeInstallationActivityComponent implements OnInit {
       .valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         if (this.form.get('installationActivity')) {
-          this.form.get('installationActivityChild').setValue(null);
-          this.form.get('installationActivityChild').enable();
+          Object.keys(this.form.controls).forEach((key) => {
+            if (key.startsWith('installationActivityChild')) {
+              this.form.get(key).setValue(null);
+              this.form.get(key).enable();
+            }
+          });
         }
       });
   }

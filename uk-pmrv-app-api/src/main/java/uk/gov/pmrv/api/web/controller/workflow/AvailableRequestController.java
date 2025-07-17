@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.Authorized;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.AvailableRequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
@@ -44,10 +44,10 @@ public class AvailableRequestController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#accountId")
     public ResponseEntity<Map<RequestCreateActionType, RequestCreateValidationResult>> getAvailableAccountWorkflows(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("accountId") @Parameter(name = "accountId", description = "The account id", required = true) Long accountId) {
 
-        return new ResponseEntity<>(availableRequestService.getAvailableAccountWorkflows(accountId, pmrvUser), HttpStatus.OK);
+        return new ResponseEntity<>(availableRequestService.getAvailableAccountWorkflows(accountId, appUser), HttpStatus.OK);
     }
 
     @GetMapping("/reporting/aer/{aerRequestId}")
@@ -58,9 +58,9 @@ public class AvailableRequestController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#aerRequestId")
     public ResponseEntity<Map<RequestCreateActionType, RequestCreateValidationResult>> getAvailableAerWorkflows(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("aerRequestId") @Parameter(name = "aerRequestId", description = "The AER request id", required = true) String aerRequestId) {
 
-        return new ResponseEntity<>(availableRequestService.getAvailableAerWorkflows(aerRequestId, pmrvUser), HttpStatus.OK);
+        return new ResponseEntity<>(availableRequestService.getAvailableAerWorkflows(aerRequestId, appUser), HttpStatus.OK);
     }
 }

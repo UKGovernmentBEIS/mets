@@ -6,7 +6,6 @@ import { BehaviorSubject, filter, map, Observable, takeUntil } from 'rxjs';
 import { EmpVariationReviewDecisionGroupSummaryComponent } from '@aviation/shared/components/emp/emp-variation-review-decision-group-summary/emp-variation-review-decision-group-summary.component';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
-import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { FileUpload } from '@shared/file-input/file-upload-event';
 import { SharedModule } from '@shared/shared.module';
 
@@ -50,14 +49,13 @@ export class EmpVariationReviewDecisionGroupComponent implements OnInit, OnDestr
     private destroy$: DestroySubject,
     private pendingRequestService: PendingRequestService,
     readonly formProvider: EmpVariationReviewDecisionGroupFormProvider,
-    private readonly businessErrorService: BusinessErrorService,
   ) {}
 
   ngOnInit(): void {
     this.groupKey = empReviewGroupMap[this.taskKey];
 
     if (this.taskKey === 'empVariationDetails') {
-      this.decisionData$ = this.store.pipe(empQuery.selectVariationDetailsReviewDecisions);
+      this.decisionData$ = this.store.pipe(empQuery.selectVariationDetailsReviewDecision);
       this.canEdit$ = this.store.pipe(
         empQuery.selectVariationDetailsReviewCompleted,
         map((reviewSectionsCompleted) => !reviewSectionsCompleted),
@@ -65,7 +63,7 @@ export class EmpVariationReviewDecisionGroupComponent implements OnInit, OnDestr
 
       this.store
         .pipe(
-          empQuery.selectVariationDetailsReviewDecisions,
+          empQuery.selectVariationDetailsReviewDecision,
           filter((reviewDecision) => !!reviewDecision),
           takeUntil(this.destroy$),
         )

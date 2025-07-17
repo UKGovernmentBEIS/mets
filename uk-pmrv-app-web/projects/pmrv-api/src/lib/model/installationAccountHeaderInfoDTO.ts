@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,6 +11,7 @@
  */
 
 export interface InstallationAccountHeaderInfoDTO {
+  id?: number;
   name?: string;
   status?:
     | 'UNAPPROVED'
@@ -25,7 +26,7 @@ export interface InstallationAccountHeaderInfoDTO {
     | 'REVOKED'
     | 'AWAITING_TRANSFER'
     | 'TRANSFERRED';
-  emitterType?: 'GHGE' | 'HSE';
+  emitterType?: 'WASTE' | 'GHGE' | 'HSE';
   installationCategory?: 'A_LOW_EMITTER' | 'A' | 'B' | 'C' | 'N_A';
   permitId?: string;
 }

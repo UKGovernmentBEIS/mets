@@ -4,19 +4,19 @@
   heading="Description of your activities"
   submitText="Continue"
 >
-  <h3 class="govuk-heading-s">Type of operator</h3>
+  <h2 class="govuk-heading-s">Type of operator</h2>
   <div formControlName="operatorType" govuk-radio class="govuk-!-width-two-thirds">
     <govuk-radio-option value="COMMERCIAL" label="Commercial"></govuk-radio-option>
     <govuk-radio-option value="NON_COMMERCIAL" label="Non-commercial"></govuk-radio-option>
   </div>
 
-  <h3 class="govuk-heading-s">Type of flights</h3>
+  <h2 class="govuk-heading-s">Type of flights</h2>
   <div formControlName="flightTypes" govuk-checkboxes>
     <govuk-checkbox label="Scheduled flights" value="SCHEDULED"></govuk-checkbox>
     <govuk-checkbox label="Non-scheduled flights" value="NON_SCHEDULED"></govuk-checkbox>
   </div>
 
-  <h3 class="govuk-heading-s">Describe your activities</h3>
+  <h2 class="govuk-heading-s">Describe your activities</h2>
   <div
     govuk-textarea
     [maxLength]="10000"

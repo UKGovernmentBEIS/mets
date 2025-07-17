@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
@@ -41,7 +41,7 @@ class PaymentMarkAsPaidHandlerTest {
     void process() {
         Long requestTaskId = 1L;
         String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        AppUser appUser = AppUser.builder().userId(userId).build();
         RequestTask requestTask = RequestTask.builder()
             .id(requestTaskId)
             .processTaskId("process-123")
@@ -49,10 +49,10 @@ class PaymentMarkAsPaidHandlerTest {
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        paymentMarkAsPaidHandler.process(requestTaskId, PAYMENT_MARK_AS_PAID, pmrvUser, new RequestTaskActionEmptyPayload());
+        paymentMarkAsPaidHandler.process(requestTaskId, PAYMENT_MARK_AS_PAID, appUser, new RequestTaskActionEmptyPayload());
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-        verify(paymentCompleteService, times(1)).markAsPaid(requestTask, pmrvUser);
+        verify(paymentCompleteService, times(1)).markAsPaid(requestTask, appUser);
         verify(workflowService, times(1))
             .completeTask(requestTask.getProcessTaskId(), Map.of(BpmnProcessConstants.PAYMENT_OUTCOME, PaymentOutcome.MARK_AS_PAID));
     }

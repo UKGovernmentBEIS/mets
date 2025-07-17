@@ -1,20 +1,21 @@
 package uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service;
 
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.authorization.rules.services.resource.RequestTaskAuthorizationResourceService;
-import uk.gov.pmrv.api.authorization.rules.services.resource.ResourceCriteria;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.resource.RequestTaskAuthorizationResourceService;
+import uk.gov.netz.api.authorization.rules.services.resource.ResourceCriteria;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
+
+import java.util.List;
+import java.util.Map;
+
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
 
 /**
  * Validation Service for assignments.
@@ -30,10 +31,10 @@ public class RequestTaskAssignmentValidationService {
     /**
      * Checks if the {@code requestTask} can be released, taking into consideration the role type of the users
      * to whom the task is addressed to.
-     * Only request tasks addressed to {@link RoleType#OPERATOR} can not be released.
+     * Only request tasks addressed to OPERATOR can not be released.
      * @param requestTask the {@link RequestTask}
      */
-    void validateTaskReleaseCapability(RequestTask requestTask, RoleType roleType) {
+    void validateTaskReleaseCapability(RequestTask requestTask, String roleType) {
         validateTaskAssignmentCapability(requestTask);
 
         if (roleType == null || OPERATOR.equals(roleType)) {
@@ -57,45 +58,26 @@ public class RequestTaskAssignmentValidationService {
     }
 
     public boolean hasUserPermissionsToBeAssignedToTask(RequestTask requestTask, String userId) {
-        RoleType userRoleType = userRoleTypeService.getUserRoleTypeByUserId(userId).getRoleType();
-        
-        ResourceCriteria resourceCriteria = 
+        String userRoleType = userRoleTypeService.getUserRoleTypeByUserId(userId).getRoleType();
+
+        ResourceCriteria resourceCriteria =
                 ResourceCriteria.builder()
-                    .accountId(requestTask.getRequest().getAccountId())
-                    .competentAuthority(requestTask.getRequest().getCompetentAuthority())
-                    .verificationBodyId(requestTask.getRequest().getVerificationBodyId())
-                    .build();
-        
-        List<String> candidateAssignees = getCandidateAssigneesByCriteriaAndRoleType(
-            requestTask.getType(),
-            resourceCriteria,
-            userRoleType);
-
-        return candidateAssignees.contains(userId);
-    }
-
-    public boolean hasUserPermissionsToBeAssignedToTaskType(RequestTaskType requestTaskType, String userId, PmrvUser pmrvUser) {
-        ResourceCriteria resourceCriteria = ResourceCriteria.builder()
-            .competentAuthority(pmrvUser.getCompetentAuthority())
-            .build();
+                        .requestResources(requestTask.getRequest().getRequestResourcesMap())
+                        .build();
 
         List<String> candidateAssignees = getCandidateAssigneesByCriteriaAndRoleType(
-            requestTaskType,
-            resourceCriteria,
-            pmrvUser.getRoleType());
-
-        if(RequestTaskType.getPeerReviewTypes().contains(requestTaskType)) {
-            candidateAssignees.remove(pmrvUser.getUserId());
-        }
+                requestTask.getType(),
+                resourceCriteria,
+                userRoleType);
 
         return candidateAssignees.contains(userId);
     }
 
     private List<String> getCandidateAssigneesByCriteriaAndRoleType(RequestTaskType requestTaskType,
-                                                                    ResourceCriteria resourceCriteria, RoleType roleType) {
+                                                                    ResourceCriteria resourceCriteria, String roleType) {
         return requestTaskAuthorizationResourceService.findUsersWhoCanExecuteRequestTaskTypeByAccountCriteriaAndRoleType(
-            requestTaskType.name(),
-            resourceCriteria,
-            roleType);
+                requestTaskType.name(),
+                resourceCriteria,
+                roleType);
     }
 }

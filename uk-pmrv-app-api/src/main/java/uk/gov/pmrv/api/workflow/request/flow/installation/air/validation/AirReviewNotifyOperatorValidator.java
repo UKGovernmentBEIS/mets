@@ -2,9 +2,9 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.air.validation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.NotifyOperatorForDecisionRequestTaskActionPayload;
@@ -20,7 +20,7 @@ public class AirReviewNotifyOperatorValidator {
 
     public void validate(final RequestTask requestTask, 
                          final NotifyOperatorForDecisionRequestTaskActionPayload payload,
-                         final PmrvUser pmrvUser) {
+                         final AppUser appUser) {
         
         final AirApplicationReviewRequestTaskPayload taskPayload = (AirApplicationReviewRequestTaskPayload) requestTask.getPayload();
         final DecisionNotification decisionNotification = payload.getDecisionNotification();
@@ -29,7 +29,7 @@ public class AirReviewNotifyOperatorValidator {
         reviewValidator.validate(taskPayload);
 
         // Validate action payload data
-        if (!decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser)) {
+        if (!decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser)) {
             throw new BusinessException(ErrorCode.FORM_VALIDATION);
         }
     }

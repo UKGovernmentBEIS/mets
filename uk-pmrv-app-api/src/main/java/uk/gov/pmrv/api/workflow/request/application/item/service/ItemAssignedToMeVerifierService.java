@@ -2,11 +2,10 @@ package uk.gov.pmrv.api.workflow.request.application.item.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.workflow.request.application.authorization.VerifierAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
@@ -26,21 +25,21 @@ public class ItemAssignedToMeVerifierService implements ItemAssignedToMeService 
     private final VerifierAuthorityResourceAdapter verifierAuthorityResourceAdapter;
 
     @Override
-    public ItemDTOResponse getItemsAssignedToMe(PmrvUser pmrvUser, AccountType accountType, PagingRequest paging) {
+    public ItemDTOResponse getItemsAssignedToMe(AppUser appUser, AccountType accountType, PagingRequest paging) {
         Map<Long, Set<RequestTaskType>> userScopedRequestTaskTypes =
-                verifierAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType);
+                verifierAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
 
         ItemPage itemPage = itemVerifierRepository.findItems(
-            pmrvUser.getUserId(),
+            appUser.getUserId(),
             ItemAssignmentType.ME,
             userScopedRequestTaskTypes,
             paging);
 
-        return itemResponseService.toItemDTOResponse(itemPage, accountType, pmrvUser);
+        return itemResponseService.toItemDTOResponse(itemPage, accountType, appUser);
     }
 
     @Override
-    public RoleType getRoleType() {
-        return RoleType.VERIFIER;
+    public String getRoleType() {
+        return RoleTypeConstants.VERIFIER;
     }
 }

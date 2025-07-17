@@ -19,10 +19,14 @@
       <div formControlName="otherDescriptionName" govuk-text-input label="Provide a short name"></div>
     </div>
   </app-select-other>
-  <div formControlName="type" govuk-select label="Type">
+
+  <app-select-other formControlName="type" label="Type">
     <option *ngFor="let option of sourceStreamTypesArray" [value]="option.value">
       {{ option.label }}
     </option>
-  </div>
+    <div govukConditionalContent>
+      <div formControlName="otherTypeName" govuk-text-input label="Provide a short name"></div>
+    </div>
+  </app-select-other>
 </app-wizard-step>
 <a govukLink routerLink="..">Return to: Source streams (fuels and materials)</a>

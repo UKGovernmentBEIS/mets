@@ -6,7 +6,6 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  @Input() logoSvg: string;
   @Input() title: string;
   @ViewChild('header') header: ElementRef;
 }

@@ -19,16 +19,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactRegistrationDTO;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactsDTO;
 import uk.gov.pmrv.api.account.service.CaExternalContactService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.BAD_REQUEST;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.FORBIDDEN;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
@@ -49,8 +49,8 @@ public class CaExternalContactController {
     @ApiResponse(responseCode = "200", description = OK, content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = CaExternalContactsDTO.class)))
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    public ResponseEntity<CaExternalContactsDTO> getCaExternalContacts(@Parameter(hidden = true) PmrvUser pmrvUser) {
-        return new ResponseEntity<>(caExternalContactService.getCaExternalContacts(pmrvUser), HttpStatus.OK);
+    public ResponseEntity<CaExternalContactsDTO> getCaExternalContacts(@Parameter(hidden = true) AppUser appUser) {
+        return new ResponseEntity<>(caExternalContactService.getCaExternalContacts(appUser), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
@@ -61,7 +61,7 @@ public class CaExternalContactController {
     @ApiResponse(responseCode = "400", description = BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    public ResponseEntity<CaExternalContactDTO> getCaExternalContactById(@Parameter(hidden = true) PmrvUser authUser, @PathVariable("id")
+    public ResponseEntity<CaExternalContactDTO> getCaExternalContactById(@Parameter(hidden = true) AppUser authUser, @PathVariable("id")
     @Parameter(description = "The ca external contact id") Long id) {
         return new ResponseEntity<>(caExternalContactService.getCaExternalContactById(authUser, id), HttpStatus.OK);
     }
@@ -74,7 +74,7 @@ public class CaExternalContactController {
     @ApiResponse(responseCode = "400", description = BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    public ResponseEntity<Void> deleteCaExternalContactById(@Parameter(hidden = true) PmrvUser authUser, @PathVariable("id")
+    public ResponseEntity<Void> deleteCaExternalContactById(@Parameter(hidden = true) AppUser authUser, @PathVariable("id")
     @Parameter(description = "The ca external contact id") Long id) {
         caExternalContactService.deleteCaExternalContactById(authUser, id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -87,7 +87,7 @@ public class CaExternalContactController {
     @ApiResponse(responseCode = "400", description = BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    public ResponseEntity<Void> createCaExternalContact(@Parameter(hidden = true) PmrvUser authUser,
+    public ResponseEntity<Void> createCaExternalContact(@Parameter(hidden = true) AppUser authUser,
                                                         @RequestBody @Valid
                                                         @Parameter(description = "The ca external information", required = true)
                                                                 CaExternalContactRegistrationDTO caExternalContactRegistration) {
@@ -103,7 +103,7 @@ public class CaExternalContactController {
     @ApiResponse(responseCode = "400", description = BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    public ResponseEntity<Void> editCaExternalContact(@Parameter(hidden = true) PmrvUser authUser,
+    public ResponseEntity<Void> editCaExternalContact(@Parameter(hidden = true) AppUser authUser,
                                                       @PathVariable("id")
                                                       @Parameter(description = "The ca external contact id") Long id,
                                                       @RequestBody @Valid

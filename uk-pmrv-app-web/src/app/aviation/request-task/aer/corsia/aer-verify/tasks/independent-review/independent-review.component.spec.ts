@@ -137,7 +137,7 @@ describe('IndependentReviewComponent', () => {
       expect(page.heading1).toBeTruthy();
       expect(page.heading1.textContent.trim()).toEqual('Independent review');
       expect(page.heading2.map((h2) => h2.textContent.trim())).toEqual([
-        'Results of the independent review',
+        'Enter the results of your independent review',
         'Independent reviewer details',
       ]);
       expect(page.submitButton).toBeTruthy();
@@ -253,7 +253,7 @@ describe('IndependentReviewComponent', () => {
       expect(page.heading1).toBeTruthy();
       expect(page.heading1.textContent.trim()).toEqual('Independent review');
       expect(page.heading2.map((h2) => h2.textContent.trim())).toEqual([
-        'Results of the independent review',
+        'Enter the results of your independent review',
         'Independent reviewer details',
       ]);
       expect(page.submitButton).toBeTruthy();

@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,6 +11,9 @@
  */
 import { ReviewDecisionRequiredChange } from './reviewDecisionRequiredChange';
 
+/**
+ * Details of the follow up decision details
+ */
 export interface PermitNotificationFollowupRequiredChangesDecisionDetails {
   notes?: string;
   requiredChanges: Array<ReviewDecisionRequiredChange>;

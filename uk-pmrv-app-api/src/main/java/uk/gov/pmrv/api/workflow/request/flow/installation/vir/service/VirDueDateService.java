@@ -12,7 +12,6 @@ public class VirDueDateService {
 
     public Date generateDueDate(Year year) {
         // For all VIRs the deadline is set at 30/06 of AER's year
-        LocalDate deadline = LocalDate.of(year.getValue(), 6, 30);
-        return DateUtils.convertLocalDateToDate(deadline);
+        return DateUtils.atEndOfDay(LocalDate.of(year.getValue(), 6, 30));
     }
 }

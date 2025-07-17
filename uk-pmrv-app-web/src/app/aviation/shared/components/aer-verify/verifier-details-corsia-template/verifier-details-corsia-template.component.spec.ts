@@ -16,8 +16,7 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
       <app-verifier-details-corsia-template
         [verificationBodyDetails]="verificationBodyDetails"
         [verifierDetails]="verifierDetails"
-        [isEditable]="isEditable"
-      ></app-verifier-details-corsia-template>
+        [isEditable]="isEditable"></app-verifier-details-corsia-template>
     `,
   })
   class TestComponent {
@@ -31,6 +30,7 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
         postcode: '15452',
       },
     };
+
     verifierDetails = {
       interestConflictAvoidance: {
         breakTaken: true,
@@ -45,6 +45,7 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
         position: 'My position',
       },
     };
+
     isEditable = true;
   }
 
@@ -75,14 +76,12 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
       ['Position', ['My position', 'Change']],
       ['Role and expertise', ['My role', 'Change']],
       ['Email', ['test@pmrv.com', 'Change']],
+      ['Has the team leader made six or more annual verifications for this aeroplane operator?', ['Yes', 'Change']],
       [
-        'Have you conducted six or more annual verifications as a team leader for this aeroplane operator?',
+        'Did they then take a break of three consecutive years from providing verification services for this operator?',
         ['Yes', 'Change'],
       ],
-      [
-        'Following completion of six annual verifications as team leader, did you take a break of three-consecutive years from providing verification services for this Aeroplane Operator?',
-        ['Yes', 'Change'],
-      ],
+      ['Results of the impartiality and conflict of interest assessment', ['', 'Change']],
     ]);
 
     hostComponent.verifierDetails = {
@@ -99,6 +98,7 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
         position: 'My position',
       },
     };
+
     fixture.detectChanges();
 
     expect(summaryListValues()).toEqual([
@@ -108,15 +108,13 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
       ['Position', ['My position', 'Change']],
       ['Role and expertise', ['My role', 'Change']],
       ['Email', ['test@pmrv.com', 'Change']],
+      ['Has the team leader made six or more annual verifications for this aeroplane operator?', ['Yes', 'Change']],
       [
-        'Have you conducted six or more annual verifications as a team leader for this aeroplane operator?',
-        ['Yes', 'Change'],
-      ],
-      [
-        'Following completion of six annual verifications as team leader, did you take a break of three-consecutive years from providing verification services for this Aeroplane Operator?',
+        'Did they then take a break of three consecutive years from providing verification services for this operator?',
         ['No', 'Change'],
       ],
-      ['Provide a reason for not meeting the conflict of interest requirement', ['My reason', 'Change']],
+      ['Reason why the conflict of interest requirement was not met', ['My reason', 'Change']],
+      ['Results of the impartiality and conflict of interest assessment', ['', 'Change']],
     ]);
 
     hostComponent.verifierDetails = {
@@ -133,6 +131,7 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
         position: 'My position',
       },
     };
+
     fixture.detectChanges();
 
     expect(summaryListValues()).toEqual([
@@ -142,14 +141,8 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
       ['Position', ['My position', 'Change']],
       ['Role and expertise', ['My role', 'Change']],
       ['Email', ['test@pmrv.com', 'Change']],
-      [
-        'Have you conducted six or more annual verifications as a team leader for this aeroplane operator?',
-        ['No', 'Change'],
-      ],
-      [
-        'Describe the main results of impartiality and avoidance of conflict of interest assessment',
-        ['My results', 'Change'],
-      ],
+      ['Has the team leader made six or more annual verifications for this aeroplane operator?', ['No', 'Change']],
+      ['Results of the impartiality and conflict of interest assessment', ['My results', 'Change']],
     ]);
 
     hostComponent.isEditable = false;
@@ -162,8 +155,8 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
       ['Position', ['My position']],
       ['Role and expertise', ['My role']],
       ['Email', ['test@pmrv.com']],
-      ['Have you conducted six or more annual verifications as a team leader for this aeroplane operator?', ['No']],
-      ['Describe the main results of impartiality and avoidance of conflict of interest assessment', ['My results']],
+      ['Has the team leader made six or more annual verifications for this aeroplane operator?', ['No']],
+      ['Results of the impartiality and conflict of interest assessment', ['My results']],
     ]);
 
     hostComponent.verifierDetails = {
@@ -175,6 +168,7 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
         position: 'My position',
       },
     };
+
     fixture.detectChanges();
 
     expect(summaryListValues()).toEqual([
@@ -190,6 +184,7 @@ describe('VerifierDetailsCorsiaTemplateComponent', () => {
       interestConflictAvoidance: null,
       verificationTeamLeader: null,
     };
+
     fixture.detectChanges();
 
     expect(summaryListValues()).toEqual([

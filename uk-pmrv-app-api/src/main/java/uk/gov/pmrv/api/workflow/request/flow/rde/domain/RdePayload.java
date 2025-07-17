@@ -1,9 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.rde.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,6 +9,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode

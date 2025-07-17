@@ -6,6 +6,7 @@ import { combineLatest, map, Observable } from 'rxjs';
 import { empCorsiaQuery } from '@aviation/request-task/emp/shared/emp-corsia.selectors';
 import { EmpReviewDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-review-decision-group/emp-review-decision-group.component';
 import { EmpVariationRegulatorLedDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-variation-regulator-led-decision-group/emp-variation-regulator-led-decision-group.component';
+import { EmpVariationReviewDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-variation-review-decision-group/emp-variation-review-decision-group.component';
 import { variationSubmitRegulatorLedRequestTaskTypes } from '@aviation/request-task/emp/shared/util/emp.util';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
@@ -27,18 +28,11 @@ import { OperatorDetailsFlightIdentificationTypePipe } from '@aviation/shared/pi
 import { OperatorDetailsLegalStatusTypePipe } from '@aviation/shared/pipes/operator-details-legal-status-type.pipe';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
-import { FileUpload } from '@shared/file-input/file-upload-event';
 import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
 
-import {
-  AirOperatingCertificate,
-  EmpCorsiaOperatorDetails,
-  EmpOperatorDetails,
-  FlightIdentification,
-  LimitedCompanyOrganisation,
-} from 'pmrv-api';
+import { EmpCorsiaOperatorDetails, LimitedCompanyOrganisation, SubsidiaryCompanyCorsia } from 'pmrv-api';
 
 import { BaseOperatorDetailsComponent } from '../base-operator-details.component';
 import { OperatorDetailsCorsiaFormProvider } from '../operator-details-form.provider';
@@ -52,6 +46,7 @@ import { OperatorDetailsCorsiaFormProvider } from '../operator-details-form.prov
     RouterLinkWithHref,
     ReturnToLinkComponent,
     EmpReviewDecisionGroupComponent,
+    EmpVariationReviewDecisionGroupComponent,
     OperatorDetailsFlightIdentificationTypePipe,
     OperatorDetailsLegalStatusTypePipe,
     OperatorDetailsSummaryTemplateComponent,
@@ -93,26 +88,51 @@ export class OperatorDetailsSummaryComponent extends BaseOperatorDetailsComponen
         showVariationDecision: showVariationReviewDecisionComponent.includes(type),
         showVariationRegLedDecision: showVariationRegLedDecisionComponent.includes(type),
         showDiff: !!originalEmpContainer,
-        originalOperatorDetails: originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails,
-        originalCertificationFiles:
+        originalOperatorDetails: originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails?.subsidiaryCompanies
+          ? {
+              ...originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails,
+              subsidiaryCompanies:
+                originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails?.subsidiaryCompanies.map(
+                  (subCompany: SubsidiaryCompanyCorsia) => {
+                    return {
+                      ...subCompany,
+                      airOperatingCertificate: {
+                        ...subCompany?.airOperatingCertificate,
+                        certificateFiles: subCompany?.airOperatingCertificate?.certificateFiles?.map((certFile) => {
+                          return {
+                            file: { name: this.store.empCorsiaDelegate.payload.empAttachments[certFile] },
+                            uuid: certFile,
+                          } as any;
+                        }),
+                      },
+                    };
+                  },
+                ),
+            }
+          : originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails,
+        originalCertificationFiles: transformFiles(
           originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails?.airOperatingCertificate?.certificateFiles?.map(
-            (doc) => {
+            (certFile) => {
               return {
-                fileName: originalEmpContainer?.empAttachments[doc],
-                downloadUrl: `${this.store.empCorsiaDelegate.baseFileAttachmentDownloadUrl}/${doc}`,
-              };
+                file: { name: this.store.empCorsiaDelegate.payload.empAttachments[certFile] },
+                uuid: certFile,
+              } as any;
             },
-          ) ?? [],
-        originalEvidenceFiles:
+          ),
+          this.downloadUrl,
+        ),
+        originalEvidenceFiles: transformFiles(
           (
             originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails
               ?.organisationStructure as LimitedCompanyOrganisation
-          )?.evidenceFiles?.map((doc) => {
+          )?.evidenceFiles?.map((evidenceFile) => {
             return {
-              fileName: originalEmpContainer?.empAttachments[doc],
-              downloadUrl: `${this.store.empCorsiaDelegate.baseFileAttachmentDownloadUrl}/${doc}`,
-            };
-          }) ?? [],
+              file: { name: this.store.empCorsiaDelegate.payload.empAttachments[evidenceFile] },
+              uuid: evidenceFile,
+            } as any;
+          }),
+          this.downloadUrl,
+        ),
       };
     }),
   );
@@ -129,29 +149,35 @@ export class OperatorDetailsSummaryComponent extends BaseOperatorDetailsComponen
   }
 
   onSubmit() {
-    const { operatorName, airOperatingCertificate, organisationStructure, flightIdentification } = this.form
-      .value as Record<keyof EmpOperatorDetails, any>;
+    const operatorDetails = this.form.value as EmpCorsiaOperatorDetails;
 
-    const operatorDetails = {
-      ...this.form.value,
-      operatorName: operatorName.operatorName,
-    } as EmpCorsiaOperatorDetails;
-
-    if ((airOperatingCertificate as AirOperatingCertificate).certificateFiles?.length > 0) {
-      operatorDetails.airOperatingCertificate.certificateFiles = airOperatingCertificate.certificateFiles?.map(
-        (doc: FileUpload) => doc.uuid,
-      );
+    if (operatorDetails.airOperatingCertificate.certificateFiles?.length > 0) {
+      operatorDetails.airOperatingCertificate.certificateFiles =
+        operatorDetails.airOperatingCertificate.certificateFiles?.map((doc: any) => doc.uuid);
     }
 
-    if ((organisationStructure as LimitedCompanyOrganisation).evidenceFiles?.length > 0) {
-      (operatorDetails.organisationStructure as LimitedCompanyOrganisation).evidenceFiles =
-        organisationStructure.evidenceFiles?.map((doc: FileUpload) => doc.uuid);
+    if ((operatorDetails.organisationStructure as LimitedCompanyOrganisation).evidenceFiles?.length > 0) {
+      (operatorDetails.organisationStructure as LimitedCompanyOrganisation).evidenceFiles = (
+        operatorDetails.organisationStructure as LimitedCompanyOrganisation
+      ).evidenceFiles?.map((doc: any) => doc.uuid);
     }
 
-    if ((flightIdentification as FlightIdentification).aircraftRegistrationMarkings?.length > 0) {
+    if (operatorDetails.flightIdentification.aircraftRegistrationMarkings?.length > 0) {
       operatorDetails.flightIdentification.aircraftRegistrationMarkings = parseCsv(
         operatorDetails.flightIdentification.aircraftRegistrationMarkings as unknown as string,
       );
+
+      if (operatorDetails.subsidiaryCompanies?.length > 0) {
+        operatorDetails.subsidiaryCompanies = operatorDetails.subsidiaryCompanies.map((subsidiaryCompany) => ({
+          ...subsidiaryCompany,
+          flightIdentification: {
+            ...subsidiaryCompany.flightIdentification,
+            aircraftRegistrationMarkings: parseCsv(
+              subsidiaryCompany.flightIdentification.aircraftRegistrationMarkings as unknown as string,
+            ),
+          },
+        }));
+      }
     }
 
     this.submitForm(null, operatorDetails, '../../../../', 'complete');

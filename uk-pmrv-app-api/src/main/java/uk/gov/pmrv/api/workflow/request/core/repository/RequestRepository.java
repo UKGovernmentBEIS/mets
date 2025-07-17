@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.application.taskview.RequestInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
@@ -62,4 +62,8 @@ public interface RequestRepository extends JpaRepository<Request, String> {
     @Transactional(readOnly = true)
     @Query(name = Request.NAMED_NATIVE_QUERY_FIND_BY_ACCOUNT_ID_AND_TYPE_IN_AND_METADATA_YEAR, nativeQuery = true)
     List<Request> findAllByAccountIdAndTypeInAndMetadataYear(Long accountId, List<String> types, int year);
+
+    @Transactional(readOnly = true)
+    @Query(name = Request.FIND_BY_ACCOUNT_ID_AND_TYPE_IN_AND_METADATA_YEAR_AND_STATUS_IN_ORDER_BY_END_DATE_DESC, nativeQuery = true)
+    List<Request> findAllByAccountIdAndTypeInAndMetadataYearAndStatusInOrderByEndDateDesc(Long accountId, List<String> types, int year, List<String> statuses);
 }

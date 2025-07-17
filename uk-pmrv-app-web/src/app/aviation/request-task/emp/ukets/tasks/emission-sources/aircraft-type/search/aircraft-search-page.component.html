@@ -4,15 +4,21 @@
   heading="Search for an aircraft"
   submitText="Select"
   [hideSubmit]="false"
-  data-testid="aircraft-type-search-form"
->
-  <span class="govuk-hint">Search by manufacturer, model and type designator code</span>
+  data-testid="aircraft-type-search-form">
+  <span class="govuk-hint">Search by manufacturer, model or type designator code</span>
   <p class="govuk-error-message" *ngIf="selectedAircraftError$ | async">Select the aircraft type.</p>
   <p class="govuk-error-message" *ngIf="showSearchError$ | async">Enter at least 3 characters.</p>
   <div class="govuk-grid-row">
     <div govuk-text-input formControlName="searchTerm" class="govuk-grid-column-two-thirds"></div>
     <div class="govuk-grid-column-one-third">
-      <button type="button" class="govuk-!-width-one-half" (click)="onSearch()" govukSecondaryButton data-testid="aircraft-type-search-btn">Search</button>
+      <button
+        type="button"
+        class="govuk-!-width-one-half"
+        (click)="onSearch()"
+        govukSecondaryButton
+        data-testid="aircraft-type-search-btn">
+        Search
+      </button>
     </div>
   </div>
   <p class="govuk-error-message" *ngIf="noResultsError$ | async">There are no matching results.</p>
@@ -24,8 +30,7 @@
             [id]="aircraftType | aircraftTypeDescription: 'label'"
             [label]="aircraftType | aircraftTypeDescription: 'label'"
             [hint]="aircraftType | aircraftTypeDescription: 'hint'"
-            [value]="aircraftType"
-          ></govuk-radio-option>
+            [value]="aircraftType"></govuk-radio-option>
         </ng-container>
       </div>
     </div>
@@ -33,8 +38,7 @@
       *ngIf="aircraftTypesVm.filters.totalResults > pageSize"
       [count]="aircraftTypesVm.filters.totalResults"
       (currentPageChange)="changePage($event)"
-      [pageSize]="pageSize"
-    ></app-pagination>
+      [pageSize]="pageSize"></app-pagination>
   </ng-container>
 </app-wizard-step>
 <app-return-to-link></app-return-to-link>

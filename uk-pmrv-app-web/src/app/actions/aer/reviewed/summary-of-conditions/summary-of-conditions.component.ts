@@ -12,9 +12,9 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Summary of conditions, changes, clarifications and variations" [breadcrumb]="true">
       <app-summary-of-conditions-group
-        [summaryOfConditionsInfo]="(payload$ | async).verificationReport.summaryOfConditions"
-      >
-      </app-summary-of-conditions-group>
+        [summaryOfConditionsInfo]="
+          (payload$ | async).verificationReport.summaryOfConditions
+        "></app-summary-of-conditions-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -26,5 +26,8 @@ export class SummaryOfConditionsComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

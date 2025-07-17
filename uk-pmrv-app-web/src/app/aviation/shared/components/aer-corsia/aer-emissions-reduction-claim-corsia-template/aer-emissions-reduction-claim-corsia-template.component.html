@@ -20,7 +20,9 @@
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Total emissions reduction claimed, from the template</dt>
-      <dd govukSummaryListRowValue>{{ emissionsReductionClaim.emissionsReductionClaimDetails.totalEmissions }}</dd>
+      <dd govukSummaryListRowValue>
+        {{ emissionsReductionClaim.emissionsReductionClaimDetails.totalEmissions }} tonnes CO2
+      </dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a govukLink routerLink="../upload-template" [queryParams]="queryParams">Change</a>
       </dd>

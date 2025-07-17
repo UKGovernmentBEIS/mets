@@ -1,10 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.handler;
 
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -18,6 +16,9 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTask
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.ReviewOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.validation.PermitReviewRequestPeerReviewValidator;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.PermitTransferBReviewService;
+
+import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class PermitTransferBRequestPeerReviewActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final PeerReviewRequestTaskActionPayload payload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -43,15 +44,15 @@ public class PermitTransferBRequestPeerReviewActionHandler
             requestTask,
             RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW,
             payload, 
-            pmrvUser
+            appUser
         );
 
-        permitTransferBReviewService.saveRequestPeerReviewAction(requestTask, payload.getPeerReviewer(), pmrvUser);
+        permitTransferBReviewService.saveRequestPeerReviewAction(requestTask, payload.getPeerReviewer(), appUser);
 
         requestService.addActionToRequest(requestTask.getRequest(),
             null,
             RequestActionType.PERMIT_TRANSFER_B_PEER_REVIEW_REQUESTED,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
 
         workflowService.completeTask(

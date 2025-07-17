@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.PermitOriginatedData;
+import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationData;
 import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayloadVerifiable;
@@ -62,9 +64,16 @@ public class AerRequestPayload extends RequestPayload implements RequestPayloadV
     @Builder.Default
     private Map<UUID, String> verificationAttachments = new HashMap<>();
 
+    private AerSkipReviewDecision skipReviewDecision;
+
     public void clearRegulatorData() {
         this.reviewGroupDecisions.clear();
         this.reviewAttachments.clear();
         this.reviewSectionsCompleted.clear();
+    }
+    
+    @JsonIgnore
+    public AerVerificationData getVerificationData() {
+        return verificationReport == null ? null : verificationReport.getVerificationData();
     }
 }

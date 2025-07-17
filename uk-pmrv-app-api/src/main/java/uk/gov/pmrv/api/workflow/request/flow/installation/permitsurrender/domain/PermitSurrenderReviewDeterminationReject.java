@@ -1,16 +1,14 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

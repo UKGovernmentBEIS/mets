@@ -1,6 +1,8 @@
 import {
+  AfterContentChecked,
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -25,7 +27,7 @@ import { WizardStepComponent } from '@shared/wizard/wizard-step.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })
-export class AbbreviationsTemplateComponent implements OnInit, AfterViewInit {
+export class AbbreviationsTemplateComponent implements OnInit, AfterViewInit, AfterContentChecked {
   @Input() submitText = 'Confirm and complete';
   @Input() form: UntypedFormGroup;
   @Input() isEditable: boolean;
@@ -39,7 +41,10 @@ export class AbbreviationsTemplateComponent implements OnInit, AfterViewInit {
 
   private abbreviationsLength = this.abbreviationDefs?.length ?? 0;
 
-  constructor(private readonly destroy$: DestroySubject) {}
+  constructor(
+    private readonly destroy$: DestroySubject,
+    private cd: ChangeDetectorRef,
+  ) {}
 
   get heading(): HTMLHeadingElement {
     return this.wizardStep.nativeElement.querySelector('h1');
@@ -64,6 +69,10 @@ export class AbbreviationsTemplateComponent implements OnInit, AfterViewInit {
           this.abbreviationDefs.disable({ emitEvent: false });
         }
       });
+  }
+
+  ngAfterContentChecked(): void {
+    this.cd.detectChanges();
   }
 
   ngAfterViewInit(): void {

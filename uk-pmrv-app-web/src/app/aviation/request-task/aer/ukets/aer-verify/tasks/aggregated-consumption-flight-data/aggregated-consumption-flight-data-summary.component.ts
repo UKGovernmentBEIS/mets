@@ -4,6 +4,7 @@ import { RouterLink, RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, filter, map, Observable, startWith } from 'rxjs';
 
+import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { AggregatedConsumptionFlightDataFormProvider } from '@aviation/request-task/aer/shared/aggregated-consumption-flight-data/aggregated-consumption-flight-data-form.provider';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
@@ -19,6 +20,7 @@ import { AviationAerCorsiaAggregatedEmissionsData, AviationAerUkEtsAggregatedEmi
 interface ViewModel {
   data: AviationAerUkEtsAggregatedEmissionsData | AviationAerCorsiaAggregatedEmissionsData;
   pageHeader: string;
+  isCorsia: boolean;
 }
 
 @Component({
@@ -35,24 +37,22 @@ interface ViewModel {
         <app-flight-data-table
           [headingText]="'File uploaded'"
           [emissionDataDetails]="vm.data.aggregatedEmissionDataDetails"
-        ></app-flight-data-table>
+          [isCorsia]="vm.isCorsia"></app-flight-data-table>
       </ng-container>
     </ng-container>
 
     <app-return-to-link></app-return-to-link>
   `,
-  styles: [
-    `
-      .header-container {
-        display: flex;
-        align-items: center;
-      }
+  styles: `
+    .header-container {
+      display: flex;
+      align-items: center;
+    }
 
-      .change-link {
-        margin-left: auto;
-      }
-    `,
-  ],
+    .change-link {
+      margin-left: auto;
+    }
+  `,
   imports: [
     SharedModule,
     GovukComponentsModule,
@@ -75,13 +75,15 @@ export default class AggregatedConsumptionFlightDataSummaryComponent {
       startWith(this.form.get('aggregatedEmissionDataDetails').status),
       filter((status) => status === 'VALID' || status === 'INVALID'),
     ),
+    this.store.pipe(aerQuery.selectIsCorsia),
   ]).pipe(
-    map(([type, formStatus]) => {
+    map(([type, formStatus, isCorsia]) => {
       const isFormValid = formStatus === 'VALID';
 
       return {
         data: isFormValid ? this.formProvider.getFormValue() : null,
         pageHeader: getSummaryHeaderForTaskType(type, 'aggregatedEmissionsData'),
+        isCorsia: isCorsia,
       };
     }),
   );

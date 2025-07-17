@@ -15,7 +15,7 @@ public class EmpVariationUkEtsRegulatorLedPeerReviewService {
 	@Transactional
     public void saveRequestPeerReviewAction(final RequestTask requestTask,
                                             final String selectedPeerReviewer,
-                                            final String pmrvUserId) {
+                                            final String appUserId) {
         final EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload taskPayload =
             (EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload) requestTask.getPayload();
 
@@ -23,7 +23,7 @@ public class EmpVariationUkEtsRegulatorLedPeerReviewService {
 
         requestPayload.setRegulatorPeerReviewer(selectedPeerReviewer);
         
-        requestPayload.setRegulatorReviewer(pmrvUserId);
+        requestPayload.setRegulatorReviewer(appUserId);
 		requestPayload.setEmissionsMonitoringPlan(taskPayload.getEmissionsMonitoringPlan());
 		requestPayload.setEmpVariationDetails(taskPayload.getEmpVariationDetails());
 		requestPayload.setEmpAttachments(taskPayload.getEmpAttachments());

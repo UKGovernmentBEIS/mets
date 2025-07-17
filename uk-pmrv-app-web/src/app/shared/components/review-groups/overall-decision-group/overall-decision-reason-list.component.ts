@@ -15,9 +15,9 @@ export class OverallDecisionReasonListComponent implements OnInit {
   data: { reason: string }[];
 
   columns: GovukTableColumn[] = [
-    { field: 'reason', header: 'Reason', widthClass: 'govuk-!-width-one-third' },
-    { field: 'change', header: '', widthClass: 'govuk-!-width-one-third' },
-    { field: 'delete', header: '', widthClass: 'govuk-!-width-one-third' },
+    { field: 'reason', header: 'Reason', widthClass: 'govuk-input--width-20' },
+    { field: 'change', header: '', widthClass: 'govuk-input--width-20' },
+    { field: 'delete', header: '', widthClass: 'govuk-input--width-20' },
   ];
 
   ngOnInit(): void {

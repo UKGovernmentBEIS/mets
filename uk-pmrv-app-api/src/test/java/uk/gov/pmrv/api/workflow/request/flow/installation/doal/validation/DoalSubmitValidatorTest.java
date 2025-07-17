@@ -10,8 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 import uk.gov.pmrv.api.allowance.domain.enums.SubInstallationName;
 import uk.gov.pmrv.api.allowance.validation.AllowanceAllocationValidator;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.ActivityLevelChangeInformation;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.Doal;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationSubmitRequestTaskPayload;
@@ -139,7 +139,7 @@ class DoalSubmitValidatorTest {
                 () -> validator.validate(payload));
 
         // Verify
-        assertEquals(ErrorCode.INVALID_DOAL, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_DOAL, businessException.getErrorCode());
         verify(allowanceAllocationValidator, times(1)).isValid(preliminaryAllocations);
         verifyNoInteractions(attachmentsValidator);
     }
@@ -205,7 +205,7 @@ class DoalSubmitValidatorTest {
                 () -> validator.validate(payload));
 
         // Verify
-        assertEquals(ErrorCode.INVALID_DOAL, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_DOAL, businessException.getErrorCode());
         verifyNoInteractions(attachmentsValidator, allowanceAllocationValidator);
     }
 
@@ -235,7 +235,7 @@ class DoalSubmitValidatorTest {
                 () -> validator.validate(payload));
 
         // Verify
-        assertEquals(ErrorCode.INVALID_DOAL, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_DOAL, businessException.getErrorCode());
         verify(attachmentsValidator, times(1)).attachmentsExist(Set.of(attachment));
         verify(attachmentsValidator, never()).attachmentsReferenced(anySet(), anySet());
         verifyNoInteractions(allowanceAllocationValidator);
@@ -268,7 +268,7 @@ class DoalSubmitValidatorTest {
                 () -> validator.validate(payload));
 
         // Verify
-        assertEquals(ErrorCode.INVALID_DOAL, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_DOAL, businessException.getErrorCode());
         verify(attachmentsValidator, times(1)).attachmentsExist(Set.of(attachment));
         verify(attachmentsValidator, times(1)).attachmentsReferenced(eq(Set.of(attachment)), anySet());
         verifyNoInteractions(allowanceAllocationValidator);

@@ -16,6 +16,6 @@ class EmissionTradingSchemeToOfficialNoticeFileNameMapperTest {
     	assertThat(cut.map(EmissionTradingScheme.UK_ETS_INSTALLATIONS)).isEqualTo("Batch_variation_notice.pdf");
     	assertThat(cut.map(EmissionTradingScheme.UK_ETS_AVIATION)).isEqualTo("Batch_variation_notice_UK_ETS.pdf");
     	assertThat(cut.map(EmissionTradingScheme.CORSIA)).isEqualTo("Batch_variation_notice_CORSIA.pdf");
-    	assertThat(cut.map(EmissionTradingScheme.EU_ETS_INSTALLATIONS)).isEqualTo(null);
+    	assertThat(cut.map(EmissionTradingScheme.EU_ETS_INSTALLATIONS)).isNull();
     }
 }

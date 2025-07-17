@@ -1,11 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.handler;
 
-import java.util.Set;
-
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -16,6 +13,8 @@ import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandle
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.mapper.PermitVariationRegulatorLedMapper;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor

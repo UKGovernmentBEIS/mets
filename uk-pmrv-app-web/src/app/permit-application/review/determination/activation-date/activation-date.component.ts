@@ -20,10 +20,9 @@ import { activationDateFormProvider } from './activation-date-form.provider';
         (formSubmit)="onContinue()"
         [formGroup]="form"
         submitText="Continue"
-        [hideSubmit]="(store.isEditable$ | async) === false"
-      >
+        [hideSubmit]="(store.isEditable$ | async) === false">
         <span class="govuk-caption-l">{{ determination$ | async }}</span>
-        <app-page-heading> Set a date for the {{ permitType | permitRequestType }} to become active </app-page-heading>
+        <app-page-heading>Set a date for the {{ permitType | permitRequestType }} to become active</app-page-heading>
         <div class="govuk-hint">For example 27.3.2022</div>
         <div formControlName="activationDate" govuk-date-input [isRequired]="true"></div>
       </app-wizard-step>
@@ -81,9 +80,9 @@ export class ActivationDateComponent implements PendingRequest {
     return state.permitType === 'HSE'
       ? 'emissions'
       : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_REVIEW'
-      ? 'log-changes'
-      : state.requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'
-      ? 'reason-template'
-      : 'answers';
+        ? 'log-changes'
+        : state.requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'
+          ? 'reason-template'
+          : 'answers';
   }
 }

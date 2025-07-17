@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { PermitApplicationState } from '../../../store/permit-application.state'
 import { PermitApplicationStore } from '../../../store/permit-application.store';
 
 @Injectable()
-export class SamplingPlanGuard implements CanActivate {
+export class SamplingPlanGuard {
   constructor(
     private readonly router: Router,
     private readonly store: PermitApplicationStore<PermitApplicationState>,

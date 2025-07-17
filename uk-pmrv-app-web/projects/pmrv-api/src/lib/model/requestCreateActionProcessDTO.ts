@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,9 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AviationAerCorsia3YearPeriodCreateActionPayload } from './aviationAerCorsia3YearPeriodCreateActionPayload';
+import { AviationAerCorsiaAnnualOffsettingCreateActionPayload } from './aviationAerCorsiaAnnualOffsettingCreateActionPayload';
 import { BatchReissueRequestCreateActionPayload } from './batchReissueRequestCreateActionPayload';
 import { DoalRequestCreateActionPayload } from './doalRequestCreateActionPayload';
 import { InstallationAccountOpeningSubmitApplicationCreateActionPayload } from './installationAccountOpeningSubmitApplicationCreateActionPayload';
+import { InstallationAuditRequestCreateActionPayload } from './installationAuditRequestCreateActionPayload';
 import { ReportRelatedRequestCreateActionPayload } from './reportRelatedRequestCreateActionPayload';
 import { RequestCreateActionEmptyPayload } from './requestCreateActionEmptyPayload';
 
@@ -30,21 +33,32 @@ export interface RequestCreateActionProcessDTO {
     | 'NON_COMPLIANCE'
     | 'NER'
     | 'DOAL'
+    | 'INSTALLATION_ONSITE_INSPECTION'
+    | 'INSTALLATION_AUDIT'
     | 'AER'
     | 'DRE'
     | 'WITHHOLDING_OF_ALLOWANCES'
     | 'RETURN_OF_ALLOWANCES'
     | 'AIR'
+    | 'BDR'
+    | 'PERMANENT_CESSATION'
+    | 'ALR'
     | 'EMP_BATCH_REISSUE'
     | 'AVIATION_ACCOUNT_CLOSURE'
     | 'EMP_VARIATION_UKETS'
     | 'AVIATION_DRE_UKETS'
     | 'AVIATION_NON_COMPLIANCE'
+    | 'AVIATION_DOE_CORSIA'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING'
     | 'EMP_VARIATION_CORSIA';
   requestCreateActionPayload:
+    | AviationAerCorsia3YearPeriodCreateActionPayload
+    | AviationAerCorsiaAnnualOffsettingCreateActionPayload
     | BatchReissueRequestCreateActionPayload
     | DoalRequestCreateActionPayload
     | InstallationAccountOpeningSubmitApplicationCreateActionPayload
+    | InstallationAuditRequestCreateActionPayload
     | ReportRelatedRequestCreateActionPayload
     | RequestCreateActionEmptyPayload;
 }

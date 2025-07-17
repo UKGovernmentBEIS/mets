@@ -1,12 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.application.userdeleted;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.event.EventListener;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import uk.gov.pmrv.api.authorization.verifier.event.VerifierAuthorityDeletionEvent;
+import uk.gov.netz.api.authorization.verifier.event.VerifierAuthorityDeletionEvent;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.verifier.VerifierRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.service.SystemMessageNotificationRequestService;
 

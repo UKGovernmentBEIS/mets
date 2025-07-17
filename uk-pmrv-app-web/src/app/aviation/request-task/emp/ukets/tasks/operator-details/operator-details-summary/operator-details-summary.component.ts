@@ -15,6 +15,7 @@ import {
   showReviewDecisionComponent,
   showVariationRegLedDecisionComponent,
   showVariationReviewDecisionComponent,
+  unparseCsv,
 } from '@aviation/request-task/util';
 import { OperatorDetailsSummaryTemplateComponent } from '@aviation/shared/components/operator-details/operator-details-summary-template/operator-details-summary-template.component';
 import {
@@ -94,7 +95,19 @@ export class OperatorDetailsSummaryComponent extends BaseOperatorDetailsComponen
         showVariationDecision: showVariationReviewDecisionComponent.includes(type),
         showVariationRegLedDecision: showVariationRegLedDecisionComponent.includes(type),
         showDiff: !!originalEmpContainer,
-        originalOperatorDetails: originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails,
+        originalOperatorDetails: originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails?.flightIdentification
+          ?.aircraftRegistrationMarkings
+          ? ({
+              ...originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails,
+              flightIdentification: {
+                ...originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails?.flightIdentification,
+                aircraftRegistrationMarkings: unparseCsv(
+                  originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails?.flightIdentification
+                    ?.aircraftRegistrationMarkings,
+                ),
+              },
+            } as any)
+          : originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails,
         originalCertificationFiles:
           originalEmpContainer?.emissionsMonitoringPlan?.operatorDetails?.airOperatingCertificate?.certificateFiles?.map(
             (doc) => {

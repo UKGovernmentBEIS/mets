@@ -6,7 +6,7 @@ import { combineLatest, map, take } from 'rxjs';
 import { AerCorsiaStoreDelegate } from '@aviation/request-task/store/delegates/aer-corsia/aer-corsia-store-delegate';
 
 import { RequestTaskStore } from '../../../store';
-import { AerStoreDelegate } from '../../../store/delegates';
+import { AerUkEtsStoreDelegate } from '../../../store/delegates';
 import { TASK_FORM_PROVIDER } from '../../../task-form.provider';
 import { aerQuery } from '../aer.selectors';
 import { AircraftTypesDataFormProvider } from './aircraft-types-data-form.provider';
@@ -20,7 +20,7 @@ export const canActivateAircraftTypesData: CanActivateFn = () => {
     map(([aer, isCorsia]) => {
       const initialState = isCorsia
         ? AerCorsiaStoreDelegate.INITIAL_STATE.aviationAerAircraftData
-        : AerStoreDelegate.INITIAL_STATE.aviationAerAircraftData;
+        : AerUkEtsStoreDelegate.INITIAL_STATE.aviationAerAircraftData;
 
       if (!aer) {
         store.setPayload({

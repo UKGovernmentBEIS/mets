@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -8,8 +8,11 @@ import { RfiStore } from '../../store/rfi.store';
 @Injectable({
   providedIn: 'root',
 })
-export class NotifyGuard implements CanActivate {
-  constructor(private readonly router: Router, private readonly store: RfiStore) {}
+export class NotifyGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly store: RfiStore,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> {
     return (

@@ -30,7 +30,9 @@ const mockAircraftType: AircraftTypeDetailsCorsia = {
 };
 @Component({
   selector: 'app-mock-parent',
-  template: ` <app-multiple-methods></app-multiple-methods>`,
+  template: `
+    <app-multiple-methods></app-multiple-methods>
+  `,
   standalone: true,
   imports: [ReactiveFormsModule, MultipleMethodsComponent],
   providers: [EmissionSourcesCorsiaFormProvider],

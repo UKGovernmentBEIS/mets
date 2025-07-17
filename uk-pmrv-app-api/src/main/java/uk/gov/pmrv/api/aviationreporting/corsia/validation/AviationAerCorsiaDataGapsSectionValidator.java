@@ -14,6 +14,7 @@ import uk.gov.pmrv.api.aviationreporting.ukets.domain.datagaps.AviationAerDataGa
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class AviationAerCorsiaDataGapsSectionValidator implements AviationAerCor
 				Boolean.TRUE.equals(dataGaps.getExist() && 
 						dataGaps.getDataGapsDetails().getDataGapsPercentageType() == AviationAerCorsiaDataGapsPercentageType.MORE_THAN_FIVE_PER_CENT)) {
             final Set<AviationAerCorsiaAggregatedEmissionDataDetails> offsettingFlightsEmissionsDataDetails =
-                    emissionsCalculationService.findOffsettingFlights(aerContainer.getAer().getAggregatedEmissionsData().getAggregatedEmissionDataDetails());
+                    emissionsCalculationService.findOffsettingFlights(aerContainer.getAer().getAggregatedEmissionsData().getAggregatedEmissionDataDetails(), aerContainer.getReportingYear());
 
             final Integer offsetFlightsNumber = offsettingFlightsEmissionsDataDetails.stream()
                     .map(AviationAerAggregatedEmissionDataDetails::getFlightsNumber)

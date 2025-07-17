@@ -12,8 +12,8 @@ import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.CardinalDirection;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.referencedata.domain.Country;
-import uk.gov.pmrv.api.referencedata.service.CountryService;
+import uk.gov.netz.api.referencedata.domain.Country;
+import uk.gov.netz.api.referencedata.service.CountryService;
 
 import java.util.List;
 

@@ -7,40 +7,41 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
+
+        <kafka.version>3.7.1</kafka.version>
+        <guava.version>33.3.1-jre</guava.version>
+        <commons-csv.version>1.12.0</commons-csv.version>
+        <sshd-sftp.version>2.14.0</sshd-sftp.version>
+
+        <netz.restlogging.version>1.4.0</netz.restlogging.version>
+        <netz.restclient.version>1.0.0</netz.restclient.version>
+        <netz.common.version>1.9.0</netz.common.version>
+        <netz.authorization.version>1.7.0</netz.authorization.version>
+        <netz.competentauthority.version>1.2.0</netz.competentauthority.version>
+        <netz.companieshouse.version>1.4.0</netz.companieshouse.version>
+        <netz.security.version>1.4.0</netz.security.version>
+        <netz.security-camunda-admin.version>1.1.0</netz.security-camunda-admin.version>
+        <netz.configuration.version>1.2.0</netz.configuration.version>
+        <netz.kafka.version>1.2.0</netz.kafka.version>
+        <netz.token.version>1.2.0</netz.token.version>
+        <netz.files.version>1.4.0</netz.files.version>
+        <netz.alert.version>1.1.0</netz.alert.version>
+        <netz.referencedata.version>1.2.0</netz.referencedata.version>
+        <netz.mireports.version>1.4.0</netz.mireports.version>
+        <netz.userinfoapi.version>1.1.0</netz.userinfoapi.version>
+        <netz.terms.version>1.1.0</netz.terms.version>
+        <netz.notificationapi.version>1.1.0</netz.notificationapi.version>
+        <netz.feedback.version>1.2.0</netz.feedback.version>
+
+        <apt-maven-plugin.version>1.1.3</apt-maven-plugin.version>
+
         <maven.checkstyle.plugin.version>3.2.0</maven.checkstyle.plugin.version>
         <maven.checkstyle.plugin.configLocation>checkstyle-ukpmrv.xml</maven.checkstyle.plugin.configLocation>
         <maven.checkstyle.plugin.suppressionsLocation>checkstyle-ukpmrv-suppressed-checks.xml</maven.checkstyle.plugin.suppressionsLocation>
-        <maven.jacoco.plugin>0.8.8</maven.jacoco.plugin>
-        <git.commit.id.plugin.version>5.0.0</git.commit.id.plugin.version>
-        <apt-maven-plugin.version>1.1.3</apt-maven-plugin.version>
-        <keycloak.version>22.0.1</keycloak.version>
-        <liquibase.version>4.23.0</liquibase.version>
-        <lombok.version>1.18.28</lombok.version>
-        <mapstruct.version>1.4.2.Final</mapstruct.version>
-        <libphonenumber.version>8.13.17</libphonenumber.version>
-        <commons.beanutils.version>1.9.4</commons.beanutils.version>
-        <querydsl.version>5.0.0</querydsl.version>
-        <swagger.version>2.1.0</swagger.version>
-        <java.jwt.version>4.3.0</java.jwt.version>
-        <zxcvbn.version>1.8.0</zxcvbn.version>
-        <maven.dependency.check.suppressionsLocation>dependency-check-ukpmrv-suppressed.xml</maven.dependency.check.suppressionsLocation>
-        <maven.dependency.check.hints>dependency-check-ukpmrv-hints.xml</maven.dependency.check.hints>
-        <camunda.spring-boot.version>7.20.0</camunda.spring-boot.version>
-        <spring-retry.version>2.0.0</spring-retry.version>
-        <commonmark.version>0.21.0</commonmark.version>
-        <mockito.version>5.2.0</mockito.version>
-        <xyz.capybara.version>2.1.2</xyz.capybara.version>
-        <hypersistence-utils.version>3.5.1</hypersistence-utils.version>
-        <jsch.version>0.1.55</jsch.version>
-        <apache.tika.version>2.8.0</apache.tika.version>
-        <xdocreport.version>2.0.4</xdocreport.version>
-        <docx4j.version>11.4.9</docx4j.version>
-        <freemarker-java8.version>2.1.0</freemarker-java8.version>
-        <testcontainers.version>1.15.3</testcontainers.version>
+
+        <maven.jacoco.plugin>0.8.12</maven.jacoco.plugin>
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco-merged/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <guava.version>32.1.1-jre</guava.version>
-        <commons-csv.version>1.10.0</commons-csv.version>
     </properties>
 
     <artifactId>uk-pmrv-app-api</artifactId>
@@ -49,10 +50,9 @@
     <packaging>jar</packaging>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.9</version>
-        <relativePath/>
+        <groupId>uk.gov.netz</groupId>
+        <artifactId>uk-netz-app-api-parent</artifactId>
+        <version>1.3.0</version>
     </parent>
 
     <dependencies>
@@ -92,7 +92,16 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-layout-template-json</artifactId>
+            <version>2.23.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -101,7 +110,6 @@
         <dependency>
             <groupId>no.api.freemarker</groupId>
             <artifactId>freemarker-java8</artifactId>
-            <version>${freemarker-java8.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -110,27 +118,30 @@
         <dependency>
             <groupId>org.camunda.bpm.springboot</groupId>
             <artifactId>camunda-bpm-spring-boot-starter</artifactId>
-            <version>${camunda.spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.camunda.bpm.springboot</groupId>
             <artifactId>camunda-bpm-spring-boot-starter-rest</artifactId>
-            <version>${camunda.spring-boot.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.camunda.bpm.springboot</groupId>
+            <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.camunda.bpm.extension</groupId>
+            <artifactId>camunda-platform-7-keycloak</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
-            <version>${spring-retry.version}</version>
         </dependency>
         <dependency>
             <groupId>io.hypersistence</groupId>
-            <artifactId>hypersistence-utils-hibernate-60</artifactId>
-            <version>${hypersistence-utils.version}</version>
+            <artifactId>hypersistence-utils-hibernate-63</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${swagger.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -139,12 +150,10 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>${liquibase.version}</version>
         </dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-maven-plugin</artifactId>
-            <version>${liquibase.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>junit</groupId>
@@ -155,45 +164,37 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>${mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
-            <version>${java.jwt.version}</version>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-admin-client</artifactId>
-            <version>${keycloak.version}</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.libphonenumber</groupId>
             <artifactId>libphonenumber</artifactId>
-            <version>${libphonenumber.version}</version>
         </dependency>
         <dependency>
             <groupId>com.nulab-inc</groupId>
             <artifactId>zxcvbn</artifactId>
-            <version>${zxcvbn.version}</version>
         </dependency>
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
-            <version>${querydsl.version}</version>
             <classifier>jakarta</classifier>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            <version>${querydsl.version}</version>
             <classifier>jakarta</classifier>
         </dependency>
         <dependency>
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
-            <version>${commons.beanutils.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -203,7 +204,6 @@
         <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark</artifactId>
-            <version>${commonmark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -222,22 +222,50 @@
         <dependency>
             <groupId>xyz.capybara</groupId>
             <artifactId>clamav-client</artifactId>
-            <version>${xyz.capybara.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch</artifactId>
-            <version>${jsch.version}</version>
+            <groupId>org.apache.sshd</groupId>
+            <artifactId>sshd-sftp</artifactId>
+            <version>${sshd-sftp.version}</version>
         </dependency>
 		<dependency>
 			<groupId>org.apache.tika</groupId>
 			<artifactId>tika-core</artifactId>
-			<version>${apache.tika.version}</version>
 		</dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-cloudwatch2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.msk</groupId>
+            <artifactId>aws-msk-iam-auth</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.giffing.bucket4j.spring.boot.starter</groupId>
+            <artifactId>bucket4j-spring-boot-starter</artifactId>
+            <version>0.12.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>jcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
 
 
@@ -245,41 +273,128 @@
         <dependency>
             <groupId>fr.opensagres.xdocreport</groupId>
             <artifactId>fr.opensagres.xdocreport.document.docx</artifactId>
-            <version>${xdocreport.version}</version>
         </dependency>
         <dependency>
             <groupId>fr.opensagres.xdocreport</groupId>
             <artifactId>fr.opensagres.xdocreport.template.freemarker</artifactId>
-            <version>${xdocreport.version}</version>
         </dependency>
         <dependency>
             <groupId>org.docx4j</groupId>
             <artifactId>docx4j-export-fo</artifactId>
-            <version>${docx4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.docx4j</groupId>
             <artifactId>docx4j-JAXB-ReferenceImpl</artifactId>
-            <version>${docx4j.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>4.0.2</version>
         </dependency>
         <dependency>
             <groupId>jakarta.activation</groupId>
             <artifactId>jakarta.activation-api</artifactId>
-            <version>2.1.0</version>
+        </dependency>
+
+
+        <!-- UK NETZ dependencies -->
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-rest-logging</artifactId>
+            <version>${netz.restlogging.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-cloudwatch2</artifactId>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-rest-client</artifactId>
+            <version>${netz.restclient.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-common</artifactId>
+            <version>${netz.common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-competentauthority</artifactId>
+            <version>${netz.competentauthority.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-authorization</artifactId>
+            <version>${netz.authorization.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-companieshouse</artifactId>
+            <version>${netz.companieshouse.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-security</artifactId>
+            <version>${netz.security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-security-camunda-admin</artifactId>
+            <version>${netz.security-camunda-admin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-configuration</artifactId>
+            <version>${netz.configuration.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-kafka</artifactId>
+            <version>${netz.kafka.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-token</artifactId>
+            <version>${netz.token.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-files</artifactId>
+            <version>${netz.files.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-alert</artifactId>
+            <version>${netz.alert.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-referencedata</artifactId>
+            <version>${netz.referencedata.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-mireport</artifactId>
+            <version>${netz.mireports.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-userinfoapi</artifactId>
+            <version>${netz.userinfoapi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-terms</artifactId>
+            <version>${netz.terms.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-notificationapi</artifactId>
+            <version>${netz.notificationapi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-feedback</artifactId>
+            <version>${netz.feedback.version}</version>
         </dependency>
 
         <!-- Test dependencies -->
@@ -295,38 +410,26 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <version>${mockito.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>fluent-hc</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5</artifactId>
-            <version>1.0.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-            <version>2.0.27</version>
+            <groupId>uk.gov.netz</groupId>
+            <artifactId>uk-netz-app-api-common</artifactId>
+            <classifier>tests</classifier>
+            <type>test-jar</type>
+            <version>${netz.common.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -335,271 +438,36 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <release>${java.version}</release>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${mapstruct.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>0.2.0</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <argLine>${failsafe.jacoco.args}</argLine>
-                </configuration>
-            </plugin>
-            <plugin>
-            <groupId>uk.gov.pmrv</groupId>
-            <artifactId>swagger-coverage-maven-plugin</artifactId>
-            <version>1.0.0</version>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>report</goal>
-                    </goals>
-                </execution>
-            </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <argLine>${surefire.jacoco.args}</argLine>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>build-info</id>
-                        <goals>
-                            <goal>build-info</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${maven.jacoco.plugin}</version>
-                <configuration>
-                    <excludes>
-                        <exclude>**/migration/**</exclude>
-                    </excludes>
-                </configuration>
+                <groupId>uk.gov.netz</groupId>
+                <artifactId>swagger-coverage-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                        <configuration>
-                            <destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
-                            <propertyName>surefire.jacoco.args</propertyName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
-                            <outputDirectory>${project.build.directory}/site/jacoco-ut</outputDirectory>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>pre-integration-test</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                        <configuration>
-                            <destFile>${project.build.directory}/coverage-reports/jacoco-it.exec</destFile>
-                            <propertyName>failsafe.jacoco.args</propertyName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>post-integration-test</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <dataFile>${project.build.directory}/coverage-reports/jacoco-it.exec</dataFile>
-                            <outputDirectory>${project.build.directory}/site/jacoco-it</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>merge-unit-and-integration</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>merge</goal>
-                        </goals>
-                        <configuration>
-                            <fileSets>
-                                <fileSet>
-                                    <directory>${project.build.directory}/coverage-reports/</directory>
-                                    <includes>
-                                        <include>*.exec</include>
-                                    </includes>
-                                </fileSet>
-                            </fileSets>
-                            <destFile>${project.build.directory}/coverage-reports/merged.exec</destFile>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>create-merged-report</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <dataFile>${project.build.directory}/coverage-reports/merged.exec</dataFile>
-                            <outputDirectory>${project.build.directory}/site/jacoco-merged</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
                         <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/site/jacoco-merged</outputDirectory>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>${liquibase.version}</version>
-                <configuration>
-                    <propertyFile>src/main/resources/liquibase.properties</propertyFile>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.mysema.maven</groupId>
-                <artifactId>apt-maven-plugin</artifactId>
-                <version>${apt-maven-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>process</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>target/generated-sources/java</outputDirectory>
-                            <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.hibernate.orm.tooling</groupId>
                 <artifactId>hibernate-enhance-maven-plugin</artifactId>
-                <version>${hibernate.version}</version>
                 <executions>
                     <execution>
-                        <configuration>
-                            <failOnError>true</failOnError>
-                            <enableLazyInitialization>true</enableLazyInitialization>
-                        </configuration>
-                        <goals>
-                            <goal>enhance</goal>
-                        </goals>
+                        <id>enhance</id>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven.checkstyle.plugin.version}</version>
-                <configuration>
-                    <configLocation>${maven.checkstyle.plugin.configLocation}</configLocation>
-                    <suppressionsLocation>${maven.checkstyle.plugin.suppressionsLocation}</suppressionsLocation>
-                    <encoding>UTF-8</encoding>
-                    <consoleOutput>true</consoleOutput>
-                    <failsOnError>true</failsOnError>
-                    <linkXRef>false</linkXRef>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>10.5.0</version>
-                    </dependency>
-                </dependencies>
-
-                <executions>
-                    <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>io.github.git-commit-id</groupId>
-                <artifactId>git-commit-id-maven-plugin</artifactId>
-                <version>${git.commit.id.plugin.version}</version>
-                <configuration>
-                    <offline>true</offline>
-                </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven.checkstyle.plugin.version}</version>
-                <configuration>
-                    <configLocation>${maven.checkstyle.plugin.configLocation}</configLocation>
-                    <encoding>UTF-8</encoding>
-                    <consoleOutput>true</consoleOutput>
-                    <failsOnError>true</failsOnError>
-                    <linkXRef>false</linkXRef>
-                </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>checkstyle</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
 </project>

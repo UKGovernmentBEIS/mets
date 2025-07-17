@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -37,7 +37,7 @@ class AviationAerCorsiaApplySubmitVerificationActionHandlerTest {
     void process() {
         Long requestTaskId = 1L;
         String processTaskId = "processTaskId";
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         RequestTaskActionEmptyPayload taskActionPayload = RequestTaskActionEmptyPayload.builder().build();
         RequestTask requestTask = RequestTask.builder().id(requestTaskId).processTaskId(processTaskId).build();
 

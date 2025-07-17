@@ -1,11 +1,5 @@
 package uk.gov.pmrv.api.user.core.service;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-
-import java.util.Set;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,14 +8,20 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-import uk.gov.pmrv.api.authorization.core.service.RoleCodeValidator;
-import uk.gov.pmrv.api.authorization.core.service.RoleService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.authorization.core.service.RoleCodeValidator;
+import uk.gov.netz.api.authorization.core.service.RoleService;
+
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
 
 @ExtendWith(MockitoExtension.class)
 class RoleCodeValidatorTest {
 
-    private static final RoleType OPERATOR_ROLE_TYPE = OPERATOR;
+    private static final String OPERATOR_ROLE_TYPE = OPERATOR;
 
     private static final String OPERATOR_ADMIN = "operator_admin";
     private static final String OPERATOR_USER = "operator_user";

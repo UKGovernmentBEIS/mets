@@ -51,7 +51,7 @@ export const AER_CORSIA_UNCORRECTED_NON_COMFORMITIES_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Uncorrected non-conformities summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Uncorrected non-conformities' },
         loadComponent: () => import('./summary/summary.component').then((c) => c.SummaryComponent),
       },
     ],

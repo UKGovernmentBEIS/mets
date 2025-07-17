@@ -3,11 +3,11 @@ package uk.gov.pmrv.api.workflow.request.flow.common.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.dto.AuthorityRoleDTO;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.dto.AuthorityRoleDTO;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityQueryService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
@@ -37,7 +37,7 @@ public class RequestActionUserInfoResolver {
     @Transactional(readOnly = true)
     public Map<String, RequestActionUserInfo> getUsersInfo(final Set<String> operators, final Request request) {
 
-        final Set<UserInfoDTO> defaultOfficialNoticeRecipients = officialNoticeSendService.getDefaultOfficialNoticeRecipients(request);
+        final Set<UserInfoDTO> defaultOfficialNoticeRecipients = officialNoticeSendService.getOfficialNoticeToRecipients(request);
 
         final Set<String> otherUsers = defaultOfficialNoticeRecipients.stream()
             .map(UserInfoDTO::getUserId)
@@ -52,7 +52,7 @@ public class RequestActionUserInfoResolver {
 
     @Transactional(readOnly = true)
     public Map<String, RequestActionUserInfo> getUsersInfo(final Set<String> operators, final String signatory, final Request request) {
-        Set<UserInfoDTO> defaultOfficialNoticeRecipients = officialNoticeSendService.getDefaultOfficialNoticeRecipients(request);
+        Set<UserInfoDTO> defaultOfficialNoticeRecipients = officialNoticeSendService.getOfficialNoticeToRecipients(request);
 
         Set<String> otherUsers = defaultOfficialNoticeRecipients.stream()
                 .map(UserInfoDTO::getUserId)

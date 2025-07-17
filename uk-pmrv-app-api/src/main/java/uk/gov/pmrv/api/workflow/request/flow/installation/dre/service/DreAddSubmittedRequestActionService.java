@@ -1,12 +1,9 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.dre.service;
 
-import java.util.Map;
-
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -16,6 +13,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInf
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.mapper.DreMapper;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

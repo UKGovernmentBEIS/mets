@@ -1,10 +1,5 @@
 package uk.gov.pmrv.api.web.controller.reporting;
 
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
-import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
-import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.REPORTING_CALCULATE_EMISSIONS_BAD_REQUEST;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.reporting.domain.dto.EmissionsCalculationDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.EmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.MeasurementEmissionsCalculationDTO;
@@ -33,7 +29,11 @@ import uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.measureme
 import uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.pfc.PfcEmissionsCalculationService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
+
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
+import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
+import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.REPORTING_CALCULATE_EMISSIONS_BAD_REQUEST;
 
 @Validated
 @RestController

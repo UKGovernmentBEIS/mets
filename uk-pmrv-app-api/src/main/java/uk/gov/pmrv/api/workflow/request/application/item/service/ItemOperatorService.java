@@ -3,8 +3,8 @@ package uk.gov.pmrv.api.workflow.request.application.item.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.application.authorization.OperatorAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
@@ -26,11 +26,11 @@ public class ItemOperatorService implements ItemService {
     private final RequestService requestService;
 
     @Override
-    public ItemDTOResponse getItemsByRequest(PmrvUser pmrvUser, String requestId) {
+    public ItemDTOResponse getItemsByRequest(AppUser appUser, String requestId) {
         Request request = requestService.findRequestById(requestId);
         Long accountId = request.getAccountId();
         Map<Long, Set<RequestTaskType>> userScopedRequestTaskTypes = operatorAuthorityResourceAdapter
-                .getUserScopedRequestTaskTypesByAccountId(pmrvUser.getUserId(), accountId);
+                .getUserScopedRequestTaskTypesByAccountId(appUser.getUserId(), accountId);
 
         if (ObjectUtils.isEmpty(userScopedRequestTaskTypes)) {
             return ItemDTOResponse.emptyItemDTOResponse();
@@ -38,11 +38,11 @@ public class ItemOperatorService implements ItemService {
 
         ItemPage itemPage = itemByRequestOperatorRepository.findItemsByRequestId(userScopedRequestTaskTypes, requestId);
 
-        return itemResponseService.toItemDTOResponse(itemPage, request.getType().getAccountType(), pmrvUser);
+        return itemResponseService.toItemDTOResponse(itemPage, request.getType().getAccountType(), appUser);
     }
 
     @Override
-    public RoleType getRoleType() {
-        return RoleType.OPERATOR;
+    public String getRoleType() {
+        return RoleTypeConstants.OPERATOR;
     }
 }

@@ -7,8 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionPayloadType;
@@ -39,16 +39,15 @@ class PermitNotificationCreateActionHandlerTest {
     private StartProcessRequestService startProcessRequestService;
 
     @Test
-    void getType() {
-        assertThat(handler.getType()).isEqualTo(RequestCreateActionType.PERMIT_NOTIFICATION);
+    void getRequestCreateActionType() {
+        assertThat(handler.getRequestCreateActionType()).isEqualTo(RequestCreateActionType.PERMIT_NOTIFICATION);
     }
 
     @Test
     void process() {
         Long accountId = 1L;
-        RequestCreateActionType type = RequestCreateActionType.PERMIT_NOTIFICATION;
         RequestCreateActionEmptyPayload payload = RequestCreateActionEmptyPayload.builder().payloadType(RequestCreateActionPayloadType.EMPTY_PAYLOAD).build();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").authorities(List.of(PmrvAuthority.builder()
+        AppUser appUser = AppUser.builder().userId("user").authorities(List.of(AppAuthority.builder()
                 .accountId(accountId).build()))
                 .build();
 
@@ -57,7 +56,7 @@ class PermitNotificationCreateActionHandlerTest {
                 .accountId(accountId)
                 .requestPayload(PermitNotificationRequestPayload.builder()
                         .payloadType(RequestPayloadType.PERMIT_NOTIFICATION_REQUEST_PAYLOAD)
-                        .operatorAssignee(pmrvUser.getUserId())
+                        .operatorAssignee(appUser.getUserId())
                         .build())
                 .requestMetadata(PermitNotificationRequestMetadata.builder()
                         .type(RequestMetadataType.PERMIT_NOTIFICATION)
@@ -66,7 +65,7 @@ class PermitNotificationCreateActionHandlerTest {
 
         when(startProcessRequestService.startProcess(expectedRequestParams)).thenReturn(Request.builder().id("requestId").build());
 
-        final String requestId = handler.process(accountId, type, payload, pmrvUser);
+        final String requestId = handler.process(accountId, payload, appUser);
 
         verify(startProcessRequestService, times(1)).startProcess(expectedRequestParams);
 

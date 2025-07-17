@@ -20,7 +20,7 @@ interface ViewModel {
 @Component({
   selector: 'app-skip-review-aviation',
   template: `
-    <app-page-heading size="xl"> Are you sure you want to skip the review and complete the report? </app-page-heading>
+    <app-page-heading size="xl">Are you sure you want to skip the review and complete the report?</app-page-heading>
     <p class="govuk-body">
       By selecting ‘Confirm and complete’ you confirm that the information in the report is correct to the best of your
       knowledge.

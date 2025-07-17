@@ -1,17 +1,18 @@
 package uk.gov.pmrv.api.migration.installationaccount;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.utils.ExceptionUtils;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
-import uk.gov.pmrv.api.common.utils.ExceptionUtils;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -25,13 +26,22 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Log4j2
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 @Service
-@RequiredArgsConstructor
 public class MigrationInstallationAccountService extends MigrationBaseService {
 
     private final JdbcTemplate migrationJdbcTemplate;
     private final Validator validator;
     private final AccountDTOBuilder accountDTOBuilder;
     private final MigrationInstallationAccountCreationService installationAccountCreationService;
+
+    public MigrationInstallationAccountService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                               Validator validator,
+                                               AccountDTOBuilder accountDTOBuilder,
+                                               MigrationInstallationAccountCreationService installationAccountCreationService) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.validator = validator;
+        this.accountDTOBuilder = accountDTOBuilder;
+        this.installationAccountCreationService = installationAccountCreationService;
+    }
 
     private static final String QUERY_BASE  = """
         with XMLNAMESPACES ('urn:www-toplev-com:officeformsofd' AS fd),

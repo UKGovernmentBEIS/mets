@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-import { mapTo, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 
 import { taskNotFoundError } from '@shared/errors/request-task-error';
 
@@ -13,7 +13,7 @@ import { IncorporateHeaderStore } from '../shared/incorporate-header/store/incor
 import { RfiStore } from './store/rfi.store';
 
 @Injectable({ providedIn: 'root' })
-export class RfiGuard implements CanActivate, CanDeactivate<any> {
+export class RfiGuard {
   constructor(
     private readonly store: RfiStore,
     private readonly incorporateHeaderStore: IncorporateHeaderStore,
@@ -38,6 +38,7 @@ export class RfiGuard implements CanActivate, CanDeactivate<any> {
               assigneeUserId: requestTaskItem.requestTask.assigneeUserId,
               assigneeFullName: requestTaskItem.requestTask.assigneeFullName,
             },
+            userAssignCapable: requestTaskItem.userAssignCapable,
             paymentCompleted: requestTaskItem.requestInfo.paymentCompleted,
             accountId: requestTaskItem.requestInfo.accountId,
             ...requestTaskItem.requestTask.payload,
@@ -60,7 +61,7 @@ export class RfiGuard implements CanActivate, CanDeactivate<any> {
           accountId: requestTaskItem.requestInfo.accountId,
         });
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 

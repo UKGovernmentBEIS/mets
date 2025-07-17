@@ -3,9 +3,9 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationop
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountAmendService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -32,7 +32,7 @@ public class InstallationAccountOpeningAmendApplicationActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final InstallationAccountOpeningAmendApplicationRequestTaskActionPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         Request request = requestTask.getRequest();
@@ -45,7 +45,7 @@ public class InstallationAccountOpeningAmendApplicationActionHandler
         InstallationAccountDTO newAccountDTO = INSTALLATION_ACCOUNT_PAYLOAD_MAPPER.toAccountInstallationDTO(newAccountPayload);
         
         //amend account
-        newAccountDTO = installationAccountAmendService.amendAccount(request.getAccountId(), currentAccountDTO, newAccountDTO, pmrvUser);
+        newAccountDTO = installationAccountAmendService.amendAccount(request.getAccountId(), currentAccountDTO, newAccountDTO, appUser);
 
         // enhance account payload with full legal entity info if id only provided
         if(newAccountPayload.getLegalEntity().getId() != null) {

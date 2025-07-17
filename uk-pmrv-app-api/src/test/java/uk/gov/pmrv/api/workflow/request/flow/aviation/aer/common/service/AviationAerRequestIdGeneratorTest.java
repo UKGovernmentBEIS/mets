@@ -30,6 +30,21 @@ class AviationAerRequestIdGeneratorTest {
         assertEquals("AEM07903-2023", requestId);
     }
 
+    @Test
+    void generatePastAerId(){
+
+        Long accountId = 1L;
+        Year year = Year.of(2023);
+        Integer yearsBefore = 2;
+
+        String expectedId = "AEM00001-2021";
+
+        String actualId = generator.generatePastAerId(accountId, year, yearsBefore);
+
+        assertThat(actualId).isEqualTo(expectedId);
+
+    }
+
 
     @Test
     void getTypes() {

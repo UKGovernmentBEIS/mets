@@ -1,13 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.handler;
 
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
@@ -19,15 +16,18 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatch
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpReissueAccountDetails;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.mapper.EmpReissueMapper;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.service.EmpBatchReissueQueryService;
-import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCreateActionHandler;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCACreateActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.BatchReissueRequestCreateActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.BatchReissueRequestPayload;
 
+import java.util.HashSet;
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
-public class EmpBatchReissueCreateActionHandler implements RequestCreateActionHandler<BatchReissueRequestCreateActionPayload> {
+public class EmpBatchReissueCreateActionHandler implements RequestCACreateActionHandler<BatchReissueRequestCreateActionPayload> {
 
 	private final EmpBatchReissueQueryService empBatchReissueQueryService;
 	private final StartProcessRequestService startProcessRequestService;
@@ -35,15 +35,15 @@ public class EmpBatchReissueCreateActionHandler implements RequestCreateActionHa
 			.getMapper(EmpReissueMapper.class);
 	
 	@Override
-	public String process(Long accountId, RequestCreateActionType type, BatchReissueRequestCreateActionPayload payload,
-			PmrvUser pmrvUser) {
+	public String process(CompetentAuthorityEnum ca, BatchReissueRequestCreateActionPayload payload,
+						  AppUser appUser) {
 		final EmpBatchReissueFilters filters = (EmpBatchReissueFilters) payload.getFilters();
 		final Map<Long, EmpReissueAccountDetails> accountsDetails = empBatchReissueQueryService
-				.findAccountsByCAAndFilters(pmrvUser.getCompetentAuthority(), filters);
+				.findAccountsByCAAndFilters(appUser.getCompetentAuthority(), filters);
 		
 		final RequestParams requestParams = RequestParams.builder()
 	            .type(RequestType.EMP_BATCH_REISSUE)
-	            .competentAuthority(pmrvUser.getCompetentAuthority())
+	            .competentAuthority(appUser.getCompetentAuthority())
 	            .requestPayload(BatchReissueRequestPayload.builder()
 	            		.payloadType(RequestPayloadType.EMP_BATCH_REISSUE_REQUEST_PAYLOAD)
 	            		.filters(filters)
@@ -51,13 +51,11 @@ public class EmpBatchReissueCreateActionHandler implements RequestCreateActionHa
 	            		.build())
 	            .requestMetadata(EmpBatchReissueRequestMetadata.builder()
 	            		.accountsReports(EMP_REISSUE_MAPPER.toEmpReissueAccountsReports(accountsDetails))
-	            		.submitterId(pmrvUser.getUserId())
-	            		.submitter(pmrvUser.getFullName())
+	            		.submitterId(appUser.getUserId())
+	            		.submitter(appUser.getFullName())
 	            		.type(RequestMetadataType.EMP_BATCH_REISSUE)
 	            		.build())
-				.processVars(Map.of(BpmnProcessConstants.ACCOUNT_IDS,
-						accountsDetails.keySet().stream()
-								.collect(Collectors.toSet()),
+				.processVars(Map.of(BpmnProcessConstants.ACCOUNT_IDS, new HashSet<>(accountsDetails.keySet()),
 						BpmnProcessConstants.BATCH_NUMBER_OF_ACCOUNTS_COMPLETED, 0))
 	            .build();
 		
@@ -66,7 +64,7 @@ public class EmpBatchReissueCreateActionHandler implements RequestCreateActionHa
 	}
 
 	@Override
-	public RequestCreateActionType getType() {
+	public RequestCreateActionType getRequestCreateActionType() {
 		return RequestCreateActionType.EMP_BATCH_REISSUE;
 	}
 

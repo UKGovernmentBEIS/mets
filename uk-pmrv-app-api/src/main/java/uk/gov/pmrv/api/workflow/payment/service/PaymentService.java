@@ -2,8 +2,8 @@ package uk.gov.pmrv.api.workflow.payment.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.payment.domain.PaymentFeeMethod;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeType;
 import uk.gov.pmrv.api.workflow.payment.repository.PaymentFeeMethodRepository;

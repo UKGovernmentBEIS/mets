@@ -6,7 +6,7 @@
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Verifier's recommendation</dt>
-    <dd govukSummaryListRowValue>{{ verificationDataItem.explanation }}</dd>
+    <dd govukSummaryListRowValue class="pre-wrap">{{ verificationDataItem.explanation }}</dd>
   </div>
   <div govukSummaryListRow *ngIf="verificationDataItem?.materialEffect !== undefined">
     <dt govukSummaryListRowKey>Material?</dt>

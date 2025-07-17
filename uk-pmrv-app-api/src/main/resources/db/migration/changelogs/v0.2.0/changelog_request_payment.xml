@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.2.0/changelog_request_payment.xml"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+
+    <changeSet id="0_2_0_insert_request_payment_fee_waste_permit_issuance_variation_revocation_surrender" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            INSERT INTO request_payment_fee (fee_method_id, type, amount)
+            SELECT id, 'WASTE', 0
+            FROM request_payment_fee_method
+            WHERE request_type in (
+                'PERMIT_ISSUANCE',
+                'PERMIT_VARIATION',
+                'PERMIT_SURRENDER',
+                'PERMIT_REVOCATION',
+                'PERMIT_TRANSFER_A',
+                'PERMIT_TRANSFER_B'
+            );
+        </sql>
+        <rollback>
+            DELETE FROM request_payment_fee
+            WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method WHERE request_type in (
+                    'PERMIT_ISSUANCE',
+                    'PERMIT_VARIATION',
+                    'PERMIT_SURRENDER',
+                    'PERMIT_REVOCATION',
+                    'PERMIT_TRANSFER_A',
+                    'PERMIT_TRANSFER_B'
+                )
+            )
+            AND type = 'WASTE'
+            AND amount = 0;
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_request_payment_fee_data_for_aviation_doe_corsia" author="dimitrios.topalidis@trasys.gr">
+          <sql>
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type, type)
+            values (nextval('request_payment_fee_method_seq'), 'ENGLAND', 'AVIATION_DOE_CORSIA', 'STANDARD');
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type, type)
+            values (nextval('request_payment_fee_method_seq'), 'SCOTLAND', 'AVIATION_DOE_CORSIA', 'STANDARD');
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type, type)
+            values (nextval('request_payment_fee_method_seq'), 'NORTHERN_IRELAND', 'AVIATION_DOE_CORSIA', 'STANDARD');
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type, type)
+            values (nextval('request_payment_fee_method_seq'), 'WALES', 'AVIATION_DOE_CORSIA', 'STANDARD');
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE
+                FROM request_payment_fee_method
+                WHERE request_type = 'AVIATION_DOE_CORSIA';
+            </sql>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

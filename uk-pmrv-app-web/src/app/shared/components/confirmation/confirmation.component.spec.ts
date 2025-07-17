@@ -4,14 +4,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from '@shared/shared.module';
 
 import { BasePage } from '../../../../testing';
-import { ConfirmationComponent } from './confirmation.component';
+import { ConfirmationSharedComponent } from './confirmation.component';
 
 describe('ConfirmationComponent', () => {
-  let component: ConfirmationComponent;
-  let fixture: ComponentFixture<ConfirmationComponent>;
+  let component: ConfirmationSharedComponent;
+  let fixture: ComponentFixture<ConfirmationSharedComponent>;
   let page: Page;
 
-  class Page extends BasePage<ConfirmationComponent> {
+  class Page extends BasePage<ConfirmationSharedComponent> {
     get confirmationMessage() {
       return this.query('.govuk-panel__title').innerHTML.trim();
     }
@@ -24,7 +24,7 @@ describe('ConfirmationComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ConfirmationComponent);
+    fixture = TestBed.createComponent(ConfirmationSharedComponent);
     component = fixture.componentInstance;
     component.title = 'The notification has been recalled';
     page = new Page(fixture);

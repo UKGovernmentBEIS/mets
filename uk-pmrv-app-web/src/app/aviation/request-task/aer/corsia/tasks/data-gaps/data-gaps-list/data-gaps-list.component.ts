@@ -63,6 +63,7 @@ export default class DataGapsListComponent implements OnInit {
           const payload = requestTaskItem?.requestTask?.payload as AerCorsiaRequestTaskPayload;
           return this.aviationReportingService.getTotalEmissionsCorsia({
             aggregatedEmissionsData: payload.aer.aggregatedEmissionsData,
+            year: payload.reportingYear,
           });
         }),
         switchMap((emissions) => {

@@ -3,7 +3,7 @@
     <ng-template let-column="column" let-row="row">
       <ng-container [ngSwitch]="column.field">
         <ng-container *ngSwitchCase="'taskType'">
-          <a [routerLink]="row | itemLink" govukLink>
+          <a [routerLink]="row | itemLink: (isAviation$ | async):false" govukLink>
             {{ row[column.field] | itemName: row.requestId?.split('-')[1] }}
           </a>
           <div>

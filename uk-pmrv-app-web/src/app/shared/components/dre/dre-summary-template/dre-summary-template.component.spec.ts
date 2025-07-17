@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { SharedModule } from '@shared/shared.module';
-import moment from 'moment';
+import { addDays, format } from 'date-fns';
 
 import { DreSummaryComponent } from './dre-summary-template.component';
 
@@ -14,7 +14,9 @@ describe('DreSummaryComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    template: ` <app-dre-summary-template [dre]="dre" [isEditable]="isEditable"></app-dre-summary-template> `,
+    template: `
+      <app-dre-summary-template [dre]="dre" [isEditable]="isEditable"></app-dre-summary-template>
+    `,
   })
   class TestComponent {
     isEditable = false;
@@ -38,7 +40,7 @@ describe('DreSummaryComponent', () => {
       informationSources: ['fgf'],
       fee: {
         feeDetails: {
-          dueDate: moment().add(1, 'day').format('YYYY-MM-DD'),
+          dueDate: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
           hourlyRate: '3',
           totalBillableHours: '34',
         },

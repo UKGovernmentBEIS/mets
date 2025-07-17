@@ -1,0 +1,178 @@
+<app-wizard-step
+  (formSubmit)="submitForm.next(form)"
+  [formGroup]="form"
+  [heading]="heading"
+  [caption]="caption"
+  submitText="Continue">
+  <div class="govuk-!-width-two-thirds">
+    <h2 class="govuk-heading-m">{{ dataSourcesHeading }}</h2>
+
+    <p class="govuk-caption-m">
+      {{ dataSourcesText }}
+    </p>
+
+    <div formArrayName="dataSources">
+      <fieldset
+        *ngFor="let dataSource of dataSourcesFormArray.controls; index as i"
+        [formGroupName]="i"
+        govukFieldset
+        id="dataSource-def-{{ i }}">
+        <legend govukLegend>Data source {{ i + 1 }}</legend>
+
+        <button
+          (click)="OnRemoveDataSource(i)"
+          *ngIf="dataSourcesFormArray.length > 1"
+          appAddAnother
+          govukSecondaryButton
+          type="button"
+          #removeButton>
+          Remove
+        </button>
+
+        <div
+          [ngClass]="{
+            'govuk-form-group--error':
+              dataSource.get('details')?.errors?.atLeastOneRequired &&
+                this.wizardStepComponent.isSummaryDisplayedSubject | async,
+          }">
+          <div
+            *ngIf="
+              dataSource.get('details')?.errors?.atLeastOneRequired &&
+                this.wizardStepComponent.isSummaryDisplayedSubject | async
+            "
+            [ngClass]="{
+              'govuk-error-message':
+                dataSource.get('details')?.errors?.atLeastOneRequired &&
+                  this.wizardStepComponent.isSummaryDisplayedSubject | async,
+            }">
+            {{ dataSource.get('details')?.errors?.atLeastOneRequired }}
+          </div>
+
+          <div [id]="'l.dataSources.' + i + '.details'">
+            @if (dataSourcesNames && dataSourcesNames?.length > 0) {
+              <div formGroupName="details">
+                <ng-container *ngFor="let dataSourceName of dataSourcesNames">
+                  <div class="govuk-label">{{ dataSourcesField[dataSourceName] }}</div>
+                  @if (subInstallationType === 'ETHYLENE_OXIDE_ETHYLENE_GLYCOLS') {
+                    <div class="govuk-caption-m govuk-!-padding-bottom-1">
+                      CF(EOE): {{ dataSourceName | ethyleneOxideCF }}
+                    </div>
+                  }
+                  <div
+                    [formControlName]="dataSourceName"
+                    govuk-select
+                    [label]="'Select ' + dataSourcesField[dataSourceName].toLowerCase()"
+                    [isLabelHidden]="true"
+                    widthClass="govuk-!-width-full">
+                    @if (
+                      ['ETHYLENE_OXIDE_ETHYLENE_GLYCOLS', 'HYDROGEN', 'SYNTHESIS_GAS'].includes(subInstallationType) &&
+                      i > 0
+                    ) {
+                      <option [value]="''">Select an option if relevant</option>
+                    } @else {
+                      <option [value]="''">Select an option</option>
+                    }
+                    <ng-container *ngIf="dataSourcesType[dataSourceName] === '44'">
+                      <option
+                        *ngFor="let productBenchmarkType of productBenchmark44Types"
+                        [value]="productBenchmarkType">
+                        {{ productBenchmarkType | productBenchmark44DataSource }}
+                      </option>
+                    </ng-container>
+                    <ng-container *ngIf="dataSourcesType[dataSourceName] === '46'">
+                      <option
+                        *ngFor="let productBenchmarkType of productBenchmark46Types"
+                        [value]="productBenchmarkType">
+                        {{ productBenchmarkType | productBenchmark46DataSource }}
+                      </option>
+                    </ng-container>
+                  </div>
+                </ng-container>
+              </div>
+            } @else {
+              <div class="govuk-label">{{ dataSourcesField }}</div>
+              <div
+                formControlName="detail"
+                govuk-select
+                [label]="'Select ' + dataSourcesField.toLowerCase()"
+                [isLabelHidden]="true"
+                widthClass="govuk-!-width-full">
+                <option [value]="''">Select an option</option>
+                <ng-container *ngIf="dataSourcesType === '44'">
+                  <option *ngFor="let productBenchmarkType of productBenchmark44Types" [value]="productBenchmarkType">
+                    {{ productBenchmarkType | productBenchmark44DataSource }}
+                  </option>
+                </ng-container>
+                <ng-container *ngIf="dataSourcesType === '45'">
+                  <option *ngFor="let productBenchmarkType of productBenchmark45Types" [value]="productBenchmarkType">
+                    {{ productBenchmarkType | productBenchmark45DataSource }}
+                  </option>
+                </ng-container>
+                <ng-container *ngIf="dataSourcesType === '46'">
+                  <option *ngFor="let productBenchmarkType of productBenchmark46Types" [value]="productBenchmarkType">
+                    {{ productBenchmarkType | productBenchmark46DataSource }}
+                  </option>
+                </ng-container>
+              </div>
+            }
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <button
+      (click)="OnAddDataSource()"
+      govukSecondaryButton
+      type="button"
+      *ngIf="dataSourcesFormArray.controls.length < 6">
+      Add another data source
+    </button>
+
+    <h2 class="govuk-heading-m">Description of methodology applied for each data source</h2>
+
+    <app-include-answer-details></app-include-answer-details>
+
+    <div formControlName="methodologyAppliedDescription" govuk-textarea [maxLength]="10000" rows="10"></div>
+
+    <div formGroupName="hierarchicalOrder">
+      <div
+        formControlName="followed"
+        govuk-radio
+        legend="Has the hierarchical order been followed?"
+        hint="Select yes if the data source with the highest rank within the hierarchy has been used, as set out in section 4 of Annex VII of the FAR."
+        [legendSize]="'medium'">
+        <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+        <govuk-radio-option [value]="false" label="No">
+          <ng-container govukConditionalContent>
+            <div
+              formControlName="notFollowingHierarchicalOrderReason"
+              govuk-radio
+              legend="Reason for not following the hierarchy">
+              <govuk-radio-option
+                [value]="'OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY'"
+                label="Other data sources lead to lower uncertainty according to the simplified uncertainty assessment in line with Article 7(2) of the FAR"></govuk-radio-option>
+              <govuk-radio-option
+                [value]="'USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE'"
+                label="Use of better data sources is technically infeasible"></govuk-radio-option>
+              <govuk-radio-option
+                [value]="'USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS'"
+                label="Use of better data sources would incur unreasonable costs"></govuk-radio-option>
+            </div>
+            <div
+              formControlName="notFollowingHierarchicalOrderDescription"
+              label="Provide more details on any deviation from the hierarchy"
+              govuk-textarea
+              [maxLength]="10000"
+              rows="10"></div>
+          </ng-container>
+        </govuk-radio-option>
+      </div>
+    </div>
+
+    <app-multiple-file-input
+      [baseDownloadUrl]="downloadUrl"
+      label="Upload supporting files (optional)"
+      formControlName="supportingFiles"
+      listTitle="Uploaded files"></app-multiple-file-input>
+  </div>
+</app-wizard-step>

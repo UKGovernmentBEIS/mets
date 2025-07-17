@@ -5,12 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.rules.domain.ResourceType;
-import uk.gov.pmrv.api.authorization.rules.services.AuthorizationRulesQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.operator.OperatorRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestTaskRepository;
 
@@ -50,18 +49,18 @@ class FirstPrimaryContactAssignedToAccountEventServiceTest {
             .build();
 
         when(requestTaskRepository.
-            findByAssigneeAndRequestAccountIdAndRequestStatus(null, accountId, RequestStatus.IN_PROGRESS)
+            findByAssigneeAndRequestAccountId(null, accountId)
         ).thenReturn(List.of(requestTask1, requestTask2));
         when(authorizationRulesQueryService
-            .findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_TASK, RoleType.OPERATOR)
+            .findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_TASK, RoleTypeConstants.OPERATOR)
         ).thenReturn(Set.of(RequestTaskType.EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT.name()));
 
         service.assignUnassignedTasksToAccountPrimaryContact(accountId, userId);
 
         verify(requestTaskRepository, times(1))
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(null, accountId, RequestStatus.IN_PROGRESS);
+            .findByAssigneeAndRequestAccountId(null, accountId);
         verify(authorizationRulesQueryService, times(1))
-            .findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_TASK, RoleType.OPERATOR);
+            .findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_TASK, RoleTypeConstants.OPERATOR);
         verify(operatorRequestTaskAssignmentService, times(1)).assignTask(requestTask1, userId);
         verifyNoMoreInteractions(operatorRequestTaskAssignmentService);
     }
@@ -72,13 +71,13 @@ class FirstPrimaryContactAssignedToAccountEventServiceTest {
         String userId = "userId";
 
         when(requestTaskRepository.
-            findByAssigneeAndRequestAccountIdAndRequestStatus(null, accountId, RequestStatus.IN_PROGRESS)
+            findByAssigneeAndRequestAccountId(null, accountId)
         ).thenReturn(List.of());
 
         service.assignUnassignedTasksToAccountPrimaryContact(accountId, userId);
 
         verify(requestTaskRepository, times(1))
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(null, accountId, RequestStatus.IN_PROGRESS);
+            .findByAssigneeAndRequestAccountId(null, accountId);
         verifyNoInteractions(authorizationRulesQueryService, operatorRequestTaskAssignmentService);
     }
 }

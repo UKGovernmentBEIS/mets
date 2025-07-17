@@ -1,8 +1,9 @@
 package uk.gov.pmrv.api.migration.permit.annualemissionstarget;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.springframework.jdbc.core.RowMapper;
 
 public class EtsAnnualEmissionsTargetRowMapper implements RowMapper<EtsAnnualEmissionsTarget> {
 

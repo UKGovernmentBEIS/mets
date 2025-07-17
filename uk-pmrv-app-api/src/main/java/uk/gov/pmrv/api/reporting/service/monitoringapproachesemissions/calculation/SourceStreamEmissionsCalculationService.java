@@ -3,8 +3,8 @@ package uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.calculat
 import org.apache.commons.lang3.tuple.Pair;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.reporting.domain.dto.CalculationParameterMeasurementUnits;
 import uk.gov.pmrv.api.reporting.domain.dto.EmissionsCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.EmissionsCalculationDTO;
@@ -42,7 +42,7 @@ public abstract class SourceStreamEmissionsCalculationService implements SourceS
             calculationEmissionsMeasurementUnitsMapper.toCalculationParameterMeasurementUnits(calculationParams);
 
         if(!getValidMeasurementUnitsCombinations().contains(measurementUnits)) {
-            throw new BusinessException(ErrorCode.AER_EMISSIONS_CALCULATION_INVALID_MEASUREMENT_UNITS_COMBINATION);
+            throw new BusinessException(MetsErrorCode.AER_EMISSIONS_CALCULATION_INVALID_MEASUREMENT_UNITS_COMBINATION);
         }
     }
 

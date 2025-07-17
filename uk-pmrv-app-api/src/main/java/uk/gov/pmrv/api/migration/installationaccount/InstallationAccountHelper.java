@@ -1,10 +1,11 @@
 package uk.gov.pmrv.api.migration.installationaccount;
 
+import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import lombok.experimental.UtilityClass;
-import org.apache.commons.lang3.StringUtils;
 
 @UtilityClass
 public class InstallationAccountHelper {

@@ -26,8 +26,7 @@
                     *ngIf="
                       row?.emissionPointCategory?.emissionPoint | findEmissionPoint | async as emissionPoint;
                       else noSourceStream
-                    "
-                  >
+                    ">
                     {{ emissionPoint.reference }}
                     {{ emissionPoint.description }}:
                     {{ row?.emissionPointCategory?.categoryType | categoryTypeName }}
@@ -43,8 +42,7 @@
                     row?.emissionPointCategory?.transfer?.entryAccountingForTransfer &&
                       row?.emissionPointCategory?.transfer?.transferDirection !== 'RECEIVED_FROM_ANOTHER_INSTALLATION';
                     else receivedTransfer
-                  "
-                >
+                  ">
                   {{ row?.emissionPointCategory?.annualEmittedCO2Tonnes | negativeNumber | number }} t
                 </div>
                 <ng-template #receivedTransfer>
@@ -53,11 +51,16 @@
                   }})
                 </ng-template>
               </ng-container>
+              <ng-container *ngSwitchCase="'measuredEmissions'">
+                {{ row?.measuredEmissions?.tier | appliedTier }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'biomassFraction'">
+                {{ row?.biomassFraction?.tier | appliedTier }}
+              </ng-container>
               <ng-container *ngSwitchCase="'status'">
                 <govuk-tag
                   [color]="'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | tagColor"
-                  class="app-task-list__tag"
-                >
+                  class="app-task-list__tag">
                   {{ 'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
                 </govuk-tag>
               </ng-container>
@@ -68,8 +71,7 @@
       <a
         *ngIf="(store.isEditable$ | async) === true"
         govukLink
-        [routerLink]="['category-tier', (emissionPointCategoryAppliedTiers$ | async)?.length]"
-      >
+        [routerLink]="['category-tier', (emissionPointCategoryAppliedTiers$ | async)?.length]">
         Add an emission point category
       </a>
     </ng-container>
@@ -80,8 +82,7 @@
         app-task-item
         link="category-tier/0"
         linkText="Add an emission point category"
-        [status]="sourceStreamCategoriesStatus$ | async"
-      ></li>
+        [status]="sourceStreamCategoriesStatus$ | async"></li>
     </ng-template>
   </ul>
 
@@ -91,38 +92,32 @@
       app-task-item
       link="./description/summary"
       linkText="Approach description"
-      [status]="'MEASUREMENT_CO2_Description' | taskStatus | async"
-    ></li>
+      [status]="'MEASUREMENT_CO2_Description' | taskStatus | async"></li>
     <li
       app-task-item
       link="./emissions/summary"
       linkText="Determination of emissions by measurement"
-      [status]="'MEASUREMENT_CO2_Emission' | taskStatus | async"
-    ></li>
+      [status]="'MEASUREMENT_CO2_Emission' | taskStatus | async"></li>
     <li
       app-task-item
       link="./reference/summary"
       linkText="Determination of reference period"
-      [status]="'MEASUREMENT_CO2_Reference' | taskStatus | async"
-    ></li>
+      [status]="'MEASUREMENT_CO2_Reference' | taskStatus | async"></li>
     <li
       app-task-item
       link="./gasflow/summary"
       linkText="Calculation of gas flow"
-      [status]="'MEASUREMENT_CO2_Gasflow' | taskStatus | async"
-    ></li>
+      [status]="'MEASUREMENT_CO2_Gasflow' | taskStatus | async"></li>
     <li
       app-task-item
       link="./biomass/summary"
       linkText="Biomass emissions"
-      [status]="'MEASUREMENT_CO2_Biomass' | taskStatus | async"
-    ></li>
+      [status]="'MEASUREMENT_CO2_Biomass' | taskStatus | async"></li>
     <li
       app-task-item
       link="./corroborating/summary"
       linkText="Corroborating calculations"
-      [status]="'MEASUREMENT_CO2_Corroborating' | taskStatus | async"
-    ></li>
+      [status]="'MEASUREMENT_CO2_Corroborating' | taskStatus | async"></li>
   </ul>
 
   <app-list-return-link></app-list-return-link>

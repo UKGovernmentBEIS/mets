@@ -1,18 +1,7 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import jakarta.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +11,15 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.util.CollectionUtils;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RequestTaskPayloadRfiAttachable;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

@@ -11,11 +11,12 @@ import {
 import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { filter, first, switchMap, switchMapTo, takeUntil } from 'rxjs';
+import { filter, first, switchMap, takeUntil } from 'rxjs';
 
-import { PendingRequestService } from '../../../../core/guards/pending-request.service';
-import { DestroySubject } from '../../../../core/services/destroy-subject.service';
-import { WizardStepComponent } from '../../../../shared/wizard/wizard-step.component';
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { DestroySubject } from '@core/services/destroy-subject.service';
+import { WizardStepComponent } from '@shared/wizard/wizard-step.component';
+
 import { PERMIT_TASK_FORM } from '../../../shared/permit-task-form.token';
 import { reviewRequestTaskTypes } from '../../../shared/utils/permit';
 import { PermitApplicationState } from '../../../store/permit-application.state';
@@ -68,7 +69,7 @@ export class TypesComponent implements AfterViewInit {
           this.store.postTask(data.taskKey, this.form.get('cellAndAnodeTypes').value, true, data.statusKey),
         ),
         this.pendingRequest.trackRequest(),
-        switchMapTo(this.store),
+        switchMap(() => this.store),
         first(),
       )
       .subscribe((state) =>

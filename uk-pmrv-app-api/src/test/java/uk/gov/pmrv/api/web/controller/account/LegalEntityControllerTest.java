@@ -1,5 +1,41 @@
 package uk.gov.pmrv.api.web.controller.account;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
+import org.springframework.aop.framework.AopProxy;
+import org.springframework.aop.framework.DefaultAopProxyFactory;
+import org.springframework.http.MediaType;
+import org.springframework.security.web.FilterChainProxy;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
+import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
+import uk.gov.pmrv.api.account.domain.dto.LegalEntityInfoDTO;
+import uk.gov.pmrv.api.account.service.LegalEntityService;
+import uk.gov.pmrv.api.account.service.LegalEntityValidationService;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
+import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Stream;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doThrow;
@@ -10,45 +46,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Stream;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
-import org.springframework.aop.framework.AopProxy;
-import org.springframework.aop.framework.DefaultAopProxyFactory;
-import org.springframework.http.MediaType;
-import org.springframework.security.web.FilterChainProxy;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
-import uk.gov.pmrv.api.account.domain.dto.LegalEntityInfoDTO;
-import uk.gov.pmrv.api.account.service.LegalEntityService;
-import uk.gov.pmrv.api.account.service.LegalEntityValidationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
-import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 @ExtendWith(MockitoExtension.class)
 class LegalEntityControllerTest {
@@ -61,7 +58,7 @@ class LegalEntityControllerTest {
     private LegalEntityController legalEntityController;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private LegalEntityService legalEntityService;
@@ -87,7 +84,7 @@ class LegalEntityControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(legalEntityController)
                 .setControllerAdvice(new ExceptionControllerAdvice())
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .addFilters(new FilterChainProxy(Collections.emptyList()))
                 .build();
     }
@@ -95,27 +92,27 @@ class LegalEntityControllerTest {
     @Test
     void getCurrentUserLegalEntities() throws Exception {
     	List<LegalEntityInfoDTO> legalEntitiesInfoDTO = List.of(LegalEntityInfoDTO.builder().name(LEGAL_ENTITY_NAME).build());
-    	PmrvUser pmrvUser = buildMockAuthenticatedUser();
+    	AppUser appUser = buildMockAuthenticatedUser();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(legalEntityService.getUserLegalEntities(pmrvUser)).thenReturn(legalEntitiesInfoDTO);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(legalEntityService.getUserLegalEntities(appUser)).thenReturn(legalEntitiesInfoDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.get(LEGAL_ENTITY_CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value(LEGAL_ENTITY_NAME));
         
-        verify(legalEntityService, times(1)).getUserLegalEntities(pmrvUser);
+        verify(legalEntityService, times(1)).getUserLegalEntities(appUser);
     }
 
     @Test
     void getLegalEntityById() throws Exception {
     	final Long id = 1L;
     	LegalEntityDTO legalEntity = LegalEntityDTO.builder().id(id).name(LEGAL_ENTITY_NAME).build();
-        PmrvUser pmrvUser = buildMockAuthenticatedUser();
+        AppUser appUser = buildMockAuthenticatedUser();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(legalEntityService.getUserLegalEntityDTOById(id, pmrvUser)).thenReturn(legalEntity);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(legalEntityService.getUserLegalEntityDTOById(id, appUser)).thenReturn(legalEntity);
 
         mockMvc.perform(MockMvcRequestBuilders.get(LEGAL_ENTITY_CONTROLLER_PATH + "/" + id)
             .contentType(MediaType.APPLICATION_JSON))
@@ -123,17 +120,17 @@ class LegalEntityControllerTest {
             .andExpect(jsonPath("name").value(LEGAL_ENTITY_NAME))
             .andExpect(jsonPath("id").value(id));
         
-        verify(legalEntityService, times(1)).getUserLegalEntityDTOById(id, pmrvUser);
+        verify(legalEntityService, times(1)).getUserLegalEntityDTOById(id, appUser);
     }
 
     @Test
     void getLegalEntityById_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.VERIFIER).build();
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(pmrvUser, new RoleType[] {RoleType.OPERATOR, RoleType.REGULATOR});
+                .evaluate(appUser, new String[] {RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR});
 
         mockMvc.perform(MockMvcRequestBuilders.get(LEGAL_ENTITY_CONTROLLER_PATH + "/" + 1)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -145,10 +142,10 @@ class LegalEntityControllerTest {
     @ParameterizedTest
     @MethodSource("provideLeNames")
     void isExistingLegalEntityName(String leName, boolean exists) throws Exception {
-        PmrvUser pmrvUser = buildMockAuthenticatedUser();
+        AppUser appUser = buildMockAuthenticatedUser();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(legalEntityValidationService.isExistingActiveLegalEntityName(leName, pmrvUser)).thenReturn(exists);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(legalEntityValidationService.isExistingActiveLegalEntityName(leName, appUser)).thenReturn(exists);
 
         mockMvc.perform(MockMvcRequestBuilders.get(LEGAL_ENTITY_CONTROLLER_PATH + "/name")
                 .param("name", leName)
@@ -156,11 +153,11 @@ class LegalEntityControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(String.valueOf(exists)));
 
-        verify(legalEntityValidationService, times(1)).isExistingActiveLegalEntityName(leName, pmrvUser);
+        verify(legalEntityValidationService, times(1)).isExistingActiveLegalEntityName(leName, appUser);
     }
 
-    private PmrvUser buildMockAuthenticatedUser() {
-        return PmrvUser.builder()
+    private AppUser buildMockAuthenticatedUser() {
+        return AppUser.builder()
                 .userId(USER_ID)
                 .build();
     }

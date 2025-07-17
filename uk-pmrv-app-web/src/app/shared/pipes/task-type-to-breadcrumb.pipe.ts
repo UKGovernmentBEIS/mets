@@ -248,7 +248,28 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
       case 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT':
       case 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT':
       case 'AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+      case 'AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT':
         return `Verify emissions report`;
+
+      // audit report
+      case 'INSTALLATION_AUDIT_APPLICATION_SUBMIT':
+        return 'Create audit report';
+      case 'INSTALLATION_AUDIT_WAIT_FOR_PEER_REVIEW':
+        return 'Audit report sent to peer reviewer';
+      case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW':
+        return 'Peer review audit report';
+      case 'INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS':
+        return 'Audit report';
+
+      // ON SITE INSPECTION
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT':
+        return 'Create on-site inspection';
+      case 'INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW':
+        return 'On-site inspection sent to peer reviewer';
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW':
+        return 'Peer review on-site inspection';
+      case 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS':
+        return 'On-site inspection';
 
       // non compliance
       case 'NON_COMPLIANCE_APPLICATION_SUBMIT':
@@ -259,6 +280,20 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
         return 'Initial penalty notice sent to peer reviewer: non-compliance';
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW':
         return 'Peer review initial penalty: non-compliance';
+      case 'NON_COMPLIANCE_NOTICE_OF_INTENT':
+        return 'Upload notice of intent: non-compliance';
+      case 'NON_COMPLIANCE_CIVIL_PENALTY':
+        return 'Upload penalty notice: non-compliance';
+      case 'NON_COMPLIANCE_FINAL_DETERMINATION':
+        return 'Provide conclusion of non-compliance';
+      case 'NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW':
+        return 'Notice of intent sent to peer reviewer: non-compliance';
+      case 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW':
+        return 'Peer review notice of intent: non-compliance';
+      case 'NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW':
+        return 'Penalty sent to peer reviewer: non-compliance';
+      case 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW':
+        return 'Peer review penalty: non-compliance';
 
       //doal
       case 'DOAL_APPLICATION_SUBMIT':
@@ -314,19 +349,24 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
         return 'Track payment for emissions monitoring plan application';
 
       case 'AVIATION_AER_UKETS_WAIT_FOR_REVIEW':
+      case 'AVIATION_AER_CORSIA_WAIT_FOR_REVIEW':
         return 'Emissions report sent to regulator';
       case 'AVIATION_AER_UKETS_APPLICATION_SUBMIT':
       case 'AVIATION_AER_CORSIA_APPLICATION_SUBMIT':
         return `Emissions report`;
       case 'AVIATION_AER_UKETS_APPLICATION_REVIEW':
+      case 'AVIATION_AER_CORSIA_APPLICATION_REVIEW':
         return `Review emissions report`;
       case 'AVIATION_AER_UKETS_AMEND_WAIT_FOR_VERIFICATION':
+      case 'AVIATION_AER_CORSIA_AMEND_WAIT_FOR_VERIFICATION':
       case 'AVIATION_AER_UKETS_WAIT_FOR_VERIFICATION':
       case 'AVIATION_AER_CORSIA_WAIT_FOR_VERIFICATION':
         return `Emissions report sent to verifier`;
       case 'AVIATION_AER_UKETS_WAIT_FOR_AMENDS':
+      case 'AVIATION_AER_CORSIA_WAIT_FOR_AMENDS':
         return `Emission report returned to operator`;
       case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT':
+      case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT':
         return 'Amend your emissions report';
       case 'AVIATION_DRE_UKETS_MAKE_PAYMENT':
         return `Pay emissions determination fee`;
@@ -411,6 +451,69 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
         return 'Penalty sent to peer reviewer: non-compliance';
       case 'AVIATION_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW':
         return 'Peer review upload penalty: non-compliance';
+      case 'AVIATION_NON_COMPLIANCE_FINAL_DETERMINATION':
+        return 'Provide conclusion of non-compliance';
+
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT':
+        return 'Calculate annual offsetting requirements';
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW':
+        return 'Peer review annual offsetting requirements';
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW':
+        return 'Annual offsetting requirements sent to peer reviewer';
+
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT':
+        return 'Calculate 3-year period offsetting requirements';
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW':
+        return 'Peer review 3-year period offsetting requirements';
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW':
+        return '3-year period offsetting requirements sent to peer reviewer';
+
+      case 'BDR_APPLICATION_SUBMIT':
+        return 'Complete baseline data report';
+      case 'BDR_WAIT_FOR_VERIFICATION':
+      case 'BDR_AMEND_WAIT_FOR_VERIFICATION':
+        return 'Baseline data report sent to verifier';
+      case 'BDR_WAIT_FOR_REGULATOR_REVIEW':
+        return 'Baseline data report sent to regulator';
+      case 'BDR_APPLICATION_VERIFICATION_SUBMIT':
+      case 'BDR_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+        return `Verify baseline data report`;
+      case 'BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+        return `Review baseline data report`;
+      case 'BDR_WAIT_FOR_AMENDS':
+        return `Baseline data report`;
+      case 'BDR_APPLICATION_AMENDS_SUBMIT':
+        return 'Amend baseline data report';
+      case 'BDR_WAIT_FOR_PEER_REVIEW':
+        return `Peer review baseline data report`;
+      case 'BDR_APPLICATION_PEER_REVIEW':
+        return `Peer review baseline data report`;
+
+      case 'PERMANENT_CESSATION_APPLICATION_SUBMIT':
+        return 'Complete permanent cessation';
+      case 'PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW':
+        return 'Permanent cessation sent to peer reviewer';
+      case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW':
+        return 'Peer review permanent cessation';
+
+      case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
+        return 'Estimate emissions';
+      case 'AVIATION_DOE_CORSIA_MAKE_PAYMENT':
+        return `Pay emissions estimation fee`;
+      case 'AVIATION_DOE_CORSIA_TRACK_PAYMENT':
+      case 'AVIATION_DOE_CORSIA_CONFIRM_PAYMENT':
+        return `Track payment for emissions estimation`;
+      case 'AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW':
+        return 'Aviation emissions report estimation sent to peer reviewer';
+      case 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW':
+        return 'Peer review emissions estimation';
+
+      case 'ALR_APPLICATION_SUBMIT':
+        return 'Complete activity level report';
+      case 'ALR_WAIT_FOR_VERIFICATION':
+        return 'Activity level report sent to verifier';
+      case 'ALR_APPLICATION_VERIFICATION_SUBMIT':
+        return `Verify activity level report`;
 
       default:
         return null;

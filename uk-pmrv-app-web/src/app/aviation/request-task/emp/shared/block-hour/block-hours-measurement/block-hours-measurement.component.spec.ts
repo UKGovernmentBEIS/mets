@@ -9,7 +9,7 @@ import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { ActivatedRouteStub, mockClass } from '@testing';
 
-import { EmpBlockHourMethodProcedures, TasksService } from 'pmrv-api';
+import { TasksService } from 'pmrv-api';
 
 import { BlockHourProceduresFormProvider } from '../block-hour-procedures-form.provider';
 import { blockHourProceduresQuery } from '../store/block-hour-procedures.selectors';
@@ -107,6 +107,7 @@ function setupStore(store: RequestTaskStore, formProvider: BlockHourProceduresFo
           },
         },
       },
+      requestInfo: { type: 'EMP_ISSUANCE_CORSIA' },
     },
     relatedTasks: [],
     timeline: [],
@@ -118,7 +119,5 @@ function setupStore(store: RequestTaskStore, formProvider: BlockHourProceduresFo
     },
   } as any);
 
-  formProvider.setFormValue(
-    store.empDelegate.payload.emissionsMonitoringPlan.blockHourMethodProcedures as EmpBlockHourMethodProcedures,
-  );
+  formProvider.setFormValue(store.empDelegate.payload.emissionsMonitoringPlan.blockHourMethodProcedures);
 }

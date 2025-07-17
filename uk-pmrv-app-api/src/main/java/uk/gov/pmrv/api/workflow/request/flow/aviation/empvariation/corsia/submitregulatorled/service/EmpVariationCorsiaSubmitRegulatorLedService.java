@@ -3,7 +3,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.submi
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.common.domain.EmpVariationCorsiaRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.submitregulatorled.domain.EmpVariationCorsiaApplicationSubmitRegulatorLedRequestTaskPayload;
@@ -47,7 +47,7 @@ public class EmpVariationCorsiaSubmitRegulatorLedService {
 	@Transactional
 	public void saveDecisionNotification(final RequestTask requestTask, 
 										 final DecisionNotification decisionNotification,
-										 final PmrvUser pmrvUser) {
+										 final AppUser appUser) {
 		
 		final EmpVariationCorsiaApplicationSubmitRegulatorLedRequestTaskPayload taskPayload = 
 			(EmpVariationCorsiaApplicationSubmitRegulatorLedRequestTaskPayload) requestTask.getPayload();
@@ -55,7 +55,7 @@ public class EmpVariationCorsiaSubmitRegulatorLedService {
 		final EmpVariationCorsiaRequestPayload requestPayload = 
 			(EmpVariationCorsiaRequestPayload) requestTask.getRequest().getPayload();
 
-		requestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+		requestPayload.setRegulatorReviewer(appUser.getUserId());
 		requestPayload.setEmissionsMonitoringPlan(taskPayload.getEmissionsMonitoringPlan());
 		requestPayload.setEmpVariationDetails(taskPayload.getEmpVariationDetails());
 		requestPayload.setEmpAttachments(taskPayload.getEmpAttachments());

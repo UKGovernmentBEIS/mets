@@ -14,16 +14,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.regulator.domain.AuthorityManagePermissionDTO;
-import uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionGroup;
-import uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionLevel;
-import uk.gov.pmrv.api.authorization.regulator.service.RegulatorAuthorityQueryService;
-import uk.gov.pmrv.api.authorization.regulator.transform.RegulatorPermissionsAdapter;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.regulator.domain.AuthorityManagePermissionDTO;
+import uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel;
+import uk.gov.netz.api.authorization.regulator.service.RegulatorAuthorityQueryService;
+import uk.gov.netz.api.authorization.regulator.transform.RegulatorPermissionsAdapter;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 
 import java.util.List;
 import java.util.Map;
@@ -40,14 +39,15 @@ import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
 public class RegulatorAuthorityPermissionController {
 
     private final RegulatorAuthorityQueryService regulatorAuthorityQueryService;
+    private final RegulatorPermissionsAdapter regulatorPermissionsAdapter;
 
     @GetMapping
     @Operation(summary = "Retrieves the current regulator user's permissions")
     @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AuthorityManagePermissionDTO.class))})
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @AuthorizedRole(roleType = RoleType.REGULATOR)
-    public ResponseEntity<AuthorityManagePermissionDTO> getCurrentRegulatorUserPermissionsByCa(@Parameter(hidden = true) PmrvUser currentUser) {
+    @AuthorizedRole(roleType = RoleTypeConstants.REGULATOR)
+    public ResponseEntity<AuthorityManagePermissionDTO> getCurrentRegulatorUserPermissionsByCa(@Parameter(hidden = true) AppUser currentUser) {
         return new ResponseEntity<>(regulatorAuthorityQueryService.getCurrentRegulatorUserPermissions(currentUser),
                 HttpStatus.OK);
     }
@@ -60,9 +60,9 @@ public class RegulatorAuthorityPermissionController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<AuthorityManagePermissionDTO> getRegulatorUserPermissionsByCaAndId(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("userId") @Parameter(description = "The regulator user id") String userId) {
-        return new ResponseEntity<>(regulatorAuthorityQueryService.getRegulatorUserPermissionsByUserId(pmrvUser, userId),
+        return new ResponseEntity<>(regulatorAuthorityQueryService.getRegulatorUserPermissionsByUserId(appUser, userId),
                 HttpStatus.OK);
     }
 
@@ -73,7 +73,7 @@ public class RegulatorAuthorityPermissionController {
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
-    public ResponseEntity<Map<RegulatorPermissionGroup, List<RegulatorPermissionLevel>>> getRegulatorPermissionGroupLevels() {
-        return new ResponseEntity<>(RegulatorPermissionsAdapter.getPermissionGroupLevels(), HttpStatus.OK);
+    public ResponseEntity<Map<String, List<RegulatorPermissionLevel>>> getRegulatorPermissionGroupLevels() {
+        return new ResponseEntity<>(regulatorPermissionsAdapter.getPermissionGroupLevels(), HttpStatus.OK);
     }
 }

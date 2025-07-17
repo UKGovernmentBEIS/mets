@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.valid
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
@@ -17,8 +17,8 @@ public class PermitSurrenderReviewRequestPeerReviewValidator {
     private final PeerReviewerTaskAssignmentValidator peerReviewerTaskAssignmentValidator;
     private final PermitSurrenderReviewDeterminationHandlerService permitSurrenderReviewDeterminationHandlerService;
 
-    public void validate(RequestTask requestTask, PeerReviewRequestTaskActionPayload payload, PmrvUser pmrvUser) {
-        peerReviewerTaskAssignmentValidator.validate(RequestTaskType.PERMIT_SURRENDER_APPLICATION_PEER_REVIEW, payload.getPeerReviewer(), pmrvUser);
+    public void validate(RequestTask requestTask, PeerReviewRequestTaskActionPayload payload, AppUser appUser) {
+        peerReviewerTaskAssignmentValidator.validate(RequestTaskType.PERMIT_SURRENDER_APPLICATION_PEER_REVIEW, payload.getPeerReviewer(), appUser);
 
         PermitSurrenderApplicationReviewRequestTaskPayload requestTaskPayload =
             (PermitSurrenderApplicationReviewRequestTaskPayload) requestTask.getPayload();

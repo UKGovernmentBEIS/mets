@@ -15,18 +15,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.user.verifier.domain.AdminVerifierUserInvitationDTO;
 import uk.gov.pmrv.api.user.verifier.domain.VerifierUserInvitationDTO;
 import uk.gov.pmrv.api.user.verifier.service.VerifierUserInvitationService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -50,18 +50,18 @@ class VerifierUserInvitationControllerTest {
     private VerifierUserInvitationService verifierUserInvitationService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent appSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp() {
-        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
@@ -73,7 +73,7 @@ class VerifierUserInvitationControllerTest {
         objectMapper = new ObjectMapper();
         Validator validator = mock(Validator.class);
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .setValidator(validator)
             .build();
@@ -83,11 +83,11 @@ class VerifierUserInvitationControllerTest {
 
     @Test
     void inviteVerifierUser() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("pmrvUser").build();
+        AppUser appUser = AppUser.builder().userId("appUser").build();
 
         VerifierUserInvitationDTO verifierUserInvitation = createVerifierUserInvitationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
 
         //invoke
         mockMvc.perform(
@@ -97,19 +97,19 @@ class VerifierUserInvitationControllerTest {
         )
             .andExpect(status().isNoContent());
 
-        verify(verifierUserInvitationService, times(1)).inviteVerifierUser(pmrvUser, verifierUserInvitation);
+        verify(verifierUserInvitationService, times(1)).inviteVerifierUser(appUser, verifierUserInvitation);
     }
 
     @Test
     void inviteVerifierUser_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("pmrvUser").build();
+        AppUser appUser = AppUser.builder().userId("appUser").build();
 
         VerifierUserInvitationDTO verifierUserInvitation = createVerifierUserInvitationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "inviteVerifierUser");
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "inviteVerifierUser");
 
         //invoke
         mockMvc.perform(
@@ -125,10 +125,10 @@ class VerifierUserInvitationControllerTest {
     @Test
     void inviteVerifierAdminUserByVerificationBodyId() throws Exception {
         final Long vbId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("pmrvUser").build();
+        AppUser appUser = AppUser.builder().userId("appUser").build();
         AdminVerifierUserInvitationDTO adminVerifierUserInvitation = createAdminVerifierUserInvitationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
 
         // Invoke
         mockMvc.perform(MockMvcRequestBuilders.post(BASE_PATH + "/vb/" + vbId)
@@ -137,18 +137,18 @@ class VerifierUserInvitationControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(verifierUserInvitationService, times(1))
-                .inviteVerifierAdminUser(pmrvUser, adminVerifierUserInvitation, vbId);
+                .inviteVerifierAdminUser(appUser, adminVerifierUserInvitation, vbId);
     }
 
     @Test
     void inviteVerifierAdminUserByVerificationBodyId_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("pmrvUser").build();
+        AppUser appUser = AppUser.builder().userId("appUser").build();
         AdminVerifierUserInvitationDTO adminVerifierUserInvitation = createAdminVerifierUserInvitationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(pmrvUser, "inviteVerifierAdminUserByVerificationBodyId");
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "inviteVerifierAdminUserByVerificationBodyId");
 
         // Invoke
         mockMvc.perform(MockMvcRequestBuilders.post(BASE_PATH + "/vb/1")

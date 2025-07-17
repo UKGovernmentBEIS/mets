@@ -30,20 +30,18 @@ import { FlightProceduresFormProvider } from '../flight-procedures-form.provider
   selector: 'app-flight-procedures-summary',
   templateUrl: './flight-procedures-summary.component.html',
   standalone: true,
-  styles: [
-    `
-      .header-container {
-        display: flex;
-        align-items: center;
-      }
-      .change-link {
-        margin-left: 68.5%;
-        margin-top: -4.6rem;
-        font-size: 1.1875rem;
-        line-height: 1.3157894737;
-      }
-    `,
-  ],
+  styles: `
+    .header-container {
+      display: flex;
+      align-items: center;
+    }
+    .change-link {
+      margin-left: 68.5%;
+      margin-top: -4.6rem;
+      font-size: 1.1875rem;
+      line-height: 1.3157894737;
+    }
+  `,
   imports: [
     SharedModule,
     RouterLinkWithHref,

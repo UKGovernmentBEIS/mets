@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service;
 
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -8,18 +7,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -33,6 +32,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.dom
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -54,7 +54,7 @@ class PermitNotificationOfficialNoticeServiceTest {
     private DecisionNotificationUsersService decisionNotificationUsersService;
 
     @Mock
-    private NotificationEmailService notificationEmailService;
+    private NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
     
     @Mock
     private RequestService requestService;
@@ -96,18 +96,18 @@ class PermitNotificationOfficialNoticeServiceTest {
         verify(decisionNotificationUsersService, times(1))
             .findUserEmails(requestPayload.getFollowUpReviewDecisionNotification());
 
-        final ArgumentCaptor<EmailData> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
+        final ArgumentCaptor<EmailData<PmrvEmailNotificationTemplateData>> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
         verify(notificationEmailService, times(1)).notifyRecipients(emailDataCaptor.capture(),
             Mockito.eq(List.of(accountPrimaryContact.getEmail())), Mockito.eq(List.of("operator1@email")));
-        final EmailData emailDataCaptured = emailDataCaptor.getValue();
+        final EmailData<PmrvEmailNotificationTemplateData> emailDataCaptured = emailDataCaptor.getValue();
         assertThat(emailDataCaptured).isEqualTo(EmailData.builder()
-            .notificationTemplateData(EmailNotificationTemplateData.builder()
-                .templateName(NotificationTemplateName.PERMIT_NOTIFICATION_OPERATOR_RESPONSE)
+            .notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
+                .templateName(PmrvNotificationTemplateName.PERMIT_NOTIFICATION_OPERATOR_RESPONSE.getName())
                 .competentAuthority(CompetentAuthorityEnum.ENGLAND)
                 .accountType(AccountType.INSTALLATION)
                 .templateParams(Map.of(
-                    EmailNotificationTemplateConstants.WORKFLOW_ID, "requestId",
-                    EmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT,accountPrimaryContact.getFullName()))
+                		PmrvEmailNotificationTemplateConstants.WORKFLOW_ID, "requestId",
+                		PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT,accountPrimaryContact.getFullName()))
                 .build()).build());
     }
 
@@ -150,7 +150,7 @@ class PermitNotificationOfficialNoticeServiceTest {
         	.thenReturn(ccRecipientsEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(templateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(DocumentTemplateType.PERMIT_NOTIFICATION_ACCEPTED, templateParams, "Permit Notification Acknowledgement Letter.pdf"))
+        when(documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.PERMIT_NOTIFICATION_ACCEPTED, templateParams, "Permit Notification Acknowledgement Letter.pdf"))
             .thenReturn(officialDocFileInfoDTO);
 
         service.generateAndSaveGrantedOfficialNotice(requestId);
@@ -160,7 +160,7 @@ class PermitNotificationOfficialNoticeServiceTest {
         verify(decisionNotificationUsersService, times(1))
         .findUserEmails(requestPayload.getReviewDecisionNotification());
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(templateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(DocumentTemplateType.PERMIT_NOTIFICATION_ACCEPTED, templateParams, "Permit Notification Acknowledgement Letter.pdf");
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(DocumentTemplateType.PERMIT_NOTIFICATION_ACCEPTED, templateParams, "Permit Notification Acknowledgement Letter.pdf");
 
         assertThat(requestPayload.getOfficialNotice()).isEqualTo(officialDocFileInfoDTO);
     }
@@ -204,7 +204,7 @@ class PermitNotificationOfficialNoticeServiceTest {
         	.thenReturn(ccRecipientsEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(templateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(DocumentTemplateType.PERMIT_NOTIFICATION_REFUSED, templateParams, "Permit Notification Refusal Letter.pdf"))
+        when(documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.PERMIT_NOTIFICATION_REFUSED, templateParams, "Permit Notification Refusal Letter.pdf"))
             .thenReturn(officialDocFileInfoDTO);
 
         service.generateAndSaveRejectedOfficialNotice(requestId);
@@ -214,7 +214,7 @@ class PermitNotificationOfficialNoticeServiceTest {
         verify(decisionNotificationUsersService, times(1))
         .findUserEmails(requestPayload.getReviewDecisionNotification());
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(templateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(DocumentTemplateType.PERMIT_NOTIFICATION_REFUSED, templateParams, "Permit Notification Refusal Letter.pdf");
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(DocumentTemplateType.PERMIT_NOTIFICATION_REFUSED, templateParams, "Permit Notification Refusal Letter.pdf");
 
         assertThat(requestPayload.getOfficialNotice()).isEqualTo(officialDocFileInfoDTO);
     }

@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.notification.message.domain.SystemMessageNotificationInfo;
 import uk.gov.pmrv.api.notification.message.domain.enumeration.SystemMessageNotificationType;
 import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.notification.template.service.NotificationTemplateProcessService;
 
 import java.util.Map;
@@ -36,7 +36,7 @@ class SystemMessageNotificationServiceTest {
     @Test
     void generateAndSendSystemMessage() {
         final SystemMessageNotificationType systemMessageNotificationType = ACCOUNT_USERS_SETUP;
-        final NotificationTemplateName templateName = systemMessageNotificationType.getNotificationTemplateName();
+        final PmrvNotificationTemplateName templateName = systemMessageNotificationType.getNotificationTemplateName();
         final String messageSubject = "message_subject";
         final String messageText = "message_text";
         final String receiver = "receiver";
@@ -54,7 +54,7 @@ class SystemMessageNotificationServiceTest {
             .build();
 
         //mock
-        when(notificationTemplateProcessService.processMessageNotificationTemplate(templateName, msgInfo.getMessageParameters()))
+        when(notificationTemplateProcessService.processMessageNotificationTemplate(templateName.getName(), msgInfo.getMessageParameters()))
             .thenReturn(notificationContent);
 
         //invoke
@@ -62,7 +62,7 @@ class SystemMessageNotificationServiceTest {
 
         //verify
         verify(notificationTemplateProcessService, times(1))
-            .processMessageNotificationTemplate(templateName, msgInfo.getMessageParameters());
+            .processMessageNotificationTemplate(templateName.getName(), msgInfo.getMessageParameters());
         verify(systemMessageNotificationSendService, times(1))
             .sendNotificationSystemMessage(msgInfo, notificationContent);
     }
@@ -70,7 +70,7 @@ class SystemMessageNotificationServiceTest {
     @Test
     void generateAndSendSystemMessage_exception_when_template_processing_fails() {
         final SystemMessageNotificationType systemMessageNotificationType = ACCOUNT_USERS_SETUP;
-        final NotificationTemplateName templateName = systemMessageNotificationType.getNotificationTemplateName();
+        final PmrvNotificationTemplateName templateName = systemMessageNotificationType.getNotificationTemplateName();
         final String receiver = "receiver";
         final Long accountId = 1L;
         SystemMessageNotificationInfo msgInfo = SystemMessageNotificationInfo.builder()
@@ -81,7 +81,7 @@ class SystemMessageNotificationServiceTest {
             .build();
 
         //mock
-        when(notificationTemplateProcessService.processMessageNotificationTemplate(templateName, msgInfo.getMessageParameters()))
+        when(notificationTemplateProcessService.processMessageNotificationTemplate(templateName.getName(), msgInfo.getMessageParameters()))
             .thenThrow(BusinessException.class);
 
         //invoke
@@ -89,7 +89,7 @@ class SystemMessageNotificationServiceTest {
 
         //verify
         verify(notificationTemplateProcessService, times(1))
-            .processMessageNotificationTemplate(templateName, msgInfo.getMessageParameters());
+            .processMessageNotificationTemplate(templateName.getName(), msgInfo.getMessageParameters());
         verifyNoInteractions(systemMessageNotificationSendService);
     }
 }

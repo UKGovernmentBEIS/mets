@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import uk.gov.pmrv.api.referencedata.service.CountryService;
+import uk.gov.netz.api.referencedata.service.CountryService;
 
 import jakarta.validation.Validator;
 

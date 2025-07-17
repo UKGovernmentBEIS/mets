@@ -1,3 +1,5 @@
+import { MmpStatuses } from '@permit-application/monitoring-methodology-plan/mmp-status';
+
 import { Permit, PermitMonitoringApproachSection } from 'pmrv-api';
 
 import { statuses as CalculationStatuses } from '../../approaches/calculation/calculation-status';
@@ -9,7 +11,7 @@ import { statuses as PFCStatuses } from '../../approaches/pfc/pfc-status';
 import { TransferredCo2Status } from '../../approaches/transferred-co2/transferred-co2-status';
 import { PermitAmendGroupStatusKey } from './amend.permit.type';
 
-export type MainTaskKey = keyof Permit | 'monitoringApproachesPrepare';
+export type MainTaskKey = keyof Permit | 'monitoringApproachesPrepare' | MmpStatuses;
 export type PermitTaskType = MainTaskKey | PermitMonitoringApproachSection['type'] | 'permitType';
 export type SubTaskKey = PermitMonitoringApproachSection['type'];
 export type TaskKey = 'monitoringApproachesPrepare' | Path<Permit>;

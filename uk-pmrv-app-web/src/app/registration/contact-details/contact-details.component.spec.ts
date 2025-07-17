@@ -210,7 +210,7 @@ describe('ContactDetailsComponent', () => {
     store.setState({
       ...store.getState(),
       userRegistrationDTO: mockContactDetails,
-      invitationStatus: 'PENDING_USER_REGISTRATION_NO_PASSWORD',
+      invitationStatus: 'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD',
       token,
     });
 

@@ -10,7 +10,7 @@ export function transferDetailsStatus(state: PermitTransferState): TaskItemStatu
     return (state.permitSectionsCompleted['transferDetails'] || [false])[0]
       ? 'complete'
       : transferDetails && Object.keys(transferDetails).length
-      ? 'in progress'
-      : 'not started';
+        ? 'in progress'
+        : 'not started';
   }
 }

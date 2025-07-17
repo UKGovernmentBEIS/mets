@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,7 +9,109 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { RequestTaskPayload } from './requestTaskPayload';
+import { AerApplicationAmendsSubmitRequestTaskPayload } from './aerApplicationAmendsSubmitRequestTaskPayload';
+import { AerApplicationReviewRequestTaskPayload } from './aerApplicationReviewRequestTaskPayload';
+import { AerApplicationSubmitRequestTaskPayload } from './aerApplicationSubmitRequestTaskPayload';
+import { AerApplicationVerificationSubmitRequestTaskPayload } from './aerApplicationVerificationSubmitRequestTaskPayload';
+import { AirApplicationRespondToRegulatorCommentsRequestTaskPayload } from './airApplicationRespondToRegulatorCommentsRequestTaskPayload';
+import { AirApplicationReviewRequestTaskPayload } from './airApplicationReviewRequestTaskPayload';
+import { AirApplicationSubmitRequestTaskPayload } from './airApplicationSubmitRequestTaskPayload';
+import { ALRApplicationSubmitRequestTaskPayload } from './aLRApplicationSubmitRequestTaskPayload';
+import { ALRApplicationVerificationSubmitRequestTaskPayload } from './aLRApplicationVerificationSubmitRequestTaskPayload';
+import { AviationAccountClosureSubmitRequestTaskPayload } from './aviationAccountClosureSubmitRequestTaskPayload';
+import { AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload } from './aviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload';
+import { AviationAerCorsiaAnnualOffsettingApplicationSubmitRequestTaskPayload } from './aviationAerCorsiaAnnualOffsettingApplicationSubmitRequestTaskPayload';
+import { AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload } from './aviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload';
+import { AviationAerCorsiaApplicationReviewRequestTaskPayload } from './aviationAerCorsiaApplicationReviewRequestTaskPayload';
+import { AviationAerCorsiaApplicationSubmitRequestTaskPayload } from './aviationAerCorsiaApplicationSubmitRequestTaskPayload';
+import { AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload } from './aviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload';
+import { AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload } from './aviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload';
+import { AviationAerUkEtsApplicationReviewRequestTaskPayload } from './aviationAerUkEtsApplicationReviewRequestTaskPayload';
+import { AviationAerUkEtsApplicationSubmitRequestTaskPayload } from './aviationAerUkEtsApplicationSubmitRequestTaskPayload';
+import { AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload } from './aviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload';
+import { AviationDoECorsiaApplicationSubmitRequestTaskPayload } from './aviationDoECorsiaApplicationSubmitRequestTaskPayload';
+import { AviationDreUkEtsApplicationSubmitRequestTaskPayload } from './aviationDreUkEtsApplicationSubmitRequestTaskPayload';
+import { AviationVirApplicationRespondToRegulatorCommentsRequestTaskPayload } from './aviationVirApplicationRespondToRegulatorCommentsRequestTaskPayload';
+import { AviationVirApplicationReviewRequestTaskPayload } from './aviationVirApplicationReviewRequestTaskPayload';
+import { AviationVirApplicationSubmitRequestTaskPayload } from './aviationVirApplicationSubmitRequestTaskPayload';
+import { BDRApplicationAmendsSubmitRequestTaskPayload } from './bDRApplicationAmendsSubmitRequestTaskPayload';
+import { BDRApplicationRegulatorReviewSubmitRequestTaskPayload } from './bDRApplicationRegulatorReviewSubmitRequestTaskPayload';
+import { BDRApplicationSubmitRequestTaskPayload } from './bDRApplicationSubmitRequestTaskPayload';
+import { BDRApplicationVerificationSubmitRequestTaskPayload } from './bDRApplicationVerificationSubmitRequestTaskPayload';
+import { BDRApplicationWaitForRegulatorReviewRequestTaskPayload } from './bDRApplicationWaitForRegulatorReviewRequestTaskPayload';
+import { DoalApplicationSubmitRequestTaskPayload } from './doalApplicationSubmitRequestTaskPayload';
+import { DoalAuthorityResponseRequestTaskPayload } from './doalAuthorityResponseRequestTaskPayload';
+import { DreApplicationSubmitRequestTaskPayload } from './dreApplicationSubmitRequestTaskPayload';
+import { EmpIssuanceCorsiaApplicationAmendsSubmitRequestTaskPayload } from './empIssuanceCorsiaApplicationAmendsSubmitRequestTaskPayload';
+import { EmpIssuanceCorsiaApplicationReviewRequestTaskPayload } from './empIssuanceCorsiaApplicationReviewRequestTaskPayload';
+import { EmpIssuanceCorsiaApplicationSubmitRequestTaskPayload } from './empIssuanceCorsiaApplicationSubmitRequestTaskPayload';
+import { EmpIssuanceUkEtsApplicationAmendsSubmitRequestTaskPayload } from './empIssuanceUkEtsApplicationAmendsSubmitRequestTaskPayload';
+import { EmpIssuanceUkEtsApplicationReviewRequestTaskPayload } from './empIssuanceUkEtsApplicationReviewRequestTaskPayload';
+import { EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload } from './empIssuanceUkEtsApplicationSubmitRequestTaskPayload';
+import { EmpVariationCorsiaApplicationAmendsSubmitRequestTaskPayload } from './empVariationCorsiaApplicationAmendsSubmitRequestTaskPayload';
+import { EmpVariationCorsiaApplicationReviewRequestTaskPayload } from './empVariationCorsiaApplicationReviewRequestTaskPayload';
+import { EmpVariationCorsiaApplicationSubmitRegulatorLedRequestTaskPayload } from './empVariationCorsiaApplicationSubmitRegulatorLedRequestTaskPayload';
+import { EmpVariationCorsiaApplicationSubmitRequestTaskPayload } from './empVariationCorsiaApplicationSubmitRequestTaskPayload';
+import { EmpVariationUkEtsApplicationAmendsSubmitRequestTaskPayload } from './empVariationUkEtsApplicationAmendsSubmitRequestTaskPayload';
+import { EmpVariationUkEtsApplicationReviewRequestTaskPayload } from './empVariationUkEtsApplicationReviewRequestTaskPayload';
+import { EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload } from './empVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload';
+import { EmpVariationUkEtsApplicationSubmitRequestTaskPayload } from './empVariationUkEtsApplicationSubmitRequestTaskPayload';
+import { InstallationAccountOpeningApplicationRequestTaskPayload } from './installationAccountOpeningApplicationRequestTaskPayload';
+import { InstallationAccountTransferringArchiveRequestTaskPayload } from './installationAccountTransferringArchiveRequestTaskPayload';
+import { InstallationAuditApplicationSubmitRequestTaskPayload } from './installationAuditApplicationSubmitRequestTaskPayload';
+import { InstallationInspectionApplicationSubmitRequestTaskPayload } from './installationInspectionApplicationSubmitRequestTaskPayload';
+import { InstallationInspectionOperatorRespondRequestTaskPayload } from './installationInspectionOperatorRespondRequestTaskPayload';
+import { InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload } from './installationOnsiteInspectionApplicationSubmitRequestTaskPayload';
+import { NerApplicationAmendsSubmitRequestTaskPayload } from './nerApplicationAmendsSubmitRequestTaskPayload';
+import { NerApplicationReviewRequestTaskPayload } from './nerApplicationReviewRequestTaskPayload';
+import { NerApplicationSubmitRequestTaskPayload } from './nerApplicationSubmitRequestTaskPayload';
+import { NerAuthorityResponseRequestTaskPayload } from './nerAuthorityResponseRequestTaskPayload';
+import { NonComplianceApplicationSubmitRequestTaskPayload } from './nonComplianceApplicationSubmitRequestTaskPayload';
+import { NonComplianceCivilPenaltyRequestTaskPayload } from './nonComplianceCivilPenaltyRequestTaskPayload';
+import { NonComplianceDailyPenaltyNoticeRequestTaskPayload } from './nonComplianceDailyPenaltyNoticeRequestTaskPayload';
+import { NonComplianceFinalDeterminationRequestTaskPayload } from './nonComplianceFinalDeterminationRequestTaskPayload';
+import { NonComplianceNoticeOfIntentRequestTaskPayload } from './nonComplianceNoticeOfIntentRequestTaskPayload';
+import { PaymentConfirmRequestTaskPayload } from './paymentConfirmRequestTaskPayload';
+import { PaymentMakeRequestTaskPayload } from './paymentMakeRequestTaskPayload';
+import { PaymentTrackRequestTaskPayload } from './paymentTrackRequestTaskPayload';
+import { PermanentCessationApplicationSubmitRequestTaskPayload } from './permanentCessationApplicationSubmitRequestTaskPayload';
+import { PermitCessationSubmitRequestTaskPayload } from './permitCessationSubmitRequestTaskPayload';
+import { PermitIssuanceApplicationAmendsSubmitRequestTaskPayload } from './permitIssuanceApplicationAmendsSubmitRequestTaskPayload';
+import { PermitIssuanceApplicationReviewRequestTaskPayload } from './permitIssuanceApplicationReviewRequestTaskPayload';
+import { PermitIssuanceApplicationSubmitRequestTaskPayload } from './permitIssuanceApplicationSubmitRequestTaskPayload';
+import { PermitNotificationApplicationReviewRequestTaskPayload } from './permitNotificationApplicationReviewRequestTaskPayload';
+import { PermitNotificationApplicationSubmitRequestTaskPayload } from './permitNotificationApplicationSubmitRequestTaskPayload';
+import { PermitNotificationFollowUpApplicationAmendsSubmitRequestTaskPayload } from './permitNotificationFollowUpApplicationAmendsSubmitRequestTaskPayload';
+import { PermitNotificationFollowUpApplicationReviewRequestTaskPayload } from './permitNotificationFollowUpApplicationReviewRequestTaskPayload';
+import { PermitNotificationFollowUpRequestTaskPayload } from './permitNotificationFollowUpRequestTaskPayload';
+import { PermitNotificationFollowUpWaitForAmendsRequestTaskPayload } from './permitNotificationFollowUpWaitForAmendsRequestTaskPayload';
+import { PermitNotificationWaitForFollowUpRequestTaskPayload } from './permitNotificationWaitForFollowUpRequestTaskPayload';
+import { PermitRevocationApplicationPeerReviewRequestTaskPayload } from './permitRevocationApplicationPeerReviewRequestTaskPayload';
+import { PermitRevocationApplicationSubmitRequestTaskPayload } from './permitRevocationApplicationSubmitRequestTaskPayload';
+import { PermitRevocationWaitForAppealRequestTaskPayload } from './permitRevocationWaitForAppealRequestTaskPayload';
+import { PermitSurrenderApplicationReviewRequestTaskPayload } from './permitSurrenderApplicationReviewRequestTaskPayload';
+import { PermitSurrenderApplicationSubmitRequestTaskPayload } from './permitSurrenderApplicationSubmitRequestTaskPayload';
+import { PermitTransferAApplicationRequestTaskPayload } from './permitTransferAApplicationRequestTaskPayload';
+import { PermitTransferBApplicationAmendsSubmitRequestTaskPayload } from './permitTransferBApplicationAmendsSubmitRequestTaskPayload';
+import { PermitTransferBApplicationRequestTaskPayload } from './permitTransferBApplicationRequestTaskPayload';
+import { PermitTransferBApplicationReviewRequestTaskPayload } from './permitTransferBApplicationReviewRequestTaskPayload';
+import { PermitVariationApplicationAmendsSubmitRequestTaskPayload } from './permitVariationApplicationAmendsSubmitRequestTaskPayload';
+import { PermitVariationApplicationReviewRequestTaskPayload } from './permitVariationApplicationReviewRequestTaskPayload';
+import { PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload } from './permitVariationApplicationSubmitRegulatorLedRequestTaskPayload';
+import { PermitVariationApplicationSubmitRequestTaskPayload } from './permitVariationApplicationSubmitRequestTaskPayload';
+import { RdeForceDecisionRequestTaskPayload } from './rdeForceDecisionRequestTaskPayload';
+import { RdeResponseRequestTaskPayload } from './rdeResponseRequestTaskPayload';
+import { ReturnOfAllowancesApplicationPeerReviewRequestTaskPayload } from './returnOfAllowancesApplicationPeerReviewRequestTaskPayload';
+import { ReturnOfAllowancesApplicationSubmitRequestTaskPayload } from './returnOfAllowancesApplicationSubmitRequestTaskPayload';
+import { ReturnOfAllowancesReturnedApplicationSubmitRequestTaskPayload } from './returnOfAllowancesReturnedApplicationSubmitRequestTaskPayload';
+import { RfiResponseSubmitRequestTaskPayload } from './rfiResponseSubmitRequestTaskPayload';
+import { SystemMessageNotificationRequestTaskPayload } from './systemMessageNotificationRequestTaskPayload';
+import { VirApplicationRespondToRegulatorCommentsRequestTaskPayload } from './virApplicationRespondToRegulatorCommentsRequestTaskPayload';
+import { VirApplicationReviewRequestTaskPayload } from './virApplicationReviewRequestTaskPayload';
+import { VirApplicationSubmitRequestTaskPayload } from './virApplicationSubmitRequestTaskPayload';
+import { WithholdingOfAllowancesApplicationPeerReviewRequestTaskPayload } from './withholdingOfAllowancesApplicationPeerReviewRequestTaskPayload';
+import { WithholdingOfAllowancesApplicationSubmitRequestTaskPayload } from './withholdingOfAllowancesApplicationSubmitRequestTaskPayload';
+import { WithholdingOfAllowancesWithdrawalApplicationSubmitRequestTaskPayload } from './withholdingOfAllowancesWithdrawalApplicationSubmitRequestTaskPayload';
 
 export interface RequestTaskDTO {
   id?: number;
@@ -165,6 +267,31 @@ export interface RequestTaskDTO {
     | 'RETURN_OF_ALLOWANCES_APPLICATION_PEER_REVIEW'
     | 'RETURN_OF_ALLOWANCES_WAIT_FOR_PEER_REVIEW'
     | 'RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_SUBMIT'
+    | 'INSTALLATION_AUDIT_APPLICATION_SUBMIT'
+    | 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT'
+    | 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW'
+    | 'INSTALLATION_AUDIT_WAIT_FOR_PEER_REVIEW'
+    | 'INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS'
+    | 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW'
+    | 'INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW'
+    | 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS'
+    | 'BDR_APPLICATION_SUBMIT'
+    | 'BDR_APPLICATION_VERIFICATION_SUBMIT'
+    | 'BDR_WAIT_FOR_VERIFICATION'
+    | 'BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+    | 'BDR_WAIT_FOR_REGULATOR_REVIEW'
+    | 'BDR_APPLICATION_AMENDS_SUBMIT'
+    | 'BDR_WAIT_FOR_AMENDS'
+    | 'BDR_AMEND_APPLICATION_VERIFICATION_SUBMIT'
+    | 'BDR_AMEND_WAIT_FOR_VERIFICATION'
+    | 'BDR_APPLICATION_PEER_REVIEW'
+    | 'BDR_WAIT_FOR_PEER_REVIEW'
+    | 'PERMANENT_CESSATION_APPLICATION_SUBMIT'
+    | 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW'
+    | 'PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW'
+    | 'ALR_APPLICATION_SUBMIT'
+    | 'ALR_APPLICATION_VERIFICATION_SUBMIT'
+    | 'ALR_WAIT_FOR_VERIFICATION'
     | 'AVIATION_ACCOUNT_CLOSURE_SUBMIT'
     | 'AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT'
     | 'AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE'
@@ -232,6 +359,12 @@ export interface RequestTaskDTO {
     | 'AVIATION_DRE_UKETS_CONFIRM_PAYMENT'
     | 'AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW'
     | 'AVIATION_DRE_UKETS_WAIT_FOR_PEER_REVIEW'
+    | 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT'
+    | 'AVIATION_DOE_CORSIA_MAKE_PAYMENT'
+    | 'AVIATION_DOE_CORSIA_TRACK_PAYMENT'
+    | 'AVIATION_DOE_CORSIA_CONFIRM_PAYMENT'
+    | 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW'
+    | 'AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW'
     | 'EMP_ISSUANCE_CORSIA_APPLICATION_SUBMIT'
     | 'EMP_ISSUANCE_CORSIA_WAIT_FOR_REVIEW'
     | 'EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW'
@@ -267,14 +400,127 @@ export interface RequestTaskDTO {
     | 'EMP_VARIATION_CORSIA_REGULATOR_LED_TRACK_PAYMENT'
     | 'EMP_VARIATION_CORSIA_REGULATOR_LED_CONFIRM_PAYMENT'
     | 'AVIATION_AER_CORSIA_APPLICATION_SUBMIT'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW'
     | 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT'
     | 'AVIATION_AER_CORSIA_WAIT_FOR_VERIFICATION'
     | 'AVIATION_AER_CORSIA_APPLICATION_REVIEW'
     | 'AVIATION_AER_CORSIA_WAIT_FOR_REVIEW'
+    | 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT'
+    | 'AVIATION_AER_CORSIA_WAIT_FOR_AMENDS'
+    | 'AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT'
+    | 'AVIATION_AER_CORSIA_AMEND_WAIT_FOR_VERIFICATION'
     | 'ACCOUNT_USERS_SETUP'
     | 'NEW_VERIFICATION_BODY_EMITTER'
     | 'VERIFIER_NO_LONGER_AVAILABLE';
-  payload?: RequestTaskPayload;
+  payload?:
+    | ALRApplicationSubmitRequestTaskPayload
+    | ALRApplicationVerificationSubmitRequestTaskPayload
+    | AerApplicationAmendsSubmitRequestTaskPayload
+    | AerApplicationReviewRequestTaskPayload
+    | AerApplicationSubmitRequestTaskPayload
+    | AerApplicationVerificationSubmitRequestTaskPayload
+    | AirApplicationRespondToRegulatorCommentsRequestTaskPayload
+    | AirApplicationReviewRequestTaskPayload
+    | AirApplicationSubmitRequestTaskPayload
+    | AviationAccountClosureSubmitRequestTaskPayload
+    | AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload
+    | AviationAerCorsiaAnnualOffsettingApplicationSubmitRequestTaskPayload
+    | AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload
+    | AviationAerCorsiaApplicationReviewRequestTaskPayload
+    | AviationAerCorsiaApplicationSubmitRequestTaskPayload
+    | AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload
+    | AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload
+    | AviationAerUkEtsApplicationReviewRequestTaskPayload
+    | AviationAerUkEtsApplicationSubmitRequestTaskPayload
+    | AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload
+    | AviationDoECorsiaApplicationSubmitRequestTaskPayload
+    | AviationDreUkEtsApplicationSubmitRequestTaskPayload
+    | AviationVirApplicationRespondToRegulatorCommentsRequestTaskPayload
+    | AviationVirApplicationReviewRequestTaskPayload
+    | AviationVirApplicationSubmitRequestTaskPayload
+    | BDRApplicationAmendsSubmitRequestTaskPayload
+    | BDRApplicationRegulatorReviewSubmitRequestTaskPayload
+    | BDRApplicationSubmitRequestTaskPayload
+    | BDRApplicationVerificationSubmitRequestTaskPayload
+    | BDRApplicationWaitForRegulatorReviewRequestTaskPayload
+    | DoalApplicationSubmitRequestTaskPayload
+    | DoalAuthorityResponseRequestTaskPayload
+    | DreApplicationSubmitRequestTaskPayload
+    | EmpIssuanceCorsiaApplicationAmendsSubmitRequestTaskPayload
+    | EmpIssuanceCorsiaApplicationReviewRequestTaskPayload
+    | EmpIssuanceCorsiaApplicationSubmitRequestTaskPayload
+    | EmpIssuanceUkEtsApplicationAmendsSubmitRequestTaskPayload
+    | EmpIssuanceUkEtsApplicationReviewRequestTaskPayload
+    | EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload
+    | EmpVariationCorsiaApplicationAmendsSubmitRequestTaskPayload
+    | EmpVariationCorsiaApplicationReviewRequestTaskPayload
+    | EmpVariationCorsiaApplicationSubmitRegulatorLedRequestTaskPayload
+    | EmpVariationCorsiaApplicationSubmitRequestTaskPayload
+    | EmpVariationUkEtsApplicationAmendsSubmitRequestTaskPayload
+    | EmpVariationUkEtsApplicationReviewRequestTaskPayload
+    | EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload
+    | EmpVariationUkEtsApplicationSubmitRequestTaskPayload
+    | InstallationAccountOpeningApplicationRequestTaskPayload
+    | InstallationAccountTransferringArchiveRequestTaskPayload
+    | InstallationAuditApplicationSubmitRequestTaskPayload
+    | InstallationInspectionApplicationSubmitRequestTaskPayload
+    | InstallationInspectionOperatorRespondRequestTaskPayload
+    | InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload
+    | NerApplicationAmendsSubmitRequestTaskPayload
+    | NerApplicationReviewRequestTaskPayload
+    | NerApplicationSubmitRequestTaskPayload
+    | NerAuthorityResponseRequestTaskPayload
+    | NonComplianceApplicationSubmitRequestTaskPayload
+    | NonComplianceCivilPenaltyRequestTaskPayload
+    | NonComplianceDailyPenaltyNoticeRequestTaskPayload
+    | NonComplianceFinalDeterminationRequestTaskPayload
+    | NonComplianceNoticeOfIntentRequestTaskPayload
+    | PaymentConfirmRequestTaskPayload
+    | PaymentMakeRequestTaskPayload
+    | PaymentTrackRequestTaskPayload
+    | PermanentCessationApplicationSubmitRequestTaskPayload
+    | PermitCessationSubmitRequestTaskPayload
+    | PermitIssuanceApplicationAmendsSubmitRequestTaskPayload
+    | PermitIssuanceApplicationReviewRequestTaskPayload
+    | PermitIssuanceApplicationSubmitRequestTaskPayload
+    | PermitNotificationApplicationReviewRequestTaskPayload
+    | PermitNotificationApplicationSubmitRequestTaskPayload
+    | PermitNotificationFollowUpApplicationAmendsSubmitRequestTaskPayload
+    | PermitNotificationFollowUpApplicationReviewRequestTaskPayload
+    | PermitNotificationFollowUpRequestTaskPayload
+    | PermitNotificationFollowUpWaitForAmendsRequestTaskPayload
+    | PermitNotificationWaitForFollowUpRequestTaskPayload
+    | PermitRevocationApplicationPeerReviewRequestTaskPayload
+    | PermitRevocationApplicationSubmitRequestTaskPayload
+    | PermitRevocationWaitForAppealRequestTaskPayload
+    | PermitSurrenderApplicationReviewRequestTaskPayload
+    | PermitSurrenderApplicationSubmitRequestTaskPayload
+    | PermitTransferAApplicationRequestTaskPayload
+    | PermitTransferBApplicationAmendsSubmitRequestTaskPayload
+    | PermitTransferBApplicationRequestTaskPayload
+    | PermitTransferBApplicationReviewRequestTaskPayload
+    | PermitVariationApplicationAmendsSubmitRequestTaskPayload
+    | PermitVariationApplicationReviewRequestTaskPayload
+    | PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload
+    | PermitVariationApplicationSubmitRequestTaskPayload
+    | RdeForceDecisionRequestTaskPayload
+    | RdeResponseRequestTaskPayload
+    | ReturnOfAllowancesApplicationPeerReviewRequestTaskPayload
+    | ReturnOfAllowancesApplicationSubmitRequestTaskPayload
+    | ReturnOfAllowancesReturnedApplicationSubmitRequestTaskPayload
+    | RfiResponseSubmitRequestTaskPayload
+    | SystemMessageNotificationRequestTaskPayload
+    | VirApplicationRespondToRegulatorCommentsRequestTaskPayload
+    | VirApplicationReviewRequestTaskPayload
+    | VirApplicationSubmitRequestTaskPayload
+    | WithholdingOfAllowancesApplicationPeerReviewRequestTaskPayload
+    | WithholdingOfAllowancesApplicationSubmitRequestTaskPayload
+    | WithholdingOfAllowancesWithdrawalApplicationSubmitRequestTaskPayload;
   assignable?: boolean;
   assigneeUserId?: string;
   assigneeFullName?: string;

@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, switchMapTo } from 'rxjs';
+import { first, switchMap } from 'rxjs';
 
-import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
-import { PendingRequest } from '../../../../../core/interfaces/pending-request.interface';
-import { DestroySubject } from '../../../../../core/services/destroy-subject.service';
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { PendingRequest } from '@core/interfaces/pending-request.interface';
+import { DestroySubject } from '@core/services/destroy-subject.service';
+
 import { reviewRequestTaskTypes } from '../../../../shared/utils/permit';
 import { PermitApplicationState } from '../../../../store/permit-application.state';
 import { PermitApplicationStore } from '../../../../store/permit-application.store';
@@ -27,7 +28,11 @@ export class AnswersComponent implements PendingRequest {
   confirm(): void {
     this.store
       .postStatus(this.route.snapshot.data.statusKey, true)
-      .pipe(this.pendingRequest.trackRequest(), switchMapTo(this.store), first())
+      .pipe(
+        this.pendingRequest.trackRequest(),
+        switchMap(() => this.store),
+        first(),
+      )
       .subscribe((state) =>
         this.router.navigate(
           [reviewRequestTaskTypes.includes(state.requestTaskType) ? '../../../review/pfc' : '../summary'],

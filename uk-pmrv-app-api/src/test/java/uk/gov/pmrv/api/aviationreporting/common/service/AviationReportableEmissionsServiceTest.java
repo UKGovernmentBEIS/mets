@@ -19,8 +19,8 @@ import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsTotalRepor
 import uk.gov.pmrv.api.aviationreporting.ukets.service.AviationAerUkEtsReportableEmissionsCalculationService;
 import uk.gov.pmrv.api.aviationreporting.ukets.service.AviationUkEtsReportableEmissionsUpdateService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 
 import java.math.BigDecimal;
 import java.time.Year;
@@ -242,7 +242,7 @@ class AviationReportableEmissionsServiceTest {
                 .thenReturn(EmissionTradingScheme.CORSIA);
 
         // Invoke
-        AviationAerTotalReportableEmissions result = aviationReportableEmissionsService.updateReportableEmissions(aerContainer, accountId);
+        AviationAerTotalReportableEmissions result = aviationReportableEmissionsService.updateReportableEmissions(aerContainer, accountId, false);
 
         // Verify
         assertThat(result)
@@ -293,7 +293,7 @@ class AviationReportableEmissionsServiceTest {
                 .thenReturn(EmissionTradingScheme.UK_ETS_AVIATION);
 
         // Invoke
-        AviationAerTotalReportableEmissions result = aviationReportableEmissionsService.updateReportableEmissions(aerContainer, accountId);
+        AviationAerTotalReportableEmissions result = aviationReportableEmissionsService.updateReportableEmissions(aerContainer, accountId, false);
 
         // Verify
         assertThat(result)
@@ -327,7 +327,7 @@ class AviationReportableEmissionsServiceTest {
 
         // Invoke
         BusinessException be = assertThrows(BusinessException.class, () ->
-            aviationReportableEmissionsService.updateReportableEmissions(aerContainer, accountId));
+            aviationReportableEmissionsService.updateReportableEmissions(aerContainer, accountId, false));
 
         // Verify
         assertThat(be.getErrorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND);
@@ -399,5 +399,59 @@ class AviationReportableEmissionsServiceTest {
         verify(aviationReportableEmissionsRepository, times(1))
                 .findByAccountIdAndYear(accountId, year);
         verify(aviationReportableEmissionsRepository, never()).delete(any());
+    }
+
+
+    @Test
+    void updateReportableEmissions_operator_submit_ukets() {
+        final Long accountId = 1L;
+        final Year year = Year.of(2022);
+        final AviationAerUkEtsContainer aerContainer = AviationAerUkEtsContainer.builder()
+                .reportingYear(year)
+                .reportingRequired(true)
+                .scheme(EmissionTradingScheme.UK_ETS_AVIATION)
+                .build();
+
+        final AviationAerUkEtsTotalReportableEmissions reportableEmissions = AviationAerUkEtsTotalReportableEmissions.builder()
+                .reportableEmissions(BigDecimal.valueOf(400))
+                .build();
+        final AviationReportableEmissionsSaveParams reportableEmissionsSaveParams =
+                AviationReportableEmissionsSaveParams.builder()
+                        .accountId(accountId)
+                        .year(year)
+                        .reportableEmissions(reportableEmissions)
+                        .isFromDre(false)
+                        .build();
+
+        when(aviationAerCorsiaReportableEmissionsCalculationService.getEmissionTradingScheme())
+                .thenReturn(EmissionTradingScheme.CORSIA);
+        when(aviationAerUkEtsReportableEmissionsCalculationService.getEmissionTradingScheme())
+                .thenReturn(EmissionTradingScheme.UK_ETS_AVIATION);
+        when(aviationAerUkEtsReportableEmissionsCalculationService.calculateReportableEmissions(aerContainer))
+                .thenReturn(reportableEmissions);
+        when(aviationCorsiaReportableEmissionsUpdateService.getEmissionTradingScheme())
+                .thenReturn(EmissionTradingScheme.CORSIA);
+        when(aviationUkEtsReportableEmissionsUpdateService.getEmissionTradingScheme())
+                .thenReturn(EmissionTradingScheme.UK_ETS_AVIATION);
+
+        AviationAerTotalReportableEmissions result = aviationReportableEmissionsService.updateReportableEmissions(aerContainer, accountId, false);
+
+        assertThat(result)
+                .isInstanceOf(AviationAerUkEtsTotalReportableEmissions.class)
+                .isEqualTo(reportableEmissions);
+
+        verify(aviationAerCorsiaReportableEmissionsCalculationService, times(1))
+                .getEmissionTradingScheme();
+        verify(aviationAerUkEtsReportableEmissionsCalculationService, times(1))
+                .getEmissionTradingScheme();
+        verify(aviationAerUkEtsReportableEmissionsCalculationService, times(1))
+                .calculateReportableEmissions(aerContainer);
+        verify(aviationCorsiaReportableEmissionsUpdateService, times(1))
+                .getEmissionTradingScheme();
+        verify(aviationUkEtsReportableEmissionsUpdateService, times(1))
+                .getEmissionTradingScheme();
+        verify(aviationUkEtsReportableEmissionsUpdateService, times(1))
+                .saveReportableEmissions(reportableEmissionsSaveParams);
+        verifyNoMoreInteractions(aviationAerCorsiaReportableEmissionsCalculationService, aviationCorsiaReportableEmissionsUpdateService);
     }
 }

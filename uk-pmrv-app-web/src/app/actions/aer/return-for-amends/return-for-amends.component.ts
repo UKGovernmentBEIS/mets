@@ -18,7 +18,7 @@ export class ReturnForAmendsComponent {
     map((payload) =>
       Object.keys(payload?.reviewGroupDecisions ?? [])
         .filter((key) => payload?.reviewGroupDecisions[key].type === 'OPERATOR_AMENDS_NEEDED')
-        .map((key) => ({ groupKey: key, data: payload.reviewGroupDecisions[key] } as any)),
+        .map((key) => ({ groupKey: key, data: payload.reviewGroupDecisions[key] }) as any),
     ),
   );
 

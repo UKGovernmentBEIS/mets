@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -7,8 +7,11 @@ import { isHSEAnnualEmissionTargetsCompleted } from '../../../../permit-applicat
 import { PermitVariationStore } from '../../../store/permit-variation.store';
 
 @Injectable({ providedIn: 'root' })
-export class ReasonTemplateGuard implements CanActivate {
-  constructor(private readonly store: PermitVariationStore, private readonly router: Router) {}
+export class ReasonTemplateGuard {
+  constructor(
+    private readonly store: PermitVariationStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return (

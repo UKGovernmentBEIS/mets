@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
 
 @Data
 @Builder
@@ -16,7 +15,7 @@ public class UserStateDTO {
 
     private String userId;
 
-    private RoleType roleType;
+    private String roleType;
 
     private AccountType lastLoginDomain;
 

@@ -20,6 +20,9 @@ describe('ReasonListComponent', () => {
     get buttons() {
       return this.queryAll<HTMLButtonElement>('.govuk-button-group');
     }
+    get pageBody() {
+      return this.query<HTMLElement>('.govuk-body');
+    }
   }
 
   const createComponent = () => {
@@ -44,6 +47,9 @@ describe('ReasonListComponent', () => {
       produce(store.getState(), (state) => {
         state.isEditable = true;
         state.requestTaskItem = {
+          requestInfo: {
+            type: 'AVIATION_AER_UKETS',
+          },
           requestTask: {
             type: 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT',
             payload: {
@@ -65,6 +71,12 @@ describe('ReasonListComponent', () => {
 
     it('should create', () => {
       expect(component).toBeTruthy();
+    });
+
+    it('should show body statement', () => {
+      expect(page.pageBody.textContent.trim()).toEqual(
+        'On the basis of your verification work these data are fairly stated, with the exception of the following reasons.',
+      );
     });
 
     it('should show the list', () => {

@@ -14,8 +14,8 @@ import uk.gov.pmrv.api.aviationreporting.ukets.domain.emissionsmonitoringapproac
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.saf.AviationAerSaf;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.AviationOperatorDetails;
 
@@ -76,7 +76,7 @@ class AviationAerUkEtsValidatorServiceTest {
         BusinessException be = assertThrows(BusinessException.class,
                 () -> aviationAerUkEtsValidatorService.validateAer(aerContainer));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AVIATION_AER);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AVIATION_AER);
     }
 
     @Test
@@ -134,7 +134,7 @@ class AviationAerUkEtsValidatorServiceTest {
         BusinessException be = assertThrows(BusinessException.class,
             () -> aviationAerUkEtsValidatorService.validate(aerContainer));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AVIATION_AER);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AVIATION_AER);
 
         verify(operatorDetailsSectionValidator, times(1)).validate(aerContainer);
     }
@@ -157,7 +157,7 @@ class AviationAerUkEtsValidatorServiceTest {
         BusinessException be = assertThrows(BusinessException.class,
             () -> aviationAerUkEtsValidatorService.validate(aerContainer));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AVIATION_AER);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AVIATION_AER);
 
         verify(operatorDetailsSectionValidator, times(1)).validate(aerContainer);
     }
@@ -178,13 +178,13 @@ class AviationAerUkEtsValidatorServiceTest {
             .build();
 
         when(operatorDetailsSectionValidator.validate(aerContainer)).thenReturn(AviationAerValidationResult.validAviationAer());
-        doThrow(new BusinessException(ErrorCode.INVALID_AVIATION_AER_VERIFICATION_REPORT))
+        doThrow(new BusinessException(MetsErrorCode.INVALID_AVIATION_AER_VERIFICATION_REPORT))
             .when(ukEtsVerificationReportValidatorService).validate(verificationReport);
 
         BusinessException be = assertThrows(BusinessException.class,
             () -> aviationAerUkEtsValidatorService.validate(aerContainer));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AVIATION_AER_VERIFICATION_REPORT);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AVIATION_AER_VERIFICATION_REPORT);
 
         verify(operatorDetailsSectionValidator, times(1)).validate(aerContainer);
         verify(ukEtsVerificationReportValidatorService, times(1)).validate(verificationReport);

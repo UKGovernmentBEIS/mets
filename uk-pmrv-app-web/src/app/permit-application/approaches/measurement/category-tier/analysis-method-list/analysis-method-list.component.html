@@ -1,0 +1,32 @@
+<app-permit-task
+  *ngIf="
+    ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]?.[
+      subtaskName
+    ] as subtaskData
+  ">
+  <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+
+  <app-page-heading
+    caption="{{ 'MEASUREMENT_CO2' | monitoringApproachDescription }}, {{
+      ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]
+        | emissionPointCategoryName
+        | async
+    }}">
+    Analysis methods used to determine {{ statusKey | subtaskName | lowercase }}
+  </app-page-heading>
+
+  <form (ngSubmit)="onContinue()" [formGroup]="form" name="userForm">
+    <app-analysis-method-list-template [formErrors]="form?.errors"></app-analysis-method-list-template>
+
+    <button appPendingButton govukButton type="submit" *ngIf="(store.isEditable$ | async) === true">Continue</button>
+  </form>
+
+  <a govukLink routerLink="../..">
+    Return to:
+    {{
+      ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]
+        | emissionPointCategoryName
+        | async
+    }}
+  </a>
+</app-permit-task>

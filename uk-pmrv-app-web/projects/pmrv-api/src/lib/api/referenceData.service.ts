@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -86,27 +86,27 @@ export class ReferenceDataService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getReferenceData(types: Array<'COUNTRIES'>): Observable<{ [key: string]: Array<object> }>;
+  public getReferenceData(types: Array<'COUNTRIES' | 'COUNTIES'>): Observable<{ [key: string]: Array<object> }>;
   public getReferenceData(
-    types: Array<'COUNTRIES'>,
+    types: Array<'COUNTRIES' | 'COUNTIES'>,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: '*/*' | 'application/json' },
   ): Observable<HttpResponse<{ [key: string]: Array<object> }>>;
   public getReferenceData(
-    types: Array<'COUNTRIES'>,
+    types: Array<'COUNTRIES' | 'COUNTIES'>,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: '*/*' | 'application/json' },
   ): Observable<HttpEvent<{ [key: string]: Array<object> }>>;
   public getReferenceData(
-    types: Array<'COUNTRIES'>,
+    types: Array<'COUNTRIES' | 'COUNTIES'>,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: '*/*' | 'application/json' },
   ): Observable<{ [key: string]: Array<object> }>;
   public getReferenceData(
-    types: Array<'COUNTRIES'>,
+    types: Array<'COUNTRIES' | 'COUNTIES'>,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: '*/*' | 'application/json' },

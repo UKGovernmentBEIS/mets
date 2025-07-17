@@ -6,8 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.reporting.domain.AerContainer;
 import uk.gov.pmrv.api.reporting.domain.AerValidationResult;
@@ -119,7 +119,7 @@ class AerValidatorServiceTest {
 
         BusinessException be = assertThrows(BusinessException.class,
             () -> aerValidatorService.validateAer(aerContainer));
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AER);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AER);
 
         verify(aerCalculationEmissionsValidator, times(1))
             .validate(aerContainer);
@@ -238,7 +238,7 @@ class AerValidatorServiceTest {
 
         BusinessException be = assertThrows(BusinessException.class,
             () -> aerValidatorService.validate(aerContainer, accountId));
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AER_VERIFICATION_REPORT);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AER_VERIFICATION_REPORT);
 
         verify(aerCalculationEmissionsValidator, times(1))
             .validate(aerContainer);

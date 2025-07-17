@@ -1,12 +1,6 @@
 package uk.gov.pmrv.api.account.repo;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.WALES;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import java.util.Optional;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +8,16 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.account.domain.CaExternalContact;
 import uk.gov.pmrv.api.account.repository.CaExternalContactRepository;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.WALES;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Testcontainers
@@ -158,7 +158,7 @@ class CaExternalContactRepositoryIT extends AbstractContainerBaseTest {
 
         em.persist(c);
 
-        assertThat(repo.existsByCompetentAuthorityAndEmail(ENGLAND, "email1")).isTrue();
+        assertThat(repo.existsByCompetentAuthorityAndEmailIgnoreCase(ENGLAND, "EMAIL1")).isTrue();
     }
 
     @Test
@@ -173,7 +173,7 @@ class CaExternalContactRepositoryIT extends AbstractContainerBaseTest {
 
         em.persist(c);
 
-        assertThat(repo.existsByCompetentAuthorityAndEmail(ENGLAND, "email1")).isFalse();
+        assertThat(repo.existsByCompetentAuthorityAndEmailIgnoreCase(ENGLAND, "email1")).isFalse();
     }
 
     @Test
@@ -218,7 +218,7 @@ class CaExternalContactRepositoryIT extends AbstractContainerBaseTest {
 
         em.persist(c);
 
-        assertThat(repo.existsByCompetentAuthorityAndEmailAndIdNot(ENGLAND, "email", 999999999999L)).isTrue();
+        assertThat(repo.existsByCompetentAuthorityAndEmailIgnoreCaseAndIdNot(ENGLAND, "EMAIL", 999999999999L)).isTrue();
     }
 
     @Test
@@ -233,7 +233,7 @@ class CaExternalContactRepositoryIT extends AbstractContainerBaseTest {
 
         em.persist(c);
 
-        assertThat(repo.existsByCompetentAuthorityAndEmailAndIdNot(ENGLAND, "email2", c.getId())).isFalse();
+        assertThat(repo.existsByCompetentAuthorityAndEmailIgnoreCaseAndIdNot(ENGLAND, "email2", c.getId())).isFalse();
     }
 
     @Test

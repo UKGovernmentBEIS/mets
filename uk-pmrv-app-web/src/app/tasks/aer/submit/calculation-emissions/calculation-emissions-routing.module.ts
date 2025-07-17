@@ -1,7 +1,11 @@
-import { NgModule } from '@angular/core';
+import { inject, NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PendingRequestGuard } from '@core/guards/pending-request.guard';
+import {
+  ACTIVITY_CALCULATION_METHOD_FORM_PROVIDER,
+  ActivityCalculationMethodFormProvider,
+} from '@tasks/aer/submit/calculation-emissions/activity-calculation-method/activity-calculation-method-form.provider';
 
 import { DateRangeComponent } from '../../shared/components/submit/date-range/date-range.component';
 import { DeleteComponent } from '../../shared/components/submit/delete/delete.component';
@@ -46,14 +50,14 @@ const routes: Routes = [
       },
       {
         path: 'transferred',
-        data: { pageTitle: 'Transferred CO2' },
+        data: { pageTitle: 'Transferred CO2', backlink: '../emission-network' },
         component: TransferredComponent,
         canActivate: [WizardStepGuard],
         canDeactivate: [PendingRequestGuard],
       },
       {
         path: 'transferred-details',
-        data: { pageTitle: 'Transferred details' },
+        data: { pageTitle: 'Transferred details', backlink: '../transferred' },
         component: TransferredDetailsComponent,
         canActivate: [WizardStepGuard],
         canDeactivate: [PendingRequestGuard],
@@ -63,7 +67,7 @@ const routes: Routes = [
         data: {
           pageTitle: 'What date range does this entry cover?',
           taskKey: 'CALCULATION_CO2',
-          backlink: '../emission-network',
+          backlink: '../emission-network', //TODO not correct. should be dynamic
         },
         component: DateRangeComponent,
         canActivate: [WizardStepGuard],
@@ -166,9 +170,21 @@ const routes: Routes = [
       },
       {
         path: 'manual-calculation-values',
+        providers: [
+          { provide: ACTIVITY_CALCULATION_METHOD_FORM_PROVIDER, useClass: ActivityCalculationMethodFormProvider },
+        ],
         data: {
           pageTitle: 'Provide the emission calculation values for this source stream',
-          backlink: '../activity-calculation-continuous',
+        },
+        resolve: {
+          backlink: () => {
+            const formProvider = inject<ActivityCalculationMethodFormProvider>(
+              ACTIVITY_CALCULATION_METHOD_FORM_PROVIDER,
+            );
+            return formProvider.getActivityCalculationMethodType() === 'AGGREGATION_OF_METERING_QUANTITIES'
+              ? '../activity-calculation-aggregation'
+              : '../activity-calculation-continuous';
+          },
         },
         component: ManualCalculationValuesComponent,
         canActivate: [WizardStepGuard],

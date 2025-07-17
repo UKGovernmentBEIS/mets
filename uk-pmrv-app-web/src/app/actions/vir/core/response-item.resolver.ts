@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -12,8 +12,11 @@ import { VirService } from './vir.service';
 @Injectable({
   providedIn: 'root',
 })
-export class ResponseItemResolver implements Resolve<VerificationDataItem> {
-  constructor(private readonly virService: VirService, private readonly router: Router) {}
+export class ResponseItemResolver {
+  constructor(
+    private readonly virService: VirService,
+    private readonly router: Router,
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<VerificationDataItem> {
     return (this.virService.payload$ as Observable<VirApplicationReviewedRequestActionPayload>).pipe(

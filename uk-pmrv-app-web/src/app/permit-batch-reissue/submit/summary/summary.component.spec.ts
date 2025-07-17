@@ -5,11 +5,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of, throwError } from 'rxjs';
 
+import { DestroySubject } from '@core/services/destroy-subject.service';
+import { AuthStore } from '@core/store';
 import { expectBusinessErrorToBe } from '@error/testing/business-error';
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
 
-import { RequestsService } from 'pmrv-api';
+import { RegulatorCurrentUserDTO, RequestsService } from 'pmrv-api';
 
 import {
   anotherInProgressError,
@@ -26,6 +28,7 @@ describe('SummaryComponent', () => {
 
   let page: Page;
   let store: PermitBatchReissueStore;
+  let authStore: AuthStore;
   const requestService = mockClass(RequestsService);
 
   const activatedRouteStub = new ActivatedRouteStub(undefined, undefined, {
@@ -61,25 +64,21 @@ describe('SummaryComponent', () => {
       declarations: [SummaryComponent],
       imports: [RouterTestingModule, SharedModule],
       providers: [
+        DestroySubject,
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: RequestsService, useValue: requestService },
       ],
     }).compileComponents();
-  });
 
-  afterEach(() => jest.clearAllMocks());
+    authStore = TestBed.inject(AuthStore);
+    authStore.setIsLoggedIn(true);
+    authStore.setUser({
+      email: 'foo@bar.com',
+      firstName: 'foo',
+      lastName: 'bar',
+      competentAuthority: 'ENGLAND',
+    } as RegulatorCurrentUserDTO);
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [SummaryComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(SummaryComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  beforeEach(() => {
     store = TestBed.inject(PermitBatchReissueStore);
     store.setState({
       ...initialState,
@@ -87,6 +86,9 @@ describe('SummaryComponent', () => {
       installationCategories: ['A_LOW_EMITTER', 'B'],
     });
   });
+
+  afterEach(() => jest.clearAllMocks());
+
   beforeEach(createComponent);
 
   it('should create', () => {
@@ -109,18 +111,21 @@ describe('SummaryComponent', () => {
     fixture.detectChanges();
 
     expect(requestService.processRequestCreateAction).toHaveBeenCalledTimes(1);
-    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith({
-      requestCreateActionType: 'PERMIT_BATCH_REISSUE',
-      requestCreateActionPayload: {
-        payloadType: 'PERMIT_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
-        filters: {
-          accountStatuses: mockSubmitCompletedState.accountStatuses,
-          emitterTypes: mockSubmitCompletedState.emitterTypes,
-          installationCategories: ['A_LOW_EMITTER', 'B'],
+    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith(
+      {
+        requestCreateActionType: 'PERMIT_BATCH_REISSUE',
+        requestCreateActionPayload: {
+          payloadType: 'PERMIT_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
+          filters: {
+            accountStatuses: mockSubmitCompletedState.accountStatuses,
+            emitterTypes: mockSubmitCompletedState.emitterTypes,
+            installationCategories: ['A_LOW_EMITTER', 'B'],
+          },
+          signatory: mockSubmitCompletedState.signatory,
         },
-        signatory: mockSubmitCompletedState.signatory,
       },
-    });
+      'ENGLAND',
+    );
 
     expect(page.confirmationMessage.textContent.trim()).toEqual('Your reference code is: 1234');
   });
@@ -134,20 +139,23 @@ describe('SummaryComponent', () => {
     fixture.detectChanges();
 
     expect(requestService.processRequestCreateAction).toHaveBeenCalledTimes(1);
-    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith({
-      requestCreateActionType: 'PERMIT_BATCH_REISSUE',
-      requestCreateActionPayload: {
-        payloadType: 'PERMIT_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
-        filters: {
-          accountStatuses: mockSubmitCompletedState.accountStatuses,
-          emitterTypes: mockSubmitCompletedState.emitterTypes,
-          installationCategories: ['A_LOW_EMITTER', 'B'],
+    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith(
+      {
+        requestCreateActionType: 'PERMIT_BATCH_REISSUE',
+        requestCreateActionPayload: {
+          payloadType: 'PERMIT_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
+          filters: {
+            accountStatuses: mockSubmitCompletedState.accountStatuses,
+            emitterTypes: mockSubmitCompletedState.emitterTypes,
+            installationCategories: ['A_LOW_EMITTER', 'B'],
+          },
+          signatory: mockSubmitCompletedState.signatory,
         },
-        signatory: mockSubmitCompletedState.signatory,
       },
-    });
+      'ENGLAND',
+    );
 
-    await expectBusinessErrorToBe(anotherInProgressError(false));
+    await expectBusinessErrorToBe(anotherInProgressError());
   });
 
   it('should display error message when 0 emitters found', async () => {
@@ -159,19 +167,22 @@ describe('SummaryComponent', () => {
     fixture.detectChanges();
 
     expect(requestService.processRequestCreateAction).toHaveBeenCalledTimes(1);
-    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith({
-      requestCreateActionType: 'PERMIT_BATCH_REISSUE',
-      requestCreateActionPayload: {
-        payloadType: 'PERMIT_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
-        filters: {
-          accountStatuses: mockSubmitCompletedState.accountStatuses,
-          emitterTypes: mockSubmitCompletedState.emitterTypes,
-          installationCategories: ['A_LOW_EMITTER', 'B'],
+    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith(
+      {
+        requestCreateActionType: 'PERMIT_BATCH_REISSUE',
+        requestCreateActionPayload: {
+          payloadType: 'PERMIT_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
+          filters: {
+            accountStatuses: mockSubmitCompletedState.accountStatuses,
+            emitterTypes: mockSubmitCompletedState.emitterTypes,
+            installationCategories: ['A_LOW_EMITTER', 'B'],
+          },
+          signatory: mockSubmitCompletedState.signatory,
         },
-        signatory: mockSubmitCompletedState.signatory,
       },
-    });
+      'ENGLAND',
+    );
 
-    await expectBusinessErrorToBe(noMatchingEmittersError(false));
+    await expectBusinessErrorToBe(noMatchingEmittersError());
   });
 });

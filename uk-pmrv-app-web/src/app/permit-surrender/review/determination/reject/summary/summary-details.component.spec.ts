@@ -17,8 +17,7 @@ describe('SummaryDetailsComponent', () => {
   @Component({
     template: `
       <app-reject-determination-summary-details
-        [rejectDetermination]="rejectDetermination$ | async"
-      ></app-reject-determination-summary-details>
+        [rejectDetermination]="rejectDetermination$ | async"></app-reject-determination-summary-details>
     `,
   })
   class TestComponent {

@@ -12,8 +12,8 @@ import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 import uk.gov.pmrv.api.allowance.domain.enums.SubInstallationName;
 import uk.gov.pmrv.api.allowance.repository.AllowanceAllocationRepository;
 import uk.gov.pmrv.api.allowance.validation.AllowanceAllocationValidator;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
 import java.time.Year;
 import java.util.HashSet;
@@ -146,7 +146,7 @@ class AllowanceAllocationServiceTest {
         );
 
         // Verify
-        assertThat(businessException.getErrorCode()).isEqualTo(ErrorCode.INVALID_ALLOWANCE_ALLOCATIONS);
+        assertThat(businessException.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_ALLOWANCE_ALLOCATIONS);
         verify(allowanceAllocationValidator, times(1)).isValid(allocations);
         verifyNoInteractions(allowanceAllocationRepository);
     }

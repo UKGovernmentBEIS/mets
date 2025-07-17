@@ -8,8 +8,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Testcontainers
@@ -267,7 +267,7 @@ class ItemOperatorRepositoryIT extends AbstractContainerBaseTest {
 
     private Request createRequest(Long accountId, RequestType type, RequestStatus status, Long vbId, LocalDateTime creationDate) {
         Request request = Request.builder()
-                .id(RandomStringUtils.random(5))
+                .id(RandomStringUtils.insecure().next(5))
                 .competentAuthority(ENGLAND)
                 .type(type)
                 .status(status)

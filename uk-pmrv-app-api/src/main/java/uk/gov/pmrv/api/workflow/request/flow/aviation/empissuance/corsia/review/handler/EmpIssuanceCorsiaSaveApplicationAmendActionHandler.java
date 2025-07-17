@@ -3,7 +3,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.review
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
@@ -20,7 +20,7 @@ public class EmpIssuanceCorsiaSaveApplicationAmendActionHandler implements
     private final RequestEmpCorsiaReviewService requestEmpCorsiaReviewService;
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser, EmpIssuanceCorsiaSaveApplicationAmendRequestTaskActionPayload payload) {
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser, EmpIssuanceCorsiaSaveApplicationAmendRequestTaskActionPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         requestEmpCorsiaReviewService.saveAmend(payload, requestTask);
     }

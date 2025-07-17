@@ -16,7 +16,7 @@ import { AccountNotesService } from 'pmrv-api';
 })
 export class DeleteAccountNoteComponent implements OnInit {
   accountId$ = this.route.paramMap.pipe(map((parameters) => +parameters.get('accountId')));
-  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain);
+  public readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain);
   domain: string;
 
   constructor(

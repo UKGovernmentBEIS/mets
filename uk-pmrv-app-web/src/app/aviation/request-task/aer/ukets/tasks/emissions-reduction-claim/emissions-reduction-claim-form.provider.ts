@@ -46,15 +46,15 @@ export interface EmissionsReductionClaimFormModel {
 }
 
 @Injectable()
-export class aerEmissionsReductionClaimFormProvider
+export class AerEmissionsReductionClaimFormProvider
   implements TaskFormProvider<AviationAerSaf, EmissionsReductionClaimFormModel>
 {
-  private fb = inject(FormBuilder);
+  private readonly fb = inject(FormBuilder);
   private _form: FormGroup;
-  private store = inject(RequestTaskStore);
-  private requestTaskFileService = inject(RequestTaskFileService);
+  private readonly store = inject(RequestTaskStore);
+  private readonly requestTaskFileService = inject(RequestTaskFileService);
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   get form(): FormGroup {
     if (!this._form) {
@@ -116,9 +116,11 @@ export class aerEmissionsReductionClaimFormProvider
     });
   }
 
-  calculateTotalEmissions(): number {
-    let total = 0;
-    this._form.value.safDetails?.purchases?.forEach((purchase) => (total += +purchase.safMass));
+  calculateTotalEmissions(): BigNumber {
+    let total = new BigNumber(0);
+    this._form.value.safDetails?.purchases?.forEach(
+      (purchase) => (total = new BigNumber(purchase.safMass).plus(total)),
+    );
     return total;
   }
 
@@ -143,7 +145,7 @@ export class aerEmissionsReductionClaimFormProvider
       {
         fuelName: [purchase?.fuelName ?? null],
         batchNumber: [purchase?.batchNumber ?? null],
-        safMass: [+purchase?.safMass ?? null],
+        safMass: [Number(purchase?.safMass) || null],
         sustainabilityCriteriaEvidenceType: [purchase?.sustainabilityCriteriaEvidenceType ?? null],
         otherSustainabilityCriteriaEvidenceDescription: [
           purchase?.otherSustainabilityCriteriaEvidenceDescription ?? null,

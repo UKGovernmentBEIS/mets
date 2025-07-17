@@ -13,8 +13,7 @@ describe('RadioComponent', () => {
         <govuk-radio-option
           *ngFor="let option of options"
           [value]="option.value"
-          [label]="option.label"
-        ></govuk-radio-option>
+          [label]="option.label"></govuk-radio-option>
       </div>
 
       <form [formGroup]="form">
@@ -22,8 +21,7 @@ describe('RadioComponent', () => {
           <govuk-radio-option
             *ngFor="let option of options"
             [value]="option.value"
-            [label]="option.label"
-          ></govuk-radio-option>
+            [label]="option.label"></govuk-radio-option>
         </div>
       </form>
     `,

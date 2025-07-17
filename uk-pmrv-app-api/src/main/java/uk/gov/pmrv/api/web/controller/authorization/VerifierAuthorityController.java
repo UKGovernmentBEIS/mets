@@ -20,17 +20,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.verifier.domain.VerifierAuthorityUpdateDTO;
-import uk.gov.pmrv.api.authorization.verifier.service.VerifierAuthorityDeletionService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.verifier.domain.VerifierAuthorityUpdateDTO;
+import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityDeletionService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
+import uk.gov.pmrv.api.web.orchestrator.authorization.dto.UsersAuthoritiesInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.authorization.service.VerifierUserAuthorityQueryOrchestrator;
 import uk.gov.pmrv.api.web.orchestrator.authorization.service.VerifierUserAuthorityUpdateOrchestrator;
-import uk.gov.pmrv.api.web.orchestrator.authorization.dto.UsersAuthoritiesInfoDTO;
-import uk.gov.pmrv.api.web.security.Authorized;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 
 import java.util.List;
 
@@ -50,8 +50,8 @@ public class VerifierAuthorityController {
 	@ApiResponse(responseCode = "200", description = SwaggerApiInfo.OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UsersAuthoritiesInfoDTO.class))})
 	@ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
 	@ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-	@AuthorizedRole(roleType = RoleType.VERIFIER)
-	public ResponseEntity<UsersAuthoritiesInfoDTO> getVerifierAuthorities(@Parameter(hidden = true) PmrvUser currentUser) {
+	@AuthorizedRole(roleType = RoleTypeConstants.VERIFIER)
+	public ResponseEntity<UsersAuthoritiesInfoDTO> getVerifierAuthorities(@Parameter(hidden = true) AppUser currentUser) {
 		return new ResponseEntity<>(
 				verifierUserAuthorityQueryOrchestrator.getVerifierUsersAuthoritiesInfo(currentUser),
 				HttpStatus.OK);
@@ -77,7 +77,7 @@ public class VerifierAuthorityController {
 	@ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
 	@Authorized
 	public ResponseEntity<Void> updateVerifierAuthorities(
-			@Parameter(hidden = true) PmrvUser currentUser,
+			@Parameter(hidden = true) AppUser currentUser,
 			@RequestBody @Valid @NotEmpty @Parameter(description = "The verifier authorities to update", required = true)
 					List<VerifierAuthorityUpdateDTO> verifierAuthorities){
 		Long verificationBodyId = currentUser.getVerificationBodyId();
@@ -108,7 +108,7 @@ public class VerifierAuthorityController {
 	@ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
 	@Authorized
 	public ResponseEntity<Void> deleteVerifierAuthority(
-			@Parameter(hidden = true) PmrvUser authUser,
+			@Parameter(hidden = true) AppUser authUser,
 			@PathVariable("userId") @Parameter(description = "The regulator to be deleted") String userId) {
 		verifierAuthorityDeletionService.deleteVerifierAuthority(userId, authUser);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -121,7 +121,7 @@ public class VerifierAuthorityController {
 	@ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
 	@ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
 	@Authorized
-	public ResponseEntity<Void> deleteCurrentVerifierAuthority(@Parameter(hidden = true) PmrvUser authUser) {
+	public ResponseEntity<Void> deleteCurrentVerifierAuthority(@Parameter(hidden = true) AppUser authUser) {
 		verifierAuthorityDeletionService.deleteVerifierAuthority(authUser.getUserId(), authUser.getVerificationBodyId());
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}

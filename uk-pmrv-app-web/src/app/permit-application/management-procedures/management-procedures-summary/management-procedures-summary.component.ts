@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { pluck } from 'rxjs';
+import { map } from 'rxjs';
 
 import { PermitApplicationState } from '../../store/permit-application.state';
 import { PermitApplicationStore } from '../../store/permit-application.store';
@@ -14,7 +14,11 @@ import { ManagementProceduresDefinitionData } from '../management-procedures.int
 })
 export class ManagementProceduresSummaryComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
-  permitTask$ = this.route.data.pipe(pluck<ManagementProceduresDefinitionData, 'permitTask'>('permitTask'));
+  permitTask$ = this.route.data.pipe(
+    map<ManagementProceduresDefinitionData, ManagementProceduresDefinitionData['permitTask']>(
+      (data) => data?.permitTask,
+    ),
+  );
 
   constructor(
     readonly store: PermitApplicationStore<PermitApplicationState>,

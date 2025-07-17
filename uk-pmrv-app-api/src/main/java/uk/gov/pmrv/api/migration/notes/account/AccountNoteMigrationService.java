@@ -1,20 +1,21 @@
 package uk.gov.pmrv.api.migration.notes.account;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.note.NotePayload;
+import uk.gov.netz.api.common.utils.ExceptionUtils;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.AccountNote;
 import uk.gov.pmrv.api.account.repository.AccountNoteRepository;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
-import uk.gov.pmrv.api.common.note.NotePayload;
-import uk.gov.pmrv.api.common.utils.ExceptionUtils;
-import uk.gov.pmrv.api.files.common.domain.FileStatus;
-import uk.gov.pmrv.api.files.notes.domain.FileNote;
-import uk.gov.pmrv.api.files.notes.repository.FileNoteRepository;
+import uk.gov.netz.api.files.common.domain.FileStatus;
+import uk.gov.netz.api.files.notes.domain.FileNote;
+import uk.gov.netz.api.files.notes.repository.FileNoteRepository;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationConstants;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
@@ -29,7 +30,6 @@ import java.util.stream.Collectors;
 
 @Service
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
-@RequiredArgsConstructor
 @Log4j2
 public class AccountNoteMigrationService extends MigrationBaseService {
 
@@ -73,6 +73,15 @@ public class AccountNoteMigrationService extends MigrationBaseService {
     private final AccountNoteRepository accountNoteRepository;
     private final FileNoteRepository fileNoteRepository;
 
+    public AccountNoteMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                       AccountRepository accountRepository,
+                                       AccountNoteRepository accountNoteRepository,
+                                       FileNoteRepository fileNoteRepository) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.accountRepository = accountRepository;
+        this.accountNoteRepository = accountNoteRepository;
+        this.fileNoteRepository = fileNoteRepository;
+    }
 
     @Override
     public String getResource() {

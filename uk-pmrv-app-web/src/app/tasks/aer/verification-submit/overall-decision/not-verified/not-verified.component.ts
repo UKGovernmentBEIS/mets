@@ -48,7 +48,7 @@ export class NotVerifiedComponent {
                   ({
                     type: reason,
                     ...(reason === 'ANOTHER_REASON' ? { otherReason: this.form.get('otherReason').value } : undefined),
-                  } as NotVerifiedReason),
+                  }) as NotVerifiedReason,
               ),
             },
           },

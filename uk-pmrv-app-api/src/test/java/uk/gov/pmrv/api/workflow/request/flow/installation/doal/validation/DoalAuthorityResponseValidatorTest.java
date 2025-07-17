@@ -7,12 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 import uk.gov.pmrv.api.allowance.domain.enums.SubInstallationName;
 import uk.gov.pmrv.api.allowance.validation.AllowanceAllocationValidator;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.validation.DecisionNotificationUsersValidator;
@@ -51,7 +52,7 @@ class DoalAuthorityResponseValidatorTest {
 
     @Test
     void validate() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final Set<PreliminaryAllocation> preliminaryAllocations = Set.of(
                 PreliminaryAllocation.builder()
                         .subInstallationName(SubInstallationName.ALUMINIUM)
@@ -76,22 +77,22 @@ class DoalAuthorityResponseValidatorTest {
                 .build();
 
         when(allowanceAllocationValidator.isValid(preliminaryAllocations)).thenReturn(true);
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser))
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser))
                 .thenReturn(true);
 
         // Invoke
-        validator.validate(requestTask, doalAuthority, decisionNotification, pmrvUser);
+        validator.validate(requestTask, doalAuthority, decisionNotification, appUser);
 
         // Verify
         verify(allowanceAllocationValidator, times(1)).isValid(preliminaryAllocations);
         verify(doalTotalYearAllocationsValidator, times(1)).validate(preliminaryAllocations, totalAllocationsPerYear);
         verify(decisionNotificationUsersValidator, times(1))
-                .areUsersValid(requestTask, decisionNotification, pmrvUser);
+                .areUsersValid(requestTask, decisionNotification, appUser);
     }
 
     @Test
     void validate_not_valid_allocations() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final Set<PreliminaryAllocation> preliminaryAllocations = Set.of(
                 PreliminaryAllocation.builder()
                         .subInstallationName(SubInstallationName.ALUMINIUM)
@@ -124,17 +125,17 @@ class DoalAuthorityResponseValidatorTest {
 
         // Invoke
         final BusinessException businessException = assertThrows(BusinessException.class,
-                () -> validator.validate(requestTask, doalAuthority, decisionNotification, pmrvUser));
+                () -> validator.validate(requestTask, doalAuthority, decisionNotification, appUser));
 
         // Verify
-        assertEquals(ErrorCode.INVALID_DOAL, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_DOAL, businessException.getErrorCode());
         verify(allowanceAllocationValidator, times(1)).isValid(preliminaryAllocations);
         verifyNoInteractions(doalTotalYearAllocationsValidator, decisionNotificationUsersValidator);
     }
 
     @Test
     void validate_not_valid_users() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final DoalAuthority doalAuthority = DoalAuthority.builder()
                 .authorityResponse(DoalRejectAuthorityResponse.builder()
                         .type(DoalAuthorityResponseType.INVALID)
@@ -147,17 +148,17 @@ class DoalAuthorityResponseValidatorTest {
                 .signatory("regulatorUserId")
                 .build();
 
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser))
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser))
                 .thenReturn(false);
 
         // Invoke
         final BusinessException businessException = assertThrows(BusinessException.class,
-                () -> validator.validate(requestTask, doalAuthority, decisionNotification, pmrvUser));
+                () -> validator.validate(requestTask, doalAuthority, decisionNotification, appUser));
 
         // Verify
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
         verify(decisionNotificationUsersValidator, times(1))
-                .areUsersValid(requestTask, decisionNotification, pmrvUser);
+                .areUsersValid(requestTask, decisionNotification, appUser);
         verifyNoInteractions(allowanceAllocationValidator, doalTotalYearAllocationsValidator);
     }
 }

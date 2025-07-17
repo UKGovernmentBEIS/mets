@@ -143,14 +143,14 @@ export type SubCategory =
 
 export const subCategories: Record<SubCategory, string> = {
   CROP_AND_ANIMAL_PRODUCTION_HUNTING_AND_RELATED_SERVICE_ACTIVITIES:
-    '1 Crop and animal production, hunting and related service activities',
-  FORESTRY_AND_LOGGING: '2 Forestry and logging',
-  FISHING_AND_AQUACULTURE: '3 Fishing and aquaculture',
-  MINING_OF_COAL_AND_LIGNITE: '5 Mining of coal and lignite',
-  EXTRACTION_OF_CRUDE_PETROLEUM_AND_NATURAL_GAS: '6 Extraction of crude petroleum and natural gas',
-  MINING_OF_METAL_ORES: '7 Mining of metal ores',
-  OTHER_MINING_AND_QUARRYING: '8 Other mining and quarrying',
-  MINING_SUPPORT_SERVICE_ACTIVITIES: '9 Mining support service activities',
+    '01 Crop and animal production, hunting and related service activities',
+  FORESTRY_AND_LOGGING: '02 Forestry and logging',
+  FISHING_AND_AQUACULTURE: '03 Fishing and aquaculture',
+  MINING_OF_COAL_AND_LIGNITE: '05 Mining of coal and lignite',
+  EXTRACTION_OF_CRUDE_PETROLEUM_AND_NATURAL_GAS: '06 Extraction of crude petroleum and natural gas',
+  MINING_OF_METAL_ORES: '07 Mining of metal ores',
+  OTHER_MINING_AND_QUARRYING: '08 Other mining and quarrying',
+  MINING_SUPPORT_SERVICE_ACTIVITIES: '09 Mining support service activities',
   MANUFACTURE_OF_FOOD_PRODUCTS: '10 Manufacture of food products',
   MANUFACTURE_OF_BEVERAGES: '11 Manufacture of beverages',
   MANUFACTURE_OF_TOBACCO_PRODUCTS: '12 Manufacture of tobacco products',
@@ -659,265 +659,335 @@ export interface InstallationActivityDetails {
 
 export const installationActivities: Record<InstallationActivity, InstallationActivityDetails> = {
   GROWING_OF_NON_PERENNIAL_CROPS: {
-    label: '11 Growing of non-perennial crops',
+    label: '011 Growing of non-perennial crops',
     children: [
       {
         value: '_111_GROWING_OF_CEREAL_EXCEPT_RICE_LEGUMINOUS_CROPS_AND_OIL_SEEDS',
-        label: '111 Growing of cereals (except rice), leguminous crops and oil seeds',
+        label: '0111 Growing of cereals (except rice), leguminous crops and oil seeds',
       },
       {
         value: '_112_GROWING_OF_RICE',
-        label: '112 Growing of rice',
+        label: '0112 Growing of rice',
       },
       {
         value: '_113_GROWING_OF_VEGETABLES_AND_MELONS_ROOTS_AND_TUBERS',
-        label: '113 Growing of vegetables and melons, roots and tubers',
+        label: '0113 Growing of vegetables and melons, roots and tubers',
       },
       {
         value: '_114_GROWING_OF_SUGAR_CANE',
-        label: '114 Growing of sugar cane',
+        label: '0114 Growing of sugar cane',
       },
       {
         value: '_115_GROWING_OF_TOBACCO',
-        label: '115 Growing of tobacco',
+        label: '0115 Growing of tobacco',
       },
       {
         value: '_116_GROWING_OF_FIBRE_CROPS',
-        label: '116 Growing of fibre crops',
+        label: '0116 Growing of fibre crops',
       },
       {
         value: '_119_GROWING_OF_OTHER_NON_PERENNIAL_CROPS',
-        label: '119 Growing of other non-perennial crops',
+        label: '0119 Growing of other non-perennial crops',
       },
     ],
   },
   GROWING_OF_PERENNIAL_CROPS: {
-    label: '12 Growing of perennial crops',
+    label: '012 Growing of perennial crops',
     children: [
       {
         value: '_121_GROWING_OF_GRAPES',
-        label: '121 Growing of grapes',
+        label: '0121 Growing of grapes',
       },
       {
         value: '_122_GROWING_OF_TROPICAL_AND_SUBTROPICAL_FRUITS',
-        label: '122 Growing of tropical and subtropical fruits',
+        label: '0122 Growing of tropical and subtropical fruits',
       },
       {
         value: '_123_GROWING_OF_CITRUS_FRUITS',
-        label: '123 Growing of citrus fruits',
+        label: '0123 Growing of citrus fruits',
       },
       {
         value: '_124_GROWING_OF_POME_FRUITS_AND_STONE_FRUITS',
-        label: '124 Growing of pome fruits and stone fruits',
+        label: '0124 Growing of pome fruits and stone fruits',
       },
       {
         value: '_125_GROWING_OF_OTHER_TREE_AND_BUSH_FRUITS_AND_NUTS',
-        label: '125 Growing of other tree and bush fruits and nuts',
+        label: '0125 Growing of other tree and bush fruits and nuts',
       },
       {
         value: '_126_GROWING_OF_OLEAGINOUS_FRUITS',
-        label: '126 Growing of oleaginous fruits',
+        label: '0126 Growing of oleaginous fruits',
       },
       {
         value: '_127_GROWING_OF_BEVERAGE_CROPS',
-        label: '127 Growing of beverage crops',
+        label: '0127 Growing of beverage crops',
       },
       {
         value: '_128_GROWING_OF_SPICES_AROMATIC_DRUG_AND_PHARMACEUTICAL_CROPS',
-        label: '128 Growing of spices, aromatic, drug and pharmaceutical crops',
+        label: '0128 Growing of spices, aromatic, drug and pharmaceutical crops',
       },
       {
         value: '_129_GROWING_OF_OTHER_PERENNIAL_CROPS',
-        label: '129 Growing of other perennial crops',
+        label: '0129 Growing of other perennial crops',
       },
     ],
   },
   PLANT_PROPAGATION: {
-    value: '_13_PLANT_PROPAGATION',
-    label: '13 Plant propagation',
+    label: '013 Plant propagation',
+    children: [
+      {
+        value: '_13_PLANT_PROPAGATION',
+        label: '0130 Plant propagation',
+      },
+    ],
   },
   ANIMAL_PRODUCTION: {
-    label: '14 Animal production',
+    label: '014 Animal production',
     children: [
       {
         value: '_141_RAISING_OF_DAIRY_CATTLE',
-        label: '141 Raising of dairy cattle',
+        label: '0141 Raising of dairy cattle',
       },
       {
         value: '_142_RAISING_OF_OTHER_CATTLE_AND_BUFFALOES',
-        label: '142 Raising of other cattle and buffaloes',
+        label: '0142 Raising of other cattle and buffaloes',
       },
       {
         value: '_143_RAISING_OF_HORSES_AND_OTHER_EQUINES',
-        label: '143 Raising of horses and other equines',
+        label: '0143 Raising of horses and other equines',
       },
       {
         value: '_144_RAISING_OF_CAMELS_AND_CAMELIDS',
-        label: '144 Raising of camels and camelids',
+        label: '0144 Raising of camels and camelids',
       },
       {
         value: '_145_RAISING_OF_SHEEP_AND_GOATS',
-        label: '145 Raising of sheep and goats',
+        label: '0145 Raising of sheep and goats',
       },
       {
         value: '_146_RAISING_OF_SWINE_PIGS',
-        label: '146 Raising of swine/pigs',
+        label: '0146 Raising of swine/pigs',
       },
       {
         value: '_147_RAISING_OF_POULTRY',
-        label: '147 Raising of poultry',
+        label: '0147 Raising of poultry',
       },
       {
         value: '_149_RAISING_OF_OTHER_ANIMALS',
-        label: '149 Raising of other animals',
+        label: '0149 Raising of other animals',
       },
     ],
   },
   MIXED_FARMING: {
-    value: '_15_MIXED_FARMING',
-    label: '15 Mixed farming',
+    label: '015 Mixed farming',
+    children: [
+      {
+        value: '_15_MIXED_FARMING',
+        label: '0150 Mixed farming',
+      },
+    ],
   },
   SUPPORT_ACTIVITIES_TO_AGRICULTURE_AND_POST_HARVEST_CROP_ACTIVITIES: {
-    label: '16 Support activities to agriculture and post-harvest crop activities',
+    label: '016 Support activities to agriculture and post-harvest crop activities',
     children: [
       {
         value: '_161_SUPPORT_ACTIVITIES_FOR_CROP_PRODUCTION',
-        label: '161 Support activities for crop production',
+        label: '0161 Support activities for crop production',
       },
       {
         value: '_162_SUPPORT_ACTIVITIES_FOR_ANIMAL_PRODUCTION',
-        label: '162 Support activities for animal production',
+        label: '0162 Support activities for animal production',
       },
       {
         value: '_163_POST_HARVEST_CROP_ACTIVITIES',
-        label: '163 Post-harvest crop activities',
+        label: '0163 Post-harvest crop activities',
       },
       {
         value: '_164_SEED_PROCESSING_FOR_PROPAGATION',
-        label: '164 Seed processing for propagation',
+        label: '0164 Seed processing for propagation',
       },
     ],
   },
   HUNTING_TRAPPING_AND_RELATED_SERVICE_ACTIVITIES: {
-    value: '_17_HUNTING_TRAPPING_AND_RELATED_SERVICE_ACTIVITIES',
-    label: '17 Hunting, trapping and related service activities',
+    label: '017 Hunting, trapping and related service activities',
+    children: [
+      {
+        value: '_17_HUNTING_TRAPPING_AND_RELATED_SERVICE_ACTIVITIES',
+        label: '0170 Hunting, trapping and related service activities',
+      },
+    ],
   },
   SILVICULTURE_AND_OTHER_FORESTRY_ACTIVITIES: {
-    value: '_21_SILVICULTURE_AND_OTHER_FORESTRY_ACTIVITIES',
-    label: '21 Silviculture and other forestry activities',
+    label: '021 Silviculture and other forestry activities',
+    children: [
+      {
+        label: '0210 Silviculture and other forestry activities',
+        value: '_21_SILVICULTURE_AND_OTHER_FORESTRY_ACTIVITIES',
+      },
+    ],
   },
   LOGGING: {
-    value: '_22_LOGGING',
-    label: '22 Logging',
+    label: '022 Logging',
+    children: [
+      {
+        label: '0220 Logging',
+        value: '_22_LOGGING',
+      },
+    ],
   },
   GATHERING_OF_WILD_GROWING_NON_WOOD_PRODUCTS: {
-    value: '_23_GATHERING_OF_WILD_GROWING_NON_WOOD_PRODUCTS',
-    label: '23 Gathering of wild growing non-wood products',
+    label: '023 Gathering of wild growing non-wood products',
+    children: [
+      {
+        value: '_23_GATHERING_OF_WILD_GROWING_NON_WOOD_PRODUCTS',
+        label: '0230 Gathering of wild growing non-wood products',
+      },
+    ],
   },
   SUPPORT_SERVICES_TO_FORESTRY: {
-    value: '_24_SUPPORT_SERVICES_TO_FORESTRY',
-    label: '24 Support services to forestry',
+    label: '024 Support services to forestry',
+    children: [
+      {
+        value: '_24_SUPPORT_SERVICES_TO_FORESTRY',
+        label: '0240 Support services to forestry',
+      },
+    ],
   },
   FISHING: {
-    label: '31 Fishing',
+    label: '031 Fishing',
     children: [
       {
         value: '_311_MARINE_FISHING',
-        label: '311 Marine fishing',
+        label: '0311 Marine fishing',
       },
       {
         value: '_312_FRESHWATER_FISHING',
-        label: '312 Freshwater fishing',
+        label: '0312 Freshwater fishing',
       },
     ],
   },
   AQUACULTURE: {
-    label: '32 Aquaculture',
+    label: '032 Aquaculture',
     children: [
       {
         value: '_321_MARINE_AQUACULTURE',
-        label: '321 Marine aquaculture',
+        label: '0321 Marine aquaculture',
       },
       {
         value: '_322_FRESHWATER_AQUACULTURE',
-        label: '322 Freshwater aquaculture',
+        label: '0322 Freshwater aquaculture',
       },
     ],
   },
   MINING_OF_HARD_COAL: {
-    value: '_51_MINING_OF_HARD_COAL',
-    label: '51 Mining of hard coal',
+    label: '051 Mining of hard coal',
+    children: [
+      {
+        value: '_51_MINING_OF_HARD_COAL',
+        label: '0510 Mining of hard coal',
+      },
+    ],
   },
   MINING_OF_LIGNITE: {
-    value: '_52_MINING_OF_LIGNITE',
-    label: '52 Mining of lignite',
+    label: '052 Mining of lignite',
+    children: [
+      {
+        value: '_52_MINING_OF_LIGNITE',
+        label: '0520 Mining of lignite',
+      },
+    ],
   },
   EXTRACTION_OF_CRUDE_PETROLEUM: {
-    value: '_61_EXTRACTION_OF_CRUDE_PETROLEUM',
-    label: '61 Extraction of crude petroleum',
+    label: '061 Extraction of crude petroleum',
+    children: [
+      {
+        value: '_61_EXTRACTION_OF_CRUDE_PETROLEUM',
+        label: '0610 Extraction of crude petroleum',
+      },
+    ],
   },
   EXTRACTION_OF_NATURAL_GAS: {
-    value: '_62_EXTRACTION_OF_NATURAL_GAS',
-    label: '62 Extraction of natural gas',
+    label: '062 Extraction of natural gas',
+    children: [
+      {
+        value: '_62_EXTRACTION_OF_NATURAL_GAS',
+        label: '0620 Extraction of natural gas',
+      },
+    ],
   },
   MINING_OF_IRON_ORES: {
-    value: '_71_MINING_OF_IRON_ORES',
-    label: '71 Mining of iron ores',
+    label: '071 Mining of iron ores',
+    children: [
+      {
+        value: '_71_MINING_OF_IRON_ORES',
+        label: '0710 Mining of iron ores',
+      },
+    ],
   },
   MINING_OF_NON_FERROUS_METAL_ORES: {
-    label: '72 Mining of non-ferrous metal ores',
+    label: '072 Mining of non-ferrous metal ores',
     children: [
       {
         value: '_721_MINING_OF_URANIUM_AND_THORIUM_ORES',
-        label: '721 Mining of uranium and thorium ores',
+        label: '0721 Mining of uranium and thorium ores',
       },
       {
         value: '_729_MINING_OF_OTHER_NON_FERROUS_METAL_ORES',
-        label: '729 Mining of other non-ferrous metal ores',
+        label: '0729 Mining of other non-ferrous metal ores',
       },
     ],
   },
   QUARRYING_OF_STONE_SAND_AND_CLAY: {
-    label: '81 Quarrying of stone, sand and clay',
+    label: '081 Quarrying of stone, sand and clay',
     children: [
       {
         value: '_811_QUARRYING_OF_ORNAMENTAL_AND_BUILDING_STONE_LIMESTONE_GYPSUM_CHALK_AND_SLATE',
-        label: '811 Quarrying of ornamental and building stone, limestone, gypsum, chalk and slate',
+        label: '0811 Quarrying of ornamental and building stone, limestone, gypsum, chalk and slate',
       },
       {
         value: '_812_OPERATION_OF_GRAVEL_AND_SAND_PITS_MINING_OF_CLAYS_AND_KAOLIN',
-        label: '812 Operation of gravel and sand pits; mining of clays and kaolin',
+        label: '0812 Operation of gravel and sand pits; mining of clays and kaolin',
       },
     ],
   },
   MINING_AND_QUARRYING_NEC: {
-    label: '89 Mining and quarrying n.e.c.',
+    label: '089 Mining and quarrying n.e.c.',
     children: [
       {
         value: '_891_MINING_OF_CHEMICAL_AND_FERTILISER_MINERALS',
-        label: '891 Mining of chemical and fertiliser minerals',
+        label: '0891 Mining of chemical and fertiliser minerals',
       },
       {
         value: '_892_EXTRACTION_OF_PEAT',
-        label: '892 Extraction of peat',
+        label: '0892 Extraction of peat',
       },
       {
         value: '_893_EXTRACTION_OF_SALT',
-        label: '893 Extraction of salt',
+        label: '0893 Extraction of salt',
       },
       {
         value: '_899_OTHER_MINING_AND_QUARRYING_N_E_C',
-        label: '899 Other mining and quarrying n.e.c.',
+        label: '0899 Other mining and quarrying n.e.c.',
       },
     ],
   },
   SUPPORT_ACTIVITIES_FOR_PETROLEUM_AND_NATURAL_GAS_EXTRACTION: {
-    value: '_91_SUPPORT_ACTIVITIES_FOR_PETROLEUM_AND_NATURAL_GAS_EXTRACTION',
-    label: '91 Support activities for petroleum and natural gas extraction',
+    label: '091 Support activities for petroleum and natural gas extraction',
+    children: [
+      {
+        value: '_91_SUPPORT_ACTIVITIES_FOR_PETROLEUM_AND_NATURAL_GAS_EXTRACTION',
+        label: '0910 Support activities for petroleum and natural gas extraction',
+      },
+    ],
   },
   SUPPORT_ACTIVITIES_FOR_OTHER_MINING_AND_QUARRYING: {
-    value: '_99_SUPPORT_ACTIVITIES_FOR_OTHER_MINING_AND_QUARRYING',
-    label: '99 Support activities for other mining and quarrying',
+    label: '099 Support activities for other mining and quarrying',
+    children: [
+      {
+        value: '_99_SUPPORT_ACTIVITIES_FOR_OTHER_MINING_AND_QUARRYING',
+        label: '0990 Support activities for other mining and quarrying',
+      },
+    ],
   },
   PROCESSING_AND_PRESERVING_OF_MEAT_AND_PRODUCTION_OF_MEAT_PRODUCTS: {
     label: '101 Processing and preserving of meat and production of meat products',
@@ -937,8 +1007,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   PROCESSING_AND_PRESERVING_OF_FISH_CRUSTACEANS_AND_MOLLUSCS: {
-    value: '_102_PROCESSING_AND_PRESERVING_OF_FISH_CRUSTACEANS_AND_MOLLUSCS',
     label: '102 Processing and preserving of fish, crustaceans and molluscs',
+    children: [
+      {
+        value: '_102_PROCESSING_AND_PRESERVING_OF_FISH_CRUSTACEANS_AND_MOLLUSCS',
+        label: '1020 Processing and preserving of fish, crustaceans and molluscs',
+      },
+    ],
   },
   PROCESSING_AND_PRESERVING_OF_FRUIT_AND_VEGETABLES: {
     label: '103 Processing and preserving of fruit and vegetables',
@@ -1093,20 +1168,40 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_TOBACCO_PRODUCTS: {
-    value: '_120_MANUFACTURE_OF_TOBACCO_PRODUCTS',
     label: '120 Manufacture of tobacco products',
+    children: [
+      {
+        label: '1200 Manufacture of tobacco products',
+        value: '_120_MANUFACTURE_OF_TOBACCO_PRODUCTS',
+      },
+    ],
   },
   PREPARATION_AND_SPINNING_OF_TEXTILE_FIBRES: {
-    value: '_131_PREPARATION_AND_SPINNING_OF_TEXTILE_FIBRES',
     label: '131 Preparation and spinning of textile fibres',
+    children: [
+      {
+        value: '_131_PREPARATION_AND_SPINNING_OF_TEXTILE_FIBRES',
+        label: '1310 Preparation and spinning of textile fibres',
+      },
+    ],
   },
   WEAVING_OF_TEXTILES: {
-    value: '_132_WEAVING_OF_TEXTILES',
     label: '132 Weaving of textiles',
+    children: [
+      {
+        value: '_132_WEAVING_OF_TEXTILES',
+        label: '1320 Weaving of textiles',
+      },
+    ],
   },
   FINISHING_OF_TEXTILES: {
-    value: '_133_FINISHING_OF_TEXTILES',
     label: '133 Finishing of textiles',
+    children: [
+      {
+        value: '_133_FINISHING_OF_TEXTILES',
+        label: '1330 Finishing of textiles',
+      },
+    ],
   },
   MANUFACTURE_OF_OTHER_TEXTILES: {
     label: '139 Manufacture of other textiles',
@@ -1198,12 +1293,22 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_FOOTWEAR: {
-    value: '_152_MANUFACTURE_OF_FOOTWEAR',
     label: '152 Manufacture of footwear',
+    children: [
+      {
+        value: '_152_MANUFACTURE_OF_FOOTWEAR',
+        label: '1520 Manufacture of footwear',
+      },
+    ],
   },
   SAWMILLING_AND_PLANING_OF_WOOD: {
-    value: '_161_SAWMILLING_AND_PLANING_OF_WOOD',
     label: '161 Sawmilling and planing of wood',
+    children: [
+      {
+        value: '_161_SAWMILLING_AND_PLANING_OF_WOOD',
+        label: '1610 Sawmilling and planing of wood',
+      },
+    ],
   },
   MANUFACTURE_OF_PRODUCTS_OF_WOOD_CORK_STRAW_AND_PLAITING_MATERIALS: {
     label: '162 Manufacture of products of wood, cork, straw and plaiting materials',
@@ -1292,16 +1397,31 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   REPRODUCTION_OF_RECORDED_MEDIA: {
-    value: '_182_REPRODUCTION_OF_RECORDED_MEDIA',
     label: '182 Reproduction of recorded media',
+    children: [
+      {
+        value: '_182_REPRODUCTION_OF_RECORDED_MEDIA',
+        label: '1820 Reproduction of recorded media',
+      },
+    ],
   },
   MANUFACTURE_OF_COKE_OVEN_PRODUCTS: {
-    value: '_191_MANUFACTURE_OF_COKE_OVEN_PRODUCTS',
     label: '191 Manufacture of coke oven products',
+    children: [
+      {
+        value: '_191_MANUFACTURE_OF_COKE_OVEN_PRODUCTS',
+        label: '1910 Manufacture of coke oven products',
+      },
+    ],
   },
   MANUFACTURE_OF_REFINED_PETROLEUM_PRODUCTS: {
-    value: '_192_MANUFACTURE_OF_REFINED_PETROLEUM_PRODUCTS',
     label: '192 Manufacture of refined petroleum products',
+    children: [
+      {
+        value: '_192_MANUFACTURE_OF_REFINED_PETROLEUM_PRODUCTS',
+        label: '1920 Manufacture of refined petroleum products',
+      },
+    ],
   },
   MANUFACTURE_OF_BASIC_CHEMICALS_FERTILISERS_AND_NITROGEN_COMPOUNDS_PLASTICS_AND_SYNTHETIC_RUBBER_IN_PRIMARY_FORMS: {
     label:
@@ -1338,12 +1458,22 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_PESTICIDES_AND_OTHER_AGROCHEMICAL_PRODUCTS: {
-    value: '_202_MANUFACTURE_OF_PESTICIDES_AND_OTHER_AGROCHEMICAL_PRODUCTS',
     label: '202 Manufacture of pesticides and other agrochemical products',
+    children: [
+      {
+        value: '_202_MANUFACTURE_OF_PESTICIDES_AND_OTHER_AGROCHEMICAL_PRODUCTS',
+        label: '2020 Manufacture of pesticides and other agrochemical products',
+      },
+    ],
   },
   MANUFACTURE_OF_PAINTS_VARNISHES_AND_SIMILAR_COATINGS_PRINTING_INK_AND_MASTICS: {
-    value: '_203_MANUFACTURE_OF_PAINTS_VARNISHES_AND_SIMILAR_COATINGS_PRINTING_INK_AND_MASTICS',
     label: '203 Manufacture of paints, varnishes and similar coatings, printing ink and mastics',
+    children: [
+      {
+        value: '_203_MANUFACTURE_OF_PAINTS_VARNISHES_AND_SIMILAR_COATINGS_PRINTING_INK_AND_MASTICS',
+        label: '2030 Manufacture of paints, varnishes and similar coatings, printing ink and mastics',
+      },
+    ],
   },
   MANUFACTURE_OF_SOAP_AND_DETERGENTS_CLEANING_AND_POLISHING_PREPARATIONS_PERFUMES_AND_TOILET_PREPARATIONS: {
     label:
@@ -1381,16 +1511,31 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_MAN_MADE_FIBRES: {
-    value: '_206_MANUFACTURE_OF_MAN_MADE_FIBRES',
     label: '206 Manufacture of man-made fibres',
+    children: [
+      {
+        value: '_206_MANUFACTURE_OF_MAN_MADE_FIBRES',
+        label: '2060 Manufacture of man-made fibres',
+      },
+    ],
   },
   MANUFACTURE_OF_BASIC_PHARMACEUTICAL_PRODUCTS: {
-    value: '_211_MANUFACTURE_OF_BASIC_PHARMACEUTICAL_PRODUCTS',
     label: '211 Manufacture of basic pharmaceutical products',
+    children: [
+      {
+        value: '_211_MANUFACTURE_OF_BASIC_PHARMACEUTICAL_PRODUCTS',
+        label: '2110 Manufacture of basic pharmaceutical products',
+      },
+    ],
   },
   MANUFACTURE_OF_PHARMACEUTICAL_PREPARATIONS: {
-    value: '_212_MANUFACTURE_OF_PHARMACEUTICAL_PREPARATIONS',
     label: '212 Manufacture of pharmaceutical preparations',
+    children: [
+      {
+        value: '_212_MANUFACTURE_OF_PHARMACEUTICAL_PREPARATIONS',
+        label: '212 Manufacture of pharmaceutical preparations',
+      },
+    ],
   },
   MANUFACTURE_OF_RUBBER_PRODUCTS: {
     label: '221 Manufacture of rubber products',
@@ -1452,8 +1597,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_REFRACTORY_PRODUCTS: {
-    value: '_232_MANUFACTURE_OF_REFRACTORY_PRODUCTS',
     label: '232 Manufacture of refractory products',
+    children: [
+      {
+        value: '_232_MANUFACTURE_OF_REFRACTORY_PRODUCTS',
+        label: '2320 Manufacture of refractory products',
+      },
+    ],
   },
   MANUFACTURE_OF_CLAY_BUILDING_MATERIALS: {
     label: '233 Manufacture of clay building materials',
@@ -1536,8 +1686,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   CUTTING_SHAPING_AND_FINISHING_OF_STONE: {
-    value: '_237_CUTTING_SHAPING_AND_FINISHING_OF_STONE',
     label: '237 Cutting, shaping and finishing of stone',
+    children: [
+      {
+        value: '_237_CUTTING_SHAPING_AND_FINISHING_OF_STONE',
+        label: '2370 Cutting, shaping and finishing of stone',
+      },
+    ],
   },
   MANUFACTURE_OF_ABRASIVE_PRODUCTS_AND_NON_METALLIC_MINERAL_PRODUCTS_NEC: {
     label: '239 Manufacture of abrasive products and non-metallic mineral products n.e.c.',
@@ -1553,12 +1708,22 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_BASIC_IRON_AND_STEEL_AND_OF_FERRO_ALLOYS: {
-    value: '_241_MANUFACTURE_OF_BASIC_IRON_AND_STEEL_AND_OF_FERRO_ALLOYS',
     label: '241 Manufacture of basic iron and steel and of ferro-alloys',
+    children: [
+      {
+        value: '_241_MANUFACTURE_OF_BASIC_IRON_AND_STEEL_AND_OF_FERRO_ALLOYS',
+        label: '2410 Manufacture of basic iron and steel and of ferro-alloys',
+      },
+    ],
   },
   MANUFACTURE_OF_TUBES_PIPES_HOLLOW_PROFILES_AND_RELATED_FITTINGS_OF_STEEL: {
-    value: '_242_MANUFACTURE_OF_TUBES_PIPES_HOLLOW_PROFILES_AND_RELATED_FITTINGS_OF_STEEL',
     label: '242 Manufacture of tubes, pipes, hollow profiles and related fittings, of steel',
+    children: [
+      {
+        value: '_242_MANUFACTURE_OF_TUBES_PIPES_HOLLOW_PROFILES_AND_RELATED_FITTINGS_OF_STEEL',
+        label: '2420 Manufacture of tubes, pipes, hollow profiles and related fittings, of steel',
+      },
+    ],
   },
   MANUFACTURE_OF_OTHER_PRODUCTS_OF_FIRST_PROCESSING_OF_STEEL: {
     label: '243 Manufacture of other products of first processing of steel',
@@ -1658,16 +1823,31 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_STEAM_GENERATORS_EXCEPT_CENTRAL_HEATING_HOT_WATER_BOILERS: {
-    value: '_253_MANUFACTURE_OF_STEAM_GENERATORS_EXCEPT_CENTRAL_HEATING_HOT_WATER_BOILERS',
     label: '253 Manufacture of steam generators, except central heating hot water boilers',
+    children: [
+      {
+        value: '_253_MANUFACTURE_OF_STEAM_GENERATORS_EXCEPT_CENTRAL_HEATING_HOT_WATER_BOILERS',
+        label: '2530 Manufacture of steam generators, except central heating hot water boilers',
+      },
+    ],
   },
   MANUFACTURE_OF_WEAPONS_AND_AMMUNITION: {
-    value: '_254_MANUFACTURE_OF_WEAPONS_AND_AMMUNITION',
     label: '254 Manufacture of weapons and ammunition',
+    children: [
+      {
+        value: '_254_MANUFACTURE_OF_WEAPONS_AND_AMMUNITION',
+        label: '2540 Manufacture of weapons and ammunition',
+      },
+    ],
   },
   FORGING_PRESSING_STAMPING_AND_ROLL_FORMING_OF_METAL_POWDER_METALLURGY: {
-    value: '_255_FORGING_PRESSING_STAMPING_AND_ROLL_FORMING_OF_METAL_POWDER_METALLURGY',
     label: '255 Forging, pressing, stamping and roll-forming of metal; powder metallurgy',
+    children: [
+      {
+        value: '_255_FORGING_PRESSING_STAMPING_AND_ROLL_FORMING_OF_METAL_POWDER_METALLURGY',
+        label: '2550 Forging, pressing, stamping and roll-forming of metal; powder metallurgy',
+      },
+    ],
   },
   TREATMENT_AND_COATING_OF_METALS_MACHINING: {
     label: '256 Treatment and coating of metals; machining',
@@ -1738,16 +1918,31 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_COMPUTERS_AND_PERIPHERAL_EQUIPMENT: {
-    value: '_262_MANUFACTURE_OF_COMPUTERS_AND_PERIPHERAL_EQUIPMENT',
     label: '262 Manufacture of computers and peripheral equipment',
+    children: [
+      {
+        value: '_262_MANUFACTURE_OF_COMPUTERS_AND_PERIPHERAL_EQUIPMENT',
+        label: '2620 Manufacture of computers and peripheral equipment',
+      },
+    ],
   },
   MANUFACTURE_OF_COMMUNICATION_EQUIPMENT: {
-    value: '_263_MANUFACTURE_OF_COMMUNICATION_EQUIPMENT',
     label: '263 Manufacture of communication equipment',
+    children: [
+      {
+        value: '_263_MANUFACTURE_OF_COMMUNICATION_EQUIPMENT',
+        label: '2630 Manufacture of communication equipment',
+      },
+    ],
   },
   MANUFACTURE_OF_CONSUMER_ELECTRONICS: {
-    value: '_264_MANUFACTURE_OF_CONSUMER_ELECTRONICS',
     label: '264 Manufacture of consumer electronics',
+    children: [
+      {
+        value: '_264_MANUFACTURE_OF_CONSUMER_ELECTRONICS',
+        label: '2640 Manufacture of consumer electronics',
+      },
+    ],
   },
   MANUFACTURE_OF_INSTRUMENTS_AND_APPLIANCES_FOR_MEASURING_TESTING_AND_NAVIGATION_WATCHES_AND_CLOCKS: {
     label: '265 Manufacture of instruments and appliances for measuring, testing and navigation; watches and clocks',
@@ -1763,16 +1958,31 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_IRRADIATION_ELECTROMEDICAL_AND_ELECTROTHERAPEUTIC_EQUIPMENT: {
-    value: '_266_MANUFACTURE_OF_IRRADIATION_ELECTROMEDICAL_AND_ELECTROTHERAPEUTIC_EQUIPMENT',
     label: '266 Manufacture of irradiation, electromedical and electrotherapeutic equipment',
+    children: [
+      {
+        value: '_266_MANUFACTURE_OF_IRRADIATION_ELECTROMEDICAL_AND_ELECTROTHERAPEUTIC_EQUIPMENT',
+        label: '2660 Manufacture of irradiation, electromedical and electrotherapeutic equipment',
+      },
+    ],
   },
   MANUFACTURE_OF_OPTICAL_INSTRUMENTS_AND_PHOTOGRAPHIC_EQUIPMENT: {
-    value: '_267_MANUFACTURE_OF_OPTICAL_INSTRUMENTS_AND_PHOTOGRAPHIC_EQUIPMENT',
     label: '267 Manufacture of optical instruments and photographic equipment',
+    children: [
+      {
+        value: '_267_MANUFACTURE_OF_OPTICAL_INSTRUMENTS_AND_PHOTOGRAPHIC_EQUIPMENT',
+        label: '2670 Manufacture of optical instruments and photographic equipment',
+      },
+    ],
   },
   MANUFACTURE_OF_MAGNETIC_AND_OPTICAL_MEDIA: {
-    value: '_268_MANUFACTURE_OF_MAGNETIC_AND_OPTICAL_MEDIA',
     label: '268 Manufacture of magnetic and optical media',
+    children: [
+      {
+        value: '_268_MANUFACTURE_OF_MAGNETIC_AND_OPTICAL_MEDIA',
+        label: '2680 Manufacture of magnetic and optical media',
+      },
+    ],
   },
   MANUFACTURE_OF_ELECTRIC_MOTORS_GENERATORS_TRANSFORMERS_AND_ELECTRICITY_DISTRIBUTION_AND_CONTROL_APPARATUS: {
     label:
@@ -1789,8 +1999,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_BATTERIES_AND_ACCUMULATORS: {
-    value: '_272_MANUFACTURE_OF_BATTERIES_AND_ACCUMULATORS',
     label: '272 Manufacture of batteries and accumulators',
+    children: [
+      {
+        value: '_272_MANUFACTURE_OF_BATTERIES_AND_ACCUMULATORS',
+        label: '2720 Manufacture of batteries and accumulators',
+      },
+    ],
   },
   MANUFACTURE_OF_WIRING_AND_WIRING_DEVICES: {
     label: '273 Manufacture of wiring and wiring devices',
@@ -1810,8 +2025,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_ELECTRIC_LIGHTING_EQUIPMENT: {
-    value: '_274_MANUFACTURE_OF_ELECTRIC_LIGHTING_EQUIPMENT',
     label: '274 Manufacture of electric lighting equipment',
+    children: [
+      {
+        value: '_274_MANUFACTURE_OF_ELECTRIC_LIGHTING_EQUIPMENT',
+        label: '2740 Manufacture of electric lighting equipment',
+      },
+    ],
   },
   MANUFACTURE_OF_DOMESTIC_APPLIANCES: {
     label: '275 Manufacture of domestic appliances',
@@ -1827,8 +2047,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_OTHER_ELECTRICAL_EQUIPMENT: {
-    value: '_279_MANUFACTURE_OF_OTHER_ELECTRICAL_EQUIPMENT',
     label: '279 Manufacture of other electrical equipment',
+    children: [
+      {
+        value: '_279_MANUFACTURE_OF_OTHER_ELECTRICAL_EQUIPMENT',
+        label: '2790 Manufacture of other electrical equipment',
+      },
+    ],
   },
   MANUFACTURE_OF_GENERAL_PURPOSE_MACHINERY: {
     label: '281 Manufacture of general-purpose machinery',
@@ -1885,8 +2110,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_AGRICULTURAL_AND_FORESTRY_MACHINERY: {
-    value: '_283_MANUFACTURE_OF_AGRICULTURAL_AND_FORESTRY_MACHINERY',
     label: '283 Manufacture of agricultural and forestry machinery',
+    children: [
+      {
+        value: '_283_MANUFACTURE_OF_AGRICULTURAL_AND_FORESTRY_MACHINERY',
+        label: '2830 Manufacture of agricultural and forestry machinery',
+      },
+    ],
   },
   MANUFACTURE_OF_METAL_FORMING_MACHINERY_AND_MACHINE_TOOLS: {
     label: '284 Manufacture of metal forming machinery and machine tools',
@@ -1935,12 +2165,22 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_MOTOR_VEHICLES: {
-    value: '_291_MANUFACTURE_OF_MOTOR_VEHICLES',
     label: '291 Manufacture of motor vehicles',
+    children: [
+      {
+        value: '_291_MANUFACTURE_OF_MOTOR_VEHICLES',
+        label: '2910 Manufacture of motor vehicles',
+      },
+    ],
   },
   'MANUFACTURE_OF_BODIES (COACHWORK) FOR_MOTOR_VEHICLES_MANUFACTURE_OF_TRAILERS_AND_SEMI_TRAILERS': {
-    value: '_292_MANUFACTURE_OF_BODIES_COACHWORK_FOR_MOTOR_VEHICLES_MANUFACTURE_TRAILERS_AND_SEMI_TRAILERS',
     label: '292 Manufacture of bodies (coachwork) for motor vehicles; manufacture of trailers and semi-trailers',
+    children: [
+      {
+        value: '_292_MANUFACTURE_OF_BODIES_COACHWORK_FOR_MOTOR_VEHICLES_MANUFACTURE_TRAILERS_AND_SEMI_TRAILERS',
+        label: '2920 Manufacture of bodies (coachwork) for motor vehicles; manufacture of trailers and semi-trailers',
+      },
+    ],
   },
   MANUFACTURE_OF_PARTS_AND_ACCESSORIES_FOR_MOTOR_VEHICLES: {
     label: '293 Manufacture of parts and accessories for motor vehicles',
@@ -1969,16 +2209,31 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_RAILWAY_LOCOMOTIVES_AND_ROLLING_STOCK: {
-    value: '_302_MANUFACTURE_OF_RAILWAY_LOCOMOTIVES_AND_ROLLING_STOCK',
     label: '302 Manufacture of railway locomotives and rolling stock',
+    children: [
+      {
+        value: '_302_MANUFACTURE_OF_RAILWAY_LOCOMOTIVES_AND_ROLLING_STOCK',
+        label: '3020 Manufacture of railway locomotives and rolling stock',
+      },
+    ],
   },
   MANUFACTURE_OF_AIR_AND_SPACECRAFT_AND_RELATED_MACHINERY: {
-    value: '_303_MANUFACTURE_OF_AIR_AND_SPACECRAFT_AND_RELATED_MACHINERY',
     label: '303 Manufacture of air and spacecraft and related machinery',
+    children: [
+      {
+        value: '_303_MANUFACTURE_OF_AIR_AND_SPACECRAFT_AND_RELATED_MACHINERY',
+        label: '3030 Manufacture of air and spacecraft and related machinery',
+      },
+    ],
   },
   MANUFACTURE_OF_MILITARY_FIGHTING_VEHICLES: {
-    value: '_304_MANUFACTURE_OF_MILITARY_FIGHTING_VEHICLES',
     label: '304 Manufacture of military fighting vehicles',
+    children: [
+      {
+        value: '_304_MANUFACTURE_OF_MILITARY_FIGHTING_VEHICLES',
+        label: '3040 Manufacture of military fighting vehicles',
+      },
+    ],
   },
   MANUFACTURE_OF_TRANSPORT_EQUIPMENT_NEC: {
     label: '309 Manufacture of transport equipment n.e.c.',
@@ -2036,20 +2291,40 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MANUFACTURE_OF_MUSICAL_INSTRUMENTS: {
-    value: '_322_MANUFACTURE_OF_MUSICAL_INSTRUMENTS',
     label: '322 Manufacture of musical instruments',
+    children: [
+      {
+        value: '_322_MANUFACTURE_OF_MUSICAL_INSTRUMENTS',
+        label: '3220 Manufacture of musical instruments',
+      },
+    ],
   },
   MANUFACTURE_OF_SPORTS_GOODS: {
-    value: '_323_MANUFACTURE_OF_SPORTS_GOODS',
     label: '323 Manufacture of sports goods',
+    children: [
+      {
+        value: '_323_MANUFACTURE_OF_SPORTS_GOODS',
+        label: '3230 Manufacture of sports goods',
+      },
+    ],
   },
   MANUFACTURE_OF_GAMES_AND_TOYS: {
-    value: '_324_MANUFACTURE_OF_GAMES_AND_TOYS',
     label: '324 Manufacture of games and toys',
+    children: [
+      {
+        value: '_324_MANUFACTURE_OF_GAMES_AND_TOYS',
+        label: '3240 Manufacture of games and toys',
+      },
+    ],
   },
   MANUFACTURE_OF_MEDICAL_AND_DENTAL_INSTRUMENTS_AND_SUPPLIES: {
-    value: '_325_MANUFACTURE_OF_MEDICAL_AND_DENTAL_INSTRUMENTS_AND_SUPPLIES',
     label: '325 Manufacture of medical and dental instruments and supplies',
+    children: [
+      {
+        value: '_325_MANUFACTURE_OF_MEDICAL_AND_DENTAL_INSTRUMENTS_AND_SUPPLIES',
+        label: '3250 Manufacture of medical and dental instruments and supplies',
+      },
+    ],
   },
   MANUFACTURING_NEC: {
     label: '329 Manufacturing n.e.c.',
@@ -2102,8 +2377,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   INSTALLATION_OF_INDUSTRIAL_MACHINERY_AND_EQUIPMENT: {
-    value: '_332_INSTALLATION_OF_INDUSTRIAL_MACHINERY_AND_EQUIPMENT',
     label: '332 Installation of industrial machinery and equipment',
+    children: [
+      {
+        value: '_332_INSTALLATION_OF_INDUSTRIAL_MACHINERY_AND_EQUIPMENT',
+        label: '3320 Installation of industrial machinery and equipment',
+      },
+    ],
   },
   ELECTRIC_POWER_GENERATION_TRANSMISSION_AND_DISTRIBUTION: {
     label: '351 Electric power generation, transmission and distribution',
@@ -2144,16 +2424,31 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   STEAM_AND_AIR_CONDITIONING_SUPPLY: {
-    value: '_353_TEAM_AND_AIR_CONDITIONING_SUPPLY',
     label: '353 Steam and air conditioning supply',
+    children: [
+      {
+        value: '_353_TEAM_AND_AIR_CONDITIONING_SUPPLY',
+        label: '3530 Steam and air conditioning supply',
+      },
+    ],
   },
   WATER_COLLECTION_TREATMENT_AND_SUPPLY: {
-    value: '_360_WATER_COLLECTION_TREATMENT_AND_SUPPLY',
     label: '360 Water collection, treatment and supply',
+    children: [
+      {
+        value: '_360_WATER_COLLECTION_TREATMENT_AND_SUPPLY',
+        label: '3600 Water collection, treatment and supply',
+      },
+    ],
   },
   SEWERAGE: {
-    value: '_370_SEWERAGE',
     label: '370 Sewerage',
+    children: [
+      {
+        value: '_370_SEWERAGE',
+        label: '3700 Sewerage',
+      },
+    ],
   },
   WASTE_COLLECTION: {
     label: '381 Waste collection',
@@ -2195,16 +2490,31 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   REMEDIATION_ACTIVITIES_AND_OTHER_WASTE_MANAGEMENT_SERVICES: {
-    value: '_390_REMEDIATION_ACTIVITIES_AND_OTHER_WASTE_MANAGEMENT_SERVICES',
     label: '390 Remediation activities and other waste management services',
+    children: [
+      {
+        value: '_390_REMEDIATION_ACTIVITIES_AND_OTHER_WASTE_MANAGEMENT_SERVICES',
+        label: '3900 Remediation activities and other waste management services',
+      },
+    ],
   },
   DEVELOPMENT_OF_BUILDING_PROJECTS: {
-    value: '_411_DEVELOPMENT_OF_BUILDING_PROJECTS',
     label: '411 Development of building projects',
+    children: [
+      {
+        value: '_411_DEVELOPMENT_OF_BUILDING_PROJECTS',
+        label: '4110 Development of building projects',
+      },
+    ],
   },
   CONSTRUCTION_OF_RESIDENTIAL_AND_NON_RESIDENTIAL_BUILDINGS: {
-    value: '_412_CONSTRUCTION_OF_RESIDENTIAL_AND_NON_RESIDENTIAL_BUILDINGS',
     label: '412 Construction of residential and non-residential buildings',
+    children: [
+      {
+        value: '_412_CONSTRUCTION_OF_RESIDENTIAL_AND_NON_RESIDENTIAL_BUILDINGS',
+        label: '4120 Construction of residential and non-residential buildings',
+      },
+    ],
   },
   CONSTRUCTION_OF_ROADS_AND_RAILWAYS: {
     label: '421 Construction of roads and railways',
@@ -2335,8 +2645,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MAINTENANCE_AND_REPAIR_OF_MOTOR_VEHICLES: {
-    value: '_452_MAINTENANCE_AND_REPAIR_OF_MOTOR_VEHICLES',
     label: '452 Maintenance and repair of motor vehicles',
+    children: [
+      {
+        value: '_452_MAINTENANCE_AND_REPAIR_OF_MOTOR_VEHICLES',
+        label: '4520 Maintenance and repair of motor vehicles',
+      },
+    ],
   },
   SALE_OF_MOTOR_VEHICLE_PARTS_AND_ACCESSORIES: {
     label: '453 Sale of motor vehicle parts and accessories',
@@ -2352,8 +2667,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   SALE_MAINTENANCE_AND_REPAIR_OF_MOTORCYCLES_AND_RELATED_PARTS_AND_ACCESSORIES: {
-    value: '_454_SALE_MAINTENANCE_AND_REPAIR_OF_MOTORCYCLES_AND_RELATED_PARTS_AND_ACCESSORIES',
     label: '454 Sale, maintenance and repair of motorcycles and related parts and accessories',
+    children: [
+      {
+        value: '_454_SALE_MAINTENANCE_AND_REPAIR_OF_MOTORCYCLES_AND_RELATED_PARTS_AND_ACCESSORIES',
+        label: '4540 Sale, maintenance and repair of motorcycles and related parts and accessories',
+      },
+    ],
   },
   WHOLESALE_ON_AFEE_OR_CONTRACT_BASIS: {
     label: '461 Wholesale on a fee or contract basis',
@@ -2581,8 +2901,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   NON_SPECIALISED_WHOLESALE_TRADE: {
-    value: '_469_NON_SPECIALISED_WHOLESALE_TRADE',
     label: '469 Non-specialised wholesale trade',
+    children: [
+      {
+        value: '_469_NON_SPECIALISED_WHOLESALE_TRADE',
+        label: '4690 Non-specialised wholesale trade',
+      },
+    ],
   },
   RETAIL_SALE_IN_NON_SPECIALISED_STORES: {
     label: '471 Retail sale in non-specialised stores',
@@ -2631,8 +2956,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   RETAIL_SALE_OF_AUTOMOTIVE_FUEL_IN_SPECIALISED_STORES: {
-    value: '_473_RETAIL_SALE_OF_AUTOMOTIVE_FUEL_IN_SPECIALISED_STORES',
     label: '473 Retail sale of automotive fuel in specialised stores',
+    children: [
+      {
+        value: '_473_RETAIL_SALE_OF_AUTOMOTIVE_FUEL_IN_SPECIALISED_STORES',
+        label: '4730 Retail sale of automotive fuel in specialised stores',
+      },
+    ],
   },
   RETAIL_SALE_OF_INFORMATION_AND_COMMUNICATION_EQUIPMENT_IN_SPECIALISED_STORES: {
     label: '474 Retail sale of information and communication equipment in specialised stores',
@@ -2774,12 +3104,22 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   PASSENGER_RAIL_TRANSPORT_INTERURBAN: {
-    value: '_491_PASSENGER_RAIL_TRANSPORT_INTERURBAN',
     label: '491 Passenger rail transport, interurban',
+    children: [
+      {
+        value: '_491_PASSENGER_RAIL_TRANSPORT_INTERURBAN',
+        label: '4910 Passenger rail transport, interurban',
+      },
+    ],
   },
   FREIGHT_RAIL_TRANSPORT: {
-    value: '_492_FREIGHT_RAIL_TRANSPORT',
     label: '492 Freight rail transport',
+    children: [
+      {
+        value: '_492_FREIGHT_RAIL_TRANSPORT',
+        label: '4920 Freight rail transport',
+      },
+    ],
   },
   OTHER_PASSENGER_LAND_TRANSPORT: {
     label: '493 Other passenger land transport',
@@ -2812,28 +3152,58 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   TRANSPORT_VIA_PIPELINE: {
-    value: '_495_TRANSPORT_VIA_PIPELINE',
     label: '495 Transport via pipeline',
+    children: [
+      {
+        value: '_495_TRANSPORT_VIA_PIPELINE',
+        label: '4950 Transport via pipeline',
+      },
+    ],
   },
   SEA_AND_COASTAL_PASSENGER_WATER_TRANSPORT: {
-    value: '_501_SEA_AND_COASTAL_PASSENGER_WATER_TRANSPORT',
     label: '501 Sea and coastal passenger water transport',
+    children: [
+      {
+        value: '_501_SEA_AND_COASTAL_PASSENGER_WATER_TRANSPORT',
+        label: '501 Sea and coastal passenger water transport',
+      },
+    ],
   },
   SEA_AND_COASTAL_FREIGHT_WATER_TRANSPORT: {
-    value: '_502_SEA_AND_COASTAL_FREIGHT_WATER_TRANSPORT',
     label: '502 Sea and coastal freight water transport',
+    children: [
+      {
+        value: '_502_SEA_AND_COASTAL_FREIGHT_WATER_TRANSPORT',
+        label: '5020 Sea and coastal freight water transport',
+      },
+    ],
   },
   INLAND_PASSENGER_WATER_TRANSPORT: {
-    value: '_503_INLAND_PASSENGER_WATER_TRANSPORT',
     label: '503 Inland passenger water transport',
+    children: [
+      {
+        value: '_503_INLAND_PASSENGER_WATER_TRANSPORT',
+        label: '5030 Inland passenger water transport',
+      },
+    ],
   },
   INLAND_FREIGHT_WATER_TRANSPORT: {
-    value: '_504_INLAND_FREIGHT_WATER_TRANSPORT',
     label: '504 Inland freight water transport',
+    children: [
+      {
+        value: '_504_INLAND_FREIGHT_WATER_TRANSPORT',
+        label: '5040 Inland freight water transport',
+      },
+    ],
   },
   PASSENGER_AIR_TRANSPORT: {
-    value: '_511_PASSENGER_AIR_TRANSPORT',
     label: '511 Passenger air transport',
+    children: [
+      {
+        value: '_511_PASSENGER_AIR_TRANSPORT',
+        label: '5110 Passenger air transport',
+      },
+    ],
   },
   FREIGHT_AIR_TRANSPORT_AND_SPACE_TRANSPORT: {
     label: '512 Freight air transport and space transport',
@@ -2849,8 +3219,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   WAREHOUSING_AND_STORAGE: {
-    value: '_521_WAREHOUSING_AND_STORAGE',
     label: '521 Warehousing and storage',
+    children: [
+      {
+        value: '_521_WAREHOUSING_AND_STORAGE',
+        label: '5210 Warehousing and storage',
+      },
+    ],
   },
   SUPPORT_ACTIVITIES_FOR_TRANSPORTATION: {
     label: '522 Support activities for transportation',
@@ -2878,32 +3253,67 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   POSTAL_ACTIVITIES_UNDER_UNIVERSAL_SERVICE_OBLIGATION: {
-    value: '_531_POSTAL_ACTIVITIES_UNDER_UNIVERSAL_SERVICE_OBLIGATION',
     label: '531 Postal activities under universal service obligation',
+    children: [
+      {
+        value: '_531_POSTAL_ACTIVITIES_UNDER_UNIVERSAL_SERVICE_OBLIGATION',
+        label: '5310 Postal activities under universal service obligation',
+      },
+    ],
   },
   OTHER_POSTAL_AND_COURIER_ACTIVITIES: {
-    value: '_532_OTHER_POSTAL_AND_COURIER_ACTIVITIES',
     label: '532 Other postal and courier activities',
+    children: [
+      {
+        value: '_532_OTHER_POSTAL_AND_COURIER_ACTIVITIES',
+        label: '5320 Other postal and courier activities',
+      },
+    ],
   },
   HOTELS_AND_SIMILAR_ACCOMMODATION: {
-    value: '_551_HOTELS_AND_SIMILAR_ACCOMMODATION',
     label: '551 Hotels and similar accommodation',
+    children: [
+      {
+        value: '_551_HOTELS_AND_SIMILAR_ACCOMMODATION',
+        label: '5510 Hotels and similar accommodation',
+      },
+    ],
   },
   HOLIDAY_AND_OTHER_SHORT_STAY_ACCOMMODATION: {
-    value: '_552_HOLIDAY_AND_OTHER_SHORT_STAY_ACCOMMODATION',
     label: '552 Holiday and other short-stay accommodation',
+    children: [
+      {
+        value: '_552_HOLIDAY_AND_OTHER_SHORT_STAY_ACCOMMODATION',
+        label: '552 Holiday and other short-stay accommodation',
+      },
+    ],
   },
   CAMPING_GROUNDS_RECREATIONAL_VEHICLE_PARKS_AND_TRAILER_PARKS: {
-    value: '_553_CAMPING_GROUNDS_RECREATIONAL_VEHICLE_PARKS_AND_TRAILER_PARKS',
     label: '553 Camping grounds, recreational vehicle parks and trailer parks',
+    children: [
+      {
+        value: '_553_CAMPING_GROUNDS_RECREATIONAL_VEHICLE_PARKS_AND_TRAILER_PARKS',
+        label: '5530 Camping grounds, recreational vehicle parks and trailer parks',
+      },
+    ],
   },
   OTHER_ACCOMMODATION: {
-    value: '_559_OTHER_ACCOMMODATION',
     label: '559 Other accommodation',
+    children: [
+      {
+        value: '_559_OTHER_ACCOMMODATION',
+        label: '5590 Other accommodation',
+      },
+    ],
   },
   RESTAURANTS_AND_MOBILE_FOOD_SERVICE_ACTIVITIES: {
-    value: '_561_RESTAURANTS_AND_MOBILE_FOOD_SERVICE_ACTIVITIES',
     label: '561 Restaurants and mobile food service activities',
+    children: [
+      {
+        value: '_561_RESTAURANTS_AND_MOBILE_FOOD_SERVICE_ACTIVITIES',
+        label: '5610 Restaurants and mobile food service activities',
+      },
+    ],
   },
   EVENT_CATERING_AND_OTHER_FOOD_SERVICE_ACTIVITIES: {
     label: '562 Event catering and other food service activities',
@@ -2919,8 +3329,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   BEVERAGE_SERVING_ACTIVITIES: {
-    value: '_563_BEVERAGE_SERVING_ACTIVITIES',
     label: '563 Beverage serving activities',
+    children: [
+      {
+        value: '_563_BEVERAGE_SERVING_ACTIVITIES',
+        label: '5630 Beverage serving activities',
+      },
+    ],
   },
   PUBLISHING_OF_BOOKS_PERIODICALS_AND_OTHER_PUBLISHING_ACTIVITIES: {
     label: '581 Publishing of books, periodicals and other publishing activities',
@@ -2982,32 +3397,67 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   SOUND_RECORDING_AND_MUSIC_PUBLISHING_ACTIVITIES: {
-    value: '_592_SOUND_RECORDING_AND_MUSIC_PUBLISHING_ACTIVITIES',
     label: '592 sound recording and music publishing activities',
+    children: [
+      {
+        value: '_592_SOUND_RECORDING_AND_MUSIC_PUBLISHING_ACTIVITIES',
+        label: '5920 sound recording and music publishing activities',
+      },
+    ],
   },
   RADIO_BROADCASTING: {
-    value: '_601_RADIO_BROADCASTING',
     label: '601 Radio broadcasting',
+    children: [
+      {
+        value: '_601_RADIO_BROADCASTING',
+        label: '6010 Radio broadcasting',
+      },
+    ],
   },
   TELEVISION_PROGRAMMING_AND_BROADCASTING_ACTIVITIES: {
-    value: '_602_TELEVISION_PROGRAMMING_AND_BROADCASTING_ACTIVITIES',
     label: '602 Television programming and broadcasting activities',
+    children: [
+      {
+        value: '_602_TELEVISION_PROGRAMMING_AND_BROADCASTING_ACTIVITIES',
+        label: '6020 Television programming and broadcasting activities',
+      },
+    ],
   },
   WIRED_TELECOMMUNICATIONS_ACTIVITIES: {
-    value: '_611_WIRED_TELECOMMUNICATIONS_ACTIVITIES',
     label: '611 Wired telecommunications activities',
+    children: [
+      {
+        value: '_611_WIRED_TELECOMMUNICATIONS_ACTIVITIES',
+        label: '6110 Wired telecommunications activities',
+      },
+    ],
   },
   WIRELESS_TELECOMMUNICATIONS_ACTIVITIES: {
-    value: '_612_WIRELESS_TELECOMMUNICATIONS_ACTIVITIES',
     label: '612 Wireless telecommunications activities',
+    children: [
+      {
+        value: '_612_WIRELESS_TELECOMMUNICATIONS_ACTIVITIES',
+        label: '6120 Wireless telecommunications activities',
+      },
+    ],
   },
   SATELLITE_TELECOMMUNICATIONS_ACTIVITIES: {
-    value: '_613_SATELLITE_TELECOMMUNICATIONS_ACTIVITIES',
     label: '613 Satellite telecommunications activities',
+    children: [
+      {
+        value: '_613_SATELLITE_TELECOMMUNICATIONS_ACTIVITIES',
+        label: '6130 Satellite telecommunications activities',
+      },
+    ],
   },
   OTHER_TELECOMMUNICATIONS_ACTIVITIES: {
-    value: '_619_OTHER_TELECOMMUNICATIONS_ACTIVITIES',
     label: '619 Other telecommunications activities',
+    children: [
+      {
+        value: '_619_OTHER_TELECOMMUNICATIONS_ACTIVITIES',
+        label: '6190 Other telecommunications activities',
+      },
+    ],
   },
   COMPUTER_PROGRAMMING_CONSULTANCY_AND_RELATED_ACTIVITIES: {
     label: '620 Computer programming, consultancy and related activities',
@@ -3070,12 +3520,22 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   ACTIVITIES_OF_HOLDING_COMPANIES: {
-    value: '_642_ACTIVITIES_OF_HOLDING_COMPANIES',
     label: '642 Activities of holding companies',
+    children: [
+      {
+        value: '_642_ACTIVITIES_OF_HOLDING_COMPANIES',
+        label: '6420 Activities of holding companies',
+      },
+    ],
   },
   TRUSTS_FUNDS_AND_SIMILAR_FINANCIAL_ENTITIES: {
-    value: '_643_TRUSTS_FUNDS_AND_SIMILAR_FINANCIAL_ENTITIES',
     label: '643 Trusts, funds and similar financial entities',
+    children: [
+      {
+        value: '_643_TRUSTS_FUNDS_AND_SIMILAR_FINANCIAL_ENTITIES',
+        label: '6430 Trusts, funds and similar financial entities',
+      },
+    ],
   },
   OTHER_FINANCIAL_SERVICE_ACTIVITIES_EXCEPT_INSURANCE_AND_PENSION_FUNDING: {
     label: '649 Other financial service activities, except insurance and pension funding',
@@ -3108,12 +3568,22 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   REINSURANCE: {
-    value: '_652_REINSURANCE',
     label: '652 Reinsurance',
+    children: [
+      {
+        value: '_652_REINSURANCE',
+        label: '6520 Reinsurance',
+      },
+    ],
   },
   PENSION_FUNDING: {
-    value: '_653_PENSION_FUNDING',
     label: '653 Pension funding',
+    children: [
+      {
+        value: '_653_PENSION_FUNDING',
+        label: '6530 Pension funding',
+      },
+    ],
   },
   ACTIVITIES_AUXILIARY_TO_FINANCIAL_SERVICES_EXCEPT_INSURANCE_AND_PENSION_FUNDING: {
     label: '661 Activities auxiliary to financial services, except insurance and pension funding',
@@ -3150,16 +3620,31 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   FUND_MANAGEMENT_ACTIVITIES: {
-    value: '_663_FUND_MANAGEMENT_ACTIVITIES',
     label: '663 Fund management activities',
+    children: [
+      {
+        value: '_663_FUND_MANAGEMENT_ACTIVITIES',
+        label: '6630 Fund management activities',
+      },
+    ],
   },
   BUYING_AND_SELLING_OF_OWN_REAL_ESTATE: {
-    value: '_681_BUYING_AND_SELLING_OF_OWN_REAL_ESTATE',
     label: '681 Buying and selling of own real estate',
+    children: [
+      {
+        value: '_681_BUYING_AND_SELLING_OF_OWN_REAL_ESTATE',
+        label: '6810 Buying and selling of own real estate',
+      },
+    ],
   },
   RENTING_AND_OPERATING_OF_OWN_OR_LEASED_REAL_ESTATE: {
-    value: '_682_RENTING_AND_OPERATING_OF_OWN_OR_LEASED_REAL_ESTATE',
     label: '682 Renting and operating of own or leased real estate',
+    children: [
+      {
+        value: '_682_RENTING_AND_OPERATING_OF_OWN_OR_LEASED_REAL_ESTATE',
+        label: '6820 Renting and operating of own or leased real estate',
+      },
+    ],
   },
   REAL_ESTATE_ACTIVITIES_ON_AFEE_OR_CONTRACT_BASIS: {
     label: '683 Real estate activities on a fee or contract basis',
@@ -3175,16 +3660,31 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   LEGAL_ACTIVITIES: {
-    value: '_691_LEGAL_ACTIVITIES',
     label: '691 Legal activities',
+    children: [
+      {
+        value: '_691_LEGAL_ACTIVITIES',
+        label: '6910 Legal activities',
+      },
+    ],
   },
   ACCOUNTING_BOOKKEEPING_AND_AUDITING_ACTIVITIES_TAX_CONSULTANCY: {
-    value: '_692_ACCOUNTING_BOOKKEEPING_AND_AUDITING_ACTIVITIES_TAX_CONSULTANCY',
     label: '692 Accounting, bookkeeping and auditing activities; tax consultancy',
+    children: [
+      {
+        value: '_692_ACCOUNTING_BOOKKEEPING_AND_AUDITING_ACTIVITIES_TAX_CONSULTANCY',
+        label: '6920 Accounting, bookkeeping and auditing activities; tax consultancy',
+      },
+    ],
   },
   ACTIVITIES_OF_HEAD_OFFICES: {
-    value: '_701_ACTIVITIES_OF_HEAD_OFFICES',
     label: '701 Activities of head offices',
+    children: [
+      {
+        value: '_701_ACTIVITIES_OF_HEAD_OFFICES',
+        label: '7010 Activities of head offices',
+      },
+    ],
   },
   MANAGEMENT_CONSULTANCY_ACTIVITIES: {
     label: '702 Management consultancy activities',
@@ -3213,8 +3713,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   TECHNICAL_TESTING_AND_ANALYSIS: {
-    value: '_712_TECHNICAL_TESTING_AND_ANALYSIS',
     label: '712 Technical testing and analysis',
+    children: [
+      {
+        value: '_712_TECHNICAL_TESTING_AND_ANALYSIS',
+        label: '7120 Technical testing and analysis',
+      },
+    ],
   },
   RESEARCH_AND_EXPERIMENTAL_DEVELOPMENT_ON_NATURAL_SCIENCES_AND_ENGINEERING: {
     label: '721 Research and experimental development on natural sciences and engineering',
@@ -3230,8 +3735,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   RESEARCH_AND_EXPERIMENTAL_DEVELOPMENT_ON_SOCIAL_SCIENCES_AND_HUMANITIES: {
-    value: '_722_RESEARCH_AND_EXPERIMENTAL_DEVELOPMENT_ON_SOCIAL_SCIENCES_AND_HUMANITIES',
     label: '722 Research and experimental development on social sciences and humanities',
+    children: [
+      {
+        value: '_722_RESEARCH_AND_EXPERIMENTAL_DEVELOPMENT_ON_SOCIAL_SCIENCES_AND_HUMANITIES',
+        label: '7220 Research and experimental development on social sciences and humanities',
+      },
+    ],
   },
   ADVERTISING: {
     label: '731 Advertising',
@@ -3247,28 +3757,58 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   MARKET_RESEARCH_AND_PUBLIC_OPINION_POLLING: {
-    value: '_732_MARKET_RESEARCH_AND_PUBLIC_OPINION_POLLING',
     label: '732 Market research and public opinion polling',
+    children: [
+      {
+        value: '_732_MARKET_RESEARCH_AND_PUBLIC_OPINION_POLLING',
+        label: '7320 Market research and public opinion polling',
+      },
+    ],
   },
   SPECIALISED_DESIGN_ACTIVITIES: {
-    value: '_741_SPECIALISED_DESIGN_ACTIVITIES',
     label: '741 Specialised design activities',
+    children: [
+      {
+        value: '_741_SPECIALISED_DESIGN_ACTIVITIES',
+        label: '7410 Specialised design activities',
+      },
+    ],
   },
   PHOTOGRAPHIC_ACTIVITIES: {
-    value: '_742_PHOTOGRAPHIC_ACTIVITIES',
     label: '742 Photographic activities',
+    children: [
+      {
+        value: '_742_PHOTOGRAPHIC_ACTIVITIES',
+        label: '7420 Photographic activities',
+      },
+    ],
   },
   TRANSLATION_AND_INTERPRETATION_ACTIVITIES: {
-    value: '_743_TRANSLATION_AND_INTERPRETATION_ACTIVITIES',
     label: '743 Translation and interpretation activities',
+    children: [
+      {
+        value: '_743_TRANSLATION_AND_INTERPRETATION_ACTIVITIES',
+        label: '7430 Translation and interpretation activities',
+      },
+    ],
   },
   OTHER_PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_ACTIVITIES_NEC: {
-    value: '_749_OTHER_PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_ACTIVITIES_N_E_C_',
     label: '749 Other professional, scientific and technical activities n.e.c.',
+    children: [
+      {
+        value: '_749_OTHER_PROFESSIONAL_SCIENTIFIC_AND_TECHNICAL_ACTIVITIES_N_E_C_',
+        label: '7490 Other professional, scientific and technical activities n.e.c.',
+      },
+    ],
   },
   VETERINARY_ACTIVITIES: {
-    value: '_750_VETERINARY_ACTIVITIES',
     label: '750 Veterinary activities',
+    children: [
+      {
+        value: '_750_VETERINARY_ACTIVITIES',
+        label: '7500 Veterinary activities',
+      },
+    ],
   },
   RENTING_AND_LEASING_OF_MOTOR_VEHICLES: {
     label: '771 Renting and leasing of motor vehicles',
@@ -3330,20 +3870,40 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   LEASING_OF_INTELLECTUAL_PROPERTY_AND_SIMILAR_PRODUCTS_EXCEPT_COPYRIGHTED_WORKS: {
-    value: '_774_LEASING_OF_INTELLECTUAL_PROPERTY_AND_SIMILAR_PRODUCTS_EXCEPT_COPYRIGHTED_WORKS',
     label: '774 Leasing of intellectual property and similar products, except copyrighted works',
+    children: [
+      {
+        value: '_774_LEASING_OF_INTELLECTUAL_PROPERTY_AND_SIMILAR_PRODUCTS_EXCEPT_COPYRIGHTED_WORKS',
+        label: '7740 Leasing of intellectual property and similar products, except copyrighted works',
+      },
+    ],
   },
   ACTIVITIES_OF_EMPLOYMENT_PLACEMENT_AGENCIES: {
-    value: '_781_ACTIVITIES_OF_EMPLOYMENT_PLACEMENT_AGENCIES',
     label: '781 Activities of employment placement agencies',
+    children: [
+      {
+        value: '_781_ACTIVITIES_OF_EMPLOYMENT_PLACEMENT_AGENCIES',
+        label: '7810 Activities of employment placement agencies',
+      },
+    ],
   },
   TEMPORARY_EMPLOYMENT_AGENCY_ACTIVITIES: {
-    value: '_782_TEMPORARY_EMPLOYMENT_AGENCY_ACTIVITIES',
     label: '782 Temporary employment agency activities',
+    children: [
+      {
+        value: '_782_TEMPORARY_EMPLOYMENT_AGENCY_ACTIVITIES',
+        label: '7820 Temporary employment agency activities',
+      },
+    ],
   },
   OTHER_HUMAN_RESOURCES_PROVISION: {
-    value: '_783_OTHER_HUMAN_RESOURCES_PROVISION',
     label: '783 Other human resources provision',
+    children: [
+      {
+        value: '_783_OTHER_HUMAN_RESOURCES_PROVISION',
+        label: '7830 Other human resources provision',
+      },
+    ],
   },
   TRAVEL_AGENCY_AND_TOUR_OPERATOR_ACTIVITIES: {
     label: '791 Travel agency and tour operator activities',
@@ -3359,24 +3919,49 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   OTHER_RESERVATION_SERVICE_AND_RELATED_ACTIVITIES: {
-    value: '_799_OTHER_RESERVATION_SERVICE_AND_RELATED_ACTIVITIES',
     label: '799 Other reservation service and related activities',
+    children: [
+      {
+        value: '_799_OTHER_RESERVATION_SERVICE_AND_RELATED_ACTIVITIES',
+        label: '7990 Other reservation service and related activities',
+      },
+    ],
   },
   PRIVATE_SECURITY_ACTIVITIES: {
-    value: '_801_PRIVATE_SECURITY_ACTIVITIES',
     label: '801 Private security activities',
+    children: [
+      {
+        value: '_801_PRIVATE_SECURITY_ACTIVITIES',
+        label: '8010 Private security activities',
+      },
+    ],
   },
   SECURITY_SYSTEMS_SERVICE_ACTIVITIES: {
-    value: '_802_SECURITY_SYSTEMS_SERVICE_ACTIVITIES',
     label: '802 Security systems service activities',
+    children: [
+      {
+        value: '_802_SECURITY_SYSTEMS_SERVICE_ACTIVITIES',
+        label: '8020 Security systems service activities',
+      },
+    ],
   },
   INVESTIGATION_ACTIVITIES: {
-    value: '_803_INVESTIGATION_ACTIVITIES',
     label: '803 Investigation activities',
+    children: [
+      {
+        value: '_803_INVESTIGATION_ACTIVITIES',
+        label: '8030 Investigation activities',
+      },
+    ],
   },
   COMBINED_FACILITIES_SUPPORT_ACTIVITIES: {
-    value: '_811_COMBINED_FACILITIES_SUPPORT_ACTIVITIES',
     label: '811 Combined facilities support activities',
+    children: [
+      {
+        value: '_811_COMBINED_FACILITIES_SUPPORT_ACTIVITIES',
+        label: '8110 Combined facilities support activities',
+      },
+    ],
   },
   CLEANING_ACTIVITIES: {
     label: '812 Cleaning activities',
@@ -3396,8 +3981,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   LANDSCAPE_SERVICE_ACTIVITIES: {
-    value: '_813_LANDSCAPE_SERVICE_ACTIVITIES',
     label: '813 Landscape service activities',
+    children: [
+      {
+        value: '_813_LANDSCAPE_SERVICE_ACTIVITIES',
+        label: '8130 Landscape service activities',
+      },
+    ],
   },
   OFFICE_ADMINISTRATIVE_AND_SUPPORT_ACTIVITIES: {
     label: '821 Office administrative and support activities',
@@ -3413,12 +4003,22 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   ACTIVITIES_OF_CALL_CENTRES: {
-    value: '_822_ACTIVITIES_OF_CALL_CENTRES',
     label: '822 Activities of call centres',
+    children: [
+      {
+        value: '_822_ACTIVITIES_OF_CALL_CENTRES',
+        label: '8220 Activities of call centres',
+      },
+    ],
   },
   ORGANISATION_OF_CONVENTIONS_AND_TRADE_SHOWS: {
-    value: '_829_ORGANISATION_OF_CONVENTIONS_AND_TRADE_SHOWS',
     label: '829 Organisation of conventions and trade shows',
+    children: [
+      {
+        value: '_829_ORGANISATION_OF_CONVENTIONS_AND_TRADE_SHOWS',
+        label: '8290 Organisation of conventions and trade shows',
+      },
+    ],
   },
   BUSINESS_SUPPORT_SERVICE_ACTIVITIES_NEC: {
     label: '829 Business support service activities n.e.c.',
@@ -3482,16 +4082,31 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   COMPULSORY_SOCIAL_SECURITY_ACTIVITIES: {
-    value: '_843_COMPULSORY_SOCIAL_SECURITY_ACTIVITIES',
     label: '843 Compulsory social security activities',
+    children: [
+      {
+        value: '_843_COMPULSORY_SOCIAL_SECURITY_ACTIVITIES',
+        label: '8430 Compulsory social security activities',
+      },
+    ],
   },
   PRE_PRIMARY_EDUCATION: {
-    value: '_851_PRE_PRIMARY_EDUCATION',
     label: '851 Pre-primary education',
+    children: [
+      {
+        value: '_851_PRE_PRIMARY_EDUCATION',
+        label: '8510 Pre-primary education',
+      },
+    ],
   },
   PRIMARY_EDUCATION: {
-    value: '_852_PRIMARY_EDUCATION',
     label: '852 Primary education',
+    children: [
+      {
+        value: '_852_PRIMARY_EDUCATION',
+        label: '8520 Primary education',
+      },
+    ],
   },
   SECONDARY_EDUCATION: {
     label: '853 Secondary education',
@@ -3541,12 +4156,22 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   EDUCATIONAL_SUPPORT_ACTIVITIES: {
-    value: '_856_EDUCATIONAL_SUPPORT_ACTIVITIES',
     label: '856 Educational support activities',
+    children: [
+      {
+        value: '_856_EDUCATIONAL_SUPPORT_ACTIVITIES',
+        label: '8560 Educational support activities',
+      },
+    ],
   },
   HOSPITAL_ACTIVITIES: {
-    value: '_861_HOSPITAL_ACTIVITIES',
     label: '861 Hospital activities',
+    children: [
+      {
+        value: '_861_HOSPITAL_ACTIVITIES',
+        label: '8610 Hospital activities',
+      },
+    ],
   },
   MEDICAL_AND_DENTAL_PRACTICE_ACTIVITIES: {
     label: '862 Medical and dental practice activities',
@@ -3566,28 +4191,58 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   OTHER_HUMAN_HEALTH_ACTIVITIES: {
-    value: '_869_OTHER_HUMAN_HEALTH_ACTIVITIES',
     label: '869 Other human health activities',
+    children: [
+      {
+        value: '_869_OTHER_HUMAN_HEALTH_ACTIVITIES',
+        label: '8690 Other human health activities',
+      },
+    ],
   },
   RESIDENTIAL_NURSING_CARE_ACTIVITIES: {
-    value: '_871_RESIDENTIAL_NURSING_CARE_ACTIVITIES',
     label: '891 Residential nursing care activities',
+    children: [
+      {
+        value: '_871_RESIDENTIAL_NURSING_CARE_ACTIVITIES',
+        label: '8910 Residential nursing care activities',
+      },
+    ],
   },
   RESIDENTIAL_CARE_ACTIVITIES_FOR_MENTAL_RETARDATION_MENTAL_HEALTH_AND_SUBSTANCE_ABUSE: {
-    value: '_872_RESIDENTIAL_CARE_ACTIVITIES_FOR_MENTAL_RETARDATION_MENTAL_HEALTH_AND_SUBSTANCE_ABUSE',
     label: '872 Residential care activities for mental retardation, mental health and substance abuse',
+    children: [
+      {
+        value: '_872_RESIDENTIAL_CARE_ACTIVITIES_FOR_MENTAL_RETARDATION_MENTAL_HEALTH_AND_SUBSTANCE_ABUSE',
+        label: '8720 Residential care activities for mental retardation, mental health and substance abuse',
+      },
+    ],
   },
   RESIDENTIAL_CARE_ACTIVITIES_FOR_THE_ELDERLY_AND_DISABLED: {
-    value: '_873_RESIDENTIAL_CARE_ACTIVITIES_FOR_THE_ELDERLY_AND_DISABLED',
     label: '873 Residential care activities for the elderly and disabled',
+    children: [
+      {
+        value: '_873_RESIDENTIAL_CARE_ACTIVITIES_FOR_THE_ELDERLY_AND_DISABLED',
+        label: '8730 Residential care activities for the elderly and disabled',
+      },
+    ],
   },
   OTHER_RESIDENTIAL_CARE_ACTIVITIES: {
-    value: '_879_OTHER_RESIDENTIAL_CARE_ACTIVITIES',
     label: '879 Other residential care activities',
+    children: [
+      {
+        value: '_879_OTHER_RESIDENTIAL_CARE_ACTIVITIES',
+        label: '8790 Other residential care activities',
+      },
+    ],
   },
   SOCIAL_WORK_ACTIVITIES_WITHOUT_ACCOMMODATION_FOR_THE_ELDERLY_AND_DISABLED: {
-    value: '_881_SOCIAL_WORK_ACTIVITIES_WITHOUT_ACCOMMODATION_FOR_THE_ELDERLY_AND_DISABLED',
     label: '881 Social work activities without accommodation for the elderly and disabled',
+    children: [
+      {
+        value: '_881_SOCIAL_WORK_ACTIVITIES_WITHOUT_ACCOMMODATION_FOR_THE_ELDERLY_AND_DISABLED',
+        label: '8810 Social work activities without accommodation for the elderly and disabled',
+      },
+    ],
   },
   OTHER_SOCIAL_WORK_ACTIVITIES_WITHOUT_ACCOMMODATION: {
     label: '889 Other social work activities without accommodation',
@@ -3645,8 +4300,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   GAMBLING_AND_BETTING_ACTIVITIES: {
-    value: '_920_GAMBLING_AND_BETTING_ACTIVITIES',
     label: '920 Gambling and betting activities',
+    children: [
+      {
+        value: '_920_GAMBLING_AND_BETTING_ACTIVITIES',
+        label: '9200 Gambling and betting activities',
+      },
+    ],
   },
   SPORTS_ACTIVITIES: {
     label: '931 Sports activities',
@@ -3696,8 +4356,13 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   ACTIVITIES_OF_TRADE_UNIONS: {
-    value: '_942_ACTIVITIES_OF_TRADE_UNIONS',
     label: '942 Activities of trade unions',
+    children: [
+      {
+        value: '_942_ACTIVITIES_OF_TRADE_UNIONS',
+        label: '942 Activities of trade unions',
+      },
+    ],
   },
   ACTIVITIES_OF_OTHER_MEMBERSHIP_ORGANISATIONS: {
     label: '949 Activities of other membership organisations',
@@ -3784,20 +4449,40 @@ export const installationActivities: Record<InstallationActivity, InstallationAc
     ],
   },
   ACTIVITIES_OF_HOUSEHOLDS_AS_EMPLOYERS_OF_DOMESTIC_PERSONNEL: {
-    value: '_970_ACTIVITIES_OF_HOUSEHOLDS_AS_EMPLOYERS_OF_DOMESTIC_PERSONNEL',
     label: '970 Activities of households as employers of domestic personnel',
+    children: [
+      {
+        value: '_970_ACTIVITIES_OF_HOUSEHOLDS_AS_EMPLOYERS_OF_DOMESTIC_PERSONNEL',
+        label: '9700 Activities of households as employers of domestic personnel',
+      },
+    ],
   },
   UNDIFFERENTIATED_GOODS_PRODUCING_ACTIVITIES_OF_PRIVATE_HOUSEHOLDS_FOR_OWN_USE: {
-    value: '_981_UNDIFFERENTIATED_GOODS_PRODUCING_ACTIVITIES_OF_PRIVATE_HOUSEHOLDS_FOR_OWN_USE',
     label: '981 Undifferentiated goods-producing activities of private households for own use',
+    children: [
+      {
+        value: '_981_UNDIFFERENTIATED_GOODS_PRODUCING_ACTIVITIES_OF_PRIVATE_HOUSEHOLDS_FOR_OWN_USE',
+        label: '9810 Undifferentiated goods-producing activities of private households for own use',
+      },
+    ],
   },
   UNDIFFERENTIATED_SERVICE_PRODUCING_ACTIVITIES_OF_PRIVATE_HOUSEHOLDS_FOR_OWN_USE: {
-    value: '_982_UNDIFFERENTIATED_SERVICE_PRODUCING_ACTIVITIES_OF_PRIVATE_HOUSEHOLDS_FOR_OWN_USE',
     label: '982 Undifferentiated service-producing activities of private households for own use',
+    children: [
+      {
+        value: '_982_UNDIFFERENTIATED_SERVICE_PRODUCING_ACTIVITIES_OF_PRIVATE_HOUSEHOLDS_FOR_OWN_USE',
+        label: '9820 Undifferentiated service-producing activities of private households for own use',
+      },
+    ],
   },
   ACTIVITIES_OF_EXTRATERRITORIAL_ORGANISATIONS_AND_BODIES: {
-    value: '_990_ACTIVITIES_OF_EXTRATERRITORIAL_ORGANIZATIONS_AND_BODIES',
     label: '990 Activities of extraterritorial organisations and bodies',
+    children: [
+      {
+        value: '_990_ACTIVITIES_OF_EXTRATERRITORIAL_ORGANIZATIONS_AND_BODIES',
+        label: '9900 Activities of extraterritorial organisations and bodies',
+      },
+    ],
   },
 };
 

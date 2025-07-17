@@ -3,11 +3,10 @@ package uk.gov.pmrv.api.workflow.request.core.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.rules.domain.ResourceType;
-import uk.gov.pmrv.api.authorization.rules.services.AuthorizationRulesQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
@@ -34,7 +33,7 @@ public class RequestTaskService {
         requestTask.setPayload(requestTaskPayload);
     }
 
-    public List<RequestTask> findTasksByRequestIdAndRoleType(String requestId, RoleType roleType) {
+    public List<RequestTask> findTasksByRequestIdAndRoleType(String requestId, String roleType) {
         Set<String> roleAllowedTaskTypes = authorizationRulesQueryService
             .findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_TASK, roleType);
 

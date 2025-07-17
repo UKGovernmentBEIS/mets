@@ -1,6 +1,6 @@
 import { getTaskStatusByTaskCompletionState } from '@aviation/request-task/aer/ukets/aer-verify/util/aer-verify.util';
 import { AerVerifyTaskPayload } from '@aviation/request-task/store';
-import { AerVerifySideEffectFn } from '@aviation/request-task/store/delegates/aer-verify/aer-verify-store-side-effects.handler';
+import { AerVerifySideEffectFn } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-side-effects.handler';
 import produce from 'immer';
 
 import { AviationAerUkEtsVerificationReport } from 'pmrv-api';

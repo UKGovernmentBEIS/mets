@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.PaymentMethodType;
 import uk.gov.pmrv.api.workflow.payment.service.BankAccountDetailsService;
 import uk.gov.pmrv.api.workflow.payment.service.PaymentMethodService;

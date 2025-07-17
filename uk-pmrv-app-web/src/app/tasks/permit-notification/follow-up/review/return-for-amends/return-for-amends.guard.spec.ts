@@ -5,8 +5,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { firstValueFrom, Observable } from 'rxjs';
 
+import { addDays, subDays } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import { PermitNotificationFollowUpApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
@@ -109,7 +109,7 @@ describe('NotifyOperatorGuard', () => {
               details: {
                 notes: 'some notes',
                 requiredChanges: [{ reason: 'reason', files: ['85ff773f-3cd4-4df4-adfa-09444b7fd732'] }],
-                dueDate: moment().subtract(1, 'days'),
+                dueDate: subDays(new Date(), 1),
               } as any,
             },
           } as PermitNotificationFollowUpApplicationReviewRequestTaskPayload,
@@ -143,7 +143,7 @@ describe('NotifyOperatorGuard', () => {
               details: {
                 notes: 'some notes',
                 requiredChanges: [{ reason: 'reason', files: ['85ff773f-3cd4-4df4-adfa-09444b7fd732'] }],
-                dueDate: moment().add(1, 'days'),
+                dueDate: addDays(new Date(), 1),
               } as any,
             },
           } as PermitNotificationFollowUpApplicationReviewRequestTaskPayload,

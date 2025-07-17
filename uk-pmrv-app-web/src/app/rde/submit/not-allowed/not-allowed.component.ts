@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, map, pluck, switchMap, takeUntil } from 'rxjs';
+import { first, map, switchMap, takeUntil } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { BackLinkService } from '@shared/back-link/back-link.service';
@@ -39,7 +39,7 @@ export class NotAllowedComponent implements OnInit {
     this.rdeStore
       .pipe(
         first(),
-        pluck('requestId'),
+        map((state) => state?.requestId),
         switchMap((requestId) => this.requestItemsService.getItemsByRequest(requestId)),
         first(),
         map((res) => this.sortTimeline(res.items).find((action) => waitForRfiRdeTypes.includes(action.taskType))),

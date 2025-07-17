@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -12,9 +12,9 @@
 
 export interface UserStateDTO {
   userId?: string;
-  roleType?: 'OPERATOR' | 'VERIFIER' | 'REGULATOR';
+  roleType?: string;
   lastLoginDomain?: 'INSTALLATION' | 'AVIATION';
   domainsLoginStatuses?: {
-    [key: string]: 'ENABLED' | 'DISABLED' | 'ACCEPTED' | 'TEMP_DISABLED' | 'DELETED' | 'NO_AUTHORITY';
+    [key: string]: 'NO_ROLE_TYPE' | 'ENABLED' | 'DISABLED' | 'ACCEPTED' | 'TEMP_DISABLED' | 'NO_AUTHORITY';
   };
 }

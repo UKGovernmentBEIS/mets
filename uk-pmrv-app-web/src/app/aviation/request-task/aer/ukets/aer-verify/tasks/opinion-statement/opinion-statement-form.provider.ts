@@ -17,9 +17,15 @@ import {
 
 import { AviationAerOpinionStatementFormModel } from './opinion-statement.interface';
 
+export interface AviationAerInPersonSiteVisitFormModel {
+  visitDates: FormControl<AviationAerInPersonSiteVisitDates[]>;
+  teamMembers: FormControl<string | null>;
+}
+export type AviationAerInPersonSiteVisitType = FormGroup<AviationAerInPersonSiteVisitFormModel>;
+
 const manuallyProvidedEmissionsValidators = [
   GovukValidators.required('Enter the total verified emissions for the scheme year'),
-  GovukValidators.naturalNumber('Enter a whole number without decimal places (you can use zero)'),
+  GovukValidators.integerNumber('Enter a whole number without decimal places (you can use zero)'),
 ];
 
 const additionalChangesNotCoveredDetailsValidators = [
@@ -71,10 +77,6 @@ export class OpinionStatementFormProvider
     return this.form.get('inPersonSiteVisitGroup') as FormGroup;
   }
 
-  get visitDatesCtrl() {
-    return this.inPersonSiteVisitGroup?.get('visitDates') as FormArray;
-  }
-
   destroyForm() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -91,12 +93,19 @@ export class OpinionStatementFormProvider
           emissionsCorrect: opinionStatement.emissionsCorrect ?? null,
         },
         changesGroup: {
-          additionalChangesNotCovered: opinionStatement.additionalChangesNotCovered ?? null,
-        },
-        siteVisit: {
-          type: opinionStatement.siteVisit?.type ?? null,
+          additionalChangesNotCovered:
+            opinionStatement.additionalChangesNotCovered != null ? opinionStatement.additionalChangesNotCovered : null,
         },
       };
+
+      if (opinionStatement?.siteVisit) {
+        value = {
+          ...value,
+          siteVisit: {
+            type: opinionStatement.siteVisit?.type ?? null,
+          },
+        };
+      }
 
       // Conditionally add or remove manuallyProvidedEmissions control
       if (opinionStatement.emissionsCorrect === false) {
@@ -129,7 +138,7 @@ export class OpinionStatementFormProvider
       }
 
       // Add virtual site according to siteVisit type
-      if (value.siteVisit.type === 'VIRTUAL') {
+      if (value?.siteVisit?.type === 'VIRTUAL') {
         this.addVirtualSiteGroup();
 
         value = {
@@ -144,8 +153,8 @@ export class OpinionStatementFormProvider
       }
 
       // Add in person site according to siteVisit type
-      if (value.siteVisit.type === 'IN_PERSON') {
-        this.addInPersonSiteGroup(opinionStatement.siteVisit['visitDates']);
+      if (value?.siteVisit?.type === 'IN_PERSON') {
+        this.addInPersonSiteGroup();
 
         value = {
           ...value,
@@ -153,15 +162,18 @@ export class OpinionStatementFormProvider
             ...value.siteVisit,
           },
           inPersonSiteVisitGroup: {
-            visitDates: opinionStatement.siteVisit['visitDates']
-              ? this._visitDatesFormatted(opinionStatement.siteVisit['visitDates'])
-              : [{ startDate: null, numberOfDays: null }],
+            visitDates: [],
             teamMembers: opinionStatement.siteVisit['teamMembers'] ?? null,
           },
         };
       }
 
-      this.form.setValue(value);
+      this.form.patchValue(value);
+
+      (this.inPersonSiteVisitGroup?.controls?.visitDates as FormArray)?.clear();
+      opinionStatement.siteVisit?.['visitDates']?.forEach((element) => {
+        (this.inPersonSiteVisitGroup?.controls?.visitDates as FormArray)?.push(this._createVisitDatesGroup(element));
+      });
     }
   }
 
@@ -172,10 +184,16 @@ export class OpinionStatementFormProvider
       monitoringApproachType: this.emissionsGroup?.value.monitoringApproachType ?? null,
       emissionsCorrect: this.emissionsGroup?.value.emissionsCorrect ?? null,
       additionalChangesNotCovered: this.changesGroup?.value.additionalChangesNotCovered ?? null,
-      siteVisit: {
-        type: this.siteVisitGroup.value.type ?? null,
-      },
     };
+
+    if (this.siteVisitGroup.value?.type) {
+      value = {
+        ...value,
+        siteVisit: {
+          type: this.siteVisitGroup.value.type ?? null,
+        },
+      };
+    }
 
     // Conditionally set manuallyProvidedEmissions value
     if (this.emissionsGroup?.value.emissionsCorrect === false) {
@@ -194,7 +212,7 @@ export class OpinionStatementFormProvider
     }
 
     // Set reason value if siteVisit type is VIRTUAL
-    if (this.siteVisitGroup.value.type === 'VIRTUAL') {
+    if (this.siteVisitGroup?.value?.type === 'VIRTUAL') {
       value = {
         ...value,
         siteVisit: {
@@ -205,7 +223,7 @@ export class OpinionStatementFormProvider
     }
 
     // Set visitDates and teamMembers values if siteVisit type is IN_PERSON
-    if (this.siteVisitGroup.value.type === 'IN_PERSON') {
+    if (this.siteVisitGroup?.value?.type === 'IN_PERSON') {
       value = {
         ...value,
         siteVisit: {
@@ -236,7 +254,7 @@ export class OpinionStatementFormProvider
     }
   }
 
-  addInPersonSiteGroup(visitDates?: AviationAerInPersonSiteVisitDates[]) {
+  addInPersonSiteGroup() {
     if (this.form.contains('virtualSiteVisitGroup')) {
       this.form.removeControl('virtualSiteVisitGroup');
     }
@@ -245,25 +263,15 @@ export class OpinionStatementFormProvider
       this.form.addControl(
         'inPersonSiteVisitGroup',
         this.fb.group({
-          visitDates: this.fb.array(
-            visitDates ? visitDates.map(() => this._createVisitDatesGroup()) : [this._createVisitDatesGroup()],
-          ),
+          visitDates: this.fb.array([], {
+            validators: GovukValidators.required(''),
+          }),
 
           teamMembers: new FormControl<string | null>(null, [
             GovukValidators.required('State which team members made the site visit'),
           ]),
         }),
       );
-    }
-  }
-
-  addVisitDatesCtrl() {
-    this.visitDatesCtrl.push(this._createVisitDatesGroup());
-  }
-
-  removeVisitDatesCtrl(index: number) {
-    if (this.visitDatesCtrl.length > 1) {
-      this.visitDatesCtrl.removeAt(index);
     }
   }
 
@@ -318,7 +326,7 @@ export class OpinionStatementFormProvider
     this.emissionsCorrectCtrl.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
       if (value) {
         this._removeManuallyProvidedEmissions();
-      } else {
+      } else if (value === false) {
         this._addManuallyProvidedEmissions();
       }
     });
@@ -328,6 +336,14 @@ export class OpinionStatementFormProvider
         this._removeAdditionalChangesNotCovered();
       } else {
         this._addAdditionalChangesNotCovered();
+      }
+    });
+
+    this.siteVisitGroup.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
+      if (value.type === 'IN_PERSON') {
+        this.addInPersonSiteGroup();
+      } else if (value.type === 'VIRTUAL') {
+        this.addVirtualSiteGroup();
       }
     });
   }
@@ -370,26 +386,19 @@ export class OpinionStatementFormProvider
     }
   }
 
-  private _createVisitDatesGroup() {
+  private _createVisitDatesGroup(visitDate: AviationAerInPersonSiteVisitDates) {
+    const startDate = new Date(visitDate?.startDate);
+
     return this.fb.group({
-      startDate: new FormControl<string | null>(null, [
+      startDate: new FormControl<Date | null>(startDate ?? null, [
         GovukValidators.required('Enter a date when the site visit began'),
         todayOrPastDateValidator(),
       ]),
 
-      numberOfDays: new FormControl<number | null>(null, [
+      numberOfDays: new FormControl<number | null>(visitDate?.numberOfDays ?? null, [
         GovukValidators.required('Enter the number of days your team were on site'),
         GovukValidators.naturalNumber('Must be integer greater than 0'),
       ]),
-    });
-  }
-
-  private _visitDatesFormatted(visitDates: { startDate: string; numberOfDays: number }[]) {
-    return visitDates.map((item) => {
-      return {
-        startDate: new Date(item.startDate),
-        numberOfDays: item.numberOfDays,
-      };
     });
   }
 }

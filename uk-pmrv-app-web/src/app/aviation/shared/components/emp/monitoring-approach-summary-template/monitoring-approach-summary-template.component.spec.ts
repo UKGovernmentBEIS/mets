@@ -3,11 +3,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { SimplifiedMonitoringApproach } from '@aviation/request-task/emp/ukets/tasks/monitoring-approach/monitoring-approach-types.interface';
 import { MonitoringApproachSummaryTemplateComponent } from '@aviation/shared/components/emp/monitoring-approach-summary-template/monitoring-approach-summary-template.component';
 
 import { EmpEmissionsMonitoringApproach } from 'pmrv-api';
-
-import { SimplifiedMonitoringApproach } from './monitoring-approach-types.interface';
 
 type EmissionsMonitoringApproachFormValues = {
   monitoringApproachType: EmpEmissionsMonitoringApproach['monitoringApproachType'];
@@ -26,8 +25,7 @@ describe('MonitoringApproachSummaryTemplateComponent', () => {
       <app-monitoring-approach-summary-template
         [data]="data"
         [files]="files"
-        [isEditable]="isEditable"
-      ></app-monitoring-approach-summary-template>
+        [isEditable]="isEditable"></app-monitoring-approach-summary-template>
     `,
   })
   class TestComponent {

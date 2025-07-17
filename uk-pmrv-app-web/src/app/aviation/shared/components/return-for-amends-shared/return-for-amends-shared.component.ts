@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { BehaviorSubject, first, map, switchMap, take } from 'rxjs';
 
+import { aerReviewCorsiaHeaderTaskMap } from '@aviation/request-task/aer/corsia/shared/aer-review-corsia.types';
 import { aerHeaderTaskMap } from '@aviation/request-task/aer/shared/util/aer.util';
 import { empHeaderTaskMap } from '@aviation/request-task/emp/shared/util/emp.util';
 import { sendReturnForAmendsRequestTaskActionTypesMapper } from '@aviation/request-task/util';
@@ -37,10 +38,12 @@ export class ReturnForAmendsSharedComponent implements PendingRequest {
   @Input() creationDate: string;
   @Input() requestTaskType: ItemDTO['taskType'];
   @Input() isAer = false;
+  @Input() isCorsia = false;
 
   isSubmitted$ = new BehaviorSubject<boolean>(false);
   readonly empHeaderTaskMap = empHeaderTaskMap;
   readonly aerHeaderTaskMap = aerHeaderTaskMap;
+  readonly aerReviewCorsiaHeaderTaskMap = aerReviewCorsiaHeaderTaskMap;
 
   constructor(
     private readonly tasksService: TasksService,

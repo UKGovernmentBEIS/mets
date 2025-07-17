@@ -19,10 +19,18 @@ export class MonitoringMethodologyPlanSummaryDetailsComponent {
   readonly files$ = this.store.pipe(
     map((state) => {
       return this.showOriginal
-        ? (state as any).originalPermitContainer.permit.monitoringMethodologyPlans?.plans ?? []
-        : state.permit.monitoringMethodologyPlans?.plans ?? [];
+        ? ((state as any).originalPermitContainer.permit.monitoringMethodologyPlans?.plans ?? [])
+        : (state.permit.monitoringMethodologyPlans?.plans ?? []);
     }),
   );
+
+  isDigitizedMMP =
+    (this.store.getState().isRequestTask &&
+      this.store.getState()?.features?.['digitized-mmp'] &&
+      this.store.getState()?.permit?.monitoringMethodologyPlans?.exist) ||
+    (!this.store.getState().isRequestTask &&
+      this.store.getState()?.permit?.monitoringMethodologyPlans?.exist &&
+      this.store.getState()?.permit?.monitoringMethodologyPlans?.digitizedPlan);
 
   constructor(
     readonly store: PermitApplicationStore<PermitApplicationState>,

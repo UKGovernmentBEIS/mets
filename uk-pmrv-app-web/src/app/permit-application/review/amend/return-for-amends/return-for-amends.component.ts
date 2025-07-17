@@ -31,6 +31,8 @@ export class ReturnForAmendsComponent implements PendingRequest, OnInit {
 
   header = this.store.getReturnForAmendHeader();
   reviewGroupHeadings = reviewGroupAllHeading;
+  requestType = this.store.getValue().requestType;
+  isEditable = this.store.getValue().isEditable;
 
   constructor(
     private readonly tasksService: TasksService,
@@ -45,13 +47,10 @@ export class ReturnForAmendsComponent implements PendingRequest, OnInit {
 
   ngOnInit(): void {
     this.backLinkService.show();
-    const breadcrumbs = this.breadcrumbService.breadcrumbItem$.getValue();
-    if (breadcrumbs && breadcrumbs.length) {
-      const lastBreadcrumb = breadcrumbs[breadcrumbs.length - 1];
-      this.breadcrumbService.show([
-        ...breadcrumbs.slice(0, breadcrumbs.length - 1),
-        { ...lastBreadcrumb, link: [...lastBreadcrumb.link, 'review'] },
-      ]);
+    if (!this.isEditable) {
+      this.breadcrumbService.cutLastBreadcrumbWithLinkandShow();
+    } else {
+      this.breadcrumbService.addToLastBreadcrumbAndShow('review');
     }
   }
 

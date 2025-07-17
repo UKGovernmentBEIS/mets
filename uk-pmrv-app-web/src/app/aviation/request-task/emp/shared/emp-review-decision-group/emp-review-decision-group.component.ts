@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, filter, map, Observable, takeUntil } from 'rxjs';
 
+import { EmpTaskKey, requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { EmpUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { EmpReviewDecisionGroupSummaryComponent } from '@aviation/shared/components/emp/emp-review-decision-group-summary/emp-review-decision-group-summary.component';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -13,7 +14,6 @@ import { SharedModule } from '@shared/shared.module';
 
 import { EmpIssuanceReviewDecision } from 'pmrv-api';
 
-import { EmpTaskKey, requestTaskQuery, RequestTaskStore } from '../../../store';
 import { empQuery } from '../emp.selectors';
 import { EmpReviewGroup, empReviewGroupMap } from '../util/emp.util';
 import { EmpReviewDecisionGroupFormProvider } from './emp-review-decision-group-form.provider';
@@ -40,7 +40,7 @@ export class EmpReviewDecisionGroupComponent implements OnInit, OnDestroy {
   attachments$: Observable<{ [key: string]: string }> = this.store.pipe(empQuery.selectReviewAttachments);
 
   private internalSet = false;
-  private groupKey: EmpReviewGroup; //TODO consider corsia as well
+  private groupKey: EmpReviewGroup;
 
   constructor(
     public store: RequestTaskStore,
@@ -60,13 +60,13 @@ export class EmpReviewDecisionGroupComponent implements OnInit, OnDestroy {
     );
 
     this.decisionData$ = this.store.pipe(
-      empQuery.selectReviewDecisions,
+      empQuery.selectIssuanceReviewDecisions,
       map((reviewDecisions) => reviewDecisions[this.groupKey]),
     );
 
     this.store
       .pipe(
-        empQuery.selectReviewDecisions,
+        empQuery.selectIssuanceReviewDecisions,
         filter((reviewDecisions) => !!reviewDecisions[this.groupKey]),
         takeUntil(this.destroy$),
       )

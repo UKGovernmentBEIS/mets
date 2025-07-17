@@ -1,10 +1,9 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.amendsubmit.service;
 
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.validation.PermitValidatorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;

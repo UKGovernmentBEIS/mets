@@ -8,7 +8,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingRequiredEvent;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.service.AviationAerReportingObligationService;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 

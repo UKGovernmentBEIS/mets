@@ -6,10 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.Authority;
+import uk.gov.netz.api.authorization.core.repository.AuthorityRepository;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.authorization.core.domain.Authority;
-import uk.gov.pmrv.api.authorization.core.repository.AuthorityRepository;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
 import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.LoginStatus;
 import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.UserDomainsLoginStatusInfo;
 
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus.ACTIVE;
+import static uk.gov.netz.api.authorization.core.domain.AuthorityStatus.ACTIVE;
 
 @ExtendWith(MockitoExtension.class)
 class OperatorLoginStatusServiceTest {
@@ -105,6 +105,6 @@ class OperatorLoginStatusServiceTest {
 
     @Test
     void getRoleType() {
-        assertEquals(RoleType.OPERATOR, operatorLoginStatusService.getRoleType());
+        assertEquals(RoleTypeConstants.OPERATOR, operatorLoginStatusService.getRoleType());
     }
 }

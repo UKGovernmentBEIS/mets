@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, map, Observable, shareReplay, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, shareReplay, Subject, switchMap, take, tap } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore, selectCurrentDomain } from '@core/store/auth';
@@ -32,8 +32,7 @@ import { VerificationBodyStatusPipe } from '../pipes/verification-body-status.pi
         <app-pagination
           [count]="totalNumOfItems$ | async"
           (currentPageChange)="currentPage$.next($event)"
-          [pageSize]="pageSize"
-        ></app-pagination>
+          [pageSize]="pageSize"></app-pagination>
       </ng-container>
     </div>
   `,
@@ -41,7 +40,7 @@ import { VerificationBodyStatusPipe } from '../pipes/verification-body-status.pi
   providers: [DestroySubject],
 })
 export class VerificationBodiesUsersComponent implements OnInit {
-  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));
+  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));
   verificationBodiesUsers$ = this.currentDomain$
     .pipe(
       switchMap((currentDomain) =>
@@ -71,11 +70,10 @@ export class VerificationBodiesUsersComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly authStore: AuthStore,
-    private readonly destroy$: DestroySubject,
   ) {}
 
   ngOnInit(): void {
-    this.currentDomain$.pipe(takeUntil(this.destroy$)).subscribe((domain) => {
+    this.currentDomain$.subscribe((domain) => {
       this.domain = domain === 'AVIATION' ? domain.toLowerCase() : '';
     });
     this.backlinkService.show(this.domain + '/mi-reports');

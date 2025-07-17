@@ -1,0 +1,36 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-base-task-container-component
+    [header]="vm.pageTitle"
+    [customContentTemplate]="customContentTemplate"
+    [expectedTaskType]="vm.expectedTaskType"
+    [daysRemaining]="vm.daysRemaining"
+  >
+    <ng-template #customContentTemplate>
+      <h2 class="govuk-heading-m">{{ vm.expectedTaskType | detailsSubtaskHeader }}</h2>
+
+      <ul app-task-item-list>
+        <li app-task-item [link]="vm.redirectReportLink" [linkText]="vm.expectedTaskType | detailsSubtaskLinktext"></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">Recommended follow-up actions</h2>
+      <ul id="taskList" app-task-item-list>
+        @for (action of vm.followUpActions; track action; let i = $index) {
+          <li app-task-item [linkText]="'Follow-up action ' + (i + 1)" [link]="i.toString()" [status]="action.status">
+            <br />
+            <p class="govuk-body pre-wrap govuk-!-margin-top-3">{{ action?.explanation }}</p>
+          </li>
+        }
+      </ul>
+
+      <h2 class="govuk-heading-m">Submit</h2>
+      <ul id="taskList" app-task-item-list>
+        <li
+          app-task-item
+          linkText="Send to the regulator"
+          [link]="vm.sendReportLink"
+          [status]="vm.sendReportStatus"
+        ></li>
+      </ul>
+    </ng-template>
+  </app-base-task-container-component>
+</ng-container>

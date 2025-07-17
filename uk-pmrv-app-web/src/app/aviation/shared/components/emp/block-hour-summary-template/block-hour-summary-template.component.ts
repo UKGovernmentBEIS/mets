@@ -27,4 +27,5 @@ import { EmpBlockHourMethodProcedures } from 'pmrv-api';
 export class BlockHourSummaryTemplateComponent {
   @Input() data: EmpBlockHourMethodProcedures | null;
   @Input() isEditable = false;
+  @Input() isCorsia = false;
 }

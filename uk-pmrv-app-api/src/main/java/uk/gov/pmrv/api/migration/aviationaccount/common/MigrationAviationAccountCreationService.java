@@ -1,34 +1,33 @@
 package uk.gov.pmrv.api.migration.aviationaccount.common;
 
-import static uk.gov.pmrv.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
-
-import java.util.List;
-import java.util.Optional;
-
+import lombok.AllArgsConstructor;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.AllArgsConstructor;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusHistory;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountCreationDTO;
-import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
+import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.account.aviation.transform.AviationAccountMapper;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.MigrationHelper;
+
+import java.util.List;
+import java.util.Optional;
+
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
@@ -46,7 +45,7 @@ public class MigrationAviationAccountCreationService {
             AviationEmitter emitter) throws Exception {
 		
 		Long identifier = Long.parseLong(emitter.getEmitterDisplayId());
-		PmrvUser authUser = buildAuthUser(Optional.ofNullable(
+		AppUser authUser = buildAuthUser(Optional.ofNullable(
     			MigrationHelper.resolveCompAuth(emitter.getCa()))
     			.orElseThrow(() -> new Exception(String.format(
     					"'%s' - CA cannot be resolved for ETSWAP value '%s'", emitter.getFldEmitterId(), emitter.getCa()))));
@@ -67,7 +66,7 @@ public class MigrationAviationAccountCreationService {
     }
 
 	private void createNewAccount(AviationAccountCreationDTO accountDTO, AviationEmitter emitter,
-			PmrvUser authUser, Long identifier) {
+			AppUser authUser, Long identifier) {
 		EmissionTradingScheme emissionTradingScheme = accountDTO.getEmissionTradingScheme();
         CompetentAuthorityEnum competentAuthority = authUser.getCompetentAuthority();
 
@@ -91,14 +90,14 @@ public class MigrationAviationAccountCreationService {
         aviationAccountRepository.saveAndFlush(account);
 	}
 	
-	private PmrvUser buildAuthUser(CompetentAuthorityEnum ca) {
-        PmrvUser authUser = new PmrvUser();
+	private AppUser buildAuthUser(CompetentAuthorityEnum ca) {
+        AppUser authUser = new AppUser();
         authUser.setFirstName("Migration");
         authUser.setLastName("user");
         authUser.setUserId("Migration user");
-        authUser.setRoleType(RoleType.REGULATOR);
+        authUser.setRoleType(RoleTypeConstants.REGULATOR);
         authUser.setAuthorities(
-            List.of(PmrvAuthority.builder().competentAuthority(ca).build()));
+            List.of(AppAuthority.builder().competentAuthority(ca).build()));
         return authUser;
     }
 	
@@ -106,7 +105,7 @@ public class MigrationAviationAccountCreationService {
             EmissionTradingScheme emissionTradingScheme) {
 				if(aviationAccountQueryService.isExistingAccountName(name, competentAuthority, emissionTradingScheme)) {
 					throw new BusinessException(
-							ErrorCode.ACCOUNT_ALREADY_EXISTS, name, competentAuthority, emissionTradingScheme);
+							MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS, name, competentAuthority, emissionTradingScheme);
 				}
 	}
 
@@ -114,7 +113,7 @@ public class MigrationAviationAccountCreationService {
 			EmissionTradingScheme emissionTradingScheme) {
 				if(aviationAccountQueryService.isExistingCrcoCode(
 						crcoCode, competentAuthority, emissionTradingScheme)) {
-					throw new BusinessException(ErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT,
+					throw new BusinessException(MetsErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT,
 							crcoCode, competentAuthority, emissionTradingScheme);
 				}
 	}

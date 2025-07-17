@@ -15,8 +15,7 @@ import { VirService } from '../../core/vir.service';
         <ul app-task-item-list>
           <li app-task-item link="{{ item.key }}/summary" linkText="Respond to operator" [hasContent]="true">
             <app-operator-response-data-item
-              [operatorImprovementResponse]="item.value"
-            ></app-operator-response-data-item>
+              [operatorImprovementResponse]="item.value"></app-operator-response-data-item>
           </li>
         </ul>
       </ng-container>

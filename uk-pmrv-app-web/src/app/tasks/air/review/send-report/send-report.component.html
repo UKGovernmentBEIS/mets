@@ -6,9 +6,10 @@
           [taskId]="taskId$ | async"
           [accountId]="accountId$ | async"
           requestTaskActionType="AIR_NOTIFY_OPERATOR_FOR_DECISION"
-          confirmationMessage = "Notification sent successfully"
+          confirmationMessage="Notification sent successfully"
           [referenceCode]="referenceCode"
           [pendingRfi]="pendingRfi$ | async"
+          [previewDocuments]="previewDocuments"
         ></app-notify-operator>
       </div>
     </div>

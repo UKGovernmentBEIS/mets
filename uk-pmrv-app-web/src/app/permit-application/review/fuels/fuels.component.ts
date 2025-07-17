@@ -7,7 +7,7 @@ import { PermitApplicationStore } from '@permit-application/store/permit-applica
 
 import { GovukTableColumn } from 'govuk-components';
 
-import { EmissionPoint, EmissionSource, EmissionSummary, MeasurementDevice } from 'pmrv-api';
+import { EmissionPoint, EmissionSource, EmissionSummary, MeasurementDeviceOrMethod } from 'pmrv-api';
 
 import { PermitApplicationState } from '../../store/permit-application.state';
 
@@ -24,10 +24,16 @@ export class FuelsComponent {
     { field: 'reference', header: 'Reference', widthClass: 'govuk-!-width-one-half' },
     { field: 'description', header: 'Description', widthClass: 'govuk-!-width-one-half' },
   ];
-  measurementDevicesColumns: GovukTableColumn<MeasurementDevice>[] = [
-    { field: 'reference', header: 'Reference', widthClass: 'govuk-!-width-one-half' },
-    { field: 'type', header: 'Type', widthClass: 'govuk-!-width-one-half' },
+
+  measurementDevicesColumns: GovukTableColumn<MeasurementDeviceOrMethod>[] = [
+    { field: 'reference', header: 'Reference', widthClass: '' },
+    { field: 'type', header: 'Type', widthClass: '' },
+    { field: 'measurementRange', header: 'Measurement range', widthClass: '' },
+    { field: 'meteringRangeUnits', header: 'Metering range units', widthClass: '' },
+    { field: 'specifiedUncertaintyPercentage', header: 'Specified uncertainty', widthClass: '' },
+    { field: 'location', header: 'Location', widthClass: '' },
   ];
+
   emissionSummariesColumns: GovukTableColumn<EmissionSummary>[] = [
     { field: 'sourceStream', header: 'Source stream', widthClass: 'govuk-!-width-one-quarter' },
     { field: 'emissionSources', header: 'Emission sources', widthClass: 'govuk-!-width-one-quarter' },

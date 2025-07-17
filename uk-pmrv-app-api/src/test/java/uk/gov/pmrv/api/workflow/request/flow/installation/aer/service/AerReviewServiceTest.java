@@ -1,30 +1,37 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.abbreviations.Abbreviations;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.MonitoringApproachType;
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.MonitoringApproachEmissions;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.calculation.CalculationOfCO2Emissions;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc.CalculationOfPfcEmissions;
+import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerDataReviewDecision;
+import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerDataReviewDecisionType;
+import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerReviewDataType;
+import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerVerificationReportDataReviewDecision;
+import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerVerificationReportDataReviewDecisionType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ChangesRequiredDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecisionRequiredChange;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationReviewRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerDataReviewDecision;
-import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerDataReviewDecisionType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationSkipReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerReviewDataType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerSaveApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerSaveReviewGroupDecisionRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerSkipReviewActionType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerSkipReviewDecision;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -92,7 +99,7 @@ class AerReviewServiceTest {
 
     @Test
     void savePermitDecisionNotification() {
-        final PmrvUser user = PmrvUser.builder().userId("user").build();
+        final AppUser user = AppUser.builder().userId("user").build();
         final UUID file = UUID.randomUUID();
 
         final AerDataReviewDecision decision = AerDataReviewDecision.builder()
@@ -132,7 +139,7 @@ class AerReviewServiceTest {
 
     @Test
     void savePermitDecisionNotification_noReviewGroupDecisions() {
-        final PmrvUser user = PmrvUser.builder().userId("user").build();
+        final AppUser user = AppUser.builder().userId("user").build();
         final UUID file = UUID.randomUUID();
 
         final AerApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
@@ -159,7 +166,7 @@ class AerReviewServiceTest {
 
     @Test
     void savePermitDecisionNotification_noReviewAttachments() {
-        final PmrvUser user = PmrvUser.builder().userId("user").build();
+        final AppUser user = AppUser.builder().userId("user").build();
 
         final AerDataReviewDecision decision = AerDataReviewDecision.builder()
             .reviewDataType(AerReviewDataType.AER_DATA)
@@ -195,7 +202,7 @@ class AerReviewServiceTest {
 
     @Test
     void saveRequestReturnForAmends() {
-        final PmrvUser user = PmrvUser.builder().userId("user").build();
+        final AppUser user = AppUser.builder().userId("user").build();
 
         final AerDataReviewDecision decision = AerDataReviewDecision.builder()
             .reviewDataType(AerReviewDataType.AER_DATA)
@@ -274,5 +281,39 @@ class AerReviewServiceTest {
         assertEquals(aerApplicationAmendsSubmitRequestTaskPayloadSaved.getAer(),
             aerSaveApplicationAmendRequestTaskActionPayload.getAer());
         assertFalse(aerApplicationAmendsSubmitRequestTaskPayloadSaved.isVerificationPerformed());
+    }
+
+    @Test
+    void updateRequestPayloadWithSkipReviewOutcome() {
+
+        String userId = "userId";
+        AppUser user = AppUser.builder().userId(userId).build();
+
+        AerRequestPayload requestPayload = AerRequestPayload
+                .builder()
+                .aer(Aer.builder().monitoringApproachEmissions(MonitoringApproachEmissions.builder().build()).build())
+                .verificationReport(AerVerificationReport.builder().build())
+                .verificationPerformed(true)
+                .build();
+        Request request = Request.builder().payload(requestPayload).build();
+        RequestTask requestTask = RequestTask.builder()
+                .request(request)
+                .build();
+
+        AerApplicationSkipReviewRequestTaskActionPayload skipReviewRequestTaskPayload = AerApplicationSkipReviewRequestTaskActionPayload.builder()
+                .aerSkipReviewDecision(AerSkipReviewDecision.builder().type(AerSkipReviewActionType.OTHER).reason("Test").build())
+                .build();
+
+        service.updateRequestPayloadWithSkipReviewOutcome(requestTask, skipReviewRequestTaskPayload, user);
+
+        AerRequestPayload updatedRequestPayload = (AerRequestPayload) request.getPayload();
+
+        Assertions.assertTrue(updatedRequestPayload.getReviewGroupDecisions().values().stream().filter(
+                dec -> dec instanceof AerDataReviewDecision
+        ).allMatch(dec -> ((AerDataReviewDecision) dec).getType() == AerDataReviewDecisionType.ACCEPTED));
+
+        Assertions.assertTrue(updatedRequestPayload.getReviewGroupDecisions().values().stream().filter(
+                dec -> dec instanceof AerVerificationReportDataReviewDecision
+        ).allMatch(dec -> ((AerVerificationReportDataReviewDecision) dec).getType() == AerVerificationReportDataReviewDecisionType.ACCEPTED));
     }
 }

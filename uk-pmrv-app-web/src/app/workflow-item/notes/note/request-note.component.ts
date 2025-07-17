@@ -92,12 +92,9 @@ export class RequestNoteComponent extends WorkflowItemAbstractComponent implemen
           : this.backLinkService.show(`${prefixUrl}/${requestId}`, 'notes'),
       );
 
-    this.fileDowloadUrl$ = this.prefixUrl$.pipe(
-      withLatestFrom(this.accountId$, this.requestId$),
+    this.fileDowloadUrl$ = this.noteId$.pipe(
       takeUntil(this.destroy$),
-      map(([prefixUrl, accountId, requestId]) =>
-        accountId ? `${prefixUrl}/workflows/${requestId}/file-download/` : `${prefixUrl}/${requestId}/file-download/`,
-      ),
+      map((noteId) => (!noteId ? `../../file-download/` : `../../../file-download/`)),
     );
 
     this.notePayload$.pipe(first()).subscribe((payload) => {
@@ -122,7 +119,7 @@ export class RequestNoteComponent extends WorkflowItemAbstractComponent implemen
   onSubmit() {
     if (this.form.valid) {
       const note = this.form.get('note').value;
-      const files = this.form.get('files').value?.map((file) => file.uuid);
+      const files = (this.form.get('files').value?.map((file) => file.uuid) as string[]).filter((uuid) => uuid);
 
       combineLatest([this.requestId$, this.noteId$])
         .pipe(

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1gies5g" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.30.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.22.0">
+  <bpmn:process id="PROCESS_BDR_INITIATE" name="Baseline data reports initiate" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="BDR_INITIATE_TIMER">
+      <bpmn:outgoing>Flow_1e96auc</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_0mqsv8a">
+        <bpmn:timeDate xsi:type="bpmn:tFormalExpression">2025-04-03T00:00:00Z</bpmn:timeDate>
+      </bpmn:timerEventDefinition>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="INITIATE_BDR" name="Initiate BDR" camunda:delegateExpression="#{initiateBDRHandler}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="accountIds">
+            <camunda:list />
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1l5e71d</bpmn:incoming>
+      <bpmn:outgoing>Flow_0qa9fng</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics camunda:asyncBefore="true" camunda:collection="accounts" camunda:elementVariable="accountId" />
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1e96auc" sourceRef="BDR_INITIATE_TIMER" targetRef="Activity_08agzh8" />
+    <bpmn:serviceTask id="Activity_08agzh8" name="Collect accounts for BDR" camunda:delegateExpression="#{collectInstallationAccountsForBDRHandler}">
+      <bpmn:incoming>Flow_1e96auc</bpmn:incoming>
+      <bpmn:outgoing>Flow_1l5e71d</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1l5e71d" sourceRef="Activity_08agzh8" targetRef="INITIATE_BDR" />
+    <bpmn:endEvent id="Event_2xbvtyg">
+      <bpmn:incoming>Flow_0qa9fng</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0qa9fng" sourceRef="INITIATE_BDR" targetRef="Event_2xbvtyg" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_BDR_INITIATE">
+      <bpmndi:BPMNShape id="Event_0hciwmu_di" bpmnElement="BDR_INITIATE_TIMER">
+        <dc:Bounds x="152" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16ycbko_di" bpmnElement="INITIATE_BDR">
+        <dc:Bounds x="490" y="120" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1akheqa_di" bpmnElement="Activity_08agzh8">
+        <dc:Bounds x="260" y="120" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1xbvtyg_di" bpmnElement="Event_2xbvtyg">
+        <dc:Bounds x="722" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1e96auc_di" bpmnElement="Flow_1e96auc">
+        <di:waypoint x="188" y="160" />
+        <di:waypoint x="260" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1l5e71d_di" bpmnElement="Flow_1l5e71d">
+        <di:waypoint x="360" y="160" />
+        <di:waypoint x="490" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qa9fng_di" bpmnElement="Flow_0qa9fng">
+        <di:waypoint x="590" y="160" />
+        <di:waypoint x="722" y="160" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

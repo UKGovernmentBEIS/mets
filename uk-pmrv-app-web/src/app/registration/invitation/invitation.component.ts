@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { pluck } from 'rxjs';
+import { map } from 'rxjs';
 
 import { UserRegistrationStore } from '../store/user-registration.store';
 
@@ -12,9 +12,10 @@ import { UserRegistrationStore } from '../store/user-registration.store';
       <div class="govuk-grid-column-two-thirds">
         <govuk-panel
           title="You have been added as an {{
-            (installation$ | async)?.roleCode === 'emitter_contact' ? 'emitter contact' : 'operator user'
-          }} to the account of {{ (installation$ | async)?.accountInstallationName }}"
-        ></govuk-panel>
+            (operatorInvitationResultData$ | async)?.roleCode === 'emitter_contact'
+              ? 'emitter contact'
+              : 'operator user'
+          }} to the account of {{ (operatorInvitationResultData$ | async)?.accountName }}"></govuk-panel>
 
         <h2 class="govuk-heading-m">What happens next</h2>
         <p class="govuk-body">
@@ -30,9 +31,12 @@ import { UserRegistrationStore } from '../store/user-registration.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvitationComponent {
-  installation$ = this.activatedRoute.data.pipe(pluck('installation'));
+  operatorInvitationResultData$ = this.activatedRoute.data.pipe(map((data) => data?.operatorInvitationResultData));
 
-  constructor(private readonly activatedRoute: ActivatedRoute, private readonly store: UserRegistrationStore) {
+  constructor(
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly store: UserRegistrationStore,
+  ) {
     store.reset();
   }
 }

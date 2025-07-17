@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { first, map, Observable, switchMap } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { waitForRfiRdeTypes } from '../../core/rfi';
 import { RfiStore } from '../../store/rfi.store';
 
 @Injectable({ providedIn: 'root' })
-export class QuestionsGuard implements CanActivate {
+export class QuestionsGuard {
   constructor(
     private readonly requestItemsService: RequestItemsService,
     private readonly router: Router,

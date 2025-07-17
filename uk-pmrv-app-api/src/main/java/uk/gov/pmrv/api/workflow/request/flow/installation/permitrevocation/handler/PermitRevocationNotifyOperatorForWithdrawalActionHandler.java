@@ -1,9 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.handler;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -15,6 +14,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.NotifyOperatorForDeci
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationWaitForAppealRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.validation.PermitRevocationValidator;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class PermitRevocationNotifyOperatorForWithdrawalActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final NotifyOperatorForDecisionRequestTaskActionPayload taskActionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -38,7 +39,7 @@ public class PermitRevocationNotifyOperatorForWithdrawalActionHandler
         final PermitRevocationWaitForAppealRequestTaskPayload taskPayload =
             (PermitRevocationWaitForAppealRequestTaskPayload) requestTask.getPayload();
 
-        validator.validateNotifyUsers(requestTask, permitDecisionNotification, pmrvUser);
+        validator.validateNotifyUsers(requestTask, permitDecisionNotification, appUser);
         validator.validateWaitForAppealRequestTaskPayload(taskPayload);
 
         // fill request payload

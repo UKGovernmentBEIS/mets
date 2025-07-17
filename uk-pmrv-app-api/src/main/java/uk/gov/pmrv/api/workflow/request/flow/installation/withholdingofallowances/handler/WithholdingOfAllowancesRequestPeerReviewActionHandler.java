@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowanc
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -38,7 +38,7 @@ public class WithholdingOfAllowancesRequestPeerReviewActionHandler implements
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final PeerReviewRequestTaskActionPayload actionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -48,9 +48,9 @@ public class WithholdingOfAllowancesRequestPeerReviewActionHandler implements
         final String peerReviewer = actionPayload.getPeerReviewer();
 
         withholdingOfAllowancesValidator.validate(payload.getWithholdingOfAllowances());
-        peerReviewerTaskAssignmentValidator.validate(RequestTaskType.WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEW, peerReviewer, pmrvUser);
+        peerReviewerTaskAssignmentValidator.validate(RequestTaskType.WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEW, peerReviewer, appUser);
 
-        final String regulatorReviewer = pmrvUser.getUserId();
+        final String regulatorReviewer = appUser.getUserId();
         withholdingOfAllowancesService.requestPeerReview(requestTask, peerReviewer, regulatorReviewer);
 
         requestService.addActionToRequest(request,

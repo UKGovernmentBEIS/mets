@@ -1,16 +1,35 @@
 <app-base-action-container-component
   [header]="aerTitle$ | async"
   [customContentTemplate]="customContentTemplate"
-  [expectedActionType]="['AER_APPLICATION_COMPLETED']"
+  [expectedActionType]="['AER_APPLICATION_COMPLETED', 'AER_APPLICATION_REVIEW_SKIPPED']"
 >
 </app-base-action-container-component>
 <ng-template #customContentTemplate>
   <h2 app-summary-header class="govuk-heading-m">Details</h2>
-  <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+  <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6" *ngIf="payload$ | async as payloadData">
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Emissions report</dt>
       <dd govukSummaryListRowValue>
-        <a govukLink [routerLink]="aerLink$ | async">{{ (payload$ | async).reportingYear }} emissions report</a>
+        <a govukLink [routerLink]="aerLink$ | async">{{ payloadData.reportingYear }} emissions report</a>
+      </dd>
+    </div>
+    <div
+      govukSummaryListRow
+      *ngIf="(isRegulator$ | async) && (requestAction$ | async).type === 'AER_APPLICATION_REVIEW_SKIPPED'"
+    >
+      <dt govukSummaryListRowKey>Reason for skipping the review</dt>
+      <dd
+        govukSummaryListRowValue
+        *ngIf="payloadData?.aerSkipReviewDecision && payloadData?.aerSkipReviewDecision?.type === 'OTHER'"
+        class="pre-wrap"
+      >
+        {{ payloadData.aerSkipReviewDecision.reason }}
+      </dd>
+      <dd
+        govukSummaryListRowValue
+        *ngIf="!payloadData.aerSkipReviewDecision || payloadData.aerSkipReviewDecision.type === 'NOT_REQUIRED'"
+      >
+        Review not required
       </dd>
     </div>
   </dl>

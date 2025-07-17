@@ -8,6 +8,8 @@ import { of, throwError } from 'rxjs';
 import { EmpBatchReissueFiltersTemplateComponent } from '@aviation/shared/components/emp-batch-reissue/filters-template/filters-template.component';
 import { EmpBatchReissueStore } from '@aviation/workflows/emp-batch-reissue/submit/store/emp-batch-reissue.store';
 import { mockSubmitCompletedState, regulators } from '@aviation/workflows/emp-batch-reissue/submit/testing/mock-data';
+import { DestroySubject } from '@core/services/destroy-subject.service';
+import { AuthStore } from '@core/store';
 import { expectBusinessErrorToBe } from '@error/testing/business-error';
 import {
   anotherInProgressError,
@@ -16,7 +18,7 @@ import {
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
 
-import { RequestsService } from 'pmrv-api';
+import { RegulatorCurrentUserDTO, RequestsService } from 'pmrv-api';
 
 import { initialState } from '../store/emp-batch-reissue.state';
 import { SummaryComponent } from './summary.component';
@@ -27,6 +29,7 @@ describe('SummaryComponent', () => {
 
   let page: Page;
   let store: EmpBatchReissueStore;
+  let authStore: AuthStore;
   const requestService = mockClass(RequestsService);
   const activatedRouteStub = new ActivatedRouteStub(undefined, undefined, {
     regulators,
@@ -61,31 +64,30 @@ describe('SummaryComponent', () => {
       declarations: [SummaryComponent],
       imports: [RouterTestingModule, SharedModule, EmpBatchReissueFiltersTemplateComponent],
       providers: [
+        DestroySubject,
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: RequestsService, useValue: requestService },
       ],
     }).compileComponents();
-  });
 
-  afterEach(() => jest.clearAllMocks());
+    authStore = TestBed.inject(AuthStore);
+    authStore.setIsLoggedIn(true);
+    authStore.setUser({
+      email: 'foo@bar.com',
+      firstName: 'foo',
+      lastName: 'bar',
+      competentAuthority: 'ENGLAND',
+    } as RegulatorCurrentUserDTO);
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [SummaryComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(SummaryComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-
-  beforeEach(() => {
     store = TestBed.inject(EmpBatchReissueStore);
     store.setState({
       ...initialState,
       ...mockSubmitCompletedState,
     });
   });
+
+  afterEach(() => jest.clearAllMocks());
+
   beforeEach(createComponent);
 
   it('should create', () => {
@@ -107,17 +109,20 @@ describe('SummaryComponent', () => {
     fixture.detectChanges();
 
     expect(requestService.processRequestCreateAction).toHaveBeenCalledTimes(1);
-    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith({
-      requestCreateActionType: 'EMP_BATCH_REISSUE',
-      requestCreateActionPayload: {
-        payloadType: 'EMP_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
-        filters: {
-          reportingStatuses: mockSubmitCompletedState.reportingStatuses,
-          emissionTradingSchemes: mockSubmitCompletedState.emissionTradingSchemes,
+    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith(
+      {
+        requestCreateActionType: 'EMP_BATCH_REISSUE',
+        requestCreateActionPayload: {
+          payloadType: 'EMP_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
+          filters: {
+            reportingStatuses: mockSubmitCompletedState.reportingStatuses,
+            emissionTradingSchemes: mockSubmitCompletedState.emissionTradingSchemes,
+          },
+          signatory: mockSubmitCompletedState.signatory,
         },
-        signatory: mockSubmitCompletedState.signatory,
       },
-    });
+      'ENGLAND',
+    );
 
     expect(page.confirmationMessage.textContent.trim()).toEqual('Your reference code is: 1234');
   });
@@ -131,19 +136,22 @@ describe('SummaryComponent', () => {
     fixture.detectChanges();
 
     expect(requestService.processRequestCreateAction).toHaveBeenCalledTimes(1);
-    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith({
-      requestCreateActionType: 'EMP_BATCH_REISSUE',
-      requestCreateActionPayload: {
-        payloadType: 'EMP_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
-        filters: {
-          reportingStatuses: mockSubmitCompletedState.reportingStatuses,
-          emissionTradingSchemes: mockSubmitCompletedState.emissionTradingSchemes,
+    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith(
+      {
+        requestCreateActionType: 'EMP_BATCH_REISSUE',
+        requestCreateActionPayload: {
+          payloadType: 'EMP_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
+          filters: {
+            reportingStatuses: mockSubmitCompletedState.reportingStatuses,
+            emissionTradingSchemes: mockSubmitCompletedState.emissionTradingSchemes,
+          },
+          signatory: mockSubmitCompletedState.signatory,
         },
-        signatory: mockSubmitCompletedState.signatory,
       },
-    });
+      'ENGLAND',
+    );
 
-    await expectBusinessErrorToBe(anotherInProgressError(true));
+    await expectBusinessErrorToBe(anotherInProgressError());
   });
 
   it('should display error message when 0 emitters found', async () => {
@@ -155,18 +163,21 @@ describe('SummaryComponent', () => {
     fixture.detectChanges();
 
     expect(requestService.processRequestCreateAction).toHaveBeenCalledTimes(1);
-    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith({
-      requestCreateActionType: 'EMP_BATCH_REISSUE',
-      requestCreateActionPayload: {
-        payloadType: 'EMP_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
-        filters: {
-          reportingStatuses: mockSubmitCompletedState.reportingStatuses,
-          emissionTradingSchemes: mockSubmitCompletedState.emissionTradingSchemes,
+    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith(
+      {
+        requestCreateActionType: 'EMP_BATCH_REISSUE',
+        requestCreateActionPayload: {
+          payloadType: 'EMP_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
+          filters: {
+            reportingStatuses: mockSubmitCompletedState.reportingStatuses,
+            emissionTradingSchemes: mockSubmitCompletedState.emissionTradingSchemes,
+          },
+          signatory: mockSubmitCompletedState.signatory,
         },
-        signatory: mockSubmitCompletedState.signatory,
       },
-    });
+      'ENGLAND',
+    );
 
-    await expectBusinessErrorToBe(noMatchingEmittersError(true));
+    await expectBusinessErrorToBe(noMatchingEmittersError());
   });
 });

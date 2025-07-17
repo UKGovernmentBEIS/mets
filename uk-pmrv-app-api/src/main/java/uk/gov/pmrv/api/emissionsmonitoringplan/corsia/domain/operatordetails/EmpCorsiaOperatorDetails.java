@@ -1,19 +1,27 @@
 package uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+
+import org.springframework.util.ObjectUtils;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 
 @Data
 @SuperBuilder
@@ -31,7 +39,24 @@ public class EmpCorsiaOperatorDetails extends AviationCorsiaOperatorDetails {
     private Boolean subsidiaryCompanyExist;
 
     @Builder.Default
-    @JsonDeserialize(as = LinkedHashSet.class)
+    @JsonDeserialize(as = ArrayList.class)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Set<@NotNull @Valid SubsidiaryCompanyCorsia> subsidiaryCompanies = new HashSet<>();
+    private List<@NotNull @Valid SubsidiaryCompanyCorsia> subsidiaryCompanies = new ArrayList<>();
+
+    @Override
+    @JsonIgnore
+    public Set<UUID> getAttachmentIds() {
+
+        final Set<UUID> attachments = new HashSet<>();
+        if (Boolean.TRUE.equals(subsidiaryCompanyExist) && subsidiaryCompanies != null && !subsidiaryCompanies.isEmpty()) {
+        	subsidiaryCompanies.forEach(company -> {
+        		if (company.getAirOperatingCertificate() != null && 
+        				!ObjectUtils.isEmpty(company.getAirOperatingCertificate().getCertificateFiles())) {
+        			attachments.addAll(company.getAirOperatingCertificate().getCertificateFiles());
+        		}
+        	});
+        }
+        attachments.addAll(super.getAttachmentIds());        
+        return Collections.unmodifiableSet(attachments);
+    }
 }

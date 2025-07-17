@@ -1,12 +1,13 @@
 package uk.gov.pmrv.api.user.core.domain.model;
 
-import java.util.Map;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.token.JwtTokenActionEnum;
+import uk.gov.netz.api.token.JwtTokenAction;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+
+import java.util.Map;
 
 /**
  * Object containing information to send a notification with a redirection link to user.
@@ -15,7 +16,7 @@ import uk.gov.pmrv.api.token.JwtTokenActionEnum;
 @Builder
 public class UserNotificationWithRedirectionLinkInfo {
 
-    private NotificationTemplateName templateName;
+    private PmrvNotificationTemplateName templateName;
     private String userEmail;
     private Map<String, Object> notificationParams;
     private String linkParamName;
@@ -26,7 +27,7 @@ public class UserNotificationWithRedirectionLinkInfo {
     @EqualsAndHashCode
     @Builder
     public static class TokenParams {
-        private final JwtTokenActionEnum jwtTokenAction;
+        private final JwtTokenAction jwtTokenAction;
         private final String claimValue;
         private final long expirationInterval;
     }

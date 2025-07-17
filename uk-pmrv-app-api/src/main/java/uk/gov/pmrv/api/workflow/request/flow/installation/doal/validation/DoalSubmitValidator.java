@@ -2,16 +2,13 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.doal.validation;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 import uk.gov.pmrv.api.allowance.validation.AllowanceAllocationValidator;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.Doal;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalProceedToAuthorityDetermination;
@@ -41,7 +38,7 @@ public class DoalSubmitValidator {
 
         // Validate attachments
         if (!doalAttachmentsValidator.attachmentsExist(taskPayload.getReferencedAttachmentIds())) {
-            throw new BusinessException(ErrorCode.INVALID_DOAL,
+            throw new BusinessException(MetsErrorCode.INVALID_DOAL,
                     DoalViolation.ATTACHMENT_NOT_FOUND.getMessage());
         }
 
@@ -49,7 +46,7 @@ public class DoalSubmitValidator {
                 taskPayload.getReferencedAttachmentIds(),
                 taskPayload.getAttachments().keySet())
         ) {
-            throw new BusinessException(ErrorCode.INVALID_DOAL,
+            throw new BusinessException(MetsErrorCode.INVALID_DOAL,
                     DoalViolation.ATTACHMENT_NOT_REFERENCED.getMessage());
         }
     }
@@ -58,7 +55,7 @@ public class DoalSubmitValidator {
         Set<PreliminaryAllocation> preliminaryAllocations = doal.getActivityLevelChangeInformation().getPreliminaryAllocations();
 
         if(!preliminaryAllocations.isEmpty() && !allowanceAllocationValidator.isValid(preliminaryAllocations)) {
-                throw new BusinessException(ErrorCode.INVALID_DOAL,
+                throw new BusinessException(MetsErrorCode.INVALID_DOAL,
                         DoalViolation.INVALID_PRELIMINARY_ALLOCATIONS.getMessage());
         }
     }
@@ -71,7 +68,7 @@ public class DoalSubmitValidator {
                 .allMatch(item -> item.getGroupType().equals(determination.getArticleReasonGroupType()));
 
         if(!areArticleReasonsValid) {
-            throw new BusinessException(ErrorCode.INVALID_DOAL,
+            throw new BusinessException(MetsErrorCode.INVALID_DOAL,
                     DoalViolation.INVALID_ARTICLE_REASONS.getMessage());
         }
     }

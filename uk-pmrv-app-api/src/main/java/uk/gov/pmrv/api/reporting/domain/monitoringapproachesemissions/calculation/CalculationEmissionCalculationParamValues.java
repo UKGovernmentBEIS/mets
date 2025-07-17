@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.ObjectUtils;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.reporting.domain.EmissionFactorMeasurementUnit;
 import uk.gov.pmrv.api.reporting.domain.NCVMeasurementUnit;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.common.ManuallyProvidedEmissions;
@@ -69,7 +69,7 @@ public class CalculationEmissionCalculationParamValues {
                 && ObjectUtils.compare(ncvMeasurementUnit, that.ncvMeasurementUnit) == 0
                 && ObjectUtils.compare(efMeasurementUnit, that.efMeasurementUnit) == 0
                 && ObjectUtils.compare(calculationCorrect, that.calculationCorrect) == 0
-                && providedEmissions != null? providedEmissions.equals(that.providedEmissions) : that.providedEmissions == null;
+                && Objects.equals(providedEmissions, that.providedEmissions);
     }
 
     @Override

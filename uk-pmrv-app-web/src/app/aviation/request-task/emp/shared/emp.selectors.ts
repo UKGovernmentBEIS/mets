@@ -8,7 +8,6 @@ import {
   EmissionsMonitoringPlanUkEts,
   EmissionsMonitoringPlanUkEtsContainer,
   EmpAcceptedVariationDecisionDetails,
-  EmpIssuanceDetermination,
   EmpIssuanceReviewDecision,
   EmpVariationReviewDecision,
   EmpVariationUkEtsDetails,
@@ -18,13 +17,14 @@ import {
 
 import {
   EmissionsMonitoringPlan,
+  EmpRequestTaskPayload,
   EmpRequestTaskPayloadCorsia,
   EmpRequestTaskPayloadUkEts,
   EmpTaskKey,
   requestTaskQuery,
   RequestTaskState,
 } from '../../store';
-import { getTaskStatusByTaskCompletionState } from './util/emp.util';
+import { EmpDetermination, EmpReviewDecision, getTaskStatusByTaskCompletionState } from './util/emp.util';
 
 const selectPayload: OperatorFunction<RequestTaskState, EmpRequestTaskPayloadUkEts> = pipe(
   requestTaskQuery.selectRequestTaskPayload,
@@ -77,22 +77,29 @@ const selectEmissionsMonitoringPlanCorsia: OperatorFunction<RequestTaskState, Em
   requestTaskQuery.selectRequestTaskPayload,
   map((state) => (state as EmpRequestTaskPayloadCorsia)?.emissionsMonitoringPlan),
 );
-const selectReviewDecisions: OperatorFunction<RequestTaskState, { [key: string]: EmpIssuanceReviewDecision }> = pipe(
+
+const selectReviewDecisions: OperatorFunction<RequestTaskState, { [key: string]: EmpReviewDecision }> = pipe(
   requestTaskQuery.selectRequestTaskPayload,
-  map((state) => (state as EmpRequestTaskPayloadUkEts)?.reviewGroupDecisions),
+  map((state) => (state as EmpRequestTaskPayload)?.reviewGroupDecisions),
 );
 
 const selectReviewSectionsCompleted: OperatorFunction<RequestTaskState, { [key: string]: boolean }> = pipe(
   requestTaskQuery.selectRequestTaskPayload,
-  map((state) => (state as EmpRequestTaskPayloadUkEts)?.reviewSectionsCompleted),
+  map((state) => (state as EmpRequestTaskPayload)?.reviewSectionsCompleted),
 );
+
+const selectIssuanceReviewDecisions: OperatorFunction<RequestTaskState, { [key: string]: EmpIssuanceReviewDecision }> =
+  pipe(
+    requestTaskQuery.selectRequestTaskPayload,
+    map((state) => (state as EmpRequestTaskPayload)?.reviewGroupDecisions),
+  );
 
 const selectVariationReviewDecisions: OperatorFunction<
   RequestTaskState,
   { [key: string]: EmpVariationReviewDecision }
 > = pipe(
   requestTaskQuery.selectRequestTaskPayload,
-  map((state) => (state as EmpRequestTaskPayloadUkEts)?.reviewGroupDecisions),
+  map((state) => (state as EmpRequestTaskPayload)?.reviewGroupDecisions),
 );
 
 const selectVariationRegLedDecisions: OperatorFunction<
@@ -103,14 +110,14 @@ const selectVariationRegLedDecisions: OperatorFunction<
   map((state) => (state as EmpRequestTaskPayloadUkEts)?.reviewGroupDecisions),
 );
 
-const selectVariationDetailsReviewDecisions: OperatorFunction<RequestTaskState, EmpVariationReviewDecision> = pipe(
+const selectVariationDetailsReviewDecision: OperatorFunction<RequestTaskState, EmpVariationReviewDecision> = pipe(
   requestTaskQuery.selectRequestTaskPayload,
-  map((state) => (state as EmpRequestTaskPayloadUkEts)?.empVariationDetailsReviewDecision),
+  map((state) => (state as EmpRequestTaskPayload)?.empVariationDetailsReviewDecision),
 );
 
 const selectVariationDetailsReviewCompleted: OperatorFunction<RequestTaskState, boolean> = pipe(
   requestTaskQuery.selectRequestTaskPayload,
-  map((state) => (state as EmpRequestTaskPayloadUkEts)?.empVariationDetailsReviewCompleted),
+  map((state) => (state as EmpRequestTaskPayload)?.empVariationDetailsReviewCompleted),
 );
 
 function selectEmpTask<T extends keyof EmissionsMonitoringPlan>(
@@ -131,9 +138,9 @@ function selectStatusForTask(task: EmpTaskKey): OperatorFunction<RequestTaskStat
   );
 }
 
-const selectReviewDetermination: OperatorFunction<RequestTaskState, EmpIssuanceDetermination> = pipe(
+const selectDetermination: OperatorFunction<RequestTaskState, EmpDetermination> = pipe(
   requestTaskQuery.selectRequestTaskPayload,
-  map((state) => (state as EmpRequestTaskPayloadUkEts)?.determination),
+  map((state) => (state as EmpRequestTaskPayload)?.determination),
 );
 
 export const empQuery = {
@@ -144,15 +151,16 @@ export const empQuery = {
   selectEmissionsMonitoringPlan,
   selectEmissionsMonitoringPlanCorsia,
   selectReviewDecisions,
+  selectIssuanceReviewDecisions,
   selectVariationReviewDecisions,
   selectVariationRegLedDecisions,
-  selectVariationDetailsReviewDecisions,
+  selectVariationDetailsReviewDecision,
   selectVariationDetailsReviewCompleted,
   selectOriginalEmpContainer,
   selectReviewSectionsCompleted,
   selectEmpTask,
   selectStatusForTask,
-  selectReviewDetermination,
+  selectDetermination,
   selectVariationDetails,
   selectVariationRegulatorLedReason,
   selectVariationDetailsCompleted,

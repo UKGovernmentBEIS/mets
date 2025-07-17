@@ -25,4 +25,5 @@ import { EmpFuelUpliftMethodProcedures } from 'pmrv-api';
 export class FuelUpliftSummaryTemplateComponent {
   @Input() data: EmpFuelUpliftMethodProcedures | null;
   @Input() isEditable = false;
+  @Input() isCorsia = false;
 }

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
@@ -37,7 +37,7 @@ class AviationAerUkEtsReviewSaveGroupDecisionActionHandlerTest {
         RequestTask requestTask = RequestTask.builder().id(requestTaskId).build();
         AviationAerUkEtsSaveReviewGroupDecisionRequestTaskActionPayload taskActionPayload =
             AviationAerUkEtsSaveReviewGroupDecisionRequestTaskActionPayload.builder().build();
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 

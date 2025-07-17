@@ -1,37 +1,44 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { first, map, takeUntil } from 'rxjs';
+import { combineLatest, first, iif, map, of, switchMap, takeUntil } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore, selectCurrentDomain } from '@core/store/auth';
 
-import { NonComplianceDailyPenaltyNoticeRequestTaskPayload } from 'pmrv-api';
+import { AviationAccountViewService, NonComplianceDailyPenaltyNoticeRequestTaskPayload } from 'pmrv-api';
 
 import { BreadcrumbService } from '../../../../shared/breadcrumbs/breadcrumb.service';
 import { NonComplianceService } from '../../core/non-compliance.service';
 
 @Component({
   selector: 'app-non-compliance-notify-operator',
-  template: `<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <app-notify-operator
-        [taskId]="taskId$ | async"
-        [accountId]="accountId$ | async"
-        requestTaskActionType="NON_COMPLIANCE_DAILY_PENALTY_NOTICE_NOTIFY_OPERATOR"
-        [confirmationMessage]="'Initial penalty notice sent to operator'"
-        [isRegistryToBeNotified]="false"
-        [referenceCode]="requestId$ | async"
-        [issueNoticeOfIntent]="issueNoticeOfIntent$ | async"
-        [hasSignature]="false"
-      ></app-notify-operator>
+  template: `
+    <div class="govuk-grid-row">
+      <div
+        class="govuk-grid-column-two-thirds"
+        *ngIf="(isAviationWithoutLocation$ | async) === false; else noContactAddressBlockNotification">
+        <app-notify-operator
+          [taskId]="taskId$ | async"
+          [accountId]="accountId$ | async"
+          requestTaskActionType="NON_COMPLIANCE_DAILY_PENALTY_NOTICE_NOTIFY_OPERATOR"
+          [confirmationMessage]="'Initial penalty notice sent to operator'"
+          [referenceCode]="requestId$ | async"
+          [issueNoticeOfIntent]="issueNoticeOfIntent$ | async"
+          [hasSignature]="false"></app-notify-operator>
+      </div>
+      <ng-template #noContactAddressBlockNotification>
+        <app-notify-operator-no-contact-address
+          [accountId]="accountId$ | async"></app-notify-operator-no-contact-address>
+      </ng-template>
     </div>
-  </div> `,
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotifyOperatorComponent implements OnInit {
   constructor(
     private readonly nonComplianceService: NonComplianceService,
+    private readonly accountViewService: AviationAccountViewService,
     private readonly route: ActivatedRoute,
     private readonly breadcrumbService: BreadcrumbService,
     private readonly authStore: AuthStore,
@@ -46,6 +53,22 @@ export class NotifyOperatorComponent implements OnInit {
   readonly issueNoticeOfIntent$ = this.nonComplianceService.payload$.pipe(
     first(),
     map((payload) => (payload as NonComplianceDailyPenaltyNoticeRequestTaskPayload).issueNoticeOfIntent),
+  );
+  readonly isAviationWithoutLocation$ = combineLatest([
+    this.currentDomain$.pipe(takeUntil(this.destroy$)),
+    this.accountId$,
+  ]).pipe(
+    first(),
+    switchMap(([domain, accountId]) =>
+      iif(
+        () => domain === 'AVIATION',
+        this.accountViewService.getAviationAccountById(accountId).pipe(
+          first(),
+          map((account) => !!(!account || account?.aviationAccount?.location == null)),
+        ),
+        of(false),
+      ),
+    ),
   );
 
   ngOnInit(): void {

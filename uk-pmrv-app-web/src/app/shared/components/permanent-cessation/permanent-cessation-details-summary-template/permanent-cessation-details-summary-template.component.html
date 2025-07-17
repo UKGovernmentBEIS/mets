@@ -1,0 +1,61 @@
+<dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Describe the cessation of regulated activities</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ data?.description }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['../']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="files?.length > 0">
+    <dt govukSummaryListRowKey>Supporting documents</dt>
+    <dd govukSummaryListRowValue>
+      <app-summary-download-files [files]="files"></app-summary-download-files>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['../']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Date of cessation</dt>
+    <dd govukSummaryListRowValue>
+      {{ data?.cessationDate | govukDate }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['../']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Scope of the cessation</dt>
+    <dd govukSummaryListRowValue>
+      {{ data?.cessationScope | cessationScopePipe }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['../']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Additional details to be included in the notice document</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ data?.additionalDetails }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['../']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="data?.regulatorComments">
+    <dt govukSummaryListRowKey>Regulator comments (optional)</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ data?.regulatorComments }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['../']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>

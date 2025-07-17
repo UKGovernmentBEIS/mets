@@ -6,7 +6,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -53,7 +53,7 @@ class WithholdingOfAllowancesPeerDecisionActionHandlerTest {
                 .decision(decision)
                 .build();
         final String userId = "userId";
-        final PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        final AppUser appUser = AppUser.builder().userId(userId).build();
         final String processTaskId = "processTaskId";
         final Request request = Request.builder().id("1").build();
         final RequestTask requestTask = RequestTask.builder().id(2L).request(request).processTaskId(processTaskId).build();
@@ -62,7 +62,7 @@ class WithholdingOfAllowancesPeerDecisionActionHandlerTest {
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.WITHHOLDING_OF_ALLOWANCES_SUBMIT_PEER_REVIEW_DECISION,
-            pmrvUser,
+            appUser,
             payload);
 
         final ArgumentCaptor<PeerReviewDecisionSubmittedRequestActionPayload> actionPayloadArgumentCaptor =

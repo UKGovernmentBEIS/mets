@@ -1,10 +1,5 @@
 package uk.gov.pmrv.api.permit.validation;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
@@ -15,6 +10,12 @@ import uk.gov.pmrv.api.permit.domain.PermitViolation;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.MonitoringApproachType;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.PermitMonitoringApproachSection;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationpfc.CalculationOfPFCMonitoringApproach;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor

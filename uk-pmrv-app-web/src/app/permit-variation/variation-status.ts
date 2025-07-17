@@ -10,7 +10,7 @@ export function variationDetailsStatus(state: PermitVariationState): TaskItemSta
     return state.permitVariationDetailsCompleted
       ? 'complete'
       : aboutVariation && Object.keys(aboutVariation).length
-      ? 'in progress'
-      : 'not started';
+        ? 'in progress'
+        : 'not started';
   }
 }

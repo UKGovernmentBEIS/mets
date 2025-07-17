@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.domain.abbreviations.Abbreviations;
@@ -38,7 +38,7 @@ class PermitVariationSaveRegulatorLedActionHandlerTest {
 	void process() {
 		Long requestTaskId = 1L;
 		RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_VARIATION_SAVE_APPLICATION_REGULATOR_LED;
-		PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+		AppUser appUser = AppUser.builder().userId("user").build();
 		PermitVariationSaveApplicationRegulatorLedRequestTaskActionPayload payload = PermitVariationSaveApplicationRegulatorLedRequestTaskActionPayload.builder()
 				.permit(Permit.builder()
 						.abbreviations(Abbreviations.builder().exist(false).build())
@@ -49,7 +49,7 @@ class PermitVariationSaveRegulatorLedActionHandlerTest {
 		RequestTask requestTask = RequestTask.builder().id(1L).build();
 		when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 		
-		cut.process(requestTaskId, requestTaskActionType, pmrvUser, payload);
+		cut.process(requestTaskId, requestTaskActionType, appUser, payload);
 		
         verify(requestTaskService, times(1)).findTaskById(requestTask.getId());
         verify(permitVariationSubmitRegulatorLedService, times(1)).savePermitVariation(payload, requestTask);

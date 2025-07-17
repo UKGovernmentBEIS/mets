@@ -114,5 +114,13 @@
       [taskId$]="taskId$"
       [allowedActions$]="store.select('allowedRequestTaskActions')"
     ></app-related-actions>
+
+    <app-preview-documents
+      *ngIf="previewDocumentsViewModel$ | async as vm"
+      [taskId]="vm.taskId"
+      [previewDocuments]="vm.previewDocuments"
+      [decisionNotification]="vm.decision"
+      linkFontSize="govuk-!-font-size-16"
+    ></app-preview-documents>
   </div>
 </div>

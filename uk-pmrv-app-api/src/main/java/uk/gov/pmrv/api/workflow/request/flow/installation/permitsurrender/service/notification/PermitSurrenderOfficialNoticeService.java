@@ -1,13 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.notification;
 
-import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.common.config.RegistryConfig;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -26,7 +24,6 @@ public class PermitSurrenderOfficialNoticeService {
     private final DecisionNotificationUsersService decisionNotificationUsersService;
     private final OfficialNoticeSendService officialNoticeSendService;
     private final OfficialNoticeGeneratorService officialNoticeGeneratorService;
-    private final RegistryConfig registryConfig;
     
     @Transactional
     public void generateAndSaveGrantedOfficialNotice(String requestId) {
@@ -89,32 +86,22 @@ public class PermitSurrenderOfficialNoticeService {
             "permit_surrender_cessation_complete_notice.pdf");
     }
 
-    public void sendReviewDeterminationOfficialNoticeForGranted(Request request) {
-        List<String> additionalRecipients = new ArrayList<>();
-        additionalRecipients.add(registryConfig.getEmail());
-
-        sendReviewDeterminationOfficialNotice(request, additionalRecipients);
-    }
-    
     public void sendReviewDeterminationOfficialNotice(Request request) {
-        sendReviewDeterminationOfficialNotice(request, new ArrayList<>());
-    }
-
-    public void sendOfficialNotice(Request request, FileInfoDTO officialNotice, DecisionNotification decisionNotification ) {
-        sendOfficialNotice(request, officialNotice, decisionNotification, new ArrayList<>());
-    }
-
-    private void sendReviewDeterminationOfficialNotice(Request request, List<String> additionalRecipients) {
         final PermitSurrenderRequestPayload requestPayload = (PermitSurrenderRequestPayload) request.getPayload();
         final FileInfoDTO officialNotice = requestPayload.getOfficialNotice();
         final DecisionNotification decisionNotification = requestPayload.getReviewDecisionNotification();
 
-        sendOfficialNotice(request, officialNotice, decisionNotification, additionalRecipients);
+        sendOfficialNotice(request, officialNotice, decisionNotification);
     }
 
-    private void sendOfficialNotice(Request request, FileInfoDTO officialNotice, DecisionNotification decisionNotification,
-                                   List<String> ccRecipientsEmails) {
-        ccRecipientsEmails.addAll(decisionNotificationUsersService.findUserEmails(decisionNotification));
-        officialNoticeSendService.sendOfficialNotice(List.of(officialNotice), request, ccRecipientsEmails);
-    }
+	public void sendOfficialNoticeForDecisionNotification(Request request, FileInfoDTO officialNotice,
+			DecisionNotification decisionNotification) {
+		sendOfficialNotice(request, officialNotice, decisionNotification);
+	}
+
+	private void sendOfficialNotice(Request request, FileInfoDTO officialNotice,
+			DecisionNotification decisionNotification) {
+		officialNoticeSendService.sendOfficialNotice(List.of(officialNotice), request,
+				decisionNotificationUsersService.findUserEmails(decisionNotification));
+	}
 }

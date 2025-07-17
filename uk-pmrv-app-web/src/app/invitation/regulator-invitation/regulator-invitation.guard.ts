@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Resolve, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
-import { catchError, mapTo, Observable, of, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 
 import { InvitedUserInfoDTO, RegulatorUsersRegistrationService } from 'pmrv-api';
 
 import { isBadRequest } from '../../error/business-errors';
 
 @Injectable({ providedIn: 'root' })
-export class RegulatorInvitationGuard implements CanActivate, Resolve<InvitedUserInfoDTO> {
+export class RegulatorInvitationGuard {
   private invitedUser: InvitedUserInfoDTO;
 
   constructor(
@@ -22,7 +22,20 @@ export class RegulatorInvitationGuard implements CanActivate, Resolve<InvitedUse
     return token
       ? this.regulatorUsersRegistrationService.acceptRegulatorInvitation({ token }).pipe(
           tap((invitedUser) => (this.invitedUser = invitedUser)),
-          mapTo(true),
+          map(() => {
+            if (this.invitedUser.invitationStatus == 'ALREADY_REGISTERED') {
+              this.router.navigate(['invitation/regulator/confirmed']);
+              return;
+            }
+            if (
+              ['PENDING_TO_REGISTERED_SET_PASSWORD_ONLY', 'ALREADY_REGISTERED_SET_PASSWORD_ONLY'].includes(
+                this.invitedUser.invitationStatus,
+              )
+            ) {
+              return true;
+            }
+            return false;
+          }),
           catchError((res: unknown) => {
             if (isBadRequest(res)) {
               this.router.navigate(['invitation/regulator/invalid-link'], {

@@ -19,8 +19,7 @@ describe('PreliminaryAllocationDetailsTemplateComponent', () => {
       <app-preliminary-allocation-details-template
         [form]="formGroup"
         isEditable="true"
-        [isEditing]="isEditing"
-      ></app-preliminary-allocation-details-template>
+        [isEditing]="isEditing"></app-preliminary-allocation-details-template>
     `,
   })
   class TestComponent {

@@ -174,6 +174,6 @@ export class SiteEmissionsComponent {
   ): number {
     return (categories ?? [])
       .filter((category) => category?.categoryType === type)
-      .reduce((total, category) => total + (+category?.annualEmittedCO2Tonnes ?? 0), 0);
+      .reduce((total, category) => total + (Number(category?.annualEmittedCO2Tonnes) || 0), 0);
   }
 }

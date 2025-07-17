@@ -1,31 +1,29 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.PermitReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitAcceptedVariationDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submit.domain.PermitVariationApplicationSubmittedRequestActionPayload;
+
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -68,5 +66,16 @@ public class PermitVariationApplicationRegulatorLedApprovedRequestActionPayload 
                 )
             )
             .flatMap(m -> m.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    @Override
+    public Map<UUID, String> getAttachments() {
+
+        final Map<UUID, String> originalAttachments = originalPermitContainer != null ?
+            originalPermitContainer.getPermitAttachments() : new HashMap<>();
+
+        return Stream.of(super.getAttachments(), originalAttachments).flatMap(m -> m.entrySet().stream()).collect(
+            Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (first, second) -> first)
+        );
     }
 }

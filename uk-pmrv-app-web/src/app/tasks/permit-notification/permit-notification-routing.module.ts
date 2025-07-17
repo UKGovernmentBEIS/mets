@@ -42,6 +42,11 @@ const routes: Route[] = [
         component: SubmitContainerComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'details-of-change',
         data: { pageTitle: 'Notify the regulator of a change - choose type of notification' },
         component: DetailsOfChangeComponent,
@@ -74,7 +79,7 @@ const routes: Route[] = [
       {
         path: 'submit',
         data: {
-          pageTitle: 'Submit',
+          pageTitle: 'Send to regulator',
           caption: 'Notify the regulator of a change',
           titleSubmitted: 'Notification submitted',
         },
@@ -93,6 +98,11 @@ const routes: Route[] = [
         path: '',
         component: ReviewComponent,
         data: { pageTitle: 'Review notification of a change' },
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'tasks/:taskId/change-assignee',
@@ -139,8 +149,18 @@ const routes: Route[] = [
   },
   {
     path: 'review-wait',
-    component: ReviewWaitComponent,
-    data: { pageTitle: 'Permit notification wait for review' },
+    children: [
+      {
+        path: '',
+        component: ReviewWaitComponent,
+        data: { pageTitle: 'Permit notification wait for review' },
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+    ],
   },
   {
     path: 'peer-review-wait',
@@ -149,6 +169,11 @@ const routes: Route[] = [
         path: '',
         data: { pageTitle: 'Wait peer review' },
         component: PeerReviewWaitComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
     ],
   },
@@ -159,6 +184,11 @@ const routes: Route[] = [
         path: '',
         data: { pageTitle: 'Peer review' },
         component: NotificationPeerReview,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'decision',

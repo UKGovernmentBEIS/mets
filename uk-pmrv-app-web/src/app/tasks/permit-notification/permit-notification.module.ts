@@ -15,6 +15,7 @@ import { ReviewComponent } from './review/review.component';
 import { ReviewWaitComponent } from './review-wait/review-wait.component';
 import { NonSignificantChangeComponent } from './shared/components/non-significant-change/non-significant-change.component';
 import { OtherFactorComponent } from './shared/components/other-factor/other-factor.component';
+import { PermanentCessationComponent } from './shared/components/permanent-cessation/permanent-cessation.component';
 import { TemporaryChangeComponent } from './shared/components/temporary-change/temporary-change.component';
 import { TemporaryFactorComponent } from './shared/components/temporary-factor/temporary-factor.component';
 import { TemporarySuspensionComponent } from './shared/components/temporary-suspension/temporary-suspension.component';
@@ -38,6 +39,7 @@ import { SummaryComponent } from './submit/summary/summary.component';
     OtherFactorComponent,
     PeerReviewComponent,
     PeerReviewWaitComponent,
+    PermanentCessationComponent,
     ReviewComponent,
     ReviewDecisionInvalidDataComponent,
     ReviewWaitComponent,

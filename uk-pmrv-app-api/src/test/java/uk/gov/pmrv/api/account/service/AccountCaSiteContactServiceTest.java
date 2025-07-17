@@ -8,22 +8,22 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.Scope;
+import uk.gov.netz.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
+import uk.gov.netz.api.authorization.rules.services.resource.RegulatorAuthorityResourceService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoResponse;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
-import uk.gov.pmrv.api.authorization.rules.domain.Scope;
-import uk.gov.pmrv.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
-import uk.gov.pmrv.api.authorization.rules.services.resource.RegulatorAuthorityResourceService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,8 +59,8 @@ class AccountCaSiteContactServiceTest {
     void getAccountsAndCaSiteContacts() {
         final AccountType accountType = AccountType.INSTALLATION;
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.WALES;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR)
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(ca).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR)
+            .authorities(List.of(AppAuthority.builder().competentAuthority(ca).build())).build();
         List<AccountContactInfoDTO> contacts = List.of(AccountContactInfoDTO.builder()
             .accountId(1L).accountName("name").userId("userId").build());
         Page<AccountContactInfoDTO> pagedAccounts = new PageImpl<>(contacts);
@@ -88,8 +88,8 @@ class AccountCaSiteContactServiceTest {
     void getAccountsAndCaSiteContacts_not_editable() {
         final AccountType accountType = AccountType.INSTALLATION;
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.WALES;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR)
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(ca).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR)
+            .authorities(List.of(AppAuthority.builder().competentAuthority(ca).build())).build();
         List<AccountContactInfoDTO> contacts = List.of(AccountContactInfoDTO.builder()
             .accountId(1L).accountName("name").userId("userId").build());
         Page<AccountContactInfoDTO> pagedAccounts = new PageImpl<>(contacts);
@@ -118,8 +118,8 @@ class AccountCaSiteContactServiceTest {
     void getAccountsAndCaSiteContacts_no_contacts() {
         final AccountType accountType = AccountType.INSTALLATION;
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.WALES;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR)
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(ca).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR)
+            .authorities(List.of(AppAuthority.builder().competentAuthority(ca).build())).build();
         Page<AccountContactInfoDTO> pagedAccounts = new PageImpl<>(List.of());
 
         AccountContactInfoResponse expected = AccountContactInfoResponse.builder()
@@ -165,8 +165,8 @@ class AccountCaSiteContactServiceTest {
         final String newUser = "new";
         final AccountType accountType = AccountType.INSTALLATION;
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.WALES;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR)
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(ca).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR)
+            .authorities(List.of(AppAuthority.builder().competentAuthority(ca).build())).build();
         List<AccountContactDTO> caSiteContactsUpdate =
             List.of(AccountContactDTO.builder().accountId(accountId).userId(newUser).build());
 
@@ -197,8 +197,8 @@ class AccountCaSiteContactServiceTest {
         final String newUser = "new";
         final AccountType accountType = AccountType.INSTALLATION;
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.WALES;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR)
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(ca).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR)
+            .authorities(List.of(AppAuthority.builder().competentAuthority(ca).build())).build();
         List<AccountContactDTO> caSiteContactsUpdate =
             List.of(AccountContactDTO.builder().accountId(accountId).userId(newUser).build());
 
@@ -218,8 +218,8 @@ class AccountCaSiteContactServiceTest {
         final String newUser = "new";
         final AccountType accountType = AccountType.INSTALLATION;
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.WALES;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR)
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(ca).build())).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR)
+            .authorities(List.of(AppAuthority.builder().competentAuthority(ca).build())).build();
         List<AccountContactDTO> caSiteContactsUpdate =
             List.of(AccountContactDTO.builder().accountId(accountId).userId(newUser).build());
 

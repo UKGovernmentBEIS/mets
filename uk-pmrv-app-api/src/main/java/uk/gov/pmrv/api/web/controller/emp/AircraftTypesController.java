@@ -16,16 +16,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.AircraftTypeSearchCriteria;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.AircraftTypeSearchResults;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.AircraftTypeQueryService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.VERIFIER;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.VERIFIER;
 
 @Validated
 @RestController

@@ -6,9 +6,9 @@ import org.springframework.boot.actuate.autoconfigure.endpoint.condition.Conditi
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
-import uk.gov.pmrv.api.files.attachments.domain.FileAttachment;
-import uk.gov.pmrv.api.files.attachments.repository.FileAttachmentRepository;
-import uk.gov.pmrv.api.files.common.domain.FileStatus;
+import uk.gov.netz.api.files.attachments.domain.FileAttachment;
+import uk.gov.netz.api.files.attachments.repository.FileAttachmentRepository;
+import uk.gov.netz.api.files.common.domain.FileStatus;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.files.FileAttachmentMigrationError;

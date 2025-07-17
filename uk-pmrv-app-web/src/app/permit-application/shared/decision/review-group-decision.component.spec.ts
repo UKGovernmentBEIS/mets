@@ -43,8 +43,7 @@ describe('ReviewGroupDecisionComponent', () => {
       <app-review-group-decision
         [canEdit]="canEdit"
         [groupKey]="groupKey"
-        (notification)="reviewDecisionSubmitted($event)"
-      ></app-review-group-decision>
+        (notification)="reviewDecisionSubmitted($event)"></app-review-group-decision>
     `,
   })
   class TestComponent {
@@ -266,7 +265,7 @@ describe('ReviewGroupDecisionComponent', () => {
 
       expect(page.summaryPairText).toEqual([
         ['Decision status', 'Operator amends needed'],
-        ['Changes required by operator', '1. Changes Required new-file.txt'],
+        ['Changes required by operator', '1. Changes Required  new-file.txt'],
         ['Notes', 'Review notes'],
       ]);
       expect(reviewDecisionSubmittedSpy).toHaveBeenCalledTimes(1);

@@ -6,21 +6,10 @@
 
   <ng-container *ngIf="'sourceStreams' | task | async as sourceStreams; else startAdding">
     <ng-container *ngIf="sourceStreams.length > 0; else startAdding">
-      <govuk-table [columns]="columns" [data]="'sourceStreams' | task | async" [class.no-bottom-border]="false">
-        <ng-template let-column="column" let-row="row">
-          <ng-container [ngSwitch]="column.field">
-            <ng-container *ngSwitchCase="'reference'">{{ row.reference }}</ng-container>
-            <ng-container *ngSwitchCase="'description'">{{ row.description | sourceStreamDescription }} </ng-container>
-            <ng-container *ngSwitchCase="'type'">{{ row.type | sourceStreamType }}</ng-container>
-            <ng-container *ngIf="(aerService.isEditable$ | async) === true">
-              <ng-container *ngSwitchCase="'change'"><a [routerLink]="row.id" govukLink>Change</a></ng-container>
-              <ng-container *ngSwitchCase="'delete'"
-                ><a [routerLink]="['delete', row.id]" govukLink>Delete</a></ng-container
-              >
-            </ng-container>
-          </ng-container>
-        </ng-template>
-      </govuk-table>
+      <app-source-streams-table
+        [data]="'sourceStreams' | task | async"
+        [isEditable]="aerService.isEditable$ | async"
+      ></app-source-streams-table>
 
       <ng-container *ngIf="(aerService.isEditable$ | async) === true">
         <button govukSecondaryButton routerLink="add" type="button">Add another source stream</button>

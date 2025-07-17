@@ -28,8 +28,7 @@ interface ViewModel {
       <app-aer-emissions-reduction-claim-corsia-template
         [emissionsReductionClaim]="vm.emissionsReductionClaim"
         [cefFiles]="vm.cefFiles"
-        [declarationFiles]="vm.declarationFiles"
-      ></app-aer-emissions-reduction-claim-corsia-template>
+        [declarationFiles]="vm.declarationFiles"></app-aer-emissions-reduction-claim-corsia-template>
     </ng-container>
     <app-return-to-link></app-return-to-link>
   `,

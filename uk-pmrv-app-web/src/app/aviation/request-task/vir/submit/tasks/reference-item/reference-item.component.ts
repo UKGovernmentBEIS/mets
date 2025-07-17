@@ -33,8 +33,7 @@ interface ViewModel {
       [heading]="vm.heading"
       [verificationDataItem]="vm.verificationDataItem"
       [isEditable]="vm.isEditable"
-      (formSubmit)="onSubmit()"
-    ></app-reference-item-form>
+      (formSubmit)="onSubmit()"></app-reference-item-form>
     <app-return-to-link></app-return-to-link>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,6 +49,7 @@ export class ReferenceItemComponent {
     { updateOn: 'change' },
   );
   private verificationDataItem = this.route.snapshot.data.verificationDataItem as VerificationDataItem;
+  summaryIsPreviousPage = this.route.snapshot.queryParamMap.get('change') === 'true';
 
   vm$: Observable<ViewModel> = this.store.pipe(requestTaskQuery.selectIsEditable).pipe(
     map((isEditable) => {
@@ -71,12 +71,13 @@ export class ReferenceItemComponent {
   ) {}
 
   onSubmit() {
+    const navigateUrl = this.summaryIsPreviousPage ? 'summary' : 'upload-evidence-question';
     this.store.virDelegate
       .saveVir(this.getFormData(), this.verificationDataItem.reference, 'in progress')
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
         this.formProvider.setFormValue(this.getFormData());
-        this.router.navigate(['upload-evidence-question'], {
+        this.router.navigate([navigateUrl], {
           relativeTo: this.route,
         });
       });

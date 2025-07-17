@@ -1,21 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.amendsubmit.mapper;
 
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
-
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ChangesRequiredDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecisionRequiredChange;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecisionType;
@@ -25,6 +15,15 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.amends
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitVariationReviewDecision;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationApplicationReviewRequestTaskPayload;
+
+import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface PermitVariationAmendSubmitMapper {

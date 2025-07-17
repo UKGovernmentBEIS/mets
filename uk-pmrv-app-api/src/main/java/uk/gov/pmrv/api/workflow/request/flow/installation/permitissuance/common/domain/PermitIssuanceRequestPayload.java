@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;

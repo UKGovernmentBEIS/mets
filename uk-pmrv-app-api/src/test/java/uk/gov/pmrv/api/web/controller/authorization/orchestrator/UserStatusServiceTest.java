@@ -7,9 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.LoginStatus;
 import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.UserDomainsLoginStatusInfo;
 
@@ -41,8 +41,8 @@ class UserStatusServiceTest {
     @Test
     void getLoginStatuses() {
         String userId = "userId";
-        RoleType roleType = RoleType.OPERATOR;
-        PmrvUser user = PmrvUser.builder().userId(userId).roleType(roleType).build();
+        String roleType = RoleTypeConstants.OPERATOR;
+        AppUser user = AppUser.builder().userId(userId).roleType(roleType).build();
 
         EnumMap<AccountType, LoginStatus> loginStatuses = new EnumMap<>(AccountType.class);
         loginStatuses.put(AccountType.INSTALLATION, LoginStatus.ENABLED);
@@ -63,14 +63,14 @@ class UserStatusServiceTest {
     }
 
     @Test
-    void getLoginStatuses_no_suitable_service() {
+    void getLoginStatuses_no_role_type_suitable_Service() {
         String userId = "userId";
-        RoleType roleType = RoleType.REGULATOR;
-        PmrvUser user = PmrvUser.builder().userId(userId).roleType(roleType).build();
+        String roleType = RoleTypeConstants.REGULATOR;
+        AppUser user = AppUser.builder().userId(userId).roleType(roleType).build();
 
         EnumMap<AccountType, LoginStatus> loginStatuses = new EnumMap<>(AccountType.class);
-        loginStatuses.put(AccountType.INSTALLATION, LoginStatus.NO_AUTHORITY);
-        loginStatuses.put(AccountType.AVIATION, LoginStatus.NO_AUTHORITY);
+        loginStatuses.put(AccountType.INSTALLATION, LoginStatus.NO_ROLE_TYPE);
+        loginStatuses.put(AccountType.AVIATION, LoginStatus.NO_ROLE_TYPE);
 
         when(operatorLoginStatusService.getRoleType()).thenReturn(roleType);
 

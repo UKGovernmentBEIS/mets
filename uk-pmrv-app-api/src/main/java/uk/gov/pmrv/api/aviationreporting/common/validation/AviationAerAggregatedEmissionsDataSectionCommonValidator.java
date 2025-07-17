@@ -1,20 +1,23 @@
 package uk.gov.pmrv.api.aviationreporting.common.validation;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.validation.uniqueelements.UniqueElementsUtils;
+import uk.gov.netz.api.common.validation.uniqueelements.UniqueElementsUtilsEqualResult;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerValidationResult;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerViolation;
 import uk.gov.pmrv.api.aviationreporting.common.domain.aggregatedemissionsdata.AviationAerAggregatedEmissionDataDetails;
 import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationRptAirportsDTO;
 import uk.gov.pmrv.api.aviationreporting.common.service.AviationRptAirportsService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -87,8 +90,14 @@ public class AviationAerAggregatedEmissionsDataSectionCommonValidator {
     private List<? extends AviationAerAggregatedEmissionDataDetails> checkAirportIcaoExistence(Set<? extends AviationAerAggregatedEmissionDataDetails> aggregatedEmissionDataDetails,
                                                                                      List<AviationRptAirportsDTO> existingAirports) {
         return aggregatedEmissionDataDetails.stream()
-                .filter(aggregatedEmissionDataDetail -> !existingAirports.contains(aggregatedEmissionDataDetail.getAirportFrom()) ||
-                        !existingAirports.contains(aggregatedEmissionDataDetail.getAirportTo())).toList();
+                .filter(aggregatedEmissionDataDetail -> {
+                    try {
+                        return !UniqueElementsUtils.contains(existingAirports,aggregatedEmissionDataDetail.getAirportFrom()) ||
+                                !UniqueElementsUtils.contains(existingAirports,aggregatedEmissionDataDetail.getAirportTo());
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList();
     }
 
     private List<? extends AviationAerAggregatedEmissionDataDetails> checkAirportCountryTypesValidity(Set<? extends AviationAerAggregatedEmissionDataDetails> aggregatedEmissionDataDetails,
@@ -101,11 +110,25 @@ public class AviationAerAggregatedEmissionsDataSectionCommonValidator {
     private boolean isCountryTypeValid(AviationAerAggregatedEmissionDataDetails aggregatedEmissionDataDetails, List<AviationRptAirportsDTO> airports) {
         
         final Optional<AviationRptAirportsDTO> airportFrom = airports.stream()
-                .filter(airport -> aggregatedEmissionDataDetails.getAirportFrom().equals(airport) && aggregatedEmissionDataDetails.getAirportFrom().getCountryType().equals(airport.getCountryType()))
+                .filter(airport -> {
+                    try {
+                        return UniqueElementsUtils.equal(aggregatedEmissionDataDetails.getAirportFrom(),airport).getResult()
+                                && aggregatedEmissionDataDetails.getAirportFrom().getCountryType().equals(airport.getCountryType());
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .findFirst();
 
         final Optional<AviationRptAirportsDTO> airportTo = airports.stream()
-                .filter(airport -> aggregatedEmissionDataDetails.getAirportTo().equals(airport) && aggregatedEmissionDataDetails.getAirportTo().getCountryType().equals(airport.getCountryType()))
+                .filter(airport -> {
+                    try {
+                        return UniqueElementsUtils.equal(aggregatedEmissionDataDetails.getAirportTo(),airport).getResult()
+                                && aggregatedEmissionDataDetails.getAirportTo().getCountryType().equals(airport.getCountryType());
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .findFirst();
 
         return airportFrom.isPresent() && airportTo.isPresent();
@@ -114,7 +137,14 @@ public class AviationAerAggregatedEmissionsDataSectionCommonValidator {
     private List<? extends AviationAerAggregatedEmissionDataDetails> checkForDepartureArrivalAirportsEquality(Set<? extends AviationAerAggregatedEmissionDataDetails> aggregatedEmissionDataDetails) {
         
         return aggregatedEmissionDataDetails.stream().
-                filter(details -> details.getAirportFrom().equals(details.getAirportTo()))
+                filter(details -> {
+                    try {
+                        UniqueElementsUtilsEqualResult result = UniqueElementsUtils.equal(details.getAirportFrom(),details.getAirportTo());
+                        return result.getResult();
+                    } catch (IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .toList();
     }
 }

@@ -1,18 +1,16 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 import org.apache.commons.collections.CollectionUtils;
-
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RequestTaskPayloadRfiAttachable;
 
-import jakarta.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;

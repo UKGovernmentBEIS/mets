@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.workflow.payment.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
@@ -11,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.payment.domain.PaymentFeeMethod;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeMethodType;
 import uk.gov.pmrv.api.workflow.payment.repository.PaymentFeeMethodRepository;

@@ -8,6 +8,4 @@ export interface TaskFormProvider<M, FM extends { [key in keyof FM]: AbstractCon
   destroyForm: () => void;
 }
 
-export const TASK_FORM_PROVIDER = new InjectionToken<TaskFormProvider<any, any> | FormGroup>(
-  'Task form provider',
-);
+export const TASK_FORM_PROVIDER = new InjectionToken<TaskFormProvider<any, any> | FormGroup>('Task form provider');

@@ -8,9 +8,10 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.application.taskview.RequestInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -59,14 +60,14 @@ public class NonComplianceApplicationValidator {
     public void validateUsers(final RequestTask requestTask,
                               final Set<String> operators,
                               final Set<Long> externalContacts,
-                              final PmrvUser pmrvUser) {
+                              final AppUser appUser) {
         
         final DecisionNotification decisionNotification = DecisionNotification.builder()
             .operators(operators)
             .externalContacts(externalContacts)
             .build();
         
-        final boolean valid = decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser);
+        final boolean valid = decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser);
         if (!valid) {
             throw new BusinessException(ErrorCode.FORM_VALIDATION);
         }
@@ -80,7 +81,7 @@ public class NonComplianceApplicationValidator {
     public void validateContactAddress(final Request request) {
     	final boolean valid = decisionNotificationUsersValidator.shouldHaveContactAddress(request);
         if (!valid) {
-            throw new BusinessException(ErrorCode.AVIATION_ACCOUNT_LOCATION_NOT_EXIST);
+            throw new BusinessException(MetsErrorCode.AVIATION_ACCOUNT_LOCATION_NOT_EXIST);
         }
     }
 }

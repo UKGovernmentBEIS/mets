@@ -14,8 +14,7 @@ describe('EmpVariationRegulatorLedDecisionGroupSummaryComponent', () => {
   @Component({
     template: `
       <app-emp-variation-regulator-led-decision-group-summary
-        [data]="data"
-      ></app-emp-variation-regulator-led-decision-group-summary>
+        [data]="data"></app-emp-variation-regulator-led-decision-group-summary>
     `,
   })
   class TestComponent {

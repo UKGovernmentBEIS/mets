@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
@@ -49,11 +49,10 @@ class AviationDreUkEtsCreateActionHandlerTest {
         Long accountId = 1L;
         String aerRequestId = "aerRequestId";
         Year year = Year.of(2023);
-        RequestCreateActionType type = RequestCreateActionType.AVIATION_DRE_UKETS;
         ReportRelatedRequestCreateActionPayload payload = ReportRelatedRequestCreateActionPayload.builder()
                 .requestId(aerRequestId)
                 .build();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        AppUser appUser = AppUser.builder().userId("user").build();
 
         LocalDateTime initiatorRequestSubmissionDate = LocalDateTime.now();
         AerInitiatorRequest initiatorRequest = AerInitiatorRequest.builder().type(RequestType.AVIATION_AER_UKETS).submissionDateTime(initiatorRequestSubmissionDate).build();
@@ -70,7 +69,7 @@ class AviationDreUkEtsCreateActionHandlerTest {
                         .build())
                 .requestPayload(AviationDreUkEtsRequestPayload.builder()
                         .payloadType(RequestPayloadType.AVIATION_DRE_UKETS_REQUEST_PAYLOAD)
-                        .regulatorAssignee(pmrvUser.getUserId())
+                        .regulatorAssignee(appUser.getUserId())
                         .reportingYear(year)
                         .initiatorRequest(initiatorRequest)
                         .build())
@@ -79,7 +78,7 @@ class AviationDreUkEtsCreateActionHandlerTest {
         when(requestQueryService.findRequestDetailsById(aerRequestId)).thenReturn(aerRequestDetails);
         when(startProcessRequestService.startProcess(requestParams)).thenReturn(Request.builder().id("dreId").build());
 
-        String result = handler.process(accountId, type, payload, pmrvUser);
+        String result = handler.process(accountId, payload, appUser);
 
         assertThat(result).isEqualTo("dreId");
         verify(requestQueryService, times(1)).findRequestDetailsById(aerRequestId);
@@ -87,7 +86,7 @@ class AviationDreUkEtsCreateActionHandlerTest {
     }
 
     @Test
-    void getType() {
-        assertThat(handler.getType()).isEqualTo(RequestCreateActionType.AVIATION_DRE_UKETS);
+    void getRequestCreateActionType() {
+        assertThat(handler.getRequestCreateActionType()).isEqualTo(RequestCreateActionType.AVIATION_DRE_UKETS);
     }
 }

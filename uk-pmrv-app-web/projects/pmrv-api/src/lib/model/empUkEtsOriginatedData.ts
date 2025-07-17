@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -12,5 +12,6 @@
 import { AviationOperatorDetails } from './aviationOperatorDetails';
 
 export interface EmpUkEtsOriginatedData {
+  operatorDetailsAttachments?: { [key: string]: string };
   operatorDetails?: AviationOperatorDetails;
 }

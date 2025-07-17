@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.returnofallowances.ha
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -38,7 +38,7 @@ public class ReturnOfAllowancesRequestPeerReviewActionHandler implements
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final PeerReviewRequestTaskActionPayload actionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -49,9 +49,9 @@ public class ReturnOfAllowancesRequestPeerReviewActionHandler implements
 
         returnOfAllowancesValidator.validate(payload.getReturnOfAllowances());
         peerReviewerTaskAssignmentValidator
-            .validate(RequestTaskType.RETURN_OF_ALLOWANCES_APPLICATION_PEER_REVIEW, peerReviewer, pmrvUser);
+            .validate(RequestTaskType.RETURN_OF_ALLOWANCES_APPLICATION_PEER_REVIEW, peerReviewer, appUser);
 
-        final String regulatorReviewer = pmrvUser.getUserId();
+        final String regulatorReviewer = appUser.getUserId();
         returnOfAllowancesService.requestPeerReview(requestTask, peerReviewer, regulatorReviewer);
 
         requestService.addActionToRequest(request,

@@ -5,6 +5,11 @@ import {
   AviationAccountClosureSaveRequestTaskActionPayload,
   AviationAccountClosureSubmitRequestTaskPayload,
   AviationAerCorsia,
+  AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload,
+  AviationAerCorsia3YearPeriodOffsettingSaveRequestTaskActionPayload,
+  AviationAerCorsiaAnnualOffsettingSaveRequestTaskActionPayload,
+  AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload,
+  AviationAerCorsiaApplicationReviewRequestTaskPayload,
   AviationAerCorsiaApplicationSubmitRequestTaskPayload,
   AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload,
   AviationAerCorsiaSaveApplicationRequestTaskActionPayload,
@@ -18,6 +23,8 @@ import {
   AviationAerUkEtsSaveApplicationVerificationRequestTaskActionPayload,
   AviationAerUkEtsVerificationReport,
   AviationCorsiaOperatorDetails,
+  AviationDoECorsiaApplicationSubmitRequestTaskPayload,
+  AviationDoECorsiaSubmitSaveRequestTaskActionPayload,
   AviationDreUkEtsApplicationSubmitRequestTaskPayload,
   AviationDreUkEtsSaveApplicationRequestTaskActionPayload,
   AviationOperatorDetails,
@@ -110,7 +117,8 @@ export type AerUkEtsRequestTaskPayload = AviationAerUkEtsApplicationSubmitReques
   AviationAerUkEtsApplicationSubmittedRequestActionPayload;
 
 export type AerCorsiaRequestTaskPayload = AviationAerCorsiaApplicationSubmitRequestTaskPayload &
-  AviationAerCorsiaSaveApplicationRequestTaskActionPayload;
+  AviationAerCorsiaSaveApplicationRequestTaskActionPayload &
+  AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload;
 
 export type AerRequestTaskPayload = AerUkEtsRequestTaskPayload & AerCorsiaRequestTaskPayload;
 
@@ -158,6 +166,7 @@ export type AerVerifyCorsiaTaskPayload = AerVerifyCorsia;
 
 export type AerVerify = AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload;
 export type AerVerifyCorsia = AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload;
+export type AerReviewCorsia = AviationAerCorsiaApplicationReviewRequestTaskPayload;
 
 export type AerVerifyTask =
   | AerVerify[keyof AerVerify]
@@ -168,7 +177,25 @@ export type AerVerifyCorsiaTask =
 
 export type AerVerifyTaskKey = keyof AerVerify | keyof AviationAerUkEtsVerificationReport | 'sendReport';
 export type AerVerifyCorsiaTaskKey = keyof AerVerifyCorsia | keyof AviationAerCorsiaVerificationReport | 'sendReport';
+export type AerReviewCorsiaTaskKey =
+  | 'serviceContactDetails'
+  | 'reportingObligation'
+  | 'totalEmissionsCorsia'
+  | keyof AviationAerCorsia
+  | keyof AviationAerCorsiaVerificationReport;
 
 export type VirRequestTaskPayload = AviationVirApplicationSubmitRequestTaskPayload &
   AviationVirApplicationReviewRequestTaskPayload &
   AviationVirApplicationRespondToRegulatorCommentsRequestTaskPayload;
+
+export type AerCorsiaAnnualOffsettingPayload = AviationAerCorsiaAnnualOffsettingSaveRequestTaskActionPayload;
+
+export type AerCorsia3YearOffsettingPayload =
+  AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload &
+    AviationAerCorsia3YearPeriodOffsettingSaveRequestTaskActionPayload;
+
+export type DoeRequestTaskPayload = AviationDoECorsiaApplicationSubmitRequestTaskPayload &
+  AviationDoECorsiaSubmitSaveRequestTaskActionPayload;
+export type Doe = AviationDoECorsiaApplicationSubmitRequestTaskPayload;
+export type DoeTaskKey = keyof Doe;
+export type DoeTask = Doe[keyof Doe];

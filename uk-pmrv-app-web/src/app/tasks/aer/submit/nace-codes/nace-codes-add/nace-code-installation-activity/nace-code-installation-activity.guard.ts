@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { AerService } from '@tasks/aer/core/aer.service';
 
 @Injectable({ providedIn: 'root' })
-export class NaceCodeInstallationActivityGuard implements CanActivate {
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+export class NaceCodeInstallationActivityGuard {
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
     const subCategory = route.queryParams.subCategory;

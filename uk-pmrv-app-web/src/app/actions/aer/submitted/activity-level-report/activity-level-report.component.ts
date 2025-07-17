@@ -12,8 +12,7 @@ import { AerService } from '../../core/aer.service';
     <app-action-task header="Activity level report" [breadcrumb]="true">
       <app-activity-level-report-group
         [activityLevelReport]="activityLevelReport$ | async"
-        [documentFiles]="documentFiles$ | async"
-      ></app-activity-level-report-group>
+        [documentFiles]="documentFiles$ | async"></app-activity-level-report-group>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

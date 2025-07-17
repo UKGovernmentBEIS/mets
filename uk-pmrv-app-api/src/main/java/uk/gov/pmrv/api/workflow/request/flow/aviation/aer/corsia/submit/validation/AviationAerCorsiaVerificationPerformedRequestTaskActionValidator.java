@@ -20,7 +20,8 @@ public class AviationAerCorsiaVerificationPerformedRequestTaskActionValidator ex
     @Override
     public Set<RequestTaskActionType> getTypes() {
         return Set.of(
-                RequestTaskActionType.AVIATION_AER_CORSIA_SUBMIT_APPLICATION
+                RequestTaskActionType.AVIATION_AER_CORSIA_SUBMIT_APPLICATION,
+                RequestTaskActionType.AVIATION_AER_CORSIA_SUBMIT_APPLICATION_AMEND
         );
     }
 

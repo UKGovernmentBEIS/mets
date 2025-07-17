@@ -1,0 +1,22 @@
+<div *ngIf="!isRecallSubmitted(); else confirmationTemplate">
+  <app-page-heading size="xl">Are you sure you want to recall the report?</app-page-heading>
+
+  <div class="govuk-button-group">
+    <button type="button" appPendingButton (click)="onRecall()" govukWarnButton>Yes, recall the report</button>
+  </div>
+
+  <a govukLink routerLink="../">Return to: {{ returnToText }}</a>
+</div>
+
+<ng-template #confirmationTemplate>
+  <app-confirmation-shared
+    title="The report has been recalled"
+    [whatHappensNextTemplate]="whatHappensNextTemplate"
+    returnToLink="/dashboard"></app-confirmation-shared>
+</ng-template>
+
+<ng-template #whatHappensNextTemplate>
+  <h3 class="govuk-heading-m">What happens next</h3>
+
+  <p class="govuk-body">You can continue to edit the report from your dashboard.</p>
+</ng-template>

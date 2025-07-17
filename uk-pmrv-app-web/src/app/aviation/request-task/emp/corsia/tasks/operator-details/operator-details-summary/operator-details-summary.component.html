@@ -33,6 +33,11 @@
 
   <app-emp-review-decision-group *ngIf="vm.showDecision" taskKey="operatorDetails"></app-emp-review-decision-group>
 
+  <app-emp-variation-review-decision-group
+    *ngIf="vm.showVariationDecision"
+    taskKey="operatorDetails"
+  ></app-emp-variation-review-decision-group>
+
   <app-emp-variation-regulator-led-decision-group
     *ngIf="vm.showVariationRegLedDecision"
     taskKey="operatorDetails"

@@ -4,6 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.service.AuthorityService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
@@ -11,10 +15,6 @@ import uk.gov.pmrv.api.account.domain.event.FirstPrimaryContactAssignedToAccount
 import uk.gov.pmrv.api.account.domain.event.FirstServiceContactAssignedToAccountEvent;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.service.validator.AccountContactTypeUpdateValidator;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.core.service.AuthorityService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 
 import java.util.Collection;
 import java.util.EnumMap;
@@ -62,17 +62,22 @@ public class AccountContactUpdateService {
         //save
         account.getContacts().putAll(allContactTypes);
 
-        // If currentContactTypes is empty means that contacts are assigned for first time in the account.
+        // If currentOperatorContacts is empty means that contacts are assigned for first time in the account.
         // This should only happen when a regulator user activates the first operator admin of an aviation account.
+        Map<AccountContactType, String> currentOperatorContacts = currentContactTypes.entrySet()
+                .stream()
+                .filter(entry -> AccountContactType.getOperatorAccountContactTypes().contains(entry.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
         String primaryContact = allContactTypes.get(AccountContactType.PRIMARY);
-        publishFirstPrimaryContactAssignedToAccountEvent(currentContactTypes, primaryContact, accountId);
+        publishFirstPrimaryContactAssignedToAccountEvent(currentOperatorContacts, primaryContact, accountId);
 
         String serviceContact = allContactTypes.get(AccountContactType.SERVICE);
-        publishFirstServiceContactAssignedToAccountEvent(currentContactTypes, serviceContact, accountId);
+        publishFirstServiceContactAssignedToAccountEvent(currentOperatorContacts, serviceContact, accountId);
     }
 
-    private void publishFirstPrimaryContactAssignedToAccountEvent(Map<AccountContactType, String> currentContactTypes, String primaryContact, Long accountId) {
-        if (currentContactTypes.isEmpty() && primaryContact != null) {
+    private void publishFirstPrimaryContactAssignedToAccountEvent(Map<AccountContactType, String> currentOperatorContacts, String primaryContact, Long accountId) {
+        if (currentOperatorContacts.isEmpty() && primaryContact != null) {
             eventPublisher.publishEvent(FirstPrimaryContactAssignedToAccountEvent.builder()
                     .accountId(accountId)
                     .userId(primaryContact)
@@ -80,10 +85,11 @@ public class AccountContactUpdateService {
         }
     }
 
-    private void publishFirstServiceContactAssignedToAccountEvent(Map<AccountContactType, String> currentContactTypes, String serviceContact, Long accountId) {
-        if (currentContactTypes.isEmpty() && serviceContact != null) {
+    private void publishFirstServiceContactAssignedToAccountEvent(Map<AccountContactType, String> currentOperatorContacts, String serviceContact, Long accountId) {
+        if (currentOperatorContacts.isEmpty() && serviceContact != null) {
             final Optional<ServiceContactDetails> serviceContactDetailsOpt = accountContactQueryService.getServiceContactDetails(accountId);
-            final ServiceContactDetails serviceContactDetails = serviceContactDetailsOpt.orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
+            final ServiceContactDetails serviceContactDetails = serviceContactDetailsOpt.orElseThrow(() -> new BusinessException(
+                ErrorCode.RESOURCE_NOT_FOUND));
             eventPublisher.publishEvent(FirstServiceContactAssignedToAccountEvent.builder()
                     .accountId(accountId)
                     .serviceContactDetails(serviceContactDetails)

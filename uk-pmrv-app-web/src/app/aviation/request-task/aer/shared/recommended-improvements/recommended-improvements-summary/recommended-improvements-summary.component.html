@@ -1,16 +1,18 @@
 <div *ngIf="vm$ | async as vm" class="govuk-!-width-two-thirds">
-  <app-page-heading>Check your answers</app-page-heading>
-  <h2 class="govuk-heading-m">Recommended improvements</h2>
+  <app-page-heading> {{ vm.pageHeader }}</app-page-heading>
 
-  <dl govuk-summary-list [hasBorders]="true">
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Are there any recommended improvements?</dt>
-      <dd govukSummaryListRowValue>{{ vm.data?.exist ? 'Yes' : 'No' }}</dd>
-      <dd govukSummaryListRowActions *ngIf="vm.isEditable">
-        <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
-      </dd>
-    </div>
-  </dl>
+  <ng-container *ngIf="vm.data">
+    <h2 class="govuk-heading-m">Recommended improvements</h2>
+    <dl govuk-summary-list [hasBorders]="true">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Are there any recommended improvements?</dt>
+        <dd govukSummaryListRowValue>{{ vm.data?.exist ? 'Yes' : 'No' }}</dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
 
   <app-recommended-improvements-group-template
     [isEditable]="vm.isEditable"

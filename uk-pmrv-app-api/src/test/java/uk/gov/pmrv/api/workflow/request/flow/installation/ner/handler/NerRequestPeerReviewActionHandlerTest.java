@@ -15,9 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -62,7 +62,7 @@ class NerRequestPeerReviewActionHandlerTest {
     void process() {
         
         final Long requestTaskId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final String selectedPeerReviewer = "selectedPeerReviewer";
         final PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
@@ -85,17 +85,17 @@ class NerRequestPeerReviewActionHandlerTest {
         requestPeerReviewActionHandler.process(
             requestTaskId,
             RequestTaskActionType.NER_REQUEST_PEER_REVIEW,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(reviewValidator, times(1))
             .validateReviewTaskPayload(requestTaskPayload, paymentAmount);
         verify(reviewValidator, times(1))
-            .validatePeerReview(taskActionPayload, pmrvUser);
-        verify(applyReviewService, times(1)).saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, pmrvUser);
+            .validatePeerReview(taskActionPayload, appUser);
+        verify(applyReviewService, times(1)).saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, appUser);
         verify(requestService, times(1))
-            .addActionToRequest(requestTask.getRequest(), null, RequestActionType.NER_PEER_REVIEW_REQUESTED, pmrvUser.getUserId());
+            .addActionToRequest(requestTask.getRequest(), null, RequestActionType.NER_PEER_REVIEW_REQUESTED, appUser.getUserId());
         verify(workflowService, times(1)).completeTask(
             requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
@@ -106,7 +106,7 @@ class NerRequestPeerReviewActionHandlerTest {
     void process_invalid_determination() {
 
         final Long requestTaskId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final String selectedPeerReviewer = "selectedPeerReviewer";
         final PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
@@ -127,20 +127,20 @@ class NerRequestPeerReviewActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         doThrow(new BusinessException(ErrorCode.FORM_VALIDATION))
             .when(reviewValidator)
-            .validatePeerReview(taskActionPayload, pmrvUser);
+            .validatePeerReview(taskActionPayload, appUser);
 
         final BusinessException be = assertThrows(BusinessException.class,
             () -> requestPeerReviewActionHandler.process(
                 requestTaskId,
                 RequestTaskActionType.NER_REQUEST_PEER_REVIEW,
-                pmrvUser,
+                appUser,
                 taskActionPayload));
 
         assertEquals(ErrorCode.FORM_VALIDATION, be.getErrorCode());
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(reviewValidator, times(1))
-            .validatePeerReview(taskActionPayload, pmrvUser);
+            .validatePeerReview(taskActionPayload, appUser);
     }
 
     @Test

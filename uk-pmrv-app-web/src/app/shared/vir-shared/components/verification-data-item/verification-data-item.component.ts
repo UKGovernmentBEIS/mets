@@ -8,7 +8,7 @@ import { VerificationDataItem } from '../../types/verification-data-item.type';
     <dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Verifier's recommendation</dt>
-        <dd govukSummaryListRowValue>{{ verificationDataItem.explanation | textEllipsis }}</dd>
+        <dd govukSummaryListRowValue class="pre-wrap">{{ verificationDataItem.explanation | textEllipsis }}</dd>
         <dd govukSummaryListRowActions></dd>
       </div>
     </dl>

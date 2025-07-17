@@ -19,7 +19,7 @@ import { originalOrder } from '@shared/keyvalue-order';
 
 import { InstallationAccountUpdateService, LegalEntityDTO } from 'pmrv-api';
 
-import { LEGAL_ENTITY_FORM } from '../../installation-account-application/factories/legal-entity-form.factory';
+import { LEGAL_ENTITY_FORM_REG } from '../../installation-account-application/factories/legal-entity/legal-entity-form-reg.factory';
 import { ApplicationSectionType } from '../../installation-account-application/store/installation-account-application.state';
 import { InstallationAccountApplicationStore } from '../../installation-account-application/store/installation-account-application.store';
 
@@ -46,7 +46,7 @@ export class LegalEntityDetailsComponent implements OnInit, AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly destroy$: DestroySubject,
     private readonly fb: UntypedFormBuilder,
-    @Inject(LEGAL_ENTITY_FORM) private readonly legalEntityForm: UntypedFormGroup,
+    @Inject(LEGAL_ENTITY_FORM_REG) private readonly legalEntityForm: UntypedFormGroup,
     private readonly accountUpdateService: InstallationAccountUpdateService,
     private router: Router,
   ) {

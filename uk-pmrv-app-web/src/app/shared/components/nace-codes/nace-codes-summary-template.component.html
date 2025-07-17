@@ -1,7 +1,6 @@
 <govuk-table [columns]="columns" [data]="data" [class.no-bottom-border]="noBottomBorder">
   <ng-template let-column="column" let-row="row">
     <ng-container [ngSwitch]="column.field">
-      <ng-container *ngSwitchCase="'mainActivity'"><strong>Main activity</strong></ng-container>
       <ng-container *ngSwitchCase="'label'">{{ row.label }}</ng-container>
       <ng-container *ngIf="isEditable">
         <ng-container *ngSwitchCase="'delete'">
@@ -11,3 +10,16 @@
     </ng-container>
   </ng-template>
 </govuk-table>
+<govuk-details
+  summary="SIC codes from Companies House"
+  *ngIf="!isEditable && this.companyProfile$ | async as companyProfileDTO"
+>
+  <govuk-table [columns]="columns" [data]="companyProfileDTO.sicCodes" [class.no-bottom-border]="noBottomBorder">
+    <ng-template let-column="column" let-row="row">
+      <ng-container [ngSwitch]="column.field">
+        <ng-container *ngSwitchCase="'label'">{{ row.code + ' ' + row.description }}</ng-container>
+      </ng-container>
+    </ng-template>
+  </govuk-table>
+  <div class="govuk-error-message" *ngIf="errorMessage$ | async as errorMessage">{{ errorMessage }}</div>
+</govuk-details>

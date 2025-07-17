@@ -17,9 +17,7 @@ import { confidentialityStatementFormProvider } from './confidentiality-statemen
         (formSubmit)="onSubmit()"
         [form]="form"
         [isEditable]="aerService.isEditable$ | async"
-        submitText="Continue"
-      >
-      </app-confidentiality-statement-template>
+        submitText="Continue"></app-confidentiality-statement-template>
       <app-return-link></app-return-link>
     </app-aer-task>
   `,

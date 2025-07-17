@@ -1,50 +1,49 @@
 <app-cookies-container *ngIf="(showCookiesBanner$ | async) === true"></app-cookies-container>
-<govuk-header
-  logoSvg="/assets/images/govuk-header-logotype-crown.svg"
-  title="Manage your UK Emissions Trading Scheme reporting"
->
+<govuk-header title="Manage your UK Emissions Trading Scheme reporting">
   <govuk-skip-link></govuk-skip-link>
   <govuk-header-actions-list>
     <select
       class="domain-picker"
       *ngIf="(isLoggedIn$ | async) && (canSwitchDomain$ | async)"
-      [ngModel]="currentDomain$ | async"
-      (ngModelChange)="onSwitchDomain($event)"
-    >
+      [ngModel]="currentSelection()"
+      (ngModelChange)="onSelectionChangeDomainSwitch($event)"
+      (keydown)="onKeyDownDomainSwitch($event)"
+      (click)="onClickDomainSwitch()"
+      aria-label="Choose a domain">
       <option title="View related to installation" ngValue="INSTALLATION">Installation view</option>
       <option title="View related to aviation" ngValue="AVIATION">Aviation view</option>
     </select>
-    <a *ngIf="isLoggedIn$ | async" class="govuk-header__link" routerLink="." (click)="authService.logout()">
-      Sign out
+    <a
+      *ngIf="(isLoggedIn$ | async) && (isGatewayServiceEnabled$ | async)"
+      class="govuk-header__link"
+      [href]="serviceGatewayUrl">
+      Change service
     </a>
+    <a routerLink *ngIf="isLoggedIn$ | async" class="govuk-header__link" (click)="logout($event)">Sign out</a>
   </govuk-header-actions-list>
   <app-navigation *ngIf="permissions$ | async as permissions">
     <a
       *ngIf="permissions.showRegulators || permissions.showVerifiers || permissions.showAuthorizedOperators"
       [routerLink]="[(domainUrlPrefix$ | async) + '/dashboard']"
-      appNavigationLink
-    >
+      appNavigationLink>
       Tasks
     </a>
     <a
       *ngIf="permissions.showRegulators || permissions.showVerifiers || permissions.showAuthorizedOperators"
       [routerLink]="[(domainUrlPrefix$ | async) + '/accounts']"
-      appNavigationLink
-    >
+      appNavigationLink>
       Accounts
     </a>
     <a
       *ngIf="permissions.showRegulators"
       [routerLink]="[(domainUrlPrefix$ | async) + '/user/regulators']"
-      appNavigationLink
-    >
+      appNavigationLink>
       Regulator users and contacts
     </a>
     <a
       *ngIf="permissions.showRegulators"
       [routerLink]="[(domainUrlPrefix$ | async) + '/verification-bodies']"
-      appNavigationLink
-    >
+      appNavigationLink>
       Verification body accounts
     </a>
     <a *ngIf="permissions.showRegulators" [routerLink]="[(domainUrlPrefix$ | async) + '/templates']" appNavigationLink>
@@ -56,15 +55,13 @@
     <a
       *ngIf="permissions.showVerifiers"
       [routerLink]="[(domainUrlPrefix$ | async) + '/user/verifiers']"
-      appNavigationLink
-    >
+      appNavigationLink>
       Manage verifier users
     </a>
     <a
       *ngIf="permissions.showRegulators"
       [routerLink]="[(domainUrlPrefix$ | async) + '/workflows/batch-variations']"
-      appNavigationLink
-    >
+      appNavigationLink>
       Batch variations
     </a>
   </app-navigation>
@@ -80,12 +77,12 @@
     <router-outlet appSkipLinkFocus></router-outlet>
   </div>
 </main>
-<govuk-footer>
+<govuk-footer crestSvg="./assets/images/govuk-crest.svg">
   <govuk-footer-meta-info>
-    <a govukLink="meta" routerLink="/privacy-notice"> Privacy Νotice </a>
-    <a govukLink="meta" routerLink="/contact-us"> Contact us </a>
-    <a govukLink="meta" routerLink="/accessibility"> Accessibility Statement </a>
-    <a govukLink="meta" routerLink="/legislation"> UK ETS legislation </a>
+    <a govukLink="meta" href="/privacy-notice">Privacy Notice</a>
+    <a govukLink="meta" routerLink="/contact-us">Contact us</a>
+    <a govukLink="meta" routerLink="/accessibility">Accessibility Statement</a>
+    <a govukLink="meta" routerLink="/legislation">UK ETS legislation</a>
   </govuk-footer-meta-info>
 </govuk-footer>
 <app-timeout-banner></app-timeout-banner>

@@ -9,7 +9,6 @@ import {
   forkJoin,
   iif,
   map,
-  mapTo,
   Observable,
   of,
   shareReplay,
@@ -92,7 +91,7 @@ export class FileUploadService {
             }),
         }),
         filter((event) => event.type === HttpEventType.Response),
-        mapTo(null),
+        map(() => null),
         catchError((error: HttpErrorResponse) => of(this.createValidationError(file, error))),
       );
   }

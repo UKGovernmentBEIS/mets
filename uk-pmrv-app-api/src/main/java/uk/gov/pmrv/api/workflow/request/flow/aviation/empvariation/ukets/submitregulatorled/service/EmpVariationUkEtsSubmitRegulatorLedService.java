@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.common.domain.EmpUkEtsReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpAcceptedVariationDecisionDetails;
@@ -48,14 +48,14 @@ public class EmpVariationUkEtsSubmitRegulatorLedService {
 	
 	@Transactional
 	public void saveDecisionNotification(RequestTask requestTask, DecisionNotification decisionNotification,
-			PmrvUser pmrvUser) {
+			AppUser appUser) {
 		EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload taskPayload = (EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload) requestTask
 				.getPayload();
 
 		EmpVariationUkEtsRequestPayload requestPayload = (EmpVariationUkEtsRequestPayload) requestTask.getRequest()
 				.getPayload();
 
-		requestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+		requestPayload.setRegulatorReviewer(appUser.getUserId());
 		requestPayload.setEmissionsMonitoringPlan(taskPayload.getEmissionsMonitoringPlan());
 		requestPayload.setEmpVariationDetails(taskPayload.getEmpVariationDetails());
 		requestPayload.setEmpAttachments(taskPayload.getEmpAttachments());

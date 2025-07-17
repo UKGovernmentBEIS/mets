@@ -1,0 +1,16 @@
+<app-request-action-heading
+  *ngIf="vm$ | async as vm"
+  [headerText]="vm.pageHeader"
+  [timelineCreationDate]="vm.creationDate">
+  <ng-container *ngIf="vm.data">
+    <app-doe-emissions-summary-template
+      [data]="vm.data"
+      [files]="vm.files"
+      [isEditable]="false"
+      [changeUrlQueryParams]="{ change: true }"></app-doe-emissions-summary-template>
+  </ng-container>
+
+  <app-action-recipients-template
+    header="Recipients"
+    officialNoticeText="Official notice"></app-action-recipients-template>
+</app-request-action-heading>

@@ -12,7 +12,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
-public class EmpVariationUkEtsRegulatorLedReasonTest {
+class EmpVariationUkEtsRegulatorLedReasonTest {
 
 	private Validator validator;
 
@@ -29,7 +29,7 @@ public class EmpVariationUkEtsRegulatorLedReasonTest {
 				.build();
 		
 		Set<ConstraintViolation<EmpVariationUkEtsRegulatorLedReason>> violations = validator.validate(reason);
-		assertThat(violations).hasSize(0);
+		assertThat(violations).isEmpty();
 	}
 	
 	@Test
@@ -51,7 +51,7 @@ public class EmpVariationUkEtsRegulatorLedReasonTest {
 				.build();
 		
 		Set<ConstraintViolation<EmpVariationUkEtsRegulatorLedReason>> violations = validator.validate(reason);
-		assertThat(violations).hasSize(0);
+		assertThat(violations).isEmpty();
 	}
 	
 }

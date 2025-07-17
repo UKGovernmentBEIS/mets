@@ -1,19 +1,15 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.common.service;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.common.domain.EmpVariationCorsiaRequestPayload;
@@ -23,6 +19,9 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateOfficialNoticeParamsProvider;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +33,6 @@ public class EmpVariationCorsiaOfficialNoticeService {
     private final DocumentFileGeneratorService documentFileGeneratorService;
     private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
     private final OfficialNoticeSendService officialNoticeSendService;
-    private final EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
 
     @Transactional
     public CompletableFuture<FileInfoDTO> generateApprovedOfficialNotice(final String requestId) {
@@ -45,10 +43,6 @@ public class EmpVariationCorsiaOfficialNoticeService {
         final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification());
         final UserInfoDTO serviceContact = requestAccountContactQueryService.getRequestAccountServiceContact(request)
             .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_SERVICE_CONTACT_NOT_FOUND));
-        final EmissionsMonitoringPlanCorsiaDTO emp = emissionsMonitoringPlanQueryService
-            .getEmissionsMonitoringPlanCorsiaDTOByAccountId(request.getAccountId())
-            .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
-        requestPayload.setEmpConsolidationNumber(emp.getConsolidationNumber());
 
         return generateOfficialNoticeAsync(request,
             accountPrimaryContact,
@@ -69,10 +63,6 @@ public class EmpVariationCorsiaOfficialNoticeService {
         final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification());
         final UserInfoDTO serviceContact = requestAccountContactQueryService.getRequestAccountServiceContact(request)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_SERVICE_CONTACT_NOT_FOUND));
-        final EmissionsMonitoringPlanCorsiaDTO emp = emissionsMonitoringPlanQueryService
-        		.getEmissionsMonitoringPlanCorsiaDTOByAccountId(request.getAccountId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
-        requestPayload.setEmpConsolidationNumber(emp.getConsolidationNumber());
 
         return generateOfficialNoticeAsync(request,
                 accountPrimaryContact,
@@ -150,7 +140,7 @@ public class EmpVariationCorsiaOfficialNoticeService {
 
         final TemplateParams templateParams = buildTemplateParams(request, accountPrimaryContact,
             serviceContact, ccRecipientsEmails, type);
-        return documentFileGeneratorService.generateFileDocumentAsync(documentTemplateType, templateParams,
+        return documentFileGeneratorService.generateAndSaveFileDocumentAsync(documentTemplateType, templateParams,
             fileNameToGenerate);
     }
 
@@ -166,7 +156,7 @@ public class EmpVariationCorsiaOfficialNoticeService {
             serviceContact,
             ccRecipientsEmails,
             type);
-        return documentFileGeneratorService.generateFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
+        return documentFileGeneratorService.generateAndSaveFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
     }
     
     private TemplateParams buildTemplateParams(final Request request, final UserInfoDTO accountPrimaryContact,

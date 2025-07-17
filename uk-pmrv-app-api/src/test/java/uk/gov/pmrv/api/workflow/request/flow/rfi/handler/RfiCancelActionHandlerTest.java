@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -41,7 +41,7 @@ class RfiCancelActionHandlerTest {
 
         final RequestTaskActionEmptyPayload actionPayload =
             RequestTaskActionEmptyPayload.builder().build();
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         
         final Long requestTaskId = 1L;
         final String processTaskId = "processTaskId";
@@ -58,7 +58,7 @@ class RfiCancelActionHandlerTest {
         handler.process(
             requestTaskId,
             RequestTaskActionType.RFI_CANCEL,
-            pmrvUser,
+            appUser,
             actionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);

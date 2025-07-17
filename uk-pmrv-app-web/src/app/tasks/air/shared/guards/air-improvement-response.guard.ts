@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { first, map, Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { AirImprovementResponseService } from '@tasks/air/shared/services/air-im
 import { AirApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Injectable()
-export class AirImprovementResponseGuard implements CanActivate {
+export class AirImprovementResponseGuard {
   constructor(
     private readonly router: Router,
     private readonly airService: AirService,

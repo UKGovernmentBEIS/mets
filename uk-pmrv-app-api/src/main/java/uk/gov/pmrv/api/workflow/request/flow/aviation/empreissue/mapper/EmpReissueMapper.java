@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.mapstruct.Mapper;
 
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpReissueAccountDetails;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpReissueAccountReport;
 

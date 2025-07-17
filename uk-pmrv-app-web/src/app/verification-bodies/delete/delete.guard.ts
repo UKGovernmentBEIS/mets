@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { map, Observable, tap } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { catchElseRethrow } from '../../error/business-errors';
 import { saveNotFoundVerificationBodyError } from '../errors/business-error';
 
 @Injectable({ providedIn: 'root' })
-export class DeleteGuard implements CanActivate {
+export class DeleteGuard {
   private body: VerificationBodyDTO;
 
   constructor(

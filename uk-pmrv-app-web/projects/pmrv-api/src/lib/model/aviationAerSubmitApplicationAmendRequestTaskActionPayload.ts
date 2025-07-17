@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -13,4 +13,6 @@ import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
 export interface AviationAerSubmitApplicationAmendRequestTaskActionPayload extends RequestTaskActionPayload {
   aerSectionsCompleted?: { [key: string]: Array<boolean> };
+  reviewSectionsCompleted?: { [key: string]: boolean };
+  verificationSectionsCompleted?: { [key: string]: Array<boolean> };
 }

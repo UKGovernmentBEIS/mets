@@ -1,5 +1,8 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="form" data-testid="emission-sources-page">
-  <govuk-error-summary [form]="form" *ngIf="aircratTypesControl.errors && aircratTypesControl.touched"></govuk-error-summary>
+  <govuk-error-summary
+    [form]="form"
+    *ngIf="aircratTypesControl.errors && aircratTypesControl.touched"
+  ></govuk-error-summary>
   <app-page-heading>Emission sources</app-page-heading>
   <div class="govuk-!-width-two-thirds">
     <h1 class="govuk-heading-m">List all aircraft currently in use</h1>
@@ -8,19 +11,13 @@
     </p>
   </div>
   <app-aircraft-type-table
-    [aircraftTypes]="aircraftTypes$ | async"
+    [aircraftTypes]="$any(aircraftTypes$ | async)"
     [isFUMM]="isFUMM"
     [isCorsia]="true"
     data-testid="aicraft-types-table"
   ></app-aircraft-type-table>
   <div class="govuk-button-group">
-    <button
-      type="button"
-      govukButton
-      govuksecondarybutton
-      (click)="addAircraftType()"
-      data-testid="add-aicraft-btn"
-    >
+    <button type="button" govukButton govuksecondarybutton (click)="addAircraftType()" data-testid="add-aicraft-btn">
       Add an aircraft type
     </button>
   </div>

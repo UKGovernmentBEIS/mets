@@ -27,4 +27,10 @@ public class AviationAerSubmitApplicationAmendRequestTaskActionPayload extends R
      */
     @Builder.Default
     private Map<String, List<Boolean>> aerSectionsCompleted = new HashMap<>();
+    
+    @Builder.Default
+    private Map<String, Boolean> reviewSectionsCompleted = new HashMap<>();
+    
+    @Builder.Default
+    private Map<String, List<Boolean>> verificationSectionsCompleted = new HashMap<>();
 }

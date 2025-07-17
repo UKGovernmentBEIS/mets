@@ -13,8 +13,7 @@ import { ActivityLevelChangeInformation } from 'pmrv-api';
       <app-page-heading>Provide information about this activity level change</app-page-heading>
       <app-doal-alc-information-template
         *ngIf="activityLevelChangeInformation$ | async as alc"
-        [data]="alc"
-      ></app-doal-alc-information-template>
+        [data]="alc"></app-doal-alc-information-template>
       <app-task-return-link [levelsUp]="2" [taskType]="taskType$ | async"></app-task-return-link>
     </app-doal-task>
   `,

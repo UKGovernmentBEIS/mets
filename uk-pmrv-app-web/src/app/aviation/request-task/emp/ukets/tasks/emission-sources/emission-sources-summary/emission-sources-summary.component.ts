@@ -6,6 +6,11 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { combineLatest, map, mergeMap, of } from 'rxjs';
 
 import { EmpVariationRegulatorLedDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-variation-regulator-led-decision-group/emp-variation-regulator-led-decision-group.component';
+import {
+  issuanceReviewRequestTaskTypes,
+  variationOperatorLedReviewRequestTaskTypes,
+  variationSubmitRegulatorLedRequestTaskTypes,
+} from '@aviation/request-task/emp/shared/util/emp.util';
 import { EmpRequestTaskPayloadUkEts, requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import {
@@ -71,7 +76,10 @@ export class EmissionSourcesSummaryComponent {
       hideSubmit:
         !isEditable ||
         ['complete', 'cannot start yet'].includes(taskStatus) ||
-        ['EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT'].includes(type),
+        ['EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT'].includes(type) ||
+        variationSubmitRegulatorLedRequestTaskTypes.includes(type) ||
+        variationOperatorLedReviewRequestTaskTypes.includes(type) ||
+        issuanceReviewRequestTaskTypes.includes(type),
       editable: isEditable,
       showDecision: showReviewDecisionComponent.includes(type),
       showVariationDecision: showVariationReviewDecisionComponent.includes(type),

@@ -54,7 +54,7 @@ export const AER_OVERALL_DECISION_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Overall decision summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Overall decision' },
         loadComponent: () =>
           import('./summary/overall-decision-summary.component').then((c) => c.OverallDecisionSummaryComponent),
       },

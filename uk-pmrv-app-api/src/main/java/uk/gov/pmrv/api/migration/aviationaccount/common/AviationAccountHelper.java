@@ -1,12 +1,11 @@
 package uk.gov.pmrv.api.migration.aviationaccount.common;
 
+import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
-
-import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class AviationAccountHelper {

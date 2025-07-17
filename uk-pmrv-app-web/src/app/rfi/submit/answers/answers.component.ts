@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, first, map, Observable, pluck, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, first, map, Observable, switchMap, takeUntil } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
 import { DestroySubject } from '@core/services/destroy-subject.service';
+import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
 import { templateError } from '@shared/errors/template-error';
 
 import { RequestActionUserInfo, RequestTaskActionPayload, TasksService } from 'pmrv-api';
 
-import { BusinessErrorService } from '../../../error/business-error/business-error.service';
 import {
   catchBadRequest,
   catchTaskReassignedBadRequest,
@@ -63,20 +63,22 @@ export class AnswersComponent implements PendingRequest, OnInit {
               state.requestType === 'PERMIT_SURRENDER'
               ? `/permit-surrender/${state.requestTaskId}/review`
               : state.requestType === 'PERMIT_VARIATION'
-              ? `/permit-variation/${state.requestTaskId}/review`
-              : state.requestType === 'PERMIT_ISSUANCE'
-              ? `/permit-issuance/${state.requestTaskId}/review`
-              : null
+                ? `/permit-variation/${state.requestTaskId}/review`
+                : state.requestType === 'PERMIT_ISSUANCE'
+                  ? `/permit-issuance/${state.requestTaskId}/review`
+                  : null
             : null,
         ),
         takeUntil(this.destroy$),
       )
       .subscribe();
 
-    this.questions$ = this.store.pipe(pluck('rfiSubmitPayload', 'questions'));
-    this.deadline$ = this.store.pipe(pluck('rfiSubmitPayload', 'deadline'));
-    this.signatory$ = this.store.pipe(pluck('rfiSubmitPayload', 'signatory'));
-    this.usersInfo$ = this.store.pipe(pluck('usersInfo')) as Observable<{ [key: string]: RequestActionUserInfo }>;
+    this.questions$ = this.store.pipe(map((state) => state?.rfiSubmitPayload?.questions));
+    this.deadline$ = this.store.pipe(map((state) => state?.rfiSubmitPayload?.deadline));
+    this.signatory$ = this.store.pipe(map((state) => state?.rfiSubmitPayload?.signatory));
+    this.usersInfo$ = this.store.pipe(map((state) => state?.usersInfo)) as Observable<{
+      [key: string]: RequestActionUserInfo;
+    }>;
     this.operators$ = combineLatest([this.usersInfo$, this.signatory$]).pipe(
       first(),
       map(([usersInfo, signatory]) => Object.keys(usersInfo).filter((userId) => userId !== signatory)),

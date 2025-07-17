@@ -1,28 +1,16 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.common.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.common.domain.EmpVariationCorsiaRequestPayload;
@@ -33,6 +21,18 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateOfficialNoticeParamsProvider;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class EmpVariationCorsiaOfficialNoticeServiceTest {
@@ -57,9 +57,6 @@ class EmpVariationCorsiaOfficialNoticeServiceTest {
 
     @Mock
     private OfficialNoticeSendService officialNoticeSendService;
-    
-    @Mock
-    private EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
 
     @Test
     void generateApprovedOfficialNotice() throws InterruptedException, ExecutionException {
@@ -102,13 +99,11 @@ class EmpVariationCorsiaOfficialNoticeServiceTest {
             .thenReturn(Optional.of(accountPrimaryContactInfo));
         when(requestAccountContactQueryService.getRequestAccountServiceContact(request))
             .thenReturn(Optional.of(serviceContactInfo));
-        when(emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanCorsiaDTOByAccountId(accountId))
-            .thenReturn(Optional.of(empDto));
         when(decisionNotificationUsersService.findUserEmails(decisionNotification))
             .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocumentAsync(
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(
             DocumentTemplateType.EMP_VARIATION_CORSIA_ACCEPTED, templateParams, fileName))
             .thenReturn(CompletableFuture.completedFuture(officialDocFileInfoDTO));
 
@@ -122,7 +117,7 @@ class EmpVariationCorsiaOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountServiceContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocumentAsync(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
             DocumentTemplateType.EMP_VARIATION_CORSIA_ACCEPTED, templateParams, fileName);
     }
     
@@ -167,13 +162,11 @@ class EmpVariationCorsiaOfficialNoticeServiceTest {
                 .thenReturn(Optional.of(accountPrimaryContactInfo));
         when(requestAccountContactQueryService.getRequestAccountServiceContact(request))
         		.thenReturn(Optional.of(serviceContactInfo));
-        when(emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanCorsiaDTOByAccountId(accountId))
-				.thenReturn(Optional.of(empDto));
         when(decisionNotificationUsersService.findUserEmails(decisionNotification))
                 .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocumentAsync(
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(
                 DocumentTemplateType.EMP_VARIATION_CORSIA_REGULATOR_LED_APPROVED, templateParams, fileName))
                 .thenReturn(CompletableFuture.completedFuture(officialDocFileInfoDTO));
 
@@ -187,7 +180,7 @@ class EmpVariationCorsiaOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountServiceContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocumentAsync(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
                 DocumentTemplateType.EMP_VARIATION_CORSIA_REGULATOR_LED_APPROVED, templateParams, fileName);
     }
 
@@ -231,7 +224,7 @@ class EmpVariationCorsiaOfficialNoticeServiceTest {
             .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(
+        when(documentFileGeneratorService.generateAndSaveFileDocument(
             DocumentTemplateType.EMP_VARIATION_CORSIA_DEEMED_WITHDRAWN, templateParams, fileName))
             .thenReturn(officialDocFileInfoDTO);
 
@@ -244,7 +237,7 @@ class EmpVariationCorsiaOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
             DocumentTemplateType.EMP_VARIATION_CORSIA_DEEMED_WITHDRAWN, templateParams, fileName);
     }
 
@@ -288,7 +281,7 @@ class EmpVariationCorsiaOfficialNoticeServiceTest {
             .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(
+        when(documentFileGeneratorService.generateAndSaveFileDocument(
             DocumentTemplateType.EMP_VARIATION_CORSIA_REJECTED, templateParams, fileName))
             .thenReturn(officialDocFileInfoDTO);
 
@@ -301,7 +294,7 @@ class EmpVariationCorsiaOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
             DocumentTemplateType.EMP_VARIATION_CORSIA_REJECTED, templateParams, fileName);
     }
     

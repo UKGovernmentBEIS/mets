@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -40,7 +40,7 @@ class PermitRevocationValidatorTest {
     void validateUsers() {
 
         final String userId = "userId";
-        final PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        final AppUser appUser = AppUser.builder().userId(userId).build();
         final PermitRevocation permitRevocation = PermitRevocation.builder()
             .reason("reason")
             .activitiesStopped(false)
@@ -59,13 +59,13 @@ class PermitRevocationValidatorTest {
             .signatory("signatory")
             .build();
 
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser)).thenReturn(
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser)).thenReturn(
             true);
 
-        permitRevocationValidator.validateNotifyUsers(requestTask, decisionNotification, pmrvUser);
+        permitRevocationValidator.validateNotifyUsers(requestTask, decisionNotification, appUser);
 
         verify(decisionNotificationUsersValidator, times(1))
-            .areUsersValid(requestTask, decisionNotification, pmrvUser);
+            .areUsersValid(requestTask, decisionNotification, appUser);
     }
 
     @Test
@@ -73,11 +73,11 @@ class PermitRevocationValidatorTest {
 
         final String peerReviewer = "peerReviewer";
         final String userId = "userId";
-        final PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        final AppUser appUser = AppUser.builder().userId(userId).build();
 
-        permitRevocationValidator.validatePeerReviewer(peerReviewer, pmrvUser);
+        permitRevocationValidator.validatePeerReviewer(peerReviewer, appUser);
 
         verify(peerReviewerTaskAssignmentValidator, times(1))
-            .validate(RequestTaskType.PERMIT_REVOCATION_APPLICATION_PEER_REVIEW, peerReviewer, pmrvUser);
+            .validate(RequestTaskType.PERMIT_REVOCATION_APPLICATION_PEER_REVIEW, peerReviewer, appUser);
     }
 }

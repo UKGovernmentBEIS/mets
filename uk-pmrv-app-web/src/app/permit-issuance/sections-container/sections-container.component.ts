@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, map, Observable, take } from 'rxjs';
 
+import { permitTypeMapLowercase } from '@permit-application/shared/utils/permit';
+
 import { RequestActionsService, RequestItemsService } from 'pmrv-api';
 
 import { SectionsContainerAbstractComponent } from '../../permit-application/shared/sections/sections-container-abstract.component';
@@ -20,10 +22,12 @@ export class SectionsContainerComponent extends SectionsContainerAbstractCompone
     map((state) => state.requestTaskType),
     map((requestTaskType) => requestTaskType === 'PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT'),
   );
-
+  permitTypeMapLowercase = permitTypeMapLowercase;
   header$: Observable<string> = this.store.pipe(
     first(),
-    map((state) => `Apply for a ${state.permitType ? state.permitType + ' permit' : 'permit'}`),
+    map(
+      (state) => `Apply for a ${state.permitType ? permitTypeMapLowercase?.[state.permitType] + ' permit' : 'permit'}`,
+    ),
   );
 
   constructor(

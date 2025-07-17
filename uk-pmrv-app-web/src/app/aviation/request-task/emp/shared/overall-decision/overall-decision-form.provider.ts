@@ -3,21 +3,18 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { Subject } from 'rxjs';
 
+import { EmpDetermination } from '@aviation/request-task/emp/shared/util/emp.util';
 import { TaskFormProvider } from '@aviation/request-task/task-form.provider';
 
 import { GovukValidators } from 'govuk-components';
 
-import { EmpIssuanceDetermination, EmpVariationDetermination } from 'pmrv-api';
-
 interface OverallDecisionFormModel {
-  reason: FormControl<EmpIssuanceDetermination['reason'] | null>;
-  type: FormControl<EmpIssuanceDetermination['type'] | EmpVariationDetermination['type'] | null>;
+  reason: FormControl<EmpDetermination['reason'] | null>;
+  type: FormControl<EmpDetermination['type'] | null>;
 }
 
 @Injectable()
-export class OverallDecisionFormProvider
-  implements TaskFormProvider<EmpIssuanceDetermination | EmpVariationDetermination, OverallDecisionFormModel>
-{
+export class OverallDecisionFormProvider implements TaskFormProvider<EmpDetermination, OverallDecisionFormModel> {
   private fb = inject(FormBuilder);
   private _form: FormGroup;
 
@@ -37,7 +34,7 @@ export class OverallDecisionFormProvider
     this._form = null;
   }
 
-  setFormValue(decision: EmpIssuanceDetermination | undefined | EmpVariationDetermination): void {
+  setFormValue(decision: EmpDetermination | undefined): void {
     if (decision) {
       this.form.patchValue(decision);
     }

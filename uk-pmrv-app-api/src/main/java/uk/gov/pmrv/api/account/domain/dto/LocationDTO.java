@@ -1,10 +1,8 @@
 package uk.gov.pmrv.api.account.domain.dto;
 
-import jakarta.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

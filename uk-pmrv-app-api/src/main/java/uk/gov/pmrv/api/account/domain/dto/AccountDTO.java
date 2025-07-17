@@ -9,10 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

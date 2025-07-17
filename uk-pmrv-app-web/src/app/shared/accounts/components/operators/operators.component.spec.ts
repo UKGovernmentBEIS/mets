@@ -118,10 +118,6 @@ describe('OperatorsComponent', () => {
       return this.rows.map((row) => row.querySelectorAll<HTMLInputElement>('input[type="radio"]'));
     }
 
-    get locks() {
-      return this.queryAll<HTMLDivElement>('.locked');
-    }
-
     get errorSummary() {
       return this.query<HTMLDivElement>('.govuk-error-summary');
     }
@@ -175,7 +171,7 @@ describe('OperatorsComponent', () => {
   const createComponent = () => {
     fixture = TestBed.createComponent(OperatorsComponent);
     component = fixture.componentInstance;
-    component.currentTab = 'users';
+    component.currentTab$ = of('users');
     page = new Page(fixture);
     fixture.detectChanges();
   };
@@ -270,10 +266,6 @@ describe('OperatorsComponent', () => {
       fixture.detectChanges();
 
       expectUserOrderToBe([1, 0, 2, 3]);
-    });
-
-    it('should show locked status sign', () => {
-      expect(page.locks).toHaveLength(1);
     });
 
     it('should render a save changes to both operator and regulator users', () => {
@@ -574,16 +566,6 @@ describe('OperatorsComponent', () => {
       expect(page.addUserFormButton).toBeFalsy();
     });
 
-    it('should not show locked status sign', () => {
-      setUserAsRegulator();
-      fixture.detectChanges();
-      page.locks.forEach((lock) => expect(lock).toBeFalsy());
-
-      setUserAsOperator();
-      fixture.detectChanges();
-      page.locks.forEach((lock) => expect(lock).toBeFalsy());
-    });
-
     it('should not render save changes button', () => {
       setUserAsRegulator();
       fixture.detectChanges();
@@ -601,13 +583,11 @@ describe('OperatorsComponent', () => {
       fixture.detectChanges();
 
       expectUserOrderToBe([0, 2, 1, 3]);
-      page.nameLinks.forEach((lock) => expect(lock).toBeFalsy());
 
       setUserAsOperator();
       fixture.detectChanges();
 
       expectUserOrderToBe([0, 2, 1, 3]);
-      page.nameLinks.forEach((lock) => expect(lock).toBeFalsy());
     });
 
     it('should not show appoint verifier button', () => {

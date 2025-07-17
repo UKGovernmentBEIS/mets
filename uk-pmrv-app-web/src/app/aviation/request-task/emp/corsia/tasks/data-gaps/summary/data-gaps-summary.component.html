@@ -1,11 +1,11 @@
 <ng-template #contentTpl let-showOriginal>
   <ng-container *ngIf="vm$ | async as vm">
-    <app-data-gaps-summary-template
+    <app-data-gaps-corsia-summary-template
       [data]="showOriginal ? vm.originalData : vm.data"
       [isEditable]="vm.isEditable"
       [corsiaMonitoringApproach]="vm.monitoringApproachType"
     >
-    </app-data-gaps-summary-template>
+    </app-data-gaps-corsia-summary-template>
   </ng-container>
 </ng-template>
 

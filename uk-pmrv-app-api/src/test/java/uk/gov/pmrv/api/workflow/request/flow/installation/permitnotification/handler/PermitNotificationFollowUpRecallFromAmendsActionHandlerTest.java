@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -40,7 +40,7 @@ class PermitNotificationFollowUpRecallFromAmendsActionHandlerTest {
     @Test
     void process() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final String processTaskId = "processTaskId";
         final Request request =
             Request.builder().id("requestId").payload(PermitNotificationRequestPayload.builder().build()).build();
@@ -54,7 +54,7 @@ class PermitNotificationFollowUpRecallFromAmendsActionHandlerTest {
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.PERMIT_NOTIFICATION_FOLLOW_UP_RECALL_FROM_AMENDS,
-            pmrvUser,
+            appUser,
             RequestTaskActionEmptyPayload.builder().build());
 
         // Verify

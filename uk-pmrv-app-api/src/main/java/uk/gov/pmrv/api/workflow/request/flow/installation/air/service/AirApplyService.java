@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -36,7 +36,7 @@ public class AirApplyService {
 
     @Transactional
     public void applySubmitAction(final RequestTask requestTask, 
-                                  final PmrvUser pmrvUser) {
+                                  final AppUser appUser) {
         
         final AirApplicationSubmitRequestTaskPayload taskPayload = (AirApplicationSubmitRequestTaskPayload) requestTask.getPayload();
 
@@ -44,11 +44,11 @@ public class AirApplyService {
         submitValidatorService.validate(taskPayload.getOperatorImprovementResponses(), taskPayload.getAirImprovements());
 
         // Submit AIR
-        this.submitAir(requestTask, pmrvUser);
+        this.submitAir(requestTask, appUser);
     }
 
     private void submitAir(final RequestTask requestTask,
-                           final PmrvUser pmrvUser) {
+                           final AppUser appUser) {
 
         final Request request = requestTask.getRequest();
         final AirRequestPayload airRequestPayload = (AirRequestPayload) request.getPayload();
@@ -68,6 +68,6 @@ public class AirApplyService {
             requestTask.getRequest(),
             actionPayload,
             RequestActionType.AIR_APPLICATION_SUBMITTED,
-            pmrvUser.getUserId());
+            appUser.getUserId());
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.pmrv.api.notification.message.domain.SystemMessageNotificationInfo;
 import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.notification.template.service.NotificationTemplateProcessService;
 
 @Log4j2
@@ -23,10 +23,10 @@ public class SystemMessageNotificationService {
     }
 
     private NotificationContent createNotificationSystemMessageContent(SystemMessageNotificationInfo msgInfo) {
-        NotificationTemplateName templateName = msgInfo.getMessageType().getNotificationTemplateName();
+    	PmrvNotificationTemplateName templateName = msgInfo.getMessageType().getNotificationTemplateName();
         log.debug("Generating system message using template {}", () -> templateName);
 
         return notificationTemplateProcessService
-                .processMessageNotificationTemplate(templateName, msgInfo.getMessageParameters());
+                .processMessageNotificationTemplate(templateName.getName(), msgInfo.getMessageParameters());
     }
 }

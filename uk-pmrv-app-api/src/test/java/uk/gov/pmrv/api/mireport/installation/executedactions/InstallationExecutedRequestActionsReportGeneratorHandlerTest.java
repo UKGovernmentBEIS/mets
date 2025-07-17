@@ -1,21 +1,21 @@
 package uk.gov.pmrv.api.mireport.installation.executedactions;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.mireport.MiReportType;
+import uk.gov.netz.api.mireport.executedactions.ExecutedRequestAction;
+import uk.gov.netz.api.mireport.executedactions.ExecutedRequestActionsMiReportParams;
+import uk.gov.netz.api.mireport.executedactions.ExecutedRequestActionsMiReportResult;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
-import uk.gov.pmrv.api.mireport.common.MiReportType;
-import uk.gov.pmrv.api.mireport.common.executedActions.ExecutedRequestAction;
-import uk.gov.pmrv.api.mireport.common.executedActions.ExecutedRequestActionsMiReportParams;
-import uk.gov.pmrv.api.mireport.common.executedActions.ExecutedRequestActionsMiReportResult;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,24 +43,24 @@ class InstallationExecutedRequestActionsReportGeneratorHandlerTest {
             .reportType(MiReportType.COMPLETED_WORK)
             .fromDate(LocalDate.now())
             .build();
-        List<ExecutedRequestAction> executedRequestActions = List.of(
-            ExecutedRequestAction.builder()
-                .emitterId("emitterId")
+        List<InstallationExecutedRequestAction> executedRequestActions = List.of(
+                InstallationExecutedRequestAction.builder()
+                .accountId("emitterId")
                 .accountName("accountName")
                 .accountStatus(InstallationAccountStatus.LIVE.name())
                 .accountType(AccountType.INSTALLATION)
                 .legalEntityName("legalEntityName")
                 .requestId("REQ-1")
-                .requestType(RequestType.PERMIT_ISSUANCE)
-                .requestStatus(RequestStatus.IN_PROGRESS)
-                .requestActionType(RequestActionType.PERMIT_ISSUANCE_APPLICATION_SUBMITTED)
+                .requestType(RequestType.PERMIT_ISSUANCE.name())
+                .requestStatus(RequestStatus.IN_PROGRESS.name())
+                .requestActionType(RequestActionType.PERMIT_ISSUANCE_APPLICATION_SUBMITTED.name())
                 .requestActionSubmitter("submitter")
                 .requestActionCompletionDate(LocalDateTime.now())
                 .build());
 
         when(repository.findExecutedRequestActions(entityManager, reportParams)).thenReturn(executedRequestActions);
 
-        ExecutedRequestActionsMiReportResult report =
+        ExecutedRequestActionsMiReportResult<InstallationExecutedRequestAction> report =
             (ExecutedRequestActionsMiReportResult) generator.generateMiReport(entityManager, reportParams);
 
         assertNotNull(report);
@@ -71,5 +71,10 @@ class InstallationExecutedRequestActionsReportGeneratorHandlerTest {
     @Test
     void getReportType() {
         assertThat(generator.getReportType()).isEqualTo(MiReportType.COMPLETED_WORK);
+    }
+
+    @Test
+    void getColumnNames() {
+        assertThat(generator.getColumnNames()).containsExactlyElementsOf(InstallationExecutedRequestAction.getColumnNames());
     }
 }

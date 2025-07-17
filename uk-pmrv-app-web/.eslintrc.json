@@ -1,12 +1,15 @@
 {
   "root": true,
+  "env": {
+    "es6": true
+  },
   "ignorePatterns": ["projects/**/*"],
   "overrides": [
     {
       "files": ["*.ts"],
       "parser": "@typescript-eslint/parser",
       "parserOptions": {
-        "project": ["tsconfig.json"],
+        "project": ["**/tsconfig.json"],
         "createDefaultProgram": true
       },
       "extends": [
@@ -15,8 +18,7 @@
         "plugin:@angular-eslint/recommended",
         "plugin:@angular-eslint/all",
         "plugin:@angular-eslint/template/process-inline-templates",
-        "prettier",
-        "plugin:@angular-eslint/recommended--extra"
+        "plugin:prettier/recommended"
       ],
       "plugins": ["simple-import-sort", "unused-imports"],
       "rules": {
@@ -46,6 +48,9 @@
         ],
         "@angular-eslint/use-injectable-provided-in": "off",
         "@angular-eslint/no-forward-ref": "off",
+        "@angular-eslint/prefer-standalone-component": "off",
+        "@angular-eslint/prefer-standalone": "off",
+        "@typescript-eslint/no-inferrable-types": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unused-vars": ["error", { "ignoreRestSiblings": true }],
         "@typescript-eslint/explicit-module-boundary-types": "off",
@@ -64,8 +69,16 @@
           }
         ],
         "unused-imports/no-unused-imports-ts": "error",
+        "no-restricted-imports": "off",
+        "@typescript-eslint/no-restricted-imports": "off",
         "sort-imports": "off",
         "import/order": "off"
+      }
+    },
+    {
+      "files": ["main.ts", "index.ts", "app*.ts"],
+      "rules": {
+        "@typescript-eslint/no-restricted-imports": "off"
       }
     },
     {
@@ -96,7 +109,9 @@
         "@angular-eslint/template/attributes-order": "off",
         "@angular-eslint/template/no-inline-styles": "off",
         "@angular-eslint/template/accessibility-interactive-supports-focus": "off",
-        "@angular-eslint/template/no-interpolation-in-attributes": "off"
+        "@angular-eslint/template/no-interpolation-in-attributes": "off",
+        "@angular-eslint/template/prefer-self-closing-tags": "off",
+        "@angular-eslint/template/prefer-control-flow": "off"
       }
     }
   ]

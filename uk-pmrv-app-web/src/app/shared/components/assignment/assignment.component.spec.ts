@@ -29,7 +29,9 @@ describe('AssignmentComponent', () => {
   );
 
   @Component({
-    template: `<app-assignment [info]="info" (submitted)="submitted($event)"></app-assignment>`,
+    template: `
+      <app-assignment [info]="info" (submitted)="submitted($event)"></app-assignment>
+    `,
     providers: [PendingRequestService],
   })
   class TestComponent {

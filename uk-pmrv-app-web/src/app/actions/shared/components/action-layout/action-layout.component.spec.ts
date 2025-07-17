@@ -15,7 +15,9 @@ describe('ActionLayoutComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    template: ` <app-action-layout [header]="header" [requestAction]="requestActionItem"> </app-action-layout> `,
+    template: `
+      <app-action-layout [header]="header" [requestAction]="requestActionItem"></app-action-layout>
+    `,
   })
   class TestComponent {
     header = 'Emissions report';

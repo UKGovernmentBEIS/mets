@@ -28,7 +28,7 @@
     <app-pagination
       [count]="totalNumOfItems$ | async"
       (currentPageChange)="currentPage$.next($event)"
-      [pageSize]="pageSize"
+      [pageSize]="showAllData ? (totalNumOfItems$ | async) : pageSize"
     ></app-pagination>
   </ng-container>
 </div>

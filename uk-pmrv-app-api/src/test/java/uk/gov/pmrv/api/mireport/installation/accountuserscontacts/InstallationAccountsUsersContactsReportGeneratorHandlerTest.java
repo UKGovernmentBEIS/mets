@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.mireport.installation.accountuserscontacts;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,15 +10,14 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.mireport.common.MiReportType;
-import uk.gov.pmrv.api.mireport.common.accountuserscontacts.AccountUserContact;
-import uk.gov.pmrv.api.mireport.common.accountuserscontacts.AccountsUsersContactsMiReportResult;
-import uk.gov.pmrv.api.mireport.common.accountuserscontacts.OperatorUserInfoDTO;
-import uk.gov.pmrv.api.mireport.common.domain.dto.EmptyMiReportParams;
+import uk.gov.netz.api.mireport.MiReportType;
+import uk.gov.netz.api.mireport.accountuserscontacts.AccountUserContact;
+import uk.gov.netz.api.mireport.accountuserscontacts.AccountsUsersContactsMiReportResult;
+import uk.gov.netz.api.mireport.accountuserscontacts.OperatorUserInfoDTO;
+import uk.gov.netz.api.mireport.domain.EmptyMiReportParams;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -53,7 +53,7 @@ class InstallationAccountsUsersContactsReportGeneratorHandlerTest {
         EmptyMiReportParams reportParams = EmptyMiReportParams.builder().build();
         String loginDate = "2022-08-18T16:48:14.729098Z";
         String parsedLoginDate = LocalDateTime.parse(loginDate, DateTimeFormatter.ISO_DATE_TIME).format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss"));
-        AccountUserContact accountUserContact = AccountUserContact.builder()
+        InstallationAccountUserContact accountUserContact = InstallationAccountUserContact.builder()
                 .userId("userId")
                 .accountId("emitterId")
                 .accountName("accountName")
@@ -77,7 +77,7 @@ class InstallationAccountsUsersContactsReportGeneratorHandlerTest {
                 .phoneNumberCode("30")
                 .lastLoginDate(loginDate)
                 .build();
-        AccountUserContact accountUserContactExpected = AccountUserContact.builder()
+        InstallationAccountUserContact accountUserContactExpected = InstallationAccountUserContact.builder()
                 .userId("userId")
                 .accountId("emitterId")
                 .accountName("accountName")
@@ -102,12 +102,17 @@ class InstallationAccountsUsersContactsReportGeneratorHandlerTest {
                 Collections.singletonList(operatorUserInfoDTO));
         when(accountUsersContactsRepository.findAccountUserContacts(entityManager))
             .thenReturn(Collections.singletonList(accountUserContact));
-        AccountsUsersContactsMiReportResult report = (AccountsUsersContactsMiReportResult) service.generateMiReport(entityManager, reportParams);
+        AccountsUsersContactsMiReportResult<InstallationAccountUserContact> report = (AccountsUsersContactsMiReportResult) service.generateMiReport(entityManager, reportParams);
 
         assertThat(report.getResults()).hasSize(1);
         AccountUserContact accountUserContactActual = report.getResults().get(0);
 
         Assertions.assertEquals(accountUserContactExpected, accountUserContactActual);
+    }
+
+    @Test
+    void getColumnNames() {
+        assertThat(service.getColumnNames()).containsExactlyElementsOf(InstallationAccountUserContact.getColumnNames());
     }
 
     private static Stream<Arguments> permitValues() {

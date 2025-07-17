@@ -26,7 +26,7 @@ export class OperatorDetailsFlightIdentificationTemplateComponent implements OnI
       ? 'How do you attribute flights to your organisation under CORSIA?'
       : 'What call sign identification do you use for Air Traffic Control purposes?';
     this.markingsHeader = this.isCorsia
-      ? 'List the aeroplane markings or codes used'
+      ? 'List the aeroplane registration markings or codes used'
       : 'List the aircraft registration markings used';
   }
 }

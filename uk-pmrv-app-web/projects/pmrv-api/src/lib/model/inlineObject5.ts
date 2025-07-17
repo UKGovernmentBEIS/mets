@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,8 +11,7 @@
  */
 
 export interface InlineObject5 {
-  /**
-   * The document template source file
-   */
+  id: string;
+  type: 'MMP' | 'FLOW_DIAGRAM';
   file: Blob;
 }

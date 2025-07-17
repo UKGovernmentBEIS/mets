@@ -6,6 +6,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.files.attachments.service.FileAttachmentService;
+import uk.gov.netz.api.files.attachments.service.FileAttachmentService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.PermitTransferAttachmentsValidator;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,7 +33,7 @@ class PermitTransferAttachmentsValidatorTest {
         
         UUID attachment1 = UUID.randomUUID();
         UUID attachment2 = UUID.randomUUID();
-        final Set<UUID> sectionAttachments = Set.of(attachment1, attachment2);
+        final Set<UUID> sectionAttachments = new HashSet<>(Arrays.asList(attachment1, attachment2, null));
         
         when(fileAttachmentService.fileAttachmentsExist(Set.of(attachment1.toString(), attachment2.toString()))).thenReturn(true);
         
@@ -68,7 +70,7 @@ class PermitTransferAttachmentsValidatorTest {
         
         UUID attachment1 = UUID.randomUUID();
         UUID attachment2 = UUID.randomUUID();
-        final Set<UUID> sectionAttachments = Set.of(attachment1, attachment2);
+        final Set<UUID> sectionAttachments = new HashSet<>(Arrays.asList(attachment1, attachment2, null));;
         final Set<UUID> transferAttachments = Set.of(attachment1, UUID.randomUUID());
         
         boolean result = validator.sectionAttachmentsReferenced(sectionAttachments, transferAttachments);

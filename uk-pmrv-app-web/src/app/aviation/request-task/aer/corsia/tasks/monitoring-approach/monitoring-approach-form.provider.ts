@@ -29,7 +29,7 @@ export interface AviationAerCorsiaCertDetailsFormModel {
 
 export interface AviationAerCorsiaAircraftTypeDetailsFormModel {
   designator: FormControl<string | null>;
-  subtype: FormControl<string | null>;
+  subtype?: FormControl<string | null>;
   fuelBurnRatio: FormControl<string | null>;
 }
 
@@ -227,7 +227,7 @@ export class AviationAerCorsiaMonitoringApproachFormProvider
         fuelBurnRatio: this.fb.control<string | null>(aircraftDetail.fuelBurnRatio ?? null),
       },
       { updateOn: 'change' },
-    );
+    ) as FormGroup<AviationAerCorsiaAircraftTypeDetailsFormModel>;
   }
 
   private addAircraftTypeDetailsFormArrayCtrl(aircraftTypeDetails?: AviationAerCorsiaAircraftTypeDetails[]) {

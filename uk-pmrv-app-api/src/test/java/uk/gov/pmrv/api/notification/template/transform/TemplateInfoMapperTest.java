@@ -7,7 +7,7 @@ import uk.gov.pmrv.api.notification.template.domain.DocumentTemplate;
 import uk.gov.pmrv.api.notification.template.domain.NotificationTemplate;
 import uk.gov.pmrv.api.notification.template.domain.dto.TemplateInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 
 import java.time.LocalDateTime;
 
@@ -48,7 +48,7 @@ class TemplateInfoMapperTest {
     @Test
     void notificationTemplateToTemplateInfoDTO() {
         Long templateId = 1L;
-        NotificationTemplateName templateName = NotificationTemplateName.EMAIL_CONFIRMATION;
+        PmrvNotificationTemplateName templateName = PmrvNotificationTemplateName.EMAIL_CONFIRMATION;
         NotificationTemplate notificationTemplate = NotificationTemplate.builder()
             .id(templateId)
             .name(templateName)

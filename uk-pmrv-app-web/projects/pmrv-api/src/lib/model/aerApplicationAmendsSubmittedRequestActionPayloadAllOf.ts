@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { Aer } from './aer';
+import { AerVerificationReport } from './aerVerificationReport';
 import { InstallationOperatorDetails } from './installationOperatorDetails';
 import { MonitoringPlanVersion } from './monitoringPlanVersion';
 import { PermitOriginatedData } from './permitOriginatedData';
@@ -20,5 +21,8 @@ export interface AerApplicationAmendsSubmittedRequestActionPayloadAllOf {
   installationOperatorDetails?: InstallationOperatorDetails;
   permitOriginatedData?: PermitOriginatedData;
   monitoringPlanVersions?: Array<MonitoringPlanVersion>;
+  verificationPerformed?: boolean;
+  verificationReport?: AerVerificationReport;
   aerAttachments?: { [key: string]: string };
+  verificationAttachments?: { [key: string]: string };
 }

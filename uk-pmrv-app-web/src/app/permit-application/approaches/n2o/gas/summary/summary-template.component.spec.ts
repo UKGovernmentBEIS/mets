@@ -18,7 +18,9 @@ describe('SummaryTemplateComponent', () => {
   let store: PermitApplicationStore<PermitApplicationState>;
 
   @Component({
-    template: ` <app-n2o-approach-gas-summary-template></app-n2o-approach-gas-summary-template> `,
+    template: `
+      <app-n2o-approach-gas-summary-template></app-n2o-approach-gas-summary-template>
+    `,
   })
   class TestComponent {}
 

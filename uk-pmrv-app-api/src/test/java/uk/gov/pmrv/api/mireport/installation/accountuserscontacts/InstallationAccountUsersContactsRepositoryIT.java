@@ -8,24 +8,23 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.authorization.core.domain.Authority;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.domain.Role;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityStatus;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
-import uk.gov.pmrv.api.authorization.core.domain.Authority;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.core.domain.Role;
 import uk.gov.pmrv.api.common.domain.Address;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.mireport.common.accountuserscontacts.AccountUserContact;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitEntity;
@@ -60,7 +59,7 @@ class InstallationAccountUsersContactsRepositoryIT extends AbstractContainerBase
         Role role = createRole();
         PermitEntity permit = createPermit("permitId", accountId);
         flushAndClear();
-        AccountUserContact accountUserContactExpected = AccountUserContact
+        InstallationAccountUserContact accountUserContactExpected = InstallationAccountUserContact
                 .builder()
                 .userId(userId)
                 .accountType(account.getAccountType().name())
@@ -79,7 +78,7 @@ class InstallationAccountUsersContactsRepositoryIT extends AbstractContainerBase
                 .build();
 
         //invoke
-        List<AccountUserContact> result = repo.findAccountUserContacts(entityManager);
+        List<InstallationAccountUserContact> result = repo.findAccountUserContacts(entityManager);
 
         //verify
         assertEquals(1, result.size());
@@ -104,7 +103,7 @@ class InstallationAccountUsersContactsRepositoryIT extends AbstractContainerBase
         Role role = Role.builder()
                 .code("code")
                 .name("roleName")
-                .type(RoleType.OPERATOR)
+                .type(RoleTypeConstants.OPERATOR)
                 .build();
         entityManager.persist(role);
         return role;

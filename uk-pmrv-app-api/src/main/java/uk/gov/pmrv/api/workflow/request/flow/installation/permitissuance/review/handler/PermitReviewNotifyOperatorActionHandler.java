@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -32,15 +32,15 @@ public class PermitReviewNotifyOperatorActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final PermitIssuanceNotifyOperatorForDecisionRequestTaskActionPayload payload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
-        validator.validate(requestTask, payload, pmrvUser);
+        validator.validate(requestTask, payload, appUser);
 
         final DecisionNotification permitDecisionNotification = payload.getDecisionNotification();
-        permitIssuanceReviewService.savePermitDecisionNotification(requestTask, permitDecisionNotification, pmrvUser);
+        permitIssuanceReviewService.savePermitDecisionNotification(requestTask, permitDecisionNotification, appUser);
 
         // complete task
         final PermitIssuanceApplicationReviewRequestTaskPayload taskPayload =

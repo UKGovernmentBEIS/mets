@@ -258,6 +258,7 @@ export class ItemNamePipe implements PipeTransform {
       case 'VERIFIER_NO_LONGER_AVAILABLE':
         return 'Verification body is no longer available';
       case 'AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+      case 'AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT':
       case 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT':
       case 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT':
         return `Verify ${year} emissions report`;
@@ -285,6 +286,14 @@ export class ItemNamePipe implements PipeTransform {
         return 'Peer review upload penalty: non-compliance';
       case 'NON_COMPLIANCE_FINAL_DETERMINATION':
         return 'Provide conclusion: non-compliance';
+
+      // permanent cessation
+      case 'PERMANENT_CESSATION_APPLICATION_SUBMIT':
+        return 'Complete permanent cessation';
+      case 'PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW':
+        return 'Permanent cessation sent to peer reviewer';
+      case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW':
+        return 'Peer review permanent cessation';
 
       //doal
       case 'DOAL_APPLICATION_SUBMIT':
@@ -352,16 +361,21 @@ export class ItemNamePipe implements PipeTransform {
       case 'AVIATION_AER_CORSIA_APPLICATION_SUBMIT':
         return `Complete ${year} emissions report`;
       case 'AVIATION_AER_UKETS_AMEND_WAIT_FOR_VERIFICATION':
+      case 'AVIATION_AER_CORSIA_AMEND_WAIT_FOR_VERIFICATION':
       case 'AVIATION_AER_UKETS_WAIT_FOR_VERIFICATION':
       case 'AVIATION_AER_CORSIA_WAIT_FOR_VERIFICATION':
         return `${year} emissions report sent to verifier`;
       case 'AVIATION_AER_UKETS_APPLICATION_REVIEW':
+      case 'AVIATION_AER_CORSIA_APPLICATION_REVIEW':
         return `Review ${year} emissions report`;
+      case 'AVIATION_AER_CORSIA_WAIT_FOR_REVIEW':
       case 'AVIATION_AER_UKETS_WAIT_FOR_REVIEW':
         return `${year} emissions report sent to regulator for review`;
+      case 'AVIATION_AER_CORSIA_WAIT_FOR_AMENDS':
       case 'AVIATION_AER_UKETS_WAIT_FOR_AMENDS':
         return `${year} emissions report returned to operator`;
       case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT':
+      case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT':
         return `Amend ${year} emissions report`;
       case 'AVIATION_DRE_UKETS_MAKE_PAYMENT':
         return `Pay ${year} emissions determination fee`;
@@ -454,6 +468,85 @@ export class ItemNamePipe implements PipeTransform {
         return 'Peer review upload penalty: non-compliance';
       case 'AVIATION_NON_COMPLIANCE_FINAL_DETERMINATION':
         return 'Provide conclusion: non-compliance';
+
+      // onsite inspection
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT':
+        return 'Create an on-site inspection';
+      case 'INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW':
+        return 'On-site inspection sent to peer reviewer';
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW':
+        return 'Peer review on-site inspection';
+      case 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS':
+        return 'On-site inspection';
+
+      // audit report
+      case 'INSTALLATION_AUDIT_APPLICATION_SUBMIT':
+        return `Create ${year} audit report`;
+      case 'INSTALLATION_AUDIT_WAIT_FOR_PEER_REVIEW':
+        return `${year} Audit report sent to peer reviewer`;
+      case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW':
+        return `Peer review ${year} audit report`;
+      case 'INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS':
+        return `${year} audit report`;
+
+      // aviation AER anual offsetting
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT':
+        return 'Calculate annual offsetting requirements';
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW':
+        return `Annual offsetting requirements sent to peer reviewer`;
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW':
+        return `Peer review annual offsetting requirements`;
+
+      // aviation AER 3 year period offsetting
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT':
+        return 'Calculate 3-year period offsetting requirements';
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW':
+        return `3-year period offsetting requirements sent to peer reviewer`;
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW':
+        return `Peer review 3-year period offsetting requirements`;
+
+      //BDR
+      case 'BDR_APPLICATION_SUBMIT':
+        return `Complete ${year} baseline data report`;
+      case 'BDR_WAIT_FOR_VERIFICATION':
+      case 'BDR_AMEND_WAIT_FOR_VERIFICATION':
+        return `${year} baseline data report sent to verifier`;
+      case 'BDR_WAIT_FOR_REGULATOR_REVIEW':
+        return `${year} baseline data report sent to regulator`;
+      case 'BDR_APPLICATION_VERIFICATION_SUBMIT':
+      case 'BDR_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+        return `Verify ${year} baseline data report`;
+      case 'BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+        return `Review ${year} baseline data report`;
+      case 'BDR_WAIT_FOR_AMENDS':
+        return `${year} baseline data report returned to operator`;
+      case 'BDR_APPLICATION_AMENDS_SUBMIT':
+        return `Amend ${year} baseline data report`;
+      case 'BDR_APPLICATION_PEER_REVIEW':
+        return `Peer review ${year} baseline data report`;
+      case 'BDR_WAIT_FOR_PEER_REVIEW':
+        return `${year} baseline data report sent to peer reviewer`;
+
+      //DOE
+      case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
+        return `Estimate ${year} emissions`;
+      case 'AVIATION_DOE_CORSIA_MAKE_PAYMENT':
+        return `Pay ${year} emissions estimation fee`;
+      case 'AVIATION_DOE_CORSIA_TRACK_PAYMENT':
+      case 'AVIATION_DOE_CORSIA_CONFIRM_PAYMENT':
+        return `Track payment for ${year} emissions estimation`;
+      case 'AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW':
+        return `${year} emissions estimation sent to peer reviewer`;
+      case 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW':
+        return `Peer review ${year} emissions estimation`;
+
+      //ALR
+      case 'ALR_APPLICATION_SUBMIT':
+        return `Complete ${year} activity level report`;
+      case 'ALR_WAIT_FOR_VERIFICATION':
+        return `${year} activity level report sent to verifier`;
+      case 'ALR_APPLICATION_VERIFICATION_SUBMIT':
+        return `Verify ${year} activity level report`;
 
       default:
         return null;

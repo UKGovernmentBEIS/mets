@@ -19,7 +19,7 @@ import { InstallationAccountDTO, InstallationAccountPermitDTO, InstallationAccou
       <govuk-error-summary *ngIf="isSummaryDisplayed | async" [form]="form"></govuk-error-summary>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
-          <div formControlName="sopId" govuk-text-input></div>
+          <div formControlName="sopId" govuk-text-input inputType="number"></div>
         </div>
       </div>
       <button appPendingButton govukButton type="submit">Confirm and complete</button>
@@ -45,7 +45,7 @@ export class SopIdComponent implements OnInit {
           (account as InstallationAccountDTO)?.sopId,
           [
             GovukValidators.max(9999999999, 'The ID should contain 10 numbers maximum'),
-            GovukValidators.pattern('[0-9]*', 'The ID should contain numbers only. Try entering the ID again.'),
+            GovukValidators.naturalNumber(),
           ],
         ],
       }),

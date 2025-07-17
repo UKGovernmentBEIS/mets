@@ -1,12 +1,9 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.service;
 
-import java.util.Map;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -18,6 +15,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submit
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationSaveDetailsReviewGroupDecisionRegulatorLedRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationSaveReviewDeterminationRegulatorLedRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationSaveReviewGroupDecisionRegulatorLedRequestTaskActionPayload;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +51,7 @@ public class PermitVariationRegulatorLedService {
     @Transactional
     public void savePermitVariationDecisionNotificationRegulatorLed(RequestTask requestTask,
                                                         DecisionNotification decisionNotification,
-                                                        PmrvUser pmrvUser) {
+                                                        AppUser appUser) {
         final Request request = requestTask.getRequest();
         final PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload taskPayload =
             (PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload) requestTask.getPayload();
@@ -63,28 +62,28 @@ public class PermitVariationRegulatorLedService {
         // update request payload
         requestPayload.setDecisionNotification(decisionNotification);
         
-        updateVariationRequestPayloadWithRegulatorLedTaskPayload(requestPayload, taskPayload, pmrvUser.getUserId());
+        updateVariationRequestPayloadWithRegulatorLedTaskPayload(requestPayload, taskPayload, appUser.getUserId());
     }
 
     @Transactional
     public void saveRequestPeerReviewActionRegulatorLed(final RequestTask requestTask,
                                             final String selectedPeerReviewer,
-                                            final String pmrvUserId) {
+                                            final String appUserId) {
         final PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload taskPayload =
             (PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload) requestTask.getPayload();
 
         final PermitVariationRequestPayload requestPayload = (PermitVariationRequestPayload) requestTask.getRequest().getPayload();
 
         requestPayload.setRegulatorPeerReviewer(selectedPeerReviewer);
-        updateVariationRequestPayloadWithRegulatorLedTaskPayload(requestPayload, taskPayload, pmrvUserId);
+        updateVariationRequestPayloadWithRegulatorLedTaskPayload(requestPayload, taskPayload, appUserId);
     }
 
     private void updateVariationRequestPayloadWithRegulatorLedTaskPayload(
 	        final PermitVariationRequestPayload requestPayload,
 	        final PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload taskPayload,
-	        final String pmrvUserId) {
+	        final String appUserId) {
     	updateVariationRequestPayload(requestPayload, taskPayload);
-		requestPayload.setRegulatorReviewer(pmrvUserId);
+		requestPayload.setRegulatorReviewer(appUserId);
 		requestPayload.setReviewSectionsCompleted(taskPayload.getReviewSectionsCompleted());
 		requestPayload.setReviewGroupDecisionsRegulatorLed(taskPayload.getReviewGroupDecisions());
 		requestPayload.setPermitVariationDetailsReviewDecisionRegulatorLed(taskPayload.getPermitVariationDetailsReviewDecision());

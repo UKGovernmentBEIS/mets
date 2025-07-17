@@ -6,7 +6,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -56,7 +56,7 @@ class EmpIssuanceUkEtsReviewPeerDecisionActionHandlerTest {
                 .build();
         Long requestTaskId = 1L;
         String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        AppUser appUser = AppUser.builder().userId(userId).build();
         String processTaskId = "processTaskId";
         Request request = Request.builder().build();
         RequestTask requestTask = RequestTask.builder().id(requestTaskId).request(request).processTaskId(processTaskId).build();
@@ -65,7 +65,7 @@ class EmpIssuanceUkEtsReviewPeerDecisionActionHandlerTest {
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.EMP_ISSUANCE_UKETS_REVIEW_SUBMIT_PEER_REVIEW_DECISION,
-            pmrvUser,
+            appUser,
             payload);
 
         ArgumentCaptor<PeerReviewDecisionSubmittedRequestActionPayload> actionPayloadArgumentCaptor =

@@ -5,14 +5,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.notification.template.domain.NotificationTemplate;
 import uk.gov.pmrv.api.notification.template.domain.dto.NotificationTemplateUpdateDTO;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.notification.template.repository.NotificationTemplateRepository;
 
 import java.time.LocalDateTime;
@@ -42,11 +43,11 @@ class NotificationTemplateUpdateServiceTest {
         String updatedNotificationTemplateText = "updated text";
         NotificationTemplate notificationTemplate = NotificationTemplate.builder()
             .id(notificationTemplateId)
-            .name(NotificationTemplateName.EMAIL_CONFIRMATION)
+            .name(PmrvNotificationTemplateName.EMAIL_CONFIRMATION)
             .subject("subject")
             .text("text")
             .competentAuthority(CompetentAuthorityEnum.WALES)
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .managed(true)
             .accountType(AccountType.INSTALLATION)
             .lastUpdatedDate(LocalDateTime.now())

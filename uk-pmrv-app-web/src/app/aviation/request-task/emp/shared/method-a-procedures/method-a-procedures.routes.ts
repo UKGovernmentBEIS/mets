@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-import { canActivateSummaryPage,canActivateTaskForm } from '@aviation/request-task/guards';
+import { canActivateSummaryPage, canActivateTaskForm } from '@aviation/request-task/guards';
 
 import { canActivateMethodAProcedures, canDeactivateMethodAProcedures } from './method-a-procedures.guards';
 export const EMP_METHOD_A_PROCEDURES_ROUTES: Routes = [
@@ -28,7 +28,7 @@ export const EMP_METHOD_A_PROCEDURES_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { breadcrumb: 'Method A procedures summary' },
+        data: { breadcrumb: 'Method A procedures' },
         loadComponent: () =>
           import('./method-a-procedures-summary/method-a-procedures-summary.component').then(
             (c) => c.MethodAProceduresSummaryComponent,

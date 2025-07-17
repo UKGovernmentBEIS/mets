@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -61,7 +61,7 @@ class PermitNotificationReviewRequestPeerReviewActionHandlerTest {
     @Test
     void process() {
         Long requestTaskId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         String selectedPeerReviewer = "selectedPeerReviewer";
         PermitNotificationReviewDecision decision = PermitNotificationReviewDecision.builder()
                 .type(PermitNotificationReviewDecisionType.ACCEPTED)
@@ -96,19 +96,19 @@ class PermitNotificationReviewRequestPeerReviewActionHandlerTest {
 
         // Invoke
         handler.process(requestTaskId, RequestTaskActionType.PERMIT_NOTIFICATION_REQUEST_PEER_REVIEW,
-                pmrvUser, taskActionPayload);
+                appUser, taskActionPayload);
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(permitNotificationValidatorService, times(1))
                 .validateNotificationReviewDecision(decision);
         verify(permitNotificationValidatorService, times(1))
-                .validatePeerReviewer(selectedPeerReviewer, pmrvUser);
+                .validatePeerReviewer(selectedPeerReviewer, appUser);
         verify(requestPermitNotificationReviewService, times(1))
-                .saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, pmrvUser);
+                .saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, appUser);
         verify(requestService, times(1))
                 .addActionToRequest(requestTask.getRequest(), null,
-                        RequestActionType.PERMIT_NOTIFICATION_PEER_REVIEW_REQUESTED, pmrvUser.getUserId());
+                        RequestActionType.PERMIT_NOTIFICATION_PEER_REVIEW_REQUESTED, appUser.getUserId());
         verify(workflowService, times(1)).completeTask(
                 requestTask.getProcessTaskId(),
                 Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),

@@ -300,69 +300,6 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="0_1_0_create_ca_reporting_users_and_permissions" author="P70453">
-        <validCheckSum>ANY</validCheckSum>
-        <sql>
-            CREATE USER usr_report_sepa WITH PASSWORD '${report_user_password_sepa}';
-            CREATE USER usr_report_opred WITH PASSWORD '${report_user_password_opred}';
-            CREATE USER usr_report_nrw WITH PASSWORD '${report_user_password_nrw}';
-            CREATE USER usr_report_niea WITH PASSWORD '${report_user_password_niea}';
-            CREATE USER usr_report_ea WITH PASSWORD '${report_user_password_ea}';
-
-            GRANT CONNECT ON DATABASE pmrv TO usr_report_sepa;
-            GRANT CONNECT ON DATABASE pmrv TO usr_report_opred;
-            GRANT CONNECT ON DATABASE pmrv TO usr_report_nrw;
-            GRANT CONNECT ON DATABASE pmrv TO usr_report_niea;
-            GRANT CONNECT ON DATABASE pmrv TO usr_report_ea;
-
-            GRANT USAGE ON SCHEMA sch_report_sepa TO usr_report_sepa;
-            GRANT USAGE ON SCHEMA sch_report_opred TO usr_report_opred;
-            GRANT USAGE ON SCHEMA sch_report_nrw TO usr_report_nrw;
-            GRANT USAGE ON SCHEMA sch_report_niea TO usr_report_niea;
-            GRANT USAGE ON SCHEMA sch_report_ea TO usr_report_ea;
-
-            GRANT SELECT ON ALL TABLES IN SCHEMA sch_report_sepa TO usr_report_sepa;
-            GRANT SELECT ON ALL TABLES IN SCHEMA sch_report_opred TO usr_report_opred;
-            GRANT SELECT ON ALL TABLES IN SCHEMA sch_report_nrw TO usr_report_nrw;
-            GRANT SELECT ON ALL TABLES IN SCHEMA sch_report_niea TO usr_report_niea;
-            GRANT SELECT ON ALL TABLES IN SCHEMA sch_report_ea TO usr_report_ea;
-
-            ALTER DEFAULT PRIVILEGES IN SCHEMA sch_report_sepa GRANT SELECT ON TABLES TO usr_report_sepa;
-            ALTER DEFAULT PRIVILEGES IN SCHEMA sch_report_opred GRANT SELECT ON TABLES TO usr_report_opred;
-            ALTER DEFAULT PRIVILEGES IN SCHEMA sch_report_nrw GRANT SELECT ON TABLES TO usr_report_nrw;
-            ALTER DEFAULT PRIVILEGES IN SCHEMA sch_report_niea GRANT SELECT ON TABLES TO usr_report_niea;
-            ALTER DEFAULT PRIVILEGES IN SCHEMA sch_report_ea GRANT SELECT ON TABLES TO usr_report_ea;
-        </sql>
-        <rollback>
-            <sql>
-                REVOKE CONNECT ON DATABASE pmrv FROM usr_report_sepa;
-                REVOKE CONNECT ON DATABASE pmrv FROM usr_report_opred;
-                REVOKE CONNECT ON DATABASE pmrv FROM usr_report_nrw;
-                REVOKE CONNECT ON DATABASE pmrv FROM usr_report_niea;
-                REVOKE CONNECT ON DATABASE pmrv FROM usr_report_ea;
-
-                REVOKE ALL ON ALL TABLES IN SCHEMA sch_report_ea FROM usr_report_ea;
-                REVOKE ALL ON ALL TABLES IN SCHEMA sch_report_niea FROM usr_report_niea;
-                REVOKE ALL ON ALL TABLES IN SCHEMA sch_report_opred FROM usr_report_opred;
-                REVOKE ALL ON ALL TABLES IN SCHEMA sch_report_sepa FROM usr_report_sepa;
-                REVOKE ALL ON ALL TABLES IN SCHEMA sch_report_nrw FROM usr_report_nrw;
-
-                DROP OWNED BY usr_report_sepa;
-                DROP OWNED BY usr_report_opred;
-                DROP OWNED BY usr_report_nrw;
-                DROP OWNED BY usr_report_niea;
-                DROP OWNED BY usr_report_ea;
-
-                DROP USER usr_report_sepa;
-                DROP USER usr_report_opred;
-                DROP USER usr_report_nrw;
-                DROP USER usr_report_niea;
-                DROP USER usr_report_ea;
-
-            </sql>
-        </rollback>
-    </changeSet>
-
     <changeSet id="0_1_0_drop_views" author="P70453" runOrder="first" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
         <sql>
@@ -388,6 +325,8 @@
             drop view if exists sch_report_sepa.account_installation cascade;
             drop view if exists sch_report_sepa.account_aviation cascade;
             drop view if exists sch_report_sepa.emp cascade;
+            drop view if exists sch_report_sepa.emp_aircraft_type cascade;
+            drop view if exists sch_report_sepa.emp_issuing_authority cascade;
             drop view if exists sch_report_sepa.rpt_reportable_emissions cascade;
             drop view if exists sch_report_sepa.aviation_rpt_reportable_emissions cascade;
             drop view if exists sch_report_sepa.rpt_charging_zone cascade;
@@ -400,6 +339,7 @@
             drop view if exists sch_report_sepa.aviation_rpt_aer cascade;
             drop view if exists sch_report_sepa.allowance_activity_level cascade;
             drop view if exists sch_report_sepa.allowance_allocation cascade;
+            drop view if exists sch_report_sepa.ref_country cascade;
 
             drop view if exists sch_report_opred.verification_body_emission_trading_scheme cascade;
             drop view if exists sch_report_opred.verification_body cascade;
@@ -423,6 +363,8 @@
             drop view if exists sch_report_opred.account_installation cascade;
             drop view if exists sch_report_opred.account_aviation cascade;
             drop view if exists sch_report_opred.emp cascade;
+            drop view if exists sch_report_opred.emp_aircraft_type cascade;
+            drop view if exists sch_report_opred.emp_issuing_authority cascade;
             drop view if exists sch_report_opred.rpt_reportable_emissions cascade;
             drop view if exists sch_report_opred.aviation_rpt_reportable_emissions cascade;
             drop view if exists sch_report_opred.rpt_charging_zone cascade;
@@ -435,6 +377,7 @@
             drop view if exists sch_report_opred.aviation_rpt_aer cascade;
             drop view if exists sch_report_opred.allowance_activity_level cascade;
             drop view if exists sch_report_opred.allowance_allocation cascade;
+            drop view if exists sch_report_opred.ref_country cascade;
 
             drop view if exists sch_report_nrw.verification_body_emission_trading_scheme cascade;
             drop view if exists sch_report_nrw.verification_body cascade;
@@ -458,6 +401,8 @@
             drop view if exists sch_report_nrw.account_installation cascade;
             drop view if exists sch_report_nrw.account_aviation cascade;
             drop view if exists sch_report_nrw.emp cascade;
+            drop view if exists sch_report_nrw.emp_aircraft_type cascade;
+            drop view if exists sch_report_nrw.emp_issuing_authority cascade;
             drop view if exists sch_report_nrw.rpt_reportable_emissions cascade;
             drop view if exists sch_report_nrw.aviation_rpt_reportable_emissions cascade;
             drop view if exists sch_report_nrw.rpt_charging_zone cascade;
@@ -470,6 +415,7 @@
             drop view if exists sch_report_nrw.aviation_rpt_aer cascade;
             drop view if exists sch_report_nrw.allowance_activity_level cascade;
             drop view if exists sch_report_nrw.allowance_allocation cascade;
+            drop view if exists sch_report_nrw.ref_country cascade;
 
             drop view if exists sch_report_niea.verification_body_emission_trading_scheme cascade;
             drop view if exists sch_report_niea.verification_body cascade;
@@ -493,6 +439,8 @@
             drop view if exists sch_report_niea.account_installation cascade;
             drop view if exists sch_report_niea.account_aviation cascade;
             drop view if exists sch_report_niea.emp cascade;
+            drop view if exists sch_report_niea.emp_aircraft_type cascade;
+            drop view if exists sch_report_niea.emp_issuing_authority cascade;
             drop view if exists sch_report_niea.rpt_reportable_emissions cascade;
             drop view if exists sch_report_niea.aviation_rpt_reportable_emissions cascade;
             drop view if exists sch_report_niea.rpt_charging_zone cascade;
@@ -505,6 +453,7 @@
             drop view if exists sch_report_niea.aviation_rpt_aer cascade;
             drop view if exists sch_report_niea.allowance_activity_level cascade;
             drop view if exists sch_report_niea.allowance_allocation cascade;
+            drop view if exists sch_report_niea.ref_country cascade;
 
             drop view if exists sch_report_ea.verification_body_emission_trading_scheme cascade;
             drop view if exists sch_report_ea.verification_body cascade;
@@ -528,6 +477,8 @@
             drop view if exists sch_report_ea.account_installation cascade;
             drop view if exists sch_report_ea.account_aviation cascade;
             drop view if exists sch_report_ea.emp cascade;
+            drop view if exists sch_report_ea.emp_aircraft_type cascade;
+            drop view if exists sch_report_ea.emp_issuing_authority cascade;
             drop view if exists sch_report_ea.rpt_reportable_emissions cascade;
             drop view if exists sch_report_ea.aviation_rpt_reportable_emissions cascade;
             drop view if exists sch_report_ea.rpt_charging_zone cascade;
@@ -540,6 +491,7 @@
             drop view if exists sch_report_ea.aviation_rpt_aer cascade;
             drop view if exists sch_report_ea.allowance_activity_level cascade;
             drop view if exists sch_report_ea.allowance_allocation cascade;
+            drop view if exists sch_report_ea.ref_country cascade;
         </sql>
         <rollback>
         </rollback>
@@ -572,6 +524,8 @@
             create or replace view sch_report_sepa.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
             create or replace view sch_report_sepa.aviation_rpt_reportable_emissions as select s.* from aviation_rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
             create or replace view sch_report_sepa.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.emp_aircraft_type as select s.* from emp_aircraft_type s;
+            create or replace view sch_report_sepa.emp_issuing_authority as select s.* from emp_issuing_authority s;
             create or replace view sch_report_sepa.rpt_charging_zone as select s.* from rpt_charging_zone s;
             create or replace view sch_report_sepa.rpt_ipcc_sector as select s.* from rpt_ipcc_sector s;
             create or replace view sch_report_sepa.rpt_national_inventory_data as select s.* from rpt_national_inventory_data s;
@@ -582,6 +536,7 @@
             create or replace view sch_report_sepa.aviation_rpt_aer as select s.* from aviation_rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
             create or replace view sch_report_sepa.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
             create or replace view sch_report_sepa.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.ref_country as select s.* from ref_country s;
 
             create or replace view sch_report_opred.account as select s.* from account s where s.competent_authority = 'OPRED';
             create or replace view sch_report_opred.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'OPRED';
@@ -607,6 +562,8 @@
             create or replace view sch_report_opred.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
             create or replace view sch_report_opred.aviation_rpt_reportable_emissions as select s.* from aviation_rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
             create or replace view sch_report_opred.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.emp_aircraft_type as select s.* from emp_aircraft_type s;
+            create or replace view sch_report_opred.emp_issuing_authority as select s.* from emp_issuing_authority s;
             create or replace view sch_report_opred.rpt_charging_zone as select s.* from rpt_charging_zone s;
             create or replace view sch_report_opred.rpt_ipcc_sector as select s.* from rpt_ipcc_sector s;
             create or replace view sch_report_opred.rpt_national_inventory_data as select s.* from rpt_national_inventory_data s;
@@ -617,6 +574,7 @@
             create or replace view sch_report_opred.aviation_rpt_aer as select s.* from aviation_rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
             create or replace view sch_report_opred.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
             create or replace view sch_report_opred.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.ref_country as select s.* from ref_country s;
 
             create or replace view sch_report_nrw.account as select s.* from account s where s.competent_authority = 'WALES';
             create or replace view sch_report_nrw.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'WALES';
@@ -642,6 +600,8 @@
             create or replace view sch_report_nrw.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
             create or replace view sch_report_nrw.aviation_rpt_reportable_emissions as select s.* from aviation_rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
             create or replace view sch_report_nrw.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.emp_aircraft_type as select s.* from emp_aircraft_type s;
+            create or replace view sch_report_nrw.emp_issuing_authority as select s.* from emp_issuing_authority s;
             create or replace view sch_report_nrw.rpt_charging_zone as select s.* from rpt_charging_zone s;
             create or replace view sch_report_nrw.rpt_ipcc_sector as select s.* from rpt_ipcc_sector s;
             create or replace view sch_report_nrw.rpt_national_inventory_data as select s.* from rpt_national_inventory_data s;
@@ -652,6 +612,7 @@
             create or replace view sch_report_nrw.aviation_rpt_aer as select s.* from aviation_rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
             create or replace view sch_report_nrw.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
             create or replace view sch_report_nrw.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.ref_country as select s.* from ref_country s;
 
             create or replace view sch_report_niea.account as select s.* from account s where s.competent_authority = 'NORTHERN_IRELAND';
             create or replace view sch_report_niea.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'NORTHERN_IRELAND';
@@ -677,6 +638,8 @@
             create or replace view sch_report_niea.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
             create or replace view sch_report_niea.aviation_rpt_reportable_emissions as select s.* from aviation_rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
             create or replace view sch_report_niea.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.emp_aircraft_type as select s.* from emp_aircraft_type s;
+            create or replace view sch_report_niea.emp_issuing_authority as select s.* from emp_issuing_authority s;
             create or replace view sch_report_niea.rpt_charging_zone as select s.* from rpt_charging_zone s;
             create or replace view sch_report_niea.rpt_ipcc_sector as select s.* from rpt_ipcc_sector s;
             create or replace view sch_report_niea.rpt_national_inventory_data as select s.* from rpt_national_inventory_data s;
@@ -687,6 +650,7 @@
             create or replace view sch_report_niea.aviation_rpt_aer as select s.* from aviation_rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
             create or replace view sch_report_niea.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
             create or replace view sch_report_niea.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.ref_country as select s.* from ref_country s;
 
             create or replace view sch_report_ea.account as select s.* from account s where s.competent_authority = 'ENGLAND';
             create or replace view sch_report_ea.account_aviation as select acc_av.* from account_aviation acc_av join account acc on acc.id=acc_av.id where acc.competent_authority = 'ENGLAND';
@@ -712,6 +676,8 @@
             create or replace view sch_report_ea.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
             create or replace view sch_report_ea.aviation_rpt_reportable_emissions as select s.* from aviation_rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
             create or replace view sch_report_ea.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.emp_aircraft_type as select s.* from emp_aircraft_type s;
+            create or replace view sch_report_ea.emp_issuing_authority as select s.* from emp_issuing_authority s;
             create or replace view sch_report_ea.rpt_charging_zone as select s.* from rpt_charging_zone s;
             create or replace view sch_report_ea.rpt_ipcc_sector as select s.* from rpt_ipcc_sector s;
             create or replace view sch_report_ea.rpt_national_inventory_data as select s.* from rpt_national_inventory_data s;
@@ -722,22 +688,10 @@
             create or replace view sch_report_ea.aviation_rpt_aer as select s.* from aviation_rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
             create or replace view sch_report_ea.allowance_activity_level as select s.* from allowance_activity_level s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
             create or replace view sch_report_ea.allowance_allocation as select s.* from allowance_allocation s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.ref_country as select s.* from ref_country s;
 
         </sql>
         <rollback changeSetId="0_1_0_drop_views" changeSetAuthor="P70453"/>
-    </changeSet>
-
-    <changeSet id="0_1_0_update_reporting_user_password" author="P70453" runAlways="true">
-        <validCheckSum>ANY</validCheckSum>
-        <sql>
-            ALTER USER usr_report_ea WITH PASSWORD '${report_user_password_ea}';
-            ALTER USER usr_report_sepa WITH PASSWORD '${report_user_password_sepa}';
-            ALTER USER usr_report_niea WITH PASSWORD '${report_user_password_niea}';
-            ALTER USER usr_report_opred WITH PASSWORD '${report_user_password_opred}';
-            ALTER USER usr_report_nrw WITH PASSWORD '${report_user_password_nrw}';
-        </sql>
-        <rollback>
-        </rollback>
     </changeSet>
 
     <changeSet id="0_1_0_MI_REPORT_ADD_NOT_NULL_CONSTRAINT_ON_COLUMNS" author="pafilisa@unisystems.gr">

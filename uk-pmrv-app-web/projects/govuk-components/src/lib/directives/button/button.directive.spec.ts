@@ -22,8 +22,7 @@ describe('ButtonDirective', () => {
     @ViewChild('secondary', { read: ElementRef }) secondaryButton: ElementRef;
     @ViewChild('disabled', { read: ElementRef }) disabledButton: ElementRef;
 
-    onClick(): void {
-    }
+    onClick(): void {}
   }
 
   beforeEach(() => {
@@ -41,7 +40,7 @@ describe('ButtonDirective', () => {
 
   it('should have govuk button class', () => {
     Object.values(fixture.componentInstance)
-      .filter(e => !!e.nativeElement)
+      .filter((e) => !!e.nativeElement)
       .forEach((elementRef: ElementRef) => {
         expect(elementRef.nativeElement.classList).toContain('govuk-button');
       });

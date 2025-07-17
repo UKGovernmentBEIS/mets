@@ -13,9 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountUpdateService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.PermitTransferBValidatorService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 
 @ExtendWith(MockitoExtension.class)
 class PermitTransferBValidatorServiceTest {

@@ -3,17 +3,17 @@ package uk.gov.pmrv.api.mireport.aviation.executedactions;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
+import uk.gov.netz.api.mireport.executedactions.ExecutedRequestAction;
+import uk.gov.netz.api.mireport.executedactions.ExecutedRequestActionsMiReportParams;
+import uk.gov.netz.api.mireport.executedactions.ExecutedRequestActionsRepository;
 import uk.gov.pmrv.api.account.aviation.domain.QAviationAccount;
 import uk.gov.pmrv.api.account.domain.QLegalEntity;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.QEmissionsMonitoringPlanEntity;
-import uk.gov.pmrv.api.mireport.common.executedActions.ExecutedRequestAction;
-import uk.gov.pmrv.api.mireport.common.executedActions.ExecutedRequestActionsMiReportParams;
-import uk.gov.pmrv.api.mireport.common.executedActions.ExecutedRequestActionsRepository;
 import uk.gov.pmrv.api.workflow.request.core.domain.QRequest;
 import uk.gov.pmrv.api.workflow.request.core.domain.QRequestAction;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
 @Repository
 public class AviationExecutedRequestActionsRepository implements ExecutedRequestActionsRepository {
 
-    public List<ExecutedRequestAction> findExecutedRequestActions(EntityManager entityManager, ExecutedRequestActionsMiReportParams reportParams) {
+    public List<AviationExecutedRequestAction> findExecutedRequestActions(EntityManager entityManager, ExecutedRequestActionsMiReportParams reportParams) {
         QRequest request = QRequest.request;
         QRequestAction requestAction = QRequestAction.requestAction;
         QAviationAccount account = QAviationAccount.aviationAccount;
@@ -35,12 +35,12 @@ public class AviationExecutedRequestActionsRepository implements ExecutedRequest
             isCreationDateBeforeToDate.and(requestAction.creationDate.before(LocalDateTime.of(reportParams.getToDate(), LocalTime.MIDNIGHT)));
         }
 
-        JPAQuery<ExecutedRequestAction> jpaQuery = query.select(
-                Projections.constructor(ExecutedRequestAction.class,
+        JPAQuery<AviationExecutedRequestAction> jpaQuery = query.select(
+                Projections.constructor(AviationExecutedRequestAction.class,
                     account.emitterId, account.accountType, account.name, account.status.stringValue(),
                     legalEntity.name, emissionsMonitoringPlan.id,
-                    request.id, request.type, request.status,
-                    requestAction.type, requestAction.submitter, requestAction.creationDate))
+                    request.id, request.type.stringValue(), request.status.stringValue(),
+                    requestAction.type.stringValue(), requestAction.submitter, requestAction.creationDate, account.crcoCode))
             .from(request)
             .innerJoin(requestAction).on(request.id.eq(requestAction.request.id))
             .innerJoin(account).on(request.accountId.eq(account.id))

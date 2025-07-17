@@ -1,12 +1,5 @@
 package uk.gov.pmrv.api.web.controller.user;
 
-import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
-import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.NO_CONTENT;
-import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
-import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.TOKEN_VERIFICATION_BAD_REQUEST;
-import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.REQUEST_RESET_PASSWORD_BAD_REQUEST;
-import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.RESET_PASSWORD_BAD_REQUEST;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +22,18 @@ import uk.gov.pmrv.api.user.core.domain.dto.TokenDTO;
 import uk.gov.pmrv.api.user.core.service.UserResetPasswordService;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
 
+import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
+import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.NO_CONTENT;
+import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
+import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.REQUEST_RESET_PASSWORD_BAD_REQUEST;
+import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.RESET_PASSWORD_BAD_REQUEST;
+import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.TOKEN_VERIFICATION_BAD_REQUEST;
+
 @RestController
 @RequestMapping(path = "/v1.0/users/forgot-password")
 @Tag(name = "Forgot Password")
 @RequiredArgsConstructor
+@Log4j2
 public class ForgotPasswordController {
 	
 	private final UserResetPasswordService userResetPasswordService;
@@ -48,7 +50,8 @@ public class ForgotPasswordController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     public ResponseEntity<Void> sendResetPasswordEmail(
         @RequestBody @Valid @Parameter(description = "The user email", required = true) EmailDTO emailDTO) {
-    	userResetPasswordService.sendResetPasswordEmail(emailDTO.getEmail());
+        log.debug("Call to sendResetPasswordEmail: {}", emailDTO);
+        userResetPasswordService.sendResetPasswordEmail(emailDTO.getEmail());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

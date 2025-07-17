@@ -1,27 +1,24 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
-
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
+import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.RegulatorReviewResponse;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.RegulatorReviewResponse;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

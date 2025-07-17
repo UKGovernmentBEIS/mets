@@ -1,9 +1,7 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.doal.service;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
-
 import uk.gov.pmrv.api.allowance.service.AllowanceActivityLevelService;
 import uk.gov.pmrv.api.allowance.service.AllowanceAllocationService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;

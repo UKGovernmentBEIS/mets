@@ -2,12 +2,12 @@ package uk.gov.pmrv.api.emissionsmonitoringplan.common.service;
 
 import lombok.RequiredArgsConstructor;
 
-import static uk.gov.pmrv.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.pmrv.api.account.service.AccountSearchAdditionalKeywordService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanEntity;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.repository.EmissionsMonitoringPlanRepository;

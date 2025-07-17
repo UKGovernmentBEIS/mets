@@ -16,7 +16,7 @@ export const biomassCalculationFormProvider = {
     const state = store.getValue();
     const disabled = !state.isEditable;
 
-    const payload: AerApplicationSubmitRequestTaskPayload = state.requestTaskItem.requestTask.payload;
+    const payload = state.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload;
 
     const sourceStreamEmission = route.snapshot.paramMap.get('index')
       ? (payload.aer.monitoringApproachEmissions.CALCULATION_CO2 as CalculationOfCO2Emissions)?.sourceStreamEmissions[
@@ -72,8 +72,8 @@ export function getBiomassFormControls(sourceStreamEmission, disabled) {
       {
         validators: [
           GovukValidators.required('Enter the biomass fraction'),
-          percentageValidator(),
-          fiveDecimalPlacesValidator,
+          percentageValidator(), // TODO should be replaced with GovukValidators.minMaxRangeNumberValidator(0, 100),
+          fiveDecimalPlacesValidator, // TODO should be replaced with GovukValidators.maxDecimalsValidator(5),
         ],
       },
     ],
@@ -85,8 +85,8 @@ export function getBiomassFormControls(sourceStreamEmission, disabled) {
       {
         validators: [
           GovukValidators.required('Enter the non-sustainable biomass fraction'),
-          percentageValidator(),
-          fiveDecimalPlacesValidator,
+          percentageValidator(), // TODO should be replaced with GovukValidators.minMaxRangeNumberValidator(0, 100),
+          fiveDecimalPlacesValidator, // TODO should be replaced with GovukValidators.maxDecimalsValidator(5),
         ],
       },
     ],

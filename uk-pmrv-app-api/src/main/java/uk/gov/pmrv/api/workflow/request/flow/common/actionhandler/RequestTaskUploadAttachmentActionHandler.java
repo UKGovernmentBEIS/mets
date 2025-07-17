@@ -7,14 +7,14 @@ import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 
 @Log4j2
 public abstract class RequestTaskUploadAttachmentActionHandler {
 
-    @Retryable(value = OptimisticLockingFailureException.class,
+    @Retryable(retryFor = OptimisticLockingFailureException.class,
             maxAttemptsExpression = "${attachment-upload.retry.max-attempts}",
             backoff = @Backoff(delayExpression = "${attachment-upload.retry.min-delay}", maxDelayExpression="${attachment-upload.retry.max-delay}"))
     @Transactional(propagation = Propagation.REQUIRES_NEW)

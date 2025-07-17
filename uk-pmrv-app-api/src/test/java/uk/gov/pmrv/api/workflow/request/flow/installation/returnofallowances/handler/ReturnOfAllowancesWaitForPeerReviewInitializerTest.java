@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ReturnOfAllowancesWaitForPeerReviewInitializerTest {
     @Test
-    public void testInitializePayload() {
+    void testInitializePayload() {
         Request request = new Request();
         ReturnOfAllowancesRequestPayload requestPayload = new ReturnOfAllowancesRequestPayload();
         request.setPayload(requestPayload);
@@ -32,7 +32,7 @@ class ReturnOfAllowancesWaitForPeerReviewInitializerTest {
     }
 
     @Test
-    public void testGetRequestTaskTypes() {
+    void testGetRequestTaskTypes() {
         ReturnOfAllowancesWaitForPeerReviewInitializer initializer = new ReturnOfAllowancesWaitForPeerReviewInitializer();
 
         Set<RequestTaskType> taskTypes = initializer.getRequestTaskTypes();

@@ -69,7 +69,7 @@ describe('AirRegulatorResponseItemComponent', () => {
       'Test comment 1',
       'Change',
       'Uploaded files',
-      '100.png200.png',
+      '100.png  200.png',
       'Change',
     ]);
   });

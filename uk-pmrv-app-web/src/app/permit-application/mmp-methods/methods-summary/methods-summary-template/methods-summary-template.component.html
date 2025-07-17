@@ -1,0 +1,69 @@
+<ng-container *ngIf="'monitoringMethodologyPlans' | task: !showOriginal | async as monitoringMethodologyPlans">
+  <ng-container *ngIf="monitoringMethodologyPlans.digitizedPlan?.methodTask as methodTask">
+    <ng-container *ngIf="hasTwoOrMoreSubInstallationsCompleted">
+      <ng-container *ngIf="form">
+        <govuk-error-summary
+          *ngIf="!form.valid && methodTask.physicalPartsAndUnitsAnswer"
+          [form]="form"></govuk-error-summary>
+      </ng-container>
+
+      <h2 class="govuk-heading-m">
+        Physical parts of the installation and units which serve more than one sub-installation
+      </h2>
+
+      <dl
+        govuk-summary-list
+        [hasBorders]="false"
+        *ngIf="methodTask.physicalPartsAndUnitsAnswer !== undefined"
+        [class.summary-list--edge-border]="hasBottomBorder"
+        [class.govuk-!-margin-bottom-0]="!isEditable">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>
+            Are there any physical parts of the installation or units which serve more than one sub-installation?
+          </dt>
+          <dd govukSummaryListRowValue>{{ methodTask.physicalPartsAndUnitsAnswer ? 'Yes' : 'No' }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+          </dd>
+        </div>
+      </dl>
+
+      <app-mmp-physical-parts-table
+        *ngIf="methodTask.physicalPartsAndUnitsAnswer"
+        [isSummaryPage]="true"></app-mmp-physical-parts-table>
+
+      <dl
+        govuk-summary-list
+        [hasBorders]="false"
+        *ngIf="methodTask.assignParts"
+        [class.summary-list--edge-border]="hasBottomBorder"
+        [class.govuk-!-margin-bottom-0]="isEditable">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>
+            Methods used to assign parts of installations and their emissions to sub-installations
+          </dt>
+          <dd govukSummaryListRowValue class="pre-wrap">{{ methodTask.assignParts }}</dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="['../assign-parts']" [state]="{ changing: true }">Change</a>
+          </dd>
+        </div>
+      </dl>
+    </ng-container>
+
+    <h2 class="govuk-heading-m">Data gaps and double counting</h2>
+
+    <dl
+      govuk-summary-list
+      [hasBorders]="false"
+      [class.summary-list--edge-border]="hasBottomBorder"
+      [class.govuk-!-margin-bottom-0]="isEditable">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Methods used for ensuring that data gaps and double counting are avoided</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">{{ methodTask.avoidDoubleCount }}</dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable">
+          <a govukLink [routerLink]="['../avoid-double-count']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+</ng-container>

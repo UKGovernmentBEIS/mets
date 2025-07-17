@@ -2,17 +2,12 @@ package uk.gov.pmrv.api.user.verifier.service.event;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.pmrv.api.authorization.verifier.event.VerifierAuthorityDeletionEvent;
+import uk.gov.netz.api.authorization.verifier.event.VerifierAuthorityDeletionEvent;
 import uk.gov.pmrv.api.user.core.service.UserLoginDomainService;
-import uk.gov.pmrv.api.user.core.service.auth.AuthService;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -21,9 +16,6 @@ class VerifierAuthorityDeletionEventListenerTest {
 
     @InjectMocks
     private VerifierAuthorityDeletionEventListener listener;
-
-    @Mock
-    private AuthService authService;
 
     @Mock
     private UserLoginDomainService userLoginDomainService;
@@ -37,8 +29,6 @@ class VerifierAuthorityDeletionEventListenerTest {
 
         listener.onVerifierUserDeletedEvent(deletionEvent);
 
-        verify(authService, never()).deleteUser(anyString());
-        verify(authService, times(1)).disableUser(userId);
         verify(userLoginDomainService, times(1)).deleteByUserId(userId);
     }
 }

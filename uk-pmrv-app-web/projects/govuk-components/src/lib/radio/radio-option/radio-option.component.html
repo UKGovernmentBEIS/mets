@@ -16,7 +16,7 @@
     <label [for]="identifier" class="govuk-label govuk-radios__label">
       <ng-container *ngIf="label; else customLabel">{{ label }}</ng-container>
       <ng-template #customLabel>
-        <ng-content select="[govukLabel]"></ng-content>
+        <ng-content select="[govukLabel]" />
       </ng-template>
     </label>
     <div *ngIf="hint" [id]="identifier + '-item-hint'" class="govuk-radios__hint govuk-hint" [innerHTML]="hint"></div>
@@ -29,6 +29,6 @@
     [id]="identifier + '-conditional'"
     class="govuk-radios__conditional"
   >
-    <ng-content select="[govukConditionalContent]"></ng-content>
+    <ng-content select="[govukConditionalContent]" />
   </div>
 </ng-template>

@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, Observable, pluck, switchMap } from 'rxjs';
+import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
+
+import { PendingRequestService } from '@core/guards/pending-request.service';
 
 import { TransferredCO2AndN2OMonitoringApproach } from 'pmrv-api';
 
-import { PendingRequestService } from '../../../../core/guards/pending-request.service';
 import { PERMIT_TASK_FORM } from '../../../shared/permit-task-form.token';
 import { PermitApplicationState } from '../../../store/permit-application.state';
 import { PermitApplicationStore } from '../../../store/permit-application.store';
@@ -20,7 +21,7 @@ import { pipelineFormProvider } from './pipeline-form.provider';
   providers: [pipelineFormProvider],
 })
 export class PipelineComponent {
-  taskKey$: Observable<string> = this.route.data.pipe(pluck('taskKey'));
+  taskKey$: Observable<string> = this.route.data.pipe(map((x) => x?.taskKey));
   headingMap = headingMap;
 
   constructor(

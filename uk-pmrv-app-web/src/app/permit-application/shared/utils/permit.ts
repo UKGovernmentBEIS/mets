@@ -3,8 +3,15 @@ import { PermitApplicationState } from '@permit-application/store/permit-applica
 import { PermitContainer, RequestTaskActionProcessDTO, RequestTaskDTO } from 'pmrv-api';
 
 export const permitTypeMap: Record<PermitContainer['permitType'], string> = {
-  GHGE: 'Greenhouse Gas Emissions',
-  HSE: 'Hospital and Small Emitters',
+  GHGE: 'GHGE',
+  HSE: 'HSE',
+  WASTE: 'Voluntary waste',
+};
+
+export const permitTypeMapLowercase: Record<PermitContainer['permitType'], string> = {
+  GHGE: 'GHGE',
+  HSE: 'HSE',
+  WASTE: 'voluntary waste',
 };
 
 export const notifyOperatorRequestTaskActionTypes: Array<RequestTaskActionProcessDTO['requestTaskActionType']> = [

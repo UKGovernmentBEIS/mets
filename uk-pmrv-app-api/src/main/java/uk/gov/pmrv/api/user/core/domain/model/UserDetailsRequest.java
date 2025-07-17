@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.user.core.domain.model;
 
 import jakarta.validation.Valid;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

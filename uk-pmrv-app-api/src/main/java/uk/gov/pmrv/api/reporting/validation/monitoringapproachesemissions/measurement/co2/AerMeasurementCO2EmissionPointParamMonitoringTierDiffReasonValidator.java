@@ -12,7 +12,6 @@ import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.common.Par
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.MeasurementEmissionPointEmission;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.co2.MeasurementCO2EmissionPointEmission;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.co2.MeasurementOfCO2Emissions;
-import uk.gov.pmrv.api.reporting.validation.monitoringapproachesemissions.measurement.AerMeasurementEmissionPointEmissionValidator;
 
 import java.util.ArrayList;
 import java.util.List;

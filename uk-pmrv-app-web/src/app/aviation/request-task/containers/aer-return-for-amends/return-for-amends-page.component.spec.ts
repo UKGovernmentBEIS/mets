@@ -38,6 +38,9 @@ describe('ReturnForAmendsPageComponent', () => {
     aviationStore.setState({
       ...state,
       requestTaskItem: {
+        requestInfo: {
+          type: 'AVIATION_AER_UKETS',
+        },
         ...state.requestTaskItem,
         allowedRequestTaskActions: ['AVIATION_AER_UKETS_REVIEW_RETURN_FOR_AMENDS'],
         requestTask: {

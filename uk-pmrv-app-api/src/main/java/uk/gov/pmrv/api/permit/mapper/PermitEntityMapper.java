@@ -1,12 +1,13 @@
 package uk.gov.pmrv.api.permit.mapper;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.control.DeepClone;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.config.MapperConfig;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.permit.domain.PermitEntity;
 import uk.gov.pmrv.api.permit.domain.dto.PermitDetailsDTO;
 import uk.gov.pmrv.api.permit.domain.dto.PermitEntityDto;
@@ -27,6 +28,28 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.inherentco2.InherentRe
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementOfCO2MonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.MeasurementOfN2OMonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.transferredco2andn2o.TransferredCO2AndN2OMonitoringApproach;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.annuallevels.AnnualLevel;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.annuallevels.annualactivitylevels.AnnualActivityFuelLevel;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.annuallevels.annualactivitylevels.AnnualActivityHeatLevel;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.annuallevels.annualactivitylevels.AnnualActivityProcessLevel;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.annuallevels.anualproductionlevels.AnnualProductionLevel;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.directlyattributableemissions.DirectlyAttributableEmissions;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.directlyattributableemissions.DirectlyAttributableEmissionsFA;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.directlyattributableemissions.DirectlyAttributableEmissionsPB;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.fuelinputandrelevantemissionsfactor.FuelInputAndRelevantEmissionFactor;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.fuelinputandrelevantemissionsfactor.FuelInputAndRelevantEmissionFactorFA;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.fuelinputandrelevantemissionsfactor.FuelInputAndRelevantEmissionFactorHeatFA;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.fuelinputandrelevantemissionsfactor.FuelInputAndRelevantEmissionFactorPB;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.specialproduct.SpecialProduct;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.specialproduct.aromatics.AromaticsSP;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.specialproduct.dolime.DolimeSP;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.specialproduct.ethyleneoxideethyleneglycols.EthyleneOxideEthyleneGlycolsSP;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.specialproduct.hydrogen.HydrogenSP;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.specialproduct.lime.LimeSP;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.specialproduct.refineryproducts.RefineryProductsSP;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.specialproduct.steamcracking.SteamCrackingSP;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.specialproduct.synthesisgas.SynthesisGasSP;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.subinstallations.specialproduct.vinylchloridemonomer.VinylChlorideMonomerSP;
 
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +61,15 @@ public interface PermitEntityMapper {
     @Mapping(target = "permitContainer.permit.monitoringApproaches.attachmentIds", ignore = true)
     @Mapping(target = "permitContainer.permit.managementProcedures.attachmentIds", ignore = true)
     @Mapping(target = "permitContainer.permit.permitSectionAttachmentIds", ignore = true)
+	@Mapping(target = "permitContainer.permit.monitoringMethodologyPlans.digitizedPlan.subInstallations[].specialProduct",
+			qualifiedByName = "mapSpecialProduct")
+	@Mapping(target = "permitContainer.permit.monitoringMethodologyPlans.digitizedPlan.subInstallations[].annualLevel",
+			qualifiedByName = "mapAnnualLevel")
+	@Mapping(target = "permitContainer.permit.monitoringMethodologyPlans.digitizedPlan.subInstallations[].directlyAttributableEmissions",
+			qualifiedByName = "mapDirectlyAttributableEmissions")
+	@Mapping(target = "permitContainer.permit.monitoringMethodologyPlans.digitizedPlan.subInstallations[].fuelInputAndRelevantEmissionFactor",
+			qualifiedByName = "mapFuelInputAndRelevantEmissionFactor")
+	@Mapping(target = "permitContainer.permit.monitoringMethodologyPlans.digitizedPlan.attachmentIds", ignore = true)
 	PermitEntityDto toPermitEntityDto(PermitEntity permitEntity);
 
 	@AfterMapping
@@ -185,4 +217,263 @@ public interface PermitEntityMapper {
             .installationDetailsType(transfer.getInstallationDetailsType());
 
     }
+
+	default SpecialProduct mapSpecialProduct(SpecialProduct source) {
+		if (source == null)
+			return null;
+		//populate with more special product types
+		switch (source.getSpecialProductType()) {
+			case REFINERY_PRODUCTS -> {
+				if (source instanceof RefineryProductsSP refineryProduct) {
+					return RefineryProductsSP.builder()
+							.specialProductType(refineryProduct.getSpecialProductType())
+							.methodologyAppliedDescription(refineryProduct.getMethodologyAppliedDescription())
+							.hierarchicalOrder(refineryProduct.getHierarchicalOrder())
+							.supportingFiles(refineryProduct.getSupportingFiles())
+							.refineryProductsDataSources(refineryProduct.getRefineryProductsDataSources())
+							.refineryProductsRelevantCWTFunctions(refineryProduct.getRefineryProductsRelevantCWTFunctions())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown SpecialProduct subtype: " + source.getClass().getName());
+			}
+			case DOLIME -> {
+				if (source instanceof DolimeSP dolime) {
+					return DolimeSP.builder()
+							.specialProductType(dolime.getSpecialProductType())
+							.methodologyAppliedDescription(dolime.getMethodologyAppliedDescription())
+							.hierarchicalOrder(dolime.getHierarchicalOrder())
+							.supportingFiles(dolime.getSupportingFiles())
+							.dataSources(dolime.getDataSources())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown SpecialProduct subtype: " + source.getClass().getName());
+			}
+			case LIME -> {
+				if (source instanceof LimeSP lime) {
+					return LimeSP.builder()
+							.specialProductType(lime.getSpecialProductType())
+							.methodologyAppliedDescription(lime.getMethodologyAppliedDescription())
+							.hierarchicalOrder(lime.getHierarchicalOrder())
+							.supportingFiles(lime.getSupportingFiles())
+							.dataSources(lime.getDataSources())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown SpecialProduct subtype: " + source.getClass().getName());
+			}
+			case STEAM_CRACKING -> {
+				if (source instanceof SteamCrackingSP steamCracking) {
+					return SteamCrackingSP.builder()
+							.specialProductType(steamCracking.getSpecialProductType())
+							.methodologyAppliedDescription(steamCracking.getMethodologyAppliedDescription())
+							.hierarchicalOrder(steamCracking.getHierarchicalOrder())
+							.supportingFiles(steamCracking.getSupportingFiles())
+							.dataSources(steamCracking.getDataSources())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown SpecialProduct subtype: " + source.getClass().getName());
+			}
+			case AROMATICS ->  {
+				if (source instanceof AromaticsSP aromatics) {
+					return AromaticsSP.builder()
+							.specialProductType(aromatics.getSpecialProductType())
+							.methodologyAppliedDescription(aromatics.getMethodologyAppliedDescription())
+							.hierarchicalOrder(aromatics.getHierarchicalOrder())
+							.supportingFiles(aromatics.getSupportingFiles())
+							.relevantCWTFunctions(aromatics.getRelevantCWTFunctions())
+							.dataSources(aromatics.getDataSources())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown SpecialProduct subtype: " + source.getClass().getName());
+			}
+			case HYDROGEN ->  {
+				if (source instanceof HydrogenSP hydrogen) {
+					return HydrogenSP.builder()
+							.specialProductType(hydrogen.getSpecialProductType())
+							.methodologyAppliedDescription(hydrogen.getMethodologyAppliedDescription())
+							.hierarchicalOrder(hydrogen.getHierarchicalOrder())
+							.supportingFiles(hydrogen.getSupportingFiles())
+							.dataSources(hydrogen.getDataSources())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown SpecialProduct subtype: " + source.getClass().getName());
+			}
+			case SYNTHESIS_GAS ->  {
+				if (source instanceof SynthesisGasSP synthesisGas) {
+					return SynthesisGasSP.builder()
+							.specialProductType(synthesisGas.getSpecialProductType())
+							.methodologyAppliedDescription(synthesisGas.getMethodologyAppliedDescription())
+							.hierarchicalOrder(synthesisGas.getHierarchicalOrder())
+							.supportingFiles(synthesisGas.getSupportingFiles())
+							.dataSources(synthesisGas.getDataSources())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown SpecialProduct subtype: " + source.getClass().getName());
+			}
+			case ETHYLENE_OXIDE_ETHYLENE_GLYCOLS -> {
+				if (source instanceof EthyleneOxideEthyleneGlycolsSP ethyleneOxideEthyleneGlycols) {
+					return EthyleneOxideEthyleneGlycolsSP.builder()
+							.specialProductType(ethyleneOxideEthyleneGlycols.getSpecialProductType())
+							.methodologyAppliedDescription(ethyleneOxideEthyleneGlycols.getMethodologyAppliedDescription())
+							.hierarchicalOrder(ethyleneOxideEthyleneGlycols.getHierarchicalOrder())
+							.supportingFiles(ethyleneOxideEthyleneGlycols.getSupportingFiles())
+							.dataSources(ethyleneOxideEthyleneGlycols.getDataSources())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown SpecialProduct subtype: " + source.getClass().getName());
+			}
+			case VINYL_CHLORIDE_MONOMER -> {
+				if (source instanceof VinylChlorideMonomerSP vinylChlorideMonomer) {
+					return VinylChlorideMonomerSP.builder()
+							.specialProductType(vinylChlorideMonomer.getSpecialProductType())
+							.methodologyAppliedDescription(vinylChlorideMonomer.getMethodologyAppliedDescription())
+							.hierarchicalOrder(vinylChlorideMonomer.getHierarchicalOrder())
+							.supportingFiles(vinylChlorideMonomer.getSupportingFiles())
+							.dataSources(vinylChlorideMonomer.getDataSources())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown SpecialProduct subtype: " + source.getClass().getName());
+			}
+			default -> throw new UnsupportedOperationException("Unknown SpecialProduct subtype: " + source.getClass().getName());
+		}
+	}
+
+	default AnnualLevel mapAnnualLevel(AnnualLevel annualLevel) {
+		switch (annualLevel.getAnnualLevelType()) {
+			case PRODUCTION -> {
+				if (annualLevel instanceof AnnualProductionLevel annualProductionLevel) {
+					return AnnualProductionLevel.builder().
+							annualLevelType(annualProductionLevel.getAnnualLevelType()).
+							methodologyAppliedDescription(annualProductionLevel.getMethodologyAppliedDescription()).
+							hierarchicalOrder(annualProductionLevel.getHierarchicalOrder()).
+							trackingMethodologyDescription(annualProductionLevel.getTrackingMethodologyDescription()).
+							supportingFiles(annualProductionLevel.getSupportingFiles()).
+							quantityProductDataSources(annualProductionLevel.getQuantityProductDataSources()).
+							annualQuantityDeterminationMethod(annualProductionLevel.getAnnualQuantityDeterminationMethod()).
+							build();
+				}
+				throw new UnsupportedOperationException("Unknown Annual Level subtype: " + annualLevel.getClass().getName());
+			}
+			case ACTIVITY_HEAT -> {
+				if (annualLevel instanceof AnnualActivityHeatLevel annualActivityHeatLevel) {
+					return AnnualActivityHeatLevel.builder().
+							annualLevelType(annualActivityHeatLevel.getAnnualLevelType()).
+							methodologyAppliedDescription(annualActivityHeatLevel.getMethodologyAppliedDescription()).
+							hierarchicalOrder(annualActivityHeatLevel.getHierarchicalOrder()).
+							trackingMethodologyDescription(annualActivityHeatLevel.getTrackingMethodologyDescription()).
+							supportingFiles(annualActivityHeatLevel.getSupportingFiles()).
+							measurableHeatFlowList(annualActivityHeatLevel.getMeasurableHeatFlowList()).
+							build();
+				}
+				throw new UnsupportedOperationException("Unknown Annual Level subtype: " + annualLevel.getClass().getName());
+			}
+			case ACTIVITY_FUEL -> {
+				if (annualLevel instanceof AnnualActivityFuelLevel annualActivityFuelLevel) {
+					return AnnualActivityFuelLevel.builder().
+							annualLevelType(annualActivityFuelLevel.getAnnualLevelType()).
+							methodologyAppliedDescription(annualActivityFuelLevel.getMethodologyAppliedDescription()).
+							hierarchicalOrder(annualActivityFuelLevel.getHierarchicalOrder()).
+							trackingMethodologyDescription(annualActivityFuelLevel.getTrackingMethodologyDescription()).
+							supportingFiles(annualActivityFuelLevel.getSupportingFiles()).
+							fuelDataSources(annualActivityFuelLevel.getFuelDataSources()).
+							build();
+				}
+				throw new UnsupportedOperationException("Unknown Annual Level subtype: " + annualLevel.getClass().getName());
+			}
+			case ACTIVITY_PROCESS -> {
+				if (annualLevel instanceof AnnualActivityProcessLevel annualActivityProcessLevel) {
+					return AnnualActivityProcessLevel.builder().
+							annualLevelType(annualActivityProcessLevel.getAnnualLevelType()).
+							methodologyAppliedDescription(annualActivityProcessLevel.getMethodologyAppliedDescription()).
+							hierarchicalOrder(annualActivityProcessLevel.getHierarchicalOrder()).
+							trackingMethodologyDescription(annualActivityProcessLevel.getTrackingMethodologyDescription()).
+							supportingFiles(annualActivityProcessLevel.getSupportingFiles()).
+							build();
+				}
+				throw new UnsupportedOperationException("Unknown Annual Level subtype: " + annualLevel.getClass().getName());
+			}
+			default -> throw new UnsupportedOperationException("Unknown Annual Level subtype: " + annualLevel.getClass().getName());
+		}
+	}
+
+	default DirectlyAttributableEmissions mapDirectlyAttributableEmissions(DirectlyAttributableEmissions source) {
+		if (source == null)
+			return null;
+		switch (source.getDirectlyAttributableEmissionsType()) {
+			case PRODUCT_BENCHMARK -> {
+				if (source instanceof DirectlyAttributableEmissionsPB directlyAttributableEmissionsPB) {
+					return DirectlyAttributableEmissionsPB.builder()
+							.furtherInternalSourceStreamsRelevant(directlyAttributableEmissionsPB.isFurtherInternalSourceStreamsRelevant())
+							.dataSources(directlyAttributableEmissionsPB.getDataSources())
+							.methodologyAppliedDescription(directlyAttributableEmissionsPB.getMethodologyAppliedDescription())
+							.transferredCO2ImportedOrExportedRelevant(directlyAttributableEmissionsPB.isTransferredCO2ImportedOrExportedRelevant())
+							.amountsMonitoringDescription(directlyAttributableEmissionsPB.getAmountsMonitoringDescription())
+							.directlyAttributableEmissionsType(directlyAttributableEmissionsPB.getDirectlyAttributableEmissionsType())
+							.attribution(directlyAttributableEmissionsPB.getAttribution())
+							.supportingFiles(directlyAttributableEmissionsPB.getSupportingFiles())
+							.directlyAttributableEmissionsType(directlyAttributableEmissionsPB.getDirectlyAttributableEmissionsType())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown DirectlyAttributableEmissions subtype: " + source.getClass().getName());
+			}
+			case FALLBACK_APPROACH -> {
+				if (source instanceof DirectlyAttributableEmissionsFA directlyAttributableEmissionsFA) {
+					return DirectlyAttributableEmissionsFA.builder()
+							.attribution(directlyAttributableEmissionsFA.getAttribution())
+							.directlyAttributableEmissionsType(directlyAttributableEmissionsFA.getDirectlyAttributableEmissionsType())
+							.supportingFiles(directlyAttributableEmissionsFA.getSupportingFiles())
+							.directlyAttributableEmissionsType(directlyAttributableEmissionsFA.getDirectlyAttributableEmissionsType())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown DirectlyAttributableEmissions subtype: " + source.getClass().getName());
+			}
+			default -> throw new UnsupportedOperationException("Unknown DirectlyAttributableEmissions subtype: " + source.getClass().getName());
+		}
+	}
+
+	default FuelInputAndRelevantEmissionFactor mapFuelInputAndRelevantEmissionFactor(FuelInputAndRelevantEmissionFactor source) {
+		if (ObjectUtils.isEmpty(source)) return null;
+		switch (source.getFuelInputAndRelevantEmissionFactorType()) {
+			case PRODUCT_BENCHMARK -> {
+				if (source instanceof FuelInputAndRelevantEmissionFactorPB fuelInputAndRelevantEmissionFactor) {
+					return FuelInputAndRelevantEmissionFactorPB.builder()
+							.exist(fuelInputAndRelevantEmissionFactor.isExist())
+							.dataSources(fuelInputAndRelevantEmissionFactor.getDataSources())
+							.fuelInputAndRelevantEmissionFactorType(fuelInputAndRelevantEmissionFactor.getFuelInputAndRelevantEmissionFactorType())
+							.hierarchicalOrder(fuelInputAndRelevantEmissionFactor.getHierarchicalOrder())
+							.supportingFiles(fuelInputAndRelevantEmissionFactor.getSupportingFiles())
+							.methodologyAppliedDescription(fuelInputAndRelevantEmissionFactor.getMethodologyAppliedDescription())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown FuelInputAndRelevantEmissionFactor subtype: " + source.getClass().getName());
+			}
+			case FALLBACK_APPROACH -> {
+				if (source instanceof FuelInputAndRelevantEmissionFactorFA fuelInputAndRelevantEmissionFactor) {
+					return FuelInputAndRelevantEmissionFactorFA.builder()
+							.wasteGasesInput(fuelInputAndRelevantEmissionFactor.getWasteGasesInput())
+							.dataSources(fuelInputAndRelevantEmissionFactor.getDataSources())
+							.fuelInputAndRelevantEmissionFactorType(fuelInputAndRelevantEmissionFactor.getFuelInputAndRelevantEmissionFactorType())
+							.hierarchicalOrder(fuelInputAndRelevantEmissionFactor.getHierarchicalOrder())
+							.supportingFiles(fuelInputAndRelevantEmissionFactor.getSupportingFiles())
+							.methodologyAppliedDescription(fuelInputAndRelevantEmissionFactor.getMethodologyAppliedDescription())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown FuelInputAndRelevantEmissionFactor subtype: " + source.getClass().getName());
+			}
+			case HEAT_FALLBACK_APPROACH -> {
+				if (source instanceof FuelInputAndRelevantEmissionFactorHeatFA fuelInputAndRelevantEmissionFactor) {
+					return FuelInputAndRelevantEmissionFactorHeatFA.builder()
+							.exists(fuelInputAndRelevantEmissionFactor.isExists())
+							.wasteGasesInput(fuelInputAndRelevantEmissionFactor.getWasteGasesInput())
+							.dataSources(fuelInputAndRelevantEmissionFactor.getDataSources())
+							.fuelInputAndRelevantEmissionFactorType(fuelInputAndRelevantEmissionFactor.getFuelInputAndRelevantEmissionFactorType())
+							.hierarchicalOrder(fuelInputAndRelevantEmissionFactor.getHierarchicalOrder())
+							.supportingFiles(fuelInputAndRelevantEmissionFactor.getSupportingFiles())
+							.methodologyAppliedDescription(fuelInputAndRelevantEmissionFactor.getMethodologyAppliedDescription())
+							.build();
+				}
+				throw new UnsupportedOperationException("Unknown FuelInputAndRelevantEmissionFactor subtype: " + source.getClass().getName());
+			}
+			default -> throw new UnsupportedOperationException("Unknown FuelInputAndRelevantEmissionFactor subtype: " + source.getClass().getName());
+		}
+	}
 }

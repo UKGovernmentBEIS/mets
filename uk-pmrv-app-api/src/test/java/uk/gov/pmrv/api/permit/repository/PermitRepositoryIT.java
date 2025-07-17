@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.SpringValidatorConfiguration;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
@@ -40,6 +40,7 @@ import uk.gov.pmrv.api.permit.domain.envmanagementsystem.EnvironmentalManagement
 import uk.gov.pmrv.api.permit.domain.envpermitandlicences.EnvironmentalPermitsAndLicences;
 import uk.gov.pmrv.api.permit.domain.estimatedannualemissions.EstimatedAnnualEmissions;
 import uk.gov.pmrv.api.permit.domain.installationdesc.InstallationDescription;
+import uk.gov.pmrv.api.permit.domain.managementprocedures.AssessAndControlRisk;
 import uk.gov.pmrv.api.permit.domain.managementprocedures.DataFlowActivities;
 import uk.gov.pmrv.api.permit.domain.managementprocedures.ManagementProcedures;
 import uk.gov.pmrv.api.permit.domain.managementprocedures.ManagementProceduresDefinition;
@@ -97,6 +98,7 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.NoHighestRequir
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.TransferCO2;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.TransferCO2Direction;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.TransferType;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.MeasurementAnalysisMethodData;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.fallback.FallbackMonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.fallback.FallbackSourceStreamCategory;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.fallback.FallbackSourceStreamCategoryAppliedTier;
@@ -105,9 +107,11 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.inherentco2.InherentCO
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.inherentco2.InherentReceivingTransferringInstallation;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.inherentco2.InherentReceivingTransferringInstallationEmitter;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.inherentco2.MeasurementInstrumentOwnerType;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementBiomassFraction;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementOfCO2EmissionPointCategory;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementOfCO2EmissionPointCategoryAppliedTier;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementOfCO2MonitoringApproach;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementBiomassFractionTier;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.measuredemissions.MeasurementOfCO2MeasuredEmissions;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.measuredemissions.MeasurementOfCO2MeasuredEmissionsTier;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.MeasurementOfN2OEmissionPointCategory;
@@ -138,7 +142,9 @@ import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreams;
 import uk.gov.pmrv.api.permit.domain.uncertaintyanalysis.UncertaintyAnalysis;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -297,7 +303,13 @@ class PermitRepositoryIT extends AbstractContainerBaseTest {
                     .id(UUID.randomUUID().toString())
                     .type(RegulatedActivityType.COMBUSTION)
                     .capacity(BigDecimal.valueOf(1L))
-                    .capacityUnit(CapacityUnit.TONNES_PER_DAY).build()))
+                    .capacityUnit(CapacityUnit.TONNES_PER_DAY).build(),
+                    RegulatedActivity.builder()
+                            .id(UUID.randomUUID().toString())
+                            .type(RegulatedActivityType.UPSTREAM_GHG_REMOVAL)
+                            .capacity(null)
+                            .capacityUnit(null).build()
+                    ))
             .build();
     }
 
@@ -348,10 +360,11 @@ class PermitRepositoryIT extends AbstractContainerBaseTest {
 
     private ManagementProcedures buildManagementProcedures() {
         ManagementProceduresDefinition managementProceduresDefinition = buildManagementAndProceduresSection();
+        AssessAndControlRisk assessAndControlRisk = buildAssessAndControlRiskSection();
         return ManagementProcedures.builder()
             .monitoringReporting(buildMonitoringReporting())
             .dataFlowActivities(buildDataFlowActivitiesSection())
-            .assessAndControlRisk(managementProceduresDefinition)
+            .assessAndControlRisk(assessAndControlRisk)
             .assignmentOfResponsibilities(managementProceduresDefinition)
             .controlOfOutsourcedActivities(managementProceduresDefinition)
             .correctionsAndCorrectiveActions(managementProceduresDefinition)
@@ -374,6 +387,20 @@ class PermitRepositoryIT extends AbstractContainerBaseTest {
             .locationOfRecords("loc")
             .itSystemUsed("system")
             .appliedStandards("standards")
+            .build();
+    }
+
+    private AssessAndControlRisk buildAssessAndControlRiskSection() {
+        return AssessAndControlRisk.builder()
+            .procedureDocumentName("procDocName")
+            .procedureReference("procRef")
+            .diagramReference("diagramRef")
+            .procedureDescription("procDesc")
+            .responsibleDepartmentOrRole("dep")
+            .locationOfRecords("loc")
+            .itSystemUsed("system")
+            .appliedStandards("standards")
+            .riskAssessmentAttachments(new HashSet<>(Arrays.asList(UUID.randomUUID(), UUID.randomUUID())))
             .build();
     }
 
@@ -578,6 +605,7 @@ class PermitRepositoryIT extends AbstractContainerBaseTest {
                     .categoryType(CategoryType.MAJOR).build())
                 .measuredEmissions(buildMeasMeasuredEmissions())
                 .appliedStandard(buildAppliedStandard())
+                .biomassFraction(buildMeasurementBiomassFraction())
                 .build()))
             .build();
     }
@@ -909,5 +937,21 @@ class PermitRepositoryIT extends AbstractContainerBaseTest {
             .deviationFromAppliedStandardDetails("deviation details")
             .laboratory(Laboratory.builder().laboratoryName("lab").laboratoryAccredited(true).build())
             .build();
+    }
+
+    private MeasurementBiomassFraction buildMeasurementBiomassFraction() {
+        return MeasurementBiomassFraction.builder()
+                .exist(true)
+                .tier(MeasurementBiomassFractionTier.TIER_1)
+                .highestRequiredTier(HighestRequiredTier.builder()
+                        .isHighestRequiredTier(Boolean.FALSE)
+                        .noHighestRequiredTierJustification(NoHighestRequiredTierJustification.builder()
+                                .isTechnicallyInfeasible(Boolean.TRUE)
+                                .technicalInfeasibilityExplanation("explain")
+                                .isCostUnreasonable(Boolean.TRUE)
+                                .build())
+                        .build())
+                .calculationAnalysisMethodData(MeasurementAnalysisMethodData.builder().analysisMethodUsed(false).build())
+                .build();
     }
 }

@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { first, map, Observable } from 'rxjs';
 
@@ -12,8 +12,12 @@ import { resolvePeerReviewDecisionUrl } from '../peer-review-decision-type-resol
 @Injectable({
   providedIn: 'root',
 })
-export class AnswersGuard implements CanActivate {
-  constructor(private readonly router: Router, private location: Location, private readonly sharedStore: SharedStore) {}
+export class AnswersGuard {
+  constructor(
+    private readonly router: Router,
+    private location: Location,
+    private readonly sharedStore: SharedStore,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     const requestType = resolveRequestType(this.location.path());

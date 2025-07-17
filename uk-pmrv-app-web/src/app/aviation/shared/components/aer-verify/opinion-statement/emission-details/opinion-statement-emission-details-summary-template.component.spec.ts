@@ -20,8 +20,7 @@ describe('OpinionStatementEmissionDetailsSummaryTemplateComponent', () => {
         [fuelTypes]="fuelTypes"
         [monitoringApproachType]="monitoringApproachType"
         [isEditable]="isEditable"
-        [queryParams]="queryParams"
-      ></app-opinion-statement-emission-details-summary-template>
+        [queryParams]="queryParams"></app-opinion-statement-emission-details-summary-template>
     `,
   })
   class TestComponent {

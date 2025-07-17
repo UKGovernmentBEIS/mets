@@ -13,15 +13,12 @@ import { AerService } from '../../core/aer.service';
     <app-aer-task-review
       [breadcrumb]="true"
       [notification]="notification"
-      heading="Verification report of the activity level report"
-    >
+      heading="Verification report of the activity level report">
       <app-activity-level-report-group
         [activityLevelReport]="activityLevelReport$ | async"
-        [documentFiles]="documentFiles$ | async"
-      ></app-activity-level-report-group>
+        [documentFiles]="documentFiles$ | async"></app-activity-level-report-group>
       <app-verification-review-group-decision
-        (notification)="notification = $event"
-      ></app-verification-review-group-decision>
+        (notification)="notification = $event"></app-verification-review-group-decision>
     </app-aer-task-review>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,5 +33,8 @@ export class VerifiedActivityLevelReportComponent {
     map((file) => (file ? this.aerService.getDownloadUrlFiles([file], true) : [])),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

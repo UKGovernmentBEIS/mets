@@ -27,6 +27,11 @@ public class AerApplicationVerificationSubmitRequestTaskPayload extends AerAppli
     private Map<UUID, String> verificationAttachments = new HashMap<>();
 
     @Override
+    public Map<UUID, String> getAttachmentsToDelete() {
+          return Map.of();
+    }
+
+    @Override
     public Set<UUID> getReferencedAttachmentIds() {
         if (verificationReport != null) {
             return Stream.of(super.getReferencedAttachmentIds(), verificationReport.getVerificationReportAttachments())

@@ -4828,4 +4828,39 @@
         </rollback>
     </changeSet>
     
+    <changeSet id="0_1_0_CREATE_USER_ROLE_TYPE_TABLE" author="P35066">
+        <createTable tableName="au_user_role_type">
+            <column name="user_id" type="varchar(255)">
+                <constraints primaryKey="true" primaryKeyName="au_user_role_type_pk" nullable="false"/>
+            </column>
+            <column name="role_type" type="varchar(255)" remarks="The role type of the user">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                drop sequence if exists au_user_role_type;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_POPULATE_USER_ROLE_TYPE_TABLE" author="P35066">
+		<sql>
+			insert into au_user_role_type(user_id, role_type)
+			select distinct user_id,
+			case
+			when account_id is not null then 'OPERATOR'
+			when competent_authority is not null then 'REGULATOR'
+			when verification_body_id is not null then 'VERIFIER'
+			end
+			from au_authority
+			where status != 'PENDING';
+		</sql>
+		<rollback>
+        	<sql>
+        		delete from au_user_role_type;
+        	</sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

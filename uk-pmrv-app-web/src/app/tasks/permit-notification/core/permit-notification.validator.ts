@@ -5,7 +5,7 @@ import { GovukDatePipe } from '../../../shared/pipes/govuk-date.pipe';
 export function endDateValidator(): ValidatorFn {
   return (group: UntypedFormGroup): ValidationErrors => {
     const startDate = group.get('startDateOfNonCompliance').value;
-    const endDate = group.get('endDateOfNonCompliance').value;
+    const endDate = group.get('endDateOfNonCompliance')?.value;
 
     const govukDatePipe = new GovukDatePipe();
     const startDateToString = govukDatePipe.transform(new Date(startDate));
@@ -49,7 +49,7 @@ export function endDateConditionalValidator(): ValidatorFn {
     } else if (
       reportingType === 'OTHER_ISSUE' &&
       !group.get('startDateOfNonCompliance_OTHER_ISSUE').value &&
-      group.get('endDateOfNonCompliance').value
+      group.get('endDateOfNonCompliance')?.value
     ) {
       deleteInvalidDateError(group);
     }
@@ -59,11 +59,11 @@ export function endDateConditionalValidator(): ValidatorFn {
 }
 
 function deleteInvalidDateError(group: UntypedFormGroup) {
-  const errors = group.controls['endDateOfNonCompliance'].errors;
+  const errors = group.controls['endDateOfNonCompliance']?.errors;
   if (errors) {
     delete errors.invalidDate;
   }
   if (errors && Object.keys(errors).length === 0) {
-    group.controls['endDateOfNonCompliance'].setErrors(null);
+    group.controls['endDateOfNonCompliance']?.setErrors(null);
   }
 }

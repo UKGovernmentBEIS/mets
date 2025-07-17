@@ -19,8 +19,7 @@ describe('VerifierDetailsGroupComponent', () => {
       <app-verifier-details-group
         [showVerifierDetails]="showVerifierDetails"
         [isEditable]="isEditable"
-        [verificationReport]="verificationReport"
-      ></app-verifier-details-group>
+        [verificationReport]="verificationReport"></app-verifier-details-group>
     `,
   })
   class TestComponent {

@@ -1,0 +1,16 @@
+@media print {
+  a[govukLink][data-print-text] {
+    text-decoration: none;
+    color: black;
+    color: transparent;
+    position: relative;
+  }
+
+  a[govukLink][data-print-text]::after {
+    content: attr(data-print-text);
+    color: black;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}

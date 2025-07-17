@@ -20,7 +20,7 @@ export const EMP_APPLICATION_TIMEFRAME_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { breadcrumb: 'Application timeframe summary' },
+        data: { breadcrumb: 'Application timeframe' },
         loadComponent: () =>
           import('./application-timeframe-summary/application-timeframe-summary.component').then(
             (c) => c.ApplicationTimeframeSummaryComponent,

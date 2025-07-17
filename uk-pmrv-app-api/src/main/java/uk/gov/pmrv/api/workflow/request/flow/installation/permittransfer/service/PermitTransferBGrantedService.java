@@ -8,7 +8,6 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountUpdateService;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
-import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.service.PermitService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -38,9 +37,15 @@ public class PermitTransferBGrantedService {
         final PermitContainer permitContainer = PERMIT_MAPPER.toPermitContainer(requestPayload, installationOperatorDetails);
         permitService.submitPermit(permitContainer, accountId);
 
+        EmitterType emitterType = switch (permitContainer.getPermitType()) {
+            case HSE -> EmitterType.HSE;
+            case WASTE -> EmitterType.WASTE;
+            default -> EmitterType.GHGE;
+        };
+
         installationAccountUpdateService.updateAccountUponTransferBGranted(
             accountId,
-            permitContainer.getPermitType() == PermitType.HSE ? EmitterType.HSE : EmitterType.GHGE,
+            emitterType,
             permitContainer.getPermit().getEstimatedAnnualEmissions().getQuantity());
     }
 }

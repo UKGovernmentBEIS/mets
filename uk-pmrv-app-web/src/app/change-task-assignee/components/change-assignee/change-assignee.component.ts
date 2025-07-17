@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, filter, Observable, take } from 'rxjs';
+import { BehaviorSubject, filter, first, Observable, take } from 'rxjs';
 
 import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
@@ -30,6 +30,7 @@ export class ChangeAssigneeComponent implements OnInit {
     private readonly breadcrumbsService: BreadcrumbService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly store: CommonTasksStore,
   ) {}
 
   ngOnInit(): void {
@@ -61,5 +62,36 @@ export class ChangeAssigneeComponent implements OnInit {
         this.breadcrumbsService.show([...breadcrumbs.slice(0, breadcrumbs.length - 1), lastBreadcrumb]);
       }
     }
+
+    this.store?.pipe(first()).subscribe((state) => {
+      switch (state.requestTaskItem.requestTask.type) {
+        case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW':
+          this.breadcrumbsService.addToLastBreadcrumbAndShow('peer-review-wait');
+          break;
+        case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW':
+          this.breadcrumbsService.addToLastBreadcrumbAndShow('dpn-peer-review');
+          break;
+        case 'NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW':
+          this.breadcrumbsService.addToLastBreadcrumbAndShow('peer-review-wait');
+          break;
+        case 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW':
+          this.breadcrumbsService.addToLastBreadcrumbAndShow('noi-peer-review');
+          break;
+        case 'NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW':
+          this.breadcrumbsService.addToLastBreadcrumbAndShow('peer-review-wait');
+          break;
+        case 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW':
+          this.breadcrumbsService.addToLastBreadcrumbAndShow('cpn-peer-review');
+          break;
+        case 'PERMIT_REVOCATION_CESSATION_SUBMIT':
+          this.breadcrumbsService.addToLastBreadcrumbAndShow('cessation');
+          break;
+        case 'PERMIT_SURRENDER_WAIT_FOR_REVIEW':
+          this.breadcrumbsService.addToLastBreadcrumbAndShow('wait');
+          break;
+        default:
+          break;
+      }
+    });
   }
 }

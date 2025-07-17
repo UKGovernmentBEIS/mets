@@ -36,6 +36,8 @@ export class SourceStreamTypePipe implements PipeTransform {
         return 'Coke: Oxide output (Method B)';
       case 'COMBUSTION_COMMERCIAL_STANDARD_FUELS':
         return 'Combustion: Commercial standard fuels';
+      case 'UPSTREAM_GHG_REMOVAL_VENTING_CO2':
+        return 'Upstream GHG removal: Venting CO2';
       case 'COMBUSTION_FLARES':
         return 'Combustion: Flares';
       case 'COMBUSTION_GAS_PROCESSING_TERMINALS':

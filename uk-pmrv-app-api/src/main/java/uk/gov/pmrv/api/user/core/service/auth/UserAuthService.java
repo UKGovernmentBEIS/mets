@@ -2,12 +2,13 @@ package uk.gov.pmrv.api.user.core.service.auth;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.userinfoapi.UserInfo;
+import uk.gov.netz.api.userinfoapi.UserInfoApi;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetails;
-import uk.gov.pmrv.api.user.core.domain.model.UserInfo;
 import uk.gov.pmrv.api.user.core.transform.UserMapper;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserAuthService {
+public class UserAuthService implements UserInfoApi {
 
     private final AuthService authService;
     private final UserMapper userMapper;
@@ -26,7 +27,7 @@ public class UserAuthService {
 
     public Optional<UserInfoDTO> getUserByEmail(String email) {
         return authService
-                .getByUsername(email)
+                .getByEmail(email)
                 .map(userMapper::toUserInfoDTO);
     }
     
@@ -46,12 +47,12 @@ public class UserAuthService {
         return authService.getUserSignature(signatureUuid);
     }
 
-    public void enablePendingUser(String userId, String password) {
-        authService.enablePendingUser(userId, password);
+    public void enableUserAndSetPassword(String userId, String password) {
+        authService.enableUserAndSetPassword(userId, password);
     }
     
-    public void updateUserTerms(String userId, Short newTermsVersion) {
-        authService.updateUserTerms(userId, newTermsVersion);
+    public void setUserPassword(String userId, String password) {
+        authService.setUserPassword(userId, password);
     }
 
     public void validateAuthenticatedUserOtp(String otp, String token) {
@@ -59,7 +60,7 @@ public class UserAuthService {
     }
 
     public void deleteOtpCredentialsByEmail(String email) {
-        authService.getByUsername(email)
+        authService.getByEmail(email)
                 .ifPresentOrElse(userRepresentation -> deleteOtpCredentials(userRepresentation.getId()),
                         () -> {throw new BusinessException(ErrorCode.USER_NOT_EXIST);});
     }
@@ -70,12 +71,20 @@ public class UserAuthService {
 	}
 
 	public void resetPassword(String email, String otp, String password) {
-		authService.getByUsername(email)
+		authService.getByEmail(email)
 		        .ifPresentOrElse(userRepresentation -> {
-		            authService.setPasswordForRegisteredUser(userRepresentation, password, otp, email);
+		            authService.resetUserPassword(userRepresentation, password, otp);
 		            authService.deleteUserSessions(userRepresentation.getId());
 		            },
                        () -> {throw new BusinessException(ErrorCode.USER_NOT_EXIST);});
-		
 	}
+	
+	/**
+     * Returns whether a password has been set in keycloak for the {@code userId}.
+     * @param userId the user id
+     * @return true/false
+     */
+    public boolean hasUserPassword(String userId) {
+        return authService.hasUserPassword(userId);
+    }
 }

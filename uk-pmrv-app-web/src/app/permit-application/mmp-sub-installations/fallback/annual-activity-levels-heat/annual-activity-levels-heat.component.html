@@ -1,0 +1,160 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    [heading]="'Annual activity levels'"
+    [caption]="productBenchmarkType$ | async | subInstallationType"
+    submitText="Continue">
+    <div class="govuk-!-width-two-thirds">
+      <div class="govuk-body">
+        For the specific purpose of the baseline data collection, this section should cover all data provided in section
+        G.(a) in the "baseline data collection" template.
+      </div>
+
+      <h2 class="govuk-heading-m">Data sources for energy flows</h2>
+
+      <p class="govuk-caption-m">
+        Add the data sources used for the energy flows in line with section 4.5 of Annex VII of the FAR and the method
+        used to determine the annual quantities in line with section 7.2 of Annex VII of the FAR.
+      </p>
+
+      <div formArrayName="measurableHeatFlowList">
+        <fieldset
+          *ngFor="let measurableHeatFlowDataSource of measurableHeatFlowDataSourcesFormArray.controls; index as i"
+          [formGroupName]="i"
+          govukFieldset
+          id="dataSource-def-{{ i }}">
+          <legend govukLegend>Data source {{ i + 1 }}</legend>
+
+          <button
+            (click)="measurableHeatFlowDataSourcesFormArray.removeAt(i)"
+            *ngIf="measurableHeatFlowDataSourcesFormArray.length > 1 && i >= 1"
+            appAddAnother
+            govukSecondaryButton
+            type="button"
+            #removeButton>
+            Remove
+          </button>
+
+          <div
+            [ngClass]="{
+              'govuk-form-group--error':
+                measurableHeatFlowDataSource?.errors?.atLeastOneRequired &&
+                  this.wizardStepComponent?.isSummaryDisplayedSubject | async,
+            }">
+            <div
+              *ngIf="
+                measurableHeatFlowDataSource?.errors?.atLeastOneRequired &&
+                  this.wizardStepComponent?.isSummaryDisplayedSubject | async
+              "
+              [ngClass]="{
+                'govuk-error-message':
+                  measurableHeatFlowDataSource?.errors?.atLeastOneRequired &&
+                    this.wizardStepComponent?.isSummaryDisplayedSubject | async,
+              }">
+              {{ measurableHeatFlowDataSource?.errors?.atLeastOneRequired }}
+            </div>
+
+            <div>
+              <div class="govuk-body">Quantification of measurable heat flows</div>
+              <div formControlName="quantification" govuk-select widthClass="govuk-!-width-full">
+                <option [value]="''">{{ i === 0 ? 'Select an option' : 'Select an option if relevant' }}</option>
+                <option *ngFor="let quantificationType of quantificationTypes" [value]="quantificationType">
+                  {{ quantificationType | productBenchmark45DataSource }}
+                </option>
+              </div>
+
+              <div class="govuk-body">Net measurable heat flows</div>
+              <div formControlName="net" govuk-select widthClass="govuk-!-width-full">
+                <option [value]="''">{{ i === 0 ? 'Select an option' : 'Select an option if relevant' }}</option>
+                <option *ngFor="let netType of netTypes" [value]="netType">
+                  {{ netType | productBenchmark72DataSource }}
+                </option>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <button
+        (click)="addMeasureableHeatDataSource()"
+        govukSecondaryButton
+        type="button"
+        *ngIf="measurableHeatFlowDataSourcesFormArray.controls.length < 6">
+        Add another data source
+      </button>
+
+      <h2 class="govuk-heading-m">Description of methodology applied for each data source</h2>
+
+      <p class="govuk-caption-m">
+        Describe in particular any assumptions if the 95% rule in Article 10(3) of the FAR is applied.
+      </p>
+
+      <app-include-answer-details></app-include-answer-details>
+
+      <div formControlName="methodologyAppliedDescription" govuk-textarea [maxLength]="10000" rows="10"></div>
+
+      <div formGroupName="hierarchicalOrder">
+        <div
+          formControlName="followed"
+          govuk-radio
+          legend="Has the hierarchical order been followed?"
+          hint="Select yes if the data source with the highest rank within the hierarchy has been used, as set out in section 4 of Annex VII of the FAR."
+          [legendSize]="'medium'">
+          <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+          <govuk-radio-option [value]="false" label="No">
+            <ng-container govukConditionalContent>
+              <div
+                formControlName="notFollowingHierarchicalOrderReason"
+                govuk-radio
+                legend="Reason for not following the hierarchy">
+                <govuk-radio-option
+                  [value]="'OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY'"
+                  label="Other data sources lead to lower uncertainty according to the simplified uncertainty assessment in line with Article 7(2) of the FAR"></govuk-radio-option>
+                <govuk-radio-option
+                  [value]="'USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE'"
+                  label="Use of better data sources is technically infeasible"></govuk-radio-option>
+                <govuk-radio-option
+                  [value]="'USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS'"
+                  label="Use of better data sources would incur unreasonable costs"></govuk-radio-option>
+              </div>
+              <div
+                formControlName="notFollowingHierarchicalOrderDescription"
+                label="Provide more details on any deviation from the hierarchy"
+                govuk-textarea
+                [maxLength]="10000"
+                rows="10"></div>
+            </ng-container>
+          </govuk-radio-option>
+        </div>
+      </div>
+
+      <h2 class="govuk-heading-m">Description of the methodology used for keeping track of the products produced</h2>
+
+      <p class="govuk-caption-m">
+        Include the methodology on how relevant PRODCOM codes are tracked, in line with section 2.1(a) and section 9 of
+        Annex VII of the FAR.
+      </p>
+      <p class="govuk-caption-m">
+        If you have exported measurable heat to non-ETS installations or entities, please describe how you have
+        determined the carbon leakage status of the processes in which this measurable heat was consumed. Relate, to the
+        extent possible, to entities and installations, where feasible to sub-installations of those installations, and
+        list relevant NACE and PRODCOM codes.
+      </p>
+      <p class="govuk-caption-m">
+        If you have exported measurable heat for district heating, please describe how you have determined the
+        respective amounts.
+      </p>
+      <app-include-answer-details></app-include-answer-details>
+      <div formControlName="trackingMethodologyDescription" govuk-textarea [maxLength]="10000" rows="10"></div>
+
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload supporting files (optional)"
+        formControlName="supportingFiles"
+        listTitle="Uploaded files"></app-multiple-file-input>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink [routerLink]="'../../../'">Return to: Sub-installations</a>
+</app-permit-task>

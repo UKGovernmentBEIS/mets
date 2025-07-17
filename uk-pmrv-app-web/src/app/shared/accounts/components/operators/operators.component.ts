@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, signal } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -28,7 +28,6 @@ import {
   AccountOperatorAuthorityUpdateDTO,
   AccountVerificationBodyService,
   AuthoritiesService,
-  InstallationAccountDTO,
   InstallationAccountPermitDTO,
   OperatorAuthoritiesService,
   UserAuthorityInfoDTO,
@@ -44,11 +43,12 @@ import { savePartiallyNotFoundOperatorError } from './errors/business-error';
   providers: [DestroySubject],
 })
 export class OperatorsComponent implements OnInit {
-  @Input() currentTab: string;
+  @Input() currentTab$: Observable<string>;
 
-  private accountId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('accountId'))));
+  private readonly accountId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('accountId'))));
 
   isAccountEditable$: Observable<boolean>;
+  showNotificationBanner = signal(false);
 
   accountAuthorities$: Observable<UserAuthorityInfoDTO[]>;
   contactType$: Observable<{ [key: string]: string }>;
@@ -80,7 +80,7 @@ export class OperatorsComponent implements OnInit {
   ];
   hasVerificationBody$: Observable<boolean>;
   userType$: Observable<GovukSelectOption<string>[]>;
-  private validators = [
+  private readonly validators = [
     this.activeOperatorAdminValidator('You must have an active operator admin on your account'),
     this.activeContactValidator('PRIMARY'),
     this.primarySecondaryValidator(
@@ -130,9 +130,13 @@ export class OperatorsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.currentTab$.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.showNotificationBanner.set(false);
+    });
+
     this.isAccountEditable$ = this.route.data.pipe(
       map((data?: { accountPermit?: InstallationAccountPermitDTO }) => {
-        return accountFinalStatuses((data?.accountPermit?.account as InstallationAccountDTO)?.status);
+        return accountFinalStatuses(data?.accountPermit?.account?.status);
       }),
     );
 
@@ -184,9 +188,11 @@ export class OperatorsComponent implements OnInit {
 
   saveUsers(): void {
     if (!this.usersForm.dirty) {
+      this.showNotificationBanner.set(false);
       return;
     }
     if (!this.usersForm.valid) {
+      this.showNotificationBanner.set(false);
       this.usersForm.markAllAsTouched();
       this.isSummaryDisplayed$.next(true);
     } else {
@@ -214,7 +220,10 @@ export class OperatorsComponent implements OnInit {
             ),
           ),
         )
-        .subscribe(() => this.refresh$.next());
+        .subscribe(() => {
+          this.refresh$.next();
+          this.showNotificationBanner.set(true);
+        });
     }
   }
 

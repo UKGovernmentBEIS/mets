@@ -26,7 +26,10 @@ export class AviationAccountFormProvider {
   private _form: FormGroup<AviationAccountFormModel>;
   private destroy$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private accountsService: AviationAccountsService) {}
+  constructor(
+    private fb: FormBuilder,
+    private accountsService: AviationAccountsService,
+  ) {}
 
   resetForm(initialValue?: AviationAccountCreationDTO): void {
     if (this._form) {
@@ -54,7 +57,7 @@ export class AviationAccountFormProvider {
   addFieldsForEdit() {
     this._form.addControl(
       'registryId',
-      new FormControl(null, [GovukValidators.pattern('^[0-9]{7}$', 'Enter a 7 digit number')]),
+      new FormControl(null, [GovukValidators.minMaxRangeNumberValidator(1000000, 9999999, 'Enter a 7 digit number')]),
     );
     this._form.addControl('id', new FormControl<number | null>(null));
     this._form.addControl('hasContactAddress', new FormControl<boolean[] | null>(null));
@@ -72,8 +75,8 @@ export class AviationAccountFormProvider {
         }),
         sopId: new FormControl<number | null>(null, {
           validators: [
-            GovukValidators.pattern(/^\d+$/, 'SOP ID should contain numbers only'),
-            GovukValidators.maxLength(10, 'SOP ID should contain 10 numbers maximum'),
+            GovukValidators.max(9999999999, 'The ID should contain 10 numbers maximum'),
+            GovukValidators.naturalNumber(),
           ],
         }),
         crcoCode: new FormControl<string | null>(null, {

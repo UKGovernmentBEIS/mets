@@ -8,7 +8,6 @@ import { of, throwError } from 'rxjs';
 
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
-import { IPasswordStrengthMeterService, PasswordStrengthMeterService } from 'angular-password-strength-meter';
 
 import { GovukComponentsModule } from 'govuk-components';
 
@@ -26,7 +25,6 @@ describe('RegulatorInvitationComponent', () => {
   let route: ActivatedRoute;
   let regulatorUsersRegistrationService: jest.Mocked<RegulatorUsersRegistrationService>;
   let passwordService: Partial<jest.Mocked<PasswordService>>;
-  let passwordStrengthMeterService: jest.Mocked<IPasswordStrengthMeterService>;
 
   class Page extends BasePage<RegulatorInvitationComponent> {
     get emailValue() {
@@ -49,7 +47,7 @@ describe('RegulatorInvitationComponent', () => {
   beforeEach(async () => {
     regulatorUsersRegistrationService = mockClass(RegulatorUsersRegistrationService);
     passwordService = mockClass(PasswordService);
-    passwordStrengthMeterService = mockClass(PasswordStrengthMeterService);
+
     const activatedRoute = new ActivatedRouteStub(
       undefined,
       { token: 'token' },
@@ -64,7 +62,6 @@ describe('RegulatorInvitationComponent', () => {
       providers: [
         { provide: RegulatorUsersRegistrationService, useValue: regulatorUsersRegistrationService },
         { provide: PasswordService, useValue: passwordService },
-        { provide: IPasswordStrengthMeterService, useValue: passwordStrengthMeterService },
         { provide: ActivatedRoute, useValue: activatedRoute },
       ],
     }).compileComponents();
@@ -89,7 +86,7 @@ describe('RegulatorInvitationComponent', () => {
   });
 
   it('should navigate for link related error', () => {
-    regulatorUsersRegistrationService.enableRegulatorInvitedUser.mockReturnValue(
+    regulatorUsersRegistrationService.acceptAuthorityAndActivateRegulatorUserFromInvite.mockReturnValue(
       throwError(() => new HttpErrorResponse({ error: { code: 'EMAIL1001' }, status: 400 })),
     );
     const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
@@ -107,7 +104,7 @@ describe('RegulatorInvitationComponent', () => {
       queryParams: { code: 'EMAIL1001' },
     });
 
-    regulatorUsersRegistrationService.enableRegulatorInvitedUser.mockReturnValue(
+    regulatorUsersRegistrationService.acceptAuthorityAndActivateRegulatorUserFromInvite.mockReturnValue(
       throwError(() => new HttpErrorResponse({ error: { code: 'TOKEN1001' }, status: 400 })),
     );
 
@@ -128,13 +125,13 @@ describe('RegulatorInvitationComponent', () => {
     page.submitButton.click();
     fixture.detectChanges();
 
-    expect(regulatorUsersRegistrationService.enableRegulatorInvitedUser).not.toHaveBeenCalled();
+    expect(regulatorUsersRegistrationService.acceptAuthorityAndActivateRegulatorUserFromInvite).not.toHaveBeenCalled();
 
     page.passwordValue = 'test';
     page.submitButton.click();
     fixture.detectChanges();
 
-    expect(regulatorUsersRegistrationService.enableRegulatorInvitedUser).not.toHaveBeenCalled();
+    expect(regulatorUsersRegistrationService.acceptAuthorityAndActivateRegulatorUserFromInvite).not.toHaveBeenCalled();
 
     passwordService.blacklisted.mockReturnValue(of(null));
     passwordService.strong.mockReturnValue(null);
@@ -144,8 +141,10 @@ describe('RegulatorInvitationComponent', () => {
 
     page.submitButton.click();
     fixture.detectChanges();
-    expect(regulatorUsersRegistrationService.enableRegulatorInvitedUser).toHaveBeenCalledTimes(1);
-    expect(regulatorUsersRegistrationService.enableRegulatorInvitedUser).toHaveBeenCalledWith({
+    expect(regulatorUsersRegistrationService.acceptAuthorityAndActivateRegulatorUserFromInvite).toHaveBeenCalledTimes(
+      1,
+    );
+    expect(regulatorUsersRegistrationService.acceptAuthorityAndActivateRegulatorUserFromInvite).toHaveBeenCalledWith({
       invitationToken: 'token',
       password: 'ThisIsAStrongP@ssw0rd',
     });

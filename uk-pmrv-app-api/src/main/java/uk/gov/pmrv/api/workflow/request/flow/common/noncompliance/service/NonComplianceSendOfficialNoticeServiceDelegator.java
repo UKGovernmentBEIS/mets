@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceDecisionNotification;
 
@@ -25,7 +25,7 @@ public class NonComplianceSendOfficialNoticeServiceDelegator {
 		
 		NonComplianceSendOfficialNoticeService nonComplianceSendOfficialNoticeService = 
 				getNonComplianceSendOfficialNotice(request.getType().getAccountType())
-				.orElseThrow(() -> new BusinessException(ErrorCode.INVALID_ACCOUNT_TYPE));
+				.orElseThrow(() -> new BusinessException(MetsErrorCode.INVALID_ACCOUNT_TYPE));
 		nonComplianceSendOfficialNoticeService.sendOfficialNotice(officialNotice, request, decisionNotification);
 	}
 	

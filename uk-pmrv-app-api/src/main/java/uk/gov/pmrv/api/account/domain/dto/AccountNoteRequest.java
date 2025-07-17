@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.note.NoteRequest;
+import uk.gov.netz.api.common.note.NoteRequest;
 
 @Data
 @NoArgsConstructor

@@ -66,7 +66,7 @@ public class NotificationTemplateCustomRepositoryImpl implements NotificationTem
 
         query.setParameter("managed", true);
         query.setParameter("competentAuthority", searchCriteria.getCompetentAuthority().name());
-        query.setParameter("roleType", searchCriteria.getRoleType().name());
+        query.setParameter("roleType", searchCriteria.getRoleType());
         query.setParameter("accountType", searchCriteria.getAccountType().name());
 
         if(StringUtils.hasText(searchCriteria.getTerm())) {

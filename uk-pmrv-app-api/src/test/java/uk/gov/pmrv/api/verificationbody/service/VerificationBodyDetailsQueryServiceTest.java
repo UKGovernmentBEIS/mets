@@ -14,8 +14,10 @@ import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyDTO;
 import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
 
+import java.util.Optional;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -53,13 +55,28 @@ class VerificationBodyDetailsQueryServiceTest {
                 .emissionTradingSchemes(verificationBodyDTO.getEmissionTradingSchemes())
                 .build();
 
-        when(verificationBodyQueryService.getVerificationBodyById(vbId)).thenReturn(verificationBodyDTO);
+        when(verificationBodyQueryService.getVerificationBodyOptById(vbId)).thenReturn(Optional.of(verificationBodyDTO));
 
         // Invoke
-        VerificationBodyDetails actual = service.getVerificationBodyDetails(vbId);
+        Optional<VerificationBodyDetails> actual = service.getVerificationBodyDetails(vbId);
 
         // Verify
-        verify(verificationBodyQueryService, times(1)).getVerificationBodyById(vbId);
-        Assertions.assertEquals(expected, actual);
+        verify(verificationBodyQueryService, times(1)).getVerificationBodyOptById(vbId);
+        Assertions.assertEquals(expected, actual.get());
+    }
+    
+    @Test
+    void getVerificationBodyDetails_not_found() {
+        final Long vbId = 1L;
+
+        when(verificationBodyQueryService.getVerificationBodyOptById(vbId)).thenReturn(Optional.empty());
+
+        // Invoke
+        Optional<VerificationBodyDetails> actual = service.getVerificationBodyDetails(vbId);
+
+        assertThat(actual).isEmpty();
+        
+        // Verify
+        verify(verificationBodyQueryService, times(1)).getVerificationBodyOptById(vbId);
     }
 }

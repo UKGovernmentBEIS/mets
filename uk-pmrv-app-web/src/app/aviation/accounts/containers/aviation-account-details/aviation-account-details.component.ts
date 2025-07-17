@@ -15,5 +15,8 @@ export class AviationAccountDetailsComponent {
   accountEmp$ = this.store.pipe(selectAccountEmp);
   userRoleType$ = this.authStore.pipe(selectUserRoleType);
 
-  constructor(private readonly store: AviationAccountsStore, readonly authStore: AuthStore) {}
+  constructor(
+    private readonly store: AviationAccountsStore,
+    readonly authStore: AuthStore,
+  ) {}
 }

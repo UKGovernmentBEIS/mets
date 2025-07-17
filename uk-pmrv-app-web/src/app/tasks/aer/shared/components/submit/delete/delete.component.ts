@@ -18,7 +18,7 @@ import { AerService } from '../../../../core/aer.service';
         <span class="nowrap">
           ‘{{ sourceStream?.sourceStreamInfo?.reference }}
           {{ sourceStream?.sourceStreamInfo?.description | sourceStreamDescription }}
-          <ng-container *ngIf="sourceStream?.isDataGap"> - Data gap</ng-container>
+          <ng-container *ngIf="sourceStream?.isDataGap">- Data gap</ng-container>
           ’?
         </span>
       </ng-container>

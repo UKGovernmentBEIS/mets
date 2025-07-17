@@ -3,10 +3,11 @@ import { TestBed } from '@angular/core/testing';
 
 import { lastValueFrom, throwError } from 'rxjs';
 
+import { BusinessTestingModule, expectBusinessErrorToBe } from '@error/testing/business-error';
+import { ActivatedRouteSnapshotStub, asyncData, mockClass } from '@testing';
+
 import { VerificationBodiesService } from 'pmrv-api';
 
-import { ActivatedRouteSnapshotStub, asyncData, mockClass } from '../../../testing';
-import { BusinessTestingModule, expectBusinessErrorToBe } from '../../error/testing/business-error';
 import { saveNotFoundVerificationBodyError } from '../errors/business-error';
 import { verificationBody } from '../testing/mock-data';
 import { DeleteGuard } from './delete.guard';
@@ -22,6 +23,7 @@ describe('DeleteGuard', () => {
       imports: [BusinessTestingModule],
       providers: [{ provide: VerificationBodiesService, useValue: verificationBodiesService }],
     });
+
     guard = TestBed.inject(DeleteGuard);
   });
 
@@ -45,6 +47,7 @@ describe('DeleteGuard', () => {
     await expect(
       lastValueFrom(guard.canActivate(new ActivatedRouteSnapshotStub({ verificationBodyId: '1' }))),
     ).rejects.toBeTruthy();
+
     await expectBusinessErrorToBe(saveNotFoundVerificationBodyError);
   });
 });

@@ -25,8 +25,7 @@ describe('VerifiersTableComponent', () => {
       <app-verifiers-table
         [verifiersAuthorities]="verifiersAuthorities$"
         (verifiersFormSubmitted)="onVerifiersFormSubmitted($event)"
-        (discard)="onDiscard()"
-      ></app-verifiers-table>
+        (discard)="onDiscard()"></app-verifiers-table>
     `,
   })
   class TestComponent {
@@ -160,13 +159,6 @@ describe('VerifiersTableComponent', () => {
       expect(page.rows[1].querySelectorAll('td')[0].querySelector('a')).toBeTruthy();
       expect(page.rows[2].querySelectorAll('td')[0].querySelector('a')).toBeTruthy();
       expect(page.rows[3].querySelectorAll('td')[0].querySelector('a')).toBeNull();
-    });
-
-    it('should show locked status sign for locked users', () => {
-      expect(page.rows[0].querySelectorAll('td')[2].querySelectorAll('.locked')).toHaveLength(0);
-      expect(page.rows[1].querySelectorAll('td')[2].querySelectorAll('.locked')).toHaveLength(0);
-      expect(page.rows[2].querySelectorAll('td')[2].querySelectorAll('.locked')).toHaveLength(1);
-      expect(page.rows[3].querySelectorAll('td')[2].querySelectorAll('.locked')).toHaveLength(0);
     });
 
     it('should hide select options for users with status pending', () => {

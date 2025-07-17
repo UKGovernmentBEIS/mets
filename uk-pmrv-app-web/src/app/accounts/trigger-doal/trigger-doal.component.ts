@@ -57,7 +57,7 @@ export class TriggerDoalComponent {
                   year: this.form.get('year').value,
                 } as DoalRequestCreateActionPayload,
               },
-              accountId,
+              String(accountId),
             ),
           ),
           switchMap(({ requestId }) => this.requestItemsService.getItemsByRequest(requestId)),
@@ -65,7 +65,7 @@ export class TriggerDoalComponent {
           this.pendingRequest.trackRequest(),
         )
         .subscribe(({ items }) => {
-          const link = items?.length == 1 ? this.itemLinkPipe.transform(items[0]) : ['/dashboard'];
+          const link = items?.length == 1 ? this.itemLinkPipe.transform(items[0], false) : ['/dashboard'];
           this.router.navigate(link).then();
         });
     }

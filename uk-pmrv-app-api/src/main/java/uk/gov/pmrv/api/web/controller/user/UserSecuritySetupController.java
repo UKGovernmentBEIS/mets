@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.pmrv.api.user.core.domain.dto.OneTimePasswordDTO;
 import uk.gov.pmrv.api.user.core.domain.dto.TokenDTO;
 import uk.gov.pmrv.api.user.core.service.UserSecuritySetupService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 @RestController
 @RequestMapping(path = "/v1.0/users/security-setup")
@@ -32,7 +32,7 @@ import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 public class UserSecuritySetupController {
 
     private final UserSecuritySetupService userSecuritySetupService;
-    private final PmrvSecurityComponent pmrvSecurityComponent;
+    private final AppSecurityComponent appSecurityComponent;
 
     @PostMapping(path = "/2fa/request-change")
     @Operation(summary = "Requests the update of the two factor authentication")
@@ -40,10 +40,10 @@ public class UserSecuritySetupController {
     @ApiResponse(responseCode = "400", description = SwaggerApiInfo.REQUEST_TO_CHANGE_2FA_BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     public ResponseEntity<Void> requestTwoFactorAuthChange
-            (@Parameter(hidden = true) PmrvUser currentUser,
+            (@Parameter(hidden = true) AppUser currentUser,
              @RequestBody @Valid @Parameter(description = "The one time authenticator code", required = true)
                      OneTimePasswordDTO oneTimePasswordDTO) {
-        userSecuritySetupService.requestTwoFactorAuthChange(currentUser, pmrvSecurityComponent.getAccessToken(),
+        userSecuritySetupService.requestTwoFactorAuthChange(currentUser, appSecurityComponent.getAccessToken(),
                 oneTimePasswordDTO.getPassword());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

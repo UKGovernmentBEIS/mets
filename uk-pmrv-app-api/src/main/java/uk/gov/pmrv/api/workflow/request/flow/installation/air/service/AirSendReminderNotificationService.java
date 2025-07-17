@@ -1,11 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.air.service;
 
-import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.ExpirationReminderType;
@@ -13,6 +12,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContac
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestExpirationReminderService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.NotificationTemplateExpirationReminderParams;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.NotificationTemplateWorkflowTaskType;
+
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor

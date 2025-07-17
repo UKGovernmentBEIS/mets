@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { EmissionSourceDeleteTemplateComponent } from '@shared/components/emission-sources/emission-source-delete/emission-source-delete-template.component';
 import { SharedModule } from '@shared/shared.module';
@@ -18,8 +18,7 @@ describe('EmissionSourcesDeleteTemplateComponent', () => {
     template: `
       <app-emission-source-delete-template
         (delete)="onDelete()"
-        [emissionSource]="emissionSource"
-      ></app-emission-source-delete-template>
+        [emissionSource]="emissionSource"></app-emission-source-delete-template>
     `,
   })
   class TestComponent {
@@ -33,8 +32,9 @@ describe('EmissionSourcesDeleteTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       declarations: [TestComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -54,7 +54,7 @@ describe('EmissionSourcesDeleteTemplateComponent', () => {
   it('should render the remove button and source reference', () => {
     expect(element.querySelectorAll<HTMLButtonElement>('button[govukwarnbutton]').length).toEqual(1);
     expect(element.querySelector('h1').textContent.trim()).toEqual(
-      'Are you sure you want to delete  ‘reference description’?',
+      'Are you sure you want to delete ‘reference description’?',
     );
   });
 });

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { VerifierCommentGroupComponent } from '@aviation/shared/components/aer-verify/verifier-comment-group/verifier-comment-group.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -48,11 +48,11 @@ export default class UncorrectedNonConformitiesPriorYearListComponent {
   ) {}
 
   onSubmit() {
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
       .saveAerVerify({ uncorrectedNonConformities: this.formProvider.getFormValue() }, 'in progress')
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setUncorrectedNonConformities(
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setUncorrectedNonConformities(
           this.formProvider.getFormValue(),
         );
         this.router.navigate(['..', 'summary'], { relativeTo: this.route });

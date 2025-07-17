@@ -19,7 +19,6 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInfoResolver;
-import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationEndedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationProceededToAuthorityRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
 

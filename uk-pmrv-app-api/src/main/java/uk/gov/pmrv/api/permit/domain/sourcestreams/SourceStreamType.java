@@ -31,6 +31,7 @@ public enum SourceStreamType {
     REFINERIES_HYDROGEN_PRODUCTION(SourceStreamCategory.CATEGORY_4, "Refineries: Hydrogen production"),
     CEMENT_CLINKER_CKD(SourceStreamCategory.CATEGORY_4, "Cement clinker: CKD"),
     CERAMICS_SCRUBBING(SourceStreamCategory.CATEGORY_4, "Ceramics: Scrubbing"),
+    UPSTREAM_GHG_REMOVAL_VENTING_CO2(SourceStreamCategory.CATEGORY_4, "Upstream GHG removal: Venting CO2"),
 
     //Category 5
     REFINERIES_CATALYTIC_CRACKER_REGENERATION(SourceStreamCategory.CATEGORY_5, "Refineries: Catalytic cracker regeneration"),

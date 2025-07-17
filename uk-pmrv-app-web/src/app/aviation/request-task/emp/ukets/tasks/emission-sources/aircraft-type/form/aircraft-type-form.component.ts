@@ -30,13 +30,11 @@ import { EMP_AIRCRAFT_TYPE_FORM } from '../aircraft-type-form.provider';
   templateUrl: './aircraft-type-form.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      #change-aircraft {
-        margin-left: 15px;
-      }
-    `,
-  ],
+  styles: `
+    #change-aircraft {
+      margin-left: 15px;
+    }
+  `,
   imports: [RouterModule, SharedModule, AircraftTypeDescriptionPipe, ReturnToLinkComponent],
 })
 export class AircraftTypeFormComponent implements OnInit {

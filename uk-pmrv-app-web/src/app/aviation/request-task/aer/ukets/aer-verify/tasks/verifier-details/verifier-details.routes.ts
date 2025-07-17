@@ -18,7 +18,7 @@ export const AER_VERIFIER_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Verifier details summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Verifier details' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./verifier-details-summary/verifier-details-summary.component'),
       },

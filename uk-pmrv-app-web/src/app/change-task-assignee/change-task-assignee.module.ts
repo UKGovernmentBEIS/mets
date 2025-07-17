@@ -5,12 +5,8 @@ import { SharedModule } from '@shared/shared.module';
 import { ChangeTaskAssigneeRoutingModule } from './change-task-assignee-routing.module';
 import { ChangeAssigneeComponent } from './components';
 
-
 @NgModule({
   declarations: [ChangeAssigneeComponent],
-  imports: [
-    ChangeTaskAssigneeRoutingModule,
-    SharedModule,
-  ]
+  imports: [ChangeTaskAssigneeRoutingModule, SharedModule],
 })
-export class ChangeTaskAssigneeModule { }
+export class ChangeTaskAssigneeModule {}

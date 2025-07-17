@@ -1,0 +1,8 @@
+<h3 class="govuk-heading-m">Verifier comments</h3>
+<dl govuk-summary-list [hasBorders]="true">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Changes required by the operator</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">{{ changesRequired }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable"></dd>
+  </div>
+</dl>

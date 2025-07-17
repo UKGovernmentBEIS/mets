@@ -1,7 +1,6 @@
 <ng-container *ngIf="vm$ | async as vm">
   <div class="govuk-!-width-two-thirds">
     <govuk-panel title="Report sent for verification">Your reference is {{ vm.requestId }}</govuk-panel>
-    <span class="govuk-caption-l govuk-!-margin-bottom-8">We have sent you a confirmation email.</span>
     <h3 class="govuk-heading-m">What happens next</h3>
     <p class="govuk-body">
       Your report has been sent to {{ vm.assignedVerifier }}. You can recall your report at any time before

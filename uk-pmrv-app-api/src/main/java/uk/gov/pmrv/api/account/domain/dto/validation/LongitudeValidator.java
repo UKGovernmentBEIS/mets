@@ -1,12 +1,10 @@
 package uk.gov.pmrv.api.account.domain.dto.validation;
 
-import org.springframework.util.ObjectUtils;
-
-import uk.gov.pmrv.api.account.domain.dto.CoordinatesDTO;
-import uk.gov.pmrv.api.account.domain.enumeration.CardinalDirection;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.util.ObjectUtils;
+import uk.gov.pmrv.api.account.domain.dto.CoordinatesDTO;
+import uk.gov.pmrv.api.account.domain.enumeration.CardinalDirection;
 
 /**
  * The longitude validation.

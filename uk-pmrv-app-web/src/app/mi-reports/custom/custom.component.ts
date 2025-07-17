@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { BehaviorSubject, EMPTY, of, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, EMPTY, of, switchMap, take } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
@@ -25,7 +25,7 @@ import { manipulateResultsAndExportToExcel } from '../core/mi-report';
 export class CustomReportComponent implements OnInit {
   readonly isTemplateGenerationErrorDisplayed$ = new BehaviorSubject<boolean>(false);
   errorMessage$ = new BehaviorSubject<string>(null);
-  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));
+  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));
   domain: string;
 
   reportOptionsForm: FormGroup = this.fb.group({
@@ -38,11 +38,10 @@ export class CustomReportComponent implements OnInit {
     private readonly miReportsService: MiReportsService,
     readonly pendingRequest: PendingRequestService,
     private readonly authStore: AuthStore,
-    private readonly destroy$: DestroySubject,
   ) {}
 
   ngOnInit(): void {
-    this.currentDomain$.pipe(takeUntil(this.destroy$)).subscribe((domain) => {
+    this.currentDomain$.subscribe((domain) => {
       this.domain = domain === 'AVIATION' ? domain.toLowerCase() : '';
     });
     this.backlinkService.show(this.domain + '/mi-reports');

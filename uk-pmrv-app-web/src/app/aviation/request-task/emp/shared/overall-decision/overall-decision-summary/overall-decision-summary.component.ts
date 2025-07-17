@@ -12,13 +12,13 @@ import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-lin
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
 
-import { EmpIssuanceDetermination, ItemDTO } from 'pmrv-api';
+import { ItemDTO } from 'pmrv-api';
 
-import { getVariationScheduleItems } from '../../util/emp.util';
+import { EmpDetermination, getVariationScheduleItems } from '../../util/emp.util';
 import { OverallDecisionFormProvider } from '../overall-decision-form.provider';
 
 interface ViewModel {
-  data: EmpIssuanceDetermination;
+  data: EmpDetermination;
   pageHeader: string;
   isEditable: boolean;
   hideSubmit: boolean;
@@ -34,24 +34,26 @@ interface ViewModel {
 })
 export class OverallDecisionSummaryComponent {
   form = this.formProvider.form;
-  requestInfoType: ItemDTO['requestType'];
+  requestType: ItemDTO['requestType'];
 
   vm$: Observable<ViewModel> = combineLatest([
     this.store.pipe(requestTaskQuery.selectIsEditable),
     this.store.pipe(empQuery.selectReviewSectionsCompleted),
-    this.store.pipe(empQuery.selectVariationReviewDecisions),
-    this.store.pipe(empQuery.selectVariationDetailsReviewDecisions),
+    this.store.pipe(empQuery.selectReviewDecisions),
+    this.store.pipe(empQuery.selectVariationDetailsReviewDecision),
     this.store.pipe(requestTaskQuery.selectRequestInfo),
   ]).pipe(
-    map(([isEditable, sectionsCompleted, reviewDecision, varDetailsReviewDecision, requestInfo]) => {
-      this.requestInfoType = requestInfo.type;
+    map(([isEditable, reviewSectionsCompleted, reviewDecisions, variationDetailsReviewDecision, requestInfo]) => {
+      this.requestType = requestInfo.type;
 
       return {
         data: getSubtaskSummaryValues(this.formProvider.form),
         pageHeader: 'Check your answers',
         isEditable,
-        hideSubmit: !isEditable || (sectionsCompleted['decision'] && this.form.valid),
-        variationScheduleItems: getVariationScheduleItems(reviewDecision, varDetailsReviewDecision),
+        hideSubmit: !isEditable || (reviewSectionsCompleted['decision'] && this.form.valid),
+        variationScheduleItems: ['EMP_VARIATION_CORSIA', 'EMP_VARIATION_UK_ETS'].includes(this.requestType)
+          ? getVariationScheduleItems(reviewDecisions, variationDetailsReviewDecision)
+          : [],
       } as ViewModel;
     }),
   );
@@ -67,10 +69,10 @@ export class OverallDecisionSummaryComponent {
   onSubmit() {
     if (this.form?.valid) {
       this.store.empDelegate
-        .saveEmpOverallDecision(this.form.value as EmpIssuanceDetermination, true)
+        .saveEmpOverallDecision(this.form.value as any, true)
         .pipe(this.pendingRequestService.trackRequest())
         .subscribe(() =>
-          this.router.navigate(overallDecisionConfirmUrlMapper[this.requestInfoType], { relativeTo: this.route }),
+          this.router.navigate(overallDecisionConfirmUrlMapper[this.requestType], { relativeTo: this.route }),
         );
     }
   }

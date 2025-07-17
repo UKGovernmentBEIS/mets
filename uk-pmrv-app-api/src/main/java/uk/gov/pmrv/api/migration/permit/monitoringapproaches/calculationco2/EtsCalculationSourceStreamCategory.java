@@ -1,8 +1,9 @@
 package uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2;
 
-import java.util.Set;
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.Set;
 
 @Builder
 @Data

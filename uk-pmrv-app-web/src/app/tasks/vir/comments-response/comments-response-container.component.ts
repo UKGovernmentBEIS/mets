@@ -24,5 +24,8 @@ export class CommentsResponseContainerComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
   readonly daysRemaining$ = this.virService.daysRemaining$;
 
-  constructor(private readonly virService: VirService, private readonly router: Router) {}
+  constructor(
+    private readonly virService: VirService,
+    private readonly router: Router,
+  ) {}
 }

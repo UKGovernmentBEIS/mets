@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.reporting.domain.Aer;
-import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerReviewDecision;
 
 import java.util.EnumMap;
@@ -24,14 +23,12 @@ public class AerApplicationCompletedRequestActionPayload extends AerApplicationS
 
     private Aer verifiedAer;
 
-    private AerVerificationReport verificationReport;
-
     @Builder.Default
     private Map<AerReviewGroup, AerReviewDecision> reviewGroupDecisions = new EnumMap<>(AerReviewGroup.class);
 
     @Builder.Default
     private Map<UUID, String> reviewAttachments = new HashMap<>();
 
-    @Builder.Default
-    private Map<UUID, String> verificationAttachments = new HashMap<>();
+    private AerSkipReviewDecision aerSkipReviewDecision;
+
 }

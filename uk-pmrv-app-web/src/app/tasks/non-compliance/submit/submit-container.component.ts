@@ -23,5 +23,8 @@ export class SubmitContainerComponent {
     map(([isEditable, sectionStatus]) => isEditable || sectionStatus !== 'not started'),
   );
 
-  constructor(public readonly nonComplianceService: NonComplianceService, readonly route: ActivatedRoute) {}
+  constructor(
+    public readonly nonComplianceService: NonComplianceService,
+    readonly route: ActivatedRoute,
+  ) {}
 }

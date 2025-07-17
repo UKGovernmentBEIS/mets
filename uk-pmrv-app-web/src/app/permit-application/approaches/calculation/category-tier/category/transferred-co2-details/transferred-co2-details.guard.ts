@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { PermitApplicationState } from '../../../../../store/permit-application.
 import { PermitApplicationStore } from '../../../../../store/permit-application.store';
 
 @Injectable()
-export class TransferredCO2DetailsGuard implements CanActivate {
+export class TransferredCO2DetailsGuard {
   constructor(
     private readonly store: PermitApplicationStore<PermitApplicationState>,
     private readonly router: Router,

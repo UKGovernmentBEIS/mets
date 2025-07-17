@@ -1,0 +1,31 @@
+<ng-container *ngIf="payload$ | async as payload">
+  <app-page-heading>{{ aerTitle$ | async }}</app-page-heading>
+  <p class="govuk-caption-m">{{ (requestAction$ | async)?.creationDate | govukDate: 'datetime' }}</p>
+  <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible" />
+
+  <div>
+    <app-operator-submitted-template
+      [payload]="payload"
+      [additionalDocumentFiles]="additionalDocumentFiles$ | async"
+      [activityLevelReportFiles]="activityLevelReportFiles$ | async"
+      [sourcesColumns]="sourcesColumns"
+      [pointsColumns]="pointsColumns"
+    ></app-operator-submitted-template>
+  </div>
+
+  <ng-container *ngIf="payload?.verificationReport">
+    <div class="pg-break"></div>
+    <div>
+      <h2 class="govuk-heading-l">5. Verifier assessment</h2>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+      <app-verifier-assessment-report></app-verifier-assessment-report>
+    </div>
+
+    <div class="pg-break"></div>
+    <div>
+      <h2 class="govuk-heading-l">6. Verifier findings</h2>
+      <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+      <app-verifier-findings-report></app-verifier-findings-report>
+    </div>
+  </ng-container>
+</ng-container>

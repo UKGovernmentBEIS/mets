@@ -27,16 +27,15 @@ import { AviationAerEmissionsCalculationDTO } from 'pmrv-api';
     RequestTaskModule,
     TotalEmissionsStandardFuelsTableComponent,
     TotalEmissionsSchemeYearHeaderComponent,
-    TotalEmissionsSchemeYearHeaderComponent,
   ],
 })
 export class TotalEmissionsPageComponent {
   constructor(
-    @Inject(TASK_FORM_PROVIDER) private formProvider: TotalEmissionsFormProvider,
-    private router: Router,
+    @Inject(TASK_FORM_PROVIDER) private readonly formProvider: TotalEmissionsFormProvider,
+    private readonly router: Router,
     private readonly route: ActivatedRoute,
-    private requestTaskStore: RequestTaskStore,
-    private pendingRequestService: PendingRequestService,
+    private readonly requestTaskStore: RequestTaskStore,
+    private readonly pendingRequestService: PendingRequestService,
   ) {}
 
   form = this.formProvider.form;

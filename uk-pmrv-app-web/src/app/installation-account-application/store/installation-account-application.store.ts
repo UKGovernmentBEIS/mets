@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, map, mapTo, mergeMap, Observable, take } from 'rxjs';
+import { combineLatest, map, mergeMap, Observable, take } from 'rxjs';
 
 import { Store } from '@core/store/store';
 
@@ -73,7 +73,7 @@ export class InstallationAccountApplicationStore extends Store<InstallationAccou
       catchTaskReassignedBadRequest(() =>
         this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
       ),
-      mapTo(null),
+      map(() => null),
     );
   }
 

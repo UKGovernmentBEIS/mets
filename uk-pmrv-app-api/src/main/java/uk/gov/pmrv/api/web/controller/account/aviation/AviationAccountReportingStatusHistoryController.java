@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.Authorized;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingStatusHistoryCreationDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingStatusHistoryListResponse;
 import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusHistoryCreationService;
 import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusHistoryQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
 
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.FORBIDDEN;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
@@ -69,11 +69,11 @@ public class AviationAccountReportingStatusHistoryController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#accountId")
     public ResponseEntity<Void> submitReportingStatus(
-            PmrvUser pmrvUser,
+            AppUser appUser,
             @PathVariable("accountId") @Parameter(description = "The account id", required = true) Long accountId,
             @RequestBody @Valid @Parameter(description = "The aviation account reporting status submit dto", required = true)
             AviationAccountReportingStatusHistoryCreationDTO reportingStatusCreationDTO) {
-    	creationService.submitReportingStatus(accountId, reportingStatusCreationDTO, pmrvUser);
+    	creationService.submitReportingStatus(accountId, reportingStatusCreationDTO, appUser);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

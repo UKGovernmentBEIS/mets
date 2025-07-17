@@ -4,21 +4,25 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { ConfigStore } from '@core/config/config.store';
+import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SourceStreamDetailsTemplateComponent } from '@shared/components/source-streams/source-stream-details/source-streams-details-template.component';
 import { SharedModule } from '@shared/shared.module';
+import { mockClass } from '@testing';
 
 describe('SourceStreamDetailsTemplateComponent', () => {
   let component: SourceStreamDetailsTemplateComponent;
   let hostComponent: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
   let element: HTMLElement;
+  const destroySubject = mockClass(DestroySubject);
+  let configStore: ConfigStore;
 
   @Component({
     template: `
       <app-source-streams-details-template
         [form]="formGroup"
-        [isEditing]="isEditing"
-      ></app-source-streams-details-template>
+        [isEditing]="isEditing"></app-source-streams-details-template>
     `,
   })
   class TestComponent {
@@ -29,6 +33,7 @@ describe('SourceStreamDetailsTemplateComponent', () => {
       description: new FormControl(),
       otherDescriptionName: new FormControl(),
       type: new FormControl(),
+      otherTypeName: new FormControl(),
     });
     onSubmit: (form: FormGroup) => any | jest.SpyInstance<void, [FormGroup]>;
   }
@@ -37,7 +42,11 @@ describe('SourceStreamDetailsTemplateComponent', () => {
     await TestBed.configureTestingModule({
       imports: [SharedModule, RouterTestingModule],
       declarations: [TestComponent],
+      providers: [{ provide: DestroySubject, useValue: destroySubject }],
     }).compileComponents();
+
+    configStore = TestBed.inject(ConfigStore);
+    configStore.setState({ features: { 'co2-venting.permit-workflows.enabled': false } });
   });
 
   beforeEach(() => {
@@ -58,6 +67,6 @@ describe('SourceStreamDetailsTemplateComponent', () => {
     expect(element.querySelector('.govuk-heading-l')).toBeTruthy();
     expect(element.querySelector('button[govukbutton]')).toBeTruthy();
     expect(element.querySelector('button[type="submit"]')).toBeTruthy();
-    expect(element.querySelectorAll('input').length).toEqual(2);
+    expect(element.querySelectorAll('input').length).toEqual(3);
   });
 });

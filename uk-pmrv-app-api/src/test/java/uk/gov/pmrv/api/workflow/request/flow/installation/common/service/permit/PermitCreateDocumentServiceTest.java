@@ -17,7 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
@@ -44,7 +44,24 @@ class PermitCreateDocumentServiceTest {
 
     @Mock
     private DocumentFileGeneratorService documentFileGeneratorService;
+    
+    
+    @Test
+    void generateDocumentWithParams() {
 
+        final PermitContainer permitContainer = PermitContainer.builder().permitType(PermitType.GHGE).build();
+        final PermitEntityDto permitEntityDto = PermitEntityDto.builder().id("permitId").consolidationNumber(1).permitContainer(permitContainer).build();
+        final TemplateParams permitParams = TemplateParams.builder().build();
+
+        service.generateDocumentWithParams(permitEntityDto, permitParams);
+
+        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+            DocumentTemplateType.PERMIT,
+            permitParams,
+            "permitId v1.pdf"
+        );
+    }
+    
     @Test
     void generateDocument() {
 
@@ -84,7 +101,7 @@ class PermitCreateDocumentServiceTest {
         service.generateDocument(request, signatory, permitEntityDto, issuanceRequestMetadata, variationRequestInfoList);
 
         verify(permitParamsProvider, times(1)).constructTemplateParams(sourceData);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
             DocumentTemplateType.PERMIT,
             permitParams,
             "permitId v1.pdf"
@@ -131,7 +148,7 @@ class PermitCreateDocumentServiceTest {
         		.build();
         
         when(permitParamsProvider.constructTemplateParams(sourceData)).thenReturn(permitParams);
-        when(documentFileGeneratorService.generateFileDocumentAsync(DocumentTemplateType.PERMIT, permitParams, "permitId v1.pdf"))
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(DocumentTemplateType.PERMIT, permitParams, "permitId v1.pdf"))
         	.thenReturn(CompletableFuture.completedFuture(generatedDoc));
 
         CompletableFuture<FileInfoDTO> result = service.generateDocumentAsync(request, signatory, permitEntityDto, issuanceRequestMetadata, variationRequestInfoList);
@@ -139,7 +156,7 @@ class PermitCreateDocumentServiceTest {
         assertThat(result.get()).isEqualTo(generatedDoc);
         
         verify(permitParamsProvider, times(1)).constructTemplateParams(sourceData);
-        verify(documentFileGeneratorService, times(1)).generateFileDocumentAsync(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
             DocumentTemplateType.PERMIT,
             permitParams,
             "permitId v1.pdf"

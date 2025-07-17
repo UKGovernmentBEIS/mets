@@ -31,8 +31,7 @@ describe('OverallDecisionGroupComponent', () => {
     template: `
       <app-overall-decision-group
         [isEditable]="isEditable"
-        [overallAssessment]="overallAssessmentInfo"
-      ></app-overall-decision-group>
+        [overallAssessment]="overallAssessmentInfo"></app-overall-decision-group>
     `,
   })
   class TestComponent {

@@ -20,12 +20,12 @@ import { ManagementProceduresFormProvider } from '../management-procedures-form.
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementProceduresUpliftQuantityComponent implements OnInit, OnDestroy {
-  private backLinkService = inject(BackLinkService);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private pendingRequestService = inject(PendingRequestService);
-  private formProvider = inject<ManagementProceduresFormProvider>(TASK_FORM_PROVIDER);
-  private store = inject(RequestTaskStore);
+  private readonly backLinkService = inject(BackLinkService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly pendingRequestService = inject(PendingRequestService);
+  private readonly formProvider = inject<ManagementProceduresFormProvider>(TASK_FORM_PROVIDER);
+  private readonly store = inject(RequestTaskStore);
 
   form = this.formProvider.upliftQuantityCrossChecksCtrl;
 

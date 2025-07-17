@@ -25,9 +25,9 @@ import { PermitApplicationState } from '../../store/permit-application.state';
         Yes, recall the {{ permitType | permitRequestType }}
       </button>
     </div>
-    <a govukLink routerLink="..">{{
-      isVariation ? 'Return to: Permit variation review' : 'Return to: Permit determination'
-    }}</a>
+    <a govukLink routerLink="..">
+      {{ isVariation ? 'Return to: Permit variation review' : 'Return to: Permit determination' }}
+    </a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

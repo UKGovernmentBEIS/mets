@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { map, Observable, tap } from 'rxjs';
 
@@ -8,7 +8,7 @@ import { NotificationTemplateDTO, NotificationTemplatesService } from 'pmrv-api'
 @Injectable({
   providedIn: 'root',
 })
-export class EmailTemplateGuard implements CanActivate, Resolve<NotificationTemplateDTO> {
+export class EmailTemplateGuard {
   emailTemplate: NotificationTemplateDTO;
 
   constructor(private readonly notificationTemplatesService: NotificationTemplatesService) {}

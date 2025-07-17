@@ -4,7 +4,8 @@ import {
   ReviewDeterminationStatus,
   ReviewGroupDecisionStatus,
   ReviewGroupTasksAggregatorStatus,
-} from '../../../permit-application/review/types/review.permit.type';
+} from '@permit-application/review/types/review.permit.type';
+
 import { DecisionStatus, FollowUpDecisionStatus } from '../../../tasks/permit-notification/core/section-status';
 import { TaskItemStatus } from '../task-list.interface';
 import { statusMap } from './status.map';

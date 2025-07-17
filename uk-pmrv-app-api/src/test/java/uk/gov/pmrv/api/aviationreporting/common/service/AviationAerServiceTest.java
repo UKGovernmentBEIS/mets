@@ -65,7 +65,7 @@ class AviationAerServiceTest {
         AviationAerTotalReportableEmissions totalReportableEmissions = Mockito.mock(AviationAerTotalReportableEmissions.class);
         AviationAerSubmittedEmissions submittedEmissions = Mockito.mock(AviationAerSubmittedEmissions.class);
 
-        when(reportableEmissionsService.updateReportableEmissions(aerContainer, accountId)).thenReturn(totalReportableEmissions);
+        when(reportableEmissionsService.updateReportableEmissions(aerContainer, accountId, true)).thenReturn(totalReportableEmissions);
         when(testAerTradingSchemeValidatorService.getEmissionTradingScheme()).thenReturn(EmissionTradingScheme.UK_ETS_AVIATION);
         when(testAerTradingSchemeValidatorService.calculateSubmittedEmissions(aerContainer)).thenReturn(submittedEmissions);
 
@@ -84,7 +84,7 @@ class AviationAerServiceTest {
         aviationAerService.submitAer(params);
 
         //verify
-        verify(reportableEmissionsService, times(1)).updateReportableEmissions(aerContainer, accountId);
+        verify(reportableEmissionsService, times(1)).updateReportableEmissions(aerContainer, accountId, true);
         verify(testAerTradingSchemeValidatorService, times(1)).getEmissionTradingScheme();
         verify(testAerTradingSchemeValidatorService, times(1)).calculateSubmittedEmissions(aerContainer);
         verify(aerValidatorService, times(1)).validate(accountId, aerContainer);

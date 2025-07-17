@@ -1,10 +1,10 @@
 package uk.gov.pmrv.api.user.core.domain.model.core;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Set;
@@ -12,40 +12,40 @@ import java.util.Set;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PmrvUserTest {
+class AppUserTest {
 
     @Test
     void getAccounts() {
         Long accountId = 1L;
-        PmrvUser pmrvUser = createOperatorUser("user");
-        List<PmrvAuthority> authorities = List.of(
-            PmrvAuthority.builder().accountId(accountId).build()
+        AppUser appUser = createOperatorUser("user");
+        List<AppAuthority> authorities = List.of(
+            AppAuthority.builder().accountId(accountId).build()
         );
-        pmrvUser.setAuthorities(authorities);
+        appUser.setAuthorities(authorities);
 
-        Set<Long> accounts = pmrvUser.getAccounts();
+        Set<Long> accounts = appUser.getAccounts();
 
         assertThat(accounts).containsOnly(accountId);
     }
 
     @Test
     void getAccounts_no_authorities() {
-        PmrvUser pmrvUser = createOperatorUser("user");
+        AppUser appUser = createOperatorUser("user");
 
-        Set<Long> accounts = pmrvUser.getAccounts();
+        Set<Long> accounts = appUser.getAccounts();
 
         assertThat(accounts).isEmpty();
     }
 
     @Test
     void getAccounts_no_account_authorities() {
-        PmrvUser pmrvUser = createRegulatorUser("user");
-        List<PmrvAuthority> authorities = List.of(
-            PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()
+        AppUser appUser = createRegulatorUser("user");
+        List<AppAuthority> authorities = List.of(
+            AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()
         );
-        pmrvUser.setAuthorities(authorities);
+        appUser.setAuthorities(authorities);
 
-        Set<Long> accounts = pmrvUser.getAccounts();
+        Set<Long> accounts = appUser.getAccounts();
 
         assertThat(accounts).isEmpty();
     }
@@ -53,13 +53,13 @@ class PmrvUserTest {
     @Test
     void getVerificationBodyId() {
         Long vbId = 1L;
-        PmrvUser pmrvUser = createVerifierUser("user");
-        List<PmrvAuthority> authorities = List.of(
-            PmrvAuthority.builder().verificationBodyId(vbId).build()
+        AppUser appUser = createVerifierUser("user");
+        List<AppAuthority> authorities = List.of(
+            AppAuthority.builder().verificationBodyId(vbId).build()
         );
-        pmrvUser.setAuthorities(authorities);
+        appUser.setAuthorities(authorities);
 
-        Long optionalVbId = pmrvUser.getVerificationBodyId();
+        Long optionalVbId = appUser.getVerificationBodyId();
 
         assertThat(optionalVbId).isNotNull();
         assertEquals(vbId, optionalVbId);
@@ -67,22 +67,22 @@ class PmrvUserTest {
 
     @Test
     void getVerificationBodyId_no_authorities() {
-        PmrvUser pmrvUser = createVerifierUser("user");
+        AppUser appUser = createVerifierUser("user");
 
-        Long optionalVbId = pmrvUser.getVerificationBodyId();
+        Long optionalVbId = appUser.getVerificationBodyId();
 
         assertThat(optionalVbId).isNull();
     }
 
     @Test
     void getVerificationBodyId_no__verifier_authorities() {
-        PmrvUser pmrvUser = createVerifierUser("user");
-        List<PmrvAuthority> authorities = List.of(
-            PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()
+        AppUser appUser = createVerifierUser("user");
+        List<AppAuthority> authorities = List.of(
+            AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()
         );
-        pmrvUser.setAuthorities(authorities);
+        appUser.setAuthorities(authorities);
 
-        Long optionalVbId = pmrvUser.getVerificationBodyId();
+        Long optionalVbId = appUser.getVerificationBodyId();
 
         assertThat(optionalVbId).isNull();
     }
@@ -90,13 +90,13 @@ class PmrvUserTest {
     @Test
     void getCompetentAuthority() {
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.ENGLAND;
-        PmrvUser pmrvUser = createRegulatorUser("user");
-        List<PmrvAuthority> authorities = List.of(
-            PmrvAuthority.builder().competentAuthority(competentAuthority).build()
+        AppUser appUser = createRegulatorUser("user");
+        List<AppAuthority> authorities = List.of(
+            AppAuthority.builder().competentAuthority(competentAuthority).build()
         );
-        pmrvUser.setAuthorities(authorities);
+        appUser.setAuthorities(authorities);
 
-        CompetentAuthorityEnum optionalCompetentAuthority = pmrvUser.getCompetentAuthority();
+        CompetentAuthorityEnum optionalCompetentAuthority = appUser.getCompetentAuthority();
 
         assertThat(optionalCompetentAuthority).isNotNull();
         assertEquals(competentAuthority, optionalCompetentAuthority);
@@ -104,40 +104,40 @@ class PmrvUserTest {
 
     @Test
     void getCompetentAuthority_no_authorities() {
-        PmrvUser pmrvUser = createRegulatorUser("user");
+        AppUser appUser = createRegulatorUser("user");
 
-        CompetentAuthorityEnum optionalCompetentAuthority = pmrvUser.getCompetentAuthority();
+        CompetentAuthorityEnum optionalCompetentAuthority = appUser.getCompetentAuthority();
 
         assertThat(optionalCompetentAuthority).isNull();
     }
 
     @Test
     void getVerificationBodyId_no__regulator_authorities() {
-        PmrvUser pmrvUser = createVerifierUser("user");
-        List<PmrvAuthority> authorities = List.of(
-            PmrvAuthority.builder().accountId(1L).build()
+        AppUser appUser = createVerifierUser("user");
+        List<AppAuthority> authorities = List.of(
+            AppAuthority.builder().accountId(1L).build()
         );
-        pmrvUser.setAuthorities(authorities);
+        appUser.setAuthorities(authorities);
 
-        CompetentAuthorityEnum optionalCompetentAuthority = pmrvUser.getCompetentAuthority();
+        CompetentAuthorityEnum optionalCompetentAuthority = appUser.getCompetentAuthority();
 
         assertThat(optionalCompetentAuthority).isNull();
     }
 
-	private PmrvUser createRegulatorUser(String userId) {
-    	return createUser(userId, RoleType.REGULATOR);
+	private AppUser createRegulatorUser(String userId) {
+    	return createUser(userId, RoleTypeConstants.REGULATOR);
     }
 	
-	private PmrvUser createOperatorUser(String userId) {
-    	return createUser(userId, RoleType.OPERATOR);
+	private AppUser createOperatorUser(String userId) {
+    	return createUser(userId, RoleTypeConstants.OPERATOR);
     }
 
-    private PmrvUser createVerifierUser(String userId) {
-        return createUser(userId, RoleType.VERIFIER);
+    private AppUser createVerifierUser(String userId) {
+        return createUser(userId, RoleTypeConstants.VERIFIER);
     }
 	
-	private PmrvUser createUser(String userId, RoleType roleType) {
-    	return PmrvUser.builder()
+	private AppUser createUser(String userId, String roleType) {
+    	return AppUser.builder()
     				.userId(userId)
     				.email("email@email")
     				.firstName("fn")

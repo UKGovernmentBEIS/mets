@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.doal.service;
 
 import org.springframework.stereotype.Component;
-
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateGenerationContextActionType;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateWorkflowParamsProvider;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;

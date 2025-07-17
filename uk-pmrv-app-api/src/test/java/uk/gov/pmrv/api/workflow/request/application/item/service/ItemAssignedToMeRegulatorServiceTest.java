@@ -6,12 +6,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.application.authorization.RegulatorAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,7 +53,7 @@ class ItemAssignedToMeRegulatorServiceTest {
     @Test
     void getItemsAssignedToMe() {
         final AccountType accountType = AccountType.INSTALLATION;
-        PmrvUser pmrvUser = buildRegulatorUser("reg1Id", "reg1");
+        AppUser appUser = buildRegulatorUser("reg1Id", "reg1");
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes =
             Map.of(ENGLAND, Set.of(INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
 
@@ -68,29 +68,29 @@ class ItemAssignedToMeRegulatorServiceTest {
 
         // Mock
         when(regulatorAuthorityResourceAdapter
-            .getUserScopedRequestTaskTypesByAccountType(pmrvUser.getUserId(), accountType))
+            .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType))
             .thenReturn(scopedRequestTaskTypes);
-        doReturn(expectedItemPage).when(itemRegulatorRepository).findItems(pmrvUser.getUserId(), ItemAssignmentType.ME,
+        doReturn(expectedItemPage).when(itemRegulatorRepository).findItems(appUser.getUserId(), ItemAssignmentType.ME,
             scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
-        doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, pmrvUser);
+        doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, appUser);
 
         // Invoke
         ItemDTOResponse actualItemDTOResponse = itemService
-                .getItemsAssignedToMe(pmrvUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
 
         // Assert
         assertEquals(expectedItemDTOResponse, actualItemDTOResponse);
 
         verify(regulatorAuthorityResourceAdapter, times(1))
-            .getUserScopedRequestTaskTypesByAccountType(pmrvUser.getUserId(), accountType);
-        verify(itemRegulatorRepository, times(1)).findItems(pmrvUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
-        verify(itemResponseService, times(1)).toItemDTOResponse(expectedItemPage, accountType, pmrvUser);
+            .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType);
+        verify(itemRegulatorRepository, times(1)).findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        verify(itemResponseService, times(1)).toItemDTOResponse(expectedItemPage, accountType, appUser);
     }
 
     @Test
     void getItemsAssignedToMe_no_user_authorities() {
         final AccountType accountType = AccountType.INSTALLATION;
-        PmrvUser pmrvUser = buildRegulatorUser("reg1Id", "reg1");
+        AppUser appUser = buildRegulatorUser("reg1Id", "reg1");
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes = emptyMap();
         ItemPage expectedItemPage = ItemPage.builder()
                 .items(List.of())
@@ -102,40 +102,40 @@ class ItemAssignedToMeRegulatorServiceTest {
         // Mock
         doReturn(scopedRequestTaskTypes)
             .when(regulatorAuthorityResourceAdapter)
-            .getUserScopedRequestTaskTypesByAccountType(pmrvUser.getUserId(), accountType);
-        doReturn(expectedItemPage).when(itemRegulatorRepository).findItems(pmrvUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
-        doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, pmrvUser);
+            .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType);
+        doReturn(expectedItemPage).when(itemRegulatorRepository).findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, appUser);
 
         // Invoke
         ItemDTOResponse actualItemDTOResponse = itemService
-            .getItemsAssignedToMe(pmrvUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+            .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
 
         // Assert
         assertEquals(ItemDTOResponse.emptyItemDTOResponse(), actualItemDTOResponse);
 
         verify(regulatorAuthorityResourceAdapter, times(1))
-            .getUserScopedRequestTaskTypesByAccountType(pmrvUser.getUserId(), accountType);
+            .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType);
         verify(itemRegulatorRepository, times(1))
-                .findItems(pmrvUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
-        verify(itemResponseService, times(1)).toItemDTOResponse(expectedItemPage, accountType, pmrvUser);
+                .findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        verify(itemResponseService, times(1)).toItemDTOResponse(expectedItemPage, accountType, appUser);
     }
 
     @Test
     void getRoleType() {
-        assertEquals(RoleType.REGULATOR, itemService.getRoleType());
+        assertEquals(RoleTypeConstants.REGULATOR, itemService.getRoleType());
     }
 
-    private PmrvUser buildRegulatorUser(String userId, String username) {
-        PmrvAuthority pmrvAuthority = PmrvAuthority.builder()
+    private AppUser buildRegulatorUser(String userId, String username) {
+        AppAuthority pmrvAuthority = AppAuthority.builder()
                 .competentAuthority(ENGLAND)
                 .build();
 
-        return PmrvUser.builder()
+        return AppUser.builder()
                 .userId(userId)
                 .firstName(username)
                 .lastName(username)
                 .authorities(List.of(pmrvAuthority))
-                .roleType(RoleType.REGULATOR)
+                .roleType(RoleTypeConstants.REGULATOR)
                 .build();
     }
 }

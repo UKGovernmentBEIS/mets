@@ -6,8 +6,14 @@ import { ReviewWaitComponent } from '@tasks/air/review-wait/review-wait.componen
 const routes: Routes = [
   {
     path: '',
-    data: { pageTitle: 'Review annual improvement report' },
-    component: ReviewWaitComponent,
+    children: [
+      { path: '', data: { pageTitle: 'Review annual improvement report' }, component: ReviewWaitComponent },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+    ],
   },
 ];
 

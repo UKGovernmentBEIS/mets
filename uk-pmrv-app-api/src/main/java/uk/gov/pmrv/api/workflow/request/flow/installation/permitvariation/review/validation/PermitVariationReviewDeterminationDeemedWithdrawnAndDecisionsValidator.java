@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.validation;
 
 import org.springframework.stereotype.Service;
-
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.DeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.validation.PermitReviewDeterminationAndDecisionsValidator;

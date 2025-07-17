@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -54,7 +54,7 @@ export default class UncorrectedNonConformitiesPriorYearItemComponent implements
 
     this.formProvider.setFormValue({ ...this.formProvider.getFormValue(), priorYearIssues: data });
 
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setUncorrectedNonConformities({
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setUncorrectedNonConformities({
       ...this.formProvider.getFormValue(),
       uncorrectedNonConformities: data,
     });

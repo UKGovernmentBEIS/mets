@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -42,7 +42,7 @@ class PermitSurrenderApplySubmitActionHandlerTest {
     @Test
     void process() {
         RequestTaskActionEmptyPayload submitPayload = RequestTaskActionEmptyPayload.builder().payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD).build();
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         String processTaskId = "processTaskId";
         Request request = Request.builder().id("1").build();
         RequestTask requestTask = RequestTask.builder().id(1L).request(request).processTaskId(processTaskId).build();
@@ -50,11 +50,11 @@ class PermitSurrenderApplySubmitActionHandlerTest {
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
         
         //invoke
-        handler.process(requestTask.getId(), RequestTaskActionType.PERMIT_SURRENDER_SUBMIT_APPLICATION, pmrvUser, submitPayload);
+        handler.process(requestTask.getId(), RequestTaskActionType.PERMIT_SURRENDER_SUBMIT_APPLICATION, appUser, submitPayload);
 
         assertThat(request.getSubmissionDate()).isNotNull();
         verify(requestTaskService, times(1)).findTaskById(requestTask.getId());
-        verify(requestPermitSurrenderService, times(1)).applySubmitPayload(requestTask, pmrvUser);
+        verify(requestPermitSurrenderService, times(1)).applySubmitPayload(requestTask, appUser);
         verify(workflowService, times(1)).completeTask(processTaskId,
             Map.of(BpmnProcessConstants.SURRENDER_OUTCOME, PermitSurrenderOutcome.SUBMITTED));
     }

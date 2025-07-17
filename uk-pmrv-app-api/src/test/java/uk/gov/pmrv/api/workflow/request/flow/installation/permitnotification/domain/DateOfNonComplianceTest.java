@@ -11,9 +11,6 @@ import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.DateOfNonCompliance;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderReviewDeterminationGrant;
-
 public class DateOfNonComplianceTest {
 
     private Validator validator;

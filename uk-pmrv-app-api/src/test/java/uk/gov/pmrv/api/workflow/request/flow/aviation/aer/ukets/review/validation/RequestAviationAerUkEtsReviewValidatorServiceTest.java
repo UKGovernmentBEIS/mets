@@ -4,8 +4,9 @@ import org.junit.jupiter.api.Test;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEts;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.emissionsmonitoringapproach.AviationAerFuelMonitoringApproach;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.domain.AviationAerUkEtsApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.domain.AviationAerUkEtsReviewGroup;
@@ -275,7 +276,7 @@ class RequestAviationAerUkEtsReviewValidatorServiceTest {
         BusinessException be = assertThrows(BusinessException.class,
             () -> reviewValidatorService.validateAtLeastOneReviewGroupAmendsNeeded(reviewRequestTaskPayload));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AVIATION_AER_REVIEW);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AVIATION_AER_REVIEW);
     }
 
     @Test

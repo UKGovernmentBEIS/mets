@@ -1,15 +1,16 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.handler;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationFollowUpApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationFollowUpSaveApplicationAmendRequestTaskActionPayload;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class PermitNotificationFollowUpSaveApplicationAmendActionHandler impleme
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final PermitNotificationFollowUpSaveApplicationAmendRequestTaskActionPayload actionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);

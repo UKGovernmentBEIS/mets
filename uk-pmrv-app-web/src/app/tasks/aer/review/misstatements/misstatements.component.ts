@@ -13,8 +13,7 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Uncorrected misstatements">
       <app-misstatements-group [uncorrectedMisstatements]="uncorrectedMisstatements$ | async"></app-misstatements-group>
       <app-verification-review-group-decision
-        (notification)="notification = $event"
-      ></app-verification-review-group-decision>
+        (notification)="notification = $event"></app-verification-review-group-decision>
     </app-aer-task-review>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,5 +24,8 @@ export class MisstatementsComponent {
     map((payload) => payload.verificationReport.uncorrectedMisstatements),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

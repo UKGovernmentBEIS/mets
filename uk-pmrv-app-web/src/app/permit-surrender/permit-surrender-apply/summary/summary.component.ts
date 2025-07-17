@@ -7,7 +7,8 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-summary',
-  template: ` <div class="govuk-grid-row">
+  template: `
+    <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         <govuk-notification-banner *ngIf="notification" type="success">
           <h1 class="govuk-notification-banner__heading">Details updated</h1>
@@ -21,7 +22,8 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
         <app-permit-surrender-summary-details></app-permit-surrender-summary-details>
         <a govukLink routerLink="../..">Return to: Surrender your permit</a>
       </div>
-    </div>`,
+    </div>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })

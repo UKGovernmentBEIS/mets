@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -58,7 +58,7 @@ class VirReviewNotifyOperatorActionHandlerTest {
         final String processId = "processId";
         final String requestId = "VIR001";
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final DecisionNotification decisionNotification = DecisionNotification.builder()
                 .operators(Set.of("operator"))
                 .signatory("signatory")
@@ -90,15 +90,15 @@ class VirReviewNotifyOperatorActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(requestTaskId, RequestTaskActionType.VIR_NOTIFY_OPERATOR_FOR_DECISION, pmrvUser, actionPayload);
+        handler.process(requestTaskId, RequestTaskActionType.VIR_NOTIFY_OPERATOR_FOR_DECISION, appUser, actionPayload);
 
         // Verify
         verify(requestTaskService, times(1))
                 .findTaskById(requestTaskId);
         verify(virReviewNotifyOperatorValidator, times(1))
-                .validate(requestTask, actionPayload, pmrvUser);
+                .validate(requestTask, actionPayload, appUser);
         verify(virReviewService, times(1))
-                .submitReview(requestTask, decisionNotification, pmrvUser);
+                .submitReview(requestTask, decisionNotification, appUser);
         verify(workflowService, times(1))
                 .completeTask(processId, Map.of(BpmnProcessConstants.REQUEST_ID, requestId,
                         BpmnProcessConstants.REVIEW_OUTCOME, ReviewOutcome.COMPLETED,

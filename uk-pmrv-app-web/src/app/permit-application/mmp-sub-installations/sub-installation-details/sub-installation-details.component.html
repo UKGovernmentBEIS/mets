@@ -1,0 +1,64 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    [heading]="'Sub-installation details'"
+    [caption]="
+      (isEditing$ | async)
+        ? 'Edit a sub-installation with product benchmark'
+        : 'Add a sub-installation with product benchmark'
+    "
+    submitText="Continue">
+    <div class="govuk-!-width-two-thirds">
+      <h2 class="govuk-heading-m">Choose a product benchmark</h2>
+      <p class="govuk-caption-m">
+        Only one sub-installation can be chosen for each type of product. Similar products which are covered by the same
+        product benchmark in Annex I of the Free Allocation Regulation (FAR) are aggregated.
+      </p>
+      <div
+        formControlName="subInstallationType"
+        govuk-select
+        label="Please choose a product benchmark"
+        [isLabelHidden]="true"
+        widthClass="govuk-!-width-full">
+        <option [value]="''">Choose a product benchmark</option>
+        <option *ngFor="let productBenchmarkType of productBenchmarkTypes$ | async" [value]="productBenchmarkType">
+          {{ productBenchmarkType | subInstallationType }}
+        </option>
+      </div>
+
+      <h2 class="govuk-heading-m">Describe the system boundaries of this sub-installation</h2>
+      <div class="govuk-caption-m">
+        You must specify which:
+        <ul class="govuk-list govuk-list--bullet govuk-!-width-two-thirds govuk-caption-m">
+          <li>technical units are included</li>
+          <li>processes are carried out</li>
+          <li>input materials and fuels</li>
+          <li>products and outputs are attributed</li>
+          <li>
+            intermediate products covered by product benchmarks are imported or exported and how respective amounts are
+            quantified
+          </li>
+        </ul>
+      </div>
+
+      <p class="govuk-caption-m">
+        This is in line with the requirements of Annex VI, section 2(b) and Annex IV, section 1.6 and 3.1(l) of the FAR.
+      </p>
+      <p class="govuk-caption-m">
+        If this information is already covered in the description of the installation and its main processes, you can
+        include a brief reference to it in this description.
+      </p>
+      <div formControlName="description" govuk-textarea [maxLength]="10000" rows="10"></div>
+
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload supporting files (optional)"
+        formControlName="supportingFiles"
+        listTitle="Uploaded files"
+        hint="In complex cases a detailed flow diagram can be uploaded for this sub-installation."></app-multiple-file-input>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink [routerLink]="'../'">Return to: Sub-installations</a>
+</app-permit-task>

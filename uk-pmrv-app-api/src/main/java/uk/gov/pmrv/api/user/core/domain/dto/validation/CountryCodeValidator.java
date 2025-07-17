@@ -1,11 +1,9 @@
 package uk.gov.pmrv.api.user.core.domain.dto.validation;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
-
-import org.springframework.util.ObjectUtils;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.util.ObjectUtils;
 
 /**
  * The country code validation.

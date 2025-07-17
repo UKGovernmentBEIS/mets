@@ -1,0 +1,45 @@
+<app-base-task-container-component
+  [header]="title()"
+  [customContentTemplate]="customContentTemplate"
+  [expectedTaskType]="requestTaskType()"
+  [notification]="notification"
+  [daysRemaining]="daysRemaining()"></app-base-task-container-component>
+
+<ng-template #customContentTemplate>
+  <h2 class="govuk-heading-m govuk-!-margin-0">Baseline data report details</h2>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="baseline"
+      linkText="Baseline data report and details"
+      [status]="'baseline' | taskStatus | async"></li>
+  </ul>
+
+  <h2 class="govuk-heading-m govuk-!-margin-0">Verification opinion statement</h2>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="opinion-statement/summary"
+      linkText="BDR verification opinion statement"
+      [status]="'opinionStatement' | taskStatus | async"></li>
+  </ul>
+
+  <h2 class="govuk-heading-m govuk-!-margin-0">Overall decision</h2>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      link="overall-decision/summary"
+      linkText="Overall decision"
+      [status]="'overallDecision' | taskStatus | async"></li>
+  </ul>
+
+  <h2 class="govuk-heading-m govuk-!-margin-0">Send report</h2>
+  <ul app-task-item-list>
+    <li
+      app-task-item
+      [link]="sectionsCompleted() ? 'send-report' : null"
+      linkText="Send report"
+      [status]="'sendReport' | taskStatus | async"
+      [hasContent]="true"></li>
+  </ul>
+</ng-template>

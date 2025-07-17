@@ -72,7 +72,7 @@ describe('OperatorResponseItemComponent', () => {
       'Yes',
       'Change',
       'Uploaded files',
-      '100.png200.png300.png',
+      '100.png  200.png  300.png',
       'Change',
     ]);
   });

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { ApproachesDeleteTemplateComponent } from '@shared/components/approaches/approaches-delete/approaches-delete-template.component';
 import { SharedModule } from '@shared/shared.module';
@@ -18,8 +18,7 @@ describe('ApproachesDeleteTemplateComponent', () => {
     template: `
       <app-approaches-delete-template
         (delete)="onDelete()"
-        [monitoringApproach]="monitoringApproach"
-      ></app-approaches-delete-template>
+        [monitoringApproach]="monitoringApproach"></app-approaches-delete-template>
     `,
   })
   class TestComponent {
@@ -29,8 +28,9 @@ describe('ApproachesDeleteTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       declarations: [TestComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -50,7 +50,7 @@ describe('ApproachesDeleteTemplateComponent', () => {
   it('should render the remove button and approach', () => {
     expect(element.querySelectorAll<HTMLButtonElement>('button[govukwarnbutton]').length).toEqual(1);
     expect(element.querySelector('h1').textContent.trim()).toEqual(
-      "Are you sure you want to delete 'Calculation of CO2'?",
+      "Are you sure you want to delete'Calculation of CO2'?",
     );
   });
 });

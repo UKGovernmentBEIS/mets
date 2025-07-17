@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Resolve, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 
-import { OperatorUsersRegistrationService } from 'pmrv-api';
+import { OperatorInvitedUserInfoDTO, OperatorUsersRegistrationService } from 'pmrv-api';
 
 import { isBadRequest } from '../../error/business-errors';
 import { UserRegistrationStore } from '../store/user-registration.store';
 
-export type ClaimOperatorData = { accountInstallationName: string; roleCode: string };
+export type OperatorInvitationResultData = { accountName: string; roleCode: string };
 @Injectable({ providedIn: 'root' })
-export class ClaimOperatorGuard implements CanActivate, Resolve<ClaimOperatorData> {
-  private claimOperatorData: ClaimOperatorData;
+export class ClaimOperatorGuard {
+  private operatorInvitationResultData: OperatorInvitationResultData;
 
   constructor(
     private readonly router: Router,
@@ -26,16 +26,16 @@ export class ClaimOperatorGuard implements CanActivate, Resolve<ClaimOperatorDat
       ? this.operatorUsersRegistrationService.acceptOperatorInvitation({ token }).pipe(
           tap(
             (res) =>
-              (this.claimOperatorData = {
-                accountInstallationName: res.accountInstallationName,
+              (this.operatorInvitationResultData = {
+                accountName: res.accountName,
                 roleCode: res.roleCode,
               }),
           ),
           map((res) => {
-            const pendingInvitationStatuses = [
-              'PENDING_USER_REGISTRATION_NO_PASSWORD',
-              'PENDING_USER_REGISTRATION',
-              'PENDING_USER_ENABLE',
+            const pendingInvitationStatuses: OperatorInvitedUserInfoDTO['invitationStatus'][] = [
+              'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD',
+              'PENDING_TO_REGISTERED_SET_REGISTER_FORM',
+              'ALREADY_REGISTERED_SET_PASSWORD_ONLY',
             ];
 
             if (pendingInvitationStatuses.includes(res.invitationStatus)) {
@@ -52,11 +52,11 @@ export class ClaimOperatorGuard implements CanActivate, Resolve<ClaimOperatorDat
               });
 
               switch (res.invitationStatus) {
-                case 'PENDING_USER_REGISTRATION':
-                case 'PENDING_USER_REGISTRATION_NO_PASSWORD':
+                case 'PENDING_TO_REGISTERED_SET_REGISTER_FORM':
+                case 'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD':
                   this.router.navigate(['/registration/user/contact-details']);
                   break;
-                case 'PENDING_USER_ENABLE':
+                case 'ALREADY_REGISTERED_SET_PASSWORD_ONLY':
                   this.router.navigate(['/registration/user/choose-password']);
                   break;
               }
@@ -79,11 +79,11 @@ export class ClaimOperatorGuard implements CanActivate, Resolve<ClaimOperatorDat
           }),
         )
       : this.store.getState().token
-      ? of(true)
-      : of(this.router.parseUrl('landing'));
+        ? of(true)
+        : of(this.router.parseUrl('landing'));
   }
 
-  resolve(): ClaimOperatorData {
-    return this.claimOperatorData;
+  resolve(): OperatorInvitationResultData {
+    return this.operatorInvitationResultData;
   }
 }

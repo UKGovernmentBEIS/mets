@@ -1,0 +1,54 @@
+<app-inspection-task *ngIf="vm() as vm" [heading]="'Follow-up action ' + (actionId + 1)" returnToLink="../..">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" submitText="Continue" [hideSubmit]="!vm.isEditable">
+    <h2 class="govuk-heading-m">Regulator’s comment</h2>
+    <app-follow-up-item
+      [followUpAction]="vm.followUpAction"
+      [isEditable]="false"
+      [index]="vm.actionId"
+      [files]="vm.attachments"
+      [hideHeading]="true"></app-follow-up-item>
+
+    <div formControlName="completed" govuk-radio legend="Have you completed this action?" legendSize="medium">
+      <govuk-radio-option [value]="true" label="Yes">
+        <ng-container govukConditionalContent>
+          <h3 class="govuk-heading-s">Progress update</h3>
+          <div
+            formControlName="explanationTrue"
+            govuk-textarea
+            [maxLength]="10000"
+            hint="This will be sent to the regulator"></div>
+
+          <h3 class="govuk-heading-s">When did you complete this action?</h3>
+          <div formControlName="completionDate" govuk-date-input [isRequired]="true"></div>
+
+          <app-multiple-file-input
+            class="govuk-button-group govuk-!-margin-top-8"
+            [baseDownloadUrl]="getDownloadUrl()"
+            label="Upload files (optional)"
+            headerSize="m"
+            listTitle="Uploaded attachments"
+            formControlName="followUpActionResponseAttachmentsTrue"></app-multiple-file-input>
+        </ng-container>
+      </govuk-radio-option>
+
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <h3 class="govuk-heading-s">Tell us why you didn’t complete the action</h3>
+          <div
+            formControlName="explanationFalse"
+            govuk-textarea
+            [maxLength]="10000"
+            hint="This will be sent to the regulator"></div>
+
+          <app-multiple-file-input
+            class="govuk-button-group govuk-!-margin-top-8"
+            [baseDownloadUrl]="getDownloadUrl()"
+            label="Upload files (optional)"
+            headerSize="m"
+            listTitle="Uploaded attachments"
+            formControlName="followUpActionResponseAttachmentsFalse"></app-multiple-file-input>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-inspection-task>

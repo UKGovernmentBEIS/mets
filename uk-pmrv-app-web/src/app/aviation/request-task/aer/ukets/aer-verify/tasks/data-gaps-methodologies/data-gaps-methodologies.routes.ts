@@ -41,7 +41,7 @@ export const AER_DATA_GAPS_METHODOLOGIES_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Methodologies to close data gaps summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Methodologies to close data gaps' },
         loadComponent: () =>
           import('./methodologies-summary/methodologies-summary.component').then(
             (c) => c.MethodologiesSummaryComponent,

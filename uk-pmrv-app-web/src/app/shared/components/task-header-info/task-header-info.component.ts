@@ -4,11 +4,17 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'app-task-header-info',
   template: `
     <div class="govuk-!-margin-top-2">
-      <p class="govuk-body"><strong>Assigned to:</strong> {{ assignee }}</p>
+      <p class="govuk-body">
+        <strong>Assigned to:</strong>
+        {{ assignee }}
+      </p>
     </div>
     <ng-container *ngIf="daysRemaining !== undefined && daysRemaining !== null">
       <div class="govuk-!-margin-top-2">
-        <p class="govuk-body"><strong>Days Remaining:</strong> {{ daysRemaining | daysRemaining }}</p>
+        <p class="govuk-body">
+          <strong>Days Remaining:</strong>
+          {{ daysRemaining | daysRemaining }}
+        </p>
       </div>
     </ng-container>
   `,

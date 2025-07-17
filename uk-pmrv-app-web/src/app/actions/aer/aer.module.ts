@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 
+import { AerMarkAsNotRequiredDetailsComponent } from '@actions/aer/aer-mark-as-not-required/aer-mark-as-not-required-details/aer-mark-as-not-required-details.component';
 import { SharedModule } from '@shared/shared.module';
 
 import { ActionSharedModule } from '../shared/action-shared-module';
@@ -54,6 +55,7 @@ import { MeasurementTierComponent } from './submitted/measurement/measurement-ti
 import { MisstatementsComponent } from './submitted/misstatements/misstatements.component';
 import { MonitoringApproachesComponent } from './submitted/monitoring-approaches/monitoring-approaches.component';
 import { MonitoringPlanComponent } from './submitted/monitoring-plan/monitoring-plan.component';
+import { MonitoringPlanDetailsComponent } from './submitted/monitoring-plan/monitoring-plan-details/monitoring-plan-details.component';
 import { NaceCodesComponent } from './submitted/nace-codes/nace-codes.component';
 import { NonCompliancesComponent } from './submitted/non-compliances/non-compliances.component';
 import { NonConformitiesComponent } from './submitted/non-conformities/non-conformities.component';
@@ -67,6 +69,13 @@ import { SubmittedComponent } from './submitted/submitted.component';
 import { SummaryOfConditionsComponent } from './submitted/summary-of-conditions/summary-of-conditions.component';
 import { VerifiedActivityLevelReportComponent } from './submitted/verified-activity-level-report/verified-activity-level-report.component';
 import { VerifierDetailsComponent } from './submitted/verifier-details/verifier-details.component';
+import { OperatorSubmittedComponent } from './submitted/workflow-report/operator-submitted/operator-submitted.component';
+import { OperatorToVerifierComponent } from './submitted/workflow-report/operator-to-verifier/operator-to-verifier.component';
+import { MonitoringApproachesReportComponent } from './submitted/workflow-report/shared/monitoring-approaches-report/monitoring-approaches-report.component';
+import { OperatorSubmittedTemplateComponent } from './submitted/workflow-report/shared/operator-submitted-template/operator-submitted-template.component';
+import { VerifierAssessmentReportComponent } from './submitted/workflow-report/shared/verifier-assessment-report/verifier-assessment-report.component';
+import { VerifierFindingsReportComponent } from './submitted/workflow-report/shared/verifier-findings-report/verifier-findings-report.component';
+import { VerifierSubmittedComponent } from './submitted/workflow-report/verifier-submitted/verifier-submitted.component';
 
 @NgModule({
   declarations: [
@@ -75,6 +84,7 @@ import { VerifierDetailsComponent } from './submitted/verifier-details/verifier-
     AdditionalDocumentsComponent,
     AdditionalInfoComponent,
     AerComponent,
+    AerMarkAsNotRequiredDetailsComponent,
     ApproachesComponent,
     ApproachesTierComponent,
     CompletedComponent,
@@ -95,10 +105,15 @@ import { VerifierDetailsComponent } from './submitted/verifier-details/verifier-
     MeasurementTierComponent,
     MisstatementsComponent,
     MonitoringApproachesComponent,
+    MonitoringApproachesReportComponent,
     MonitoringPlanComponent,
+    MonitoringPlanDetailsComponent,
     NaceCodesComponent,
     NonCompliancesComponent,
     NonConformitiesComponent,
+    OperatorSubmittedComponent,
+    OperatorSubmittedTemplateComponent,
+    OperatorToVerifierComponent,
     OpinionStatementComponent,
     OverallDecisionComponent,
     PrtrComponent,
@@ -132,7 +147,10 @@ import { VerifierDetailsComponent } from './submitted/verifier-details/verifier-
     SubmittedComponent,
     SummaryOfConditionsComponent,
     VerifiedActivityLevelReportComponent,
+    VerifierAssessmentReportComponent,
     VerifierDetailsComponent,
+    VerifierFindingsReportComponent,
+    VerifierSubmittedComponent,
   ],
   imports: [ActionSharedModule, AerRoutingModule, SharedModule],
 })

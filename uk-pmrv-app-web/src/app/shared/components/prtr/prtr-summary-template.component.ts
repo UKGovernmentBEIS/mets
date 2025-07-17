@@ -23,7 +23,10 @@ export class PrtrSummaryTemplateComponent implements OnInit {
     { field: 'delete', header: '', widthClass: 'govuk-input--width-20' },
   ];
 
-  constructor(private readonly route: ActivatedRoute, private readonly router: Router) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.activityItems = this.activities?.activities?.map((item) => ({ activity: item })) ?? [];

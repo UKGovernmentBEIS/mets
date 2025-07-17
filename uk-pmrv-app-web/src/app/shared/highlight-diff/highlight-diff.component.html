@@ -6,4 +6,5 @@
   <ng-content select="[slot=previous]"></ng-content>
 </div>
 
+<!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -->
 <div class="highlight" (click)="onClickDiff($event)" (keydown)="onClickDiff($event)" [innerHtml]="diff"></div>

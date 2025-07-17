@@ -1,14 +1,13 @@
 package uk.gov.pmrv.api.permit.domain.monitoringapproaches.transferredco2andn2o;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.permit.domain.common.ProcedureForm;
 import uk.gov.pmrv.api.permit.domain.common.ProcedureOptionalForm;
-
-import jakarta.validation.Valid;
 
 @Data
 @Builder

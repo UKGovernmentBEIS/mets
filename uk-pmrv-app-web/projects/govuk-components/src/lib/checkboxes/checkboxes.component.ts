@@ -1,5 +1,5 @@
 import { AfterContentInit, Component, ContentChildren, Input, Optional, QueryList, Self } from '@angular/core';
-import { ControlContainer, ControlValueAccessor, NgControl,UntypedFormBuilder } from '@angular/forms';
+import { ControlContainer, ControlValueAccessor, NgControl, UntypedFormBuilder } from '@angular/forms';
 
 import { LegendSizeType } from '../fieldset';
 import { FormService } from '../form/form.service';

@@ -10,8 +10,7 @@ import { AerService } from '../../core/aer.service';
   selector: 'app-misstatements',
   template: `
     <app-action-task header="Uncorrected misstatements" [breadcrumb]="true">
-      <app-misstatements-group [uncorrectedMisstatements]="uncorrectedMisstatements$ | async">
-      </app-misstatements-group>
+      <app-misstatements-group [uncorrectedMisstatements]="uncorrectedMisstatements$ | async"></app-misstatements-group>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

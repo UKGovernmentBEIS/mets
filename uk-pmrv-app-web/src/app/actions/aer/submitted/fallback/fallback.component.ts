@@ -9,6 +9,7 @@ import { SourceStreamDescriptionPipe } from '@shared/pipes/source-streams-descri
 import { AerApplicationSubmittedRequestActionPayload, FallbackEmissions } from 'pmrv-api';
 
 import { AerService } from '../../core/aer.service';
+import { getFallbackSourceStreams } from './fallback';
 
 @Component({
   selector: 'app-fallback',
@@ -17,8 +18,7 @@ import { AerService } from '../../core/aer.service';
       <app-fallback-emissions-group
         [fallbackEmissions]="fallbackEmissions$ | async"
         [sourceStreams]="sourceStreams$ | async"
-        [documentFiles]="documentFiles$ | async"
-      ></app-fallback-emissions-group>
+        [documentFiles]="documentFiles$ | async"></app-fallback-emissions-group>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,15 +35,7 @@ export class FallbackComponent {
   );
   sourceStreams$ = combineLatest([this.aerPayload$, this.fallbackEmissions$]).pipe(
     first(),
-    map(([payload, fallbackEmissions]) => {
-      return fallbackEmissions?.sourceStreams.map((sourceStreamKey) => {
-        const aerSourceStream = payload.aer.sourceStreams.find((sourceStream) => sourceStream.id === sourceStreamKey);
-
-        return `${aerSourceStream.reference} ${this.sourceStreamDescriptionPipe.transform(
-          aerSourceStream.description,
-        )}`;
-      });
-    }),
+    map(([payload, fallbackEmissions]) => getFallbackSourceStreams(payload, fallbackEmissions)),
   );
 
   constructor(

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, map, Observable, shareReplay, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, shareReplay, Subject, switchMap, take, tap } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore, selectCurrentDomain } from '@core/store/auth';
@@ -45,14 +45,19 @@ export class RegulatorOutstandingRequestTasksComponent implements OnInit {
   currentPage$ = new BehaviorSubject<number>(1);
   generateReport$ = new Subject<void>();
 
-  reportOptionsForm: FormGroup = this.fb.group({
-    taskTypes: [],
-    regulators: [],
-  });
+  reportOptionsForm: FormGroup = this.fb.group(
+    {
+      taskTypes: [],
+      regulators: [],
+    },
+    {
+      updateOn: 'change',
+    },
+  );
 
   tableColumns: GovukTableColumn<OutstandingRequestTask>[];
   domain: string;
-  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));
+  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));
 
   constructor(
     private readonly fb: FormBuilder,
@@ -62,11 +67,10 @@ export class RegulatorOutstandingRequestTasksComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly authStore: AuthStore,
-    private readonly destroy$: DestroySubject,
   ) {}
 
   ngOnInit(): void {
-    this.currentDomain$.pipe(takeUntil(this.destroy$)).subscribe((domain) => {
+    this.currentDomain$.subscribe((domain) => {
       this.domain = domain === 'AVIATION' ? domain.toLowerCase() : '';
     });
     this.backlinkService.show(this.domain + '/mi-reports');

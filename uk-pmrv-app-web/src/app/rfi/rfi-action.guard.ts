@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
-import { mapTo, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
+
+import { IncorporateHeaderStore } from '@shared/incorporate-header/store/incorporate-header.store';
 
 import { RequestActionsService } from 'pmrv-api';
 
-import { IncorporateHeaderStore } from '../shared/incorporate-header/store/incorporate-header.store';
 import { RfiStore } from './store/rfi.store';
 
 @Injectable({ providedIn: 'root' })
-export class RfiActionGuard implements CanActivate {
+export class RfiActionGuard {
   constructor(
     private readonly store: RfiStore,
     private readonly requestActionsService: RequestActionsService,
@@ -39,7 +40,7 @@ export class RfiActionGuard implements CanActivate {
           accountId: requestAction.requestAccountId,
         });
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 

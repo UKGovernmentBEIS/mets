@@ -19,5 +19,8 @@ export class SummaryComponent {
     .getTask('monitoringApproaches')
     .pipe(map((task) => (task.FALLBACK as FallbackMonitoringApproach).annualUncertaintyAnalysis));
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly router: Router) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly router: Router,
+  ) {}
 }

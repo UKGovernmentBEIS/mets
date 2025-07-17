@@ -4,17 +4,14 @@ import { AbstractControl } from '@angular/forms';
 
 import { debounceTime, map, Observable } from 'rxjs';
 
-import { PasswordStrengthMeterService } from 'angular-password-strength-meter';
+import { zxcvbn } from '@zxcvbn-ts/core';
 import CryptoJS from 'crypto-js';
 
 import { MessageValidationErrors } from 'govuk-components';
 
 @Injectable()
 export class PasswordService {
-  constructor(
-    private readonly http: HttpClient,
-    private readonly passwordStrengthService: PasswordStrengthMeterService,
-  ) {}
+  constructor(private readonly http: HttpClient) {}
 
   isBlacklistedPassword(password: string): Observable<boolean> {
     const hexString = CryptoJS.SHA1(password).toString();
@@ -37,7 +34,7 @@ export class PasswordService {
   }
 
   strong(control: AbstractControl): MessageValidationErrors | null {
-    const strength = this.passwordStrengthService.score(control.value ?? '');
+    const strength = zxcvbn(control.value ?? '').score;
 
     return strength > 2 ? null : { weakPassword: 'Enter a strong password' };
   }

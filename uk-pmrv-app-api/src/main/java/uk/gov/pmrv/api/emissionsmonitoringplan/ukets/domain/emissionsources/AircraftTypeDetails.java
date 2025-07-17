@@ -6,28 +6,27 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import uk.gov.netz.api.common.validation.uniqueelements.UniqueField;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.emissionsources.AircraftTypeInfo;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.emissionsources.FuelConsumptionMeasuringMethod;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.enumeration.FuelType;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class AircraftTypeDetails {
 
     @NotNull
     @Valid
-    @EqualsAndHashCode.Include()
+    @UniqueField
     private AircraftTypeInfo aircraftTypeInfo;
 
     @Size(max = 10000)

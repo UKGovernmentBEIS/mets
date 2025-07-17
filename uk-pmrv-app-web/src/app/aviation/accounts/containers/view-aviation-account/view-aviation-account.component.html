@@ -35,7 +35,7 @@
       </ng-container>
     </ng-template>
     <ng-template *ngIf="vm.userRoleType !== 'VERIFIER'" govukTab id="users" label="Users and contacts">
-      <app-operators [currentTab]="currentTab$ | async"></app-operators>
+      <app-operators [currentTab$]="currentTab$"></app-operators>
     </ng-template>
   </govuk-tabs>
 </ng-container>

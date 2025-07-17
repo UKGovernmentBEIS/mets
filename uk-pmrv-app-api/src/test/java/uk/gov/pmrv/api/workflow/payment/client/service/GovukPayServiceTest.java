@@ -1,14 +1,6 @@
 package uk.gov.pmrv.api.workflow.payment.client.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,9 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.restclient.RestClientApi;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.payment.client.domain.CreatePaymentRequest;
 import uk.gov.pmrv.api.workflow.payment.client.domain.Link;
 import uk.gov.pmrv.api.workflow.payment.client.domain.PaymentLinks;
@@ -39,6 +32,14 @@ import uk.gov.pmrv.api.workflow.payment.domain.dto.PaymentCreateResult;
 import uk.gov.pmrv.api.workflow.payment.domain.dto.PaymentGetInfo;
 import uk.gov.pmrv.api.workflow.payment.domain.dto.PaymentGetResult;
 import uk.gov.pmrv.api.workflow.payment.domain.dto.PaymentStateInfo;
+
+import java.math.BigDecimal;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @Import(ObjectMapper.class)
@@ -62,7 +63,7 @@ class GovukPayServiceTest {
         String returnUrl = "payment_return_url";
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.WALES;
         String apiKey = "api_key";
-        String serviceUrl = "service_url";
+        String serviceUrl = "http://localhost:8080/";
         PaymentCreateInfo paymentCreateInfo = PaymentCreateInfo.builder()
             .amount(amount)
             .paymentRefNum(paymentRefNum)
@@ -70,8 +71,6 @@ class GovukPayServiceTest {
             .returnUrl(returnUrl)
             .competentAuthority(competentAuthority)
             .build();
-
-        String restPoint = serviceUrl + RestEndPointEnum.GOV_UK_CREATE_PAYMENT.getEndPoint();
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(apiKey);
@@ -82,6 +81,19 @@ class GovukPayServiceTest {
             .description(description)
             .returnUrl(returnUrl)
             .build();
+
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(serviceUrl)
+                        .path(RestEndPointEnum.GOV_UK_CREATE_PAYMENT.getPath())
+                        .build()
+                        .toUri())
+                .restEndPoint(RestEndPointEnum.GOV_UK_CREATE_PAYMENT)
+                .headers(httpHeaders)
+                .body(payment)
+                .restTemplate(restTemplate)
+                .build();
+
         String paymentId = "paymentId";
         String nextUrl = "payment_next_url";
         PaymentResponse paymentResponse = PaymentResponse.builder()
@@ -92,9 +104,9 @@ class GovukPayServiceTest {
         when(govukPayProperties.getApiKeys()).thenReturn(
             Map.of(competentAuthority.name().toLowerCase(), apiKey));
         when(govukPayProperties.getServiceUrl()).thenReturn(serviceUrl);
-        when(restTemplate.exchange(restPoint, HttpMethod.POST, new HttpEntity<>(payment, httpHeaders),
-            new ParameterizedTypeReference<PaymentResponse>() {}, new HashMap<>()))
-            .thenReturn(new ResponseEntity<PaymentResponse>(paymentResponse, HttpStatus.OK));
+        when(restTemplate.exchange(appRestApi.getUri(), HttpMethod.POST, new HttpEntity<>(payment, httpHeaders),
+                new ParameterizedTypeReference<PaymentResponse>() {}))
+                .thenReturn(new ResponseEntity<>(paymentResponse, HttpStatus.OK));
 
         PaymentCreateResult paymentCreateResult = govukPayService.createPayment(paymentCreateInfo);
 
@@ -112,7 +124,7 @@ class GovukPayServiceTest {
         String returnUrl = "payment_return_url";
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.WALES;
         String apiKey = "api_key";
-        String serviceUrl = "service_url";
+        String serviceUrl = "http://localhost:8080/";
         PaymentCreateInfo paymentCreateInfo = PaymentCreateInfo.builder()
             .amount(amount)
             .paymentRefNum(paymentRefNum)
@@ -120,8 +132,6 @@ class GovukPayServiceTest {
             .returnUrl(returnUrl)
             .competentAuthority(competentAuthority)
             .build();
-
-        String restPoint = serviceUrl + RestEndPointEnum.GOV_UK_CREATE_PAYMENT.getEndPoint();
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(apiKey);
@@ -133,12 +143,24 @@ class GovukPayServiceTest {
             .returnUrl(returnUrl)
             .build();
 
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(serviceUrl)
+                        .path(RestEndPointEnum.GOV_UK_CREATE_PAYMENT.getPath())
+                        .build()
+                        .toUri())
+                .restEndPoint(RestEndPointEnum.GOV_UK_CREATE_PAYMENT)
+                .headers(httpHeaders)
+                .body(payment)
+                .restTemplate(restTemplate)
+                .build();
+
         when(govukPayProperties.getApiKeys()).thenReturn(
             Map.of(competentAuthority.name().toLowerCase(), apiKey));
         when(govukPayProperties.getServiceUrl()).thenReturn(serviceUrl);
-        when(restTemplate.exchange(restPoint, HttpMethod.POST, new HttpEntity<>(payment, httpHeaders),
-            new ParameterizedTypeReference<PaymentResponse>() {}, new HashMap<>()))
-            .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+        when(restTemplate.exchange(appRestApi.getUri(), HttpMethod.POST, new HttpEntity<>(payment, httpHeaders),
+                new ParameterizedTypeReference<PaymentResponse>() {}))
+                .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
 
         BusinessException businessException = assertThrows(BusinessException.class,
             () -> govukPayService.createPayment(paymentCreateInfo));
@@ -155,15 +177,20 @@ class GovukPayServiceTest {
             .competentAuthority(competentAuthority)
             .build();
         String apiKey = "api_key";
-        String serviceUrl = "http://www.pmrv.org.uk";
+        String serviceUrl = "http://localhost:8080/";
 
-        String restPoint = UriComponentsBuilder
-            .fromHttpUrl(serviceUrl)
-            .path(RestEndPointEnum.GOV_UK_GET_PAYMENT.getEndPoint())
-            .buildAndExpand(paymentId)
-            .toString();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(apiKey);
+
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(serviceUrl)
+                        .path(RestEndPointEnum.GOV_UK_GET_PAYMENT.getPath())
+                        .build(paymentGetInfo.getPaymentId()))
+                .restEndPoint(RestEndPointEnum.GOV_UK_GET_PAYMENT)
+                .headers(httpHeaders)
+                .restTemplate(restTemplate)
+                .build();
 
         PaymentState paymentState = PaymentState.builder()
             .status("success")
@@ -177,9 +204,9 @@ class GovukPayServiceTest {
         when(govukPayProperties.getApiKeys()).thenReturn(
             Map.of(competentAuthority.name().toLowerCase(), apiKey));
         when(govukPayProperties.getServiceUrl()).thenReturn(serviceUrl);
-        when(restTemplate.exchange(restPoint, HttpMethod.GET, new HttpEntity<>(httpHeaders),
-            new ParameterizedTypeReference<PaymentResponse>() {}, new HashMap<>()))
-            .thenReturn(new ResponseEntity<PaymentResponse>(paymentResponse, HttpStatus.OK));
+        when(restTemplate.exchange(appRestApi.getUri(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<PaymentResponse>() {}))
+                .thenReturn(new ResponseEntity<>(paymentResponse, HttpStatus.OK));
 
         PaymentGetResult paymentResult = govukPayService.getPayment(paymentGetInfo);
 
@@ -199,23 +226,27 @@ class GovukPayServiceTest {
             .competentAuthority(competentAuthority)
             .build();
         String apiKey = "api_key";
-        String serviceUrl = "http://www.pmrv.org.uk";
+        String serviceUrl = "http://localhost:8080/";
 
-        String restPoint = UriComponentsBuilder
-            .fromHttpUrl(serviceUrl)
-            .path(RestEndPointEnum.GOV_UK_GET_PAYMENT.getEndPoint())
-            .buildAndExpand(paymentId)
-            .toString();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(apiKey);
 
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(serviceUrl)
+                        .path(RestEndPointEnum.GOV_UK_GET_PAYMENT.getPath())
+                        .build(paymentGetInfo.getPaymentId()))
+                .restEndPoint(RestEndPointEnum.GOV_UK_GET_PAYMENT)
+                .headers(httpHeaders)
+                .restTemplate(restTemplate)
+                .build();
 
         when(govukPayProperties.getApiKeys()).thenReturn(
             Map.of(competentAuthority.name().toLowerCase(), apiKey));
         when(govukPayProperties.getServiceUrl()).thenReturn(serviceUrl);
-        when(restTemplate.exchange(restPoint, HttpMethod.GET, new HttpEntity<>(httpHeaders),
-            new ParameterizedTypeReference<PaymentResponse>() {}, new HashMap<>()))
-            .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+        when(restTemplate.exchange(appRestApi.getUri(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<PaymentResponse>() {}))
+                .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
 
         BusinessException businessException = assertThrows(BusinessException.class,
             () -> govukPayService.getPayment(paymentGetInfo));

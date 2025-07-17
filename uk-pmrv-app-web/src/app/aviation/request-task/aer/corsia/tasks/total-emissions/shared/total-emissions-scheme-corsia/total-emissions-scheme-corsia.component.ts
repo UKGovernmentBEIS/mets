@@ -5,7 +5,8 @@ import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { RequestTaskModule } from '@aviation/request-task/request-task.module';
-import { RequestTaskStore } from '@aviation/request-task/store';
+import { AerCorsiaRequestTaskPayload, RequestTaskStore } from '@aviation/request-task/store';
+import { TotalEmissionAviationAerCorsia } from '@aviation/shared/components/aer-corsia/total-emission-aviation-aer-corsia.model';
 import { TotalEmissionsCorsiaAerodromePairsTableTemplateComponent } from '@aviation/shared/components/aer-corsia/total-emissions-corsia-aerodrome-pairs-table-template/total-emissions-corsia-aerodrome-pairs-table-template.component';
 import { TotalEmissionsCorsiaSchemeYearSummaryComponent } from '@aviation/shared/components/aer-corsia/total-emissions-corsia-scheme-year-summary';
 import { TotalEmissionsCorsiaStandardFuelsTableTemplateComponent } from '@aviation/shared/components/aer-corsia/total-emissions-corsia-standard-fuels-table-template/total-emissions-corsia-standard-fuels-table-template.component';
@@ -13,14 +14,13 @@ import { TotalEmissionsCorsiaStatePairsTableTemplateComponent } from '@aviation/
 import { SharedModule } from '@shared/shared.module';
 
 import {
-  AviationAerCorsia,
   AviationAerCorsiaApplicationSubmitRequestTaskPayload,
   AviationAerCorsiaTotalEmissions,
   AviationReportingService,
 } from 'pmrv-api';
 
 interface ViewModel {
-  aviationAerCorsia: AviationAerCorsia;
+  aviationAerCorsia: TotalEmissionAviationAerCorsia;
   corsiaRequestTaskPayload: AviationAerCorsiaApplicationSubmitRequestTaskPayload;
   totalEmissions: AviationAerCorsiaTotalEmissions;
 }
@@ -52,11 +52,15 @@ export class TotalEmissionsSchemeCorsiaComponent implements OnDestroy {
         .getTotalEmissionsCorsia({
           aggregatedEmissionsData: payload?.aer?.aggregatedEmissionsData,
           emissionsReductionClaim: payload?.aer.emissionsReductionClaim?.emissionsReductionClaimDetails?.totalEmissions,
+          year: payload?.reportingYear,
         })
         .pipe(
           map((totalEmissions) => {
             return {
-              aviationAerCorsia: payload?.aer,
+              aviationAerCorsia: {
+                ...(payload as AerCorsiaRequestTaskPayload).aer,
+                reportingYear: payload.reportingYear,
+              },
               corsiaRequestTaskPayload: payload,
               totalEmissions: totalEmissions,
             };

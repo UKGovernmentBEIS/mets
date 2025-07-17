@@ -1,0 +1,18 @@
+<ng-container
+  *ngIf="
+    ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async] as tier
+  ">
+  <app-permit-task
+    [notification]="notification"
+    [breadcrumb]="[
+      { text: 'MEASUREMENT_CO2' | monitoringApproachDescription, link: ['measurement'] },
+      { text: tier | emissionPointCategoryName | async, link: ['measurement', 'category-tier', index$ | async] },
+    ]">
+    <app-page-heading
+      caption="{{ 'MEASUREMENT_CO2' | monitoringApproachDescription }}, {{ tier | emissionPointCategoryName | async }}">
+      {{ statusKey | subtaskName }}
+    </app-page-heading>
+    <app-measurement-category-tier-subtasks-summary-template></app-measurement-category-tier-subtasks-summary-template>
+    <a govukLink routerLink="../..">Return to: {{ tier | emissionPointCategoryName | async }}</a>
+  </app-permit-task>
+</ng-container>

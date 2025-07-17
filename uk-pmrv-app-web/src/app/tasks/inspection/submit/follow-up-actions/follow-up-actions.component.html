@@ -1,0 +1,97 @@
+<ng-container *ngIf="inspectionPayload$ | async as payload">
+  <app-inspection-task [heading]="headerTitle" caption="Follow-up actions for the operator" returnToLink="../">
+    <dl
+      govuk-summary-list
+      [hasBorders]="true"
+      *ngIf="
+        inspectionPayload().installationInspection?.followUpActionsRequired !== null &&
+        inspectionPayload().installationInspection?.followUpActionsRequired !== undefined
+      ">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Do you want to add follow-up actions for the operator?</dt>
+        <dd govukSummaryListRowValue>
+          {{ inspectionPayload().installationInspection?.followUpActionsRequired ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable()">
+          <a govukLink [routerLink]="['../', 'follow-up-actions-guard-question']">Change</a>
+        </dd>
+      </div>
+
+      <div
+        govukSummaryListRow
+        *ngIf="
+          inspectionPayload().installationInspection?.followUpActionsRequired === false &&
+          inspectionPayload().installationInspection?.followUpActionsOmissionJustification
+        ">
+        <dt govukSummaryListRowKey>Justification</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ inspectionPayload().installationInspection?.followUpActionsOmissionJustification }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditable()">
+          <a govukLink [routerLink]="['../', 'follow-up-actions-guard-question']">Change</a>
+        </dd>
+      </div>
+    </dl>
+
+    <ng-container *ngIf="inspectionPayload().installationInspection?.followUpActionsOmissionFiles?.length">
+      <dl govuk-summary-list [hasBorders]="true">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Uploaded files</dt>
+          <dd govukSummaryListRowValue>
+            <app-summary-download-files [files]="files()"></app-summary-download-files>
+          </dd>
+          <dd govukSummaryListRowActions *ngIf="isEditable">
+            <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+          </dd>
+        </div>
+      </dl>
+    </ng-container>
+
+    <app-follow-up-item
+      *ngFor="let followUpItem of payload.installationInspection?.followUpActions; let i = index"
+      [followUpAction]="followUpItem"
+      [isEditable]="isEditable()"
+      [index]="i"
+      [files]="(attachments$ | async)?.[i] || []"
+      (removeFollowUpItem)="removeFollowUpItem($event)"></app-follow-up-item>
+
+    <div *ngIf="isEditable() && payload.installationInspection?.followUpActionsRequired !== false">
+      @if (payload.installationInspection?.followUpActions.length) {
+        <button govukSecondaryButton id="anotherActionBtn" type="button" (click)="addAnotherFollowUpAction()">
+          Add another item
+        </button>
+      } @else {
+        <div class="govuk-button-group">
+          <button govukButton id="newActionBtn" type="button" (click)="addAnotherFollowUpAction()">
+            Add a new entry
+          </button>
+        </div>
+      }
+    </div>
+    <div *ngIf="isEditable() && (showContinueButton$ | async) === true">
+      <button
+        appPendingButton
+        govukButton
+        type="button"
+        id="continueBtn"
+        [routerLink]="['../response-deadline']"
+        routerLinkActive="router-link-active">
+        Continue
+      </button>
+    </div>
+
+    <ng-content></ng-content>
+
+    <div *ngIf="isEditable() && (showConfirmButton$ | async) === true">
+      <button
+        appPendingButton
+        govukButton
+        id="confirmBtn"
+        type="button"
+        (click)="onConfirm()"
+        routerLinkActive="router-link-active">
+        Confirm and continue
+      </button>
+    </div>
+  </app-inspection-task>
+</ng-container>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, CanDeactivate, UrlTree } from '@angular/router';
+import { UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { AviationAccountFormProvider } from '../services';
 import { AviationAccountsStore } from '../store';
 
 @Injectable()
-export class CreateAviationAccountGuard implements CanActivate, CanDeactivate<unknown> {
+export class CreateAviationAccountGuard {
   constructor(
     private readonly authStore: AuthStore,
     private readonly store: AviationAccountsStore,

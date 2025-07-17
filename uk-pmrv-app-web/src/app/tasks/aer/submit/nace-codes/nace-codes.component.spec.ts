@@ -103,7 +103,7 @@ describe('NaceCodesComponent', () => {
     });
 
     it('should display selected nace code', () => {
-      expect(page.naceCodes[1]).toEqual(['Main activity', '2229 Manufacture of other plastic products', 'Delete']);
+      expect(page.naceCodes[1]).toEqual(['2229 Manufacture of other plastic products', 'Delete']);
     });
 
     it('should submit selected nace codes and navigate to summary page', () => {

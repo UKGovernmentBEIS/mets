@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { empQuery } from '@aviation/request-task/emp/shared/emp.selectors';
 import {
+  EmpDetermination,
   isAllCorsiaSectionsApproved,
   isAllSectionsApproved,
   isEvenOneCorsiaSectionRejected,
   isEvenOneSectionRejected,
+  variationOperatorLedReviewRequestTaskTypes,
 } from '@aviation/request-task/emp/shared/util/emp.util';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
@@ -20,7 +22,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
 
-import { EmpIssuanceDetermination, EmpVariationDetermination } from 'pmrv-api';
+import { RequestTaskDTO } from 'pmrv-api';
 
 import { empCorsiaQuery } from '../../emp-corsia.selectors';
 import { OverallDecisionFormProvider } from '../overall-decision-form.provider';
@@ -45,10 +47,10 @@ export class OverallDecisionActionComponent implements OnInit {
 
   isApprovedDisplayed$: Observable<boolean>;
   isRejectDisplayed$: Observable<boolean>;
+  showUnavailabeActionsTypes: Array<RequestTaskDTO['type']>;
 
   summaryIsPreviousPage = this.route.snapshot.queryParamMap.get('change') === 'true';
 
-  private determinationTypeStateValue: EmpIssuanceDetermination['type'] | EmpVariationDetermination['type'];
   private isCorsia = CorsiaRequestTypes.includes(this.store.getState().requestTaskItem.requestInfo.type);
 
   constructor(
@@ -63,47 +65,34 @@ export class OverallDecisionActionComponent implements OnInit {
     if (this.isCorsia) {
       this.isApprovedDisplayed$ = this.store.pipe(
         empCorsiaQuery.selectPayload,
-        tap((payload) => (this.determinationTypeStateValue = payload.determination.type)),
         map((payload) => isAllCorsiaSectionsApproved(payload, this.requestType)),
       );
 
       this.isRejectDisplayed$ = this.store.pipe(
         empCorsiaQuery.selectPayload,
-        tap((payload) => (this.determinationTypeStateValue = payload.determination.type)),
         map((payload) => isEvenOneCorsiaSectionRejected(payload)),
       );
     } else {
       this.isApprovedDisplayed$ = this.store.pipe(
         empQuery.selectPayload,
-        tap((payload) => (this.determinationTypeStateValue = payload.determination.type)),
         map((payload) => isAllSectionsApproved(payload, this.requestType)),
       );
 
       this.isRejectDisplayed$ = this.store.pipe(
         empQuery.selectPayload,
-        tap((payload) => (this.determinationTypeStateValue = payload.determination.type)),
         map((payload) => isEvenOneSectionRejected(payload)),
       );
     }
+
+    this.showUnavailabeActionsTypes = variationOperatorLedReviewRequestTaskTypes;
   }
 
-  onContinue(type: EmpIssuanceDetermination['type'] | EmpVariationDetermination['type']): void {
+  onContinue(type: EmpDetermination['type']): void {
     this.form.patchValue({ type });
 
-    const page =
-      this.summaryIsPreviousPage &&
-      (this.form.value.type === 'APPROVED' || this.form.value.type === 'REJECTED') &&
-      !!this.form.value.reason
-        ? 'summary'
-        : 'reason';
-
-    if (this.determinationTypeStateValue === type) {
-      this.router.navigate([page], { relativeTo: this.route });
-    } else {
-      this.store.empDelegate
-        .saveEmpOverallDecision(this.form.value as EmpIssuanceDetermination & EmpVariationDetermination, false)
-        .pipe(this.pendingRequestService.trackRequest())
-        .subscribe(() => this.router.navigate([page], { relativeTo: this.route }));
-    }
+    this.store.empDelegate
+      .saveEmpOverallDecision(this.form.value as EmpDetermination, false)
+      .pipe(this.pendingRequestService.trackRequest())
+      .subscribe(() => this.router.navigate(['reason'], { relativeTo: this.route }));
   }
 }

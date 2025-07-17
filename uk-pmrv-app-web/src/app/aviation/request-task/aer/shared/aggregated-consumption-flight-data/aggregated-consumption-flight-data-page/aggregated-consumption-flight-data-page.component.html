@@ -28,17 +28,23 @@
 >
   <div class="govuk-!-width-three-quarters">
     <p class="govuk-body">
-      Upload a comma-separated values (.csv) file of fuel consumption in tonnes per aerodrome pair, which you have
-      operated during the scheme year.
+      Upload a comma-separated values (.csv) file of fuel consumption in tonnes per aerodrome pair, for
+      <span *ngIf="(isCorsia$ | async) === true"> all international flights in scope of CORSIA </span>
+      <span *ngIf="(isCorsia$ | async) === false"> UK ETS flights </span>
+      that you have operated during the scheme year.
     </p>
-    <p class="govuk-body">
-      You can upload your own data by using the
-      <a class="govuk-link" href="#" rel="noreferrer noopener">aerodrome pair data template</a>, or if you qualify for
-      simplified reporting, upload the Eurocontrol aggregated emissions data file.
+    <p *ngIf="(isCorsia$ | async) === false" class="govuk-body">
+      You can upload your own data or if you qualify for simplified reporting, upload the Eurocontrol aggregated
+      emissions data file.
     </p>
-    <p class="govuk-body">
-      Your data must only include flights within the scope of UK ETS, as defined in Schedule 1 of the Order.
-    </p>
+    <p class="govuk-body">The name of the fuel used must match the format:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Jet kerosene (jet A1 or jet A)</li>
+      <li>Jet gasoline (jet B)</li>
+      <li>Aviation gasoline (AV gas)</li>
+      <li *ngIf="(isCorsia$ | async) === true">TS-1</li>
+      <li *ngIf="(isCorsia$ | async) === true">No.3 Jet fuel</li>
+    </ul>
   </div>
   <input type="file" (change)="onFileSelect($event)" style="display: none" #fileInput />
 

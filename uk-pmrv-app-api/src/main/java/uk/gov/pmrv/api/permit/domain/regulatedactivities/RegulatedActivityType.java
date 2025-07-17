@@ -6,11 +6,21 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum RegulatedActivityType {
+
+    //waste
+    WASTE(
+            RegulatedActivitySection.WASTE,
+            "Waste",
+            GreenHouseGasesCategory.CARBON_DIOXIDE),
     
     //combustion
     COMBUSTION(
             RegulatedActivitySection.COMBUSTION,
-            "Combustion", 
+            "Combustion",
+            GreenHouseGasesCategory.CARBON_DIOXIDE),
+    UPSTREAM_GHG_REMOVAL(
+            RegulatedActivitySection.COMBUSTION,
+            "Upstream GHG Removal ",
             GreenHouseGasesCategory.CARBON_DIOXIDE),
     
     //refining

@@ -1,5 +1,5 @@
 /* eslint-disable @angular-eslint/component-max-inline-declarations */
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { AfterContentChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -19,26 +19,29 @@ import { abbreviationsFormProvider } from './abbreviations-form.provider';
         (formSubmit)="onSubmit()"
         [form]="form"
         [isEditable]="store.isEditable$ | async"
-        caption="Additional information"
-      ></app-abbreviations-template>
+        caption="Additional information"></app-abbreviations-template>
       <app-list-return-link
         reviewGroupTitle="Additional information"
-        reviewGroupUrl="additional-info"
-      ></app-list-return-link>
+        reviewGroupUrl="additional-info"></app-list-return-link>
     </app-permit-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [abbreviationsFormProvider],
 })
-export class AbbreviationsComponent extends SectionComponent {
+export class AbbreviationsComponent extends SectionComponent implements AfterContentChecked {
   constructor(
     @Inject(PERMIT_TASK_FORM) readonly form: UntypedFormGroup,
     readonly store: PermitApplicationStore<PermitApplicationState>,
     readonly pendingRequest: PendingRequestService,
     readonly router: Router,
     readonly route: ActivatedRoute,
+    private cd: ChangeDetectorRef,
   ) {
     super(store, router, route);
+  }
+
+  ngAfterContentChecked(): void {
+    this.cd.detectChanges();
   }
 
   onSubmit(): void {

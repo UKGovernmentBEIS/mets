@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, pluck } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { Store } from '@core/store/store';
 import { AVIATION_REQUEST_TYPES } from '@shared/utils/request.utils';
@@ -18,11 +18,15 @@ export class RdeStore extends Store<RdeState> {
   }
 
   get isEditable$(): Observable<boolean> {
-    return this.pipe(pluck('isEditable'));
+    return this.pipe(map((state) => state?.isEditable));
   }
 
   get isPaymentRequired(): boolean {
     return true;
+  }
+
+  get isAssignableAndCapable$(): Observable<boolean> {
+    return this.pipe(map((state) => state?.userAssignCapable && state?.assignable));
   }
 
   getDownloadUrlFiles(files: string[]): { downloadUrl: string; fileName: string }[] {

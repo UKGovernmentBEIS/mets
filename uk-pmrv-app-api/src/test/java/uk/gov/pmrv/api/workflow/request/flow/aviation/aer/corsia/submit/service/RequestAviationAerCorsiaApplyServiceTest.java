@@ -3,6 +3,8 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.service
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.additionaldocuments.EmpAdditionalDocuments;
@@ -18,6 +21,7 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.Avi
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.service.AviationAerCorsiaSubmitRequestTaskSyncAerAttachmentsService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.domain.AviationAerCorsiaApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.domain.AviationAerCorsiaSaveApplicationRequestTaskActionPayload;
 
@@ -26,10 +30,12 @@ class RequestAviationAerCorsiaApplyServiceTest {
 
     @InjectMocks
     private RequestAviationAerCorsiaApplyService service;
+    
+    @Mock
+    private AviationAerCorsiaSubmitRequestTaskSyncAerAttachmentsService syncAerAttachmentsService;
 
     @Test
     void applySaveAction() {
-
         AviationAerCorsiaSaveApplicationRequestTaskActionPayload taskActionPayload =
             AviationAerCorsiaSaveApplicationRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.AVIATION_AER_CORSIA_SAVE_APPLICATION_PAYLOAD)
@@ -62,5 +68,7 @@ class RequestAviationAerCorsiaApplyServiceTest {
         assertThat(payloadSaved.getAerSectionsCompleted()).containsExactly(
             Map.entry(EmpAdditionalDocuments.class.getName(), List.of(true)));
         assertFalse(payloadSaved.isVerificationPerformed());
+        
+        verify(syncAerAttachmentsService, times(1)).sync(taskActionPayload.getReportingRequired(), requestTaskPayload);
     }
 }

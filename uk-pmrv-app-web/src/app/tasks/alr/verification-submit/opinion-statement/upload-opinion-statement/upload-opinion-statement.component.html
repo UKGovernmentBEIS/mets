@@ -1,0 +1,35 @@
+<app-alr-task-review>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Upload the activity level report verification opinion statement"
+    caption="ALR verification opinion statement"
+    [hideSubmit]="!isEditable()">
+    <div class="govuk-!-width-three-quarters">
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload the activity level report verification opinion statement"
+        headerSize="s"
+        formControlName="opinionStatementFiles"
+        listTitle="Uploaded files"></app-multiple-file-input>
+    </div>
+
+    <div class="govuk-!-width-three-quarters">
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload supporting files (optional)"
+        headerSize="s"
+        listTitle="Uploaded files"
+        formControlName="supportingFiles"></app-multiple-file-input>
+    </div>
+
+    <div
+      class="govuk-!-width-three-quarters"
+      formControlName="notes"
+      govuk-textarea
+      label="Notes"
+      labelSize="medium"
+      hint="This cannot be viewed by the operator"
+      [maxLength]="10000"></div>
+  </app-wizard-step>
+</app-alr-task-review>

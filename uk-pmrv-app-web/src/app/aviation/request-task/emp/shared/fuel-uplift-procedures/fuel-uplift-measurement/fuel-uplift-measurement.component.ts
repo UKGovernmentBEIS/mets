@@ -9,6 +9,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
 
+import { empQuery } from '../../emp.selectors';
 import { ProcedureFormPageHeaderDirective, ProcedureFormStepComponent } from '../../procedure-form-step';
 import { FuelUpliftProceduresFormProvider } from '../fuel-uplift-procedures-form.provider';
 
@@ -28,6 +29,8 @@ import { FuelUpliftProceduresFormProvider } from '../fuel-uplift-procedures-form
 })
 export class FuelUpliftMeasurementComponent {
   form = this.formProvider.blockHoursPerFlightCtrl;
+
+  isCorsia$ = this.store.pipe(empQuery.selectIsCorsia);
 
   constructor(
     @Inject(TASK_FORM_PROVIDER) private formProvider: FuelUpliftProceduresFormProvider,

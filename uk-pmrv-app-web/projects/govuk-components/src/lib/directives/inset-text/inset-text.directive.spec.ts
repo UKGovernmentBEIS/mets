@@ -9,7 +9,9 @@ describe('InsetTextDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    template: ` <div #insetText govukInsetText>Some text</div>`,
+    template: `
+      <div #insetText govukInsetText>Some text</div>
+    `,
   })
   class TestComponent {
     @ViewChild('insetText') insetTextDiv: ElementRef;

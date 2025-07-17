@@ -18,16 +18,21 @@ async function setup() {
 
 @Component({
   selector: 'app-mock-parent',
-  template: ` <form [formGroup]="form">
-    <app-aviation-aer-verification-review-decision-group-form></app-aviation-aer-verification-review-decision-group-form>
-  </form>`,
+  template: `
+    <form [formGroup]="form">
+      <app-aviation-aer-verification-review-decision-group-form></app-aviation-aer-verification-review-decision-group-form>
+    </form>
+  `,
   standalone: true,
   imports: [ReactiveFormsModule, AerVerificationReviewDecisionGroupFormComponent],
   providers: [AerVerificationReviewDecisionGroupFormProvider],
 })
 class MockParentComponent {
   form = this.formProvider.form;
-  constructor(readonly formProvider: AerVerificationReviewDecisionGroupFormProvider, public store: RequestTaskStore) {
+  constructor(
+    readonly formProvider: AerVerificationReviewDecisionGroupFormProvider,
+    public store: RequestTaskStore,
+  ) {
     store.setState({
       requestTaskItem: {
         requestTask: {

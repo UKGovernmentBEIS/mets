@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
-import { combineLatest, map, Observable, pluck } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
+
+import { BackLinkService } from '@shared/back-link/back-link.service';
 
 import { RequestActionUserInfo } from 'pmrv-api';
 
-import { BackLinkService } from '../../../shared/back-link/back-link.service';
 import { PermitSurrenderStore } from '../../store/permit-surrender.store';
 
 @Component({
@@ -19,13 +20,16 @@ export class CompletedComponent implements OnInit {
   }>;
   operators$: Observable<string[]>;
 
-  constructor(readonly store: PermitSurrenderStore, private readonly backLinkService: BackLinkService) {}
+  constructor(
+    readonly store: PermitSurrenderStore,
+    private readonly backLinkService: BackLinkService,
+  ) {}
 
   ngOnInit(): void {
     this.backLinkService.show();
 
-    this.signatory$ = this.store.pipe(pluck('cessationDecisionNotification', 'signatory'));
-    this.usersInfo$ = this.store.pipe(pluck('cessationDecisionNotificationUsersInfo')) as Observable<{
+    this.signatory$ = this.store.pipe(map((state) => state?.cessationDecisionNotification?.signatory));
+    this.usersInfo$ = this.store.pipe(map((state) => state?.cessationDecisionNotificationUsersInfo)) as Observable<{
       [key: string]: RequestActionUserInfo;
     }>;
     this.operators$ = combineLatest([this.usersInfo$, this.signatory$]).pipe(

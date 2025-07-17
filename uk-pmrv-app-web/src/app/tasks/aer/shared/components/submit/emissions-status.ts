@@ -42,12 +42,12 @@ export function getSourceStreamsStatus(taskKey, payload: AerApplicationSubmitReq
   return !payload.aerSectionsCompleted['emissionSources']?.[0] || !payload.aerSectionsCompleted['sourceStreams']?.[0]
     ? 'cannot start yet'
     : sourceStreamEmissionsStatuses.find((status) => status === 'needs review')
-    ? 'needs review'
-    : !!sourceStreamEmissionsStatuses.length && sourceStreamEmissionsStatuses.every((status) => status === 'complete')
-    ? 'complete'
-    : sourceStreamEmissionsStatuses.length
-    ? 'in progress'
-    : 'not started';
+      ? 'needs review'
+      : !!sourceStreamEmissionsStatuses.length && sourceStreamEmissionsStatuses.every((status) => status === 'complete')
+        ? 'complete'
+        : sourceStreamEmissionsStatuses.length
+          ? 'in progress'
+          : 'not started';
 }
 
 export function getCompletionStatus(taskKey, payload, index, status) {

@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,7 +9,30 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { RequestMetadata } from './requestMetadata';
+import { AerRequestMetadata } from './aerRequestMetadata';
+import { AirRequestMetadata } from './airRequestMetadata';
+import { ALRRequestMetaData } from './aLRRequestMetaData';
+import { AviationAerCorsia3YearPeriodOffsettingRequestMetadata } from './aviationAerCorsia3YearPeriodOffsettingRequestMetadata';
+import { AviationAerCorsiaAnnualOffsettingRequestMetadata } from './aviationAerCorsiaAnnualOffsettingRequestMetadata';
+import { AviationAerCorsiaRequestMetadata } from './aviationAerCorsiaRequestMetadata';
+import { AviationAerRequestMetadata } from './aviationAerRequestMetadata';
+import { AviationDoECorsiaRequestMetadata } from './aviationDoECorsiaRequestMetadata';
+import { AviationDreRequestMetadata } from './aviationDreRequestMetadata';
+import { AviationVirRequestMetadata } from './aviationVirRequestMetadata';
+import { BDRRequestMetadata } from './bDRRequestMetadata';
+import { DoalRequestMetadata } from './doalRequestMetadata';
+import { DreRequestMetadata } from './dreRequestMetadata';
+import { EmpBatchReissueRequestMetadata } from './empBatchReissueRequestMetadata';
+import { EmpVariationRequestMetadata } from './empVariationRequestMetadata';
+import { InstallationInspectionRequestMetadata } from './installationInspectionRequestMetadata';
+import { PermitBatchReissueRequestMetadata } from './permitBatchReissueRequestMetadata';
+import { PermitIssuanceRequestMetadata } from './permitIssuanceRequestMetadata';
+import { PermitNotificationRequestMetadata } from './permitNotificationRequestMetadata';
+import { PermitSurrenderRequestMetadata } from './permitSurrenderRequestMetadata';
+import { PermitTransferBRequestMetadata } from './permitTransferBRequestMetadata';
+import { PermitVariationRequestMetadata } from './permitVariationRequestMetadata';
+import { ReissueRequestMetadata } from './reissueRequestMetadata';
+import { VirRequestMetadata } from './virRequestMetadata';
 
 export interface RequestDetailsDTO {
   id?: string;
@@ -34,6 +57,11 @@ export interface RequestDetailsDTO {
     | 'DRE'
     | 'WITHHOLDING_OF_ALLOWANCES'
     | 'RETURN_OF_ALLOWANCES'
+    | 'INSTALLATION_ONSITE_INSPECTION'
+    | 'INSTALLATION_AUDIT'
+    | 'BDR'
+    | 'PERMANENT_CESSATION'
+    | 'ALR'
     | 'AVIATION_ACCOUNT_CLOSURE'
     | 'AVIATION_NON_COMPLIANCE'
     | 'EMP_BATCH_REISSUE'
@@ -45,7 +73,10 @@ export interface RequestDetailsDTO {
     | 'AVIATION_DRE_UKETS'
     | 'EMP_ISSUANCE_CORSIA'
     | 'EMP_VARIATION_CORSIA'
-    | 'AVIATION_AER_CORSIA';
+    | 'AVIATION_AER_CORSIA'
+    | 'AVIATION_DOE_CORSIA'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING';
   requestStatus?:
     | 'IN_PROGRESS'
     | 'COMPLETED'
@@ -55,7 +86,32 @@ export interface RequestDetailsDTO {
     | 'REJECTED'
     | 'CLOSED'
     | 'EXEMPT'
-    | 'MIGRATED';
+    | 'MIGRATED'
+    | 'NOT_REQUIRED';
   creationDate?: string;
-  requestMetadata?: RequestMetadata;
+  requestMetadata?:
+    | ALRRequestMetaData
+    | AerRequestMetadata
+    | AirRequestMetadata
+    | AviationAerCorsia3YearPeriodOffsettingRequestMetadata
+    | AviationAerCorsiaAnnualOffsettingRequestMetadata
+    | AviationAerCorsiaRequestMetadata
+    | AviationAerRequestMetadata
+    | AviationDoECorsiaRequestMetadata
+    | AviationDreRequestMetadata
+    | AviationVirRequestMetadata
+    | BDRRequestMetadata
+    | DoalRequestMetadata
+    | DreRequestMetadata
+    | EmpBatchReissueRequestMetadata
+    | EmpVariationRequestMetadata
+    | InstallationInspectionRequestMetadata
+    | PermitBatchReissueRequestMetadata
+    | PermitIssuanceRequestMetadata
+    | PermitNotificationRequestMetadata
+    | PermitSurrenderRequestMetadata
+    | PermitTransferBRequestMetadata
+    | PermitVariationRequestMetadata
+    | ReissueRequestMetadata
+    | VirRequestMetadata;
 }

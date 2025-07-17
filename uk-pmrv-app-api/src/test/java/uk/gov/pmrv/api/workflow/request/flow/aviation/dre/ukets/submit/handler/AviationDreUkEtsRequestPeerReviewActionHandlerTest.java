@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class AviationDreUkEtsRequestPeerReviewActionHandlerTest {
+class AviationDreUkEtsRequestPeerReviewActionHandlerTest {
 
     @InjectMocks
     private AviationDreUkEtsRequestPeerReviewActionHandler peerReviewActionHandler;
@@ -55,7 +55,7 @@ public class AviationDreUkEtsRequestPeerReviewActionHandlerTest {
         String peerReviewer = "peerReviewer";
         Long requestTaskId = 2L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.AVIATION_DRE_UKETS_REQUEST_PEER_REVIEW;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        AppUser appUser = AppUser.builder().userId("user").build();
 
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .payloadType(RequestTaskActionPayloadType.AVIATION_DRE_UKETS_REQUEST_PEER_REVIEW_PAYLOAD)
@@ -71,13 +71,13 @@ public class AviationDreUkEtsRequestPeerReviewActionHandlerTest {
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        peerReviewActionHandler.process(requestTaskId, requestTaskActionType,  pmrvUser, taskActionPayload);
+        peerReviewActionHandler.process(requestTaskId, requestTaskActionType,  appUser, taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-        verify(peerReviewerTaskAssignmentValidator, times(1)).validate(RequestTaskType.AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW, peerReviewer, pmrvUser);
+        verify(peerReviewerTaskAssignmentValidator, times(1)).validate(RequestTaskType.AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW, peerReviewer, appUser);
         verify(aviationDreUkEtsApplyService, times(1)).requestPeerReview(requestTask, peerReviewer);
         verify(requestService, times(1))
-            .addActionToRequest(request, null, RequestActionType.AVIATION_DRE_UKETS_PEER_REVIEW_REQUESTED, pmrvUser.getUserId());
+            .addActionToRequest(request, null, RequestActionType.AVIATION_DRE_UKETS_PEER_REVIEW_REQUESTED, appUser.getUserId());
 
         verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),

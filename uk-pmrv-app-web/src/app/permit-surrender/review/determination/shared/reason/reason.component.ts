@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, pluck, switchMap, switchMapTo } from 'rxjs';
+import { first, map, switchMap } from 'rxjs';
+
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { PendingRequest } from '@core/interfaces/pending-request.interface';
+import { BackLinkService } from '@shared/back-link/back-link.service';
 
 import { PermitSurrenderReviewDetermination } from 'pmrv-api';
 
-import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
-import { PendingRequest } from '../../../../../core/interfaces/pending-request.interface';
-import { BackLinkService } from '../../../../../shared/back-link/back-link.service';
 import { PERMIT_SURRENDER_TASK_FORM } from '../../../../core/permit-surrender-task-form.token';
 import { PermitSurrenderStore } from '../../../../store/permit-surrender.store';
 import { reasonFormProvider } from './reason-form.provider';
@@ -20,7 +21,7 @@ import { reasonFormProvider } from './reason-form.provider';
   providers: [reasonFormProvider],
 })
 export class ReasonComponent implements PendingRequest, OnInit {
-  determinationType$ = this.store.pipe(pluck('reviewDetermination', 'type'));
+  determinationType$ = this.store.pipe(map((state) => state?.reviewDetermination?.type));
 
   constructor(
     @Inject(PERMIT_SURRENDER_TASK_FORM) readonly form: UntypedFormGroup,
@@ -55,7 +56,7 @@ export class ReasonComponent implements PendingRequest, OnInit {
             ),
           ),
           this.pendingRequest.trackRequest(),
-          switchMapTo(this.determinationType$),
+          switchMap(() => this.determinationType$),
           first(),
         )
         .subscribe((type) => this.router.navigate([`../${this.nextStep(type)}`], { relativeTo: this.route }));

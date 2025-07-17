@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerStoreDelegate } from '@aviation/request-task/store/delegates';
+import { AerUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { RequestTaskFileService } from '@shared/services/request-task-file-service/request-task-file.service';
@@ -13,14 +13,14 @@ import { ActivatedRouteStub, mockClass } from '@testing';
 
 import { AviationAerSaf, TasksService } from 'pmrv-api';
 
-import { aerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
+import { AerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
 import { EmissionsReductionClaimSummaryComponent } from './emissions-reduction-claim-summary.component';
 
 describe('EmissionsReductionClaimSummaryComponent', () => {
   let component: EmissionsReductionClaimSummaryComponent;
   let fixture: ComponentFixture<EmissionsReductionClaimSummaryComponent>;
   let store: RequestTaskStore;
-  let formProvider: aerEmissionsReductionClaimFormProvider;
+  let formProvider: AerEmissionsReductionClaimFormProvider;
 
   const activatedRouteStub = new ActivatedRouteStub();
   const tasksService = mockClass(TasksService);
@@ -84,7 +84,7 @@ describe('EmissionsReductionClaimSummaryComponent', () => {
     await TestBed.configureTestingModule({
       imports: [EmissionsReductionClaimSummaryComponent, RouterTestingModule],
       providers: [
-        { provide: TASK_FORM_PROVIDER, useClass: aerEmissionsReductionClaimFormProvider },
+        { provide: TASK_FORM_PROVIDER, useClass: AerEmissionsReductionClaimFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: TasksService, useValue: tasksService },
@@ -103,7 +103,7 @@ describe('EmissionsReductionClaimSummaryComponent', () => {
         requestTask: {
           type: 'AVIATION_AER_UKETS_APPLICATION_SUBMIT',
           payload: {
-            ...AerStoreDelegate.INITIAL_STATE,
+            ...AerUkEtsStoreDelegate.INITIAL_STATE,
             saf: { ...dataForm },
 
             reviewSectionsCompleted: {},
@@ -114,7 +114,7 @@ describe('EmissionsReductionClaimSummaryComponent', () => {
         },
       },
     });
-    formProvider = TestBed.inject<aerEmissionsReductionClaimFormProvider>(TASK_FORM_PROVIDER);
+    formProvider = TestBed.inject<AerEmissionsReductionClaimFormProvider>(TASK_FORM_PROVIDER);
     formProvider.setFormValue(dataForm as AviationAerSaf);
     fixture = TestBed.createComponent(EmissionsReductionClaimSummaryComponent);
     component = fixture.componentInstance;

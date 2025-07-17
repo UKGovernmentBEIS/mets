@@ -33,6 +33,7 @@ import { OperatorDetailsFormProvider } from '../operator-details-form.provider';
 export class OperatorDetailsAirOperatingCertificateComponent extends BaseOperatorDetailsComponent implements OnInit {
   form = this.getform('airOperatingCertificate');
   issuingAuthorityOptions$ = this.getIssuingAuthorityOptions(this.issuingAuthorityService);
+
   constructor(
     public router: Router,
     public route: ActivatedRoute,
@@ -59,6 +60,7 @@ export class OperatorDetailsAirOperatingCertificateComponent extends BaseOperato
         certificateFiles: this.form.value.certificateFiles?.map((doc: FileUpload) => doc.uuid),
       },
     };
+
     this.submitForm('airOperatingCertificate', operatorDetails, 'operating-license');
   }
 }

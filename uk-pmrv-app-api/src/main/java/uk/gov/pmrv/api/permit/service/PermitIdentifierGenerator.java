@@ -2,12 +2,12 @@ package uk.gov.pmrv.api.permit.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.constants.StateConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDTO;
 import uk.gov.pmrv.api.account.installation.service.ApprovedInstallationAccountQueryService;
-import uk.gov.pmrv.api.common.constants.StateConstants;
-import uk.gov.pmrv.api.common.exception.BusinessException;
 
-import static uk.gov.pmrv.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 /**
  * Generates permit identifier according to specs:
@@ -20,7 +20,7 @@ public class PermitIdentifierGenerator {
 
     private final ApprovedInstallationAccountQueryService approvedInstallationAccountService;
 
-    String generate(Long accountId) {
+    public String generate(Long accountId) {
         InstallationAccountInfoDTO accountInfo = approvedInstallationAccountService.getApprovedAccountById(accountId)
             .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
 

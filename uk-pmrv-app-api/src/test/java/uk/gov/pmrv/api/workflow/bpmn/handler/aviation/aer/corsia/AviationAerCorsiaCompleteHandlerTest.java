@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.service.AviationAerCorsiaCompleteService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

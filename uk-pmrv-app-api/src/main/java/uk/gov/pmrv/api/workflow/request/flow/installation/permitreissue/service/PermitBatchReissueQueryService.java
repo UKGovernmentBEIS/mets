@@ -1,20 +1,19 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.service;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountIdAndNameAndLegalEntityNameDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.permit.domain.dto.PermitEntityAccountDTO;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueFilters;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitReissueAccountDetails;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

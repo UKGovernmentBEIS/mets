@@ -15,19 +15,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.account.domain.dto.AppointVerificationBodyDTO;
 import uk.gov.pmrv.api.account.service.AccountVerificationBodyAppointService;
 import uk.gov.pmrv.api.account.service.AccountVerificationBodyService;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyNameInfoDTO;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,15 +60,15 @@ class AccountVerificationBodyControllerTest {
     private AccountVerificationBodyAppointService accountVerificationBodyAppointService;
     
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
     
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
@@ -78,7 +78,7 @@ class AccountVerificationBodyControllerTest {
         controller = (AccountVerificationBodyController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .build();
 
@@ -109,12 +109,12 @@ class AccountVerificationBodyControllerTest {
     @Test
     void getVerificationBodyOfAccount_forbidden() throws Exception {
         Long accountId = 1L;
-        PmrvUser user = PmrvUser.builder().userId("userId").build();
+        AppUser user = AppUser.builder().userId("userId").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(user, "getVerificationBodyOfAccount", Long.toString(accountId));
+                .when(appUserAuthorizationService)
+                .authorize(user, "getVerificationBodyOfAccount", Long.toString(accountId), null, null);
         
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -150,12 +150,12 @@ class AccountVerificationBodyControllerTest {
     @Test
     void getActiveVerificationBodies_forbidden() throws Exception {
         Long accountId = 1L;
-        PmrvUser user = PmrvUser.builder().userId("userId").build();
+        AppUser user = AppUser.builder().userId("userId").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(user, "getActiveVerificationBodies", Long.toString(accountId));
+                .when(appUserAuthorizationService)
+                .authorize(user, "getActiveVerificationBodies", Long.toString(accountId), null, null);
         
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -168,7 +168,7 @@ class AccountVerificationBodyControllerTest {
     
     @Test
     void appointVerificationBodyToAccount() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         Long verificationBodyId = 1L;
         AppointVerificationBodyDTO vb = 
@@ -188,7 +188,7 @@ class AccountVerificationBodyControllerTest {
     
     @Test
     void appointVerificationBodyToAccount_forbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         Long verificationBodyId = 1L;
         AppointVerificationBodyDTO vb = 
@@ -196,8 +196,8 @@ class AccountVerificationBodyControllerTest {
         
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(user, "appointVerificationBodyToAccount", String.valueOf(accountId));
+                .when(appUserAuthorizationService)
+                .authorize(user, "appointVerificationBodyToAccount", String.valueOf(accountId), null, null);
         
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -212,7 +212,7 @@ class AccountVerificationBodyControllerTest {
 
     @Test
     void replaceVerificationBodyToAccount() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         Long verificationBodyId = 1L;
         AppointVerificationBodyDTO vb = AppointVerificationBodyDTO.builder().verificationBodyId(verificationBodyId).build();
@@ -232,15 +232,15 @@ class AccountVerificationBodyControllerTest {
 
     @Test
     void replaceVerificationBodyToAccount_forbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         Long verificationBodyId = 1L;
         AppointVerificationBodyDTO vb = AppointVerificationBodyDTO.builder().verificationBodyId(verificationBodyId).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(user, "replaceVerificationBodyToAccount", String.valueOf(accountId));
+                .when(appUserAuthorizationService)
+                .authorize(user, "replaceVerificationBodyToAccount", String.valueOf(accountId), null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders

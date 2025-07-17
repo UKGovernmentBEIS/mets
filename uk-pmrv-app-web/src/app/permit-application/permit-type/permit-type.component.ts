@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, switchMap } from 'rxjs';
+import { combineLatest, first, map, switchMap } from 'rxjs';
 
+import { ConfigStore } from '@core/config/config.store';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 
 import { PERMIT_TASK_FORM } from '../shared/permit-task-form.token';
@@ -18,12 +19,17 @@ import { permitTypeFormProvider } from './permit-type-form.provider';
   providers: [permitTypeFormProvider],
 })
 export class PermitTypeComponent {
+  readonly wastePermitEnabled$ = this.configStore
+    .asObservable()
+    .pipe(map((state) => state.features?.wastePermitEnabled));
+
   constructor(
     @Inject(PERMIT_TASK_FORM) readonly form: UntypedFormGroup,
     readonly store: PermitApplicationStore<PermitApplicationState>,
     readonly pendingRequest: PendingRequestService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly configStore: ConfigStore,
   ) {}
 
   onSubmit(): void {

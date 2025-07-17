@@ -10,7 +10,7 @@ import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.domain.abbreviations.Abbreviations;
@@ -44,7 +44,6 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActio
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationAmendsSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationAmendsSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationRequestVerificationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationSubmittedRequestActionPayload;
@@ -92,7 +91,7 @@ class RequestAerSubmitServiceTest {
     @Test
     void sendToRegulator() {
         final long accountId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
         final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
         final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
@@ -158,6 +157,8 @@ class RequestAerSubmitServiceTest {
                         .installationOperatorDetails(installationOperatorDetails)
                         .monitoringPlanVersions(monitoringPlanVersions)
                         .permitOriginatedData(permitOriginatedData)
+                        .verificationPerformed(true)
+                        .verificationReport(aerVerificationReport)
                         .build();
 
         AerSubmitParams params = AerSubmitParams.builder()
@@ -168,12 +169,12 @@ class RequestAerSubmitServiceTest {
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(request.getAccountId()))
                 .thenReturn(installationOperatorDetails);
 
-        when(aerService.updateReportableEmissions(params))
+        when(aerService.updateReportableEmissions(params, false))
                 .thenReturn(BigDecimal.valueOf(12345.1234));
 
 
         // Invoke
-        service.sendToRegulator(requestTask, pmrvUser);
+        service.sendToRegulator(requestTask, appUser);
 
         // Verify
         verify(aerValidatorService, times(1))
@@ -181,9 +182,9 @@ class RequestAerSubmitServiceTest {
         verify(installationOperatorDetailsQueryService, times(1))
                 .getInstallationOperatorDetails(request.getAccountId());
         verify(requestService, times(1)).addActionToRequest(requestTask.getRequest(),
-                actionPayload, RequestActionType.AER_APPLICATION_SUBMITTED, pmrvUser.getUserId());
+                actionPayload, RequestActionType.AER_APPLICATION_SUBMITTED, appUser.getUserId());
         verify(aerService, times(1))
-                .updateReportableEmissions(params);
+                .updateReportableEmissions(params, false);
         assertThat(request.getPayload()).isEqualTo(savedRequest.getPayload());
         assertEquals(BigDecimal.valueOf(12345.1234), ((AerRequestMetadata) request.getMetadata()).getEmissions());
         assertEquals(OverallAssessmentType.VERIFIED_AS_SATISFACTORY,
@@ -195,7 +196,7 @@ class RequestAerSubmitServiceTest {
     @Test
     void sendAmendsToRegulator() {
         final long accountId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
         final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
         final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
@@ -260,8 +261,8 @@ class RequestAerSubmitServiceTest {
                         .build())
                 .build();
 
-        AerApplicationAmendsSubmittedRequestActionPayload actionPayload =
-                AerApplicationAmendsSubmittedRequestActionPayload.builder()
+        AerApplicationSubmittedRequestActionPayload actionPayload =
+                AerApplicationSubmittedRequestActionPayload.builder()
                         .payloadType(RequestActionPayloadType.AER_APPLICATION_AMENDS_SUBMITTED_PAYLOAD)
                         .aer(container.getAer())
                         .installationOperatorDetails(installationOperatorDetails)
@@ -282,12 +283,12 @@ class RequestAerSubmitServiceTest {
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(request.getAccountId()))
                 .thenReturn(installationOperatorDetails);
 
-        when(aerService.updateReportableEmissions(params))
+        when(aerService.updateReportableEmissions(params, false))
                 .thenReturn(BigDecimal.valueOf(12345.1234));
 
 
         // Invoke
-        service.sendAmendsToRegulator(requestTask, requestTaskActionPayload, pmrvUser);
+        service.sendAmendsToRegulator(requestTask, requestTaskActionPayload, appUser);
 
         // Verify
         verify(aerValidatorService, times(1))
@@ -295,9 +296,9 @@ class RequestAerSubmitServiceTest {
         verify(installationOperatorDetailsQueryService, times(1))
                 .getInstallationOperatorDetails(request.getAccountId());
         verify(requestService, times(1)).addActionToRequest(requestTask.getRequest(),
-                actionPayload, RequestActionType.AER_APPLICATION_AMENDS_SUBMITTED, pmrvUser.getUserId());
+                actionPayload, RequestActionType.AER_APPLICATION_AMENDS_SUBMITTED, appUser.getUserId());
         verify(aerService, times(1))
-                .updateReportableEmissions(params);
+                .updateReportableEmissions(params, false);
         assertThat(request.getPayload()).isEqualTo(savedRequest.getPayload());
         assertEquals(BigDecimal.valueOf(12345.1234), ((AerRequestMetadata) request.getMetadata()).getEmissions());
         assertNull(((AerRequestMetadata) request.getMetadata()).getOverallAssessmentType());
@@ -315,7 +316,7 @@ class RequestAerSubmitServiceTest {
     @Test
     void sendToRegulator_verificationPerformed_false() {
         final long accountId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
         final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
         final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
@@ -379,6 +380,7 @@ class RequestAerSubmitServiceTest {
                         .installationOperatorDetails(installationOperatorDetails)
                         .monitoringPlanVersions(monitoringPlanVersions)
                         .permitOriginatedData(permitOriginatedData)
+                        .verificationPerformed(false)
                         .build();
 
         AerSubmitParams params = AerSubmitParams.builder()
@@ -389,11 +391,11 @@ class RequestAerSubmitServiceTest {
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(request.getAccountId()))
                 .thenReturn(installationOperatorDetails);
 
-        when(aerService.updateReportableEmissions(params))
+        when(aerService.updateReportableEmissions(params, false))
                 .thenReturn(BigDecimal.valueOf(12345.1234));
 
         // Invoke
-        service.sendToRegulator(requestTask, pmrvUser);
+        service.sendToRegulator(requestTask, appUser);
 
         // Verify
         verify(aerValidatorService, times(1))
@@ -401,9 +403,9 @@ class RequestAerSubmitServiceTest {
         verify(installationOperatorDetailsQueryService, times(1))
                 .getInstallationOperatorDetails(request.getAccountId());
         verify(requestService, times(1)).addActionToRequest(requestTask.getRequest(),
-                actionPayload, RequestActionType.AER_APPLICATION_SUBMITTED, pmrvUser.getUserId());
+                actionPayload, RequestActionType.AER_APPLICATION_SUBMITTED, appUser.getUserId());
         verify(aerService, times(1))
-                .updateReportableEmissions(params);
+                .updateReportableEmissions(params, false);
 
         assertThat(request.getPayload()).isEqualTo(savedRequest.getPayload());
         assertEquals(BigDecimal.valueOf(12345.1234), ((AerRequestMetadata) request.getMetadata()).getEmissions());
@@ -412,9 +414,112 @@ class RequestAerSubmitServiceTest {
     }
 
     @Test
+    void sendToRegulator_verificationPerformed_true() {
+        final long accountId = 1L;
+        final AppUser appUser = AppUser.builder().userId("userId").build();
+        final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
+        final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
+        final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
+        AerVerificationReport aerVerificationReport = AerVerificationReport.builder()
+                .verificationData(AerVerificationData.builder()
+                        .overallAssessment(VerifiedSatisfactoryOverallAssessment.builder().type(OverallAssessmentType.VERIFIED_AS_SATISFACTORY).build())
+                        .build())
+                .build();
+
+        Request request = Request.builder()
+                .accountId(accountId)
+                .payload(AerRequestPayload.builder()
+                        .payloadType(RequestPayloadType.AER_REQUEST_PAYLOAD)
+                        .verificationReport(aerVerificationReport)
+                        .build())
+                .metadata(AerRequestMetadata.builder()
+                        .type(RequestMetadataType.AER)
+                        .build())
+                .build();
+
+        final AerContainer container = AerContainer.builder()
+                .installationOperatorDetails(installationOperatorDetails)
+                .aer(Aer.builder().abbreviations(Abbreviations.builder().exist(false).build()).build())
+                .permitOriginatedData(permitOriginatedData)
+                .verificationReport(aerVerificationReport)
+                .build();
+
+        AerApplicationSubmitRequestTaskPayload taskPayload = AerApplicationSubmitRequestTaskPayload.builder()
+                .payloadType(RequestTaskPayloadType.AER_APPLICATION_SUBMIT_PAYLOAD)
+                .installationOperatorDetails(installationOperatorDetails)
+                .aer(container.getAer())
+                .permitType(PermitType.GHGE)
+                .permitOriginatedData(permitOriginatedData)
+                .monitoringPlanVersions(monitoringPlanVersions)
+                .verificationPerformed(true)
+                .build();
+
+        RequestTask requestTask = RequestTask.builder()
+                .request(request)
+                .payload(taskPayload)
+                .build();
+
+        Request savedRequest = Request.builder()
+                .accountId(1L)
+                .payload(AerRequestPayload.builder()
+                        .payloadType(RequestPayloadType.AER_REQUEST_PAYLOAD)
+                        .aer(container.getAer())
+                        .verificationPerformed(true)
+                        .monitoringPlanVersions(monitoringPlanVersions)
+                        .permitOriginatedData(permitOriginatedData)
+                        .verificationReport(aerVerificationReport)
+                        .build())
+                .metadata(AerRequestMetadata.builder()
+                        .type(RequestMetadataType.AER)
+                        .emissions(BigDecimal.valueOf(12345.1234))
+                        .build())
+                .build();
+
+        AerApplicationSubmittedRequestActionPayload actionPayload =
+                AerApplicationSubmittedRequestActionPayload.builder()
+                        .payloadType(RequestActionPayloadType.AER_APPLICATION_SUBMITTED_PAYLOAD)
+                        .aer(container.getAer())
+                        .installationOperatorDetails(installationOperatorDetails)
+                        .monitoringPlanVersions(monitoringPlanVersions)
+                        .permitOriginatedData(permitOriginatedData)
+                        .verificationPerformed(true)
+                        .verificationReport(aerVerificationReport)
+                        .build();
+
+        AerSubmitParams params = AerSubmitParams.builder()
+                .accountId(request.getAccountId())
+                .aerContainer(container)
+                .build();
+
+        when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(request.getAccountId()))
+                .thenReturn(installationOperatorDetails);
+
+        when(aerService.updateReportableEmissions(params, false))
+                .thenReturn(BigDecimal.valueOf(12345.1234));
+
+        // Invoke
+        service.sendToRegulator(requestTask, appUser);
+
+        // Verify
+        verify(aerValidatorService, times(1))
+                .validate(container, accountId);
+        verify(installationOperatorDetailsQueryService, times(1))
+                .getInstallationOperatorDetails(request.getAccountId());
+        verify(requestService, times(1)).addActionToRequest(requestTask.getRequest(),
+                actionPayload, RequestActionType.AER_APPLICATION_SUBMITTED, appUser.getUserId());
+        verify(aerService, times(1))
+                .updateReportableEmissions(params, false);
+
+        assertThat(request.getPayload()).isEqualTo(savedRequest.getPayload());
+        assertEquals(BigDecimal.valueOf(12345.1234), ((AerRequestMetadata) request.getMetadata()).getEmissions());
+        assertEquals(OverallAssessmentType.VERIFIED_AS_SATISFACTORY, ((AerRequestMetadata) request.getMetadata()).getOverallAssessmentType());
+
+    }
+
+    @Test
     void sendToVerifier() {
         final long accountId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
         final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
         final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
@@ -476,7 +581,7 @@ class RequestAerSubmitServiceTest {
                 .thenReturn(installationOperatorDetails);
 
         // Invoke
-        service.sendToVerifier(taskActionPayload, requestTask, pmrvUser);
+        service.sendToVerifier(taskActionPayload, requestTask, appUser);
 
         // Verify
         verify(aerValidatorService, times(1))
@@ -484,7 +589,7 @@ class RequestAerSubmitServiceTest {
         verify(installationOperatorDetailsQueryService, times(1))
                 .getInstallationOperatorDetails(request.getAccountId());
         verify(requestService, times(1)).addActionToRequest(requestTask.getRequest(),
-                actionPayload, RequestActionType.AER_APPLICATION_SENT_TO_VERIFIER, pmrvUser.getUserId());
+                actionPayload, RequestActionType.AER_APPLICATION_SENT_TO_VERIFIER, appUser.getUserId());
 
         assertThat(request.getPayload()).isEqualTo(savedRequest.getPayload());
     }
@@ -492,7 +597,7 @@ class RequestAerSubmitServiceTest {
     @Test
     void sendAmendsToVerifier() {
         final long accountId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
         final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
         final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
@@ -555,8 +660,8 @@ class RequestAerSubmitServiceTest {
                         .build())
                 .build();
 
-        AerApplicationAmendsSubmittedRequestActionPayload actionPayload =
-                AerApplicationAmendsSubmittedRequestActionPayload.builder()
+        AerApplicationSubmittedRequestActionPayload actionPayload =
+                AerApplicationSubmittedRequestActionPayload.builder()
                         .payloadType(RequestActionPayloadType.AER_APPLICATION_AMENDS_SUBMITTED_PAYLOAD)
                         .aer(container.getAer())
                         .installationOperatorDetails(installationOperatorDetails)
@@ -568,7 +673,7 @@ class RequestAerSubmitServiceTest {
                 .thenReturn(installationOperatorDetails);
 
         // Invoke
-        service.sendAmendsToVerifier(taskActionPayload, requestTask, pmrvUser);
+        service.sendAmendsToVerifier(taskActionPayload, requestTask, appUser);
 
         // Verify
         verify(aerValidatorService, times(1))
@@ -576,14 +681,14 @@ class RequestAerSubmitServiceTest {
         verify(installationOperatorDetailsQueryService, times(1))
                 .getInstallationOperatorDetails(request.getAccountId());
         verify(requestService, times(1)).addActionToRequest(requestTask.getRequest(),
-                actionPayload, RequestActionType.AER_APPLICATION_AMENDS_SENT_TO_VERIFIER, pmrvUser.getUserId());
+                actionPayload, RequestActionType.AER_APPLICATION_AMENDS_SENT_TO_VERIFIER, appUser.getUserId());
 
         assertThat(request.getPayload()).isEqualTo(savedRequest.getPayload());
     }
 
     @Test
     void sendToOperator() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
         final List<MonitoringPlanVersion> monitoringPlanVersions = getMonitoringPlanVersions();
         final PermitOriginatedData permitOriginatedData = getPermitOriginatedData();
@@ -642,7 +747,7 @@ class RequestAerSubmitServiceTest {
                 .build();
 
         // Invoke
-        service.sendToOperator(requestTask, pmrvUser);
+        service.sendToOperator(requestTask, appUser);
 
         // Verify
         verify(aerValidatorService, times(1))
@@ -650,7 +755,7 @@ class RequestAerSubmitServiceTest {
         verify(installationOperatorDetailsQueryService, times(1))
                 .getInstallationOperatorDetails(request.getAccountId());
         verify(requestService, times(1)).addActionToRequest(requestTask.getRequest(),
-                actionPayload, RequestActionType.AER_APPLICATION_VERIFICATION_SUBMITTED, pmrvUser.getUserId());
+                actionPayload, RequestActionType.AER_APPLICATION_VERIFICATION_SUBMITTED, appUser.getUserId());
 
         assertThat(request.getPayload()).isEqualTo(savedRequest.getPayload());
     }

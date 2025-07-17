@@ -4,5 +4,6 @@ public enum DeterminationType {
 
     GRANTED,
     REJECTED,
+    COMPLETED,
     DEEMED_WITHDRAWN
 }

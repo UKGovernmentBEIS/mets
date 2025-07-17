@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.Authorized;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountUpdateDTO;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountUpdateService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
 
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.FORBIDDEN;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
@@ -49,7 +49,7 @@ public class AviationAccountUpdateController {
     public ResponseEntity<Void> updateAviationAccount(
             @PathVariable("id") @Parameter(description = "The account id", required = true) Long accountId,
             @RequestBody @Valid @Parameter(description = "The aviation account fields", required = true) AviationAccountUpdateDTO accountUpdateDTO,
-            PmrvUser user) {
+            AppUser user) {
         aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

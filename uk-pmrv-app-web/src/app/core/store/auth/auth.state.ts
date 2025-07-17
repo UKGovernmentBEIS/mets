@@ -1,6 +1,6 @@
 import { KeycloakProfile } from 'keycloak-js';
 
-import { ApplicationUserDTO, TermsDTO, UserStateDTO } from 'pmrv-api';
+import { UserDTO, UserStateDTO, UserTermsVersionDTO } from 'pmrv-api';
 
 export type AccountType = 'INSTALLATION' | 'AVIATION';
 export type LoginStatus = UserStateDTO['domainsLoginStatuses'][keyof UserStateDTO['domainsLoginStatuses']];
@@ -14,10 +14,10 @@ export interface UserState extends UserStateDTO {
 }
 
 export interface AuthState {
-  user: ApplicationUserDTO;
+  user: UserDTO;
   userProfile: KeycloakProfile;
   userState: UserState;
-  terms: TermsDTO;
+  userTerms: UserTermsVersionDTO;
   isLoggedIn: boolean;
   currentDomain: UserState['lastLoginDomain'];
   switchingDomain: UserState['lastLoginDomain'];
@@ -27,7 +27,7 @@ export const initialState: AuthState = {
   user: null,
   userProfile: null,
   userState: null,
-  terms: null,
+  userTerms: null,
   isLoggedIn: null,
   currentDomain: null,
   switchingDomain: null,

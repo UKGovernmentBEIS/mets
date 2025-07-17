@@ -6,7 +6,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { LegalEntitiesService } from 'pmrv-api';
 
-import { LEGAL_ENTITY_FORM, legalEntityFormFactory } from '../factories/legal-entity-form.factory';
+import {
+  LEGAL_ENTITY_FORM_REG,
+  legalEntityFormRegFactory,
+} from '../factories/legal-entity/legal-entity-form-reg.factory';
 import { InstallationAccountApplicationStore } from '../store/installation-account-application.store';
 import { LegalEntityDetailsGuard } from './legal-entity-details.guard';
 
@@ -26,13 +29,13 @@ describe('LegalEntityDetailsGuard', () => {
         InstallationAccountApplicationStore,
         LegalEntitiesService,
         LegalEntityDetailsGuard,
-        legalEntityFormFactory,
+        legalEntityFormRegFactory,
         UntypedFormBuilder,
       ],
     });
     router = TestBed.inject(Router);
     guard = TestBed.inject(LegalEntityDetailsGuard);
-    form = TestBed.inject(LEGAL_ENTITY_FORM);
+    form = TestBed.inject(LEGAL_ENTITY_FORM_REG);
   });
 
   afterEach(fakeAsync(() => flush()));

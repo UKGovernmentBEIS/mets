@@ -16,7 +16,7 @@ import uk.gov.pmrv.api.account.aviation.transform.AviationAccountMapper;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;

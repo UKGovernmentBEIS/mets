@@ -8,7 +8,7 @@ import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-lin
 import { BackLinkService } from '@shared/back-link/back-link.service';
 import { SharedModule } from '@shared/shared.module';
 
-import { aerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
+import { AerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
 
 @Component({
   selector: 'app-emissions-reduction-claim-list',
@@ -34,7 +34,7 @@ export class EmissionsReductionClaimListComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private backLinkService: BackLinkService,
-    @Inject(TASK_FORM_PROVIDER) protected readonly formProvider: aerEmissionsReductionClaimFormProvider,
+    @Inject(TASK_FORM_PROVIDER) protected readonly formProvider: AerEmissionsReductionClaimFormProvider,
   ) {}
 
   ngOnInit(): void {

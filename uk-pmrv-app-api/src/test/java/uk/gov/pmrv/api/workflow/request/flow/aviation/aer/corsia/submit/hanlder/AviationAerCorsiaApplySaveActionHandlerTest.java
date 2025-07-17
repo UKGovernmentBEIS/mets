@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.AviationCorsiaOperatorDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -38,7 +38,7 @@ class AviationAerCorsiaApplySaveActionHandlerTest {
         
         Long requestTaskId = 1L;
         RequestTask requestTask = RequestTask.builder().id(requestTaskId).build();
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         AviationAerCorsiaSaveApplicationRequestTaskActionPayload taskActionPayload =
             AviationAerCorsiaSaveApplicationRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.AVIATION_AER_CORSIA_SAVE_APPLICATION_PAYLOAD)
@@ -51,7 +51,7 @@ class AviationAerCorsiaApplySaveActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         applySaveActionHandler.process(requestTask.getId(), RequestTaskActionType.AVIATION_AER_CORSIA_SAVE_APPLICATION,
-            pmrvUser, taskActionPayload);
+            appUser, taskActionPayload);
 
         // Verify
         verify(applyService, times(1)).applySaveAction(taskActionPayload, requestTask);

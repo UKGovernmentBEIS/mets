@@ -29,7 +29,7 @@ public class PermitRevokedService {
         installationAccountStatusService.handlePermitRevoked(accountId);
     }
 
-    public Map<String, Object> getAerVariables(String requestId) {
+    public Map<String, Object> constructAerVariables(String requestId) {
         Map<String, Object> variables = new HashMap<>();
 
         Request request = requestService.findRequestById(requestId);
@@ -40,7 +40,7 @@ public class PermitRevokedService {
 
         if(Boolean.TRUE.equals(revocation.getAnnualEmissionsReportRequired())){
             variables.put(BpmnProcessConstants.AER_EXPIRATION_DATE,
-                    DateUtils.convertLocalDateToDate(revocation.getAnnualEmissionsReportDate()));
+                    DateUtils.atEndOfDay(revocation.getAnnualEmissionsReportDate()));
         }
 
         return variables;

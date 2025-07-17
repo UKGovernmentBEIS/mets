@@ -1,20 +1,17 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.common.config.RegistryConfig;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
 import uk.gov.pmrv.api.permit.domain.PermitType;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
@@ -24,6 +21,9 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +35,7 @@ public class PermitIssuanceOfficialNoticeService {
     private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
     private final DocumentFileGeneratorService documentFileGeneratorService;
     private final OfficialNoticeSendService officialNoticeSendService;
+    private final RegistryConfig registryConfig;
 
     @Transactional
     public CompletableFuture<FileInfoDTO> generateGrantedOfficialNotice(final String requestId) {
@@ -44,17 +45,25 @@ public class PermitIssuanceOfficialNoticeService {
             .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
         final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification());
 
-        final boolean isGhge = requestPayload.getPermitType() == PermitType.GHGE;
-        final DocumentTemplateGenerationContextActionType documentTemplateGenerationContextActionType = isGhge ?
-                DocumentTemplateGenerationContextActionType.PERMIT_ISSUANCE_GHGE_GRANTED :
-                DocumentTemplateGenerationContextActionType.PERMIT_ISSUANCE_HSE_GRANTED;
-        
-        final DocumentTemplateType documentTemplateType = isGhge ?
-                DocumentTemplateType.PERMIT_ISSUANCE_GHGE_ACCEPTED :
-                DocumentTemplateType.PERMIT_ISSUANCE_HSE_ACCEPTED;
-        
-        final String fileName = isGhge ? "GHGE_permit_application_approved.pdf" : "HSE_permit_application_approved.pdf";
-        
+        DocumentTemplateType documentTemplateType;
+        DocumentTemplateGenerationContextActionType documentTemplateGenerationContextActionType;
+
+        if(requestPayload.getPermitType().equals(PermitType.GHGE)) {
+            documentTemplateType = DocumentTemplateType.PERMIT_ISSUANCE_GHGE_ACCEPTED;
+            documentTemplateGenerationContextActionType =
+                    DocumentTemplateGenerationContextActionType.PERMIT_ISSUANCE_GHGE_GRANTED;
+        } else if (requestPayload.getPermitType().equals(PermitType.HSE)) {
+            documentTemplateType = DocumentTemplateType.PERMIT_ISSUANCE_HSE_ACCEPTED;
+             documentTemplateGenerationContextActionType =
+                    DocumentTemplateGenerationContextActionType.PERMIT_ISSUANCE_HSE_GRANTED;
+        } else {
+            documentTemplateType = DocumentTemplateType.PERMIT_ISSUANCE_WASTE_ACCEPTED;
+            documentTemplateGenerationContextActionType =
+                    DocumentTemplateGenerationContextActionType.PERMIT_ISSUANCE_WASTE_GRANTED;
+        }
+
+        final String fileName = requestPayload.getPermitType() + "_permit_application_approved.pdf";
+
         return generateOfficialNoticeAsync(request,
             accountPrimaryContact,
             ccRecipientsEmails,
@@ -102,15 +111,16 @@ public class PermitIssuanceOfficialNoticeService {
     }
 
     public void sendOfficialNotice(final String requestId) {
-
         final Request request = requestService.findRequestById(requestId);
         final PermitIssuanceRequestPayload requestPayload = (PermitIssuanceRequestPayload) request.getPayload();
-        final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification());
         final List<FileInfoDTO> attachments = 
             requestPayload.getPermitDocument() != null ?
             List.of(requestPayload.getOfficialNotice(), requestPayload.getPermitDocument()) :
             List.of(requestPayload.getOfficialNotice());
-        officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails);
+        
+		officialNoticeSendService.sendOfficialNotice(attachments, request,
+				decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification()),
+				List.of(registryConfig.getEmail()));
     }
     
     private FileInfoDTO generateOfficialNotice(final Request request,
@@ -124,7 +134,7 @@ public class PermitIssuanceOfficialNoticeService {
 
         final TemplateParams templateParams = constructTemplateParams(request, accountPrimaryContact,
 				ccRecipientsEmails, type, requestPayload);
-        return documentFileGeneratorService.generateFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
+        return documentFileGeneratorService.generateAndSaveFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
     }
     
     private CompletableFuture<FileInfoDTO> generateOfficialNoticeAsync(final Request request,
@@ -137,7 +147,7 @@ public class PermitIssuanceOfficialNoticeService {
 
 		final TemplateParams templateParams = constructTemplateParams(request, accountPrimaryContact,
 				ccRecipientsEmails, type, requestPayload);
-		return documentFileGeneratorService.generateFileDocumentAsync(documentTemplateType, templateParams,
+		return documentFileGeneratorService.generateAndSaveFileDocumentAsync(documentTemplateType, templateParams,
 				fileNameToGenerate);
 	}
 

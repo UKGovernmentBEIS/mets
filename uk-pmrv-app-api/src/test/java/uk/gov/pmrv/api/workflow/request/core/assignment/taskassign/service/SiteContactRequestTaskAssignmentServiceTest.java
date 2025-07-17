@@ -17,8 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
@@ -54,7 +54,7 @@ class SiteContactRequestTaskAssignmentServiceTest {
             AccountContactInfoDTO.builder().accountId(accountId).userId(caSiteContact).build();
 
         when(requestTaskRepository
-            .findByAssigneeAndRequestStatus(userId, RequestStatus.IN_PROGRESS))
+            .findByAssignee(userId))
             .thenReturn(List.of(requestTask));
         when(accountContactQueryService
             .findContactsByAccountIdsAndContactType(Set.of(accountId), AccountContactType.CA_SITE))
@@ -64,7 +64,7 @@ class SiteContactRequestTaskAssignmentServiceTest {
             .assignTasksOfDeletedUserToSiteContactOrRelease(userId, AccountContactType.CA_SITE);
 
         verify(requestTaskRepository, times(1))
-            .findByAssigneeAndRequestStatus(userId, RequestStatus.IN_PROGRESS);
+            .findByAssignee(userId);
         verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, caSiteContact);
         verifyNoInteractions(requestTaskReleaseService);
     }
@@ -74,7 +74,7 @@ class SiteContactRequestTaskAssignmentServiceTest {
         String userId = "userId";
 
         when(requestTaskRepository
-            .findByAssigneeAndRequestStatus(userId, RequestStatus.IN_PROGRESS))
+            .findByAssignee(userId))
             .thenReturn(Collections.emptyList());
 
         siteContactRequestTaskAssignmentService
@@ -94,7 +94,7 @@ class SiteContactRequestTaskAssignmentServiceTest {
             AccountContactInfoDTO.builder().accountId(accountId).build();
 
         when(requestTaskRepository
-            .findByAssigneeAndRequestStatus(userId, RequestStatus.IN_PROGRESS))
+            .findByAssignee(userId))
             .thenReturn(List.of(requestTask));
         when(accountContactQueryService
             .findContactsByAccountIdsAndContactType(Set.of(accountId), AccountContactType.CA_SITE))
@@ -120,7 +120,7 @@ class SiteContactRequestTaskAssignmentServiceTest {
             AccountContactInfoDTO.builder().accountId(accountId).userId(caSiteContact).build();
 
         when(requestTaskRepository
-            .findByAssigneeAndRequestStatus(userId, RequestStatus.IN_PROGRESS))
+            .findByAssignee(userId))
             .thenReturn(List.of(requestTask));
         when(accountContactQueryService
             .findContactsByAccountIdsAndContactType(Set.of(accountId), AccountContactType.CA_SITE))
@@ -148,7 +148,7 @@ class SiteContactRequestTaskAssignmentServiceTest {
             AccountContactInfoDTO.builder().accountId(accountId).userId(caSiteContact).build();
 
         when(requestTaskRepository
-            .findByAssigneeAndRequestStatus(userId, RequestStatus.IN_PROGRESS))
+            .findByAssignee(userId))
             .thenReturn(List.of(requestTask));
         when(accountContactQueryService
             .findContactsByAccountIdsAndContactType(Set.of(accountId), AccountContactType.CA_SITE))

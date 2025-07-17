@@ -3,6 +3,8 @@ import { RequestDetailsDTO } from 'pmrv-api';
 export const reportsTypesMap: Record<string, Record<string, RequestDetailsDTO['requestType'][]>> = {
   INSTALLATION: {
     'Annual improvement': ['AIR'],
+    'Activity level report': ['ALR'],
+    'Baseline data report': ['BDR'],
     'Determination of activity level': ['DOAL'],
     'Determine emissions': ['DRE'],
     'Emissions report': ['AER'],
@@ -12,6 +14,9 @@ export const reportsTypesMap: Record<string, Record<string, RequestDetailsDTO['r
     'Annual emissions': ['AVIATION_AER_UKETS', 'AVIATION_AER_CORSIA'],
     'Determine emissions': ['AVIATION_DRE_UKETS'],
     'Verifier improvement': ['AVIATION_VIR'],
+    'Calculate annual offsetting requirements': ['AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'],
+    'Calculate 3-year offsetting requirements': ['AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING'],
+    'Estimate emissions': ['AVIATION_DOE_CORSIA'],
   },
 };
 export const reportsTypesTagsMap: Record<string, any> = {
@@ -21,9 +26,14 @@ export const reportsTypesTagsMap: Record<string, any> = {
   AIR: 'annual improvement report',
   DOAL: 'Determination of activity level',
   DRE: 'determination of reportable emissions',
+  BDR: 'baseline data report',
   AVIATION_DRE_UKETS: 'determination of emissions',
   AVIATION_AER_CORSIA: 'emissions report',
   AVIATION_VIR: 'verifier improvement report',
+  AVIATION_AER_CORSIA_ANNUAL_OFFSETTING: 'annual offsetting requirements',
+  AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING: '3 year offsetting requirements',
+  AVIATION_DOE_CORSIA: 'estimation of emissions',
+  ALR: 'activity level report',
 };
 
 export const reportsStatusesMap: Record<string, Partial<Record<RequestDetailsDTO['requestStatus'], string>>> = {
@@ -35,6 +45,7 @@ export const reportsStatusesMap: Record<string, Partial<Record<RequestDetailsDTO
     IN_PROGRESS: 'In Progress',
     MIGRATED: 'Migrated',
     REJECTED: 'Rejected',
+    NOT_REQUIRED: 'Not Required',
   },
   AVIATION: {
     IN_PROGRESS: 'In Progress',
@@ -53,4 +64,5 @@ export const reportsStatusesTagMap: Partial<Record<RequestDetailsDTO['requestSta
   REJECTED: 'REJECTED',
   CLOSED: 'CLOSED',
   EXEMPT: 'EXEMPT',
+  NOT_REQUIRED: 'NOT REQUIRED',
 };

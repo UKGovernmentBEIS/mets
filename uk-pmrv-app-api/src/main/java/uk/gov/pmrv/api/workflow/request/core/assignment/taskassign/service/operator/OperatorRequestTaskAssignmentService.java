@@ -4,16 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskReleaseService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.UserRoleRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestTaskRepository;
 
 import java.util.List;
@@ -30,8 +29,8 @@ public class OperatorRequestTaskAssignmentService implements UserRoleRequestTask
     private final RequestTaskReleaseService requestTaskReleaseService;
 
     @Override
-    public RoleType getRoleType() {
-        return RoleType.OPERATOR;
+    public String getRoleType() {
+        return RoleTypeConstants.OPERATOR;
     }
 
     @Transactional
@@ -46,7 +45,7 @@ public class OperatorRequestTaskAssignmentService implements UserRoleRequestTask
     @Transactional
     public void assignUserTasksToAccountPrimaryContactOrRelease(String userId, Long accountId) {
         List<RequestTask> userRequestTasks = requestTaskRepository
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(userId, accountId, RequestStatus.IN_PROGRESS);
+            .findByAssigneeAndRequestAccountId(userId, accountId);
 
         if (!userRequestTasks.isEmpty()) {
             Optional<String> accountPrimaryContactOptional = accountContactQueryService.findPrimaryContactByAccount(accountId);

@@ -4,10 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,6 +16,11 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.NerReviewGroup;
+
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

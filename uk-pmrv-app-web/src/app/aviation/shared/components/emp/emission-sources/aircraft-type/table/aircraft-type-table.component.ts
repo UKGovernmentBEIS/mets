@@ -27,7 +27,7 @@ const pipes = [AircraftTypeFuelTypesPipe, AircraftTypeDescriptionPipe, AircraftT
   standalone: true,
   imports: [CommonModule, RouterModule, SharedModule, ...pipes],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./aircraft-type-table.component.scss'],
+  styleUrl: './aircraft-type-table.component.scss',
 })
 export class AircraftTypeTableComponent implements OnInit {
   @Input()

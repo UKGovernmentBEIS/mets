@@ -12,10 +12,10 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class WithholdingOfAllowancesApplicationPeerReviewInitializerTest {
+class WithholdingOfAllowancesApplicationPeerReviewInitializerTest {
 
     @Test
-    public void initializePayload() {
+    void initializePayload() {
         Request request = new Request();
         WithholdingOfAllowancesRequestPayload requestPayload = new WithholdingOfAllowancesRequestPayload();
         request.setPayload(requestPayload);
@@ -30,7 +30,7 @@ public class WithholdingOfAllowancesApplicationPeerReviewInitializerTest {
     }
 
     @Test
-    public void getRequestTaskTypes() {
+    void getRequestTaskTypes() {
         WithholdingOfAllowancesApplicationPeerReviewInitializer initializer = new WithholdingOfAllowancesApplicationPeerReviewInitializer();
 
         Set<RequestTaskType> taskTypes = initializer.getRequestTaskTypes();

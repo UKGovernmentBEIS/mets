@@ -4,7 +4,7 @@ import { CanActivateFn, CanDeactivateFn } from '@angular/router';
 import { map, take, tap } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 
 import { aerVerifyQuery } from '../../aer-verify.selector';
@@ -23,13 +23,13 @@ export const canActivateComplianceMonitoring: CanActivateFn = () => {
         store.setPayload({
           ...payload,
           complianceMonitoringReportingRules:
-            AerVerifyStoreDelegate.INITIAL_STATE.verificationReport?.complianceMonitoringReportingRules,
+            AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport?.complianceMonitoringReportingRules,
         } as any);
       }
 
       if (!verificationReport?.complianceMonitoringReportingRules) {
-        (store.aerVerifyDelegate as AerVerifyStoreDelegate).setComplianceMonitoring(
-          AerVerifyStoreDelegate.INITIAL_STATE.verificationReport.complianceMonitoringReportingRules,
+        (store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setComplianceMonitoring(
+          AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport.complianceMonitoringReportingRules,
         );
       }
 

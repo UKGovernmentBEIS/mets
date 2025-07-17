@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,9 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { NerDetermination } from './nerDetermination';
+import { NerEndedDetermination } from './nerEndedDetermination';
+import { NerProceedToAuthorityDetermination } from './nerProceedToAuthorityDetermination';
 
 export interface NerSaveReviewDeterminationRequestTaskActionPayloadAllOf {
-  determination?: NerDetermination;
+  determination?: NerEndedDetermination | NerProceedToAuthorityDetermination;
   reviewSectionsCompleted?: { [key: string]: boolean };
 }

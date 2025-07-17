@@ -53,7 +53,7 @@ export const AER_UNCORRECTED_NON_COMPLIANCES_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Uncorrected non-compliances summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Uncorrected non-compliances' },
         loadComponent: () =>
           import('./non-compliances-summary/non-compliances-summary.component').then(
             (c) => c.NonCompliancesSummaryComponent,

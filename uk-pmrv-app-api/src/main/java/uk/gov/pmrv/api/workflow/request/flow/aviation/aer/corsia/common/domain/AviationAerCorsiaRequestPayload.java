@@ -7,9 +7,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerVerificationData;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsia;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.EmpCorsiaOriginatedData;
+import uk.gov.pmrv.api.aviationreporting.corsia.domain.totalemissions.AviationAerCorsiaSubmittedEmissions;
+import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationData;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayloadVerifiable;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerRequestPayload;
@@ -38,13 +39,15 @@ public class AviationAerCorsiaRequestPayload extends AviationAerRequestPayload
 
     private BigDecimal totalOffsetEmissionsProvided;
 
+    private AviationAerCorsiaSubmittedEmissions submittedEmissions;
+
     @Builder.Default
     private Map<AviationAerCorsiaReviewGroup, AerReviewDecision> reviewGroupDecisions =
         new EnumMap<>(AviationAerCorsiaReviewGroup.class);
 
     @Override
     @JsonIgnore
-    public AviationAerVerificationData getVerificationData() {
+    public AviationAerCorsiaVerificationData getVerificationData() {
         return verificationReport == null ? null : verificationReport.getVerificationData();
     }
 }

@@ -12,24 +12,18 @@ import { AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload } from 
 export function getAerVerifySections(
   payload?: AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload,
 ): TaskSection<any>[] {
-  const sections = [
-    ...getVerifierAssessmentTasks(false, payload?.verificationReport?.safExists),
-    ...getAerVerifyVerifierFindings(false),
-    ...getAerVerifySendReportSection(false),
-  ]
-    .filter((section) => !!section)
-    .map((section) => ({
-      ...section,
-      tasks: section.tasks.filter((task) => !!task),
-    }));
+  const assesmentSections = getVerifierAssessmentTasks(false, payload?.verificationReport?.safExists);
+  const findingsSections = getAerVerifyVerifierFindings(false);
+  const sendReportSections = getAerVerifySendReportSection(false);
+  const allSections = [...assesmentSections, ...findingsSections, ...sendReportSections];
 
-  const availableSubTasks = getAvailableSubTasks(sections);
+  const availableSubTasks = getAvailableSubTasks(allSections);
 
-  const allAerVerifyTasksCompleted =
-    Object.keys(payload.verificationSectionsCompleted).length === availableSubTasks.length &&
-    Object.values(payload.verificationSectionsCompleted).every((tc) => tc[0] === true);
+  const allAerVerifyTasksCompleted = availableSubTasks.every(
+    (subtask) => payload.verificationSectionsCompleted[subtask]?.[0] === true,
+  );
 
-  const sectionsToReturn = sections.map((section) => {
+  const sectionsToReturn = allSections.map((section) => {
     return {
       ...section,
       tasks: section.tasks.map((task) => {
@@ -73,12 +67,7 @@ export function getTaskStatusByTaskCompletionState(
   const sections = [
     ...getVerifierAssessmentTasks(false, payload.verificationReport.safExists),
     ...getAerVerifyVerifierFindings(false),
-  ]
-    .filter((section) => !!section)
-    .map((section) => ({
-      ...section,
-      tasks: section.tasks.filter((task) => !!task),
-    }));
+  ];
 
   switch (taskName) {
     case 'sendReport': {
@@ -108,11 +97,10 @@ export function getLinkByTaskAndStatus(status: TaskItemStatus, task: TaskItem<an
 }
 
 export function resolveSubmissionTaskStatus(
-  tasksCompleted: { [key: string]: boolean[] },
-  availableTasks: string[],
+  verificationSectionsCompleted: { [key: string]: boolean[] },
+  availableSubTasks: AerVerifyTaskKey[],
 ): TaskItemStatus {
-  return Object.keys(tasksCompleted).length >= availableTasks.length &&
-    Object.values(tasksCompleted).every((tc) => tc[0] === true)
+  return availableSubTasks.every((subTask) => verificationSectionsCompleted[subTask]?.[0] === true)
     ? 'not started'
     : 'cannot start yet';
 }

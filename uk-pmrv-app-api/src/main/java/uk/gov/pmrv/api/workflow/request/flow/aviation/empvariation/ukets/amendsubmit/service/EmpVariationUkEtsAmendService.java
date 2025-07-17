@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -50,7 +50,7 @@ public class EmpVariationUkEtsAmendService {
     
     @Transactional
     public void submitAmend(EmpVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload actionPayload, RequestTask requestTask,
-                            PmrvUser pmrvUser) {
+                            AppUser appUser) {
 
         Request request = requestTask.getRequest();
         EmpVariationUkEtsApplicationAmendsSubmitRequestTaskPayload taskPayload =
@@ -76,7 +76,7 @@ public class EmpVariationUkEtsAmendService {
         requestPayload.setEmpVariationDetailsReviewCompleted(taskPayload.getEmpVariationDetailsReviewCompleted());
         
         // Add timeline
-        addAmendsSubmittedRequestAction(request, pmrvUser);
+        addAmendsSubmittedRequestAction(request, appUser);
     }
 
     private void removeDeprecatedReviewGroupDecisionsFromVariationRequestPayload(EmpVariationUkEtsRequestPayload requestPayload,
@@ -89,7 +89,7 @@ public class EmpVariationUkEtsAmendService {
         }
     }
     
-    private void addAmendsSubmittedRequestAction(Request request, PmrvUser pmrvUser) {
+    private void addAmendsSubmittedRequestAction(Request request, AppUser appUser) {
     	EmpVariationUkEtsRequestPayload requestPayload = (EmpVariationUkEtsRequestPayload) request.getPayload();
         RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 
@@ -100,6 +100,6 @@ public class EmpVariationUkEtsAmendService {
                 request,
                 amendsSubmittedRequestActionPayload,
                 RequestActionType.EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMITTED,
-                pmrvUser.getUserId());
+                appUser.getUserId());
     }
 }

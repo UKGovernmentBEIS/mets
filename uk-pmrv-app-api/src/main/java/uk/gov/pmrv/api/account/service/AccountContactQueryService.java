@@ -3,15 +3,15 @@ package uk.gov.pmrv.api.account.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
+import uk.gov.netz.api.authorization.core.service.AuthorityService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
-import uk.gov.pmrv.api.authorization.core.domain.dto.AuthorityInfoDTO;
-import uk.gov.pmrv.api.authorization.core.service.AuthorityService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 import uk.gov.pmrv.api.user.operator.service.OperatorUserAuthService;
 
@@ -29,7 +29,7 @@ public class AccountContactQueryService {
 
     private final AccountRepository accountRepository;
 
-    private final AuthorityService authorityService;
+    private final AuthorityService<?> authorityService;
 
     private final OperatorUserAuthService operatorUserAuthService;
 

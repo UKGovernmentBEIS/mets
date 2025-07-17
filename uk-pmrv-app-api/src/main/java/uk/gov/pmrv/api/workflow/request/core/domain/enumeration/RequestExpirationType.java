@@ -16,6 +16,12 @@ public enum RequestExpirationType {
     VIR("vir"),
     AIR("air"),
 
+    INSTALLATION_ONSITE_INSPECTION("installationOnsiteInspection"),
+    INSTALLATION_AUDIT("installationAudit"),
+
+    BDR("bdr"),
+    ALR("alr"),
+
     AVIATION_AER("aviationAer"),
     AVIATION_VIR("aviationVir"),
     ;

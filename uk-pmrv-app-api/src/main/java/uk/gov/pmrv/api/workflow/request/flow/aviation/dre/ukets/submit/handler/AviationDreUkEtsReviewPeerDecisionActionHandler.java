@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -36,11 +36,11 @@ public class AviationDreUkEtsReviewPeerDecisionActionHandler
     private final WorkflowService workflowService;
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser,
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser,
                         PeerReviewDecisionRequestTaskActionPayload taskActionPayload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         final Request request = requestTask.getRequest();
-        final String peerReviewer = pmrvUser.getUserId();
+        final String peerReviewer = appUser.getUserId();
 
         final PeerReviewDecisionSubmittedRequestActionPayload actionPayload = PEER_REVIEW_MAPPER
             .toPeerReviewDecisionSubmittedRequestActionPayload(taskActionPayload,

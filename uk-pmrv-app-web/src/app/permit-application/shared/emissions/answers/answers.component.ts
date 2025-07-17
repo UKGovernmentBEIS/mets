@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, pluck, switchMap, tap } from 'rxjs';
+import { combineLatest, first, map, switchMap, tap } from 'rxjs';
 
 import {
   MeasurementOfCO2EmissionPointCategoryAppliedTier,
@@ -23,12 +23,12 @@ import { measurementDevicesFormProvider } from '../measurement-devices-form.prov
   templateUrl: './answers.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [measurementDevicesFormProvider, DestroySubject],
-  styleUrls: ['./answers.component.scss'],
+  styleUrl: './answers.component.scss',
 })
 export class AnswersComponent implements PendingRequest {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));
 
-  taskKey$ = this.route.data.pipe(pluck('taskKey'));
+  taskKey$ = this.route.data.pipe(map((x) => x?.taskKey));
   task$ = this.route.data.pipe(
     switchMap((data) =>
       this.store.findTask<

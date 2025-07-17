@@ -26,7 +26,7 @@
   </div>
 </dl>
 
-<ng-container *ngIf="(invitationStatus$ | async) !== 'PENDING_USER_REGISTRATION_NO_PASSWORD'">
+<ng-container *ngIf="(invitationStatus$ | async) !== 'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD'">
   <h2 [changeRoute]="['/registration', 'user', 'choose-password']" app-summary-header class="govuk-heading-m">
     Password
   </h2>

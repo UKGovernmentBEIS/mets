@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 
+import { AerMarkAsNotRequiredDetailsComponent } from '@actions/aer/aer-mark-as-not-required/aer-mark-as-not-required-details/aer-mark-as-not-required-details.component';
+import { PendingRequestGuard } from '@core/guards/pending-request.guard';
+
 import { AerComponent } from './aer.component';
 import { CompletedComponent } from './completed/completed.component';
 import { ReturnForAmendsComponent } from './return-for-amends/return-for-amends.component';
@@ -64,6 +67,7 @@ import { SubmittedComponent } from './submitted/submitted.component';
 import { SummaryOfConditionsComponent } from './submitted/summary-of-conditions/summary-of-conditions.component';
 import { VerifiedActivityLevelReportComponent } from './submitted/verified-activity-level-report/verified-activity-level-report.component';
 import { VerifierDetailsComponent } from './submitted/verifier-details/verifier-details.component';
+import { VerifierReturnedToOperatorActionComponent } from './verifier-returned-to-operator/verifier-returned-to-operator.component';
 
 const routes: Route[] = [
   {
@@ -324,7 +328,6 @@ const routes: Route[] = [
       },
       {
         path: 'reviewed',
-        data: { pageTitle: 'Emissions report' },
         children: [
           {
             path: '',
@@ -570,6 +573,20 @@ const routes: Route[] = [
         path: 'completed',
         data: { pageTitle: 'Emissions report' },
         component: CompletedComponent,
+      },
+      {
+        path: 'decision/details',
+        data: {
+          pageTitle: 'Marked as not required',
+          breadcrumb: 'Marked as not required',
+        },
+        component: AerMarkAsNotRequiredDetailsComponent,
+        canDeactivate: [PendingRequestGuard],
+      },
+      {
+        path: 'returned-to-operator',
+        data: { pageTitle: 'Emissions report' },
+        component: VerifierReturnedToOperatorActionComponent,
       },
     ],
   },

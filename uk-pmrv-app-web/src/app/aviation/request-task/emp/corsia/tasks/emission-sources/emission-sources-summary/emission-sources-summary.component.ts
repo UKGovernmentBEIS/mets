@@ -9,7 +9,11 @@ import { empCorsiaQuery } from '@aviation/request-task/emp/shared/emp-corsia.sel
 import { EmpReviewDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-review-decision-group/emp-review-decision-group.component';
 import { EmpVariationRegulatorLedDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-variation-regulator-led-decision-group/emp-variation-regulator-led-decision-group.component';
 import { EmpVariationReviewDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-variation-review-decision-group/emp-variation-review-decision-group.component';
-import { variationSubmitRegulatorLedRequestTaskTypes } from '@aviation/request-task/emp/shared/util/emp.util';
+import {
+  issuanceReviewRequestTaskTypes,
+  variationOperatorLedReviewRequestTaskTypes,
+  variationSubmitRegulatorLedRequestTaskTypes,
+} from '@aviation/request-task/emp/shared/util/emp.util';
 import { EmpRequestTaskPayloadCorsia, requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import {
@@ -55,10 +59,15 @@ import { EmissionSourcesFormModelCorsia } from '../emission-sources-form.model';
 export class EmissionSourcesSummaryComponent {
   private pendingRequestService = inject(PendingRequestService);
 
-  router = inject(Router);
-  route = inject(ActivatedRoute);
-  store = inject(RequestTaskStore);
-  form = inject<FormGroup<EmissionSourcesFormModelCorsia>>(TASK_FORM_PROVIDER);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private store = inject(RequestTaskStore);
+  protected form = inject<FormGroup<EmissionSourcesFormModelCorsia>>(TASK_FORM_PROVIDER);
+
+  aircraftTypes = this.form.getRawValue().aircraftTypes.map(appendIndex);
+
+  multipleMethodsExplanation = this.form.getRawValue().multipleFuelConsumptionMethodsExplanation;
+  isFUMM = isFUMM(this.store.getValue().requestTaskItem?.requestTask?.payload as EmpRequestTaskPayloadCorsia);
 
   vm$ = combineLatest([
     this.store.pipe(requestTaskQuery.selectRequestTaskType),
@@ -71,7 +80,9 @@ export class EmissionSourcesSummaryComponent {
       hideSubmit:
         !isEditable ||
         ['complete', 'cannot start yet'].includes(taskStatus) ||
-        variationSubmitRegulatorLedRequestTaskTypes.includes(type),
+        variationSubmitRegulatorLedRequestTaskTypes.includes(type) ||
+        variationOperatorLedReviewRequestTaskTypes.includes(type) ||
+        issuanceReviewRequestTaskTypes.includes(type),
       editable: isEditable,
       showDecision: showReviewDecisionComponent.includes(type),
       showVariationDecision: showVariationReviewDecisionComponent.includes(type),
@@ -96,11 +107,6 @@ export class EmissionSourcesSummaryComponent {
         originalEmpContainer?.emissionsMonitoringPlan?.emissionSources?.multipleFuelConsumptionMethodsExplanation,
     })),
   );
-
-  aircraftTypes = this.form.getRawValue().aircraftTypes.map(appendIndex);
-
-  multipleMethodsExplanation = this.form.getRawValue().multipleFuelConsumptionMethodsExplanation;
-  isFUMM = isFUMM(this.store.getValue().requestTaskItem?.requestTask?.payload as EmpRequestTaskPayloadCorsia);
 
   addAircraftType() {
     this.router.navigate(['../aircraft-type', 'add'], {

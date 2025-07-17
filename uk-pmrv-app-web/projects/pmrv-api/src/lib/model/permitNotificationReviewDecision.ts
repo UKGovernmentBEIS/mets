@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -12,6 +12,12 @@
 import { ReviewDecisionDetails } from './reviewDecisionDetails';
 
 export interface PermitNotificationReviewDecision {
-  type: 'ACCEPTED' | 'REJECTED';
+  type:
+    | 'ACCEPTED'
+    | 'REJECTED'
+    | 'PERMANENT_CESSATION'
+    | 'TEMPORARY_CESSATION'
+    | 'CESSATION_TREATED_AS_PERMANENT'
+    | 'NOT_CESSATION';
   details?: ReviewDecisionDetails;
 }

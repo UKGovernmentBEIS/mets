@@ -13,8 +13,8 @@ import uk.gov.pmrv.api.aviationreporting.common.validation.AviationAerValidatorH
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsia;
 
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class AviationAerCorsiaVerificationReportValidatorService {
         final boolean isValid = verificationReportValidationResults.stream().allMatch(AviationAerValidationResult::isValid);
 
         if (!isValid) {
-            throw new BusinessException(ErrorCode.INVALID_AVIATION_AER_VERIFICATION_REPORT,
+            throw new BusinessException(MetsErrorCode.INVALID_AVIATION_AER_VERIFICATION_REPORT,
                 AviationAerValidatorHelper.extractAviationAerViolations(verificationReportValidationResults));
         }
     }

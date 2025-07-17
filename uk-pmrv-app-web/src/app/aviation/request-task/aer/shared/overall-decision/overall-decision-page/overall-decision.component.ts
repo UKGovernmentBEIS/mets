@@ -9,8 +9,8 @@ import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { CorsiaRequestTypes } from '@aviation/request-task/util';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
-import { AviationOverallDecisionTypePipe } from '@aviation/shared/pipes/overall-decision-type.pipe';
 import { PendingRequestService } from '@core/guards/pending-request.service';
+import { OverallDecisionTypePipe } from '@shared/pipes/overall-decision-type.pipe';
 import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
@@ -30,7 +30,7 @@ interface ViewModel {
   selector: 'app-overall-decision',
   templateUrl: './overall-decision.component.html',
   standalone: true,
-  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent, AviationOverallDecisionTypePipe],
+  imports: [GovukComponentsModule, SharedModule, ReturnToLinkComponent, OverallDecisionTypePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverallDecisionComponent {

@@ -27,6 +27,9 @@ public class PermitNotificationGenerateOfficialNoticeHandler implements JavaDele
             case REJECTED:
                 service.generateAndSaveRejectedOfficialNotice(requestId);
                 break;
+            case COMPLETED:
+                service.generateAndSaveCompletedOfficialNotice(requestId);
+                break;
             default:
                 throw new UnsupportedOperationException("Determination type is not supported: " + determinationType);
         }

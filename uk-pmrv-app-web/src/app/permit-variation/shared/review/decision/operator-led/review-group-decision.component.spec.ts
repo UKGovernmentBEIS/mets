@@ -35,8 +35,7 @@ describe('ReviewGroupDecisionComponent', () => {
       <app-variation-operator-led-review-group-decision
         [canEdit]="canEdit"
         [groupKey]="groupKey"
-        (notification)="reviewDecisionSubmitted($event)"
-      ></app-variation-operator-led-review-group-decision>
+        (notification)="reviewDecisionSubmitted($event)"></app-variation-operator-led-review-group-decision>
     `,
   })
   class TestComponent {

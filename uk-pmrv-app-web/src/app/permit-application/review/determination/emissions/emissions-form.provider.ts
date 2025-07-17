@@ -12,16 +12,23 @@ export const emissionsFormProvider = {
   deps: [UntypedFormBuilder, PermitApplicationStore],
   useFactory: (fb: UntypedFormBuilder, store: PermitApplicationStore<PermitApplicationState>) => {
     const state = store.getValue();
-    const value = state.determination;
     const disabled = !state.isEditable;
 
+    const value = state.determination;
+    const originalValue = (state as any)?.originalPermitContainer;
+
+    const annualEmissionsTargets = value?.annualEmissionsTargets
+      ? Object.keys(value.annualEmissionsTargets).map((key) =>
+          createAnotherEmissionsTarget(key, value.annualEmissionsTargets[key], disabled),
+        )
+      : originalValue?.annualEmissionsTargets
+        ? Object.keys(originalValue.annualEmissionsTargets).map((key) =>
+            createAnotherEmissionsTarget(key, originalValue.annualEmissionsTargets[key], disabled),
+          )
+        : null;
+
     return fb.group({
-      annualEmissionsTargets: fb.array(
-        (value?.annualEmissionsTargets &&
-          Object.keys(value.annualEmissionsTargets).map((key) =>
-            createAnotherEmissionsTarget(key, value.annualEmissionsTargets[key], disabled),
-          )) ?? [createAnotherEmissionsTarget(null, null, disabled)],
-      ),
+      annualEmissionsTargets: fb.array(annualEmissionsTargets ?? [createAnotherEmissionsTarget(null, null, disabled)]),
     });
   },
 };

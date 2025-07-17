@@ -1,5 +1,9 @@
 import { NgModule } from '@angular/core';
 
+import { EmissionPointsTableComponent } from '@shared/components/emission-points/emission-points-table/emission-points-table.component';
+import { EmissionSourceTableComponent } from '@shared/components/emission-sources/emission-source-table/emission-source-table.component';
+import { SourceStreamsTableComponent } from '@shared/components/source-streams/source-streams-table/source-streams-table.component';
+
 import { SharedModule } from '../shared/shared.module';
 import { AbbreviationsComponent } from './abbreviations/abbreviations.component';
 import { AbbreviationsSummaryComponent } from './abbreviations/abbreviations-summary/abbreviations-summary.component';
@@ -96,6 +100,69 @@ import { MeasurementDeviceDetailsComponent } from './measurement-devices/measure
 import { MeasurementDeviceDetailsGuard } from './measurement-devices/measurement-device-details/measurement-device-details.guard';
 import { MeasurementDevicesComponent } from './measurement-devices/measurement-devices.component';
 import { MeasurementDevicesSummaryComponent } from './measurement-devices/measurement-devices-summary/measurement-devices-summary.component';
+import { MMPEnergyFlowsStepGuard } from './mmp-energy-flows/mmp-energy-flows-summary/mmp-energy-flows-step-guard';
+import { MMPEnergyFlowsSummaryGuard } from './mmp-energy-flows/mmp-energy-flows-summary/mmp-energy-flows-summary-guard';
+import { MmpInstallationDescriptionAnswersComponent } from './mmp-installation-description/answers/mmp-installation-description-answers.component';
+import { ConnectionDeleteComponent } from './mmp-installation-description/connection-delete/connection-delete.component';
+import { ConnectionDetailsComponent } from './mmp-installation-description/connection-details/connection-details.component';
+import { ConnectionDetailsGuard } from './mmp-installation-description/connection-details/connection-details.guard';
+import { ConnectionsComponent } from './mmp-installation-description/connections/connections.component';
+import { MmpFlowDiagramComponent } from './mmp-installation-description/mmp-flow-diagram/mmp-flow-diagram.component';
+import { MmpInstallationDescriptionComponent } from './mmp-installation-description/mmp-installation-description.component';
+import { MMPInstallationDescriptionSummaryGuard } from './mmp-installation-description/summary/mmp-installation-description-summary-guard';
+import { AddPhysicalPartComponent } from './mmp-methods/add-physical-part/add-physical-part.component';
+import { AvoidDoubleCountComponent } from './mmp-methods/avoid-double-count/avoid-double-count.component';
+import { DeletePhysicalPartComponent } from './mmp-methods/delete-physical-part/delete-physical-part.component';
+import { MMPMethodsStepGuard } from './mmp-methods/methods-step-guard';
+import { MethodsSummaryComponent } from './mmp-methods/methods-summary/methods-summary.component';
+import { MethodsToAssignPartsComponent } from './mmp-methods/methods-to-assign-parts/methods-to-assign-parts.component';
+import { PhysicalPartsGuardQuestionComponent } from './mmp-methods/physical-parts-guard-question.component';
+import { PhysicalPartsListComponent } from './mmp-methods/physical-parts-list/physical-parts-list.component';
+import { AssignmentOfResponsibilitiesComponent } from './mmp-procedures/assignment-of-responsibilities/assignment-of-responsibilities.component';
+import { ControlActivitiesComponent } from './mmp-procedures/control-activities/control-activities.component';
+import { DataFlowActivitiesComponent } from './mmp-procedures/data-flow-activities/data-flow-activities.component';
+import { MmpProcedureFormComponent } from './mmp-procedures/mmp-procedure-form/mmp-procedure-form.component';
+import { MMPProceduresStepGuard } from './mmp-procedures/mmp-procedures-summary/mmp-procedures-step-guard';
+import { MmpProceduresSummaryComponent } from './mmp-procedures/mmp-procedures-summary/mmp-procedures-summary.component';
+import { MMPProceduresSummaryGuard } from './mmp-procedures/mmp-procedures-summary/mmp-procedures-summary-guard';
+import { MonitoringPlanAppropriatenessComponent } from './mmp-procedures/monitoring-plan-appropriateness/monitoring-plan-appropriateness.component';
+import { AnnualProductionLevelComponent } from './mmp-sub-installations/annual-production-levels/annual-production-levels.component';
+import { DeleteSubInstallationComponent } from './mmp-sub-installations/delete-sub-installation/delete-sub-installation.component';
+import { DirectlyAttributableEmissionsComponent } from './mmp-sub-installations/directly-attributable-emissions/directly-attributable-emissions.component';
+import { ExchangeabilityComponent } from './mmp-sub-installations/exchangeability/exchangeability.component';
+import { AnnualActivityLevelsFuelComponent } from './mmp-sub-installations/fallback/annual-activity-levels-fuel/annual-activity-levels-fuel.component';
+import { AnnualActivityLevelsHeatComponent } from './mmp-sub-installations/fallback/annual-activity-levels-heat/annual-activity-levels-heat.component';
+import { AnnualActivityLevelsProcessComponent } from './mmp-sub-installations/fallback/annual-activity-levels-process/annual-activity-levels-process.component';
+import { DirectlyAttributableEmissionsFAComponent } from './mmp-sub-installations/fallback/directly-attributable-emissions/directly-attributable-emissions.component';
+import { FuelInputRelevantEmissionFactorFAComponent } from './mmp-sub-installations/fallback/fuel-input-relevant-emission-factor/fuel-input-relevant-emission-factor.component';
+import { MeasurableHeatExportedComponent } from './mmp-sub-installations/fallback/measurable-heat-exported/measurable-heat-exported.component';
+import { MeasurableHeatImportedComponent } from './mmp-sub-installations/fallback/measurable-heat-imported/measurable-heat-imported.component';
+import { MeasurableHeatProducedComponent } from './mmp-sub-installations/fallback/measurable-heat-produced/measurable-heat-produced.component';
+import { MMPSubInstallationsFallbackStepGuard } from './mmp-sub-installations/fallback/sub-installations-fallback-summary/sub-installations-fallback-step-guard';
+import { SubInstallationsFallbackSummaryComponent } from './mmp-sub-installations/fallback/sub-installations-fallback-summary/sub-installations-fallback-summary.component';
+import { MMPSubInstallationsFallbackSummaryGuard } from './mmp-sub-installations/fallback/sub-installations-fallback-summary/sub-installations-fallback-summary-guard';
+import { SubInstallationsFallbackSummaryTemplateComponent } from './mmp-sub-installations/fallback/sub-installations-fallback-summary/sub-installations-fallback-summary-template/sub-installations-fallback-summary-template.component';
+import { FuelInputRelevantEmissionFactorComponent } from './mmp-sub-installations/fuel-input-relevant-emission-factor/fuel-input-relevant-emission-factor.component';
+import { ImportedExportedMeasurableHeatComponent } from './mmp-sub-installations/imported-exported-measurable-heat/imported-exported-measurable-heat.component';
+import { ImportedMeasureableHeatFlowsComponent } from './mmp-sub-installations/imported-measureable-heat-flows/imported-measureable-heat-flows.component';
+import { MmpSubInstallationsComponent } from './mmp-sub-installations/mmp-sub-installations.component';
+import { IncludeAnswerDetailsComponent } from './mmp-sub-installations/shared/include-answer-details.component';
+import { ProductBenchmarkFormComponent } from './mmp-sub-installations/shared/product-benchmark-form/product-benchmark-form.component';
+import { CalculationAromaticsComponent } from './mmp-sub-installations/special-product-benchmarks/calculation-aromatics/calculation-aromatics.component';
+import { CalculationDolimeComponent } from './mmp-sub-installations/special-product-benchmarks/calculation-dolime/calculation-dolime.component';
+import { CalculationEthyleneOxideGlycolsComponent } from './mmp-sub-installations/special-product-benchmarks/calculation-ethylene-oxide-glycols/calculation-ethylene-oxide-glycols.component';
+import { CalculationHydrogenComponent } from './mmp-sub-installations/special-product-benchmarks/calculation-hydrogen/calculation-hydrogen.component';
+import { CalculationLimeComponent } from './mmp-sub-installations/special-product-benchmarks/calculation-lime/calculation-lime.component';
+import { CalculationRefineryProductsComponent } from './mmp-sub-installations/special-product-benchmarks/calculation-refinery-products/calculation-refinery-products.component';
+import { CalculationSteamCrackingComponent } from './mmp-sub-installations/special-product-benchmarks/calculation-steam-cracking/calculation-steam-cracking.component';
+import { CalculationSynthesisGasComponent } from './mmp-sub-installations/special-product-benchmarks/calculation-synthesis-gas/calculation-synthesis-gas.component';
+import { CalculationVinylChlorideMonomerComponent } from './mmp-sub-installations/special-product-benchmarks/calculation-vinyl-chloride-monomer/calculation-vinyl-chloride-monomer.component';
+import { SubInstallationDetailsComponent } from './mmp-sub-installations/sub-installation-details/sub-installation-details.component';
+import { SubInstallationFallbackDetailsComponent } from './mmp-sub-installations/sub-installation-fallback-details/sub-installation-fallback-details.component';
+import { MMPSubInstallationsStepGuard } from './mmp-sub-installations/sub-installations-summary/sub-installations-step-guard';
+import { SubInstallationsSummaryComponent } from './mmp-sub-installations/sub-installations-summary/sub-installations-summary.component';
+import { MMPSubInstallationsSummaryGuard } from './mmp-sub-installations/sub-installations-summary/sub-installations-summary-guard';
+import { WasteGasBalanceComponent } from './mmp-sub-installations/waste-gas-balance/waste-gas-balance.component';
 import { AnswersComponent as MonitoringMethodologyPlanAnswersComponent } from './monitoring-methodology-plan/answers/answers.component';
 import { AnswersGuard as MonitoringMethodologyPlanAnswersGuard } from './monitoring-methodology-plan/answers/answers.guard';
 import { MonitoringMethodologyPlanComponent } from './monitoring-methodology-plan/monitoring-methodology-plan.component';
@@ -125,6 +192,7 @@ import { NotifyOperatorGuard } from './review/notify-operator/notify-operator.gu
 import { RecallGuard } from './review/recall/recall.guard';
 import { AnswersGuard as EmissionsAnswersGuard } from './shared/emissions/answers/answers.guard';
 import { EmissionsGuard } from './shared/emissions/emissions.guard';
+import { MeasurementDevicesTableComponent } from './shared/measurement-devices-table/measurement-devices-table.component';
 import { SharedPermitModule } from './shared/shared-permit.module';
 import { SummaryGuard } from './shared/summary.guard';
 import { SiteDiagramComponent } from './site-diagram/site-diagram.component';
@@ -144,6 +212,10 @@ import { SourceStreamsSummaryComponent } from './source-streams/source-streams-s
     AmendComponent,
     AmendSummaryComponent,
     AmendSummaryTemplateComponent,
+    AnnualActivityLevelsFuelComponent,
+    AnnualActivityLevelsHeatComponent,
+    AnnualActivityLevelsProcessComponent,
+    AnnualProductionLevelComponent,
     AnswersComponent,
     ApproachesAddComponent,
     ApproachesComponent,
@@ -152,10 +224,28 @@ import { SourceStreamsSummaryComponent } from './source-streams/source-streams-s
     ApproachesPrepareSummaryComponent,
     ApproachesPrepareTemplateComponent,
     ApproachesSummaryComponent,
+    AssignmentOfResponsibilitiesComponent,
     CalculatingCo2Co2eDetailsComponent,
+    CalculationAromaticsComponent,
+    CalculationDolimeComponent,
+    CalculationEthyleneOxideGlycolsComponent,
+    CalculationHydrogenComponent,
+    CalculationLimeComponent,
+    CalculationRefineryProductsComponent,
+    CalculationSteamCrackingComponent,
+    CalculationSynthesisGasComponent,
+    CalculationVinylChlorideMonomerComponent,
     ConfidentialityStatementComponent,
     ConfidentialityStatementSummaryComponent,
+    ConnectionDeleteComponent,
+    ConnectionDetailsComponent,
+    ConnectionsComponent,
+    ControlActivitiesComponent,
+    DataFlowActivitiesComponent,
+    DeleteSubInstallationComponent,
     DetailsComponent,
+    DirectlyAttributableEmissionsComponent,
+    DirectlyAttributableEmissionsFAComponent,
     EmissionPointDeleteComponent,
     EmissionPointDetailsComponent,
     EmissionPointsComponent,
@@ -172,20 +262,35 @@ import { SourceStreamsSummaryComponent } from './source-streams/source-streams-s
     EnvironmentalSystemSummaryComponent,
     EstimatedEmissionsComponent,
     EstimatedEmissionsSummaryComponent,
+    ExchangeabilityComponent,
+    FuelInputRelevantEmissionFactorComponent,
+    FuelInputRelevantEmissionFactorFAComponent,
+    ImportedExportedMeasurableHeatComponent,
+    ImportedMeasureableHeatFlowsComponent,
     InstallationDescriptionComponent,
     InstallationDescriptionSummaryComponent,
     ManagementProceduresBodyPipe,
     ManagementProceduresComponent,
     ManagementProceduresHeadingPipe,
     ManagementProceduresSummaryComponent,
+    MeasurableHeatExportedComponent,
+    MeasurableHeatImportedComponent,
+    MeasurableHeatProducedComponent,
     MeasurementDeviceDeleteComponent,
     MeasurementDeviceDetailsComponent,
     MeasurementDevicesComponent,
     MeasurementDevicesSummaryComponent,
+    MmpFlowDiagramComponent,
+    MmpInstallationDescriptionAnswersComponent,
+    MmpInstallationDescriptionComponent,
+    MmpProcedureFormComponent,
+
+    MmpSubInstallationsComponent,
     MonitoringMethodologyPlanAnswersComponent,
     MonitoringMethodologyPlanComponent,
     MonitoringMethodologyPlanSummaryComponent,
     MonitoringMethodologyPlanUploadFileComponent,
+    MonitoringPlanAppropriatenessComponent,
     MonitoringRolesComponent,
     MonitoringRolesSummaryComponent,
     OtherPermitsComponent,
@@ -200,11 +305,35 @@ import { SourceStreamsSummaryComponent } from './source-streams/source-streams-s
     SourceStreamDetailsComponent,
     SourceStreamsComponent,
     SourceStreamsSummaryComponent,
+    SubInstallationDetailsComponent,
+    SubInstallationFallbackDetailsComponent,
+    SubInstallationsFallbackSummaryComponent,
+    SubInstallationsFallbackSummaryTemplateComponent,
+    SubInstallationsSummaryComponent,
     UncertaintyAnalysisComponent,
     UncertaintyAnalysisSummaryComponent,
     UploadFileComponent,
+    WasteGasBalanceComponent,
   ],
-  imports: [PermitApplicationRoutingModule, SharedModule, SharedPermitModule],
+  imports: [
+    AddPhysicalPartComponent,
+    AvoidDoubleCountComponent,
+    DeletePhysicalPartComponent,
+    EmissionPointsTableComponent,
+    EmissionSourceTableComponent,
+    IncludeAnswerDetailsComponent,
+    MeasurementDevicesTableComponent,
+    MethodsSummaryComponent,
+    MethodsToAssignPartsComponent,
+    MmpProceduresSummaryComponent,
+    PermitApplicationRoutingModule,
+    PhysicalPartsGuardQuestionComponent,
+    PhysicalPartsListComponent,
+    ProductBenchmarkFormComponent,
+    SharedModule,
+    SharedPermitModule,
+    SourceStreamsTableComponent,
+  ],
   providers: [
     AmendGuard,
     AmendSummaryGuard,
@@ -222,6 +351,7 @@ import { SourceStreamsSummaryComponent } from './source-streams/source-streams-s
     CalculationSamplingPlanGuard,
     CalculationSamplingPlanPlanGuard,
     CalculationSamplingPlanReconciliationGuard,
+    ConnectionDetailsGuard,
     DeterminationActivationDateGuard,
     DeterminationAnswersGuard,
     DeterminationEmissionsGuard,
@@ -244,6 +374,16 @@ import { SourceStreamsSummaryComponent } from './source-streams/source-streams-s
     MeasurementCategoryTierGuard,
     MeasurementCategoryTierTransferredCO2DetailsGuard,
     MeasurementDeviceDetailsGuard,
+    MMPEnergyFlowsStepGuard,
+    MMPEnergyFlowsSummaryGuard,
+    MMPInstallationDescriptionSummaryGuard,
+    MMPMethodsStepGuard,
+    MMPProceduresStepGuard,
+    MMPProceduresSummaryGuard,
+    MMPSubInstallationsFallbackStepGuard,
+    MMPSubInstallationsFallbackSummaryGuard,
+    MMPSubInstallationsStepGuard,
+    MMPSubInstallationsSummaryGuard,
     MonitoringMethodologyPlanAnswersGuard,
     MonitoringMethodologyPlanGuard,
     MonitoringMethodologyPlanUploadFileGuard,

@@ -10,29 +10,27 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.ApplicationType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountCreationService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.notification.mail.config.property.NotificationProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.notificationapi.mail.config.property.NotificationProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionPayloadType;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
-import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningApplicationSubmittedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningSubmitApplicationCreateActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.*;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -42,7 +40,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.ACCOUNT_APPLICATION_RECEIVED;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType.INSTALLATION_ACCOUNT_OPENING;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,7 +55,7 @@ class InstallationAccountOpeningSubmitApplicationCreateActionHandlerTest {
     private StartProcessRequestService startProcessRequestService;
 
     @Mock
-    private NotificationEmailService notificationEmailService;
+    private NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
 
     @Mock
     private InstallationAccountCreationService installationAccountCreationService;
@@ -69,12 +66,13 @@ class InstallationAccountOpeningSubmitApplicationCreateActionHandlerTest {
     @Test
     void process_new_permit() {
         String contactUsLink = "/contact-us";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").firstName("fn").lastName("ln").build();
+        AppUser appUser = AppUser.builder().userId("user").firstName("fn").lastName("ln").build();
         Long accountId = 1L;
         InstallationAccountPayload accountPayload = InstallationAccountPayload.builder()
             .accountType(AccountType.INSTALLATION)
             .applicationType(ApplicationType.NEW_PERMIT)
             .name("account")
+            .submitter(InstallationAccountSubmitter.builder().name("fn ln").build())
             .competentAuthority(CompetentAuthorityEnum.ENGLAND)
             .location(LocationOnShoreDTO.builder().build())
             .legalEntity(LegalEntityDTO.builder().id(1L).build()).build();
@@ -87,7 +85,7 @@ class InstallationAccountOpeningSubmitApplicationCreateActionHandlerTest {
         InstallationAccountOpeningRequestPayload requestPayload = InstallationAccountOpeningRequestPayload.builder()
             .payloadType(RequestPayloadType.INSTALLATION_ACCOUNT_OPENING_REQUEST_PAYLOAD)
             .accountPayload(accountPayload)
-            .operatorAssignee(pmrvUser.getUserId())
+            .operatorAssignee(appUser.getUserId())
             .build();
 
         InstallationAccountOpeningApplicationSubmittedRequestActionPayload accountSubmittedPayload = InstallationAccountOpeningApplicationSubmittedRequestActionPayload
@@ -122,7 +120,7 @@ class InstallationAccountOpeningSubmitApplicationCreateActionHandlerTest {
 
         Request request = Request.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).creationDate(LocalDateTime.now()).build();
 
-        when(installationAccountCreationService.createAccount(accountDTO, pmrvUser)).thenReturn(persistedAccountDTO);
+        when(installationAccountCreationService.createAccount(accountDTO, appUser)).thenReturn(persistedAccountDTO);
         when(startProcessRequestService.startProcess(requestParams)).thenReturn(request);
 
         NotificationProperties.Email notificationEmail = mock(NotificationProperties.Email.class);
@@ -130,36 +128,37 @@ class InstallationAccountOpeningSubmitApplicationCreateActionHandlerTest {
         when(notificationEmail.getContactUsLink()).thenReturn(contactUsLink);
 
         //invoke
-        handler.process(null, RequestCreateActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION, createActionPayload, pmrvUser);
+        handler.process(null, createActionPayload, appUser);
 
         assertThat(request.getSubmissionDate()).isEqualTo(request.getCreationDate());
-        verify(installationAccountCreationService, times(1)).createAccount(accountDTO, pmrvUser);
+        verify(installationAccountCreationService, times(1)).createAccount(accountDTO, appUser);
         verify(startProcessRequestService, times(1)).startProcess(requestParams);
         verify(requestService, times(1))
             .addActionToRequest(request,
                 accountSubmittedPayload,
                 RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
-                pmrvUser.getUserId());
+                appUser.getUserId());
 
 
-        ArgumentCaptor<EmailData> recipientEmailInformationCaptor = ArgumentCaptor.forClass(EmailData.class);
-        verify(notificationEmailService, times(1)).notifyRecipient(recipientEmailInformationCaptor.capture(), Mockito.eq(pmrvUser.getEmail()));
-        EmailData emailData = recipientEmailInformationCaptor.getValue();
-        assertThat(emailData.getNotificationTemplateData().getTemplateName()).isEqualTo(ACCOUNT_APPLICATION_RECEIVED);
+        ArgumentCaptor<EmailData<EmailNotificationTemplateData>> recipientEmailInformationCaptor = ArgumentCaptor.forClass(EmailData.class);
+        verify(notificationEmailService, times(1)).notifyRecipient(recipientEmailInformationCaptor.capture(), Mockito.eq(appUser.getEmail()));
+        EmailData<EmailNotificationTemplateData> emailData = recipientEmailInformationCaptor.getValue();
+        assertThat(emailData.getNotificationTemplateData().getTemplateName()).isEqualTo(PmrvNotificationTemplateName.ACCOUNT_APPLICATION_RECEIVED.getName());
         assertThat(emailData.getNotificationTemplateData().getTemplateParams())
-                .isEqualTo(Map.of(EmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink));
+                .isEqualTo(Map.of(PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink));
 
     }
 
     @Test
     void process_transfer() {
         String contactUsLink = "/contact-us";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").firstName("fn").lastName("ln").build();
+        AppUser appUser = AppUser.builder().userId("user").firstName("fn").lastName("ln").build();
         Long accountId = 1L;
         InstallationAccountPayload accountPayload = InstallationAccountPayload.builder()
             .accountType(AccountType.INSTALLATION)
             .applicationType(ApplicationType.TRANSFER)
             .name("account")
+            .submitter(InstallationAccountSubmitter.builder().name("fn ln").build())
             .competentAuthority(CompetentAuthorityEnum.ENGLAND)
             .location(LocationOnShoreDTO.builder().build())
             .legalEntity(LegalEntityDTO.builder().id(1L).build()).build();
@@ -172,7 +171,7 @@ class InstallationAccountOpeningSubmitApplicationCreateActionHandlerTest {
         InstallationAccountOpeningRequestPayload requestPayload = InstallationAccountOpeningRequestPayload.builder()
             .payloadType(RequestPayloadType.INSTALLATION_ACCOUNT_OPENING_REQUEST_PAYLOAD)
             .accountPayload(accountPayload)
-            .operatorAssignee(pmrvUser.getUserId())
+            .operatorAssignee(appUser.getUserId())
             .build();
 
         InstallationAccountOpeningApplicationSubmittedRequestActionPayload accountSubmittedPayload = InstallationAccountOpeningApplicationSubmittedRequestActionPayload
@@ -207,7 +206,7 @@ class InstallationAccountOpeningSubmitApplicationCreateActionHandlerTest {
 
         Request request = Request.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).creationDate(LocalDateTime.now()).build();
 
-        when(installationAccountCreationService.createAccount(accountDTO, pmrvUser)).thenReturn(persistedAccountDTO);
+        when(installationAccountCreationService.createAccount(accountDTO, appUser)).thenReturn(persistedAccountDTO);
         when(startProcessRequestService.startProcess(requestParams)).thenReturn(request);
 
         NotificationProperties.Email notificationEmail = mock(NotificationProperties.Email.class);
@@ -215,24 +214,24 @@ class InstallationAccountOpeningSubmitApplicationCreateActionHandlerTest {
         when(notificationEmail.getContactUsLink()).thenReturn(contactUsLink);
 
         //invoke
-        handler.process(null, RequestCreateActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION, createActionPayload, pmrvUser);
+        handler.process(null, createActionPayload, appUser);
 
         assertThat(request.getSubmissionDate()).isEqualTo(request.getCreationDate());
-        verify(installationAccountCreationService, times(1)).createAccount(accountDTO, pmrvUser);
+        verify(installationAccountCreationService, times(1)).createAccount(accountDTO, appUser);
         verify(startProcessRequestService, times(1)).startProcess(requestParams);
         verify(requestService, times(1))
             .addActionToRequest(request,
                 accountSubmittedPayload,
                 RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED,
-                pmrvUser.getUserId());
+                appUser.getUserId());
 
 
-        ArgumentCaptor<EmailData> recipientEmailInformationCaptor = ArgumentCaptor.forClass(EmailData.class);
-        verify(notificationEmailService, times(1)).notifyRecipient(recipientEmailInformationCaptor.capture(), Mockito.eq(pmrvUser.getEmail()));
-        EmailData emailData = recipientEmailInformationCaptor.getValue();
-        assertThat(emailData.getNotificationTemplateData().getTemplateName()).isEqualTo(ACCOUNT_APPLICATION_RECEIVED);
+        ArgumentCaptor<EmailData<EmailNotificationTemplateData>> recipientEmailInformationCaptor = ArgumentCaptor.forClass(EmailData.class);
+        verify(notificationEmailService, times(1)).notifyRecipient(recipientEmailInformationCaptor.capture(), Mockito.eq(appUser.getEmail()));
+        EmailData<EmailNotificationTemplateData> emailData = recipientEmailInformationCaptor.getValue();
+        assertThat(emailData.getNotificationTemplateData().getTemplateName()).isEqualTo(PmrvNotificationTemplateName.ACCOUNT_APPLICATION_RECEIVED.getName());
         assertThat(emailData.getNotificationTemplateData().getTemplateParams())
-                .isEqualTo(Map.of(EmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink));
+                .isEqualTo(Map.of(PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink));
 
     }
 

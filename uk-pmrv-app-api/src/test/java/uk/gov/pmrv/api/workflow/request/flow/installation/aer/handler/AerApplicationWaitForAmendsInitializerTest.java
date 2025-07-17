@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.permit.domain.abbreviations.Abbreviations;
 import uk.gov.pmrv.api.permit.domain.additionaldocuments.AdditionalDocuments;
 import uk.gov.pmrv.api.reporting.domain.Aer;
@@ -15,7 +14,6 @@ import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.PermitOrig
 import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationData;
 import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.pmrv.api.reporting.domain.verification.SummaryOfConditions;
-import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ChangesRequiredDecisionDetails;
@@ -48,7 +46,7 @@ class AerApplicationWaitForAmendsInitializerTest {
     private InstallationOperatorDetailsQueryService installationOperatorDetailsQueryService;
 
     @Mock
-    private RequestVerificationService<AerVerificationReport> requestVerificationService;
+    private RequestVerificationService requestVerificationService;
 
     @Test
     void initializePayload() {
@@ -82,17 +80,9 @@ class AerApplicationWaitForAmendsInitializerTest {
             .verificationBodyId(2L)
             .build();
         InstallationOperatorDetails installationOperatorDetails = InstallationOperatorDetails.builder().build();
-        VerificationBodyDetails verificationBodyDetails = VerificationBodyDetails.builder()
-            .name("name")
-            .accreditationReferenceNumber("refNumber")
-            .emissionTradingSchemes(Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS))
-            .build();
-
 
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(request.getAccountId()))
             .thenReturn(installationOperatorDetails);
-        when(requestVerificationService.getVerificationBodyDetails(verificationReport, request.getVerificationBodyId()))
-            .thenReturn(verificationBodyDetails);
 
         AerApplicationReviewRequestTaskPayload result =
             (AerApplicationReviewRequestTaskPayload) initializer.initializePayload(request);

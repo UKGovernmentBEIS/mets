@@ -38,8 +38,7 @@ export class MaterialityLevelComponent {
           first(),
           map(
             (payload) =>
-              (payload as AerApplicationVerificationSubmitRequestTaskPayload).verificationReport
-                .materialityLevel,
+              (payload as AerApplicationVerificationSubmitRequestTaskPayload).verificationReport.materialityLevel,
           ),
           switchMap((materialityLevelInfo) =>
             this.aerService.postVerificationTaskSave(

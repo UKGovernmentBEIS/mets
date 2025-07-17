@@ -2,18 +2,17 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, pluck, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, first, map, switchMap, takeUntil } from 'rxjs';
+
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { DestroySubject } from '@core/services/destroy-subject.service';
 
 import {
   MeasurementOfCO2EmissionPointCategoryAppliedTier,
-  MeasurementOfCO2MonitoringApproach,
   MeasurementOfN2OEmissionPointCategoryAppliedTier,
   MeasurementOfN2OMeasuredEmissions,
-  MeasurementOfN2OMonitoringApproach,
 } from 'pmrv-api';
 
-import { PendingRequestService } from '../../../core/guards/pending-request.service';
-import { DestroySubject } from '../../../core/services/destroy-subject.service';
 import { areMeasMeasuredEmissionsPrerequisitesMet } from '../../approaches/measurement/measurement-status';
 import { areN2OMeasuredEmissionsPrerequisitesMet } from '../../approaches/n2o/n2o-status';
 import { PermitApplicationState } from '../../store/permit-application.state';
@@ -30,7 +29,7 @@ import { EMISSIONS_FORM, emissionsFormProvider } from './emissions-form.provider
 export class EmissionsComponent implements OnInit {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));
 
-  taskKey$ = this.route.data.pipe(pluck('taskKey'));
+  taskKey$ = this.route.data.pipe(map((x) => x?.taskKey));
   task$ = this.route.data.pipe(
     switchMap((data) =>
       this.store.findTask<
@@ -56,18 +55,6 @@ export class EmissionsComponent implements OnInit {
     { value: 'ANNUALLY', label: 'Annually' },
   ];
 
-  tierCategory$ = combineLatest([this.index$, this.taskKey$, this.store]).pipe(
-    map(
-      ([index, taskKey, state]) =>
-        (
-          state.permit.monitoringApproaches[taskKey] as
-            | MeasurementOfN2OMonitoringApproach
-            | MeasurementOfCO2MonitoringApproach
-        )?.emissionPointCategoryAppliedTiers?.[index]?.emissionPointCategory,
-    ),
-  );
-
-  estimatedAnnualEmissions$ = this.store.findTask('estimatedAnnualEmissions').pipe(pluck('quantity'));
   constructor(
     @Inject(EMISSIONS_FORM) readonly form: UntypedFormGroup,
     readonly store: PermitApplicationStore<PermitApplicationState>,

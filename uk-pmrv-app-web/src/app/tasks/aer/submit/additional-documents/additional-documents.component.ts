@@ -16,8 +16,7 @@ import { additionalDocumentsFormFactory } from './additional-documents-form.prov
       [isEditable]="aerService.isEditable$ | async"
       (formSubmit)="onSubmit()"
       [downloadUrl]="getDownloadUrl()"
-      submitText="Continue"
-    ></app-additional-documents-shared>
+      submitText="Continue"></app-additional-documents-shared>
     <app-return-link></app-return-link>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -60,6 +59,6 @@ export class AdditionalDocumentsComponent {
   }
 
   getDownloadUrl() {
-    return this.aerService.createBaseFileDownloadUrl();
+    return this.aerService.getBaseFileDownloadUrl();
   }
 }

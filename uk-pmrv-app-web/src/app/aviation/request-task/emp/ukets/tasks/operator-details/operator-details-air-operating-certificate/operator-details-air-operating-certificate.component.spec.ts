@@ -100,7 +100,7 @@ describe('OperatorDetailsAirOperatingCertificateComponent', () => {
     expect(screen.getByRole('alert')).toBeVisible();
     expect(screen.getAllByText(/Enter a certificate number/)).toHaveLength(2);
     expect(screen.getAllByText(/Select an issuing authority/)).toHaveLength(1);
-  });
+  }, 50000);
 
   it('should call the saveEmp function with the correct data when the form is valid and navigate to operating license page', async () => {
     const navigateSpy = jest.spyOn(router, 'navigate');

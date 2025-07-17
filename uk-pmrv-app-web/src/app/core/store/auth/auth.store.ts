@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AuthState, initialState } from '@core/store/auth/auth.state';
 import { KeycloakProfile } from 'keycloak-js';
 
-import { ApplicationUserDTO, TermsDTO } from 'pmrv-api';
+import { UserDTO, UserTermsVersionDTO } from 'pmrv-api';
 
 import { Store } from '../store';
 import { UserState } from './auth.state';
@@ -32,7 +32,7 @@ export class AuthStore extends Store<AuthState> {
     });
   }
 
-  setUser(user: ApplicationUserDTO) {
+  setUser(user: UserDTO) {
     this.setState({ ...this.getState(), user });
   }
 
@@ -51,8 +51,8 @@ export class AuthStore extends Store<AuthState> {
     });
   }
 
-  setTerms(terms: TermsDTO) {
-    this.setState({ ...this.getState(), terms });
+  setUserTerms(userTerms: UserTermsVersionDTO) {
+    this.setState({ ...this.getState(), userTerms });
   }
 
   reset(): void {

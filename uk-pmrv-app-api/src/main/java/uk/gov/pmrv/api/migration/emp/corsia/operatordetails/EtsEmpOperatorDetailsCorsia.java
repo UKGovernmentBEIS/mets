@@ -1,12 +1,12 @@
 package uk.gov.pmrv.api.migration.emp.corsia.operatordetails;
 
-import java.util.Set;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.flightaircraftprocedures.EmpOperatingStatePairsCorsiaDetails;
+
+import java.util.Set;
 
 @Data
 @NoArgsConstructor

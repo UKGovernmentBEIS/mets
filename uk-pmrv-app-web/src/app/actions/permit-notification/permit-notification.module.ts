@@ -4,7 +4,7 @@ import { PermitNotificationSharedModule } from '@shared/components/permit-notifi
 import { SharedModule } from '@shared/shared.module';
 
 import { ActionSharedModule } from '../shared/action-shared-module';
-import { CompletedComponent } from './completed/completed.component';
+import { NotificationCompletedActionComponent } from './completed/completed.component';
 import { FollowUpResponseComponent } from './follow-up-response/follow-up-response.component';
 import { FollowUpReturnForAmendsComponent } from './follow-up-return-for-amends/follow-up-return-for-amends.component';
 import { PeerReviewDecisionComponent } from './peer-review-decision/peer-review-decision.component';
@@ -15,9 +15,9 @@ import { SubmittedComponent } from './submitted/submitted.component';
 
 @NgModule({
   declarations: [
-    CompletedComponent,
     FollowUpResponseComponent,
     FollowUpReturnForAmendsComponent,
+    NotificationCompletedActionComponent,
     PeerReviewDecisionComponent,
     PermitNotificationComponent,
     ReviewDecisionComponent,

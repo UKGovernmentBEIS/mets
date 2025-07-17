@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, CanActivateFn, createUrlTreeFromSnapshot } from
 import { map, take } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { returnForAmendsRequestTaskActionTypes, variationDetailsSentIsForAmends } from '@aviation/request-task/util';
+import { returnForAmendsRequestTaskActionTypes, variationDetailsSectionIsForAmends } from '@aviation/request-task/util';
 
 import { empQuery } from '../emp.selectors';
 
@@ -22,7 +22,7 @@ export const canActivateEmpReturnForAmends: CanActivateFn = (route: ActivatedRou
             (key) =>
               (payload.reviewGroupDecisions[key].type === 'OPERATOR_AMENDS_NEEDED' &&
                 payload.reviewSectionsCompleted[key]) ||
-              variationDetailsSentIsForAmends(payload),
+              variationDetailsSectionIsForAmends(payload),
           )) ||
         createUrlTreeFromSnapshot(route, ['../../../'])
       );

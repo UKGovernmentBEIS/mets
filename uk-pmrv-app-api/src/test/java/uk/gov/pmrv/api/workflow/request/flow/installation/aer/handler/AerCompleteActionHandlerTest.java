@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.PermitOriginatedData;
@@ -62,7 +62,7 @@ class AerCompleteActionHandlerTest {
     void process() {
         final long taskId = 1L;
         final String requestId = "requestId";
-        final PmrvUser user = PmrvUser.builder().build();
+        final AppUser user = AppUser.builder().build();
         final String process = "process";
 
         final RequestTaskActionEmptyPayload payload = RequestTaskActionEmptyPayload.builder().build();

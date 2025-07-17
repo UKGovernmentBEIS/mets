@@ -14,11 +14,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -96,7 +96,7 @@ class AirOfficialNoticeServiceTest {
                 .thenReturn(ccRecipientsEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(paramsSourceData))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(DocumentTemplateType.AIR_REVIEWED,
+        when(documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.AIR_REVIEWED,
                 templateParams, "Annual_improvement_report_recommended_improvements.pdf")).thenReturn(officialNotice);
 
         // Invoke
@@ -113,7 +113,7 @@ class AirOfficialNoticeServiceTest {
         verify(documentTemplateOfficialNoticeParamsProvider, times(1))
                 .constructTemplateParams(paramsSourceData);
         verify(documentFileGeneratorService, times(1))
-                .generateFileDocument(DocumentTemplateType.AIR_REVIEWED, templateParams, "Annual_improvement_report_recommended_improvements.pdf");
+                .generateAndSaveFileDocument(DocumentTemplateType.AIR_REVIEWED, templateParams, "Annual_improvement_report_recommended_improvements.pdf");
     }
 
     @Test

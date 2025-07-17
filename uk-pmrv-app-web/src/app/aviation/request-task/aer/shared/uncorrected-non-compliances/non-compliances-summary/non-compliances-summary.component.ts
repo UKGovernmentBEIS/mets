@@ -8,7 +8,7 @@ import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { AerVerificationReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-verification-review-decision-group/aer-verification-review-decision-group.component';
 import { uncorrectedNonCompliancesQuery } from '@aviation/request-task/aer/shared/uncorrected-non-compliances/uncorrected-non-compliances.selector';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { showReviewDecisionComponent } from '@aviation/request-task/util';
+import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
 import { UncorrectedItemGroupComponent } from '@aviation/shared/components/aer-verify/uncorrected-item-group/uncorrected-item-group.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -55,7 +55,7 @@ export class NonCompliancesSummaryComponent {
     map(([type, uncorrectedNonCompliances, isEditable, taskStatus, isCorsia]) => {
       return {
         data: uncorrectedNonCompliances,
-        pageHeader: 'Check Your Answers',
+        pageHeader: getSummaryHeaderForTaskType(type, 'uncorrectedNonCompliances'),
         detailsHeader: isCorsia
           ? 'Non-compliances with the Air Navigation Order'
           : 'Non-compliances with the monitoring and reporting regulations',

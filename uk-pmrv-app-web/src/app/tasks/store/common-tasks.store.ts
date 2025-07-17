@@ -1,13 +1,16 @@
 import { Injectable, Optional } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { first, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap, take, tap } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { Store } from '@core/store/store';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
+import { skipReviewMap } from '@tasks/aer/review/skip-review/skip-review.map';
 
 import {
+  AerApplicationSkipReviewRequestTaskPayload,
+  AerSkipReviewDecision,
   ItemDTO,
   RequestActionInfoDTO,
   RequestActionsService,
@@ -104,11 +107,49 @@ const requestTaskEditActionsMap: Partial<
   RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_SUBMIT: ['RETURN_OF_ALLOWANCES_RETURNED_SAVE_APPLICATION'],
   WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_APPLICATION_SUBMIT: ['WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_SAVE_APPLICATION'],
 
+  INSTALLATION_AUDIT_APPLICATION_SUBMIT: [
+    'INSTALLATION_AUDIT_SAVE_APPLICATION',
+    'INSTALLATION_AUDIT_UPLOAD_ATTACHMENT',
+  ],
+  INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS: ['INSTALLATION_AUDIT_OPERATOR_RESPOND_SAVE'],
+
+  INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT: ['INSTALLATION_ONSITE_INSPECTION_SAVE_APPLICATION'],
+  INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS: [
+    'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SAVE',
+  ],
+
   AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT: ['NON_COMPLIANCE_SAVE_APPLICATION'],
   AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE: ['NON_COMPLIANCE_DAILY_PENALTY_NOTICE_SAVE_APPLICATION'],
   AVIATION_NON_COMPLIANCE_NOTICE_OF_INTENT: ['NON_COMPLIANCE_NOTICE_OF_INTENT_SAVE_APPLICATION'],
   AVIATION_NON_COMPLIANCE_CIVIL_PENALTY: ['NON_COMPLIANCE_CIVIL_PENALTY_SAVE_APPLICATION'],
   AVIATION_NON_COMPLIANCE_FINAL_DETERMINATION: ['NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION'],
+
+  BDR_APPLICATION_SUBMIT: ['BDR_SAVE_APPLICATION', 'BDR_UPLOAD_ATTACHMENT'],
+  BDR_APPLICATION_VERIFICATION_SUBMIT: ['BDR_SAVE_APPLICATION_VERIFICATION', 'BDR_VERIFICATION_UPLOAD_ATTACHMENT'],
+  BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT: [
+    'BDR_REGULATOR_REVIEW_SAVE',
+    'BDR_SAVE_REGULATOR_REVIEW_GROUP_DECISION',
+    'BDR_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT',
+  ],
+  BDR_APPLICATION_AMENDS_SUBMIT: [
+    'BDR_APPLICATION_AMENDS_SAVE',
+    'BDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR',
+    'BDR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER',
+    'BDR_UPLOAD_ATTACHMENT',
+  ],
+  BDR_AMEND_APPLICATION_VERIFICATION_SUBMIT: [
+    'BDR_SAVE_APPLICATION_VERIFICATION',
+    'BDR_VERIFICATION_UPLOAD_ATTACHMENT',
+  ],
+
+  PERMANENT_CESSATION_APPLICATION_SUBMIT: [
+    'PERMANENT_CESSATION_CANCEL_APPLICATION',
+    'PERMANENT_CESSATION_SAVE_APPLICATION',
+    'PERMANENT_CESSATION_UPLOAD',
+  ],
+
+  ALR_APPLICATION_SUBMIT: ['ALR_SAVE_APPLICATION', 'ALR_UPLOAD_ATTACHMENT'],
+  ALR_APPLICATION_VERIFICATION_SUBMIT: ['ALR_SAVE_APPLICATION_VERIFICATION', 'ALR_VERIFICATION_UPLOAD_ATTACHMENT'],
 };
 
 @Injectable({ providedIn: 'root' })
@@ -187,8 +228,11 @@ export class CommonTasksStore extends Store<CommonTasksState> {
     return this.getValue().requestTaskItem?.requestInfo?.id;
   }
 
+  resetStoreInitialized(): void {
+    this.patchState({ storeInitialized: false });
+  }
+
   requestedTask(taskId: number) {
-    this.reset();
     this.tasksService
       .getTaskItemInfoById(taskId)
       .pipe(
@@ -197,11 +241,23 @@ export class CommonTasksStore extends Store<CommonTasksState> {
           return of(null);
         }),
         tap((requestTask) => {
-          this.patchState({ requestTaskItem: requestTask, isEditable: this.isTaskEditable(requestTask) });
+          if (requestTask) {
+            this.setState({
+              ...initialState,
+              requestTaskItem: requestTask,
+              isEditable: this.isTaskEditable(requestTask),
+            });
+          }
         }),
-        switchMap((requestTask) => this.requestRelatedItemsAndActions$(requestTask)),
+        switchMap((requestTask) => {
+          if (requestTask) {
+            return this.requestRelatedItemsAndActions$(requestTask);
+          } else {
+            return of(null);
+          }
+        }),
         tap(() => this.patchState({ storeInitialized: true })),
-        first(),
+        take(1),
       )
       .subscribe();
   }
@@ -241,6 +297,16 @@ export class CommonTasksStore extends Store<CommonTasksState> {
     return timelineActions
       .slice()
       .sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+  }
+
+  skipReview(decision: AerSkipReviewDecision): Observable<any> {
+    const task = this.getState().requestTaskItem.requestTask;
+    const aerSkipReviewTaskPayload: AerApplicationSkipReviewRequestTaskPayload = {
+      reason: decision.reason,
+      type: decision.type,
+      payloadType: 'AER_SKIP_REVIEW_PAYLOAD',
+    };
+    return this.processRequestTaskAction(skipReviewMap?.[task.type], task.id, aerSkipReviewTaskPayload);
   }
 
   cancelCurrentTask() {

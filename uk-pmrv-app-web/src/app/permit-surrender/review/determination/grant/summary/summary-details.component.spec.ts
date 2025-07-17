@@ -15,8 +15,7 @@ describe('SummaryDetailsComponent', () => {
   @Component({
     template: `
       <app-grant-determination-summary-details
-        [grantDetermination$]="grantDetermination$"
-      ></app-grant-determination-summary-details>
+        [grantDetermination$]="grantDetermination$"></app-grant-determination-summary-details>
     `,
   })
   class TestComponent {

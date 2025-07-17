@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Routes } from '@angular/router';
 
-import { CommonActionsStore } from 'src/app/actions/store/common-actions.store';
+import { CommonActionsStore } from '@actions/store/common-actions.store';
 
 import { RequestActionStore } from '../store';
 

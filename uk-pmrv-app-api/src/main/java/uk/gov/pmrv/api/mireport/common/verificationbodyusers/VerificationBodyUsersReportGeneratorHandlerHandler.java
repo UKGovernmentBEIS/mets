@@ -1,16 +1,15 @@
 package uk.gov.pmrv.api.mireport.common.verificationbodyusers;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.mireport.domain.EmptyMiReportParams;
+import uk.gov.netz.api.mireport.domain.MiReportResult;
 import uk.gov.pmrv.api.mireport.aviation.AviationMiReportGeneratorHandler;
 import uk.gov.pmrv.api.mireport.installation.InstallationMiReportGeneratorHandler;
-import uk.gov.pmrv.api.mireport.common.MiReportType;
-import uk.gov.pmrv.api.mireport.common.domain.dto.EmptyMiReportParams;
-import uk.gov.pmrv.api.mireport.common.domain.dto.MiReportResult;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -22,9 +21,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class VerificationBodyUsersReportGeneratorHandlerHandler implements
-    InstallationMiReportGeneratorHandler<EmptyMiReportParams>,
-    AviationMiReportGeneratorHandler<EmptyMiReportParams> {
+public class VerificationBodyUsersReportGeneratorHandlerHandler implements InstallationMiReportGeneratorHandler<EmptyMiReportParams>,
+        AviationMiReportGeneratorHandler<EmptyMiReportParams> {
 
     private final VerificationBodyUsersRepository verificationBodyUsersRepository;
 
@@ -54,8 +52,8 @@ public class VerificationBodyUsersReportGeneratorHandlerHandler implements
     }
 
     @Override
-    public MiReportType getReportType() {
-        return MiReportType.LIST_OF_VERIFICATION_BODY_USERS;
+    public String getReportType() {
+        return "LIST_OF_VERIFICATION_BODY_USERS";
     }
 
     private Map<String, VerifierUserInfoDTO> getVerifierUserInfoByUserIds(List<VerificationBodyUser> verificationBodyUsers) {

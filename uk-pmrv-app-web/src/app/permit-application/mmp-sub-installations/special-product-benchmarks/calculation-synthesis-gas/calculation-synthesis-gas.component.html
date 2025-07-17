@@ -1,0 +1,25 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-product-benchmark-form
+    [form]="form"
+    [heading]="'Calculation of historical activity levels for synthesis gas'"
+    [caption]="productBenchmarkType$ | async | subInstallationType"
+    [downloadUrl]="getDownloadUrl()"
+    [dataSourcesHeading]="'Data sources for hydrogen volume fraction'"
+    [dataSourcesText]="
+      'Add the data sources used for the properties of synthesis gas (CaO and MgO content) in line with section 4.6 of Annex VII of the FAR.'
+    "
+    [dataSourcesNames]="['SYNTHESIS_GAS_TOTAL_PRODUCTION', 'SYNTHESIS_GAS_COMPOSITION_DATA']"
+    [dataSourcesField]="{
+      SYNTHESIS_GAS_TOTAL_PRODUCTION: 'Total synthesis gas production',
+      SYNTHESIS_GAS_COMPOSITION_DATA: 'Composition data',
+    }"
+    [dataSourcesType]="{
+      SYNTHESIS_GAS_TOTAL_PRODUCTION: '44',
+      SYNTHESIS_GAS_COMPOSITION_DATA: '46',
+    }"
+    (submitForm)="onSubmit()"
+    (addDataSource)="addDataSource()"
+    (removeDataSource)="removeDataSource($event)"
+    [subInstallationType]="productBenchmarkType$ | async"></app-product-benchmark-form>
+  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+</app-permit-task>

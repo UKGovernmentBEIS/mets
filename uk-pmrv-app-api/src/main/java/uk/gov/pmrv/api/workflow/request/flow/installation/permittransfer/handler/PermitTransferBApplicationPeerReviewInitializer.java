@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.handler;
 
 
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.mapper.PermitTransferMapper;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor

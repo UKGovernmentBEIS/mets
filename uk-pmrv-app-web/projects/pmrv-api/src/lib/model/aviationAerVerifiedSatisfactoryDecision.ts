@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,4 +11,4 @@
  */
 import { AviationAerVerificationDecision } from './aviationAerVerificationDecision';
 
-export type AviationAerVerifiedSatisfactoryDecision = AviationAerVerificationDecision;
+export interface AviationAerVerifiedSatisfactoryDecision extends AviationAerVerificationDecision {}

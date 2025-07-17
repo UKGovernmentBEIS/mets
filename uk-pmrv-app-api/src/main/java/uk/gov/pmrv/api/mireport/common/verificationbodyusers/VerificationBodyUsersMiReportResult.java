@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.mireport.common.domain.dto.MiReportResult;
+import uk.gov.netz.api.mireport.domain.MiReportResult;
 
 import java.util.List;
 

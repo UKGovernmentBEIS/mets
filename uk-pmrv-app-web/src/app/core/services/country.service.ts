@@ -25,4 +25,12 @@ export class CountryService {
       first((country) => country.code === code),
     );
   }
+
+  getCountryCode(name: string): Observable<Country['code']> {
+    return this.countries$.pipe(
+      mergeMap((countries) => from(countries)),
+      first((country) => country.name === name),
+      map((country) => country.code),
+    );
+  }
 }

@@ -27,4 +27,37 @@ export class BreadcrumbService {
   clear(): void {
     this.breadcrumbItem$.next(null);
   }
+
+  addToLastBreadcrumbAndShow(urlPart: string | string[]): void {
+    urlPart = Array.isArray(urlPart) ? [...urlPart] : [urlPart];
+    const breadcrumbs = this.breadcrumbItem$.getValue();
+    if (breadcrumbs && breadcrumbs.length) {
+      const lastBreadcrumb = breadcrumbs[breadcrumbs.length - 1];
+      if (lastBreadcrumb.link) {
+        this.show([
+          ...breadcrumbs.slice(0, breadcrumbs.length - 1),
+          { ...lastBreadcrumb, link: [...lastBreadcrumb.link, ...urlPart] },
+        ]);
+      } else if (breadcrumbs.length > 1) {
+        const lastBreadcrumbWithLink = breadcrumbs[breadcrumbs.length - 2];
+        this.show([
+          ...breadcrumbs.slice(0, breadcrumbs.length - 2),
+          { ...lastBreadcrumbWithLink, link: [...lastBreadcrumbWithLink.link, ...urlPart] },
+          lastBreadcrumb,
+        ]);
+      }
+    }
+  }
+
+  cutLastBreadcrumbWithLinkandShow() {
+    const breadcrumbs = this.breadcrumbItem$.getValue();
+    if (breadcrumbs && breadcrumbs.length) {
+      const lastBreadcrumb = breadcrumbs[breadcrumbs.length - 1];
+      if (lastBreadcrumb.link) {
+        this.show([...breadcrumbs.slice(0, breadcrumbs.length - 1)]);
+      } else if (breadcrumbs.length > 1) {
+        this.show([...breadcrumbs.slice(0, breadcrumbs.length - 2), lastBreadcrumb]);
+      }
+    }
+  }
 }

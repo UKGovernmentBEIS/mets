@@ -40,20 +40,41 @@
 
   <h2 *ngIf="!hideSubheadings" class="govuk-heading-m govuk-!-margin-top-6">Organisation details</h2>
   <dl govuk-summary-list [hasBorders]="hasBorders" [class]="cssClass">
+    <div govukSummaryListRow *ngIf="showCompaniesHouse()">
+      <dt govukSummaryListRowKey>Details</dt>
+      <dd govukSummaryListRowValue class="govuk-heading-s">Current input</dd>
+      <dd govukSummaryListRowValue class="govuk-heading-s">Companies house input</dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Company registration number</dt>
+      <dd govukSummaryListRowValue>{{ details.companyReferenceNumber }}</dd>
+
+      <dd
+        govukSummaryListRowValue
+        *ngIf="showCompaniesHouse()"
+        [ngClass]="{ 'govuk-error-message': !companiesHouse?.registrationNumber }"
+      >
+        {{ companiesHouse?.registrationNumber || companiesHouseErrorMessage }}
+      </dd>
+    </div>
+
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Operator name</dt>
       <dd govukSummaryListRowValue>{{ details.operator }}</dd>
+      <dd govukSummaryListRowValue *ngIf="showCompaniesHouse()">
+        {{ companiesHouse?.name }}
+      </dd>
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Legal status</dt>
       <dd govukSummaryListRowValue>{{ details.operatorType | legalEntityType }}</dd>
-      <dd govukSummaryListRowActions></dd>
+
+      <dd govukSummaryListRowValue *ngIf="showCompaniesHouse()">
+        {{ companiesHouse?.companyType?.description }}
+      </dd>
     </div>
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Company registration number</dt>
-      <dd govukSummaryListRowValue>{{ details.companyReferenceNumber }}</dd>
-      <dd govukSummaryListRowActions></dd>
-    </div>
+
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Operator address</dt>
       <dd govukSummaryListRowValue>
@@ -67,7 +88,16 @@
         <div>{{ details.operatorDetailsAddress.postcode }}</div>
         <div>{{ details.operatorDetailsAddress.country | country }}</div>
       </dd>
-      <dd govukSummaryListRowActions></dd>
+
+      <dd govukSummaryListRowValue *ngIf="showCompaniesHouse()">
+        <div>
+          {{ companiesHouse?.address?.line1 }}
+          <ng-container *ngIf="companiesHouse?.address?.line2">, {{ companiesHouse?.address?.line2 }} </ng-container>
+        </div>
+        <div>{{ companiesHouse?.address?.city }}</div>
+        <div>{{ companiesHouse?.address?.postcode }}</div>
+        <div>{{ companiesHouse?.address?.country }}</div>
+      </dd>
     </div>
   </dl>
 </ng-container>

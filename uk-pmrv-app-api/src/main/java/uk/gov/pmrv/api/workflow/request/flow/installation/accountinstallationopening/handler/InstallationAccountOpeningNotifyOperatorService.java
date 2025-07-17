@@ -2,13 +2,15 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationop
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.notification.mail.config.property.NotificationProperties;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.user.application.UserService;
-import uk.gov.pmrv.api.user.core.domain.dto.ApplicationUserDTO;
+import uk.gov.netz.api.common.config.WebAppProperties;
+import uk.gov.netz.api.notificationapi.mail.config.property.NotificationProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.pmrv.api.user.application.UserServiceDelegator;
+import uk.gov.pmrv.api.user.core.domain.dto.UserDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.Decision;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -18,12 +20,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationope
 import java.util.HashMap;
 import java.util.Map;
 
-import static uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants.ACCOUNT_APPLICATION_REJECTED_REASON;
-import static uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants.CONTACT_REGULATOR;
-import static uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants.HOME_URL;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.ACCOUNT_APPLICATION_ACCEPTED;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.ACCOUNT_APPLICATION_REJECTED;
-
 /**
  * Handler for the Notify Operator service task of the installation account opening BPMN process.
  */
@@ -31,10 +27,10 @@ import static uk.gov.pmrv.api.notification.template.domain.enumeration.Notificat
 @RequiredArgsConstructor
 public class InstallationAccountOpeningNotifyOperatorService {
 
-    private final NotificationEmailService notificationEmailService;
-    private final UserService userService;
+    private final NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
+    private final UserServiceDelegator userServiceDelegator;
     private final RequestService requestService;
-    private final AppProperties appProperties;
+    private final WebAppProperties webAppProperties;
     private final NotificationProperties notificationProperties;
 
     public void execute(String requestId) {
@@ -47,24 +43,26 @@ public class InstallationAccountOpeningNotifyOperatorService {
             ((InstallationAccountOpeningRequestPayload) request.getPayload()).getAccountOpeningDecisionPayload();
         boolean isApplicationAccepted = accountOpeningDecisionPayload.getDecision() == Decision.ACCEPTED;
         final String userId = request.getPayload().getOperatorAssignee();
-        ApplicationUserDTO applicantUserDTO = userService.getUserById(userId);
+        final UserDTO userDTO = userServiceDelegator.getUserById(userId);
 
-        EmailData emailData = EmailData.builder()
+        EmailData<EmailNotificationTemplateData> emailData = EmailData.<EmailNotificationTemplateData>builder()
             .notificationTemplateData(EmailNotificationTemplateData.builder()
-                .templateName(isApplicationAccepted ? ACCOUNT_APPLICATION_ACCEPTED : ACCOUNT_APPLICATION_REJECTED)
+						.templateName(isApplicationAccepted
+								? PmrvNotificationTemplateName.ACCOUNT_APPLICATION_ACCEPTED.getName()
+								: PmrvNotificationTemplateName.ACCOUNT_APPLICATION_REJECTED.getName())
                 .templateParams(buildTemplateParams(isApplicationAccepted, accountOpeningDecisionPayload))
                 .build())
             .build();
-        notificationEmailService.notifyRecipient(emailData, applicantUserDTO.getEmail());
+        notificationEmailService.notifyRecipient(emailData, userDTO.getEmail());
     }
 
     private Map<String, Object> buildTemplateParams(boolean isApplicationAccepted, AccountOpeningDecisionPayload accountOpeningDecisionPayload) {
         Map<String, Object> dataModelParams = new HashMap<>();
-        dataModelParams.put(HOME_URL, appProperties.getWeb().getUrl());
-        dataModelParams.put(CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink());
+        dataModelParams.put(PmrvEmailNotificationTemplateConstants.HOME_URL, webAppProperties.getUrl());
+        dataModelParams.put(PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink());
 
         if (!isApplicationAccepted) {
-            dataModelParams.put(ACCOUNT_APPLICATION_REJECTED_REASON, accountOpeningDecisionPayload.getReason());
+            dataModelParams.put(PmrvEmailNotificationTemplateConstants.ACCOUNT_APPLICATION_REJECTED_REASON, accountOpeningDecisionPayload.getReason());
         }
         return dataModelParams;
     }

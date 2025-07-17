@@ -11,11 +11,12 @@ import { InstallationAccountsService, LegalEntitiesService, TasksService } from 
 import { AccountsServiceStub } from '../../../testing/accounts.service.stub';
 import { LegalEntitiesServiceStub } from '../../../testing/legal-entities.service.stub';
 import { INSTALLATION_FORM, installationFormFactory } from '../factories/installation-form.factory';
+import { legalEntityFormOpFactory } from '../factories/legal-entity/legal-entity-form-op.factory';
 import {
-  LEGAL_ENTITY_FORM,
-  legalEntityFormFactory,
+  LEGAL_ENTITY_FORM_REG,
+  legalEntityFormRegFactory,
   legalEntityInitialValue,
-} from '../factories/legal-entity-form.factory';
+} from '../factories/legal-entity/legal-entity-form-reg.factory';
 import { ApplicationSectionType, initialState } from '../store/installation-account-application.state';
 import { InstallationAccountApplicationStore } from '../store/installation-account-application.store';
 import { mockState } from '../testing/mock-state';
@@ -24,7 +25,7 @@ import { FormGuard } from './form.guard';
 describe('FormGuard', () => {
   let guard: FormGuard;
   let installationForm: FormGroup;
-  let legalEntityForm: FormGroup;
+  let legalEntityFormReg: FormGroup;
   let store: InstallationAccountApplicationStore;
 
   const findSectionValue = (section) => mockState.tasks.find((task) => task.type === section).value;
@@ -35,7 +36,8 @@ describe('FormGuard', () => {
       providers: [
         FormGuard,
         installationFormFactory,
-        legalEntityFormFactory,
+        legalEntityFormRegFactory,
+        legalEntityFormOpFactory,
         { provide: InstallationAccountsService, useClass: AccountsServiceStub },
         { provide: LegalEntitiesService, useClass: LegalEntitiesServiceStub },
         { provide: TasksService, useValue: {} },
@@ -43,7 +45,7 @@ describe('FormGuard', () => {
     });
     guard = TestBed.inject(FormGuard);
     installationForm = TestBed.inject(INSTALLATION_FORM);
-    legalEntityForm = TestBed.inject(LEGAL_ENTITY_FORM);
+    legalEntityFormReg = TestBed.inject(LEGAL_ENTITY_FORM_REG);
     store = TestBed.inject(InstallationAccountApplicationStore);
 
     [ApplicationSectionType.installation, ApplicationSectionType.legalEntity].forEach((section) =>
@@ -59,7 +61,7 @@ describe('FormGuard', () => {
     await expect(lastValueFrom(guard.canActivate())).resolves.toBeTruthy();
 
     expect(installationForm.value).toMatchObject(findSectionValue(ApplicationSectionType.installation));
-    expect(legalEntityForm.value).toEqual(findSectionValue(ApplicationSectionType.legalEntity));
+    expect(legalEntityFormReg.value).toEqual(findSectionValue(ApplicationSectionType.legalEntity));
   });
 
   it('should disable the installation type and location when the application is under review', async () => {
@@ -75,7 +77,7 @@ describe('FormGuard', () => {
     expect(installationForm.value).toEqual(
       expect.objectContaining(findSectionValue(ApplicationSectionType.installation)),
     );
-    expect(legalEntityForm.value).toEqual(findSectionValue(ApplicationSectionType.legalEntity));
+    expect(legalEntityFormReg.value).toEqual(findSectionValue(ApplicationSectionType.legalEntity));
 
     const emptyState = cloneDeep(initialState);
     store.setState({ ...emptyState });
@@ -84,9 +86,9 @@ describe('FormGuard', () => {
     expect(installationForm.get('locationGroup').value.location).toBeNull();
     expect(installationForm.get('installationTypeGroup').value.type).toBeNull();
 
-    expect(legalEntityForm.get('selectGroup').value.isNew).toEqual(legalEntityInitialValue.selectGroup?.isNew);
-    expect(legalEntityForm.get('selectGroup').value.id).toBeNull();
-    expect(legalEntityForm.get('detailsGroup').value.type).toBeNull();
-    expect(legalEntityForm.get('detailsGroup').value.name).toBeNull();
+    expect(legalEntityFormReg.get('selectGroup').value.isNew).toEqual(legalEntityInitialValue.selectGroup?.isNew);
+    expect(legalEntityFormReg.get('selectGroup').value.id).toBeNull();
+    expect(legalEntityFormReg.get('detailsGroup').value.type).toBeNull();
+    expect(legalEntityFormReg.get('detailsGroup').value.name).toBeNull();
   });
 });

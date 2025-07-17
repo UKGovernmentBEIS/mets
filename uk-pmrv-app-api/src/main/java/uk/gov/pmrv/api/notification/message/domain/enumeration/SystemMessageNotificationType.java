@@ -2,14 +2,14 @@ package uk.gov.pmrv.api.notification.message.domain.enumeration;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 
 @Getter
 @AllArgsConstructor
 public enum SystemMessageNotificationType {
-    ACCOUNT_USERS_SETUP(NotificationTemplateName.ACCOUNT_USERS_SETUP),
-    NEW_VERIFICATION_BODY_EMITTER(NotificationTemplateName.NEW_VERIFICATION_BODY_EMITTER),
-    VERIFIER_NO_LONGER_AVAILABLE(NotificationTemplateName.VERIFIER_NO_LONGER_AVAILABLE);
+    ACCOUNT_USERS_SETUP(PmrvNotificationTemplateName.ACCOUNT_USERS_SETUP),
+    NEW_VERIFICATION_BODY_EMITTER(PmrvNotificationTemplateName.NEW_VERIFICATION_BODY_EMITTER),
+    VERIFIER_NO_LONGER_AVAILABLE(PmrvNotificationTemplateName.VERIFIER_NO_LONGER_AVAILABLE);
 
-    private final NotificationTemplateName notificationTemplateName;
+    private final PmrvNotificationTemplateName notificationTemplateName;
 }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationData;
 import uk.gov.pmrv.api.reporting.domain.verification.EtsComplianceRules;
 import uk.gov.pmrv.api.reporting.domain.verification.MethodologiesToCloseDataGaps;
@@ -44,7 +44,7 @@ class AerApplySaveVerificationActionHandlerTest {
     @Test
     void process() {
         final long taskId = 1L;
-        final PmrvUser user = PmrvUser.builder().build();
+        final AppUser user = AppUser.builder().build();
         final AerSaveApplicationVerificationRequestTaskActionPayload payload = AerSaveApplicationVerificationRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.AER_SAVE_APPLICATION_VERIFICATION_PAYLOAD)
                 .verificationData(AerVerificationData.builder()

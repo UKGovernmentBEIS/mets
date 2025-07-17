@@ -8,11 +8,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
@@ -53,14 +53,14 @@ class ItemResponseServiceTest {
             .items(List.of(expectedItem))
             .totalItems(1L)
             .build();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").roleType(RoleType.OPERATOR).build();
+        AppUser appUser = AppUser.builder().userId("user").roleType(RoleTypeConstants.OPERATOR).build();
         ItemDTO itemDTO = Mockito.mock(ItemDTO.class);
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().items(List.of(itemDTO)).totalItems(1L).build();
 
         when(itemResponseCreationService.getAccountType()).thenReturn(AccountType.INSTALLATION);
-        when(itemResponseCreationService.toItemDTOResponse(itemPage, pmrvUser)).thenReturn(itemDTOResponse);
+        when(itemResponseCreationService.toItemDTOResponse(itemPage, appUser)).thenReturn(itemDTOResponse);
 
-        ItemDTOResponse result = itemResponseService.toItemDTOResponse(itemPage, accountType, pmrvUser);
+        ItemDTOResponse result = itemResponseService.toItemDTOResponse(itemPage, accountType, appUser);
 
         assertEquals(itemDTOResponse, result);
     }

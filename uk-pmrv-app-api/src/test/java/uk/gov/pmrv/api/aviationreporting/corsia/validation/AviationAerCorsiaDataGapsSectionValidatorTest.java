@@ -20,6 +20,7 @@ import uk.gov.pmrv.api.aviationreporting.corsia.service.AviationAerCorsiaSubmitt
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.datagaps.AviationAerDataGap;
 
 import java.math.BigDecimal;
+import java.time.Year;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -107,15 +108,15 @@ class AviationAerCorsiaDataGapsSectionValidatorTest {
                                         .build())
                                 .build())
                         .build())
-
+                .reportingYear(Year.of(2023))
                 .build();
 
-        when(emissionsCalculationService.findOffsettingFlights(aviationAerCorsiaAggregatedEmissionDataDetails)).thenReturn(Set.of(details1, details3));
+        when(emissionsCalculationService.findOffsettingFlights(aviationAerCorsiaAggregatedEmissionDataDetails, Year.of(2023))).thenReturn(Set.of(details1, details3));
 
         final AviationAerValidationResult actual = validator.validate(aerContainer);
         assertTrue(actual.isValid());
         assertThat(actual.getAerViolations()).isEmpty();
-        verify(emissionsCalculationService, times(1)).findOffsettingFlights(aviationAerCorsiaAggregatedEmissionDataDetails);
+        verify(emissionsCalculationService, times(1)).findOffsettingFlights(aviationAerCorsiaAggregatedEmissionDataDetails, Year.of(2023));
     }
     
     @Test
@@ -149,10 +150,10 @@ class AviationAerCorsiaDataGapsSectionValidatorTest {
                                         .build())
                                 .build())
                         .build())
-
+                .reportingYear(Year.of(2023))
                 .build();
 
-        when(emissionsCalculationService.findOffsettingFlights(aviationAerCorsiaAggregatedEmissionDataDetails)).thenReturn(Set.of(details1, details3));
+        when(emissionsCalculationService.findOffsettingFlights(aviationAerCorsiaAggregatedEmissionDataDetails, Year.of(2023))).thenReturn(Set.of(details1, details3));
 
         final AviationAerValidationResult actual = validator.validate(aerContainer);
         assertFalse(actual.isValid());
@@ -160,7 +161,7 @@ class AviationAerCorsiaDataGapsSectionValidatorTest {
         assertThat(actual.getAerViolations()).extracting(AviationAerViolation::getMessage)
                 .containsOnly(AviationAerViolation.AviationAerViolationMessage.INVALID_AFFECTED_FLIGHTS_PERCENTAGE.getMessage());
         
-        verify(emissionsCalculationService, times(1)).findOffsettingFlights(aviationAerCorsiaAggregatedEmissionDataDetails);
+        verify(emissionsCalculationService, times(1)).findOffsettingFlights(aviationAerCorsiaAggregatedEmissionDataDetails, Year.of(2023));
     }
 
     private AviationAerDataGap createDataGap(String reason, String type, String replacementMethod, Integer flightsAffected, BigDecimal totalEmissions) {

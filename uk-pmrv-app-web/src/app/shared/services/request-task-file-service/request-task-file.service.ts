@@ -46,8 +46,8 @@ export class RequestTaskFileService {
         value: !uuid
           ? null
           : Array.isArray(uuid)
-          ? uuid.map((id) => this.buildFileEvent(id, attachments))
-          : this.buildFileEvent(uuid, attachments),
+            ? (uuid || []).map((id) => this.buildFileEvent(id, attachments))
+            : this.buildFileEvent(uuid, attachments),
         disabled,
       },
       {
@@ -63,7 +63,7 @@ export class RequestTaskFileService {
   }
 
   private buildFileEvent(uuid: string, attachments: { [key: string]: string }): Pick<FileUploadEvent, 'uuid' | 'file'> {
-    //todo This should be refactored and replace the store with what is absolutely  necessary.
+    //TODO This should be refactored and replace the store with what is absolutely  necessary.
     // currently an assumption is mde that either the state will have
     // the property key property or the store will have a getter for the specific property
     // check common-tasks.store.ts

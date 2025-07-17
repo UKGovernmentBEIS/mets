@@ -9,15 +9,11 @@ import { EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 import { SubmissionPageComponent } from '../submission-page';
 
-
 describe('SubmissionSuccessComponent', () => {
-
   async function setup() {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [
-        { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
-      ],
+      providers: [{ provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore }],
     }).compileComponents();
 
     TestBed.inject(RequestTaskStore).setRequestTaskItem({

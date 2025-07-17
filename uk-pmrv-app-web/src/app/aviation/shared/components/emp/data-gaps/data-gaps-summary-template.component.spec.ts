@@ -35,6 +35,6 @@ describe('DataGapsSummaryTemplate', () => {
     expect(screen.getByText(dataGapsData.otherDataGapsTypes)).toBeInTheDocument();
     expect(screen.getByText(dataGapsData.secondaryDataSources)).toBeInTheDocument();
     expect(screen.getByText(dataGapsData.substituteData)).toBeInTheDocument();
-    expect((await screen.findAllByText("Change")).length).toEqual(4)
+    expect((await screen.findAllByText('Change')).length).toEqual(4);
   });
 });

@@ -1,10 +1,10 @@
 package uk.gov.pmrv.api.migration.verification_body;
 
 import org.springframework.jdbc.core.RowMapper;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
 public class VerificationBodyMapper implements RowMapper<VerificationBodyVO> {
 

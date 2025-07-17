@@ -50,6 +50,7 @@ export const AER_EMISSIONS_REDUCTION_CLAIM_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Emissions reduction claim' },
         loadComponent: () =>
           import('./emissions-reduction-claim-summary').then((c) => c.EmissionsReductionClaimSummaryComponent),
       },

@@ -1,14 +1,12 @@
 package uk.gov.pmrv.api.migration.workflow;
 
-import lombok.RequiredArgsConstructor;
-
 import org.mapstruct.factory.Mappers;
-
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
@@ -24,13 +22,20 @@ import java.util.stream.Collectors;
 
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 @Service
-@RequiredArgsConstructor
 public class MigrationWorkflowService extends MigrationBaseService {
 
     private final JdbcTemplate migrationJdbcTemplate;
     private final AccountRepository accountRepository;
     private final RequestRepository requestRepository;
     private final MigrationRequestMapper requestMapper = Mappers.getMapper(MigrationRequestMapper.class);
+
+    public MigrationWorkflowService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                    AccountRepository accountRepository,
+                                    RequestRepository requestRepository) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.accountRepository = accountRepository;
+        this.requestRepository = requestRepository;
+    }
 
     private static final String QUERY_BASE = """
 with mig_wf_status as (

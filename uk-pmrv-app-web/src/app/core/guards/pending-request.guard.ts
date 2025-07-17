@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanDeactivate, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { combineLatest, first, map, Observable, tap } from 'rxjs';
 
@@ -7,8 +7,11 @@ import { PendingRequest } from '../interfaces/pending-request.interface';
 import { PendingRequestService } from './pending-request.service';
 
 @Injectable({ providedIn: 'root' })
-export class PendingRequestGuard implements CanDeactivate<PendingRequest> {
-  constructor(private readonly router: Router, private readonly pendingRequest: PendingRequestService) {}
+export class PendingRequestGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly pendingRequest: PendingRequestService,
+  ) {}
 
   canDeactivate(component: PendingRequest | any): boolean | Observable<boolean> {
     return (

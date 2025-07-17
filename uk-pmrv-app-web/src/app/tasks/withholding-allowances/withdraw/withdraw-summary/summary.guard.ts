@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { isWizardComplete } from '@tasks/withholding-allowances/withdraw/withdra
 @Injectable({
   providedIn: 'root',
 })
-export class SummaryGuard implements CanActivate {
+export class SummaryGuard {
   constructor(
     private readonly router: Router,
     private readonly withholdingAllowancesService: WithholdingAllowancesService,

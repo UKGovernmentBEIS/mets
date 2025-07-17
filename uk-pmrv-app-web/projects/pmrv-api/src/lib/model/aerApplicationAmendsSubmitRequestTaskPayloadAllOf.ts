@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -17,7 +17,7 @@ import { PermitOriginatedData } from './permitOriginatedData';
 
 export interface AerApplicationAmendsSubmitRequestTaskPayloadAllOf {
   aer?: Aer;
-  permitType?: 'GHGE' | 'HSE';
+  permitType?: 'GHGE' | 'HSE' | 'WASTE';
   reportingYear?: number;
   installationOperatorDetails?: InstallationOperatorDetails;
   permitOriginatedData?: PermitOriginatedData;

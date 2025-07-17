@@ -1,21 +1,23 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service;
 
-import java.util.Optional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferAApplicationRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferViolation;
+
+import java.util.Optional;
 
 @Service
 @Validated
@@ -30,7 +32,7 @@ public class PermitTransferAValidatorService {
     public void validateTaskPayload(@NotNull @Valid final PermitTransferAApplicationRequestTaskPayload taskPayload) {
 
         if (!attachmentsValidator.attachmentsExist(taskPayload.getReferencedAttachmentIds())) {
-            throw new BusinessException(ErrorCode.INVALID_PERMIT_TRANSFER,
+            throw new BusinessException(MetsErrorCode.INVALID_PERMIT_TRANSFER,
                 PermitTransferViolation.ATTACHMENT_NOT_FOUND.getMessage());
         }
 
@@ -38,7 +40,7 @@ public class PermitTransferAValidatorService {
             taskPayload.getReferencedAttachmentIds(),
             taskPayload.getTransferAttachments().keySet())
         ) {
-            throw new BusinessException(ErrorCode.INVALID_PERMIT_TRANSFER,
+            throw new BusinessException(MetsErrorCode.INVALID_PERMIT_TRANSFER,
                 PermitTransferViolation.ATTACHMENT_NOT_REFERENCED.getMessage());
         }
     }

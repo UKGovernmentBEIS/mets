@@ -1,17 +1,16 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.dre.service;
 
-import java.math.BigDecimal;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeMethodType;
 import uk.gov.pmrv.api.workflow.payment.service.PaymentFeeMethodService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.payment.service.PaymentDetermineAmountByRequestTypeService;
+
+import java.math.BigDecimal;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

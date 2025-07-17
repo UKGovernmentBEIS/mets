@@ -63,6 +63,7 @@ export function buildTaskData(payload: AerApplicationSubmitRequestTaskPayload, s
 
 // Validators
 
+// TODO should be replaced with rangeIntegerPartValidator once input-type="number" is used in respective html fields
 export function maxIntegerPartValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: string } | null => {
     if (control.value) {
@@ -77,3 +78,23 @@ export function maxIntegerPartValidator(): ValidatorFn {
     return null;
   };
 }
+
+// export function rangeIntegerPartValidator(): ValidatorFn {
+//   return (control: AbstractControl): { [key: string]: string } | null => {
+//     if (control.value) {
+//       if (isNaN(control.value)) {
+//         return null;
+//       }
+
+//       const minAllowedValue = -999999999999;
+//       const maxAllowedValue = Math.abs(minAllowedValue);
+
+//       const integerPart = Math.floor(control.value);
+
+//       return integerPart > maxAllowedValue || integerPart < minAllowedValue
+//         ? { invalidLength: `Enter a number up to 12 figures` }
+//         : null;
+//     }
+//     return null;
+//   };
+// }

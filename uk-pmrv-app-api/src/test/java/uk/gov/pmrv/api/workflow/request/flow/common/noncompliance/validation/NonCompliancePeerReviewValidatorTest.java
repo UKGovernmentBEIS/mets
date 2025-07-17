@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceDailyPenaltyNoticeRequestTaskPayload;
@@ -33,17 +33,17 @@ class NonCompliancePeerReviewValidatorTest {
         final PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer("peerReviewer")
             .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
 
         validator.validateDailyPenaltyNoticePeerReview(requestTaskPayload,
             requestTaskType,
             taskActionPayload,
-            pmrvUser
+            appUser
         );
 
         verify(peerReviewerTaskAssignmentValidator, times(1)).validate(
             requestTaskType,
             "peerReviewer",
-            pmrvUser);
+            appUser);
     }
 }

@@ -17,7 +17,10 @@ export class SubmitComponent {
   isPermitSurrenderSubmitted$ = new BehaviorSubject(false);
   competentAuthority$ = this.store.select('competentAuthority');
 
-  constructor(readonly store: PermitSurrenderStore, readonly pendingRequest: PendingRequestService) {}
+  constructor(
+    readonly store: PermitSurrenderStore,
+    readonly pendingRequest: PendingRequestService,
+  ) {}
 
   onSubmit(): void {
     this.store

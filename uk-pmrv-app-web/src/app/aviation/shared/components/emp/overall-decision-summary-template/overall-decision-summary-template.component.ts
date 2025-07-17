@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
+import { EmpDetermination } from '@aviation/request-task/emp/shared/util/emp.util';
 import { EmpReviewDeterminationTypePipe } from '@aviation/shared/pipes/review-determination-type.pipe';
 import { SharedModule } from '@shared/shared.module';
-
-import { EmpIssuanceDetermination } from 'pmrv-api';
 
 @Component({
   selector: 'app-overall-decision-summary-template',
@@ -14,7 +13,7 @@ import { EmpIssuanceDetermination } from 'pmrv-api';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverallDecisionSummaryTemplateComponent {
-  @Input() data: EmpIssuanceDetermination;
+  @Input() data: EmpDetermination;
   @Input() variationScheduleItems: string[] = [];
   @Input() isEditable: boolean;
   @Input() changeUrlQueryParams: Params = {};

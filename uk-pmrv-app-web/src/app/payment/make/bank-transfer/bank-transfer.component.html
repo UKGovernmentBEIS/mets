@@ -7,6 +7,7 @@
     [requestTaskType$]="requestTaskType$"
     defaultHelp="Use the {{ ca | competentAuthority }}'s bank details to make a payment by bank transfer"
   ></app-make-payment-help>
+
   <govuk-details summary="How long does it take">
     <p>Faster Payments are usually received on the same day they are sent, including weekends and bank holidays.</p>
     <p>
@@ -15,6 +16,7 @@
     </p>
     <p>BACS payments usually take 3 working days to be received.</p>
   </govuk-details>
+
   <govuk-warning-text>You must include your payment reference when paying</govuk-warning-text>
 
   <ng-container *ngIf="makePaymentDetails$ | async as makePaymentDetails">
@@ -76,5 +78,5 @@
 <app-return-link
   [requestTaskType]="(store | async).requestTaskItem.requestTask.type"
   [requestMetadata]="(store | async).requestTaskItem.requestInfo.requestMetadata"
-  returnLink="../details"
+  returnLink=".."
 ></app-return-link>

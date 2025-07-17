@@ -1,14 +1,12 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 
 import java.time.Year;

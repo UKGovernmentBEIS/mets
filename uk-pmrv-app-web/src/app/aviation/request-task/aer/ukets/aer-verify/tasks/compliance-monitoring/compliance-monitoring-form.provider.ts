@@ -94,7 +94,7 @@ export class ComplianceMonitoringFormProvider
         transparencyNonCompliantReason: new FormControl<string | null>(null),
         integrityCompliant: new FormControl<boolean | null>(null, [
           GovukValidators.required(
-            'Provide a reason why the operator was not compliant with the principle of integrity of methodology',
+            'Select if the aircraft operator complied with the principle of integrity of methodology',
           ),
         ]),
         integrityNonCompliantReason: new FormControl<string | null>(null),
@@ -199,7 +199,7 @@ export class ComplianceMonitoringFormProvider
       if (!value) {
         integrityNonCompliantReason.setValidators([
           GovukValidators.required(
-            'Select if the aircraft operator complied with the principle of integrity of methodology',
+            'Provide a reason why the operator was not compliant with the principle of integrity of methodology',
           ),
           GovukValidators.maxLength(10000, 'The reason should not be more than 10000 characters'),
         ]);

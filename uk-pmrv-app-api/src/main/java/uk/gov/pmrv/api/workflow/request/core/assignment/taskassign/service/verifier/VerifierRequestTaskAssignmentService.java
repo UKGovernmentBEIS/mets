@@ -3,11 +3,11 @@ package uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.veri
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.SiteContactRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.UserRoleRequestTaskAssignmentService;
@@ -22,8 +22,8 @@ public class VerifierRequestTaskAssignmentService implements UserRoleRequestTask
     private final SiteContactRequestTaskAssignmentService siteContactRequestTaskAssignmentService;
 
     @Override
-    public RoleType getRoleType() {
-        return RoleType.VERIFIER;
+    public String getRoleType() {
+        return RoleTypeConstants.VERIFIER;
     }
 
     @Transactional

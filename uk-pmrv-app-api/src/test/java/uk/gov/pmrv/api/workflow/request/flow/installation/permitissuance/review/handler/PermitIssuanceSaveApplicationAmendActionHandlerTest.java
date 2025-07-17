@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.envpermitandlicences.EnvironmentalPermitsAndLicences;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -44,12 +44,12 @@ class PermitIssuanceSaveApplicationAmendActionHandlerTest {
                 .build();
 
         RequestTask requestTask = RequestTask.builder().id(requestTaskId).build();
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         permitIssuanceSaveApplicationAmendActionHandler
-            .process(requestTask.getId(), RequestTaskActionType.PERMIT_ISSUANCE_SAVE_APPLICATION_AMEND, pmrvUser, permitAmendRequestTaskActionPayload);
+            .process(requestTask.getId(), RequestTaskActionType.PERMIT_ISSUANCE_SAVE_APPLICATION_AMEND, appUser, permitAmendRequestTaskActionPayload);
 
         //verify
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);

@@ -3,13 +3,12 @@ package uk.gov.pmrv.api.permit.domain.sourcestreams;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.permit.domain.PermitIdSection;
 
 @Data
@@ -34,4 +33,6 @@ public class SourceStream extends PermitIdSection {
     @NotNull
     private SourceStreamType type;
 
+    @Size(max = 300)
+    private String otherTypeName;
 }

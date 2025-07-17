@@ -19,13 +19,18 @@ describe('AccountComponent', () => {
   let fixture: ComponentFixture<AccountComponent>;
   let authStore: AuthStore;
   let page: Page;
+  let activatedRouteStub: ActivatedRouteStub;
   let authService: Partial<jest.Mocked<AuthService>>;
 
-  const activatedRouteStub = new ActivatedRouteStub(undefined, undefined, {
+  activatedRouteStub = new ActivatedRouteStub(undefined, undefined, {
     accountPermit: mockedAccountPermit,
   });
 
   class Page extends BasePage<AccountComponent> {
+    get notification() {
+      return this.query<HTMLElement>('govuk-notification-banner div.govuk-notification-banner');
+    }
+
     get heading() {
       return this.query<HTMLElement>('app-page-heading h1.govuk-heading-xl');
     }
@@ -100,6 +105,56 @@ describe('AccountComponent', () => {
         'Reports',
         'Users and contacts',
       ]);
+    });
+
+    it("should not have a WASTE notification if it's not a WASTE emitterType", () => {
+      expect(page.notification).toBeNull();
+    });
+
+    describe('with emitterType equal to WASTE', () => {
+      beforeEach(async () => {
+        const accountPermit = {
+          ...mockedAccountPermit,
+          account: { ...mockedAccountPermit.account, status: 'LIVE', emitterType: 'WASTE' },
+        };
+
+        activatedRouteStub = new ActivatedRouteStub(undefined, undefined, {
+          accountPermit,
+        });
+
+        authStore.setUserState({
+          ...authStore.getState().userState,
+          roleType: 'OPERATOR',
+          userId: 'opTestId',
+        });
+        fixture.detectChanges();
+      });
+
+      it('should render all tabs', () => {
+        expect(page.tabs.map((tab) => tab.textContent.trim())).toEqual([
+          'Details',
+          'Permit history',
+          'Reports',
+          'Users and contacts',
+        ]);
+      });
+
+      it('should have a WASTE notification when the role type is an OPERATOR', () => {
+        expect(page.notification?.textContent.trim()).toEqual(
+          'Important During the voluntary waste monitoring, reporting and verification period, the METS service will reflect the full ETS scheme, so some references and data requests may not be relevant to waste operators. Contact your regulator for further information on how to participate.',
+        );
+      });
+
+      it('should not have a WASTE notification when the role type is a REGULATOR ', () => {
+        authStore.setUserState({
+          ...authStore.getState().userState,
+          roleType: 'REGULATOR',
+          userId: 'opTestId',
+        });
+        fixture.detectChanges();
+
+        expect(page.notification).toBeNull();
+      });
     });
   });
 

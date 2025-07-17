@@ -21,15 +21,15 @@ export class FlightProceduresDataTableComponent implements OnInit, OnChanges {
 
   protected columns = defaultColumns;
 
-  ngOnInit(): void {
-    if (this.customColumns) {
-      this.columns = this.customColumns;
-    }
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.customColumns && changes.customColumns.currentValue) {
       this.columns = changes.customColumns.currentValue;
+    }
+  }
+
+  ngOnInit(): void {
+    if (this.customColumns) {
+      this.columns = this.customColumns;
     }
   }
 }

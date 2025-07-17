@@ -38,6 +38,7 @@ describe('VerificationBodyDetailsInfoTemplateComponent', () => {
       },
       accreditationReferenceNumber: '1313',
     };
+
     page = new Page(fixture);
     fixture.detectChanges();
     jest.clearAllMocks();
@@ -48,11 +49,10 @@ describe('VerificationBodyDetailsInfoTemplateComponent', () => {
   });
 
   it('should show summary details', () => {
-    expect(page.summaryValues).toHaveLength(3);
+    expect(page.summaryValues).toHaveLength(2);
     expect(page.summaryValues).toEqual([
       ['Company name', 'Verification body company'],
       ['Address', `Korinthou 4, Neo Psychiko  , line 2 legal test Athens15452`],
-      ['Accreditation number', '1313'],
     ]);
   });
 });

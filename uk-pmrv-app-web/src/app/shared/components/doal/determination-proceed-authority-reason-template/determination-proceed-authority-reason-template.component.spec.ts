@@ -16,8 +16,7 @@ describe('DeterminationProceedAuthorityReasonTemplateComponent', () => {
     template: `
       <app-determination-proceed-authority-reason-template
         [determination]="determination"
-        [editable]="editable"
-      ></app-determination-proceed-authority-reason-template>
+        [editable]="editable"></app-determination-proceed-authority-reason-template>
     `,
   })
   class TestComponent {

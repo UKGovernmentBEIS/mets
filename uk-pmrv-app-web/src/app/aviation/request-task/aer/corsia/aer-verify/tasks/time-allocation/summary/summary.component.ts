@@ -37,7 +37,7 @@ export class SummaryComponent {
     map(([isEditable, taskStatus]) => {
       return {
         heading: 'Check your answers',
-        timeAllocationScope: this.formProvider.getFormValue(),
+        timeAllocationScope: this.formProvider.form.valid ? this.formProvider.getFormValue() : null,
         isEditable: isEditable,
         hideSubmit: !isEditable || ['complete', 'cannot start yet'].includes(taskStatus),
       };

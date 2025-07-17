@@ -19,7 +19,9 @@ describe('DecisionComponent', () => {
   tasksService.processRequestTaskAction.mockReturnValue(of({}));
 
   @Component({
-    template: `<app-decision [taskId]="taskId" (submitted)="submitted($event)"></app-decision>`,
+    template: `
+      <app-decision [taskId]="taskId" (submitted)="submitted($event)"></app-decision>
+    `,
     providers: [PendingRequestService],
   })
   class TestComponent {

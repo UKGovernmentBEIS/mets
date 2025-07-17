@@ -12,19 +12,19 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class MigrationDatasourceConfig {
 
-    @Bean
+    @Bean(defaultCandidate = false)
     @ConfigurationProperties(prefix="migration-datasource")
     public DataSourceProperties migrationDataSourceProperties() {
         return new DataSourceProperties();
     }
 
-    @Bean
+    @Bean(defaultCandidate = false)
     @ConfigurationProperties(prefix = "migration-datasource.hikari")
     public HikariDataSource migrationDataSource() {
         return migrationDataSourceProperties().initializeDataSourceBuilder().type(HikariDataSource.class).build();
     }
 
-    @Bean
+    @Bean(defaultCandidate = false, name = "migrationJdbcTemplate")
     public JdbcTemplate migrationJdbcTemplate() {
         JdbcTemplate template = new JdbcTemplate();
         template.setDataSource(migrationDataSource());

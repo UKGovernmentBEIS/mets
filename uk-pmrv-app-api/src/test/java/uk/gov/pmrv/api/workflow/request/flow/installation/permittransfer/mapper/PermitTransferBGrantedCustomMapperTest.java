@@ -1,14 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -17,7 +14,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBApplicationGrantedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBDetailsConfirmationReviewDecision;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBDetailsConfirmationReviewDecisionType;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.mapper.PermitTransferBGrantedCustomMapper;
+
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class PermitTransferBGrantedCustomMapperTest {
@@ -59,6 +59,6 @@ class PermitTransferBGrantedCustomMapperTest {
 
     @Test
     void getUserRoleTypes() {
-        assertThat(mapper.getUserRoleTypes()).containsExactlyInAnyOrder(RoleType.OPERATOR, RoleType.VERIFIER);
+        assertThat(mapper.getUserRoleTypes()).containsExactlyInAnyOrder(RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER);
     }
 }

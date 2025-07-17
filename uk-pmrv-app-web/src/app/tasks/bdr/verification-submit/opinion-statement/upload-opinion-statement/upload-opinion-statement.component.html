@@ -1,0 +1,18 @@
+<app-bdr-task-review [breadcrumb]="true">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()">
+    <app-page-heading caption="BDR verification opinion statement">
+      Upload the BDR verification opinion statement
+    </app-page-heading>
+    <div class="govuk-!-width-two-thirds">
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        [label]="(isFileUploaded$ | async) ? 'Upload another file' : 'Upload a file'"
+        formControlName="opinionStatementFiles"
+        listTitle="Uploaded files"></app-multiple-file-input>
+
+      <h2 class="govuk-heading-m">Notes (optional)</h2>
+      <p class="govuk-caption-m">This cannot be viewed by the operator</p>
+      <div formControlName="notes" govuk-textarea [maxLength]="10000" rows="10"></div>
+    </div>
+  </app-wizard-step>
+</app-bdr-task-review>

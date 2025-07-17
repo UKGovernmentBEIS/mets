@@ -20,4 +20,14 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_1_0_DELETE_DUE_DATE_FROM_EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMIT" author="P70605">
+        <sql>
+            UPDATE request_task
+            SET due_date = null
+            WHERE type = 'EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMIT'
+        </sql>
+        <rollback>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

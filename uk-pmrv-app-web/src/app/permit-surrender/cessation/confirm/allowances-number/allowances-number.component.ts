@@ -12,12 +12,12 @@ import { allowancesNumberFormProvider } from './allowances-number-form.provider'
 
 @Component({
   selector: 'app-allowances-number',
-  template: `<app-wizard-step
+  template: `
+    <app-wizard-step
       (formSubmit)="onContinue()"
       [formGroup]="form"
       submitText="Continue"
-      [hideSubmit]="(store.isEditable$ | async) === false"
-    >
+      [hideSubmit]="(store.isEditable$ | async) === false">
       <span class="govuk-caption-l">Confirm cessation of regulated activities</span>
 
       <app-page-heading>How many allowances were surrendered by the installation?</app-page-heading>
@@ -27,10 +27,10 @@ import { allowancesNumberFormProvider } from './allowances-number-form.provider'
         inputType="number"
         govuk-text-input
         hint="For example 1000"
-        widthClass="govuk-input--width-10"
-      ></div>
+        widthClass="govuk-input--width-10"></div>
     </app-wizard-step>
-    <a govukLink routerLink="../..">Return to: Cessation</a> `,
+    <a govukLink routerLink="../..">Return to: Cessation</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [allowancesNumberFormProvider],
 })

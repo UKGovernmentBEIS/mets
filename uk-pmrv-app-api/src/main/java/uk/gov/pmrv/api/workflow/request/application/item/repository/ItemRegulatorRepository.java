@@ -4,10 +4,11 @@ import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
-
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
@@ -17,8 +18,6 @@ import uk.gov.pmrv.api.workflow.request.core.domain.QRequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,20 +64,12 @@ public class ItemRegulatorRepository {
 		final BooleanExpression caRequestTaskScopeWhereClause = ItemRepoUtils
 				.constructCARequestTaskScopeWhereClause(scopedCARequestTaskTypes, request, requestTask);
 
-		switch (assignmentType) {
-		case ME: {
-			return requestTask.assignee.eq(userId)
-					.and(caRequestTaskScopeWhereClause.or(request.type.eq(RequestType.SYSTEM_MESSAGE_NOTIFICATION)));
-		}
-		case OTHERS: {
-			return requestTask.assignee.ne(userId).and(caRequestTaskScopeWhereClause);
-		}
-		case UNASSIGNED: {
-			return requestTask.assignee.isNull().and(caRequestTaskScopeWhereClause);
-		}
-		default:
-			throw new IllegalArgumentException("Unexpected value: " + assignmentType);
-		}
+        return switch (assignmentType) {
+            case ME -> requestTask.assignee.eq(userId)
+                    .and(caRequestTaskScopeWhereClause.or(request.type.eq(RequestType.SYSTEM_MESSAGE_NOTIFICATION)));
+            case OTHERS -> requestTask.assignee.ne(userId).and(caRequestTaskScopeWhereClause);
+            case UNASSIGNED -> requestTask.assignee.isNull().and(caRequestTaskScopeWhereClause);
+        };
 	}
     	
 }

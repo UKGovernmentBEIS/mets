@@ -12,7 +12,6 @@ import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.domain.abbreviations.Abbreviations;
 import uk.gov.pmrv.api.permit.domain.additionaldocuments.AdditionalDocuments;
@@ -31,7 +30,6 @@ import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.pmrv.api.reporting.domain.verification.NotVerifiedOverallAssessment;
 import uk.gov.pmrv.api.reporting.domain.verification.OverallAssessmentType;
 import uk.gov.pmrv.api.reporting.service.AerService;
-import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -53,13 +51,10 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AerCompleteServiceTest {
@@ -77,7 +72,7 @@ class AerCompleteServiceTest {
     private InstallationOperatorDetailsQueryService installationOperatorDetailsQueryService;
 
     @Mock
-    private RequestVerificationService<AerVerificationReport> requestVerificationService;
+    private RequestVerificationService requestVerificationService;
 
     @Mock
     private RequestActionUserInfoResolver requestActionUserInfoResolver;
@@ -87,7 +82,6 @@ class AerCompleteServiceTest {
         final BigDecimal totalEmissions = BigDecimal.valueOf(1000);
         final String requestId = "requestId";
         final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
-        final VerificationBodyDetails bodyDetails = getVerificationBodyDetails();
         final AerVerificationReport verificationReport = AerVerificationReport.builder()
                 .verificationBodyId(2L)
                 .verificationData(AerVerificationData.builder()
@@ -134,8 +128,6 @@ class AerCompleteServiceTest {
                 .thenReturn(request);
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(request.getAccountId()))
                 .thenReturn(installationOperatorDetails);
-        when(requestVerificationService.getVerificationBodyDetails(verificationReport, request.getVerificationBodyId()))
-                .thenReturn(bodyDetails);
         when(aerService.submitAer(params))
                 .thenReturn(totalEmissions);
 
@@ -148,7 +140,7 @@ class AerCompleteServiceTest {
         verify(installationOperatorDetailsQueryService, times(1))
                 .getInstallationOperatorDetails(request.getAccountId());
         verify(requestVerificationService, times(1))
-                .getVerificationBodyDetails(verificationReport, request.getVerificationBodyId());
+                .refreshVerificationReportVBDetails(verificationReport, request.getVerificationBodyId());
         verify(aerService, times(1))
                 .submitAer(params);
 
@@ -165,7 +157,6 @@ class AerCompleteServiceTest {
         final UUID attachmentId = UUID.randomUUID();
 
         final InstallationOperatorDetails installationOperatorDetails = getInstallationOperatorDetails();
-        final VerificationBodyDetails bodyDetails = getVerificationBodyDetails();
         final AerVerificationReport verificationReport = AerVerificationReport.builder()
                 .verificationBodyId(2L)
                 .build();
@@ -208,6 +199,7 @@ class AerCompleteServiceTest {
                 .installationOperatorDetails(installationOperatorDetails)
                 .permitOriginatedData(permitOriginatedData)
                 .monitoringPlanVersions(monitoringPlanVersions)
+                .verificationPerformed(true)
                 .verificationReport(verificationReport)
                 .reviewGroupDecisions(reviewGroupDecisions)
                 .verificationAttachments(Map.of(attachmentId, "fileName"))
@@ -217,11 +209,9 @@ class AerCompleteServiceTest {
                 .thenReturn(request);
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(request.getAccountId()))
                 .thenReturn(installationOperatorDetails);
-        when(requestVerificationService.getVerificationBodyDetails(verificationReport, request.getVerificationBodyId()))
-                .thenReturn(bodyDetails);
 
         // Invoke
-        service.addRequestAction(requestId);
+        service.addRequestAction(requestId, false);
 
         // Verify
         verify(requestService, times(1))
@@ -229,7 +219,7 @@ class AerCompleteServiceTest {
         verify(installationOperatorDetailsQueryService, times(1))
                 .getInstallationOperatorDetails(request.getAccountId());
         verify(requestVerificationService, times(1))
-                .getVerificationBodyDetails(verificationReport, request.getVerificationBodyId());
+                .refreshVerificationReportVBDetails(verificationReport, request.getVerificationBodyId());
         verify(requestService, times(1))
                 .addActionToRequest(request, actionPayload, RequestActionType.AER_APPLICATION_COMPLETED, regulatorReviewer);
     }
@@ -257,20 +247,6 @@ class AerCompleteServiceTest {
                         .country("GR")
                         .postcode("postcode")
                         .build())
-                .build();
-    }
-
-    private VerificationBodyDetails getVerificationBodyDetails() {
-        return VerificationBodyDetails.builder()
-                .name("name2")
-                .accreditationReferenceNumber("accRefNum2")
-                .address(AddressDTO.builder()
-                        .line1("line2")
-                        .city("city2")
-                        .country("GR")
-                        .postcode("postcode2")
-                        .build())
-                .emissionTradingSchemes(Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS))
                 .build();
     }
 

@@ -32,11 +32,13 @@ describe('ReviewSectionsContainerComponent', () => {
 
   @Component({
     selector: 'app-review-sections',
-    template: `<div>
-      <div class="status-resolver">
-        {{ 'INSTALLATION_DETAILS' | reviewGroupStatusWrapper: statusResolverPipe | async }}
+    template: `
+      <div>
+        <div class="status-resolver">
+          {{ 'INSTALLATION_DETAILS' | reviewGroupStatusWrapper: statusResolverPipe | async }}
+        </div>
       </div>
-    </div>`,
+    `,
   })
   class MockReviewSectionsComponent {
     @Input()

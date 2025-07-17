@@ -5,11 +5,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
+import uk.gov.pmrv.api.aviationreporting.ukets.EmpUkEtsOriginatedData;
+import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEts;
+import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.AviationOperatorDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.common.domain.AviationAerUkEtsRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.domain.AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.mapper.AviationAerUkEtsReviewMapper;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.domain.RequestAviationAccountInfo;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.RequestAviationAccountQueryService;
@@ -46,19 +53,50 @@ class AviationAerUkEtsApplicationAmendsSubmitInitializerTest {
             .payload(requestPayload)
             .metadata(requestMetadata)
             .build();
-        RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder().crcoCode("code").build();
+        RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder()
+        		.serviceContactDetails(ServiceContactDetails.builder().email("email").build())
+        		.crcoCode("latest_crcocode")
+        		.build();
 
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(accountInfo);
+        
+		AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload requestTaskPayload = AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload
+				.builder()
+				.empOriginatedData(EmpUkEtsOriginatedData.builder()
+						.operatorDetails(AviationOperatorDetails.builder().build())
+						.build())
+				.aer(AviationAerUkEts.builder()
+						.operatorDetails(AviationOperatorDetails.builder().build())
+						.build())
+				.build();
+		when(aviationAerUkEtsReviewMapper.toAviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload(requestPayload,
+				RequestTaskPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT_PAYLOAD,
+				reportingYear
+				)).thenReturn(requestTaskPayload);
 
         //invoke
-        initializer.initializePayload(request);
+        RequestTaskPayload result = initializer.initializePayload(request);
+        
+        assertThat(result).isEqualTo(AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload
+				.builder()
+				.serviceContactDetails(accountInfo.getServiceContactDetails())
+				.empOriginatedData(EmpUkEtsOriginatedData.builder()
+						.operatorDetails(AviationOperatorDetails.builder()
+								.crcoCode("latest_crcocode")
+								.build())
+						.build())
+				.aer(AviationAerUkEts.builder()
+						.operatorDetails(AviationOperatorDetails.builder()
+								.crcoCode("latest_crcocode")
+								.build())
+						.build())
+				.build());
 
         //verify
         verify(requestAviationAccountQueryService, times(1)).getAccountInfo(accountId);
         verify(aviationAerUkEtsReviewMapper, times(1))
             .toAviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload(
                 requestPayload,
-                accountInfo,
                 RequestTaskPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT_PAYLOAD,
                 reportingYear
             );

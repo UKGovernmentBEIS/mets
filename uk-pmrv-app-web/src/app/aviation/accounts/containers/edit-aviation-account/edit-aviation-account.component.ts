@@ -53,7 +53,7 @@ export class EditAviationAccountComponent implements OnInit, AfterViewInit, OnDe
           commencementDate: new Date(response?.commencementDate) as any,
           registryId: response?.registryId ? response.registryId.toString() : null,
           id: response?.id,
-          hasContactAddress: [!!response?.location ?? false],
+          hasContactAddress: [!!response?.location],
           location: response?.location,
         },
       });

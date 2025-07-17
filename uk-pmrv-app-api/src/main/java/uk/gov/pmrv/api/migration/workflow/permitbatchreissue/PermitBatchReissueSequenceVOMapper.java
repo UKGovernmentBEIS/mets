@@ -1,11 +1,10 @@
 package uk.gov.pmrv.api.migration.workflow.permitbatchreissue;
 
+import org.springframework.jdbc.core.RowMapper;
+import uk.gov.pmrv.api.migration.MigrationHelper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.springframework.jdbc.core.RowMapper;
-
-import uk.gov.pmrv.api.migration.MigrationHelper;
 
 public class PermitBatchReissueSequenceVOMapper implements RowMapper<PermitBatchReissueSequenceVO> {
 

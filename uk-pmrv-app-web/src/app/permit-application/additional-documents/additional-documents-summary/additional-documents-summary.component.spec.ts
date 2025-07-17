@@ -70,7 +70,7 @@ describe('AdditionalDocumentsSummaryComponent', () => {
 
   it('should list the file names', () => {
     expect(page.attachments).toHaveLength(2);
-    expect(page.attachments.map((dd) => dd.textContent)).toEqual(['cover.jpg', 'PublicationAgreement.pdf']);
+    expect(page.attachments.map((dd) => dd.textContent)).toEqual([' cover.jpg ', ' PublicationAgreement.pdf ']);
     expect(page.summaryHeader.textContent.trim()).toEqual('Uploaded additional documents and information');
     expect(page.summaryHeader.classList).not.toContain('govuk-visually-hidden');
     expect(page.notificationBanner).toBeTruthy();

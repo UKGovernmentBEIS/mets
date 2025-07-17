@@ -1,9 +1,8 @@
 package uk.gov.pmrv.api.account.service.event;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.account.service.AccountVerificationBodyUnappointService;
 import uk.gov.pmrv.api.verificationbody.event.AccreditationEmissionTradingSchemeNotAvailableEvent;
 

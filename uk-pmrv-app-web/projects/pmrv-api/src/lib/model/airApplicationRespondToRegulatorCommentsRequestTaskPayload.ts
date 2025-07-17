@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,15 +9,31 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AirImprovement } from './airImprovement';
+import { AirImprovementCalculationCO2 } from './airImprovementCalculationCO2';
+import { AirImprovementCalculationPFC } from './airImprovementCalculationPFC';
+import { AirImprovementFallback } from './airImprovementFallback';
+import { AirImprovementMeasurement } from './airImprovementMeasurement';
+import { OperatorAirImprovementAlreadyMadeResponse } from './operatorAirImprovementAlreadyMadeResponse';
 import { OperatorAirImprovementFollowUpResponse } from './operatorAirImprovementFollowUpResponse';
-import { OperatorAirImprovementResponse } from './operatorAirImprovementResponse';
+import { OperatorAirImprovementNoResponse } from './operatorAirImprovementNoResponse';
+import { OperatorAirImprovementYesResponse } from './operatorAirImprovementYesResponse';
 import { RegulatorAirImprovementResponse } from './regulatorAirImprovementResponse';
 import { RequestTaskPayload } from './requestTaskPayload';
 
 export interface AirApplicationRespondToRegulatorCommentsRequestTaskPayload extends RequestTaskPayload {
-  airImprovements: { [key: string]: AirImprovement };
-  operatorImprovementResponses: { [key: string]: OperatorAirImprovementResponse };
+  airImprovements: {
+    [key: string]:
+      | AirImprovementCalculationCO2
+      | AirImprovementCalculationPFC
+      | AirImprovementFallback
+      | AirImprovementMeasurement;
+  };
+  operatorImprovementResponses: {
+    [key: string]:
+      | OperatorAirImprovementAlreadyMadeResponse
+      | OperatorAirImprovementNoResponse
+      | OperatorAirImprovementYesResponse;
+  };
   airSectionsCompleted?: { [key: string]: boolean };
   airAttachments?: { [key: string]: string };
   regulatorImprovementResponses: { [key: string]: RegulatorAirImprovementResponse };

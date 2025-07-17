@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -59,7 +59,7 @@ class PermitVariationReviewRequestPeerReviewRegulatorLedActionHandlerTest {
     @Test
     void process() {
         Long requestTaskId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         String selectedPeerReviewer = "selectedPeerReviewer";
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
@@ -81,16 +81,16 @@ class PermitVariationReviewRequestPeerReviewRegulatorLedActionHandlerTest {
         cut.process(
             requestTaskId,
             RequestTaskActionType.PERMIT_VARIATION_REQUEST_PEER_REVIEW,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(permitVariationReviewRequestPeerReviewRegulatorLedValidator, times(1))
-            .validate(requestTask, taskActionPayload, pmrvUser);
+            .validate(requestTask, taskActionPayload, appUser);
         verify(permitVariationRegulatorLedService, times(1))
             .saveRequestPeerReviewActionRegulatorLed(requestTask, selectedPeerReviewer, "userId");
         verify(requestService, times(1))
-            .addActionToRequest(requestTask.getRequest(), null, PERMIT_VARIATION_PEER_REVIEW_REQUESTED, pmrvUser.getUserId());
+            .addActionToRequest(requestTask.getRequest(), null, PERMIT_VARIATION_PEER_REVIEW_REQUESTED, appUser.getUserId());
         verify(workflowService, times(1)).completeTask(
             requestTask.getProcessTaskId(),
             Map.of(

@@ -33,7 +33,7 @@ export class ViewAviationAccountComponent implements OnDestroy {
   constructor(
     private readonly store: AviationAccountsStore,
     readonly authStore: AuthStore,
-    private router: Router,
+    private readonly router: Router,
     private readonly route: ActivatedRoute,
   ) {}
 

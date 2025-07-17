@@ -15,10 +15,6 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.domain.Av
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.domain.AviationDreDeterminationReasonType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.domain.AviationDreUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.submit.domain.AviationDreUkEtsApplicationSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.Dre;
-import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreApplicationSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreDeterminationReason;
-import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestPayload;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

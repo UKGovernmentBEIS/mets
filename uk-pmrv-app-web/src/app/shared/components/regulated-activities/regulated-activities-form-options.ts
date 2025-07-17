@@ -1,7 +1,8 @@
 import { RegulatedActivity } from 'pmrv-api';
 
 export type RegulatedActivitiesFormGroup = {
-  COMBUSTION_GROUP: Extract<RegulatedActivity['type'], 'COMBUSTION'>[];
+  WASTE_GROUP?: Extract<RegulatedActivity['type'], 'WASTE'>[];
+  COMBUSTION_GROUP: Extract<RegulatedActivity['type'], 'COMBUSTION' | 'UPSTREAM_GHG_REMOVAL'>[];
   REFINING_GROUP: Extract<RegulatedActivity['type'], 'MINERAL_OIL_REFINING'>[];
   METAL_GROUP: Extract<
     RegulatedActivity['type'],
@@ -44,6 +45,7 @@ export type RegulatedActivitiesFormGroup = {
 export const formGroupOptions: {
   [K in keyof RegulatedActivitiesFormGroup]: RegulatedActivity['type'][];
 } = {
+  WASTE_GROUP: ['WASTE'],
   COMBUSTION_GROUP: ['COMBUSTION'],
   REFINING_GROUP: ['MINERAL_OIL_REFINING'],
   METAL_GROUP: [
@@ -81,6 +83,7 @@ export const formGroupOptions: {
 };
 
 export const activityGroupMap: Record<keyof RegulatedActivitiesFormGroup, string> = {
+  WASTE_GROUP: 'Waste',
   COMBUSTION_GROUP: 'Combustion',
   REFINING_GROUP: 'Refining',
   METAL_GROUP: 'Metals',
@@ -106,8 +109,12 @@ export const unitOptions: RegulatedActivity['capacityUnit'][] = [
 ];
 
 export const activityHintMap: Partial<Record<RegulatedActivity['type'], string>> = {
+  WASTE: 'Including incineration and combustion of waste and other energy recovery from waste',
   COMBUSTION:
     'At installations with a total rated thermal input exceeding 20MW. Installations excluded are those for the incineration of municipal or hazardous waste.',
+  UPSTREAM_GHG_REMOVAL:
+    'If undertaking upstream GHG removal of constituent greenhouse gases from petroleum (whether by a chemical or physical process) at an upstream site that is vented without a combustion process, this box must be selected.',
+
   ORE_ROASTING_OR_SINTERING: 'Including sulphide ore, and pelletisation of the ores',
   PIG_IRON_STEEL_PRODUCTION:
     'Including continuous casting. Primary or secondary fusion, at a capacity exceeding 2,5 tonnes per hour.',

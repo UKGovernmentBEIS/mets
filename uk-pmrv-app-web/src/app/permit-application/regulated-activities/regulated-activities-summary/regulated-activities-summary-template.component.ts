@@ -8,14 +8,13 @@ import { GovukTableColumn } from 'govuk-components';
     <govuk-table
       [columns]="columns"
       [data]="'regulatedActivities' | task: !showOriginal | async"
-      [class.no-bottom-border]="!hasBottomBorder"
-    >
+      [class.no-bottom-border]="!hasBottomBorder">
       <ng-template let-column="column" let-row="row">
         <ng-container [ngSwitch]="column.field">
           <ng-container *ngSwitchCase="'activity'">{{ row.type | regulatedActivityType }}</ng-container>
-          <ng-container *ngSwitchCase="'capacityAndUnit'"
-            >{{ row.capacity | number: '1.0-1000' }} {{ row.capacityUnit | capacityUnit }}</ng-container
-          >
+          <ng-container *ngSwitchCase="'capacityAndUnit'">
+            {{ row.capacity | number: '1.0-1000' }} {{ row.capacityUnit | capacityUnit }}
+          </ng-container>
           <ng-container *ngSwitchCase="'type'">{{ row.type | gas }}</ng-container>
         </ng-container>
       </ng-template>

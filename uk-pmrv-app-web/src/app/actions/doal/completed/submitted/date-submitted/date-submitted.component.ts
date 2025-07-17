@@ -10,12 +10,10 @@ import { DoalActionService } from '../../../core/doal-action.service';
   template: `
     <app-doal-action-task
       header="Provide the date application was submitted to UK authorities"
-      [actionType]="actionType$ | async"
-    >
+      [actionType]="actionType$ | async">
       <app-doal-date-submitted-summary-template
         [dateSubmittedToAuthority]="dateSubmittedToAuthority$ | async"
-        [editable]="false"
-      ></app-doal-date-submitted-summary-template>
+        [editable]="false"></app-doal-date-submitted-summary-template>
     </app-doal-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

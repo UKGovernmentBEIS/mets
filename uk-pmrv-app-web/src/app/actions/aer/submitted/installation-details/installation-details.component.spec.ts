@@ -55,9 +55,9 @@ describe('InstallationDetailsComponent', () => {
       ['Installation name', 'onshore permit installation'],
       ['Site name', 'site name'],
       ['Installation address', 'NN166712 Korinthou 4, Neo Psychiko, line 2 legal testAthens15452'],
+      ['Company registration number', '88888'],
       ['Operator name', 'onshore permit'],
       ['Legal status', 'Limited Company'],
-      ['Company registration number', '88888'],
       ['Operator address', 'Korinthou 3, Neo Psychiko, line 2 legal test Athens15451'],
     ]);
   });

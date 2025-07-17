@@ -1,24 +1,13 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType.PERMIT_REVOCATION_CESSATION_SUBMIT_PAYLOAD;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountStatusService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -41,6 +30,17 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.common.mapper.PermitCe
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.validation.PermitCessationNotifyOperatorValidator;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service.notification.PermitRevocationOfficialNoticeService;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType.PERMIT_REVOCATION_CESSATION_SUBMIT_PAYLOAD;
 
 @ExtendWith(MockitoExtension.class)
 class RequestPermitRevocationCessationServiceTest {
@@ -141,7 +141,7 @@ class RequestPermitRevocationCessationServiceTest {
                 .payloadType(RequestActionPayloadType.PERMIT_REVOCATION_CESSATION_COMPLETED_PAYLOAD)
                 .cessationOfficialNotice(officialNotice)
                 .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        final AppUser appUser = AppUser.builder().userId("user").build();
         
         when(permitRevocationOfficialNoticeService.generateRevocationCessationOfficialNotice(request.getId(), taskActionPayload.getDecisionNotification()))
         	.thenReturn(officialNotice);
@@ -153,13 +153,13 @@ class RequestPermitRevocationCessationServiceTest {
             .thenReturn(cessationCompletedRequestActionPayload);
 
         //invoke
-        service.executeNotifyOperatorActions(requestTask, pmrvUser, taskActionPayload);
+        service.executeNotifyOperatorActions(requestTask, appUser, taskActionPayload);
 
         assertThat(requestPayload.getPermitCessationContainer()).isEqualTo(requestTaskPayload.getCessationContainer());
         assertThat(requestPayload.getPermitCessationCompletedDate()).isNotNull();
         
         verify(cessationNotifyOperatorValidator, times(1))
-            .validate(requestTask, pmrvUser, taskActionPayload);
+            .validate(requestTask, appUser, taskActionPayload);
         verify(installationAccountStatusService, times(1)).handleRevocationCessationCompleted(request.getAccountId());
         verify(permitRevocationOfficialNoticeService, times(1))
             .generateRevocationCessationOfficialNotice(request.getId(), taskActionPayload.getDecisionNotification());

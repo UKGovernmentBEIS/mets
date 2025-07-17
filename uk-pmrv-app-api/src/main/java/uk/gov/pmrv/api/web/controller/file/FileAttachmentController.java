@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.files.attachments.service.FileAttachmentTokenService;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.attachments.service.FileAttachmentTokenService;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
 
-import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping(path = "/v1.0/file-attachments")
@@ -47,7 +47,7 @@ public class FileAttachmentController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
-                        ContentDisposition.builder("attachment").filename(file.getFileName()).build().toString())
+                        ContentDisposition.builder("attachment").filename(file.getFileName(), StandardCharsets.UTF_8).build().toString())
                 .contentType(MediaType.parseMediaType(file.getFileType()))
                 .body(new ByteArrayResource(file.getFileContent()));
     }

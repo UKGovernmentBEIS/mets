@@ -8,7 +8,6 @@ const mockVerifierAuthorities: UserAuthorityInfoDTO[] = [
     firstName: 'Jim',
     lastName: 'Cash',
     authorityStatus: 'DISABLED',
-    locked: false,
     authorityCreationDate: '2020-01-03T12:38:12.846716Z',
   },
   {
@@ -18,7 +17,6 @@ const mockVerifierAuthorities: UserAuthorityInfoDTO[] = [
     firstName: 'John',
     lastName: 'Cash',
     authorityStatus: 'ACTIVE',
-    locked: false,
     authorityCreationDate: '2020-01-01T12:38:12.846716Z',
   },
   {
@@ -28,7 +26,6 @@ const mockVerifierAuthorities: UserAuthorityInfoDTO[] = [
     firstName: 'Pit',
     lastName: 'Cash',
     authorityStatus: 'PENDING',
-    locked: false,
     authorityCreationDate: '2020-01-08T12:38:12.846716Z',
   },
   {
@@ -38,7 +35,6 @@ const mockVerifierAuthorities: UserAuthorityInfoDTO[] = [
     firstName: 'Patty',
     lastName: 'Cash',
     authorityStatus: 'ACTIVE',
-    locked: true,
     authorityCreationDate: '2020-01-06T12:38:12.846716Z',
   },
 ];

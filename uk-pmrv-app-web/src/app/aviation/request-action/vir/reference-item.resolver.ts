@@ -12,7 +12,10 @@ import { matchVerificationItem } from '@shared/vir-shared/utils/match-verificati
   providedIn: 'root',
 })
 export class ReferenceItemResolver {
-  constructor(private store: RequestActionStore, private readonly router: Router) {}
+  constructor(
+    private store: RequestActionStore,
+    private readonly router: Router,
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<VerificationDataItem> {
     return this.store.pipe(virQuery.selectVerificationData).pipe(

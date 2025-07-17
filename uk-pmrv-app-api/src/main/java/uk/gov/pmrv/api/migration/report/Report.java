@@ -1,14 +1,15 @@
 package uk.gov.pmrv.api.migration.report;
 
 import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Year;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.gov.pmrv.api.reporting.domain.verification.OverallAssessmentType;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Year;
 
 @Data
 @NoArgsConstructor

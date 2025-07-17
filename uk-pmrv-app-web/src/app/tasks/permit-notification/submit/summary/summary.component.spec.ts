@@ -88,13 +88,13 @@ describe('SummaryComponent', () => {
   it('should display the summary details', () => {
     expect(page.summaryDefinitions).toEqual([
       'Some other factor',
-      'Change',
+      'Change what do you want to notify the regulator about',
       'Renounce free allocations',
-      'Change',
+      'Change any other factor',
       'description',
-      'Change',
+      'Change any other factor',
       'No',
-      'Change',
+      'Change any other factor',
     ]);
   });
 });

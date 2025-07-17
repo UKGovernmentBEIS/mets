@@ -9,11 +9,14 @@
             {{ row.explanation }}
           </div>
         </ng-container>
+
         <ng-container *ngSwitchCase="'impact'">{{ row.materialEffect ? 'Material' : 'Not material' }} </ng-container>
+
         <ng-container *ngIf="isEditable">
           <ng-container *ngSwitchCase="'change'">
             <a [routerLink]="[baseUrl, index]" govukLink [queryParams]="queryParams">Change</a>
           </ng-container>
+
           <ng-container *ngSwitchCase="'delete'">
             <a [routerLink]="[baseUrl, index, 'delete']" govukLink [queryParams]="queryParams">Remove</a>
           </ng-container>
@@ -21,6 +24,7 @@
       </ng-container>
     </ng-template>
   </govuk-table>
+
   <div class="govuk-button-group" *ngIf="isEditable">
     <button
       govukSecondaryButton

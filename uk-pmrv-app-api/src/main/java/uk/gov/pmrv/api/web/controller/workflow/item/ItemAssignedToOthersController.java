@@ -18,21 +18,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemAssignedToOthersService;
 
 import java.util.List;
 import java.util.Optional;
 
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.VERIFIER;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.VERIFIER;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
 
@@ -51,7 +50,7 @@ public class ItemAssignedToOthersController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = {OPERATOR, REGULATOR, VERIFIER})
     public ResponseEntity<ItemDTOResponse> getAssignedToOthersItems(
-            @Parameter(hidden = true) PmrvUser user,
+            @Parameter(hidden = true) AppUser user,
             @PathVariable("accountType") @Parameter(description = "The account type") AccountType accountType,
             @RequestParam("page") @Parameter(name = "page", description = "The page number starting from zero")
             @Min(value = 0, message = "{parameter.page.typeMismatch}")

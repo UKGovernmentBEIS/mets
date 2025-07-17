@@ -3,15 +3,16 @@ package uk.gov.pmrv.api.user.core.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.notification.mail.config.property.NotificationProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.token.JwtTokenService;
-import uk.gov.pmrv.api.token.JwtTokenActionEnum;
+
+import uk.gov.netz.api.notificationapi.mail.config.property.NotificationProperties;
+import uk.gov.netz.api.token.JwtProperties;
+import uk.gov.netz.api.token.JwtTokenAction;
+import uk.gov.netz.api.token.JwtTokenService;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.user.NavigationOutcomes;
-import uk.gov.pmrv.api.token.JwtProperties;
 import uk.gov.pmrv.api.user.core.domain.dto.ResetPasswordDTO;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.domain.model.UserNotificationWithRedirectionLinkInfo;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
@@ -36,19 +37,19 @@ public class UserResetPasswordService {
 		
 		 if (user.isPresent()) {
 			 Map<String, Object> notificationParams = new HashMap<>(Map.of(
-		                EmailNotificationTemplateConstants.CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink(),
-		                EmailNotificationTemplateConstants.EXPIRATION_MINUTES, expirationInMinutes
+					 PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink(),
+					 PmrvEmailNotificationTemplateConstants.EXPIRATION_MINUTES, expirationInMinutes
 		        ));
 			 
 			 userNotificationService.notifyUserWithLink(
 		                UserNotificationWithRedirectionLinkInfo.builder()
-		                        .templateName(NotificationTemplateName.RESET_PASSWORD_REQUEST)
+		                        .templateName(PmrvNotificationTemplateName.RESET_PASSWORD_REQUEST)
 		                        .userEmail(email)
 		                        .notificationParams(notificationParams)
-		                        .linkParamName(EmailNotificationTemplateConstants.RESET_PASSWORD_LINK)
+		                        .linkParamName(PmrvEmailNotificationTemplateConstants.RESET_PASSWORD_LINK)
 		                        .linkPath(NavigationOutcomes.RESET_PASSWORD_URL)
 		                        .tokenParams(UserNotificationWithRedirectionLinkInfo.TokenParams.builder()
-		                                .jwtTokenAction(JwtTokenActionEnum.RESET_PASSWORD)
+		                                .jwtTokenAction(JwtTokenAction.RESET_PASSWORD)
 		                                .claimValue(email)
 		                                .expirationInterval(jwtProperties.getClaim().getResetPasswordExpIntervalMinutes())
 		                                .build()
@@ -61,7 +62,7 @@ public class UserResetPasswordService {
 	}
 
 	public String verifyToken(String token) {
-		return jwtTokenService.resolveTokenActionClaim(token, JwtTokenActionEnum.RESET_PASSWORD);
+		return jwtTokenService.resolveTokenActionClaim(token, JwtTokenAction.RESET_PASSWORD);
 	}
 
 	public void resetPassword(ResetPasswordDTO resetPasswordDTO) {

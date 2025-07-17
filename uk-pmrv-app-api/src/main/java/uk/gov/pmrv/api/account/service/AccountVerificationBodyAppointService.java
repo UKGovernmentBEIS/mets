@@ -1,17 +1,15 @@
 package uk.gov.pmrv.api.account.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.domain.event.AccountVerificationBodyAppointedEvent;
-import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyQueryService;
 
 @RequiredArgsConstructor

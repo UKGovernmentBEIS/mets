@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { first, map, Observable, switchMap, tap } from 'rxjs';
 
-import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
+import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 
 import {
   NonComplianceApplicationSubmitRequestTaskPayload,
@@ -18,44 +18,12 @@ import {
   NonComplianceNoticeOfIntentRequestTaskPayload,
   NonComplianceNoticeOfIntentSaveApplicationRequestTaskActionPayload,
   RequestTaskActionPayload,
-  RequestTaskItemDTO,
-  RequestTaskPayload,
-  TasksService,
 } from 'pmrv-api';
 
-import { CommonTasksStore } from '../../store/common-tasks.store';
-
 @Injectable({ providedIn: 'root' })
-export class NonComplianceService {
-  constructor(
-    private readonly store: CommonTasksStore,
-    private readonly tasksService: TasksService,
-    private readonly businessErrorService: BusinessErrorService,
-  ) {}
-
-  get requestTaskItem$(): Observable<RequestTaskItemDTO> {
-    return this.store.requestTaskItem$;
-  }
-
-  get isEditable$(): Observable<boolean> {
-    return this.store.isEditable$;
-  }
-
-  get payload$(): Observable<RequestTaskPayload> {
-    return this.store.payload$;
-  }
-
+export class NonComplianceService extends TasksHelperService {
   get accountId$() {
     return this.store.requestTaskItem$.pipe(map((task) => task.requestInfo.accountId));
-  }
-
-  getPayload(): Observable<any> {
-    return this.store.payload$;
-  }
-
-  getBaseFileDownloadUrl() {
-    const requestTaskId = this.store.requestTaskId;
-    return `/tasks/${requestTaskId}/file-download/`;
   }
 
   saveNonCompliance(
@@ -154,18 +122,13 @@ export class NonComplianceService {
   }
 
   getDownloadUrlFiles(files: string[]): { downloadUrl: string; fileName: string }[] {
-    const url = this.createBaseFileDownloadUrl();
+    const url = this.getBaseFileDownloadUrl();
     return (
       files?.map((id) => ({
         downloadUrl: url + `${id}`,
         fileName: this.attachments[id],
       })) ?? []
     );
-  }
-
-  createBaseFileDownloadUrl() {
-    const requestTaskId = this.store.requestTaskId;
-    return `/tasks/${requestTaskId}/file-download/`;
   }
 
   saveDailyPenaltyNotice(

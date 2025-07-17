@@ -15,17 +15,16 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmpIssuingAuthorityQueryService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.Collections;
 import java.util.List;
@@ -37,8 +36,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 
 @ExtendWith(MockitoExtension.class)
 class EmpIssuingAuthorityControllerTest {
@@ -50,7 +49,7 @@ class EmpIssuingAuthorityControllerTest {
     private RoleAuthorizationService roleAuthorizationService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private EmpIssuingAuthorityQueryService empIssuingAuthorityQueryService;
@@ -71,7 +70,7 @@ class EmpIssuingAuthorityControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(empIssuingAuthorityController)
                 .setControllerAdvice(new ExceptionControllerAdvice())
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .addFilters(new FilterChainProxy(Collections.emptyList()))
                 .build();
 
@@ -94,15 +93,15 @@ class EmpIssuingAuthorityControllerTest {
 
     @Test
     void getEmpIssuingAuthorityNames_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
                 .userId("userId")
                 .roleType(OPERATOR)
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(pmrvUser, new RoleType[]{OPERATOR, REGULATOR});
+                .evaluate(appUser, new String[]{OPERATOR, REGULATOR});
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/v1.0/issuing-authority")

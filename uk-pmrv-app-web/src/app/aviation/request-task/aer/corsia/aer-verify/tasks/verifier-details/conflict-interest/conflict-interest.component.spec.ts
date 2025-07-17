@@ -117,6 +117,9 @@ describe('ConflictInterestComponent', () => {
                     email: 'test@pmrv.com',
                     position: 'My position',
                   },
+                  interestConflictAvoidance: {
+                    impartialityAssessmentResult: 'My results',
+                  },
                 },
               },
               verificationSectionsCompleted: {},
@@ -129,6 +132,7 @@ describe('ConflictInterestComponent', () => {
         (store.aerVerifyDelegate.payload as AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload)
           .verificationReport.verifierDetails as AviationAerCorsiaVerifierDetails,
       );
+
       createComponent();
     });
 
@@ -140,7 +144,10 @@ describe('ConflictInterestComponent', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
       expect(page.heading1.textContent.trim()).toEqual('Avoiding a conflict of interest');
-      expect(page.heading2.map((h2) => h2.textContent.trim())).toEqual(['Team leader repeat visits']);
+      expect(page.heading2.map((h2) => h2.textContent.trim())).toEqual([
+        'Team leader repeat visits',
+        'Verification impartiality assessment',
+      ]);
       expect(page.submitButton).toBeTruthy();
     });
 
@@ -163,10 +170,7 @@ describe('ConflictInterestComponent', () => {
       page.submitButton.click();
       fixture.detectChanges();
 
-      expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryListContents).toEqual([
-        'Provide a reason why you could not meet the conflict of interest requirement',
-      ]);
+      expect(page.errorSummary).toBeFalsy();
 
       page.sixVerificationsConductedRadioButtons[0].click();
       page.submitButton.click();
@@ -186,11 +190,9 @@ describe('ConflictInterestComponent', () => {
         'Provide a reason why you could not meet the conflict of interest requirement',
       ]);
 
-      page.breakTakenRadioButtons[0].click();
       page.submitButton.click();
       fixture.detectChanges();
 
-      expect(page.errorSummary).toBeFalsy();
       expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
       expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith({
         requestTaskId: 19,
@@ -198,8 +200,8 @@ describe('ConflictInterestComponent', () => {
         requestTaskActionPayload: {
           verifierDetails: {
             interestConflictAvoidance: {
-              breakTaken: true,
-              sixVerificationsConducted: true,
+              sixVerificationsConducted: false,
+              impartialityAssessmentResult: 'My results',
             },
             verificationTeamLeader: {
               name: 'My name',
@@ -259,6 +261,7 @@ describe('ConflictInterestComponent', () => {
           },
         },
       } as any);
+
       formProvider.setFormValue(
         (store.aerVerifyDelegate.payload as AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload)
           .verificationReport.verifierDetails as AviationAerCorsiaVerifierDetails,
@@ -275,7 +278,10 @@ describe('ConflictInterestComponent', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
       expect(page.heading1.textContent.trim()).toEqual('Avoiding a conflict of interest');
-      expect(page.heading2.map((h2) => h2.textContent.trim())).toEqual(['Team leader repeat visits']);
+      expect(page.heading2.map((h2) => h2.textContent.trim())).toEqual([
+        'Team leader repeat visits',
+        'Verification impartiality assessment',
+      ]);
       expect(page.submitButton).toBeTruthy();
     });
 
@@ -301,6 +307,7 @@ describe('ConflictInterestComponent', () => {
             interestConflictAvoidance: {
               breakTaken: true,
               sixVerificationsConducted: true,
+              impartialityAssessmentResult: 'My results',
             },
             verificationTeamLeader: {
               name: 'My name',

@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter, Router } from '@angular/router';
 
 import { BasePage } from '../../../../testing';
 import { PermitIssuanceStore } from '../../../permit-issuance/store/permit-issuance.store';
@@ -32,8 +31,9 @@ describe('RegulatedActivitiesSummaryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RegulatedActivitiesSummaryComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [SharedModule, SharedPermitModule],
       providers: [
+        provideRouter([]),
         {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,

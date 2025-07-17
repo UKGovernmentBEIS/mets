@@ -14,7 +14,10 @@ import { AerService } from '@tasks/aer/core/aer.service';
 export class RecallComponent implements PendingRequest {
   readonly isConfirmed$ = new BehaviorSubject(false);
 
-  constructor(readonly pendingRequest: PendingRequestService, private readonly aerService: AerService) {}
+  constructor(
+    readonly pendingRequest: PendingRequestService,
+    private readonly aerService: AerService,
+  ) {}
 
   recall(): void {
     this.aerService

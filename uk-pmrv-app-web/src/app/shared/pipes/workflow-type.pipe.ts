@@ -6,34 +6,75 @@ import { RequestDetailsDTO } from 'pmrv-api';
 export class WorkflowTypePipe implements PipeTransform {
   transform(type: RequestDetailsDTO['requestType']): string {
     switch (type) {
-      case 'AER':
-        return 'AER';
-      case 'NER':
-        return 'NER';
-      case 'VIR':
-        return 'VIR';
-      case 'DRE':
-        return 'DRE';
+      // ######################## COMMON ########################
+      case 'SYSTEM_MESSAGE_NOTIFICATION':
+        return 'System Message Notification';
+
+      // ######################## INSTALLATION ########################
       case 'INSTALLATION_ACCOUNT_OPENING':
         return 'Account creation';
+
       case 'PERMIT_ISSUANCE':
         return 'Permit Application';
-      case 'PERMIT_NOTIFICATION':
-        return 'Permit Notification';
-      case 'PERMIT_REVOCATION':
-        return 'Permit Revocation';
       case 'PERMIT_SURRENDER':
         return 'Permit Surrender';
+      case 'PERMIT_REVOCATION':
+        return 'Permit Revocation';
       case 'PERMIT_TRANSFER_A':
-        return 'Permit Transfer';
       case 'PERMIT_TRANSFER_B':
         return 'Permit Transfer';
       case 'PERMIT_VARIATION':
         return 'Permit Variation';
-      case 'SYSTEM_MESSAGE_NOTIFICATION':
-        return 'System Message Notification';
+      case 'PERMIT_NOTIFICATION':
+        return 'Permit Notification';
+      case 'PERMIT_REISSUE':
+        return 'Batch variation';
+
       case 'NON_COMPLIANCE':
-        return 'Non Compliance';
+        return 'Non-compliance';
+
+      case 'NER':
+        return 'New Entrant Reserve';
+      case 'DOAL':
+        return 'Determination of activity level';
+      case 'AER':
+        return 'Emissions report';
+      case 'VIR':
+        return 'Verifier improvement';
+      case 'AIR':
+        return 'Annual improvement';
+      case 'DRE':
+        return 'Determine emissions';
+
+      case 'WITHHOLDING_OF_ALLOWANCES':
+        return 'Withholding of allowances';
+      case 'RETURN_OF_ALLOWANCES':
+        return 'Return of allowances';
+
+      // ######################## AVIATION ########################
+      case 'AVIATION_ACCOUNT_CLOSURE':
+        return 'Account closure';
+
+      case 'AVIATION_NON_COMPLIANCE':
+        return 'Non-compliance';
+
+      case 'EMP_REISSUE':
+        return 'Batch variation';
+      case 'EMP_ISSUANCE_CORSIA':
+      case 'EMP_ISSUANCE_UKETS':
+        return 'EMP Application';
+      case 'EMP_VARIATION_CORSIA':
+      case 'EMP_VARIATION_UKETS':
+        return 'Variation';
+
+      case 'AVIATION_AER_CORSIA':
+      case 'AVIATION_AER_UKETS':
+        return 'Emissions report';
+      case 'AVIATION_DRE_UKETS':
+        return 'Determine emissions';
+      case 'AVIATION_VIR':
+        return 'Verifier improvement';
+
       default:
         return null;
     }

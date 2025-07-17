@@ -30,7 +30,9 @@ describe('ContactsComponent', () => {
   };
 
   @Component({
-    template: ` <app-contacts [verificationBodyId]="verificationBodyId$"></app-contacts> `,
+    template: `
+      <app-contacts [verificationBodyId]="verificationBodyId$"></app-contacts>
+    `,
   })
   class TestComponent {
     verificationBodyId$: Observable<number>;

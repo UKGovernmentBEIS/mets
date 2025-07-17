@@ -1,11 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.ner.handler;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -20,6 +17,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.NerDe
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.service.NerApplyReviewService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.validation.NerReviewValidator;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class NerReviewNotifyOperatorActionHandler
@@ -33,7 +34,7 @@ public class NerReviewNotifyOperatorActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final NotifyOperatorForDecisionRequestTaskActionPayload payload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -43,9 +44,9 @@ public class NerReviewNotifyOperatorActionHandler
         final BigDecimal paymentAmount = requestTask.getRequest().getPayload().getPaymentAmount();
 
         validator.validateReviewTaskPayload(taskPayload, paymentAmount);
-        validator.validateReviewNotifyUsers(requestTask, decisionNotification, pmrvUser);
+        validator.validateReviewNotifyUsers(requestTask, decisionNotification, appUser);
 
-        applyReviewService.saveDecisionNotification(requestTask, decisionNotification, pmrvUser);
+        applyReviewService.saveDecisionNotification(requestTask, decisionNotification, appUser);
         
         final NerDeterminationType determinationType = taskPayload.getDetermination().getType();
         workflowService.completeTask(

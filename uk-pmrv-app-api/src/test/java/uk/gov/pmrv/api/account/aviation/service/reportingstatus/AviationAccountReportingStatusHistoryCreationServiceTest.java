@@ -8,6 +8,8 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.context.ApplicationEventPublisher;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingExemptEvent;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingRequiredEvent;
@@ -16,12 +18,12 @@ import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingStatu
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -52,20 +54,20 @@ class AviationAccountReportingStatusHistoryCreationServiceTest {
         Long accountId = 1L;
 		final AviationAccountReportingStatusHistoryCreationDTO reportingStatusHistoryCreationDTO = AviationAccountReportingStatusHistoryCreationDTO
 				.builder().status(AviationAccountReportingStatus.REQUIRED_TO_REPORT).reason("reason").build();
-        final PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
+        final AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
 		final AviationAccount aviationAccount = createAviationAccount(accountId,
 				AviationAccountReportingStatus.EXEMPT_COMMERCIAL, List.of());
         
         when(aviationAccountRepository.findById(accountId)).thenReturn(Optional.of(aviationAccount));
 
-        service.submitReportingStatus(accountId, reportingStatusHistoryCreationDTO, pmrvUser);
+        service.submitReportingStatus(accountId, reportingStatusHistoryCreationDTO, appUser);
         
         assertThat(aviationAccount.getReportingStatus()).isEqualTo(AviationAccountReportingStatus.REQUIRED_TO_REPORT);
         assertThat(aviationAccount.getReportingStatusHistoryList()).hasSize(1);
         assertThat(aviationAccount.getReportingStatusHistoryList().get(0).getReason()).isEqualTo("reason");
         assertThat(aviationAccount.getReportingStatusHistoryList().get(0).getStatus()).isEqualTo(AviationAccountReportingStatus.REQUIRED_TO_REPORT);
-        assertThat(aviationAccount.getReportingStatusHistoryList().get(0).getSubmitterId()).isEqualTo(pmrvUser.getUserId());
-        assertThat(aviationAccount.getReportingStatusHistoryList().get(0).getSubmitterName()).isEqualTo(pmrvUser.getFullName());
+        assertThat(aviationAccount.getReportingStatusHistoryList().get(0).getSubmitterId()).isEqualTo(appUser.getUserId());
+        assertThat(aviationAccount.getReportingStatusHistoryList().get(0).getSubmitterName()).isEqualTo(appUser.getFullName());
         
         verify(aviationAccountRepository, times(1)).findById(accountId);
         verify(publisher, times(1)).publishEvent(Mockito.isA(AviationAccountReportingRequiredEvent.class));
@@ -76,7 +78,7 @@ class AviationAccountReportingStatusHistoryCreationServiceTest {
         Long accountId = 1L;
 		final AviationAccountReportingStatusHistoryCreationDTO reportingStatusHistoryCreationDTO = AviationAccountReportingStatusHistoryCreationDTO
 				.builder().status(AviationAccountReportingStatus.EXEMPT_COMMERCIAL).reason("reason").build();
-		final PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).userId("userId")
+		final AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).userId("userId")
 				.firstName("first name").lastName("last name").build();
 		final AviationAccount aviationAccount = createAviationAccount(accountId,
 				AviationAccountReportingStatus.REQUIRED_TO_REPORT,
@@ -85,7 +87,7 @@ class AviationAccountReportingStatusHistoryCreationServiceTest {
         
         when(aviationAccountRepository.findById(accountId)).thenReturn(Optional.of(aviationAccount));
 
-        service.submitReportingStatus(accountId, reportingStatusHistoryCreationDTO, pmrvUser);
+        service.submitReportingStatus(accountId, reportingStatusHistoryCreationDTO, appUser);
         
         assertThat(aviationAccount.getReportingStatus()).isEqualTo(AviationAccountReportingStatus.EXEMPT_COMMERCIAL);
         assertThat(aviationAccount.getReportingStatusHistoryList()).hasSize(2);
@@ -100,14 +102,14 @@ class AviationAccountReportingStatusHistoryCreationServiceTest {
         Long accountId = 1L;
         final AviationAccountReportingStatusHistoryCreationDTO reportingStatusHistoryCreationDTO =
             AviationAccountReportingStatusHistoryCreationDTO.builder().status(AviationAccountReportingStatus.EXEMPT_NON_COMMERCIAL).reason("reason").build();
-        final PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
+        final AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
         final AviationAccount aviationAccount = createAviationAccount(accountId,
 				AviationAccountReportingStatus.EXEMPT_COMMERCIAL,
 				new ArrayList<>(List.of(createReportingStatusHistory(accountId,
 						AviationAccountReportingStatus.EXEMPT_COMMERCIAL, "reason1"))));
         when(aviationAccountRepository.findById(accountId)).thenReturn(Optional.of(aviationAccount));
 
-        service.submitReportingStatus(accountId, reportingStatusHistoryCreationDTO, pmrvUser);
+        service.submitReportingStatus(accountId, reportingStatusHistoryCreationDTO, appUser);
         
         assertThat(aviationAccount.getReportingStatus()).isEqualTo(AviationAccountReportingStatus.EXEMPT_NON_COMMERCIAL);
         assertThat(aviationAccount.getReportingStatusHistoryList()).hasSize(2);
@@ -120,12 +122,12 @@ class AviationAccountReportingStatusHistoryCreationServiceTest {
         Long accountId = 1L;
         final AviationAccountReportingStatusHistoryCreationDTO reportingStatusHistoryCreationDTO =
                 AviationAccountReportingStatusHistoryCreationDTO.builder().status(AviationAccountReportingStatus.REQUIRED_TO_REPORT).reason("reason").build();
-        final PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
+        final AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
 
         when(aviationAccountRepository.findById(accountId)).thenReturn(Optional.empty());
         
         BusinessException businessException = assertThrows(
-                BusinessException.class, () -> service.submitReportingStatus(accountId, reportingStatusHistoryCreationDTO, pmrvUser));
+                BusinessException.class, () -> service.submitReportingStatus(accountId, reportingStatusHistoryCreationDTO, appUser));
         assertThat(businessException.getErrorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND);
         verify(aviationAccountRepository, times(1)).findById(accountId);
     }
@@ -135,7 +137,7 @@ class AviationAccountReportingStatusHistoryCreationServiceTest {
         Long accountId = 1L;
         final AviationAccountReportingStatusHistoryCreationDTO reportingStatusHistoryCreationDTO =
                 AviationAccountReportingStatusHistoryCreationDTO.builder().status(AviationAccountReportingStatus.REQUIRED_TO_REPORT).reason("reason").build();
-        final PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
+        final AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
         final AviationAccount aviationAccount = createAviationAccount(accountId,
 				AviationAccountReportingStatus.REQUIRED_TO_REPORT,
 				new ArrayList<>(List.of(createReportingStatusHistory(accountId,
@@ -144,9 +146,9 @@ class AviationAccountReportingStatusHistoryCreationServiceTest {
         when(aviationAccountRepository.findById(accountId)).thenReturn(Optional.of(aviationAccount));
         
         BusinessException businessException = assertThrows(
-                BusinessException.class, () -> service.submitReportingStatus(accountId, reportingStatusHistoryCreationDTO, pmrvUser));
+                BusinessException.class, () -> service.submitReportingStatus(accountId, reportingStatusHistoryCreationDTO, appUser));
 
-        assertThat(businessException.getErrorCode()).isEqualTo(ErrorCode.AVIATION_ACCOUNT_REPORTING_STATUS_NOT_CHANGED);
+        assertThat(businessException.getErrorCode()).isEqualTo(MetsErrorCode.AVIATION_ACCOUNT_REPORTING_STATUS_NOT_CHANGED);
         verify(aviationAccountRepository, times(1)).findById(accountId);
     }
 

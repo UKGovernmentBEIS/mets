@@ -13,10 +13,16 @@ import { BaseDataGapsComponent } from '../base-data-gaps.component';
   imports: [SharedModule, ReturnToLinkComponent],
 })
 export class SecondaryDataSourcesExistComponent extends BaseDataGapsComponent {
-  form = this.fb.group({
-    secondarySourcesDataGapsExist: this._form.controls.secondarySourcesDataGapsExist,
-    secondarySourcesDataGapsConditions: this._form.controls.secondarySourcesDataGapsConditions,
-  });
+  form = this.fb.group(
+    {
+      secondarySourcesDataGapsExist: this._form.controls.secondarySourcesDataGapsExist,
+      secondarySourcesDataGapsConditions: this._form.controls.secondarySourcesDataGapsConditions,
+    },
+    {
+      updateOn: 'change',
+    },
+  );
+
   onSubmit() {
     this._form.updateValueAndValidity();
 

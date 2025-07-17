@@ -1,8 +1,8 @@
 package uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.calculation;
 
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamCategory;
 import uk.gov.pmrv.api.reporting.domain.ActivityDataMeasurementUnit;
 import uk.gov.pmrv.api.reporting.domain.EmissionFactorMeasurementUnit;
@@ -21,7 +21,7 @@ public class SeventhCategoryEmissionsCalculationService extends SourceStreamEmis
         BigDecimal conversionFactor = calculationParams.getConversionFactor();
 
         if(conversionFactor == null) {
-            throw new BusinessException(ErrorCode.AER_EMISSIONS_CALCULATION_PARAMETER_VALUE_MISSING);
+            throw new BusinessException(MetsErrorCode.AER_EMISSIONS_CALCULATION_PARAMETER_VALUE_MISSING);
         }
 
         return calculationParams.getEmissionFactor().multiply(conversionFactor);

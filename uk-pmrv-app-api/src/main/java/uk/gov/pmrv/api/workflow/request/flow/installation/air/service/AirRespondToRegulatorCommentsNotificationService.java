@@ -1,48 +1,49 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.air.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.service.AuthorityService;
+import uk.gov.netz.api.common.config.WebAppProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
+import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
+import uk.gov.pmrv.api.account.service.AccountCaSiteContactService;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
+import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
-import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
-import uk.gov.pmrv.api.account.service.AccountCaSiteContactService;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.core.service.AuthorityService;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
-import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
-import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 
 @Service
 @RequiredArgsConstructor
 public class AirRespondToRegulatorCommentsNotificationService {
 
-    private final NotificationEmailService notificationEmailService;
+    private final NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
     private final UserAuthService userAuthService;
     private final AuthorityService authorityService;
     private final AccountCaSiteContactService accountCaSiteContactService;
     private final InstallationOperatorDetailsQueryService installationOperatorDetailsQueryService;
-    private final AppProperties appProperties;
+    private final WebAppProperties webAppProperties;
 
     public void sendSubmittedResponseToRegulatorCommentsNotificationToRegulator(final Request request) {
-        this.sendNotification(request, NotificationTemplateName.AIR_NOTIFICATION_OPERATOR_RESPONSE);
+        this.sendNotification(request, PmrvNotificationTemplateName.AIR_NOTIFICATION_OPERATOR_RESPONSE);
     }
 
     public void sendDeadlineResponseToRegulatorCommentsNotificationToRegulator(final Request request) {
-        this.sendNotification(request, NotificationTemplateName.AIR_NOTIFICATION_OPERATOR_MISSES_DEADLINE);
+        this.sendNotification(request, PmrvNotificationTemplateName.AIR_NOTIFICATION_OPERATOR_MISSES_DEADLINE);
     }
 
-    private void sendNotification(final Request request, NotificationTemplateName templateName) {
+    private void sendNotification(final Request request, PmrvNotificationTemplateName templateName) {
         
         final Set<String> recipientsEmails = new HashSet<>();
         final String reviewer = request.getPayload().getRegulatorReviewer();
@@ -67,18 +68,18 @@ public class AirRespondToRegulatorCommentsNotificationService {
             InstallationOperatorDetails operatorDetails = installationOperatorDetailsQueryService
                     .getInstallationOperatorDetails(accountId);
 
-            EmailData notifyInfo = EmailData.builder()
+            EmailData<EmailNotificationTemplateData> notifyInfo = EmailData.<EmailNotificationTemplateData>builder()
                     .notificationTemplateData(EmailNotificationTemplateData.builder()
-                            .templateName(templateName)
+                            .templateName(templateName.getName())
                             .templateParams(Map.of(
-                                    EmailNotificationTemplateConstants.ACCOUNT_NAME, operatorDetails.getInstallationName(),
-                                    EmailNotificationTemplateConstants.EMITTER_ID, operatorDetails.getEmitterId(),
-                                    EmailNotificationTemplateConstants.HOME_URL, appProperties.getWeb().getUrl()
+                            		PmrvEmailNotificationTemplateConstants.ACCOUNT_NAME, operatorDetails.getInstallationName(),
+                                    PmrvEmailNotificationTemplateConstants.EMITTER_ID, operatorDetails.getEmitterId(),
+                                    PmrvEmailNotificationTemplateConstants.HOME_URL, webAppProperties.getUrl()
                             ))
                             .build())
                     .build();
 
-            notificationEmailService.notifyRecipients(notifyInfo, new ArrayList<>(recipientsEmails), List.of());
+            notificationEmailService.notifyRecipients(notifyInfo, new ArrayList<>(recipientsEmails));
         }
     }
 }

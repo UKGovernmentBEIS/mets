@@ -66,7 +66,7 @@ describe('SubmitComponent', () => {
     expect(page.heading).toEqual('Notify the regulator of a change');
     expect(page.sections.map((el) => el.textContent.trim())).toEqual([
       'Details of the Change not started',
-      'Submit cannot start yet',
+      'Send to regulator cannot start yet',
     ]);
   });
 });

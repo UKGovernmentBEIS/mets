@@ -2,19 +2,14 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.ner.validation;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 import uk.gov.pmrv.api.allowance.validation.AllowanceAllocationValidator;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -30,6 +25,11 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerProceedT
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerReviewGroupDecision;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.NerDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.NerReviewGroup;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 @Validated
@@ -82,18 +82,18 @@ public class NerReviewValidator {
     }
 
     public void validatePeerReview(final PeerReviewRequestTaskActionPayload payload,
-                                   final PmrvUser pmrvUser) {
+                                   final AppUser appUser) {
 
         peerReviewerTaskAssignmentValidator.validate(
             RequestTaskType.NER_APPLICATION_PEER_REVIEW,
             payload.getPeerReviewer(), 
-            pmrvUser
+            appUser
         );
     }
 
     public void validateReviewNotifyUsers(final RequestTask requestTask,
                                           final DecisionNotification decisionNotification,
-                                          final PmrvUser pmrvUser) {
+                                          final AppUser appUser) {
 
         final NerApplicationReviewRequestTaskPayload taskPayload =
             (NerApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -107,14 +107,14 @@ public class NerReviewValidator {
             }
         }
         
-        this.validateNotifyUsers(requestTask, decisionNotification, pmrvUser);
+        this.validateNotifyUsers(requestTask, decisionNotification, appUser);
     }
 
     public void validateNotifyUsers(final RequestTask requestTask,
                                     final DecisionNotification decisionNotification,
-                                    final PmrvUser pmrvUser) {
+                                    final AppUser appUser) {
 
-        final boolean valid = decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser);
+        final boolean valid = decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser);
         if (!valid) {
             throw new BusinessException(ErrorCode.FORM_VALIDATION);
         }

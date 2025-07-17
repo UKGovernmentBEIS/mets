@@ -9,15 +9,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.notification.template.domain.DocumentTemplate;
 import uk.gov.pmrv.api.notification.template.domain.NotificationTemplate;
 import uk.gov.pmrv.api.notification.template.domain.dto.NotificationTemplateDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.TemplateInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.notification.template.repository.NotificationTemplateRepository;
 import uk.gov.pmrv.api.notification.template.transform.NotificationTemplateMapper;
 import uk.gov.pmrv.api.notification.template.transform.TemplateInfoMapper;
@@ -84,7 +84,7 @@ class NotificationTemplateQueryServiceTest {
     @Test
     void getManagedNotificationTemplateById() {
         Long notificationTemplateId = 1L;
-        NotificationTemplateName notificationTemplateName = NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT;
+        PmrvNotificationTemplateName notificationTemplateName = PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT;
         String notificationTemplateSubject = "notification template subject";
         String notificationTemplateText = "notification template text";
         String workflow = " workflow";

@@ -36,7 +36,7 @@ export class TriggerAirComponent {
                 payloadType: 'EMPTY_PAYLOAD',
               },
             },
-            accountId,
+            String(accountId),
           ),
         ),
         this.pendingRequest.trackRequest(),

@@ -1,14 +1,13 @@
 package uk.gov.pmrv.api.user.core.domain.dto.validation;
 
+import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-
-import jakarta.validation.ConstraintValidatorContext;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -49,7 +48,8 @@ class PasswordValidatorTest {
 
     @Test
     void notValidPwnedPassword() {
-        when(passwordClientService.searchPassword(strongPasswordHashPrefix)).thenThrow(new BusinessException(ErrorCode.INTERNAL_SERVER));
+        when(passwordClientService.searchPassword(strongPasswordHashPrefix)).thenThrow(new BusinessException(
+            ErrorCode.INTERNAL_SERVER));
 
         assertThrows(BusinessException.class, () -> passwordValidator.isValid(strongPassword, constraintValidatorContext));
         verify(passwordClientService, times(1)).searchPassword(strongPasswordHashPrefix);

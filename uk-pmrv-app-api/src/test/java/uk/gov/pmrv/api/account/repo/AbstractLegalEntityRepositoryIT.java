@@ -1,13 +1,14 @@
 package uk.gov.pmrv.api.account.repo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.HoldingCompany;
 import uk.gov.pmrv.api.account.domain.HoldingCompanyAddress;
@@ -18,11 +19,11 @@ import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.repository.LegalEntityRepository;
 import uk.gov.pmrv.api.common.domain.Address;
 
-import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @Testcontainers
@@ -53,7 +54,11 @@ public abstract class AbstractLegalEntityRepositoryIT extends AbstractContainerB
         List<LegalEntity> list = repo.findActiveLegalEntitiesByAccountsOrderByName(Set.of(account1Active.getId(), account2Pending.getId()));
         assertThat(list).hasSize(1);
         assertThat(list.get(0).getName()).isEqualTo(le1Name);
-        assertThat(list.get(0).getHoldingCompany()).usingRecursiveComparison().ignoringExpectedNullFields().isEqualTo(createHoldingCompany());
+        HoldingCompany actual = list.get(0).getHoldingCompany();
+        HoldingCompany expected = createHoldingCompany();
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getRegistrationNumber(), actual.getRegistrationNumber());
+        assertEquals(expected.getAddress(), actual.getAddress());
     }
 
     @Test

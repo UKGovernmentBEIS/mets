@@ -1,9 +1,7 @@
 package uk.gov.pmrv.api.workflow.request.flow.common.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -19,9 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 
@@ -55,7 +51,7 @@ class RequestAccountContactQueryServiceTest {
         //invoke
         Optional<UserInfoDTO> result = service.getRequestAccountContact(request, contactType);
             
-        assertThat(result.get()).isEqualTo(userInfoDTO);
+        assertThat(result).contains(userInfoDTO);
         
         verify(accountContactQueryService, times(1)).findContactByAccountAndContactType(accountId, contactType);
         verify(userAuthService, times(1)).getUserByUserId("primaryUserId");
@@ -78,7 +74,7 @@ class RequestAccountContactQueryServiceTest {
         //invoke
         Optional<UserInfoDTO> result = service.getRequestAccountPrimaryContact(request);
             
-        assertThat(result.get()).isEqualTo(userInfoDTO);
+        assertThat(result).contains(userInfoDTO);
         
         verify(accountContactQueryService, times(1)).findContactByAccountAndContactType(accountId, AccountContactType.PRIMARY);
         verify(userAuthService, times(1)).getUserByUserId("primaryUserId");

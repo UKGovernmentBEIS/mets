@@ -1,8 +1,9 @@
 package uk.gov.pmrv.api.permit.validation;
 
-import java.util.List;
 import lombok.experimental.UtilityClass;
 import uk.gov.pmrv.api.permit.domain.PermitValidationResult;
+
+import java.util.List;
 
 @UtilityClass
 public class PermitValidatorHelper {

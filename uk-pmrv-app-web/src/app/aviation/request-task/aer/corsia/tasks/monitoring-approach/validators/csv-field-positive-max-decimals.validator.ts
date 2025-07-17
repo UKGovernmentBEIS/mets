@@ -15,9 +15,12 @@ export function csvFieldPositiveMaxDecimalsValidator(
 ): ValidatorFn {
   return (control: FormControl): { [key: string]: any } | null => {
     const data = control.value;
+    const emptyFuelBurnRatioData = control.value.filter(
+      (element) => element.fuelBurnRatio === null || element.fuelBurnRatio === '',
+    );
     const regex = new RegExp(`^-?[0-9]+(\\.[0-9]{1,${decimalDigits}})?$`, '');
 
-    if (!Array.isArray(data)) {
+    if (!Array.isArray(data) || emptyFuelBurnRatioData.length > 0) {
       return null;
     }
 

@@ -29,11 +29,13 @@ describe('FuelsComponent', () => {
 
   @Component({
     selector: 'app-review-group-decision-container',
-    template: `<div>
-      Review group decision component.
-      <div>Key:{{ groupKey }}</div>
-      <div>Can edit:{{ canEdit }}</div>
-    </div>`,
+    template: `
+      <div>
+        Review group decision component.
+        <div>Key:{{ groupKey }}</div>
+        <div>Can edit:{{ canEdit }}</div>
+      </div>
+    `,
   })
   class MockDecisionComponent {
     @Input() groupKey: PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload['group'];
@@ -194,8 +196,8 @@ describe('FuelsComponent', () => {
     fixture.detectChanges();
 
     expect(page.measurementDevices).toEqual([
-      ['ref1', 'Ultrasonic meter'],
-      ['ref2', 'Ultrasonic meter'],
+      ['ref1', 'Ultrasonic meter', '3', 'litres', '± 2.0 %', 'north terminal', '', ''],
+      ['ref2', 'Ultrasonic meter', '3', 'litres', 'None', 'north terminal', '', ''],
     ]);
   });
 

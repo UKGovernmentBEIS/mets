@@ -15,7 +15,8 @@ import { requestTaskReassignedError, taskNotFoundError } from '../../errors/requ
   selector: 'app-archive',
   template: `
     <govuk-warning-text *ngIf="warningText">
-      No actions are currently required.<br />
+      No actions are currently required.
+      <br />
       {{ warningText }}
     </govuk-warning-text>
     <ng-content></ng-content>

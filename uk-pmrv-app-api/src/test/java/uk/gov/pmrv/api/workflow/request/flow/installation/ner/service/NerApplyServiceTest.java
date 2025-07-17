@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.additionaldocuments.AdditionalDocuments;
 import uk.gov.pmrv.api.permit.domain.confidentialitystatement.ConfidentialityStatement;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -79,7 +79,7 @@ class NerApplyServiceTest {
     @Test
     void applySubmitAction() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final UUID newEntrantDataReport = UUID.randomUUID();
         final UUID monitoringMethodologyPlan = UUID.randomUUID();
         final UUID additional = UUID.randomUUID();
@@ -120,7 +120,7 @@ class NerApplyServiceTest {
                 .build();
 
 
-        service.applySubmitAction(requestTask, pmrvUser);
+        service.applySubmitAction(requestTask, appUser);
 
         verify(validatorService, times(1)).validateSubmitTaskPayload(taskPayload);
         verify(requestService, times(1)).addActionToRequest(

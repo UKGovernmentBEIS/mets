@@ -2,7 +2,6 @@ package uk.gov.pmrv.api.account.installation.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,10 +12,9 @@ import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.ApplicationType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.TransferCodeStatus;
-import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.service.AccountContactUpdateService;
 import uk.gov.pmrv.api.account.service.LegalEntityService;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityService;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;

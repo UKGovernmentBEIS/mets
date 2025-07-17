@@ -18,7 +18,7 @@
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Final penalty amount</dt>
         <dd govukSummaryListRowValue class="pre-wrap">
-          {{ payload.penaltyAmount }}
+          £{{ payload.penaltyAmount }}
         </dd>
         <dd govukSummaryListRowActions *ngIf="isEditable$ | async">
           <a govukLink [routerLink]="['..', 'upload-penalty-notice']" [state]="{ changing: true }">Change</a>

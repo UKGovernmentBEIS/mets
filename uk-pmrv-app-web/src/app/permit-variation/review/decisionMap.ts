@@ -1,6 +1,6 @@
 import { PermitVariationGrantDetermination } from 'pmrv-api';
 
-export function getDecisionNameMap(): Record<PermitVariationGrantDetermination['type'], string> {
+export function getDecisionNameMap(): Partial<Record<PermitVariationGrantDetermination['type'], string>> {
   return {
     DEEMED_WITHDRAWN: 'Permit variation deemed withdrawn',
     GRANTED: 'Permit variation approved',

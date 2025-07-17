@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { map, pluck } from 'rxjs';
+import { map } from 'rxjs';
 
 import { statusMap } from '@shared/task-list/task-item/status.map';
 
@@ -21,7 +21,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 export class NitrousOxideComponent {
   showDiff$ = this.store.showDiff$;
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
-  groupKey$ = this.route.data.pipe(pluck('groupKey'));
+  groupKey$ = this.route.data.pipe(map((x) => x?.groupKey));
 
   emissionPointCategoryAppliedTiers$ = this.store.findTask<MeasurementOfN2OEmissionPointCategoryAppliedTier[]>(
     'monitoringApproaches.MEASUREMENT_N2O.emissionPointCategoryAppliedTiers',

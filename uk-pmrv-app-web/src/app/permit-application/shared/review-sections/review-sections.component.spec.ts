@@ -20,7 +20,9 @@ import { ReviewSectionsComponent } from './review-sections.component';
 describe('ReviewSectionsComponent', () => {
   @Component({
     selector: 'app-test-component-wrapper',
-    template: `<app-review-sections [statusResolverPipe]="statusResolverPipe"></app-review-sections>`,
+    template: `
+      <app-review-sections [statusResolverPipe]="statusResolverPipe"></app-review-sections>
+    `,
   })
   class TestWrapperComponent implements OnInit {
     statusResolverPipe: PipeTransform;

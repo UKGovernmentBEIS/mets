@@ -7,13 +7,12 @@ import { PermitMonitoringApproachSection } from 'pmrv-api';
   template: `
     <ng-container *ngIf="monitoringApproach">
       <app-page-heading size="xl">
-        <span>Are you sure you want to delete </span>
+        <span>Are you sure you want to delete</span>
         <span class="nowrap">'{{ monitoringApproach | monitoringApproachDescription }}'?</span>
       </app-page-heading>
 
       <p class="govuk-body">
-        All information related to the {{ monitoringApproach | monitoringApproachDescription }} approach will
-        be
+        All information related to the {{ monitoringApproach | monitoringApproachDescription }} approach will be
         deleted.
       </p>
 
@@ -24,13 +23,11 @@ import { PermitMonitoringApproachSection } from 'pmrv-api';
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      .nowrap {
-        white-space: nowrap;
-      }
-    `,
-  ],
+  styles: `
+    .nowrap {
+      white-space: nowrap;
+    }
+  `,
 })
 export class ApproachesDeleteTemplateComponent {
   @Input() monitoringApproach: PermitMonitoringApproachSection['type'];

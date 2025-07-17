@@ -5,9 +5,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -38,47 +38,47 @@ class PermitNotificationValidatorServiceTest {
     void validateNotifyUsers() {
         final RequestTask requestTask = RequestTask.builder().build();
         final DecisionNotification decisionNotification = DecisionNotification.builder().build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
 
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser)).thenReturn(true);
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser)).thenReturn(true);
 
         // Invoke
-        validator.validateNotifyUsers(requestTask, decisionNotification, pmrvUser);
+        validator.validateNotifyUsers(requestTask, decisionNotification, appUser);
 
         // Verify
         verify(decisionNotificationUsersValidator, times(1))
-                .areUsersValid(requestTask, decisionNotification, pmrvUser);
+                .areUsersValid(requestTask, decisionNotification, appUser);
     }
 
     @Test
     void validateNotifyUsers_not_valid() {
         final RequestTask requestTask = RequestTask.builder().build();
         final DecisionNotification decisionNotification = DecisionNotification.builder().build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
 
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser)).thenReturn(false);
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser)).thenReturn(false);
 
         // Invoke
         BusinessException businessException = assertThrows(BusinessException.class,
-                () -> validator.validateNotifyUsers(requestTask, decisionNotification, pmrvUser));
+                () -> validator.validateNotifyUsers(requestTask, decisionNotification, appUser));
 
         // Verify
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
         verify(decisionNotificationUsersValidator, times(1))
-                .areUsersValid(requestTask, decisionNotification, pmrvUser);
+                .areUsersValid(requestTask, decisionNotification, appUser);
     }
 
     @Test
     void validatePeerReviewer() {
         String peerReviewer = "selectedPeerReviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
         // Invoke
-        validator.validatePeerReviewer(peerReviewer, pmrvUser);
+        validator.validatePeerReviewer(peerReviewer, appUser);
 
         // Verify
         verify(peerReviewerTaskAssignmentValidator, times(1))
-                .validate(RequestTaskType.PERMIT_NOTIFICATION_APPLICATION_PEER_REVIEW, peerReviewer, pmrvUser);
+                .validate(RequestTaskType.PERMIT_NOTIFICATION_APPLICATION_PEER_REVIEW, peerReviewer, appUser);
     }
 
     @Test

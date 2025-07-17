@@ -13,16 +13,13 @@ import { PermitTransferAActionService } from '../core/permit-transfer-a.service'
     <app-base-action-container-component
       [header]="(route.data | async)?.pageTitle"
       [customContentTemplate]="customContentTemplate"
-      [expectedActionType]="['PERMIT_TRANSFER_A_APPLICATION_SUBMITTED']"
-    >
-    </app-base-action-container-component>
+      [expectedActionType]="['PERMIT_TRANSFER_A_APPLICATION_SUBMITTED']"></app-base-action-container-component>
 
     <ng-template #customContentTemplate>
       <app-permit-transfer-details-summary-template
         [payload]="payload$ | async"
         [allowChange]="false"
-        [files]="files$ | async"
-      ></app-permit-transfer-details-summary-template>
+        [files]="files$ | async"></app-permit-transfer-details-summary-template>
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,5 +30,8 @@ export class SubmittedComponent {
     map((payload) => this.permitTransferAActionService.getDownloadUrlFiles(payload.reasonAttachments)),
   );
 
-  constructor(readonly route: ActivatedRoute, readonly permitTransferAActionService: PermitTransferAActionService) {}
+  constructor(
+    readonly route: ActivatedRoute,
+    readonly permitTransferAActionService: PermitTransferAActionService,
+  ) {}
 }

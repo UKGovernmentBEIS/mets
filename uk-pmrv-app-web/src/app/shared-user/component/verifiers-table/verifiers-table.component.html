@@ -15,7 +15,7 @@
                 else bareName
               "
             >
-              <ng-container *ngIf="verifierUserLink else noLink">
+              <ng-container *ngIf="verifierUserLink; else noLink">
                 <a [routerLink]="[verifierUserLink, row.userId]">{{ row | userFullName }}</a>
               </ng-container>
               <ng-template #noLink>
@@ -37,7 +37,6 @@
           </ng-container>
           <ng-container *ngSwitchCase="'authorityStatus'">
             <ng-container *ngIf="row.authorityStatus !== 'PENDING'; else bareStatus">
-              <app-user-locked *ngIf="row.locked"></app-user-locked>
               <div
                 [options]="row.authorityStatus === 'ACCEPTED' ? authorityStatusesAccepted : authorityStatuses"
                 formControlName="authorityStatus"

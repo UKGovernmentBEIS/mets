@@ -1,0 +1,215 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    [heading]="'Measurable heat imported'"
+    [caption]="(productBenchmarkType$ | async | subInstallationType) + ': benchmark improvement rate'"
+    submitText="Continue">
+    <div class="govuk-!-width-two-thirds">
+      <div class="govuk-body">
+        For the specific purpose of the baseline data collection, this section should cover all data provided in section
+        G.(f) in the "baseline data collection" template.
+      </div>
+
+      <div
+        govuk-checkboxes
+        legend="Is any measurable heat imported to this sub-installation?"
+        legendSize="medium"
+        hint="Select all that apply."
+        formControlName="measurableHeatImportedActivities">
+        <govuk-checkbox
+          [value]="'MEASURABLE_HEAT_IMPORTED_OTHER_SOURCES'"
+          label="Imported from other sources"
+          hint="Including heat imported from other installations, or, where measurable heat is consumed by more than one sub-installation, including measurbale heat exported <br />Do not include measurable heat imported from fuel benchmark sub-installations or from waste gases."></govuk-checkbox>
+        <govuk-checkbox
+          [value]="'MEASURABLE_HEAT_IMPORTED_PRODUCT_BENCHMARK'"
+          label="Imported from product benchmark"
+          hint="Including heat imported from other installations, or, where measurable heat is consumed by more than one sub-installation, including measurbale heat exported <br />Do not include measurable heat from sub-installations producing pulp."></govuk-checkbox>
+        <govuk-checkbox
+          [value]="'MEASURABLE_HEAT_IMPORTED_PULP'"
+          label="Imported from pulp"
+          hint="Including heat imported from sub-installations producing pulp."></govuk-checkbox>
+        <govuk-checkbox
+          [value]="'MEASURABLE_HEAT_IMPORTED_FUEL_BENCHMARK'"
+          label="Imported from fuel benchmark"
+          hint="Including measurable heat recovered from waste heat from fuel benchmark sub-installations."></govuk-checkbox>
+        <govuk-checkbox
+          [value]="'MEASURABLE_HEAT_IMPORTED_WASTE_GAS'"
+          label="Imported from waste gas"
+          hint="Including measurable heat produced from waste gases."></govuk-checkbox>
+        <govuk-checkbox
+          [value]="'MEASURABLE_HEAT_NO_MEASURABLE_HEAT_IMPORTED'"
+          label="No, we do not have any measurable heat imported"
+          divider="or"></govuk-checkbox>
+      </div>
+
+      @if (
+        form.get('measurableHeatImportedActivities').value !== null &&
+        form.get('measurableHeatImportedActivities').value?.length > 0 &&
+        !form.get('measurableHeatImportedActivities').value?.includes('MEASURABLE_HEAT_NO_MEASURABLE_HEAT_IMPORTED')
+      ) {
+        <h2 class="govuk-heading-m">Data sources for measurable heat imported</h2>
+
+        <p class="govuk-caption-m">
+          Add the data sources used to determine the amount of measurable heat imported in line with section 4.5 of
+          Annex VII of the FAR and the method used to determine the net amounts in line with section 7.2 of Annex VII of
+          the FAR.
+        </p>
+
+        <div formArrayName="dataSources">
+          <fieldset
+            *ngFor="let dataSource of dataSourcesFormArray?.controls; index as i"
+            [formGroupName]="i"
+            govukFieldset
+            id="dataSource-def-{{ i }}">
+            <legend govukLegend>Data source {{ i + 1 }}</legend>
+
+            <button
+              (click)="dataSourcesFormArray.removeAt(i)"
+              *ngIf="dataSourcesFormArray.length > 1"
+              appAddAnother
+              govukSecondaryButton
+              type="button"
+              #removeButton>
+              Remove
+            </button>
+
+            <div
+              [ngClass]="{
+                'govuk-form-group--error':
+                  dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async,
+              }">
+              <div
+                *ngIf="
+                  dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async
+                "
+                [ngClass]="{
+                  'govuk-error-message':
+                    dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject
+                    | async,
+                }">
+                {{ dataSource?.errors?.atLeastOneRequired }}
+              </div>
+
+              <div [id]="'l.dataSources.' + i">
+                <ng-container *ngFor="let activityKey of measurableHeatImportedActivities; index as j">
+                  @if (
+                    form.get('measurableHeatImportedActivities').value !== null &&
+                    form.get('measurableHeatImportedActivities').value?.length > 0 &&
+                    form.get('measurableHeatImportedActivities').value?.includes(activityKey)
+                  ) {
+                    <ng-container [formGroupName]="activityKey">
+                      <div class="govuk-body" [ngClass]="{ 'govuk-!-margin-top-8': j > 0 }">
+                        {{ activityKey | measurableHeatLabel: 'imported' }}
+                      </div>
+                      <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
+                        <option [value]="''">
+                          @if (i === 0) {
+                            Select an option
+                          } @else {
+                            Select an option if relevant
+                          }
+                        </option>
+                        <option *ngFor="let dataSource45Type of dataSource45Types" [value]="dataSource45Type">
+                          {{ dataSource45Type | productBenchmark45DataSource }}
+                        </option>
+                      </div>
+
+                      <div class="govuk-body">
+                        {{ activityKey | measurableHeatLabel: 'net' }}
+                      </div>
+                      <div formControlName="netContent" govuk-select widthClass="govuk-!-width-full">
+                        <option [value]="''">
+                          @if (i === 0) {
+                            Select an option
+                          } @else {
+                            Select an option if relevant
+                          }
+                        </option>
+                        <option *ngFor="let dataSource72Type of dataSource72Types" [value]="dataSource72Type">
+                          {{ dataSource72Type | productBenchmark72DataSource }}
+                        </option>
+                      </div>
+                    </ng-container>
+                  }
+                </ng-container>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <button
+          (click)="addDataSource()"
+          govukSecondaryButton
+          type="button"
+          *ngIf="dataSourcesFormArray?.controls.length < 6">
+          Add another data source
+        </button>
+
+        <h2 class="govuk-heading-m">Description of methodology applied for each data source</h2>
+        <app-include-answer-details></app-include-answer-details>
+        <div formControlName="methodologyAppliedDescription" govuk-textarea [maxLength]="10000" rows="10"></div>
+
+        <div formGroupName="hierarchicalOrder">
+          <div
+            formControlName="followed"
+            govuk-radio
+            legend="Has the hierarchical order been followed?"
+            hint="Select yes if the data source with the highest rank within the hierarchy has been used, as set out in section 4 of Annex VII of the FAR."
+            [legendSize]="'medium'">
+            <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+            <govuk-radio-option [value]="false" label="No">
+              <ng-container govukConditionalContent>
+                <div
+                  formControlName="notFollowingHierarchicalOrderReason"
+                  govuk-radio
+                  legend="Reason for not following the hierarchy">
+                  <govuk-radio-option
+                    [value]="'OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY'"
+                    label="Other data sources lead to lower uncertainty according to the simplified uncertainty assessment in line with Article 7(2) of the FAR"></govuk-radio-option>
+                  <govuk-radio-option
+                    [value]="'USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE'"
+                    label="Use of better data sources is technically infeasible"></govuk-radio-option>
+                  <govuk-radio-option
+                    [value]="'USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS'"
+                    label="Use of better data sources would incur unreasonable costs"></govuk-radio-option>
+                </div>
+                <div
+                  formControlName="notFollowingHierarchicalOrderDescription"
+                  label="Provide more details on any deviation from the hierarchy"
+                  govuk-textarea
+                  [maxLength]="10000"
+                  rows="10"></div>
+              </ng-container>
+            </govuk-radio-option>
+          </div>
+        </div>
+
+        <h2 class="govuk-heading-m">
+          Description of the methodology for determination of the relevant attributable emission factors
+        </h2>
+        <p class="govuk-caption-m">
+          This should cover the emission factor for each type of measurable heat flow identified.
+        </p>
+        <p class="govuk-caption-m">
+          If the heat is produced from CHPs, please describe how all parameters in section 8 of Annex VII of the FAR
+          have been determined.
+        </p>
+        <app-include-answer-details></app-include-answer-details>
+        <div
+          formControlName="methodologyDeterminationEmissionDescription"
+          govuk-textarea
+          [maxLength]="10000"
+          rows="10"></div>
+
+        <app-multiple-file-input
+          [baseDownloadUrl]="getDownloadUrl()"
+          label="Upload supporting files (optional)"
+          formControlName="supportingFiles"
+          listTitle="Uploaded files"></app-multiple-file-input>
+      }
+    </div>
+  </app-wizard-step>
+
+  <a govukLink [routerLink]="'../../../'">Return to: Sub-installations</a>
+</app-permit-task>

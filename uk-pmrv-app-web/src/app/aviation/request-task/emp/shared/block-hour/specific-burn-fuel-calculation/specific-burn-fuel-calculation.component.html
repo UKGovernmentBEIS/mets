@@ -12,7 +12,11 @@
   <div formControlName="fuelBurnCalculationTypes" govuk-checkboxes class="govuk-!-width-two-thirds">
     <govuk-checkbox
       [value]="'CLEAR_DISTINGUISHION'"
-      label="You can clearly distinguish between fuel uplifts for international and domestic flights on a flight by flight basis"
+      [label]="
+        isCorsia()
+          ? 'You can clearly distinguish between fuel uplifts for international and domestic flights on a flight by flight basis'
+          : 'You can clearly distinguish between fuel uplifts for UK ETS flights and flights not within the scope of UK ETS on a flight by flight basis'
+      "
     >
       <ng-container govukConditionalContent>
         <h1 class="govuk-heading-s">
@@ -31,14 +35,22 @@
           formControlName="assignmentAndAdjustment"
           govuk-textarea
           [maxLength]="10000"
-          hint="Describe the data handling and calculations necessary to meet the adjustment requirements for international flights with zero uplift and the following flights."
+          [hint]="
+            isCorsia()
+              ? 'Describe the data handling and calculations necessary to meet the adjustment requirements for international flights with zero uplift and the following flights.'
+              : 'Describe the data handling and calculations necessary to meet the adjustment requirements for UK ETS flights with zero uplift and the following flights.'
+          "
         ></div>
       </ng-container>
     </govuk-checkbox>
 
     <govuk-checkbox
       [value]="'NOT_CLEAR_DISTINGUISHION'"
-      label="You cannot clearly distinguish between international and domestic fuel uplifts on a flight by flight basis"
+      [label]="
+        isCorsia()
+          ? 'You cannot clearly distinguish between international and domestic fuel uplifts on a flight by flight basis'
+          : 'You cannot clearly distinguish between fuel uplifts for UK ETS flights and flights not within the scope of UK ETS on a flight by flight basis'
+      "
     >
       <ng-container govukConditionalContent>
         <h1 class="govuk-heading-s">

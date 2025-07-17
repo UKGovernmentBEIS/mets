@@ -51,10 +51,10 @@ export class AnswersComponent implements OnInit {
               state.requestType === 'PERMIT_SURRENDER'
               ? `/permit-surrender/${state.requestTaskId}/review`
               : state.requestType === 'PERMIT_VARIATION'
-              ? `/permit-variation/${state.requestTaskId}/review`
-              : state.requestType === 'PERMIT_ISSUANCE'
-              ? `/permit-issuance/${state.requestTaskId}/review`
-              : null
+                ? `/permit-variation/${state.requestTaskId}/review`
+                : state.requestType === 'PERMIT_ISSUANCE'
+                  ? `/permit-issuance/${state.requestTaskId}/review`
+                  : null
             : null,
         ),
         takeUntil(this.destroy$),

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerStoreDelegate } from '@aviation/request-task/store/delegates';
+import { AerUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { RequestTaskFileService } from '@shared/services/request-task-file-service/request-task-file.service';
@@ -13,7 +13,7 @@ import { screen } from '@testing-library/dom';
 
 import { AviationAerSaf, TasksService } from 'pmrv-api';
 
-import { aerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
+import { AerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
 import { EmissionsReductionClaimRemoveBatchItemComponent } from './emissions-reduction-claim-remove-batch-item.component';
 
 describe('EmissionsReductionClaimRemoveBatchItemComponent', () => {
@@ -21,7 +21,7 @@ describe('EmissionsReductionClaimRemoveBatchItemComponent', () => {
   let fixture: ComponentFixture<EmissionsReductionClaimRemoveBatchItemComponent>;
   let store: RequestTaskStore;
 
-  let formProvider: aerEmissionsReductionClaimFormProvider;
+  let formProvider: AerEmissionsReductionClaimFormProvider;
 
   const tasksService = mockClass(TasksService);
   const requestTaskFileService = mockClass(RequestTaskFileService);
@@ -84,7 +84,7 @@ describe('EmissionsReductionClaimRemoveBatchItemComponent', () => {
     await TestBed.configureTestingModule({
       imports: [EmissionsReductionClaimRemoveBatchItemComponent, RouterTestingModule],
       providers: [
-        { provide: TASK_FORM_PROVIDER, useClass: aerEmissionsReductionClaimFormProvider },
+        { provide: TASK_FORM_PROVIDER, useClass: AerEmissionsReductionClaimFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
         {
           provide: ActivatedRoute,
@@ -110,7 +110,7 @@ describe('EmissionsReductionClaimRemoveBatchItemComponent', () => {
         requestTask: {
           type: 'AVIATION_AER_UKETS_APPLICATION_SUBMIT',
           payload: {
-            ...AerStoreDelegate.INITIAL_STATE,
+            ...AerUkEtsStoreDelegate.INITIAL_STATE,
             saf: { ...dataForm },
 
             reviewSectionsCompleted: {},
@@ -124,7 +124,7 @@ describe('EmissionsReductionClaimRemoveBatchItemComponent', () => {
 
     fixture = TestBed.createComponent(EmissionsReductionClaimRemoveBatchItemComponent);
     component = fixture.componentInstance;
-    formProvider = TestBed.inject<aerEmissionsReductionClaimFormProvider>(TASK_FORM_PROVIDER);
+    formProvider = TestBed.inject<AerEmissionsReductionClaimFormProvider>(TASK_FORM_PROVIDER);
     formProvider.setFormValue(dataForm as AviationAerSaf);
     fixture.detectChanges();
   });

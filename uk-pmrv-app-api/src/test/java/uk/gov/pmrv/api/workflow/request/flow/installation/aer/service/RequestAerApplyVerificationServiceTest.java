@@ -22,14 +22,18 @@ import uk.gov.pmrv.api.reporting.domain.verification.VerifiedSatisfactoryOverall
 import uk.gov.pmrv.api.common.reporting.verification.VerifierComment;
 import uk.gov.pmrv.api.reporting.domain.verification.VerifierContact;
 import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationVerificationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerSaveApplicationVerificationRequestTaskActionPayload;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -41,6 +45,22 @@ class RequestAerApplyVerificationServiceTest {
 
     @Test
     void applySaveAction() {
+
+         final AerRequestPayload aerRequestPayload = AerRequestPayload.builder()
+                .payloadType(RequestPayloadType.AER_REQUEST_PAYLOAD).build();
+
+        final Long accountId = 100L;
+        final String requestId = "requestId";
+        final Long verificationBodyId = 101L;
+        final UUID attachmentId = UUID.randomUUID();
+
+        final Request request = Request.builder()
+                    .id(requestId)
+                    .accountId(accountId)
+                    .payload(aerRequestPayload)
+                    .verificationBodyId(verificationBodyId)
+                    .build();
+
         final AerVerificationData verificationData = AerVerificationData.builder()
                 .verificationTeamDetails(VerificationTeamDetails.builder()
                         .leadEtsAuditor("leadEtsAuditor")
@@ -101,6 +121,7 @@ class RequestAerApplyVerificationServiceTest {
         AerApplicationVerificationSubmitRequestTaskPayload taskPayload =
                 AerApplicationVerificationSubmitRequestTaskPayload.builder()
                         .payloadType(RequestTaskPayloadType.AER_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD)
+                        .verificationAttachments(Map.of(attachmentId,"attachment"))
                         .verificationReport(AerVerificationReport.builder()
                                 .verificationBodyDetails(VerificationBodyDetails.builder()
                                         .name("nameNew")
@@ -111,7 +132,7 @@ class RequestAerApplyVerificationServiceTest {
                                 .build())
                         .build();
 
-        RequestTask requestTask = RequestTask.builder().payload(taskPayload).build();
+        RequestTask requestTask = RequestTask.builder().request(request).payload(taskPayload).build();
 
         // Invoke
         service.applySaveAction(actionPayload, requestTask);
@@ -125,5 +146,19 @@ class RequestAerApplyVerificationServiceTest {
                 .isEqualTo(actionPayload.getVerificationSectionsCompleted());
         assertThat(payloadSaved.getVerificationReport().getVerificationBodyDetails())
                 .isEqualTo(taskPayload.getVerificationReport().getVerificationBodyDetails());
+
+        assertThat(((AerRequestPayload) request.getPayload()).getVerificationReport())
+                    .isEqualTo(taskPayload.getVerificationReport());
+
+        assertThat(((AerRequestPayload) request.getPayload()).isVerificationPerformed()).isFalse();
+
+        assertThat(((AerRequestPayload) request.getPayload()).getVerificationReport().getVerificationBodyId())
+                    .isEqualTo(verificationBodyId);
+
+        assertThat(((AerRequestPayload) request.getPayload()).getVerificationSectionsCompleted())
+                    .containsExactlyEntriesOf(actionPayload.getVerificationSectionsCompleted());
+
+        assertThat(((AerRequestPayload) request.getPayload()).getVerificationAttachments())
+                    .containsExactlyEntriesOf(taskPayload.getVerificationAttachments());
     }
 }

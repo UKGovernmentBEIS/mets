@@ -1,7 +1,8 @@
 import {
   ReviewDeterminationStatus,
   ReviewGroupDecisionStatus,
-} from '../../../permit-application/review/types/review.permit.type';
+} from '@permit-application/review/types/review.permit.type';
+
 import { TaskItemStatus } from '../task-list.interface';
 
 export const statusMap: Record<

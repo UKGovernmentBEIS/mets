@@ -23,13 +23,12 @@ import { AccordionItemComponent } from './accordion-item/accordion-item.componen
           type="button"
           class="govuk-accordion__open-all"
           [attr.aria-expanded]="areExpanded$ | async"
-          (click)="toggleAllSections()"
-        >
+          (click)="toggleAllSections()">
           {{ (areExpanded$ | async) ? 'Close all' : 'Open all' }}
-          <span class="govuk-visually-hidden"> sections</span>
+          <span class="govuk-visually-hidden">sections</span>
         </button>
       </div>
-      <ng-content select="govuk-accordion-item"></ng-content>
+      <ng-content select="govuk-accordion-item" />
     </div>
   `,
   providers: [accordionFactory],

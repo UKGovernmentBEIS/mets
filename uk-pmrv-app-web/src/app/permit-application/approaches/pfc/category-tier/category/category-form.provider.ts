@@ -26,7 +26,7 @@ export const categoryFormProvider = {
     const tiers = (state.permit.monitoringApproaches.CALCULATION_PFC as CalculationOfPFCMonitoringApproach)
       .sourceStreamCategoryAppliedTiers;
     const sourceStreamCategoryTier = tiers
-      ? tiers[Number(route.snapshot.paramMap.get('index'))]?.sourceStreamCategory ?? null
+      ? (tiers[Number(route.snapshot.paramMap.get('index'))]?.sourceStreamCategory ?? null)
       : null;
 
     return fb.group({

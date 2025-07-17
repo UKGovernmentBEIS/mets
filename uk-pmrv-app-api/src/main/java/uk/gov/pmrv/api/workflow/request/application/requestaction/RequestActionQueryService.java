@@ -4,12 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.authorization.rules.domain.ResourceType;
-import uk.gov.pmrv.api.authorization.rules.services.AuthorizationRulesQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionInfoDTO;
@@ -35,12 +34,12 @@ public class RequestActionQueryService {
 
 
     @Transactional(readOnly = true)
-    public RequestActionDTO getRequestActionById(Long requestActionId, PmrvUser pmrvUser) {
+    public RequestActionDTO getRequestActionById(Long requestActionId, AppUser appUser) {
         final RequestAction requestAction = requestActionRepository.findById(requestActionId).orElseThrow(() ->
             new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
         
         final RequestActionType requestActionType = requestAction.getType();
-        final RoleType roleType = pmrvUser.getRoleType();
+        final String roleType = appUser.getRoleType();
         final Optional<RequestActionCustomMapper> customMapper = customMapperHandler.getMapper(requestActionType, roleType);
         return customMapper.isPresent() ?
             customMapper.get().toRequestActionDTO(requestAction) :
@@ -48,7 +47,7 @@ public class RequestActionQueryService {
     }
     
     @Transactional(readOnly = true)
-    public List<RequestActionInfoDTO> getRequestActionsByRequestId(String requestId, PmrvUser authUser) {
+    public List<RequestActionInfoDTO> getRequestActionsByRequestId(String requestId, AppUser authUser) {
         List<RequestAction> requestActions = requestActionRepository.findAllByRequestId(requestId);
         List<RequestAction> userGrantedRequestActions = filterUserGrantedRequestActions(authUser, requestActions);
         return userGrantedRequestActions.stream()
@@ -56,7 +55,7 @@ public class RequestActionQueryService {
                 .collect(Collectors.toList());
     }
     
-    private List<RequestAction> filterUserGrantedRequestActions(PmrvUser authUser, List<RequestAction> requestActions) {
+    private List<RequestAction> filterUserGrantedRequestActions(AppUser authUser, List<RequestAction> requestActions) {
         Set<String> userAllowedRequestActionTypes = authorizationRulesQueryService
                 .findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_ACTION, authUser.getRoleType());
         

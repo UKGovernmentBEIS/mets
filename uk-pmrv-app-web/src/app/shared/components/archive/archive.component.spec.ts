@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -23,8 +22,7 @@ describe('ArchiveComponent', () => {
         [taskId]="taskId"
         [warningText]="warningText"
         [buttonText]="buttonText"
-        (submitted)="submitted()"
-      ></app-archive>
+        (submitted)="submitted()"></app-archive>
     `,
   })
   class TestComponent {
@@ -54,7 +52,7 @@ describe('ArchiveComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       providers: [{ provide: TasksService, useValue: tasksService }],
       declarations: [TestComponent],
     }).compileComponents();
@@ -73,7 +71,7 @@ describe('ArchiveComponent', () => {
 
   it('should display warning and a button', () => {
     expect(page.warningText).toEqual(
-      'Warning No actions are currently required. This task / item can be archived for future reference.',
+      'Warning No actions are currently required.  This task / item can be archived for future reference.',
     );
     expect(page.buttonText).toEqual('Archive now and return to dashboard');
 
@@ -81,7 +79,7 @@ describe('ArchiveComponent', () => {
     hostComponent.buttonText = 'Test';
     fixture.detectChanges();
 
-    expect(page.warningText).toEqual('Warning No actions are currently required. Warn.');
+    expect(page.warningText).toEqual('Warning No actions are currently required.  Warn.');
     expect(page.buttonText).toEqual('Test');
   });
 

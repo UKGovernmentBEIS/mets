@@ -1,5 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -11,6 +12,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
 
+import { empQuery } from '../../emp.selectors';
 import { FuelUpliftProceduresFormProvider } from '../fuel-uplift-procedures-form.provider';
 
 @Component({
@@ -24,13 +26,14 @@ export class FuelUpliftAssignmentComponent {
   form = new FormGroup({
     zeroFuelUplift: this.formProvider.zeroFuelUpliftCtrl,
   });
+  isCorsia = toSignal(this.store.pipe(empQuery.selectIsCorsia));
 
   constructor(
-    @Inject(TASK_FORM_PROVIDER) private formProvider: FuelUpliftProceduresFormProvider,
-    private store: RequestTaskStore,
-    private pendingRequestService: PendingRequestService,
-    private router: Router,
-    private route: ActivatedRoute,
+    @Inject(TASK_FORM_PROVIDER) private readonly formProvider: FuelUpliftProceduresFormProvider,
+    private readonly store: RequestTaskStore,
+    private readonly pendingRequestService: PendingRequestService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
   ) {}
 
   onSubmit() {

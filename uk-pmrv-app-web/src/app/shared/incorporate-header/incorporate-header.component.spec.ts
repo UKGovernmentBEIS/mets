@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -32,6 +33,10 @@ describe('IncorporateHeaderComponent', () => {
     get candidateAssigneesSelectInputValue(): HTMLSelectElement {
       return this.query<HTMLSelectElement>('.govuk-phase-banner');
     }
+
+    get phaseBannerLink(): HTMLAnchorElement {
+      return this.query<HTMLAnchorElement>('.govuk-phase-banner a');
+    }
   }
 
   const mockTaskState: IncorporateHeaderState = { accountId: 1 };
@@ -52,6 +57,7 @@ describe('IncorporateHeaderComponent', () => {
     };
     await TestBed.configureTestingModule({
       providers: [
+        provideRouter([]),
         { provide: InstallationAccountViewService, useValue: accountViewService },
         { provide: AviationAccountViewService, useValue: aviationAccountViewService },
         DestroySubject,
@@ -86,8 +92,12 @@ describe('IncorporateHeaderComponent', () => {
       const category = installationCategory.transform(mockedAccountHeaderInfo.installationCategory);
 
       expect(page.candidateAssigneesSelectInputValue.textContent).toEqual(
-        ` ${mockedAccountHeaderInfo.name}  Permit ID:  ${mockedAccountHeaderInfo.permitId} / ${status}  Type:  ${mockedAccountHeaderInfo.emitterType} / ${category} `,
+        ` ${mockedAccountHeaderInfo.name}  Permit ID: ${mockedAccountHeaderInfo.permitId} / ${status} Type:  ${mockedAccountHeaderInfo.emitterType} / ${category} `,
       );
+    });
+
+    it('should display incorporate header account link', () => {
+      expect(page.phaseBannerLink.href).toEqual(`http://localhost/accounts/${mockedAccountHeaderInfo.id}`);
     });
   });
 
@@ -123,7 +133,13 @@ describe('IncorporateHeaderComponent', () => {
       const scheme = emissionTradingScheme.transform(mockedAviationAccountHeaderInfo.emissionTradingScheme);
 
       expect(page.candidateAssigneesSelectInputValue.textContent).toEqual(
-        ` ${mockedAviationAccountHeaderInfo.name}  Emissions Plan ID:  ${mockedAviationAccountHeaderInfo.empId} / ${status}  Schema: ${scheme} `,
+        ` ${mockedAviationAccountHeaderInfo.name}  Emissions Plan ID: ${mockedAviationAccountHeaderInfo.empId} / ${status} Schema: ${scheme} `,
+      );
+    });
+
+    it('should display incorporate header account link', () => {
+      expect(page.phaseBannerLink.href).toEqual(
+        `http://localhost/aviation/accounts/${mockedAviationAccountHeaderInfo.id}`,
       );
     });
   });

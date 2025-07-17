@@ -51,7 +51,7 @@
           <app-timeline-item
             *ngFor="let action of actions$ | async"
             [action]="action"
-            [link]="action | timelineItemLink"
+            [link]="action | timelineItemLink: false:(isAviation$ | async)"
           ></app-timeline-item>
         </app-timeline>
       </div>

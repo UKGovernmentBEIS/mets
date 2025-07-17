@@ -27,12 +27,14 @@ export interface VariationDetailsFormModel {
 
 @Injectable()
 export class VariationDetailsFormProvider
-  implements
-    TaskFormProvider<EmpVariationUkEtsDetails & EmpVariationUkEtsRegulatorLedReason, VariationDetailsFormModel>
+  implements TaskFormProvider<EmpVariationUkEtsDetails & EmpVariationUkEtsRegulatorLedReason, VariationDetailsFormModel>
 {
   private _form: FormGroup<VariationDetailsFormModel>;
 
-  constructor(private fb: FormBuilder, private store: RequestTaskStore) {}
+  constructor(
+    private fb: FormBuilder,
+    private store: RequestTaskStore,
+  ) {}
 
   private destroy$ = new Subject<void>();
 

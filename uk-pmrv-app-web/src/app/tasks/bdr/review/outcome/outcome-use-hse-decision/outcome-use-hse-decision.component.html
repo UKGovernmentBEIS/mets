@@ -1,0 +1,63 @@
+<app-bdr-task-review
+  [breadcrumb]="true"
+  returnToLink="../.."
+  heading="What is your decision on the USE/HSE application?"
+  caption="Outcome of regulator review">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()">
+    <div class="govuk-!-width-two-thirds">
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key govuk-!-width-two-thirds">Is the operator applying for HSE?</dt>
+          <dd class="govuk-summary-list__value">
+            {{ isHSEApplied ? 'Yes' : 'No' }}
+          </dd>
+        </div>
+      </dl>
+      <div
+        formControlName="hasRegulatorSentHSE"
+        govuk-radio
+        legend="What is your opinion on the hospital and small emitter application?"
+        legendSize="medium">
+        <govuk-radio-option
+          [value]="true"
+          label="Regulator has sent hospital and small emitter application, recommendations and reasoning to UK ETS authority for final assessment"></govuk-radio-option>
+        <govuk-radio-option [value]="false" label="No hospital and small emitter application"></govuk-radio-option>
+      </div>
+
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key govuk-!-width-two-thirds">Is the operator applying for USE?</dt>
+          <dd class="govuk-summary-list__value">
+            {{ isUSEApplied ? 'Yes' : 'No' }}
+          </dd>
+        </div>
+      </dl>
+      <div
+        formControlName="hasRegulatorSentUSE"
+        govuk-radio
+        legend="What is your opinion on the ultra small emitter application?"
+        legendSize="medium">
+        <govuk-radio-option
+          [value]="true"
+          label="Regulator has sent ultra small emitter application, recommendations and reasoning to UK ETS authority for final assessment"></govuk-radio-option>
+        <govuk-radio-option [value]="false" label="No ultra small emitter application"></govuk-radio-option>
+      </div>
+
+      <h2 class="govuk-heading-m govuk-!-margin-0">Review notes (optional)</h2>
+      <div
+        formControlName="useHseNotesOperator"
+        govuk-textarea
+        [maxLength]="10000"
+        rows="5"
+        label="This can be viewed by the operator"></div>
+
+      <h2 class="govuk-heading-m govuk-!-margin-0">Review notes (optional)</h2>
+      <div
+        formControlName="useHseNotes"
+        govuk-textarea
+        [maxLength]="10000"
+        rows="5"
+        label="This cannot be viewed by the operator"></div>
+    </div>
+  </app-wizard-step>
+</app-bdr-task-review>

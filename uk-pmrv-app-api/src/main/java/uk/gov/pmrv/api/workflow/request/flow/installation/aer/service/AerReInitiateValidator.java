@@ -1,9 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.service;
 
-import java.util.Set;
-
 import org.springframework.stereotype.Service;
-
 import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
@@ -14,6 +11,8 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateRequestTypeValidationResult;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestCreateAerRelatedValidator;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestCreateValidatorService;
+
+import java.util.Set;
 
 @Service
 public class AerReInitiateValidator extends RequestCreateAerRelatedValidator {

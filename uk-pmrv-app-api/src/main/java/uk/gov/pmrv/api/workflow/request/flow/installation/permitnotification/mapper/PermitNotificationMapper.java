@@ -3,11 +3,12 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.ma
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationAcceptedDecisionDetails;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationReviewSubmittedDecisionRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationApplicationSubmitRequestTaskPayload;
@@ -45,10 +46,27 @@ public interface PermitNotificationMapper {
             PermitNotificationRequestPayload requestPayload, RequestActionPayloadType payloadType);
 
     @Mapping(target = "payloadType", source = "payloadType")
+    PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload toPermitNotificationApplicationReviewCompletedDecisionRequestActionPayload(
+            PermitNotificationRequestPayload requestPayload, RequestActionPayloadType payloadType);
+
+    @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "reviewDecision", source = "payload.reviewDecision", qualifiedByName = "followUpReviewDecisionWithoutNotes")
     PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActionPayload cloneCompletedPayloadIgnoreNotes(
             PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActionPayload payload, RequestActionPayloadType payloadType);
 
+
+    @Mapping(target = "payloadType", source = "payloadType")
+    @Mapping(target = "reviewDecision", source = "payload", qualifiedByName = "extractReviewDecision")
+    PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload cloneCompletedPayloadIgnoreNotes(
+            PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload payload,
+            RequestActionPayloadType payloadType);
+
+    @Named("extractReviewDecision")
+    static PermitNotificationReviewDecision extractReviewDecision(PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload payload) {
+        PermitNotificationReviewDecision reviewDecision = payload.getReviewDecision();
+        reviewDecision.getDetails().setNotes(null);
+        return reviewDecision;
+    }
     @Named("followUpReviewDecisionWithoutNotes")
     default PermitNotificationFollowUpReviewDecision setReviewDecision(PermitNotificationFollowUpReviewDecision sourceReviewDecision) {
         return cloneFollowUpReviewDecisionIgnoreNotes(sourceReviewDecision);

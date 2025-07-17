@@ -7,6 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
@@ -14,11 +18,8 @@ import uk.gov.pmrv.api.account.domain.dto.LegalEntityInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityStatus;
 import uk.gov.pmrv.api.account.repository.LegalEntityRepository;
 import uk.gov.pmrv.api.account.transform.LegalEntityMapper;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
 import java.util.List;
 import java.util.Optional;
@@ -60,13 +61,13 @@ class LegalEntityServiceTest {
         		List.of(LegalEntityInfoDTO.builder().name("name1").build(),
         				LegalEntityInfoDTO.builder().name("name2").build());
 
-        PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
 
         when(legalEntityRepository.findAllByStatusOrderByName(LegalEntityStatus.ACTIVE)).thenReturn(legalEntities);
         when(legalEntityMapper.toLegalEntityInfoDTOs(legalEntities)).thenReturn(legalEntitiesInfoDTO);
         
         //invoke
-        List<LegalEntityInfoDTO> actualLegalEntitiesInfoDTO = service.getUserLegalEntities(pmrvUser);
+        List<LegalEntityInfoDTO> actualLegalEntitiesInfoDTO = service.getUserLegalEntities(appUser);
         
         //assert
         assertThat(actualLegalEntitiesInfoDTO).extracting(LegalEntityInfoDTO::getName)
@@ -88,23 +89,23 @@ class LegalEntityServiceTest {
         		List.of(LegalEntityInfoDTO.builder().name("name1").build(),
         				LegalEntityInfoDTO.builder().name("name2").build());
 
-        PmrvUser pmrvUser = PmrvUser.builder().userId(USER_ID).roleType(RoleType.OPERATOR)
+        AppUser appUser = AppUser.builder().userId(USER_ID).roleType(RoleTypeConstants.OPERATOR)
                             .authorities(List.of(
-                                    PmrvAuthority.builder().accountId(1L).build()
+                                    AppAuthority.builder().accountId(1L).build()
                                     )).build();
 
-        when(legalEntityRepository.findActiveLegalEntitiesByAccountsOrderByName(pmrvUser.getAccounts())).thenReturn(legalEntities);
+        when(legalEntityRepository.findActiveLegalEntitiesByAccountsOrderByName(appUser.getAccounts())).thenReturn(legalEntities);
         when(legalEntityMapper.toLegalEntityInfoDTOs(legalEntities)).thenReturn(legalEntitiesInfoDTO);
         
         //invoke
-        List<LegalEntityInfoDTO> actualLegalEntitiesInfoDTO = service.getUserLegalEntities(pmrvUser);
+        List<LegalEntityInfoDTO> actualLegalEntitiesInfoDTO = service.getUserLegalEntities(appUser);
         
         //assert
         assertThat(actualLegalEntitiesInfoDTO).extracting(LegalEntityInfoDTO::getName)
         										.containsExactly("name1", "name2");
         
         //verify mocks
-        verify(legalEntityRepository, times(1)).findActiveLegalEntitiesByAccountsOrderByName(pmrvUser.getAccounts());
+        verify(legalEntityRepository, times(1)).findActiveLegalEntitiesByAccountsOrderByName(appUser.getAccounts());
         verify(legalEntityMapper, times(1)).toLegalEntityInfoDTOs(legalEntities);
         verify(legalEntityRepository, never()).findAllByStatusOrderByName(LegalEntityStatus.ACTIVE);
     }
@@ -128,26 +129,26 @@ class LegalEntityServiceTest {
     @Test
     void getUserLegalEntityById_not_found() {
     	final Long id = 1L;
-    	final PmrvUser pmrvUser = PmrvUser.builder().build();
+    	final AppUser appUser = AppUser.builder().build();
     	
     	when(legalEntityRepository.findById(id)).thenReturn(Optional.empty());
     	
     	//invoke
     	BusinessException businessException =
-              assertThrows(BusinessException.class, () -> service.getUserLegalEntityById(id, pmrvUser));
+              assertThrows(BusinessException.class, () -> service.getUserLegalEntityById(id, appUser));
     	assertEquals(ErrorCode.RESOURCE_NOT_FOUND, businessException.getErrorCode());
     }
     
     @Test
     void getUserLegalEntityById_regulator() {
     	final Long id = 1L;
-    	final PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+    	final AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
     	LegalEntity legalEntity = LegalEntity.builder().id(id).build();
     	
     	when(legalEntityRepository.findById(id)).thenReturn(Optional.of(legalEntity));
         
         //invoke
-        LegalEntity result = service.getUserLegalEntityById(id, pmrvUser);
+        LegalEntity result = service.getUserLegalEntityById(id, appUser);
         
         //assert
         assertThat(result.getId()).isEqualTo(id);
@@ -160,68 +161,68 @@ class LegalEntityServiceTest {
     @Test
     void getUserLegalEntityById_operator_not_in_account() {
     	final Long id = 1L;
-    	PmrvUser pmrvUser = PmrvUser.builder().userId(USER_ID).roleType(RoleType.OPERATOR)
+        AppUser appUser = AppUser.builder().userId(USER_ID).roleType(RoleTypeConstants.OPERATOR)
                 .authorities(List.of(
-                        PmrvAuthority.builder().accountId(1L).build()
+                        AppAuthority.builder().accountId(1L).build()
                         )).build();
     	LegalEntity legalEntity = LegalEntity.builder().id(id).build();
     	
     	when(legalEntityRepository.findById(id)).thenReturn(Optional.of(legalEntity));
-    	when(legalEntityRepository.existsLegalEntityInAnyOfAccounts(id, pmrvUser.getAccounts())).thenReturn(false);
+    	when(legalEntityRepository.existsLegalEntityInAnyOfAccounts(id, appUser.getAccounts())).thenReturn(false);
     	
         //invoke
     	BusinessException businessException =
-                assertThrows(BusinessException.class, () -> service.getUserLegalEntityById(id, pmrvUser));
-      	assertEquals(ErrorCode.LEGAL_ENTITY_NOT_ASSOCIATED_WITH_USER, businessException.getErrorCode());
+                assertThrows(BusinessException.class, () -> service.getUserLegalEntityById(id, appUser));
+      	assertEquals(MetsErrorCode.LEGAL_ENTITY_NOT_ASSOCIATED_WITH_USER, businessException.getErrorCode());
         
         //verify mocks
         verify(legalEntityRepository, times(1)).findById(id);
-        verify(legalEntityRepository, times(1)).existsLegalEntityInAnyOfAccounts(id, pmrvUser.getAccounts());
+        verify(legalEntityRepository, times(1)).existsLegalEntityInAnyOfAccounts(id, appUser.getAccounts());
     }
     
     @Test
     void getUserLegalEntityById_operator() {
     	final Long id = 1L;
-    	PmrvUser pmrvUser = PmrvUser.builder().userId(USER_ID).roleType(RoleType.OPERATOR)
+        AppUser appUser = AppUser.builder().userId(USER_ID).roleType(RoleTypeConstants.OPERATOR)
                 .authorities(List.of(
-                        PmrvAuthority.builder().accountId(1L).build()
+                        AppAuthority.builder().accountId(1L).build()
                         )).build();
     	LegalEntity legalEntity = LegalEntity.builder().id(id).build();
     	
     	when(legalEntityRepository.findById(id)).thenReturn(Optional.of(legalEntity));
-    	when(legalEntityRepository.existsLegalEntityInAnyOfAccounts(id, pmrvUser.getAccounts())).thenReturn(true);
+    	when(legalEntityRepository.existsLegalEntityInAnyOfAccounts(id, appUser.getAccounts())).thenReturn(true);
     	
         //invoke
-    	LegalEntity result = service.getUserLegalEntityById(id, pmrvUser);
+    	LegalEntity result = service.getUserLegalEntityById(id, appUser);
         
     	assertThat(result).isEqualTo(legalEntity);
         //verify mocks
         verify(legalEntityRepository, times(1)).findById(id);
-        verify(legalEntityRepository, times(1)).existsLegalEntityInAnyOfAccounts(id, pmrvUser.getAccounts());
+        verify(legalEntityRepository, times(1)).existsLegalEntityInAnyOfAccounts(id, appUser.getAccounts());
     }
     
     @Test
     void getUserLegalEntityDTOById_operator() {
         final Long id = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId(USER_ID).roleType(RoleType.OPERATOR)
+        AppUser appUser = AppUser.builder().userId(USER_ID).roleType(RoleTypeConstants.OPERATOR)
                 .authorities(List.of(
-                        PmrvAuthority.builder().accountId(1L).build()
+                        AppAuthority.builder().accountId(1L).build()
                         )).build();
         LegalEntity legalEntity = LegalEntity.builder().id(id).build();
         LegalEntityDTO legalEntityDTO = LegalEntityDTO.builder().id(id).build();
         
         when(legalEntityRepository.findById(id)).thenReturn(Optional.of(legalEntity));
-        when(legalEntityRepository.existsLegalEntityInAnyOfAccounts(id, pmrvUser.getAccounts())).thenReturn(true);
+        when(legalEntityRepository.existsLegalEntityInAnyOfAccounts(id, appUser.getAccounts())).thenReturn(true);
         when(legalEntityMapper.toLegalEntityDTO(legalEntity)).thenReturn(legalEntityDTO);
         
         //invoke
-        LegalEntityDTO result = service.getUserLegalEntityDTOById(id, pmrvUser);
+        LegalEntityDTO result = service.getUserLegalEntityDTOById(id, appUser);
         assertThat(result).isEqualTo(legalEntityDTO);
         
         //verify mocks
         verify(legalEntityRepository, times(1)).findById(id);
         verify(legalEntityMapper, times(1)).toLegalEntityDTO(legalEntity);
-        verify(legalEntityRepository, times(1)).existsLegalEntityInAnyOfAccounts(id, pmrvUser.getAccounts());
+        verify(legalEntityRepository, times(1)).existsLegalEntityInAnyOfAccounts(id, appUser.getAccounts());
     }
     
     @Test
@@ -269,7 +270,7 @@ class LegalEntityServiceTest {
     void resolveLegalEntity_id_exists() {
         Long id = 1L;
         LegalEntityDTO legalEntityDTO = LegalEntityDTO.builder().id(id).build();
-        PmrvUser authUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser authUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         
         LegalEntity legalEntity = LegalEntity.builder().name("name1").id(id).build();
         when(legalEntityRepository.findById(id)).thenReturn(Optional.of(legalEntity));
@@ -285,13 +286,13 @@ class LegalEntityServiceTest {
     void resolveLegalEntity_id_not_exists_active_name_already_exists_regulator() {
         String leName = "le";
         LegalEntityDTO legalEntityDTO = LegalEntityDTO.builder().name(leName).build();
-        PmrvUser authUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser authUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
 
         when(legalEntityValidationService.isExistingActiveLegalEntityName(leName, authUser)).thenReturn(true);
 
         BusinessException be =
                 assertThrows(BusinessException.class, () -> service.resolveLegalEntity(legalEntityDTO, authUser));
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
         
         verify(legalEntityValidationService, times(1)).isExistingActiveLegalEntityName(leName, authUser);
         verifyNoMoreInteractions(legalEntityRepository);
@@ -301,14 +302,14 @@ class LegalEntityServiceTest {
     void resolveLegalEntity_id_not_exists_active_name_already_exists_operator() {
         String leName = "le";
         LegalEntityDTO legalEntityDTO = LegalEntityDTO.builder().name(leName).build();
-        PmrvUser authUser = PmrvUser.builder().userId(USER_ID).roleType(RoleType.OPERATOR)
-                .authorities(List.of(PmrvAuthority.builder().accountId(1L).build())).build();
+        AppUser authUser = AppUser.builder().userId(USER_ID).roleType(RoleTypeConstants.OPERATOR)
+                .authorities(List.of(AppAuthority.builder().accountId(1L).build())).build();
 
         when(legalEntityValidationService.isExistingActiveLegalEntityName(leName, authUser)).thenReturn(true);
 
         BusinessException be =
                 assertThrows(BusinessException.class, () -> service.resolveLegalEntity(legalEntityDTO, authUser));
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
         
         verify(legalEntityValidationService, times(1)).isExistingActiveLegalEntityName(leName, authUser);
         verifyNoMoreInteractions(legalEntityRepository);
@@ -319,7 +320,7 @@ class LegalEntityServiceTest {
         String leName = "le";
         LegalEntityDTO legalEntityDTO = LegalEntityDTO.builder().name(leName).build();
         LegalEntity legalEntity = LegalEntity.builder().status(LegalEntityStatus.PENDING).name(leName).id(1L).build();
-        PmrvUser authUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser authUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
 
         when(legalEntityValidationService.isExistingActiveLegalEntityName(leName, authUser)).thenReturn(false);
         when(legalEntityRepository.findByNameAndStatus(leName, LegalEntityStatus.PENDING)).thenReturn(Optional.of(legalEntity));
@@ -339,7 +340,7 @@ class LegalEntityServiceTest {
         LegalEntityDTO legalEntityDTO = LegalEntityDTO.builder().name(leName).build();
         LegalEntity legalEntity = LegalEntity.builder().id(1L).name(leName).build();
         LegalEntity savedLegalEntity = LegalEntity.builder().id(1L).name(leName).status(LegalEntityStatus.PENDING).build();
-        PmrvUser authUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser authUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
 
         when(legalEntityValidationService.isExistingActiveLegalEntityName(leName, authUser)).thenReturn(false);
         when(legalEntityRepository.findByNameAndStatus(leName, LegalEntityStatus.PENDING)).thenReturn(Optional.empty());
@@ -361,7 +362,7 @@ class LegalEntityServiceTest {
         String leName = "le";
         LegalEntityDTO newLegalEntityDTO = LegalEntityDTO.builder().name(leName).build();
         LegalEntity currentLegalEntity = LegalEntity.builder().id(1L).name(leName).build();
-        PmrvUser authUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser authUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         
         LegalEntity result = service.resolveAmendedLegalEntity(newLegalEntityDTO, currentLegalEntity, authUser);
         
@@ -375,7 +376,7 @@ class LegalEntityServiceTest {
         LegalEntityDTO newLegalEntityDTO = LegalEntityDTO.builder().id(2L).build();
         LegalEntity newLegalEntity = LegalEntity.builder().id(2L).name("name2").build();
         LegalEntity currentLegalEntity = LegalEntity.builder().id(1L).name("name1").build();
-        PmrvUser authUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser authUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         
         when(legalEntityRepository.findById(2L)).thenReturn(Optional.of(newLegalEntity));
         
@@ -392,7 +393,7 @@ class LegalEntityServiceTest {
         LegalEntityDTO newLegalEntityDTO = LegalEntityDTO.builder().name("name2").build();
         LegalEntity newLegalEntity = LegalEntity.builder().id(2L).name("name2").status(LegalEntityStatus.PENDING).build();
         LegalEntity currentLegalEntity = LegalEntity.builder().id(1L).name("name1").build();
-        PmrvUser authUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser authUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
 
         when(legalEntityValidationService.isExistingActiveLegalEntityName("name2", authUser)).thenReturn(false);
         when(legalEntityRepository.findByNameAndStatus("name2", LegalEntityStatus.PENDING)).thenReturn(Optional.of(newLegalEntity));
@@ -431,7 +432,7 @@ class LegalEntityServiceTest {
 
         BusinessException be = assertThrows(BusinessException.class,
                 () -> service.activateLegalEntity(latestLegalEntityDTO));
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
         
         verify(legalEntityValidationService, times(1)).isExistingActiveLegalEntityName("le");
         verifyNoMoreInteractions(legalEntityRepository);

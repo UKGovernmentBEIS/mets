@@ -39,6 +39,15 @@ const routes: Routes = [
         loadChildren: () => import('./aer/aer.module').then((m) => m.AerModule),
       },
       {
+        path: 'bdr',
+        loadChildren: () => import('./bdr/bdr.module').then((m) => m.BdrModule),
+      },
+      {
+        path: 'permanent-cessation',
+        loadChildren: () =>
+          import('./permanent-cessation/permanent-cessation.module').then((m) => m.PermanentCessationModule),
+      },
+      {
         path: 'vir',
         children: [
           {
@@ -116,21 +125,30 @@ const routes: Routes = [
         path: 'change-assignee',
         data: { pageTitle: 'Change assignee', backlink: '../' },
         loadChildren: () =>
-          import('../change-task-assignee/change-task-assignee.module').then(m => m.ChangeTaskAssigneeModule),
+          import('../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'withholding-allowances',
         loadChildren: () =>
           import('./withholding-allowances/withholding-allowances.module').then((m) => m.WithholdingAllowancesModule),
       },
+
       {
         path: 'return-of-allowances',
         loadChildren: () =>
           import('./return-of-allowances/return-of-allowances.module').then((m) => m.ReturnOfAllowancesModule),
       },
       {
+        path: 'inspection',
+        loadChildren: () => import('./inspection/inspection.module').then((m) => m.InspectionModule),
+      },
+      {
+        path: 'alr',
+        loadChildren: () => import('./alr/alr.module').then((m) => m.AlrModule),
+      },
+      {
         path: 'cancel',
-        loadChildren: () => import('../cancel-task/cancel-task.module').then(m => m.CancelTaskModule),
+        loadChildren: () => import('../cancel-task/cancel-task.module').then((m) => m.CancelTaskModule),
       },
       {
         path: 'file-download/:uuid',

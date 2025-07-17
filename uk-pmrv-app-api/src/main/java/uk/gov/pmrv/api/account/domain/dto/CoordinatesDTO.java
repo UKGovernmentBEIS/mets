@@ -1,5 +1,8 @@
 package uk.gov.pmrv.api.account.domain.dto;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +12,6 @@ import uk.gov.pmrv.api.account.domain.dto.validation.MaxSeconds;
 import uk.gov.pmrv.api.account.domain.enumeration.CardinalDirection;
 
 import java.util.Locale;
-
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
 /**
  * The Geographical Coordinates as DMS.

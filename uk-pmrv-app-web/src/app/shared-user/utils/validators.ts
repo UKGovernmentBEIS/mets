@@ -15,3 +15,14 @@ export function atLeastOneRequiredValidator(message: string): ValidatorFn {
     Object.keys(group.controls).find((key) => !!group.controls[key].value) ? null : { atLeastOneRequired: true },
   );
 }
+
+export function atLeastOneRequiredNestedValidator(message: string): ValidatorFn {
+  return GovukValidators.builder(message, (group: UntypedFormGroup) => {
+    // Check if at least one nested form group has a control with a non-empty value
+    const hasValue = Object.values(group?.controls ?? {}).some((nestedGroup: UntypedFormGroup) =>
+      Object.values(nestedGroup?.controls ?? {}).some((control) => !!control.value),
+    );
+
+    return hasValue ? null : { atLeastOneRequired: true };
+  });
+}

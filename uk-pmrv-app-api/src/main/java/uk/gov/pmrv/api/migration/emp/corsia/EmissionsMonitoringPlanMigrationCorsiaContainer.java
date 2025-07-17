@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
-import uk.gov.pmrv.api.files.attachments.domain.FileAttachment;
+import uk.gov.netz.api.files.attachments.domain.FileAttachment;
 
 @Data
 @NoArgsConstructor

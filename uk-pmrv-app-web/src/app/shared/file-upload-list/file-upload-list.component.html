@@ -1,20 +1,25 @@
-<div [class.moj-hidden]="files.length === 0" class="moj-multi-file__uploaded-files">
-  <h2 [class]="'govuk-heading-' + headerSize">{{ listTitle }}</h2>
+<div [class.moj-hidden]="files?.length === 0" class="moj-multi-file__uploaded-files">
+  <h2 *ngIf="listTitle" [class]="'govuk-heading-' + headerSize">{{ listTitle }}</h2>
 
-  <div *ngIf="files.length === 1; else multiple_files" class="govuk-summary-list moj-multi-file-upload__list">
-    <div aria-live="polite" class="govuk-summary-list__value moj-multi-file-upload__message">
-      <ng-container
-        *ngTemplateOutlet="
-          files[0].errors ? error : files[0].progress === 1 ? success : progress;
-          context: { $implicit: files[0], message: files[0].errors ? files[0].errors : null }
-        "
-      ></ng-container>
+  <ng-container *ngIf="files?.length > 0">
+    <div *ngIf="files.length === 1; else multiple_files" class="govuk-summary-list moj-multi-file-upload__list">
+      <div aria-live="polite" class="govuk-summary-list__value moj-multi-file-upload__message">
+        <ng-container
+          *ngTemplateOutlet="
+            files[0].errors ? error : files[0].progress === 1 ? success : progress;
+            context: { $implicit: files[0], message: files[0].errors ? files[0].errors : null }
+          "
+        ></ng-container>
+      </div>
+      <div class="govuk-summary-list__actions moj-multi-file-upload__actions">
+        <ng-container
+          [ngTemplateOutlet]="fileDeleteButton"
+          [ngTemplateOutletContext]="{ fileIndex: 0, file: files[0] }"
+        >
+        </ng-container>
+      </div>
     </div>
-    <div class="govuk-summary-list__actions moj-multi-file-upload__actions">
-      <ng-container [ngTemplateOutlet]="fileDeleteButton" [ngTemplateOutletContext]="{ fileIndex: 0, file: files[0] }">
-      </ng-container>
-    </div>
-  </div>
+  </ng-container>
 
   <ng-template #multiple_files>
     <dl class="govuk-summary-list moj-multi-file-upload__list">

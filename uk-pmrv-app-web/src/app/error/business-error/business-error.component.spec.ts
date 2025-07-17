@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { firstValueFrom } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
-import { RouterStubComponent } from '../../../testing';
 import { SharedModule } from '../../shared/shared.module';
 import { BusinessError } from './business-error';
 import { BusinessErrorComponent } from './business-error.component';
@@ -14,20 +13,15 @@ describe('BusinessErrorComponent', () => {
   let fixture: ComponentFixture<BusinessErrorComponent>;
 
   const error = new BusinessError('Test header').withLink({ link: ['/dashboard'], linkText: 'Go to dashboard' });
+  const clear = jest.fn();
+  const businessErrorService = { error$: new BehaviorSubject(error), clear };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        SharedModule,
-        RouterTestingModule.withRoutes([
-          { path: 'dashboard', component: RouterStubComponent },
-          { path: 'error/business', component: BusinessErrorComponent },
-        ]),
-      ],
-      declarations: [BusinessErrorComponent, RouterStubComponent],
+      imports: [SharedModule, RouterTestingModule],
+      declarations: [BusinessErrorComponent],
+      providers: [{ provide: BusinessErrorService, useValue: businessErrorService }],
     }).compileComponents();
-
-    TestBed.inject(BusinessErrorService).showError(error);
   });
 
   beforeEach(() => {
@@ -51,6 +45,8 @@ describe('BusinessErrorComponent', () => {
   it('should clear the error on destroy', async () => {
     fixture.destroy();
 
-    await expect(firstValueFrom(TestBed.inject(BusinessErrorService).error$)).resolves.toBeNull();
+    const clearSpy = jest.spyOn(businessErrorService, 'clear');
+
+    expect(clearSpy).toHaveBeenCalled();
   });
 });

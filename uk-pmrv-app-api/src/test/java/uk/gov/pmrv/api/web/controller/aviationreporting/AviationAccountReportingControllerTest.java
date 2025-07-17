@@ -15,19 +15,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationReportableEmissionsDTO;
 import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationReportingYearsDTO;
 import uk.gov.pmrv.api.aviationreporting.common.service.AviationReportableEmissionsService;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsTotalReportableEmissions;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.math.BigDecimal;
 import java.time.Year;
@@ -53,10 +53,10 @@ class AviationAccountReportingControllerTest {
     private AviationReportableEmissionsService aviationReportableEmissionsService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
@@ -65,7 +65,7 @@ class AviationAccountReportingControllerTest {
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver =
             new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
@@ -75,7 +75,7 @@ class AviationAccountReportingControllerTest {
         controller = (AviationAccountReportingController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .build();
 
@@ -97,7 +97,7 @@ class AviationAccountReportingControllerTest {
             .years(Set.of(year2022))
             .build();
 
-        PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+        AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         when(aviationReportableEmissionsService
@@ -122,12 +122,12 @@ class AviationAccountReportingControllerTest {
         AviationReportingYearsDTO reportingYears = AviationReportingYearsDTO.builder()
             .years(Set.of(Year.of(2022)))
             .build();
-        PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+        AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(currentUser, "getAviationAccountReportableEmissions", String.valueOf(accountId));
+            .when(appUserAuthorizationService)
+            .authorize(currentUser, "getAviationAccountReportableEmissions", String.valueOf(accountId), null, null);
 
         // Invoke
         mockMvc.perform(

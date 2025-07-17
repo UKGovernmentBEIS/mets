@@ -31,7 +31,10 @@ export class SummaryTemplateComponent implements OnInit {
 
   allowChange: boolean;
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly route: ActivatedRoute) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly route: ActivatedRoute,
+  ) {}
 
   ngOnInit() {
     this.subtaskName = statusKeyToSubtaskNameMapper[this.statusKey];

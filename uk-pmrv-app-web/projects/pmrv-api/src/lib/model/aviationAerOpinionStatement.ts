@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,7 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { AviationAerInPersonSiteVisit } from './aviationAerInPersonSiteVisit';
 import { AviationAerSiteVisit } from './aviationAerSiteVisit';
+import { AviationAerVirtualSiteVisit } from './aviationAerVirtualSiteVisit';
 
 export interface AviationAerOpinionStatement {
   fuelTypes?: Array<'JET_KEROSENE' | 'JET_GASOLINE' | 'AVIATION_GASOLINE'>;
@@ -18,5 +20,5 @@ export interface AviationAerOpinionStatement {
   manuallyProvidedEmissions?: string;
   additionalChangesNotCovered: boolean;
   additionalChangesNotCoveredDetails?: string;
-  siteVisit: AviationAerSiteVisit;
+  siteVisit: AviationAerSiteVisit | AviationAerInPersonSiteVisit | AviationAerVirtualSiteVisit;
 }

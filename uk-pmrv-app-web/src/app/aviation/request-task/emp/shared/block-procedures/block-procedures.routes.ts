@@ -20,7 +20,7 @@ export const EMP_BLOCK_PROCEDURES_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Block procedures summary' },
+        data: { breadcrumb: 'Block procedures' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () =>
           import('./block-procedures-monitoring-summary/block-procedures-monitoring-summary.component').then(

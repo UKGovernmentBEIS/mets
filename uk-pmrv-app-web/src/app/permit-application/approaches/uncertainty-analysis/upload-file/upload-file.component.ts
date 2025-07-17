@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, Observable, pluck, startWith, switchMap, switchMapTo, tap } from 'rxjs';
+import { combineLatest, first, map, Observable, startWith, switchMap, tap } from 'rxjs';
 
-import { PendingRequestService } from '../../../../core/guards/pending-request.service';
+import { PendingRequestService } from '@core/guards/pending-request.service';
+
 import { PERMIT_TASK_FORM } from '../../../shared/permit-task-form.token';
 import { PermitApplicationState } from '../../../store/permit-application.state';
 import { PermitApplicationStore } from '../../../store/permit-application.store';
@@ -17,7 +18,7 @@ import { uploadFileProvider } from './upload-file.provider';
   providers: [uploadFileProvider],
 })
 export class UploadFileComponent {
-  permitTask$ = this.route.data.pipe(pluck('permitTask'));
+  permitTask$ = this.route.data.pipe(map((x) => x?.permitTask));
 
   readonly isFileUploaded$: Observable<boolean> = this.form.get('files').valueChanges.pipe(
     startWith(this.form.get('files').value),
@@ -46,7 +47,7 @@ export class UploadFileComponent {
             attachments: this.form.value.files?.map((file) => file.uuid),
           }),
         ),
-        switchMapTo(this.store),
+        switchMap(() => this.store),
         first(),
         tap((state) =>
           this.store.setState({

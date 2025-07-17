@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
@@ -31,16 +31,15 @@ class WithholdingOfAllowancesCreateActionHandlerTest {
     @Test
     void process() {
         Long accountId = 123L;
-        RequestCreateActionType type = RequestCreateActionType.WITHHOLDING_OF_ALLOWANCES;
         RequestCreateActionEmptyPayload payload = new RequestCreateActionEmptyPayload();
-        PmrvUser pmrvUser = new PmrvUser();
+        AppUser appUser = new AppUser();
 
         RequestParams expectedParams = RequestParams.builder()
             .type(RequestType.WITHHOLDING_OF_ALLOWANCES)
             .accountId(accountId)
             .requestPayload(WithholdingOfAllowancesRequestPayload.builder()
                 .payloadType(RequestPayloadType.WITHHOLDING_OF_ALLOWANCES_REQUEST_PAYLOAD)
-                .regulatorAssignee(pmrvUser.getUserId())
+                .regulatorAssignee(appUser.getUserId())
                 .build())
             .build();
 
@@ -49,15 +48,15 @@ class WithholdingOfAllowancesCreateActionHandlerTest {
 
         when(startProcessRequestService.startProcess(expectedParams)).thenReturn(expectedRequest);
 
-        String requestId = handler.process(accountId, type, payload, pmrvUser);
+        String requestId = handler.process(accountId, payload, appUser);
 
         verify(startProcessRequestService).startProcess(expectedParams);
         assertEquals(expectedRequest.getId(), requestId);
     }
 
     @Test
-    void getType() {
-        RequestCreateActionType type = handler.getType();
+    void getRequestCreateActionType() {
+        RequestCreateActionType type = handler.getRequestCreateActionType();
         assertEquals(RequestCreateActionType.WITHHOLDING_OF_ALLOWANCES, type);
     }
 }

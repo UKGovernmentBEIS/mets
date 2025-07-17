@@ -32,8 +32,7 @@ describe('AdditionalDocumentsComponent', () => {
       <app-additional-documents-shared
         [form]="form"
         [isEditable]="true"
-        (formSubmit)="onSubmit()"
-      ></app-additional-documents-shared>
+        (formSubmit)="onSubmit()"></app-additional-documents-shared>
     `,
   })
   class TestComponent {

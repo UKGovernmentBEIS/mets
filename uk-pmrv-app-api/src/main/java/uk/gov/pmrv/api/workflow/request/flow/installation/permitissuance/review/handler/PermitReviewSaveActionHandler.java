@@ -1,15 +1,16 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.handler;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceSaveApplicationReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.PermitIssuanceReviewService;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class PermitReviewSaveActionHandler
     private final PermitIssuanceReviewService permitIssuanceReviewService;
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser,
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser,
                         PermitIssuanceSaveApplicationReviewRequestTaskActionPayload payload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);

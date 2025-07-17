@@ -86,6 +86,11 @@ const routes: Routes = [
         component: SubmitContainerComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'details-of-breach',
         data: { pageTitle: 'Non compliance submit details of breach' },
         component: DetailsOfBreachComponent,
@@ -189,8 +194,13 @@ const routes: Routes = [
       {
         path: '',
         component: DailyPenaltyNoticeComponent,
-        data: { pageTitle: 'Upload initial penalty notice: non-compliance' },
+        data: { pageTitle: 'Upload initial penalty notice: non-compliance', breadcrumb: true },
         canDeactivate: [PendingRequestGuard],
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'upload-initial-notice',
@@ -225,8 +235,13 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            data: { pageTitle: 'Wait peer review' },
+            data: { pageTitle: 'Wait peer review', breadcrumb: true },
             component: DailyPenaltyNoticePeerReviewWaitComponent,
+          },
+          {
+            path: 'change-assignee',
+            loadChildren: () =>
+              import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
           },
         ],
       },
@@ -235,8 +250,13 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            data: { pageTitle: 'Peer review' },
+            data: { pageTitle: 'Peer review', breadcrumb: true },
             component: DailyPenaltyNoticePeerReviewComponent,
+          },
+          {
+            path: 'change-assignee',
+            loadChildren: () =>
+              import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
           },
           {
             path: 'decision',
@@ -271,8 +291,13 @@ const routes: Routes = [
       {
         path: '',
         component: NoticeOfIntentTaskComponent,
-        data: { pageTitle: 'Upload notice of intent: non-compliance' },
+        data: { pageTitle: 'Upload notice of intent: non-compliance', breadcrumb: true },
         canDeactivate: [PendingRequestGuard],
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'upload-notice-of-intent',
@@ -307,8 +332,13 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            data: { pageTitle: 'Wait peer review' },
+            data: { pageTitle: 'Wait peer review', breadcrumb: true },
             component: NoticeOfIntentPeerReviewWaitComponent,
+          },
+          {
+            path: 'change-assignee',
+            loadChildren: () =>
+              import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
           },
         ],
       },
@@ -317,8 +347,13 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            data: { pageTitle: 'Peer review' },
+            data: { pageTitle: 'Peer review', breadcrumb: true },
             component: NoticeOfIntentPeerReviewComponent,
+          },
+          {
+            path: 'change-assignee',
+            loadChildren: () =>
+              import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
           },
           {
             path: 'decision',
@@ -353,8 +388,13 @@ const routes: Routes = [
       {
         path: '',
         component: CivilPenaltyNoticeComponent,
-        data: { pageTitle: 'Upload penalty notice: non-compliance' },
+        data: { pageTitle: 'Upload penalty notice: non-compliance', breadcrumb: true },
         canDeactivate: [PendingRequestGuard],
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'upload-penalty-notice',
@@ -389,8 +429,13 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            data: { pageTitle: 'Wait peer review' },
+            data: { pageTitle: 'Wait peer review', breadcrumb: true },
             component: CivilPenaltyPeerReviewWaitComponent,
+          },
+          {
+            path: 'change-assignee',
+            loadChildren: () =>
+              import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
           },
         ],
       },
@@ -399,8 +444,13 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            data: { pageTitle: 'Peer review' },
+            data: { pageTitle: 'Peer review', breadcrumb: true },
             component: CivilPenaltyPeerReviewComponent,
+          },
+          {
+            path: 'change-assignee',
+            loadChildren: () =>
+              import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
           },
           {
             path: 'decision',
@@ -437,6 +487,11 @@ const routes: Routes = [
         component: ConclusionComponent,
         data: { pageTitle: 'Provide conclusion of non-compliance' },
         canDeactivate: [PendingRequestGuard],
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'provide-conclusion',

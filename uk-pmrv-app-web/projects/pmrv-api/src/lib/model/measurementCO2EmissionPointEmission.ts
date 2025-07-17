@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -14,7 +14,8 @@ import { DurationRange } from './durationRange';
 import { ManuallyProvidedEmissions } from './manuallyProvidedEmissions';
 import { MeasurementAdditionalInformation } from './measurementAdditionalInformation';
 import { ParameterMonitoringTierDiffReason } from './parameterMonitoringTierDiffReason';
-import { Transfer } from './transfer';
+import { TransferCO2 } from './transferCO2';
+import { TransferN2O } from './transferN2O';
 
 export interface MeasurementCO2EmissionPointEmission {
   id?: string;
@@ -30,7 +31,7 @@ export interface MeasurementCO2EmissionPointEmission {
   measurementAdditionalInformation?: MeasurementAdditionalInformation;
   calculationCorrect: boolean;
   providedEmissions?: ManuallyProvidedEmissions;
-  transfer?: Transfer;
+  transfer?: TransferCO2 | TransferN2O;
   reportableEmissions: string;
   sustainableBiomassEmissions: string;
   globalWarmingPotential: string;

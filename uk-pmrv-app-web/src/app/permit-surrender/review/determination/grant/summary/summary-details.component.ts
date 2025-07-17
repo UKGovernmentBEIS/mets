@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { map, Observable, pluck, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 import { PermitSurrenderReviewDeterminationGrant } from 'pmrv-api';
 
@@ -13,14 +13,14 @@ import { noticeDateFormProvider } from '../notice-date/notice-date-form.provider
 @Component({
   selector: 'app-grant-determination-summary-details',
   templateUrl: './summary-details.component.html',
-  styleUrls: ['./summary-details.component.scss'],
+  styleUrl: './summary-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [noticeDateFormProvider],
 })
 export class SummaryDetailsComponent {
   @Input() grantDetermination$: Observable<PermitSurrenderReviewDeterminationGrant>;
 
-  isEditable$ = this.store.pipe(pluck('isEditable'));
+  isEditable$ = this.store.pipe(map((state) => state?.isEditable));
 
   invalidNoticeDate$ = this.store.pipe(
     tap(() => {

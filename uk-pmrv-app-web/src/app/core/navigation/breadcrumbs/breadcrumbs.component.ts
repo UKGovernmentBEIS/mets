@@ -18,9 +18,9 @@ import { BreadcrumbItem } from './breadcrumbs.interface';
           *ngIf="breadcrumb.link; else bareText"
           govukLink="breadcrumb"
           [routerLink]="breadcrumb.link"
-          [queryParams]="breadcrumb.queryParams"
-          >{{ breadcrumb.text }}</a
-        >
+          [queryParams]="breadcrumb.queryParams">
+          {{ breadcrumb.text }}
+        </a>
         <ng-template #bareText>
           <li class="govuk-breadcrumbs__list-item" govukLink="breadcrumb">{{ breadcrumb.text }}</li>
         </ng-template>
@@ -81,10 +81,10 @@ export class BreadcrumbsComponent {
     return this.hasTextResolutionFunction(breadcrumb)
       ? breadcrumb.resolveText(data)
       : typeof breadcrumb === 'function'
-      ? breadcrumb(data)
-      : typeof breadcrumb === 'boolean'
-      ? data.pageTitle ?? title
-      : breadcrumb;
+        ? breadcrumb(data)
+        : typeof breadcrumb === 'boolean'
+          ? (data.pageTitle ?? title)
+          : breadcrumb;
   }
 
   private getBreadcrumbLink(route: ActivatedRouteSnapshot, routeUrl: string[]): string[] {

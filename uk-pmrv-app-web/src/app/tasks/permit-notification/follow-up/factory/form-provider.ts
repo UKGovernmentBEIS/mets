@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { RequestTaskFileService } from '@shared/services/request-task-file-service/request-task-file.service';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
-import moment from 'moment';
+import { format } from 'date-fns';
 
 import { GovukValidators, MessageValidatorFn } from 'govuk-components';
 
@@ -91,8 +91,10 @@ export const dueDateMinValidator = (): ValidatorFn => {
     return group.value && group.value < new Date()
       ? { invalidDate: `The date must be in the future` }
       : group.value && group.value <= new Date(followUpResponseExpirationDate)
-      ? { invalidDate: `The date must be after ${moment(followUpResponseExpirationDate).format('DD MMM YYYY')}` }
-      : null;
+        ? {
+            invalidDate: `The date must be after ${format(new Date(followUpResponseExpirationDate), 'dd MMM yyyy')}`,
+          }
+        : null;
   };
 };
 
@@ -108,7 +110,7 @@ export const dueDateMinValidatorToday = (): ValidatorFn => {
         return { invalidDate: `The date must be today or in the future` };
       } else if (group.value <= new Date(followUpResponseExpirationDate)) {
         return {
-          invalidDate: `The date must be after the ${moment(followUpResponseExpirationDate).format('DD MMM YYYY')}`,
+          invalidDate: `The date must be after the ${format(new Date(followUpResponseExpirationDate), 'dd MMM yyyy')}`,
         };
       }
     }

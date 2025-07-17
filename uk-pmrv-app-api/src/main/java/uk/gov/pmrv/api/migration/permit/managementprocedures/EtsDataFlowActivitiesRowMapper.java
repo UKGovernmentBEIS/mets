@@ -1,8 +1,9 @@
 package uk.gov.pmrv.api.migration.permit.managementprocedures;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.springframework.jdbc.core.RowMapper;
 
 public class EtsDataFlowActivitiesRowMapper implements RowMapper<EtsDataFlowActivities> {
 

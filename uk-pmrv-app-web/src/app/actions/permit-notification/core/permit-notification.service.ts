@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { filter, map, Observable } from 'rxjs';
 
 import {
+  PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload,
   PermitNotificationApplicationReviewRequestTaskPayload,
   PermitNotificationApplicationSubmittedRequestActionPayload,
   PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActionPayload,
@@ -77,6 +78,7 @@ export class PermitNotificationService {
 
   private get attachments() {
     const payload = this.store.getValue().action.payload;
+
     switch (payload.payloadType) {
       case 'PERMIT_NOTIFICATION_APPLICATION_SUBMITTED_PAYLOAD':
         return (<PermitNotificationApplicationSubmittedRequestActionPayload>payload).permitNotificationAttachments;
@@ -87,6 +89,10 @@ export class PermitNotificationService {
           .responseAttachments;
       case 'PERMIT_NOTIFICATION_FOLLOW_UP_RETURNED_FOR_AMENDS_PAYLOAD':
         return (<PermitNotificationFollowUpReturnedForAmendsRequestActionPayload>payload)?.amendAttachments;
+      case 'PERMIT_NOTIFICATION_APPLICATION_CESSATION_COMPLETED_PAYLOAD':
+        return (<PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload>payload)
+          ?.permitNotificationAttachments;
+
       default:
         throw Error('Unhandled task type: ' + payload.payloadType);
     }

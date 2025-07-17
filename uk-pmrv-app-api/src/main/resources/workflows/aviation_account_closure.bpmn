@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1exuv7h" targetNamespace="http://bpmn.io/schema/bpmn">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_1exuv7h" targetNamespace="http://bpmn.io/schema/bpmn">
   <bpmn:process id="PROCESS_AVIATION_ACCOUNT_CLOSURE" name="Aviation account closure process" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="AVIATION_ACCOUNT_CLOSURE_START_EVENT" name="Start Event">
       <bpmn:outgoing>Flow_0oue52q</bpmn:outgoing>

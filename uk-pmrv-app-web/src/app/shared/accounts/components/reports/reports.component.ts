@@ -1,12 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import {
-  BehaviorSubject,
   combineLatest,
   distinctUntilChanged,
-  filter,
   iif,
   map,
   Observable,
@@ -14,178 +12,152 @@ import {
   shareReplay,
   switchMap,
   takeUntil,
+  tap,
   withLatestFrom,
 } from 'rxjs';
 
-import { AviationAccountDetails, AviationAccountsStore, selectAccountInfo } from '@aviation/accounts/store';
+import { AviationAccountsStore } from '@aviation/accounts/store';
+import { ConfigStore } from '@core/config/config.store';
 import { DestroySubject } from '@core/services/destroy-subject.service';
-import { AccountType, AuthStore, selectCurrentDomain } from '@core/store/auth';
-import { originalOrder } from '@shared/keyvalue-order';
+import { AuthStore } from '@core/store/auth';
 
 import {
   AccountReportingService,
   AviationAccountReportingService,
-  InstallationAccountPermitDTO,
   RequestDetailsDTO,
-  RequestSearchByAccountCriteria,
+  RequestSearchCriteria,
   RequestsService,
 } from 'pmrv-api';
 
+import { BaseComponent, Reports } from '../shared/base/base.component';
 import { reportsStatusesMap, reportsStatusesTagMap, reportsTypesMap, reportsTypesTagsMap } from './reportsMap';
-
-interface Report {
-  year: string;
-  reportableEmissions: number;
-  reportableOffsetEmissions?: number;
-  reportableReductionClaimEmissions?: number;
-  reportsDetails: RequestDetailsDTO[];
-  isExempt?: boolean;
-}
 
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
-  styles: [
-    `
-      span.search-results-list_item_status {
-        float: right;
-      }
-    `,
-  ],
+  styles: `
+    span.search-results-list_item_status {
+      float: right;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })
-export class ReportsComponent implements OnInit {
-  reportsTypesMap = reportsTypesMap;
+export class ReportsComponent extends BaseComponent implements OnInit {
+  currentPageData$: Observable<Reports[]>;
+  data$: Observable<Reports[]>;
+  category: RequestSearchCriteria['category'] = 'REPORTING';
+
+  reportsTypesMap: Record<string, string[]>;
   reportsTypesTagsMap = reportsTypesTagsMap;
-  reportsStatusesMap = reportsStatusesMap;
+  reportsStatusesMap: Record<string, string>;
   reportsStatusesTagMap = reportsStatusesTagMap;
 
-  readonly originalOrder = originalOrder;
-  readonly pageSize = 5;
-  page$ = new BehaviorSubject<number>(1);
-  showPagination$ = new BehaviorSubject<boolean>(true);
-  totalReportsNumber$ = new BehaviorSubject<number>(0);
-
-  reportTypesPerDomain: Record<string, string[]>;
-  reportStatusesPerDomain: Record<string, string>;
-  domain: AccountType;
-  accountId$: Observable<number>;
-  reports$: Observable<Report[]>;
-  allReports$: Observable<Report[]>;
-
-  searchForm: UntypedFormGroup = this.fb.group({
-    reportsTypes: [[], { updateOn: 'change' }],
-    reportsStatuses: [[], { updateOn: 'change' }],
-  });
-
-  private searchTypes$ = new BehaviorSubject<RequestDetailsDTO['requestType'][]>([]);
-  private searchStatuses$ = new BehaviorSubject<RequestSearchByAccountCriteria['requestStatuses'][]>([]);
-  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain);
+  private readonly configFeatures$ = this.configStore.asObservable().pipe(map((state) => state.features));
 
   constructor(
-    private readonly route: ActivatedRoute,
-    private readonly fb: UntypedFormBuilder,
-    private readonly requestsService: RequestsService,
-    private readonly authStore: AuthStore,
+    fb: UntypedFormBuilder,
+    authStore: AuthStore,
+    route: ActivatedRoute,
+    destroy$: DestroySubject,
+    requestsService: RequestsService,
+    store: AviationAccountsStore,
     private readonly accountReportingService: AccountReportingService,
     private readonly aviationAccountReportingService: AviationAccountReportingService,
-    private readonly destroy$: DestroySubject,
-    private readonly store: AviationAccountsStore,
-  ) {}
+    private readonly configStore: ConfigStore,
+  ) {
+    super(fb, authStore, route, destroy$, requestsService, store);
+  }
 
   ngOnInit(): void {
-    this.currentDomain$.pipe(takeUntil(this.destroy$)).subscribe((domain) => {
-      this.domain = domain;
-    });
+    super.ngOnInit();
 
-    if (this.domain === 'INSTALLATION') {
-      this.accountId$ = (
-        this.route.data as Observable<{
-          accountPermit: InstallationAccountPermitDTO;
-        }>
-      ).pipe(map((data) => data.accountPermit?.account.id));
-    } else {
-      this.accountId$ = this.store.pipe(selectAccountInfo).pipe(
-        filter((account) => !!account),
-        map((account: AviationAccountDetails) => account.id),
-      );
-    }
+    this.configFeatures$
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((features) => {
+          const corsia3yearOffsettingEnabled = features.corsia3yearOffsettingEnabled;
+          const bdrEnabled = features.bdrEnabled;
 
-    this.reportTypesPerDomain = reportsTypesMap[this.domain];
-    this.reportStatusesPerDomain = reportsStatusesMap[this.domain];
-    this.searchForm
-      .get('reportsTypes')
-      .valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.searchTypes$.next(this.searchForm.get('reportsTypes').value));
+          this.reportsTypesMap = reportsTypesMap[this.domain];
 
-    this.searchForm
-      .get('reportsStatuses')
-      .valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.searchStatuses$.next(this.searchForm.get('reportsStatuses').value));
+          if (!corsia3yearOffsettingEnabled) {
+            delete this.reportsTypesMap['Calculate 3-year offsetting requirements'];
+          }
 
-    this.allReports$ = combineLatest([this.accountId$, this.searchTypes$, this.searchStatuses$]).pipe(
-      switchMap(([accountId, types, statuses]) =>
-        this.requestsService.getRequestDetailsByAccountId({
-          accountId: accountId,
-          category: 'REPORTING',
-          requestTypes: types.reduce((acc, val) => acc.concat(val), []),
-          requestStatuses: statuses.reduce((acc, val) => acc.concat(val), []),
-          pageNumber: 0,
-          pageSize: 999999,
+          if (!bdrEnabled) {
+            delete this.reportsTypesMap['Baseline data report'];
+          }
         }),
-      ),
+      )
+      .subscribe();
+
+    this.reportsStatusesMap = reportsStatusesMap[this.domain];
+
+    this.data$ = this.getRequestDetails().pipe(
       map((results) => {
-        const totalReports = this.buildTotalReportsData(results.requestDetails);
+        const totalData = this.buildTotalData(results.requestDetails);
+        this.totalDataNumber$.next(totalData.length);
+        this.showPagination$.next(totalData.length > this.itemsPerPage);
 
-        this.totalReportsNumber$.next(totalReports.length);
-        this.showPagination$.next(totalReports.length > this.pageSize);
-
-        return totalReports;
+        return totalData;
       }),
       withLatestFrom(this.accountId$),
-      switchMap(([reports, accountId]) => {
-        return iif(() => reports.length === 0, of([]), this.getEmissions(accountId, reports));
+      switchMap(([data, accountId]) => {
+        return iif(() => data.length === 0, of([]), this.getReportableEmissions(accountId, data));
       }),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
-    this.reports$ = combineLatest([this.allReports$, this.page$.pipe(distinctUntilChanged())]).pipe(
-      map(([totalReports, page]) => this.getCurrentPageReports(totalReports, page - 1, this.pageSize)),
+    this.currentPageData$ = combineLatest([this.data$, this.page$.pipe(distinctUntilChanged())]).pipe(
+      map(([totalData, page]) => this.getCurrentPageData(totalData, page - 1, this.itemsPerPage)),
     );
   }
 
-  private getCurrentPageReports(reports: Report[], page: number, pageSize: number): Report[] {
-    return reports.slice(page * pageSize, (page + 1) * pageSize);
+  private getCurrentPageData(data: Reports[], page: number, pageSize: number): Reports[] {
+    return data.slice(page * pageSize, (page + 1) * pageSize);
   }
 
-  private buildTotalReportsData(reports: RequestDetailsDTO[]): Report[] {
-    const reportsDetailsByYear = reports.reduce((acc, val) => {
-      const year = (val.requestMetadata as any).year as number;
-      const yearReportsDetails = acc[year] || [];
-
-      return {
-        ...acc,
-        [year]: [...yearReportsDetails, val],
-      };
-    }, {});
+  private buildTotalData(data: RequestDetailsDTO[]): Reports[] {
+    const detailsByYear = this.groupDetailsByYear(data);
 
     return (
-      (reportsDetailsByYear &&
-        Object.keys(reportsDetailsByYear)
+      (detailsByYear &&
+        Object.keys(detailsByYear)
           .map((year) => ({
             year: year,
             reportableEmissions: 0,
-            reportsDetails: reportsDetailsByYear[year].sort(
+            details: detailsByYear[year].sort(
               (a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime(),
             ),
+            hasEmissionReportNotRequired: this.getHasEmissionReportNotRequiredValue(
+              detailsByYear[year].sort(
+                (a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime(),
+              ),
+            ),
+            hasDoeCorsia: this.getHasDoeCorsia(detailsByYear[year]),
           }))
           .sort((a, b) => Number(b.year) - Number(a.year))) ??
       []
     );
   }
 
-  private getEmissions(accountId: number, reports: Report[]) {
+  private getHasEmissionReportNotRequiredValue(detailsByYear): boolean {
+    return !!detailsByYear
+      .filter(
+        (details) =>
+          details.requestType === 'AVIATION_AER_CORSIA' ||
+          details.requestType === 'AER' ||
+          details.requestType === 'AVIATION_AER_UKETS',
+      )
+      .find((x) => x.requestStatus === 'NOT_REQUIRED');
+  }
+
+  private getHasDoeCorsia(detailsByYear): boolean {
+    return detailsByYear.filter((details) => details.requestType === 'AVIATION_DOE_CORSIA').length > 0;
+  }
+
+  private getReportableEmissions(accountId: number, reports: Reports[]) {
     if (this.domain === 'INSTALLATION') {
       return this.accountReportingService
         .getReportableEmissions(accountId, {
@@ -217,10 +189,14 @@ export class ReportsComponent implements OnInit {
                   ?.reportableReductionClaimEmissions,
                 isExempt:
                   reportableEmissions?.[report.year]?.exempted ||
-                  report.reportsDetails?.filter(
+                  report.details?.filter(
                     (el) =>
-                      ['AVIATION_AER_UKETS', 'AVIATION_DRE_UKETS', 'AVIATION_AER_CORSIA'].includes(el.requestType) &&
-                      el.requestMetadata['exempted'],
+                      [
+                        'AVIATION_AER_UKETS',
+                        'AVIATION_DRE_UKETS',
+                        'AVIATION_AER_CORSIA',
+                        'AVIATION_DOE_CORSIA',
+                      ].includes(el.requestType) && el.requestMetadata['exempted'],
                   ).length > 0,
               };
             });

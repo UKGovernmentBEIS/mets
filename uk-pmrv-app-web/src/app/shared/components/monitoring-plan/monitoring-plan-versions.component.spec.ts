@@ -14,7 +14,9 @@ describe('MonitoringPlanVersionsComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    template: ` <app-monitoring-plan-versions [versions]="versions"></app-monitoring-plan-versions> `,
+    template: `
+      <app-monitoring-plan-versions [versions]="versions"></app-monitoring-plan-versions>
+    `,
   })
   class TestComponent {
     versions: MonitoringPlanVersion[] = [

@@ -17,4 +17,6 @@ public interface WorkflowService {
     void setVariable(String processInstanceId, String variableName, Object value);
 
     String constructBusinessKey(String requestId);
+
+    boolean hasMessageEventSubscriptionWithName(final String requestId, final String messageName);
 }

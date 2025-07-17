@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
@@ -53,14 +53,14 @@ export default class UncorrectedNonConformitiesPriorYearItemDeleteComponent impl
         })),
     };
 
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).saveAerVerify(
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).saveAerVerify(
       {
         uncorrectedNonConformities: uncorrectedNonConformitiesValue,
       },
       'in progress',
     );
 
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setUncorrectedNonConformities({
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setUncorrectedNonConformities({
       ...uncorrectedNonConformitiesValue,
     });
 

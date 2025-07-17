@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -52,7 +52,7 @@ class NerReviewCompleteActionHandlerTest {
     void process() {
 
         final Long requestTaskId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final RequestTaskActionEmptyPayload taskActionPayload = RequestTaskActionEmptyPayload.builder()
             .build();
         final NerApplicationReviewRequestTaskPayload requestTaskPayload =
@@ -74,7 +74,7 @@ class NerReviewCompleteActionHandlerTest {
         handler.process(
             requestTaskId,
             RequestTaskActionType.NER_COMPLETE_REVIEW,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
@@ -83,7 +83,7 @@ class NerReviewCompleteActionHandlerTest {
         verify(reviewValidator, times(1))
             .validateCompleteReview(requestTaskPayload);
         verify(applyReviewService, times(1))
-            .updateRequestPayload(requestTask, pmrvUser);
+            .updateRequestPayload(requestTask, appUser);
         verify(workflowService, times(1)).completeTask(
             requestTask.getProcessTaskId(),
             Map.of(

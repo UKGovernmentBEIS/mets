@@ -11,7 +11,7 @@ import { DoalGrantAuthorityResponse } from 'pmrv-api';
 @Component({
   selector: 'app-preliminary-allocation-delete',
   template: `
-    <app-page-heading size="xl"> Are you sure you want to delete this item? </app-page-heading>
+    <app-page-heading size="xl">Are you sure you want to delete this item?</app-page-heading>
 
     <p class="govuk-body">Any reference to this item will be removed from your application.</p>
 

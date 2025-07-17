@@ -1,20 +1,18 @@
 package uk.gov.pmrv.api.permit.domain.emissionsummaries;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.permit.domain.PermitSection;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 @Builder

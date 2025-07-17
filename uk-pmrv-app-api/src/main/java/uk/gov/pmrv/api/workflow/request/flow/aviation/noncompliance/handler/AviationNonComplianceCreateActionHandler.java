@@ -2,35 +2,34 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.noncompliance.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
-import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCreateActionHandler;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestAccountCreateActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestCreateActionEmptyPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceRequestPayload;
 
 @Component
 @RequiredArgsConstructor
-public class AviationNonComplianceCreateActionHandler implements RequestCreateActionHandler<RequestCreateActionEmptyPayload> {
+public class AviationNonComplianceCreateActionHandler implements RequestAccountCreateActionHandler<RequestCreateActionEmptyPayload> {
 
     private final StartProcessRequestService startProcessRequestService;
 
     @Override
     public String process(final Long accountId,
-                          final RequestCreateActionType type,
                           final RequestCreateActionEmptyPayload payload,
-                          final PmrvUser pmrvUser) {
+                          final AppUser appUser) {
 
         final RequestParams requestParams = RequestParams.builder()
             .accountId(accountId)
             .type(RequestType.AVIATION_NON_COMPLIANCE)
             .requestPayload(NonComplianceRequestPayload.builder()
 				.payloadType(RequestPayloadType.NON_COMPLIANCE_REQUEST_PAYLOAD)
-				.regulatorAssignee(pmrvUser.getUserId())
+				.regulatorAssignee(appUser.getUserId())
 				.build())
             .build();
 
@@ -40,7 +39,7 @@ public class AviationNonComplianceCreateActionHandler implements RequestCreateAc
     }
 
     @Override
-    public RequestCreateActionType getType() {
+    public RequestCreateActionType getRequestCreateActionType() {
         return RequestCreateActionType.AVIATION_NON_COMPLIANCE;
     }
 

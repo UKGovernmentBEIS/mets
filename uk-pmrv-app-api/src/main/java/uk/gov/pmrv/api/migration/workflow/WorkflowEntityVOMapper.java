@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.migration.workflow;
 
 import org.springframework.jdbc.core.RowMapper;
-
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 

@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.user.core.domain.dto;
 
 import jakarta.validation.constraints.NotBlank;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

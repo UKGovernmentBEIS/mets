@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -57,7 +57,7 @@ class PermitVariationReviewPeerDecisionRegulatorLedActionHandlerTest {
                 .decision(decision)
                 .build();
         final String userId = "userId";
-        final PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        final AppUser appUser = AppUser.builder().userId(userId).build();
         final String processTaskId = "processTaskId";
         final Request request = Request.builder().id("1").build();
         final RequestTask requestTask = RequestTask.builder().id(2L).request(request).processTaskId(processTaskId).build();
@@ -66,7 +66,7 @@ class PermitVariationReviewPeerDecisionRegulatorLedActionHandlerTest {
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.PERMIT_VARIATION_REVIEW_SUBMIT_PEER_REVIEW_DECISION_REGULATOR_LED,
-            pmrvUser,
+            appUser,
             payload);
 
         ArgumentCaptor<PeerReviewDecisionSubmittedRequestActionPayload> actionPayloadArgumentCaptor =

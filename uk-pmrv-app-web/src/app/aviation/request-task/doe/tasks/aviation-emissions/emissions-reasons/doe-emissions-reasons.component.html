@@ -1,0 +1,53 @@
+<div class="govuk-!-width-two-thirds">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Reason for estimating emissions"
+    caption="Aviation emissions"
+    submitText="Continue"
+    [hideSubmit]="false">
+    <div
+      formControlName="type"
+      govuk-radio
+      [isInline]="false"
+      legend="Why are we estimating emissions?"
+      legendSize="medium">
+      <govuk-radio-option
+        value="VERIFIED_EMISSIONS_REPORT_HAS_NOT_BEEN_SUBMITTED"
+        [label]="'VERIFIED_EMISSIONS_REPORT_HAS_NOT_BEEN_SUBMITTED' | doeDeterminationReasonType"></govuk-radio-option>
+      <govuk-radio-option
+        value="CORRECTIONS_TO_A_VERIFIED_REPORT"
+        [label]="'CORRECTIONS_TO_A_VERIFIED_REPORT' | doeDeterminationReasonType"
+        hint="Examples of reasons why you are making a correction include errors discovered during order of magnitude checks, uncorrected non-material misstatements reported by the verifier, or errors discovered after the emissions have been reported to ICAO.">
+        <ng-container govukConditionalContent>
+          <h1 class="govuk-heading-s">Select which emissions are being corrected</h1>
+          <div formControlName="subtypes" govuk-checkboxes>
+            <govuk-checkbox
+              [value]="'CORRECTING_TOTAL_EMISSIONS_ON_ALL_INTERNATIONAL_FLIGHTS'"
+              [label]="
+                'CORRECTING_TOTAL_EMISSIONS_ON_ALL_INTERNATIONAL_FLIGHTS' | doeDeterminationReasonSubType
+              "></govuk-checkbox>
+            <govuk-checkbox
+              [value]="'CORRECTING_EMISSIONS_ON_FLIGHTS_WITH_OFFSETTING_REQUIREMENTS'"
+              [label]="
+                'CORRECTING_EMISSIONS_ON_FLIGHTS_WITH_OFFSETTING_REQUIREMENTS' | doeDeterminationReasonSubType
+              "></govuk-checkbox>
+            <govuk-checkbox
+              [value]="'CORRECTING_EMISSIONS_RELATED_TO_A_CLAIM_FROM_CORSIA_ELIGIBLE_FUELS'"
+              [label]="
+                'CORRECTING_EMISSIONS_RELATED_TO_A_CLAIM_FROM_CORSIA_ELIGIBLE_FUELS' | doeDeterminationReasonSubType
+              "></govuk-checkbox>
+          </div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+
+    <div class="govuk-heading-m">Further details (optional)</div>
+    <div
+      formControlName="furtherDetails"
+      govuk-textarea
+      [maxLength]="10000"
+      hint="Provide more information about why you are making an estimate. The operator cannot view this."></div>
+  </app-wizard-step>
+</div>
+<app-return-to-link></app-return-to-link>

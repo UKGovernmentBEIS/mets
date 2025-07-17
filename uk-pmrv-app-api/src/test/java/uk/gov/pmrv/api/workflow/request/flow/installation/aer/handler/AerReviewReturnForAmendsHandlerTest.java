@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -65,7 +65,7 @@ class AerReviewReturnForAmendsHandlerTest {
                     .details(ChangesRequiredDecisionDetails.builder().build())
                     .build()))
                 .build();
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         Request request = Request.builder().build();
         RequestTask requestTask = RequestTask.builder()
             .processTaskId(processTaskId)
@@ -75,10 +75,10 @@ class AerReviewReturnForAmendsHandlerTest {
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        aerReviewReturnForAmendsHandler.process(requestTaskId, requestTaskActionType, pmrvUser, payload);
+        aerReviewReturnForAmendsHandler.process(requestTaskId, requestTaskActionType, appUser, payload);
 
         verify(aerReviewReturnForAmendsValidatorService).validate(taskPayload);
-        verify(aerReviewService).saveRequestReturnForAmends(requestTask, pmrvUser);
+        verify(aerReviewService).saveRequestReturnForAmends(requestTask, appUser);
         verify(workflowService).completeTask(processTaskId,
             Map.of(BpmnProcessConstants.AER_REVIEW_OUTCOME, ReviewOutcome.AMENDS_NEEDED.name()));
     }

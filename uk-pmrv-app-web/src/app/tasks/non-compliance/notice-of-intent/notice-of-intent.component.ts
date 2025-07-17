@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, map } from 'rxjs';
+
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { NonComplianceNoticeOfIntentRequestTaskPayload } from 'pmrv-api';
 
@@ -13,7 +15,7 @@ import { resolveSectionStatus } from './section.status';
   templateUrl: './notice-of-intent.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NoticeOfIntentComponent {
+export class NoticeOfIntentComponent implements OnInit {
   sectionStatus$ = this.nonComplianceService.payload$.pipe(
     first(),
     map((payload) => resolveSectionStatus(payload as NonComplianceNoticeOfIntentRequestTaskPayload)),
@@ -41,7 +43,12 @@ export class NoticeOfIntentComponent {
     private readonly nonComplianceService: NonComplianceService,
     readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
+
+  ngOnInit(): void {
+    this.breadcrumbService.cutLastBreadcrumbWithLinkandShow();
+  }
 
   notifyOperator(): void {
     this.router.navigate(['notify-operator'], { relativeTo: this.route });

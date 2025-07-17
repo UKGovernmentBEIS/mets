@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -46,7 +46,7 @@ public class EmpVariationUkEtsSubmitService {
 	}
 	
 	@Transactional
-	public void submitEmpVariation(RequestTask requestTask, PmrvUser authUser) {
+	public void submitEmpVariation(RequestTask requestTask, AppUser authUser) {
 		EmpVariationUkEtsApplicationSubmitRequestTaskPayload taskPayload = (EmpVariationUkEtsApplicationSubmitRequestTaskPayload) requestTask
 				.getPayload();
 		Request request = requestTask.getRequest();
@@ -72,7 +72,7 @@ public class EmpVariationUkEtsSubmitService {
 		addEmpVariationUkEtsApplicationSubmittedRequestAction(authUser, taskPayload, request);
 	}
 
-	private void addEmpVariationUkEtsApplicationSubmittedRequestAction(PmrvUser authUser,
+	private void addEmpVariationUkEtsApplicationSubmittedRequestAction(AppUser authUser,
 			EmpVariationUkEtsApplicationSubmitRequestTaskPayload taskPayload, Request request) {		
 		RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 		

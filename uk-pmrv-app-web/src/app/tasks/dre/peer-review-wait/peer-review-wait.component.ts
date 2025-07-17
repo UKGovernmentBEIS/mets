@@ -23,5 +23,8 @@ export class PeerReviewWaitComponent {
     map((payload) => resolveSectionStatus(payload as DreApplicationSubmitRequestTaskPayload)),
   );
 
-  constructor(readonly store: CommonTasksStore, private readonly dreService: DreService) {}
+  constructor(
+    readonly store: CommonTasksStore,
+    private readonly dreService: DreService,
+  ) {}
 }

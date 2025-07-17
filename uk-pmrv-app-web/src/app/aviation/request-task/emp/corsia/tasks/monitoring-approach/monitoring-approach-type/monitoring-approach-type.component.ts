@@ -49,8 +49,6 @@ export class MonitoringApproachTypeComponent implements OnInit {
       .saveEmp({ emissionsMonitoringApproach: this.formProvider.getFormValue() }, 'in progress')
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
-        this.store.empCorsiaDelegate.setEmissionsMonitoringApproach(this.formProvider.getFormValue());
-        this.formProvider.removeCertEmissionsType();
         this.router.navigate(
           [
             this.formProvider.getFormValue()?.monitoringApproachType === 'CERT_MONITORING'

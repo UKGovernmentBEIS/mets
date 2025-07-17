@@ -22,7 +22,7 @@ export const aerAdditionalDocumentsFormProvider: Provider = {
     const payload = state.requestTaskItem?.requestTask?.payload as AerRequestTaskPayload;
     const additionalDocuments = payload?.aer?.additionalDocuments;
 
-    return fb.group({
+    const formGroup = fb.group({
       exist: [
         { value: additionalDocuments?.exist ?? null, disabled: !state.isEditable },
         { validators: GovukValidators.required('Select yes or no'), updateOn: 'change' },
@@ -36,5 +36,16 @@ export const aerAdditionalDocumentsFormProvider: Provider = {
         !state.isEditable,
       ),
     });
+
+    formGroup.get('exist').valueChanges.subscribe((exist) => {
+      if (!exist) {
+        formGroup.controls.documents.disable();
+        formGroup.controls.documents.setValue([]);
+      } else {
+        formGroup.controls.documents.enable();
+      }
+    });
+
+    return formGroup;
   },
 };

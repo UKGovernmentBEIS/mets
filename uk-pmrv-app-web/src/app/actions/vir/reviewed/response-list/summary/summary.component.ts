@@ -13,23 +13,19 @@ import { VirService } from '../../../core/vir.service';
   selector: 'app-summary',
   template: `
     <app-action-task [header]="verificationDataItem.reference | verificationReferenceTitle" [breadcrumb]="true">
-      <app-verification-recommendation-item [verificationDataItem]="verificationDataItem">
-      </app-verification-recommendation-item>
+      <app-verification-recommendation-item
+        [verificationDataItem]="verificationDataItem"></app-verification-recommendation-item>
       <app-operator-response-item
         [reference]="reference"
         [operatorImprovementResponse]="operatorImprovementResponse$ | async"
         [attachedFiles]="documentFiles$ | async"
         [isEditable]="false"
-        [isReview]="true"
-      >
-      </app-operator-response-item>
+        [isReview]="true"></app-operator-response-item>
       <app-regulator-response-item
         [reference]="reference"
         [regulatorImprovementResponse]="regulatorImprovementResponse$ | async"
         [isEditable]="false"
-        [isReview]="true"
-      >
-      </app-regulator-response-item>
+        [isReview]="true"></app-regulator-response-item>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,5 +49,8 @@ export class SummaryComponent {
     ),
   );
 
-  constructor(private readonly virService: VirService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly virService: VirService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

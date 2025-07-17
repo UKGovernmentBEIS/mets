@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { combineLatest, map, Observable, pluck } from 'rxjs';
+import { combineLatest, map, Observable } from 'rxjs';
+
+import { AuthStore, selectUserRoleType, UserState } from '@core/store';
 
 import { DecisionNotification, FileInfoDTO, PermitNotificationReviewDecision, RequestActionUserInfo } from 'pmrv-api';
 
-import { AuthStore, selectUserRoleType, UserState } from '../../../core/store';
 import { CommonActionsStore } from '../../store/common-actions.store';
 import { PermitNotificationService } from '../core/permit-notification.service';
 
@@ -35,16 +36,18 @@ export class ReviewDecisionComponent implements OnInit {
 
   ngOnInit(): void {
     this.reviewDecision$ = this.permitNotificationService.reviewDecision$;
-    this.actionId$ = this.store.pipe(pluck('action', 'id'));
+    this.actionId$ = this.store.pipe(map((state) => state?.action?.id));
     this.reviewDecisionNotification$ = this.store.pipe(
-      pluck('action', 'payload', 'reviewDecisionNotification'),
+      map((state) => state?.action?.payload?.['reviewDecisionNotification']),
     ) as Observable<DecisionNotification>;
-    this.usersInfo$ = this.store.pipe(pluck('action', 'payload', 'usersInfo')) as Observable<{
+    this.usersInfo$ = this.store.pipe(map((state) => state?.action?.payload?.['usersInfo'])) as Observable<{
       [key: string]: RequestActionUserInfo;
     }>;
-    this.officialNotice$ = this.store.pipe(pluck('action', 'payload', 'officialNotice')) as Observable<FileInfoDTO>;
+    this.officialNotice$ = this.store.pipe(
+      map((state) => state?.action?.payload?.['officialNotice']),
+    ) as Observable<FileInfoDTO>;
     this.signatory$ = this.store.pipe(
-      pluck('action', 'payload', 'reviewDecisionNotification', 'signatory'),
+      map((state) => state?.action?.payload?.['reviewDecisionNotification']?.['signatory']),
     ) as Observable<string>;
     this.operators$ = combineLatest([this.usersInfo$, this.signatory$]).pipe(
       map(([usersInfo, signatory]) => Object.keys(usersInfo).filter((userId) => userId !== signatory)),

@@ -16,7 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -28,7 +28,6 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInf
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocation;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service.PermitRevocationSubmittedService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service.notification.PermitRevocationOfficialNoticeService;
 
 @ExtendWith(MockitoExtension.class)
@@ -95,7 +94,7 @@ class PermitRevocationSubmittedServiceTest {
             .getUsersInfo(decisionNotification.getOperators(), decisionNotification.getSignatory(), request);
         verify(permitRevocationOfficialNoticeService, times(1)).generateRevocationOfficialNotice(request.getId());
         verify(permitRevocationOfficialNoticeService, times(1))
-            .sendOfficialNoticeForSubmitted(request, officialNotice, decisionNotification);
+            .sendOfficialNotice(request, officialNotice, decisionNotification);
 
         final ArgumentCaptor<PermitRevocationApplicationSubmittedRequestActionPayload> requestActionPayloadCaptor =
             ArgumentCaptor.forClass(PermitRevocationApplicationSubmittedRequestActionPayload.class);

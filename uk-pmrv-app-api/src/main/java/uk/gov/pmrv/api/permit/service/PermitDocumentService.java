@@ -1,10 +1,11 @@
 package uk.gov.pmrv.api.permit.service;
 
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentTokenService;
-import uk.gov.pmrv.api.token.FileToken;
+import uk.gov.netz.api.files.documents.service.FileDocumentTokenService;
+import uk.gov.netz.api.token.FileToken;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

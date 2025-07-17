@@ -1,11 +1,18 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterContentChecked,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  inject,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
-import { BackLinkService } from '@shared/back-link/back-link.service';
 import { SharedModule } from '@shared/shared.module';
 import { WizardStepComponent } from '@shared/wizard/wizard-step.component';
 
@@ -24,10 +31,9 @@ import { ManagementProceduresRolesFormComponent } from '../management-procedures
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ManagementProceduresRolesComponent implements OnInit, OnDestroy {
+export class ManagementProceduresRolesComponent implements AfterContentChecked {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;
 
-  private backLinkService = inject(BackLinkService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private pendingRequestService = inject(PendingRequestService);
@@ -39,12 +45,10 @@ export class ManagementProceduresRolesComponent implements OnInit, OnDestroy {
   });
   managementProcedures: EmpManagementProcedures;
 
-  ngOnInit(): void {
-    this.backLinkService.show();
-  }
+  constructor(private cd: ChangeDetectorRef) {}
 
-  ngOnDestroy(): void {
-    this.backLinkService.hide();
+  ngAfterContentChecked(): void {
+    this.cd.detectChanges();
   }
 
   onSubmit() {

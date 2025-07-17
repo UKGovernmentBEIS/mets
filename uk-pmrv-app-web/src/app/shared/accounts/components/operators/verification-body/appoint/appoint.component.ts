@@ -55,7 +55,6 @@ export class AppointComponent implements OnInit {
 
   private accountId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('accountId'))));
   private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain);
-  domainUrlPrefix$ = this.currentDomain$.pipe(map((domain) => (domain === 'AVIATION' ? '/aviation' : '')));
 
   constructor(
     private readonly fb: UntypedFormBuilder,
@@ -69,9 +68,11 @@ export class AppointComponent implements OnInit {
 
   ngOnInit(): void {
     this.backLinkService.show();
+
     this.activeBodies$ = this.accountId$.pipe(
       switchMap((accountId) => this.accountVerificationBodyService.getActiveVerificationBodies(accountId)),
       map((bodies) => bodies.map((body) => ({ text: body.name, value: body.id }))),
+      map((bodies) => [{ text: 'No verification body', value: -1 }, ...bodies]),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
@@ -101,11 +102,15 @@ export class AppointComponent implements OnInit {
       this.appointedAccount$ = this.accountId$.pipe(
         first(),
         withLatestFrom(this.currentVerificationBody$),
-        switchMap(([accountId, currentVerificationBody]) =>
-          currentVerificationBody
-            ? this.accountVerificationBodyService.replaceVerificationBodyToAccount(accountId, value)
-            : this.accountVerificationBodyService.appointVerificationBodyToAccount(accountId, value),
-        ),
+        switchMap(([accountId, currentVerificationBody]) => {
+          if (value.verificationBodyId === -1) {
+            return this.accountVerificationBodyService.unappointVerificationBodyFromAccount(accountId);
+          } else if (currentVerificationBody) {
+            return this.accountVerificationBodyService.replaceVerificationBodyToAccount(accountId, value);
+          } else {
+            return this.accountVerificationBodyService.appointVerificationBodyToAccount(accountId, value);
+          }
+        }),
         switchMap(() => this.activeBodies$),
         map((bodies) => bodies.find((body) => body.value === value.verificationBodyId).text),
         tap((name) => {
@@ -116,10 +121,7 @@ export class AppointComponent implements OnInit {
         catchBadRequest(ErrorCodes.ACCOUNT1006, () =>
           this.accountId$.pipe(
             first(),
-            withLatestFrom(this.domainUrlPrefix$),
-            switchMap(([accountId, domain]) =>
-              this.businessErrorService.showError(appointedVerificationBodyError(accountId, domain)),
-            ),
+            switchMap((accountId) => this.businessErrorService.showError(appointedVerificationBodyError(accountId))),
           ),
         ),
         catchBadRequest(ErrorCodes.ACCOUNT1007, () =>

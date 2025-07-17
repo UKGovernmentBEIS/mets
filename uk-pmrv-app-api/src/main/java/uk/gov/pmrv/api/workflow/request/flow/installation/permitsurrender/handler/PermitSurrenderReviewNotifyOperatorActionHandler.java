@@ -1,12 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.handler;
 
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -21,6 +19,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.PermitSurrenderReviewDeterminationHandlerService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.RequestPermitSurrenderReviewService;
 
+import java.util.List;
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class PermitSurrenderReviewNotifyOperatorActionHandler
@@ -34,7 +35,7 @@ public class PermitSurrenderReviewNotifyOperatorActionHandler
 
     @Override
     public void process(final Long requestTaskId, final RequestTaskActionType requestTaskActionType,
-            final PmrvUser pmrvUser, final NotifyOperatorForDecisionRequestTaskActionPayload payload) {
+            final AppUser appUser, final NotifyOperatorForDecisionRequestTaskActionPayload payload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
         final PermitSurrenderApplicationReviewRequestTaskPayload reviewTaskPayload = (PermitSurrenderApplicationReviewRequestTaskPayload) requestTask
@@ -44,14 +45,14 @@ public class PermitSurrenderReviewNotifyOperatorActionHandler
         reviewDeterminationHandlerService.validateReview(reviewTaskPayload.getReviewDecision(),
                 reviewTaskPayload.getReviewDetermination());
         if (!decisionNotificationUsersValidator.areUsersValid(requestTask, payload.getDecisionNotification(),
-                pmrvUser)) {
+                appUser)) {
             throw new BusinessException(ErrorCode.FORM_VALIDATION);
         }
         
         // save
         final DecisionNotification decisionNotification = payload.getDecisionNotification();
         requestPermitSurrenderReviewService.saveReviewDecisionNotification(requestTask, decisionNotification,
-                pmrvUser);
+                appUser);
 
         // complete task
         workflowService.completeTask(requestTask.getProcessTaskId(),

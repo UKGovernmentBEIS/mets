@@ -1,19 +1,15 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.service;
 
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
@@ -23,6 +19,9 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +42,7 @@ public class PermitVariationOfficialNoticeService {
             .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
         final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification());
 
-        return generateOfficialNoticeAsync(request,
+        return generateAndSaveOfficialNoticeAsync(request,
             accountPrimaryContact,
             ccRecipientsEmails,
             DocumentTemplateGenerationContextActionType.PERMIT_VARIATION_GRANTED,
@@ -59,7 +58,7 @@ public class PermitVariationOfficialNoticeService {
             .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
         final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification());
 
-        return generateOfficialNoticeAsync(request,
+        return generateAndSaveOfficialNoticeAsync(request,
             accountPrimaryContact,
             ccRecipientsEmails,
             DocumentTemplateGenerationContextActionType.PERMIT_VARIATION_REGULATOR_LED_APPROVED,
@@ -76,7 +75,7 @@ public class PermitVariationOfficialNoticeService {
             .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
         final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification());
 
-        final FileInfoDTO officialNotice = generateOfficialNotice(request,
+        final FileInfoDTO officialNotice = generateAndSaveOfficialNotice(request,
                 accountPrimaryContact,
                 ccRecipientsEmails,
                 DocumentTemplateGenerationContextActionType.PERMIT_VARIATION_REJECTED,
@@ -95,7 +94,7 @@ public class PermitVariationOfficialNoticeService {
             .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
         final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification());
 
-        final FileInfoDTO officialNotice = generateOfficialNotice(request,
+        final FileInfoDTO officialNotice = generateAndSaveOfficialNotice(request,
                 accountPrimaryContact,
                 ccRecipientsEmails,
                 null,
@@ -115,31 +114,31 @@ public class PermitVariationOfficialNoticeService {
         officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails);
     }
     
-	private CompletableFuture<FileInfoDTO> generateOfficialNoticeAsync(final Request request,
-			final UserInfoDTO accountPrimaryContact, 
-			final List<String> ccRecipientsEmails,
-			final DocumentTemplateGenerationContextActionType type, 
-			final DocumentTemplateType documentTemplateType,
-			final String fileNameToGenerate) {
+	private CompletableFuture<FileInfoDTO> generateAndSaveOfficialNoticeAsync(final Request request,
+                                                                              final UserInfoDTO accountPrimaryContact,
+                                                                              final List<String> ccRecipientsEmails,
+                                                                              final DocumentTemplateGenerationContextActionType type,
+                                                                              final DocumentTemplateType documentTemplateType,
+                                                                              final String fileNameToGenerate) {
 		final TemplateParams templateParams = buildTemplateParams(request, 
 				accountPrimaryContact, 
 				ccRecipientsEmails,
 				type);
-		return documentFileGeneratorService.generateFileDocumentAsync(documentTemplateType, templateParams,
+		return documentFileGeneratorService.generateAndSaveFileDocumentAsync(documentTemplateType, templateParams,
 				fileNameToGenerate);
 	}
 
-	private FileInfoDTO generateOfficialNotice(final Request request, 
-			final UserInfoDTO accountPrimaryContact,
-			final List<String> ccRecipientsEmails, 
-			final DocumentTemplateGenerationContextActionType type,
-			final DocumentTemplateType documentTemplateType, 
-			final String fileNameToGenerate) {
+	private FileInfoDTO generateAndSaveOfficialNotice(final Request request,
+                                                      final UserInfoDTO accountPrimaryContact,
+                                                      final List<String> ccRecipientsEmails,
+                                                      final DocumentTemplateGenerationContextActionType type,
+                                                      final DocumentTemplateType documentTemplateType,
+                                                      final String fileNameToGenerate) {
         final TemplateParams templateParams = buildTemplateParams(request, 
         		accountPrimaryContact, 
         		ccRecipientsEmails,
 				type);
-        return documentFileGeneratorService.generateFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
+        return documentFileGeneratorService.generateAndSaveFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
     }
     
     private TemplateParams buildTemplateParams(final Request request, final UserInfoDTO accountPrimaryContact,

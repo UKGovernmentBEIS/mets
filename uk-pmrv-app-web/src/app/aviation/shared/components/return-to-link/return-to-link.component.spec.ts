@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { ActivatedRouteStub } from '@testing';
@@ -18,7 +17,7 @@ describe('ReturnToLinkComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReturnToLinkComponent, RouterTestingModule],
+      imports: [ReturnToLinkComponent],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
@@ -196,6 +195,20 @@ describe('ReturnToLinkComponent', () => {
     expect(screen.getByText('Return to: Verify emissions report')).toBeInTheDocument();
   });
 
+  it(`should display correct link text for aer corsia amends verification`, () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT',
+          },
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(screen.getByText('Return to: Verify emissions report')).toBeInTheDocument();
+  });
+
   it(`should display correct link text for aer review`, () => {
     store.setState(
       produce(store.getState(), (state) => {
@@ -238,6 +251,20 @@ describe('ReturnToLinkComponent', () => {
     expect(screen.getByText('Return to: Emissions report returned to operator')).toBeInTheDocument();
   });
 
+  it(`should display correct link text for aer corsia emissions report returned to operator`, () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_AER_CORSIA_WAIT_FOR_AMENDS',
+          },
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(screen.getByText('Return to: Emissions report returned to operator')).toBeInTheDocument();
+  });
+
   it(`should display correct link text for aer amend your emissions report`, () => {
     store.setState(
       produce(store.getState(), (state) => {
@@ -252,12 +279,68 @@ describe('ReturnToLinkComponent', () => {
     expect(screen.getByText('Return to: Amend your emissions report')).toBeInTheDocument();
   });
 
+  it(`should display correct link text for aer corsia amend your emissions report`, () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT',
+          },
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(screen.getByText('Return to: Amend your emissions report')).toBeInTheDocument();
+  });
+
+  it(`should display correct link text for aer amends sent to verifier`, () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER',
+          } as any,
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(screen.getByText('Return to: Changes submitted')).toBeInTheDocument();
+  });
+
+  it(`should display correct link text for aer corsia amends sent to verifier`, () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER',
+          } as any,
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(screen.getByText('Return to: Changes submitted')).toBeInTheDocument();
+  });
+
   it(`should display correct link text for aer amends submitted`, () => {
     store.setState(
       produce(store.getState(), (state) => {
         state.requestTaskItem = {
           requestTask: {
             type: 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED',
+          } as any,
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(screen.getByText('Return to: Changes submitted')).toBeInTheDocument();
+  });
+
+  it(`should display correct link text for aer corsia amends submitted`, () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED',
           } as any,
         };
       }),
@@ -652,5 +735,91 @@ describe('ReturnToLinkComponent', () => {
     );
     fixture.detectChanges();
     expect(screen.getByText('Return to: Verifier improvement report')).toBeInTheDocument();
+  });
+
+  it('should display correct link text for aviation corsia annual offsetting requirements', () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT',
+          },
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(screen.getByText('Return to: Calculate annual offsetting requirements')).toBeInTheDocument();
+  });
+
+  it('should display correct link text for aviation corsia 3 year period offsetting requirements submit', () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT',
+          },
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(screen.getByText('Return to: Calculate 3-year period offsetting requirements')).toBeInTheDocument();
+  });
+
+  it('should display correct link text for aviation corsia 3 year period offsetting requirements peer review', () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW',
+          },
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(screen.getByText('Return to: Peer review 3-year period offsetting requirements')).toBeInTheDocument();
+  });
+
+  it('should display correct link text for aviation doe corsia submit', () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT',
+          },
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(screen.getByText('Return to: Estimate emissions')).toBeInTheDocument();
+  });
+
+  it('should display correct link text for aviation doe corsia wait for peer review', () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW',
+          },
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(
+      screen.getByText('Return to: Aviation emissions report estimation sent to peer reviewer'),
+    ).toBeInTheDocument();
+  });
+
+  it('should display correct link text for aviation doe corsia peer review decision', () => {
+    store.setState(
+      produce(store.getState(), (state) => {
+        state.requestTaskItem = {
+          requestTask: {
+            type: 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW',
+          },
+        };
+      }),
+    );
+    fixture.detectChanges();
+    expect(screen.getByText('Return to: Peer review emissions estimation')).toBeInTheDocument();
   });
 });

@@ -2,25 +2,13 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  first,
-  map,
-  Observable,
-  of,
-  pluck,
-  shareReplay,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, first, map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
+
+import { BackLinkService } from '@shared/back-link/back-link.service';
 
 import { GovukValidators } from 'govuk-components';
 
 import { NotificationTemplateDTO, NotificationTemplatesService } from 'pmrv-api';
-
-import { BackLinkService } from '../../../shared/back-link/back-link.service';
 
 @Component({
   selector: 'app-email-template',
@@ -28,7 +16,7 @@ import { BackLinkService } from '../../../shared/back-link/back-link.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailTemplateComponent implements OnInit {
-  emailTemplate$: Observable<NotificationTemplateDTO> = this.route.data.pipe(pluck('emailTemplate'));
+  emailTemplate$: Observable<NotificationTemplateDTO> = this.route.data.pipe(map((x) => x?.emailTemplate));
 
   form$ = this.emailTemplate$.pipe(
     map((emailTemplate) =>

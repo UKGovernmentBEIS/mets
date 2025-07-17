@@ -68,6 +68,7 @@ function getReviewDecisionsData(
           };
 
     case 'EMP_VARIATION_UKETS_APPLICATION_REGULATOR_LED_APPROVED':
+    case 'EMP_VARIATION_CORSIA_APPLICATION_REGULATOR_LED_APPROVED':
       return {
         showDecision: false,
         showVariationDecision: false,
@@ -76,6 +77,7 @@ function getReviewDecisionsData(
       };
 
     case 'EMP_VARIATION_UKETS_APPLICATION_APPROVED':
+    case 'EMP_VARIATION_CORSIA_APPLICATION_APPROVED':
       return regulatorViewer
         ? {
             showDecision: false,
@@ -108,19 +110,23 @@ export function getEmpApplicationSubmittedTasks(
   regulatorViewer: boolean,
   isCorsia: boolean,
 ): TaskSection<any>[] {
+  const prefix = isCorsia ? 'emp-corsia' : 'emp';
+
   return [
     [
       'EMP_VARIATION_UKETS_APPLICATION_SUBMITTED_PAYLOAD',
+      'EMP_VARIATION_CORSIA_APPLICATION_SUBMITTED_PAYLOAD',
       'EMP_VARIATION_UKETS_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD',
       'EMP_VARIATION_CORSIA_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD',
       'EMP_VARIATION_UKETS_APPLICATION_APPROVED_PAYLOAD',
+      'EMP_VARIATION_CORSIA_APPLICATION_APPROVED_PAYLOAD',
     ].includes(payload.payloadType)
       ? {
           title: 'Variation details',
           tasks: [
             {
               name: 'empVariationDetails',
-              link: `emp/submitted/variation-details`,
+              link: `${prefix}/submitted/variation-details`,
               linkText: empHeaderTaskMap['empVariationDetails'],
             },
           ],
@@ -132,12 +138,12 @@ export function getEmpApplicationSubmittedTasks(
         {
           name: 'serviceContactDetails',
           linkText: empHeaderTaskMap['serviceContactDetails'],
-          link: `emp/submitted/service-contact-details`,
+          link: `${prefix}/submitted/service-contact-details`,
         },
         {
           name: 'operatorDetails',
           linkText: empHeaderTaskMap['operatorDetails'],
-          link: `emp/submitted/operator-details`,
+          link: `${prefix}/submitted/operator-details`,
         },
       ],
     },
@@ -147,67 +153,67 @@ export function getEmpApplicationSubmittedTasks(
         {
           name: 'flightAndAircraftProcedures',
           linkText: empHeaderTaskMap['flightAndAircraftProcedures'],
-          link: `emp/submitted/flight-procedures`,
+          link: `${prefix}/submitted/flight-procedures`,
         },
         {
           name: 'emissionsMonitoringApproach',
           linkText: empHeaderTaskMap['emissionsMonitoringApproach'],
-          link: `emp/submitted/monitoring-approach`,
+          link: `${prefix}/submitted/monitoring-approach`,
         },
         ...(!isCorsia
           ? [
               {
                 name: 'emissionsReductionClaim',
                 linkText: empHeaderTaskMap['emissionsReductionClaim'],
-                link: `emp/submitted/emissions-reduction-claim`,
+                link: `${prefix}/submitted/emissions-reduction-claim`,
               },
             ]
           : []),
         {
           name: 'emissionSources',
           linkText: empHeaderTaskMap['emissionSources'],
-          link: `emp/submitted/emission-sources`,
+          link: `${prefix}/submitted/emission-sources`,
         },
         payload.emissionsMonitoringPlan?.methodAProcedures
           ? {
               name: 'methodAProcedures',
               linkText: empHeaderTaskMap['methodAProcedures'],
-              link: `emp/submitted/method-a-procedures`,
+              link: `${prefix}/submitted/method-a-procedures`,
             }
           : null,
         payload.emissionsMonitoringPlan?.methodBProcedures
           ? {
               name: 'methodBProcedures',
               linkText: empHeaderTaskMap['methodBProcedures'],
-              link: `emp/submitted/method-b-procedures`,
+              link: `${prefix}/submitted/method-b-procedures`,
             }
           : null,
         payload.emissionsMonitoringPlan?.blockOnBlockOffMethodProcedures
           ? {
               name: 'blockOnBlockOffMethodProcedures',
               linkText: empHeaderTaskMap['blockOnBlockOffMethodProcedures'],
-              link: `emp/submitted/block-on-off-procedures`,
+              link: `${prefix}/submitted/block-on-off-procedures`,
             }
           : null,
         payload.emissionsMonitoringPlan?.fuelUpliftMethodProcedures
           ? {
               name: 'fuelUpliftMethodProcedures',
               linkText: empHeaderTaskMap['fuelUpliftMethodProcedures'],
-              link: `emp/submitted/fuel-uplift-procedures`,
+              link: `${prefix}/submitted/fuel-uplift-procedures`,
             }
           : null,
         payload.emissionsMonitoringPlan?.blockHourMethodProcedures
           ? {
               name: 'blockHourMethodProcedures',
               linkText: empHeaderTaskMap['blockHourMethodProcedures'],
-              link: `emp/submitted/block-hour-procedures`,
+              link: `${prefix}/submitted/block-hour-procedures`,
             }
           : null,
-        isFUMM(payload)
+        (!isCorsia && isFUMM(payload)) || isCorsia
           ? {
               name: 'dataGaps',
               linkText: isCorsia ? 'Data Gaps' : empHeaderTaskMap['dataGaps'],
-              link: `emp/submitted/data-gaps`,
+              link: `${prefix}/submitted/data-gaps`,
             }
           : null,
       ],
@@ -218,7 +224,7 @@ export function getEmpApplicationSubmittedTasks(
         {
           name: 'managementProcedures',
           linkText: empHeaderTaskMap['managementProcedures'],
-          link: `emp/submitted/management-procedures`,
+          link: `${prefix}/submitted/management-procedures`,
         },
       ],
     },
@@ -228,12 +234,12 @@ export function getEmpApplicationSubmittedTasks(
         {
           name: 'abbreviations',
           linkText: empHeaderTaskMap['abbreviations'],
-          link: `emp/submitted/abbreviations`,
+          link: `${prefix}/submitted/abbreviations`,
         },
         {
           name: 'additionalDocuments',
           linkText: empHeaderTaskMap['additionalDocuments'],
-          link: `emp/submitted/additional-docs`,
+          link: `${prefix}/submitted/additional-docs`,
         },
       ],
     },
@@ -245,7 +251,7 @@ export function getEmpApplicationSubmittedTasks(
               {
                 name: 'applicationTimeframeInfo',
                 linkText: empHeaderTaskMap['applicationTimeframeInfo'],
-                link: `emp/submitted/application-timeframe-apply`,
+                link: `${prefix}/submitted/application-timeframe-apply`,
               },
             ],
           },
@@ -260,7 +266,7 @@ export function getEmpApplicationSubmittedTasks(
           tasks: [
             {
               name: 'decision',
-              link: `emp/submitted/decision`,
+              link: `${prefix}/submitted/decision`,
               linkText: empHeaderTaskMap['decision'],
             },
           ],

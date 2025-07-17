@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration.emp.ukets.operatordetails;
 
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
@@ -11,17 +12,15 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.Lim
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OrganisationLegalStatusType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OrganisationStructure;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
-import uk.gov.pmrv.api.files.attachments.domain.FileAttachment;
+import uk.gov.netz.api.files.attachments.domain.FileAttachment;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.emp.common.attachments.FileAttachmentUtil;
 import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanMigrationContainer;
 import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanSectionMigrationService;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachment;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachmentMapper;
-import uk.gov.pmrv.api.referencedata.domain.Country;
-import uk.gov.pmrv.api.referencedata.repository.CountryRepository;
-
-import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
+import uk.gov.netz.api.referencedata.domain.Country;
+import uk.gov.netz.api.referencedata.repository.CountryRepository;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,16 +30,21 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
+
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class EmpOperatorDetailsSectionMigrationService implements EmissionsMonitoringPlanSectionMigrationService<EmpOperatorDetailsFlightIdentification> {
 
     private final JdbcTemplate migrationJdbcTemplate;
-
     private final CountryRepository countryRepository;
 
-    private final EtsFileAttachmentMapper etsFileAttachmentMapper = Mappers.getMapper(EtsFileAttachmentMapper.class);
+	public EmpOperatorDetailsSectionMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate, CountryRepository countryRepository) {
+		this.migrationJdbcTemplate = migrationJdbcTemplate;
+		this.countryRepository = countryRepository;
+	}
+
+	private final EtsFileAttachmentMapper etsFileAttachmentMapper = Mappers.getMapper(EtsFileAttachmentMapper.class);
 
     private static final String BLANK_FILE_PATH = "migration" + File.separator + "attachments" + File.separator + "Blank file AOC not required.pdf";
     private static final String QUERY_BASE = "with XMLNAMESPACES (\n"

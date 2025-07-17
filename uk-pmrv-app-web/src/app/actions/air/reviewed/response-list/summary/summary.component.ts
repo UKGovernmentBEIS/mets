@@ -20,17 +20,13 @@ import { AirService } from '../../../core/air.service';
         [operatorAirImprovementResponse]="operatorAirImprovementResponse$ | async"
         [attachedFiles]="operatorFiles$ | async"
         [isEditable]="false"
-        [isReview]="true"
-      >
-      </app-air-operator-response-item>
+        [isReview]="true"></app-air-operator-response-item>
       <app-air-regulator-response-item
         [reference]="reference"
         [regulatorAirImprovementResponse]="regulatorAirImprovementResponse$ | async"
         [attachedFiles]="regulatorFiles$ | async"
         [isEditable]="false"
-        [isReview]="false"
-      >
-      </app-air-regulator-response-item>
+        [isReview]="false"></app-air-regulator-response-item>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,5 +49,8 @@ export class SummaryComponent {
     map((payload) => (payload?.files ? this.airService.getRegulatorDownloadUrlFiles(payload?.files) : [])),
   );
 
-  constructor(private readonly airService: AirService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly airService: AirService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -60,7 +60,7 @@ class AviationVirRespondToRegulatorCommentsSubmitActionHandlerTest {
                     .regulatorImprovementResponses(regulatorImprovementResponses)
                     .build())
             .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final AviationVirSubmitRespondToRegulatorCommentsRequestTaskActionPayload actionPayload =
             AviationVirSubmitRespondToRegulatorCommentsRequestTaskActionPayload.builder()
                 .payloadType(
@@ -70,12 +70,12 @@ class AviationVirRespondToRegulatorCommentsSubmitActionHandlerTest {
         when(requestTaskService.findTaskById(taskId)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(taskId, RequestTaskActionType.AVIATION_VIR_SUBMIT_RESPOND_TO_REGULATOR_COMMENTS, pmrvUser,
+        handler.process(taskId, RequestTaskActionType.AVIATION_VIR_SUBMIT_RESPOND_TO_REGULATOR_COMMENTS, appUser,
             actionPayload);
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(1L);
-        verify(virRespondToRegulatorCommentsService, times(1)).applySubmitAction(actionPayload, requestTask, pmrvUser);
+        verify(virRespondToRegulatorCommentsService, times(1)).applySubmitAction(actionPayload, requestTask, appUser);
         verify(workflowService, times(1)).sendEvent(requestId, BpmnProcessConstants.VIR_RESPONSE_COMMENT_SUBMITTED,
             new HashMap<>());
         verifyNoMoreInteractions(workflowService);
@@ -97,7 +97,7 @@ class AviationVirRespondToRegulatorCommentsSubmitActionHandlerTest {
                     .regulatorImprovementResponses(Map.of())
                     .build())
             .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final AviationVirSubmitRespondToRegulatorCommentsRequestTaskActionPayload actionPayload =
             AviationVirSubmitRespondToRegulatorCommentsRequestTaskActionPayload.builder()
                 .payloadType(
@@ -107,12 +107,12 @@ class AviationVirRespondToRegulatorCommentsSubmitActionHandlerTest {
         when(requestTaskService.findTaskById(taskId)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(taskId, RequestTaskActionType.AVIATION_VIR_SUBMIT_RESPOND_TO_REGULATOR_COMMENTS, pmrvUser,
+        handler.process(taskId, RequestTaskActionType.AVIATION_VIR_SUBMIT_RESPOND_TO_REGULATOR_COMMENTS, appUser,
             actionPayload);
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(1L);
-        verify(virRespondToRegulatorCommentsService, times(1)).applySubmitAction(actionPayload, requestTask, pmrvUser);
+        verify(virRespondToRegulatorCommentsService, times(1)).applySubmitAction(actionPayload, requestTask, appUser);
         verify(workflowService, times(1)).completeTask(processId);
         verifyNoMoreInteractions(workflowService);
     }

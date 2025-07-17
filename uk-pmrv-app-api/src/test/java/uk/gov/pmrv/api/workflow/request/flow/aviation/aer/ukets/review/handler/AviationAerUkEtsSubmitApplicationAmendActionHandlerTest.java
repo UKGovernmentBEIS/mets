@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -42,7 +42,7 @@ class AviationAerUkEtsSubmitApplicationAmendActionHandlerTest {
     void process() {
         Long requestTaskId = 1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.AVIATION_AER_UKETS_SUBMIT_APPLICATION_AMEND;
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         AviationAerSubmitApplicationAmendRequestTaskActionPayload taskActionPayload =
             AviationAerSubmitApplicationAmendRequestTaskActionPayload.builder().build();
 
@@ -57,11 +57,11 @@ class AviationAerUkEtsSubmitApplicationAmendActionHandlerTest {
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        submitApplicationAmendActionHandler.process(requestTaskId, requestTaskActionType, pmrvUser, taskActionPayload);
+        submitApplicationAmendActionHandler.process(requestTaskId, requestTaskActionType, appUser, taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(requestAviationAerUkEtsReviewService, times(1))
-            .sendAmendedAerToRegulator(taskActionPayload, requestTask, pmrvUser);
+            .sendAmendedAerToRegulator(taskActionPayload, requestTask, appUser);
         verify(workflowService, times(1)).completeTask(processTaskId,
             Map.of(BpmnProcessConstants.REQUEST_ID, requestId,
                 BpmnProcessConstants.AVIATION_AER_OUTCOME, AviationAerOutcome.REVIEW_REQUESTED)

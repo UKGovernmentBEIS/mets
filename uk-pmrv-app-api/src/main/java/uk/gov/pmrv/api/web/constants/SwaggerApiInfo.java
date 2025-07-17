@@ -16,6 +16,7 @@ public final class SwaggerApiInfo {
     public static final String NOT_FOUND = "Not Found";
     public static final String FORBIDDEN = "Forbidden";
     public static final String INTERNAL_SERVER_ERROR = "Internal Server Error";
+    public static final String SERVICE_UNAVAILABLE = "Service unavailable";
     public static final String VALIDATION_ERROR_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "FORM1001 | Form validation failed";
     public static final String VALIDATION_PARAMETER_ERROR_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
@@ -23,13 +24,15 @@ public final class SwaggerApiInfo {
     public static final String TOKEN_VERIFICATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
             "EMAIL1001 | The verification link has expired \t\n " +
             "TOKEN1001 | Invalid Token";
-    public static final String USERS_INVITATION_TOKEN_VERIFICATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
-            "AUTHORITY1005 | User status cannot be updated \t\n " +
+    public static final String ACCEPT_AUTHORITY_AND_ENABLE_OPERATOR_USER_FROM_INVITATION_WITH_CREDENTIALS_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
             "EMAIL1001 | The verification link has expired \t\n " +
             "TOKEN1001 | Invalid Token \t\n " +
+            "USER1003 | User is already registered with different role \t\n " +
+            "AUTHORITY1005 | User status cannot be updated \t\n " +
+            "AUTHORITY1016 | Authority already exists for a different role type than operator \t\n " + 
             "FORM1001 | Form validation failed";
     public static final String USERS_TOKEN_VERIFICATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
-        "USER1001 | User is already registered \t\n " +
+        "USER1001 | User role already exists \t\n " +
         "EMAIL1001 | The verification link has expired \t\n " +
         "TOKEN1001 | Invalid Token \t\n " +
         "FORM1001 | Form validation failed";
@@ -37,8 +40,12 @@ public final class SwaggerApiInfo {
             "EMAIL1001 | The verification link has expired \t\n " +
             "TOKEN1001 | Invalid Token \t\n " + 
             "USER1002 | User is deleted \t\n " +
+            "USER1003 | User is already registered with different role \t\n " +
             "NOTFOUND1001 | Resource not found \t\n " +
-            "AUTHORITY1009 | User is not operator \t\n ";
+            "AUTHORITY1005 | User status cannot be updated \t\n " +
+            "AUTHORITY1009 | User is not operator \t\n " + 
+            "AUTHORITY1016 | Authority already exists for a different role type than operator"
+            ;
     public static final String ACCOUNT_LEGAL_ENTITY_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "ACCOUNT1000 | User account does not belong to legal entity";
     public static final String REQUEST_ACTION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
@@ -99,35 +106,60 @@ public final class SwaggerApiInfo {
         "FORM1001 | Form validation failed";
     public static final String OPERATOR_USER_ACCOUNT_REGISTRATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "FORM1001 | Form validation failed \t\n " +
-        "AUTHORITY1000 | Can not assign authority. Another role is already assigned to user \t\n " +
         "AUTHORITY1005 | User status cannot be updated \t\n " +
         "AUTHORITY1011 | Regulator user can only add operator administrator users to an account \t\n " +
+        "AUTHORITY1016 | Authority already exists for a different role type than operator \t\n" +
         "USER1000 | User registration failed \t\n " +
-        "USER1001 | User is already registered";
+        "USER1003 | User is already registered with different role ";
     public static final String DELETE_ACCOUNT_OPERATOR_AUTHORITY_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "AUTHORITY1001 | At least one operator admin should exist in account \t\n " +
         "AUTHORITY1004 | User is not related to account";
     public static final String UPDATE_VERIFIER_AUTHORITY_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "AUTHORITY1007 | Active verifier admin should exist \t\n " +
         "AUTHORITY1008 | Authority status in not valid";
+    public static final String INVITE_REGULATOR_USER_TO_CA_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
+            "USER1001 | User role already exists \t\n " +
+            "AUTHORITY1005 | User status cannot be updated \t\n " +
+            "AUTHORITY1014 | Authority already exists for a different role type or CA ";
     public static final String ACCEPT_REGULATOR_USER_INVITATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "EMAIL1001 | The verification link has expired \t\n " +
         "TOKEN1001 | Invalid Token \t\n " +
-        "USER1004 | User status is not valid ";
-    public static final String ENABLE_REGULATOR_USER_FROM_INVITATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
+        "USER1004 | User status is not valid \t\n" + 
+        "USER1001 | User role already exists \t\n " +
+        "AUTHORITY1005 | User status cannot be updated \t\n " +
+        "AUTHORITY1014 | Authority already exists for a different role type or CA ";
+    public static final String ACCEPT_AUTHORITY_AND_ENABLE_REGULATOR_USER_FROM_INVITATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "FORM1001 | Form validation failed \t\n " +
         "EMAIL1001 | The verification link has expired \t\n " +
         "TOKEN1001 | Invalid Token \t\n " +
-        "USER1004 | User status is not valid ";
+        "USER1001 | User role already exists \t\n " +
+        "USER1004 | User status is not valid t\n " +
+        "AUTHORITY1005 | User status cannot be updated \t\n " +
+        "AUTHORITY1014 | Authority already exists for a different role type or CA ";
+    public static final String ACCEPT_AUTHORITY_REGULATOR_USER_FROM_INVITATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
+            "FORM1001 | Form validation failed \t\n " +
+            "EMAIL1001 | The verification link has expired \t\n " +
+            "TOKEN1001 | Invalid Token \t\n " +
+            "USER1004 | User status is not valid ";
+    public static final String INVITE_VERIFIER_USER_TO_VB_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
+            "USER1001 | User role already exists \t\n " +
+            "AUTHORITY1005 | User status cannot be updated \t\n " +
+            "AUTHORITY1015 | Authority already exists for a different role type or VB ";
     public static final String ACCEPT_VERIFIER_USER_INVITATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "EMAIL1001 | The verification link has expired \t\n " +
         "TOKEN1001 | Invalid Token \t\n " +
-        "USER1004 | User status is not valid ";
-    public static final String ENABLE_VERIFIER_USER_FROM_INVITATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
+        "USER1001 | User role already exists \t\n " +
+        "USER1004 | User status is not valid \t\n " + 
+        "AUTHORITY1005 | User status cannot be updated \t\n " +
+        "AUTHORITY1015 | Authority already exists for a different role type or VB ";
+    public static final String ACCEPT_AUTHORITY_AND_ENABLE_VERIFIER_USER_FROM_INVITATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "FORM1001 | Form validation failed \t\n " +
         "EMAIL1001 | The verification link has expired \t\n " +
         "TOKEN1001 | Invalid Token \t\n " +
-        "USER1004 | User status is not valid ";
+        "USER1001 | User role already exists \t\n " +
+        "USER1004 | User status is not valid \t\n " + 
+        "AUTHORITY1005 | User status cannot be updated \t\n " +
+        "AUTHORITY1015 | Authority already exists for a different role type or VB ";
     public static final String UPDATE_CA_SITE_CONTACTS_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
             "AUTHORITY1003 | User is not related to competent authority \t\n " +
             "ACCOUNT1004 | Account is not related to competent authority \t\n " +
@@ -137,7 +169,7 @@ public final class SwaggerApiInfo {
             "ACCOUNT1005 | Account is not related to verification body \t\n " +
             "FORM1001 | Form validation failed";
     public static final String APPOINT_VERIFICATION_BODY_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
-            "ACCOUNT1006 | A verification body has already been appointed to the Installation account \t\n " +
+            "ACCOUNT1006 | A verification body has already been appointed to the account \t\n " +
             "ACCOUNT1008 | The verification body is not accredited to the account's emission trading scheme \t\n " +
             "ACCOUNT1009 | Account status is not valid \t\n " +
             "ACCOUNT1010 | Verification body is attached on open tasks \t\n " +
@@ -145,17 +177,21 @@ public final class SwaggerApiInfo {
             "NOTFOUND1001 | Resource not found \t\n " +
             "FORM1001 | Form validation failed";
     public static final String REAPPOINT_VERIFICATION_BODY_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
-            "ACCOUNT1006 | A verification body has already been appointed to the Installation account \t\n " +
-            "ACCOUNT1007 | A verification body has not been appointed to the Installation account \t\n " +
+            "ACCOUNT1006 | A verification body has already been appointed to the account \t\n " +
+            "ACCOUNT1007 | A verification body has not been appointed to the account \t\n " +
             "ACCOUNT1009 | Account status is not valid \t\n " +
             "ACCOUNT1008 | The verification body is not accredited to the account's emission trading scheme \t\n " +
             "ACCOUNT1010 | Verification body is attached on open tasks \t\n " +
             "NOTIF1000 | Template processing failed \t\n " +
             "NOTFOUND1001 | Resource not found \t\n " +
             "FORM1001 | Form validation failed";
+    public static final String UNAPPOINT_VERIFICATION_BODY_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
+            "NOTIF1000 | Template processing failed \t\n " +
+            "NOTFOUND1001 | Resource not found \t\n " +
+            "FORM1001 | Form validation failed";
     public static final String CREATE_VERIFICATION_BODY_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "FORM1001 | Form validation failed \t\n " +
-        "USER1001 | User is already registered \t\n " +
+        "USER1001 | User role already exists \t\n " +
         "AUTHORITY1005 | User status cannot be updated ";
     public static final String UPDATE_VERIFICATION_BODY_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "FORM1001 | Form validation failed \t\n " +
@@ -163,17 +199,24 @@ public final class SwaggerApiInfo {
     public static final String INVITE_ADMIN_VERIFIER_TO_VB_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
             "FORM1001 | Form validation failed \t\n " +
             "NOTFOUND1001 | Resource not found \t\n " +
-            "USER1001 | User is already registered ";
-    public static final String REGISTER_OPERATOR_USER_FROM_INVITATION_WOUT_CREDENTIALS_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
-        "AUTHORITY1005 | User status cannot be updated \t\n " +
+            "USER1001 | User role already exists \t\n " +
+            "AUTHORITY1005 | User status cannot be updated \t\n " +
+            "AUTHORITY1015 | Authority already exists for a different role type or VB ";
+    public static final String ACCEPT_AUTHORITY_AND_ENABLE_OPERATOR_USER_FROM_INVITATION_WOUT_CREDENTIALS_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         "EMAIL1001 | The verification link has expired \t\n " +
         "TOKEN1001 | Invalid Token \t\n " +
+        "USER1003 | User is already registered with different role \t\n " +
+        "AUTHORITY1005 | User status cannot be updated \t\n " +
+        "AUTHORITY1016 | Authority already exists for a different role type than operator \t\n " + 
         "FORM1001 | Form validation failed";
     public static final String UPDATE_VERIFICATION_BODY_STATUS_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
             "FORM1001 | Form validation failed \t\n " +
             "VERBODY1002 | Verification body status is not valid";
-    public static final String ENABLE_OPERATOR_USER_FROM_INVITATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
+    public static final String SET_CREDENTIALS_TO_REGISTERED_OPERATOR_USER_FROM_INVITATION_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
+        "USER1003 | User is already registered with different role \t\n " +
         "USER1004 | User status is not valid \t\n " +
+        "AUTHORITY1005 | User status cannot be updated \t\n " +
+        "AUTHORITY1016 | Authority already exists for a different role type than operator \t\n " + 
         "EMAIL1001 | The verification link has expired \t\n " +
         "TOKEN1001 | Invalid Token \t\n " +
         "FORM1001 | Form validation failed";
@@ -250,4 +293,10 @@ public final class SwaggerApiInfo {
     public static final String SUBMIT_REPORTING_STATUS_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
             "FORM1001 | Form validation failed \t\n " +
             "ACCOUNT1014 | Aviation account reporting status is not changed";
+
+    public static final String GET_COMPANY_PROFILE_SERVICE_UNAVAILABLE = SERVICE_UNAVAILABLE + ERROR_CODES_HEADER +
+        "COMPANYINFO1001 | Companies House API is currently unavailable";
+
+    public static final String GET_COMPANY_PROFILE_INTERNAL_SERVER_ERROR = INTERNAL_SERVER_ERROR + ERROR_CODES_HEADER +
+        "COMPANYINFO1002 | Companies House API integration failed";
 }

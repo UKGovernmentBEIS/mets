@@ -64,6 +64,6 @@ describe('SopIdComponent', () => {
     fixture.detectChanges();
 
     expect(accountUpdateService.updateInstallationAccountSopId).toHaveBeenCalled();
-    expect(accountUpdateService.updateInstallationAccountSopId).toHaveBeenCalledWith(1, { sopId: '123456' });
+    expect(accountUpdateService.updateInstallationAccountSopId).toHaveBeenCalledWith(1, { sopId: 123456 });
   });
 });

@@ -15,6 +15,8 @@ import { ControlContainer, ControlValueAccessor, NgControl } from '@angular/form
 
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs';
 
+import BigNumber from 'bignumber.js';
+
 import { LabelDirective } from '../directives';
 import { GovukValidators } from '../error-message/govuk-validators';
 import { FormService } from '../form/form.service';
@@ -38,11 +40,11 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
   @Input() widthClass: GovukTextWidthClass = 'govuk-!-width-full';
   @Input() prefix?: string;
   @Input() suffix?: string;
+  @Input() isLabelHidden = true;
   @ContentChild(LabelDirective) templateLabel: LabelDirective;
   @ViewChild('input') input: ElementRef<HTMLInputElement>;
   currentLabel = 'Insert text';
   currentLabelSize = 'govuk-label';
-  isLabelHidden = true;
   disabled: boolean;
   onChange: (_: any) => any;
   onBlur: (_: any) => any;
@@ -81,8 +83,11 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
 
   ngOnInit(): void {
     super.ngOnInit();
-    if (this.inputType === 'number') {
-      const notNanValidator = GovukValidators.notNaN('Enter a numerical value');
+    if (this.inputType === 'number' || this.inputType === 'big-number') {
+      const notNanValidator =
+        this.inputType === 'number'
+          ? GovukValidators.notNaN('Enter a numerical value')
+          : GovukValidators.notNaBigNumber('Enter a numerical value');
       this.control.addValidators(notNanValidator);
       this.control.updateValueAndValidity();
     }
@@ -92,11 +97,7 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
     this.writeValue(this.control.value);
     this.control.valueChanges
       .pipe(
-        distinctUntilChanged((prev, curr) => {
-          const previousValue = this.inputType === 'number' ? Number(prev) : prev;
-          const currentValue = this.inputType === 'number' ? Number(curr) : curr;
-          return previousValue === currentValue;
-        }),
+        distinctUntilChanged((prev, curr) => prev === curr),
         tap((value) => this.handleInputValue(value)),
         takeUntil(this.destroy$),
       )
@@ -110,9 +111,9 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
         'value',
         this.input.nativeElement === document.activeElement
           ? value
-          : this.numberFormat && !Number.isNaN(Number(value))
-          ? this.decimalPipe.transform(value, this.numberFormat)
-          : value,
+          : this.numberFormat && this.inputType !== 'big-number' && !Number.isNaN(Number(value))
+            ? this.decimalPipe.transform(value, this.numberFormat)
+            : value,
       );
     }
   }
@@ -153,27 +154,73 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
     this.onBlur(value);
   }
 
-  private handleInputValue(value: string) {
+  private handleInputValue(value: string | number | BigNumber) {
     switch (this.inputType) {
       case 'number':
+        if (typeof value === 'number') {
+          // has already been handled
+          return;
+        }
         if (value === null) {
-          break;
-        } else if (value === '') {
+          return;
+        } else if ((value as string).trim() === '') {
           this.control.setValue(null);
-        } else if (!isNaN(Number(value))) {
-          this.control.setValue(Number(value));
+        } else {
+          const valueAsString = value as string;
+          const parts = valueAsString.split('.');
+          if (parts.length > 1 && parts[1].charAt(parts[1].length - 1) === '0') {
+            return;
+          }
+
+          const valueAsNumber = Number(value);
+          if (isNaN(valueAsNumber) || (value as string).charAt((value as string).length - 1) === '.') {
+            return;
+          }
+
+          this.control.setValue(valueAsNumber);
 
           if (this.input.nativeElement !== document.activeElement) {
             this.renderer.setProperty(
               this.input.nativeElement,
               'value',
-              this.numberFormat ? this.decimalPipe.transform(value, this.numberFormat) : value,
+              this.numberFormat ? this.decimalPipe.transform(value as string, this.numberFormat) : value,
             );
           }
         }
         break;
+      case 'big-number':
+        if (BigNumber.isBigNumber(value)) {
+          // has already been handled
+          return;
+        }
+        if (value === null) {
+          return;
+        } else if ((value as string).trim() === '') {
+          this.control.setValue(null);
+        } else {
+          const valueAsString = value as string;
+          if (valueAsString.charAt(valueAsString.length - 1) === '.') {
+            return;
+          }
+
+          const parts = valueAsString.split('.');
+          if (parts.length > 1 && parts[1].charAt(parts[1].length - 1) === '0') {
+            return;
+          }
+
+          const valueAsBigNumber = new BigNumber(value);
+          if (valueAsBigNumber.isNaN()) {
+            return;
+          }
+          this.control.setValue(valueAsBigNumber);
+
+          if (this.input.nativeElement !== document.activeElement) {
+            this.renderer.setProperty(this.input.nativeElement, 'value', value);
+          }
+        }
+        break;
       case 'text':
-        this.control.setValue(value ? (value.trim() === '' ? null : value.trim()) : value, {
+        this.control.setValue(value ? ((value as string).trim() === '' ? null : (value as string).trim()) : value, {
           emitEvent: false,
           emitViewToModelChange: false,
           emitModelToViewChange: false,

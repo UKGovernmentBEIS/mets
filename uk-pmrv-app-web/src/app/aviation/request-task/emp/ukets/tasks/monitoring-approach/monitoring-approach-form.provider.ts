@@ -3,18 +3,17 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 
 import { Subject } from 'rxjs';
 
-import {
-  EmissionsMonitoringApproach,
-  MonitoringApproachType,
-} from '@aviation/shared/components/emp/monitoring-approach-summary-template/monitoring-approach-types.interface';
 import { FileUpload } from '@shared/file-input/file-upload-event';
 import { RequestTaskFileService } from '@shared/services/request-task-file-service/request-task-file.service';
 
 import { GovukValidators } from 'govuk-components';
 
+import { EmpEmissionsMonitoringApproach } from 'pmrv-api';
+
 import { RequestTaskStore } from '../../../../store';
 import { TaskFormProvider } from '../../../../task-form.provider';
 import { getRequestTaskAttachmentTypeForRequestTaskType } from '../../../../util';
+import { EmissionsMonitoringApproach } from './monitoring-approach-types.interface';
 
 export interface SimplifiedApproachFormModel {
   explanation: FormControl<string | null>;
@@ -22,7 +21,7 @@ export interface SimplifiedApproachFormModel {
 }
 
 export interface MonitoringApproachFormModel {
-  monitoringApproachType: FormControl<MonitoringApproachType | null>;
+  monitoringApproachType: FormControl<EmissionsMonitoringApproach['monitoringApproachType'] | null>;
   simplifiedApproach?: FormGroup<SimplifiedApproachFormModel>;
 }
 
@@ -137,7 +136,7 @@ export class MonitoringApproachFormProvider
   private buildForm() {
     this._form = this.fb.group<MonitoringApproachFormModel>(
       {
-        monitoringApproachType: new FormControl<MonitoringApproachType | null>(null, {
+        monitoringApproachType: new FormControl<EmpEmissionsMonitoringApproach['monitoringApproachType'] | null>(null, {
           updateOn: 'change',
           validators: GovukValidators.required('You must select one approach'),
         }),

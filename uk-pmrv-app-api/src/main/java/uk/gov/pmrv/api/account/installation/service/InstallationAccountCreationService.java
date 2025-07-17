@@ -1,9 +1,11 @@
 package uk.gov.pmrv.api.account.installation.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
@@ -12,9 +14,6 @@ import uk.gov.pmrv.api.account.installation.transform.InstallationAccountMapper;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.service.AccountIdentifierService;
 import uk.gov.pmrv.api.account.service.LegalEntityService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-
-import jakarta.validation.Valid;
 
 @Validated
 @Service
@@ -28,10 +27,10 @@ public class InstallationAccountCreationService {
     private final InstallationAccountMapper installationAccountMapper;
 
     @Transactional
-    public InstallationAccountDTO createAccount(@Valid InstallationAccountDTO accountDTO, PmrvUser pmrvUser) {
+    public InstallationAccountDTO createAccount(@Valid InstallationAccountDTO accountDTO, AppUser appUser) {
         installationAccountQueryService.validateAccountNameExistence(accountDTO.getName());
 
-        final LegalEntity legalEntity = legalEntityService.resolveLegalEntity(accountDTO.getLegalEntity(), pmrvUser);
+        final LegalEntity legalEntity = legalEntityService.resolveLegalEntity(accountDTO.getLegalEntity(), appUser);
         final Long identifier = accountDTO.getId() != null ? accountDTO.getId()
                 : accountIdentifierService.incrementAndGet();
 

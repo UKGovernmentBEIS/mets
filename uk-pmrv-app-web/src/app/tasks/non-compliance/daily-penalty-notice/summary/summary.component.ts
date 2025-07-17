@@ -6,6 +6,7 @@ import { combineLatest, first, map, switchMap, takeUntil } from 'rxjs';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { selectCurrentDomain } from '@core/store/auth/auth.selectors';
 import { AuthStore } from '@core/store/auth/auth.store';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { NonComplianceDailyPenaltyNoticeRequestTaskPayload } from 'pmrv-api';
 
@@ -59,6 +60,7 @@ export class SummaryComponent implements OnInit {
     private readonly router: Router,
     public readonly authStore: AuthStore,
     private readonly destroy$: DestroySubject,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
 
   ngOnInit(): void {
@@ -70,9 +72,9 @@ export class SummaryComponent implements OnInit {
       )
       .subscribe();
 
-    combineLatest([this.isTaskSubmitted$, this.requestTask$])
+    combineLatest([this.isTaskSubmitted$, this.requestTask$, this.currentDomain$])
       .pipe(
-        switchMap(async ([isTaskSubmitted, requestTask]) => {
+        switchMap(async ([isTaskSubmitted, requestTask, currentDomain]) => {
           if (!isTaskSubmitted) {
             const taskId = requestTask?.id;
             const text = 'Non compliance';
@@ -80,9 +82,15 @@ export class SummaryComponent implements OnInit {
             switch (requestTask.payload.payloadType) {
               case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW_PAYLOAD':
                 link = ['/tasks', taskId, 'non-compliance', 'daily-penalty-notice', 'peer-review-wait'];
+                if (currentDomain === 'INSTALLATION') {
+                  this.breadcrumbService.addToLastBreadcrumbAndShow('peer-review-wait');
+                }
                 break;
               case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW_PAYLOAD':
                 link = ['/tasks', taskId, 'non-compliance', 'daily-penalty-notice', 'dpn-peer-review'];
+                if (currentDomain === 'INSTALLATION') {
+                  this.breadcrumbService.addToLastBreadcrumbAndShow('dpn-peer-review');
+                }
                 break;
               default:
                 link = ['/tasks', taskId, 'non-compliance', 'daily-penalty-notice', 'submit'];

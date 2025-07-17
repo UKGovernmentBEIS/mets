@@ -4,20 +4,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.Scope;
+import uk.gov.netz.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
+import uk.gov.netz.api.authorization.rules.services.resource.RegulatorAuthorityResourceService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoResponse;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
-import uk.gov.pmrv.api.authorization.rules.domain.Scope;
-import uk.gov.pmrv.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
-import uk.gov.pmrv.api.authorization.rules.services.resource.RegulatorAuthorityResourceService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Objects;
@@ -39,13 +39,13 @@ public class AccountCaSiteContactService {
        return accountContactQueryService.findContactByAccountAndContactType(accountId, AccountContactType.CA_SITE);
     }
 
-    public AccountContactInfoResponse getAccountsAndCaSiteContacts(PmrvUser pmrvUser, AccountType accountType,
+    public AccountContactInfoResponse getAccountsAndCaSiteContacts(AppUser appUser, AccountType accountType,
                                                                    Integer page, Integer pageSize) {
         Page<AccountContactInfoDTO> contacts =
-            approvedAccountQueryService.getApprovedAccountsAndCaSiteContactsByCa(pmrvUser.getCompetentAuthority(), accountType, page, pageSize);
+            approvedAccountQueryService.getApprovedAccountsAndCaSiteContactsByCa(appUser.getCompetentAuthority(), accountType, page, pageSize);
 
         // Check if user has the permission of editing account contacts assignees
-        boolean isEditable = compAuthAuthorizationResourceService.hasUserScopeToCompAuth(pmrvUser, Scope.EDIT_USER);
+        boolean isEditable = compAuthAuthorizationResourceService.hasUserScopeToCompAuth(appUser, Scope.EDIT_USER);
 
         // Transform properly
         return AccountContactInfoResponse.builder()
@@ -63,8 +63,8 @@ public class AccountCaSiteContactService {
     }
 
     @Transactional
-    public void updateCaSiteContacts(PmrvUser pmrvUser, AccountType accountType, List<AccountContactDTO> caSiteContacts) {
-        CompetentAuthorityEnum ca = pmrvUser.getCompetentAuthority();
+    public void updateCaSiteContacts(AppUser appUser, AccountType accountType, List<AccountContactDTO> caSiteContacts) {
+        CompetentAuthorityEnum ca = appUser.getCompetentAuthority();
 
         // Validate accounts belonging to CA
         Set<Long> accountIds =

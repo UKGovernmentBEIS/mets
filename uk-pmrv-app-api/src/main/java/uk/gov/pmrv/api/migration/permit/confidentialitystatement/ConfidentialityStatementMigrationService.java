@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration.permit.confidentialitystatement;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
@@ -21,12 +22,17 @@ import static uk.gov.pmrv.api.migration.permit.MigrationPermitHelper.constructEt
 
 @Log4j2
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class ConfidentialityStatementMigrationService implements PermitSectionMigrationService<ConfidentialityStatement> {
 
     private final JdbcTemplate migrationJdbcTemplate;
     private final MigrationConfidentialityStatementMapper migrationConfidentialityStatementMapper;
+
+    public ConfidentialityStatementMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                                    MigrationConfidentialityStatementMapper migrationConfidentialityStatementMapper) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.migrationConfidentialityStatementMapper = migrationConfidentialityStatementMapper;
+    }
 
     private static final String QUERY_BASE =
         "with XMLNAMESPACES ('urn:www-toplev-com:officeformsofd' AS fd), \r\n" +

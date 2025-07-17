@@ -16,9 +16,7 @@ import { UserRegistrationStore } from '../store/user-registration.store';
           authentication.
         </p>
         <h3 class="govuk-heading-m">What happens next</h3>
-        <p class="govuk-body">
-          You can sign in to the UK ETS reporting service and apply to create a new installation or aviation account.
-        </p>
+        <p class="govuk-body">You can now sign in to the UK ETS reporting service.</p>
         <button type="button" (click)="authService.login({})" govukButton>Sign in</button>
       </div>
     </div>

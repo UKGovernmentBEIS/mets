@@ -12,13 +12,11 @@ import { DoalActionService } from '../../core/doal-action.service';
   template: `
     <app-doal-action-task
       header="Upload verification report of the activity level report"
-      [actionType]="requestActionType$ | async"
-    >
+      [actionType]="requestActionType$ | async">
       <app-verification-report-summary-template
         [verificationActivityLevelReport]="verificationActivityLevelReport$ | async"
         [editable]="false"
-        [document]="files$ | async"
-      ></app-verification-report-summary-template>
+        [document]="files$ | async"></app-verification-report-summary-template>
     </app-doal-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

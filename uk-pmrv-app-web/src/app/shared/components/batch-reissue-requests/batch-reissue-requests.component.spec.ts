@@ -38,9 +38,7 @@ describe('BatchReissueRequestsComponent', () => {
         <app-batch-reissue-requests
           [batchReissuesResponse$]="response$"
           [pageSize]="pageSize"
-          (currentPageChanged)="onCurrentPageChanged($event)"
-        >
-        </app-batch-reissue-requests>
+          (currentPageChanged)="onCurrentPageChanged($event)"></app-batch-reissue-requests>
       `,
     })
     class TestComponent {
@@ -89,9 +87,7 @@ describe('BatchReissueRequestsComponent', () => {
         <app-batch-reissue-requests
           [batchReissuesResponse$]="response$"
           [pageSize]="pageSize"
-          (currentPageChanged)="onCurrentPageChanged($event)"
-        >
-        </app-batch-reissue-requests>
+          (currentPageChanged)="onCurrentPageChanged($event)"></app-batch-reissue-requests>
       `,
     })
     class Test2Component {

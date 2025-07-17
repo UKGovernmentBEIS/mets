@@ -14,8 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.config.RegistryConfig;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -38,12 +37,8 @@ class DreOfficialNoticeSendServiceTest {
 	@Mock
 	private OfficialNoticeSendService officialNoticeSendService;
 
-    @Mock
-    private RegistryConfig registryConfig;
-    
 	@Test
 	void sendOfficialNotice() {
-		String registryEmail = "registryEmail@email";
 		String requestId = "1";
 		FileInfoDTO officialDocFileInfoDTO = FileInfoDTO.builder()
                 .name("offDoc.pdf")
@@ -59,7 +54,6 @@ class DreOfficialNoticeSendServiceTest {
 		List<String> decisionNotificationUserEmails = List.of("operator@pmrv.uk");
 		
 		when(requestService.findRequestById(requestId)).thenReturn(request);
-		when(registryConfig.getEmail()).thenReturn(registryEmail);
 		when(decisionNotificationUsersService.findUserEmails(decisionNotification))
     		.thenReturn(decisionNotificationUserEmails);
 		
@@ -68,6 +62,6 @@ class DreOfficialNoticeSendServiceTest {
 		verify(requestService, times(1)).findRequestById(requestId);
 		verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
 		verify(officialNoticeSendService, times(1))
-			.sendOfficialNotice(List.of(requestPayload.getOfficialNotice()), request, List.of(registryEmail, "operator@pmrv.uk"));
+			.sendOfficialNotice(List.of(requestPayload.getOfficialNotice()), request, decisionNotificationUserEmails);
 	}
 }

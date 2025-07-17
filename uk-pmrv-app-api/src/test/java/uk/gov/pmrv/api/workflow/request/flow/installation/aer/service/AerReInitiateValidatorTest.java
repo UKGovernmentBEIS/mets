@@ -16,8 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
@@ -63,7 +63,7 @@ class AerReInitiateValidatorTest {
         BusinessException ex = assertThrows(BusinessException.class, 
         		() -> validator.validateAction(accountId, payload));
 
-        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.AER_REQUEST_IS_NOT_AER);
+        assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.AER_REQUEST_IS_NOT_AER);
         verify(requestQueryService, times(1)).findRequestDetailsById(requestId);
         verifyNoInteractions(requestCreateValidatorService);
     }

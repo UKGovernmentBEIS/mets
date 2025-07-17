@@ -57,7 +57,7 @@ public class ManagementProcedures implements PermitSection {
     @Valid
     @NotNull(message = "permit.managementProcedures.assessAndControlRisk")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private ManagementProceduresDefinition assessAndControlRisk;
+    private AssessAndControlRisk assessAndControlRisk;
 
     @Valid
     @NotNull(message = "permit.managementProcedures.qaMeteringAndMeasuringEquipment")
@@ -93,6 +93,10 @@ public class ManagementProcedures implements PermitSection {
 
         if (monitoringReporting != null && !ObjectUtils.isEmpty(monitoringReporting.getOrganisationCharts())) {
             attachments.addAll(monitoringReporting.getOrganisationCharts());
+        }
+
+        if (assessAndControlRisk != null && !ObjectUtils.isEmpty(assessAndControlRisk.getRiskAssessmentAttachments())) {
+            attachments.addAll(assessAndControlRisk.getRiskAssessmentAttachments());
         }
 
         return Collections.unmodifiableSet(attachments);

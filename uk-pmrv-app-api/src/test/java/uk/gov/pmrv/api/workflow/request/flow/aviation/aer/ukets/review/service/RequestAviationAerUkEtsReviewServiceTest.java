@@ -6,8 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerReportingObligationDetails;
+import uk.gov.pmrv.api.aviationreporting.common.domain.verification.AviationAerVerificationDecisionType;
+import uk.gov.pmrv.api.aviationreporting.common.domain.verification.AviationAerVerifiedSatisfactoryDecision;
 import uk.gov.pmrv.api.aviationreporting.common.service.AviationReportableEmissionsService;
 import uk.gov.pmrv.api.aviationreporting.common.validation.AviationAerTradingSchemeValidatorService;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEts;
@@ -16,7 +18,11 @@ import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsTotalRepor
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.datagaps.AviationAerDataGaps;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.emissionsmonitoringapproach.AviationAerFuelMonitoringApproach;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.emissionsmonitoringapproach.AviationAerSmallEmittersMonitoringApproach;
+import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.AviationAerTotalEmissions;
+import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.AviationAerUkEtsSubmittedEmissions;
+import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationData;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
+import uk.gov.pmrv.api.aviationreporting.ukets.service.AviationAerUkEtsSubmittedEmissionsCalculationService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.additionaldocuments.EmpAdditionalDocuments;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachType;
@@ -36,6 +42,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.Aviation
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerSubmitApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.common.domain.AviationAerUkEtsApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.common.domain.AviationAerUkEtsRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.common.service.AviationAerUkEtsSubmitRequestTaskSyncAerAttachmentsService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.domain.AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.domain.AviationAerUkEtsApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.domain.AviationAerUkEtsReviewGroup;
@@ -70,6 +77,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -94,6 +102,12 @@ class RequestAviationAerUkEtsReviewServiceTest {
     @Mock
     private AviationReportableEmissionsService aviationReportableEmissionsService;
 
+    @Mock
+    private AviationAerUkEtsSubmittedEmissionsCalculationService aviationAerUkEtsEmissionsCalculationService;
+
+    @Mock
+    private AviationAerUkEtsSubmitRequestTaskSyncAerAttachmentsService syncAerAttachmentsService;
+    
     @Mock
     private AviationAerUkEtsReviewMapper aviationAerUkEtsReviewMapper;
 
@@ -150,7 +164,7 @@ class RequestAviationAerUkEtsReviewServiceTest {
     @Test
     void updateRequestPayloadWithReviewOutcome() {
         String userId = "userId";
-        PmrvUser user = PmrvUser.builder().userId(userId).build();
+        AppUser user = AppUser.builder().userId(userId).build();
 
         AerDataReviewDecision acceptedDecision = AerDataReviewDecision.builder()
             .reviewDataType(AerReviewDataType.VERIFICATION_REPORT_DATA)
@@ -197,7 +211,7 @@ class RequestAviationAerUkEtsReviewServiceTest {
     void updateRequestPayloadWithSkipReviewOutcome() {
         
         String userId = "userId";
-        PmrvUser user = PmrvUser.builder().userId(userId).build();
+        AppUser user = AppUser.builder().userId(userId).build();
 
         AviationAerUkEtsRequestPayload requestPayload = AviationAerUkEtsRequestPayload
             .builder()
@@ -268,18 +282,25 @@ class RequestAviationAerUkEtsReviewServiceTest {
         assertThat(updatedRequestTaskPayload.getReviewSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(reviewSectionsCompleted);
 
         assertFalse(updatedRequestTaskPayload.isVerificationPerformed());
+        
+        verify(syncAerAttachmentsService, times(1)).sync(taskActionPayload.getReportingRequired(), requestTaskPayload);
     }
 
     @Test
     void sendAmendedAerToVerifier() {
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         Map<String, List<Boolean>> verificationSectionsCompleted = Map.of(
             "Verification Section 1", List.of(true),
             "Verification Section 2", List.of(true)
             );
+        Map<String, Boolean> requestTaskActionReviewSectionsCompleted = Map.of(
+                "Review Section 1", true,
+                "Review Section 2", true
+                );
         AviationAerApplicationRequestVerificationRequestTaskActionPayload requestVerificationRequestTaskActionPayload =
             AviationAerApplicationRequestVerificationRequestTaskActionPayload.builder()
+            .reviewSectionsCompleted(requestTaskActionReviewSectionsCompleted)
                 .verificationSectionsCompleted(verificationSectionsCompleted)
                 .build();
 
@@ -323,7 +344,7 @@ class RequestAviationAerUkEtsReviewServiceTest {
         Map<String, List<Boolean>> aerSectionsCompleted = Map.of("Aer Section 1", List.of(true));
         Map<UUID, String> aerAttachments = Map.of(UUID.randomUUID(), "attachment 1");
         Map<UUID, String> reviewAttachments = Map.of(UUID.randomUUID(), "review attachment");
-        Map<String, Boolean> reviewSectionsCompleted = Map.of("Review Section 1", true);
+        Map<String, Boolean> requestTaskReviewSectionsCompleted = Map.of("Review Section 1", true);
 
         AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload aviationAerAmendsSubmitRequestTaskPayload =
             AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload.builder()
@@ -335,7 +356,7 @@ class RequestAviationAerUkEtsReviewServiceTest {
                 .aerSectionsCompleted(aerSectionsCompleted)
                 .aerAttachments(aerAttachments)
                 .reviewAttachments(reviewAttachments)
-                .reviewSectionsCompleted(reviewSectionsCompleted)
+                .reviewSectionsCompleted(requestTaskReviewSectionsCompleted)
                 .build();
         RequestTask requestTask = RequestTask.builder()
             .type(RequestTaskType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT)
@@ -343,7 +364,10 @@ class RequestAviationAerUkEtsReviewServiceTest {
             .payload(aviationAerAmendsSubmitRequestTaskPayload)
             .build();
 
-        AviationAerUkEtsContainer aerUkEtsContainer = AviationAerUkEtsContainer.builder().aer(aviationAerUkEts).build();
+        AviationAerUkEtsContainer aerUkEtsContainer = AviationAerUkEtsContainer.builder().reportingRequired(Boolean.TRUE).aer(aviationAerUkEts).build();
+        AviationAerUkEtsSubmittedEmissions submittedEmissions = AviationAerUkEtsSubmittedEmissions.builder()
+            .aviationAerTotalEmissions(AviationAerTotalEmissions.builder().totalEmissions(BigDecimal.TEN).build())
+            .build();
         RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder().crcoCode("crcoCode").operatorName("operatorName").build();
         AviationAerUkEtsApplicationSubmittedRequestActionPayload submittedRequestActionPayload =
             AviationAerUkEtsApplicationSubmittedRequestActionPayload.builder()
@@ -354,12 +378,14 @@ class RequestAviationAerUkEtsReviewServiceTest {
         when(aviationAerUkEtsReviewMapper.toAviationAerUkEtsContainer(aviationAerAmendsSubmitRequestTaskPayload, EmissionTradingScheme.UK_ETS_AVIATION))
             .thenReturn(aerUkEtsContainer);
         doNothing().when(aviationAerUkEtsValidatorService).validateAer(aerUkEtsContainer);
+        when(aviationAerUkEtsEmissionsCalculationService.calculateSubmittedEmissions(aerUkEtsContainer)).thenReturn(submittedEmissions);
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(accountInfo);
-        when(aviationAerUkEtsReviewMapper
-            .toAviationAerUkEtsApplicationSubmittedRequestActionPayload(aviationAerAmendsSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD))
-            .thenReturn(submittedRequestActionPayload);
+		when(aviationAerUkEtsReviewMapper.toAviationAerUkEtsApplicationSubmittedRequestActionPayload(
+				aviationAerAmendsSubmitRequestTaskPayload, accountInfo, submittedEmissions,
+				RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD))
+				.thenReturn(submittedRequestActionPayload);
 
-        reviewService.sendAmendedAerToVerifier(requestVerificationRequestTaskActionPayload, requestTask, pmrvUser);
+        reviewService.sendAmendedAerToVerifier(requestVerificationRequestTaskActionPayload, requestTask, appUser);
 
         AviationAerUkEtsRequestPayload updatedRequestPayload = (AviationAerUkEtsRequestPayload) request.getPayload();
 
@@ -371,33 +397,52 @@ class RequestAviationAerUkEtsReviewServiceTest {
         assertThat(updatedRequestPayload.getAerAttachments()).containsExactlyInAnyOrderEntriesOf(aerAttachments);
         assertThat(updatedRequestPayload.getAerSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(aerSectionsCompleted);
         assertThat(updatedRequestPayload.getVerificationSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(verificationSectionsCompleted);
-        assertThat(updatedRequestPayload.getReviewSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(reviewSectionsCompleted);
+        assertThat(updatedRequestPayload.getReviewSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(requestTaskActionReviewSectionsCompleted);
         assertThat(updatedRequestPayload.getReviewGroupDecisions()).containsOnlyKeys(AviationAerUkEtsReviewGroup.MONITORING_APPROACH);
+        assertEquals(submittedEmissions, updatedRequestPayload.getSubmittedEmissions());
 
         verify(aviationAerUkEtsReviewMapper, times(1))
             .toAviationAerUkEtsContainer(aviationAerAmendsSubmitRequestTaskPayload, EmissionTradingScheme.UK_ETS_AVIATION);
         verify(aviationAerUkEtsValidatorService, times(1)).validateAer(aerUkEtsContainer);
         verify(requestAviationAccountQueryService, times(1)).getAccountInfo(accountId);
         verify(aviationAerUkEtsReviewMapper, times(1))
-            .toAviationAerUkEtsApplicationSubmittedRequestActionPayload(aviationAerAmendsSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD);
+            .toAviationAerUkEtsApplicationSubmittedRequestActionPayload(aviationAerAmendsSubmitRequestTaskPayload, accountInfo, submittedEmissions, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD);
         verify(requestService, times(1)).addActionToRequest(
-            request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER, pmrvUser.getUserId());
+            request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER, appUser.getUserId());
     }
 
     @Test
     void sendAmendedAerToRegulator_when_reporting_required_true() {
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         Map<String, List<Boolean>> aerSectionsCompleted = Map.of(
             "Section 1", List.of(true),
             "Section 2", List.of(true)
         );
+        
+        Map<String, List<Boolean>> verificationSectionsCompleted = Map.of(
+                "Verification Section 1", List.of(true),
+                "Verification Section 2", List.of(true)
+                );
+        Map<String, Boolean> requestTaskActionReviewSectionsCompleted = Map.of(
+                "Review Section 1", true,
+                "Review Section 2", true
+                );
+            
         AviationAerSubmitApplicationAmendRequestTaskActionPayload submitApplicationAmendRequestTaskActionPayload =
             AviationAerSubmitApplicationAmendRequestTaskActionPayload.builder()
                 .aerSectionsCompleted(aerSectionsCompleted)
+                .verificationSectionsCompleted(verificationSectionsCompleted)
+                .reviewSectionsCompleted(requestTaskActionReviewSectionsCompleted)
                 .build();
 
-        AviationAerUkEtsVerificationReport verificationReport = AviationAerUkEtsVerificationReport.builder().build();
+        AviationAerUkEtsVerificationReport verificationReport = AviationAerUkEtsVerificationReport.builder()
+                .verificationData(AviationAerUkEtsVerificationData.builder()
+                        .overallDecision(AviationAerVerifiedSatisfactoryDecision.builder()
+                        		.type(AviationAerVerificationDecisionType.VERIFIED_AS_SATISFACTORY)
+                        		.build())
+                        .build())
+                .build();
         AerDataReviewDecision aerDataReviewDecision = AerDataReviewDecision.builder()
             .reviewDataType(AerReviewDataType.AER_DATA)
             .type(AerDataReviewDecisionType.ACCEPTED)
@@ -440,7 +485,7 @@ class RequestAviationAerUkEtsReviewServiceTest {
             .build();
         Map<UUID, String> aerAttachments = Map.of(UUID.randomUUID(), "attachment 1");
         Map<UUID, String> reviewAttachments = Map.of(UUID.randomUUID(), "review attachment");
-        Map<String, Boolean> reviewSectionsCompleted = Map.of("Review Section 1", true);
+        Map<String, Boolean> requestTaskReviewSectionsCompleted = Map.of("Review Section 1", true);
         AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload aviationAerAmendsSubmitRequestTaskPayload =
             AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload.builder()
                 .payloadType(RequestTaskPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT_PAYLOAD)
@@ -450,7 +495,7 @@ class RequestAviationAerUkEtsReviewServiceTest {
                 .aerMonitoringPlanVersions(aerMonitoringPlanVersions)
                 .aerSectionsCompleted(Map.of("Aer Section 1", List.of(false)))
                 .aerAttachments(aerAttachments)
-                .reviewSectionsCompleted(reviewSectionsCompleted)
+                .reviewSectionsCompleted(requestTaskReviewSectionsCompleted)
                 .reviewAttachments(reviewAttachments)
                 .build();
         RequestTask requestTask = RequestTask.builder()
@@ -459,12 +504,20 @@ class RequestAviationAerUkEtsReviewServiceTest {
             .payload(aviationAerAmendsSubmitRequestTaskPayload)
             .build();
 
-        AviationAerUkEtsContainer aerUkEtsContainer = AviationAerUkEtsContainer.builder().reportingRequired(Boolean.TRUE).aer(aviationAerUkEts).build();
+        AviationAerUkEtsContainer aerUkEtsContainer = AviationAerUkEtsContainer.builder()
+        		.reportingRequired(Boolean.TRUE)
+        		.aer(aviationAerUkEts)
+        		.verificationReport(verificationReport)
+        		.build();
+        AviationAerUkEtsSubmittedEmissions submittedEmissions = AviationAerUkEtsSubmittedEmissions.builder()
+            .aviationAerTotalEmissions(AviationAerTotalEmissions.builder().totalEmissions(BigDecimal.TEN).build())
+            .build();
         RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder().crcoCode("crcoCode").operatorName("operatorName").build();
         AviationAerUkEtsApplicationSubmittedRequestActionPayload submittedRequestActionPayload =
             AviationAerUkEtsApplicationSubmittedRequestActionPayload.builder()
                 .reportingRequired(true)
                 .aer(aviationAerUkEts)
+                .verificationReport(verificationReport)
                 .build();
         AviationAerUkEtsTotalReportableEmissions totalEmissions = AviationAerUkEtsTotalReportableEmissions.builder()
                 .reportableEmissions(BigDecimal.valueOf(200))
@@ -473,13 +526,14 @@ class RequestAviationAerUkEtsReviewServiceTest {
         when(aviationAerUkEtsReviewMapper.toAviationAerUkEtsContainer(aviationAerAmendsSubmitRequestTaskPayload, verificationReport, EmissionTradingScheme.UK_ETS_AVIATION))
             .thenReturn(aerUkEtsContainer);
         doNothing().when(aviationAerUkEtsValidatorService).validate(aerUkEtsContainer);
+        when(aviationAerUkEtsEmissionsCalculationService.calculateSubmittedEmissions(aerUkEtsContainer)).thenReturn(submittedEmissions);
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(accountInfo);
         when(aviationAerUkEtsReviewMapper
-            .toAviationAerUkEtsApplicationSubmittedRequestActionPayload(aviationAerAmendsSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD))
+            .toAviationAerUkEtsApplicationSubmittedRequestActionPayload(aviationAerAmendsSubmitRequestTaskPayload, accountInfo, submittedEmissions, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD))
             .thenReturn(submittedRequestActionPayload);
-        when(aviationReportableEmissionsService.updateReportableEmissions(aerUkEtsContainer, accountId)).thenReturn(totalEmissions);
+        when(aviationReportableEmissionsService.updateReportableEmissions(aerUkEtsContainer, accountId, false)).thenReturn(totalEmissions);
 
-        reviewService.sendAmendedAerToRegulator(submitApplicationAmendRequestTaskActionPayload, requestTask, pmrvUser);
+        reviewService.sendAmendedAerToRegulator(submitApplicationAmendRequestTaskActionPayload, requestTask, appUser);
 
         AviationAerUkEtsRequestPayload updatedRequestPayload = (AviationAerUkEtsRequestPayload) request.getPayload();
 
@@ -491,21 +545,26 @@ class RequestAviationAerUkEtsReviewServiceTest {
         assertEquals(updatedRequestPayload.getAerMonitoringPlanVersions(), aerMonitoringPlanVersions);
         assertThat(updatedRequestPayload.getAerAttachments()).containsExactlyInAnyOrderEntriesOf(aerAttachments);
         assertThat(updatedRequestPayload.getAerSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(aerSectionsCompleted);
-        assertThat(updatedRequestPayload.getReviewSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(reviewSectionsCompleted);
+        assertThat(updatedRequestPayload.getReviewSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(requestTaskActionReviewSectionsCompleted);
+        assertThat(updatedRequestPayload.getVerificationSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(verificationSectionsCompleted);
         assertThat(updatedRequestPayload.getReviewGroupDecisions()).containsOnlyKeys(AviationAerUkEtsReviewGroup.MONITORING_APPROACH);
+        assertEquals(submittedEmissions, updatedRequestPayload.getSubmittedEmissions());
+        assertEquals(submittedRequestActionPayload.getVerificationReport(), updatedRequestPayload.getVerificationReport());
 
         AviationAerRequestMetadata updatedRequestMetadata = (AviationAerRequestMetadata) request.getMetadata();
         assertEquals(totalEmissions.getReportableEmissions(), updatedRequestMetadata.getEmissions());
+        assertEquals(AviationAerVerificationDecisionType.VERIFIED_AS_SATISFACTORY,
+        		updatedRequestMetadata.getOverallAssessmentType());
 
         verify(aviationAerUkEtsReviewMapper, times(1))
             .toAviationAerUkEtsContainer(aviationAerAmendsSubmitRequestTaskPayload, verificationReport, EmissionTradingScheme.UK_ETS_AVIATION);
         verify(aviationAerUkEtsValidatorService, times(1)).validate(aerUkEtsContainer);
         verify(requestAviationAccountQueryService, times(1)).getAccountInfo(accountId);
         verify(aviationAerUkEtsReviewMapper, times(1))
-            .toAviationAerUkEtsApplicationSubmittedRequestActionPayload(aviationAerAmendsSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD);
+            .toAviationAerUkEtsApplicationSubmittedRequestActionPayload(aviationAerAmendsSubmitRequestTaskPayload, accountInfo, submittedEmissions, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD);
         verify(requestService, times(1)).addActionToRequest(
-            request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED, pmrvUser.getUserId());
-        verify(aviationReportableEmissionsService, times(1)).updateReportableEmissions(aerUkEtsContainer, accountId);
+            request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED, appUser.getUserId());
+        verify(aviationReportableEmissionsService, times(1)).updateReportableEmissions(aerUkEtsContainer, accountId, false);
 
         verify(aviationReportableEmissionsService, never()).deleteReportableEmissions(any(), any());
     }
@@ -513,14 +572,26 @@ class RequestAviationAerUkEtsReviewServiceTest {
     @Test
     void sendAmendedAerToRegulator_when_reporting_required_false() {
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         Map<String, List<Boolean>> aerSectionsCompleted = Map.of(
             "Section 1", List.of(true),
             "Section 2", List.of(true)
         );
+        
+        Map<String, List<Boolean>> verificationSectionsCompleted = Map.of(
+                "Verification Section 1", List.of(true),
+                "Verification Section 2", List.of(true)
+                );
+        Map<String, Boolean> requestTaskActionReviewSectionsCompleted = Map.of(
+                "Review Section 1", true,
+                "Review Section 2", true
+                );
+        
         AviationAerSubmitApplicationAmendRequestTaskActionPayload submitApplicationAmendRequestTaskActionPayload =
             AviationAerSubmitApplicationAmendRequestTaskActionPayload.builder()
                 .aerSectionsCompleted(aerSectionsCompleted)
+                .verificationSectionsCompleted(verificationSectionsCompleted)
+                .reviewSectionsCompleted(requestTaskActionReviewSectionsCompleted)
                 .build();
 
         AviationAerUkEtsVerificationReport verificationReport = AviationAerUkEtsVerificationReport.builder().build();
@@ -552,7 +623,10 @@ class RequestAviationAerUkEtsReviewServiceTest {
             .verificationReport(verificationReport)
             .reviewGroupDecisions(reviewGroupDecisions)
             .build();
-        AviationAerRequestMetadata aviationAerRequestMetadata = AviationAerRequestMetadata.builder().build();
+        AviationAerRequestMetadata aviationAerRequestMetadata = AviationAerRequestMetadata.builder()
+        		.emissions(BigDecimal.TEN)
+        		.overallAssessmentType(AviationAerVerificationDecisionType.VERIFIED_AS_SATISFACTORY)
+        		.build();
         Request request = Request.builder()
             .type(RequestType.AVIATION_AER_UKETS)
             .payload(aviationAerUkEtsRequestPayload)
@@ -602,10 +676,10 @@ class RequestAviationAerUkEtsReviewServiceTest {
         doNothing().when(aviationAerUkEtsValidatorService).validate(aerUkEtsContainer);
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(accountInfo);
         when(aviationAerUkEtsReviewMapper
-            .toAviationAerUkEtsApplicationSubmittedRequestActionPayload(aviationAerAmendsSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD))
+            .toAviationAerUkEtsApplicationSubmittedRequestActionPayload(aviationAerAmendsSubmitRequestTaskPayload, accountInfo, null, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD))
             .thenReturn(submittedRequestActionPayload);
 
-        reviewService.sendAmendedAerToRegulator(submitApplicationAmendRequestTaskActionPayload, requestTask, pmrvUser);
+        reviewService.sendAmendedAerToRegulator(submitApplicationAmendRequestTaskActionPayload, requestTask, appUser);
 
         AviationAerUkEtsRequestPayload updatedRequestPayload = (AviationAerUkEtsRequestPayload) request.getPayload();
 
@@ -617,22 +691,24 @@ class RequestAviationAerUkEtsReviewServiceTest {
         assertEquals(updatedRequestPayload.getAerMonitoringPlanVersions(), aerMonitoringPlanVersions);
         assertThat(updatedRequestPayload.getAerAttachments()).isEmpty();
         assertThat(updatedRequestPayload.getAerSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(aerSectionsCompleted);
-        assertThat(updatedRequestPayload.getReviewSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(reviewSectionsCompleted);
+        assertThat(updatedRequestPayload.getReviewSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(requestTaskActionReviewSectionsCompleted);
         assertThat(updatedRequestPayload.getReviewGroupDecisions()).isEmpty();
+        assertNull(updatedRequestPayload.getSubmittedEmissions());
 
         AviationAerRequestMetadata updatedRequestMetadata = (AviationAerRequestMetadata) request.getMetadata();
         assertNull(updatedRequestMetadata.getEmissions());
+        assertNull(updatedRequestMetadata.getOverallAssessmentType());
 
         verify(aviationAerUkEtsReviewMapper, times(1))
             .toAviationAerUkEtsContainer(aviationAerAmendsSubmitRequestTaskPayload, null, EmissionTradingScheme.UK_ETS_AVIATION);
         verify(aviationAerUkEtsValidatorService, times(1)).validate(aerUkEtsContainer);
         verify(requestAviationAccountQueryService, times(1)).getAccountInfo(accountId);
         verify(aviationAerUkEtsReviewMapper, times(1))
-            .toAviationAerUkEtsApplicationSubmittedRequestActionPayload(aviationAerAmendsSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD);
+            .toAviationAerUkEtsApplicationSubmittedRequestActionPayload(aviationAerAmendsSubmitRequestTaskPayload, accountInfo, null, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED_PAYLOAD);
         verify(requestService, times(1)).addActionToRequest(
-            request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED, pmrvUser.getUserId());
+            request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED, appUser.getUserId());
         verify(aviationReportableEmissionsService, times(1)).deleteReportableEmissions(accountId, aerUkEtsContainer.getReportingYear());
 
-        verify(aviationReportableEmissionsService, never()).updateReportableEmissions(any(), any());
+        verify(aviationReportableEmissionsService, never()).updateReportableEmissions(any(), any(), anyBoolean());
     }
 }

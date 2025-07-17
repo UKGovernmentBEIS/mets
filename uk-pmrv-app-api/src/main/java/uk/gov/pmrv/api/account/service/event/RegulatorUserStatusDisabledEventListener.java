@@ -1,11 +1,10 @@
 package uk.gov.pmrv.api.account.service.event;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import lombok.RequiredArgsConstructor;
+import uk.gov.netz.api.authorization.regulator.event.RegulatorUserStatusDisabledEvent;
 import uk.gov.pmrv.api.account.service.AccountCaSiteContactService;
-import uk.gov.pmrv.api.authorization.regulator.event.RegulatorUserStatusDisabledEvent;
 
 @RequiredArgsConstructor
 @Component

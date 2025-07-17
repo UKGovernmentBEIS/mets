@@ -103,6 +103,7 @@ describe('PermitIssuanceTaskGuard', () => {
       reviewSectionsCompleted: {},
       allowedRequestTaskActions: ['PERMIT_ISSUANCE_SAVE_APPLICATION'],
       isRequestTask: true,
+      features: {},
     });
   });
 });

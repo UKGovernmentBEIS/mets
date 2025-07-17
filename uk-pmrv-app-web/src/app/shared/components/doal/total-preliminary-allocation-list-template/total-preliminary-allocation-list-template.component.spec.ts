@@ -16,8 +16,7 @@ describe('TotalPreliminaryAllocationListTemplateComponent', () => {
   @Component({
     template: `
       <app-doal-total-preliminary-allocation-list-template
-        [data]="data"
-      ></app-doal-total-preliminary-allocation-list-template>
+        [data]="data"></app-doal-total-preliminary-allocation-list-template>
     `,
   })
   class TestComponent {

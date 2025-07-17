@@ -4,6 +4,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDTO;
@@ -11,7 +12,6 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountWithou
 import uk.gov.pmrv.api.account.service.AccountEmitterIdGenerator;
 import uk.gov.pmrv.api.account.transform.LegalEntityMapper;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
 
 @Mapper(
     componentModel = "spring",

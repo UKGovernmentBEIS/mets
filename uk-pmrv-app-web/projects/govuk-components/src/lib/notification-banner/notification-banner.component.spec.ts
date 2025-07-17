@@ -16,7 +16,9 @@ describe('NotificationBannerComponent', () => {
       <govuk-notification-banner [type]="type" [heading]="heading">
         <h3 class="govuk-notification-banner__heading">Training outcome recorded and trainee withdrawn</h3>
         <p class="govuk-body">
-          Contact <a govukLink="notification" href="#">example@department.gov.uk</a> if you think there's a problem.
+          Contact
+          <a govukLink="notification" href="#">example&#64;department.gov.uk</a>
+          if you think there's a problem.
         </p>
       </govuk-notification-banner>
     `,

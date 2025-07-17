@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -34,11 +34,11 @@ export default class VerifyEmissionsReductionClaimPageComponent {
   onSubmit() {
     if (this.form.invalid) return;
 
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
       .saveAerVerify({ emissionsReductionClaimVerification: this.form.value }, 'in progress')
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setEmissionsReductionClaimVerification(
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setEmissionsReductionClaimVerification(
           this.form.value,
         );
         this.router.navigate(['summary'], { relativeTo: this.route });

@@ -2,8 +2,8 @@ package uk.gov.pmrv.api.user.regulator.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.dto.AuthorityInfoDTO;
-import uk.gov.pmrv.api.token.JwtTokenActionEnum;
+import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
+import uk.gov.netz.api.token.JwtTokenAction;
 import uk.gov.pmrv.api.user.core.service.UserInvitationTokenVerificationService;
 
 @Service
@@ -14,6 +14,6 @@ public class RegulatorUserTokenVerificationService {
 
     public AuthorityInfoDTO verifyInvitationTokenForPendingAuthority(String invitationToken) {
         return userInvitationTokenVerificationService
-            .verifyInvitationTokenForPendingAuthority(invitationToken, JwtTokenActionEnum.REGULATOR_INVITATION);
+            .verifyInvitationTokenForPendingAuthority(invitationToken, JwtTokenAction.REGULATOR_INVITATION);
     }
 }

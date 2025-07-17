@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -56,14 +56,14 @@ class PermitVariationNotifyOperatorRegulatorLedValidatorTest {
 
 		RequestTask requestTask = RequestTask.builder().request(request).payload(taskPayload).build();
 
-		PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+		AppUser appUser = AppUser.builder().userId("user").build();
 
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser))
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser))
         	.thenReturn(true);
 
-        cut.validate(requestTask, actionPayload, pmrvUser);
+        cut.validate(requestTask, actionPayload, appUser);
 
         verify(permitReviewDeterminationValidatorService, times(1)).validateDeterminationObject(determination);
-        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, pmrvUser);
+        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, appUser);
     }
 }

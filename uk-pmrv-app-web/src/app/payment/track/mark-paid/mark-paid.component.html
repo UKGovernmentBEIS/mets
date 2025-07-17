@@ -1,18 +1,21 @@
 <ng-container *ngIf="(confirmed$ | async) === false; else paymentConfirmed">
   <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
   <app-page-heading size="l">When was the payment received?</app-page-heading>
+
   <form (ngSubmit)="submitForm()" [formGroup]="form">
     <div formControlName="receivedDate" govuk-date-input [max]="today" [isRequired]="true"></div>
     <button *ngIf="(store.isEditable$ | async) === true" appPendingButton govukButton type="submit">
       Confirm and complete
     </button>
   </form>
+
   <app-return-link
     [requestTaskType]="(store | async).requestTaskItem.requestTask.type"
     [requestMetadata]="(store | async).requestTaskItem.requestInfo.requestMetadata"
     returnLink=".."
   ></app-return-link>
 </ng-container>
+
 <ng-template #paymentConfirmed>
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">

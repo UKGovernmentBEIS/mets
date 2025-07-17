@@ -24,12 +24,12 @@
 <dl govuk-summary-list>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Emissions from all flights</dt>
-    <dd govukSummaryListRowValue>{{ totalEmissionsProvided }}</dd>
+    <dd govukSummaryListRowValue>{{ totalEmissionsProvided }} tCO2</dd>
     <dd govukSummaryListRowActions></dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Emissions from offset flights</dt>
-    <dd govukSummaryListRowValue>{{ totalOffsetEmissionsProvided }}</dd>
+    <dd govukSummaryListRowValue>{{ totalOffsetEmissionsProvided }} tCO2</dd>
     <dd govukSummaryListRowActions></dd>
   </div>
   <div govukSummaryListRow>
@@ -42,14 +42,14 @@
   <ng-container *ngIf="!opinionStatement.emissionsCorrect">
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Total verified emissions for the scheme year</dt>
-      <dd govukSummaryListRowValue>{{ opinionStatement.manuallyInternationalFlightsProvidedEmissions }}</dd>
+      <dd govukSummaryListRowValue>{{ opinionStatement.manuallyInternationalFlightsProvidedEmissions }} tCO2</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
       </dd>
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Total verified emissions from offset flights for the scheme year</dt>
-      <dd govukSummaryListRowValue>{{ opinionStatement.manuallyOffsettingFlightsProvidedEmissions }}</dd>
+      <dd govukSummaryListRowValue>{{ opinionStatement.manuallyOffsettingFlightsProvidedEmissions }} tCO2</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a govukLink routerLink="../" [queryParams]="queryParams">Change</a>
       </dd>

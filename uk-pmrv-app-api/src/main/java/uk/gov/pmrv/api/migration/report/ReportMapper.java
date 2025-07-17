@@ -1,11 +1,12 @@
 package uk.gov.pmrv.api.migration.report;
 
+import org.springframework.jdbc.core.RowMapper;
+import uk.gov.pmrv.api.reporting.domain.verification.OverallAssessmentType;
+
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Year;
-import org.springframework.jdbc.core.RowMapper;
-import uk.gov.pmrv.api.reporting.domain.verification.OverallAssessmentType;
 
 public class ReportMapper implements RowMapper<Report> {
 

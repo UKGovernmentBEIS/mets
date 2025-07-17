@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,6 +11,9 @@
  */
 import { Abbreviations } from './abbreviations';
 import { AdditionalDocuments } from './additionalDocuments';
+import { AssessAndControlRisk } from './assessAndControlRisk';
+import { CalculationOfCO2MonitoringApproach } from './calculationOfCO2MonitoringApproach';
+import { CalculationOfPFCMonitoringApproach } from './calculationOfPFCMonitoringApproach';
 import { ConfidentialityStatement } from './confidentialityStatement';
 import { DataFlowActivities } from './dataFlowActivities';
 import { EmissionPoint } from './emissionPoint';
@@ -19,14 +22,18 @@ import { EmissionSummary } from './emissionSummary';
 import { EnvironmentalManagementSystem } from './environmentalManagementSystem';
 import { EnvironmentalPermitsAndLicences } from './environmentalPermitsAndLicences';
 import { EstimatedAnnualEmissions } from './estimatedAnnualEmissions';
+import { FallbackMonitoringApproach } from './fallbackMonitoringApproach';
+import { InherentCO2MonitoringApproach } from './inherentCO2MonitoringApproach';
 import { InstallationDescription } from './installationDescription';
 import { ManagementProceduresDefinition } from './managementProceduresDefinition';
 import { MeasurementDeviceOrMethod } from './measurementDeviceOrMethod';
+import { MeasurementOfCO2MonitoringApproach } from './measurementOfCO2MonitoringApproach';
+import { MeasurementOfN2OMonitoringApproach } from './measurementOfN2OMonitoringApproach';
 import { MonitoringMethodologyPlans } from './monitoringMethodologyPlans';
 import { MonitoringReporting } from './monitoringReporting';
-import { PermitMonitoringApproachSection } from './permitMonitoringApproachSection';
 import { RegulatedActivity } from './regulatedActivity';
 import { SourceStream } from './sourceStream';
+import { TransferredCO2AndN2OMonitoringApproach } from './transferredCO2AndN2OMonitoringApproach';
 import { UncertaintyAnalysis } from './uncertaintyAnalysis';
 
 export interface Permit {
@@ -44,7 +51,16 @@ export interface Permit {
   abbreviations: Abbreviations;
   confidentialityStatement: ConfidentialityStatement;
   additionalDocuments: AdditionalDocuments;
-  monitoringApproaches: { [key: string]: PermitMonitoringApproachSection };
+  monitoringApproaches: {
+    [key: string]:
+      | CalculationOfCO2MonitoringApproach
+      | CalculationOfPFCMonitoringApproach
+      | FallbackMonitoringApproach
+      | InherentCO2MonitoringApproach
+      | MeasurementOfCO2MonitoringApproach
+      | MeasurementOfN2OMonitoringApproach
+      | TransferredCO2AndN2OMonitoringApproach;
+  };
   uncertaintyAnalysis: UncertaintyAnalysis;
   monitoringReporting: MonitoringReporting;
   assignmentOfResponsibilities: ManagementProceduresDefinition;
@@ -52,7 +68,7 @@ export interface Permit {
   dataFlowActivities: DataFlowActivities;
   qaDataFlowActivities: ManagementProceduresDefinition;
   reviewAndValidationOfData: ManagementProceduresDefinition;
-  assessAndControlRisk: ManagementProceduresDefinition;
+  assessAndControlRisk: AssessAndControlRisk;
   qaMeteringAndMeasuringEquipment: ManagementProceduresDefinition;
   correctionsAndCorrectiveActions: ManagementProceduresDefinition;
   controlOfOutsourcedActivities: ManagementProceduresDefinition;

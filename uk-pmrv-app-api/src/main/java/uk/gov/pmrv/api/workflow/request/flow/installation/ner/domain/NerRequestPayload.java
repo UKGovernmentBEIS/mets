@@ -1,11 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import java.time.LocalDate;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +13,12 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.NerReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.payment.domain.RequestPayloadPayable;
 import uk.gov.pmrv.api.workflow.request.flow.payment.domain.RequestPaymentInfo;
+
+import java.time.LocalDate;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

@@ -1,10 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.common.service;
 
-import static java.time.temporal.ChronoUnit.MONTHS;
-
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.Date;
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -15,8 +11,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.constants.ExpirationReminder
 class RequestCalculateExpirationService {
 
     public Date calculateExpirationDate() {
-        final LocalDate expiration = LocalDate.now().plus(2, MONTHS);
-        return Date.from(expiration.atTime(LocalTime.MIN).atZone(ZoneId.systemDefault()).toInstant());
+        final LocalDate expiration = LocalDate.now().plusMonths(2);
+        return uk.gov.pmrv.api.workflow.utils.DateUtils.atEndOfDay(expiration);
     }
     
     public Date calculateFirstReminderDate(Date expirationDate) {

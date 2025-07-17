@@ -5,8 +5,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -18,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestExpirationType;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestExpirationVarsBuilder;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.service.CalculateAirExpirationRemindersService;
+import uk.gov.pmrv.api.workflow.utils.DateUtils;
 
 @ExtendWith(MockitoExtension.class)
 class CalculateAirExpirationRemindersHandlerTest {
@@ -38,12 +37,7 @@ class CalculateAirExpirationRemindersHandlerTest {
     void execute() throws Exception {
 
         final LocalDate expirationDate = LocalDate.of(2022, 7, 1);
-        final Date dueDate = Date.from(
-            expirationDate
-                .atTime(LocalTime.MIN)
-                .atZone(ZoneId.systemDefault())
-                .toInstant()
-        );
+        final Date dueDate = DateUtils.atEndOfDay(expirationDate);
         final Map<String, Object> expirations = Map.of("expirationDate", dueDate);
 
         when(expirationRemindersService.getExpirationDate()).thenReturn(expirationDate);

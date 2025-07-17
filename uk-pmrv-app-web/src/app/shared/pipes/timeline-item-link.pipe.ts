@@ -4,7 +4,7 @@ import { RequestActionInfoDTO } from 'pmrv-api';
 
 @Pipe({ name: 'timelineItemLink' })
 export class TimelineItemLinkPipe implements PipeTransform {
-  transform(value: RequestActionInfoDTO, isWorkflow?: boolean, isAviation?: boolean): any[] {
+  transform(value: RequestActionInfoDTO, isWorkflow?: boolean, isAviation?: boolean, roleType?: string): any[] {
     const routerLooks = isWorkflow ? './' : '/';
     switch (value.type) {
       case 'INSTALLATION_ACCOUNT_OPENING_ACCEPTED':
@@ -80,6 +80,8 @@ export class TimelineItemLinkPipe implements PipeTransform {
         return null;
       case 'PERMIT_NOTIFICATION_APPLICATION_COMPLETED':
         return [routerLooks + 'actions', value.id, 'permit-notification', 'completed'];
+      case 'PERMIT_NOTIFICATION_APPLICATION_CESSATION_COMPLETED':
+        return [routerLooks + 'actions', value.id, 'permit-notification', 'cessation-completed'];
 
       case 'PERMIT_VARIATION_APPLICATION_SUBMITTED':
         return [routerLooks + 'permit-variation', 'action', value.id];
@@ -123,19 +125,19 @@ export class TimelineItemLinkPipe implements PipeTransform {
         return [routerLooks + 'permit-transfer', 'action', value.id, 'review', 'decision-summary'];
 
       case 'PAYMENT_MARKED_AS_PAID':
-        return isAviation
+        return isAviation && !isWorkflow
           ? [routerLooks + 'aviation/payment', 'actions', value.id, 'paid']
           : [routerLooks + 'payment', 'actions', value.id, 'paid'];
       case 'PAYMENT_CANCELLED':
-        return isAviation
+        return isAviation && !isWorkflow
           ? [routerLooks + 'aviation/payment', 'actions', value.id, 'cancelled']
           : [routerLooks + 'payment', 'actions', value.id, 'cancelled'];
       case 'PAYMENT_MARKED_AS_RECEIVED':
-        return isAviation
+        return isAviation && !isWorkflow
           ? [routerLooks + 'aviation/payment', 'actions', value.id, 'received']
           : [routerLooks + 'payment', 'actions', value.id, 'received'];
       case 'PAYMENT_COMPLETED':
-        return isAviation
+        return isAviation && !isWorkflow
           ? [routerLooks + 'aviation/payment', 'actions', value.id, 'completed']
           : [routerLooks + 'payment', 'actions', value.id, 'completed'];
 
@@ -145,26 +147,26 @@ export class TimelineItemLinkPipe implements PipeTransform {
         return null;
       case 'RDE_FORCE_ACCEPTED':
       case 'RDE_FORCE_REJECTED':
-        return isAviation
+        return isAviation && !isWorkflow
           ? [routerLooks + 'aviation/rde', 'action', value.id, 'rde-manual-approval-submitted']
           : [routerLooks + 'rde', 'action', value.id, 'rde-manual-approval-submitted'];
       case 'RDE_REJECTED':
-        return isAviation
+        return isAviation && !isWorkflow
           ? [routerLooks + 'aviation/rde', 'action', value.id, 'rde-response-submitted']
           : [routerLooks + 'rde', 'action', value.id, 'rde-response-submitted'];
       case 'RDE_SUBMITTED':
-        return isAviation
+        return isAviation && !isWorkflow
           ? [routerLooks + 'aviation/rde', 'action', value.id, 'rde-submitted']
           : [routerLooks + 'rde', 'action', value.id, 'rde-submitted'];
       case 'RFI_CANCELLED':
       case 'RFI_EXPIRED':
         return null;
       case 'RFI_RESPONSE_SUBMITTED':
-        return isAviation
+        return isAviation && !isWorkflow
           ? [routerLooks + 'aviation/rfi', 'action', value.id, 'rfi-response-submitted']
           : [routerLooks + 'rfi', 'action', value.id, 'rfi-response-submitted'];
       case 'RFI_SUBMITTED':
-        return isAviation
+        return isAviation && !isWorkflow
           ? [routerLooks + 'aviation/rfi', 'action', value.id, 'rfi-submitted']
           : [routerLooks + 'rfi', 'action', value.id, 'rfi-submitted'];
       case 'REQUEST_TERMINATED':
@@ -181,8 +183,13 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'AER_APPLICATION_AMENDS_SUBMITTED':
       case 'AER_APPLICATION_AMENDS_SENT_TO_VERIFIER':
         return [routerLooks + 'actions', value.id, 'aer', 'submitted'];
+      case 'AER_APPLICATION_REVIEW_SKIPPED':
       case 'AER_APPLICATION_COMPLETED':
         return [routerLooks + 'actions', value.id, 'aer', 'completed'];
+      case 'AER_APPLICATION_NOT_REQUIRED':
+        return roleType === 'REGULATOR' ? [routerLooks + 'actions', value.id, 'aer', 'decision', 'details'] : null;
+      case 'AER_VERIFICATION_RETURNED_TO_OPERATOR':
+        return [routerLooks + 'actions', value.id, 'aer', 'returned-to-operator'];
 
       case 'VIR_APPLICATION_SUBMITTED':
         return [routerLooks + 'actions', value.id, 'vir', 'submitted'];
@@ -228,16 +235,16 @@ export class TimelineItemLinkPipe implements PipeTransform {
 
       case 'BATCH_REISSUE_SUBMITTED':
         return isAviation
-          ? [routerLooks + 'actions', value.id, 'emp-batch-variation', 'batch-reissue', 'submitted']
+          ? [routerLooks + 'actions', value.id]
           : [routerLooks + 'actions', value.id, 'permit-batch-variation', 'submitted'];
       case 'BATCH_REISSUE_COMPLETED':
         return isAviation
-          ? [routerLooks + 'actions', value.id, 'emp-batch-variation', 'batch-reissue', 'completed']
+          ? [routerLooks + 'actions', value.id]
           : [routerLooks + 'actions', value.id, 'permit-batch-variation', 'completed'];
 
       case 'REISSUE_COMPLETED':
         return isAviation
-          ? [routerLooks + 'actions', value.id, 'emp-batch-variation', 'reissue', 'completed']
+          ? [routerLooks + 'actions', value.id]
           : [routerLooks + 'actions', value.id, 'variation', 'completed'];
 
       case 'EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED':
@@ -276,9 +283,7 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'EMP_ISSUANCE_CORSIA_APPLICATION_RETURNED_FOR_AMENDS':
       case 'EMP_VARIATION_UKETS_APPLICATION_RETURNED_FOR_AMENDS':
       case 'EMP_VARIATION_CORSIA_APPLICATION_RETURNED_FOR_AMENDS':
-        return isWorkflow
-          ? [routerLooks, 'actions', value.id, 'return-for-amends']
-          : [routerLooks + 'aviation', 'actions', value.id, 'return-for-amends'];
+        return isWorkflow ? [routerLooks, 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
       case 'EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEWER_ACCEPTED':
       case 'EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEWER_REJECTED':
       case 'EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEWER_ACCEPTED':
@@ -287,53 +292,69 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'EMP_VARIATION_UKETS_APPLICATION_PEER_REVIEWER_REJECTED':
       case 'EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEWER_ACCEPTED':
       case 'EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEWER_REJECTED':
-        return isWorkflow
-          ? [routerLooks + 'actions', value.id, 'peer-reviewer-submitted']
-          : [routerLooks + 'aviation', 'actions', value.id, 'peer-reviewer-submitted'];
+        return isWorkflow ? [routerLooks + 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
 
       case 'NON_COMPLIANCE_APPLICATION_CLOSED':
-        return [routerLooks + 'actions', value.id, 'non-compliance', 'closed'];
+        return isAviation
+          ? [routerLooks + 'actions', value.id]
+          : [routerLooks + 'actions', value.id, 'non-compliance', 'closed'];
       case 'NON_COMPLIANCE_APPLICATION_SUBMITTED':
         return isAviation && !isWorkflow
-          ? [routerLooks + 'aviation', 'actions', value.id, 'non-compliance', 'submitted']
-          : [routerLooks + 'actions', value.id, 'non-compliance', 'submitted'];
+          ? [routerLooks + 'aviation', 'actions', value.id]
+          : isAviation
+            ? [routerLooks + 'actions', value.id]
+            : [routerLooks + 'actions', value.id, 'non-compliance', 'submitted'];
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED':
         return isAviation && !isWorkflow
-          ? [routerLooks + 'aviation', 'actions', value.id, 'non-compliance', 'daily-penalty-notice-submitted']
-          : [routerLooks + 'actions', value.id, 'non-compliance', 'daily-penalty-notice-submitted'];
+          ? [routerLooks + 'aviation', 'actions', value.id]
+          : isAviation
+            ? [routerLooks + 'actions', value.id]
+            : [routerLooks + 'actions', value.id, 'non-compliance', 'daily-penalty-notice-submitted'];
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED':
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_REJECTED':
         return isAviation && !isWorkflow
-          ? [routerLooks + 'aviation', 'actions', value.id, 'non-compliance', 'dpn-peer-review-decision']
-          : [routerLooks + 'actions', value.id, 'non-compliance', 'dpn-peer-review-decision'];
+          ? [routerLooks + 'aviation', 'actions', value.id]
+          : isAviation
+            ? [routerLooks + 'actions', value.id]
+            : [routerLooks + 'actions', value.id, 'non-compliance', 'dpn-peer-review-decision'];
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED':
         return null;
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED':
         return isAviation && !isWorkflow
-          ? [routerLooks + 'aviation', 'actions', value.id, 'non-compliance', 'notice-of-intent-submitted']
-          : [routerLooks + 'actions', value.id, 'non-compliance', 'notice-of-intent-submitted'];
+          ? [routerLooks + 'aviation', 'actions', value.id]
+          : isAviation
+            ? [routerLooks + 'actions', value.id]
+            : [routerLooks + 'actions', value.id, 'non-compliance', 'notice-of-intent-submitted'];
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_ACCEPTED':
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_REJECTED':
         return isAviation && !isWorkflow
-          ? [routerLooks + 'aviation', 'actions', value.id, 'non-compliance', 'noi-peer-review-decision']
-          : [routerLooks + 'actions', value.id, 'non-compliance', 'noi-peer-review-decision'];
+          ? [routerLooks + 'aviation', 'actions', value.id]
+          : isAviation
+            ? [routerLooks + 'actions', value.id]
+            : [routerLooks + 'actions', value.id, 'non-compliance', 'noi-peer-review-decision'];
       case 'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_REQUESTED':
         return null;
       case 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED':
         return isAviation && !isWorkflow
-          ? [routerLooks + 'aviation', 'actions', value.id, 'non-compliance', 'civil-penalty-notice-submitted']
-          : [routerLooks + 'actions', value.id, 'non-compliance', 'civil-penalty-notice-submitted'];
+          ? [routerLooks + 'aviation', 'actions', value.id]
+          : isAviation
+            ? [routerLooks + 'actions', value.id]
+            : [routerLooks + 'actions', value.id, 'non-compliance', 'civil-penalty-notice-submitted'];
       case 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_ACCEPTED':
       case 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_REJECTED':
         return isAviation && !isWorkflow
-          ? [routerLooks + 'aviation', 'actions', value.id, 'non-compliance', 'cpn-peer-review-decision']
-          : [routerLooks + 'actions', value.id, 'non-compliance', 'cpn-peer-review-decision'];
+          ? [routerLooks + 'aviation', 'actions', value.id]
+          : isAviation
+            ? [routerLooks + 'actions', value.id]
+            : [routerLooks + 'actions', value.id, 'non-compliance', 'cpn-peer-review-decision'];
       case 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_REQUESTED':
         return null;
       case 'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED':
         return isAviation && !isWorkflow
-          ? [routerLooks + 'aviation', 'actions', value.id, 'non-compliance', 'conclusion-submitted']
-          : [routerLooks + 'actions', value.id, 'non-compliance', 'conclusion-submitted'];
+          ? [routerLooks + 'aviation', 'actions', value.id]
+          : isAviation
+            ? [routerLooks + 'actions', value.id]
+            : [routerLooks + 'actions', value.id, 'non-compliance', 'conclusion-submitted'];
 
       case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMITTED':
         return [routerLooks + 'actions', value.id, 'withholding-allowances', 'submitted'];
@@ -355,9 +376,12 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'AVIATION_AER_UKETS_APPLICATION_SENT_TO_VERIFIER':
       case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER':
       case 'AVIATION_AER_UKETS_APPLICATION_REVIEW_SKIPPED':
+      case 'AVIATION_AER_CORSIA_APPLICATION_REVIEW_SKIPPED':
       case 'AVIATION_AER_CORSIA_APPLICATION_SENT_TO_VERIFIER':
+      case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER':
       case 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMITTED':
       case 'AVIATION_AER_CORSIA_APPLICATION_SUBMITTED':
+      case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED':
         return isWorkflow ? [routerLooks, 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
       case 'AVIATION_AER_UKETS_APPLICATION_COMPLETED':
         return isWorkflow
@@ -368,9 +392,9 @@ export class TimelineItemLinkPipe implements PipeTransform {
           ? [routerLooks, 'actions', value.id, 'aer-corsia', 'aer-completed']
           : [routerLooks + 'aviation', 'actions', value.id, 'aer-corsia', 'aer-completed'];
       case 'AVIATION_AER_UKETS_APPLICATION_RETURNED_FOR_AMENDS':
-        return isWorkflow
-          ? [routerLooks, 'actions', value.id, 'aer', 'return-for-amends']
-          : [routerLooks + 'aviation', 'actions', value.id, 'aer', 'return-for-amends'];
+        return isWorkflow ? [routerLooks, 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
+      case 'AVIATION_AER_CORSIA_APPLICATION_RETURNED_FOR_AMENDS':
+        return isWorkflow ? [routerLooks, 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
 
       case 'AVIATION_AER_APPLICATION_CANCELLED_DUE_TO_EXEPMT':
       case 'AVIATION_AER_RECALLED_FROM_VERIFICATION':
@@ -383,7 +407,7 @@ export class TimelineItemLinkPipe implements PipeTransform {
       case 'AVIATION_ACCOUNT_CLOSURE_CANCELLED':
         return null;
       case 'AVIATION_ACCOUNT_CLOSURE_SUBMITTED':
-        return [routerLooks + 'actions', value.id, 'account-closure-submitted'];
+        return [routerLooks + 'actions', value.id];
 
       case 'AVIATION_DRE_APPLICATION_CANCELLED':
       case 'AVIATION_DRE_UKETS_PEER_REVIEW_REQUESTED':
@@ -391,13 +415,9 @@ export class TimelineItemLinkPipe implements PipeTransform {
         return null;
       case 'AVIATION_DRE_UKETS_PEER_REVIEWER_ACCEPTED':
       case 'AVIATION_DRE_UKETS_PEER_REVIEWER_REJECTED':
-        return isWorkflow
-          ? [routerLooks + 'actions', value.id, 'peer-reviewer-submitted']
-          : [routerLooks + 'aviation', 'actions', value.id, 'peer-reviewer-submitted'];
+        return isWorkflow ? [routerLooks + 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
       case 'AVIATION_DRE_UKETS_APPLICATION_SUBMITTED':
-        return isWorkflow
-          ? [routerLooks + 'actions', value.id, 'aviation-emissions-updated']
-          : [routerLooks + 'aviation', 'actions', value.id, 'aviation-emissions-updated'];
+        return isWorkflow ? [routerLooks + 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
 
       case 'AVIATION_VIR_APPLICATION_SUBMITTED':
         return isWorkflow ? [routerLooks, 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
@@ -406,9 +426,7 @@ export class TimelineItemLinkPipe implements PipeTransform {
           ? [routerLooks, 'actions', value.id, 'vir', 'decision-summary']
           : [routerLooks + 'aviation', 'actions', value.id, 'vir', 'decision-summary'];
       case 'AVIATION_VIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS':
-        return isWorkflow
-          ? [routerLooks, 'actions', value.id, 'vir', 'responded']
-          : [routerLooks + 'aviation', 'actions', value.id, 'vir', 'responded'];
+        return isWorkflow ? [routerLooks, 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
 
       case 'RETURN_OF_ALLOWANCES_APPLICATION_SUBMITTED':
         return [routerLooks + 'actions', value.id, 'return-of-allowances', 'submitted'];
@@ -420,6 +438,88 @@ export class TimelineItemLinkPipe implements PipeTransform {
         return null;
       case 'RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_COMPLETED':
         return [routerLooks + 'actions', value.id, 'return-of-allowances', 'returned'];
+
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW_REQUESTED':
+      case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW_REQUESTED':
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_CANCELLED':
+      case 'INSTALLATION_AUDIT_APPLICATION_CANCELLED':
+        return null;
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEWER_ACCEPTED':
+      case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEWER_ACCEPTED':
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEWER_REJECTED':
+      case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEWER_REJECTED':
+        return [routerLooks + 'actions', value.id, 'inspection', 'peer-review-decision'];
+
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMITTED':
+      case 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPONDED':
+      case 'INSTALLATION_AUDIT_APPLICATION_SUBMITTED':
+      case 'INSTALLATION_AUDIT_OPERATOR_RESPONDED':
+        return [routerLooks + 'actions', value.id, 'inspection', 'onsite-audit-submitted'];
+
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_REQUESTED':
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_CANCELLED':
+        return null;
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMITTED':
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED':
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED':
+        return isWorkflow ? [routerLooks + 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
+
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REQUESTED':
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_CANCELLED':
+        return null;
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED':
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED':
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED':
+        return isWorkflow ? [routerLooks + 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
+
+      case 'AVIATION_AER_CORSIA_VERIFICATION_RETURNED_TO_OPERATOR':
+      case 'AVIATION_AER_UKETS_VERIFICATION_RETURNED_TO_OPERATOR':
+        return isWorkflow ? [routerLooks + 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
+
+      case 'BDR_RECALLED_FROM_VERIFICATION':
+      case 'BDR_APPLICATION_RE_INITIATED':
+      case 'BDR_APPLICATION_PEER_REVIEW_REQUESTED':
+        return null;
+      case 'BDR_APPLICATION_SENT_TO_VERIFIER':
+      case 'BDR_APPLICATION_SENT_TO_REGULATOR':
+      case 'BDR_APPLICATION_VERIFICATION_SUBMITTED':
+      case 'BDR_APPLICATION_AMENDS_SENT_TO_VERIFIER':
+      case 'BDR_APPLICATION_COMPLETED':
+        return [routerLooks + 'actions', value.id, 'bdr', 'submitted'];
+      case 'BDR_VERIFICATION_RETURNED_TO_OPERATOR':
+        return [routerLooks + 'actions', value.id, 'bdr', 'returned-to-operator'];
+      case 'BDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+        return [routerLooks + 'actions', value.id, 'bdr', 'return-for-amends'];
+      case 'BDR_APPLICATION_PEER_REVIEW_ACCEPTED':
+      case 'BDR_APPLICATION_PEER_REVIEW_REJECTED':
+        return [routerLooks + 'actions', value.id, 'bdr', 'peer-review-decision'];
+
+      case 'PERMANENT_CESSATION_SUBMITTED':
+      case 'PERMANENT_CESSATION_APPLICATION_CANCELLED':
+      case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REQUESTED':
+        return null;
+      case 'PERMANENT_CESSATION_APPLICATION_SUBMITTED':
+        return [routerLooks + 'actions', value.id, 'permanent-cessation', 'submitted'];
+      case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REJECTED':
+      case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_ACCEPTED':
+        return [routerLooks + 'actions', value.id, 'permanent-cessation', 'peer-reviewer-submitted'];
+
+      case 'AVIATION_DOE_CORSIA_SUBMIT_CANCELLED':
+      case 'AVIATION_DOE_CORSIA_PEER_REVIEW_REQUESTED':
+      case 'AVIATION_AER_CORSIA_APPLICATION_CANCELLED_DUE_TO_DOE':
+        return null;
+      case 'AVIATION_DOE_CORSIA_SUBMITTED':
+      case 'AVIATION_DOE_CORSIA_PEER_REVIEWER_ACCEPTED':
+      case 'AVIATION_DOE_CORSIA_PEER_REVIEWER_REJECTED':
+        return isWorkflow ? [routerLooks + 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
+
+      case 'ALR_RECALLED_FROM_VERIFICATION':
+        return null;
+      case 'ALR_APPLICATION_SENT_TO_VERIFIER':
+      case 'ALR_APPLICATION_VERIFICATION_SUBMITTED':
+        return [routerLooks + 'actions', value.id, 'alr', 'submitted'];
+      case 'ALR_VERIFICATION_RETURNED_TO_OPERATOR':
+        return [routerLooks + 'actions', value.id, 'alr', 'returned-to-operator'];
 
       default:
         throw new Error('Provide an action url');

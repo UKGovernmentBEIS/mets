@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.config.WebAppProperties;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.payment.client.service.GovukPayService;
 import uk.gov.pmrv.api.workflow.payment.domain.dto.PaymentCreateInfo;
 import uk.gov.pmrv.api.workflow.payment.domain.dto.PaymentCreateResult;
@@ -65,13 +65,13 @@ class CardPaymentServiceTest {
     private WorkflowService workflowService;
 
     @Mock
-    private AppProperties appProperties;
+    private WebAppProperties webAppProperties;
 
     @Test
     void processPayment_create_new() {
         Long requestTaskId =  1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PAYMENT_PAY_BY_CARD;
-        PmrvUser authUser = PmrvUser.builder().build();
+        AppUser authUser = AppUser.builder().build();
         String paymentRefNum = "AEM-098-1";
         BigDecimal amount = BigDecimal.valueOf(2302.54);
         RequestType requestType = RequestType.PERMIT_ISSUANCE;
@@ -88,7 +88,7 @@ class CardPaymentServiceTest {
             .request(request)
             .build();
         String webUrl = "http://www.pmrv.uk";
-        AppProperties.Web web = createAppWeb(webUrl);
+        WebAppProperties web = createAppWeb(webUrl);
         String cardPaymentDesc = "Pay for a permit";
         PaymentCreateInfo paymentCreateInfo = PaymentCreateInfo.builder()
             .competentAuthority(competentAuthority)
@@ -105,7 +105,7 @@ class CardPaymentServiceTest {
             .build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
-        when(appProperties.getWeb()).thenReturn(web);
+        when(webAppProperties.getUrl()).thenReturn(webUrl);
         when(govukPayService.createPayment(paymentCreateInfo)).thenReturn(paymentCreateResult);
 
         //invoke
@@ -129,7 +129,7 @@ class CardPaymentServiceTest {
     void processPayment_pending_payment_exists() {
         Long requestTaskId =  1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PAYMENT_PAY_BY_CARD;
-        PmrvUser authUser = PmrvUser.builder().build();
+        AppUser authUser = AppUser.builder().build();
         String paymentRefNum = "AEM-098-1";
         BigDecimal amount = BigDecimal.valueOf(2302.54);
         RequestType requestType = RequestType.PERMIT_ISSUANCE;
@@ -168,7 +168,7 @@ class CardPaymentServiceTest {
     void processPayment_not_supported() {
         Long requestTaskId =  1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PAYMENT_PAY_BY_CARD;
-        PmrvUser authUser = PmrvUser.builder().build();
+        AppUser authUser = AppUser.builder().build();
         PaymentMakeRequestTaskPayload requestTaskPayload = PaymentMakeRequestTaskPayload.builder()
             .paymentMethodTypes(Set.of(PaymentMethodType.BANK_TRANSFER))
             .build();
@@ -196,7 +196,7 @@ class CardPaymentServiceTest {
         Long requestTaskId =  1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PAYMENT_PAY_BY_CARD;
         String userId = "userId";
-        PmrvUser authUser = PmrvUser.builder().userId(userId).build();
+        AppUser authUser = AppUser.builder().userId(userId).build();
         String paymentRefNum = "AEM-098-1";
         String externalPaymentId = "n4brhul26f2hn1lt992ejj10ht";
         BigDecimal amount = BigDecimal.valueOf(2302.54);
@@ -254,7 +254,7 @@ class CardPaymentServiceTest {
     void getCardPaymentState_no_payment_id() {
         Long requestTaskId =  1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PAYMENT_PAY_BY_CARD;
-        PmrvUser authUser = PmrvUser.builder().build();
+        AppUser authUser = AppUser.builder().build();
         String paymentRefNum = "AEM-098-1";
         BigDecimal amount = BigDecimal.valueOf(2302.54);
         RequestType requestType = RequestType.PERMIT_ISSUANCE;
@@ -290,7 +290,7 @@ class CardPaymentServiceTest {
         Long requestTaskId =  1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PAYMENT_PAY_BY_CARD;
         String userId = "userId";
-        PmrvUser authUser = PmrvUser.builder().userId(userId).build();
+        AppUser authUser = AppUser.builder().userId(userId).build();
         String paymentRefNum = "AEM-098-1";
         String externalPaymentId = "n4brhul26f2hn1lt992ejj10ht";
         BigDecimal amount = BigDecimal.valueOf(2302.54);
@@ -357,7 +357,7 @@ class CardPaymentServiceTest {
         Long requestTaskId =  1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PAYMENT_PAY_BY_CARD;
         String userId = "userId";
-        PmrvUser authUser = PmrvUser.builder().userId(userId).build();
+        AppUser authUser = AppUser.builder().userId(userId).build();
         String paymentRefNum = "AEM-098-1";
         String externalPaymentId = "n4brhul26f2hn1lt992ejj10ht";
         BigDecimal amount = BigDecimal.valueOf(2302.54);
@@ -415,8 +415,8 @@ class CardPaymentServiceTest {
         verifyNoInteractions(paymentCompleteService, workflowService);
     }
 
-    private AppProperties.Web createAppWeb(String url) {
-        AppProperties.Web web = new AppProperties.Web();
+    private WebAppProperties createAppWeb(String url) {
+        WebAppProperties web = new WebAppProperties();
         web.setUrl(url);
         return web;
     }

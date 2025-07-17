@@ -24,8 +24,7 @@ export class AerTaskReviewComponent implements OnInit {
   @Input() returnToLink = '..';
   @Input() linkText;
 
-  constructor(private readonly breadcrumbs: BreadcrumbService) {
-  }
+  constructor(private readonly breadcrumbs: BreadcrumbService) {}
 
   ngOnInit(): void {
     const breadcrumbs = this.breadcrumbs.breadcrumbItem$.getValue();

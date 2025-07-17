@@ -22,6 +22,16 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.support.GenericWebApplicationContext;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.account.domain.dto.HoldingCompanyAddressDTO;
 import uk.gov.pmrv.api.account.domain.dto.HoldingCompanyDTO;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
@@ -35,23 +45,13 @@ import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateSiteNameDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountUpdateSopIdDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountUpdateService;
 import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.referencedata.domain.Country;
-import uk.gov.pmrv.api.referencedata.service.CountryService;
-import uk.gov.pmrv.api.referencedata.service.CountryValidator;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.referencedata.domain.Country;
+import uk.gov.netz.api.referencedata.service.CountryService;
+import uk.gov.netz.api.referencedata.service.CountryValidator;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.controller.utils.TestConstrainValidatorFactory;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.List;
 
@@ -78,10 +78,10 @@ class InstallationAccountUpdateControllerTest {
     private InstallationAccountUpdateService installationAccountUpdateService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -93,7 +93,7 @@ class InstallationAccountUpdateControllerTest {
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver =
             new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
@@ -105,7 +105,7 @@ class InstallationAccountUpdateControllerTest {
         LocalValidatorFactoryBean validatorFactoryBean = mockValidatorFactoryBean();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .setValidator(validatorFactoryBean)
             .build();
@@ -115,7 +115,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountSiteName() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateSiteNameDTO siteNameDTO = AccountUpdateSiteNameDTO.builder().siteName("newSiteName").build();
 
@@ -133,14 +133,14 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountSiteName_forbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateSiteNameDTO siteNameDTO = AccountUpdateSiteNameDTO.builder().siteName("newSiteName").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "updateInstallationAccountSiteName", String.valueOf(accountId));
+            .when(appUserAuthorizationService)
+            .authorize(user, "updateInstallationAccountSiteName", String.valueOf(accountId), null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -155,7 +155,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountRegistryId() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateRegistryIdDTO registryIdDTO = AccountUpdateRegistryIdDTO.builder().registryId(1234567).build();
 
@@ -173,14 +173,14 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountRegistryId_forbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateRegistryIdDTO registryIdDTO = AccountUpdateRegistryIdDTO.builder().registryId(1234567).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "updateInstallationAccountRegistryId", String.valueOf(accountId));
+            .when(appUserAuthorizationService)
+            .authorize(user, "updateInstallationAccountRegistryId", String.valueOf(accountId), null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -195,7 +195,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountSopId() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateSopIdDTO sopIdDTO = AccountUpdateSopIdDTO.builder().sopId(1234567899L).build();
 
@@ -213,14 +213,14 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountSopId_forbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateSopIdDTO sopIdDTO = AccountUpdateSopIdDTO.builder().sopId(1234567899L).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "updateInstallationAccountSopId", String.valueOf(accountId));
+            .when(appUserAuthorizationService)
+            .authorize(user, "updateInstallationAccountSopId", String.valueOf(accountId), null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -235,7 +235,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountAddress() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         LocationOnShoreDTO address =
             LocationOnShoreDTO.builder().type(LocationType.ONSHORE).gridReference("te12345").address(AddressDTO.builder()
@@ -257,7 +257,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountAddress_forbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         LocationOnShoreDTO address =
             LocationOnShoreDTO.builder().type(LocationType.ONSHORE).gridReference("te12345").address(AddressDTO.builder()
@@ -266,8 +266,8 @@ class InstallationAccountUpdateControllerTest {
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(countryService.getReferenceData()).thenReturn(List.of(Country.builder().code("GR").build()));
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "updateInstallationAccountAddress", String.valueOf(accountId));
+            .when(appUserAuthorizationService)
+            .authorize(user, "updateInstallationAccountAddress", String.valueOf(accountId), null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -282,7 +282,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateAccountLegalEntity() throws Exception {
-        final var user = PmrvUser.builder().build();
+        final var user = AppUser.builder().build();
         final var accountId = 1L;
         final var legalEntityDTO = LegalEntityDTO.builder()
             .name("TEST_LE")
@@ -324,7 +324,7 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateInstallationName() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateInstallationNameDTO installationNameDTO = AccountUpdateInstallationNameDTO.builder()
             .installationName("newInstallationName").build();
@@ -344,15 +344,15 @@ class InstallationAccountUpdateControllerTest {
 
     @Test
     void updateInstallationName_forbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AccountUpdateInstallationNameDTO installationNameDTO = AccountUpdateInstallationNameDTO.builder()
             .installationName("newInstallationName").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "updateInstallationName", String.valueOf(accountId));
+            .when(appUserAuthorizationService)
+            .authorize(user, "updateInstallationName", String.valueOf(accountId), null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -369,7 +369,7 @@ class InstallationAccountUpdateControllerTest {
     void updateFreeAllocationStatus() throws Exception {
         InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService);
         setupRoleBasedAuthentication(controller);
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         Long accountId = 1L;
         AccountUpdateFaStatusDTO updateFaStatusDTO = AccountUpdateFaStatusDTO.builder()
             .faStatus(true)
@@ -392,7 +392,7 @@ class InstallationAccountUpdateControllerTest {
     void updateFreeAllocationStatus_forbidden() throws Exception {
         InstallationAccountUpdateController controller = new InstallationAccountUpdateController(installationAccountUpdateService);
         setupRoleBasedAuthentication(controller);
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.VERIFIER).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
         long accountId = 1L;
         AccountUpdateFaStatusDTO updateFaStatusDTO = AccountUpdateFaStatusDTO.builder()
             .faStatus(true)
@@ -401,7 +401,7 @@ class InstallationAccountUpdateControllerTest {
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(user, new RoleType[]{RoleType.REGULATOR});
+            .evaluate(user, new String[]{RoleTypeConstants.REGULATOR});
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -433,7 +433,7 @@ class InstallationAccountUpdateControllerTest {
 
     private void setupRoleBasedAuthentication(InstallationAccountUpdateController controller) {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
@@ -448,7 +448,7 @@ class InstallationAccountUpdateControllerTest {
         conversionService.addConverter(new StringToAccountTypeEnumConverter());
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .setConversionService(conversionService)
             .build();

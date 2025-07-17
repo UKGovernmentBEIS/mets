@@ -3,18 +3,18 @@ package uk.gov.pmrv.api.notification.template.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentTemplateService;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentTemplateTokenService;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.documents.service.FileDocumentTemplateService;
+import uk.gov.netz.api.files.documents.service.FileDocumentTemplateTokenService;
 import uk.gov.pmrv.api.notification.template.domain.DocumentTemplate;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.repository.DocumentTemplateRepository;
-import uk.gov.pmrv.api.token.FileToken;
+import uk.gov.netz.api.token.FileToken;
 
 import java.util.UUID;
 

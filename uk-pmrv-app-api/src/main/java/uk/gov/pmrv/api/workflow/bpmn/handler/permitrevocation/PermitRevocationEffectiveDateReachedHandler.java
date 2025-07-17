@@ -20,6 +20,6 @@ public class PermitRevocationEffectiveDateReachedHandler implements JavaDelegate
         service.executePermitRevokedPostActions(requestId);
 
         // Add variables for triggering AER
-        service.getAerVariables(requestId).forEach(execution::setVariable);
+        service.constructAerVariables(requestId).forEach(execution::setVariable);
     }
 }

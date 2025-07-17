@@ -1,19 +1,17 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.submit.handler;
 
-import java.util.Set;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
-
+import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
+import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.submit.domain.PermitIssuanceApplicationSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
+
+import java.util.Set;
 
 /**
  * Handler in permit issuance workflow for initializing installation operator details from installation account.

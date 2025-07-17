@@ -6,110 +6,115 @@
 
 <ng-template #notify>
   <ng-container *ngIf="(isFormSubmitted$ | async) === false; else confirmation">
-    <app-page-heading
-      size="l"
-      *ngIf="requestTaskActionType !== 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_NOTIFY_OPERATOR'; else initialPenaltyNotice"
-    >
-      Select who should receive
-      {{
-        ['AVIATION_VIR_NOTIFY_OPERATOR_FOR_DECISION'].includes(requestTaskActionType)
-          ? 'the improvements letter'
-          : [
-              'DRE_SUBMIT_NOTIFY_OPERATOR',
-              'DOAL_PROCEED_TO_AUTHORITY_AND_NOTIFY_OPERATOR_FOR_DECISION',
-              'DOAL_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION'
-            ].includes(requestTaskActionType)
-          ? 'the official notice'
-          : isForAviationDocuments
-          ? 'documents'
-          : ['PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_SUBMISSION'].includes(requestTaskActionType)
-          ? 'the official revocation notice'
-          : ['PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_WITHDRAWAL'].includes(requestTaskActionType)
-          ? 'the official revocation withdrawal notice'
-          : 'the official determination notice'
-      }}
-    </app-page-heading>
+    <div *ngIf="'Select who should receive' as v">
+      <app-page-heading
+        size="l"
+        *ngIf="
+          requestTaskActionType !== 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_NOTIFY_OPERATOR';
+          else initialPenaltyNotice
+        ">
+        @if (['AVIATION_VIR_NOTIFY_OPERATOR_FOR_DECISION'].includes(requestTaskActionType)) {
+          {{ v }} the improvements letter
+        } @else if (
+          [
+            'DRE_SUBMIT_NOTIFY_OPERATOR',
+            'DOAL_PROCEED_TO_AUTHORITY_AND_NOTIFY_OPERATOR_FOR_DECISION',
+            'DOAL_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION',
+          ].includes(requestTaskActionType)
+        ) {
+          {{ v }} the official notice
+        } @else if (
+          [
+            'INSTALLATION_ONSITE_INSPECTION_SUBMIT_NOTIFY_OPERATOR',
+            'INSTALLATION_AUDIT_SUBMIT_NOTIFY_OPERATOR',
+          ].includes(requestTaskActionType)
+        ) {
+          {{ v }} the notification letter
+        } @else if (['PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_SUBMISSION'].includes(requestTaskActionType)) {
+          {{ v }} the official revocation notice
+        } @else if (['PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_WITHDRAWAL'].includes(requestTaskActionType)) {
+          {{ v }} the official revocation withdrawal notice
+        } @else if (['PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION'].includes(requestTaskActionType)) {
+          {{ v }} the notice document
+        } @else {
+          @if (isAviation$ | async) {
+            {{ v }} documents
+          } @else {
+            {{ v }} the official determination notice
+          }
+        }
+      </app-page-heading>
 
-    <ng-template #initialPenaltyNotice>
-      <app-page-heading size="l"> Select who should receive the initial penalty notice </app-page-heading>
-    </ng-template>
+      <ng-template #initialPenaltyNotice>
+        <app-page-heading size="l">{{ v }} the initial penalty notice</app-page-heading>
+      </ng-template>
+    </div>
 
     <form (ngSubmit)="onSubmit()" [formGroup]="form">
       <govuk-error-summary *ngIf="isSummaryDisplayed | async" [form]="form"></govuk-error-summary>
 
       <div
-        *ngIf="accountPrimaryContactUsersInfo$ | async as accountPrimaryContactUsersInfo"
-        class="govuk-heading-m govuk-!-margin-bottom-6"
-      >
-        {{ isForAviationDocuments ? 'Users that automatically receive documents' : 'Users automatically notified' }}
-        <p *ngFor="let primaryContactUsersInfo of accountPrimaryContactUsersInfo | keyvalue" class="govuk-body">
-          {{ primaryContactUsersInfo.key | userInfoResolver: accountPrimaryContactUsersInfo }}
+        *ngIf="accountOperatorUsersAutomaticallyNotified$ | async as accountOperatorUsersAutomaticallyNotified"
+        class="govuk-heading-m govuk-!-margin-bottom-6">
+        {{ (isAviation$ | async) ? 'Users that automatically receive documents' : 'Users automatically notified' }}
+        <p *ngFor="let userInfo of accountOperatorUsersAutomaticallyNotified | keyvalue" class="govuk-body">
+          {{ userInfo.key | userInfoResolver: accountOperatorUsersAutomaticallyNotified }}
         </p>
-        <p
-          *ngIf="isRegistryToBeNotified && requestTaskActionType !== 'AVIATION_DRE_UKETS_SUBMIT_NOTIFY_OPERATOR'"
-          class="govuk-body"
-        >
-          UK Registry Administrator
-        </p>
+        <p *ngIf="isRegistryToBeNotified" class="govuk-body">UK Registry Administrator</p>
 
         <p
           *ngIf="
             requestTaskActionType === 'AVIATION_DRE_UKETS_SUBMIT_NOTIFY_OPERATOR' &&
-            (accountPrimaryContactUsersInfo | keyvalue).length === 0
+            (accountOperatorUsersAutomaticallyNotified | keyvalue).length === 0
           "
-          class="govuk-body"
-        >
+          class="govuk-body">
+          No users exist
+        </p>
+        <p
+          *ngIf="
+            requestTaskActionType === 'AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR' &&
+            (accountOperatorUsersAutomaticallyNotified | keyvalue).length === 0
+          "
+          class="govuk-body">
           No users exist
         </p>
       </div>
 
-      <ng-container *ngIf="otherOperatorUsersInfo$ | async as usersInfo">
+      <ng-container *ngIf="accountOperatorUsersOther$ | async as usersInfo">
         <ng-container *ngIf="objectKeys(usersInfo).length > 0; else noUsers">
-          <div
-            govuk-checkboxes
-            formControlName="users"
-            [legend]="isForAviationDocuments ? 'Select other users' : 'Select the users you want to notify'"
-            legendSize="medium"
-          >
+          <div govuk-checkboxes formControlName="users" [legend]="usersToNotify$ | async" legendSize="medium">
             <govuk-checkbox
               *ngFor="let userInfo of usersInfo | keyvalue"
               [value]="userInfo.key"
-              [label]="userInfo.key | userInfoResolver: usersInfo"
-            ></govuk-checkbox>
+              [label]="userInfo.key | userInfoResolver: usersInfo"></govuk-checkbox>
           </div>
         </ng-container>
 
         <ng-template #noUsers>
           <div class="govuk-heading-m govuk-!-margin-bottom-6">
-            {{ isForAviationDocuments ? 'Select other users' : 'Select the users you want to notify' }}
+            {{ usersToNotify$ | async }}
             <p class="govuk-body">No additional users exist</p>
           </div>
         </ng-template>
       </ng-container>
 
-      <ng-container *ngIf="contacts$ | async as contacts">
+      <ng-container *ngIf="externalContacts$ | async as contacts">
         <ng-container *ngIf="contacts.length > 0; else noContacts">
           <div
             govuk-checkboxes
             formControlName="contacts"
-            [legend]="
-              isForAviationDocuments ? 'Select external contacts' : 'Select the external contacts you want to notify'
-            "
-            legendSize="medium"
-          >
+            [legend]="externalContactsToNotify$ | async"
+            legendSize="medium">
             <govuk-checkbox
               *ngFor="let contact of contacts"
               [value]="contact.id.toString()"
-              [label]="contact.email"
-            ></govuk-checkbox>
+              [label]="contact.email"></govuk-checkbox>
           </div>
         </ng-container>
 
         <ng-template #noContacts>
           <div class="govuk-heading-m govuk-!-margin-bottom-6">
-            {{
-              isForAviationDocuments ? 'Select external contacts' : 'Select the external contacts you want to notify'
-            }}
+            {{ externalContactsToNotify$ | async }}
             <p class="govuk-body">No external contacts exist</p>
           </div>
         </ng-template>
@@ -118,22 +123,27 @@
       <div *ngIf="hasSignature" class="govuk-heading-m govuk-!-margin-bottom-6">
         Select the name and signature that will be shown on the
         <span>
-          {{
-            ['AVIATION_VIR_NOTIFY_OPERATOR_FOR_DECISION'].includes(requestTaskActionType)
-              ? 'letter'
-              : isForAviationDocuments
-              ? 'documents'
-              : 'official notice document'
-          }}
+          @if (['AVIATION_VIR_NOTIFY_OPERATOR_FOR_DECISION'].includes(requestTaskActionType)) {
+            letter
+          } @else if (['PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION'].includes(requestTaskActionType)) {
+            notice document
+          } @else {
+            {{ (isAviation$ | async) ? 'documents' : 'official notice document' }}
+          }
         </span>
         <div
           class="govuk-body"
           [options]="assignees$ | async"
           formControlName="assignees"
           govuk-select
-          widthClass="govuk-!-width-two-thirds"
-        ></div>
+          widthClass="govuk-!-width-two-thirds"></div>
       </div>
+
+      <app-preview-documents
+        [taskId]="taskId"
+        [previewDocuments]="previewDocuments"
+        [decisionNotification]="decisionNotification"
+        *ngIf="previewDocuments"></app-preview-documents>
 
       <button appPendingButton govukButton type="submit">Confirm and complete</button>
     </form>
@@ -151,136 +161,50 @@
     </ng-container>
 
     <a govukLink [routerLink]="returnToUrl(requestTaskActionType, currentDomain$ | async)">
-      Return to:
-      <ng-container [ngSwitch]="requestTaskActionType">
-        <ng-container *ngSwitchCase="'PERMIT_ISSUANCE_NOTIFY_OPERATOR_FOR_DECISION'">
-          Permit Determination
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'PERMIT_TRANSFER_B_NOTIFY_OPERATOR_FOR_DECISION'"> Permit Transfer </ng-container>
-        <ng-container *ngSwitchCase="'PERMIT_VARIATION_NOTIFY_OPERATOR_FOR_DECISION'"> Permit Variation </ng-container>
-
-        <ng-container *ngSwitchCase="'PERMIT_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED'">
-          Permit Variation
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION'"> Permit Surrender </ng-container>
-
-        <ng-container *ngSwitchCase="'PERMIT_SURRENDER_CESSATION_NOTIFY_OPERATOR_FOR_DECISION'">
-          Surrender Cessation
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_SUBMISSION'">
-          Permit Revocation
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_WITHDRAWAL'"> Dashboard </ng-container>
-
-        <ng-container *ngSwitchCase="'PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_CESSATION'">
-          Revocation cessation
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'PERMIT_NOTIFICATION_NOTIFY_OPERATOR_FOR_DECISION'">
-          Permit Notification
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'PERMIT_NOTIFICATION_FOLLOW_UP_NOTIFY_OPERATOR_FOR_DECISION'">
-          Permit notification follow up
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'DRE_SUBMIT_NOTIFY_OPERATOR'"> Reportable emissions </ng-container>
-
-        <ng-container *ngSwitchCase="'DOAL_PROCEED_TO_AUTHORITY_AND_NOTIFY_OPERATOR_FOR_DECISION'">
-          Determination of activity level change
-        </ng-container>
-        <ng-container *ngSwitchCase="'DOAL_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION'">
-          Provide UK ETS Authority response for activity Level Change
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'VIR_NOTIFY_OPERATOR_FOR_DECISION'">
-          Review verifier improvement report
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'AIR_NOTIFY_OPERATOR_FOR_DECISION'">
-          Review Annual improvement report
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'EMP_ISSUANCE_UKETS_NOTIFY_OPERATOR_FOR_DECISION'">
-          Review emissions monitoring plan application
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'EMP_ISSUANCE_CORSIA_NOTIFY_OPERATOR_FOR_DECISION'">
-          Review emissions monitoring plan application
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'EMP_VARIATION_UKETS_NOTIFY_OPERATOR_FOR_DECISION'">
-          Review emissions monitoring plan variation
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'EMP_VARIATION_CORSIA_NOTIFY_OPERATOR_FOR_DECISION'">
-          Review emissions monitoring plan variation
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_NOTIFY_OPERATOR'">
-          Upload initial penalty notice: non-compliance
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR'">
-          Upload penalty notice: non-compliance
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR'">
-          Upload notice of intent: non-compliance
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'WITHHOLDING_OF_ALLOWANCES_NOTIFY_OPERATOR_FOR_DECISION'">
-          Withholding of allowances
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'RETURN_OF_ALLOWANCES_NOTIFY_OPERATOR_FOR_DECISION'">
-          Return of allowances
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_NOTIFY_OPERATOR_FOR_DECISION'">
-          Withdraw withholding of allowances notice
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'AVIATION_DRE_UKETS_SUBMIT_NOTIFY_OPERATOR'"> Determine emissions </ng-container>
-
-        <ng-container *ngSwitchCase="'EMP_VARIATION_UKETS_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED'">
-          Vary the emissions monitoring plan
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'EMP_VARIATION_CORSIA_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED'">
-          Vary the emissions monitoring plan
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'AVIATION_VIR_NOTIFY_OPERATOR_FOR_DECISION'">
-          Review verifier improvement report
-        </ng-container>
-      </ng-container>
+      Return to: {{ returnToTextMapper }}
     </a>
   </ng-container>
 
   <ng-template #confirmation>
     <div>
-      <ng-container *ngIf="requestTaskActionType === 'DRE_SUBMIT_NOTIFY_OPERATOR'; else default">
+      @if (
+        ['DRE_SUBMIT_NOTIFY_OPERATOR', 'PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION'].includes(
+          requestTaskActionType
+        )
+      ) {
         <govuk-panel [title]="confirmationMessage">
           <ng-container *ngIf="referenceCode">
-            <strong>Your reference is</strong><br />
+            <strong>Your reference is</strong>
+            <br />
             {{ referenceCode }}
           </ng-container>
         </govuk-panel>
-      </ng-container>
-
-      <ng-template #default>
+      } @else if (
+        ['INSTALLATION_ONSITE_INSPECTION_SUBMIT_NOTIFY_OPERATOR', 'INSTALLATION_AUDIT_SUBMIT_NOTIFY_OPERATOR'].includes(
+          requestTaskActionType
+        )
+      ) {
         <govuk-panel [title]="confirmationMessage">
-          <ng-container *ngIf="confirmationText">{{ confirmationText }}<br /><br /></ng-container>
           <ng-container *ngIf="referenceCode">
-            <strong>Your reference code is:</strong><br />{{ referenceCode }}
+            <strong>Your reference number</strong>
+            <br />
+            {{ referenceCode }}
           </ng-container>
         </govuk-panel>
-      </ng-template>
+      } @else {
+        <govuk-panel [title]="confirmationMessage">
+          <ng-container *ngIf="confirmationText">
+            {{ confirmationText }}
+            <br />
+            <br />
+          </ng-container>
+          <ng-container *ngIf="referenceCode">
+            <strong>Your reference code is:</strong>
+            <br />
+            {{ referenceCode }}
+          </ng-container>
+        </govuk-panel>
+      }
 
       <ng-container [ngSwitch]="requestTaskActionType">
         <ng-container *ngSwitchCase="'PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION'">
@@ -307,6 +231,10 @@
         </ng-container>
 
         <ng-container *ngSwitchCase="'AVIATION_DRE_UKETS_SUBMIT_NOTIFY_OPERATOR'">
+          <p class="govuk-body">If you have selected any users, they will receive a confirmation email.</p>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR'">
           <p class="govuk-body">If you have selected any users, they will receive a confirmation email.</p>
         </ng-container>
 
@@ -384,8 +312,13 @@
 
           <p class="govuk-body">They can then choose to make a further reply or not.</p>
         </ng-container>
+
+        <ng-container *ngSwitchCase="'PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION'">
+          <h3 class="govuk-heading-m">What happens next</h3>
+          <p class="govuk-body">The selected users will receive an email notification of your decision</p>
+        </ng-container>
       </ng-container>
-      <a govukLink [routerLink]="isAviation ? '/aviation/dashboard' : '/dashboard'"> Return to dashboard </a>
+      <a govukLink [routerLink]="(isAviation$ | async) ? '/aviation/dashboard' : '/dashboard'">Return to dashboard</a>
     </div>
   </ng-template>
 </ng-template>

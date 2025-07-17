@@ -56,7 +56,7 @@ describe('MonitoringMethodologyPlanSummaryDetailsComponent', () => {
 
   it('should display summary details', () => {
     expect(page.answers).toEqual([
-      ['Are you supplying a Monitoring and Methodology Plan as part of your permit application?', 'No'],
+      ['Are you providing a monitoring methodology plan as part of your permit application?', 'No'],
     ]);
   });
 });

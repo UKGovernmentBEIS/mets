@@ -1,6 +1,10 @@
 import { TaskItemStatus, TaskSection } from '@shared/task-list/task-list.interface';
 
-import { AviationDreUkEtsApplicationSubmitRequestTaskPayload } from 'pmrv-api';
+import {
+  AviationDreUkEtsApplicationSubmitRequestTaskPayload,
+  RequestTaskActionProcessDTO,
+  RequestTaskDTO,
+} from 'pmrv-api';
 
 import { DreTaskKey } from '../../store';
 
@@ -53,3 +57,12 @@ const BASIC_AER_APPLICATION_TASKS: TaskSection<any>[] = [
     ],
   },
 ];
+
+export function DREdocumentPreviewRequestTaskActionTypesMap(
+  requestTaskType: RequestTaskDTO['type'],
+): RequestTaskActionProcessDTO['requestTaskActionType'] {
+  switch (requestTaskType) {
+    case 'AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW':
+      return 'AVIATION_DRE_UKETS_SUBMIT_PEER_REVIEW_DECISION';
+  }
+}

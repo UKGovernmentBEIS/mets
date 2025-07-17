@@ -20,8 +20,7 @@ describe('CalculationEmissionsGroupComponent', () => {
       <app-calculation-emissions-group
         [data]="data"
         [statuses]="statuses"
-        [isReview]="isReview"
-      ></app-calculation-emissions-group>
+        [isReview]="isReview"></app-calculation-emissions-group>
     `,
   })
   class TestComponent {

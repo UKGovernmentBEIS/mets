@@ -4,7 +4,7 @@ import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 import { map, take, tap } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerStoreDelegate } from '@aviation/request-task/store/delegates';
+import { AerUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 
 import { aerQuery } from '../../../shared/aer.selectors';
@@ -23,13 +23,13 @@ export const canActivateAviationAerDataGaps: CanActivateFn = () => {
         store.setPayload({
           ...payload,
           aer: {
-            dataGaps: AerStoreDelegate.INITIAL_STATE.dataGaps,
+            dataGaps: AerUkEtsStoreDelegate.INITIAL_STATE.dataGaps,
           },
         } as any);
       }
 
       if (!aer?.dataGaps) {
-        store.aerDelegate.setDataGaps(AerStoreDelegate.INITIAL_STATE.dataGaps);
+        store.aerDelegate.setDataGaps(AerUkEtsStoreDelegate.INITIAL_STATE.dataGaps);
       }
 
       formProvider.setFormValue(aer.dataGaps);

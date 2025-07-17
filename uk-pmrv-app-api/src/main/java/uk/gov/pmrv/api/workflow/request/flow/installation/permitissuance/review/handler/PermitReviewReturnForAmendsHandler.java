@@ -1,12 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.handler;
 
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -25,6 +23,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.PermitIssuanceReviewService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.validation.PermitReviewReturnForAmendsValidatorService;
 
+import java.util.List;
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class PermitReviewReturnForAmendsHandler implements RequestTaskActionHandler<RequestTaskActionEmptyPayload> {
@@ -38,17 +39,17 @@ public class PermitReviewReturnForAmendsHandler implements RequestTaskActionHand
 
     @Override
     @Transactional
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser, RequestTaskActionEmptyPayload payload) {
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser, RequestTaskActionEmptyPayload payload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
         // Validate that at least one review group is 'Operator to amend'
         permitReviewReturnForAmendsValidatorService.validate((PermitIssuanceApplicationReviewRequestTaskPayload) requestTask.getPayload());
 
         // Update request payload
-        permitIssuanceReviewService.saveRequestReturnForAmends(requestTask, pmrvUser);
+        permitIssuanceReviewService.saveRequestReturnForAmends(requestTask, appUser);
 
         // Add PERMIT_ISSUANCE_APPLICATION_RETURNED_FOR_AMENDS request action
-        createRequestAction(requestTask.getRequest(), pmrvUser, (PermitIssuanceApplicationReviewRequestTaskPayload) requestTask.getPayload());
+        createRequestAction(requestTask.getRequest(), appUser, (PermitIssuanceApplicationReviewRequestTaskPayload) requestTask.getPayload());
 
         // Close task
         workflowService.completeTask(requestTask.getProcessTaskId(),
@@ -60,7 +61,7 @@ public class PermitReviewReturnForAmendsHandler implements RequestTaskActionHand
         return List.of(RequestTaskActionType.PERMIT_ISSUANCE_REVIEW_RETURN_FOR_AMENDS);
     }
 
-    private void createRequestAction(Request request, PmrvUser pmrvUser, PermitIssuanceApplicationReviewRequestTaskPayload taskPayload) {
+    private void createRequestAction(Request request, AppUser appUser, PermitIssuanceApplicationReviewRequestTaskPayload taskPayload) {
         PermitIssuanceApplicationReturnedForAmendsRequestActionPayload requestActionPayload = permitReviewMapper
                 .toPermitIssuanceApplicationReturnedForAmendsRequestActionPayload(
                     taskPayload, 
@@ -68,6 +69,6 @@ public class PermitReviewReturnForAmendsHandler implements RequestTaskActionHand
                 );
 
         requestService.addActionToRequest(request, requestActionPayload, RequestActionType.PERMIT_ISSUANCE_APPLICATION_RETURNED_FOR_AMENDS,
-                pmrvUser.getUserId());
+                appUser.getUserId());
     }
 }

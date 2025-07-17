@@ -3,21 +3,25 @@ package uk.gov.pmrv.api.account.installation.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.authorization.rules.services.resource.AccountAuthorizationResourceService;
+import uk.gov.netz.api.authorization.rules.services.resource.AccountRequestAuthorizationResourceService;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.Account;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.ApplicationType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
-import uk.gov.pmrv.api.authorization.rules.services.resource.AccountAuthorizationResourceService;
-import uk.gov.pmrv.api.authorization.rules.services.resource.AccountRequestAuthorizationResourceService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.aviation.response.AviationEmissionsUpdatedEventListener;
+import uk.gov.pmrv.api.integration.registry.reportableemissionsupdated.installation.response.InstallationEmissionsUpdatedEventListener;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -44,6 +48,7 @@ import static org.mockito.Mockito.verify;
     }
 )
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@Import({BuildProperties.class})
 class ParallelRequestHandlingIT extends AbstractContainerBaseTest {
 
     private static final String DELETE_REASON = "Workflow terminated by the system";
@@ -60,14 +65,19 @@ class ParallelRequestHandlingIT extends AbstractContainerBaseTest {
     @Autowired
     private RequestActionRepository requestActionRepository;
 
-    @MockBean
+    @MockitoBean
     WorkflowService workflowService;
-    @MockBean
+    @MockitoBean
     UserAuthService userAuthService;
-    @MockBean
+    @MockitoBean
     AccountAuthorizationResourceService accountAuthorizationResourceService;
-    @MockBean
+    @MockitoBean
     AccountRequestAuthorizationResourceService accountRequestAuthorizationResourceService;
+
+    @MockitoBean
+    AviationEmissionsUpdatedEventListener aviationEmissionsUpdatedEventListener;
+    @MockitoBean
+    InstallationEmissionsUpdatedEventListener installationEmissionsUpdatedEventListener;
 
     @BeforeEach
     void setUp() {

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { first, map, switchMap, takeUntil } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { PendingRequestService } from '../../../../core/guards/pending-request.service';
 import { PendingRequest } from '../../../../core/interfaces/pending-request.interface';
@@ -17,8 +18,7 @@ import { PermitRevocationStore } from '../../../store/permit-revocation-store';
     <app-revocation-cessation-summary-details
       [cessation]="store.select('cessation') | async"
       [allowancesSurrenderRequired]="store.select('allowancesSurrenderRequired') | async"
-      [isEditable]="store.select('isEditable') | async"
-    ></app-revocation-cessation-summary-details>
+      [isEditable]="store.select('isEditable') | async"></app-revocation-cessation-summary-details>
     <div class="govuk-button-group">
       <button appPendingButton govukButton type="button" (click)="confirm()" *ngIf="store.select('isEditable') | async">
         Confirm and complete
@@ -37,6 +37,7 @@ export class AnswersComponent implements OnInit, PendingRequest {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly destroy$: DestroySubject,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +47,8 @@ export class AnswersComponent implements OnInit, PendingRequest {
         map((paramMap) => Number(paramMap.get('taskId'))),
       )
       .subscribe((taskId) => this.backLinkService.show(`/permit-revocation/${taskId}/cessation`));
+
+    this.breadcrumbService.addToLastBreadcrumbAndShow('cessation');
   }
 
   confirm(): void {

@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -9,7 +8,6 @@ import { RegulatedActivitiesComponent } from '@tasks/aer/submit/regulated-activi
 import { mockAerApplyPayload, mockState } from '@tasks/aer/submit/testing/mock-aer-apply-action';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { AerApplicationSubmitRequestTaskPayload, TasksService } from 'pmrv-api';
 
@@ -57,8 +55,8 @@ describe('RegulatedActivitiesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
-      providers: [KeycloakService, { provide: TasksService, useValue: tasksService }],
+      imports: [AerModule],
+      providers: [provideRouter([]), { provide: TasksService, useValue: tasksService }],
     }).compileComponents();
   });
 

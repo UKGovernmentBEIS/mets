@@ -4,8 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
+import { addDays, format } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import { TasksService } from 'pmrv-api';
 
@@ -121,7 +121,7 @@ describe('FeeComponent', () => {
       page.totalBillableHours = '5';
       page.hourlyRate = '20';
 
-      const dueDate = moment().add(1, 'day').format('YYYY-MM-DD');
+      const dueDate = format(addDays(new Date(), 1), 'yyyy-MM-dd');
       const date = dueDate.split('-');
       page.dueDateYear = date[0];
       page.dueDateMonth = date[1];

@@ -1,15 +1,16 @@
 package uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 @Data
 @SuperBuilder

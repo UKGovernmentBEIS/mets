@@ -11,8 +11,7 @@ import { DoalService } from '@tasks/doal/core/doal.service';
       <app-page-heading>Upload verification report of the activity level report</app-page-heading>
       <app-verification-report-summary-template
         [verificationActivityLevelReport]="verificationActivityLevelReport$ | async"
-        [document]="documentFile$ | async"
-      ></app-verification-report-summary-template>
+        [document]="documentFile$ | async"></app-verification-report-summary-template>
       <app-task-return-link [levelsUp]="2" [taskType]="taskType$ | async"></app-task-return-link>
     </app-doal-task>
   `,

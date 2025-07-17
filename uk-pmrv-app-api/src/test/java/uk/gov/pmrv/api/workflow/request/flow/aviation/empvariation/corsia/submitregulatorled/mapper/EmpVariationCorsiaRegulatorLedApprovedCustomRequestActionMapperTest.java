@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
@@ -30,7 +31,7 @@ class EmpVariationCorsiaRegulatorLedApprovedCustomRequestActionMapperTest {
 
     @Test
     void getUserRoleTypes() {
-    	assertThat(cut.getUserRoleTypes()).containsExactlyInAnyOrder(RoleType.VERIFIER, RoleType.OPERATOR);
+    	assertThat(cut.getUserRoleTypes()).containsExactlyInAnyOrder(RoleTypeConstants.VERIFIER, RoleTypeConstants.OPERATOR);
     }
     
     @Test

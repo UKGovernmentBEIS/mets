@@ -12,13 +12,11 @@ import { areCategoryTierPrerequisitesMet } from '../n2o-status';
 @Component({
   selector: 'app-category-tier',
   templateUrl: './category-tier.component.html',
-  styles: [
-    `
-      app-page-heading button {
-        float: right;
-      }
-    `,
-  ],
+  styles: `
+    app-page-heading button {
+      float: right;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CategoryTierComponent {
@@ -32,5 +30,8 @@ export class CategoryTierComponent {
     ),
   );
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly route: ActivatedRoute) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

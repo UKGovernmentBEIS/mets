@@ -175,10 +175,10 @@ export class ActivityCalculationContinuousComponent {
             predefinedMeasurementUnit === 'GJ_PER_TONNE'
               ? 'TONNES'
               : predefinedMeasurementUnit === 'GJ_PER_NM3'
-              ? 'NM3'
-              : calculationActivityDataCalculationMethod?.measurementUnit
-              ? calculationActivityDataCalculationMethod.measurementUnit
-              : null,
+                ? 'NM3'
+                : calculationActivityDataCalculationMethod?.measurementUnit
+                  ? calculationActivityDataCalculationMethod.measurementUnit
+                  : null,
           disabled: !isEditable || !!predefinedMeasurementUnit,
         },
         {
@@ -193,7 +193,7 @@ export class ActivityCalculationContinuousComponent {
         {
           validators: [
             GovukValidators.required('Please state the total amount of exported fuel'),
-            maxIntegerPartValidator(),
+            maxIntegerPartValidator(), // TODO should be replaced with rangeIntegerPartValidator(),
           ],
         },
       ],

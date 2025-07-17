@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,6 +11,9 @@
  */
 import { LegalEntityDTO } from './legalEntityDTO';
 import { LocationDTO } from './locationDTO';
+import { LocationOffShoreDTO } from './locationOffShoreDTO';
+import { LocationOnShoreDTO } from './locationOnShoreDTO';
+import { LocationOnShoreStateDTO } from './locationOnShoreStateDTO';
 
 export interface InstallationAccountDTO {
   id?: number;
@@ -20,7 +23,7 @@ export interface InstallationAccountDTO {
   competentAuthority: 'ENGLAND' | 'NORTHERN_IRELAND' | 'OPRED' | 'SCOTLAND' | 'WALES';
   commencementDate: string;
   legalEntity?: LegalEntityDTO;
-  location?: LocationDTO;
+  location?: LocationDTO | LocationOffShoreDTO | LocationOnShoreDTO | LocationOnShoreStateDTO;
   acceptedDate?: string;
   sopId?: number;
   registryId?: number;
@@ -38,7 +41,7 @@ export interface InstallationAccountDTO {
     | 'AWAITING_TRANSFER'
     | 'TRANSFERRED';
   siteName: string;
-  emitterType?: 'GHGE' | 'HSE';
+  emitterType?: 'WASTE' | 'GHGE' | 'HSE';
   installationCategory?: 'A_LOW_EMITTER' | 'A' | 'B' | 'C' | 'N_A';
   applicationType?: 'NEW_PERMIT' | 'TRANSFER';
   transferCode?: string;

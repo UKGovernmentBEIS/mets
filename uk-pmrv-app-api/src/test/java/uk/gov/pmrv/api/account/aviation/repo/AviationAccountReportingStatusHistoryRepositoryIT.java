@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusHistory;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
@@ -18,7 +18,7 @@ import uk.gov.pmrv.api.account.aviation.repository.AviationAccountReportingStatu
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
 import jakarta.persistence.EntityManager;

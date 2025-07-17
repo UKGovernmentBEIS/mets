@@ -11,7 +11,10 @@ import { VirService } from '@tasks/vir/core/vir.service';
   providedIn: 'root',
 })
 export class ResponseItemResolver {
-  constructor(private readonly virService: VirService, private readonly router: Router) {}
+  constructor(
+    private readonly virService: VirService,
+    private readonly router: Router,
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<VerificationDataItem> {
     return this.virService.payload$.pipe(

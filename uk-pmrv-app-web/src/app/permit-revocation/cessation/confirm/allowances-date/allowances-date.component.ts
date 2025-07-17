@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -8,6 +8,7 @@ import {
   PERMIT_REVOCATION_CESSATION_TASK_FORM,
   permitRevocationCessationFormProvider,
 } from '@permit-revocation/cessation/confirm/core/factory/cessation-form-provider';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { PendingRequestService } from '../../../../core/guards/pending-request.service';
 import { PendingRequest } from '../../../../core/interfaces/pending-request.interface';
@@ -15,12 +16,12 @@ import { PermitRevocationStore } from '../../../store/permit-revocation-store';
 
 @Component({
   selector: 'app-revocation-cessation-allowances-date',
-  template: `<app-wizard-step
+  template: `
+    <app-wizard-step
       (formSubmit)="onContinue()"
       [formGroup]="form"
       submitText="Continue"
-      [hideSubmit]="(store.isEditable$ | async) === false"
-    >
+      [hideSubmit]="(store.isEditable$ | async) === false">
       <span class="govuk-caption-l">Confirm cessation of regulated activities</span>
 
       <app-page-heading>When were the installation allowances surrendered?</app-page-heading>
@@ -29,11 +30,12 @@ import { PermitRevocationStore } from '../../../store/permit-revocation-store';
 
       <div formControlName="allowancesSurrenderDate" govuk-date-input [max]="today" [isRequired]="true"></div>
     </app-wizard-step>
-    <a govukLink routerLink="../..">Return to: Cessation</a> `,
+    <a govukLink routerLink="../..">Return to: Cessation</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [permitRevocationCessationFormProvider],
 })
-export class AllowancesDateComponent implements PendingRequest {
+export class AllowancesDateComponent implements PendingRequest, OnInit {
   today = new Date();
 
   constructor(
@@ -42,6 +44,7 @@ export class AllowancesDateComponent implements PendingRequest {
     readonly pendingRequest: PendingRequestService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
 
   onContinue(): void {
@@ -71,5 +74,9 @@ export class AllowancesDateComponent implements PendingRequest {
         )
         .subscribe(() => navigateToNextStep());
     }
+  }
+
+  ngOnInit(): void {
+    this.breadcrumbService.addToLastBreadcrumbAndShow('cessation');
   }
 }

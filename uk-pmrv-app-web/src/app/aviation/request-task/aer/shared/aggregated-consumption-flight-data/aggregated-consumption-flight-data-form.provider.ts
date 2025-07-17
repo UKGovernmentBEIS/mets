@@ -5,7 +5,6 @@ import { combineLatest, forkJoin, map, Observable, of, Subject, take } from 'rxj
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AirportTypes } from '@aviation/shared/components/aer/util/airport-types';
 import { getFuelTypeValues } from '@aviation/shared/components/emp/emission-sources/aircraft-type/fuel-types';
 
 import {
@@ -14,6 +13,7 @@ import {
   AviationAerUkEtsAggregatedEmissionDataDetails,
   AviationAerUkEtsAggregatedEmissionsData,
   AviationReportedAirportsService,
+  AviationRptAirportsDTO,
 } from 'pmrv-api';
 
 import { TaskFormProvider } from '../../../task-form.provider';
@@ -57,23 +57,22 @@ export class AggregatedConsumptionFlightDataFormProvider
   }
 
   setFormValue(
-    aviationAerUkEtsCorsiaAggregatedEmissionsData:
+    aviationAerAggregatedEmissionsData:
       | AviationAerUkEtsAggregatedEmissionsData
       | AviationAerCorsiaAggregatedEmissionsData
       | null,
   ): void {
     this.store.pipe(aerQuery.selectIsCorsia, take(1)).subscribe((isCorsia) => {
-      if (isCorsia && aviationAerUkEtsCorsiaAggregatedEmissionsData) {
+      if (isCorsia && aviationAerAggregatedEmissionsData) {
         this.form.patchValue({
           aggregatedEmissionDataDetails: (
-            aviationAerUkEtsCorsiaAggregatedEmissionsData as AviationAerCorsiaAggregatedEmissionsData
+            aviationAerAggregatedEmissionsData as AviationAerCorsiaAggregatedEmissionsData
           ).aggregatedEmissionDataDetails,
         });
-      } else if (!isCorsia && aviationAerUkEtsCorsiaAggregatedEmissionsData) {
+      } else if (!isCorsia && aviationAerAggregatedEmissionsData) {
         this.form.patchValue({
-          aggregatedEmissionDataDetails: (
-            aviationAerUkEtsCorsiaAggregatedEmissionsData as AviationAerUkEtsAggregatedEmissionsData
-          ).aggregatedEmissionDataDetails,
+          aggregatedEmissionDataDetails: (aviationAerAggregatedEmissionsData as AviationAerUkEtsAggregatedEmissionsData)
+            .aggregatedEmissionDataDetails,
         });
       }
     });
@@ -93,26 +92,7 @@ export class AggregatedConsumptionFlightDataFormProvider
         if (isCorsia) {
           const formGroup = this.fb.group(
             {
-              aggregatedEmissionDataDetails: [
-                null,
-                [
-                  Validators.required,
-                  this.uniqueFuelTypePerAerodromePairValidator(
-                    'You cannot enter the same aerodrome pair and fuel type',
-                  ),
-                  this.validateFuelType(getFuelTypeValues(true), 'Fuel type must be a standard fuel type'),
-                  this.validateAerodromes('Departure and arrival aerodromes must be different'),
-                  this.validateNumericValues('Enter a number'),
-                ],
-                [
-                  this.combinedAerodromeValidatorCorsia(
-                    aerYear,
-                    'One or more aerodrome of departure ICAO codes are invalid',
-                    'One or more aerodrome of arrival ICAO codes are invalid',
-                    'Departure and arrival aerodromes must be in different ICAO states',
-                  ),
-                ],
-              ],
+              aggregatedEmissionDataDetails: [null, [Validators.required], [this.businessValidatorsCorsia(aerYear)]],
             },
             { updateOn: 'change' },
           );
@@ -120,27 +100,7 @@ export class AggregatedConsumptionFlightDataFormProvider
         } else {
           const formGroup = this.fb.group(
             {
-              aggregatedEmissionDataDetails: [
-                null,
-                [
-                  Validators.required,
-                  this.uniqueFuelTypePerAerodromePairValidator(
-                    'You cannot enter the same aerodrome pair and fuel type',
-                  ),
-                  this.validateFuelType(getFuelTypeValues(), 'Fuel type must be a standard fuel type'),
-                  this.validateAerodromes('Departure and arrival aerodromes must be different'),
-                  this.validateNumericValues('Enter a number'),
-                ],
-                [
-                  this.combinedAerodromeValidatorUkEts(
-                    aerYear,
-                    'One or more aerodrome of departure ICAO codes are invalid',
-                    'Aerodrome of departure codes must be within the scope of UK ETS',
-                    'One or more aerodrome of arrival ICAO codes are invalid',
-                    'Aerodrome of arrival codes must be within the scope of UK ETS',
-                  ),
-                ],
-              ],
+              aggregatedEmissionDataDetails: [null, [Validators.required], [this.businessValidatorsUkEts(aerYear)]],
             },
             { updateOn: 'change' },
           );
@@ -149,185 +109,176 @@ export class AggregatedConsumptionFlightDataFormProvider
       });
   }
 
-  uniqueFuelTypePerAerodromePairValidator(message: string) {
-    return (control: FormControl): ValidationErrors | null => {
-      const data = control.value;
+  uniqueFuelTypePerAerodromePairValidator(control: FormControl): ValidationErrors | null {
+    const data = control.value;
 
-      if (!Array.isArray(data)) {
-        return null;
-      }
-
-      const combinations = new Map<string, number[]>();
-      const invalidColumns = [];
-      const rows = [];
-
-      data.forEach((entry, index) => {
-        const { airportFrom, airportTo, fuelType } = entry;
-        const key = `${airportFrom.icao}-${airportTo.icao}-${fuelType}`;
-
-        const existingRows = combinations.get(key);
-        if (existingRows) {
-          existingRows.push(index + 1);
-        } else {
-          combinations.set(key, [index + 1]);
-        }
-      });
-
-      combinations.forEach((indices) => {
-        if (indices.length > 1) {
-          invalidColumns.push('fuelType');
-          indices.forEach((rowIndex) => {
-            rows.push({
-              rowIndex: rowIndex,
-            });
-          });
-        }
-      });
-
-      if (rows.length > 0) {
-        return {
-          multipleFuelTypes: {
-            rows,
-            columns: this.mapFieldsToColumnNames(invalidColumns),
-            message,
-          },
-        };
-      }
-
+    if (!Array.isArray(data)) {
       return null;
-    };
+    }
+
+    const combinations = new Map<string, number[]>();
+    const invalidColumns = [];
+    const rows = [];
+
+    data.forEach((entry, index) => {
+      const { airportFrom, airportTo, fuelType } = entry;
+      const key = `${airportFrom.icao}-${airportTo.icao}-${fuelType}`;
+
+      const existingRows = combinations.get(key);
+      if (existingRows) {
+        existingRows.push(index + 1);
+      } else {
+        combinations.set(key, [index + 1]);
+      }
+    });
+
+    combinations.forEach((indices) => {
+      if (indices.length > 1) {
+        invalidColumns.push('fuelType');
+        indices.forEach((rowIndex) => {
+          rows.push({
+            rowIndex: rowIndex,
+          });
+        });
+      }
+    });
+
+    if (rows.length > 0) {
+      return {
+        multipleFuelTypes: {
+          rows,
+          columns: this.mapFieldsToColumnNames(invalidColumns),
+          message: 'You cannot enter the same aerodrome pair and fuel type',
+        },
+      };
+    }
+
+    return null;
   }
 
-  validateFuelType(fuelTypes: string[], message: string) {
-    return (control: FormControl): { [key: string]: any } | null => {
-      const data = control.value;
+  validateFuelType(control: FormControl, fuelTypes: string[]): ValidationErrors | null {
+    const data = control.value;
 
-      if (!Array.isArray(data)) {
-        return null;
+    if (!Array.isArray(data)) {
+      return null;
+    }
+
+    const rows = [];
+
+    for (let i = 0; i < data.length; i++) {
+      const entry = data[i];
+      if (entry && !fuelTypes.includes(entry.fuelType)) {
+        rows.push({
+          rowIndex: i + 1,
+        });
       }
+    }
 
-      const rows = [];
+    if (rows.length > 0) {
+      return {
+        invalidFuelType: {
+          rows,
+          columns: this.mapFieldsToColumnNames(['fuelType']),
+          message: 'Fuel type must be a standard fuel type',
+        },
+      };
+    }
 
-      for (let i = 0; i < data.length; i++) {
-        const entry = data[i];
-        if (entry && !fuelTypes.includes(entry.fuelType)) {
+    return null;
+  }
+
+  validateFromAndToAerodromesAreDifferent(control: FormControl): ValidationErrors | null {
+    const data = control.value;
+
+    if (!Array.isArray(data)) {
+      return null;
+    }
+
+    const rows = [];
+    const columnsSet = new Set<string>();
+
+    for (let i = 0; i < data.length; i++) {
+      const entry = data[i];
+
+      if (entry && entry.airportFrom.icao === entry.airportTo.icao) {
+        columnsSet.add('airportFrom');
+        columnsSet.add('airportTo');
+        rows.push({
+          rowIndex: i + 1,
+        });
+      }
+    }
+
+    const invalidColumns = Array.from(columnsSet);
+
+    if (rows.length > 0) {
+      return {
+        sameAerodromes: {
+          rows,
+          columns: this.mapFieldsToColumnNames(invalidColumns),
+          message: 'Departure and arrival aerodromes must be different',
+        },
+      };
+    }
+
+    return null;
+  }
+
+  validateNumericValues(control: FormControl): ValidationErrors | null {
+    const data = control.value;
+
+    if (!Array.isArray(data)) {
+      return null;
+    }
+
+    const rows = [];
+    const invalidColumnsSet = new Set<string>();
+
+    for (let i = 0; i < data.length; i++) {
+      const entry = data[i];
+
+      if (entry) {
+        const fuelConsumption = parseFloat(entry.fuelConsumption);
+        const decimalPlaces = (fuelConsumption.toString().split('.')[1] || '').length;
+
+        if (isNaN(fuelConsumption) || fuelConsumption <= 0 || decimalPlaces > 3) {
+          invalidColumnsSet.add('fuelConsumption');
+          rows.push({
+            rowIndex: i + 1,
+          });
+        }
+
+        const flightsNumber = entry.flightsNumber;
+
+        if (!Number.isInteger(flightsNumber) || flightsNumber <= 0) {
+          invalidColumnsSet.add('flightsNumber');
           rows.push({
             rowIndex: i + 1,
           });
         }
       }
+    }
 
-      if (rows.length > 0) {
-        return {
-          invalidFuelType: {
-            rows,
-            columns: this.mapFieldsToColumnNames(['fuelType']),
-            message,
-          },
-        };
-      }
+    if (rows.length > 0) {
+      return {
+        invalidNumericValue: {
+          rows,
+          columns: this.mapFieldsToColumnNames([...invalidColumnsSet]),
+          message: 'Enter a number',
+        },
+      };
+    }
 
-      return null;
-    };
+    return null;
   }
 
-  validateAerodromes(message: string) {
-    return (control: FormControl): { [key: string]: any } | null => {
-      const data = control.value;
-
-      if (!Array.isArray(data)) {
-        return null;
-      }
-
-      const rows = [];
-      const columnsSet = new Set<string>();
-
-      for (let i = 0; i < data.length; i++) {
-        const entry = data[i];
-
-        if (entry && entry.airportFrom.icao === entry.airportTo.icao) {
-          columnsSet.add('airportFrom');
-          columnsSet.add('airportTo');
-          rows.push({
-            rowIndex: i + 1,
-          });
-        }
-      }
-
-      const invalidColumns = Array.from(columnsSet);
-
-      if (rows.length > 0) {
-        return {
-          sameAerodromes: {
-            rows,
-            columns: this.mapFieldsToColumnNames(invalidColumns),
-            message,
-          },
-        };
-      }
-
-      return null;
-    };
-  }
-
-  validateNumericValues(message: string) {
-    return (control: FormControl): { [key: string]: any } | null => {
-      const data = control.value;
-
-      if (!Array.isArray(data)) {
-        return null;
-      }
-
-      const rows = [];
-      const invalidColumnsSet = new Set<string>();
-
-      for (let i = 0; i < data.length; i++) {
-        const entry = data[i];
-
-        if (entry) {
-          const fuelConsumption = parseFloat(entry.fuelConsumption);
-          const decimalPlaces = (fuelConsumption.toString().split('.')[1] || '').length;
-
-          if (isNaN(fuelConsumption) || fuelConsumption <= 0 || decimalPlaces > 3) {
-            invalidColumnsSet.add('fuelConsumption');
-            rows.push({
-              rowIndex: i + 1,
-            });
-          }
-
-          const flightsNumber = entry.flightsNumber;
-
-          if (!Number.isInteger(flightsNumber) || flightsNumber <= 0) {
-            invalidColumnsSet.add('flightsNumber');
-            rows.push({
-              rowIndex: i + 1,
-            });
-          }
-        }
-      }
-
-      if (rows.length > 0) {
-        return {
-          invalidNumericValue: {
-            rows,
-            columns: this.mapFieldsToColumnNames([...invalidColumnsSet]),
-            message,
-          },
-        };
-      }
-
-      return null;
-    };
-  }
-
-  combinedAerodromeValidatorUkEts(
-    aerYear: number,
-    messageForCodeDeparture: string,
-    messageForTypeDeparture: string,
-    messageForCodeArrival: string,
-    messageForTypeArrival: string,
-  ): AsyncValidatorFn {
+  businessValidatorsUkEts(aerYear: number): AsyncValidatorFn {
     return (control: FormControl): Observable<ValidationErrors | null> => {
+      const uniqueFuelTypePerAerodromePairValidatorResult = this.uniqueFuelTypePerAerodromePairValidator(control);
+      const fuleTypeValidatorResult = this.validateFuelType(control, getFuelTypeValues());
+      const fromAndToAerodromesAreDifferentValidatorResult = this.validateFromAndToAerodromesAreDifferent(control);
+      const numericValuesValidatorResult = this.validateNumericValues(control);
+
       const data = control.value;
 
       if (!Array.isArray(data)) {
@@ -337,105 +288,160 @@ export class AggregatedConsumptionFlightDataFormProvider
       const icaosFrom = data.map((entry) => entry.airportFrom.icao);
       const icaosTo = data.map((entry) => entry.airportTo.icao);
 
-      return forkJoin({
-        airportsFrom: this.aviationReportedAirportsService.getReportedAirports({ icaos: icaosFrom, year: aerYear }),
-        airportsTo: this.aviationReportedAirportsService.getReportedAirports({ icaos: icaosTo, year: aerYear }),
-      }).pipe(
-        map(({ airportsFrom, airportsTo }) => {
-          const validIcaoCodesFrom = airportsFrom.map((airport) => airport.icao);
-          const validIcaoCodesTo = airportsTo.map((airport) => airport.icao);
+      const airportsFrom = this.aviationReportedAirportsService.getReportedAirports({
+        icaos: icaosFrom,
+        year: aerYear,
+      });
+      const airportsTo = this.aviationReportedAirportsService.getReportedAirports({ icaos: icaosTo, year: aerYear });
 
-          const validCombinations = [
-            { from: AirportTypes.UKETS_FLIGHTS_TO_EEA_REPORTED, to: AirportTypes.UKETS_FLIGHTS_TO_EEA_REPORTED },
-            { from: AirportTypes.UKETS_FLIGHTS_TO_EEA_REPORTED, to: AirportTypes.UKETS_FLIGHTS_TO_EEA_NOT_REPORTED },
-            { from: AirportTypes.UKETS_FLIGHTS_TO_EEA_REPORTED, to: AirportTypes.EEA_COUNTRY },
-            { from: AirportTypes.UKETS_FLIGHTS_TO_EEA_REPORTED, to: AirportTypes.EFTA_COUNTRY },
-            { from: AirportTypes.UKETS_FLIGHTS_TO_EEA_NOT_REPORTED, to: AirportTypes.UKETS_FLIGHTS_TO_EEA_REPORTED },
-          ];
+      return forkJoin([
+        of(uniqueFuelTypePerAerodromePairValidatorResult),
+        of(fuleTypeValidatorResult),
+        of(fromAndToAerodromesAreDifferentValidatorResult),
+        of(numericValuesValidatorResult),
+        airportsFrom,
+        airportsTo,
+      ]).pipe(
+        map(
+          ([
+            uniqueFuelTypePerAerodromePairValidatorResult,
+            fuleTypeValidatorResult,
+            fromAndToAerodromesAreDifferentValidatorResult,
+            numericValuesValidatorResult,
+            airportsFrom,
+            airportsTo,
+          ]) => {
+            let errors = {};
 
-          const invalidCodeDepartureRows = [];
-          const invalidTypeDepartureRows = [];
-          const invalidCodeArrivalRows = [];
-          const invalidTypeArrivalRows = [];
-
-          data.forEach((entry, index) => {
-            const airportFrom = airportsFrom.find((airport) => airport.icao === entry.airportFrom.icao);
-            const airportTo = airportsTo.find((airport) => airport.icao === entry.airportTo.icao);
-
-            if (!validIcaoCodesFrom.includes(entry.airportFrom.icao)) {
-              invalidCodeDepartureRows.push({ rowIndex: index + 1 });
+            if (uniqueFuelTypePerAerodromePairValidatorResult) {
+              errors = { ...errors, ...uniqueFuelTypePerAerodromePairValidatorResult };
             }
 
-            if (
-              airportFrom &&
-              !validCombinations.some((combination) => combination.from === airportFrom?.countryType)
-            ) {
-              invalidTypeDepartureRows.push({ rowIndex: index + 1 });
+            if (fuleTypeValidatorResult) {
+              errors = { ...errors, ...fuleTypeValidatorResult };
             }
 
-            if (!validIcaoCodesTo.includes(entry.airportTo.icao)) {
-              invalidCodeArrivalRows.push({ rowIndex: index + 1 });
+            if (fromAndToAerodromesAreDifferentValidatorResult) {
+              errors = { ...errors, ...fromAndToAerodromesAreDifferentValidatorResult };
             }
 
-            if (
-              airportTo &&
-              airportFrom &&
-              !validCombinations.some(
-                (combination) =>
-                  combination.from === airportFrom?.countryType && combination.to === airportTo?.countryType,
-              )
-            ) {
-              invalidTypeArrivalRows.push({ rowIndex: index + 1 });
+            if (numericValuesValidatorResult) {
+              errors = { ...errors, ...numericValuesValidatorResult };
             }
-          });
 
-          const errors = {};
+            const validIcaoCodesFrom = airportsFrom.map((airport) => airport.icao);
+            const validIcaoCodesTo = airportsTo.map((airport) => airport.icao);
 
-          if (invalidCodeDepartureRows.length > 0) {
-            errors['invalidDepartureAerodromeCode'] = {
-              rows: invalidCodeDepartureRows,
-              columns: this.mapFieldsToColumnNames(['airportFrom']),
-              message: messageForCodeDeparture,
-            };
-          }
+            const validUkEtsFromToCountryTypes: {
+              from: AviationRptAirportsDTO['countryType'];
+              to: AviationRptAirportsDTO['countryType'];
+            }[] = [
+              { from: 'UKETS_FLIGHTS_TO_EEA_REPORTED', to: 'UKETS_FLIGHTS_TO_EEA_REPORTED' },
+              { from: 'UKETS_FLIGHTS_TO_EEA_REPORTED', to: 'UKETS_FLIGHTS_TO_EEA_NOT_REPORTED' },
+              { from: 'UKETS_FLIGHTS_TO_EEA_REPORTED', to: 'EEA_COUNTRY' },
+              { from: 'UKETS_FLIGHTS_TO_EEA_REPORTED', to: 'EFTA_COUNTRY' },
+              { from: 'UKETS_FLIGHTS_TO_EEA_NOT_REPORTED', to: 'UKETS_FLIGHTS_TO_EEA_REPORTED' },
+            ];
 
-          if (invalidTypeDepartureRows.length > 0) {
-            errors['invalidDepartureAerodrome'] = {
-              rows: invalidTypeDepartureRows,
-              columns: this.mapFieldsToColumnNames(['airportFrom']),
-              message: messageForTypeDeparture,
-            };
-          }
+            const invalidDepartureAerodromeCodeRows = [];
+            const notUkEtsDepartureAerodromeCodeRows = [];
+            const invalidArrivalAerodromeCodeRows = [];
+            const notUkEtsArrivalAerodromeCodeRows = [];
+            const notUkEtsDepartureArrivalAerodromeCodesPairRows = [];
 
-          if (invalidCodeArrivalRows.length > 0) {
-            errors['invalidArrivalAerodromeCode'] = {
-              rows: invalidCodeArrivalRows,
-              columns: this.mapFieldsToColumnNames(['airportTo']),
-              message: messageForCodeArrival,
-            };
-          }
+            data.forEach((entry, index) => {
+              if (!validIcaoCodesFrom.includes(entry.airportFrom.icao)) {
+                invalidDepartureAerodromeCodeRows.push({ rowIndex: index + 1 });
+              }
 
-          if (invalidTypeArrivalRows.length > 0) {
-            errors['invalidArrivalAerodrome'] = {
-              rows: invalidTypeArrivalRows,
-              columns: this.mapFieldsToColumnNames(['airportTo']),
-              message: messageForTypeArrival,
-            };
-          }
+              const airportFrom = airportsFrom.find((airport) => airport.icao === entry.airportFrom.icao);
+              const notUkEtsDepartureAerodromeCode =
+                airportFrom &&
+                !validUkEtsFromToCountryTypes.some((combination) => combination.from === airportFrom.countryType);
+              if (notUkEtsDepartureAerodromeCode) {
+                notUkEtsDepartureAerodromeCodeRows.push({ rowIndex: index + 1 });
+              }
 
-          return Object.keys(errors).length ? errors : null;
-        }),
+              if (!validIcaoCodesTo.includes(entry.airportTo.icao)) {
+                invalidArrivalAerodromeCodeRows.push({ rowIndex: index + 1 });
+              }
+
+              const airportTo = airportsTo.find((airport) => airport.icao === entry.airportTo.icao);
+              const notUkEtsArrivalAerodromeCode =
+                airportTo &&
+                !validUkEtsFromToCountryTypes.some((combination) => combination.to === airportTo.countryType);
+              if (notUkEtsArrivalAerodromeCode) {
+                notUkEtsArrivalAerodromeCodeRows.push({ rowIndex: index + 1 });
+              }
+
+              if (
+                airportTo &&
+                airportFrom &&
+                !notUkEtsDepartureAerodromeCode &&
+                !notUkEtsArrivalAerodromeCode &&
+                !validUkEtsFromToCountryTypes.some(
+                  (combination) =>
+                    combination.from === airportFrom.countryType && combination.to === airportTo.countryType,
+                )
+              ) {
+                notUkEtsDepartureArrivalAerodromeCodesPairRows.push({ rowIndex: index + 1 });
+              }
+            });
+
+            if (invalidDepartureAerodromeCodeRows.length > 0) {
+              errors['invalidDepartureAerodromeCode'] = {
+                rows: invalidDepartureAerodromeCodeRows,
+                columns: this.mapFieldsToColumnNames(['airportFrom']),
+                message: 'One or more aerodrome of departure ICAO codes are invalid',
+              };
+            }
+
+            if (notUkEtsDepartureAerodromeCodeRows.length > 0) {
+              errors['notUkEtsDepartureAerodromeCode'] = {
+                rows: notUkEtsDepartureAerodromeCodeRows,
+                columns: this.mapFieldsToColumnNames(['airportFrom']),
+                message: 'Aerodrome of departure codes must be within the scope of UK ETS',
+              };
+            }
+
+            if (invalidArrivalAerodromeCodeRows.length > 0) {
+              errors['invalidArrivalAerodromeCode'] = {
+                rows: invalidArrivalAerodromeCodeRows,
+                columns: this.mapFieldsToColumnNames(['airportTo']),
+                message: 'One or more aerodrome of arrival ICAO codes are invalid',
+              };
+            }
+
+            if (notUkEtsArrivalAerodromeCodeRows.length > 0) {
+              errors['notUkEtsArrivalAerodromeCode'] = {
+                rows: notUkEtsArrivalAerodromeCodeRows,
+                columns: this.mapFieldsToColumnNames(['airportTo']),
+                message: 'Aerodrome of arrival codes must be within the scope of UK ETS',
+              };
+            }
+
+            if (notUkEtsDepartureArrivalAerodromeCodesPairRows.length > 0) {
+              errors['notUkEtsDepartureArrivalAerodromeCodesPair'] = {
+                rows: notUkEtsDepartureArrivalAerodromeCodesPairRows,
+                columns: this.mapFieldsToColumnNames(['airportTo']),
+                message: 'Aerodrome of arrival codes must be within the scope of UK ETS',
+              };
+            }
+
+            return Object.keys(errors).length ? errors : null;
+          },
+        ),
       );
     };
   }
 
-  combinedAerodromeValidatorCorsia(
-    aerYear: number,
-    messageForCodeDeparture: string,
-    messageForCodeArrival: string,
-    messageForInvalidIcao: string,
-  ): AsyncValidatorFn {
+  businessValidatorsCorsia(aerYear: number): AsyncValidatorFn {
     return (control: FormControl): Observable<ValidationErrors | null> => {
+      const uniqueFuelTypePerAerodromePairValidatorResult = this.uniqueFuelTypePerAerodromePairValidator(control);
+      const fuelTypeValidatorResult = this.validateFuelType(control, getFuelTypeValues(true));
+      const fromAndToAerodromesAreDifferentValidatorResult = this.validateFromAndToAerodromesAreDifferent(control);
+      const numericValuesValidatorResult = this.validateNumericValues(control);
+
       const data = control.value;
 
       if (!Array.isArray(data)) {
@@ -445,63 +451,100 @@ export class AggregatedConsumptionFlightDataFormProvider
       const icaosFrom = data.map((entry) => entry.airportFrom.icao);
       const icaosTo = data.map((entry) => entry.airportTo.icao);
 
-      return forkJoin({
-        airportsFrom: this.aviationReportedAirportsService.getReportedAirports({ icaos: icaosFrom, year: aerYear }),
-        airportsTo: this.aviationReportedAirportsService.getReportedAirports({ icaos: icaosTo, year: aerYear }),
-      }).pipe(
-        map(({ airportsFrom, airportsTo }) => {
-          const validIcaoCodesFrom = airportsFrom.map((airport) => airport.icao);
-          const validIcaoCodesTo = airportsTo.map((airport) => airport.icao);
+      const airportsFrom = this.aviationReportedAirportsService.getReportedAirports({
+        icaos: icaosFrom,
+        year: aerYear,
+      });
+      const airportsTo = this.aviationReportedAirportsService.getReportedAirports({ icaos: icaosTo, year: aerYear });
 
-          const invalidCodeDepartureRows = [];
-          const invalidCodeArrivalRows = [];
-          const invalidCountryMatchRows = [];
+      return forkJoin([
+        of(uniqueFuelTypePerAerodromePairValidatorResult),
+        of(fuelTypeValidatorResult),
+        of(fromAndToAerodromesAreDifferentValidatorResult),
+        of(numericValuesValidatorResult),
+        airportsFrom,
+        airportsTo,
+      ]).pipe(
+        map(
+          ([
+            uniqueFuelTypePerAerodromePairValidatorResult,
+            fuelTypeValidatorResult,
+            fromAndToAerodromesAreDifferentValidatorResult,
+            numericValuesValidatorResult,
+            airportsFrom,
+            airportsTo,
+          ]) => {
+            let errors = {};
 
-          data.forEach((entry, index) => {
-            const departureAirport = airportsFrom.find((airport) => airport.icao === entry.airportFrom.icao);
-            const arrivalAirport = airportsTo.find((airport) => airport.icao === entry.airportTo.icao);
-
-            if (departureAirport?.state === arrivalAirport?.state) {
-              invalidCountryMatchRows.push({ rowIndex: index + 1 });
+            if (uniqueFuelTypePerAerodromePairValidatorResult) {
+              errors = { ...errors, ...uniqueFuelTypePerAerodromePairValidatorResult };
             }
 
-            if (!validIcaoCodesFrom.includes(entry.airportFrom.icao)) {
-              invalidCodeDepartureRows.push({ rowIndex: index + 1 });
+            if (fuelTypeValidatorResult) {
+              errors = { ...errors, ...fuelTypeValidatorResult };
             }
 
-            if (!validIcaoCodesTo.includes(entry.airportTo.icao)) {
-              invalidCodeArrivalRows.push({ rowIndex: index + 1 });
+            if (fromAndToAerodromesAreDifferentValidatorResult) {
+              errors = { ...errors, ...fromAndToAerodromesAreDifferentValidatorResult };
             }
-          });
 
-          const errors = {};
+            if (numericValuesValidatorResult) {
+              errors = { ...errors, ...numericValuesValidatorResult };
+            }
 
-          if (invalidCodeDepartureRows.length > 0) {
-            errors['invalidDepartureAerodromeCode'] = {
-              rows: invalidCodeDepartureRows,
-              columns: this.mapFieldsToColumnNames(['airportFrom']),
-              message: messageForCodeDeparture,
-            };
-          }
+            const validIcaoCodesFrom = airportsFrom.map((airport) => airport.icao);
+            const validIcaoCodesTo = airportsTo.map((airport) => airport.icao);
+            const invalidCodeDepartureRows = [];
+            const invalidCodeArrivalRows = [];
+            const invalidCountryMatchRows = [];
 
-          if (invalidCodeArrivalRows.length > 0) {
-            errors['invalidArrivalAerodromeCode'] = {
-              rows: invalidCodeArrivalRows,
-              columns: this.mapFieldsToColumnNames(['airportTo']),
-              message: messageForCodeArrival,
-            };
-          }
+            data.forEach((entry, index) => {
+              const departureAirport = airportsFrom.find((airport) => airport.icao === entry.airportFrom.icao);
+              const arrivalAirport = airportsTo.find((airport) => airport.icao === entry.airportTo.icao);
 
-          if (invalidCountryMatchRows.length > 0) {
-            errors['invalidCountryMatch'] = {
-              rows: invalidCountryMatchRows,
-              columns: this.mapFieldsToColumnNames(['airportFrom', 'airportTo']),
-              message: messageForInvalidIcao,
-            };
-          }
+              if (!validIcaoCodesFrom.includes(entry.airportFrom.icao)) {
+                invalidCodeDepartureRows.push({ rowIndex: index + 1 });
+              }
 
-          return Object.keys(errors).length ? errors : null;
-        }),
+              if (!validIcaoCodesTo.includes(entry.airportTo.icao)) {
+                invalidCodeArrivalRows.push({ rowIndex: index + 1 });
+              }
+
+              if (
+                fromAndToAerodromesAreDifferentValidatorResult == null &&
+                departureAirport?.state === arrivalAirport?.state
+              ) {
+                invalidCountryMatchRows.push({ rowIndex: index + 1 });
+              }
+            });
+
+            if (invalidCodeDepartureRows.length > 0) {
+              errors['invalidDepartureAerodromeCode'] = {
+                rows: invalidCodeDepartureRows,
+                columns: this.mapFieldsToColumnNames(['airportFrom']),
+                message: 'One or more aerodrome of departure ICAO codes are invalid',
+              };
+            }
+
+            if (invalidCodeArrivalRows.length > 0) {
+              errors['invalidArrivalAerodromeCode'] = {
+                rows: invalidCodeArrivalRows,
+                columns: this.mapFieldsToColumnNames(['airportTo']),
+                message: 'One or more aerodrome of arrival ICAO codes are invalid',
+              };
+            }
+
+            if (invalidCountryMatchRows.length > 0) {
+              errors['invalidCountryMatch'] = {
+                rows: invalidCountryMatchRows,
+                columns: this.mapFieldsToColumnNames(['airportFrom', 'airportTo']),
+                message: 'Departure and arrival aerodromes must be in different ICAO states',
+              };
+            }
+
+            return Object.keys(errors).length ? errors : null;
+          },
+        ),
       );
     };
   }

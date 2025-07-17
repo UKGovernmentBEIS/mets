@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, Observable, pluck, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
+import { combineLatest, first, map, Observable, shareReplay, switchMap, tap, withLatestFrom } from 'rxjs';
 
+import { AuthStore } from '@core/store';
 import {
   NotifyAccountOperatorUsersInfo,
+  notifyAccountOperatorUsersInfoReduceCallback,
   toAccountOperatorUser,
-  toNotifyAccountOperatorUsersInfo,
 } from '@shared/components/notify-operator/notify-operator';
 import { UserFullNamePipe } from '@shared/pipes/user-full-name.pipe';
 
@@ -15,7 +16,6 @@ import { GovukSelectOption } from 'govuk-components';
 
 import { OperatorAuthoritiesService, TasksAssignmentService } from 'pmrv-api';
 
-import { AuthStore } from '../../../core/store';
 import { RfiStore } from '../../store/rfi.store';
 import { NOTIFY_FORM, notifyFormFactory } from './notify-form.provider';
 
@@ -45,9 +45,10 @@ export class NotifyComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // TODO dupe code with src\app\shared\components\notify-operator\notify-operator.component.ts. Consider creating abstract component to put all the common code
     const accountOperatorAuthorities$ = this.store.pipe(
       first(),
-      pluck('accountId'),
+      map((state) => state?.accountId),
       switchMap((accountId: number) => this.operatorAuthoritiesService.getAccountOperatorAuthorities(accountId)),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
@@ -67,7 +68,7 @@ export class NotifyComponent implements OnInit {
       map((users) =>
         users
           .filter((user) => user.contactTypes.includes('PRIMARY') || user.contactTypes.includes('SERVICE'))
-          .reduce(toNotifyAccountOperatorUsersInfo, {}),
+          .reduce(notifyAccountOperatorUsersInfoReduceCallback, {}),
       ),
     );
 
@@ -75,7 +76,7 @@ export class NotifyComponent implements OnInit {
       map((users) =>
         users
           .filter((user) => !user.contactTypes.includes('PRIMARY') && !user.contactTypes.includes('SERVICE'))
-          .reduce(toNotifyAccountOperatorUsersInfo, {}),
+          .reduce(notifyAccountOperatorUsersInfoReduceCallback, {}),
       ),
     );
 

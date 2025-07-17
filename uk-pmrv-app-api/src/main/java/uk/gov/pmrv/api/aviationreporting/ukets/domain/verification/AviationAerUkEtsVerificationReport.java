@@ -16,7 +16,7 @@ import uk.gov.pmrv.api.verificationbody.domain.verificationreport.VerificationRe
 public class AviationAerUkEtsVerificationReport extends VerificationReport {
 
     @NotNull
-    private Boolean safExists;
+    private Boolean safExists; //TODO remove me in favor of the source aer's safExists
 
     @JsonUnwrapped
     @Valid

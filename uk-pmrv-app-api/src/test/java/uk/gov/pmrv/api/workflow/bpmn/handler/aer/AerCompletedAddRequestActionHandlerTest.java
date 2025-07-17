@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.ReviewOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.AerCompleteService;
 
 import static org.mockito.Mockito.mock;
@@ -27,16 +28,32 @@ class AerCompletedAddRequestActionHandlerTest {
     private AerCompleteService aerCompleteService;
 
     @Test
-    void execute() throws Exception {
+    void execute_not_skipped() throws Exception {
         final DelegateExecution execution = mock(DelegateExecution.class);
         final String requestId = "requestId";
 
         when(execution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);
+        when(execution.getVariable(BpmnProcessConstants.AER_REVIEW_OUTCOME)).thenReturn(ReviewOutcome.COMPLETED);
 
         // Invoke
         handler.execute(execution);
 
         // Verify
-        verify(aerCompleteService, times(1)).addRequestAction(requestId);
+        verify(aerCompleteService, times(1)).addRequestAction(requestId, false);
+    }
+
+    @Test
+    void execute_skipped() throws Exception {
+        final DelegateExecution execution = mock(DelegateExecution.class);
+        final String requestId = "requestId";
+
+        when(execution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);
+        when(execution.getVariable(BpmnProcessConstants.AER_REVIEW_OUTCOME)).thenReturn(ReviewOutcome.SKIPPED);
+
+        // Invoke
+        handler.execute(execution);
+
+        // Verify
+        verify(aerCompleteService, times(1)).addRequestAction(requestId, true);
     }
 }

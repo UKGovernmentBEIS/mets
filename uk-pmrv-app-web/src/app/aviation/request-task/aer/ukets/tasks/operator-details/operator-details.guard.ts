@@ -4,7 +4,7 @@ import { CanActivateFn, CanDeactivateFn } from '@angular/router';
 import { map, take, tap } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerStoreDelegate } from '@aviation/request-task/store/delegates/aer';
+import { AerUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-ukets';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 
 import { aerQuery } from '../../../shared/aer.selectors';
@@ -23,13 +23,15 @@ export const canActivateOperatorDetails: CanActivateFn = () => {
         store.setPayload({
           ...payload,
           emissionsMonitoringPlan: {
-            operatorDetails: AerStoreDelegate.INITIAL_STATE.operatorDetails,
+            operatorDetails: AerUkEtsStoreDelegate.INITIAL_STATE.operatorDetails,
           },
         } as any);
       }
 
       if (!aer?.operatorDetails) {
-        (store.aerDelegate as AerStoreDelegate).setOperatorDetails(AerStoreDelegate.INITIAL_STATE.operatorDetails);
+        (store.aerDelegate as AerUkEtsStoreDelegate).setOperatorDetails(
+          AerUkEtsStoreDelegate.INITIAL_STATE.operatorDetails,
+        );
       }
 
       formProvider.setFormValue(aer?.operatorDetails);

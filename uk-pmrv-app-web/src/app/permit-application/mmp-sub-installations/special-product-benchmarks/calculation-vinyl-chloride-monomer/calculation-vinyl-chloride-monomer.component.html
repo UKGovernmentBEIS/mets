@@ -1,0 +1,17 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-product-benchmark-form
+    [form]="form"
+    [heading]="'Calculation of historical activity levels for vinyl chloride monomer'"
+    [caption]="productBenchmarkType$ | async | subInstallationType"
+    [dataSourcesField]="'Quantification of heat from hydrogen'"
+    [downloadUrl]="getDownloadUrl()"
+    [dataSourcesHeading]="'Data sources for heat consumption from hydrogen combustion'"
+    [dataSourcesText]="'Add the data sources used for energy flows in line with section 4.5 of Annex VII of the FAR.'"
+    [dataSourcesType]="'45'"
+    (submitForm)="onSubmit()"
+    (addDataSource)="addDataSource()"
+    (removeDataSource)="removeDataSource($event)"
+  >
+  </app-product-benchmark-form>
+  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+</app-permit-task>

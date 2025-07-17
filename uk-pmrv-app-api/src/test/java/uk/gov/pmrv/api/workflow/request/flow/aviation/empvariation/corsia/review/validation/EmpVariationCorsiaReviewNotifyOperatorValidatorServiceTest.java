@@ -13,9 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDeterminationType;
@@ -38,7 +38,7 @@ class EmpVariationCorsiaReviewNotifyOperatorValidatorServiceTest {
 
     @Test
     void validate_is_valid() {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         EmpVariationDetermination determination = EmpVariationDetermination.builder()
             .type(EmpVariationDeterminationType.APPROVED)
             .build();
@@ -57,19 +57,19 @@ class EmpVariationCorsiaReviewNotifyOperatorValidatorServiceTest {
                 .build();
 
         when(reviewDeterminationValidatorService.isValid(requestTaskPayload, determination.getType())).thenReturn(true);
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser)).thenReturn(true);
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser)).thenReturn(true);
 
-        reviewNotifyOperatorValidatorService.validate(requestTask, notifyOperatorRequestTaskActionPayload, pmrvUser);
+        reviewNotifyOperatorValidatorService.validate(requestTask, notifyOperatorRequestTaskActionPayload, appUser);
 
         verify(reviewDeterminationValidatorService,times(1)).validateDeterminationObject(determination);
         verify(reviewDeterminationValidatorService, times(1)).isValid(requestTaskPayload, determination.getType());
-        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, pmrvUser);
+        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, decisionNotification, appUser);
 
     }
 
     @Test
     void validate_invalid() {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         EmpVariationDetermination determination = EmpVariationDetermination.builder()
             .type(EmpVariationDeterminationType.APPROVED)
             .build();
@@ -90,7 +90,7 @@ class EmpVariationCorsiaReviewNotifyOperatorValidatorServiceTest {
         when(reviewDeterminationValidatorService.isValid(requestTaskPayload, determination.getType())).thenReturn(false);
 
         BusinessException be = assertThrows(BusinessException.class,
-            () -> reviewNotifyOperatorValidatorService.validate(requestTask, notifyOperatorRequestTaskActionPayload, pmrvUser));
+            () -> reviewNotifyOperatorValidatorService.validate(requestTask, notifyOperatorRequestTaskActionPayload, appUser));
 
         Assertions.assertEquals(ErrorCode.FORM_VALIDATION, be.getErrorCode());
 

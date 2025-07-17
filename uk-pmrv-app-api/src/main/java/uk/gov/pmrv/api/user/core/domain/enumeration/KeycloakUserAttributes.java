@@ -7,13 +7,12 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum KeycloakUserAttributes {
 
-    USER_STATUS("status"),
     JOB_TITLE("jobTitle"),
     PHONE_NUMBER_CODE("phoneNumberCode"),
     PHONE_NUMBER("phoneNumber"),
     MOBILE_NUMBER_CODE("mobileNumberCode"),
-    MOBILE_NUMBER("mobileNumber"),
-    TERMS_VERSION("termsVersion");
+    MOBILE_NUMBER("mobileNumber")
+    ;
 
     /** The name. */
     private final String name;

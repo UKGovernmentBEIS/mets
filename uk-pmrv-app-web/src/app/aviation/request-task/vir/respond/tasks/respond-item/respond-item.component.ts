@@ -41,8 +41,7 @@ interface ViewModel {
       [documentFiles]="vm.documentFiles"
       [regulatorImprovementResponse]="vm.regulatorImprovementResponse"
       [isEditable]="vm.isEditable"
-      (formSubmit)="onSubmit()"
-    ></app-respond-item-form>
+      (formSubmit)="onSubmit()"></app-respond-item-form>
     <app-return-to-link></app-return-to-link>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

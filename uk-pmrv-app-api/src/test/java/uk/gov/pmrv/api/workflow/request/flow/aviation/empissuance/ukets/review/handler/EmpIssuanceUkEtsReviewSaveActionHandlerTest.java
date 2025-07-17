@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEts;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
@@ -41,14 +41,14 @@ class EmpIssuanceUkEtsReviewSaveActionHandlerTest {
                 .build();
 
         RequestTask requestTask = RequestTask.builder().id(requestTaskId).build();
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         //invoke
         empIssuanceUkEtsReviewSaveActionHandler.process(requestTask.getId(),
             RequestTaskActionType.EMP_ISSUANCE_UKETS_SAVE_APPLICATION_REVIEW,
-            pmrvUser,
+            appUser,
             requestTaskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);

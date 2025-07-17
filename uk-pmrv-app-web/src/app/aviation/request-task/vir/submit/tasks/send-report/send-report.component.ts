@@ -42,7 +42,10 @@ export class SendReportComponent {
     }),
   );
 
-  constructor(private store: RequestTaskStore, private pendingRequestService: PendingRequestService) {}
+  constructor(
+    private store: RequestTaskStore,
+    private pendingRequestService: PendingRequestService,
+  ) {}
 
   onConfirm() {
     this.store.virDelegate

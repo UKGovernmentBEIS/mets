@@ -1,13 +1,12 @@
 package uk.gov.pmrv.api.user.operator.domain;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.user.core.domain.dto.validation.Password;
-
-import jakarta.validation.constraints.NotBlank;
 
 @NoArgsConstructor
 @AllArgsConstructor

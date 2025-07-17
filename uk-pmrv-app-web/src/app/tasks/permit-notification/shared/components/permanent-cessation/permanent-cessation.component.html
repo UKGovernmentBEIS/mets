@@ -1,0 +1,69 @@
+<div class="govuk-!-width-two-thirds">
+  <app-page-heading>Cessation of all regulated activities</app-page-heading>
+
+  <div
+    formControlName="description"
+    govuk-textarea
+    [maxLength]="10000"
+    label="Describe the cessation of regulated activities"
+    labelSize="medium"></div>
+
+  <ng-content></ng-content>
+
+  <div
+    formControlName="startDateOfNonCompliance"
+    govuk-date-input
+    label="Date of cessation"
+    [isRequired]="true"
+    errorMessage="Enter the date of cessation"></div>
+
+  <div
+    govuk-radio
+    formControlName="isTemporary"
+    legend="Do you intend to resume one or more of the regulated activities?"
+    legendSize="medium">
+    <govuk-radio-option label="Yes" [value]="true"></govuk-radio-option>
+    <govuk-radio-option label="No" [value]="false"></govuk-radio-option>
+  </div>
+
+  @if (isTemporary() === true) {
+    <div
+      formControlName="endDateOfNonCompliance"
+      govuk-date-input
+      label="Expected date to resume regulated activities"
+      errorMessage="Enter the date that activities are expected to resume"
+      [isRequired]="true"></div>
+
+    <ng-container formGroupName="technicalCapabilityDetails">
+      <div
+        govuk-radio
+        formControlName="technicalCapability"
+        legend="Technical capability to resume regulated activities"
+        legendSize="medium">
+        <govuk-radio-option
+          label="The installation is technically capable of resuming regulated activities without physical changes being made"
+          value="RESUME_REG_ACTIVITIES_WITHOUT_PHYSICAL_CHANGES">
+          <ng-container govukConditionalContent>
+            <div
+              formControlName="RESUME_REG_ACTIVITIES_WITHOUT_PHYSICAL_CHANGES_details"
+              govuk-textarea
+              [maxLength]="10000"
+              label="Provide details"></div>
+          </ng-container>
+        </govuk-radio-option>
+
+        <govuk-radio-option
+          label="We intend to restore the technical capability required for regulated activities to resume"
+          value="RESTORE_TECHNICAL_CAPABILITY_TO_RESUME_REG_ACTIVITIES">
+          <ng-container govukConditionalContent>
+            <div
+              formControlName="RESTORE_TECHNICAL_CAPABILITY_TO_RESUME_REG_ACTIVITIES_details"
+              govuk-textarea
+              [maxLength]="10000"
+              label="Provide details"></div>
+          </ng-container>
+        </govuk-radio-option>
+      </div>
+    </ng-container>
+  }
+</div>

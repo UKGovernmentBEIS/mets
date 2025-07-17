@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -13,10 +13,10 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActio
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerOutcome;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.domain.AviationAerCorsiaSubmitApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.handler.AviationAerCorsiaSubmitActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.service.RequestAviationAerCorsiaSubmitService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
-import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestTaskActionEmptyPayload;
 
 import java.util.Map;
 
@@ -52,9 +52,9 @@ class AviationAerCorsiaSubmitActionHandlerTest {
                 .request(request)
                 .processTaskId(processId)
                 .build();
-        PmrvUser user = PmrvUser.builder().build();
-        RequestTaskActionEmptyPayload payload = RequestTaskActionEmptyPayload.builder()
-                .payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD).build();
+        AppUser user = AppUser.builder().build();
+        AviationAerCorsiaSubmitApplicationRequestTaskActionPayload payload = AviationAerCorsiaSubmitApplicationRequestTaskActionPayload.builder()
+                .payloadType(RequestTaskActionPayloadType.AVIATION_AER_CORSIA_SUBMIT_APPLICATION_PAYLOAD).build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(task);
 
@@ -66,7 +66,7 @@ class AviationAerCorsiaSubmitActionHandlerTest {
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-        verify(requestAviationAerCorsiaSubmitService, times(1)).sendToRegulator(task, user);
+        verify(requestAviationAerCorsiaSubmitService, times(1)).sendToRegulator(payload, task, user);
         verify(workflowService, times(1)).completeTask(processId,
                 Map.of(BpmnProcessConstants.REQUEST_ID, requestId,
                         BpmnProcessConstants.AVIATION_AER_OUTCOME, AviationAerOutcome.REVIEW_REQUESTED));

@@ -10,7 +10,7 @@ import { GovukComponentsModule } from 'govuk-components';
 import { EmpManagementProceduresCorsia } from 'pmrv-api';
 
 @Component({
-  selector: 'app-management-procedures-summary-template',
+  selector: 'app-corsia-management-procedures-summary-template',
   templateUrl: './management-procedures-summary-template.component.html',
   standalone: true,
   imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref, NgFor, NgForOf],

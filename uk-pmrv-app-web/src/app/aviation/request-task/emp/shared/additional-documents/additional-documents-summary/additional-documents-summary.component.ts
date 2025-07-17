@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, Observable, switchMap, take } from 'rxjs';
 
 import { EmpVariationRegulatorLedDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-variation-regulator-led-decision-group/emp-variation-regulator-led-decision-group.component';
 import { variationSubmitRegulatorLedRequestTaskTypes } from '@aviation/request-task/emp/shared/util/emp.util';
+import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
+import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { FileUpload } from '@shared/file-input/file-upload-event';
@@ -13,8 +14,6 @@ import { SharedModule } from '@shared/shared.module';
 
 import { EmpAdditionalDocuments } from 'pmrv-api';
 
-import { requestTaskQuery, RequestTaskStore } from '../../../../store';
-import { TASK_FORM_PROVIDER } from '../../../../task-form.provider';
 import {
   getSummaryHeaderForTaskType,
   showReviewDecisionComponent,
@@ -24,6 +23,7 @@ import {
 import { empQuery } from '../../emp.selectors';
 import { EmpReviewDecisionGroupComponent } from '../../emp-review-decision-group/emp-review-decision-group.component';
 import { EmpVariationReviewDecisionGroupComponent } from '../../emp-variation-review-decision-group/emp-variation-review-decision-group.component';
+import { AdditionalDocumentsFormProvider } from '../additional-documents-form.provider';
 import { additionalDocsQuery } from '../store/additional-documents.selectors';
 
 interface ViewModel {
@@ -56,7 +56,7 @@ interface ViewModel {
 })
 export class AdditionalDocumentsSummaryComponent {
   private store = inject(RequestTaskStore);
-  private form = inject<FormGroup>(TASK_FORM_PROVIDER);
+  private formProvider = inject<AdditionalDocumentsFormProvider>(TASK_FORM_PROVIDER);
   private pendingRequestService = inject(PendingRequestService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -70,9 +70,9 @@ export class AdditionalDocumentsSummaryComponent {
     map(([type, isEditable, taskStatus, originalEmpContainer]) => ({
       pageHeader: getSummaryHeaderForTaskType(type, 'additionalDocuments'),
       isEditable,
-      hasDocuments: this.form.value.exist,
+      hasDocuments: this.formProvider.getFormValue().exist,
       files:
-        this.form.value?.documents?.map((doc) => {
+        this.formProvider.getFormValue().documents?.map((doc) => {
           return {
             fileName: doc.file.name,
             downloadUrl: `${this.store.empDelegate.baseFileAttachmentDownloadUrl}/${doc.uuid}`,
@@ -110,9 +110,10 @@ export class AdditionalDocumentsSummaryComponent {
   }
 
   private get additionalDocuments(): EmpAdditionalDocuments {
-    const ret: EmpAdditionalDocuments = { exist: this.form.value.exist };
+    const ret: EmpAdditionalDocuments = { exist: this.formProvider.getFormValue().exist };
+
     if (ret.exist) {
-      ret.documents = this.form.value.documents.map((doc: FileUpload) => doc.uuid);
+      ret.documents = this.formProvider.getFormValue().documents.map((doc: FileUpload) => doc.uuid);
     }
 
     return ret;

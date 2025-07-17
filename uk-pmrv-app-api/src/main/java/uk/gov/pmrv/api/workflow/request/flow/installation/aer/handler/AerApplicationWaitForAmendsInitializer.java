@@ -5,7 +5,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
-import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
@@ -16,7 +15,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestM
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.mapper.AerMapper;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -25,7 +23,7 @@ public class AerApplicationWaitForAmendsInitializer implements InitializeRequest
 
     private static final AerMapper aerMapper = Mappers.getMapper(AerMapper.class);
     private final InstallationOperatorDetailsQueryService installationOperatorDetailsQueryService;
-    private final RequestVerificationService<AerVerificationReport> requestVerificationService;
+    private final RequestVerificationService requestVerificationService;
 
     @Override
     public RequestTaskPayload initializePayload(Request request) {
@@ -34,13 +32,10 @@ public class AerApplicationWaitForAmendsInitializer implements InitializeRequest
                 request.getAccountId());
         AerRequestPayload aerRequestPayload = (AerRequestPayload) request.getPayload();
         AerRequestMetadata aerRequestMetadata = (AerRequestMetadata) request.getMetadata();
-
-        // Set Verification Body details if verification is performed
-        AerVerificationReport verificationReport = aerRequestPayload.getVerificationReport();
-        Optional.ofNullable(verificationReport).ifPresent(report ->
-            verificationReport.setVerificationBodyDetails(requestVerificationService
-                .getVerificationBodyDetails(verificationReport, request.getVerificationBodyId()))
-        );
+        
+        // refresh Verification Body details
+ 		requestVerificationService.refreshVerificationReportVBDetails(aerRequestPayload.getVerificationReport(),
+ 				request.getVerificationBodyId());
 
         return aerMapper.toAerApplicationReviewRequestTaskPayload(aerRequestPayload,
             installationOperatorDetails,

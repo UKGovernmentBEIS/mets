@@ -8,7 +8,9 @@ import { getHeadingMap } from '../../../core/payment.map';
 
 @Component({
   selector: 'app-return-link',
-  template: ` <a govukLink [routerLink]="link"> Return to: {{ linkName }} </a> `,
+  template: `
+    <a govukLink [routerLink]="link">Return to: {{ linkName }}</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReturnLinkComponent implements OnInit {

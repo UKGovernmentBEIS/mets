@@ -2,7 +2,6 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domai
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

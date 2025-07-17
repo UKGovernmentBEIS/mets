@@ -1,6 +1,6 @@
-# UK PMRV API application
+# UK METS API application
 
-The UK PMRV API is a Java(SpringBoot) application.
+The UK METS API is a Java(SpringBoot) application.
 
 ## Structure
 
@@ -14,10 +14,14 @@ or
 
     $ ./_runme.sh
 
-You can then access the final jar file that contains both the API and the
-UI code from here :
+You can then access the final jar file that contains the API here :
 
     uk-pmrv-app-api\target
+
+For the build to succeed uk-pmrv-swagger-coverage-maven-plugin must have been built prior to building the UK METS API application 
+
+### NOTE: Some mandatory properties need to be set in the local environment in order for deployment to succeed: 
+https://pmo.trasys.be/confluence/display/PMRV/Initialize+environment
 
 ## REST API Documentation
 
@@ -26,100 +30,7 @@ The API is documented using Swagger 3.
 After running the application, the documentation is available here:
 
 - http://localhost:8080/api/swagger-ui/index.html (UI)
-- http://localhost:8080/api/v2/api-docs (JSON)
-
-## Development
-
-## Securing with Keycloak
-
-Prior to running the application for the first time you need to create a client in <span>Keycloak</span>.
-
-The following steps shows how to create the client required:
-
-- Open the <span>Keycloak</span> admin console
-- Make sure you have selected the correct realm from the upper left corner.
-- Select `Clients` from the menu
-- Click `Create`
-- Add the following values:
-- Client ID: You choose (for example `uk-ets-registry-api`)
-- Client Protocol: `openid-connect`
-- Click `Save`
-
-Once saved you need to change the `Access Type` to `bearer-only` and click save.
-Next you need to add the roles (e.g. user,admin,representative) in the realm.
-
-- Open the <span>Keycloak</span> admin console
-- Open the client you have created in the previous step
-- Move to the `Roles` tab.
-- Click the `Add Role` button in the right.
-- Add the `Role Name` & click `Save`.
-
-Last you should assign this role (e.g. `user`) in the users you want to give authorization to access the REST endpoint.
-
-- Click the `Users` link in the `Manage` section
-- Click on th `ID` of the user you want to authorize and then click on the `Role Mappings` tab.
-- In the `Realm Roles` pane the newly added role must appear in the `Available Roles`.
-- Select the role and press the `Add selected>>` button.
-
-**NOTE:**You may run the application with **security disabled** using the Spring 'no-keycloak' profile.
-
-## Enable Authentication through Swagger UI
-
-Due to keycloak same-origin security policy CORS, you have to configure the web origin of incoming authentication requests through 8080 port.
-
-The following steps are needed:
-
-- Open the <span>Keycloak</span> admin console
-- Make sure you have selected the correct realm from the upper left corner (`Uk-pmrv`).
-- Select `Clients` from the menu
-- Choose relevant Client ID that Swagger uses for authentication (e.g. `admin-cli`)
-- On `Settings` tab add to `Web Origins` field the value `http://localhost:8080`
-- Click `Save`
-
-### Code quality
-
-In order to enforce code quality the following plugins are used when building:
-
-- Checkstyle using google_checks.xml (you can use this configuration
-  from inside your IDE)
-- PMD with the default configuration
-- SpotBugs with the default configuration
-
-If an issue is found then the build is failed.
-
-#### Some tips on code quality
-
-- The REST controllers need to be declared in SpotBugs, in file `spotbugs-security-exclude.xml`, as per the example below:
-
-```
-<Match>
-    <Class name="AccountController" />
-    <Bug pattern="SPRING_ENDPOINT,PREDICTABLE_RANDOM" />
-</Match>
-```
-
-- Automatically generated classes need to be excluded from PMD checks, in `pom.xml`. For example, the QueryDSL generates classes which do not respect several PMD rules:
-
-```
-<plugin>
-<groupId>org.apache.maven.plugins</groupId>
-...
-<configuration>
-	...
-	<excludeRoots>
-		<excludeRoot>target/generated-sources/java</excludeRoot>
-	</excludeRoots>
-</configuration>
-</plugin>
-```
-
-### How to disable Keycloak when developing back-end REST APIs
-
-- Disable the following property in `application.properties`.
-
-```
-keycloak.enabled = false
-```
+- http://localhost:8080/api/v3/api-docs (JSON)
 
 ### Actuator
 
@@ -135,45 +46,41 @@ network.
 
 ### Feature flags
 
-Feature flags provide the capability to deploy unfinished features
-in production. Feature flags can be specified in `application.properties`:
+Feature flag feature-flag.disabledWorkflows for disabling workflows has been implemented and can take as a value comma-separated workflows(RequestType) that need to be disabled. (Only user initiated workflows are taken under consideration)
 
-```
-togglz.features.FOO.enabled=true
-togglz.features.BAR.enabled=false
-```
+### Logging
 
-You can query the current status of the feature flags by accessing actuator:
+By default, logging to json format is configured through log4j2-json.xml but default console logging can be chosen by setting LOG4J2_CONFIG_FILE env var to log4j2-local.xml.
 
-```
-http://localhost:8080/actuator/togglz
-```
+Unauthenticated API calls are not logged(RestLoggingFilter is applied after security filters in order to be able to inject user related info in authenticated API calls) so explicit logging should be added for these calls. 
 
-You can inject `FeatureManager` bean in your components and use code similar to
-following snippet:
+## UK METS Camunda admin
 
-```
-@Controller
-public class MyClass {
-  private FeatureManager manager;
+### REST API
 
-  public MyClass(FeatureManager manager) {
-      this.manager = manager;
-  }
+Camunda rest is used to manage camunda processes. It is unauthenticated and can be accessed at /api/admin/camunda-api.
 
-  @RequestMapping("/")
-  public ResponseEntity<?> index() {
-      if (manager.isActive(HELLO_WORLD)) {
-           ...
-      }
-  }
-}
-```
+Documentation can be found at
+- https://docs.camunda.org/manual/latest/reference/rest/
+
+### WEB APP
+
+Camunda webapp consists of 3 different web apps:
+- cockpit: an administration interface for processes and decisions
+- tasklist: provides an interface to process user tasks
+- admin: is used to administer users, groups and their authorizations
+
+It is authenticated through keycloak's master realm and can be accessed at /api/admin/camunda-web.
+
+Documentation can be found at
+- https://camunda.com/platform-7/cockpit/
+- https://camunda.com/platform/tasklist/
+- https://github.com/camunda/camunda-bpm-platform/tree/master/webapps
 
 ### How to execute an AER workflow manually
 
 ```
-curl --location --request POST 'http://localhost:8080/api/camunda-api/process-definition/key/PROCESS_AER_INITIATE/start' \
+curl --location --request POST 'http://localhost:8080/api/admin/camunda-api/process-definition/key/PROCESS_AER_INITIATE/start' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "variables": {

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.note.NoteDto;
+import uk.gov.netz.api.common.note.NoteDto;
 
 @Data
 @NoArgsConstructor

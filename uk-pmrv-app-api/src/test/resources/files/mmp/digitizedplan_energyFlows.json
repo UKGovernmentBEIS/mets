@@ -1,0 +1,56 @@
+{
+  "fuelInputFlows": {
+    "fuelInputDataSources": [
+      {
+        "dataSourceNumber": "1",
+        "fuelInput": "METHOD_MONITORING_PLAN",
+        "energyContent": "CALCULATION_METHOD_MONITORING_PLAN"
+      }
+    ],
+    "methodologyAppliedDescription": "description",
+    "hierarchicalOrder": {
+      "followed": true
+    }
+  },
+  "measurableHeatFlows": {
+    "measurableHeatFlowsRelevant": true,
+    "measurableHeatFlowsDataSources": [
+      {
+        "dataSourceNumber": "1",
+        "quantification": "LEGAL_METROLOGICAL_CONTROL_READING",
+        "net": "MEASUREMENTS"
+      }
+    ],
+    "methodologyAppliedDescription": "description",
+    "hierarchicalOrder": {
+      "followed": true
+    }
+  },
+  "wasteGasFlows": {
+    "wasteGasFlowsRelevant": true,
+    "wasteGasFlowsDataSources": [
+      {
+        "dataSourceNumber": "1",
+        "quantification": "INDIRECT_DETERMINATION",
+        "energyContent": "LABORATORY_ANALYSES_SECTION_61"
+      }
+    ],
+    "methodologyAppliedDescription": "description",
+    "hierarchicalOrder": {
+      "followed": true
+    }
+  },
+  "electricityFlows": {
+    "electricityProduced": true,
+    "electricityFlowsDataSources": [
+      {
+        "dataSourceNumber": "1",
+        "quantification": "OTHER_METHODS"
+      }
+    ],
+    "methodologyAppliedDescription": "description",
+    "hierarchicalOrder": {
+      "followed": true
+    }
+  }
+}

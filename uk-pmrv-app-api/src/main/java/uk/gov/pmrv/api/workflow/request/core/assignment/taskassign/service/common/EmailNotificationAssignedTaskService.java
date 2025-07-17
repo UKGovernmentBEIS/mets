@@ -1,29 +1,30 @@
 package uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.common;
 
-import static java.util.Map.entry;
-
-import java.util.Collections;
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.common.config.WebAppProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
+
+import java.util.Collections;
+import java.util.Map;
+
+import static java.util.Map.entry;
 
 @Log4j2
 @Service
 @AllArgsConstructor
 public class EmailNotificationAssignedTaskService {
 
-    private final NotificationEmailService notificationEmailService;
+    private final NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
     private final UserAuthService userAuthService;
-    private final AppProperties appProperties;
+    private final WebAppProperties webAppProperties;
 
     /**
      * Sends an email notification to the specified recipient.
@@ -40,8 +41,8 @@ public class EmailNotificationAssignedTaskService {
         UserInfoDTO userInfoDTO = userAuthService.getUserByUserId(userId);
 
         notificationEmailService.notifyRecipient(
-            EmailData.builder()
-                .notificationTemplateData(constructEmailTemplateData(appProperties.getWeb().getUrl()))
+            EmailData.<EmailNotificationTemplateData>builder()
+                .notificationTemplateData(constructEmailTemplateData(webAppProperties.getUrl()))
                 .attachments(Collections.emptyMap())
                 .build(),
             userInfoDTO.getEmail()
@@ -50,10 +51,10 @@ public class EmailNotificationAssignedTaskService {
 
     private EmailNotificationTemplateData constructEmailTemplateData(String homePage) {
         return EmailNotificationTemplateData.builder()
-            .templateName(NotificationTemplateName.EMAIL_ASSIGNED_TASK)
+            .templateName(PmrvNotificationTemplateName.EMAIL_ASSIGNED_TASK.getName())
             .templateParams(
                 Map.ofEntries(
-                    entry(EmailNotificationTemplateConstants.HOME_URL, homePage)))
+                    entry(PmrvEmailNotificationTemplateConstants.HOME_URL, homePage)))
             .build();
     }
 }

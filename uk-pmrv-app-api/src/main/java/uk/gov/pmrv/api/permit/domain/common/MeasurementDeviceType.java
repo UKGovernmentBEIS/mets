@@ -10,6 +10,7 @@ public enum MeasurementDeviceType {
     BELLOWS_METER("Bellows meter"),
     BELT_WEIGHER("Belt weigher"),
     CORIOLIS_METER("Coriolis meter"),
+    CRANE_WEIGHT("Crane weight"),
     ELECTRONIC_VOLUME_CONVERSION_INSTRUMENT("Electronic volume conversion instrument (EVCI)"),
     GAS_CHROMATOGRAPH("Gas chromatograph"),
     LEVEL_GAUGE("Level gauge"),

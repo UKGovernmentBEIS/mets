@@ -17,7 +17,7 @@ class EmissionTradingSchemeToEntityDocumentTemplateTypeMapperTest {
     	assertThat(cut.map(EmissionTradingScheme.UK_ETS_INSTALLATIONS)).isEqualTo(DocumentTemplateType.PERMIT);
     	assertThat(cut.map(EmissionTradingScheme.UK_ETS_AVIATION)).isEqualTo(DocumentTemplateType.EMP_UKETS);
     	assertThat(cut.map(EmissionTradingScheme.CORSIA)).isEqualTo(DocumentTemplateType.EMP_CORSIA);
-    	assertThat(cut.map(EmissionTradingScheme.EU_ETS_INSTALLATIONS)).isEqualTo(null);
+    	assertThat(cut.map(EmissionTradingScheme.EU_ETS_INSTALLATIONS)).isNull();
     }
     
 }

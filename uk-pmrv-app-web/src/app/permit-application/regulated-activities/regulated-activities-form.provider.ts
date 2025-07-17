@@ -20,9 +20,18 @@ export const regulatedActivitiesFormProvider = {
   deps: [UntypedFormBuilder, PermitApplicationStore],
   useFactory: (fb: UntypedFormBuilder, store: PermitApplicationStore<PermitApplicationState>) => {
     const state = store.getState();
-    const group = fb.group(controlsConfig(mapToForm(state.permit.regulatedActivities)), {
-      validators: atLeastOneValidator(),
-    });
+    const isWasteSelected = store.permitType === 'WASTE';
+    const group = fb.group(
+      controlsConfig(
+        mapToForm(state.permit.regulatedActivities, state?.features?.['co2-venting.permit-workflows.enabled']),
+        state.features?.wastePermitEnabled,
+        isWasteSelected,
+      ),
+      {
+        validators: atLeastOneValidator(),
+        updateOn: 'change',
+      },
+    );
 
     if (!state.isEditable) {
       group.disable();
@@ -32,7 +41,11 @@ export const regulatedActivitiesFormProvider = {
   },
 };
 
-function controlsConfig(form: Partial<RegulatedActivitiesForm>): GroupBuilderConfig<RegulatedActivitiesForm> {
+function controlsConfig(
+  form: Partial<RegulatedActivitiesForm>,
+  wastePermitEnabled?: boolean,
+  isWasteSelected?: boolean,
+): GroupBuilderConfig<RegulatedActivitiesForm> {
   return {
     COMBUSTION_GROUP: [form?.COMBUSTION_GROUP ?? null],
     REFINING_GROUP: [form?.REFINING_GROUP ?? null],
@@ -50,7 +63,6 @@ function controlsConfig(form: Partial<RegulatedActivitiesForm>): GroupBuilderCon
       form?.COMBUSTION_CAPACITY_UNIT ?? null,
       [GovukValidators.required('Enter the capacity unit for combustion')],
     ],
-
     MINERAL_OIL_REFINING_CAPACITY: [
       form?.MINERAL_OIL_REFINING_CAPACITY ?? null,
       [GovukValidators.required('Enter the capacity for mineral oil refining'), GovukValidators.positiveNumber()],
@@ -348,6 +360,24 @@ function controlsConfig(form: Partial<RegulatedActivitiesForm>): GroupBuilderCon
       form?.STORAGE_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE_CAPACITY_UNIT ?? null,
       [GovukValidators.required('Enter the capacity unit for transport of storage gases')],
     ],
+    ...(wastePermitEnabled
+      ? {
+          WASTE_GROUP: [
+            form?.WASTE_GROUP ?? null,
+            isWasteSelected
+              ? [GovukValidators.required('You must select waste to apply for a voluntary waste monitoring plan')]
+              : [],
+          ],
+          WASTE_CAPACITY: [
+            form?.WASTE_CAPACITY ?? null,
+            [GovukValidators.required('Enter the capacity for waste'), GovukValidators.positiveNumber()],
+          ],
+          WASTE_CAPACITY_UNIT: [
+            form?.WASTE_CAPACITY_UNIT ?? null,
+            [GovukValidators.required('Enter the capacity unit for waste')],
+          ],
+        }
+      : {}),
   };
 }
 
@@ -361,25 +391,38 @@ function atLeastOneValidator(): ValidatorFn {
       : { atLeastOne: 'Select all the regulated activities carried out the installation' };
 }
 
-function mapToForm(regulatedActivities: RegulatedActivity[]): Partial<RegulatedActivitiesForm> {
+function mapToForm(regulatedActivities: RegulatedActivity[], upstreamFlag?: boolean): Partial<RegulatedActivitiesForm> {
   return regulatedActivities?.reduce(
     (form: Partial<RegulatedActivitiesForm>, activity) => ({
       ...form,
       ...(activity.capacity ? { [`${activity.type}_CAPACITY`]: activity.capacity } : null),
       ...(activity.capacityUnit ? { [`${activity.type}_CAPACITY_UNIT`]: activity.capacityUnit } : null),
-      [findGroupByType(activity.type)]: [...(form?.[findGroupByType(activity.type)] ?? []), ...[activity.type]],
+      [findGroupByType(activity.type, upstreamFlag)]: [
+        ...(form?.[findGroupByType(activity.type, upstreamFlag)] ?? []),
+        ...[activity.type],
+      ],
     }),
     {},
   );
 }
 
-function findTypesByGroupName(groupName: keyof RegulatedActivitiesFormGroup): RegulatedActivity['type'][] {
-  return formGroupOptions[groupName];
+function findTypesByGroupName(
+  groupName: keyof RegulatedActivitiesFormGroup,
+  upstreamFlag?: boolean,
+): RegulatedActivity['type'][] {
+  return (
+    upstreamFlag
+      ? { ...formGroupOptions, COMBUSTION_GROUP: [...formGroupOptions.COMBUSTION_GROUP, 'UPSTREAM_GHG_REMOVAL'] }
+      : formGroupOptions
+  )[groupName] as any;
 }
 
-function findGroupByType(type: RegulatedActivity['type']): keyof RegulatedActivitiesFormGroup {
-  return Object.keys(formGroupOptions).find(
-    (key: keyof RegulatedActivitiesFormGroup): key is keyof RegulatedActivitiesFormGroup =>
-      findTypesByGroupName(key).includes(type),
+function findGroupByType(type: RegulatedActivity['type'], upstreamFlag?: boolean): keyof RegulatedActivitiesFormGroup {
+  return Object.keys(
+    upstreamFlag
+      ? { ...formGroupOptions, COMBUSTION_GROUP: [...formGroupOptions.COMBUSTION_GROUP, 'UPSTREAM_GHG_REMOVAL'] }
+      : formGroupOptions,
+  ).find((key: keyof RegulatedActivitiesFormGroup): key is keyof RegulatedActivitiesFormGroup =>
+    findTypesByGroupName(key, upstreamFlag).includes(type),
   );
 }

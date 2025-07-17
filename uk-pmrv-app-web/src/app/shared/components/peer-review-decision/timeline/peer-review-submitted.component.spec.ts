@@ -1,9 +1,8 @@
 import { Location } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
-import { ActivatedRouteStub, mockClass } from '../../../../../testing';
+import { ActivatedRouteStub, BasePage, mockClass } from '../../../../../testing';
 import { PermitIssuanceStore } from '../../../../permit-issuance/store/permit-issuance.store';
 import { SharedModule } from '../../../shared.module';
 import { StoreContextResolver } from '../../../store-resolver/store-context.resolver';
@@ -14,14 +13,20 @@ describe('PeerReviewSubmittedComponent', () => {
   let fixture: ComponentFixture<PeerReviewSubmittedComponent>;
   let store: PermitIssuanceStore;
   let location: Location;
+  let page: Page;
 
   const storeResolver = mockClass(StoreContextResolver);
-
   const route = new ActivatedRouteStub({ taskId: '237' });
+
+  class Page extends BasePage<PeerReviewSubmittedComponent> {
+    get pageContents() {
+      return this.queryAll<HTMLDListElement>('h1, dl dt, dl dd').map((item) => item.textContent.trim());
+    }
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         { provide: StoreContextResolver, useValue: storeResolver },
@@ -48,6 +53,7 @@ describe('PeerReviewSubmittedComponent', () => {
 
     fixture = TestBed.createComponent(PeerReviewSubmittedComponent);
     hostComponent = fixture.componentInstance;
+    page = new Page(fixture);
     fixture.detectChanges();
   });
 
@@ -55,5 +61,15 @@ describe('PeerReviewSubmittedComponent', () => {
     expect(hostComponent).toBeTruthy();
   });
 
-  //TODO add real tests
+  it('should show all html elements', () => {
+    expect(page.pageContents).toEqual([
+      'Peer review approval',
+      'Decision',
+      'Agreed with the determination',
+      'Supporting notes',
+      'I strongly agree',
+      'Peer reviewer',
+      'John Bolt',
+    ]);
+  });
 });

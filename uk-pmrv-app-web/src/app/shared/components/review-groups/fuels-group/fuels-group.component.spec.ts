@@ -21,7 +21,9 @@ describe('FuelsGroupComponent', () => {
   let page: Page;
 
   @Component({
-    template: ` <app-fuels-group [aerData]="aerData"></app-fuels-group> `,
+    template: `
+      <app-fuels-group [aerData]="aerData"></app-fuels-group>
+    `,
   })
   class TestComponent {
     aerData = {

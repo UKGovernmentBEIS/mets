@@ -8,9 +8,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.service.ApprovedAviationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 
 import java.util.Optional;
 

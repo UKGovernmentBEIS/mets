@@ -36,10 +36,7 @@ export const canActivateDataGaps: CanActivateFn = (route: ActivatedRouteSnapshot
         } as any);
       }
 
-      form.patchValue({ ...payload.emissionsMonitoringPlan.dataGaps });
-      const dataGaps = payload.emissionsMonitoringPlan.dataGaps;
-      if (dataGaps && !dataGaps.secondarySourcesDataGapsExist)
-        form.controls.secondarySourcesDataGapsConditions.disable();
+      form.patchValue(payload.emissionsMonitoringPlan.dataGaps);
     }),
     map(() => {
       // Requirements depict that we should show the form steps in different order depending on monitoringApproachType

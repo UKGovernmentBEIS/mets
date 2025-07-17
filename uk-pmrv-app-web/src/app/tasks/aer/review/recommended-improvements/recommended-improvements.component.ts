@@ -11,11 +11,10 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
   selector: 'app-recommended-improvements',
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Recommended improvements">
-      <app-recommended-improvements-group [recommendedImprovements]="recommendedImprovements$ | async">
-      </app-recommended-improvements-group>
+      <app-recommended-improvements-group
+        [recommendedImprovements]="recommendedImprovements$ | async"></app-recommended-improvements-group>
       <app-verification-review-group-decision
-        (notification)="notification = $event"
-      ></app-verification-review-group-decision>
+        (notification)="notification = $event"></app-verification-review-group-decision>
     </app-aer-task-review>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,5 +25,8 @@ export class RecommendedImprovementsComponent {
     map((payload) => payload.verificationReport.recommendedImprovements),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

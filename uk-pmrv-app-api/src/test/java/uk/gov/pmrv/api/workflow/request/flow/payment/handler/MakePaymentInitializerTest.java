@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.payment.domain.dto.BankAccountDetailsDTO;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.PaymentMethodType;
 import uk.gov.pmrv.api.workflow.payment.service.BankAccountDetailsService;

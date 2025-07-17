@@ -8,7 +8,8 @@
           <ng-template let-column="column" let-row="row" let-index="index">
             <ng-container [ngSwitch]="column.field">
               <ng-container *ngSwitchCase="'category'">
-                <a govukLink [routerLink]="['../../measurement/category-tier', index]">
+                <ng-container *ngIf="showOriginal; else currentCategory">
+                  <!-- prettier-ignore -->
                   <ng-container
                     *ngIf="
                       row?.emissionPointCategory?.emissionPoint
@@ -16,13 +17,26 @@
                         | async as emissionPoint;
                       else noEmissionPoint
                     "
+                    >{{ emissionPoint | tierEmissionPointName: row.emissionPointCategory }}</ng-container
                   >
-                    {{ row | emissionPointCategoryName | async }}
-                  </ng-container>
-                  <ng-template #noEmissionPoint>
-                    UNDEFINED: {{ row?.emissionPointCategory?.categoryType | categoryTypeName }}
-                  </ng-template>
-                </a>
+                </ng-container>
+                <ng-template #currentCategory>
+                  <a govukLink [routerLink]="['../../measurement/category-tier', index]">
+                    <!-- prettier-ignore -->
+                    <ng-container
+                      *ngIf="
+                        row?.emissionPointCategory?.emissionPoint
+                          | findEmissionPoint: !showOriginal
+                          | async as emissionPoint;
+                        else noEmissionPoint
+                      "
+                      >{{ emissionPoint | tierEmissionPointName: row.emissionPointCategory }}</ng-container
+                    >
+                  </a>
+                </ng-template>
+                <ng-template #noEmissionPoint>
+                  UNDEFINED: {{ row?.emissionPointCategory?.categoryType | categoryTypeName }}
+                </ng-template>
               </ng-container>
               <ng-container *ngSwitchCase="'emissions'">
                 {{ row?.emissionPointCategory?.annualEmittedCO2Tonnes | number }} t
@@ -30,13 +44,22 @@
               <ng-container *ngSwitchCase="'measuredEmissions'">
                 {{ row?.measuredEmissions?.tier | appliedTier }}
               </ng-container>
+              <ng-container *ngSwitchCase="'biomassFraction'">
+                {{ row?.biomassFraction?.tier | appliedTier }}
+              </ng-container>
               <ng-container *ngSwitchCase="'status'">
-                <govuk-tag
-                  [color]="'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | tagColor"
-                  class="app-task-list__tag"
-                >
-                  {{ 'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
-                </govuk-tag>
+                <ng-container *ngIf="!showOriginal; else originalStatus">
+                  <govuk-tag
+                    [color]="'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | tagColor"
+                    class="app-task-list__tag">
+                    {{ 'MEASUREMENT_CO2_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
+                  </govuk-tag>
+                </ng-container>
+                <ng-template #originalStatus>
+                  <govuk-tag [color]="'complete' | tagColor" class="app-task-list__tag">
+                    {{ 'complete' | i18nSelect: statusMap }}
+                  </govuk-tag>
+                </ng-template>
               </ng-container>
             </ng-container>
           </ng-template>
@@ -44,8 +67,7 @@
         <a
           *ngIf="(store.isEditable$ | async) === true"
           govukLink
-          [routerLink]="['../../measurement/category-tier', (emissionPointCategoryAppliedTiers$ | async)?.length]"
-        >
+          [routerLink]="['../../measurement/category-tier', (emissionPointCategoryAppliedTiers$ | async)?.length]">
           Add an emission point category
         </a>
       </ng-container>
@@ -56,8 +78,7 @@
           app-task-item
           link="../../measurement/category-tier/0"
           linkText="Add an emission point category"
-          [status]="emissionPointCategoriesStatus$ | async"
-        ></li>
+          [status]="emissionPointCategoriesStatus$ | async"></li>
       </ng-template>
     </div>
   </ul>
@@ -69,82 +90,70 @@
       app-task-item
       link="../../measurement/description/summary"
       linkText="Approach description"
-      [status]="'MEASUREMENT_CO2_Description' | taskStatus | async"
-    >
+      [status]="'MEASUREMENT_CO2_Description' | taskStatus | async">
       <app-measurement-approach-description-summary-template
         [showOriginal]="showOriginal"
-        [hasBottomBorder]="false"
-      ></app-measurement-approach-description-summary-template>
+        [hasBottomBorder]="false"></app-measurement-approach-description-summary-template>
     </li>
     <li
       app-task-item
       link="../../measurement/emissions/summary"
       linkText="Determination of emissions by measurement"
-      [status]="'MEASUREMENT_CO2_Emission' | taskStatus | async"
-    >
+      [status]="'MEASUREMENT_CO2_Emission' | taskStatus | async">
       <app-procedure-form-summary
         [details]="
           'monitoringApproaches.MEASUREMENT_CO2.emissionDetermination' | taskProcedureForm: !showOriginal | async
         "
         cssClass="govuk-!-margin-bottom-0"
-        [hasBottomBorder]="false"
-      ></app-procedure-form-summary>
+        [hasBottomBorder]="false"></app-procedure-form-summary>
     </li>
     <li
       app-task-item
       link="../../measurement/reference/summary"
       linkText="Determination of reference period"
-      [status]="'MEASUREMENT_CO2_Reference' | taskStatus | async"
-    >
+      [status]="'MEASUREMENT_CO2_Reference' | taskStatus | async">
       <app-procedure-form-summary
         [details]="
           'monitoringApproaches.MEASUREMENT_CO2.referencePeriodDetermination' | taskProcedureForm: !showOriginal | async
         "
         cssClass="govuk-!-margin-bottom-0"
-        [hasBottomBorder]="false"
-      ></app-procedure-form-summary>
+        [hasBottomBorder]="false"></app-procedure-form-summary>
     </li>
     <li
       app-task-item
       link="../../measurement/gasflow/summary"
       linkText="Calculation of gas flow"
-      [status]="'MEASUREMENT_CO2_Gasflow' | taskStatus | async"
-    >
+      [status]="'MEASUREMENT_CO2_Gasflow' | taskStatus | async">
       <app-measurement-optional-summary-template
         [procedureOptionalForm]="
           'monitoringApproaches.MEASUREMENT_CO2.gasFlowCalculation' | taskProcedureOptionalForm: !showOriginal | async
         "
         [taskKey]="'monitoringApproaches.MEASUREMENT_CO2.gasFlowCalculation'"
-        [hasBottomBorder]="false"
-      ></app-measurement-optional-summary-template>
+        [hasBottomBorder]="false"></app-measurement-optional-summary-template>
     </li>
     <li
       app-task-item
       link="../../measurement/biomass/summary"
       linkText="Biomass emissions"
-      [status]="'MEASUREMENT_CO2_Biomass' | taskStatus | async"
-    >
+      [status]="'MEASUREMENT_CO2_Biomass' | taskStatus | async">
       <app-measurement-optional-summary-template
         [procedureOptionalForm]="
           'monitoringApproaches.MEASUREMENT_CO2.biomassEmissions' | taskProcedureOptionalForm: !showOriginal | async
         "
         [taskKey]="'monitoringApproaches.MEASUREMENT_CO2.biomassEmissions'"
-        [hasBottomBorder]="false"
-      ></app-measurement-optional-summary-template>
+        [hasBottomBorder]="false"></app-measurement-optional-summary-template>
     </li>
     <li
       app-task-item
       link="../../measurement/corroborating/summary"
       linkText="Corroborating calculations"
-      [status]="'MEASUREMENT_CO2_Corroborating' | taskStatus | async"
-    >
+      [status]="'MEASUREMENT_CO2_Corroborating' | taskStatus | async">
       <app-procedure-form-summary
         [details]="
           'monitoringApproaches.MEASUREMENT_CO2.corroboratingCalculations' | taskProcedureForm: !showOriginal | async
         "
         cssClass="govuk-!-margin-bottom-0"
-        [hasBottomBorder]="false"
-      ></app-procedure-form-summary>
+        [hasBottomBorder]="false"></app-procedure-form-summary>
     </li>
   </ul>
 </ng-template>
@@ -152,8 +161,7 @@
 <app-permit-task-review
   [breadcrumb]="true"
   [notification]="notification"
-  [heading]="'MEASUREMENT_CO2' | monitoringApproachDescription"
->
+  [heading]="'MEASUREMENT_CO2' | monitoringApproachDescription">
   <app-site-emissions></app-site-emissions>
 
   <app-highlight-diff *ngIf="(showDiff$ | async) === true">
@@ -162,25 +170,24 @@
       *ngTemplateOutlet="
         contentTpl;
         context: { $implicit: true, appliedTiers: originalEmissionPointCategoryAppliedTiers$ | async }
-      "
-    ></ng-container>
+      "></ng-container>
     <ng-container
       slot="current"
       *ngTemplateOutlet="
         contentTpl;
         context: { $implicit: false, appliedTiers: emissionPointCategoryAppliedTiers$ | async }
-      "
-    ></ng-container>
+      "></ng-container>
   </app-highlight-diff>
 
   <ng-container
     *ngIf="(showDiff$ | async) === false"
     [ngTemplateOutlet]="contentTpl"
-    [ngTemplateOutletContext]="{ $implicit: false, appliedTiers: emissionPointCategoryAppliedTiers$ | async }"
-  ></ng-container>
+    [ngTemplateOutletContext]="{
+      $implicit: false,
+      appliedTiers: emissionPointCategoryAppliedTiers$ | async,
+    }"></ng-container>
 
   <app-review-group-decision-container
     [groupKey]="groupKey$ | async"
-    (notification)="notification = $event"
-  ></app-review-group-decision-container>
+    (notification)="notification = $event"></app-review-group-decision-container>
 </app-permit-task-review>

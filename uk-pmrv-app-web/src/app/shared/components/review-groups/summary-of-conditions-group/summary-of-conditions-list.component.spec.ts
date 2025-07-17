@@ -17,8 +17,7 @@ describe('SummaryOfConditionsListComponent', () => {
       <app-summary-of-conditions-list
         [isEditable]="isEditable"
         [list]="list"
-        baseChangeLink=".."
-      ></app-summary-of-conditions-list>
+        baseChangeLink=".."></app-summary-of-conditions-list>
     `,
   })
   class TestComponent {

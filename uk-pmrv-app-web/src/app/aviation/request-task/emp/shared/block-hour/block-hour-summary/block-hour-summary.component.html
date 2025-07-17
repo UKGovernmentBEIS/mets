@@ -1,6 +1,10 @@
 <ng-template #contentTpl let-showOriginal>
   <ng-container *ngIf="vm$ | async as vm">
-    <app-block-hour-summary-template [data]="showOriginal ? vm.originalData : vm.data" [isEditable]="vm.isEditable">
+    <app-block-hour-summary-template
+      [data]="showOriginal ? vm.originalData : vm.data"
+      [isEditable]="vm.isEditable"
+      [isCorsia]="isCorsia$ | async"
+    >
     </app-block-hour-summary-template>
   </ng-container>
 </ng-template>

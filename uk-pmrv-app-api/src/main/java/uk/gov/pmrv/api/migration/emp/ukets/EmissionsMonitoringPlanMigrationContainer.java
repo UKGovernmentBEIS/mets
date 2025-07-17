@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
-import uk.gov.pmrv.api.files.attachments.domain.FileAttachment;
+import uk.gov.netz.api.files.attachments.domain.FileAttachment;
 
 import java.util.ArrayList;
 import java.util.List;

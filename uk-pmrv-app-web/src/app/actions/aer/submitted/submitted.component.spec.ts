@@ -6,7 +6,7 @@ import { BasePage } from '@testing';
 import { CommonActionsStore } from '../../store/common-actions.store';
 import { AerModule } from '../aer.module';
 import { SubmittedComponent } from './submitted.component';
-import { mockState } from './testing/mock-aer-submitted';
+import { mockStateReviewed } from './testing/mock-aer-submitted';
 
 describe('SubmittedComponent', () => {
   let page: Page;
@@ -28,7 +28,7 @@ describe('SubmittedComponent', () => {
 
   beforeEach(() => {
     store = TestBed.inject(CommonActionsStore);
-    store.setState(mockState);
+    store.setState(mockStateReviewed);
 
     fixture = TestBed.createComponent(SubmittedComponent);
     component = fixture.componentInstance;
@@ -60,6 +60,18 @@ describe('SubmittedComponent', () => {
       'Abbreviations and definitions',
       'Additional documents and information',
       'Confidentiality statement',
+      'Verifier details',
+      'Opinion statement',
+      'Compliance with ETS rules',
+      'Compliance with monitoring and reporting principles',
+      'Overall decision',
+      'Uncorrected misstatements',
+      'Uncorrected non-conformities',
+      'Uncorrected non-compliances',
+      'Recommended improvements',
+      'Methodologies to close data gaps',
+      'Materiality level and reference documents',
+      'Summary of conditions, changes, clarifications and variations',
     ]);
   });
 });

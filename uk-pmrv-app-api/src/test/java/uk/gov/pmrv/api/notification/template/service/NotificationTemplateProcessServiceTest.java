@@ -6,10 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
 import uk.gov.pmrv.api.notification.template.domain.NotificationTemplate;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.notification.template.repository.NotificationTemplateRepository;
 
 import java.util.Map;
@@ -17,7 +17,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.EMAIL_CONFIRMATION;
 
 @ExtendWith(MockitoExtension.class)
 class NotificationTemplateProcessServiceTest {
@@ -37,7 +36,7 @@ class NotificationTemplateProcessServiceTest {
 
     @Test
     void processMessageNotificationTemplate() {
-        final NotificationTemplateName templateName = EMAIL_CONFIRMATION;
+        final PmrvNotificationTemplateName templateName = PmrvNotificationTemplateName.EMAIL_CONFIRMATION;
         final String subject = "template subject";
         final String text = "template text";
         NotificationTemplate notificationTemplate = buildMockNotificationTemplate(templateName, null);
@@ -47,14 +46,14 @@ class NotificationTemplateProcessServiceTest {
             .thenReturn(Optional.of(notificationTemplate));
 
         NotificationContent actualNotificationContent =
-            service.processMessageNotificationTemplate(notificationTemplate.getName(), DATA_MODEL_PARAMS);
+            service.processMessageNotificationTemplate(notificationTemplate.getName().getName(), DATA_MODEL_PARAMS);
 
         assertEquals(expectedNotificationContent, actualNotificationContent);
     }
 
     @Test
     void processEmailNotificationTemplate_with_CA() {
-        final NotificationTemplateName templateName = EMAIL_CONFIRMATION;
+        final PmrvNotificationTemplateName templateName = PmrvNotificationTemplateName.EMAIL_CONFIRMATION;
         CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         AccountType accountType = AccountType.INSTALLATION;
         final String subject = "template subject";
@@ -66,12 +65,12 @@ class NotificationTemplateProcessServiceTest {
             .thenReturn(Optional.of(notificationTemplate));
 
         NotificationContent actualNotificationContent =
-            service.processEmailNotificationTemplate(notificationTemplate.getName(), ca, accountType, DATA_MODEL_PARAMS);
+            service.processEmailNotificationTemplate(notificationTemplate.getName().getName(), ca, accountType, DATA_MODEL_PARAMS);
 
         assertEquals(expectedNotificationContent, actualNotificationContent);
     }
 
-    private NotificationTemplate buildMockNotificationTemplate(NotificationTemplateName templateName, CompetentAuthorityEnum competentAuthority) {
+    private NotificationTemplate buildMockNotificationTemplate(PmrvNotificationTemplateName templateName, CompetentAuthorityEnum competentAuthority) {
         NotificationTemplate notificationTemplate = new NotificationTemplate();
         notificationTemplate.setName(templateName);
         notificationTemplate.setCompetentAuthority(competentAuthority);

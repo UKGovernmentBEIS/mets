@@ -1,0 +1,38 @@
+<ng-container *ngIf="vm() as vm">
+  <app-alr-task-review
+    returnToLink="../../"
+    [breadcrumb]="true"
+    heading="Check your answers"
+    caption="Overall decision"
+    *ngIf="!isSubmitted(); else confirmationContent">
+    <dl govuk-summary-list [hasBorders]="true">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Changes required from operator</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ vm.changesRequired }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+
+    <div *ngIf="vm.isEditable" class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+    </div>
+  </app-alr-task-review>
+
+  <ng-template #confirmationContent>
+    <app-confirmation-shared
+      title="Returned to operator for changes"
+      [whatHappensNextTemplate]="whatHappensNextTemplate"></app-confirmation-shared>
+
+    <ng-template #whatHappensNextTemplate>
+      <p class="govuk-body">The report has been returned to the operator so they can make the necessary changes.</p>
+
+      <h3 class="govuk-heading-m">What happens next</h3>
+
+      <p class="govuk-body">The operator will return the application to you when the changes have been made.</p>
+    </ng-template>
+  </ng-template>
+</ng-container>

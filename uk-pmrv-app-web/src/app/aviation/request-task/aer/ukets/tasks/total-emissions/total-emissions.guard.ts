@@ -6,7 +6,7 @@ import { map, take, tap } from 'rxjs';
 import { TotalEmissionsFormProvider } from '@aviation/request-task/aer/ukets/tasks/total-emissions/total-emissions-form.provider';
 
 import { RequestTaskStore } from '../../../../store';
-import { AerStoreDelegate } from '../../../../store/delegates';
+import { AerUkEtsStoreDelegate } from '../../../../store/delegates';
 import { TASK_FORM_PROVIDER } from '../../../../task-form.provider';
 import { aerQuery } from '../../../shared/aer.selectors';
 
@@ -24,13 +24,15 @@ export const canActivateTotalEmissions: CanActivateFn = () => {
           ...payload,
           aer: {
             aviationAerTotalEmissionsConfidentiality:
-              AerStoreDelegate.INITIAL_STATE.aviationAerTotalEmissionsConfidentiality,
+              AerUkEtsStoreDelegate.INITIAL_STATE.aviationAerTotalEmissionsConfidentiality,
           },
         } as any);
       }
 
       if (!aer?.aviationAerTotalEmissionsConfidentiality) {
-        store.aerDelegate.setTotalEmissions(AerStoreDelegate.INITIAL_STATE.aviationAerTotalEmissionsConfidentiality);
+        store.aerDelegate.setTotalEmissions(
+          AerUkEtsStoreDelegate.INITIAL_STATE.aviationAerTotalEmissionsConfidentiality,
+        );
       }
 
       formProvider.setFormValue(aer.aviationAerTotalEmissionsConfidentiality);

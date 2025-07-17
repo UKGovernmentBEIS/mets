@@ -9,8 +9,9 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 @Component({
   selector: 'app-source-stream-delete',
   template: `
-    <app-source-stream-delete-template (delete)="onDelete()" [sourceStream]="sourceStream$ | async">
-    </app-source-stream-delete-template>
+    <app-source-stream-delete-template
+      (delete)="onDelete()"
+      [sourceStream]="sourceStream$ | async"></app-source-stream-delete-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

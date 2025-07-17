@@ -1,6 +1,7 @@
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 import {
+  CessationNotification,
   NonSignificantChange,
   OtherFactor,
   PermitNotificationApplicationSubmitRequestTaskPayload,
@@ -15,6 +16,7 @@ import { endDateConditionalValidator, endDateValidator } from '../../core/permit
 import { PERMIT_NOTIFICATION_TASK_FORM } from '../../core/permit-notification-task-form.token';
 import { NonSignificantChangeComponent } from '../../shared/components/non-significant-change/non-significant-change.component';
 import { OtherFactorComponent } from '../../shared/components/other-factor/other-factor.component';
+import { PermanentCessationComponent } from '../../shared/components/permanent-cessation/permanent-cessation.component';
 import { TemporaryChangeComponent } from '../../shared/components/temporary-change/temporary-change.component';
 import { TemporaryFactorComponent } from '../../shared/components/temporary-factor/temporary-factor.component';
 import { TemporarySuspensionComponent } from '../../shared/components/temporary-suspension/temporary-suspension.component';
@@ -50,8 +52,10 @@ export const descriptionFormProvider = {
             payload.permitNotification.type === 'NON_SIGNIFICANT_CHANGE'
               ? []
               : payload.permitNotification.type === 'OTHER_FACTOR'
-              ? [endDateConditionalValidator()]
-              : [endDateValidator()],
+                ? [endDateConditionalValidator()]
+                : payload.permitNotification.type === 'CESSATION'
+                  ? []
+                  : [endDateValidator()],
         },
       ),
     });
@@ -59,7 +63,13 @@ export const descriptionFormProvider = {
 };
 
 function createFormByType(
-  value: TemporaryFactor | TemporaryChange | TemporarySuspension | NonSignificantChange | OtherFactor,
+  value:
+    | TemporaryFactor
+    | TemporaryChange
+    | TemporarySuspension
+    | CessationNotification
+    | NonSignificantChange
+    | OtherFactor,
   disabled: boolean,
 ): any {
   switch (value.type) {
@@ -69,6 +79,8 @@ function createFormByType(
       return TemporaryChangeComponent.controlsFactory(value as TemporaryChange, disabled);
     case 'TEMPORARY_SUSPENSION':
       return TemporarySuspensionComponent.controlsFactory(value as TemporarySuspension, disabled);
+    case 'CESSATION':
+      return PermanentCessationComponent.controlsFactory(value as CessationNotification, disabled);
     case 'NON_SIGNIFICANT_CHANGE':
       return NonSignificantChangeComponent.controlsFactory(value as NonSignificantChange, disabled);
     case 'OTHER_FACTOR':

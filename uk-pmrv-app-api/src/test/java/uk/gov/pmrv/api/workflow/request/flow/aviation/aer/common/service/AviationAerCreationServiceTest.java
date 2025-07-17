@@ -11,8 +11,8 @@ import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.service.AviationAerCorsiaCreationRequestParamsBuilderService;
@@ -165,7 +165,7 @@ class AviationAerCreationServiceTest {
         BusinessException businessException = assertThrows(BusinessException.class,
             () -> aviationAerCreationService.createRequestAviationAer(accountId));
 
-        assertEquals(ErrorCode.AVIATION_AER_CREATION_NOT_ALLOWED_INVALID_ACCOUNT_STATUS, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.AVIATION_AER_CREATION_NOT_ALLOWED_INVALID_ACCOUNT_STATUS, businessException.getErrorCode());
 
         verify(aviationAerCreationValidatorService, times(1)).validateAccountStatus(accountId);
         verifyNoMoreInteractions(aviationAerCreationValidatorService);
@@ -185,7 +185,7 @@ class AviationAerCreationServiceTest {
         BusinessException businessException = assertThrows(BusinessException.class,
             () -> aviationAerCreationService.createRequestAviationAer(accountId));
 
-        assertEquals(ErrorCode.AVIATION_AER_ALREADY_EXISTS_FOR_REPORTING_YEAR, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.AVIATION_AER_ALREADY_EXISTS_FOR_REPORTING_YEAR, businessException.getErrorCode());
 
         verify(aviationAerCreationValidatorService, times(1)).validateAccountStatus(accountId);
         verify(aviationAerCreationValidatorService, times(1)).validateReportingYear(eq(accountId), any());

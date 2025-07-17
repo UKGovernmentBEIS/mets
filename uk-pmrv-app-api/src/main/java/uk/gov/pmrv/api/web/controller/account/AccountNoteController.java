@@ -8,13 +8,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,18 +26,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.note.NoteRequest;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileUuidDTO;
+import uk.gov.netz.api.files.notes.service.FileNoteService;
+import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.token.FileToken;
 import uk.gov.pmrv.api.account.domain.dto.AccountNoteDto;
 import uk.gov.pmrv.api.account.domain.dto.AccountNoteRequest;
 import uk.gov.pmrv.api.account.domain.dto.AccountNoteResponse;
 import uk.gov.pmrv.api.account.service.AccountNoteService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.note.NoteRequest;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileUuidDTO;
-import uk.gov.pmrv.api.files.notes.service.FileNoteService;
-import uk.gov.pmrv.api.token.FileToken;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
 import uk.gov.pmrv.api.web.util.FileDtoMapper;
 
 import java.io.IOException;
@@ -54,6 +54,7 @@ import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
 @RequestMapping(path = "/v1.0/account-notes")
 @Tag(name = "Account Notes")
 @RequiredArgsConstructor
+@Validated
 public class AccountNoteController {
 
     private final AccountNoteService accountNoteService;
@@ -101,7 +102,7 @@ public class AccountNoteController {
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#accountNoteRequest.accountId")
-    public ResponseEntity<Void> createAccountNote(@Parameter(hidden = true) PmrvUser authUser,
+    public ResponseEntity<Void> createAccountNote(@Parameter(hidden = true) AppUser authUser,
                                                   @RequestBody
                                                   @Valid
                                                   @Parameter(description = "The account note request", required = true)
@@ -119,13 +120,12 @@ public class AccountNoteController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#accountId")
     public ResponseEntity<FileUuidDTO> uploadAccountNoteFile(
-            @Parameter(hidden = true) PmrvUser authUser,
+            @Parameter(hidden = true) AppUser authUser,
             @PathVariable("accountId") @Parameter(description = "The account id") Long accountId,
-            @RequestPart("file") @Valid @NotBlank @Parameter(description = "The note file", required = true)
-                    MultipartFile file) throws IOException {
+            @RequestPart("file") @Parameter(description = "The note file", required = true) MultipartFile file) throws IOException {
 
         final FileDTO fileDTO = fileDtoMapper.toFileDTO(file);
-        final FileUuidDTO fileUuidDTO = fileNoteService.uploadAccountFile(authUser, fileDTO, accountId);
+        final FileUuidDTO fileUuidDTO = fileNoteService.uploadAccountFile(authUser.getUserId(), fileDTO, accountId);
 
         return new ResponseEntity<>(fileUuidDTO, HttpStatus.OK);
     }
@@ -139,7 +139,7 @@ public class AccountNoteController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#id")
     public ResponseEntity<Void> updateAccountNote(
-            @Parameter(hidden = true) PmrvUser authUser,
+            @Parameter(hidden = true) AppUser authUser,
             @PathVariable("id") @Parameter(description = "The note id") Long id,
             @RequestBody @Valid @Parameter(description = "The note request", required = true) NoteRequest noteRequest) {
 

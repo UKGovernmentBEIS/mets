@@ -19,8 +19,7 @@ describe('VerifyEmissionsReductionClaimGroupComponent', () => {
       <app-verify-emissions-reduction-claim-group
         [isEditable]="isEditable"
         [emissionsReductionClaimVerification]="emissionsReductionClaimVerification"
-        [queryParams]="queryParams"
-      ></app-verify-emissions-reduction-claim-group>
+        [queryParams]="queryParams"></app-verify-emissions-reduction-claim-group>
     `,
   })
   class TestComponent {

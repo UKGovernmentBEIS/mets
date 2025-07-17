@@ -4,7 +4,7 @@ package uk.gov.pmrv.api.verificationbody.event;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.verifier.service.VerifierAdminCreationEvent;
+import uk.gov.netz.api.authorization.verifier.service.VerifierAdminCreationEvent;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyManagementService;
 
 @Component

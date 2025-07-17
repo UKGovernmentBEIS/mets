@@ -1,14 +1,12 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationData;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskActionPayload;
 

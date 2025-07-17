@@ -111,7 +111,8 @@ describe('SendReportRegulatorComponent', () => {
       requestTaskActionType: 'AVIATION_AER_CORSIA_SUBMIT_APPLICATION',
       requestTaskId: 1,
       requestTaskActionPayload: {
-        payloadType: 'EMPTY_PAYLOAD',
+        payloadType: 'AVIATION_AER_CORSIA_SUBMIT_APPLICATION_PAYLOAD',
+        verificationSectionsCompleted: undefined,
       },
     });
   });

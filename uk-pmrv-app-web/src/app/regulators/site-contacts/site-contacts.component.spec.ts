@@ -75,7 +75,6 @@ describe('SiteContactsComponent', () => {
         firstName: 'Bob',
         lastName: 'Squarepants',
         jobTitle: 'Swimmer',
-        locked: false,
       },
       {
         userId: 'bsdfg3',
@@ -84,7 +83,6 @@ describe('SiteContactsComponent', () => {
         firstName: 'Patrick',
         lastName: 'Star',
         jobTitle: 'Funny guy',
-        locked: false,
       },
       {
         userId: 'bGFDFG',
@@ -93,7 +91,6 @@ describe('SiteContactsComponent', () => {
         firstName: 'Tes',
         lastName: 'Locke',
         jobTitle: 'Officer',
-        locked: false,
       },
     ],
     editable: true,

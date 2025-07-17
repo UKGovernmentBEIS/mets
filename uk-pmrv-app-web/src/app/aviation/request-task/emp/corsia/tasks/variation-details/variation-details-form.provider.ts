@@ -32,7 +32,10 @@ export class VariationDetailsFormProvider
 {
   private _form: FormGroup<VariationDetailsFormModel>;
 
-  constructor(private fb: FormBuilder, private store: RequestTaskStore) {}
+  constructor(
+    private fb: FormBuilder,
+    private store: RequestTaskStore,
+  ) {}
 
   private destroy$ = new Subject<void>();
 
@@ -75,7 +78,7 @@ export class VariationDetailsFormProvider
         variationDetails?.changes?.filter((change) => Object.keys(nonMaterialChanges).includes(change)) ?? [],
       reason: variationDetails?.reason ?? null,
       reasonRegulatorLed: isReasonWizardRequired(this.store.getState().requestTaskItem.requestTask.type)
-        ? reasonRegulatorLed ?? null
+        ? (reasonRegulatorLed ?? null)
         : null,
     });
   }

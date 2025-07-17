@@ -8,7 +8,9 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-approach-return-link',
-  template: ` <a govukLink [routerLink]="returnToUrl$ | async">Return to: {{ parentTitle }}</a> `,
+  template: `
+    <a govukLink [routerLink]="returnToUrl$ | async">Return to: {{ parentTitle }}</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApproachReturnLinkComponent {
@@ -36,19 +38,30 @@ export class ApproachReturnLinkComponent {
         state.requestTaskType === 'PERMIT_ISSUANCE_WAIT_FOR_PEER_REVIEW' ||
         state.requestTaskType === 'PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW' ||
         state.requestTaskType === 'PERMIT_ISSUANCE_WAIT_FOR_AMENDS' ||
-        state.requestActionType === 'PERMIT_ISSUANCE_APPLICATION_GRANTED'
+        state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_PEER_REVIEW' ||
+        state.requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW' ||
+        state.requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_WAIT_FOR_PEER_REVIEW' ||
+        state.requestTaskType === 'PERMIT_TRANSFER_B_APPLICATION_REVIEW' ||
+        state.requestTaskType === 'PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW' ||
+        state.requestTaskType === 'PERMIT_TRANSFER_B_WAIT_FOR_AMENDS' ||
+        state.requestTaskType === 'PERMIT_TRANSFER_B_WAIT_FOR_PEER_REVIEW' ||
+        state.requestActionType === 'PERMIT_ISSUANCE_APPLICATION_GRANTED' ||
+        state.requestActionType === 'PERMIT_TRANSFER_B_APPLICATION_GRANTED'
       ) {
         return state.userViewRole === 'REGULATOR'
           ? isIncludedInUrl || param.get('index')
             ? `../../../review/${this.reviewGroupUrl}`
             : `../../review/${this.reviewGroupUrl}`
           : isIncludedInUrl || param.get('index')
-          ? '../..'
-          : '..';
+            ? '../..'
+            : '..';
       }
       return isIncludedInUrl || param.get('index') ? '../..' : '..';
     }),
   );
 
-  constructor(private readonly route: ActivatedRoute, readonly store: PermitApplicationStore<PermitApplicationState>) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+  ) {}
 }

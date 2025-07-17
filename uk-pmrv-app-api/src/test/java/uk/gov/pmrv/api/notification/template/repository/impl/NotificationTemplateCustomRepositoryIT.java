@@ -8,16 +8,16 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.notification.template.domain.NotificationTemplate;
 import uk.gov.pmrv.api.notification.template.domain.dto.NotificationTemplateSearchCriteria;
 import uk.gov.pmrv.api.notification.template.domain.dto.TemplateInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.TemplateSearchResults;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,26 +43,26 @@ class NotificationTemplateCustomRepositoryIT extends AbstractContainerBaseTest {
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.ENGLAND;
         AccountType accountType = AccountType.INSTALLATION;
 
-        NotificationTemplate notificationTemplate1 = createNotificationTemplate(NotificationTemplateName.INVITATION_TO_REGULATOR_ACCOUNT,
-            competentAuthority, permitWorkflow, RoleType.OPERATOR, accountType, true);
-        NotificationTemplate notificationTemplate2 = createNotificationTemplate(NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
-            competentAuthority, permitWorkflow, RoleType.OPERATOR, accountType, true);
-        NotificationTemplate notificationTemplate3 = createNotificationTemplate(NotificationTemplateName.USER_ACCOUNT_CREATED,
-            competentAuthority, accountOpeningWorkflow, RoleType.OPERATOR, accountType, true);
-        createNotificationTemplate(NotificationTemplateName.USER_ACCOUNT_ACTIVATION, competentAuthority, accountOpeningWorkflow,
-            RoleType.REGULATOR, accountType, true);
-        createNotificationTemplate(NotificationTemplateName.USER_ACCOUNT_ACTIVATION, CompetentAuthorityEnum.WALES, accountOpeningWorkflow,
-            RoleType.OPERATOR, accountType, true);
-        createNotificationTemplate(NotificationTemplateName.CHANGE_2FA, null, null, null, accountType, false);
-        createNotificationTemplate(NotificationTemplateName.INVITATION_TO_VERIFIER_ACCOUNT, competentAuthority, permitWorkflow,
-            RoleType.OPERATOR, AccountType.AVIATION, true);
+        NotificationTemplate notificationTemplate1 = createNotificationTemplate(PmrvNotificationTemplateName.INVITATION_TO_REGULATOR_ACCOUNT,
+            competentAuthority, permitWorkflow, RoleTypeConstants.OPERATOR, accountType, true);
+        NotificationTemplate notificationTemplate2 = createNotificationTemplate(PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
+            competentAuthority, permitWorkflow, RoleTypeConstants.OPERATOR, accountType, true);
+        NotificationTemplate notificationTemplate3 = createNotificationTemplate(PmrvNotificationTemplateName.USER_ACCOUNT_CREATED,
+            competentAuthority, accountOpeningWorkflow, RoleTypeConstants.OPERATOR, accountType, true);
+        createNotificationTemplate(PmrvNotificationTemplateName.USER_ACCOUNT_ACTIVATION, competentAuthority, accountOpeningWorkflow,
+            RoleTypeConstants.REGULATOR, accountType, true);
+        createNotificationTemplate(PmrvNotificationTemplateName.USER_ACCOUNT_ACTIVATION, CompetentAuthorityEnum.WALES, accountOpeningWorkflow,
+            RoleTypeConstants.OPERATOR, accountType, true);
+        createNotificationTemplate(PmrvNotificationTemplateName.CHANGE_2FA, null, null, null, accountType, false);
+        createNotificationTemplate(PmrvNotificationTemplateName.INVITATION_TO_VERIFIER_ACCOUNT, competentAuthority, permitWorkflow,
+            RoleTypeConstants.OPERATOR, AccountType.AVIATION, true);
 
         flushAndClear();
 
         NotificationTemplateSearchCriteria searchCriteria = NotificationTemplateSearchCriteria.builder()
             .competentAuthority(competentAuthority)
             .accountType(accountType)
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .term("account")
             .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
             .build();
@@ -88,24 +88,24 @@ class NotificationTemplateCustomRepositoryIT extends AbstractContainerBaseTest {
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.ENGLAND;
         AccountType accountType = AccountType.INSTALLATION;
 
-        createNotificationTemplate(NotificationTemplateName.INVITATION_TO_EMITTER_CONTACT, competentAuthority, permitWorkflow,
-            RoleType.OPERATOR, accountType, true);
-        NotificationTemplate notificationTemplate2 = createNotificationTemplate(NotificationTemplateName.USER_ACCOUNT_CREATED,
-            competentAuthority, accountOpeningWorkflow, RoleType.REGULATOR, accountType, true);
-        NotificationTemplate notificationTemplate3 = createNotificationTemplate(NotificationTemplateName.USER_ACCOUNT_ACTIVATION,
-            competentAuthority, accountOpeningWorkflow, RoleType.REGULATOR, accountType, true);
-        createNotificationTemplate(NotificationTemplateName.USER_ACCOUNT_ACTIVATION, CompetentAuthorityEnum.WALES, accountOpeningWorkflow,
-            RoleType.OPERATOR, accountType, true);
-        createNotificationTemplate(NotificationTemplateName.CHANGE_2FA, null, null, null, accountType ,false);
-        createNotificationTemplate(NotificationTemplateName.USER_ACCOUNT_ACTIVATION, competentAuthority, accountOpeningWorkflow,
-            RoleType.REGULATOR, AccountType.AVIATION, true);
+        createNotificationTemplate(PmrvNotificationTemplateName.INVITATION_TO_EMITTER_CONTACT, competentAuthority, permitWorkflow,
+            RoleTypeConstants.OPERATOR, accountType, true);
+        NotificationTemplate notificationTemplate2 = createNotificationTemplate(PmrvNotificationTemplateName.USER_ACCOUNT_CREATED,
+            competentAuthority, accountOpeningWorkflow, RoleTypeConstants.REGULATOR, accountType, true);
+        NotificationTemplate notificationTemplate3 = createNotificationTemplate(PmrvNotificationTemplateName.USER_ACCOUNT_ACTIVATION,
+            competentAuthority, accountOpeningWorkflow, RoleTypeConstants.REGULATOR, accountType, true);
+        createNotificationTemplate(PmrvNotificationTemplateName.USER_ACCOUNT_ACTIVATION, CompetentAuthorityEnum.WALES, accountOpeningWorkflow,
+            RoleTypeConstants.OPERATOR, accountType, true);
+        createNotificationTemplate(PmrvNotificationTemplateName.CHANGE_2FA, null, null, null, accountType ,false);
+        createNotificationTemplate(PmrvNotificationTemplateName.USER_ACCOUNT_ACTIVATION, competentAuthority, accountOpeningWorkflow,
+            RoleTypeConstants.REGULATOR, AccountType.AVIATION, true);
 
         flushAndClear();
 
         NotificationTemplateSearchCriteria searchCriteria = NotificationTemplateSearchCriteria.builder()
             .competentAuthority(competentAuthority)
             .accountType(accountType)
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
             .build();
 
@@ -124,8 +124,8 @@ class NotificationTemplateCustomRepositoryIT extends AbstractContainerBaseTest {
     }
 
 
-    private NotificationTemplate createNotificationTemplate(NotificationTemplateName name, CompetentAuthorityEnum ca, String workflow,
-                                                            RoleType roleType, AccountType accountType, boolean managed) {
+    private NotificationTemplate createNotificationTemplate(PmrvNotificationTemplateName name, CompetentAuthorityEnum ca, String workflow,
+                                                            String roleType, AccountType accountType, boolean managed) {
         NotificationTemplate notificationTemplate = NotificationTemplate.builder()
             .name(name)
             .subject("subject")

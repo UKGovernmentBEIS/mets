@@ -74,7 +74,7 @@ export const initialState: InstallationAccountApplicationState = {
       title: 'Add the installation operator details',
       linkText: 'Identity and contact details of the operator',
       status: 'not started',
-      link: 'legal-entity',
+      link: 'legal-entity-op',
     },
     {
       type: ApplicationSectionType.installation,

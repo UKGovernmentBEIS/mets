@@ -11,7 +11,7 @@
 
   <!-- Total emissions -->
   <app-opinion-statement-total-emissions-summary-template
-    [totalEmissionsProvided]="totalEmissionsProvided"
+    [totalEmissionsProvided]="totalEmissionsProvided$ | async"
     [emissionsCorrect]="vm.opinionStatement.emissionsCorrect"
     [manuallyProvidedEmissions]="vm.opinionStatement.manuallyProvidedEmissions"
     [isEditable]="vm.isEditable"
@@ -19,11 +19,13 @@
   ></app-opinion-statement-total-emissions-summary-template>
 
   <!-- Monitoring plan -->
-  <app-aer-monitoring-plan-versions [planVersions]="[]"></app-aer-monitoring-plan-versions>
+  <app-aer-monitoring-plan-versions
+    [planVersions]="aerMonitoringPlanVersions$ | async"
+  ></app-aer-monitoring-plan-versions>
 
   <!-- Changes not covered in EMP -->
   <app-opinion-statement-changes-not-covered-in-emp-summary-template
-    [aerMonitoringPlanChanges]="aerMonitoringPlanChanges"
+    [aerMonitoringPlanChanges]="aerMonitoringPlanChanges$ | async"
     [additionalChangesNotCovered]="vm.opinionStatement.additionalChangesNotCovered"
     [additionalChangesNotCoveredDetails]="vm.opinionStatement.additionalChangesNotCoveredDetails"
     [isEditable]="vm.isEditable"

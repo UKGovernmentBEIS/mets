@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0xeklly" targetNamespace="http://bpmn.io/schema/bpmn">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_0xeklly" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.25.0">
   <bpmn:process id="PROCESS_AER" name="AER Process" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0ionfvw</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0cfrfxe</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:exclusiveGateway id="Gateway_1kh4rb4" name="what is the review outcome?" default="Flow_1dc0moe">
       <bpmn:incoming>Flow_105bz0h</bpmn:incoming>
@@ -256,10 +259,32 @@
     <bpmn:sequenceFlow id="Flow_14lq1yb" sourceRef="Activity_1kgbg55" targetRef="Activity_1ihtsb4" />
     <bpmn:sequenceFlow id="Flow_0oco79j" sourceRef="Activity_0ahurmt" targetRef="Activity_1ihtsb4" />
     <bpmn:sequenceFlow id="Flow_105bz0h" sourceRef="Activity_1ihtsb4" targetRef="Gateway_1kh4rb4" />
+    <bpmn:serviceTask id="Activity_0y2ie97" name="Update Workflow status to NOT_REQUIRED" camunda:delegateExpression="#{requestUpdateStatusHandler}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="requestStatus">NOT_REQUIRED</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1j0ytxm</bpmn:incoming>
+      <bpmn:outgoing>Flow_1j79x0f</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_01qpygb">
+      <bpmn:incoming>Flow_1j79x0f</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_1s02bmi" />
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1j79x0f" sourceRef="Activity_0y2ie97" targetRef="Event_01qpygb" />
+    <bpmn:intermediateCatchEvent id="Event_04jqxg6">
+      <bpmn:incoming>Flow_0cfrfxe</bpmn:incoming>
+      <bpmn:outgoing>Flow_1j0ytxm</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1e8imp5" messageRef="Message_1elrll5" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0cfrfxe" sourceRef="StartEvent_1" targetRef="Event_04jqxg6" />
+    <bpmn:sequenceFlow id="Flow_1j0ytxm" sourceRef="Event_04jqxg6" targetRef="Activity_0y2ie97" />
   </bpmn:process>
   <bpmn:message id="Message_1wx2gz2" name="timerPaused" />
   <bpmn:message id="Message_1hyjtr1" name="timerExtended" />
   <bpmn:message id="Message_10p46ne" name="rfiCancelled" />
+  <bpmn:message id="Message_1elrll5" name="aerMarkNotRequired" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_AER">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
@@ -588,6 +613,16 @@
         <di:waypoint x="1986" y="380" />
         <di:waypoint x="2015" y="380" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0y2ie97_di" bpmnElement="Activity_0y2ie97">
+        <dc:Bounds x="410" y="750" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_01qpygb_di" bpmnElement="Event_01qpygb">
+        <dc:Bounds x="762" y="772" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_030kr2s_di" bpmnElement="Event_04jqxg6">
+        <dc:Bounds x="152" y="772" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1usi6ex_di" bpmnElement="Flow_1usi6ex">
         <di:waypoint x="3052" y="385" />
         <di:waypoint x="3112" y="385" />
@@ -627,6 +662,18 @@
       <bpmndi:BPMNEdge id="Flow_105bz0h_di" bpmnElement="Flow_105bz0h">
         <di:waypoint x="2480" y="385" />
         <di:waypoint x="2820" y="385" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1j79x0f_di" bpmnElement="Flow_1j79x0f">
+        <di:waypoint x="510" y="790" />
+        <di:waypoint x="762" y="790" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0cfrfxe_di" bpmnElement="Flow_0cfrfxe">
+        <di:waypoint x="170" y="403" />
+        <di:waypoint x="170" y="772" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1j0ytxm_di" bpmnElement="Flow_1j0ytxm">
+        <di:waypoint x="188" y="790" />
+        <di:waypoint x="410" y="790" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

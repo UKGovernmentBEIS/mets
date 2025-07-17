@@ -11,14 +11,12 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
       [notification]="notification"
       [breadcrumb]="true"
       reviewGroupTitle="Uncertainty analysis"
-      reviewGroupUrl="uncertainty-analysis"
-    >
+      reviewGroupUrl="uncertainty-analysis">
       <app-page-heading caption="Monitoring approaches">Uncertainty analysis</app-page-heading>
       <app-uncertainty-analysis-summary-details></app-uncertainty-analysis-summary-details>
       <app-list-return-link
         reviewGroupTitle="Uncertainty analysis"
-        reviewGroupUrl="uncertainty-analysis"
-      ></app-list-return-link>
+        reviewGroupUrl="uncertainty-analysis"></app-list-return-link>
     </app-permit-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,5 +24,8 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
 export class SummaryComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
 
-  constructor(private readonly router: Router, readonly store: PermitApplicationStore<PermitApplicationState>) {}
+  constructor(
+    private readonly router: Router,
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+  ) {}
 }

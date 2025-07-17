@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -151,9 +151,7 @@ export class OperatorAuthoritiesService {
     }
 
     return this.httpClient.delete<any>(
-      `${this.configuration.basePath}/v1.0/operator-authorities/account/${encodeURIComponent(
-        String(accountId),
-      )}/${encodeURIComponent(String(userId))}`,
+      `${this.configuration.basePath}/v1.0/operator-authorities/account/${encodeURIComponent(String(accountId))}/${encodeURIComponent(String(userId))}`,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

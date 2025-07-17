@@ -11,8 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachTypeCorsia;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproach;
 
 @ExtendWith(MockitoExtension.class)
 class FuelUseMonitoringApproachTest {
@@ -28,20 +26,20 @@ class FuelUseMonitoringApproachTest {
 
     @Test
     void validate_fuelUseMonitoringApproach() {
-        final FuelMonitoringApproach fuelMonitoringApproach = FuelMonitoringApproach.builder()
+        final FuelMonitoringApproachCorsia fuelMonitoringApproach = FuelMonitoringApproachCorsia.builder()
                 .monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
                 .build();
 
-        final Set<ConstraintViolation<FuelMonitoringApproach>> violations = validator.validate(fuelMonitoringApproach);
+        final Set<ConstraintViolation<FuelMonitoringApproachCorsia>> violations = validator.validate(fuelMonitoringApproach);
 
         assertEquals(0, violations.size());
     }
 
     @Test
     void validate_fuelUseMonitoringApproach_no_type() {
-        final FuelMonitoringApproach fuelMonitoringApproach = FuelMonitoringApproach.builder().build();
+        final FuelMonitoringApproachCorsia fuelMonitoringApproach = FuelMonitoringApproachCorsia.builder().build();
 
-        final Set<ConstraintViolation<FuelMonitoringApproach>> violations = validator.validate(fuelMonitoringApproach);
+        final Set<ConstraintViolation<FuelMonitoringApproachCorsia>> violations = validator.validate(fuelMonitoringApproach);
 
         assertEquals(1, violations.size());
     }

@@ -60,6 +60,20 @@ export function resolveRequestTaskActionType(
       return 'NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW';
     case 'AVIATION_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW':
       return 'NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION';
+    case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW':
+      return 'INSTALLATION_AUDIT_SUBMIT_PEER_REVIEW_DECISION';
+    case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW':
+      return 'INSTALLATION_ONSITE_INSPECTION_SUBMIT_PEER_REVIEW_DECISION';
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW':
+      return 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_PEER_REVIEW_DECISION';
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW':
+      return 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_PEER_REVIEW_DECISION';
+    case 'BDR_APPLICATION_PEER_REVIEW':
+      return 'BDR_SUBMIT_PEER_REVIEW_DECISION';
+    case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW':
+      return 'PERMANENT_CESSATION_SUBMIT_PEER_REVIEW_DECISION';
+    case 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW':
+      return 'AVIATION_DOE_CORSIA_SUBMIT_PEER_REVIEW_DECISION';
 
     default:
       return null;
@@ -118,6 +132,20 @@ export function resolveRequestTaskActionPayloadType(
       return 'NON_COMPLIANCE_NOTICE_OF_INTENT_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
     case 'AVIATION_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW':
       return 'NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
+    case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW':
+      return 'INSTALLATION_AUDIT_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
+    case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW':
+      return 'INSTALLATION_ONSITE_INSPECTION_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW':
+      return 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_PEER_REVIEW_DECISION_PAYLOAD';
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW':
+      return 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_PEER_REVIEW_DECISION_PAYLOAD';
+    case 'BDR_APPLICATION_PEER_REVIEW':
+      return 'BDR_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
+    case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW':
+      return 'PERMANENT_CESSATION_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
+    case 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW':
+      return 'AVIATION_DOE_CORSIA_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
 
     default:
       return null;
@@ -161,11 +189,30 @@ export function resolveReturnToText(requestType: UrlRequestType, requestTaskType
         case 'AVIATION_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW':
           return 'Peer review upload penalty: non-compliance';
 
+        case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW':
+          return 'Peer review annual offsetting requirements';
+        case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW':
+          return 'Peer review 3-year period offsetting requirements';
+
         default:
           return 'Peer review emissions monitoring plan application';
       }
     case 'return-of-allowances':
       return 'Peer review return of allowances';
+    case 'inspection':
+      switch (requestTaskType) {
+        case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW':
+          return 'Peer review installation audit';
+        case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW':
+          return 'Peer review on-site inspection';
+
+        default:
+          return 'Peer review emissions monitoring plan application';
+      }
+    case 'bdr':
+      return 'Peer review baseline data report';
+    case 'permanent-cessation':
+      return 'Peer review permanent cessation';
 
     default:
       return null;
@@ -218,6 +265,8 @@ export function resolvePeerReviewBaseUrl(requestType: UrlRequestType, taskId: st
       return `tasks/${taskId}/withholding-allowances/submit`;
     case 'aviation':
       return `aviation/tasks/${taskId}`;
+    case 'permanent-cessation':
+      return `tasks/${taskId}/${requestType}/submit`;
 
     default:
       return null;

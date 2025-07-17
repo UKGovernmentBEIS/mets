@@ -1,32 +1,33 @@
 package uk.gov.pmrv.api.workflow.request.core.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.common.note.NotePayload;
-import uk.gov.pmrv.api.common.note.NoteRequest;
-import uk.gov.pmrv.api.common.service.DateService;
-import uk.gov.pmrv.api.files.notes.service.FileNoteService;
-import uk.gov.pmrv.api.files.notes.service.FileNoteTokenService;
-import uk.gov.pmrv.api.token.FileToken;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.note.NotePayload;
+import uk.gov.netz.api.common.note.NoteRequest;
+import uk.gov.netz.api.common.utils.DateService;
+import uk.gov.netz.api.files.notes.service.FileNoteService;
+import uk.gov.netz.api.files.notes.service.FileNoteTokenService;
+import uk.gov.netz.api.token.FileToken;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestNote;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestNoteDto;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestNoteRequest;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestNoteResponse;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestNoteRepository;
 import uk.gov.pmrv.api.workflow.request.core.transform.RequestNoteMapper;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class RequestNoteService {
     }
 
     @Transactional
-    public void createNote(final PmrvUser authUser, final RequestNoteRequest requestNoteRequest) {
+    public void createNote(final AppUser authUser, final RequestNoteRequest requestNoteRequest) {
 
         final RequestNote requestNote = this.buildRequestNote(requestNoteRequest, authUser);
         requestNoteRepository.save(requestNote);
@@ -70,7 +71,7 @@ public class RequestNoteService {
     }
 
     @Transactional
-    public void updateNote(final Long noteId, final NoteRequest noteRequest, final PmrvUser authUser) {
+    public void updateNote(final Long noteId, final NoteRequest noteRequest, final AppUser authUser) {
 
         final RequestNote requestNote = requestNoteRepository.findById(noteId)
             .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
@@ -83,13 +84,14 @@ public class RequestNoteService {
             fileNoteService.deleteFiles(deletedFiles);
         }
 
-        final Map<UUID, String> newFileNames = this.getFileNames(currentFiles);
+        final Map<UUID, String> currentFileUuidsWithNames = this.getFileUuidWithNames(currentFiles);
 
         requestNote.getPayload().setNote(noteRequest.getNote());
-        requestNote.getPayload().setFiles(newFileNames);
+        requestNote.getPayload().setFiles(currentFileUuidsWithNames);
         requestNote.setSubmitterId(authUser.getUserId());
         requestNote.setSubmitter(authUser.getFirstName() + " " + authUser.getLastName());
         requestNote.setLastUpdatedOn(dateService.getLocalDateTime());
+        fileNoteService.submitFiles(currentFiles);
     }
 
     @Transactional
@@ -118,15 +120,15 @@ public class RequestNoteService {
             });
     }
 
-    private RequestNote buildRequestNote(final RequestNoteRequest requestNoteRequest, final PmrvUser authUser) {
+    private RequestNote buildRequestNote(final RequestNoteRequest requestNoteRequest, final AppUser authUser) {
 
-        final Map<UUID, String> fileNames = this.getFileNames(requestNoteRequest.getFiles());
+        final Map<UUID, String> fileUuidWithNames = this.getFileUuidWithNames(requestNoteRequest.getFiles());
 
         return RequestNote.builder()
             .requestId(requestNoteRequest.getRequestId())
             .payload(NotePayload.builder()
                 .note(requestNoteRequest.getNote())
-                .files(fileNames)
+                .files(fileUuidWithNames)
                 .build())
             .submitterId(authUser.getUserId())
             .submitter(authUser.getFirstName() + " " + authUser.getLastName())
@@ -134,13 +136,15 @@ public class RequestNoteService {
             .build();
     }
 
-    private Map<UUID, String> getFileNames(final Set<UUID> filesUuids) {
-
-        final Map<UUID, String> fileNames = fileNoteService.getFileNames(filesUuids);
-        final int filesFound = fileNames.size();
-        if (filesFound != filesUuids.size()) {
-            throw new BusinessException(ErrorCode.FORM_VALIDATION);
-        }
-        return fileNames;
+    private Map<UUID, String> getFileUuidWithNames(final Set<UUID> filesUuids) {
+    	final Map<UUID, String> fileUuidWithNames = fileNoteService.getFileNames(filesUuids);
+        
+        filesUuids.forEach(uuid -> {
+        	if(fileUuidWithNames.get(uuid) == null) {
+        		log.warn("Request file note not found for uuid: " + uuid);
+        	}
+        });
+        
+        return fileUuidWithNames;
     }
 }

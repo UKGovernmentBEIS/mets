@@ -1,13 +1,14 @@
 package uk.gov.pmrv.api.mireport.common.verificationbodyusers;
 
+import jakarta.persistence.EntityManager;
 import org.hibernate.query.NativeQuery;
-import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class VerificationBodyUsersRepository {
@@ -43,7 +44,24 @@ public class VerificationBodyUsersRepository {
                 .addScalar("authorityStatus", StandardBasicTypes.STRING)
                 .addScalar("userId", StandardBasicTypes.STRING)
                 .setReadOnly(true)
-                .setTupleTransformer(Transformers.aliasToBean(VerificationBodyUser.class))
+                .setTupleTransformer((tuple, aliases) -> {
+                    Map<String, Object> map = new HashMap<>();
+                    for(int i = 0; i < tuple.length; i++) {
+                        map.put(aliases[i], tuple[i]);
+                    }
+                    VerificationBodyUser result = new VerificationBodyUser();
+                    result.setVerificationBodyName((String)map.get("verificationBodyName"));
+                    result.setAccountStatus((String)map.get("accountStatus"));
+                    result.setAccreditationReferenceNumber((String)map.get("accreditationReferenceNumber"));
+                    result.setIsAccreditedForUKETSInstallations((Boolean)map.get("isAccreditedForUKETSInstallations"));
+                    result.setIsAccreditedForEUETSInstallations((Boolean) map.get("isAccreditedForEUETSInstallations"));
+                    result.setIsAccreditedForUKETSAviation((Boolean)map.get("isAccreditedForUKETSAviation"));
+                    result.setIsAccreditedForCorsia((Boolean)map.get("isAccreditedForCorsia"));
+                    result.setRole((String)map.get("role"));
+                    result.setAuthorityStatus((String)map.get("authorityStatus"));
+                    result.setUserId((String)map.get("userId"));
+                    return result;
+                })
                 .getResultList();
     }
 }

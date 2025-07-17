@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -38,7 +38,7 @@ public class RequestEmpCorsiaService {
     }
 
     @Transactional
-    public void applySubmitAction(RequestTask requestTask, PmrvUser pmrvUser) {
+    public void applySubmitAction(RequestTask requestTask, AppUser appUser) {
         EmpIssuanceCorsiaApplicationSubmitRequestTaskPayload empIssuanceApplicationSubmitRequestTaskPayload =
             (EmpIssuanceCorsiaApplicationSubmitRequestTaskPayload) requestTask.getPayload();
 
@@ -55,16 +55,16 @@ public class RequestEmpCorsiaService {
         empIssuanceCorsiaRequestPayload.setEmpSectionsCompleted(empIssuanceApplicationSubmitRequestTaskPayload.getEmpSectionsCompleted());
 
         //add request action for emp submission
-        addEmpApplicationSubmittedRequestAction(empIssuanceApplicationSubmitRequestTaskPayload, request, pmrvUser);
+        addEmpApplicationSubmittedRequestAction(empIssuanceApplicationSubmitRequestTaskPayload, request, appUser);
     }
 
     private void addEmpApplicationSubmittedRequestAction(EmpIssuanceCorsiaApplicationSubmitRequestTaskPayload empIssuanceApplicationSubmitRequestTaskPayload,
-                                                         Request request, PmrvUser pmrvUser) {
+                                                         Request request, AppUser appUser) {
         RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 
         EmpIssuanceCorsiaApplicationSubmittedRequestActionPayload empApplicationSubmittedPayload =
             EMP_CORSIA_SUBMIT_MAPPER.toEmpIssuanceCorsiaApplicationSubmittedRequestActionPayload(empIssuanceApplicationSubmitRequestTaskPayload, accountInfo);
 
-        requestService.addActionToRequest(request, empApplicationSubmittedPayload, RequestActionType.EMP_ISSUANCE_CORSIA_APPLICATION_SUBMITTED, pmrvUser.getUserId());
+        requestService.addActionToRequest(request, empApplicationSubmittedPayload, RequestActionType.EMP_ISSUANCE_CORSIA_APPLICATION_SUBMITTED, appUser.getUserId());
     }
 }

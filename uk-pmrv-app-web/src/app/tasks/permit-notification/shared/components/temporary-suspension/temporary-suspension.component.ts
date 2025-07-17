@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
+import { existingControlContainer } from '@shared/providers/control-container.factory';
+import { GroupBuilderConfig } from '@shared/types';
+
 import { GovukValidators } from 'govuk-components';
 
 import { TemporarySuspension } from 'pmrv-api';
-
-import { existingControlContainer } from '../../../../../shared/providers/control-container.factory';
-import { GroupBuilderConfig } from '../../../../../shared/types';
 
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({

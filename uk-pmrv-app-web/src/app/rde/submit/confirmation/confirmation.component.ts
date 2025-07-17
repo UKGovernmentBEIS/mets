@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
       <div class="govuk-grid-column-two-thirds">
         <govuk-panel title="Request sent"></govuk-panel>
 
-        <a govukLink [routerLink]="isAviation + '/dashboard'"> Return to dashboard </a>
+        <a govukLink [routerLink]="isAviation + '/dashboard'">Return to dashboard</a>
       </div>
     </div>
   `,

@@ -39,7 +39,7 @@ export const AER_CORSIA_PROCESS_ANALYSIS_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Process and analysis details summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Process and analysis details' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./summary/summary.component').then((c) => c.SummaryComponent),
       },

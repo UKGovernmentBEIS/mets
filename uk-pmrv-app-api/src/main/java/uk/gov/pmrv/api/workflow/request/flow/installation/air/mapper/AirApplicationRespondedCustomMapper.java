@@ -1,15 +1,16 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.air.mapper;
 
-import java.util.Set;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.transform.RequestActionCustomMapper;
 import uk.gov.pmrv.api.workflow.request.core.transform.RequestActionMapper;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationRespondedToRegulatorCommentsRequestActionPayload;
+
+import java.util.Set;
 
 @Service
 public class AirApplicationRespondedCustomMapper implements RequestActionCustomMapper {
@@ -38,7 +39,7 @@ public class AirApplicationRespondedCustomMapper implements RequestActionCustomM
     }
 
     @Override
-    public Set<RoleType> getUserRoleTypes() {
-        return Set.of(RoleType.OPERATOR, RoleType.VERIFIER);
+    public Set<String> getUserRoleTypes() {
+        return Set.of(RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER);
     }
 }

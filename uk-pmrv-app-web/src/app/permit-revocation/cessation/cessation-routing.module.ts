@@ -5,6 +5,7 @@ import { PendingRequestGuard } from '@core/guards/pending-request.guard';
 import { NotifyOperatorComponent } from '@permit-revocation/notify-operator/notify-operator.component';
 import { NotifyOperatorGuard } from '@permit-revocation/notify-operator/notify-operator.guard';
 import { PermitRevocationTaskGuard } from '@permit-revocation/permit-revocation-task.guard';
+import { TaskGuard } from '@tasks/task.guard';
 
 import { PaymentCompletedGuard } from '../../shared/guards/payment-completed.guard';
 import { CessationComponent } from './cessation.component';
@@ -25,8 +26,19 @@ import { SummaryComponent } from './confirm/summary/summary.component';
 const routes: Routes = [
   {
     path: '',
-    data: { pageTitle: 'Revocation cessation' },
-    component: CessationComponent,
+    children: [
+      {
+        path: '',
+        data: { pageTitle: 'Revocation cessation', breadcrumb: true },
+        component: CessationComponent,
+      },
+      {
+        path: 'change-assignee',
+        canActivate: [TaskGuard],
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+    ],
   },
   {
     path: 'confirm',

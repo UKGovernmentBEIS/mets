@@ -1,9 +1,9 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.item.service;
 
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;

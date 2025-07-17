@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -37,7 +37,7 @@ class PermitSurrenderReviewSaveDeterminationActionHandlerTest {
     void process() {
         final Long requestTaskId = 1L;
         final RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_SURRENDER_SAVE_REVIEW_GROUP_DECISION;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        final AppUser appUser = AppUser.builder().userId("user").build();
         final PermitSurrenderSaveReviewDeterminationRequestTaskActionPayload payload = PermitSurrenderSaveReviewDeterminationRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.PERMIT_SURRENDER_SAVE_REVIEW_DETERMINATION_PAYLOAD)
                 .reviewDetermination(PermitSurrenderReviewDeterminationGrant.builder().stopDate(LocalDate.now().minusDays(1)).build())
@@ -49,7 +49,7 @@ class PermitSurrenderReviewSaveDeterminationActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         
         //invoke
-        handler.process(requestTaskId, requestTaskActionType, pmrvUser, payload);
+        handler.process(requestTaskId, requestTaskActionType, appUser, payload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTask.getId());
         verify(requestPermitSurrenderReviewService, times(1)).saveReviewDetermination(payload, requestTask);

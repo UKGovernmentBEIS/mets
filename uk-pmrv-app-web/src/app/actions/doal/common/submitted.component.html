@@ -24,8 +24,9 @@
           linkText="Upload verification report of the activity level report"
         ></li>
         <li
+          *ngIf="(requestActionPayload$ | async).doal.additionalDocuments as additionalDocuments"
           app-task-item
-          [link]="(requestActionPayload$ | async).doal.additionalDocuments ? './additional-documents' : null"
+          [link]="additionalDocuments ? './additional-documents' : null"
           linkText="Upload additional documents"
         ></li>
       </ul>

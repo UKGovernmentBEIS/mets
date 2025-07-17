@@ -7,9 +7,10 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEts;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsContainer;
+import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.AviationAerUkEtsSubmittedEmissions;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.AviationOperatorDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
@@ -70,29 +71,15 @@ public interface AviationAerUkEtsReviewMapper {
         RequestActionPayloadType payloadType);
 
     @Mapping(target = "payloadType", source = "payloadType")
-    @Mapping(target = "serviceContactDetails", source = "accountInfo.serviceContactDetails")
     @Mapping(target = "reviewGroupDecisions", source = "requestPayload.reviewGroupDecisions", qualifiedByName =
         "reviewGroupDecisionsForOperatorAmend")
     @Mapping(target = "verificationBodyId", source = "requestPayload", qualifiedByName = "verificationBodyId")
     @Mapping(target = "aer.operatorDetails.attachmentIds", ignore = true)
-    @Mapping(target = "aer.operatorDetails.crcoCode", ignore = true)
     @Mapping(target = "aer.aerSectionAttachmentIds", ignore = true)
     AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload toAviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload(
         AviationAerUkEtsRequestPayload requestPayload,
-        RequestAviationAccountInfo accountInfo,
         RequestTaskPayloadType payloadType,
         Year reportingYear);
-
-    @AfterMapping
-    default void setOperatorDetailsCrcoCode(@MappingTarget AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload amendsSubmitRequestTaskPayload,
-                                            RequestAviationAccountInfo accountInfo) {
-        AviationAerUkEts aer = amendsSubmitRequestTaskPayload.getAer();
-        //if statement has been added for the case where the operator has no reporting obligation, thus aer will be null
-        if(aer != null) {
-            AviationOperatorDetails operatorDetails = aer.getOperatorDetails();
-            operatorDetails.setCrcoCode(accountInfo.getCrcoCode());
-        }
-    }
 
     @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "serviceContactDetails", source = "accountInfo.serviceContactDetails")
@@ -102,7 +89,10 @@ public interface AviationAerUkEtsReviewMapper {
     @Mapping(target = "aer.operatorDetails.crcoCode", ignore = true)
     @Mapping(target = "aer.aerSectionAttachmentIds", ignore = true)
     AviationAerUkEtsApplicationSubmittedRequestActionPayload toAviationAerUkEtsApplicationSubmittedRequestActionPayload(
-        AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload taskPayload, RequestAviationAccountInfo accountInfo, RequestActionPayloadType payloadType);
+        AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload taskPayload,
+        RequestAviationAccountInfo accountInfo,
+        AviationAerUkEtsSubmittedEmissions submittedEmissions,
+        RequestActionPayloadType payloadType);
 
     @AfterMapping
     default void setOperatorDetailsCrcoCode(@MappingTarget AviationAerUkEtsApplicationSubmittedRequestActionPayload requestActionPayload,

@@ -1,0 +1,37 @@
+<ng-container *ngIf="vm() as vm">
+  <app-page-heading [caption]="vm.caption">{{ vm.heading }}</app-page-heading>
+
+  <h2
+    app-summary-header
+    class="govuk-heading-m"
+    [changeRoute]="vm.isEditable ? '..' : null"
+    [queryParams]="{ change: true }"
+  >
+    Review {{ vm.caption }}
+  </h2>
+
+  <app-3year-offsetting-requirements-table-template
+    [useTableWithInputs]="false"
+    [data]="vm.data"
+  ></app-3year-offsetting-requirements-table-template>
+
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Does the operator have any offsetting requirements for this period?</dt>
+      <dd govukSummaryListRowValue>
+        {{ vm.operatorHaveOffsettingRequirements ? 'Yes' : 'No' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+        <a govukLink [routerLink]="['..']" [queryParams]="{ change: true }"> Change </a>
+      </dd>
+    </div>
+  </dl>
+
+  <div class="govuk-button-group">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">
+      Confirm and complete
+    </button>
+  </div>
+
+  <app-return-to-link></app-return-to-link>
+</ng-container>

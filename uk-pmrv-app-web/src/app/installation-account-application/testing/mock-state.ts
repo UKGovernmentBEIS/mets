@@ -27,7 +27,7 @@ export const mockState: InstallationAccountApplicationState = {
       title: 'Add the installation operator details',
       linkText: 'Identity and contact details of the operator',
       status: 'complete',
-      link: 'legal-entity',
+      link: 'legal-entity-op',
       value: {
         selectGroup: {
           isNew: true,

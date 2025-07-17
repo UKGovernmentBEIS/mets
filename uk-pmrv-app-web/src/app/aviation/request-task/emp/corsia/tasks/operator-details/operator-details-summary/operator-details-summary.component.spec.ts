@@ -27,9 +27,7 @@ describe('OperatorDetailsSummaryComponent', () => {
   const tasksService = mockClass(TasksService);
   const requestTaskFileService = mockClass(RequestTaskFileService);
 
-  const operatorName = {
-    operatorName: 'Operator name',
-  };
+  const operatorName = 'Operator name';
 
   const flightIdentification = {
     flightIdentificationType: 'AIRCRAFT_REGISTRATION_MARKINGS',
@@ -64,14 +62,13 @@ describe('OperatorDetailsSummaryComponent', () => {
     activityDescription: 'Activity description',
   } as ActivitiesDescription;
 
-  const subsidiaryCompanyExist = { subsidiaryCompanyExist: true };
+  const subsidiaryCompanyExist = { subsidiaryCompanyExist: false };
 
   const transformForm = () => {
     const form = component.form.value;
 
     return {
       ...form,
-      operatorName: form.operatorName.operatorName,
       flightIdentification: {
         ...form.flightIdentification,
         aircraftRegistrationMarkings: parseCsv(flightIdentification.aircraftRegistrationMarkings),

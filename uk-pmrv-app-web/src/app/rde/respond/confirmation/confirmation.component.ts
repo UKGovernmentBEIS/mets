@@ -6,10 +6,10 @@ import { Router } from '@angular/router';
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <govuk-panel title="Extension request {{ decision === 'ACCEPTED' ? 'accepted' : 'rejected' }}"> </govuk-panel>
+        <govuk-panel title="Extension request {{ decision === 'ACCEPTED' ? 'accepted' : 'rejected' }}"></govuk-panel>
       </div>
     </div>
-    <a govukLink [routerLink]="isAviation + '/dashboard'"> Return to dashboard </a>
+    <a govukLink [routerLink]="isAviation + '/dashboard'">Return to dashboard</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

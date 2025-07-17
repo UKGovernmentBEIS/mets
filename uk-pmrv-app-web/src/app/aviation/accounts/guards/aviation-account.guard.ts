@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { first, map, Observable, tap } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { AviationAccountsStore } from '../store';
 @Injectable({
   providedIn: 'root',
 })
-export class AviationAccountGuard implements CanActivate {
+export class AviationAccountGuard {
   account: AviationAccountEmpDTO;
 
   constructor(

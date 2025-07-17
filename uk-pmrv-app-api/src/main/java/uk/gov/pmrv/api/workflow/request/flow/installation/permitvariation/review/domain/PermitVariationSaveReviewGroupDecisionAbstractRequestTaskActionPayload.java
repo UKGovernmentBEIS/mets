@@ -1,7 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain;
 
-import java.util.HashMap;
-import java.util.Map;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -12,6 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitVariationReviewDecision;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
+import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
@@ -18,8 +19,7 @@ import { GovukComponentsModule } from 'govuk-components';
 
 import { AviationAerSaf, AviationAerSafPurchase } from 'pmrv-api';
 
-import { AerReviewDecisionGroupComponent } from '../../../aer-review-decision-group/aer-review-decision-group.component';
-import { aerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
+import { AerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
 
 interface ViewModel {
   data: AviationAerSaf;
@@ -95,7 +95,7 @@ export class EmissionsReductionClaimSummaryComponent implements OnInit, OnDestro
   );
 
   constructor(
-    @Inject(TASK_FORM_PROVIDER) private formProvider: aerEmissionsReductionClaimFormProvider,
+    @Inject(TASK_FORM_PROVIDER) private formProvider: AerEmissionsReductionClaimFormProvider,
     private store: RequestTaskStore,
     private backLinkService: BackLinkService,
     private pendingRequestService: PendingRequestService,

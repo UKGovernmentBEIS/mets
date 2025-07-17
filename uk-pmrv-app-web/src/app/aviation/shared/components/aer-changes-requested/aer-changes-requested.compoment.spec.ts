@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerStoreDelegate } from '@aviation/request-task/store/delegates';
+import { AerUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { ActivatedRouteStub, mockClass } from '@testing';
 import { screen } from '@testing-library/angular';
@@ -44,10 +44,13 @@ describe('AerChangesRequestedComponent', () => {
       isEditable: true,
       requestTaskItem: {
         ...state.requestTaskItem,
+        requestInfo: {
+          type: 'AVIATION_AER_UKETS',
+        },
         requestTask: {
           type: 'AVIATION_AER_UKETS_APPLICATION_SUBMIT',
           payload: {
-            emissionsMonitoringPlan: AerStoreDelegate.INITIAL_STATE,
+            emissionsMonitoringPlan: AerUkEtsStoreDelegate.INITIAL_STATE,
             reviewGroupDecisions: {
               MONITORING_PLAN_CHANGES: {
                 details: { requiredChanges: [{ reason: 'First change' }, { reason: 'Second change' }] },

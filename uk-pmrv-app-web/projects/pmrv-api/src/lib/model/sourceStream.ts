@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -24,6 +24,7 @@ export interface SourceStream {
     | 'BLENDED_FUEL_GAS'
     | 'CARBON_MONOXIDE'
     | 'CHARCOAL'
+    | 'CLINICAL_WASTE'
     | 'COAL'
     | 'COAL_TAR'
     | 'COKE'
@@ -31,6 +32,7 @@ export interface SourceStream {
     | 'COKE_OVEN_GAS'
     | 'COKING_COAL'
     | 'COLLIERY_METHANE'
+    | 'COMMERCIAL_INDUSTRIAL_WASTE'
     | 'CRUDE_OIL'
     | 'ETHANE'
     | 'FUEL_GAS'
@@ -39,6 +41,7 @@ export interface SourceStream {
     | 'GAS_DIESEL_OIL'
     | 'GAS_OIL'
     | 'GAS_WORKS'
+    | 'HAZARDOUS_WASTE'
     | 'HIGH_PRESSURE_FLARE_GAS'
     | 'IMPORT_FUEL_GAS'
     | 'INDUSTRIAL_WASTES'
@@ -84,13 +87,16 @@ export interface SourceStream {
     | 'SLUDGE_GAS'
     | 'SOUR_GAS'
     | 'SOUR_GAS_FLARE'
+    | 'SDF'
     | 'SSF'
+    | 'SRF'
     | 'SUB_BITUMINOUS_COAL'
     | 'WASTE_OILS'
     | 'WASTE_SOLVENTS'
     | 'WASTE_TYRES'
     | 'WHITE_SPIRIT_SBP'
-    | 'WOOD_WOOD_WASTE';
+    | 'WOOD_WOOD_WASTE'
+    | 'VENTED_GAS';
   otherDescriptionName?: string;
   type:
     | 'COMBUSTION_COMMERCIAL_STANDARD_FUELS'
@@ -112,6 +118,7 @@ export interface SourceStream {
     | 'REFINERIES_HYDROGEN_PRODUCTION'
     | 'CEMENT_CLINKER_CKD'
     | 'CERAMICS_SCRUBBING'
+    | 'UPSTREAM_GHG_REMOVAL_VENTING_CO2'
     | 'REFINERIES_CATALYTIC_CRACKER_REGENERATION'
     | 'COKE_FUEL_AS_PROCESS_INPUT'
     | 'IRON_STEEL_FUEL_AS_PROCESS_INPUT'
@@ -136,4 +143,5 @@ export interface SourceStream {
     | 'COMBUSTION_SCRUBBING_UREA'
     | 'COMBUSTION_SCRUBBING_GYPSUM'
     | 'PRIMARY_ALUMINIUM_PFC';
+  otherTypeName?: string;
 }

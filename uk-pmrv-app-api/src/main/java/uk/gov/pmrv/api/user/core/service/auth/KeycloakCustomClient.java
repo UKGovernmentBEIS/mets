@@ -11,15 +11,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.gov.pmrv.api.common.domain.provider.PMRVRestApi;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.common.config.KeycloakProperties;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.restclient.RestClientApi;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.userinfoapi.UserInfo;
+import uk.gov.pmrv.api.user.core.config.KeycloakProperties;
 import uk.gov.pmrv.api.user.core.domain.enumeration.KeycloakRestEndPointEnum;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetails;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetailsRequest;
-import uk.gov.pmrv.api.user.core.domain.model.UserInfo;
 import uk.gov.pmrv.api.user.core.domain.model.keycloak.KeycloakSignature;
 import uk.gov.pmrv.api.user.core.domain.model.keycloak.KeycloakUserDetails;
 import uk.gov.pmrv.api.user.core.domain.model.keycloak.KeycloakUserDetailsRequest;
@@ -64,11 +64,12 @@ class KeycloakCustomClient {
             return Optional.empty();
         }
 
-        PMRVRestApi pmrvRestApi = PMRVRestApi.builder()
+        RestClientApi appRestApi = RestClientApi.builder()
                 .uri(UriComponentsBuilder
-                        .fromHttpUrl(realmEndpointUrl() + KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_DETAILS.getEndPoint())
-                        .queryParam("userId", userId)
-                        .build())
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_DETAILS.getPath())
+                        .queryParam("userId", "{userId}")
+                        .build(userId))
                 .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_DETAILS)
                 .headers(httpHeaders())
                 .restTemplate(restTemplate)
@@ -76,7 +77,7 @@ class KeycloakCustomClient {
 
         ResponseEntity<KeycloakUserDetails> res;
         try{
-            res = pmrvRestApi.performApiCall();
+            res = appRestApi.performApiCall();
         } catch (HttpClientErrorException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
@@ -92,8 +93,12 @@ class KeycloakCustomClient {
     }
 
     public void saveUserDetails(UserDetailsRequest userDetails) {
-        PMRVRestApi pmrvRestApi = PMRVRestApi.builder()
-                .baseUrl(realmEndpointUrl())
+    	RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_POST_USER_DETAILS.getPath())
+                        .build()
+                        .toUri())
                 .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_POST_USER_DETAILS)
                 .headers(httpHeaders())
                 .body(KeycloakUserDetailsRequest.builder()
@@ -104,7 +109,7 @@ class KeycloakCustomClient {
                 .build();
 
         try {
-            pmrvRestApi.performApiCall();
+            appRestApi.performApiCall();
         } catch (HttpClientErrorException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
@@ -116,11 +121,12 @@ class KeycloakCustomClient {
             return Optional.empty();
         }
 
-        PMRVRestApi pmrvRestApi = PMRVRestApi.builder()
+        RestClientApi appRestApi = RestClientApi.builder()
                 .uri(UriComponentsBuilder
-                        .fromHttpUrl(realmEndpointUrl() + KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_SIGNATURE.getEndPoint())
-                        .queryParam("signatureUuid", signatureUuid)
-                        .build())
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_SIGNATURE.getPath())
+                        .queryParam("signatureUuid", "{signatureUuid}")
+                        .build(signatureUuid))
                 .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_SIGNATURE)
                 .headers(httpHeaders())
                 .restTemplate(restTemplate)
@@ -128,7 +134,7 @@ class KeycloakCustomClient {
 
         ResponseEntity<KeycloakSignature> res;
         try{
-            res = pmrvRestApi.performApiCall();
+            res = appRestApi.performApiCall();
         } catch (HttpClientErrorException e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);
@@ -146,8 +152,12 @@ class KeycloakCustomClient {
     }
 
     public void validateAuthenticatedUserOtp(String otp, String token) {
-        PMRVRestApi pmrvRestApi = PMRVRestApi.builder()
-                .baseUrl(realmEndpointUrl())
+    	RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_VALIDATE_OTP.getPath())
+                        .build()
+                        .toUri())
                 .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_VALIDATE_OTP)
                 .headers(buildHttpHeadersWithAuthToken(token))
                 .body(KeycloakUserOtpValidationInfo.builder().otp(otp).build())
@@ -155,23 +165,27 @@ class KeycloakCustomClient {
                 .build();
 
         try {
-            pmrvRestApi.performApiCall();
+            appRestApi.performApiCall();
         } catch (HttpClientErrorException e) {
             log.error(e.getMessage());
             throw new BusinessException(ErrorCode.INVALID_OTP, e);
         }
     }
-    
-    public void validateUnAuthenticatedUserOtp(String otp, String email) {
-        PMRVRestApi pmrvRestApi = PMRVRestApi.builder()
-                .baseUrl(realmEndpointUrl())
+
+    public void validateUnauthenticatedUserOtp(String otp, String email) {
+    	RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_VALIDATE_OTP.getPath())
+                        .build()
+                        .toUri())
                 .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_VALIDATE_OTP)
                 .body(KeycloakUserOtpValidationInfo.builder().otp(otp).email(email).build())
                 .restTemplate(restTemplate)
                 .build();
 
         try {
-            pmrvRestApi.performApiCall();
+            appRestApi.performApiCall();
         } catch (HttpClientErrorException e) {
             log.error(e.getMessage());
             throw new BusinessException(ErrorCode.INVALID_OTP, e);
@@ -183,11 +197,12 @@ class KeycloakCustomClient {
             return  Optional.empty();
         }
 
-        PMRVRestApi pmrvRestApi = PMRVRestApi.builder()
+        RestClientApi appRestApi = RestClientApi.builder()
                 .uri(UriComponentsBuilder
-                        .fromHttpUrl(realmEndpointUrl() + KeycloakRestEndPointEnum.KEYCLOAK_GET_USERS.getEndPoint())
-                        .queryParam("includeAttributes", includeAttributes)
-                        .build())
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_GET_USERS.getPath())
+                        .queryParam("includeAttributes", "{includeAttributes}")
+                        .build(Boolean.toString(includeAttributes)))
                 .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_GET_USERS)
                 .headers(httpHeaders())
                 .body(userIds)
@@ -196,7 +211,7 @@ class KeycloakCustomClient {
 
         ResponseEntity<List<KeycloakUserInfo>> res;
         try{
-            res = pmrvRestApi.performApiCall();
+            res = appRestApi.performApiCall();
         } catch (HttpClientErrorException e) {
             log.error(e.getMessage());
             throw new BusinessException(ErrorCode.INTERNAL_SERVER, e);

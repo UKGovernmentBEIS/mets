@@ -103,6 +103,6 @@ export class SummaryComponent implements PendingRequest {
   }
 
   getDownloadUrl() {
-    return this.airService.createBaseFileDownloadUrl();
+    return this.airService.getBaseFileDownloadUrl();
   }
 }

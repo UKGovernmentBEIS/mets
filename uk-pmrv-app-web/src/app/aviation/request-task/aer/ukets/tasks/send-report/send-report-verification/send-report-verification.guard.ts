@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
 
-import { map, switchMap, take } from 'rxjs';
+import { map, Observable, of, switchMap, take } from 'rxjs';
 
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
@@ -12,14 +11,14 @@ import { AccountVerificationBodyService } from 'pmrv-api';
 @Injectable({
   providedIn: 'root',
 })
-export class VerificationGuard implements CanActivate {
+export class VerificationGuard {
   constructor(
     private readonly store: RequestTaskStore,
     private readonly accountVerificationBodyService: AccountVerificationBodyService,
     private readonly businessErrorService: BusinessErrorService,
   ) {}
 
-  canActivate(): any {
+  canActivate(): Observable<boolean> {
     return this.store
       .pipe(
         take(1),
@@ -28,7 +27,7 @@ export class VerificationGuard implements CanActivate {
       )
       .pipe(
         switchMap((accountId) => this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId)),
-        map((vb) => (!vb ? this.businessErrorService.showError(notFoundVerificationBodyError()) : true)),
+        switchMap((vb) => (!vb ? this.businessErrorService.showError(notFoundVerificationBodyError()) : of(true))),
       );
   }
 }

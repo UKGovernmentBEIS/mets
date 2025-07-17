@@ -7,6 +7,7 @@ import { filter, map, Observable, takeUntil } from 'rxjs';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { ReviewGroupDecisionStatus } from '@permit-application/review/types/review.permit.type';
 import { ReviewSectionsContainerAbstractComponent } from '@permit-application/shared/review-sections/review-sections-container-abstract.component';
+import { permitTypeMap } from '@permit-application/shared/utils/permit';
 import { BackLinkService } from '@shared/back-link/back-link.service';
 import { TaskItemStatus } from '@shared/task-list/task-list.interface';
 
@@ -24,6 +25,7 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
   confirmTransferDetailsReviewStatus$: Observable<ReviewGroupDecisionStatus | TaskItemStatus> =
     this.store.getConfirmTransferDetailsReviewStatus$();
 
+  permitTypeMap = permitTypeMap;
   readonly header$ = this.store.pipe(
     map((state) => {
       if (state.isRequestTask) {
@@ -31,11 +33,11 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
           case 'PERMIT_TRANSFER_B_APPLICATION_REVIEW':
           case 'PERMIT_TRANSFER_B_WAIT_FOR_AMENDS':
           case 'PERMIT_TRANSFER_B_WAIT_FOR_PEER_REVIEW':
-            return `${state.permitType} permit transfer review`;
+            return `${permitTypeMap?.[state.permitType]} permit transfer review`;
           case 'PERMIT_TRANSFER_B_WAIT_FOR_REVIEW':
             return 'Full transfer of permit';
           case 'PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW':
-            return `${state.permitType} permit transfer peer review`;
+            return `${permitTypeMap?.[state.permitType]} permit transfer peer review`;
         }
       } else {
         return 'Review full transfer of permit';

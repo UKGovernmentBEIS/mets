@@ -7,24 +7,32 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.common.domain.AviationAerCorsiaAnnualOffsettingRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.threeyearperiodoffsetting.common.domain.AviationAerCorsia3YearPeriodOffsettingRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.common.domain.AviationAerUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aviationaccountclosure.domain.AviationAccountClosureRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.doe.corsia.domain.AviationDoECorsiaRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.domain.AviationDreUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.submit.domain.EmpIssuanceCorsiaRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.submit.domain.EmpIssuanceUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.common.domain.EmpVariationCorsiaRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.vir.domain.AviationVirRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.BatchReissueRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.audit.domain.InstallationAuditRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.onsiteinspection.domain.InstallationOnsiteInspectionRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permanentcessation.domain.PermanentCessationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
@@ -39,7 +47,7 @@ import uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.domain.Sy
 
 import java.math.BigDecimal;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME , include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "payloadType", visible = true)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "payloadType", visible = true)
 @JsonSubTypes({
     @JsonSubTypes.Type(value = InstallationAccountOpeningRequestPayload.class, name = "INSTALLATION_ACCOUNT_OPENING_REQUEST_PAYLOAD"),
     @JsonSubTypes.Type(value = PermitIssuanceRequestPayload.class, name = "PERMIT_ISSUANCE_REQUEST_PAYLOAD"),
@@ -61,6 +69,11 @@ import java.math.BigDecimal;
     @JsonSubTypes.Type(value = SystemMessageNotificationRequestPayload.class, name = "SYSTEM_MESSAGE_NOTIFICATION_REQUEST_PAYLOAD"),
     @JsonSubTypes.Type(value = WithholdingOfAllowancesRequestPayload.class, name = "WITHHOLDING_OF_ALLOWANCES_REQUEST_PAYLOAD"),
     @JsonSubTypes.Type(value = ReturnOfAllowancesRequestPayload.class, name = "RETURN_OF_ALLOWANCES_REQUEST_PAYLOAD"),
+    @JsonSubTypes.Type(value = InstallationOnsiteInspectionRequestPayload.class, name = "INSTALLATION_ONSITE_INSPECTION_REQUEST_PAYLOAD"),
+    @JsonSubTypes.Type(value = InstallationAuditRequestPayload.class, name = "INSTALLATION_AUDIT_REQUEST_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRRequestPayload.class, name = "BDR_REQUEST_PAYLOAD"),
+    @JsonSubTypes.Type(value = PermanentCessationRequestPayload.class, name = "PERMANENT_CESSATION_REQUEST_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRRequestPayload.class, name = "ALR_REQUEST_PAYLOAD"),
 
     // Aviation related request payloads
     @JsonSubTypes.Type(value = EmpIssuanceUkEtsRequestPayload.class, name = "EMP_ISSUANCE_UKETS_REQUEST_PAYLOAD"),
@@ -73,6 +86,9 @@ import java.math.BigDecimal;
     @JsonSubTypes.Type(value = EmpVariationCorsiaRequestPayload.class, name = "EMP_VARIATION_CORSIA_REQUEST_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerCorsiaRequestPayload.class, name = "AVIATION_AER_CORSIA_REQUEST_PAYLOAD"),
     @JsonSubTypes.Type(value = BatchReissueRequestPayload.class, name = "EMP_BATCH_REISSUE_REQUEST_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerCorsiaAnnualOffsettingRequestPayload.class, name = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_REQUEST_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerCorsia3YearPeriodOffsettingRequestPayload.class, name = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_REQUEST_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationDoECorsiaRequestPayload.class, name = "AVIATION_DOE_CORSIA_REQUEST_PAYLOAD")
 })
 @Data
 @SuperBuilder

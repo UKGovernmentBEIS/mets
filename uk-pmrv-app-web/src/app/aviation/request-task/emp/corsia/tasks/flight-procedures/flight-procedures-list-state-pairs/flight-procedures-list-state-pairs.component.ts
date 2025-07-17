@@ -23,6 +23,7 @@ import {
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
+import Encoding from 'encoding-japanese';
 import Papa from 'papaparse';
 
 import { EmpOperatingStatePairsCorsiaDetails } from 'pmrv-api';
@@ -103,45 +104,62 @@ export default class FlightProceduresListStatePairsComponent implements OnInit, 
   }
 
   onFileSelect(event: any) {
-    this.form.get('operatingStatePairsCorsiaDetails').reset();
-    this.wizardStep.isSummaryDisplayedSubject.next(false);
-    this.uploadedFile = event.target.files[0];
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const binaryString = e.target.result as string;
+      let data = binaryString;
+      const encoding = Encoding.detect(binaryString);
 
-    this.fileControl.setValue(this.uploadedFile);
-    this.errorList = [];
+      if (encoding !== 'UTF8') {
+        const encoder = new TextEncoder();
+        const decoder = new TextDecoder();
+        const encodedUtf8 = encoder.encode(binaryString);
+        data = decoder.decode(encodedUtf8);
+      }
 
-    this.fileControl.updateValueAndValidity();
+      this.form.get('operatingStatePairsCorsiaDetails').reset();
+      this.wizardStep.isSummaryDisplayedSubject.next(false);
+      this.uploadedFile = event.target.files[0];
 
-    this.fileControl.statusChanges
-      .pipe(
-        filter((status) => ['VALID', 'INVALID'].includes(status)),
-        first(),
-      )
-      .subscribe(() => {
-        if (this.fileControl.errors) {
-          this.parsedData = null;
+      this.fileControl.setValue(this.uploadedFile);
+      this.errorList = [];
 
-          for (const errorKey in this.fileControl.errors) {
-            if (Object.prototype.hasOwnProperty.call(this.fileControl.errors, errorKey)) {
-              this.errorList.push(this.fileControl.errors[errorKey]);
+      this.fileControl.updateValueAndValidity();
+
+      this.fileControl.statusChanges
+        .pipe(
+          filter((status) => ['VALID', 'INVALID'].includes(status)),
+          first(),
+        )
+        .subscribe(() => {
+          if (this.fileControl.errors) {
+            this.parsedData = null;
+
+            for (const errorKey in this.fileControl.errors) {
+              if (Object.prototype.hasOwnProperty.call(this.fileControl.errors, errorKey)) {
+                this.errorList.push(this.fileControl.errors[errorKey]);
+              }
             }
           }
-        }
 
-        this.cd.detectChanges();
+          this.cd.detectChanges();
 
-        if (this.errorList.length === 0) {
-          Papa.parse(this.uploadedFile, {
-            complete: (result) => {
-              this._processCSVData(result.data);
-            },
-          });
+          if (this.errorList.length === 0) {
+            Papa.parse(encoding === 'UTF8' ? file : data, {
+              skipEmptyLines: true,
+              complete: (result) => {
+                this._processCSVData(result.data);
+              },
+            });
 
-          this.alreadyUploaded = false;
-        }
+            this.alreadyUploaded = false;
+          }
 
-        event.target.value = '';
-      });
+          event.target.value = '';
+        });
+    };
+    reader.readAsBinaryString(file);
   }
 
   onSubmit() {
@@ -260,9 +278,14 @@ export default class FlightProceduresListStatePairsComponent implements OnInit, 
             }
 
             for (const row of rows) {
+              if (row.trim() === '') {
+                //empty line
+                continue;
+              }
+
               const values = row.split(',');
 
-              if (values.length !== 2) {
+              if (values.length !== 2 || values[0].trim() === '' || values[1].trim() === '') {
                 observer.next({ invalidRowFormat: { message } });
                 observer.complete();
 

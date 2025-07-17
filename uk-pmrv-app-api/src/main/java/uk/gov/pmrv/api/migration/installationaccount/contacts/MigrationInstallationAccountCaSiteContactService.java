@@ -1,18 +1,19 @@
 package uk.gov.pmrv.api.migration.installationaccount.contacts;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.Authority;
+import uk.gov.netz.api.authorization.core.repository.AuthorityRepository;
+import uk.gov.netz.api.common.utils.ExceptionUtils;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
-import uk.gov.pmrv.api.authorization.core.domain.Authority;
-import uk.gov.pmrv.api.authorization.core.repository.AuthorityRepository;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.utils.ExceptionUtils;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.installationaccount.InstallationAccountHelper;
@@ -25,13 +26,22 @@ import java.util.Optional;
 @Log4j2
 @Service
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
-@RequiredArgsConstructor
 public class MigrationInstallationAccountCaSiteContactService extends MigrationBaseService {
 
     private final JdbcTemplate migrationJdbcTemplate;
     private final UserAuthService userAuthService;
     private final AccountRepository accountRepository;
     private final AuthorityRepository authorityRepository;
+
+    public MigrationInstallationAccountCaSiteContactService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                                            UserAuthService userAuthService,
+                                                            AccountRepository accountRepository,
+                                                            AuthorityRepository authorityRepository) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.userAuthService = userAuthService;
+        this.accountRepository = accountRepository;
+        this.authorityRepository = authorityRepository;
+    }
 
     private static final String QUERY_BASE = """
         select e.fldEmitterId AS account_id,
@@ -113,7 +123,7 @@ public class MigrationInstallationAccountCaSiteContactService extends MigrationB
      * During migration of account contacts, the following validations are performed :
      * 1.Candidate user to be assigned as ca site account contact is related to the competent authority of the account
      *
-     * Main difference with {@link uk.gov.pmrv.api.account.service.AccountCaSiteContactService#updateCaSiteContacts(PmrvUser, List)}
+     * Main difference with {@link uk.gov.pmrv.api.account.service.AccountCaSiteContactService#updateCaSiteContacts(AppUser, List)}
      * is that during migration we do not check that candidate users have active authorities on the competent authority of the account.
      * Also we don't check if the account to which we assign the ca site contact is ACTIVE.
      */

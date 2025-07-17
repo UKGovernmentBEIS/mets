@@ -1,19 +1,16 @@
 package uk.gov.pmrv.api.allowance.service;
 
 import lombok.RequiredArgsConstructor;
-
 import org.mapstruct.factory.Mappers;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.allowance.domain.AllowanceAllocationEntity;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 import uk.gov.pmrv.api.allowance.mapper.AllowanceMapper;
 import uk.gov.pmrv.api.allowance.repository.AllowanceAllocationRepository;
 import uk.gov.pmrv.api.allowance.validation.AllowanceAllocationValidator;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
 import java.util.List;
 import java.util.Set;
@@ -33,7 +30,7 @@ public class AllowanceAllocationService {
         boolean isValid = allowanceAllocationValidator.isValid(allocations);
 
         if(!isValid) {
-            throw new BusinessException(ErrorCode.INVALID_ALLOWANCE_ALLOCATIONS);
+            throw new BusinessException(MetsErrorCode.INVALID_ALLOWANCE_ALLOCATIONS);
         }
 
         Set<AllowanceAllocationEntity> entities = allowanceAllocationRepository.findAllByAccountId(accountId);

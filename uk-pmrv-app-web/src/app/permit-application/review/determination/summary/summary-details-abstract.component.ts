@@ -19,7 +19,7 @@ export abstract class SummaryDetailsAbstractComponent {
             ({
               year: key,
               target: state.determination.annualEmissionsTargets[key],
-            } as AnnualEmissionTarget),
+            }) as AnnualEmissionTarget,
         ),
     ),
   );

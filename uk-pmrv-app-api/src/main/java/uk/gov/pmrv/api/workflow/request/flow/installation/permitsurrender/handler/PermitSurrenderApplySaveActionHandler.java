@@ -1,17 +1,16 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.handler;
 
-import java.util.List;
-
-import org.springframework.stereotype.Component;
-
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import org.springframework.stereotype.Component;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.RequestPermitSurrenderService;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Component
@@ -23,7 +22,7 @@ public class PermitSurrenderApplySaveActionHandler implements RequestTaskActionH
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser, 
+                        final AppUser appUser,
                         final PermitSurrenderSaveApplicationRequestTaskActionPayload actionPayload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         requestPermitSurrenderService.applySavePayload(actionPayload, requestTask);

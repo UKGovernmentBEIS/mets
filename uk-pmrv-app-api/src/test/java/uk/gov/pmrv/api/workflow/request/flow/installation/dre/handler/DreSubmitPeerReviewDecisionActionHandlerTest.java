@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -48,7 +48,7 @@ class DreSubmitPeerReviewDecisionActionHandlerTest {
     	String requestId = "1";
     	Long requestTaskId = 2L;
     	RequestTaskActionType requestTaskActionType = RequestTaskActionType.DRE_SUBMIT_PEER_REVIEW_DECISION;
-    	PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+    	AppUser appUser = AppUser.builder().userId("user").build();
     	PeerReviewDecisionRequestTaskActionPayload taskActionPayload = PeerReviewDecisionRequestTaskActionPayload.builder()
     			.decision(PeerReviewDecision.builder()
     					.type(PeerReviewDecisionType.AGREE)
@@ -66,14 +66,14 @@ class DreSubmitPeerReviewDecisionActionHandlerTest {
 		
 		when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 		
-		cut.process(requestTaskId, requestTaskActionType, pmrvUser, taskActionPayload);
+		cut.process(requestTaskId, requestTaskActionType, appUser, taskActionPayload);
 		
 		verify(requestTaskService, times(1)).findTaskById(requestTaskId);
 		verify(requestService, times(1)).addActionToRequest(request, PeerReviewDecisionSubmittedRequestActionPayload.builder()
 				.payloadType(RequestActionPayloadType.DRE_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD)
 				.decision(taskActionPayload.getDecision())
 				.build(), 
-				RequestActionType.DRE_APPLICATION_PEER_REVIEWER_ACCEPTED, pmrvUser.getUserId());
+				RequestActionType.DRE_APPLICATION_PEER_REVIEWER_ACCEPTED, appUser.getUserId());
 		verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(), Map.of(
 			BpmnProcessConstants.DRE_SUBMIT_OUTCOME, DreSubmitOutcome.SUBMITTED
 		));
@@ -84,7 +84,7 @@ class DreSubmitPeerReviewDecisionActionHandlerTest {
     	String requestId = "1";
     	Long requestTaskId = 2L;
     	RequestTaskActionType requestTaskActionType = RequestTaskActionType.DRE_SUBMIT_PEER_REVIEW_DECISION;
-    	PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+    	AppUser appUser = AppUser.builder().userId("user").build();
     	PeerReviewDecisionRequestTaskActionPayload taskActionPayload = PeerReviewDecisionRequestTaskActionPayload.builder()
     			.decision(PeerReviewDecision.builder()
     					.type(PeerReviewDecisionType.DISAGREE)
@@ -102,14 +102,14 @@ class DreSubmitPeerReviewDecisionActionHandlerTest {
 		
 		when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 		
-		cut.process(requestTaskId, requestTaskActionType, pmrvUser, taskActionPayload);
+		cut.process(requestTaskId, requestTaskActionType, appUser, taskActionPayload);
 		
 		verify(requestTaskService, times(1)).findTaskById(requestTaskId);
 		verify(requestService, times(1)).addActionToRequest(request, PeerReviewDecisionSubmittedRequestActionPayload.builder()
 				.payloadType(RequestActionPayloadType.DRE_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD)
 				.decision(taskActionPayload.getDecision())
 				.build(), 
-				RequestActionType.DRE_APPLICATION_PEER_REVIEWER_REJECTED, pmrvUser.getUserId());
+				RequestActionType.DRE_APPLICATION_PEER_REVIEWER_REJECTED, appUser.getUserId());
 		verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(), Map.of(
 			BpmnProcessConstants.DRE_SUBMIT_OUTCOME, DreSubmitOutcome.SUBMITTED
 		));

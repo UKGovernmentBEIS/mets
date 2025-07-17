@@ -1,0 +1,13 @@
+<ng-container *ngIf="vm() as vm">
+  <app-bdr-task-review
+    [breadcrumb]="true"
+    returnToLink=".."
+    heading="Check your answers"
+    caption="Outcome of regulator review">
+    <app-outcome-summary-template [vm]="vm"></app-outcome-summary-template>
+
+    <div *ngIf="isEditable() && hideSubmit() === false" class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+    </div>
+  </app-bdr-task-review>
+</ng-container>

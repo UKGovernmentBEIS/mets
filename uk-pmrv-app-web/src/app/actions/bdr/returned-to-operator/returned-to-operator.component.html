@@ -1,0 +1,17 @@
+<ng-container *ngIf="vm() as vm">
+  <app-base-action-container-component
+    [header]="vm.header"
+    [customContentTemplate]="customContentTemplate"
+    [expectedActionType]="vm.expectedActionType"></app-base-action-container-component>
+
+  <ng-template #customContentTemplate>
+    <dl govuk-summary-list [hasBorders]="true">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Changes required from operator</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ vm.changesRequired }}
+        </dd>
+      </div>
+    </dl>
+  </ng-template>
+</ng-container>

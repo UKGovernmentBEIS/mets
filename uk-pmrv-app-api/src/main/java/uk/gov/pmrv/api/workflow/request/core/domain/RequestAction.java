@@ -47,7 +47,7 @@ public class RequestAction {
 
     @EqualsAndHashCode.Include
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
     private Request request;
 

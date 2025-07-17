@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -41,7 +41,7 @@ public class RequestPermitSurrenderService {
     }
     
     @Transactional
-    public void applySubmitPayload(RequestTask requestTask, PmrvUser authUser) {
+    public void applySubmitPayload(RequestTask requestTask, AppUser authUser) {
         Request request = requestTask.getRequest();
         PermitSurrenderApplicationSubmitRequestTaskPayload
             taskPayload = (PermitSurrenderApplicationSubmitRequestTaskPayload) requestTask.getPayload();

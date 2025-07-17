@@ -9,10 +9,10 @@ import { AER_TASK_FORM } from '@tasks/aer/core/aer-task-form.token';
 import { activityFormProvider } from '@tasks/aer/submit/prtr/activity/activity-form.provider';
 import {
   activitiesChildSection,
-  activitiesSection,
   activityItemNameMap,
   activityItemTypeMap,
-  stepWithSubActivities,
+  activitySections,
+  intermediateStepsWithSubIntermediateSteps,
 } from '@tasks/aer/submit/prtr/activity-item';
 
 @Component({
@@ -24,14 +24,14 @@ import {
 export class ActivityComponent {
   isEditable$ = this.aerService.isEditable$;
   activityItems$: Observable<string[]> = this.route.queryParams.pipe(
-    map((params) => activitiesChildSection[params?.activityItem] ?? activitiesSection),
+    map((params) => activitiesChildSection[params?.activityItem] ?? activitySections),
   );
   hasSubActivities$: Observable<boolean> = this.route.queryParams.pipe(
-    map((params) => stepWithSubActivities.includes(params?.activityItem) ?? false),
+    map((params) => intermediateStepsWithSubIntermediateSteps.includes(params?.activityItem) ?? false),
   );
   isActivitySector$: Observable<boolean> = this.route.queryParams.pipe(map((params) => !params?.activityItem));
   isA1Sector$: Observable<boolean> = this.route.queryParams.pipe(map((params) => params?.activityItem === '_1_A'));
-  activityItemName = activityItemNameMap;
+  activityItemNameMap = activityItemNameMap;
 
   constructor(
     @Inject(AER_TASK_FORM) readonly form: UntypedFormGroup,

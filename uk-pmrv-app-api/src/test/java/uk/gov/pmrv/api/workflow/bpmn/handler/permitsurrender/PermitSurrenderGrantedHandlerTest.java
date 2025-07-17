@@ -41,7 +41,7 @@ class PermitSurrenderGrantedHandlerTest {
 
         when(execution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);
         when(service.resolveNoticeReminderDate(requestId)).thenReturn(noticeReminderDate);
-        when(service.getAerVariables(requestId)).thenReturn(variables);
+        when(service.constructAerVariables(requestId)).thenReturn(variables);
 
         handler.execute(execution);
         

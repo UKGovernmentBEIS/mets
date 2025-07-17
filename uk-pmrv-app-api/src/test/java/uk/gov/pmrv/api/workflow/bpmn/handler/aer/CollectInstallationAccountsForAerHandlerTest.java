@@ -8,21 +8,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.client.ExpectedCount.once;
 
 @ExtendWith(MockitoExtension.class)
 class CollectInstallationAccountsForAerHandlerTest {

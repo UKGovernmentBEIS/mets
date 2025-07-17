@@ -1,29 +1,28 @@
 package uk.gov.pmrv.api.user.core.service;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.token.FileToken;
+import uk.gov.netz.api.token.UserFileTokenService;
+import uk.gov.pmrv.api.user.core.domain.model.UserDetails;
+import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
+
+import java.util.Optional;
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
-
-import java.util.Optional;
-import java.util.UUID;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.token.UserFileTokenService;
-import uk.gov.pmrv.api.token.FileToken;
-import uk.gov.pmrv.api.user.core.domain.model.UserDetails;
-import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
 @ExtendWith(MockitoExtension.class)
 public class UserSignatureServiceTest {

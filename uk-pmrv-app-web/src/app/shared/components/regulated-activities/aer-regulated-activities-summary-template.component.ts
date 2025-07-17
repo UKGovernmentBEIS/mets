@@ -7,7 +7,7 @@ import { AerRegulatedActivity } from 'pmrv-api';
   selector: 'app-aer-regulated-activities-summary-template',
   templateUrl: './aer-regulated-activities-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./aer-regulated-activities-summary-template.component.scss'],
+  styleUrl: './aer-regulated-activities-summary-template.component.scss',
 })
 export class AerRegulatedActivitiesSummaryTemplateComponent {
   @Input() cssClass: string;

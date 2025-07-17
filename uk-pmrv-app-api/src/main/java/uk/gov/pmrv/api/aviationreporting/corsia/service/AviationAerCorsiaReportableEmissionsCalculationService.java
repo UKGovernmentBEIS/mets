@@ -20,7 +20,7 @@ public class AviationAerCorsiaReportableEmissionsCalculationService
     @Override
     public AviationAerCorsiaTotalReportableEmissions calculateReportableEmissions(AviationAerCorsiaContainer aerContainer) {
         AviationAerCorsiaVerificationReport verificationReport = aerContainer.getVerificationReport();
-        AviationAerCorsiaTotalEmissions operatorTotalEmissions = emissionsCalculationService.calculateTotalSubmittedEmissions(aerContainer.getAer());
+        AviationAerCorsiaTotalEmissions operatorTotalEmissions = emissionsCalculationService.calculateTotalSubmittedEmissions(aerContainer.getAer(), aerContainer.getReportingYear());
         boolean getFromVerifier = ObjectUtils.isNotEmpty(verificationReport) && Boolean.FALSE.equals(verificationReport.getVerificationData().getOpinionStatement().getEmissionsCorrect());
 
         return AviationAerCorsiaTotalReportableEmissions.builder()

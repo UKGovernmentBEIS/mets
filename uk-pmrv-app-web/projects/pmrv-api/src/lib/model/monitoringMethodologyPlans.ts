@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,8 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DigitizedPlan } from './digitizedPlan';
 
 export interface MonitoringMethodologyPlans {
   exist?: boolean;
   plans?: Array<string>;
+  digitizedPlan?: DigitizedPlan;
 }

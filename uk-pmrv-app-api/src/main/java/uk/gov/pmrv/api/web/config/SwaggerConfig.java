@@ -40,14 +40,13 @@ public class SwaggerConfig {
         );
 
         return new OpenAPI().info(new Info()
-                        .title("PMRV API Documentation")
+                        .title("METS API Documentation")
                         .version(String.format("%s %s", buildProperties.getName(), buildProperties.getVersion()))
-                        .description("PMRV API Documentation"))
+                        .description("METS API Documentation"))
                 .addSecurityItem(new SecurityRequirement()
                         .addList(securitySchemeName))
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName, new SecurityScheme()
-                                .name(securitySchemeName)
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")));
     }

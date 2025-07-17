@@ -28,5 +28,16 @@ import { SubmittedComponent } from './submitted/submitted.component';
     SubmittedComponent,
   ],
   imports: [ActionSharedModule, NonComplianceRoutingModule, SharedModule],
+  exports: [
+    CivilPenaltyNoticeSubmittedComponent,
+    CivilPenaltyPeerReviewDecisionComponent,
+    ClosedComponent,
+    ConclusionComponent,
+    DailyPenaltyNoticePeerReviewDecisionComponent,
+    DailyPenaltyNoticeSubmittedComponent,
+    NoticeOfIntentPeerReviewDecisionComponent,
+    NoticeOfIntentSubmittedComponent,
+    SubmittedComponent,
+  ],
 })
 export class NonComplianceModule {}

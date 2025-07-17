@@ -22,8 +22,7 @@ import { AerApplicationSubmitRequestTaskPayload } from 'pmrv-api';
       <app-documents-summary-template
         [isEditable]="isEditable$ | async"
         [data]="additionalDocuments$ | async"
-        [files]="additionalDocumentFiles$ | async"
-      ></app-documents-summary-template>
+        [files]="additionalDocumentFiles$ | async"></app-documents-summary-template>
       <div class="govuk-button-group" *ngIf="isEditable$ | async">
         <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
       </div>

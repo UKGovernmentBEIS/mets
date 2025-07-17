@@ -59,6 +59,6 @@ describe('CompleteReportConfirmationComponent', () => {
   it('should show content', () => {
     expect(page.confirmationTitle).toBeTruthy();
     expect(page.confirmationTitle.textContent.trim()).toEqual('Emissions report completed');
-    expect(page.confirmationPanelContent.textContent.trim()).toEqual('Your reference is AEM00016-2022');
+    expect(page.confirmationPanelContent.textContent.trim()).toEqual('Your reference code is: AEM00016-2022');
   });
 });

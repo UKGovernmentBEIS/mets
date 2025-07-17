@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, pluck, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 import { Store } from '@core/store/store';
+import { BusinessErrorService } from '@error/business-error/business-error.service';
+import { catchTaskReassignedBadRequest } from '@error/business-errors';
+import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
 
 import {
@@ -13,9 +16,6 @@ import {
   TasksService,
 } from 'pmrv-api';
 
-import { BusinessErrorService } from '../../error/business-error/business-error.service';
-import { catchTaskReassignedBadRequest } from '../../error/business-errors';
-import { catchNotFoundRequest, ErrorCode } from '../../error/not-found-error';
 import { initialState, PaymentState } from './payment.state';
 
 @Injectable({ providedIn: 'root' })
@@ -33,7 +33,7 @@ export class PaymentStore extends Store<PaymentState> {
   }
 
   get isEditable$(): Observable<boolean> {
-    return this.pipe(pluck('isEditable'));
+    return this.pipe(map((state) => state?.isEditable));
   }
 
   postMarkAsPaid(state: PaymentState) {

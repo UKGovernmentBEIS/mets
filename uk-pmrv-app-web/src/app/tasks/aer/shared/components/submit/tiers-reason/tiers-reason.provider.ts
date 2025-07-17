@@ -17,7 +17,7 @@ export const tiersReasonFormProvider = {
     const state = store.getValue();
     const disabled = !state.isEditable;
 
-    const payload: AerApplicationSubmitRequestTaskPayload = state.requestTaskItem.requestTask.payload;
+    const payload = state.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload;
 
     const sourceStreamEmission = route.snapshot.paramMap.get('index')
       ? (payload.aer.monitoringApproachEmissions[taskKey] as any)?.sourceStreamEmissions[
@@ -39,7 +39,7 @@ export const tiersReasonFormProvider = {
         },
       ],
       reasonDataGap: [
-        { value: type === 'DATA_GAP' ? reason ?? null : null, disabled },
+        { value: type === 'DATA_GAP' ? (reason ?? null) : null, disabled },
         {
           validators: GovukValidators.required(
             'You must say why you could not use the tiers from your monitoring plan during the data gap',
@@ -47,7 +47,7 @@ export const tiersReasonFormProvider = {
         },
       ],
       reasonOther: [
-        { value: type === 'OTHER' ? reason ?? null : null, disabled },
+        { value: type === 'OTHER' ? (reason ?? null) : null, disabled },
         {
           validators: GovukValidators.required(
             'You must say why you could not use the tiers from your monitoring plan',

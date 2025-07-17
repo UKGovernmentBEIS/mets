@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -38,7 +38,7 @@ public class RequestEmpUkEtsService {
     }
 
     @Transactional
-    public void applySubmitAction(RequestTask requestTask, PmrvUser pmrvUser) {
+    public void applySubmitAction(RequestTask requestTask, AppUser appUser) {
         //validate emp
         EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload empIssuanceApplicationSubmitRequestTaskPayload =
             (EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload) requestTask.getPayload();
@@ -56,16 +56,16 @@ public class RequestEmpUkEtsService {
         empIssuanceUkEtsRequestPayload.setEmpSectionsCompleted(empIssuanceApplicationSubmitRequestTaskPayload.getEmpSectionsCompleted());
 
         //add request action for emp submission
-        addEmpApplicationSubmittedRequestAction(empIssuanceApplicationSubmitRequestTaskPayload, request, pmrvUser);
+        addEmpApplicationSubmittedRequestAction(empIssuanceApplicationSubmitRequestTaskPayload, request, appUser);
     }
 
     private void addEmpApplicationSubmittedRequestAction(EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload empIssuanceApplicationSubmitRequestTaskPayload,
-                                                         Request request, PmrvUser pmrvUser) {
+                                                         Request request, AppUser appUser) {
         RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 
         EmpIssuanceUkEtsApplicationSubmittedRequestActionPayload empApplicationSubmittedPayload =
             EMP_UK_ETS_SUBMIT_MAPPER.toEmpIssuanceUkEtsApplicationSubmittedRequestActionPayload(empIssuanceApplicationSubmitRequestTaskPayload, accountInfo);
 
-        requestService.addActionToRequest(request, empApplicationSubmittedPayload, RequestActionType.EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED, pmrvUser.getUserId());
+        requestService.addActionToRequest(request, empApplicationSubmittedPayload, RequestActionType.EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED, appUser.getUserId());
     }
 }

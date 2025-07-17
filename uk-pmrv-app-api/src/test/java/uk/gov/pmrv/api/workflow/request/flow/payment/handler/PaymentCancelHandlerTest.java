@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -50,7 +50,7 @@ class PaymentCancelHandlerTest {
             .builder()
             .reason(cancellationReason)
             .build();
-        PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        AppUser appUser = AppUser.builder().userId(userId).build();
         Request request = Request.builder().build();
         RequestTask requestTask = RequestTask.builder()
             .id(requestTaskId)
@@ -60,7 +60,7 @@ class PaymentCancelHandlerTest {
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        paymentCancelHandler.process(requestTaskId, PAYMENT_CANCEL, pmrvUser, paymentCancelRequestTaskActionPayload);
+        paymentCancelHandler.process(requestTaskId, PAYMENT_CANCEL, appUser, paymentCancelRequestTaskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(paymentCompleteService, times(1)).cancel(requestTask, cancellationReason);

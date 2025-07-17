@@ -48,6 +48,9 @@ describe('RegulatedActivityTypePipe', () => {
     expect(pipe.transform('TRANSPORT_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE')).toEqual(
       'Transport of greenhouse gases under Directive 2009/31/EC',
     );
+
+    expect(pipe.transform('UPSTREAM_GHG_REMOVAL')).toEqual('Upstream GHG Removal');
+    expect(pipe.transform('WASTE')).toEqual('Waste');
   });
 
   it('should handle empty value', () => {

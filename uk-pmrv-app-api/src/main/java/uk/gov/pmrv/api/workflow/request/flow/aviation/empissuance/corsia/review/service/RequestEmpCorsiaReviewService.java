@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -87,19 +87,19 @@ public class RequestEmpCorsiaReviewService {
 
     @Transactional
     public void saveDecisionNotification(RequestTask requestTask, DecisionNotification decisionNotification,
-                                         PmrvUser pmrvUser) {
+                                         AppUser appUser) {
         EmpIssuanceCorsiaApplicationReviewRequestTaskPayload taskPayload =
             (EmpIssuanceCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload();
 
         EmpIssuanceCorsiaRequestPayload empIssuanceRequestPayload =
             (EmpIssuanceCorsiaRequestPayload) requestTask.getRequest().getPayload();
 
-        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, taskPayload, pmrvUser);
+        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, taskPayload, appUser);
         empIssuanceRequestPayload.setDecisionNotification(decisionNotification);
     }
 
     @Transactional
-    public void saveRequestPeerReviewAction(RequestTask requestTask, String selectedPeerReviewer, PmrvUser pmrvUser) {
+    public void saveRequestPeerReviewAction(RequestTask requestTask, String selectedPeerReviewer, AppUser appUser) {
         Request request = requestTask.getRequest();
         EmpIssuanceCorsiaApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
             (EmpIssuanceCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -107,14 +107,14 @@ public class RequestEmpCorsiaReviewService {
         EmpIssuanceCorsiaRequestPayload empIssuanceRequestPayload =
             (EmpIssuanceCorsiaRequestPayload) request.getPayload();
 
-        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, reviewRequestTaskPayload, pmrvUser);
+        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, reviewRequestTaskPayload, appUser);
         empIssuanceRequestPayload.setRegulatorPeerReviewer(selectedPeerReviewer);
     }
 
     private void updateEmpIssuanceRequestPayload(EmpIssuanceCorsiaRequestPayload empIssuanceRequestPayload,
                                                  EmpIssuanceCorsiaApplicationReviewRequestTaskPayload reviewRequestTaskPayload,
-                                                 PmrvUser pmrvUser) {
-        empIssuanceRequestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+                                                 AppUser appUser) {
+        empIssuanceRequestPayload.setRegulatorReviewer(appUser.getUserId());
         empIssuanceRequestPayload.setEmissionsMonitoringPlan(reviewRequestTaskPayload.getEmissionsMonitoringPlan());
         empIssuanceRequestPayload.setEmpSectionsCompleted(reviewRequestTaskPayload.getEmpSectionsCompleted());
         empIssuanceRequestPayload.setEmpAttachments(reviewRequestTaskPayload.getEmpAttachments());
@@ -125,7 +125,7 @@ public class RequestEmpCorsiaReviewService {
     }
 
     @Transactional
-    public void saveRequestReturnForAmends(RequestTask requestTask, PmrvUser pmrvUser) {
+    public void saveRequestReturnForAmends(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         EmpIssuanceCorsiaApplicationReviewRequestTaskPayload taskPayload =
             (EmpIssuanceCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -133,7 +133,7 @@ public class RequestEmpCorsiaReviewService {
         EmpIssuanceCorsiaRequestPayload empIssuanceRequestPayload =
             (EmpIssuanceCorsiaRequestPayload) request.getPayload();
 
-        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, taskPayload, pmrvUser);
+        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, taskPayload, appUser);
     }
 
     @Transactional
@@ -146,7 +146,7 @@ public class RequestEmpCorsiaReviewService {
 
     @Transactional
     public void submitAmend(EmpIssuanceCorsiaSubmitApplicationAmendRequestTaskActionPayload actionPayload, RequestTask requestTask,
-                            PmrvUser pmrvUser) {
+                            AppUser appUser) {
 
         Request request = requestTask.getRequest();
         EmpIssuanceCorsiaApplicationAmendsSubmitRequestTaskPayload taskPayload =
@@ -170,7 +170,7 @@ public class RequestEmpCorsiaReviewService {
         requestPayload.setEmpSectionsCompleted(actionPayload.getEmpSectionsCompleted());
 
         // Add timeline
-        addAmendsSubmittedRequestAction(request, pmrvUser);
+        addAmendsSubmittedRequestAction(request, appUser);
     }
 
     private void resetDeterminationIfApproved(EmpIssuanceCorsiaApplicationReviewRequestTaskPayload reviewRequestTaskPayload) {
@@ -205,7 +205,7 @@ public class RequestEmpCorsiaReviewService {
         }
     }
 
-    private void addAmendsSubmittedRequestAction(Request request, PmrvUser pmrvUser) {
+    private void addAmendsSubmittedRequestAction(Request request, AppUser appUser) {
         EmpIssuanceCorsiaRequestPayload requestPayload = (EmpIssuanceCorsiaRequestPayload) request.getPayload();
         RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 
@@ -216,6 +216,6 @@ public class RequestEmpCorsiaReviewService {
             request,
             amendsSubmittedRequestActionPayload,
             RequestActionType.EMP_ISSUANCE_CORSIA_APPLICATION_AMENDS_SUBMITTED,
-            pmrvUser.getUserId());
+            appUser.getUserId());
     }
 }

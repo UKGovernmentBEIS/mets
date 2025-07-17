@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration.emp.corsia.monitoringapproach;
 
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
@@ -23,14 +24,17 @@ import java.util.stream.Collectors;
 import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
 
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class EmpMonitoringApproachCorsiaSectionMigrationService 
 	implements EmissionsMonitoringPlanCorsiaSectionMigrationService<EmpMigrationMonitoringApproachCorsia> {
 
 	private final JdbcTemplate migrationJdbcTemplate;
 
-    private final EtsFileAttachmentMapper etsFileAttachmentMapper = Mappers.getMapper(EtsFileAttachmentMapper.class);
+	public EmpMonitoringApproachCorsiaSectionMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+		this.migrationJdbcTemplate = migrationJdbcTemplate;
+	}
+
+	private final EtsFileAttachmentMapper etsFileAttachmentMapper = Mappers.getMapper(EtsFileAttachmentMapper.class);
 
     private static final String QUERY_BASE = """
 			with XMLNAMESPACES (

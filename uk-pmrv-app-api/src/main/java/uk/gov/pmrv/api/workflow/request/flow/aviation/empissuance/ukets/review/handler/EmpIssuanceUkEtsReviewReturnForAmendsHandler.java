@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -40,7 +40,7 @@ public class EmpIssuanceUkEtsReviewReturnForAmendsHandler implements RequestTask
 
     @Override
     @Transactional
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser, RequestTaskActionEmptyPayload payload) {
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser, RequestTaskActionEmptyPayload payload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
         // Validate that at least one review group is 'Operator to amend'
@@ -48,10 +48,10 @@ public class EmpIssuanceUkEtsReviewReturnForAmendsHandler implements RequestTask
         		(EmpIssuanceUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload());
 
         // Update request payload
-        requestEmpUkEtsReviewService.saveRequestReturnForAmends(requestTask, pmrvUser);
+        requestEmpUkEtsReviewService.saveRequestReturnForAmends(requestTask, appUser);
 
         // Add request action
-        createRequestAction(requestTask.getRequest(), pmrvUser, (EmpIssuanceUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload());
+        createRequestAction(requestTask.getRequest(), appUser, (EmpIssuanceUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload());
 
         // Close task
         workflowService.completeTask(requestTask.getProcessTaskId(),
@@ -63,7 +63,7 @@ public class EmpIssuanceUkEtsReviewReturnForAmendsHandler implements RequestTask
         return List.of(RequestTaskActionType.EMP_ISSUANCE_UKETS_REVIEW_RETURN_FOR_AMENDS);
     }
 
-    private void createRequestAction(Request request, PmrvUser pmrvUser, EmpIssuanceUkEtsApplicationReviewRequestTaskPayload taskPayload) {
+    private void createRequestAction(Request request, AppUser appUser, EmpIssuanceUkEtsApplicationReviewRequestTaskPayload taskPayload) {
         EmpIssuanceUkEtsApplicationReturnedForAmendsRequestActionPayload requestActionPayload = empUkEtsReviewMapper
                 .toEmpIssuanceUkEtsApplicationReturnedForAmendsRequestActionPayload(
                     taskPayload, 
@@ -71,6 +71,6 @@ public class EmpIssuanceUkEtsReviewReturnForAmendsHandler implements RequestTask
                 );
 
         requestService.addActionToRequest(request, requestActionPayload, RequestActionType.EMP_ISSUANCE_UKETS_APPLICATION_RETURNED_FOR_AMENDS,
-                pmrvUser.getUserId());
+                appUser.getUserId());
     }
 }

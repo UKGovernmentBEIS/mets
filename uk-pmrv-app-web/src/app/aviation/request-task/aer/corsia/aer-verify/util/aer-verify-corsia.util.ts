@@ -14,7 +14,7 @@ import { AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload } from
 export function getAerVerifyCorsiaSections(
   payload: AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload,
 ): TaskSection<any>[] {
-  const sectionsToReturn = getVerifierSections(payload).map((section) => {
+  const sectionsToReturn = getSections(payload).map((section) => {
     return {
       ...section,
       tasks: section.tasks.map((task) => {
@@ -52,8 +52,7 @@ export function getTaskStatusByTaskCompletionState(
 
   switch (taskName) {
     case 'sendReport': {
-      const sections = getVerifierSections(payload);
-      const availableSubTasks = getAvailableSubTasks(sections);
+      const availableSubTasks = getAvailableSubTasks(payload);
       return resolveSubmissionTaskStatus(payload.verificationSectionsCompleted, availableSubTasks);
     }
     default:
@@ -61,35 +60,30 @@ export function getTaskStatusByTaskCompletionState(
   }
 }
 
-function getVerifierSections(
-  payload: AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload,
-): TaskSection<any>[] {
+function getSections(payload: AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload): TaskSection<any>[] {
   return [
     ...getVerifierAssessmentTasks(true),
     ...getAerVerifyCorsiaVerifiedEmissions(payload.aer),
     ...getAerVerifyVerifierFindings(true),
     ...getAerVerifyCorsiaVerifierSummary(),
-  ]
-    .filter((section) => !!section)
-    .map((section) => ({
-      ...section,
-      tasks: section.tasks.filter((task) => !!task),
-    }));
+  ];
 }
 
-function getAvailableSubTasks(taskSections: TaskSection<any>[]): AerVerifyCorsiaTaskKey[] {
-  return taskSections
+function getAvailableSubTasks(
+  payload: AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload,
+): AerVerifyCorsiaTaskKey[] {
+  const sections = getSections(payload);
+  return sections
     .map((t) => t.tasks)
     .reduce((acc, tasks) => acc.concat(tasks), [])
     .map((task) => task.name as AerVerifyCorsiaTaskKey);
 }
 
 function resolveSubmissionTaskStatus(
-  tasksCompleted: { [key: string]: boolean[] },
-  availableTasks: string[],
+  verificationSectionsCompleted: { [key: string]: boolean[] },
+  availableSubTasks: AerVerifyCorsiaTaskKey[],
 ): TaskItemStatus {
-  return Object.keys(tasksCompleted).length >= availableTasks.length &&
-    Object.values(tasksCompleted).every((tc) => tc[0] === true)
+  return availableSubTasks.every((subTask) => verificationSectionsCompleted[subTask]?.[0] === true)
     ? 'not started'
     : 'cannot start yet';
 }

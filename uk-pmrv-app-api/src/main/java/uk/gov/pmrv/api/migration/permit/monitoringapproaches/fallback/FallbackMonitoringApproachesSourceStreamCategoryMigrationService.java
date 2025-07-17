@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration.permit.monitoringapproaches.fallback;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
@@ -30,11 +31,14 @@ import java.util.stream.Collectors;
 
 @Log4j2
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class FallbackMonitoringApproachesSourceStreamCategoryMigrationService implements PermitSectionMigrationService<FallbackMonitoringApproach> {
 
     private final JdbcTemplate migrationJdbcTemplate;
+
+    public FallbackMonitoringApproachesSourceStreamCategoryMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+    }
 
     private static final String QUERY_BASE =
             "with XMLNAMESPACES (\r\n" +

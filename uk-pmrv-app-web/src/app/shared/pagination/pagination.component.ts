@@ -36,7 +36,10 @@ export class PaginationComponent implements OnChanges {
     tap((page) => this.currentPageChange.emit(page)),
   );
 
-  constructor(public readonly route: ActivatedRoute, private readonly _: ScrollService) {}
+  constructor(
+    public readonly route: ActivatedRoute,
+    private readonly _: ScrollService,
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes?.count || changes?.pageSize) {

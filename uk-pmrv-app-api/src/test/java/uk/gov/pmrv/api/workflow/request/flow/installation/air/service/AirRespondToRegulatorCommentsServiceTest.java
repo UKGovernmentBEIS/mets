@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -106,7 +106,7 @@ class AirRespondToRegulatorCommentsServiceTest {
         final long accountId = 1L;
         final String regulator = "regulator";
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        final AppUser appUser = AppUser.builder().userId(userId).build();
         final AirSubmitRespondToRegulatorCommentsRequestTaskActionPayload actionPayload =
             AirSubmitRespondToRegulatorCommentsRequestTaskActionPayload.builder()
                 .reference(reference)
@@ -177,7 +177,7 @@ class AirRespondToRegulatorCommentsServiceTest {
                 .build();
 
         // Invoke
-        service.applySubmitAction(actionPayload, requestTask, pmrvUser);
+        service.applySubmitAction(actionPayload, requestTask, appUser);
 
         // Verify
         verify(respondToRegulatorCommentsValidator, times(1))

@@ -39,5 +39,15 @@ function createForm(fb: FormBuilder): DataGapsFormModel {
       updateOn: 'change',
     },
   ) as DataGapsFormModel;
+
+  form.get('secondarySourcesDataGapsExist').valueChanges.subscribe((exist) => {
+    if (!exist) {
+      form.controls.secondarySourcesDataGapsConditions.disable();
+      form.controls.secondarySourcesDataGapsConditions.setValue(null);
+    } else {
+      form.controls.secondarySourcesDataGapsConditions.enable();
+    }
+  });
+
   return form;
 }

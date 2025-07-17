@@ -11,7 +11,6 @@ import {
   first,
   map,
   Observable,
-  pluck,
   switchMap,
   takeUntil,
   tap,
@@ -87,7 +86,7 @@ export class DetailsComponent implements OnInit {
   });
 
   userLoaded$: Observable<CaExternalContactDTO> = this.route.data.pipe(
-    pluck('user'),
+    map((data) => data?.user),
     filter((user) => user),
     tap((user) => {
       this.form.patchValue(user);
@@ -140,7 +139,7 @@ export class DetailsComponent implements OnInit {
           catchBadRequest(ErrorCodes.AUTHORITY1006, () =>
             this.businessErrorService.showError(saveNotFoundVerifierError),
           ),
-          catchBadRequest(ErrorCodes.USER1001, () => {
+          catchBadRequest([ErrorCodes.USER1001, ErrorCodes.AUTHORITY1005, ErrorCodes.AUTHORITY1015], () => {
             this.form.get('email').setErrors({ existingUser: 'This user email already exists in the service' });
             this.isSummaryDisplayed$.next(true);
 

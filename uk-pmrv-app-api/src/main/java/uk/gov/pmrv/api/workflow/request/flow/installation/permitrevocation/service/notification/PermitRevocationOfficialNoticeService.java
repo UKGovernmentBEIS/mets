@@ -1,13 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service.notification;
 
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.common.config.RegistryConfig;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -18,6 +15,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Officia
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class PermitRevocationOfficialNoticeService {
@@ -26,7 +25,6 @@ public class PermitRevocationOfficialNoticeService {
 	private final DecisionNotificationUsersService decisionNotificationUsersService;
     private final OfficialNoticeSendService officialNoticeSendService;
     private final OfficialNoticeGeneratorService officialNoticeGeneratorService;
-    private final RegistryConfig registryConfig;
 
 	@Transactional
     public FileInfoDTO generateRevocationOfficialNotice(String requestId) {
@@ -68,20 +66,10 @@ public class PermitRevocationOfficialNoticeService {
             "cessation_notice_after_permit_revocation.pdf");
     }
 
-    public void sendOfficialNoticeForSubmitted(Request request, FileInfoDTO officialNotice, DecisionNotification decisionNotification) {
-        List<String> additionalRecipients = new ArrayList<>();
-        additionalRecipients.add(registryConfig.getEmail());
+	public void sendOfficialNotice(Request request, FileInfoDTO officialNotice,
+			DecisionNotification decisionNotification) {
+		officialNoticeSendService.sendOfficialNotice(List.of(officialNotice), request,
+				decisionNotificationUsersService.findUserEmails(decisionNotification));
+	}
 
-        sendOfficialNotice(request, officialNotice, decisionNotification, additionalRecipients);
-    }
-	
-	public void sendOfficialNotice(Request request, FileInfoDTO officialNotice, DecisionNotification decisionNotification) {
-        sendOfficialNotice(request, officialNotice, decisionNotification, new ArrayList<>());
-    }
-
-    private void sendOfficialNotice(Request request, FileInfoDTO officialNotice, DecisionNotification decisionNotification,
-                               List<String> ccRecipientsEmails) {
-        ccRecipientsEmails.addAll(decisionNotificationUsersService.findUserEmails(decisionNotification));
-        officialNoticeSendService.sendOfficialNotice(List.of(officialNotice), request, ccRecipientsEmails);
-    }
 }

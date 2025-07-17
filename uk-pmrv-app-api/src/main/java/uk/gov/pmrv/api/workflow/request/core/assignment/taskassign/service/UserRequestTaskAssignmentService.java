@@ -3,9 +3,8 @@ package uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.rules.domain.ResourceType;
-import uk.gov.pmrv.api.authorization.rules.services.AuthorizationRulesQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.dto.RequestTaskAssignmentDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
@@ -40,7 +39,7 @@ public class UserRequestTaskAssignmentService {
     }
 
     private Optional<UserRoleRequestTaskAssignmentService> getUserService(RequestTask requestTask) {
-        RoleType requestTaskRoleType = authorizationRulesQueryService
+    	String requestTaskRoleType = authorizationRulesQueryService
             .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name())
             .orElse(null);
 

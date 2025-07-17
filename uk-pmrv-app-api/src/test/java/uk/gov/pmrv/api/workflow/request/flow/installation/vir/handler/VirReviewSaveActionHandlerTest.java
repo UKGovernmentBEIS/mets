@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -35,7 +35,7 @@ class VirReviewSaveActionHandlerTest {
     @Test
     void process() {
         final long requestTaskId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final VirSaveReviewRequestTaskActionPayload actionPayload = VirSaveReviewRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.VIR_SAVE_REVIEW_PAYLOAD)
                 .build();
@@ -44,7 +44,7 @@ class VirReviewSaveActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(requestTaskId, RequestTaskActionType.VIR_SAVE_REVIEW, pmrvUser, actionPayload);
+        handler.process(requestTaskId, RequestTaskActionType.VIR_SAVE_REVIEW, appUser, actionPayload);
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);

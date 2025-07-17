@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -12,6 +13,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecision
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@Schema(description = "Details of the permit notification accept review of regulator superclass")
 public class PermitNotificationReviewDecisionDetails extends ReviewDecisionDetails {
 
     @NotBlank

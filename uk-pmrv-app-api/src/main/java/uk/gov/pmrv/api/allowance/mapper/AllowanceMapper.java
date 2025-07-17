@@ -2,13 +2,12 @@ package uk.gov.pmrv.api.allowance.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.allowance.domain.ActivityLevel;
 import uk.gov.pmrv.api.allowance.domain.AllowanceActivityLevelEntity;
 import uk.gov.pmrv.api.allowance.domain.AllowanceAllocationEntity;
 import uk.gov.pmrv.api.allowance.domain.HistoricalActivityLevel;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
 
 import java.util.List;
 

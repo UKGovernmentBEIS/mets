@@ -6,9 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.authorization.core.domain.dto.RoleCode;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.user.core.domain.dto.UserDTO;
-import uk.gov.pmrv.api.authorization.core.domain.dto.RoleCode;
 
 /**
  * Data transfer object used to add an operator user to an account.
@@ -21,6 +21,6 @@ import uk.gov.pmrv.api.authorization.core.domain.dto.RoleCode;
 @SuperBuilder
 public class OperatorUserInvitationDTO extends UserDTO {
 
-    @RoleCode(roleType = RoleType.OPERATOR)
+    @RoleCode(roleType = RoleTypeConstants.OPERATOR)
     private String roleCode;
 }

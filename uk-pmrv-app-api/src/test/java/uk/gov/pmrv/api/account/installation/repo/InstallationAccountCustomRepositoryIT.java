@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountSearchResultsInfoDTO;
@@ -21,8 +21,8 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.ApplicationType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.repository.impl.InstallationAccountCustomRepositoryImpl;
 import uk.gov.pmrv.api.common.domain.Address;
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
 import jakarta.persistence.EntityManager;
@@ -183,24 +183,6 @@ class InstallationAccountCustomRepositoryIT extends AbstractContainerBaseTest {
         assertThat(results.getAccounts()).extracting(AccountSearchResultsInfoDTO::getStatus).containsOnly(account1.getStatus(), account3.getStatus());
     }
 
-    @Test
-    void findByVerificationBodyId() {
-        Long vbId1 = 1L;
-        Long vbId2 = 2L;
-        InstallationAccount account1 = createAccount(1L, "account1", "leName1", CompetentAuthorityEnum.ENGLAND, vbId1, InstallationAccountStatus.LIVE, LegalEntityStatus.ACTIVE);
-        InstallationAccount account2 =createAccount(2L, "account2", "leName2", CompetentAuthorityEnum.WALES, vbId1, InstallationAccountStatus.LIVE, LegalEntityStatus.ACTIVE);
-        InstallationAccount account3 = createAccount(3L, "account3", "leName3", CompetentAuthorityEnum.ENGLAND, vbId2, InstallationAccountStatus.UNAPPROVED, LegalEntityStatus.PENDING);
-
-        flushAndClear();
-
-        final AccountSearchCriteria searchCriteria = AccountSearchCriteria.builder()
-        		.paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
-
-        AccountSearchResults results = repo.findByVerificationBodyId(vbId1, searchCriteria);
-        assertThat(results.getTotal()).isEqualTo(2);
-        assertThat(results.getAccounts()).extracting(AccountSearchResultsInfoDTO::getId).containsOnly(account1.getId(), account2.getId());
-    }
-    
     private InstallationAccount createAccount(Long id, String accountName, String leName, CompetentAuthorityEnum ca,
             InstallationAccountStatus status, LegalEntityStatus leStatus) {
         return createAccount(id, accountName, leName, ca, null, status, leStatus);

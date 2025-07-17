@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, map, Observable, shareReplay, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, shareReplay, Subject, switchMap, take, tap } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore, selectCurrentDomain } from '@core/store/auth';
@@ -32,8 +32,7 @@ import { createTableColumns, createTablePage, manipulateResultsAndExportToExcel,
         <app-pagination
           [count]="totalNumOfItems$ | async"
           (currentPageChange)="currentPage$.next($event)"
-          [pageSize]="pageSize"
-        ></app-pagination>
+          [pageSize]="pageSize"></app-pagination>
       </ng-container>
       <ng-template #noResults>
         <div class="govuk-body"><h2>No results</h2></div>
@@ -45,7 +44,7 @@ import { createTableColumns, createTablePage, manipulateResultsAndExportToExcel,
 })
 export class AccountsRegulatorsSiteContactsComponent implements OnInit {
   readonly pageSize = pageSize;
-  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));
+  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));
 
   accountsRegulatorsSiteContacts$ = this.currentDomain$
     .pipe(
@@ -78,11 +77,10 @@ export class AccountsRegulatorsSiteContactsComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly authStore: AuthStore,
-    private readonly destroy$: DestroySubject,
   ) {}
 
   ngOnInit(): void {
-    this.currentDomain$.pipe(takeUntil(this.destroy$)).subscribe((domain) => {
+    this.currentDomain$.subscribe((domain) => {
       this.domain = domain === 'AVIATION' ? domain.toLowerCase() : '';
     });
     this.backlinkService.show(this.domain + '/mi-reports');
@@ -128,9 +126,9 @@ export class AccountsRegulatorsSiteContactsComponent implements OnInit {
     return results.sort(
       (a, b) =>
         (a['Assigned regulator'] ? a['Assigned regulator'] : '')?.localeCompare(b['Assigned regulator']) ||
-        a['Account status'].localeCompare(b['Account status']) ||
-        a['Legal Entity name'].localeCompare(b['Legal Entity name']) ||
-        a['Account name'].localeCompare(b['Account name']),
+        a['Account status']?.localeCompare(b['Account status']) ||
+        a['Legal Entity name']?.localeCompare(b['Legal Entity name']) ||
+        a['Account name']?.localeCompare(b['Account name']),
     );
   }
 

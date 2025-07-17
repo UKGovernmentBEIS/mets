@@ -17,8 +17,7 @@ describe('ActivityLevelListTemplateComponent', () => {
         [data]="data"
         [heading]="heading"
         [historical]="historical"
-        [editable]="editable"
-      ></app-doal-activity-level-list-template>
+        [editable]="editable"></app-doal-activity-level-list-template>
     `,
   })
   class TestComponent {

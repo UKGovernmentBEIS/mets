@@ -4,17 +4,15 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   selector: 'govuk-phase-banner',
   templateUrl: './phase-banner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      .align-right {
-        display: flex;
-        justify-content: space-between;
-      }
-      .order-2 {
-        order: 2;
-      }
-    `,
-  ],
+  styles: `
+    .align-right {
+      display: flex;
+      justify-content: space-between;
+    }
+    .order-2 {
+      order: 2;
+    }
+  `,
 })
 export class PhaseBannerComponent {
   @Input() phase: string;

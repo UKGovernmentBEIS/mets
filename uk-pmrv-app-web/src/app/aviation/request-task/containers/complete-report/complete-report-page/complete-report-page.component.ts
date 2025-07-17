@@ -9,8 +9,6 @@ import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
 
-import { RequestTaskActionProcessDTO } from 'pmrv-api';
-
 @Component({
   selector: 'app-complete-report-page',
   templateUrl: './complete-report-page.component.html',
@@ -33,11 +31,15 @@ export default class CompleteReportPageComponent {
         take(1),
         requestTaskQuery.selectRequestTaskType,
         switchMap((requestTaskType) => {
-          let actionType: RequestTaskActionProcessDTO['requestTaskActionType'];
-
-          if (requestTaskType === 'AVIATION_AER_UKETS_APPLICATION_REVIEW') {
-            actionType = 'AVIATION_AER_UKETS_COMPLETE_REVIEW';
-
+          if (
+            ['AVIATION_AER_UKETS_APPLICATION_REVIEW', 'AVIATION_AER_CORSIA_APPLICATION_REVIEW'].includes(
+              requestTaskType,
+            )
+          ) {
+            const actionType =
+              requestTaskType === 'AVIATION_AER_UKETS_APPLICATION_REVIEW'
+                ? 'AVIATION_AER_UKETS_COMPLETE_REVIEW'
+                : 'AVIATION_AER_CORSIA_COMPLETE_REVIEW';
             return this.store.aerDelegate.submitAer(actionType);
           } else {
             return;

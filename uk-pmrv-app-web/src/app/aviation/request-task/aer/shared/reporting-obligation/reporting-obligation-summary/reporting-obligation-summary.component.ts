@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
-import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/ukets/aer-review-decision-group/aer-review-decision-group.component';
+import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { showReviewDecisionComponent } from '@aviation/request-task/util';
@@ -12,6 +12,7 @@ import { ReportingObligationSummaryTemplateComponent } from '@aviation/shared/co
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
+import { AttachedFile } from '@shared/types/attached-file.type';
 
 import { AviationAerRequestMetadata } from 'pmrv-api';
 
@@ -20,7 +21,7 @@ import { ReportingObligationFormProvider } from '../reporting-obligation-form.pr
 
 interface ViewModel {
   reportingData: ReportingObligation;
-  files: { downloadUrl: string; fileName: string }[];
+  files: AttachedFile[];
   year: number;
   isEditable: boolean;
   hideSubmit: boolean;

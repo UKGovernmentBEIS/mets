@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable, switchMap } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { accountFinalStatuses } from '../../../../../accounts/core/accountFinalS
 @Injectable({
   providedIn: 'root',
 })
-export class AccountStatusGuard implements CanActivate {
+export class AccountStatusGuard {
   constructor(
     private readonly installationAccountViewService: InstallationAccountViewService,
     private readonly aviationAccountViewService: AviationAccountViewService,

@@ -1,11 +1,5 @@
 package uk.gov.pmrv.api.migration.initialdata;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import liquibase.change.custom.CustomTaskChange;
 import liquibase.database.Database;
 import liquibase.database.jvm.JdbcConnection;
@@ -13,8 +7,14 @@ import liquibase.exception.CustomChangeException;
 import liquibase.exception.DatabaseException;
 import lombok.Getter;
 import lombok.Setter;
-import uk.gov.pmrv.api.common.domain.dto.ResourceFile;
-import uk.gov.pmrv.api.files.common.domain.FileStatus;
+import uk.gov.netz.api.common.domain.ResourceFile;
+import uk.gov.netz.api.files.common.domain.FileStatus;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Custom implementation to insert initial data in file_document database table using liquibase.
@@ -34,7 +34,7 @@ public class InsertDocumentTemplateFileTaskChange extends DocumentTemplateFileUp
     @Override
     public void execute(Database database) throws CustomChangeException {
         // The context classloader does not include the jar file that contain the resources files,
-        // so the code in ResourceFileUtil class trying to find resource using Thread.currentThread() will not work.
+        // so the code in ResourceFileUtils class trying to find resource using Thread.currentThread() will not work.
         // Solution: set the current class' classloader as the thread's classloader
         Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
         

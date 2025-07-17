@@ -3,17 +3,17 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/for
 
 import { Subject, takeUntil } from 'rxjs';
 
+import { RequestTaskStore } from '@aviation/request-task/store';
 import { RequestTaskFileService } from '@shared/services/request-task-file-service/request-task-file.service';
 
 import { GovukValidators } from 'govuk-components';
 
-import {
-  EmpIssuanceReviewDecision,
-  EmpIssuanceUkEtsApplicationReviewRequestTaskPayload,
-  ReviewDecisionRequiredChange,
-} from 'pmrv-api';
+import { EmpIssuanceReviewDecision, ReviewDecisionRequiredChange } from 'pmrv-api';
 
-import { RequestTaskStore } from '../../../store';
+import {
+  EmpIssuanceReviewRequestTaskPayload,
+  uploadReviewGroupDecisionAttachmentActionTypeByRequestTaskTypeMap,
+} from '../util/emp.util';
 
 @Injectable()
 export class EmpReviewDecisionGroupFormProvider {
@@ -36,7 +36,7 @@ export class EmpReviewDecisionGroupFormProvider {
   }
 
   setFormValue(reviewDecision: EmpIssuanceReviewDecision) {
-    this.form.setValue({
+    this.form.patchValue({
       type: reviewDecision?.type ?? null,
       notes: reviewDecision?.details?.notes ?? null,
     });
@@ -104,11 +104,11 @@ export class EmpReviewDecisionGroupFormProvider {
       files: this.requestTaskFileService.buildFormControl(
         this.store.requestTaskId,
         decisionRequiredChange?.files ?? [],
-        (
-          this.store.getState().requestTaskItem?.requestTask
-            ?.payload as EmpIssuanceUkEtsApplicationReviewRequestTaskPayload
-        )?.reviewAttachments ?? {}, //TODO consider corsia as well
-        'EMP_ISSUANCE_UKETS_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT', //TODO consider corsia as well
+        (this.store.getState().requestTaskItem?.requestTask?.payload as EmpIssuanceReviewRequestTaskPayload)
+          ?.reviewAttachments ?? {},
+        uploadReviewGroupDecisionAttachmentActionTypeByRequestTaskTypeMap(
+          this.store.getState().requestTaskItem?.requestTask?.type,
+        ),
         false,
         !this.store.getState().isEditable,
       ),

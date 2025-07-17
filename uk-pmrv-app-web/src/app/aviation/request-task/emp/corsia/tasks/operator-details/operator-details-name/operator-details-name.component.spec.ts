@@ -91,14 +91,14 @@ describe('OperatorDetailsNameComponent', () => {
 
     tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
 
-    const operatorName = 'Operator name' as EmpCorsiaOperatorDetails['operatorName'];
+    const operatorName = { operatorName: 'Operator name' as EmpCorsiaOperatorDetails['operatorName'] };
 
     const state = store.getState();
 
     const data = {
       operatorDetails: {
         operatorName,
-      } as EmpCorsiaOperatorDetails,
+      },
     };
 
     const saveEmpSpy = jest.spyOn(store.empCorsiaDelegate, 'saveEmp').mockReturnValue(of({}));

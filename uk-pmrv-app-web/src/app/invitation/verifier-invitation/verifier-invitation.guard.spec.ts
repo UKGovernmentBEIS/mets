@@ -52,7 +52,10 @@ describe('VerifierInvitationGuard', () => {
   });
 
   it('should resolved the invited user', async () => {
-    const invitedUser: InvitedUserInfoDTO = { email: 'user@pmrv.uk' };
+    const invitedUser: InvitedUserInfoDTO = {
+      email: 'user@pmrv.uk',
+      invitationStatus: 'ALREADY_REGISTERED_SET_PASSWORD_ONLY',
+    };
     verifierUsersRegistrationService.acceptVerifierInvitation.mockReturnValue(of(invitedUser));
 
     await lastValueFrom(guard.canActivate(new ActivatedRouteSnapshotStub(undefined, { token: 'token' })));
@@ -61,5 +64,18 @@ describe('VerifierInvitationGuard', () => {
     expect(verifierUsersRegistrationService.acceptVerifierInvitation).toHaveBeenCalledWith({
       token: 'token',
     });
+  });
+
+  it('should resolved the invited user and navigate to confirmed when invitation status is already registered', async () => {
+    const navigateSpy = jest.spyOn(router, 'navigate');
+    const invitedUser: InvitedUserInfoDTO = { email: 'user@pmrv.uk', invitationStatus: 'ALREADY_REGISTERED' };
+    verifierUsersRegistrationService.acceptVerifierInvitation.mockReturnValue(of(invitedUser));
+
+    await lastValueFrom(guard.canActivate(new ActivatedRouteSnapshotStub(undefined, { token: 'token' })));
+    expect(guard.resolve()).toEqual(invitedUser);
+    expect(verifierUsersRegistrationService.acceptVerifierInvitation).toHaveBeenCalledWith({
+      token: 'token',
+    });
+    expect(navigateSpy).toHaveBeenCalledWith(['invitation/verifier/confirmed']);
   });
 });

@@ -20,8 +20,7 @@ describe('AdditionalDocumentsSummaryTemplateComponent', () => {
       <app-doal-additional-documents-summary-template
         [additionalDocuments]="additionalDocuments"
         [documents]="documents"
-        [editable]="editable"
-      ></app-doal-additional-documents-summary-template>
+        [editable]="editable"></app-doal-additional-documents-summary-template>
     `,
   })
   class TestComponent {
@@ -72,7 +71,7 @@ describe('AdditionalDocumentsSummaryTemplateComponent', () => {
   it('should display data', () => {
     expect(page.values.map((el) => el.textContent.trim())).toEqual([
       'Yes',
-      'doc1.pdfdoc2.pdf',
+      'doc1.pdf  doc2.pdf',
       'additionalDocumentsComment',
     ]);
   });

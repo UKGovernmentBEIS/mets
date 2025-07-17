@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { combineLatest, first, map, Observable } from 'rxjs';
 
@@ -8,7 +8,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 import { areEmissionSummariesUsingEverything, areEmissionSummariesValid } from '../emission-summaries-status';
 
 @Injectable()
-export class EmissionSummariesSummaryGuard implements CanActivate {
+export class EmissionSummariesSummaryGuard {
   constructor(
     private readonly store: PermitApplicationStore<PermitApplicationState>,
     private readonly router: Router,

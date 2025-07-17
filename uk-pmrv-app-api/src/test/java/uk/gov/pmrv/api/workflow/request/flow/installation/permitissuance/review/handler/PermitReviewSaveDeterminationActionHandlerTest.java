@@ -14,9 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
@@ -66,14 +66,14 @@ class PermitReviewSaveDeterminationActionHandlerTest {
         		.payload(taskPayload)
         		.request(Request.builder().type(RequestType.PERMIT_ISSUANCE).build())
         		.build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
 
         when(permitReviewDeterminationAndDecisionsValidatorService.isDeterminationAndDecisionsValid(determination, taskPayload, RequestType.PERMIT_ISSUANCE)).thenReturn(true);
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         handler.process(requestTaskId,
             RequestTaskActionType.PERMIT_ISSUANCE_SAVE_REVIEW_DETERMINATION,
-            pmrvUser,
+            appUser,
             payload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
@@ -101,7 +101,7 @@ class PermitReviewSaveDeterminationActionHandlerTest {
         		.payload(taskPayload)
         		.request(Request.builder().type(RequestType.PERMIT_ISSUANCE).build())
         		.build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
 
         when(permitReviewDeterminationAndDecisionsValidatorService.isDeterminationAndDecisionsValid(determination, taskPayload, RequestType.PERMIT_ISSUANCE)).thenReturn(false);
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
@@ -109,7 +109,7 @@ class PermitReviewSaveDeterminationActionHandlerTest {
         final BusinessException businessException = assertThrows(BusinessException.class,
             () -> handler.process(requestTaskId,
                 RequestTaskActionType.PERMIT_ISSUANCE_SAVE_REVIEW_DETERMINATION,
-                pmrvUser,
+                appUser,
                 payload));
 
         assertThat(businessException.getErrorCode()).isEqualTo(ErrorCode.FORM_VALIDATION);

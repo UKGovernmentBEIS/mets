@@ -1,0 +1,99 @@
+<ng-container *ngIf="vm() as vm">
+  <app-base-action-container-component
+    [header]="vm.pageTitle"
+    [customContentTemplate]="customContentTemplate"
+    [expectedActionType]="vm.expectedActionType"></app-base-action-container-component>
+
+  <ng-template #customContentTemplate>
+    <h2 class="govuk-heading-m">Notification details</h2>
+    <dl govuk-summary-list *ngIf="vm.permitNotification as permitNotification">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Type of change</dt>
+        <dd govukSummaryListRowValue>{{ permitNotification?.type | notificationType }}</dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Describe the cessation of regulated activities</dt>
+        <dd govukSummaryListRowValue>{{ permitNotification?.description }}</dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Supporting documents</dt>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files [files]="vm.supportingDocuments"></app-summary-download-files>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Date of cessation</dt>
+        <dd govukSummaryListRowValue>{{ permitNotification?.startDateOfNonCompliance | govukDate }}</dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Do you intend to resume one or more of the regulated activities?</dt>
+        <dd govukSummaryListRowValue>{{ permitNotification?.isTemporary ? 'Yes' : 'No' }}</dd>
+      </div>
+
+      <ng-container *ngIf="permitNotification?.isTemporary">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Expected date to resume regulated activities</dt>
+          <dd govukSummaryListRowValue>{{ permitNotification?.endDateOfNonCompliance | govukDate }}</dd>
+        </div>
+
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Technical capability to resume regulated activities</dt>
+          <dd govukSummaryListRowValue>
+            <div>
+              {{
+                permitNotification?.technicalCapabilityDetails.technicalCapability ===
+                'RESUME_REG_ACTIVITIES_WITHOUT_PHYSICAL_CHANGES'
+                  ? 'The installation is technically capable of resuming regulated activities without physical changes being made'
+                  : 'We intend to restore the technical capability required for regulated activities to resume'
+              }}
+            </div>
+            <br />
+            <div>{{ permitNotification?.technicalCapabilityDetails.details }}</div>
+          </dd>
+        </div>
+      </ng-container>
+    </dl>
+
+    <h2 class="govuk-heading-m">Decision details</h2>
+    <dl govuk-summary-list *ngIf="vm.reviewDecision as reviewDecision">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Assessment of the cessation</dt>
+        <dd govukSummaryListRowValue>{{ reviewDecision?.type | reviewGroupDecision }}</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Details to be included in the notification letter</dt>
+        <dd govukSummaryListRowValue>{{ reviewDecision?.details?.officialNotice }}</dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Do you require a response from the operator?</dt>
+        <dd govukSummaryListRowValue>
+          {{ reviewDecision?.details?.followUp?.followUpResponseRequired ? 'Yes' : 'No' }}
+        </dd>
+      </div>
+      <ng-container *ngIf="reviewDecision?.details?.followUp?.followUpResponseRequired">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Explain what the operator should cover in their response</dt>
+          <dd govukSummaryListRowValue>{{ reviewDecision.details?.followUp?.followUpRequest }}</dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Date response is needed</dt>
+          <dd govukSummaryListRowValue>
+            {{ reviewDecision.details?.followUp?.followUpResponseExpirationDate | govukDate }}
+          </dd>
+        </div>
+      </ng-container>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Notes</dt>
+        <dd govukSummaryListRowValue>{{ reviewDecision?.details?.notes }}</dd>
+      </div>
+    </dl>
+
+    <app-action-recipients-template
+      header="Recipients"
+      officialNoticeText="Notification letter"></app-action-recipients-template>
+  </ng-template>
+</ng-container>

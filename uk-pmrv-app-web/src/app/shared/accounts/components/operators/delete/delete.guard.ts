@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
-import { ApplicationUserDTO, OperatorUserDTO } from 'pmrv-api';
+import { OperatorUserDTO, UserDTO } from 'pmrv-api';
 
 import { BusinessErrorService } from '../../../../../error/business-error/business-error.service';
 import { catchBadRequest, ErrorCodes } from '../../../../../error/business-errors';
@@ -11,7 +11,7 @@ import { DetailsGuard } from '../details/details.guard';
 import { saveNotFoundOperatorError } from '../errors/business-error';
 
 @Injectable({ providedIn: 'root' })
-export class DeleteGuard implements CanActivate, Resolve<OperatorUserDTO | ApplicationUserDTO> {
+export class DeleteGuard {
   constructor(
     private readonly operatorDetailsGuard: DetailsGuard,
     private readonly businessErrorService: BusinessErrorService,
@@ -27,7 +27,7 @@ export class DeleteGuard implements CanActivate, Resolve<OperatorUserDTO | Appli
       );
   }
 
-  resolve(): OperatorUserDTO | ApplicationUserDTO {
+  resolve(): OperatorUserDTO | UserDTO {
     return this.operatorDetailsGuard.resolve();
   }
 }

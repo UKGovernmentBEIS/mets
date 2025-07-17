@@ -1,11 +1,13 @@
 import { NgFor, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
+import { parseCsv } from '@aviation/request-task/util';
 import { OperatorDetailsNameTemplateComponent } from '@aviation/shared/components/operator-details/operator-details-name-template/operator-details-name-template.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { OperatorDetailsFlightIdentificationTypePipe } from '@aviation/shared/pipes/operator-details-flight-identification-type.pipe';
@@ -17,17 +19,10 @@ import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule, GovukSelectOption } from 'govuk-components';
 
-import { IssuingAuthoritiesService } from 'pmrv-api';
+import { EmpCorsiaOperatorDetails, IssuingAuthoritiesService, SubsidiaryCompanyCorsia } from 'pmrv-api';
 
 import { BaseOperatorDetailsComponent } from '../../base-operator-details.component';
 import { OperatorDetailsCorsiaFormProvider } from '../../operator-details-form.provider';
-
-interface CertificateFile {
-  file: {
-    name: string;
-  };
-  uuid: string;
-}
 
 @Component({
   selector: 'app-add-subsidiary-company',
@@ -44,8 +39,9 @@ interface CertificateFile {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AddSubsidiaryCompanyComponent extends BaseOperatorDetailsComponent implements OnInit {
-  form = this.formProvider.subsidiaryCompaniesForm();
+export class AddSubsidiaryCompanyComponent extends BaseOperatorDetailsComponent implements OnInit, OnDestroy {
+  private subsidiaryCompaniesFormArray = this.getform('subsidiaryCompanies') as unknown as FormArray;
+  form: FormGroup;
   issuingAuthorityOptions$ = this.getIssuingAuthorityOptions(this.issuingAuthorityService);
   downloadUrl = `${this.store.empDelegate.baseFileAttachmentDownloadUrl}/`;
   countriesOptions$: Observable<GovukSelectOption<string>[]> = this.countryService
@@ -53,7 +49,7 @@ export class AddSubsidiaryCompanyComponent extends BaseOperatorDetailsComponent 
     .pipe(
       map((countries) =>
         countries
-          .map((country) => ({ text: country.name, value: country.code } as GovukSelectOption<string>))
+          .map((country) => ({ text: country.name, value: country.code }) as GovukSelectOption<string>)
           .sort((a, b) => a.text.localeCompare(b.text)),
       ),
     );
@@ -81,7 +77,9 @@ export class AddSubsidiaryCompanyComponent extends BaseOperatorDetailsComponent 
 
   ngOnInit(): void {
     if (!this.isAddPath) {
-      const subsidiaryCompanies = this.formProvider.form.get('subsidiaryCompanies')?.value;
+      this.form = this.subsidiaryCompaniesFormArray.controls[this.index] as FormGroup;
+
+      const subsidiaryCompanies = this.form?.value;
 
       if (subsidiaryCompanies && !!subsidiaryCompanies[this.index]) {
         for (const company of subsidiaryCompanies) {
@@ -98,6 +96,26 @@ export class AddSubsidiaryCompanyComponent extends BaseOperatorDetailsComponent 
 
         this.form.patchValue(subsidiaryCompanies[this.index]);
       }
+    } else {
+      this.form = this.subsidiaryCompaniesFormArray.controls[
+        this.subsidiaryCompaniesFormArray.controls.length - 1
+      ] as FormGroup;
+    }
+
+    const airOperatingCertificateControl = (this.form.controls.airOperatingCertificate as FormGroup).controls;
+
+    airOperatingCertificateControl.restrictionsExist.valueChanges.subscribe((restrictionsExist) => {
+      if (restrictionsExist) {
+        airOperatingCertificateControl.restrictionsDetails.enable();
+      } else {
+        airOperatingCertificateControl.restrictionsDetails.disable();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.isAddPath && this.form.invalid && this.subsidiaryCompaniesFormArray.controls.length > 1) {
+      this.subsidiaryCompaniesFormArray.removeAt(this.subsidiaryCompaniesFormArray.controls.length - 1);
     }
   }
 
@@ -107,65 +125,63 @@ export class AddSubsidiaryCompanyComponent extends BaseOperatorDetailsComponent 
       .pipe(
         map((issuingAuthorityNames: string[]) =>
           issuingAuthorityNames.map(
-            (authorityNames) => ({ text: authorityNames, value: authorityNames } as GovukSelectOption<string>),
+            (authorityNames) => ({ text: authorityNames, value: authorityNames }) as GovukSelectOption<string>,
           ),
         ),
       );
   }
 
   onSubmit() {
-    let subsidiaryCompanies = [];
-    if (this.formProvider.form.value?.subsidiaryCompanies?.length > 0) {
-      subsidiaryCompanies = [...this.formProvider.form.value?.subsidiaryCompanies];
-      if (!isNaN(this.index)) {
-        subsidiaryCompanies.splice(this.index, 1, this.form.value);
-      } else {
-        subsidiaryCompanies.push(this.form.value);
-      }
+    const { flightIdentification, airOperatingCertificate } = this.form.value as SubsidiaryCompanyCorsia;
+
+    if (!airOperatingCertificate.certificateExist) {
+      airOperatingCertificate.certificateFiles = [];
+      airOperatingCertificate.certificateNumber = null;
+      airOperatingCertificate.issuingAuthority = null;
+      airOperatingCertificate.restrictionsDetails = null;
+      airOperatingCertificate.restrictionsExist = null;
     } else {
-      subsidiaryCompanies = [this.form.value];
+      if (!airOperatingCertificate.restrictionsExist) {
+        airOperatingCertificate.restrictionsDetails = null;
+      }
     }
 
-    subsidiaryCompanies = Object.values(this.removeNullKeysTransformationFiles(subsidiaryCompanies));
+    this.form.patchValue({ ...this.form.value, flightIdentification, airOperatingCertificate });
 
-    this.getOperatorDetails();
-    this.formProvider.addSubsidiaryCompanyControl(subsidiaryCompanies);
+    this.subsidiaryCompaniesFormArray.updateValueAndValidity();
+    const subsidiaryCompanies = (
+      this.subsidiaryCompaniesFormArray.value as EmpCorsiaOperatorDetails['subsidiaryCompanies']
+    ).map((subsidiaryCompany) => {
+      return subsidiaryCompany.flightIdentification.aircraftRegistrationMarkings?.length > 0
+        ? {
+            ...subsidiaryCompany,
+            flightIdentification: {
+              ...subsidiaryCompany.flightIdentification,
+              aircraftRegistrationMarkings: parseCsv(
+                subsidiaryCompany.flightIdentification.aircraftRegistrationMarkings as unknown as string,
+              ),
+            },
+          }
+        : subsidiaryCompany;
+    });
 
-    if (!isNaN(this.index)) {
-      this.submitForm('subsidiaryCompanies', { subsidiaryCompanies }, '../../list');
-    } else {
+    this.updateOperatorDetails();
+
+    if (this.isAddPath) {
       this.submitForm('subsidiaryCompanies', { subsidiaryCompanies }, '../list');
+    } else {
+      this.submitForm('subsidiaryCompanies', { subsidiaryCompanies }, '../../list');
     }
   }
 
-  private removeNullKeysTransformationFiles<T>(obj: T): T {
-    const newObj = { ...obj };
-
-    for (const key in newObj) {
-      if (newObj[key] === null) {
-        delete newObj[key];
-      } else if (typeof newObj[key] === 'object' && !Array.isArray(newObj[key])) {
-        newObj[key] = this.removeNullKeysTransformationFiles(newObj[key]);
-
-        if ((newObj[key] as any)?.certificateExist) {
-          (newObj[key] as any).certificateFiles = (newObj[key] as any).certificateFiles.map(
-            (doc: FileUpload) => doc.uuid,
-          );
-        }
-      }
-    }
-
-    return newObj;
-  }
-
-  transformCertificateFile(element): CertificateFile {
+  transformCertificateFile(element): FileUpload {
     const url = element.downloadUrl.split('/').pop();
     const uuid = url.split('attachment').pop();
 
     return {
       file: {
         name: element.fileName,
-      },
+      } as File,
       uuid: uuid,
     };
   }

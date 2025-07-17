@@ -27,7 +27,7 @@
         </ng-container>
         <ng-container *ngIf="!isAviation"> Operator response </ng-container>
       </dt>
-      <dd govukSummaryListRowValue>{{ operatorImprovementResponse?.addressedDescription }}</dd>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ operatorImprovementResponse?.addressedDescription }}</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a
           govukLink

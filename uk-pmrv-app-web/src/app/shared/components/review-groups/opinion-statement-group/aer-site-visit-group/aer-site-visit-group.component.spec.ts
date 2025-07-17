@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { AerSiteVisitGroupComponent } from '@shared/components/review-groups/opinion-statement-group/aer-site-visit-group/aer-site-visit-group.component';
 import { SharedModule } from '@shared/shared.module';
@@ -27,7 +27,8 @@ describe('AerSiteVisitGroupComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AerSiteVisitGroupComponent],
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -53,7 +54,7 @@ describe('AerSiteVisitGroupComponent', () => {
       expect(page.heading2.textContent.trim()).toEqual('Site verification');
       expect(page.summaryList).toEqual([
         [['Did your team conduct any site visits?', 'In person visit', 'Change']],
-        [['Dates of visit', 'Jan 2, 2018 Dec 28, 2020', 'Change']],
+        [['Dates of visit', 'Jan 2, 2018  Dec 28, 2020', 'Change']],
         [['Team members who conducted the site visit', 'Alex, Joe', 'Change']],
       ]);
     });
@@ -108,7 +109,7 @@ describe('AerSiteVisitGroupComponent', () => {
       expect(page.heading2.textContent.trim()).toEqual('Site verification');
       expect(page.summaryList).toEqual([
         [['Did your team conduct any site visits?', 'Virtual visit', 'Change']],
-        [['Dates of visit', 'Jan 2, 2018 Dec 28, 2020', 'Change']],
+        [['Dates of visit', 'Jan 2, 2018  Dec 28, 2020', 'Change']],
         [['Team members who conducted the site visit', 'Alex, Joe', 'Change']],
         [['Reasons for conducting a virtual site visit', 'Some reason', 'Change']],
       ]);

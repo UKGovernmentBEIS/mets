@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,18 +9,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { InstallationAccountSubmitter } from './installationAccountSubmitter';
 import { LegalEntityDTO } from './legalEntityDTO';
 import { LocationDTO } from './locationDTO';
+import { LocationOffShoreDTO } from './locationOffShoreDTO';
+import { LocationOnShoreDTO } from './locationOnShoreDTO';
+import { LocationOnShoreStateDTO } from './locationOnShoreStateDTO';
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
 export interface InstallationAccountOpeningAmendApplicationRequestTaskActionPayload extends RequestTaskActionPayload {
   accountType: 'INSTALLATION' | 'AVIATION';
   applicationType: 'NEW_PERMIT' | 'TRANSFER';
   name: string;
+  submitter?: InstallationAccountSubmitter;
   siteName: string;
   emissionTradingScheme: 'UK_ETS_INSTALLATIONS' | 'EU_ETS_INSTALLATIONS' | 'UK_ETS_AVIATION' | 'CORSIA';
   competentAuthority: 'ENGLAND' | 'NORTHERN_IRELAND' | 'OPRED' | 'SCOTLAND' | 'WALES';
   commencementDate: string;
   legalEntity: LegalEntityDTO;
-  location: LocationDTO;
+  location: LocationDTO | LocationOffShoreDTO | LocationOnShoreDTO | LocationOnShoreStateDTO;
 }

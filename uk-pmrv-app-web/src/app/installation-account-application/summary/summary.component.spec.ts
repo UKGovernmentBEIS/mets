@@ -17,7 +17,7 @@ import { ApplicationType } from '../application-type/application-type';
 import { Commencement } from '../commencement/commencement';
 import { EtsScheme } from '../ets-scheme/ets-scheme';
 import { installationFormFactory } from '../factories/installation-form.factory';
-import { legalEntityFormFactory } from '../factories/legal-entity-form.factory';
+import { legalEntityFormRegFactory } from '../factories/legal-entity/legal-entity-form-reg.factory';
 import { OffshoreInstallation, OnshoreInstallation } from '../installation-type/installation';
 import { SubmitApplicationActionPayload } from '../pipes/submit-application';
 import {
@@ -192,7 +192,7 @@ describe('SummaryComponent', () => {
         { provide: CountryService, useClass: CountryServiceStub },
         { provide: TasksService, useValue: tasksService },
         installationFormFactory,
-        legalEntityFormFactory,
+        legalEntityFormRegFactory,
       ],
     }).compileComponents();
 

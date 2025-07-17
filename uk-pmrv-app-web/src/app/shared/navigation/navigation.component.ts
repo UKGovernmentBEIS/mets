@@ -15,19 +15,17 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
       </div>
     </div>
   `,
-  styles: [
-    `
-      .hmcts-primary-navigation {
-        width: 100%;
-        margin: 0;
-        float: left;
-      }
+  styles: `
+    .hmcts-primary-navigation {
+      width: 100%;
+      margin: 0;
+      float: left;
+    }
 
-      .hmcts-primary-navigation__container {
-        margin: 0;
-      }
-    `,
-  ],
+    .hmcts-primary-navigation__container {
+      margin: 0;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationComponent {

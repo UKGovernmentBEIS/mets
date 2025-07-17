@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { PermitNotificationSharedModule } from '@shared/components/permit-notification/permit-notification-shared.module';
 import { SharedModule } from '@shared/shared.module';
@@ -9,15 +9,15 @@ import { PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActi
 
 import { ActionSharedModule } from '../../shared/action-shared-module';
 import { CommonActionsStore } from '../../store/common-actions.store';
-import { CompletedComponent } from './completed.component';
+import { NotificationCompletedActionComponent } from './completed.component';
 
 describe('CompletedComponent', () => {
-  let component: CompletedComponent;
-  let fixture: ComponentFixture<CompletedComponent>;
+  let component: NotificationCompletedActionComponent;
+  let fixture: ComponentFixture<NotificationCompletedActionComponent>;
   let store: CommonActionsStore;
   let page: Page;
 
-  class Page extends BasePage<CompletedComponent> {
+  class Page extends BasePage<NotificationCompletedActionComponent> {
     get summaryListValues() {
       return this.queryAll<HTMLDivElement>('.govuk-summary-list__row')
         .map((row) => [row.querySelector('dt'), row.querySelector('dd')])
@@ -27,8 +27,9 @@ describe('CompletedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CompletedComponent],
-      imports: [ActionSharedModule, SharedModule, RouterTestingModule, PermitNotificationSharedModule],
+      declarations: [NotificationCompletedActionComponent],
+      imports: [ActionSharedModule, SharedModule, PermitNotificationSharedModule],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -77,7 +78,7 @@ describe('CompletedComponent', () => {
       },
     });
 
-    fixture = TestBed.createComponent(CompletedComponent);
+    fixture = TestBed.createComponent(NotificationCompletedActionComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
     fixture.detectChanges();

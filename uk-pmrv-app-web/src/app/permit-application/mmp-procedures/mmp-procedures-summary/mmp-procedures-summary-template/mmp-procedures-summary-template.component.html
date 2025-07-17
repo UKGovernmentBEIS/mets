@@ -1,0 +1,81 @@
+<ng-container *ngIf="'monitoringMethodologyPlans' | task: !showOriginal | async as monitoringMethodologyPlans">
+  <ng-container *ngIf="monitoringMethodologyPlans.digitizedPlan?.procedures as procedures">
+    @for (procedureType of procedureTypes; track procedureType) {
+      @if (procedures[procedureType]?.procedureName && procedures[procedureType]?.procedureReference) {
+        <h2 class="govuk-heading-m">{{ labelsForHeader[procedureType] }}</h2>
+        <dl
+          govuk-summary-list
+          [hasBorders]="hasBottomBorder"
+          class="govuk-!-margin-bottom-8"
+          [class.summary-list--edge-border]="hasBottomBorder"
+          [class.govuk-!-margin-bottom-0]="isEditable">
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Name of the procedure</dt>
+            <dd govukSummaryListRowValue>{{ procedures[procedureType]?.procedureName }}</dd>
+            <dd govukSummaryListRowActions *ngIf="isEditable">
+              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+            </dd>
+          </div>
+
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Procedure reference</dt>
+            <dd govukSummaryListRowValue>{{ procedures[procedureType]?.procedureReference }}</dd>
+            <dd govukSummaryListRowActions *ngIf="isEditable">
+              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+            </dd>
+          </div>
+
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Diagram reference</dt>
+            <dd govukSummaryListRowValue>{{ procedures[procedureType]?.diagramReference }}</dd>
+            <dd govukSummaryListRowActions *ngIf="isEditable">
+              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+            </dd>
+          </div>
+
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Procedure description</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ procedures[procedureType]?.procedureDescription }}
+            </dd>
+            <dd govukSummaryListRowActions *ngIf="isEditable">
+              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+            </dd>
+          </div>
+
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Department or role responsible for data maintenance</dt>
+            <dd govukSummaryListRowValue>{{ procedures[procedureType]?.dataMaintenanceResponsibleEntity }}</dd>
+            <dd govukSummaryListRowActions *ngIf="isEditable">
+              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+            </dd>
+          </div>
+
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Location of records</dt>
+            <dd govukSummaryListRowValue>{{ procedures[procedureType]?.locationOfRecords }}</dd>
+            <dd govukSummaryListRowActions *ngIf="isEditable">
+              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+            </dd>
+          </div>
+
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>IT system used</dt>
+            <dd govukSummaryListRowValue>{{ procedures[procedureType]?.itSystemUsed }}</dd>
+            <dd govukSummaryListRowActions *ngIf="isEditable">
+              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+            </dd>
+          </div>
+
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>List of EN or other standards applied</dt>
+            <dd govukSummaryListRowValue>{{ procedures[procedureType]?.standardsAppliedList }}</dd>
+            <dd govukSummaryListRowActions *ngIf="isEditable">
+              <a govukLink [routerLink]="[routerLink(procedureType)]" [state]="{ changing: true }">Change</a>
+            </dd>
+          </div>
+        </dl>
+      }
+    }
+  </ng-container>
+</ng-container>

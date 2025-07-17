@@ -1,9 +1,9 @@
-<ng-container *ngIf="data?.operatorName">
+<ng-container *ngIf="data?.operatorName as operatorName">
   <h2 class="govuk-heading-m">Operator details</h2>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Aircraft operator name</dt>
-      <dd govukSummaryListRowValue>{{ data.operatorName }}</dd>
+      <dd govukSummaryListRowValue>{{ operatorName }}</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a govukLink [routerLink]="'../'" [queryParams]="changeUrlQueryParams">Change</a>
       </dd>
@@ -76,7 +76,10 @@
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Restrictions or obligations imposed by the certificate?</dt>
-        <dd govukSummaryListRowValue>{{ $any(airOperatingCertificate).restrictionsExist ? 'Yes' : 'No' }}</dd>
+        <dd govukSummaryListRowValue>
+          {{ $any(airOperatingCertificate).restrictionsExist ? 'Yes' : 'No' }} <br />
+          <span class="pre-wrap"> {{ $any(airOperatingCertificate).restrictionsDetails }} </span>
+        </dd>
         <dd govukSummaryListRowActions *ngIf="isEditable">
           <a govukLink [routerLink]="'../air-operating-certificate'" [queryParams]="changeUrlQueryParams">Change</a>
         </dd>
@@ -284,14 +287,14 @@
   </dl>
 </ng-container>
 
-<ng-container *ngIf="!$any(data)?.subsidiaryCompanies || $any(data)?.subsidiaryCompanies?.length === 0">
+<ng-container *ngIf="!$any(data)?.subsidiaryCompanyExist">
   <h2 class="govuk-heading-m">Subsidiary company</h2>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Do you want to add a subsidiary company?</dt>
-      <dd govukSummaryListRowValue>No</dd>
+      <dd govukSummaryListRowValue>{{ $any(data)?.subsidiaryCompanyExist ? 'Yes' : 'No' }}</dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="'../subsidiary-companies/add'" [queryParams]="changeUrlQueryParams">Change</a>
+        <a govukLink [routerLink]="'../subsidiary-companies'" [queryParams]="changeUrlQueryParams">Change</a>
       </dd>
     </div>
   </dl>
@@ -299,7 +302,7 @@
 
 <ng-container *ngIf="$any(data)?.subsidiaryCompanies">
   <app-operator-details-subsidiary-list
-    [subsidiaryCompanyData]="$any(data)"
+    [subsidiaryCompaniesData$]="subsidiaryCompanies$"
     [isEditable]="isEditable"
     [queryParams]="changeUrlQueryParams"
     [linkTo]="'../subsidiary-companies/'"

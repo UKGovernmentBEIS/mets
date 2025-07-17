@@ -102,7 +102,7 @@ describe('SectionsComponent', () => {
         'Control of outsourced activities',
         'Record keeping and documentation',
         'Environmental management system',
-        'Monitoring Methodology Plan',
+        'Provide a monitoring methodology plan',
         'Abbreviations, acronyms and definitions',
         'Additional documents and information',
         'Confidentiality statement',

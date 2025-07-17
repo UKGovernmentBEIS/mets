@@ -22,9 +22,9 @@ export class TextareaComponent extends FormInput implements ControlValueAccessor
   @Input() hint: string;
   @Input() rows = '5';
   @Input() maxLength: number;
+  @Input() isLabelHidden = true;
   currentLabel = 'Insert text details';
   currentLabelSize = 'govuk-label';
-  isLabelHidden = true;
   onBlur: (_: any) => any;
 
   constructor(

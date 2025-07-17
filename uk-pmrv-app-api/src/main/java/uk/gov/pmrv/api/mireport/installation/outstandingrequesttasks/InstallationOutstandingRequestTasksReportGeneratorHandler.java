@@ -1,28 +1,35 @@
 package uk.gov.pmrv.api.mireport.installation.outstandingrequesttasks;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.mireport.common.outstandingrequesttasks.OutstandingRegulatorRequestTasksMiReportParams;
-import uk.gov.pmrv.api.mireport.common.outstandingrequesttasks.OutstandingRequestTasksReportGenerator;
-import uk.gov.pmrv.api.mireport.common.outstandingrequesttasks.OutstandingRequestTasksReportService;
-import uk.gov.pmrv.api.mireport.common.outstandingrequesttasks.OutstandingRequestTasksRepository;
+import uk.gov.netz.api.mireport.outstandingrequesttasks.OutstandingRegulatorRequestTasksMiReportParams;
+import uk.gov.netz.api.mireport.outstandingrequesttasks.OutstandingRequestTasksReportGenerator;
 import uk.gov.pmrv.api.mireport.installation.InstallationMiReportGeneratorHandler;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
+import java.util.List;
+
 @Service
 public class InstallationOutstandingRequestTasksReportGeneratorHandler
-    extends OutstandingRequestTasksReportGenerator
-    implements InstallationMiReportGeneratorHandler<OutstandingRegulatorRequestTasksMiReportParams> {
+        extends OutstandingRequestTasksReportGenerator<InstallationOutstandingRequestTask>
+        implements InstallationMiReportGeneratorHandler<OutstandingRegulatorRequestTasksMiReportParams> {
 
+    private final InstallationOutstandingRequestTasksRepository outstandingRequestTasksRepository;
 
-    public InstallationOutstandingRequestTasksReportGeneratorHandler(OutstandingRequestTasksReportService outstandingRequestTasksReportService,
-                                                                     OutstandingRequestTasksRepository outstandingRequestTasksRepository,
+    public InstallationOutstandingRequestTasksReportGeneratorHandler(InstallationOutstandingRequestTasksRepository outstandingRequestTasksRepository,
+                                                                     InstallationOutstandingRequestTasksReportService outstandingRequestTasksReportService,
                                                                      UserAuthService userAuthService) {
-        super(outstandingRequestTasksReportService, outstandingRequestTasksRepository, userAuthService);
+        super(outstandingRequestTasksReportService, userAuthService);
+        this.outstandingRequestTasksRepository = outstandingRequestTasksRepository;
     }
 
     @Override
-    public AccountType getAccountType() {
-        return AccountType.INSTALLATION;
+    public List<InstallationOutstandingRequestTask> findOutstandingRequestTaskParams(EntityManager entityManager, OutstandingRegulatorRequestTasksMiReportParams reportParams) {
+        return outstandingRequestTasksRepository.findOutstandingRequestTaskParams(entityManager, reportParams);
+    }
+
+    @Override
+    public List<String> getColumnNames() {
+        return InstallationOutstandingRequestTask.getColumnNames();
     }
 }

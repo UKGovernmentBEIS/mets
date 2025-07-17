@@ -1,12 +1,13 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.validation;
 
 import org.junit.jupiter.api.Test;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsia;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.emissionsmonitoringapproach.AviationAerCorsiaMonitoringApproach;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.emissionsreductionclaim.AviationAerCorsiaEmissionsReductionClaim;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerDataReviewDecision;
@@ -292,7 +293,7 @@ class RequestAviationAerCorsiaReviewValidatorServiceTest {
         BusinessException be = assertThrows(BusinessException.class,
                 () -> reviewValidatorService.validateAtLeastOneReviewGroupAmendsNeeded(reviewRequestTaskPayload));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AVIATION_AER_REVIEW);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AVIATION_AER_REVIEW);
     }
 
     @Test

@@ -6,10 +6,6 @@
   [heading]="vm.pageHeader"
   *ngIf="vm$ | async as vm"
 >
-  <p class="govuk-body govuk-!-width-two-thirds">
-    The regulator would normally receive and approve a notification sent by the operator when the issue occurred.
-  </p>
-
   <div formControlName="methodApproved" govuk-radio>
     <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
     <govuk-radio-option [value]="false" label="No"></govuk-radio-option>

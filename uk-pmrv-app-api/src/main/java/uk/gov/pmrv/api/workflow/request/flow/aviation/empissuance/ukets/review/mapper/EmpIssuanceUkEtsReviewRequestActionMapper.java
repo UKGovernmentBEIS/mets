@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceUkEtsApplicationApprovedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.domain.EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload;
 

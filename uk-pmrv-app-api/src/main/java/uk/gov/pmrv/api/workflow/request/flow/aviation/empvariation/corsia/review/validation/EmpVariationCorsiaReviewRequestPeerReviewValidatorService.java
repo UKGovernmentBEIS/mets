@@ -4,9 +4,9 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -25,12 +25,12 @@ public class EmpVariationCorsiaReviewRequestPeerReviewValidatorService {
     private final EmpTradingSchemeValidatorService<EmissionsMonitoringPlanCorsiaContainer> empCorsiaValidatorService;
     private static final EmpVariationCorsiaMapper MAPPER = Mappers.getMapper(EmpVariationCorsiaMapper.class);
 
-    public void validate(RequestTask requestTask, String selectedPeerReviewer, PmrvUser pmrvUser) {
+    public void validate(RequestTask requestTask, String selectedPeerReviewer, AppUser appUser) {
 
         peerReviewerTaskAssignmentValidator.validate(
             RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEW,
             selectedPeerReviewer,
-            pmrvUser);
+            appUser);
 
         EmpVariationCorsiaApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
             (EmpVariationCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload();

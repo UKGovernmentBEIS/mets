@@ -3,7 +3,8 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationop
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.pmrv.api.account.installation.domain.enumeration.ApplicationType;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -14,6 +15,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActio
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
+import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.AccountOpeningDecisionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningApplicationRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningDecisionRequestActionPayload;
@@ -25,12 +27,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationope
 import java.util.List;
 import java.util.Map;
 
-import static uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants.APPLICATION_ACCEPTED;
-
 @Component
 @RequiredArgsConstructor
 public class InstallationAccountOpeningSubmitDecisionActionHandler
-    implements RequestTaskActionHandler<InstallationAccountOpeningSubmitDecisionRequestTaskActionPayload> {
+        implements RequestTaskActionHandler<InstallationAccountOpeningSubmitDecisionRequestTaskActionPayload> {
 
     private final WorkflowService workflowService;
     private final RequestService requestService;
@@ -40,41 +40,44 @@ public class InstallationAccountOpeningSubmitDecisionActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final InstallationAccountOpeningSubmitDecisionRequestTaskActionPayload payload) {
-        
+
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         Request request = requestTask.getRequest();
         AccountOpeningDecisionPayload
-            accountOpeningDecisionPayload = payload.getAccountOpeningDecisionPayload();
+                accountOpeningDecisionPayload = payload.getAccountOpeningDecisionPayload();
         boolean isApplicationAccepted = isApplicationAccepted(accountOpeningDecisionPayload);
 
         // Add request actions
         requestService.addActionToRequest(
-            request,
-            buildSubmittedDecisionPayload(accountOpeningDecisionPayload),
-            isApplicationAccepted ?
-                RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCEPTED :
-                RequestActionType.INSTALLATION_ACCOUNT_OPENING_REJECTED,
-            pmrvUser.getUserId());
+                request,
+                buildSubmittedDecisionPayload(accountOpeningDecisionPayload),
+                isApplicationAccepted ?
+                        RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCEPTED :
+                        RequestActionType.INSTALLATION_ACCOUNT_OPENING_REJECTED,
+                appUser.getUserId());
 
         InstallationAccountOpeningApplicationRequestTaskPayload accountApplyRequestTaskPayload =
-            (InstallationAccountOpeningApplicationRequestTaskPayload) requestTask.getPayload();
+                (InstallationAccountOpeningApplicationRequestTaskPayload) requestTask.getPayload();
 
         if (isApplicationAccepted) {
             requestService.addActionToRequest(
-                request,
-                INSTALLATION_ACCOUNT_PAYLOAD_MAPPER.toInstallationAccountOpeningApprovedRequestActionPayload(accountApplyRequestTaskPayload.getAccountPayload()),
-                RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
-                pmrvUser.getUserId());
+                    request,
+                    INSTALLATION_ACCOUNT_PAYLOAD_MAPPER.toInstallationAccountOpeningApprovedRequestActionPayload(accountApplyRequestTaskPayload.getAccountPayload()),
+                    RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
+                    appUser.getUserId());
         }
 
         updateRequestPayload(request, accountApplyRequestTaskPayload.getAccountPayload(), accountOpeningDecisionPayload);
 
         // Complete task
+        final boolean isTransfer = ApplicationType.TRANSFER.equals(accountApplyRequestTaskPayload.getAccountPayload().getApplicationType());
         workflowService.completeTask(
-            requestTask.getProcessTaskId(),
-            Map.of(APPLICATION_ACCEPTED, isApplicationAccepted));
+                requestTask.getProcessTaskId(),
+                Map.of(BpmnProcessConstants.APPLICATION_ACCEPTED, isApplicationAccepted,
+                        BpmnProcessConstants.APPLICATION_TYPE_IS_TRANSFER, isTransfer)
+        );
     }
 
     @Override
@@ -87,11 +90,11 @@ public class InstallationAccountOpeningSubmitDecisionActionHandler
     }
 
     private InstallationAccountOpeningDecisionRequestActionPayload buildSubmittedDecisionPayload(
-        AccountOpeningDecisionPayload accountOpeningDecisionPayload) {
+            AccountOpeningDecisionPayload accountOpeningDecisionPayload) {
         return InstallationAccountOpeningDecisionRequestActionPayload.builder()
-            .payloadType(RequestActionPayloadType.INSTALLATION_ACCOUNT_OPENING_DECISION_PAYLOAD)
-            .accountOpeningDecisionPayload(accountOpeningDecisionPayload)
-            .build();
+                .payloadType(RequestActionPayloadType.INSTALLATION_ACCOUNT_OPENING_DECISION_PAYLOAD)
+                .accountOpeningDecisionPayload(accountOpeningDecisionPayload)
+                .build();
     }
 
     private void updateRequestPayload(Request request, InstallationAccountPayload accountPayload, AccountOpeningDecisionPayload decisionPayload) {

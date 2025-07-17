@@ -14,27 +14,27 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.regulator.domain.RegulatorUserUpdateStatusDTO;
-import uk.gov.pmrv.api.authorization.regulator.service.RegulatorAuthorityDeletionService;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.regulator.domain.RegulatorUserUpdateStatusDTO;
+import uk.gov.netz.api.authorization.regulator.service.RegulatorAuthorityDeletionService;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.orchestrator.authorization.service.RegulatorUserAuthorityQueryOrchestrator;
 import uk.gov.pmrv.api.web.orchestrator.authorization.service.RegulatorUserAuthorityUpdateOrchestrator;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.RegulatorUserAuthorityInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.RegulatorUsersAuthoritiesInfoDTO;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.Collections;
 import java.util.List;
@@ -61,10 +61,10 @@ class RegulatorAuthorityControllerTest {
     private RegulatorAuthorityController regulatorAuthorityController;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent appSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -82,8 +82,8 @@ class RegulatorAuthorityControllerTest {
 
     @BeforeEach
     public void setUp() {
-        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(regulatorAuthorityController);
@@ -96,7 +96,7 @@ class RegulatorAuthorityControllerTest {
         regulatorAuthorityController = (RegulatorAuthorityController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(regulatorAuthorityController)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .build();
 
@@ -105,14 +105,14 @@ class RegulatorAuthorityControllerTest {
 
     @Test
     void updateCompetentAuthorityRegulatorUsersStatus() throws Exception {
-        PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+        AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
         List<RegulatorUserUpdateStatusDTO> regulatorUsers = List.of(
             RegulatorUserUpdateStatusDTO.builder().userId("user1").authorityStatus(AuthorityStatus.DISABLED).build(),
             RegulatorUserUpdateStatusDTO.builder().userId("user2").authorityStatus(AuthorityStatus.DISABLED).build()
         );
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
         //invoke
         mockMvc.perform(
@@ -128,16 +128,16 @@ class RegulatorAuthorityControllerTest {
 
     @Test
     void updateCompetentAuthorityRegulatorUsersStatus_forbidden() throws Exception {
-        PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+        AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
         List<RegulatorUserUpdateStatusDTO> regulatorUsers = List.of(
             RegulatorUserUpdateStatusDTO.builder().userId("user1").authorityStatus(AuthorityStatus.DISABLED).build(),
             RegulatorUserUpdateStatusDTO.builder().userId("user2").authorityStatus(AuthorityStatus.DISABLED).build()
         );
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(currentUser, "updateCompetentAuthorityRegulatorUsersStatus");
 
         //invoke
@@ -153,10 +153,10 @@ class RegulatorAuthorityControllerTest {
 
     @Test
     void deleteRegulatorUserByCompetentAuthority() throws Exception {
-        final PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+        final AppUser currentUser = AppUser.builder().userId("currentuser").build();
         final String user = "user";
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
         //invoke
         mockMvc.perform(
@@ -170,12 +170,12 @@ class RegulatorAuthorityControllerTest {
 
     @Test
     void deleteRegulatorUserByCompetentAuthority_forbidden() throws Exception {
-        final PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+        final AppUser currentUser = AppUser.builder().userId("currentuser").build();
         final String user = "user";
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(currentUser, "deleteRegulatorUserByCompetentAuthority");
 
         //invoke
@@ -189,9 +189,9 @@ class RegulatorAuthorityControllerTest {
 
     @Test
     void deleteCurrentRegulatorUserByCompetentAuthority() throws Exception {
-        final PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+        final AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
         //invoke
         mockMvc.perform(
@@ -204,11 +204,11 @@ class RegulatorAuthorityControllerTest {
 
     @Test
     void deleteCurrentRegulatorUserByCompetentAuthority_forbidden() throws Exception {
-        final PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+        final AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(currentUser, "deleteCurrentRegulatorUserByCompetentAuthority");
 
         //invoke
@@ -222,10 +222,10 @@ class RegulatorAuthorityControllerTest {
 
     @Test
     void getCaRegulators_no_users() throws Exception {
-        PmrvUser authUser = buildRegulatorUser();
+        AppUser authUser = buildRegulatorUser();
 
         //mock
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         when(regulatorUserAuthorityQueryOrchestrator.getCaUsersAuthoritiesInfo(authUser))
             .thenReturn(buildRegulatorUsersAuthoritiesInfoDTO(Collections.emptyList()));
 
@@ -239,13 +239,13 @@ class RegulatorAuthorityControllerTest {
 
     @Test
     void getCaRegulators_no_permission() throws Exception {
-        PmrvUser authUser = buildRegulatorUser();
+        AppUser authUser = buildRegulatorUser();
 
         //mock
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(authUser, new RoleType[] {RoleType.REGULATOR});
+            .evaluate(authUser, new String[] {RoleTypeConstants.REGULATOR});
 
         //invoke
         mockMvc.perform(
@@ -256,11 +256,11 @@ class RegulatorAuthorityControllerTest {
 
     @Test
     void getCaRegulators() throws Exception {
-        PmrvUser authUser = buildRegulatorUser();
+        AppUser authUser = buildRegulatorUser();
         RegulatorUserAuthorityInfoDTO caRegulatorUserManageDTO = buildRegulatorUserAuthorityInfoDTO();
 
         //mock
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         when(regulatorUserAuthorityQueryOrchestrator.getCaUsersAuthoritiesInfo(authUser))
             .thenReturn(buildRegulatorUsersAuthoritiesInfoDTO(List.of(buildRegulatorUserAuthorityInfoDTO())));
 
@@ -276,11 +276,11 @@ class RegulatorAuthorityControllerTest {
             .andExpect(jsonPath("caUsers[0].jobTitle").value(caRegulatorUserManageDTO.getJobTitle()));
     }
 
-    private PmrvUser buildRegulatorUser() {
-        return PmrvUser.builder()
+    private AppUser buildRegulatorUser() {
+        return AppUser.builder()
                 .userId("userId")
-                .roleType(RoleType.REGULATOR)
-                .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+                .roleType(RoleTypeConstants.REGULATOR)
+                .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
                 .build();
     }
 

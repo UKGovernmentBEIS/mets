@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.pmrv.api.account.domain.AccountIdentifier;
 import uk.gov.pmrv.api.account.repository.AccountIdentifierRepository;
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @ExtendWith(MockitoExtension.class)
 class AccountIdentifierServiceTest {

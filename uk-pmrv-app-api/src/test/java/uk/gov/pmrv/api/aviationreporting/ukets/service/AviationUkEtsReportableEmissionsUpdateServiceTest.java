@@ -7,9 +7,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationReportableEmissionsEntity;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationReportableEmissionsSaveParams;
+import uk.gov.pmrv.api.aviationreporting.common.domain.AviationReportableEmissionsUpdatedEvent;
 import uk.gov.pmrv.api.aviationreporting.common.repository.AviationReportableEmissionsRepository;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsTotalReportableEmissions;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
@@ -25,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +38,9 @@ class AviationUkEtsReportableEmissionsUpdateServiceTest {
 
     @Mock
     private AviationReportableEmissionsRepository aviationReportableEmissionsRepository;
+    
+    @Mock
+    private ApplicationEventPublisher publisher;
 
     @Test
     void saveReportableEmissions_new_entry() {
@@ -65,10 +71,16 @@ class AviationUkEtsReportableEmissionsUpdateServiceTest {
         assertEquals(year, savedEntity.getYear());
         assertEquals(reportableEmissions, savedEntity.getReportableEmissions());
         assertEquals(params.isFromDre(), savedEntity.isFromDre());
+        verify(publisher, times(1)).publishEvent(AviationReportableEmissionsUpdatedEvent.builder()
+        		.accountId(accountId)
+                .year(year)
+                .reportableEmissions(reportableEmissions)
+                .isFromDre(false)
+        		.build());
     }
 
     @Test
-    void saveReportableEmissions_when_aer_and_entry_from_aer_exists() {
+    void saveReportableEmissions_params_not_from_dre_and_entity_not_from_dre() {
         Long accountId = 1L;
         Year year = Year.now();
         Long reportableEmissionsEntityId = 10L;
@@ -99,10 +111,16 @@ class AviationUkEtsReportableEmissionsUpdateServiceTest {
         assertEquals(newReportableEmissions, reportableEmissionsEntity.getReportableEmissions());
 
         verify(aviationReportableEmissionsRepository, never()).save(any());
+        verify(publisher, times(1)).publishEvent(AviationReportableEmissionsUpdatedEvent.builder()
+        		.accountId(accountId)
+                .year(year)
+                .reportableEmissions(newReportableEmissions)
+                .isFromDre(false)
+        		.build());
     }
 
     @Test
-    void saveReportableEmissions_when_aer_and_entry_from_dre_exist() {
+    void saveReportableEmissions_params_not_from_dre_and_entity_from_dre() {
         Long accountId = 1L;
         Year year = Year.now();
         Long reportableEmissionsEntityId = 10L;
@@ -134,10 +152,11 @@ class AviationUkEtsReportableEmissionsUpdateServiceTest {
         assertEquals(BigDecimal.valueOf(200), reportableEmissionsEntity.getReportableEmissions());
 
         verify(aviationReportableEmissionsRepository, never()).save(any());
+        verifyNoInteractions(publisher);
     }
 
     @Test
-    void saveReportableEmissions_when_dre_and_entry_from_dre_exist() {
+    void saveReportableEmissions_params_from_dre_and_entity_from_dre() {
         Long accountId = 1L;
         Year year = Year.now();
         Long reportableEmissionsEntityId = 10L;
@@ -169,10 +188,16 @@ class AviationUkEtsReportableEmissionsUpdateServiceTest {
         assertEquals(newReportableEmissions, reportableEmissionsEntity.getReportableEmissions());
 
         verify(aviationReportableEmissionsRepository, never()).save(any());
+        verify(publisher, times(1)).publishEvent(AviationReportableEmissionsUpdatedEvent.builder()
+        		.accountId(accountId)
+                .year(year)
+                .reportableEmissions(newReportableEmissions)
+                .isFromDre(true)
+        		.build());
     }
 
     @Test
-    void saveReportableEmissions_when_dre_and_entry_from_aer_exist() {
+    void saveReportableEmissions_params_from_dre_and_entity_not_from_dre() {
         Long accountId = 1L;
         Year year = Year.now();
         Long reportableEmissionsEntityId = 10L;
@@ -204,6 +229,12 @@ class AviationUkEtsReportableEmissionsUpdateServiceTest {
         assertEquals(newReportableEmissions, reportableEmissionsEntity.getReportableEmissions());
 
         verify(aviationReportableEmissionsRepository, never()).save(any());
+        verify(publisher, times(1)).publishEvent(AviationReportableEmissionsUpdatedEvent.builder()
+        		.accountId(accountId)
+                .year(year)
+                .reportableEmissions(newReportableEmissions)
+                .isFromDre(true)
+        		.build());
     }
 
     @Test

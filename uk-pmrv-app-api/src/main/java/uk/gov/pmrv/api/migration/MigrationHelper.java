@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration;
 
+import uk.gov.netz.api.authorization.AuthorityConstants;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
-import uk.gov.pmrv.api.authorization.AuthorityConstants;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.authorization.PmrvAuthorityConstants;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,10 +25,10 @@ public final class MigrationHelper {
         compAuthMapper.put("DECC", CompetentAuthorityEnum.OPRED);
         
         roleMapper = new HashMap<>();
-        roleMapper.put("Competent Authority", AuthorityConstants.REGULATOR_ADMIN_TEAM_ROLE_CODE);
-        roleMapper.put("Competent Authority Assistant", AuthorityConstants.REGULATOR_TECHNICAL_OFFICER_ROLE_CODE);
-        roleMapper.put("Competent Authority Admin", AuthorityConstants.CA_SUPER_USER_ROLE_CODE); //exclude VB manage?
-        roleMapper.put("Member State Admin", AuthorityConstants.PMRV_SUPER_USER_ROLE_CODE);
+        roleMapper.put("Competent Authority", PmrvAuthorityConstants.REGULATOR_ADMIN_TEAM_ROLE_CODE);
+        roleMapper.put("Competent Authority Assistant", PmrvAuthorityConstants.REGULATOR_TECHNICAL_OFFICER_ROLE_CODE);
+        roleMapper.put("Competent Authority Admin", PmrvAuthorityConstants.CA_SUPER_USER_ROLE_CODE); //exclude VB manage?
+        roleMapper.put("Member State Admin", PmrvAuthorityConstants.PMRV_SUPER_USER_ROLE_CODE);
         roleMapper.put("Operator Admin", AuthorityConstants.OPERATOR_ADMIN_ROLE_CODE);
         roleMapper.put("Operator", AuthorityConstants.OPERATOR_ROLE_CODE);
         roleMapper.put("Operator Editor", "operator_editor");

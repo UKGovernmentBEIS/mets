@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
 import uk.gov.pmrv.api.verificationbody.repository.VerificationBodyRepository;
 

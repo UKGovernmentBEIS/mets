@@ -1,7 +1,7 @@
 import { render } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
-import { MonitoringApproachSummaryTemplateComponent } from './monitoring-approach-summary-template.component';
+import { MonitoringApproachCorsiaSummaryTemplateComponent } from './monitoring-approach-summary-template.component';
 
 describe('MonitoringApproachSummaryTemplateComponent', () => {
   async function renderComponent() {
@@ -13,7 +13,7 @@ describe('MonitoringApproachSummaryTemplateComponent', () => {
         </app-monitoring-approach-summary-template>
       `,
       {
-        imports: [MonitoringApproachSummaryTemplateComponent],
+        imports: [MonitoringApproachCorsiaSummaryTemplateComponent],
         componentProperties: {
           data: {
             dataManagement: {

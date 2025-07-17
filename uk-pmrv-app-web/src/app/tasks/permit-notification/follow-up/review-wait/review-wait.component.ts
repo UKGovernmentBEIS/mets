@@ -12,17 +12,18 @@ import { CommonTasksStore } from '../../../store/common-tasks.store';
       [header]="(route.data | async)?.pageTitle"
       [customContentTemplate]="customContentTemplate"
       expectedTaskType="PERMIT_NOTIFICATION_FOLLOW_UP_WAIT_FOR_REVIEW"
-      [daysRemaining]="daysRemaining$ | async"
-    >
-    </app-base-task-container-component>
+      [daysRemaining]="daysRemaining$ | async"></app-base-task-container-component>
 
     <ng-template #customContentTemplate>
-      <govuk-warning-text> Waiting for the regulator to make a determination </govuk-warning-text>
+      <govuk-warning-text>Waiting for the regulator to make a determination</govuk-warning-text>
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowUpReviewWaitComponent {
   readonly daysRemaining$ = this.store.pipe(map((state) => state.requestTaskItem.requestTask.daysRemaining));
-  constructor(readonly route: ActivatedRoute, readonly store: CommonTasksStore) {}
+  constructor(
+    readonly route: ActivatedRoute,
+    readonly store: CommonTasksStore,
+  ) {}
 }

@@ -4,14 +4,14 @@ import { CanActivateFn, CanDeactivateFn } from '@angular/router';
 import { map, take, tap } from 'rxjs';
 
 import { RequestTaskStore } from '../../../../store';
-import { AerStoreDelegate } from '../../../../store/delegates';
+import { AerUkEtsStoreDelegate } from '../../../../store/delegates';
 import { TASK_FORM_PROVIDER } from '../../../../task-form.provider';
 import { aerQuery } from '../../../shared/aer.selectors';
-import { aerEmissionsReductionClaimFormProvider } from './emissions-reduction-claim-form.provider';
+import { AerEmissionsReductionClaimFormProvider } from './emissions-reduction-claim-form.provider';
 
 export const canActivateAerEmissionsReductionClaim: CanActivateFn = () => {
   const store = inject(RequestTaskStore);
-  const formProvider = inject<aerEmissionsReductionClaimFormProvider>(TASK_FORM_PROVIDER);
+  const formProvider = inject<AerEmissionsReductionClaimFormProvider>(TASK_FORM_PROVIDER);
   const payload = store.getState().requestTaskItem.requestTask.payload;
 
   return store.pipe(
@@ -22,13 +22,13 @@ export const canActivateAerEmissionsReductionClaim: CanActivateFn = () => {
         store.setPayload({
           ...payload,
           aer: {
-            saf: AerStoreDelegate.INITIAL_STATE.saf,
+            saf: AerUkEtsStoreDelegate.INITIAL_STATE.saf,
           },
         } as any);
       }
 
       if (!aer?.saf) {
-        store.aerDelegate.setSaf(AerStoreDelegate.INITIAL_STATE.saf);
+        store.aerDelegate.setSaf(AerUkEtsStoreDelegate.INITIAL_STATE.saf);
       }
 
       formProvider.setFormValue(aer.saf);
@@ -38,6 +38,6 @@ export const canActivateAerEmissionsReductionClaim: CanActivateFn = () => {
 };
 
 export const canDeactivateAerEmissionsReductionClaim: CanDeactivateFn<any> = () => {
-  inject<aerEmissionsReductionClaimFormProvider>(TASK_FORM_PROVIDER).destroyForm();
+  inject<AerEmissionsReductionClaimFormProvider>(TASK_FORM_PROVIDER).destroyForm();
   return true;
 };

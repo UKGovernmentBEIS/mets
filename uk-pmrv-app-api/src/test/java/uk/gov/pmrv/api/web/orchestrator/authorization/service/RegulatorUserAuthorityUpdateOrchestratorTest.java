@@ -5,22 +5,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.regulator.domain.RegulatorUserUpdateStatusDTO;
-import uk.gov.pmrv.api.authorization.regulator.service.RegulatorAuthorityUpdateService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.regulator.domain.RegulatorUserUpdateStatusDTO;
+import uk.gov.netz.api.authorization.regulator.service.RegulatorAuthorityUpdateService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.user.regulator.service.RegulatorUserNotificationGateway;
-import uk.gov.pmrv.api.web.orchestrator.authorization.service.RegulatorUserAuthorityUpdateOrchestrator;
 
 import java.util.List;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 
 @ExtendWith(MockitoExtension.class)
 class RegulatorUserAuthorityUpdateOrchestratorTest {
@@ -43,7 +42,7 @@ class RegulatorUserAuthorityUpdateOrchestratorTest {
             RegulatorUserUpdateStatusDTO.builder().userId("user2").authorityStatus(AuthorityStatus.ACTIVE).build();
         final List<RegulatorUserUpdateStatusDTO>
             regulatorUsers = List.of(regulatorUserUpdateStatus1, regulatorUserUpdateStatus2);
-        final PmrvUser authUser = buildRegulatorUser("regUserId", ENGLAND);
+        final AppUser authUser = buildRegulatorUser("regUserId", ENGLAND);
 
         when(regulatorAuthorityUpdateService.updateRegulatorUsersStatus(regulatorUsers, authUser))
             .thenReturn(List.of("user1"));
@@ -54,12 +53,12 @@ class RegulatorUserAuthorityUpdateOrchestratorTest {
         verify(regulatorUserNotificationGateway, times(1)).sendUpdateNotifications(List.of("user1"));
     }
 
-    private PmrvUser buildRegulatorUser(final String userId, final CompetentAuthorityEnum ca) {
-        return PmrvUser.builder()
+    private AppUser buildRegulatorUser(final String userId, final CompetentAuthorityEnum ca) {
+        return AppUser.builder()
             .userId(userId)
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .authorities(
-                List.of(PmrvAuthority.builder()
+                List.of(AppAuthority.builder()
                     .competentAuthority(ca)
                     .build()
                 )

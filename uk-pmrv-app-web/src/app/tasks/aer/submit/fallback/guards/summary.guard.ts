@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { first, map, Observable } from 'rxjs';
 
@@ -8,8 +8,11 @@ import { fallbackStatus } from '@tasks/aer/submit/fallback/fallback-status';
 import { isWizardComplete } from '@tasks/aer/submit/fallback/fallback-wizard';
 
 @Injectable({ providedIn: 'root' })
-export class SummaryGuard implements CanActivate {
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+export class SummaryGuard {
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     const taskId = route.paramMap.get('taskId');

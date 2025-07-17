@@ -13,6 +13,7 @@ import uk.gov.pmrv.api.account.domain.dto.AccountContactVbInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;
@@ -91,4 +92,16 @@ public interface AccountRepository extends JpaRepository<Account, Long>, Account
         + "from Account acc "
         + "where acc.verificationBodyId = :vbId")
     List<Long> findAllIdsByVerificationBody(Long vbId);
+
+    @Transactional(readOnly = true)
+    @Query("select acc.competentAuthority "
+            + "from Account acc "
+            + "where acc.emitterId = :emitterId")
+    CompetentAuthorityEnum findCompetentAuthorityByEmitterId(String emitterId);
+
+
+    @Transactional(readOnly = true)
+    @Query("SELECT a FROM Account a WHERE a.registryId = :registryId")
+    Optional<Account> findAccountByRegistryId(@Param("registryId") Integer registryId);
+
 }

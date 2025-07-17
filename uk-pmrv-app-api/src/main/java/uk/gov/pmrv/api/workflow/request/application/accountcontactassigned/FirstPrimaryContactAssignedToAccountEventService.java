@@ -3,12 +3,11 @@ package uk.gov.pmrv.api.workflow.request.application.accountcontactassigned;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.rules.domain.ResourceType;
-import uk.gov.pmrv.api.authorization.rules.services.AuthorizationRulesQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.operator.OperatorRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestTaskRepository;
 
 import java.util.List;
@@ -26,12 +25,12 @@ public class FirstPrimaryContactAssignedToAccountEventService {
     public void assignUnassignedTasksToAccountPrimaryContact(Long accountId, String userId) {
         //find all unassigned tasks for the account id
         List<RequestTask> unassignedRequestTasks = requestTaskRepository
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(null, accountId, RequestStatus.IN_PROGRESS);
+            .findByAssigneeAndRequestAccountId(null, accountId);
 
         if(!unassignedRequestTasks.isEmpty()) {
             //filter unassigned tasks using the user role (OPERATOR)
             Set<String> operatorRequestTaskTypes = authorizationRulesQueryService
-                .findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_TASK, RoleType.OPERATOR);
+                .findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_TASK, RoleTypeConstants.OPERATOR);
 
             List<RequestTask> unassignedOperatorRelatedRequestTasks = unassignedRequestTasks.stream()
                 .filter(requestTask -> operatorRequestTaskTypes.contains(requestTask.getType().name()))

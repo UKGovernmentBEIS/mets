@@ -70,13 +70,11 @@ const getTableColumns = (domain: AccountType, activeTab: WorkflowItemsAssignment
 @Component({
   selector: 'app-dashboard-page',
   templateUrl: './dashboard-page.component.html',
-  styles: [
-    `
-      .js-enabled .govuk-tabs__panel {
-        border: 0px;
-      }
-    `,
-  ],
+  styles: `
+    .js-enabled .govuk-tabs__panel {
+      border: 0px;
+    }
+  `,
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

@@ -11,8 +11,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,18 +24,18 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.Scope;
+import uk.gov.netz.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.CaExternalContact;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactRegistrationDTO;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactsDTO;
 import uk.gov.pmrv.api.account.repository.CaExternalContactRepository;
-import uk.gov.pmrv.api.authorization.rules.domain.Scope;
-import uk.gov.pmrv.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
 class CaExternalContactServiceTest {
@@ -55,9 +55,9 @@ class CaExternalContactServiceTest {
     @Test
     void getCaExternalContacts_editable_false() {
         final CompetentAuthorityEnum ca = ENGLAND;
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(ca).build()))
+            .authorities(List.of(AppAuthority.builder().competentAuthority(ca).build()))
             .build();
 
         List<CaExternalContact> caExternalContacts = List.of(
@@ -81,10 +81,10 @@ class CaExternalContactServiceTest {
     @Test
     void getCaExternalContacts_editable_true() {
         final CompetentAuthorityEnum ca = ENGLAND;
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                AppAuthority
                     .builder()
                     .competentAuthority(ca).build()))
             .build();
@@ -112,10 +112,10 @@ class CaExternalContactServiceTest {
     void getCaExternalContactById() {
         Long id = 1L;
         final CompetentAuthorityEnum ca = ENGLAND;
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                AppAuthority
                     .builder()
                     .competentAuthority(ca).build()))
             .build();
@@ -140,10 +140,10 @@ class CaExternalContactServiceTest {
     void getCaExternalContactById_contact_not_related_to_ca() {
         Long id = 1L;
         final CompetentAuthorityEnum ca = ENGLAND;
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                AppAuthority
                     .builder()
                     .competentAuthority(ca)
                     .build()))
@@ -190,10 +190,10 @@ class CaExternalContactServiceTest {
     void deleteCaExternalContactById() {
         Long id = 1L;
         final CompetentAuthorityEnum ca = ENGLAND;
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                AppAuthority
                     .builder()
                     .competentAuthority(ca)
                     .build()))
@@ -214,10 +214,10 @@ class CaExternalContactServiceTest {
     void deleteCaExternalContactById_contact_not_related_to_ca() {
         Long id = 1L;
         final CompetentAuthorityEnum ca = ENGLAND;
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                    AppAuthority
                     .builder()
                     .competentAuthority(ca)
                     .build()))
@@ -241,10 +241,10 @@ class CaExternalContactServiceTest {
         final String email = "email";
         final String description = "description";
 
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                    AppAuthority
                     .builder()
                     .competentAuthority(ca)
                     .build()))
@@ -276,10 +276,10 @@ class CaExternalContactServiceTest {
         final String email = "email";
         final String description = "description";
 
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                    AppAuthority
                     .builder()
                     .competentAuthority(ca)
                     .build()))
@@ -311,10 +311,10 @@ class CaExternalContactServiceTest {
         final String email = "email";
         final String description = "description";
 
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                    AppAuthority
                     .builder()
                     .competentAuthority(ca)
                     .build()))
@@ -346,10 +346,10 @@ class CaExternalContactServiceTest {
         final String email = "email";
         final String description = "description";
 
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                    AppAuthority
                     .builder()
                     .competentAuthority(ca)
                     .build()))
@@ -380,10 +380,10 @@ class CaExternalContactServiceTest {
 
         final Long id = 1L;
         final CompetentAuthorityEnum ca = ENGLAND;
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                    AppAuthority
                     .builder()
                     .competentAuthority(ca)
                    .build()))
@@ -418,10 +418,10 @@ class CaExternalContactServiceTest {
         final Long id = 1L;
         final CompetentAuthorityEnum ca = ENGLAND;
 
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                    AppAuthority
                     .builder()
                     .competentAuthority(ca)
                     .build()))
@@ -442,7 +442,7 @@ class CaExternalContactServiceTest {
 
         assertThat(businessException.getErrorCode()).isEqualTo(ErrorCode.EXTERNAL_CONTACT_NOT_RELATED_TO_CA);
         verify(caExternalContactRepository, never()).existsByCompetentAuthorityAndNameAndIdNot(any(), anyString(), anyLong());
-        verify(caExternalContactRepository, never()).existsByCompetentAuthorityAndEmailAndIdNot(any(), anyString(), anyLong());
+        verify(caExternalContactRepository, never()).existsByCompetentAuthorityAndEmailIgnoreCaseAndIdNot(any(), anyString(), anyLong());
         verify(caExternalContactRepository, never()).save(any());
     }
 
@@ -451,10 +451,10 @@ class CaExternalContactServiceTest {
 
         final Long id = 1L;
         final CompetentAuthorityEnum ca = ENGLAND;
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                    AppAuthority
                     .builder()
                     .competentAuthority(ca)
                     .build()))
@@ -482,7 +482,7 @@ class CaExternalContactServiceTest {
                 () ->  caExternalContactService.editCaExternalContact(authUser, id, caExternalContactRegistrationDTO));
 
         assertThat(businessException.getErrorCode()).isEqualTo(ErrorCode.EXTERNAL_CONTACT_CA_NAME_ALREADY_EXISTS);
-        verify(caExternalContactRepository, never()).existsByCompetentAuthorityAndEmailAndIdNot(ca, caExternalContactRegistrationDTO.getEmail(), id);
+        verify(caExternalContactRepository, never()).existsByCompetentAuthorityAndEmailIgnoreCaseAndIdNot(ca, caExternalContactRegistrationDTO.getEmail(), id);
         verify(caExternalContactRepository, never()).save(any());
     }
 
@@ -492,10 +492,10 @@ class CaExternalContactServiceTest {
         final Long id = 1L;
         final CompetentAuthorityEnum ca = ENGLAND;
 
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                    AppAuthority
                     .builder()
                     .competentAuthority(ca)
                     .build()))
@@ -532,10 +532,10 @@ class CaExternalContactServiceTest {
         final Long id = 1L;
         final CompetentAuthorityEnum ca = ENGLAND;
 
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
             .roleType(REGULATOR)
             .authorities(List.of(
-                PmrvAuthority
+                AppAuthority
                     .builder()
                     .competentAuthority(ca)
                     .build()))

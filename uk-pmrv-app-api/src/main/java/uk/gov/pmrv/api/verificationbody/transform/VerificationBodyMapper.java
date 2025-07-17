@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.verificationbody.transform;
 
 import java.util.List;
 import org.mapstruct.Mapper;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEditDTO;

@@ -11,6 +11,7 @@ describe('MeasurementDevicesTypePipe', () => {
     expect(pipe.transform('BELLOWS_METER')).toEqual('Bellows meter');
     expect(pipe.transform('OTHER')).toEqual('Other');
     expect(pipe.transform('TANK_DIP')).toEqual('Tank dip');
+    expect(pipe.transform('CRANE_WEIGHT')).toEqual('Crane weight');
   });
 
   it('should handle empty value', () => {

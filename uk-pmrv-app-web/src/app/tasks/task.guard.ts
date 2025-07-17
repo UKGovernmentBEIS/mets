@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, UrlTree } from '@angular/router';
 
-import { filter, mapTo, Observable, tap } from 'rxjs';
+import { filter, map, Observable, tap } from 'rxjs';
 
-import { IncorporateHeaderStore } from '../shared/incorporate-header/store/incorporate-header.store';
+import { IncorporateHeaderStore } from '@shared/incorporate-header/store/incorporate-header.store';
+
 import { CommonTasksStore } from './store/common-tasks.store';
 
 @Injectable({ providedIn: 'root' })
-export class TaskGuard implements CanActivate, CanDeactivate<any> {
+export class TaskGuard {
   constructor(
     private readonly store: CommonTasksStore,
     private readonly incorporateHeaderStore: IncorporateHeaderStore,
@@ -24,14 +25,15 @@ export class TaskGuard implements CanActivate, CanDeactivate<any> {
         this.incorporateHeaderStore.reset();
         this.incorporateHeaderStore.setState({
           ...this.incorporateHeaderStore.getState(),
-          accountId: this.store.getState().requestTaskItem.requestInfo.accountId,
+          accountId: this.store.getState()?.requestTaskItem?.requestInfo.accountId,
         });
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 
   canDeactivate(): boolean {
+    this.store.resetStoreInitialized();
     this.incorporateHeaderStore.reset();
     return true;
   }

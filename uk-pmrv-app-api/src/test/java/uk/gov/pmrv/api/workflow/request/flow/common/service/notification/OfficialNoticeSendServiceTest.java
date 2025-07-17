@@ -7,23 +7,25 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.documents.service.FileDocumentService;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityDTO;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentService;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.CompetentAuthorityDTOByRequestResolverDelegator;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -46,16 +48,86 @@ class OfficialNoticeSendServiceTest {
     private RequestAccountContactQueryService requestAccountContactQueryService;
 	
 	@Mock
-    private NotificationEmailService notificationEmailService;
+    private NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
     
     @Mock
     private FileDocumentService fileDocumentService;
 
+    @Mock
+    private CompetentAuthorityDTOByRequestResolverDelegator competentAuthorityDTOByRequestResolverDelegator;
+
 	@Mock
-	private CompetentAuthorityService competentAuthorityService;
+	private AccountQueryService accountQueryService;
+
+	
+	@Test
+    void sendOfficialNotice_sameServiceContact() {
+		Long accountId = 1L;
+    	FileInfoDTO officialDocFileInfoDTO = FileInfoDTO.builder()
+                .name("offDoc.pdf")
+                .uuid(UUID.randomUUID().toString())
+                .build();
+    	
+    	Request request = Request.builder()
+        		.id("1")
+				.accountId(accountId)
+                .competentAuthority(CompetentAuthorityEnum.ENGLAND)
+				.type(RequestType.PERMIT_ISSUANCE)
+                .build();
+    	
+    	UserInfoDTO accountPrimaryContact = UserInfoDTO.builder()
+                .firstName("fn").lastName("ln").email("primary@email").userId("primaryUserId")
+                .build();
+    	
+    	FileDTO officialDocFileDTO = FileDTO.builder().fileContent("content".getBytes()).build();
+
+		CompetentAuthorityDTO competentAuthority = CompetentAuthorityDTO.builder()
+			.id(CompetentAuthorityEnum.ENGLAND)
+			.name("competentAuthority")
+			.email("competent@authority.com")
+			.build();
+    	
+    	when(requestAccountContactQueryService.getRequestAccountPrimaryContact(request))
+    		.thenReturn(Optional.of(accountPrimaryContact));
+		when(requestAccountContactQueryService.getRequestAccountServiceContact(request))
+			.thenReturn(Optional.of(accountPrimaryContact));
+    	when(fileDocumentService.getFileDTO(officialDocFileInfoDTO.getUuid()))
+    		.thenReturn(officialDocFileDTO);
+		when(competentAuthorityDTOByRequestResolverDelegator.resolveCA(request, AccountType.INSTALLATION))
+			.thenReturn(competentAuthority);
+
+		when(accountQueryService.getAccountType(accountId)).thenReturn(AccountType.INSTALLATION);
+
+		service.sendOfficialNotice(List.of(officialDocFileInfoDTO), request);
+    	
+    	verify(requestAccountContactQueryService, times(2)).getRequestAccountPrimaryContact(request);
+		verify(requestAccountContactQueryService, times(1)).getRequestAccountServiceContact(request);
+		verify(fileDocumentService, times(1)).getFileDTO(officialDocFileInfoDTO.getUuid());
+
+		verify(accountQueryService,times(1)).getAccountType(accountId);
+		verify(competentAuthorityDTOByRequestResolverDelegator, times(1)).resolveCA(request, AccountType.INSTALLATION);
+
+		ArgumentCaptor<EmailData<PmrvEmailNotificationTemplateData>> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
+		verify(notificationEmailService, times(1)).notifyRecipients(emailDataCaptor.capture(),
+				Mockito.eq(List.of(accountPrimaryContact.getEmail())), Mockito.eq(Collections.emptyList()), Mockito.eq(Collections.emptyList()));
+		EmailData<PmrvEmailNotificationTemplateData> emailDataCaptured = emailDataCaptor.getValue();
+		assertThat(emailDataCaptured).isEqualTo(EmailData.builder()
+				.notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
+						.templateName(PmrvNotificationTemplateName.GENERIC_EMAIL.getName())
+						.competentAuthority(CompetentAuthorityEnum.ENGLAND)
+						.accountType(AccountType.INSTALLATION)
+					.templateParams(Map.of(
+							PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
+							PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
+							PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
+					))
+						.build())
+				.attachments(Map.of(officialDocFileInfoDTO.getName(), officialDocFileDTO.getFileContent())).build());
+	}
     
     @Test
-    void sendOfficialNotice_sameServiceContact() {
+    void sendOfficialNotice_with_cc_and_sameServiceContact() {
+		Long accountId = 1L;
     	FileInfoDTO officialDocFileInfoDTO = FileInfoDTO.builder()
                 .name("offDoc.pdf")
                 .uuid(UUID.randomUUID().toString())
@@ -64,6 +136,7 @@ class OfficialNoticeSendServiceTest {
     	Request request = Request.builder()
         		.id("1")
                 .competentAuthority(CompetentAuthorityEnum.ENGLAND)
+				.accountId(accountId)
 				.type(RequestType.PERMIT_ISSUANCE)
                 .build();
     	
@@ -87,37 +160,42 @@ class OfficialNoticeSendServiceTest {
 			.thenReturn(Optional.of(accountPrimaryContact));
     	when(fileDocumentService.getFileDTO(officialDocFileInfoDTO.getUuid()))
     		.thenReturn(officialDocFileDTO);
-		when(competentAuthorityService.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND,AccountType.INSTALLATION))
+		when(competentAuthorityDTOByRequestResolverDelegator.resolveCA(request, AccountType.INSTALLATION))
 			.thenReturn(competentAuthority);
+		when(accountQueryService.getAccountType(accountId)).thenReturn(AccountType.INSTALLATION);
+
 
 		service.sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails);
     	
     	verify(requestAccountContactQueryService, times(2)).getRequestAccountPrimaryContact(request);
 		verify(requestAccountContactQueryService, times(1)).getRequestAccountServiceContact(request);
 		verify(fileDocumentService, times(1)).getFileDTO(officialDocFileInfoDTO.getUuid());
-		verify(competentAuthorityService, times(1))
-			.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND,AccountType.INSTALLATION);
+		verify(accountQueryService,times(1)).getAccountType(accountId);
+		verify(competentAuthorityDTOByRequestResolverDelegator, times(1)).resolveCA(request, AccountType.INSTALLATION);
 
-		ArgumentCaptor<EmailData> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
+		ArgumentCaptor<EmailData<PmrvEmailNotificationTemplateData>> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
 		verify(notificationEmailService, times(1)).notifyRecipients(emailDataCaptor.capture(),
-				Mockito.eq(List.of(accountPrimaryContact.getEmail())), Mockito.eq(ccRecipientsEmails));
-		EmailData emailDataCaptured = emailDataCaptor.getValue();
+				Mockito.eq(List.of(accountPrimaryContact.getEmail())), Mockito.eq(ccRecipientsEmails), Mockito.eq(Collections.emptyList()));
+		EmailData<PmrvEmailNotificationTemplateData> emailDataCaptured = emailDataCaptor.getValue();
 		assertThat(emailDataCaptured).isEqualTo(EmailData.builder()
-				.notificationTemplateData(EmailNotificationTemplateData.builder()
-						.templateName(NotificationTemplateName.GENERIC_EMAIL)
+				.notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
+						.templateName(PmrvNotificationTemplateName.GENERIC_EMAIL.getName())
 						.competentAuthority(CompetentAuthorityEnum.ENGLAND)
 						.accountType(AccountType.INSTALLATION)
 					.templateParams(Map.of(
-						EmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
-						EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
-						EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
+							PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
+							PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
+							PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
 					))
 						.build())
 				.attachments(Map.of(officialDocFileInfoDTO.getName(), officialDocFileDTO.getFileContent())).build());
 	}
 
 	@Test
-	void sendOfficialNotice_sameServiceContact_Aviation() {
+	void sendOfficialNotice_with_cc_and_differentServiceContact() {
+
+		Long accountId = 1L;
+
 		FileInfoDTO officialDocFileInfoDTO = FileInfoDTO.builder()
 			.name("offDoc.pdf")
 			.uuid(UUID.randomUUID().toString())
@@ -125,68 +203,7 @@ class OfficialNoticeSendServiceTest {
 
 		Request request = Request.builder()
 			.id("1")
-			.competentAuthority(CompetentAuthorityEnum.ENGLAND)
-			.type(RequestType.EMP_ISSUANCE_UKETS)
-			.build();
-
-		UserInfoDTO accountPrimaryContact = UserInfoDTO.builder()
-			.firstName("fn").lastName("ln").email("primary@email").userId("primaryUserId")
-			.build();
-
-		FileDTO officialDocFileDTO = FileDTO.builder().fileContent("content".getBytes()).build();
-
-		CompetentAuthorityDTO competentAuthority = CompetentAuthorityDTO.builder()
-			.id(CompetentAuthorityEnum.ENGLAND)
-			.name("competentAuthority")
-			.email("competent@authority.com")
-			.build();
-
-		List<String> ccRecipientsEmails = List.of("cc1@email", "cc2@email");
-
-		when(requestAccountContactQueryService.getRequestAccountPrimaryContact(request))
-			.thenReturn(Optional.of(accountPrimaryContact));
-		when(requestAccountContactQueryService.getRequestAccountServiceContact(request))
-			.thenReturn(Optional.of(accountPrimaryContact));
-		when(fileDocumentService.getFileDTO(officialDocFileInfoDTO.getUuid()))
-			.thenReturn(officialDocFileDTO);
-		when(competentAuthorityService.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND,AccountType.AVIATION))
-			.thenReturn(competentAuthority);
-
-		service.sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails);
-
-		verify(requestAccountContactQueryService, times(2)).getRequestAccountPrimaryContact(request);
-		verify(requestAccountContactQueryService, times(1)).getRequestAccountServiceContact(request);
-		verify(fileDocumentService, times(1)).getFileDTO(officialDocFileInfoDTO.getUuid());
-		verify(competentAuthorityService, times(1))
-			.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND,AccountType.AVIATION);
-
-		ArgumentCaptor<EmailData> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
-		verify(notificationEmailService, times(1)).notifyRecipients(emailDataCaptor.capture(),
-			Mockito.eq(List.of(accountPrimaryContact.getEmail())), Mockito.eq(ccRecipientsEmails));
-		EmailData emailDataCaptured = emailDataCaptor.getValue();
-		assertThat(emailDataCaptured).isEqualTo(EmailData.builder()
-			.notificationTemplateData(EmailNotificationTemplateData.builder()
-				.templateName(NotificationTemplateName.GENERIC_EMAIL)
-				.competentAuthority(CompetentAuthorityEnum.ENGLAND)
-				.accountType(AccountType.AVIATION)
-				.templateParams(Map.of(
-					EmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
-					EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
-					EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
-				))
-				.build())
-			.attachments(Map.of(officialDocFileInfoDTO.getName(), officialDocFileDTO.getFileContent())).build());
-	}
-
-	@Test
-	void sendOfficialNotice_differentServiceContact() {
-		FileInfoDTO officialDocFileInfoDTO = FileInfoDTO.builder()
-			.name("offDoc.pdf")
-			.uuid(UUID.randomUUID().toString())
-			.build();
-
-		Request request = Request.builder()
-			.id("1")
+			.accountId(accountId)
 			.competentAuthority(CompetentAuthorityEnum.ENGLAND)
 			.type(RequestType.PERMIT_ISSUANCE)
 			.build();
@@ -215,37 +232,50 @@ class OfficialNoticeSendServiceTest {
 			.thenReturn(Optional.of(accountServiceContact));
 		when(fileDocumentService.getFileDTO(officialDocFileInfoDTO.getUuid()))
 			.thenReturn(officialDocFileDTO);
-		when(competentAuthorityService.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND,AccountType.INSTALLATION))
+		when(competentAuthorityDTOByRequestResolverDelegator.resolveCA(request, AccountType.INSTALLATION))
 			.thenReturn(competentAuthority);
+		when(accountQueryService.getAccountType(accountId)).thenReturn(AccountType.INSTALLATION);
+
 
 		service.sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails);
 
 		verify(requestAccountContactQueryService, times(2)).getRequestAccountPrimaryContact(request);
 		verify(requestAccountContactQueryService, times(1)).getRequestAccountServiceContact(request);
 		verify(fileDocumentService, times(1)).getFileDTO(officialDocFileInfoDTO.getUuid());
-		verify(competentAuthorityService, times(1))
-			.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND,AccountType.INSTALLATION);
 
-		ArgumentCaptor<EmailData> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
+		verify(accountQueryService,times(1)).getAccountType(accountId);
+		verify(competentAuthorityDTOByRequestResolverDelegator, times(1)).resolveCA(request, AccountType.INSTALLATION);
+
+
+
+		ArgumentCaptor<EmailData<PmrvEmailNotificationTemplateData>> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
+		ArgumentCaptor<List<String>> toRecipientsEmailsCaptor = ArgumentCaptor.forClass(List.class);
 		verify(notificationEmailService, times(1)).notifyRecipients(emailDataCaptor.capture(),
-			Mockito.eq(List.of(accountPrimaryContact.getEmail(), accountServiceContact.getEmail())), Mockito.eq(ccRecipientsEmails));
-		EmailData emailDataCaptured = emailDataCaptor.getValue();
+				toRecipientsEmailsCaptor.capture(),
+				Mockito.eq(ccRecipientsEmails), Mockito.eq(Collections.emptyList()));
+		List<String> toRecipientsEmailsCaptured = toRecipientsEmailsCaptor.getValue();
+		assertThat(toRecipientsEmailsCaptured).containsExactlyInAnyOrder("primary@email", "service@email");
+		
+		EmailData<PmrvEmailNotificationTemplateData> emailDataCaptured = emailDataCaptor.getValue();
 		assertThat(emailDataCaptured).isEqualTo(EmailData.builder()
-			.notificationTemplateData(EmailNotificationTemplateData.builder()
-				.templateName(NotificationTemplateName.GENERIC_EMAIL)
+			.notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
+				.templateName(PmrvNotificationTemplateName.GENERIC_EMAIL.getName())
 				.competentAuthority(CompetentAuthorityEnum.ENGLAND)
 				.accountType(AccountType.INSTALLATION)
 				.templateParams(Map.of(
-					EmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
-					EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
-					EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
+						PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
+						PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
+						PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
 				))
 				.build())
 			.attachments(Map.of(officialDocFileInfoDTO.getName(), officialDocFileDTO.getFileContent())).build());
 	}
 
 	@Test
-	void sendOfficialNotice_whenDuplicates_thenRemoveThem() {
+	void sendOfficialNotice_with_cc_and_bcc_whenDuplicatesInCc_thenRemoveDupe() {
+
+		Long accountId = 1L;
+
 		FileInfoDTO officialDocFileInfoDTO = FileInfoDTO.builder()
 			.name("offDoc.pdf")
 			.uuid(UUID.randomUUID().toString())
@@ -253,6 +283,7 @@ class OfficialNoticeSendServiceTest {
 
 		Request request = Request.builder()
 			.id("1")
+			.accountId(accountId)
 			.competentAuthority(CompetentAuthorityEnum.ENGLAND)
 			.type(RequestType.PERMIT_ISSUANCE)
 			.build();
@@ -263,8 +294,8 @@ class OfficialNoticeSendServiceTest {
 
 		FileDTO officialDocFileDTO = FileDTO.builder().fileContent("content".getBytes()).build();
 
-		List<String> toRecipientsEmails = List.of("primary@email", "cc2@email");
-		List<String> ccRecipientsEmails = List.of("cc1@email", "cc2@email");
+		List<String> ccRecipientsEmails = List.of("primary@email", "cc@email");
+		List<String> bccRecipientsEmails = List.of("bcc@email");
 
 		CompetentAuthorityDTO competentAuthority = CompetentAuthorityDTO.builder()
 			.id(CompetentAuthorityEnum.ENGLAND)
@@ -278,37 +309,39 @@ class OfficialNoticeSendServiceTest {
 			.thenReturn(Optional.of(accountPrimaryContact));
 		when(fileDocumentService.getFileDTO(officialDocFileInfoDTO.getUuid()))
 			.thenReturn(officialDocFileDTO);
-		when(competentAuthorityService.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND,AccountType.INSTALLATION))
+		when(competentAuthorityDTOByRequestResolverDelegator.resolveCA(request, AccountType.INSTALLATION))
 			.thenReturn(competentAuthority);
+		when(accountQueryService.getAccountType(accountId)).thenReturn(AccountType.INSTALLATION);
 
-		service.sendOfficialNotice(List.of(officialDocFileInfoDTO), request, toRecipientsEmails, ccRecipientsEmails);
+		service.sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails, bccRecipientsEmails);
 
 		verify(requestAccountContactQueryService, times(2)).getRequestAccountPrimaryContact(request);
 		verify(requestAccountContactQueryService, times(1)).getRequestAccountServiceContact(request);
 		verify(fileDocumentService, times(1)).getFileDTO(officialDocFileInfoDTO.getUuid());
-		verify(competentAuthorityService, times(1))
-			.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND,AccountType.INSTALLATION);
+		verify(accountQueryService,times(1)).getAccountType(accountId);
+		verify(competentAuthorityDTOByRequestResolverDelegator, times(1)).resolveCA(request, AccountType.INSTALLATION);
 
-		ArgumentCaptor<EmailData> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
+
+		ArgumentCaptor<EmailData<PmrvEmailNotificationTemplateData>> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
 		verify(notificationEmailService, times(1)).notifyRecipients(emailDataCaptor.capture(),
-			Mockito.eq(toRecipientsEmails), Mockito.eq(List.of("cc1@email")));
-		EmailData emailDataCaptured = emailDataCaptor.getValue();
+			Mockito.eq(List.of("primary@email")), Mockito.eq(List.of("cc@email")), Mockito.eq(bccRecipientsEmails));
+		EmailData<PmrvEmailNotificationTemplateData> emailDataCaptured = emailDataCaptor.getValue();
 		assertThat(emailDataCaptured).isEqualTo(EmailData.builder()
-			.notificationTemplateData(EmailNotificationTemplateData.builder()
-				.templateName(NotificationTemplateName.GENERIC_EMAIL)
+			.notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
+				.templateName(PmrvNotificationTemplateName.GENERIC_EMAIL.getName())
 				.competentAuthority(CompetentAuthorityEnum.ENGLAND)
 				.accountType(AccountType.INSTALLATION)
 				.templateParams(Map.of(
-					EmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
-					EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
-					EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
+						PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
+						PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
+						PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
 				))
 				.build())
 			.attachments(Map.of(officialDocFileInfoDTO.getName(), officialDocFileDTO.getFileContent())).build());
 	}
 
 	@Test
-	void getDefaultOfficialNoticeRecipients() {
+	void getOfficialNoticeToRecipients() {
 		Request request = Request.builder()
 				.id("1")
 				.build();
@@ -326,7 +359,7 @@ class OfficialNoticeSendServiceTest {
 		when(requestAccountContactQueryService.getRequestAccountServiceContact(request))
 				.thenReturn(Optional.of(accountServiceContact));
 
-		Set<UserInfoDTO> defaultOfficialNoticeRecipients = service.getDefaultOfficialNoticeRecipients(request);
+		Set<UserInfoDTO> defaultOfficialNoticeRecipients = service.getOfficialNoticeToRecipients(request);
 
 		assertEquals(Set.of(accountPrimaryContact, accountServiceContact), defaultOfficialNoticeRecipients);
 	}

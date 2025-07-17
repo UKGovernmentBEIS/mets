@@ -1,10 +1,19 @@
 <ng-container *ngIf="accountDetails$ | async as account">
   <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <govuk-notification-banner *ngIf="account.emitterType === 'WASTE' && (userRoleType$ | async) === 'OPERATOR'">
+        <p class="govuk-body" id="waste-monitoring-notice">
+          During the voluntary waste monitoring, reporting and verification period, the METS service will reflect the
+          full ETS scheme, so some references and data requests may not be relevant to waste operators. Contact your
+          regulator for further information on how to participate.
+        </p>
+      </govuk-notification-banner>
+    </div>
     <div class="govuk-grid-column-three-quarters">
       <app-page-heading size="xl">
         {{ account.name }}
         <span class="status govuk-tag govuk-tag--grey">
-          <strong>{{ account.status | accountStatus }} </strong>
+          <strong>{{ account.status | accountStatus }}</strong>
         </span>
       </app-page-heading>
     </div>
@@ -32,7 +41,16 @@
       <app-reports></app-reports>
     </ng-container>
   </ng-template>
+  <ng-template
+    *ngIf="(userRoleType$ | async) !== 'VERIFIER' && (inspectionsWfAccountsTabEnabled$ | async) === true"
+    govukTab
+    id="inspections"
+    label="Inspections">
+    <ng-container *ngIf="(currentTab$ | async) === 'inspections'">
+      <app-inspections></app-inspections>
+    </ng-container>
+  </ng-template>
   <ng-template *ngIf="(userRoleType$ | async) !== 'VERIFIER'" govukTab id="users" label="Users and contacts">
-    <app-operators [currentTab]="currentTab$ | async"></app-operators>
+    <app-operators [currentTab$]="currentTab$"></app-operators>
   </ng-template>
 </govuk-tabs>

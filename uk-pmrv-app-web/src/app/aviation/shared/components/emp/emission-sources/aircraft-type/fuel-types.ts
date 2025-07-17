@@ -85,9 +85,9 @@ export function mapFuelType(fuelType, isCorsia = false) {
   const lowercaseFuelType = fuelType.toLowerCase();
   const fuelTypes = isCorsia ? FUEL_TYPES_CORSIA : FUEL_TYPES;
 
-  const type = fuelTypes.find((item: { summaryDescription: string; label: string; }) =>
-      item.summaryDescription.toLowerCase() === lowercaseFuelType ||
-      item.label.toLowerCase() === lowercaseFuelType
+  const type = fuelTypes.find(
+    (item: { summaryDescription: string; label: string }) =>
+      item.summaryDescription.toLowerCase() === lowercaseFuelType || item.label.toLowerCase() === lowercaseFuelType,
   );
 
   return type ? type.value : '';

@@ -23,13 +23,13 @@ import { approachesAddFormProvider } from './approaches-add-form.provider';
       <app-approaches-add-template
         (formSubmit)="onSubmit()"
         [monitoringApproaches]="monitoringApproaches$ | async"
-        [form]="form"
-      >
+        [form]="form">
         <ng-container heading>
           <p class="govuk-body">Select the monitoring approaches relevant to your installation.</p>
           <p class="govuk-body">
             Get help with
-            <a govukLink routerLink="../help-with-monitoring-approaches" target="_blank">monitoring approaches</a>.
+            <a govukLink routerLink="../help-with-monitoring-approaches" target="_blank">monitoring approaches</a>
+            .
           </p>
         </ng-container>
         <ng-container returnTo>

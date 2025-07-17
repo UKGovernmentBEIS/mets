@@ -6,6 +6,11 @@ import { combineLatest, map, Observable } from 'rxjs';
 import { empQuery } from '@aviation/request-task/emp/shared/emp.selectors';
 import { EmpReviewDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-review-decision-group/emp-review-decision-group.component';
 import { EmpVariationRegulatorLedDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-variation-regulator-led-decision-group/emp-variation-regulator-led-decision-group.component';
+import {
+  issuanceReviewRequestTaskTypes,
+  variationOperatorLedReviewRequestTaskTypes,
+  variationSubmitRegulatorLedRequestTaskTypes,
+} from '@aviation/request-task/emp/shared/util/emp.util';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import {
@@ -72,7 +77,10 @@ export class DataGapsSummaryComponent {
       hideSubmit:
         !isEditable ||
         ['complete', 'cannot start yet'].includes(taskStatus) ||
-        ['EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT'].includes(type),
+        ['EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT'].includes(type) ||
+        variationSubmitRegulatorLedRequestTaskTypes.includes(type) ||
+        variationOperatorLedReviewRequestTaskTypes.includes(type) ||
+        issuanceReviewRequestTaskTypes.includes(type),
       showDecision: showReviewDecisionComponent.includes(type),
       showVariationDecision: showVariationReviewDecisionComponent.includes(type),
       showVariationRegLedDecision: showVariationRegLedDecisionComponent.includes(type),

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
@@ -18,12 +18,12 @@ describe('RtfoSustainabilityCriteriaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
       providers: [
         { provide: TASK_FORM_PROVIDER, useClass: EmissionsReductionClaimFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
         { provide: TasksService, useValue: mockClass(TasksService) },
         { provide: PendingRequestService, useValue: mockClass(PendingRequestService) },
+        provideRouter([]),
       ],
     }).compileComponents();
 
@@ -38,7 +38,7 @@ describe('RtfoSustainabilityCriteriaComponent', () => {
 
   it(`should display correct page heading`, () => {
     expect(
-      screen.getByText('Meet the Renewable Transport Fuel Obligation (RTFO) sustainability criteria'),
+      screen.getByText('Proof the SAF meets the Renewable Transport Fuel Obligation (RTFO) sustainability criteria'),
     ).toBeInTheDocument();
   });
 
@@ -46,6 +46,8 @@ describe('RtfoSustainabilityCriteriaComponent', () => {
     expect(screen.getByText('information from your fuel supplier')).toBeInTheDocument();
     expect(screen.getByText('information on documents related to purchase or delivery')).toBeInTheDocument();
     expect(screen.getByText('screen shots from the RTFO operating system')).toBeInTheDocument();
-    expect(screen.getByText('Proof of Sustainability certificates, Proof of Compliance documents')).toBeInTheDocument();
+    expect(
+      screen.getByText('Proof of Sustainability certificates or Proof of Compliance documents'),
+    ).toBeInTheDocument();
   });
 });

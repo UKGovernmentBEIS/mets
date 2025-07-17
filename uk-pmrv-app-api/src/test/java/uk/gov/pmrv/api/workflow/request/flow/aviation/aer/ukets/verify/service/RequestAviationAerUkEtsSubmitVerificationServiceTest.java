@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEts;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationData;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
@@ -88,7 +88,7 @@ class RequestAviationAerUkEtsSubmitVerificationServiceTest {
             .build();
         Request request = Request.builder().payload(requestPayload).verificationBodyId(2L).accountId(accountId).build();
         RequestTask requestTask = RequestTask.builder().payload(verificationSubmitRequestTaskPayload).request(request).build();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder().build();
         AviationAerUkEtsApplicationVerificationSubmittedRequestActionPayload verificationSubmittedRequestActionPayload =
             AviationAerUkEtsApplicationVerificationSubmittedRequestActionPayload.builder().build();
@@ -100,7 +100,7 @@ class RequestAviationAerUkEtsSubmitVerificationServiceTest {
             RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD))
             .thenReturn(verificationSubmittedRequestActionPayload);
 
-        submitVerificationService.submitVerificationReport(requestTask, pmrvUser);
+        submitVerificationService.submitVerificationReport(requestTask, appUser);
 
         AviationAerUkEtsRequestPayload updatedRequestPayload = (AviationAerUkEtsRequestPayload) request.getPayload();
 
@@ -122,7 +122,7 @@ class RequestAviationAerUkEtsSubmitVerificationServiceTest {
             request,
             verificationSubmittedRequestActionPayload,
             RequestActionType.AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED,
-            pmrvUser.getUserId());
+            appUser.getUserId());
     }
 
     @Test
@@ -165,7 +165,7 @@ class RequestAviationAerUkEtsSubmitVerificationServiceTest {
             .build();
         Request request = Request.builder().payload(requestPayload).verificationBodyId(2L).accountId(accountId).build();
         RequestTask requestTask = RequestTask.builder().payload(verificationSubmitRequestTaskPayload).request(request).build();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder().build();
         AviationAerUkEtsApplicationVerificationSubmittedRequestActionPayload verificationSubmittedRequestActionPayload =
             AviationAerUkEtsApplicationVerificationSubmittedRequestActionPayload.builder().build();
@@ -177,7 +177,7 @@ class RequestAviationAerUkEtsSubmitVerificationServiceTest {
             RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD))
             .thenReturn(verificationSubmittedRequestActionPayload);
 
-        submitVerificationService.submitVerificationReport(requestTask, pmrvUser);
+        submitVerificationService.submitVerificationReport(requestTask, appUser);
 
         AviationAerUkEtsRequestPayload updatedRequestPayload = (AviationAerUkEtsRequestPayload) request.getPayload();
 
@@ -201,6 +201,6 @@ class RequestAviationAerUkEtsSubmitVerificationServiceTest {
             request,
             verificationSubmittedRequestActionPayload,
             RequestActionType.AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED,
-            pmrvUser.getUserId());
+            appUser.getUserId());
     }
 }

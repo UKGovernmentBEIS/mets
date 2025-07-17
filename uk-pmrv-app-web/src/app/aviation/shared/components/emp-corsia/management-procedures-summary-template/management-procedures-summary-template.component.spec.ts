@@ -8,10 +8,10 @@ describe('ManagementProceduresSummaryTemplateComponent', () => {
   async function renderComponent() {
     const { fixture, detectChanges } = await render(
       `
-        <app-management-procedures-summary-template
+        <app-corsia-management-procedures-summary-template
           [data] = data
         >
-        </app-management-procedures-summary-template>
+        </app-corsia-management-procedures-summary-template>
       `,
       {
         imports: [ManagementProceduresSummaryTemplateComponent],
@@ -29,12 +29,14 @@ describe('ManagementProceduresSummaryTemplateComponent', () => {
             recordKeepingAndDocumentation: 'rfv23',
             riskExplanation: 'Explanation description',
             empRevisions: 'Revisions of emissions monitoring plan description',
-            monitoringReportingRoles: [
-              {
-                jobTitle: 'Job role 1',
-                mainDuties: 'main duties roles',
-              },
-            ],
+            monitoringReportingRoles: {
+              monitoringReportingRoles: [
+                {
+                  jobTitle: 'Job role 1',
+                  mainDuties: 'main duties roles',
+                },
+              ],
+            },
           },
         },
       },

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { first, map, Observable } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 @Injectable({
   providedIn: 'root',
 })
-export class SiteVisitsGuard implements CanActivate {
+export class SiteVisitsGuard {
   constructor(
     private readonly router: Router,
     private readonly aerService: AerService,

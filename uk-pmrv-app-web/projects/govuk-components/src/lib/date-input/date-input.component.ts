@@ -27,6 +27,7 @@ export class DateInputComponent extends FormInput implements ControlValueAccesso
   @Input() hint: string;
   @Input() min: Date;
   @Input() max: Date;
+  @Input() errorMessage: string;
   @Input() isRequired: boolean;
 
   formGroup = this.formBuilder.group(
@@ -169,12 +170,12 @@ export class DateInputComponent extends FormInput implements ControlValueAccesso
     const validationResults = DateInputValidators.getCombinedValidationResults(this.formGroup, this.isRequired);
 
     const errorMessage = validationResults?.isEmpty
-      ? 'Enter a date'
+      ? this.errorMessage || 'Enter a date'
       : validationResults?.isIncomplete
-      ? 'Enter a full date'
-      : validationResults?.isUnrealDate
-      ? 'Enter a real date'
-      : '';
+        ? 'Enter a full date'
+        : validationResults?.isUnrealDate
+          ? 'Enter a real date'
+          : '';
     return {
       ...GovukValidators.builder(
         errorMessage,
@@ -189,8 +190,8 @@ export class DateInputComponent extends FormInput implements ControlValueAccesso
       DateInputValidators.buildDate(this.formGroup.value) < this.min
         ? `This date must be the same as or after ${this.datePipe.transform(this.min, 'd MMMM y')}`
         : DateInputValidators.buildDate(this.formGroup.value) > this.max
-        ? `This date must be the same as or before ${this.datePipe.transform(this.max, 'd MMMM y')}`
-        : '';
+          ? `This date must be the same as or before ${this.datePipe.transform(this.max, 'd MMMM y')}`
+          : '';
     return {
       ...GovukValidators.builder(
         errorMessage,

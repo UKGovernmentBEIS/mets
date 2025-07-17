@@ -1,18 +1,6 @@
 package uk.gov.pmrv.api.web.controller.workflow;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Collections;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,15 +14,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 import uk.gov.pmrv.api.workflow.request.application.taskview.RequestTaskDTO;
 import uk.gov.pmrv.api.workflow.request.application.taskview.RequestTaskItemDTO;
 import uk.gov.pmrv.api.workflow.request.application.taskview.RequestTaskViewService;
@@ -54,6 +42,19 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitVariationReviewDecision;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationSaveDetailsReviewGroupDecisionRequestTaskActionPayload;
 
+import java.util.Collections;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @ExtendWith(MockitoExtension.class)
 class RequestTaskControllerTest {
 
@@ -65,13 +66,13 @@ class RequestTaskControllerTest {
     private RequestTaskController requestTaskController;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private RequestTaskViewService requestTaskViewService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RequestTaskActionHandlerMapper requestTaskActionHandlerMapper;
@@ -92,7 +93,7 @@ class RequestTaskControllerTest {
         mapper = new ObjectMapper();
 
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(requestTaskController);
         aspectJProxyFactory.addAspect(aspect);
@@ -103,14 +104,14 @@ class RequestTaskControllerTest {
         requestTaskController = (RequestTaskController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(requestTaskController)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .build();
     }
 
     @Test
     void getTaskItemInfoById() throws Exception {
-        PmrvUser user = PmrvUser.builder().firstName("fn").lastName("ln").build();
+        AppUser user = AppUser.builder().firstName("fn").lastName("ln").build();
         RequestTaskType requestTaskType = RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW;
         Long requestTaskId = 1L;
         RequestTaskItemDTO taskItem = createTaskItem(requestTaskId, requestTaskType);
@@ -130,13 +131,13 @@ class RequestTaskControllerTest {
 
     @Test
     void getTaskItemInfoById_forbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().firstName("fn").lastName("ln").build();
+        AppUser user = AppUser.builder().firstName("fn").lastName("ln").build();
         long requestTaskId = 1L;
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "getTaskItemInfoById", String.valueOf(requestTaskId));
+            .when(appUserAuthorizationService)
+            .authorize(user, "getTaskItemInfoById", String.valueOf(requestTaskId), null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get(BASE_PATH + "/" + requestTaskId)
@@ -149,7 +150,7 @@ class RequestTaskControllerTest {
 
     @Test
     void processRequestTaskAction() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("id").build();
+        AppUser appUser = AppUser.builder().userId("id").build();
         RequestTaskActionEmptyPayload dismissPayload = RequestTaskActionEmptyPayload.builder()
             .payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD)
             .build();
@@ -159,7 +160,7 @@ class RequestTaskControllerTest {
             .requestTaskActionPayload(dismissPayload)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(requestTaskActionHandlerMapper.get(RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE)).thenReturn(requestTaskActionHandler);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -170,13 +171,13 @@ class RequestTaskControllerTest {
 
         verify(requestTaskActionHandler, times(1)).process(requestTaskActionProcessDTO.getRequestTaskId(),
             RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE,
-            pmrvUser,
+            appUser,
             (RequestTaskActionEmptyPayload) requestTaskActionProcessDTO.getRequestTaskActionPayload());
     }
 
     @Test
     void processRequestTaskActionForPermitIssuance() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("id").build();
+        AppUser appUser = AppUser.builder().userId("id").build();
         PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload permitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload =
             PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.PERMIT_ISSUANCE_SAVE_REVIEW_GROUP_DECISION_PAYLOAD)
@@ -191,7 +192,7 @@ class RequestTaskControllerTest {
             .requestTaskActionPayload(permitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(requestTaskActionHandlerMapper.get(RequestTaskActionType.PERMIT_ISSUANCE_SAVE_REVIEW_GROUP_DECISION)).thenReturn(
             permitIssuanceSaveReviewGroupDecisionActionHandler);
 
@@ -203,13 +204,13 @@ class RequestTaskControllerTest {
 
         verify(permitIssuanceSaveReviewGroupDecisionActionHandler, times(1)).process(requestTaskActionProcessDTO.getRequestTaskId(),
             RequestTaskActionType.PERMIT_ISSUANCE_SAVE_REVIEW_GROUP_DECISION,
-            pmrvUser,
+            appUser,
             (PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload) requestTaskActionProcessDTO.getRequestTaskActionPayload());
     }
 
     @Test
     void processRequestTaskActionForPermitVariation() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("id").build();
+        AppUser appUser = AppUser.builder().userId("id").build();
         PermitVariationSaveDetailsReviewGroupDecisionRequestTaskActionPayload permitVariationSaveDetailsReviewGroupDecisionRequestTaskActionPayload =
             PermitVariationSaveDetailsReviewGroupDecisionRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.PERMIT_VARIATION_SAVE_DETAILS_REVIEW_GROUP_DECISION_PAYLOAD)
@@ -223,7 +224,7 @@ class RequestTaskControllerTest {
             .requestTaskActionPayload(permitVariationSaveDetailsReviewGroupDecisionRequestTaskActionPayload)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(requestTaskActionHandlerMapper.get(RequestTaskActionType.PERMIT_VARIATION_SAVE_DETAILS_REVIEW_GROUP_DECISION)).thenReturn(
             permitVariationSaveReviewGroupDecisionActionHandler);
 
@@ -235,13 +236,13 @@ class RequestTaskControllerTest {
 
         verify(permitVariationSaveReviewGroupDecisionActionHandler, times(1)).process(requestTaskActionProcessDTO.getRequestTaskId(),
             RequestTaskActionType.PERMIT_VARIATION_SAVE_DETAILS_REVIEW_GROUP_DECISION,
-            pmrvUser,
+            appUser,
             (PermitVariationSaveDetailsReviewGroupDecisionRequestTaskActionPayload) requestTaskActionProcessDTO.getRequestTaskActionPayload());
     }
 
     @Test
     void processRequestTaskAction_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("id").build();
+        AppUser appUser = AppUser.builder().userId("id").build();
         RequestTaskActionEmptyPayload dismissPayload = RequestTaskActionEmptyPayload.builder()
             .payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD)
             .build();
@@ -251,10 +252,10 @@ class RequestTaskControllerTest {
             .requestTaskActionPayload(dismissPayload)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "processRequestTaskAction", "1");
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "processRequestTaskAction", "1", null, null);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post(BASE_PATH + "/actions")

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, map, Observable, pluck, shareReplay } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, shareReplay } from 'rxjs';
 
 import { GovukTableColumn, SortEvent } from 'govuk-components';
 
@@ -34,10 +34,11 @@ export class ExternalContactsComponent implements OnInit {
     const contactResponse$ = this.externalContactsService
       .getCaExternalContacts()
       .pipe(shareReplay({ bufferSize: 1, refCount: true }));
-    this.isEditable$ = contactResponse$.pipe(pluck('isEditable'));
-    this.contacts$ = combineLatest([contactResponse$.pipe(pluck('caExternalContacts')), this.sorting$]).pipe(
-      map(([contacts, sorting]) => contacts.slice().sort(this.sortContacts(sorting))),
-    );
+    this.isEditable$ = contactResponse$.pipe(map((caExternalContactsDTO) => caExternalContactsDTO?.isEditable));
+    this.contacts$ = combineLatest([
+      contactResponse$.pipe(map((caExternalContactsDTO) => caExternalContactsDTO?.caExternalContacts)),
+      this.sorting$,
+    ]).pipe(map(([contacts, sorting]) => contacts.slice().sort(this.sortContacts(sorting))));
   }
 
   private sortContacts(sorting: SortEvent): (a: CaExternalContactDTO, b: CaExternalContactDTO) => number {

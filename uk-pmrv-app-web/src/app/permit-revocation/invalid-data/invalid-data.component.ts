@@ -10,7 +10,7 @@ import {
   selector: 'app-invalid-data',
   template: `
     <govuk-error-summary [form]="form"></govuk-error-summary>
-    <a govukLink routerLink=".."> Return to permit revocation </a>
+    <a govukLink routerLink="..">Return to permit revocation</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [permitRevocationFormProvider],

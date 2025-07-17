@@ -42,4 +42,7 @@ public class FtpProperties {
 
     @NotBlank
     private String serverEmpDocumentDirectory;
+
+    @NotBlank
+    private String serverMmpDocumentDirectory;
 }

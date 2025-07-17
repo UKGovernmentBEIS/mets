@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingExemptEvent;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingRequiredEvent;
@@ -14,11 +16,9 @@ import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingStatu
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.service.validator.AccountStatus;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
-import static uk.gov.pmrv.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @Validated
 @Service
@@ -32,7 +32,7 @@ public class AviationAccountReportingStatusHistoryCreationService {
 	@AccountStatus(expression = "{#status != 'CLOSED'}")
 	public void submitReportingStatus(Long accountId,
 			@Valid AviationAccountReportingStatusHistoryCreationDTO reportingStatusHistoryCreationDTO,
-			PmrvUser pmrvUser) {
+									  AppUser appUser) {
 		final AviationAccount aviationAccount = aviationAccountRepository.findById(accountId)
 				.orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
 
@@ -44,13 +44,13 @@ public class AviationAccountReportingStatusHistoryCreationService {
 			aviationAccount.addReportingStatusHistory(AviationAccountReportingStatusHistory.builder()
 					.status(reportingStatusHistoryCreationDTO.getStatus())
 					.reason(reportingStatusHistoryCreationDTO.getReason())
-					.submitterId(pmrvUser.getUserId())
-					.submitterName(pmrvUser.getFullName()).build());
+					.submitterId(appUser.getUserId())
+					.submitterName(appUser.getFullName()).build());
 			
 			publishReportingStatusChangedEvent(accountId, currentReportingStatus, newReportingStatus,
-					pmrvUser.getUserId());
+					appUser.getUserId());
 		} else {
-			throw new BusinessException(ErrorCode.AVIATION_ACCOUNT_REPORTING_STATUS_NOT_CHANGED, accountId,
+			throw new BusinessException(MetsErrorCode.AVIATION_ACCOUNT_REPORTING_STATUS_NOT_CHANGED, accountId,
 					reportingStatusHistoryCreationDTO.getStatus());
 		}
 	}

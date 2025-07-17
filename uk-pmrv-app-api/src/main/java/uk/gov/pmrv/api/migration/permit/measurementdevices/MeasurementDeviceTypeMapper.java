@@ -1,9 +1,16 @@
 package uk.gov.pmrv.api.migration.permit.measurementdevices;
 
+import lombok.experimental.UtilityClass;
+import uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType.BALANCE;
 import static uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType.BELLOWS_METER;
 import static uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType.BELT_WEIGHER;
 import static uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType.CORIOLIS_METER;
+import static uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType.CRANE_WEIGHT;
 import static uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType.ELECTRONIC_VOLUME_CONVERSION_INSTRUMENT;
 import static uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType.GAS_CHROMATOGRAPH;
 import static uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType.LEVEL_GAUGE;
@@ -19,13 +26,6 @@ import static uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType.VORTEX_
 import static uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType.WEIGHBRIDGE;
 import static uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType.WEIGHSCALE;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import lombok.experimental.UtilityClass;
-
-import uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType;
-
 @UtilityClass
 public class MeasurementDeviceTypeMapper {
 
@@ -36,6 +36,7 @@ public class MeasurementDeviceTypeMapper {
         measurementDeviceTypes.put("Bellows meter", BELLOWS_METER);
         measurementDeviceTypes.put("Belt weigher", BELT_WEIGHER);
         measurementDeviceTypes.put("Coriolis meter", CORIOLIS_METER);
+        measurementDeviceTypes.put("Crane weight", CRANE_WEIGHT);
         measurementDeviceTypes.put("Electronic volume conversion instrument (EVCI)", ELECTRONIC_VOLUME_CONVERSION_INSTRUMENT);
         measurementDeviceTypes.put("Gas chromatograph", GAS_CHROMATOGRAPH);
         measurementDeviceTypes.put("Level gauge", LEVEL_GAUGE);

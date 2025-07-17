@@ -13,9 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.config.RegistryConfig;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -44,9 +43,6 @@ class PermitSurrenderOfficialNoticeServiceTest {
     @Mock
     private OfficialNoticeGeneratorService officialNoticeGeneratorService;
 
-    @Mock
-    private RegistryConfig registryConfig;
-    
     @Test
     void generateAndSaveGrantedOfficialNotice() {
         String requestId = "1";
@@ -160,7 +156,7 @@ class PermitSurrenderOfficialNoticeServiceTest {
     }
     
     @Test
-    void sendOfficialNotice_with_file_in_request_payload() {
+    void sendReviewDeterminationOfficialNotice() {
         PermitSurrenderRequestPayload requestPayload = PermitSurrenderRequestPayload.builder()
             .reviewDecisionNotification(DecisionNotification.builder()
                 .operators(Set.of("operator1"))
@@ -168,54 +164,26 @@ class PermitSurrenderOfficialNoticeServiceTest {
                 .build())
             .build();
         Request request = Request.builder().payload(requestPayload).build();
-        List<String> ccRecipientsEmails = List.of("operator1@email");
+        List<String> decisionNotificationRecipientsEmails = List.of("operator1@email");
         FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
         requestPayload.setOfficialNotice(officialDocFileInfoDTO);
         
         when(decisionNotificationUsersService.findUserEmails(requestPayload.getReviewDecisionNotification()))
-        .thenReturn(ccRecipientsEmails);
+        .thenReturn(decisionNotificationRecipientsEmails);
         
         service.sendReviewDeterminationOfficialNotice(request);
         
         verify(decisionNotificationUsersService, times(1))
             .findUserEmails(requestPayload.getReviewDecisionNotification());
         verify(officialNoticeSendService, times(1))
-            .sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails);
-    }
-
-    @Test
-    void sendReviewDeterminationOfficialNoticeForGranted() {
-        final String registryEmail = "registry-admin@email";
-        PermitSurrenderRequestPayload requestPayload = PermitSurrenderRequestPayload.builder()
-                .reviewDecisionNotification(DecisionNotification.builder()
-                        .operators(Set.of("operator1"))
-                        .signatory("signatory")
-                        .build())
-                .build();
-        Request request = Request.builder().payload(requestPayload).build();
-        List<String> ccUserEmails = List.of("operator1@email");
-        List<String> ccRecipientsEmails = List.of(registryEmail, "operator1@email");
-        FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
-        requestPayload.setOfficialNotice(officialDocFileInfoDTO);
-
-        when(registryConfig.getEmail()).thenReturn(registryEmail);
-        when(decisionNotificationUsersService.findUserEmails(requestPayload.getReviewDecisionNotification()))
-                .thenReturn(ccUserEmails);
-
-        service.sendReviewDeterminationOfficialNoticeForGranted(request);
-
-        verify(registryConfig, times(1)).getEmail();
-        verify(decisionNotificationUsersService, times(1))
-                .findUserEmails(requestPayload.getReviewDecisionNotification());
-        verify(officialNoticeSendService, times(1))
-                .sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails);
+            .sendOfficialNotice(List.of(officialDocFileInfoDTO), request, decisionNotificationRecipientsEmails);
     }
     
     @Test
-    void sendOfficialNotice_with_file_provided() {
+    void sendOfficialNoticeForDecisionNotification() {
         PermitSurrenderRequestPayload requestPayload = PermitSurrenderRequestPayload.builder().build();
         Request request = Request.builder().payload(requestPayload).build();
-        List<String> ccRecipientsEmails = List.of("operator1@email");
+        List<String> decisionNotificationRecipientsEmails = List.of("operator1@email");
         FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
         requestPayload.setOfficialNotice(officialDocFileInfoDTO);
         DecisionNotification decisionNotification = DecisionNotification.builder()
@@ -223,13 +191,13 @@ class PermitSurrenderOfficialNoticeServiceTest {
             .signatory("signatory")
             .build();
 
-        when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(ccRecipientsEmails);
+        when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(decisionNotificationRecipientsEmails);
         
-        service.sendOfficialNotice(request, officialDocFileInfoDTO, decisionNotification);
+        service.sendOfficialNoticeForDecisionNotification(request, officialDocFileInfoDTO, decisionNotification);
         
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(officialNoticeSendService, times(1))
-            .sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails);
+            .sendOfficialNotice(List.of(officialDocFileInfoDTO), request, decisionNotificationRecipientsEmails);
     }
 
     private FileInfoDTO buildOfficialFileInfo() {

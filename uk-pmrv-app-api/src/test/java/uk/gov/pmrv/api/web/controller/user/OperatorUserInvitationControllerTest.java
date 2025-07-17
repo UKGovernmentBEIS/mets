@@ -16,18 +16,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserInvitationDTO;
 import uk.gov.pmrv.api.user.operator.service.OperatorUserInvitationService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -52,20 +52,20 @@ class OperatorUserInvitationControllerTest {
     private OperatorUserInvitationService operatorUserInvitationService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     private MockMvc mockMvc;
     private ObjectMapper mapper;
-    private PmrvUserArgumentResolver pmrvUserArgumentResolver;
+    private AppUserArgumentResolver appUserArgumentResolver;
     private Validator validator;
 
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(operatorUserInvitationController);
         aspectJProxyFactory.addAspect(aspect);
@@ -75,24 +75,24 @@ class OperatorUserInvitationControllerTest {
 
         operatorUserInvitationController = (OperatorUserInvitationController) aopProxy.getProxy();
         mapper = new ObjectMapper();
-        pmrvUserArgumentResolver = Mockito.mock(PmrvUserArgumentResolver.class);
+        appUserArgumentResolver = Mockito.mock(AppUserArgumentResolver.class);
         validator = Mockito.mock(Validator.class);
 
         mockMvc = MockMvcBuilders.standaloneSetup(operatorUserInvitationController)
             .setControllerAdvice(new ExceptionControllerAdvice())
-            .setCustomArgumentResolvers(pmrvUserArgumentResolver)
+            .setCustomArgumentResolvers(appUserArgumentResolver)
             .setValidator(validator)
             .build();
     }
 
     @Test
     void inviteOperatorUserToAccount() throws Exception {
-        PmrvUser currentUser = PmrvUser.builder().userId("pmrv_user_id").roleType(RoleType.OPERATOR).build();
+        AppUser currentUser = AppUser.builder().userId("pmrv_user_id").roleType(RoleTypeConstants.OPERATOR).build();
         OperatorUserInvitationDTO operatorUserInvitationDTO = buildMockOperatorUserInvitationDTO();
         Long accountId = 1L;
 
-        when(pmrvUserArgumentResolver.supportsParameter(any())).thenReturn(true);
-        when(pmrvUserArgumentResolver.resolveArgument(any(), any(), any(), any())).thenReturn(currentUser);
+        when(appUserArgumentResolver.supportsParameter(any())).thenReturn(true);
+        when(appUserArgumentResolver.resolveArgument(any(), any(), any(), any())).thenReturn(currentUser);
         doNothing().when(operatorUserInvitationService).inviteUserToAccount(accountId, operatorUserInvitationDTO, currentUser);
 
         mockMvc.perform(MockMvcRequestBuilders.post(OPERATOR_USER_CONTROLLER_REGISTRATION_BASE_PATH + ADD_TO_ACCOUNT_PATH + "/" + accountId)
@@ -104,15 +104,15 @@ class OperatorUserInvitationControllerTest {
 
     @Test
     void inviteOperatorUserToAccount_forbidden() throws Exception {
-        PmrvUser currentUser = PmrvUser.builder().userId("pmrv_user_id").roleType(RoleType.OPERATOR).build();
+        AppUser currentUser = AppUser.builder().userId("pmrv_user_id").roleType(RoleTypeConstants.OPERATOR).build();
         OperatorUserInvitationDTO operatorUserInvitationDTO = buildMockOperatorUserInvitationDTO();
         Long accountId = 1L;
 
-        when(pmrvUserArgumentResolver.supportsParameter(any())).thenReturn(true);
-        when(pmrvUserArgumentResolver.resolveArgument(any(), any(), any(), any())).thenReturn(currentUser);
+        when(appUserArgumentResolver.supportsParameter(any())).thenReturn(true);
+        when(appUserArgumentResolver.resolveArgument(any(), any(), any(), any())).thenReturn(currentUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(currentUser, "inviteOperatorUserToAccount", accountId.toString());
+            .when(appUserAuthorizationService)
+            .authorize(currentUser, "inviteOperatorUserToAccount", accountId.toString(), null, null);
 
         mockMvc.perform(MockMvcRequestBuilders.post(OPERATOR_USER_CONTROLLER_REGISTRATION_BASE_PATH + ADD_TO_ACCOUNT_PATH + "/" + accountId)
             .contentType(MediaType.APPLICATION_JSON)

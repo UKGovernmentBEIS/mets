@@ -17,7 +17,7 @@ import { BehaviorSubject } from 'rxjs';
       </ng-container>
     </div>
   `,
-  styleUrls: ['./dropdown-button.component.scss'],
+  styleUrl: './dropdown-button.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DropdownButtonComponent {

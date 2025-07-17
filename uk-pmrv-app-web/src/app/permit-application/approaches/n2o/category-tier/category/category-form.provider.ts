@@ -26,7 +26,7 @@ export const categoryFormProvider = {
     const tiers = (state.permit.monitoringApproaches.MEASUREMENT_N2O as MeasurementOfN2OMonitoringApproach)
       .emissionPointCategoryAppliedTiers;
     const emissionPointCategory = tiers
-      ? tiers[Number(route.snapshot.paramMap.get('index'))]?.emissionPointCategory ?? null
+      ? (tiers[Number(route.snapshot.paramMap.get('index'))]?.emissionPointCategory ?? null)
       : null;
     const hasTransfer = (state.permit.monitoringApproaches.MEASUREMENT_N2O as MeasurementOfN2OMonitoringApproach)
       ?.hasTransfer;

@@ -88,19 +88,19 @@ export class ReferenceItemFormProvider
   setFormValue(formValue: OperatorImprovementResponse): void {
     this.form.setValue({
       isAddressed: formValue?.isAddressed ?? null,
-      addressedDescription: formValue?.isAddressed ? formValue?.addressedDescription ?? null : null,
+      addressedDescription: formValue?.isAddressed ? (formValue?.addressedDescription ?? null) : null,
       addressedDate: formValue?.isAddressed
         ? formValue?.addressedDate
           ? (new Date(formValue.addressedDate) as any)
           : null
         : null,
-      addressedDescription2: !formValue?.isAddressed ? formValue?.addressedDescription ?? null : null,
+      addressedDescription2: !formValue?.isAddressed ? (formValue?.addressedDescription ?? null) : null,
       uploadEvidence: formValue?.uploadEvidence ?? null,
       files: formValue?.uploadEvidence
-        ? formValue.files?.map((uuid) => ({
+        ? (formValue.files?.map((uuid) => ({
             file: { name: this.store.virDelegate.payload.virAttachments[uuid] } as File,
             uuid,
-          })) ?? []
+          })) ?? [])
         : [],
     });
   }

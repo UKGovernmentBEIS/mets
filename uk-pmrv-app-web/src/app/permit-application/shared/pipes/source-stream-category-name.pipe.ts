@@ -56,7 +56,7 @@ export class SourceStreamCategoryNamePipe implements PipeTransform {
             sourceStream,
           )}: ${this.categoryTypeNamePipe.transform(tier?.sourceStreamCategory?.categoryType)}`;
         } else {
-          return tier?.sourceStreamCategory?.categoryType ?? false
+          return (tier?.sourceStreamCategory?.categoryType ?? false)
             ? 'UNDEFINED: ' + this.categoryTypeNamePipe.transform(tier.sourceStreamCategory.categoryType)
             : 'Add a source stream category';
         }

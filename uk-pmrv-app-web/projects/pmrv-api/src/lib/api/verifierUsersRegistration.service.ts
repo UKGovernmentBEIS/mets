@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
-import { InvitedUserEnableDTO } from '../model/invitedUserEnableDTO';
+import { InvitedUserCredentialsDTO } from '../model/invitedUserCredentialsDTO';
 import { InvitedUserInfoDTO } from '../model/invitedUserInfoDTO';
 import { TokenDTO } from '../model/tokenDTO';
 import { BASE_PATH } from '../variables';
@@ -84,39 +84,41 @@ export class VerifierUsersRegistrationService {
   }
 
   /**
-   * Enable a new verifier user from invitation
-   * @param invitedUserEnableDTO
+   * Accept authority and activate verifier user from invitation
+   * @param invitedUserCredentialsDTO
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public acceptAndEnableVerifierInvitedUser(invitedUserEnableDTO: InvitedUserEnableDTO): Observable<any>;
-  public acceptAndEnableVerifierInvitedUser(
-    invitedUserEnableDTO: InvitedUserEnableDTO,
+  public acceptAuthorityAndActivateVerifierUserFromInvite(
+    invitedUserCredentialsDTO: InvitedUserCredentialsDTO,
+  ): Observable<any>;
+  public acceptAuthorityAndActivateVerifierUserFromInvite(
+    invitedUserCredentialsDTO: InvitedUserCredentialsDTO,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpResponse<any>>;
-  public acceptAndEnableVerifierInvitedUser(
-    invitedUserEnableDTO: InvitedUserEnableDTO,
+  public acceptAuthorityAndActivateVerifierUserFromInvite(
+    invitedUserCredentialsDTO: InvitedUserCredentialsDTO,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpEvent<any>>;
-  public acceptAndEnableVerifierInvitedUser(
-    invitedUserEnableDTO: InvitedUserEnableDTO,
+  public acceptAuthorityAndActivateVerifierUserFromInvite(
+    invitedUserCredentialsDTO: InvitedUserCredentialsDTO,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<any>;
-  public acceptAndEnableVerifierInvitedUser(
-    invitedUserEnableDTO: InvitedUserEnableDTO,
+  public acceptAuthorityAndActivateVerifierUserFromInvite(
+    invitedUserCredentialsDTO: InvitedUserCredentialsDTO,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<any> {
-    if (invitedUserEnableDTO === null || invitedUserEnableDTO === undefined) {
+    if (invitedUserCredentialsDTO === null || invitedUserCredentialsDTO === undefined) {
       throw new Error(
-        'Required parameter invitedUserEnableDTO was null or undefined when calling acceptAndEnableVerifierInvitedUser.',
+        'Required parameter invitedUserCredentialsDTO was null or undefined when calling acceptAuthorityAndActivateVerifierUserFromInvite.',
       );
     }
 
@@ -145,8 +147,8 @@ export class VerifierUsersRegistrationService {
     }
 
     return this.httpClient.put<any>(
-      `${this.configuration.basePath}/v1.0/verifier-users/registration/enable-from-invitation`,
-      invitedUserEnableDTO,
+      `${this.configuration.basePath}/v1.0/verifier-users/registration/accept-authority-and-activate-verifier-user-from-invitation`,
+      invitedUserCredentialsDTO,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

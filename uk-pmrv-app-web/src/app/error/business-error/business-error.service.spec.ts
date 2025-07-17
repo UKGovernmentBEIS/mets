@@ -29,14 +29,18 @@ describe('BusinessErrorService', () => {
     const navigateSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
     const error = buildSaveNotFoundError().withLink({ linkText: 'Back', link: ['/'] });
 
-    await expect(firstValueFrom(service.showError(error))).rejects.toBeTruthy();
+    expect(firstValueFrom(service.showError(error))).toBeTruthy();
 
     await expect(firstValueFrom(service.error$)).resolves.toEqual({
       heading: 'These changes cannot be saved because the information no longer exists',
       linkText: 'Back',
       link: ['/'],
     });
-    expect(navigateSpy).toHaveBeenCalledWith(['/error/business'], { skipLocationChange: true });
+
+    expect(navigateSpy).toHaveBeenCalledWith(['/error/business'], {
+      state: { forceNavigation: false },
+      skipLocationChange: true,
+    });
   });
 
   it('should clear the error', async () => {

@@ -12,5 +12,8 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 export class EmissionSourcesSummaryComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly router: Router) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly router: Router,
+  ) {}
 }

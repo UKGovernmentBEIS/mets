@@ -4,12 +4,12 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountIdAndNameDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.repository.AccountBaseRepository;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
 import java.util.List;

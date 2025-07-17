@@ -2,15 +2,15 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, first, switchMapTo } from 'rxjs';
+import { BehaviorSubject, first, switchMap } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { BackLinkService } from '@shared/back-link/back-link.service';
-import moment from 'moment';
+import { CommonTasksStore } from '@tasks/store/common-tasks.store';
+import { addDays, startOfDay } from 'date-fns';
 
 import { PermitNotificationFollowUpExtendDateRequestTaskActionPayload } from 'pmrv-api';
 
-import { CommonTasksStore } from '../../../../../store/common-tasks.store';
 import { PermitNotificationService } from '../../../../core/permit-notification.service';
 import {
   PERMIT_NOTIFICATION_FOLLOW_UP_FORM,
@@ -43,8 +43,7 @@ export class DueDateComponent implements OnInit {
     private readonly permitNotificationService: PermitNotificationService,
     private readonly router: Router,
   ) {
-    const setHours = moment().add(1, 'd').set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-    this.minDate = new Date(setHours.toISOString());
+    this.minDate = startOfDay(addDays(new Date(), 1));
   }
 
   ngOnInit(): void {
@@ -65,7 +64,7 @@ export class DueDateComponent implements OnInit {
         )
         .pipe(
           first(),
-          switchMapTo(this.store.updateTimelineActions(this.store.requestId)),
+          switchMap(() => this.store.updateTimelineActions(this.store.requestId)),
           this.pendingRequest.trackRequest(),
         )
         .subscribe(() => this.router.navigate(['..'], { relativeTo: this.route, state: { notification: true } }));
@@ -88,7 +87,7 @@ export class DueDateComponent implements OnInit {
         )
         .pipe(
           first(),
-          switchMapTo(this.store.updateTimelineActions(this.store.requestId)),
+          switchMap(() => this.store.updateTimelineActions(this.store.requestId)),
           this.pendingRequest.trackRequest(),
         )
         .subscribe(() => {

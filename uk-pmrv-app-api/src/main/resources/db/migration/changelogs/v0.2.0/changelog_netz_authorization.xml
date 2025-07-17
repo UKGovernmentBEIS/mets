@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+		logicalFilePath="v0.2.0/changelog_netz_authorization.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+	<changeSet id="0_2_0_add_type_column_au_authority_table" author="P70453">
+		<addColumn tableName="au_authority">
+			<column name="type" type="varchar(50)" remarks="The type of the authority">
+				<constraints nullable="true"/>
+			</column>
+		</addColumn>
+		<rollback>
+			<dropColumn tableName="au_authority" columnName="type"/>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="0_2_0_update_INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION_handler" author="P70453">
+		<sql>
+			update au_rule set handler='installationAccountOpeningRuleHandler' where resource_type='ACCOUNT' and resource_sub_type='INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION' and role_type='OPERATOR';
+		</sql>
+		<rollback>
+			<sql>
+				update au_rule set handler='accountRequestCreateHandler' where resource_type='ACCOUNT' and resource_sub_type='INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION' and role_type='OPERATOR';
+			</sql>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

@@ -9,7 +9,7 @@ import { BaseSuccessComponent } from '@shared/base-success/base-success.componen
       <div class="govuk-grid-column-two-thirds">
         <govuk-panel title="Returned to regulator"></govuk-panel>
         <p class="govuk-body">The regulator will continue their review.</p>
-        <a govukLink routerLink="{{ isAviation }}/dashboard"> Return to dashboard </a>
+        <a govukLink routerLink="{{ isAviation }}/dashboard">Return to dashboard</a>
       </div>
     </div>
   `,

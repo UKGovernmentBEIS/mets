@@ -1,11 +1,12 @@
 package uk.gov.pmrv.api.web.orchestrator.authorization.dto;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -19,5 +20,4 @@ public class UserAuthorityInfoDTO {
     private String roleCode;
     private LocalDateTime authorityCreationDate;
     private AuthorityStatus authorityStatus;
-    private Boolean locked;
 }

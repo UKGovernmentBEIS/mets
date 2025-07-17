@@ -110,21 +110,13 @@
       link="../../measurement-devices/summary"
       [status]="status"
     >
-      <govuk-table
-        *ngIf="status === 'complete'"
-        [columns]="measurementDevicesColumns"
+      @if (status === 'complete') {
+      <app-measurement-devices-table
         [data]="'measurementDevicesOrMethods' | task: !showOriginal | async"
-        [class.no-bottom-border]="true"
-      >
-        <ng-template let-column="column" let-row="row">
-          <ng-container [ngSwitch]="column.field">
-            <ng-container *ngSwitchCase="'reference'">{{ row.reference }}</ng-container>
-            <ng-container *ngSwitchCase="'type'">
-              {{ row.type === 'OTHER' ? row.otherTypeName : (row.type | measurementDevicesType) }}
-            </ng-container>
-          </ng-container>
-        </ng-template>
-      </govuk-table>
+        [isEditable]="false"
+        [noBottomBorder]="true"
+      ></app-measurement-devices-table>
+      }
     </li>
     <li app-task-item linkText="Site diagram" link="../../site-diagram/summary" status="complete">
       <app-site-diagram-summary-template

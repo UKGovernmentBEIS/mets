@@ -20,7 +20,7 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.permit.domain.dto.PermitEntityAccountDTO;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.InstallationAccountIdAndNameAndLegalEntityNameDTOImpl;

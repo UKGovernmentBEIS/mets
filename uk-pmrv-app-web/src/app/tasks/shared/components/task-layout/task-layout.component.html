@@ -43,6 +43,7 @@
             [action]="action"
             [link]="action | timelineItemLink"
             [state]="navigationState"
+            [year]="(requestInfo$ | async)?.requestMetadata?.['year'] ?? ''"
           ></app-timeline-item>
         </app-timeline>
       </div>
@@ -55,6 +56,14 @@
         [allowedActions$]="allowedActions$"
         [requestInfo$]="requestInfo$"
       ></app-related-actions>
+      <app-preview-documents
+        [taskId]="taskId$ | async"
+        [previewDocuments]="previewDocuments"
+        [decisionNotification]="decisionNotification$ | async"
+        linkFontSize="govuk-!-font-size-16"
+        *ngIf="previewDocuments"
+      >
+      </app-preview-documents>
     </div>
   </div>
 </ng-container>

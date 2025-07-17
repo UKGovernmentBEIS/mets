@@ -27,50 +27,11 @@
         {{ measurementDevices.length > 1 ? 'devices' : 'device' }}
       </h2>
 
-      <ng-container *ngFor="let measurementDevice of measurementDevices">
-        <dl appGroupedSummaryList govuk-summary-list>
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Reference</dt>
-            <dd govukSummaryListRowValue>{{ measurementDevice.reference }}</dd>
-            <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
-              <a [routerLink]="measurementDevice.id" govukLink>Change</a> |
-              <a [routerLink]="['delete', measurementDevice.id]" govukLink>Delete</a>
-            </dd>
-          </div>
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Type of measurement device or method</dt>
-            <dd govukSummaryListRowValue>
-              {{
-                measurementDevice.type === 'OTHER'
-                  ? measurementDevice.otherTypeName
-                  : (measurementDevice.type | measurementDevicesType)
-              }}
-            </dd>
-          </div>
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Measurement range</dt>
-            <dd govukSummaryListRowValue>{{ measurementDevice.measurementRange }}</dd>
-          </div>
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Metering range units</dt>
-            <dd govukSummaryListRowValue>{{ measurementDevice.meteringRangeUnits }}</dd>
-          </div>
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Specified uncertainty</dt>
-            <dd govukSummaryListRowValue>
-              {{
-                measurementDevice.uncertaintySpecified
-                  ? '&#177; ' + measurementDevice.specifiedUncertaintyPercentage + ' %'
-                  : 'None'
-              }}
-            </dd>
-          </div>
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Location</dt>
-            <dd govukSummaryListRowValue>{{ measurementDevice.location }}</dd>
-          </div>
-        </dl>
-      </ng-container>
+      <app-measurement-devices-table
+        [data]="measurementDevices"
+        [isEditable]="(store.isEditable$ | async) === true"
+        [noBottomBorder]="false"
+      ></app-measurement-devices-table>
 
       <ng-container *ngIf="(store.isEditable$ | async) === true">
         <button govukSecondaryButton routerLink="add" type="button">Add another measurement device</button>

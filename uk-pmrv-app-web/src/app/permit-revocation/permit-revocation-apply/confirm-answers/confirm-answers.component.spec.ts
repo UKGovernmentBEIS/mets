@@ -9,7 +9,7 @@ import { CessationModule } from '@permit-revocation/cessation/cessation.module';
 import { PermitRevocationModule } from '@permit-revocation/permit-revocation.module';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
 import { mockTaskState } from '@permit-revocation/testing/mock-state';
-import moment from 'moment';
+import { addDays, format } from 'date-fns';
 
 import { TasksService } from 'pmrv-api';
 
@@ -77,7 +77,7 @@ describe('ConfirmAnswersComponent', () => {
         reason: 'Because i have to',
         activitiesStopped: true,
         stoppedDate: '2022-04-14',
-        effectiveDate: moment().add(29, 'd').utc(true).format('YYYY-MM-DD'),
+        effectiveDate: format(addDays(new Date(), 29), 'yyyy-MM-dd'),
         surrenderRequired: false,
         annualEmissionsReportRequired: true,
         annualEmissionsReportDate: '2022-04-14',
@@ -109,7 +109,7 @@ describe('ConfirmAnswersComponent', () => {
           reason: 'Because i have to',
           activitiesStopped: true,
           stoppedDate: '2022-04-14',
-          effectiveDate: moment().add(29, 'd').utc(true).format('YYYY-MM-DD'),
+          effectiveDate: format(addDays(new Date(), 29), 'yyyy-MM-dd'),
           surrenderRequired: false,
           annualEmissionsReportRequired: true,
           annualEmissionsReportDate: '2022-04-14',

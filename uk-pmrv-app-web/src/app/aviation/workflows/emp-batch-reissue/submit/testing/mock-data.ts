@@ -15,7 +15,6 @@ export const regulators: RegulatorUsersAuthoritiesInfoDTO = {
       firstName: 'fn1',
       lastName: 'ln1',
       authorityStatus: 'ACTIVE',
-      locked: false,
       authorityCreationDate: '2020-12-15T12:38:12.846716Z',
     },
     {
@@ -23,7 +22,6 @@ export const regulators: RegulatorUsersAuthoritiesInfoDTO = {
       firstName: 'fn2',
       lastName: 'ln2',
       authorityStatus: 'ACTIVE',
-      locked: false,
       authorityCreationDate: '2020-11-10T12:38:12.846716Z',
     },
     {
@@ -31,7 +29,6 @@ export const regulators: RegulatorUsersAuthoritiesInfoDTO = {
       firstName: 'fn3',
       lastName: 'ln3',
       authorityStatus: 'ACTIVE',
-      locked: false,
       authorityCreationDate: '2021-01-10T12:38:12.846716Z',
     },
     {
@@ -39,7 +36,6 @@ export const regulators: RegulatorUsersAuthoritiesInfoDTO = {
       firstName: 'fn4',
       lastName: 'ln4',
       authorityStatus: 'PENDING',
-      locked: true,
       authorityCreationDate: '2021-02-8T12:38:12.846716Z',
     },
     {
@@ -47,7 +43,6 @@ export const regulators: RegulatorUsersAuthoritiesInfoDTO = {
       firstName: 'fn5',
       lastName: 'ln5',
       authorityStatus: 'DISABLED',
-      locked: false,
       authorityCreationDate: '2020-12-14T12:38:12.846716Z',
     },
   ],

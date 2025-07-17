@@ -17,14 +17,14 @@ export const AER_CORSIA_TOTAL_EMISSIONS_ROUTES: Routes = [
     children: [
       {
         path: '',
-        canActivate: [canActivateTotalEmissionsPage],
         data: { pageTitle: 'Total emissions' },
+        canActivate: [canActivateTotalEmissionsPage],
         loadComponent: () => import('./total-emissions-page').then((c) => c.TotalEmissionsPageComponent),
       },
       {
         path: 'summary',
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Total emissions' },
         canActivate: [canActivateTotalEmissionsSummaryPage],
-        data: { pageTitle: 'Total emissions summary', breadcrumb: true },
         loadComponent: () => import('./total-emissions-summary').then((c) => c.TotalEmissionsSummaryComponent),
       },
     ],

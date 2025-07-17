@@ -1,3 +1,5 @@
+import { FeaturesConfig } from '@core/config/config.state';
+
 import {
   DecisionNotification,
   PermitIssuanceApplicationReviewRequestTaskPayload,
@@ -42,6 +44,8 @@ export interface PermitApplicationState extends PermitIssuanceApplicationReviewR
   userViewRole?: 'OPERATOR' | 'REGULATOR' | 'VERIFIER'; //TODO remove me from here, not part of permit application state
 
   returnUrl?: string;
+
+  features?: FeaturesConfig;
 }
 
 export const initialState: PermitApplicationState = {
@@ -93,4 +97,5 @@ export const initialState: PermitApplicationState = {
   requestType: undefined,
   isRequestTask: undefined,
   returnUrl: undefined,
+  features: undefined,
 };

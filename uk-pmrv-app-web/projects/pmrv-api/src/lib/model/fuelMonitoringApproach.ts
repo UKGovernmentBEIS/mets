@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,6 +9,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { EmpEmissionsMonitoringApproachCorsia } from './empEmissionsMonitoringApproachCorsia';
+import { EmpEmissionsMonitoringApproach } from './empEmissionsMonitoringApproach';
 
-export type FuelMonitoringApproach = EmpEmissionsMonitoringApproachCorsia;
+export interface FuelMonitoringApproach extends EmpEmissionsMonitoringApproach {}

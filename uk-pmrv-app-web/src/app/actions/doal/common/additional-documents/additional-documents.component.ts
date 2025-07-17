@@ -14,8 +14,7 @@ import { DoalActionService } from '../../core/doal-action.service';
       <app-doal-additional-documents-summary-template
         [additionalDocuments]="additionalDocuments$ | async"
         [editable]="false"
-        [documents]="files$ | async"
-      ></app-doal-additional-documents-summary-template>
+        [documents]="files$ | async"></app-doal-additional-documents-summary-template>
     </app-doal-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

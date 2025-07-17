@@ -9,7 +9,7 @@ import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmpDetailsDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
@@ -39,21 +39,21 @@ class AviationAccountEmpQueryOrchestratorTest {
     @Test
     void getAviationAccountWithEMP() {
         final Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         AviationAccountDTO aviationAccount = AviationAccountDTO.builder().build();
         EmpDetailsDTO empDetailsDTO = EmpDetailsDTO.builder().build();
 
-        when(aviationAccountQueryService.getAviationAccountDTOByIdAndUser(accountId, pmrvUser)).thenReturn(aviationAccount);
+        when(aviationAccountQueryService.getAviationAccountDTOByIdAndUser(accountId, appUser)).thenReturn(aviationAccount);
         when(emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanDetailsDTOByAccountId(accountId)).thenReturn(Optional.of(empDetailsDTO));
 
-        final AviationAccountEmpDTO aviationAccountWithEMP = orchestrator.getAviationAccountWithEMP(accountId, pmrvUser);
+        final AviationAccountEmpDTO aviationAccountWithEMP = orchestrator.getAviationAccountWithEMP(accountId, appUser);
 
         assertThat(aviationAccountWithEMP).isEqualTo(AviationAccountEmpDTO.builder()
                 .aviationAccount(aviationAccount)
                 .emp(empDetailsDTO)
                 .build());
 
-        verify(aviationAccountQueryService, times(1)).getAviationAccountDTOByIdAndUser(accountId, pmrvUser);
+        verify(aviationAccountQueryService, times(1)).getAviationAccountDTOByIdAndUser(accountId, appUser);
         verify(emissionsMonitoringPlanQueryService, times(1)).getEmissionsMonitoringPlanDetailsDTOByAccountId(accountId);
     }
 
@@ -61,19 +61,19 @@ class AviationAccountEmpQueryOrchestratorTest {
     void getAviationAccountWithEMP_No_EMP() {
         final Long accountId = 1L;
         AviationAccountDTO aviationAccount = AviationAccountDTO.builder().build();
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
-        when(aviationAccountQueryService.getAviationAccountDTOByIdAndUser(accountId, pmrvUser)).thenReturn(aviationAccount);
+        when(aviationAccountQueryService.getAviationAccountDTOByIdAndUser(accountId, appUser)).thenReturn(aviationAccount);
         when(emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanDetailsDTOByAccountId(accountId)).thenReturn(Optional.empty());
 
-        final AviationAccountEmpDTO aviationAccountWithEMP = orchestrator.getAviationAccountWithEMP(accountId, pmrvUser);
+        final AviationAccountEmpDTO aviationAccountWithEMP = orchestrator.getAviationAccountWithEMP(accountId, appUser);
 
         assertThat(aviationAccountWithEMP).isEqualTo(AviationAccountEmpDTO.builder()
                 .aviationAccount(aviationAccount)
                 .emp(null)
                 .build());
 
-        verify(aviationAccountQueryService, times(1)).getAviationAccountDTOByIdAndUser(accountId, pmrvUser);
+        verify(aviationAccountQueryService, times(1)).getAviationAccountDTOByIdAndUser(accountId, appUser);
         verify(emissionsMonitoringPlanQueryService, times(1)).getEmissionsMonitoringPlanDetailsDTOByAccountId(accountId);
     }
 
@@ -86,6 +86,7 @@ class AviationAccountEmpQueryOrchestratorTest {
         String empId = "empId";
 
         AviationAccountInfoDTO accountInfo = AviationAccountInfoDTO.builder()
+            .id(accountId)
             .name(name)
             .status(status)
             .emissionTradingScheme(scheme)
@@ -95,6 +96,7 @@ class AviationAccountEmpQueryOrchestratorTest {
         when(emissionsMonitoringPlanQueryService.getEmpIdByAccountId(accountId)).thenReturn(Optional.of(empId));
 
         AviationAccountHeaderInfoDTO expected = AviationAccountHeaderInfoDTO.builder()
+            .id(accountId)
             .name(name)
             .status(status)
             .emissionTradingScheme(scheme)

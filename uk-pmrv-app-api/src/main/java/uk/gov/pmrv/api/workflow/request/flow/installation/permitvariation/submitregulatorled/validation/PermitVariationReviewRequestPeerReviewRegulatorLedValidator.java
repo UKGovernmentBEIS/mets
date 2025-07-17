@@ -4,7 +4,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.validation.PermitGrantedValidatorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -28,11 +28,11 @@ public class PermitVariationReviewRequestPeerReviewRegulatorLedValidator {
 
     public void validate(final RequestTask requestTask,
                          final PeerReviewRequestTaskActionPayload payload,
-                         final PmrvUser pmrvUser) {
+                         final AppUser appUser) {
         peerReviewerTaskAssignmentValidator.validate(
             RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW,
             payload.getPeerReviewer(), 
-            pmrvUser
+            appUser
         );
 
         final PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload taskPayload =

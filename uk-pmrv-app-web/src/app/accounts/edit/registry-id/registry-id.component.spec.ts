@@ -65,7 +65,7 @@ describe('RegistryIdComponent', () => {
 
     expect(accountUpdateService.updateInstallationAccountRegistryId).toHaveBeenCalled();
     expect(accountUpdateService.updateInstallationAccountRegistryId).toHaveBeenCalledWith(1, {
-      registryId: '1111111',
+      registryId: 1111111,
     });
   });
 });

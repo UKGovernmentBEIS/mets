@@ -1,4 +1,4 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -8,11 +8,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { AuthService } from '@core/services/auth.service';
-import { AuthStore } from '@core/store/auth';
+import { LatestTermsStore } from '@core/store/latest-terms/latest-terms.store';
 import { SharedModule } from '@shared/shared.module';
 import { buttonClick } from '@testing';
 
-import { ApplicationUserDTO, UsersService } from 'pmrv-api';
+import { UsersService } from 'pmrv-api';
 
 import { LandingPageComponent } from '../landing-page/landing-page.component';
 import { TermsAndConditionsComponent } from './terms-and-conditions.component';
@@ -21,9 +21,9 @@ describe('TermsAndConditionsComponent', () => {
   let component: TermsAndConditionsComponent;
   let fixture: ComponentFixture<TestComponent>;
   let httpTestingController: HttpTestingController;
-  let authStore: AuthStore;
+  let latestTermsStore: LatestTermsStore;
   const authService: Partial<jest.Mocked<AuthService>> = {
-    loadUser: jest.fn(() => of({} as ApplicationUserDTO)),
+    loadUserTerms: jest.fn(() => of({})),
   };
 
   @Component({
@@ -43,22 +43,12 @@ describe('TermsAndConditionsComponent', () => {
         HttpClientTestingModule,
         SharedModule,
       ],
-      providers: [UsersService, { provide: AuthService, useValue: authService }],
+      providers: [UsersService, { provide: AuthService, useValue: authService }, provideHttpClientTesting()],
       declarations: [TermsAndConditionsComponent, TestComponent, LandingPageComponent],
     }).compileComponents();
 
-    authStore = TestBed.inject(AuthStore);
-    authStore.setState({
-      ...authStore.getState(),
-      isLoggedIn: true,
-      userProfile: { firstName: 'Gimli', lastName: 'Gloin' },
-      userState: {
-        roleType: 'REGULATOR',
-        userId: 'opTestId',
-        domainsLoginStatuses: { INSTALLATION: 'ENABLED' },
-      },
-      terms: { url: '/test', version: 1 },
-    });
+    latestTermsStore = TestBed.inject(LatestTermsStore);
+    latestTermsStore.setLatestTerms({ url: '/test', version: 2 });
   });
 
   beforeEach(() => {
@@ -67,8 +57,6 @@ describe('TermsAndConditionsComponent', () => {
     fixture.detectChanges();
     httpTestingController = TestBed.inject(HttpTestingController);
   });
-
-  afterEach(() => httpTestingController.verify());
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -111,8 +99,9 @@ describe('TermsAndConditionsComponent', () => {
     buttonClick(fixture);
     fixture.detectChanges();
 
-    const request = httpTestingController.expectOne('http://localhost:8080/api/v1.0/users/terms-and-conditions');
+    const request = httpTestingController.expectOne('http://localhost:8080/api/v1.0/user-terms');
     expect(request.request.method).toEqual('PATCH');
+    httpTestingController.verify();
 
     request.flush(200);
     expect(navigateSpy).toHaveBeenCalledWith(['']);

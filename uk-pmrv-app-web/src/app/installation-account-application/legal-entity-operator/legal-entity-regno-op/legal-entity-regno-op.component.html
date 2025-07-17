@@ -1,0 +1,47 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+  <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+  <app-page-heading caption="Identity and contact details of the operator" size="l">
+    Is the UK organisation registered at Companies House?
+  </app-page-heading>
+
+  <p class="govuk-body">
+    If your organisation is registered, you must enter your Company Registration Number. The Company Registration Number
+    must either be:
+  </p>
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-left-3">
+    <li>8 numbers, for example 87654321</li>
+    <li>1 letter and 7 numbers, for example A7654321</li>
+    <li>2 letters and 6 numbers, for example AA654321</li>
+    <li>2 letters, 5 numbers and a final letter, for example AA12345A</li>
+  </ul>
+  <p class="govuk-body">
+    If your Company Registration Number has fewer than 8 numbers, add zeroes at the start of the number, for example
+    00654321
+  </p>
+
+  <div formControlName="isEntityRegistered" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes">
+      <ng-container govukConditionalContent>
+        <div formControlName="referenceNumber" govuk-text-input label="Enter the Company Registration Number"></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option
+      [value]="false"
+      label="No, the organisation is not registered and does not have a Company Registration Number"
+    >
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="noReferenceNumberReason"
+          govuk-textarea
+          [maxLength]="500"
+          label="Tell us why you do not have a registration number, for example if your installation is a hospital or military site"
+        ></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+  <button appPendingButton govukButton type="submit">Submit</button>
+</form>
+
+<a *ngIf="!this.store.getState().isReviewed" govukLink routerLink="../../"
+  >Return to: Request to open an installation account</a
+>

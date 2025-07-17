@@ -42,7 +42,6 @@ describe('ImprovementResponseReviewComponent', () => {
 
   const tasksService = mockClass(TasksService);
   const attachmentService = mockClass(RequestTaskAttachmentsHandlingService);
-  const expectedDate = new Date('2023-12-01');
   const expectedNextRoute = '../summary';
   const uuid3 = '33333333-3333-4333-a333-333333333333';
   const uuid4 = '44444444-4444-4444-a444-444444444444';
@@ -203,7 +202,9 @@ describe('ImprovementResponseReviewComponent', () => {
       ]);
 
       page.improvementRequiredButtons[0].click();
-      page.improvementDeadline = expectedDate;
+
+      const nextYearDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
+      page.improvementDeadline = nextYearDate;
       page.officialResponse = 'Test official response 1';
       page.comments = 'Test comments 1';
       page.submitButton.click();
@@ -218,7 +219,7 @@ describe('ImprovementResponseReviewComponent', () => {
               regulatorImprovementResponses: {
                 [reference]: {
                   improvementRequired: true,
-                  improvementDeadline: expectedDate,
+                  improvementDeadline: new Date(new Date(nextYearDate).setUTCHours(0, 0, 0, 0)),
                   officialResponse: 'Test official response 1',
                   comments: 'Test comments 1',
                   files: [uuid3, uuid4],

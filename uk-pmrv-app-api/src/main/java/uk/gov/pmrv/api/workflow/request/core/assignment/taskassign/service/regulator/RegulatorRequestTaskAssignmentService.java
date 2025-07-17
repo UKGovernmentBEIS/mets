@@ -3,16 +3,15 @@ package uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.regu
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.SiteContactRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.UserRoleRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 @Service
 @AllArgsConstructor
@@ -22,14 +21,13 @@ public class RegulatorRequestTaskAssignmentService implements UserRoleRequestTas
     private final SiteContactRequestTaskAssignmentService siteContactRequestTaskAssignmentService;
 
     @Override
-    public RoleType getRoleType() {
-        return RoleType.REGULATOR;
+    public String getRoleType() {
+        return RoleTypeConstants.REGULATOR;
     }
 
     @Transactional
     public void assignTask(RequestTask requestTask, String userId) {
-        boolean isPeerReviewTask = RequestTaskType.getPeerReviewTypes().contains(requestTask.getType());
-        if(isPeerReviewTask) {
+        if(requestTask.getType().isPeerReview()) {
             assignPeerReviewTask(requestTask, userId);
         } else {
             assignTaskToUser(requestTask, userId);

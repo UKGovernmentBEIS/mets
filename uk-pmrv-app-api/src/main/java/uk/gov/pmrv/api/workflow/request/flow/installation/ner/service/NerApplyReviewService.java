@@ -1,10 +1,9 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.ner.service;
 
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -20,6 +19,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveRevi
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSubmitApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.enums.NerReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.validation.NerReviewValidator;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -79,19 +80,19 @@ public class NerApplyReviewService {
     @Transactional
     public void saveRequestPeerReviewAction(final RequestTask requestTask, 
                                             final String selectedPeerReview, 
-                                            final PmrvUser pmrvUser) {
+                                            final AppUser appUser) {
 
         final Request request = requestTask.getRequest();
         final NerApplicationReviewRequestTaskPayload taskPayload =
             (NerApplicationReviewRequestTaskPayload) requestTask.getPayload();
 
         final NerRequestPayload requestPayload = (NerRequestPayload) request.getPayload();
-        this.updateRequestPayload(pmrvUser, taskPayload, requestPayload);
+        this.updateRequestPayload(appUser, taskPayload, requestPayload);
         requestPayload.setRegulatorPeerReviewer(selectedPeerReview);
     }
     
     @Transactional
-    public void updateRequestPayload(final RequestTask requestTask, final PmrvUser pmrvUser) {
+    public void updateRequestPayload(final RequestTask requestTask, final AppUser appUser) {
         
         final Request request = requestTask.getRequest();
         final NerApplicationReviewRequestTaskPayload taskPayload =
@@ -99,7 +100,7 @@ public class NerApplyReviewService {
 
         final NerRequestPayload requestPayload = (NerRequestPayload) request.getPayload();
 
-        this.updateRequestPayload(pmrvUser, taskPayload, requestPayload);
+        this.updateRequestPayload(appUser, taskPayload, requestPayload);
     }
 
     @Transactional
@@ -136,7 +137,7 @@ public class NerApplyReviewService {
     @Transactional
     public void saveDecisionNotification(final RequestTask requestTask,
                                          final DecisionNotification decisionNotification,
-                                         final PmrvUser pmrvUser) {
+                                         final AppUser appUser) {
 
         final Request request = requestTask.getRequest();
         final NerApplicationReviewRequestTaskPayload taskPayload =
@@ -145,11 +146,11 @@ public class NerApplyReviewService {
         final NerRequestPayload requestPayload =
             (NerRequestPayload) request.getPayload();
 
-        this.updateRequestPayload(pmrvUser, taskPayload, requestPayload);
+        this.updateRequestPayload(appUser, taskPayload, requestPayload);
         requestPayload.setDecisionNotification(decisionNotification);
     }
     
-    private void updateRequestPayload(final PmrvUser pmrvUser,
+    private void updateRequestPayload(final AppUser appUser,
                                       final NerApplicationReviewRequestTaskPayload taskPayload,
                                       final NerRequestPayload requestPayload) {
         
@@ -162,7 +163,7 @@ public class NerApplyReviewService {
         requestPayload.setReviewAttachments(taskPayload.getReviewAttachments());
         requestPayload.setNerSectionsCompleted(taskPayload.getNerSectionsCompleted());
         requestPayload.setReviewSectionsCompleted(taskPayload.getReviewSectionsCompleted());
-        requestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+        requestPayload.setRegulatorReviewer(appUser.getUserId());
     }
 
     private void resetDeterminationIfInvalid(final NerApplicationReviewRequestTaskPayload requestTaskPayload) {

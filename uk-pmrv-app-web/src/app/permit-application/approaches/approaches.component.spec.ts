@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 import { PermitIssuanceStore } from '@permit-issuance/store/permit-issuance.store';
 import { monitoringApproachTypeOptions } from '@shared/components/approaches/approaches-options';
 import { SharedModule } from '@shared/shared.module';
-import { BasePage, mockClass } from '@testing';
+import { BasePage, mockClass, RouterStubComponent } from '@testing';
 
 import { TasksService } from 'pmrv-api';
 
@@ -61,7 +61,11 @@ describe('ApproachesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ApproachesComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [
+        RouterTestingModule.withRoutes([{ path: 'summary', component: RouterStubComponent }]),
+        SharedModule,
+        SharedPermitModule,
+      ],
       providers: [
         { provide: TasksService, useValue: tasksService },
         {

@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,17 +9,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { AirImprovement } from './airImprovement';
+import { AirImprovementCalculationCO2 } from './airImprovementCalculationCO2';
+import { AirImprovementCalculationPFC } from './airImprovementCalculationPFC';
+import { AirImprovementFallback } from './airImprovementFallback';
+import { AirImprovementMeasurement } from './airImprovementMeasurement';
+import { OperatorAirImprovementAlreadyMadeResponse } from './operatorAirImprovementAlreadyMadeResponse';
 import { OperatorAirImprovementFollowUpResponse } from './operatorAirImprovementFollowUpResponse';
-import { OperatorAirImprovementResponse } from './operatorAirImprovementResponse';
+import { OperatorAirImprovementNoResponse } from './operatorAirImprovementNoResponse';
+import { OperatorAirImprovementYesResponse } from './operatorAirImprovementYesResponse';
 import { RegulatorAirImprovementResponse } from './regulatorAirImprovementResponse';
 import { RequestActionPayload } from './requestActionPayload';
 
 export interface AirApplicationRespondedToRegulatorCommentsRequestActionPayload extends RequestActionPayload {
   reportingYear: number;
   reference: number;
-  airImprovement: AirImprovement;
-  operatorImprovementResponse: OperatorAirImprovementResponse;
+  airImprovement:
+    | AirImprovementCalculationCO2
+    | AirImprovementCalculationPFC
+    | AirImprovementFallback
+    | AirImprovementMeasurement;
+  operatorImprovementResponse:
+    | OperatorAirImprovementAlreadyMadeResponse
+    | OperatorAirImprovementNoResponse
+    | OperatorAirImprovementYesResponse;
   regulatorImprovementResponse: RegulatorAirImprovementResponse;
   operatorImprovementFollowUpResponse: OperatorAirImprovementFollowUpResponse;
   airAttachments?: { [key: string]: string };

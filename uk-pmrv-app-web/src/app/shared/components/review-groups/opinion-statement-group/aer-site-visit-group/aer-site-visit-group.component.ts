@@ -21,7 +21,10 @@ import { SiteVisit } from 'pmrv-api';
         <div govukSummaryListRow *ngIf="siteVisit?.visitDates as visitDates">
           <dt govukSummaryListRowKey>Dates of visit</dt>
           <dd class="pre-wrap" govukSummaryListRowValue>
-            <ng-container *ngFor="let visitDate of visitDates"> {{ visitDate | date }}<br /></ng-container>
+            <ng-container *ngFor="let visitDate of visitDates">
+              {{ visitDate | date }}
+              <br />
+            </ng-container>
           </dd>
           <dd *ngIf="isEditable" govukSummaryListRowActions>
             <a govukLink [routerLink]="resolvedSiteVisitLink">Change</a>

@@ -107,6 +107,7 @@ describe('SendReportVerificationComponent', () => {
             ...mockState.requestTaskItem.requestTask.payload,
             payloadType: 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT_PAYLOAD',
             verificationSectionsCompleted: {},
+            reviewSectionsCompleted: {},
           },
         },
       },
@@ -124,6 +125,7 @@ describe('SendReportVerificationComponent', () => {
       requestTaskActionPayload: {
         payloadType: 'AVIATION_AER_UKETS_REQUEST_AMENDS_VERIFICATION_PAYLOAD',
         verificationSectionsCompleted: {},
+        reviewSectionsCompleted: {},
       },
     });
     expect(navigateSpy).toHaveBeenCalledWith(['../confirmation-verifier'], { relativeTo: activatedRouteStub });

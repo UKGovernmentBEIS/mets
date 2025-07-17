@@ -1,12 +1,6 @@
 package uk.gov.pmrv.api.migration.emp.corsia.managementprocedures;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-
 import org.apache.commons.lang3.ObjectUtils;
-
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.managementprocedures.EmpDataManagement;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.managementprocedures.EmpManagementProceduresCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.managementprocedures.EmpMonitoringReportingRoleCorsia;
@@ -14,6 +8,11 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.managementprocedure
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.managementprocedures.EmpProcedureDescription;
 import uk.gov.pmrv.api.migration.MigrationConstants;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachment;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 public class EmpManagementProceduresCorsiaMigrationMapper {
 	

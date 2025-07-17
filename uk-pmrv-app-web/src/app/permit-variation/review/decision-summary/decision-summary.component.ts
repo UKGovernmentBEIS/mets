@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
-import { Observable, pluck, shareReplay } from 'rxjs';
+import { Observable, shareReplay } from 'rxjs';
 import { map } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
@@ -45,7 +45,9 @@ export class DecisionSummaryComponent implements OnInit {
     map((state) => this.store.isVariationRegulatorLedRequest || state.determination.type === 'GRANTED'),
   );
 
-  officialNotice$: Observable<FileInfoDTO> = this.store.pipe(pluck('officialNotice')) as Observable<FileInfoDTO>;
+  officialNotice$: Observable<FileInfoDTO> = this.store.pipe(
+    map((state) => state?.['officialNotice']),
+  ) as Observable<FileInfoDTO>;
   permitDocument$: Observable<FileInfoDTO> = this.store.pipe(
     map((state) => (state as any)?.permitDocument),
   ) as Observable<FileInfoDTO>;
@@ -70,7 +72,7 @@ export class DecisionSummaryComponent implements OnInit {
             ({
               year: key,
               target: state.determination.annualEmissionsTargets[key],
-            } as AnnualEmissionTarget),
+            }) as AnnualEmissionTarget,
         ),
     ),
   );

@@ -3,9 +3,6 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +12,10 @@ import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.permit.domain.additionaldocuments.AdditionalDocuments;
 import uk.gov.pmrv.api.permit.domain.confidentialitystatement.ConfidentialityStatement;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

@@ -1,24 +1,20 @@
 <div class="govuk-body govuk-!-width-two-thirds">
   <h2 class="govuk-heading-m">Other changes not covered in the approved emissions monitoring plans</h2>
 
-  <dl govuk-summary-list *ngIf="aerMonitoringPlanChanges.notCoveredChangesExist">
+  <dl govuk-summary-list>
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey class="pre-wrap">Changes reported by the operator</dt>
+      <dt govukSummaryListRowKey>Changes reported by the operator</dt>
       <dd govukSummaryListRowValue>
-        {{ aerMonitoringPlanChanges?.details }}
+        {{ !!aerMonitoringPlanChanges.notCoveredChangesExist ? aerMonitoringPlanChanges?.details : 'None' }}
       </dd>
-
-      <dd govukSummaryListRowActions></dd>
     </div>
+  </dl>
 
+  <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Changes reported by the verifier</dt>
-      <dd govukSummaryListRowValue class="pre-wrap">
-        <p class="govuk-body" *ngIf="additionalChangesNotCovered">
-          {{ additionalChangesNotCoveredDetails }}
-        </p>
-
-        <p class="govuk-body" *ngIf="!additionalChangesNotCovered">No changes reported.</p>
+      <dd govukSummaryListRowValue>
+        {{ additionalChangesNotCovered ? additionalChangesNotCoveredDetails : 'None' }}
       </dd>
 
       <dd govukSummaryListRowActions *ngIf="isEditable">

@@ -1,0 +1,43 @@
+<app-request-action-task
+  *ngIf="vm$ | async as vm"
+  [header]="vm.pageHeader"
+  [requestActionType]="vm.requestActionType"
+  [breadcrumb]="true"
+>
+  <!-- Emission details -->
+  <app-opinion-statement-emission-details-summary-template
+    [fuelTypes]="fuelTypes"
+    [monitoringApproachType]="vm.opinionStatement.monitoringApproachType"
+  ></app-opinion-statement-emission-details-summary-template>
+
+  <!-- Total emissions -->
+  <app-opinion-statement-total-emissions-summary-template
+    [totalEmissionsProvided]="vm.totalEmissionsProvided"
+    [emissionsCorrect]="vm.opinionStatement.emissionsCorrect"
+    [manuallyProvidedEmissions]="vm.opinionStatement.manuallyProvidedEmissions"
+  ></app-opinion-statement-total-emissions-summary-template>
+
+  <!-- Monitoring plan -->
+  <app-aer-monitoring-plan-versions
+    [planVersions]="aerMonitoringPlanVersions$ | async"
+  ></app-aer-monitoring-plan-versions>
+
+  <!-- Changes not covered in EMP -->
+  <app-opinion-statement-changes-not-covered-in-emp-summary-template
+    [aerMonitoringPlanChanges]="vm.aerMonitoringPlanChanges"
+    [additionalChangesNotCovered]="vm.opinionStatement.additionalChangesNotCovered"
+    [additionalChangesNotCoveredDetails]="vm.opinionStatement.additionalChangesNotCoveredDetails"
+  ></app-opinion-statement-changes-not-covered-in-emp-summary-template>
+
+  <!-- Site verification -->
+  <app-opinion-statement-site-verification-summary-template
+    [siteVisit]="vm.opinionStatement.siteVisit"
+  ></app-opinion-statement-site-verification-summary-template>
+
+  <ng-container *ngIf="vm.showDecision">
+    <h2 app-summary-header class="govuk-heading-m">Decision Summary</h2>
+    <app-aer-verification-review-decision-group-summary
+      [data]="vm.reviewVerifyDecision"
+    ></app-aer-verification-review-decision-group-summary>
+  </ng-container>
+</app-request-action-task>

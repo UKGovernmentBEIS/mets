@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { statusKeyTosubtaskUrlParamMapper } from '../category-tier';
 import { isWizardComplete } from '../category-tier-wizard';
 
 @Injectable()
-export class WizardStepGuard implements CanActivate {
+export class WizardStepGuard {
   constructor(
     private readonly router: Router,
     private readonly store: PermitApplicationStore<PermitApplicationState>,

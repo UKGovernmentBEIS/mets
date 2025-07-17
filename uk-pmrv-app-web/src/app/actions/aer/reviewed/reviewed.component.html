@@ -1,7 +1,7 @@
 <app-base-action-container-component
   [header]="aerTitle$ | async"
   [customContentTemplate]="customContentTemplate"
-  [expectedActionType]="['AER_APPLICATION_COMPLETED']"
+  [expectedActionType]="['AER_APPLICATION_COMPLETED', 'AER_APPLICATION_REVIEW_SKIPPED']"
 >
 </app-base-action-container-component>
 <ng-template #customContentTemplate>

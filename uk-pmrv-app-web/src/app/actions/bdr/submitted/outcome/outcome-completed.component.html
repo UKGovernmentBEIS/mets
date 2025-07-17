@@ -1,0 +1,5 @@
+<ng-container *ngIf="vm() as vm">
+  <app-action-task header="Outcome of regulator review" [breadcrumb]="true">
+    <app-outcome-summary-template [vm]="vm"></app-outcome-summary-template>
+  </app-action-task>
+</ng-container>

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.util.Pair;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationRptAirportsEntity;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationRptCountriesEntity;
 import uk.gov.pmrv.api.aviationreporting.common.enumeration.CountryType;

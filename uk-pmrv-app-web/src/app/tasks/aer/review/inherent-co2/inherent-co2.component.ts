@@ -13,8 +13,7 @@ import { AerApplicationReviewRequestTaskPayload, InherentCO2Emissions } from 'pm
     <app-aer-task-review
       [breadcrumb]="true"
       [notification]="notification"
-      heading="{{ 'INHERENT_CO2' | monitoringApproachEmissionDescription }}"
-    >
+      heading="{{ 'INHERENT_CO2' | monitoringApproachEmissionDescription }}">
       <app-inherent-co2-group [inherentInstallations]="inherentInstallations$ | async"></app-inherent-co2-group>
       <app-aer-review-group-decision (notification)="notification = $event"></app-aer-review-group-decision>
     </app-aer-task-review>
@@ -31,5 +30,8 @@ export class InherentCo2Component {
     ),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

@@ -25,10 +25,12 @@ describe('AboutVariationComponent', () => {
 
   @Component({
     selector: 'app-variation-regulator-led-review-group-decision',
-    template: `<div>
-      Review group decision regulator led component.
-      <p>Key:{{ groupKey }}</p>
-    </div>`,
+    template: `
+      <div>
+        Review group decision regulator led component.
+        <p>Key:{{ groupKey }}</p>
+      </div>
+    `,
   })
   class MockDecisionRegulatorLedComponent {
     @Input() groupKey: AboutVariationGroupKey;
@@ -37,10 +39,12 @@ describe('AboutVariationComponent', () => {
 
   @Component({
     selector: 'app-variation-operator-led-review-group-decision',
-    template: `<div>
-      Review group decision operator led component.
-      <p>Key:{{ groupKey }}</p>
-    </div>`,
+    template: `
+      <div>
+        Review group decision operator led component.
+        <p>Key:{{ groupKey }}</p>
+      </div>
+    `,
   })
   class MockDecisionOperatorLedComponent {
     @Input() groupKey: AboutVariationGroupKey;

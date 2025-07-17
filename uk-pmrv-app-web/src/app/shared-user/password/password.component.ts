@@ -5,7 +5,7 @@ import { ControlContainer, FormGroupDirective } from '@angular/forms';
 @Component({
   selector: 'app-password',
   templateUrl: './password.component.html',
-  styleUrls: ['./password.component.scss'],
+  styleUrl: './password.component.scss',
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
 })
 export class PasswordComponent {

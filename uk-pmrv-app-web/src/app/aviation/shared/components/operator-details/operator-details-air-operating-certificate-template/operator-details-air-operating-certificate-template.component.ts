@@ -10,6 +10,7 @@ const UKETSHeading =
   'Do you have an Air Operating Certificate (AOC) or equivalent, such as an Air Carrier Operating Certificate or Air Operator Certification?';
 const CorsiaHeading =
   'Do you have an Air Operator Certificate (AOC) or equivalent, such as an Air Carrier Operating Certificate?';
+
 @Component({
   selector: 'app-operator-details-air-operating-certificate-template',
   standalone: true,
@@ -19,14 +20,15 @@ const CorsiaHeading =
   providers: [DestroySubject],
 })
 export class OperatorDetailsAirOperatingCertificateTemplateComponent implements OnInit {
-  heading = UKETSHeading;
-
   @Input() form: FormGroup<any>;
   @Input() issuingAuthorityOptions: GovukSelectOption<string>[];
   @Input() downloadUrl: string;
   @Input() isCorsia = false;
+
   @Output()
   readonly submitForm = new EventEmitter<FormGroup<any>>();
+
+  heading = UKETSHeading;
 
   ngOnInit(): void {
     if (this.isCorsia) this.heading = CorsiaHeading;

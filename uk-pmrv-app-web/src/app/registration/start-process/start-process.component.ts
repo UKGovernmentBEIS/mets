@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         <li>a work email address that is not shared with anyone else</li>
         <li>a mobile phone, tablet or browser to set up two-factor authentication</li>
       </ul>
-      <a govukButton routerLink="email"> Continue </a>
+      <a govukButton routerLink="email">Continue</a>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

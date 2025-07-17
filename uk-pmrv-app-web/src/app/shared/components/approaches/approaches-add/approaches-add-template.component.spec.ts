@@ -18,8 +18,7 @@ describe('ApproachesAddTemplateComponent', () => {
       <app-approaches-add-template
         (formSubmit)="onSubmit()"
         [monitoringApproaches]="monitoringApproaches"
-        [form]="form"
-      ></app-approaches-add-template>
+        [form]="form"></app-approaches-add-template>
     `,
   })
   class TestComponent {

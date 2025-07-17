@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -54,6 +55,6 @@ class AviationAerUkEtsApplicationCompletedCustomMapperTest {
 
     @Test
     void getUserRoleTypes() {
-        assertThat(mapper.getUserRoleTypes()).containsExactlyInAnyOrder(RoleType.OPERATOR, RoleType.VERIFIER);
+        assertThat(mapper.getUserRoleTypes()).containsExactlyInAnyOrder(RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER);
     }
 }

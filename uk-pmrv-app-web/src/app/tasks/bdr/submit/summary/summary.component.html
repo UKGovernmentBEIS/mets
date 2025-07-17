@@ -1,0 +1,15 @@
+<app-bdr-task [breadcrumb]="true">
+  <app-page-heading caption="Provide the baseline data report and details">Check your answers</app-page-heading>
+
+  <app-bdr-baseline-summary-template
+    [isEditable]="isEditable()"
+    [data]="bdrPayload().bdr"
+    [bdrFile]="bdrFiles()"
+    [files]="files()"
+    [mmpFiles]="mmpFiles()"></app-bdr-baseline-summary-template>
+
+  <div *ngIf="isEditable() && hideSubmit() === false" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+  <app-bdr-return-link [returnLink]="backlink()" title="Complete baseline data report"></app-bdr-return-link>
+</app-bdr-task>

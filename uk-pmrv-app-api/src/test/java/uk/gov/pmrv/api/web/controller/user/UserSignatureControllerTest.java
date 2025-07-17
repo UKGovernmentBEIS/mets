@@ -1,10 +1,5 @@
 package uk.gov.pmrv.api.web.controller.user;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,11 +14,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import uk.gov.pmrv.api.files.common.FileType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.FileType;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.pmrv.api.user.core.service.UserSignatureService;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
+
+import java.nio.charset.StandardCharsets;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserSignatureControllerTest {
@@ -67,7 +68,7 @@ public class UserSignatureControllerTest {
         assertThat(response.getContentType()).isEqualTo(FileType.BMP.getMimeTypes().iterator().next());
         assertThat(response.getContentAsByteArray()).isEqualTo(fileContent);
         assertThat(response.getHeader(HttpHeaders.CONTENT_DISPOSITION)).isEqualTo(
-                ContentDisposition.builder("signature").filename(signature.getFileName()).build().toString());
+                ContentDisposition.builder("signature").filename(signature.getFileName(), StandardCharsets.UTF_8).build().toString());
         
         verify(userSignatureService, times(1)).getSignatureFileDTOByToken(token);
     }

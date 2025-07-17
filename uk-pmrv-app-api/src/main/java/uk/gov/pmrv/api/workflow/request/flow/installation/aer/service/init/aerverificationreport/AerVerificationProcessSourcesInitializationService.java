@@ -1,12 +1,13 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.init.aerverificationreport;
 
-import java.util.HashSet;
-import java.util.List;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription;
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.reporting.domain.CalculationEmissionCategory;
 import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationData;
+
+import java.util.HashSet;
+import java.util.List;
 
 @Service
 public class AerVerificationProcessSourcesInitializationService implements AerVerificationReportSectionInitializationService{

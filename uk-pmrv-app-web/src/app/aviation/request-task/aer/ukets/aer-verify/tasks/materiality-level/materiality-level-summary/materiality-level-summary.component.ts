@@ -5,7 +5,7 @@ import { combineLatest, map, Observable } from 'rxjs';
 
 import { AerVerificationReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-verification-review-decision-group/aer-verification-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
 import { AerVerifyMaterialityLevelGroupComponent } from '@aviation/shared/components/aer-verify/materiality-level-group/materiality-level-group.component';
@@ -65,11 +65,13 @@ export default class MaterialityLevelSummaryComponent {
   );
 
   onSubmit() {
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
       .saveAerVerify({ materialityLevel: this.formProvider.getFormValue() }, 'complete')
       .pipe(this.pendingRequest.trackRequest())
       .subscribe(() => {
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setMaterialityLevel(this.formProvider.getFormValue());
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setMaterialityLevel(
+          this.formProvider.getFormValue(),
+        );
 
         this.router.navigate(['../../..'], { relativeTo: this.route, replaceUrl: true });
       });

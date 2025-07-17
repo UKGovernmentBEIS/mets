@@ -69,4 +69,29 @@ describe('CompletedComponent', () => {
     expect(page.summaryListValues).toHaveLength(1);
     expect(page.summaryListValues).toEqual([['Emissions report', '2022 emissions report']]);
   });
+
+  it('should show summary details for skipped review', () => {
+    store.setState({
+      storeInitialized: true,
+      action: {
+        id: 1,
+        requestAccountId: 13,
+        submitter: 'Operator',
+        creationDate: '2022-11-29T12:12:48.469862Z',
+        type: 'AER_APPLICATION_REVIEW_SKIPPED',
+        payload: {
+          payloadType: 'AER_APPLICATION_COMPLETED_PAYLOAD',
+          reportingYear: '2022',
+        },
+      },
+    } as CommonActionsState);
+    fixture.detectChanges();
+
+    expect(page.heading).toEqual('2022 completed without review');
+    expect(page.summaryListValues).toHaveLength(2);
+    expect(page.summaryListValues).toEqual([
+      ['Emissions report', '2022 emissions report'],
+      ['Reason for skipping the review', 'Review not required'],
+    ]);
+  });
 });

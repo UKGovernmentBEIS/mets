@@ -29,6 +29,7 @@ export class BooleanRadioGroupComponent implements AfterContentInit, AfterViewIn
   @Input() legend: string;
   @Input() hint: string;
   @Input() isEditable = true;
+  @Input() isInline = true;
 
   @Input() yesLabel = 'Yes';
   @Input() noLabel = 'No';
@@ -67,27 +68,18 @@ export class BooleanRadioGroupComponent implements AfterContentInit, AfterViewIn
   ngAfterViewInit(): void {
     this.yesRadio = this.radio.nativeElement.querySelector('input');
     this.yesRadio.setAttribute('aria-controls', this.conditionalId);
-    this.setAriaExpanded(this.control.value);
 
     // Trigger a change detection to update the conditionalId
     this.changeDetectorRef.detectChanges();
   }
 
   private onChoose(value: boolean): void {
-    this.setAriaExpanded(value);
-
     if (this.conditional) {
       if (value && this.isEditable) {
         this.conditional.enableControls();
       } else {
         this.conditional.disableControls();
       }
-    }
-  }
-
-  private setAriaExpanded(value: boolean): void {
-    if (this.yesRadio) {
-      this.yesRadio.setAttribute('aria-expanded', value ? 'true' : 'false');
     }
   }
 }

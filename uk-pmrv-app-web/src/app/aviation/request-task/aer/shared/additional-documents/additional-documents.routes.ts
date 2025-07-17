@@ -11,12 +11,13 @@ export const AER_ADDITIONAL_DOCUMENTS_ROUTES: Routes = [
     children: [
       {
         path: '',
+        data: { pageTitle: 'Additional documents and information' },
         canActivate: [canActivateTaskForm],
         loadComponent: () => import('./additional-documents-page').then((c) => c.AdditionalDocumentsPageComponent),
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Additional documents summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Additional documents and information' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () =>
           import('./additional-documents-summary').then((c) => c.AdditionalDocumentsSummaryComponent),

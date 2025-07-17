@@ -20,8 +20,7 @@ describe('VerificationReportSummaryTemplateComponent', () => {
       <app-verification-report-summary-template
         [verificationActivityLevelReport]="verificationActivityLevelReport"
         [document]="document"
-        [editable]="editable"
-      ></app-verification-report-summary-template>
+        [editable]="editable"></app-verification-report-summary-template>
     `,
   })
   class TestComponent {

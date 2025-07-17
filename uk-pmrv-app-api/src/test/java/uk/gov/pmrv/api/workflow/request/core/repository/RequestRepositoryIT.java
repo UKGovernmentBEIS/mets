@@ -8,14 +8,15 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.common.domain.AviationAerCorsiaAnnualOffsettingRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.common.domain.AviationDreRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestMetadata;
 
@@ -231,6 +232,44 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
 
         assertThat(result).containsExactlyInAnyOrder(dreRequest2023_1, dreRequest2023_2);
     }
+
+    @Test
+    void findAllByAccountIdAndTypeInAndMetadataYearAndStatusInOrderByEndDateDesc() {
+        Long accountId = 1L;
+        Year year = Year.of(2023);
+
+        createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_AER_UKETS, RequestStatus.IN_PROGRESS,
+            LocalDateTime.now(), null,
+            AviationAerRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER).year(year).build());
+
+        createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_DRE_UKETS, RequestStatus.COMPLETED,
+            LocalDateTime.now(), null,
+            AviationDreRequestMetadata.builder().type(RequestMetadataType.AVIATION_DRE).year(Year.of(2022)).build());
+
+        createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING, RequestStatus.CANCELLED,
+            LocalDateTime.now(), null,
+            AviationAerCorsiaAnnualOffsettingRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING).year(year).build());
+
+        Request req1 = createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING, RequestStatus.IN_PROGRESS,
+             LocalDateTime.of(2024, 10, 19, 14, 5), null,
+            AviationAerCorsiaAnnualOffsettingRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING).year(year).build());
+
+        Request req2 = createRequest(accountId, CompetentAuthorityEnum.ENGLAND, RequestType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING, RequestStatus.COMPLETED,
+            LocalDateTime.of(2024, 10, 20, 14, 5), null,
+            AviationAerCorsiaAnnualOffsettingRequestMetadata.builder().type(RequestMetadataType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING).year(year).build());
+
+        flushAndClear();
+
+        List<Request> result = requestRepository.findAllByAccountIdAndTypeInAndMetadataYearAndStatusInOrderByEndDateDesc(
+                accountId,
+                List.of(RequestType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING.name()),
+                year.getValue(),
+                List.of(RequestStatus.IN_PROGRESS.name(), RequestStatus.COMPLETED.name())
+        );
+
+        assertThat(result).containsExactly(req2, req1);
+    }
+
     
 	private Request createRequest(Long accountId, CompetentAuthorityEnum competentAuthority, RequestType type,
 			RequestStatus status, LocalDateTime endDate) {
@@ -246,7 +285,7 @@ class RequestRepositoryIT extends AbstractContainerBaseTest {
 			RequestStatus status, LocalDateTime endDate, Long verificationBodyId, RequestMetadata metadata) {
         Request request = 
                 Request.builder()
-                    .id(RandomStringUtils.random(5))
+                    .id(RandomStringUtils.insecure().next(5))
                     .accountId(accountId)
                     .type(type)
                     .status(status)

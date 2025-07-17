@@ -10,15 +10,12 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPaylo
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrender;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderApplicationSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.PermitSurrenderUploadAttachmentService;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

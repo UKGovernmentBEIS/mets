@@ -14,22 +14,22 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactRegistrationDTO;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactsDTO;
 import uk.gov.pmrv.api.account.service.CaExternalContactService;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ class CaExternalContactControllerTest {
     private CaExternalContactController controller;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent appSecurityComponent;
 
     @Mock
     private CaExternalContactService caExternalContactService;
@@ -64,13 +64,13 @@ class CaExternalContactControllerTest {
     private RoleAuthorizationService roleAuthorizationService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @BeforeEach
     public void setUp() {
 
-        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect authorizedAspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect authorizedAspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(authorizedAspect);
@@ -80,15 +80,15 @@ class CaExternalContactControllerTest {
         controller = (CaExternalContactController) aopProxy.getProxy();
         mapper = new ObjectMapper();
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .build();
     }
 
     @Test
     void getCaExternalContacts() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
         CaExternalContactsDTO caExternalContactsDTO =
@@ -99,7 +99,7 @@ class CaExternalContactControllerTest {
                 .isEditable(false)
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(caExternalContactService.getCaExternalContacts(user)).thenReturn(caExternalContactsDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.get(CA_EXTERNAL_CONTACT_CONTROLLER_PATH)
@@ -113,14 +113,14 @@ class CaExternalContactControllerTest {
 
     @Test
     void getCaExternalContacts_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.OPERATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.OPERATOR)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(user, new RoleType[] {RoleType.REGULATOR});
+            .evaluate(user, new String[] {RoleTypeConstants.REGULATOR});
 
         mockMvc.perform(MockMvcRequestBuilders.get(CA_EXTERNAL_CONTACT_CONTROLLER_PATH)
             .contentType(MediaType.APPLICATION_JSON))
@@ -131,8 +131,8 @@ class CaExternalContactControllerTest {
 
     @Test
     void getCaExternalContactById() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
         long id = 1L;
 
@@ -143,7 +143,7 @@ class CaExternalContactControllerTest {
                 .build();
 
         when(caExternalContactService.getCaExternalContactById(user, id)).thenReturn(caExternalContactDTO);
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders.get(CA_EXTERNAL_CONTACT_CONTROLLER_PATH + "/" + id)
             .contentType(MediaType.APPLICATION_JSON))
@@ -156,14 +156,14 @@ class CaExternalContactControllerTest {
 
     @Test
     void getCaExternalContactById_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
         long id = 1L;
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(user, "getCaExternalContactById");
 
         mockMvc.perform(MockMvcRequestBuilders.get(CA_EXTERNAL_CONTACT_CONTROLLER_PATH + "/" + id)
@@ -175,12 +175,12 @@ class CaExternalContactControllerTest {
 
     @Test
     void deleteCaExternalContactById() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
         long id = 1L;
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders.delete(CA_EXTERNAL_CONTACT_CONTROLLER_PATH + "/" + id))
             .andExpect(status().isNoContent());
@@ -190,14 +190,14 @@ class CaExternalContactControllerTest {
 
     @Test
     void deleteCaExternalContactById_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
         Long id = 1L;
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(user, "deleteCaExternalContactById");
 
         mockMvc.perform(MockMvcRequestBuilders.delete(CA_EXTERNAL_CONTACT_CONTROLLER_PATH + "/" + id))
@@ -208,11 +208,11 @@ class CaExternalContactControllerTest {
 
     @Test
     void createCaExternalContact() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         CaExternalContactRegistrationDTO caExternalContactRegistrationDTO =
             CaExternalContactRegistrationDTO.builder()
@@ -231,11 +231,11 @@ class CaExternalContactControllerTest {
 
     @Test
     void createCaExternalContact_bad_request() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         CaExternalContactRegistrationDTO caExternalContactRegistrationDTO =
             CaExternalContactRegistrationDTO.builder()
@@ -253,13 +253,13 @@ class CaExternalContactControllerTest {
 
     @Test
     void createCaExternalContact_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(user, "createCaExternalContact");
 
         CaExternalContactRegistrationDTO caExternalContactRegistrationDTO =
@@ -279,12 +279,12 @@ class CaExternalContactControllerTest {
 
     @Test
     void editCaExternalContact() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
         long id = 1L;
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         CaExternalContactRegistrationDTO caExternalContactRegistrationDTO =
             CaExternalContactRegistrationDTO.builder()
@@ -303,12 +303,12 @@ class CaExternalContactControllerTest {
 
     @Test
     void editCaExternalContact_bad_request() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
         long id = 1L;
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         CaExternalContactRegistrationDTO caExternalContactRegistrationDTO =
             CaExternalContactRegistrationDTO.builder()
@@ -326,14 +326,14 @@ class CaExternalContactControllerTest {
 
     @Test
     void editCaExternalContact_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder()
-            .roleType(RoleType.REGULATOR)
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
         long id = 1L;
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(user, "editCaExternalContact");
 
         CaExternalContactRegistrationDTO caExternalContactRegistrationDTO =

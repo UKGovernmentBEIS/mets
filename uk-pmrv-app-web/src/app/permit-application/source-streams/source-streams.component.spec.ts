@@ -4,6 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
+import { SourceStreamsTableComponent } from '@shared/components/source-streams/source-streams-table/source-streams-table.component';
+
 import { TasksService } from 'pmrv-api';
 
 import { BasePage, mockClass } from '../../../testing';
@@ -46,12 +48,12 @@ describe('SourceStreamsComponent', () => {
     }
 
     get sourceStreams() {
-      return this.queryAll<HTMLDListElement>('dl');
+      return this.queryAll<HTMLDListElement>('tr');
     }
 
     get sourceStreamsTextContents() {
       return this.sourceStreams.map((sourceStream) =>
-        Array.from(sourceStream.querySelectorAll('dd')).map((dd) => dd.textContent.trim()),
+        Array.from(sourceStream.querySelectorAll('td')).map((dd) => dd.textContent.trim()),
       );
     }
   }
@@ -59,7 +61,7 @@ describe('SourceStreamsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [SourceStreamsComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [RouterTestingModule, SharedModule, SharedPermitModule, SourceStreamsTableComponent],
       providers: [
         { provide: TasksService, useValue: tasksService },
         {
@@ -113,13 +115,14 @@ describe('SourceStreamsComponent', () => {
       expect(page.submitButton).toBeTruthy();
       expect(page.addSourceStreamBtn).toBeFalsy();
       expect(page.addAnotherSourceStreamBtn).toBeTruthy();
-      expect(page.sourceStreams.length).toEqual(2);
+      expect(page.sourceStreams.length).toEqual(3);
     });
 
     it('should display the source streams', () => {
       expect(page.sourceStreamsTextContents).toEqual([
-        ['13123124 White Spirit & SBP', 'Change | Delete', 'Refineries: Hydrogen production'],
-        ['33334 Lignite', 'Change | Delete', 'Refineries: Catalytic cracker regeneration'],
+        [],
+        ['13123124', 'White Spirit & SBP', 'Refineries: Hydrogen production', 'Change', 'Delete'],
+        ['33334', 'Lignite', 'Refineries: Catalytic cracker regeneration', 'Change', 'Delete'],
       ]);
     });
 

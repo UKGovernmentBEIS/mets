@@ -10,13 +10,14 @@ import { BaseSuccessComponent } from '@shared/base-success/base-success.componen
       <div class="govuk-grid-column-two-thirds">
         <govuk-panel title="Emissions report completed">
           <p>
-            <strong>Your reference code is:</strong><br />
+            <strong>Your reference code is:</strong>
+            <br />
             {{ (requestId$ | async).id }}
           </p>
         </govuk-panel>
       </div>
     </div>
-    <a govukLink routerLink="/aviation/dashboard"> Return to dashboard </a>
+    <a govukLink routerLink="/aviation/dashboard">Return to dashboard</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

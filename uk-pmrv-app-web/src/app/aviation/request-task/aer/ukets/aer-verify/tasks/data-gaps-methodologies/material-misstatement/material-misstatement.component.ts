@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, map, Observable, tap } from 'rxjs';
 
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -69,7 +69,7 @@ export class MaterialMisstatementComponent {
         ? this.form.value.materialMisstatementDetails
         : null,
     };
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
       .saveAerVerify({ dataGapsMethodologies: { ...parentFormValue, ...value } }, 'in progress')
       .pipe(this.pendingRequest.trackRequest())
       .subscribe(() => {
@@ -77,7 +77,7 @@ export class MaterialMisstatementComponent {
           ...parentFormValue,
           ...value,
         } as AviationAerDataGapsMethodologies);
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setDataGapsMethodologies({
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setDataGapsMethodologies({
           ...parentFormValue,
           ...value,
         } as AviationAerDataGapsMethodologies);

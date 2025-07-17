@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 
+import { EmissionPointsTableComponent } from '@shared/components/emission-points/emission-points-table/emission-points-table.component';
+import { EmissionSourceTableComponent } from '@shared/components/emission-sources/emission-source-table/emission-source-table.component';
+import { SourceStreamsTableComponent } from '@shared/components/source-streams/source-streams-table/source-streams-table.component';
 import { SharedModule } from '@shared/shared.module';
 import { ActivityLevelReportComponent as ReviewActivityLevelReportComponent } from '@tasks/aer/review/activity-level-report/activity-level-report.component';
 import { AdditionalInfoComponent as ReviewAdditionalInfoComponent } from '@tasks/aer/review/additional-info/additional-info.component';
@@ -105,6 +108,7 @@ import { NonCompliancesComponent } from './review/non-compliances/non-compliance
 import { NonConformitiesComponent } from './review/non-conformities/non-conformities.component';
 import { RecommendedImprovementsComponent } from './review/recommended-improvements/recommended-improvements.component';
 import { ReturnForAmendsComponent } from './review/return-for-amends/return-for-amends.component';
+import { SkipReviewComponent } from './review/skip-review/skip-review.component';
 import { AerSharedModule } from './shared/aer-shared.module';
 import { AdditionalDocumentsComponent } from './submit/additional-documents/additional-documents.component';
 import { AmendComponent } from './submit/amend/amend.component';
@@ -130,7 +134,6 @@ import { RecallComponent } from './verification-wait/recall/recall.component';
     AmendComponent,
     AmendSummaryComponent,
     AmendSummaryTemplateComponent,
-
     ApproachesAddComponent,
     ApproachesComponent,
     ApproachesDeleteComponent,
@@ -218,6 +221,7 @@ import { RecallComponent } from './verification-wait/recall/recall.component';
     ReviewVerifierDetailsComponent,
     ReviewWaitComponent,
     SendReportComponent,
+    SkipReviewComponent,
     SourceStreamDeleteComponent,
     SourceStreamDetailsComponent,
     SourceStreamHelpComponent,
@@ -238,6 +242,14 @@ import { RecallComponent } from './verification-wait/recall/recall.component';
     VerifierEmissionsSummary,
     VerifierSendReportComponent,
   ],
-  imports: [AerRoutingModule, AerSharedModule, SharedModule, TaskSharedModule],
+  imports: [
+    AerRoutingModule,
+    AerSharedModule,
+    EmissionPointsTableComponent,
+    EmissionSourceTableComponent,
+    SharedModule,
+    SourceStreamsTableComponent,
+    TaskSharedModule,
+  ],
 })
 export class AerModule {}

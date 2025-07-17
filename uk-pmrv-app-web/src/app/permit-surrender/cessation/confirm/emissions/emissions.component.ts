@@ -12,12 +12,12 @@ import { emissionsFormProvider } from './emissions-form.provider';
 
 @Component({
   selector: 'app-emissions',
-  template: `<app-wizard-step
+  template: `
+    <app-wizard-step
       (formSubmit)="onContinue()"
       [formGroup]="form"
       submitText="Continue"
-      [hideSubmit]="(store.isEditable$ | async) === false"
-    >
+      [hideSubmit]="(store.isEditable$ | async) === false">
       <span class="govuk-caption-l">Confirm cessation of regulated activities</span>
       <app-page-heading>What is the installations annual reportable emissions?</app-page-heading>
       <div
@@ -26,10 +26,10 @@ import { emissionsFormProvider } from './emissions-form.provider';
         inputType="number"
         hint="Tonnes of carbon dioxide equivalent (CO2e)"
         suffix="tCO2e"
-        widthClass="govuk-input--width-10"
-      ></div>
+        widthClass="govuk-input--width-10"></div>
     </app-wizard-step>
-    <a govukLink routerLink="../..">Return to: Cessation</a> `,
+    <a govukLink routerLink="../..">Return to: Cessation</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [emissionsFormProvider],
 })

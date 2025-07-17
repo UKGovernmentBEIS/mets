@@ -2,10 +2,10 @@ package uk.gov.pmrv.api.workflow.request.application.authorization;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.resource.OperatorAuthorityResourceService;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.rules.services.resource.OperatorAuthorityResourceService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class OperatorAuthorityResourceAdapter {
         return findUserScopedRequestTaskTypesByAccounts(userId, Set.of(accountId));
     }
 
-    public Map<Long, Set<RequestTaskType>> getUserScopedRequestTaskTypesByAccountType(PmrvUser user, AccountType accountType){
+    public Map<Long, Set<RequestTaskType>> getUserScopedRequestTaskTypesByAccountType(AppUser user, AccountType accountType){
         Set<Long> accountIds = accountQueryService.getAccountIdsByAccountType(new ArrayList<>(user.getAccounts()), accountType);
         return findUserScopedRequestTaskTypesByAccounts(user.getUserId(), accountIds);
     }

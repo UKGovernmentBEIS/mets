@@ -15,8 +15,7 @@ describe('SummaryDetailsComponent', () => {
   @Component({
     template: `
       <app-deem-withdraw-determination-summary-details
-        [deemWithdrawDetermination$]="deemWithdrawDetermination$"
-      ></app-deem-withdraw-determination-summary-details>
+        [deemWithdrawDetermination$]="deemWithdrawDetermination$"></app-deem-withdraw-determination-summary-details>
     `,
   })
   class TestComponent {

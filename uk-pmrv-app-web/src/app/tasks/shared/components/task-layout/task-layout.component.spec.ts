@@ -23,9 +23,7 @@ describe('TaskLayoutComponent', () => {
         [header]="header"
         [requestTaskItem$]="requestTaskItem$"
         [relatedTasks]="relatedTasks"
-        [timelineActions]="timelineActions"
-      >
-      </app-task-layout>
+        [timelineActions]="timelineActions"></app-task-layout>
     `,
   })
   class TestComponent {

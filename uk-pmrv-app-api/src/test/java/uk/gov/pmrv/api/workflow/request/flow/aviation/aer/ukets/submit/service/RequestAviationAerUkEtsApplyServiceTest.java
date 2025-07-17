@@ -1,14 +1,19 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.submit.service;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEts;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.additionaldocuments.EmpAdditionalDocuments;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.common.service.AviationAerUkEtsSubmitRequestTaskSyncAerAttachmentsService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.submit.domain.AviationAerUkEtsApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.submit.domain.AviationAerUkEtsSaveApplicationRequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.submit.service.RequestAviationAerUkEtsApplyService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +23,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
+@ExtendWith(MockitoExtension.class)
 class RequestAviationAerUkEtsApplyServiceTest {
 
-    private final RequestAviationAerUkEtsApplyService service = new RequestAviationAerUkEtsApplyService();
+	@InjectMocks
+    private RequestAviationAerUkEtsApplyService service;
+    
+    @Mock
+    private AviationAerUkEtsSubmitRequestTaskSyncAerAttachmentsService syncAerAttachmentsService;
 
     @Test
     void applySaveAction() {
@@ -59,5 +71,7 @@ class RequestAviationAerUkEtsApplyServiceTest {
         assertTrue(payloadSaved.getReportingRequired());
         assertThat(payloadSaved.getAerSectionsCompleted()).containsExactly(Map.entry(EmpAdditionalDocuments.class.getName(), List.of(true)));
         assertFalse(payloadSaved.isVerificationPerformed());
+        
+        verify(syncAerAttachmentsService, times(1)).sync(taskActionPayload.getReportingRequired(), requestTaskPayload);
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AviationAerUkEtsSubmittedEmissions extends AviationAerSubmittedEmissions {
+public class AviationAerUkEtsSubmittedEmissions implements AviationAerSubmittedEmissions {
 
     @NotNull
     @Valid

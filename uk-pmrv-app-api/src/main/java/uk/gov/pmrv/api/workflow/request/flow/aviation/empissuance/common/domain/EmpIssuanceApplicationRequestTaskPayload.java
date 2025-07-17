@@ -1,5 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.common.domain;
 
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,10 +14,7 @@ import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -20,7 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @SuperBuilder
 public abstract class EmpIssuanceApplicationRequestTaskPayload extends RequestTaskPayload {
-    
+
     private ServiceContactDetails serviceContactDetails;
     
     @Builder.Default
@@ -33,4 +35,5 @@ public abstract class EmpIssuanceApplicationRequestTaskPayload extends RequestTa
     public Map<UUID, String> getAttachments() {
         return getEmpAttachments();
     }
+
 }

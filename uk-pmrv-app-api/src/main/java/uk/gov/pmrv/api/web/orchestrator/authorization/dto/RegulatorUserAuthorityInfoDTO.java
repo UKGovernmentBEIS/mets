@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 
 import java.time.LocalDateTime;
 
@@ -22,5 +22,4 @@ public class RegulatorUserAuthorityInfoDTO {
     private String jobTitle;
     private LocalDateTime authorityCreationDate;
     private AuthorityStatus authorityStatus;
-    private Boolean locked;
 }

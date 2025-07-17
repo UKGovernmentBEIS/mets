@@ -5,7 +5,7 @@ import { map, take, tap } from 'rxjs';
 
 import { aerVerifyQuery } from '@aviation/request-task/aer/ukets/aer-verify/aer-verify.selector';
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 
 import { VerifyEmissionsReductionClaimFormProvider } from './verify-emissions-reduction-claim-form.provider';
@@ -22,13 +22,13 @@ export const canActivateVerifyEmissionsReductionClaim: CanActivateFn = () => {
       if (!verificationReport) {
         store.setPayload({
           ...payload,
-          verificationReport: AerVerifyStoreDelegate.INITIAL_STATE.verificationReport,
+          verificationReport: AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport,
         } as any);
       }
 
       if (!verificationReport?.emissionsReductionClaimVerification) {
-        (store.aerVerifyDelegate as AerVerifyStoreDelegate).setEmissionsReductionClaimVerification(
-          AerVerifyStoreDelegate.INITIAL_STATE.verificationReport.emissionsReductionClaimVerification,
+        (store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setEmissionsReductionClaimVerification(
+          AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport.emissionsReductionClaimVerification,
         );
       }
 

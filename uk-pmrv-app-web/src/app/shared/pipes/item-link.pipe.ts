@@ -4,20 +4,20 @@ import { ItemDTO } from 'pmrv-api';
 
 @Pipe({ name: 'itemLink' })
 export class ItemLinkPipe implements PipeTransform {
-  transform(value: ItemDTO, isWorkflow?: boolean): any[] {
+  transform(value: ItemDTO, isAviation: boolean, isWorkflow?: boolean): any[] {
     if (isWorkflow) {
       return this.transformWorkflowUrl(value, '/accounts/' + value.accountId + '/workflows/' + value.requestId + '/');
     } else {
-      return this.transformWorkflowUrl(value, '/');
+      return this.transformWorkflowUrl(value, '/', isAviation);
     }
   }
 
-  private transformWorkflowUrl(value: ItemDTO, routerLooks: string) {
+  private transformWorkflowUrl(value: ItemDTO, routerLooks: string, isAviation?: boolean) {
     switch (value?.requestType) {
       case 'INSTALLATION_ACCOUNT_OPENING':
         return [routerLooks + 'installation-account', value.taskId];
       case 'SYSTEM_MESSAGE_NOTIFICATION':
-        return [routerLooks + 'message', value.taskId];
+        return isAviation ? [routerLooks + 'aviation/message', value.taskId] : [routerLooks + 'message', value.taskId];
       case 'PERMIT_ISSUANCE':
         switch (value?.taskType) {
           case 'PERMIT_ISSUANCE_WAIT_FOR_REVIEW':
@@ -35,7 +35,7 @@ export class ItemLinkPipe implements PipeTransform {
           case 'PERMIT_ISSUANCE_WAIT_FOR_RDE_RESPONSE':
             return [routerLooks + 'rde', value.taskId, 'manual-approval'];
           case 'PERMIT_ISSUANCE_MAKE_PAYMENT':
-            return [routerLooks + 'payment', value.taskId, 'make', 'details'];
+            return [routerLooks + 'payment', value.taskId, 'make'];
           case 'PERMIT_ISSUANCE_TRACK_PAYMENT':
           case 'PERMIT_ISSUANCE_CONFIRM_PAYMENT':
             return [routerLooks + 'payment', value.taskId, 'track'];
@@ -53,7 +53,7 @@ export class ItemLinkPipe implements PipeTransform {
           case 'PERMIT_REVOCATION_CESSATION_SUBMIT':
             return [routerLooks + 'permit-revocation', value.taskId, 'cessation'];
           case 'PERMIT_REVOCATION_MAKE_PAYMENT':
-            return [routerLooks + 'payment', value.taskId, 'make', 'details'];
+            return [routerLooks + 'payment', value.taskId, 'make'];
           case 'PERMIT_REVOCATION_TRACK_PAYMENT':
           case 'PERMIT_REVOCATION_CONFIRM_PAYMENT':
             return [routerLooks + 'payment', value.taskId, 'track'];
@@ -79,7 +79,7 @@ export class ItemLinkPipe implements PipeTransform {
           case 'PERMIT_SURRENDER_CESSATION_SUBMIT':
             return [routerLooks + 'permit-surrender', value.taskId, 'cessation'];
           case 'PERMIT_SURRENDER_MAKE_PAYMENT':
-            return [routerLooks + 'payment', value.taskId, 'make', 'details'];
+            return [routerLooks + 'payment', value.taskId, 'make'];
           case 'PERMIT_SURRENDER_TRACK_PAYMENT':
           case 'PERMIT_SURRENDER_CONFIRM_PAYMENT':
             return [routerLooks + 'payment', value.taskId, 'track'];
@@ -141,7 +141,7 @@ export class ItemLinkPipe implements PipeTransform {
             return [routerLooks + 'rde', value.taskId, 'manual-approval'];
           case 'PERMIT_VARIATION_MAKE_PAYMENT':
           case 'PERMIT_VARIATION_REGULATOR_LED_MAKE_PAYMENT':
-            return [routerLooks + 'payment', value.taskId, 'make', 'details'];
+            return [routerLooks + 'payment', value.taskId, 'make'];
           case 'PERMIT_VARIATION_TRACK_PAYMENT':
           case 'PERMIT_VARIATION_CONFIRM_PAYMENT':
           case 'PERMIT_VARIATION_REGULATOR_LED_TRACK_PAYMENT':
@@ -159,7 +159,7 @@ export class ItemLinkPipe implements PipeTransform {
           case 'PERMIT_TRANSFER_A_WAIT_FOR_TRANSFER':
             return [routerLooks + 'tasks', value.taskId, 'permit-transfer-a', 'wait'];
           case 'PERMIT_TRANSFER_A_MAKE_PAYMENT':
-            return [routerLooks + 'payment', value.taskId, 'make', 'details'];
+            return [routerLooks + 'payment', value.taskId, 'make'];
           case 'PERMIT_TRANSFER_A_TRACK_PAYMENT':
           case 'PERMIT_TRANSFER_A_CONFIRM_PAYMENT':
             return [routerLooks + 'payment', value.taskId, 'track'];
@@ -174,7 +174,7 @@ export class ItemLinkPipe implements PipeTransform {
           case 'PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMIT':
             return [routerLooks + 'permit-transfer', value.taskId];
           case 'PERMIT_TRANSFER_B_MAKE_PAYMENT':
-            return [routerLooks + 'payment', value.taskId, 'make', 'details'];
+            return [routerLooks + 'payment', value.taskId, 'make'];
           case 'PERMIT_TRANSFER_B_TRACK_PAYMENT':
           case 'PERMIT_TRANSFER_B_CONFIRM_PAYMENT':
             return [routerLooks + 'payment', value.taskId, 'track'];
@@ -261,7 +261,7 @@ export class ItemLinkPipe implements PipeTransform {
           case 'DRE_APPLICATION_SUBMIT':
             return [routerLooks + 'tasks', value.taskId, 'dre', 'submit'];
           case 'DRE_MAKE_PAYMENT':
-            return [routerLooks + 'payment', value.taskId, 'make', 'details'];
+            return [routerLooks + 'payment', value.taskId, 'make'];
           case 'DRE_TRACK_PAYMENT':
           case 'DRE_CONFIRM_PAYMENT':
             return [routerLooks + 'payment', value.taskId, 'track'];
@@ -303,6 +303,17 @@ export class ItemLinkPipe implements PipeTransform {
         }
       }
 
+      case 'PERMANENT_CESSATION': {
+        switch (value?.taskType) {
+          case 'PERMANENT_CESSATION_APPLICATION_SUBMIT':
+          case 'PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW':
+          case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'permanent-cessation', 'submit'];
+          default:
+            return ['.'];
+        }
+      }
+
       case 'DOAL': {
         switch (value?.taskType) {
           case 'DOAL_APPLICATION_SUBMIT':
@@ -318,6 +329,38 @@ export class ItemLinkPipe implements PipeTransform {
         }
       }
 
+      case 'INSTALLATION_AUDIT': {
+        switch (value?.taskType) {
+          case 'INSTALLATION_AUDIT_APPLICATION_SUBMIT':
+            return [routerLooks + 'tasks', value.taskId, 'inspection', 'audit', 'submit'];
+          case 'INSTALLATION_AUDIT_WAIT_FOR_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'inspection', 'audit', 'peer-review-wait'];
+          case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'inspection', 'audit', 'peer-review'];
+          case 'INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS':
+            return [routerLooks + 'tasks', value.taskId, 'inspection', 'audit', 'respond'];
+
+          default:
+            return ['.'];
+        }
+      }
+
+      case 'INSTALLATION_ONSITE_INSPECTION': {
+        switch (value?.taskType) {
+          case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT':
+            return [routerLooks + 'tasks', value.taskId, 'inspection', 'onsite', 'submit'];
+          case 'INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'inspection', 'onsite', 'peer-review-wait'];
+          case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'inspection', 'onsite', 'peer-review'];
+          case 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS':
+            return [routerLooks + 'tasks', value.taskId, 'inspection', 'onsite', 'respond'];
+
+          default:
+            return ['.'];
+        }
+      }
+
       case 'WITHHOLDING_OF_ALLOWANCES': {
         switch (value?.taskType) {
           case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMIT':
@@ -328,6 +371,7 @@ export class ItemLinkPipe implements PipeTransform {
             return [routerLooks + 'tasks', value.taskId, 'withholding-allowances', 'peer-review-wait'];
           case 'WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_APPLICATION_SUBMIT':
             return [routerLooks + 'tasks', value.taskId, 'withholding-allowances', 'withdraw'];
+
           default:
             return ['.'];
         }
@@ -368,7 +412,7 @@ export class ItemLinkPipe implements PipeTransform {
           }
           case 'EMP_ISSUANCE_UKETS_MAKE_PAYMENT':
           case 'EMP_ISSUANCE_CORSIA_MAKE_PAYMENT':
-            return ['/aviation' + routerLooks, 'payment', value.taskId, 'make', 'details'];
+            return ['/aviation' + routerLooks, 'payment', value.taskId, 'make'];
           case 'EMP_ISSUANCE_UKETS_TRACK_PAYMENT':
           case 'EMP_ISSUANCE_UKETS_CONFIRM_PAYMENT':
           case 'EMP_ISSUANCE_CORSIA_TRACK_PAYMENT':
@@ -432,7 +476,7 @@ export class ItemLinkPipe implements PipeTransform {
           case 'EMP_VARIATION_UKETS_REGULATOR_LED_MAKE_PAYMENT':
           case 'EMP_VARIATION_CORSIA_REGULATOR_LED_MAKE_PAYMENT':
           case 'EMP_VARIATION_CORSIA_MAKE_PAYMENT':
-            return ['/aviation' + routerLooks, 'payment', value.taskId, 'make', 'details'];
+            return ['/aviation' + routerLooks, 'payment', value.taskId, 'make'];
           case 'EMP_VARIATION_UKETS_TRACK_PAYMENT':
           case 'EMP_VARIATION_UKETS_CONFIRM_PAYMENT':
           case 'EMP_VARIATION_CORSIA_TRACK_PAYMENT':
@@ -475,7 +519,7 @@ export class ItemLinkPipe implements PipeTransform {
           case 'AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW':
             return ['/aviation' + routerLooks + 'tasks', value.taskId];
           case 'AVIATION_DRE_UKETS_MAKE_PAYMENT':
-            return ['/aviation' + routerLooks, 'payment', value.taskId, 'make', 'details'];
+            return ['/aviation' + routerLooks, 'payment', value.taskId, 'make'];
           case 'AVIATION_DRE_UKETS_TRACK_PAYMENT':
           case 'AVIATION_DRE_UKETS_CONFIRM_PAYMENT':
             return ['/aviation' + routerLooks, 'payment', value.taskId, 'track'];
@@ -517,6 +561,12 @@ export class ItemLinkPipe implements PipeTransform {
           case 'AVIATION_AER_CORSIA_APPLICATION_SUBMIT':
           case 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT':
           case 'AVIATION_AER_CORSIA_WAIT_FOR_VERIFICATION':
+          case 'AVIATION_AER_CORSIA_WAIT_FOR_REVIEW':
+          case 'AVIATION_AER_CORSIA_APPLICATION_REVIEW':
+          case 'AVIATION_AER_CORSIA_WAIT_FOR_AMENDS':
+          case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT':
+          case 'AVIATION_AER_CORSIA_AMEND_WAIT_FOR_VERIFICATION':
+          case 'AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT':
             return ['/aviation' + routerLooks + 'tasks', value.taskId];
 
           default: {
@@ -551,6 +601,81 @@ export class ItemLinkPipe implements PipeTransform {
             return ['/aviation' + routerLooks + 'tasks', value.taskId];
           default:
             return ['.'];
+        }
+      }
+
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING': {
+        switch (value?.taskType) {
+          case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW':
+          case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW':
+          case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT':
+            return ['/aviation' + routerLooks + 'tasks', value.taskId];
+          default:
+            return ['.'];
+        }
+      }
+
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING': {
+        switch (value?.taskType) {
+          case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT':
+          case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW':
+          case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW':
+            return ['/aviation' + routerLooks + 'tasks', value.taskId];
+
+          default:
+            return ['.'];
+        }
+      }
+
+      case 'BDR': {
+        switch (value?.taskType) {
+          case 'BDR_APPLICATION_SUBMIT':
+          case 'BDR_APPLICATION_AMENDS_SUBMIT':
+          case 'BDR_WAIT_FOR_VERIFICATION':
+          case 'BDR_WAIT_FOR_REGULATOR_REVIEW':
+          case 'BDR_AMEND_WAIT_FOR_VERIFICATION':
+            return [routerLooks + 'tasks', value.taskId, 'bdr', 'submit'];
+          case 'BDR_APPLICATION_VERIFICATION_SUBMIT':
+          case 'BDR_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+            return [routerLooks + 'tasks', value.taskId, 'bdr', 'verification-submit'];
+          case 'BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+          case 'BDR_WAIT_FOR_AMENDS':
+          case 'BDR_APPLICATION_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'bdr', 'review'];
+          case 'BDR_WAIT_FOR_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'bdr', 'peer-review-wait'];
+          default:
+            return ['.'];
+        }
+      }
+
+      case 'AVIATION_DOE_CORSIA': {
+        switch (value?.taskType) {
+          case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
+          case 'AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW':
+          case 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW':
+            return ['/aviation' + routerLooks + 'tasks', value.taskId];
+          case 'AVIATION_DOE_CORSIA_MAKE_PAYMENT':
+            return ['/aviation' + routerLooks, 'payment', value.taskId, 'make'];
+          case 'AVIATION_DOE_CORSIA_TRACK_PAYMENT':
+          case 'AVIATION_DOE_CORSIA_CONFIRM_PAYMENT':
+            return ['/aviation' + routerLooks, 'payment', value.taskId, 'track'];
+          default: {
+            return ['.'];
+          }
+        }
+      }
+
+      case 'ALR': {
+        switch (value?.taskType) {
+          case 'ALR_APPLICATION_SUBMIT':
+          case 'ALR_WAIT_FOR_VERIFICATION':
+            return [routerLooks + 'tasks', value.taskId, 'alr', 'submit'];
+          case 'ALR_APPLICATION_VERIFICATION_SUBMIT':
+            return [routerLooks + 'tasks', value.taskId, 'alr', 'verification-submit'];
+          default: {
+            return ['.'];
+          }
         }
       }
 

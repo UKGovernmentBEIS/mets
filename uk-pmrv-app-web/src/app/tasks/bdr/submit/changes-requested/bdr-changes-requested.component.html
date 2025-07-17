@@ -1,0 +1,42 @@
+<app-bdr-task [breadcrumb]="true">
+  <app-page-heading>Changes requested by the regulator</app-page-heading>
+
+  <govuk-error-summary *ngIf="displayErrorSummary$ | async" [form]="form"></govuk-error-summary>
+
+  <h2 app-summary-header class="govuk-heading-m">Baseline data report details</h2>
+
+  <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Changes required</dt>
+      <dd govukSummaryListRowValue>
+        <ng-container
+          *ngFor="
+            let requiredChange of payload()?.regulatorReviewGroupDecisions?.BDR?.['details']?.requiredChanges;
+            let i = index;
+            let isLast = last
+          ">
+          <div>
+            {{ i + 1 }}. {{ requiredChange?.reason }}
+            <br />
+            <ng-container *ngIf="requiredChange?.files?.length > 0">
+              <app-summary-download-files
+                [files]="bdrService.getRegulatorDownloadUrlFiles(requiredChange?.files)"></app-summary-download-files>
+            </ng-container>
+          </div>
+          <br *ngIf="!isLast" />
+        </ng-container>
+      </dd>
+    </div>
+  </dl>
+
+  <form (ngSubmit)="confirm()" [formGroup]="form">
+    <div formControlName="changesRequested" govuk-checkboxes>
+      <govuk-checkbox
+        [value]="true"
+        label="I have made changes and want to mark this task as complete"></govuk-checkbox>
+    </div>
+    <div *ngIf="isEditable()" class="govuk-button-group">
+      <button appPendingButton govukButton type="submit">Confirm and complete</button>
+    </div>
+  </form>
+</app-bdr-task>

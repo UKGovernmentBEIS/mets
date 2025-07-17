@@ -67,7 +67,7 @@ describe('ConfirmationGuard', () => {
 
     await expect(
       firstValueFrom(guard.canActivate(activatedRouteSnapshotBank) as Observable<true | UrlTree>),
-    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshotBank.params.taskId}/make/details`));
+    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshotBank.params.taskId}/make`));
 
     store.setState({
       ...mockPaymentState,
@@ -77,7 +77,7 @@ describe('ConfirmationGuard', () => {
 
     await expect(
       firstValueFrom(guard.canActivate(activatedRouteSnapshotBank) as Observable<true | UrlTree>),
-    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshotBank.params.taskId}/make/details`));
+    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshotBank.params.taskId}/make`));
 
     store.setState({
       ...mockPaymentState,
@@ -86,16 +86,16 @@ describe('ConfirmationGuard', () => {
 
     await expect(
       firstValueFrom(guard.canActivate(activatedRouteSnapshotBank) as Observable<true | UrlTree>),
-    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshotBank.params.taskId}/make/details`));
+    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshotBank.params.taskId}/make`));
 
     store.setState(mockPaymentState);
 
     await expect(
       firstValueFrom(guard.canActivate(activatedRouteSnapshotBank) as Observable<true | UrlTree>),
-    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshotBank.params.taskId}/make/details`));
+    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshotBank.params.taskId}/make`));
 
     await expect(
       firstValueFrom(guard.canActivate(activatedRouteSnapshotNoQueryParam) as Observable<true | UrlTree>),
-    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshotNoQueryParam.params.taskId}/make/details`));
+    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshotNoQueryParam.params.taskId}/make`));
   });
 });

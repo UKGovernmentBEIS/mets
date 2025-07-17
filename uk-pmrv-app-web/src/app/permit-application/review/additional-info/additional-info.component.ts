@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { filter, map, pluck } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 import { PermitApplicationState } from '../../store/permit-application.state';
 import { PermitApplicationStore } from '../../store/permit-application.store';
@@ -14,7 +14,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 export class AdditionalInfoComponent {
   showDiff$ = this.store.showDiff$;
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
-  groupKey$ = this.route.data.pipe(pluck('groupKey'));
+  groupKey$ = this.route.data.pipe(map((x) => x?.groupKey));
 
   files$ = this.store.getTask('additionalDocuments').pipe(
     filter((item) => !!item),
@@ -23,7 +23,7 @@ export class AdditionalInfoComponent {
 
   originalFiles$ = this.store.getOriginalTask('additionalDocuments').pipe(
     filter((item) => !!item),
-    map((item) => this.store.getDownloadUrlFiles(item.documents)),
+    map((item) => this.store.getDownloadUrlFiles(item.documents, 'permitAttachments', true)),
   );
 
   constructor(

@@ -12,13 +12,11 @@ import { AviationAerSafPurchase } from 'pmrv-api';
   standalone: true,
   imports: [SharedModule, RouterModule],
   templateUrl: './emissions-reduction-claim-list-template.component.html',
-  styles: [
-    `
-      .amount {
-        text-align: left;
-      }
-    `,
-  ],
+  styles: `
+    .amount {
+      text-align: left;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionsReductionClaimListTemplateComponent implements OnInit {
@@ -54,7 +52,10 @@ export class EmissionsReductionClaimListTemplateComponent implements OnInit {
     },
   ];
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
     this.purchases = this.data?.map((items) => items.purchase) ?? [];

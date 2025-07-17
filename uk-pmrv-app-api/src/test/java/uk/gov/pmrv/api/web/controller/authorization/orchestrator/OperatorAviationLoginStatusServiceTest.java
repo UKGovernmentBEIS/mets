@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.domain.Authority;
+import uk.gov.netz.api.authorization.core.domain.AuthorityPermission;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.Authority;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityPermission;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.LoginStatus;
 
 import java.util.List;

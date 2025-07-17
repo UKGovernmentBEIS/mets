@@ -7,15 +7,18 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.notification.mail.config.property.NotificationProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.token.JwtTokenActionEnum;
+import uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel;
+import uk.gov.netz.api.common.config.WebAppProperties;
+import uk.gov.netz.api.notificationapi.mail.config.property.NotificationProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.netz.api.token.JwtProperties;
+import uk.gov.netz.api.token.JwtTokenAction;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.user.NavigationOutcomes;
-import uk.gov.pmrv.api.token.JwtProperties;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.domain.model.UserNotificationWithRedirectionLinkInfo;
 import uk.gov.pmrv.api.user.core.domain.model.UserNotificationWithRedirectionLinkInfo.TokenParams;
 import uk.gov.pmrv.api.user.core.service.UserNotificationService;
@@ -31,8 +34,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionGroup.MANAGE_USERS_AND_CONTACTS;
-import static uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionLevel.NONE;
+import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionGroup.MANAGE_USERS_AND_CONTACTS;
 
 @ExtendWith(MockitoExtension.class)
 class RegulatorUserNotificationGatewayTest {
@@ -43,14 +45,16 @@ class RegulatorUserNotificationGatewayTest {
     @Mock
     private UserNotificationService userNotificationService;
     @Mock
-    private NotificationEmailService notificationEmailService;
+    private NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
 
     @Mock
     private JwtProperties jwtProperties;
+
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private NotificationProperties notificationProperties;
+
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private AppProperties appProperties;
+    private WebAppProperties webAppProperties;
 
     @Test
     void notifyInvitedUser() {
@@ -75,16 +79,16 @@ class RegulatorUserNotificationGatewayTest {
 
         UserNotificationWithRedirectionLinkInfo notificationInfo = notificationInfoCaptor.getValue();
 
-        assertThat(notificationInfo.getTemplateName()).isEqualTo(NotificationTemplateName.INVITATION_TO_REGULATOR_ACCOUNT);
+        assertThat(notificationInfo.getTemplateName()).isEqualTo(PmrvNotificationTemplateName.INVITATION_TO_REGULATOR_ACCOUNT);
         assertThat(notificationInfo.getUserEmail()).isEqualTo(userDetails.getEmail());
-        assertThat(notificationInfo.getLinkParamName()).isEqualTo(EmailNotificationTemplateConstants.REGULATOR_INVITATION_CONFIRMATION_LINK);
+        assertThat(notificationInfo.getLinkParamName()).isEqualTo(PmrvEmailNotificationTemplateConstants.REGULATOR_INVITATION_CONFIRMATION_LINK);
         assertThat(notificationInfo.getLinkPath()).isEqualTo(NavigationOutcomes.REGULATOR_REGISTRATION_INVITATION_ACCEPTED_URL);
         assertThat(notificationInfo.getNotificationParams()).containsExactlyInAnyOrderEntriesOf(
                 Map.of(
-                        EmailNotificationTemplateConstants.APPLICANT_FNAME, userDetails.getFirstName(),
-                        EmailNotificationTemplateConstants.APPLICANT_LNAME, userDetails.getLastName(),
-                        EmailNotificationTemplateConstants.EXPIRATION_MINUTES, 60L,
-                        EmailNotificationTemplateConstants.CONTACT_REGULATOR, "link"
+                		PmrvEmailNotificationTemplateConstants.APPLICANT_FNAME, userDetails.getFirstName(),
+                		PmrvEmailNotificationTemplateConstants.APPLICANT_LNAME, userDetails.getLastName(),
+                		PmrvEmailNotificationTemplateConstants.EXPIRATION_MINUTES, 60L,
+                		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, "link"
                 ));
         assertThat(notificationInfo.getTokenParams()).isEqualTo(expectedInvitationLinkTokenParams(authorityUuid, expirationInterval));
     }
@@ -92,23 +96,25 @@ class RegulatorUserNotificationGatewayTest {
     @Test
     void notifyInviteeAcceptedInvitation() {
         when(notificationProperties.getEmail().getContactUsLink()).thenReturn("link");
-        when(appProperties.getWeb().getUrl()).thenReturn("url");
+        when(webAppProperties.getUrl()).thenReturn("url");
+
+        UserInfoDTO invitee = UserInfoDTO.builder().email("email").build();
 
         //invoke
-        regulatorUserNotificationGateway.notifyInviteeAcceptedInvitation("email");
+        regulatorUserNotificationGateway.notifyInviteeAcceptedInvitation(invitee);
 
-        ArgumentCaptor<EmailData> emailDataCaptor =
+        ArgumentCaptor<EmailData<EmailNotificationTemplateData>> emailDataCaptor =
                 ArgumentCaptor.forClass(EmailData.class);
         verify(notificationEmailService, times(1)).notifyRecipient(emailDataCaptor.capture(), eq("email"));
 
-        EmailData emailData = emailDataCaptor.getValue();
+        EmailData<EmailNotificationTemplateData> emailData = emailDataCaptor.getValue();
 
-        assertThat(emailData.getNotificationTemplateData().getTemplateName()).isEqualTo(NotificationTemplateName.INVITEE_INVITATION_ACCEPTED);
+        assertThat(emailData.getNotificationTemplateData().getTemplateName()).isEqualTo(PmrvNotificationTemplateName.INVITEE_INVITATION_ACCEPTED.getName());
         assertThat(emailData.getNotificationTemplateData().getTemplateParams()).containsExactlyInAnyOrderEntriesOf(
                 Map.of(
-                        EmailNotificationTemplateConstants.USER_ROLE_TYPE, "Regulator",
-                        EmailNotificationTemplateConstants.CONTACT_REGULATOR, "link",
-                        EmailNotificationTemplateConstants.HOME_URL, "url"
+                		PmrvEmailNotificationTemplateConstants.USER_ROLE_TYPE, "Regulator",
+                		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, "link",
+                		PmrvEmailNotificationTemplateConstants.HOME_URL, "url"
                 ));
     }
 
@@ -129,13 +135,13 @@ class RegulatorUserNotificationGatewayTest {
                         .phoneNumber("210000")
                         .build()
                 )
-                .permissions(Map.of(MANAGE_USERS_AND_CONTACTS, NONE))
+                .permissions(Map.of(MANAGE_USERS_AND_CONTACTS, RegulatorPermissionLevel.NONE))
                 .build();
     }
 
     private TokenParams expectedInvitationLinkTokenParams(String authUuid, long expirationInterval) {
         return TokenParams.builder()
-                .jwtTokenAction(JwtTokenActionEnum.REGULATOR_INVITATION)
+                .jwtTokenAction(JwtTokenAction.REGULATOR_INVITATION)
                 .claimValue(authUuid)
                 .expirationInterval(expirationInterval)
                 .build();

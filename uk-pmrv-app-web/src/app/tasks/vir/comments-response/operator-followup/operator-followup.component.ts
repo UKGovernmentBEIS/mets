@@ -24,8 +24,7 @@ import { VirApplicationRespondToRegulatorCommentsRequestTaskPayload } from 'pmrv
         [regulatorImprovementResponse]="regulatorImprovementResponse$ | async"
         [formGroup]="form"
         [isEditable]="isEditable$ | async"
-        (formSubmit)="onSubmit()"
-      ></app-respond-item-form>
+        (formSubmit)="onSubmit()"></app-respond-item-form>
     </app-vir-task>
   `,
   providers: [operatorFollowupFormProvider],

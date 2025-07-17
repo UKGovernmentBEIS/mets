@@ -1,19 +1,17 @@
 <div class="govuk-grid-row" *ngIf="route.data | async as routeData">
-  <div class="govuk-grid-column-full">
+  <div class="govuk-grid-column-two-thirds">
     <ng-container *ngIf="!isActionSubmitted; else actionSubmitted">
       <app-page-heading [caption]="routeData?.caption">{{ routeData?.pageTitle }}</app-page-heading>
 
       <ng-container *ngIf="allowSubmit; else submitNotAllowed">
         <ng-container
-          *ngTemplateOutlet="customSubmitContentTemplate ? customSubmitContentTemplate : defaultSubmitContentTemplate"
-        >
-        </ng-container>
+          *ngTemplateOutlet="
+            customSubmitContentTemplate ? customSubmitContentTemplate : defaultSubmitContentTemplate
+          "></ng-container>
         <ng-template #defaultSubmitContentTemplate>
-          <p class="govuk-body"><strong>Now send your application</strong></p>
-
           <p class="govuk-body">
-            By submitting this application you are confirming that, to the best of your knowledge, the details you are
-            providing are correct.
+            By selecting ‘Confirm and send’ you confirm that the information in your application is correct to the best
+            of your knowledge.
           </p>
         </ng-template>
 
@@ -38,9 +36,7 @@
       <ng-container
         *ngTemplateOutlet="
           customSubmittedContentTemplate ? customSubmittedContentTemplate : defaultSubmittedContentTemplate
-        "
-      >
-      </ng-container>
+        "></ng-container>
       <ng-template #defaultSubmittedContentTemplate>
         <p class="govuk-body">The regulator will make a decision and get back to you.</p>
       </ng-template>

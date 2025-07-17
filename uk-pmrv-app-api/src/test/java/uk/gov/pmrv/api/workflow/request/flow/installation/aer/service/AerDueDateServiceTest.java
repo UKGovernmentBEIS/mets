@@ -6,8 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import uk.gov.pmrv.api.workflow.utils.DateUtils;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.Date;
@@ -22,7 +22,7 @@ class AerDueDateServiceTest {
 
     @Test
     void generateDueDate() {
-        Date expectedDate = Timestamp.valueOf(LocalDate.of(Year.now().getValue(), 4, 1).atTime(0, 0));
+    	Date expectedDate = DateUtils.atEndOfDay(LocalDate.of(Year.now().getValue(), 3, 31));
         // Invoke
         Date actualDate = aerDueDateService.generateDueDate();
 

@@ -4,6 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
+import { EmissionPointsTableComponent } from '@shared/components/emission-points/emission-points-table/emission-points-table.component';
+
 import { TasksService } from 'pmrv-api';
 
 import { BasePage, mockClass } from '../../../testing';
@@ -46,12 +48,12 @@ describe('EmissionPointsComponent', () => {
     }
 
     get emissionPoints() {
-      return this.queryAll<HTMLDListElement>('dl');
+      return this.queryAll<HTMLDListElement>('tr');
     }
 
     get emissionPointsTextContents() {
       return this.emissionPoints.map((emissionPoint) =>
-        Array.from(emissionPoint.querySelectorAll('dd')).map((dd) => dd.textContent.trim()),
+        Array.from(emissionPoint.querySelectorAll('td')).map((td) => td.textContent.trim()),
       );
     }
   }
@@ -59,7 +61,7 @@ describe('EmissionPointsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [EmissionPointsComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [RouterTestingModule, SharedModule, SharedPermitModule, EmissionPointsTableComponent],
       providers: [
         { provide: TasksService, useValue: tasksService },
         {
@@ -112,13 +114,14 @@ describe('EmissionPointsComponent', () => {
       expect(page.submitButton).toBeTruthy();
       expect(page.addEmissionPointBtn).toBeFalsy();
       expect(page.addAnotherEmissionPointBtn).toBeTruthy();
-      expect(page.emissionPoints).toHaveLength(2);
+      expect(page.emissionPoints).toHaveLength(3);
     });
 
     it('should display the emission points', () => {
       expect(page.emissionPointsTextContents).toEqual([
-        ['The big Ref Emission point 1', 'Change | Delete'],
-        ['Yet another reference Point taken!', 'Change | Delete'],
+        [],
+        ['The big Ref', 'Emission point 1', 'Change', 'Delete'],
+        ['Yet another reference', 'Point taken!', 'Change', 'Delete'],
       ]);
     });
 

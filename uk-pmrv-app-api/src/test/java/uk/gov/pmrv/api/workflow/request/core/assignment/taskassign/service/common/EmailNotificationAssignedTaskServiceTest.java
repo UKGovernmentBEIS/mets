@@ -8,10 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.common.config.WebAppProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
 public class EmailNotificationAssignedTaskServiceTest {
@@ -20,16 +21,14 @@ public class EmailNotificationAssignedTaskServiceTest {
     private EmailNotificationAssignedTaskService emailNotificationAssignedTaskService;
 
     @Mock
-    private NotificationEmailService notificationEmailService;
+    private NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
 
     @Mock
     private UserAuthService userAuthService;
 
-    @Mock
-    private AppProperties appProperties;
 
     @Mock
-    private AppProperties.Web webProperties;
+    private WebAppProperties webAppProperties;
 
     private static final String USER_ID = "userId";
     private static final String EMAIL = "email@example.com";
@@ -38,8 +37,7 @@ public class EmailNotificationAssignedTaskServiceTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(appProperties.getWeb()).thenReturn(webProperties);
-        when(webProperties.getUrl()).thenReturn(HOME_PAGE);
+        when(webAppProperties.getUrl()).thenReturn(HOME_PAGE);
     }
 
     @Test

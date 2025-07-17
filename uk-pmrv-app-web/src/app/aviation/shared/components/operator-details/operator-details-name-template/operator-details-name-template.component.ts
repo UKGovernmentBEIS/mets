@@ -18,7 +18,9 @@ export class OperatorDetailsNameTemplateComponent implements OnInit {
   @Input() form: FormGroup<any>;
   @Input() isCorsia = false;
   @Output() readonly submitForm = new EventEmitter<FormGroup<any>>();
+
   label = 'Aircraft operator name';
+
   ngOnInit(): void {
     if (this.isCorsia) this.label = 'Aeroplane operator name';
   }

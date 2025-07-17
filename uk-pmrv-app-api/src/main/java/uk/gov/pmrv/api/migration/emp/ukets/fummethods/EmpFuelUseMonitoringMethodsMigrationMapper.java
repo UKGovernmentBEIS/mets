@@ -1,7 +1,5 @@
 package uk.gov.pmrv.api.migration.emp.ukets.fummethods;
 
-import java.util.Map;
-
 import org.apache.commons.lang3.ObjectUtils;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmpProcedureForm;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.blockonblockoff.EmpBlockOnBlockOffMethodProcedures;
@@ -10,6 +8,8 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.fueluplift.EmpFuelU
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.methoda.EmpMethodAProcedures;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.methodb.EmpMethodBProcedures;
 import uk.gov.pmrv.api.migration.emp.common.fummethods.EmpFuelUseMonitoringMethods;
+
+import java.util.Map;
 
 public class EmpFuelUseMonitoringMethodsMigrationMapper {
 	    

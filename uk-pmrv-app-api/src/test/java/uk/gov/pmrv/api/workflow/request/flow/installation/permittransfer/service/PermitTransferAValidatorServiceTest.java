@@ -5,10 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
@@ -17,8 +18,6 @@ import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferAApplicationRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.TransferParty;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.PermitTransferAValidatorService;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.PermitTransferAttachmentsValidator;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -67,7 +66,7 @@ class PermitTransferAValidatorServiceTest {
         final BusinessException businessException = assertThrows(BusinessException.class, () ->
             validator.validateTaskPayload(payload));
 
-        assertEquals(ErrorCode.INVALID_PERMIT_TRANSFER, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_PERMIT_TRANSFER, businessException.getErrorCode());
     }
 
     @Test

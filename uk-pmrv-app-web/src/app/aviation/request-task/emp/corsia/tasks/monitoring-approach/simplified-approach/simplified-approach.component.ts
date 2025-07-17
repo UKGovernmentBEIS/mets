@@ -53,11 +53,9 @@ export class SimplifiedApproachComponent {
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
         this.store.empCorsiaDelegate.setEmissionsMonitoringApproach(this.formProvider.getFormValue());
-
         file?.forEach((doc) => {
           this.store.empCorsiaDelegate.addEmpAttachment({ [doc.uuid]: doc.file.name });
         });
-
         this.router.navigate(['../summary'], {
           relativeTo: this.route,
         });

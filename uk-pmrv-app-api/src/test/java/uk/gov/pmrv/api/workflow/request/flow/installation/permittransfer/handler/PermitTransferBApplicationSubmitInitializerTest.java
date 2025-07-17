@@ -130,7 +130,7 @@ class PermitTransferBApplicationSubmitInitializerTest {
         assertEquals(permitTransferDetails, result.getPermitTransferDetails());
         assertEquals(PermitType.GHGE, result.getPermitType());
         assertNull(permit.getSiteDiagrams());
-        assertNull(permit.getMonitoringMethodologyPlans());
+        assertNull(permit.getMonitoringMethodologyPlans().getPlans());
         assertNull(permit.getAdditionalDocuments());
         assertNull(permit.getUncertaintyAnalysis());
         assertNull(permit.getConfidentialityStatement());

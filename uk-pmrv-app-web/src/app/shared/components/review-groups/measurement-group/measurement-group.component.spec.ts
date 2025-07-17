@@ -19,8 +19,7 @@ describe('MeasurementGroupComponent', () => {
         [data]="data"
         [statuses]="statuses"
         [taskKey]="taskKey"
-        [isReview]="isReview"
-      ></app-measurement-group>
+        [isReview]="isReview"></app-measurement-group>
     `,
   })
   class TestComponent {

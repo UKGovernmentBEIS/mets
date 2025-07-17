@@ -19,17 +19,15 @@ import { AerService } from '../../../core/aer.service';
       [breadcrumb]="[
         {
           text: taskKey | monitoringApproachEmissionDescription,
-          link: [taskKey === 'MEASUREMENT_CO2' ? 'measurement-co2' : 'measurement-n2o']
-        }
+          link: [taskKey === 'MEASUREMENT_CO2' ? 'measurement-co2' : 'measurement-n2o'],
+        },
       ]"
       linkText="{{ taskKey | monitoringApproachEmissionDescription }}"
-      returnToLink="../.."
-    >
+      returnToLink="../..">
       <app-measurement-tier-summary
         [payload]="payload$ | async"
         [taskKey]="taskKey"
-        [index]="index$ | async"
-      ></app-measurement-tier-summary>
+        [index]="index$ | async"></app-measurement-tier-summary>
     </app-aer-task-review>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,5 +53,8 @@ export class MeasurementTierReviewSummaryComponent {
     }),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

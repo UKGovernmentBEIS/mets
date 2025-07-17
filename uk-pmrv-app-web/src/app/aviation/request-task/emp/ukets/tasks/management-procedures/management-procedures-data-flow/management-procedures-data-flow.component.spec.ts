@@ -41,7 +41,7 @@ describe('ManagementProceduresDataFlowComponent', () => {
   it(`should display correct description`, () => {
     expect(
       screen.getByText(
-        'Describe the procedures used to manage data flow activities, to ensure data does not contain misstatements and conforms to the approved emissions monitoring plan and Order.',
+        'Describe the procedures used to manage data flow activities, to ensure data does not contain misstatements and conforms to the approved emissions monitoring plan and to the Order.',
       ),
     ).toBeInTheDocument();
   });

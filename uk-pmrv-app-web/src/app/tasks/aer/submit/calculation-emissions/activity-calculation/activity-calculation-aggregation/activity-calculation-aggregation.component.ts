@@ -157,12 +157,8 @@ export class ActivityCalculationAggregationComponent implements OnInit {
         materialOpeningQuantity: form.get('materialOpeningQuantity').value,
         materialClosingQuantity: form.get('materialClosingQuantity').value,
         materialImportedOrExported,
-        ...(materialImportedOrExported === true
-          ? {
-              materialImportedQuantity: form.get('materialImportedQuantity').value,
-              materialExportedQuantity: form.get('materialExportedQuantity').value,
-            }
-          : {}),
+        materialImportedQuantity: materialImportedOrExported ? form.get('materialImportedQuantity').value : null,
+        materialExportedQuantity: materialImportedOrExported ? form.get('materialExportedQuantity').value : null,
       },
     };
 
@@ -251,10 +247,10 @@ export class ActivityCalculationAggregationComponent implements OnInit {
             predefinedMeasurementUnit === 'GJ_PER_TONNE'
               ? 'TONNES'
               : predefinedMeasurementUnit === 'GJ_PER_NM3'
-              ? 'NM3'
-              : calculationActivityDataCalculationMethod?.measurementUnit
-              ? calculationActivityDataCalculationMethod.measurementUnit
-              : null,
+                ? 'NM3'
+                : calculationActivityDataCalculationMethod?.measurementUnit
+                  ? calculationActivityDataCalculationMethod.measurementUnit
+                  : null,
           disabled: !isEditable || !!predefinedMeasurementUnit,
         },
         {
@@ -270,7 +266,7 @@ export class ActivityCalculationAggregationComponent implements OnInit {
         {
           validators: [
             GovukValidators.required('Please state the opening quantity of fuel'),
-            maxIntegerPartValidator(),
+            maxIntegerPartValidator(), // TODO should be replaced with rangeIntegerPartValidator(),
           ],
           updateOn: 'change',
         },
@@ -283,7 +279,7 @@ export class ActivityCalculationAggregationComponent implements OnInit {
         {
           validators: [
             GovukValidators.required('Please state the closing quantity of fuel'),
-            maxIntegerPartValidator(),
+            maxIntegerPartValidator(), // TODO should be replaced with rangeIntegerPartValidator(),
           ],
           updateOn: 'change',
         },
@@ -306,7 +302,7 @@ export class ActivityCalculationAggregationComponent implements OnInit {
         {
           validators: [
             GovukValidators.required('Please state the total amount of imported fuel'),
-            maxIntegerPartValidator(),
+            maxIntegerPartValidator(), // TODO should be replaced with rangeIntegerPartValidator(),
           ],
           updateOn: 'change',
         },
@@ -319,7 +315,7 @@ export class ActivityCalculationAggregationComponent implements OnInit {
         {
           validators: [
             GovukValidators.required('Please state the total amount of exported fuel'),
-            maxIntegerPartValidator(),
+            maxIntegerPartValidator(), // TODO should be replaced with rangeIntegerPartValidator(),
           ],
           updateOn: 'change',
         },

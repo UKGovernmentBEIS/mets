@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
 
-
 @Injectable({
   providedIn: 'root',
 })
-export class WithdrawReasonGuard implements CanActivate {
-  constructor(private readonly router: Router, private readonly store: PermitRevocationStore) {}
+export class WithdrawReasonGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly store: PermitRevocationStore,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): true | Observable<true | UrlTree> {
     return (

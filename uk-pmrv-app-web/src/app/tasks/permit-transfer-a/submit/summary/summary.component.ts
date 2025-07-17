@@ -15,8 +15,7 @@ import { PermitTransferAApplicationRequestTaskPayload } from 'pmrv-api';
     <app-permit-transfer-details-summary-template
       [payload]="payload$ | async"
       [allowChange]="isEditable$ | async"
-      [files]="files$ | async"
-    ></app-permit-transfer-details-summary-template>
+      [files]="files$ | async"></app-permit-transfer-details-summary-template>
     <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
       <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
     </div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { categoryTierSubtaskStatus } from '../../../pfc-status';
 import { isWizardComplete } from '../emission-factor-wizard';
 
 @Injectable()
-export class AnswersGuard implements CanActivate {
+export class AnswersGuard {
   constructor(
     private readonly router: Router,
     private readonly store: PermitApplicationStore<PermitApplicationState>,

@@ -9,13 +9,13 @@ import org.springframework.boot.actuate.autoconfigure.endpoint.condition.Conditi
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanValidationResult;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanViolation;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.LimitedCompanyOrganisation;
@@ -27,8 +27,8 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringP
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.EmpOperatorDetails;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.validation.EmpUkEtsContextValidator;
-import uk.gov.pmrv.api.files.attachments.domain.FileAttachment;
-import uk.gov.pmrv.api.files.attachments.repository.FileAttachmentRepository;
+import uk.gov.netz.api.files.attachments.domain.FileAttachment;
+import uk.gov.netz.api.files.attachments.repository.FileAttachmentRepository;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static uk.gov.pmrv.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor

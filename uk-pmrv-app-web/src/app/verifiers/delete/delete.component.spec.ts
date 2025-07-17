@@ -12,7 +12,7 @@ import { BusinessTestingModule, expectBusinessErrorToBe } from '@error/testing/b
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage, RouterStubComponent } from '@testing';
 
-import { ApplicationUserDTO, VerifierAuthoritiesService } from 'pmrv-api';
+import { UserDTO, VerifierAuthoritiesService } from 'pmrv-api';
 
 import { saveNotFoundVerifierError } from '../errors/business-error';
 import { DeleteComponent } from './delete.component';
@@ -46,11 +46,10 @@ describe('VerifierDeleteComponent', () => {
     }
   }
 
-  const user: ApplicationUserDTO = {
+  const user: UserDTO = {
     email: 'alfyn-octo@pmrv.uk',
     firstName: 'Alfyn',
     lastName: 'Octo',
-    termsVersion: 1,
   };
 
   let verifierAuthoritiesService: Partial<jest.Mocked<VerifierAuthoritiesService>>;

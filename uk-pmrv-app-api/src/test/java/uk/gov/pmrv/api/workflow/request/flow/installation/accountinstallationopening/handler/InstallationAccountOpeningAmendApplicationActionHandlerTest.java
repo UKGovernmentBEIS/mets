@@ -12,8 +12,8 @@ import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountAmendService;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
@@ -54,7 +54,7 @@ class InstallationAccountOpeningAmendApplicationActionHandlerTest {
     void doProcess() {
     	//prepare data
     	final Long accountId = 1L;
-    	PmrvUser userSubmitted = PmrvUser.builder().userId("user1").build();
+    	AppUser userSubmitted = AppUser.builder().userId("user1").build();
     	RequestTask requestTask = createRequestTask(userSubmitted, accountId);
         InstallationAccountPayload initialAccountPayload = createAccountPayload("accountname", "leName");
         InstallationAccountOpeningApplicationRequestTaskPayload requestTaskPayload = InstallationAccountOpeningApplicationRequestTaskPayload
@@ -72,7 +72,7 @@ class InstallationAccountOpeningAmendApplicationActionHandlerTest {
             .accountPayload(amendAccountPayload)
             .build();
 
-        PmrvUser userAmend = PmrvUser.builder().userId("user2").build();
+        AppUser userAmend = AppUser.builder().userId("user2").build();
 		InstallationAccountDTO amendAccountDTO = createAccountDTO("accountname", "leName2");
 
         InstallationAccountOpeningApplicationRequestTaskPayload newRequestTaskPayload = InstallationAccountOpeningApplicationRequestTaskPayload
@@ -93,7 +93,7 @@ class InstallationAccountOpeningAmendApplicationActionHandlerTest {
         verify(requestTaskValidationService, times(1)).validateRequestTaskPayload(newRequestTaskPayload);
     }
 
-    private RequestTask createRequestTask(PmrvUser user, Long accountId) {
+    private RequestTask createRequestTask(AppUser user, Long accountId) {
     	return RequestTask.builder()
 				.id(10L)
 				.request(Request.builder()

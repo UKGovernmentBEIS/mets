@@ -34,7 +34,6 @@ import { DoalActionTaskComponent } from './shared/doal-action-task.component';
     OperatorReportComponent,
     PeerReviewDecisionComponent,
     ProceededComponent,
-    ProceededComponent,
     ResponseComponent,
     SubmittedComponent,
     VerificationReportComponent,

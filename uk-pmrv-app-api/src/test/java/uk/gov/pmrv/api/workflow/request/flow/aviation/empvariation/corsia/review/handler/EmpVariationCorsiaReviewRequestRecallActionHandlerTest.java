@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -39,7 +39,7 @@ class EmpVariationCorsiaReviewRequestRecallActionHandlerTest {
 
     @Test
     void process() {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         String processTaskId = "processTaskId";
         Request request = Request.builder().id("requestId").payload(EmpVariationCorsiaRequestPayload.builder().build()).build();
         RequestTask requestTask = RequestTask.builder()
@@ -52,7 +52,7 @@ class EmpVariationCorsiaReviewRequestRecallActionHandlerTest {
 
         recallActionHandler.process(requestTask.getId(),
             RequestTaskActionType.EMP_VARIATION_CORSIA_RECALL_FROM_AMENDS,
-            pmrvUser,
+            appUser,
             RequestTaskActionEmptyPayload.builder().build());
 
         // Verify

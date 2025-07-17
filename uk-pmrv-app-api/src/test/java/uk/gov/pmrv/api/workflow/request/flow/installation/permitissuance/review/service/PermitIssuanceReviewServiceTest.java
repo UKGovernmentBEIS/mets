@@ -6,8 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitType;
@@ -233,9 +233,9 @@ class PermitIssuanceReviewServiceTest {
             .payload(taskPayload)
             .build();
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").roleType(RoleType.OPERATOR).build();
+        final AppUser appUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.OPERATOR).build();
 
-        cut.savePermitDecisionNotification(requestTask, actionPayload.getDecisionNotification(), pmrvUser);
+        cut.savePermitDecisionNotification(requestTask, actionPayload.getDecisionNotification(), appUser);
 
         assertThat(requestTask.getRequest().getPayload()).isInstanceOf(PermitIssuanceRequestPayload.class);
 
@@ -251,14 +251,14 @@ class PermitIssuanceReviewServiceTest {
         assertThat(payloadSaved.getReviewAttachments()).isEqualTo(taskPayload.getReviewAttachments());
         assertThat(payloadSaved.getDetermination()).isEqualTo(taskPayload.getDetermination());
         assertThat(payloadSaved.getDecisionNotification()).isEqualTo(actionPayload.getDecisionNotification());
-        assertThat(payloadSaved.getRegulatorReviewer()).isEqualTo(pmrvUser.getUserId());
+        assertThat(payloadSaved.getRegulatorReviewer()).isEqualTo(appUser.getUserId());
     }
 
     @Test
     void saveRequestPeerReviewAction() {
         String selectedPeerReviewer = "selectedPeerReviewer";
         String user = "user";
-        PmrvUser reviewer = PmrvUser.builder().userId(user).build();
+        AppUser reviewer = AppUser.builder().userId(user).build();
 
         PermitIssuanceRequestPayload requestPayload = PermitIssuanceRequestPayload.builder()
             .payloadType(RequestPayloadType.PERMIT_ISSUANCE_REQUEST_PAYLOAD)

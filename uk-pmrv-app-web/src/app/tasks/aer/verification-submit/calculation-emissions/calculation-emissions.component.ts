@@ -9,7 +9,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 @Component({
   selector: 'app-calculation-emissions',
   template: `
-    <app-page-heading>{{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }} </app-page-heading>
+    <app-page-heading>{{ 'CALCULATION_CO2' | monitoringApproachEmissionDescription }}</app-page-heading>
     <app-calculation-emissions-group [data]="aerData$ | async"></app-calculation-emissions-group>
     <app-return-link></app-return-link>
   `,

@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.service;
 
 import org.springframework.stereotype.Service;
-
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestSequence;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestSequenceRepository;

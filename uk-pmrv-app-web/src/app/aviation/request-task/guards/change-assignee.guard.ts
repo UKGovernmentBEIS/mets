@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, CanDeactivate } from '@angular/router';
 
 import { map, Observable, take, tap } from 'rxjs';
 
 import { requestTaskQuery, RequestTaskStore } from '../store';
 
 @Injectable()
-export class ChangeAssigneeGuard implements CanActivate, CanDeactivate<unknown> {
+export class ChangeAssigneeGuard {
   private reassignedTo: string;
 
   constructor(private readonly store: RequestTaskStore) {}

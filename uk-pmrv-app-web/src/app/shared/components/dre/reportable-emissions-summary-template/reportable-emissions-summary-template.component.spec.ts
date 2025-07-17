@@ -15,10 +15,11 @@ describe('ReportableEmissionsSummaryTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    template: `<app-reportable-emissions-summary-template
-      [approachEmissions]="dre.monitoringApproachReportingEmissions"
-      [editable]="editable"
-    ></app-reportable-emissions-summary-template>`,
+    template: `
+      <app-reportable-emissions-summary-template
+        [approachEmissions]="dre.monitoringApproachReportingEmissions"
+        [editable]="editable"></app-reportable-emissions-summary-template>
+    `,
   })
   class TestComponent {
     editable = false;

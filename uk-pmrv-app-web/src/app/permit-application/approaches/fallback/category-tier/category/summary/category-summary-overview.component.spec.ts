@@ -23,7 +23,9 @@ describe('CategorySummaryOverviewComponent', () => {
   let store: PermitApplicationStore<PermitApplicationState>;
 
   @Component({
-    template: ` <app-category-summary-overview [sourceStreamCategory]="sourceStream"></app-category-summary-overview> `,
+    template: `
+      <app-category-summary-overview [sourceStreamCategory]="sourceStream"></app-category-summary-overview>
+    `,
   })
   class TestComponent {
     sourceStream = (mockPermitApplyPayload.permit.monitoringApproaches.FALLBACK as FallbackMonitoringApproach)

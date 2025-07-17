@@ -46,8 +46,11 @@ public class PermitViolation {
         INVALID_ANNUAL_EMISSIONS_TARGET("Annual emissions target should not be defined"),
         INVALID_ACTIVATION_DATE("Activation date is not valid"),
         NO_TRANSFERRED_EMISSIONS_SELECTED("At least one transferred emission should be selected on the appropriate monitoring approach type"),
-        TRANSFERRED_CO2_AND_N2O_MONITORING_APPROACH_SHOULD_EXIST("TransferredCo2AndN2O Monitoring Approach does not exist")
-        ;
+        TRANSFERRED_CO2_AND_N2O_MONITORING_APPROACH_SHOULD_EXIST("TransferredCo2AndN2O Monitoring Approach does not exist"),
+        PERMIT_MMP_VERSION_NOT_COMPLIANT("Permit MMP enabled version is not in line with permit data"),
+        INVALID_DIGITIZED_MMP_SUB_INSTALLATION("Permit digitized MMP sub installations are not valid"),
+        INVALID_WASTE_REGULATED_ACTIVITY("Waste Regulated Activity must be selected"),
+        INVALID_CO2_MEASUREMENT_BIOMASS_FRACTION("CO2 measurement biomass fraction should not be null");
 
         private final String message;
 

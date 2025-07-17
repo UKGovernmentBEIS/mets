@@ -21,15 +21,13 @@ import { scheduleMeasurementsFormProvider } from './schedule-measurements-form.p
         submitText="Continue"
         [caption]="'CALCULATION_PFC' | monitoringApproachDescription"
         heading="Provide details about the procedures for setting out the measurement schedule"
-        [hideSubmit]="(store.isEditable$ | async) === false"
-      >
+        [hideSubmit]="(store.isEditable$ | async) === false">
         <app-procedure-form></app-procedure-form>
       </app-wizard-step>
       <app-approach-return-link
         [parentTitle]="'CALCULATION_PFC' | monitoringApproachDescription"
         reviewGroupUrl="pfc"
-        [isNested]="true"
-      ></app-approach-return-link>
+        [isNested]="true"></app-approach-return-link>
     </app-permit-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,5 +1,7 @@
 import { AbstractControl, ValidatorFn, Validators } from '@angular/forms';
 
+import BigNumber from 'bignumber.js';
+
 import { MessageValidationErrors, MessageValidatorFn } from './message-validation-errors';
 
 // @dynamic
@@ -45,6 +47,14 @@ export class GovukValidators {
     return GovukValidators.builder(message, Validators.maxLength(length));
   }
 
+  static minMaxRangeNumberValidator(
+    min: number,
+    max: number,
+    message = `Enter a number between ${min} and ${max}`,
+  ): MessageValidatorFn {
+    return GovukValidators.builder(message, this.rangeNumberValidator(min, max));
+  }
+
   static pattern(pattern: string | RegExp, message: string): MessageValidatorFn {
     return GovukValidators.builder(message, Validators.pattern(pattern));
   }
@@ -60,6 +70,10 @@ export class GovukValidators {
 
   static notNaN(message: string): MessageValidatorFn {
     return GovukValidators.builder(message, this.notNaNValidator());
+  }
+
+  static notNaBigNumber(message: string): MessageValidatorFn {
+    return GovukValidators.builder(message, this.notNaBigNumberValidator());
   }
 
   static empty(message: string): MessageValidatorFn {
@@ -135,6 +149,18 @@ export class GovukValidators {
     };
   }
 
+  private static rangeNumberValidator(min: number, max: number): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: string } | null => {
+      let error = null;
+      if (control.value !== null && control.value !== undefined && !isNaN(control.value)) {
+        if (control.value < min || control.value > max) {
+          error = { invalidLength: true };
+        }
+      }
+      return error;
+    };
+  }
+
   private static maxFileSizeValidator(maxFileSize: number): ValidatorFn {
     return (control: AbstractControl): { [key: string]: boolean } | null => {
       if (
@@ -164,6 +190,19 @@ export class GovukValidators {
   private static notNaNValidator(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: boolean } | null => {
       if (control.value !== '' && isNaN(control.value)) {
+        return { isNaN: true };
+      }
+      return null;
+    };
+  }
+
+  private static notNaBigNumberValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: boolean } | null => {
+      if (control.value === null || control.value === '') {
+        return null;
+      }
+      const val = new BigNumber(control.value);
+      if (val.isNaN()) {
         return { isNaN: true };
       }
       return null;

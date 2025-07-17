@@ -1,5 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ProcedureFormStepComponent } from '@aviation/request-task/emp/shared/procedure-form-step';
@@ -12,6 +13,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
 
+import { empQuery } from '../../emp.selectors';
 import { BlockHourProceduresFormProvider } from '../block-hour-procedures-form.provider';
 
 @Component({
@@ -31,13 +33,14 @@ import { BlockHourProceduresFormProvider } from '../block-hour-procedures-form.p
 })
 export class BlockHoursMeasurementComponent {
   form = this.formProvider.blockHoursMeasurement;
+  isCorsia = toSignal(this.store.pipe(empQuery.selectIsCorsia));
 
   constructor(
-    @Inject(TASK_FORM_PROVIDER) private formProvider: BlockHourProceduresFormProvider,
-    private store: RequestTaskStore,
-    private pendingRequestService: PendingRequestService,
-    private router: Router,
-    private route: ActivatedRoute,
+    @Inject(TASK_FORM_PROVIDER) private readonly formProvider: BlockHourProceduresFormProvider,
+    private readonly store: RequestTaskStore,
+    private readonly pendingRequestService: PendingRequestService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
   ) {}
 
   onSubmit() {

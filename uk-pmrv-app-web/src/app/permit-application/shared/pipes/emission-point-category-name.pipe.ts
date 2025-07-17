@@ -47,7 +47,7 @@ export class EmissionPointCategoryNamePipe implements PipeTransform {
             tier?.emissionPointCategory?.categoryType,
           )}`;
         } else {
-          return tier?.emissionPointCategory?.categoryType ?? false
+          return (tier?.emissionPointCategory?.categoryType ?? false)
             ? 'UNDEFINED: ' + this.categoryTypeNamePipe.transform(tier.emissionPointCategory.categoryType)
             : 'Add an emission point category';
         }

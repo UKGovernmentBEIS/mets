@@ -19,8 +19,8 @@ export const crfCodesFormProvider = {
     const activity = activities?.find((activity) => activity.id === route.snapshot.paramMap.get('activityId'));
     const group = fb.group(
       {
-        hasEnergyCrf: [[activity?.hasEnergyCrf] ?? null],
-        hasIndustrialCrf: [[activity?.hasIndustrialCrf] ?? null],
+        hasEnergyCrf: [[activity?.hasEnergyCrf]],
+        hasIndustrialCrf: [[activity?.hasIndustrialCrf]],
       },
       {
         validators: [atLeastOneRequiredValidator('You must select at least one option')],

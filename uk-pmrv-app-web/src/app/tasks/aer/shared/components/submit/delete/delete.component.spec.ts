@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -55,7 +54,7 @@ describe('DeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, AerModule, RouterTestingModule, AerSharedModule],
+      imports: [SharedModule, AerModule, AerSharedModule],
       providers: [
         KeycloakService,
         { provide: ActivatedRoute, useValue: activatedRoute },
@@ -71,8 +70,8 @@ describe('DeleteComponent', () => {
   });
 
   it('should display the name of the source stream emission to be deleted', () => {
-    expect(page.header.textContent.trim()).toContain(
-      'Are you sure you want to delete  ‘the reference Anthracite  - Data gap ’?',
+    expect(page.header.textContent.trim()).toEqual(
+      'Are you sure you want to delete  ‘the reference Anthracite - Data gap ’?',
     );
   });
 

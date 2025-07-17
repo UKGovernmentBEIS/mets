@@ -3,6 +3,7 @@ import { Observable, tap } from 'rxjs';
 import {
   allEmpApplicationTasks,
   EmpCorsiaReviewGroup,
+  EmpDetermination,
   empReviewGroupMap,
   getAvailableSubTasks,
 } from '@aviation/request-task/emp/shared/util/emp.util';
@@ -24,10 +25,10 @@ import {
   EmpEmissionsMonitoringApproachCorsia,
   EmpEmissionSourcesCorsia,
   EmpFlightAndAircraftProceduresCorsia,
-  EmpIssuanceDetermination,
   EmpIssuanceReviewDecision,
   EmpManagementProceduresCorsia,
   EmpVariationCorsiaDetails,
+  EmpVariationDetermination,
   RequestTaskActionPayload,
   RequestTaskActionProcessDTO,
   RequestTaskDTO,
@@ -62,6 +63,7 @@ export class EmpCorsiaStoreDelegate extends EmpStoreDelegate {
       organisationStructure: null,
       activitiesDescription: null,
       subsidiaryCompanyExist: null,
+      subsidiaryCompanies: [],
     },
     emissionsMonitoringApproach: {
       monitoringApproachType: null,
@@ -122,7 +124,10 @@ export class EmpCorsiaStoreDelegate extends EmpStoreDelegate {
 
   private sideEffectsHandler = new EmpCorsiaStoreSideEffectsHandler(this.store);
 
-  constructor(protected store: RequestTaskStore, protected readonly businessErrorService: BusinessErrorService) {
+  constructor(
+    protected store: RequestTaskStore,
+    protected readonly businessErrorService: BusinessErrorService,
+  ) {
     super(store, businessErrorService);
   }
 
@@ -194,7 +199,7 @@ export class EmpCorsiaStoreDelegate extends EmpStoreDelegate {
     this.store.setState(newState);
   }
 
-  saveEmpOverallDecision(decision: EmpIssuanceDetermination, sectionsCompleted: boolean) {
+  saveEmpOverallDecision(decision: EmpDetermination, sectionsCompleted: boolean) {
     const {
       requestTaskItem: { requestTask },
     } = this.store.getState();
@@ -202,7 +207,7 @@ export class EmpCorsiaStoreDelegate extends EmpStoreDelegate {
     const payloadToUpdate = produce(this.payload, (draft) => {
       delete draft.reviewAttachments;
 
-      draft.determination = decision;
+      draft.determination = decision as any;
       draft.reviewSectionsCompleted.decision = sectionsCompleted;
     });
 
@@ -330,6 +335,10 @@ export class EmpCorsiaStoreDelegate extends EmpStoreDelegate {
       delete draft.empAttachments;
       delete draft.serviceContactDetails;
 
+      if (draft.sendEmailNotification) {
+        delete draft.sendEmailNotification;
+      }
+
       if (Object.keys(ROOT_EMP_PAYLOAD_TASKS).includes(taskKey)) {
         if (ROOT_EMP_PAYLOAD_TASKS[taskKey]) {
           draft[taskKey] = empCorsiaTask[taskKey];
@@ -343,9 +352,9 @@ export class EmpCorsiaStoreDelegate extends EmpStoreDelegate {
           status === 'complete'
             ? true
             : // this check is needed for payload types that has no effect on empVariationDetailsCompleted
-            notEffectOnOperatorsSectionStatusesPayloadTypes.includes(draft.payloadType)
-            ? draft.empVariationDetailsCompleted
-            : false;
+              notEffectOnOperatorsSectionStatusesPayloadTypes.includes(draft.payloadType)
+              ? draft.empVariationDetailsCompleted
+              : false;
         if (
           draft.payloadType === 'EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMIT_PAYLOAD' ||
           // this check is needed for payload types that has effect on empVariationDetailsReviewCompleted
@@ -359,20 +368,26 @@ export class EmpCorsiaStoreDelegate extends EmpStoreDelegate {
           status === 'complete'
             ? [true]
             : // this check is needed for payload types that has no effect on empSectionsCompleted
-            notEffectOnOperatorsSectionStatusesPayloadTypes.includes(draft.payloadType)
-            ? draft.empSectionsCompleted[taskKey]
-            : [false];
+              notEffectOnOperatorsSectionStatusesPayloadTypes.includes(draft.payloadType)
+              ? draft.empSectionsCompleted[taskKey]
+              : [false];
       }
 
       if (
         draft.payloadType === 'EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW_PAYLOAD' ||
         (draft.payloadType === 'EMP_VARIATION_CORSIA_APPLICATION_SUBMIT_PAYLOAD' &&
           taskKey !== 'empVariationDetails') ||
-        (draft.payloadType === 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW_PAYLOAD' && taskKey !== 'empVariationDetails')
+        draft.payloadType === 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW_PAYLOAD'
       ) {
-        draft.reviewSectionsCompleted[empReviewGroupMap[taskKey]] = false;
+        if (taskKey !== 'empVariationDetails') {
+          draft.reviewSectionsCompleted[empReviewGroupMap[taskKey]] = false;
+        }
 
-        if (draft.determination?.type === 'APPROVED') {
+        if (
+          draft.determination?.type === 'APPROVED' ||
+          (this.store.getState().requestTaskItem.requestInfo.type === 'EMP_VARIATION_CORSIA' &&
+            (draft.determination as EmpVariationDetermination)?.type === 'REJECTED')
+        ) {
           delete draft.determination;
           draft.reviewSectionsCompleted.decision = false;
         }

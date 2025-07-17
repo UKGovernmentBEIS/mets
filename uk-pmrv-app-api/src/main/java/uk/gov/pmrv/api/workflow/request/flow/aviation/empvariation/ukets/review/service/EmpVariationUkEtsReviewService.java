@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.common.domain.EmpUkEtsReviewGroup;
@@ -90,19 +90,19 @@ public class EmpVariationUkEtsReviewService {
     
     @Transactional
     public void saveDecisionNotification(RequestTask requestTask, DecisionNotification decisionNotification,
-                                         PmrvUser pmrvUser) {
+                                         AppUser appUser) {
         EmpVariationUkEtsApplicationReviewRequestTaskPayload taskPayload =
             (EmpVariationUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload();
 
         EmpVariationUkEtsRequestPayload requestPayload =
             (EmpVariationUkEtsRequestPayload) requestTask.getRequest().getPayload();
 
-        updateRequestPayload(requestPayload, taskPayload, pmrvUser);
+        updateRequestPayload(requestPayload, taskPayload, appUser);
         requestPayload.setDecisionNotification(decisionNotification);
     }
     
     @Transactional
-    public void saveRequestPeerReviewAction(RequestTask requestTask, String selectedPeerReviewer, PmrvUser pmrvUser) {
+    public void saveRequestPeerReviewAction(RequestTask requestTask, String selectedPeerReviewer, AppUser appUser) {
         Request request = requestTask.getRequest();
         EmpVariationUkEtsApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
             (EmpVariationUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -110,12 +110,12 @@ public class EmpVariationUkEtsReviewService {
         EmpVariationUkEtsRequestPayload requestPayload =
             (EmpVariationUkEtsRequestPayload) request.getPayload();
 
-        updateRequestPayload(requestPayload, reviewRequestTaskPayload, pmrvUser);
+        updateRequestPayload(requestPayload, reviewRequestTaskPayload, appUser);
         requestPayload.setRegulatorPeerReviewer(selectedPeerReviewer);
     }
     
     @Transactional
-    public void saveRequestReturnForAmends(RequestTask requestTask, PmrvUser pmrvUser) {
+    public void saveRequestReturnForAmends(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         EmpVariationUkEtsApplicationReviewRequestTaskPayload taskPayload =
             (EmpVariationUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -123,7 +123,7 @@ public class EmpVariationUkEtsReviewService {
         EmpVariationUkEtsRequestPayload requestPayload =
             (EmpVariationUkEtsRequestPayload) request.getPayload();
 
-        updateRequestPayload(requestPayload, taskPayload, pmrvUser);
+        updateRequestPayload(requestPayload, taskPayload, appUser);
     }
     
     private void updateRequestTaskPayload(
@@ -156,9 +156,9 @@ public class EmpVariationUkEtsReviewService {
     
     private void updateRequestPayload(EmpVariationUkEtsRequestPayload requestPayload,
             EmpVariationUkEtsApplicationReviewRequestTaskPayload taskPayload,
-            PmrvUser pmrvUser) {
+            AppUser appUser) {
     	
-		requestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+		requestPayload.setRegulatorReviewer(appUser.getUserId());
 		requestPayload.setEmpVariationDetails(taskPayload.getEmpVariationDetails());
 		requestPayload.setEmpVariationDetailsCompleted(taskPayload.getEmpVariationDetailsCompleted());
 		requestPayload.setEmpVariationDetailsReviewCompleted(taskPayload.getEmpVariationDetailsReviewCompleted());

@@ -20,7 +20,7 @@ export const AER_CORSIA_INDEPENDENT_REVIEW_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Independent review summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Independent review' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./summary/summary.component').then((c) => c.SummaryComponent),
       },

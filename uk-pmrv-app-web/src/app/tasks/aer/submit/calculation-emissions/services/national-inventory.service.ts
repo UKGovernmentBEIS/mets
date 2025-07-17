@@ -19,7 +19,10 @@ export class NationalInventoryService {
     return this.cachedNationalInventoryData$;
   }
 
-  constructor(private readonly reportingDataService: ReportingDataService, private readonly aerService: AerService) {}
+  constructor(
+    private readonly reportingDataService: ReportingDataService,
+    private readonly aerService: AerService,
+  ) {}
 
   private getNationalInventoryData(): Observable<NationalInventoryDataDTO> {
     return this.aerService.getPayload().pipe(

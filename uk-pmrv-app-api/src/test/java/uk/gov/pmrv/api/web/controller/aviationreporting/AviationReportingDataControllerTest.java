@@ -1,19 +1,7 @@
 package uk.gov.pmrv.api.web.controller.aviationreporting;
 
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import java.time.Year;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,20 +16,33 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationRptAirportsDTO;
 import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationRptAirportsYearDTO;
 import uk.gov.pmrv.api.aviationreporting.common.enumeration.CountryType;
 import uk.gov.pmrv.api.aviationreporting.common.service.AviationRptAirportsService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
+
+import java.time.Year;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -58,7 +59,7 @@ class AviationReportingDataControllerTest {
     private AviationRptAirportsService aviationRptAirportsService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -81,7 +82,7 @@ class AviationReportingDataControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
             .setControllerAdvice(new ExceptionControllerAdvice())
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .addFilters(new FilterChainProxy(Collections.emptyList()))
             .build();
 
@@ -122,13 +123,13 @@ class AviationReportingDataControllerTest {
 
     @Test
     void getReportedAirports_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         AviationRptAirportsYearDTO airportsYearDTO  = AviationRptAirportsYearDTO.builder().icaos(Set.of("LEPA", "EGLL")).year(Year.of(2022)).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+            .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post(BASE_CONTROLLER_PATH + "/" + AIRPORT_STATES_PATH)

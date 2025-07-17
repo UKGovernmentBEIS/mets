@@ -5,10 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
 import uk.gov.pmrv.api.workflow.request.core.assignment.requestassign.RequestReleaseService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -179,6 +179,6 @@ class OperatorRequestTaskDefaultAssignmentServiceTest {
 
     @Test
     void getRoleType() {
-        assertEquals(RoleType.OPERATOR, operatorRequestTaskDefaultAssignmentService.getRoleType());
+        assertEquals(RoleTypeConstants.OPERATOR, operatorRequestTaskDefaultAssignmentService.getRoleType());
     }
 }

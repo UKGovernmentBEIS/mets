@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, map, Observable, of, startWith, switchMap, withLatestFrom } from 'rxjs';
 
+import { hasRequestTaskAllowedActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
+
 import {
   ItemDTOResponse,
   RequestActionInfoDTO,
@@ -29,7 +31,7 @@ import { forceDecisionProvider, RDE_FORM } from './force-decision-form.provider'
   providers: [forceDecisionProvider],
 })
 export class ForceDecisionComponent {
-  private readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
+  taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
   navigationState = { returnUrl: this.router.url };
   isAviation = this.router.url.includes('/aviation/');
 
@@ -52,6 +54,15 @@ export class ForceDecisionComponent {
   readonly isFileUploaded$: Observable<boolean> = this.form.get('files').valueChanges.pipe(
     startWith(this.form.get('files').value),
     map((value) => value?.length > 0),
+  );
+
+  readonly allowedRequestTaskActions$ = this.store.pipe(map((state) => state?.allowedRequestTaskActions));
+
+  hasRelatedActions$ = this.store.pipe(
+    map(
+      (state) =>
+        (state.assignable && state.userAssignCapable) || hasRequestTaskAllowedActions(state.allowedRequestTaskActions),
+    ),
   );
 
   getDownloadUrl() {

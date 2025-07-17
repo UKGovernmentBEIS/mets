@@ -1,16 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.mapper;
 
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
-
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.PermitReviewGroup;
@@ -18,6 +13,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitAcceptedVariationDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationApplicationRegulatorLedApprovedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload;
+
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface PermitVariationRegulatorLedMapper {

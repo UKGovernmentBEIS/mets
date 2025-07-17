@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -55,7 +55,7 @@ class PermitVariationNotifyOperatorRegulatorLedActionHandlerTest {
     void process() {
     	Long requestTaskId = 1L;
     	RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED;
-    	PmrvUser pmrvUser = PmrvUser.builder().build();
+    	AppUser appUser = AppUser.builder().build();
 		PermitVariationNotifyOperatorForDecisionRequestTaskActionPayload payload = PermitVariationNotifyOperatorForDecisionRequestTaskActionPayload.builder()
 				.payloadType(RequestTaskActionPayloadType.PERMIT_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED_PAYLOAD)
 				.decisionNotification(DecisionNotification.builder().signatory("sign").build())
@@ -71,13 +71,13 @@ class PermitVariationNotifyOperatorRegulatorLedActionHandlerTest {
 		
 		when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 		
-		cut.process(requestTaskId, requestTaskActionType,  pmrvUser, payload);
+		cut.process(requestTaskId, requestTaskActionType,  appUser, payload);
 		
 		assertThat(request.getSubmissionDate()).isNotNull();
 		
 		verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-		verify(validator, times(1)).validate(requestTask, payload, pmrvUser);
-        verify(permitVariationRegulatorLedService, times(1)).savePermitVariationDecisionNotificationRegulatorLed(requestTask, payload.getDecisionNotification(), pmrvUser);
+		verify(validator, times(1)).validate(requestTask, payload, appUser);
+        verify(permitVariationRegulatorLedService, times(1)).savePermitVariationDecisionNotificationRegulatorLed(requestTask, payload.getDecisionNotification(), appUser);
         verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
                 BpmnProcessConstants.PERMIT_VARIATION_SUBMIT_OUTCOME, PermitVariationSubmitOutcome.SUBMITTED,

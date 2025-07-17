@@ -10,7 +10,7 @@ import { ActivatedRouteSnapshotStub, mockClass, MockType } from '../../../testin
 import { AccountsServiceStub } from '../../../testing/accounts.service.stub';
 import { LegalEntitiesServiceStub } from '../../../testing/legal-entities.service.stub';
 import { installationFormFactory } from '../factories/installation-form.factory';
-import { legalEntityFormFactory } from '../factories/legal-entity-form.factory';
+import { legalEntityFormRegFactory } from '../factories/legal-entity/legal-entity-form-reg.factory';
 import {
   ApplicationSectionType,
   InstallationAccountApplicationState,
@@ -49,7 +49,7 @@ describe('ApplicationGuard', () => {
       providers: [
         ApplicationGuard,
         installationFormFactory,
-        legalEntityFormFactory,
+        legalEntityFormRegFactory,
         InstallationAccountApplicationStore,
         { provide: RequestActionsService, useValue: requestActionsService },
         { provide: InstallationAccountsService, useClass: AccountsServiceStub },

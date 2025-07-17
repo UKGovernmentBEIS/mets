@@ -13,9 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -44,7 +44,7 @@ class EmpIssuanceCorsiaReviewRequestPeerReviewValidatorServiceTest {
     @Test
     void validate_is_valid() {
         String selectedPeerReviewer = "peerReviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         EmpIssuanceDeterminationType determinationType = EmpIssuanceDeterminationType.APPROVED;
         EmpIssuanceDetermination determination = EmpIssuanceDetermination.builder().type(determinationType).build();
         EmpIssuanceCorsiaApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
@@ -59,10 +59,10 @@ class EmpIssuanceCorsiaReviewRequestPeerReviewValidatorServiceTest {
         when(reviewDeterminationValidatorService.isValid(reviewRequestTaskPayload, determinationType)).thenReturn(true);
 
 
-        requestPeerReviewValidatorService.validate(requestTask, selectedPeerReviewer, pmrvUser);
+        requestPeerReviewValidatorService.validate(requestTask, selectedPeerReviewer, appUser);
 
         verify(peerReviewerTaskAssignmentValidator, times(1))
-            .validate(RequestTaskType.EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+            .validate(RequestTaskType.EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
         verify(reviewDeterminationValidatorService, times(1)).validateDeterminationObject(determination);
         verify(reviewDeterminationValidatorService, times(1)).isValid(reviewRequestTaskPayload, determinationType);
         verify(empCorsiaValidatorService, times(1)).validateEmissionsMonitoringPlan(isA(EmissionsMonitoringPlanCorsiaContainer.class));
@@ -71,7 +71,7 @@ class EmpIssuanceCorsiaReviewRequestPeerReviewValidatorServiceTest {
     @Test
     void validate_throws_exception_when_invalid() {
         String selectedPeerReviewer = "peerReviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         EmpIssuanceDeterminationType determinationType = EmpIssuanceDeterminationType.APPROVED;
         EmpIssuanceDetermination determination = EmpIssuanceDetermination.builder().type(determinationType).build();
         EmpIssuanceCorsiaApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
@@ -86,12 +86,12 @@ class EmpIssuanceCorsiaReviewRequestPeerReviewValidatorServiceTest {
         when(reviewDeterminationValidatorService.isValid(reviewRequestTaskPayload, determinationType)).thenReturn(false);
 
         BusinessException be = assertThrows(BusinessException.class,
-            () -> requestPeerReviewValidatorService.validate(requestTask, selectedPeerReviewer, pmrvUser));
+            () -> requestPeerReviewValidatorService.validate(requestTask, selectedPeerReviewer, appUser));
 
         assertEquals(ErrorCode.FORM_VALIDATION, be.getErrorCode());
 
         verify(peerReviewerTaskAssignmentValidator, times(1))
-            .validate(RequestTaskType.EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+            .validate(RequestTaskType.EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
         verify(reviewDeterminationValidatorService, times(1)).validateDeterminationObject(determination);
         verify(reviewDeterminationValidatorService, times(1)).isValid(reviewRequestTaskPayload, determinationType);
         verifyNoInteractions(empCorsiaValidatorService);

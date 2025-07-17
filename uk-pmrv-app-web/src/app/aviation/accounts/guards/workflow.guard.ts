@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { IncorporateHeaderStore } from '../../../shared/incorporate-header/store/incorporate-header.store';
 
 @Injectable({
   providedIn: 'root',
 })
-export class WorkflowGuard implements CanActivate, CanDeactivate<any> {
+export class WorkflowGuard {
   constructor(private readonly store: IncorporateHeaderStore) {}
 
   canActivate(route: ActivatedRouteSnapshot): boolean {

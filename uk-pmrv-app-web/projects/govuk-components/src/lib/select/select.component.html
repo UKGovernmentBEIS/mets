@@ -12,5 +12,5 @@
   <option *ngFor="let option of options" [attr.disabled]="option.disabled || null" [ngValue]="option.value">
     {{ option.text }}
   </option>
-  <ng-content></ng-content>
+  <ng-content />
 </select>

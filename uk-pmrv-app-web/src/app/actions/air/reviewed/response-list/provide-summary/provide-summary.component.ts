@@ -13,8 +13,7 @@ import { AirService } from '../../../core/air.service';
       <app-air-regulator-provide-summary
         [regulatorAirReviewResponse]="regulatorReviewResponse$ | async"
         [isEditable]="false"
-        [isReview]="true"
-      ></app-air-regulator-provide-summary>
+        [isReview]="true"></app-air-regulator-provide-summary>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

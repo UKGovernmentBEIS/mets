@@ -1,29 +1,29 @@
 package uk.gov.pmrv.api.mireport.installation.accountuserscontacts;
 
+import jakarta.persistence.EntityManager;
 import org.hibernate.query.NativeQuery;
-import org.hibernate.transform.Transformers;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.mireport.common.accountuserscontacts.AccountUserContact;
-import uk.gov.pmrv.api.mireport.common.accountuserscontacts.AccountUsersContactsRepository;
+import uk.gov.netz.api.mireport.accountuserscontacts.AccountUsersContactsRepository;
 
-import jakarta.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class InstallationAccountUsersContactsRepository implements AccountUsersContactsRepository {
 
     @Transactional(readOnly = true)
     @SuppressWarnings("unchecked")
-    public List<AccountUserContact> findAccountUserContacts(EntityManager entityManager) {
+    public List<InstallationAccountUserContact> findAccountUserContacts(EntityManager entityManager) {
         return entityManager.createNativeQuery(
                         "select auth.user_id as \"userId\", role.name as \"role\",  account.emitter_id as \"accountId\", account.name as \"accountName\", " +
                                 "account.type as \"accountType\", acc_inst.status as \"accountStatus\", le.name as \"legalEntityName\", auth.status as \"authorityStatus\",\n" +
                                 "       case when acPrimary.user_id is not null then true else false end as \"primaryContact\",\n" +
-                                "       case when acService.user_id is not null then true else false end as \"secondaryContact\",\n" +
+                                "       case when acService.user_id is not null then true else false end as \"serviceContact\",\n" +
                                 "       case when acFinancial.user_id is not null then true else false end as \"financialContact\",\n" +
-                                "       case when acSecondary.user_id is not null then true else false end as \"serviceContact\",\n" +
+                                "       case when acSecondary.user_id is not null then true else false end as \"secondaryContact\",\n" +
                                 "       permit.id as \"permitId\", permit.data->> 'permitType' as \"permitType\"\n" +
                                 "from account\n" +
                                 "    inner join account_installation acc_inst on account.id = acc_inst.id " +
@@ -51,7 +51,28 @@ public class InstallationAccountUsersContactsRepository implements AccountUsersC
                 .addScalar("permitType", StandardBasicTypes.STRING)
                 .addScalar("role", StandardBasicTypes.STRING)
                 .setReadOnly(true)
-                .setTupleTransformer(Transformers.aliasToBean(AccountUserContact.class)) //https://vladmihalcea.com/hibernate-resulttransformer/
+                .setTupleTransformer((tuple, aliases) -> {
+                    Map<String, Object> map = new HashMap<>();
+                    for(int i = 0; i < tuple.length; i++) {
+                        map.put(aliases[i], tuple[i]);
+                    }
+                    InstallationAccountUserContact result = new InstallationAccountUserContact();
+                    result.setUserId((String)map.get("userId"));
+                    result.setAccountId((String)map.get("accountId"));
+                    result.setAccountName((String)map.get("accountName"));
+                    result.setAccountType((String)map.get("accountType"));
+                    result.setAccountStatus((String)map.get("accountStatus"));
+                    result.setLegalEntityName((String)map.get("legalEntityName"));
+                    result.setAuthorityStatus((String)map.get("authorityStatus"));
+                    result.setPrimaryContact((Boolean) map.get("primaryContact"));
+                    result.setSecondaryContact((Boolean)map.get("secondaryContact"));
+                    result.setFinancialContact((Boolean)map.get("financialContact"));
+                    result.setServiceContact((Boolean)map.get("serviceContact"));
+                    result.setPermitId((String)map.get("permitId"));
+                    result.setPermitType((String)map.get("permitType"));
+                    result.setRole((String)map.get("role"));
+                    return result;
+                })
                 .getResultList();
     }
 }

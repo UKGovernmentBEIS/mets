@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -49,7 +48,7 @@ describe('RegulatedActivityDeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OpinionStatementModule, RouterTestingModule],
+      imports: [OpinionStatementModule],
       providers: [
         KeycloakService,
         { provide: ActivatedRoute, useValue: route },
@@ -75,7 +74,7 @@ describe('RegulatedActivityDeleteComponent', () => {
 
   it('should display all HTMLElements', () => {
     expect(page.heading1).toBeTruthy();
-    expect(page.heading1.textContent.trim()).toContain('Are you sure you want to delete  ‘Combustion’?');
+    expect(page.heading1.textContent.trim()).toContain('Are you sure you want to delete ‘Combustion’?');
     expect(page.paragraph).toBeTruthy();
     expect(page.submitButton).toBeTruthy();
     expect(page.cancelLink).toBeTruthy();

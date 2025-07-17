@@ -25,12 +25,14 @@ describe('BankTransferComponent', () => {
 
   @Component({
     selector: 'app-make-payment-help',
-    template: `<div class="help">
-      <p class="competentAuthority">{{ competentAuthority$ | async }}</p>
-      <p class="requestType">{{ requestType$ | async }}</p>
-      <p class="requestTaskType">{{ requestTaskType$ | async }}</p>
-      <p class="default">{{ default }}</p>
-    </div>`,
+    template: `
+      <div class="help">
+        <p class="competentAuthority">{{ competentAuthority$ | async }}</p>
+        <p class="requestType">{{ requestType$ | async }}</p>
+        <p class="requestTaskType">{{ requestTaskType$ | async }}</p>
+        <p class="default">{{ default }}</p>
+      </div>
+    `,
   })
   class MockPaymentHelpComponent {
     @Input() competentAuthority$: Observable<RequestInfoDTO['competentAuthority']>;

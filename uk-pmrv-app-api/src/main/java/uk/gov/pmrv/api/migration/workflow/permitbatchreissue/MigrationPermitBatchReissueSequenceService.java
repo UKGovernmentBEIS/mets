@@ -1,24 +1,23 @@
 package uk.gov.pmrv.api.migration.workflow.permitbatchreissue;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestSequence;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestSequenceRepository;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 @Service
-@RequiredArgsConstructor
 public class MigrationPermitBatchReissueSequenceService extends MigrationBaseService {
 	
 	private static final String SQL = "SELECT ca.fldName ca, max(bo.fldDisplayID) latestReissueId \r\n"
@@ -30,6 +29,12 @@ public class MigrationPermitBatchReissueSequenceService extends MigrationBaseSer
 	
 	private final RequestSequenceRepository requestSequenceRepository;
 	private final JdbcTemplate migrationJdbcTemplate;
+
+	public MigrationPermitBatchReissueSequenceService(RequestSequenceRepository requestSequenceRepository,
+													  @Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+		this.requestSequenceRepository = requestSequenceRepository;
+		this.migrationJdbcTemplate = migrationJdbcTemplate;
+	}
 
 	@Override
 	public List<String> migrate(String ids) {

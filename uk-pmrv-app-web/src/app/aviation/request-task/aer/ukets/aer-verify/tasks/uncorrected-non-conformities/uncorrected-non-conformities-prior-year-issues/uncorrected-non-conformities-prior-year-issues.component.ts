@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -36,7 +36,7 @@ export default class UncorrectedNonConformitiesPriorYearIssuesComponent {
   onSubmit() {
     if (this.form.invalid) return;
 
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
       .saveAerVerify({ uncorrectedNonConformities: this.formProvider.getFormValue() }, 'in progress')
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
@@ -48,7 +48,7 @@ export default class UncorrectedNonConformitiesPriorYearIssuesComponent {
           path = '../summary';
         }
 
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setUncorrectedNonConformities(
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setUncorrectedNonConformities(
           this.formProvider.getFormValue(),
         );
         this.router.navigate([path], { relativeTo: this.route });

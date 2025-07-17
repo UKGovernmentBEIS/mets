@@ -73,8 +73,7 @@ describe('ConfidentialityStatementTemplateComponent', () => {
       <app-confidentiality-statement-template
         (formSubmit)="onSubmit($event)"
         [form]="formGroup"
-        [isEditable]="isEditable"
-      ></app-confidentiality-statement-template>
+        [isEditable]="isEditable"></app-confidentiality-statement-template>
     `,
   })
   class TestComponent {

@@ -1,5 +1,21 @@
 package uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.regulator;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
+import uk.gov.pmrv.api.account.service.AccountCaSiteContactService;
+import uk.gov.pmrv.api.workflow.request.core.assignment.requestassign.RequestReleaseService;
+import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentService;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -7,24 +23,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.PERMIT_ISSUANCE_APPLICATION_REVIEW;
-
-import java.util.Optional;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.account.service.AccountCaSiteContactService;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
-import uk.gov.pmrv.api.workflow.request.core.assignment.requestassign.RequestReleaseService;
-import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentService;
-import uk.gov.pmrv.api.workflow.request.core.domain.Request;
-import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
 
 @ExtendWith(MockitoExtension.class)
 class RegulatorRequestTaskDefaultAssignmentServiceTest {

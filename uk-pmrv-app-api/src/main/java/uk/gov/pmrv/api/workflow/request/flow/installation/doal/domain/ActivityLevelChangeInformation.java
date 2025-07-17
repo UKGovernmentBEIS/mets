@@ -3,15 +3,13 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.allowance.domain.ActivityLevel;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
 
 import java.util.ArrayList;
 import java.util.List;

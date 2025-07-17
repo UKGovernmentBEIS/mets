@@ -4,4 +4,13 @@
   <button type="button" (click)="onDelete()" appPendingButton govukWarnButton>Yes, delete this note</button>
 </div>
 
-<a govukLink routerLink="/accounts/{{ accountId$ | async }}" fragment="notes">Return to: Account notes</a>
+<a
+  govukLink
+  [routerLink]="
+    (currentDomain$ | async) === 'INSTALLATION'
+      ? ['/accounts', accountId$ | async]
+      : ['/aviation', 'accounts', accountId$ | async]
+  "
+  fragment="notes"
+  >Return to: Account notes</a
+>

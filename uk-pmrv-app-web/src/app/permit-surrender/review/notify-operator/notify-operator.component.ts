@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { first, map, pluck, Subject, switchMap, tap } from 'rxjs';
+import { first, map, Subject, switchMap, tap } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 
@@ -11,19 +11,19 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-permit-surrender-notify-operator',
-  template: `<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <app-notify-operator
-        [taskId]="taskId$ | async"
-        [accountId]="accountId$ | async"
-        requestTaskActionType="PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION"
-        [pendingRfi]="pendingRfi$ | async"
-        [pendingRde]="pendingRde$ | async"
-        [confirmationMessage]="confirmationMessage$ | async"
-        [isRegistryToBeNotified]="isDeterminationGranted$ | async"
-      ></app-notify-operator>
+  template: `
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <app-notify-operator
+          [taskId]="taskId$ | async"
+          [accountId]="accountId$ | async"
+          requestTaskActionType="PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION"
+          [pendingRfi]="pendingRfi$ | async"
+          [pendingRde]="pendingRde$ | async"
+          [confirmationMessage]="confirmationMessage$ | async"></app-notify-operator>
+      </div>
     </div>
-  </div> `,
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotifyOperatorComponent implements OnInit {
@@ -38,10 +38,6 @@ export class NotifyOperatorComponent implements OnInit {
   readonly accountId$ = this.store.pipe(map((state) => state.accountId));
 
   readonly reviewDetermination$ = this.store.pipe(map((state) => state.reviewDetermination));
-
-  readonly isDeterminationGranted$ = this.reviewDetermination$.pipe(
-    map((determination) => determination.type === 'GRANTED'),
-  );
 
   readonly confirmationMessage$ = this.reviewDetermination$.pipe(
     map((determination) => {
@@ -65,7 +61,7 @@ export class NotifyOperatorComponent implements OnInit {
     this.store
       .pipe(
         first(),
-        pluck('requestId'),
+        map((state) => state?.requestId),
         switchMap((requestId) => this.requestItemsService.getItemsByRequest(requestId)),
         first(),
         tap((res) =>

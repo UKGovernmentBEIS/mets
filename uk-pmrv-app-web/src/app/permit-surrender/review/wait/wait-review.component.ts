@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, map, Observable, switchMap } from 'rxjs';
 
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 import { hasRequestTaskAllowedActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
 
 import { RequestActionInfoDTO, RequestActionsService, RequestTaskItemDTO } from 'pmrv-api';
@@ -14,7 +15,7 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
   templateUrl: './wait-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WaitReviewComponent {
+export class WaitReviewComponent implements OnInit {
   readonly storeFirst$ = this.store.pipe(first());
   readonly navigationState = { returnUrl: this.router.url };
 
@@ -51,9 +52,14 @@ export class WaitReviewComponent {
     private readonly requestActionsService: RequestActionsService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
 
   private sortTimeline(res: RequestActionInfoDTO[]): RequestActionInfoDTO[] {
     return res.slice().sort((a, b) => new Date(b.creationDate).getTime() - new Date(a.creationDate).getTime());
+  }
+
+  ngOnInit(): void {
+    this.breadcrumbService.cutLastBreadcrumbWithLinkandShow();
   }
 }

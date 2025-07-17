@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { isWizardComplete } from '../inherent-co2-wizard';
 @Injectable({
   providedIn: 'root',
 })
-export class WizardStepGuard implements CanActivate {
+export class WizardStepGuard {
   constructor(
     private readonly router: Router,
     private readonly store: PermitApplicationStore<PermitApplicationState>,

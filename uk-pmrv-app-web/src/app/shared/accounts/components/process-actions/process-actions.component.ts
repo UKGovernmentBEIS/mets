@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, map, Observable, switchMap, withLatestFrom } from 'rxjs';
+import { first, map, Observable, switchMap, take, withLatestFrom } from 'rxjs';
 
-import { AuthStore, selectUserRoleType, UserState } from '@core/store/auth';
+import { AuthStore, selectCurrentDomain, selectUserRoleType, UserState } from '@core/store/auth';
 import { AccountStatusPipe } from '@shared/pipes/account-status.pipe';
 import { ItemLinkPipe } from '@shared/pipes/item-link.pipe';
 
@@ -18,7 +18,7 @@ import {
 } from 'pmrv-api';
 
 import { workflowDetailsTypesMap } from '../../../../workflow-item/shared/workflowDetailsTypesMap';
-import { WorkflowLabel, WorkflowMap } from './process-actions-map';
+import { WorkflowArray, WorkflowLabel, WorkflowLabelProperties } from './process-actions-map';
 
 @Component({
   selector: 'app-process-actions',
@@ -29,82 +29,206 @@ export class ProcessActionsComponent implements OnInit {
   accountId$: Observable<number>;
   availableTasks$: Observable<WorkflowLabel[]>;
 
-  private readonly variationWorkflow: Partial<WorkflowLabel> = {
+  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));
+  isAviation: boolean;
+
+  private readonly variationWorkflow: WorkflowLabel = {
     title: 'Make a permanent change to your permit plan related to emissions, emission equipment or legal changes',
-    button: 'Start a variation',
+    properties: [
+      {
+        button: 'Start a variation',
+        type: 'PERMIT_VARIATION',
+        errors: [],
+      },
+    ],
   };
 
-  private operatorsWorkflowMessagesMap: Partial<WorkflowMap> = {
-    PERMIT_SURRENDER: {
+  private operatorsWorkflowMessagesMap: WorkflowArray = [
+    {
       title: 'Surrender your permit and close this installation',
-      button: 'Start a permit surrender',
+      properties: [
+        {
+          button: 'Start a permit surrender',
+          type: 'PERMIT_SURRENDER',
+          errors: [],
+        },
+      ],
     },
-    PERMIT_VARIATION: this.variationWorkflow,
-    PERMIT_TRANSFER_A: {
+    this.variationWorkflow,
+    {
       title: 'Transfer all or part of a permit to another operator',
-      button: 'Start a transfer',
+      properties: [
+        {
+          button: 'Start a transfer',
+          type: 'PERMIT_TRANSFER_A',
+          errors: [],
+        },
+      ],
     },
-    PERMIT_ISSUANCE: undefined,
-    PERMIT_NOTIFICATION: {
-      title: 'Notify the regulator of a temporary or minor change to your permit plan',
-      button: 'Start a notification',
+
+    {
+      title: 'Notify the regulator of a change',
+      properties: [
+        {
+          button: 'Start a notification',
+          type: 'PERMIT_NOTIFICATION',
+          errors: [],
+        },
+      ],
     },
-    AER: undefined,
-    EMP_VARIATION_UKETS: {
+
+    {
       title: 'Make a change to your emissions plan',
-      button: 'Start an emission plan variation',
+      properties: [
+        {
+          button: 'Start an emission plan variation',
+          type: 'EMP_VARIATION_UKETS',
+          errors: [],
+        },
+      ],
     },
-    EMP_VARIATION_CORSIA: {
+    {
       title: 'Make a change to the emissions plan',
-      button: 'Start an emission plan variation',
+      properties: [
+        {
+          button: 'Start an emission plan variation',
+          type: 'EMP_VARIATION_CORSIA',
+          errors: [],
+        },
+      ],
     },
-  };
+  ];
 
-  private regulatorsWorkflowMessagesMap: Partial<WorkflowMap> = {
-    PERMIT_VARIATION: this.variationWorkflow,
-    PERMIT_REVOCATION: {
+  private regulatorsWorkflowMessagesMap: WorkflowArray = [
+    this.variationWorkflow,
+    {
       title: 'Revoke your permit',
-      button: 'Start a permit revocation',
+      properties: [
+        {
+          button: 'Start a permit revocation',
+          type: 'PERMIT_REVOCATION',
+          errors: [],
+        },
+      ],
     },
-    NON_COMPLIANCE: {
+    {
       title: 'Start a non-compliance task',
-      button: 'Start non-compliance',
+      properties: [
+        {
+          button: 'Start non-compliance',
+          type: 'NON_COMPLIANCE',
+          errors: [],
+        },
+      ],
     },
-    AVIATION_ACCOUNT_CLOSURE: {
+    {
       title: 'Close this account',
-      button: 'Start to close this account',
+      properties: [
+        {
+          button: 'Start to close this account',
+          type: 'AVIATION_ACCOUNT_CLOSURE',
+          errors: [],
+        },
+      ],
     },
-    AIR: {
+    {
       title: 'Trigger annual improvement report',
-      button: 'Trigger annual improvement report',
+      properties: [
+        {
+          button: 'Trigger annual improvement report',
+          type: 'AIR',
+          errors: [],
+        },
+      ],
     },
-    DOAL: {
+    {
       title: 'Start a determination of activity level change',
-      button: 'Start determination of activity level',
+      properties: [
+        {
+          button: 'Start determination of activity level',
+          type: 'DOAL',
+          errors: [],
+        },
+      ],
     },
-    WITHHOLDING_OF_ALLOWANCES: {
+    {
       title: 'Withhold allowances',
-      button: 'Start a withholding of allowances',
+      properties: [
+        {
+          button: 'Start a withholding of allowances',
+          type: 'WITHHOLDING_OF_ALLOWANCES',
+          errors: [],
+        },
+      ],
     },
-    RETURN_OF_ALLOWANCES: {
+    {
       title: 'Start return of allowances',
-      button: 'Start return of allowances',
+      properties: [
+        {
+          button: 'Start return of allowances',
+          type: 'RETURN_OF_ALLOWANCES',
+          errors: [],
+        },
+      ],
     },
-    EMP_VARIATION_UKETS: {
+    {
       title: 'Make a change to the emissions plan',
-      button: 'Start an emission plan variation',
+      properties: [
+        {
+          button: 'Start an emission plan variation',
+          type: 'EMP_VARIATION_UKETS',
+          errors: [],
+        },
+      ],
     },
-    AVIATION_NON_COMPLIANCE: {
+    {
       title: 'Start a non-compliance task',
-      button: 'Start non-compliance',
+      properties: [
+        {
+          button: 'Start non-compliance',
+          type: 'AVIATION_NON_COMPLIANCE',
+          errors: [],
+        },
+      ],
     },
-    EMP_VARIATION_CORSIA: {
+    {
       title: 'Make a change to the emissions plan',
-      button: 'Start an emission plan variation',
+      properties: [
+        {
+          button: 'Start an emission plan variation',
+          type: 'EMP_VARIATION_CORSIA',
+          errors: [],
+        },
+      ],
     },
-  };
+    {
+      title: 'Start a new inspection',
+      properties: [
+        {
+          button: 'Start an on-site inspection',
+          type: 'INSTALLATION_ONSITE_INSPECTION',
+          errors: [],
+        },
+        {
+          button: 'Start an audit report',
+          type: 'INSTALLATION_AUDIT',
+          errors: [],
+        },
+      ],
+    },
+    {
+      title: 'Permanent cessation',
+      properties: [
+        {
+          button: 'Start a permanent cessation',
+          type: 'PERMANENT_CESSATION',
+          errors: [],
+        },
+      ],
+    },
+  ];
 
-  private userRoleWorkflowsMap: Record<UserState['roleType'], Partial<WorkflowMap>> = {
+  private userRoleWorkflowsMap: Record<UserState['roleType'], WorkflowArray> = {
     OPERATOR: this.operatorsWorkflowMessagesMap,
     REGULATOR: this.regulatorsWorkflowMessagesMap,
     VERIFIER: undefined,
@@ -121,9 +245,12 @@ export class ProcessActionsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.currentDomain$.subscribe((domain) => {
+      this.isAviation = domain === 'AVIATION';
+    });
+
     this.accountId$ = this.activatedRoute.paramMap.pipe(map((parameters) => +parameters.get('accountId')));
 
-    // request for available tasks
     this.availableTasks$ = this.accountId$.pipe(
       switchMap((accountId) => this.requestsService.getAvailableAccountWorkflows(accountId)),
       withLatestFrom(
@@ -132,17 +259,34 @@ export class ProcessActionsComponent implements OnInit {
           map((roleType) => this.userRoleWorkflowsMap[roleType]),
         ),
       ),
-      map(([validationResults, userRoleWorkflowMessagesMap]) =>
-        Object.entries(validationResults)
-          .filter(([type]) => userRoleWorkflowMessagesMap[type])
-          .map(([type, result]) => ({
-            ...userRoleWorkflowMessagesMap[type],
-            type: type,
-            errors: result.valid
-              ? undefined
-              : this.createErrorMessages(type as RequestCreateActionProcessDTO['requestCreateActionType'], result),
-          })),
-      ),
+      map(([validationResults, userRoleWorkflowMessagesMap]) => {
+        const allowedWorkflowTypes = Object.keys(validationResults);
+        return userRoleWorkflowMessagesMap
+          .filter((workflow) => {
+            const currentWorkflowTypes = workflow.properties.map((property) => property.type);
+
+            return allowedWorkflowTypes.some(
+              (allowedWorkflowType: RequestCreateActionProcessDTO['requestCreateActionType']) =>
+                currentWorkflowTypes.includes(allowedWorkflowType),
+            );
+          })
+          .map((workflow) => {
+            const properties = (workflow.properties as WorkflowLabelProperties[])
+              .filter((property) => allowedWorkflowTypes.includes(property.type))
+              .map((property) => ({
+                button: property.button,
+                type: property.type,
+                errors: validationResults[property.type].valid
+                  ? []
+                  : this.createErrorMessages(property.type, validationResults[property.type]),
+              }));
+
+            return {
+              title: workflow.title,
+              properties,
+            };
+          });
+      }),
     );
   }
 
@@ -151,6 +295,8 @@ export class ProcessActionsComponent implements OnInit {
       this.router.navigate(['../trigger-air'], { relativeTo: this.route }).then();
     } else if (requestType === 'DOAL') {
       this.router.navigate(['../trigger-doal'], { relativeTo: this.route }).then();
+    } else if (requestType === 'INSTALLATION_AUDIT') {
+      this.router.navigate(['../audit-year'], { relativeTo: this.route }).then();
     } else {
       this.accountId$
         .pipe(
@@ -162,14 +308,14 @@ export class ProcessActionsComponent implements OnInit {
                   payloadType: 'EMPTY_PAYLOAD',
                 },
               },
-              accountId,
+              String(accountId),
             ),
           ),
           switchMap(({ requestId }) => this.requestItemsService.getItemsByRequest(requestId)),
           first(),
         )
         .subscribe(({ items }) => {
-          const link = items?.length == 1 ? this.itemLinkPipe.transform(items[0]) : ['/dashboard'];
+          const link = items?.length == 1 ? this.itemLinkPipe.transform(items[0], this.isAviation) : ['/dashboard'];
           this.router.navigate(link).then();
         });
     }
@@ -193,8 +339,8 @@ export class ProcessActionsComponent implements OnInit {
             ),
           ]
         : (result as any)?.improvementsExist === false
-        ? [`You cannot trigger ${typeString} as the installation does not have any improvements to make.`]
-        : ['Action currently unavailable'];
+          ? [`You cannot trigger ${typeString} as the installation does not have any improvements to make.`]
+          : ['Action currently unavailable'];
     }
   }
 
@@ -213,8 +359,10 @@ export class ProcessActionsComponent implements OnInit {
   }
 
   private getTransformedRequestTypeFragment(requestType: RequestCreateActionProcessDTO['requestCreateActionType']) {
-    return requestType === 'AIR'
-      ? `an ${workflowDetailsTypesMap[requestType].toLowerCase()}`
-      : `a ${workflowDetailsTypesMap[requestType].toLowerCase()}`;
+    const result = workflowDetailsTypesMap[requestType].toLowerCase();
+
+    return ['AIR', 'INSTALLATION_ONSITE_INSPECTION', 'INSTALLATION_AUDIT'].includes(requestType)
+      ? `an ${result}`
+      : `a ${result}`;
   }
 }

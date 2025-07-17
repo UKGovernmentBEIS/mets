@@ -1,0 +1,64 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-base-task-container-component
+    [header]="vm.pageTitle"
+    [customContentTemplate]="customContentTemplate"
+    [expectedTaskType]="vm.expectedTaskType"
+    [previewDocuments]="vm.previewDocuments"></app-base-task-container-component>
+
+  <ng-template #customContentTemplate>
+    <div class="govuk-button-group">
+      <button
+        *ngIf="vm.allowSendPeerReview"
+        (click)="sendPeerReview()"
+        govukButton
+        title="Send for peer review"
+        type="button">
+        Send for peer review
+      </button>
+
+      <button
+        *ngIf="vm.allowNotifyOperator"
+        (click)="notifyOperator()"
+        govukButton
+        title="Notify Operator for decision"
+        type="button">
+        Notify Operator of decision
+      </button>
+
+      <button
+        *ngIf="vm.allowPeerReviewDecision"
+        (click)="peerReviewDecision()"
+        govukButton
+        title="Peer review decision"
+        type="button">
+        Peer review decision
+      </button>
+    </div>
+
+    <ng-container *ngIf="!vm.isWaitForPeerReviewTask; else waitForPeerReeviewTemplate">
+      <h2 class="govuk-heading-m">{{ vm.expectedTaskType | detailsSubtaskHeader }}</h2>
+
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          [link]="vm.redirectReportLink"
+          [linkText]="vm.expectedTaskType | detailsSubtaskLinktext"
+          [status]="vm.reportSectionStatus"></li>
+      </ul>
+
+      <h2 class="govuk-heading-m">Recommended follow-up actions</h2>
+
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          [link]="vm.redirectFollowUpLink"
+          linkText="Follow-up actions for the operator"
+          [status]="vm.sectionStatus"></li>
+      </ul>
+    </ng-container>
+
+    <ng-template #waitForPeerReeviewTemplate>
+      <govuk-warning-text>Waiting for the regulator to review your report</govuk-warning-text>
+    </ng-template>
+  </ng-template>
+</ng-container>

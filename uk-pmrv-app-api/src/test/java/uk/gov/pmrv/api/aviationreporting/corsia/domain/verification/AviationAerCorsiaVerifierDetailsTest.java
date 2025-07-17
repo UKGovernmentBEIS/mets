@@ -72,11 +72,10 @@ class AviationAerCorsiaVerifierDetailsTest {
 
         final Set<ConstraintViolation<AviationAerCorsiaVerifierDetails>> violations = validator.validate(verifierDetails);
 
-        assertEquals(2, violations.size());
+        assertEquals(1, violations.size());
         assertThat(violations)
                 .extracting(ConstraintViolation::getMessage)
-                .containsOnly("{aviationAerVerificationData.corsia.verifierDetails.interestConflictAvoidance.impartialityAssessmentResult}",
-                        "{aviationAerVerificationData.corsia.verifierDetails.interestConflictAvoidance.breakTaken}");
+                .containsOnly("{aviationAerVerificationData.corsia.verifierDetails.interestConflictAvoidance.breakTaken}");
     }
 
     @Test
@@ -85,6 +84,7 @@ class AviationAerCorsiaVerifierDetailsTest {
                 .interestConflictAvoidance(AviationAerCorsiaInterestConflictAvoidance.builder()
                         .sixVerificationsConducted(Boolean.TRUE)
                         .breakTaken(Boolean.FALSE)
+                        .impartialityAssessmentResult("impartiality assessment")
                         .build())
                 .verificationTeamLeader(AviationAerCorsiaVerificationTeamLeader.builder()
                         .name("name")
@@ -121,7 +121,7 @@ class AviationAerCorsiaVerifierDetailsTest {
         assertEquals(1, violations.size());
         assertThat(violations)
                 .extracting(ConstraintViolation::getMessage)
-                .containsExactly("{aviationAerVerificationData.corsia.verifierDetails.interestConflictAvoidance.impartialityAssessmentResult}");
+                .containsExactly("must not be blank");
     }
 
     @Test
@@ -131,6 +131,7 @@ class AviationAerCorsiaVerifierDetailsTest {
                         .sixVerificationsConducted(Boolean.TRUE)
                         .breakTaken(Boolean.FALSE)
                         .reason("reason")
+                        .impartialityAssessmentResult("impartiality assessment")
                         .build())
                 .verificationTeamLeader(AviationAerCorsiaVerificationTeamLeader.builder()
                         .name("name")

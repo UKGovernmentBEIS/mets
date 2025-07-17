@@ -25,5 +25,8 @@ export class AmendSummaryTemplateComponent {
   heading = amendGroupAllHeading;
   groupHeading = reviewGroupAllHeading;
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly route: ActivatedRoute) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

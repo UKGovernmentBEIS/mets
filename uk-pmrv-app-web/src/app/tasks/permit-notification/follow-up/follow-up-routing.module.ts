@@ -27,8 +27,18 @@ import { WaitComponent } from './shared/wait/wait.component';
 const routes: Routes = [
   {
     path: '',
-    data: { pageTitle: 'Follow up response to a notification' },
-    component: FollowUpComponent,
+    children: [
+      {
+        path: '',
+        data: { pageTitle: 'Follow up response to a notification' },
+        component: FollowUpComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+    ],
   },
   {
     path: 'response',
@@ -75,6 +85,11 @@ const routes: Routes = [
         data: { pageTitle: 'Review follow up response to a notification' },
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'decision',
         component: FollowUpReviewDecisionComponent,
         data: { pageTitle: 'Operator response' },
@@ -109,8 +124,18 @@ const routes: Routes = [
   },
   {
     path: 'review-wait',
-    component: FollowUpReviewWaitComponent,
-    data: { pageTitle: 'Follow up response submitted' },
+    children: [
+      {
+        path: '',
+        component: FollowUpReviewWaitComponent,
+        data: { pageTitle: 'Follow up response submitted' },
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+    ],
   },
   {
     path: 'wait',
@@ -119,6 +144,11 @@ const routes: Routes = [
         path: '',
         data: { pageTitle: 'Awaiting follow up response to notification', caption: 'Follow up response details' },
         component: WaitComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'due-date',

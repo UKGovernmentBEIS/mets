@@ -137,7 +137,7 @@ describe('OperatorDetailsActivitiesDescriptionComponent', () => {
     expect(saveEmpSpy).toHaveBeenCalledWith(data, 'in progress');
     expect(navigateSpy).toHaveBeenCalledWith(['../subsidiary-companies'], {
       relativeTo: activatedRouteStub,
-      queryParams: { change: 'true' },
+      queryParams: { change: null },
     });
   });
 });

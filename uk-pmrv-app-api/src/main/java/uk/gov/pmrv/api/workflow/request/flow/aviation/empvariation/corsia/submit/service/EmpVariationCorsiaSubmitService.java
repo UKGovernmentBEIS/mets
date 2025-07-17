@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -49,7 +49,7 @@ public class EmpVariationCorsiaSubmitService {
 	}
 	
 	@Transactional
-	public void submitEmpVariation(RequestTask requestTask, PmrvUser authUser) {
+	public void submitEmpVariation(RequestTask requestTask, AppUser authUser) {
 		EmpVariationCorsiaApplicationSubmitRequestTaskPayload taskPayload = (EmpVariationCorsiaApplicationSubmitRequestTaskPayload) requestTask
 				.getPayload();
 		Request request = requestTask.getRequest();
@@ -75,7 +75,7 @@ public class EmpVariationCorsiaSubmitService {
 		addEmpVariationCorsiaApplicationSubmittedRequestAction(authUser, taskPayload, request);
 	}
 
-	private void addEmpVariationCorsiaApplicationSubmittedRequestAction(PmrvUser authUser,
+	private void addEmpVariationCorsiaApplicationSubmittedRequestAction(AppUser authUser,
 			EmpVariationCorsiaApplicationSubmitRequestTaskPayload taskPayload, Request request) {		
 		RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 		

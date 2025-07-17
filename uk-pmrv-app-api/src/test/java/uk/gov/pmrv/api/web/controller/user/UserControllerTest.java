@@ -14,32 +14,26 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.feedback.FeedbackRating;
+import uk.gov.netz.api.feedback.UserFeedbackDto;
+import uk.gov.netz.api.feedback.UserFeedbackService;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
+import uk.gov.netz.api.token.FileToken;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.feedback.domain.dto.UserFeedbackDto;
-import uk.gov.pmrv.api.feedback.model.enumeration.FeedbackRating;
-import uk.gov.pmrv.api.feedback.service.UserFeedbackService;
-import uk.gov.pmrv.api.terms.domain.dto.UpdateTermsDTO;
-import uk.gov.pmrv.api.user.application.UserService;
-import uk.gov.pmrv.api.user.core.domain.dto.ApplicationUserDTO;
-import uk.gov.pmrv.api.token.FileToken;
+import uk.gov.pmrv.api.user.application.UserServiceDelegator;
 import uk.gov.pmrv.api.user.core.domain.dto.RegisterUserLoginDomainDTO;
+import uk.gov.pmrv.api.user.core.domain.dto.UserDTO;
 import uk.gov.pmrv.api.user.core.service.UserLoginDomainService;
 import uk.gov.pmrv.api.user.core.service.UserSignatureService;
-import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
-import java.util.Collections;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -62,13 +56,10 @@ class UserControllerTest {
     private UserController userController;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private UserService userService;
-
-    @Mock
-    private UserAuthService userAuthService;
+    private UserServiceDelegator userServiceDelegator;
 
     @Mock
     private UserSignatureService userSignatureService;
@@ -77,7 +68,7 @@ class UserControllerTest {
     private UserFeedbackService userFeedbackService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -91,7 +82,7 @@ class UserControllerTest {
     public void setUp() {
         objectMapper = new ObjectMapper();
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect authorizedAspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect authorizedAspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(userController);
         aspectJProxyFactory.addAspect(authorizedAspect);
@@ -100,7 +91,7 @@ class UserControllerTest {
         AopProxy aopProxy = proxyFactory.createAopProxy(aspectJProxyFactory);
         userController = (UserController) aopProxy.getProxy();
         mockMvc = MockMvcBuilders.standaloneSetup(userController)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .build();
     }
@@ -110,40 +101,26 @@ class UserControllerTest {
         final String userId = "userId";
         final String firstName = "firstName";
         final String lastName = "lastName";
-        final Short termsVersion = 1;
 
-        ApplicationUserDTO userDTO = ApplicationUserDTO.builder()
+        UserDTO userDTO = UserDTO.builder()
             .email(EMAIL)
             .firstName(firstName)
             .lastName(lastName)
-            .termsVersion(termsVersion)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(PmrvUser.builder().userId(userId).build());
-        when(userService.getUserById(userId)).thenReturn(userDTO);
+        AppUser currentUser = AppUser.builder().userId(userId).build();
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+        when(userServiceDelegator.getCurrentUserDTO(currentUser)).thenReturn(userDTO);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(USER_CONTROLLER_PATH)
+        mockMvc.perform(MockMvcRequestBuilders.get(USER_CONTROLLER_PATH + "/current")
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.email").value(EMAIL))
             .andExpect(jsonPath("$.firstName").value(firstName))
             .andExpect(jsonPath("$.lastName").value(lastName))
-            .andExpect(jsonPath("$.termsVersion").isNumber());
-    }
+            ;
 
-    @Test
-    void editUserTerms() throws Exception {
-        final String userId = "userId";
-        UpdateTermsDTO updateTermsDTO = new UpdateTermsDTO(Short.valueOf("1"));
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(PmrvUser.builder().userId(userId).build());
-
-        mockMvc.perform(MockMvcRequestBuilders.patch(USER_CONTROLLER_PATH + "/terms-and-conditions")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(updateTermsDTO)))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.version").value(1));
-
-        verify(userAuthService, times(1)).updateUserTerms(userId, updateTermsDTO.getVersion());
+        verify(userServiceDelegator, times(1)).getCurrentUserDTO(currentUser);
     }
 
     @Test
@@ -152,7 +129,7 @@ class UserControllerTest {
         UUID signatureUuid = UUID.randomUUID();
         FileToken fileToken = FileToken.builder().token("token").tokenExpirationMinutes(10L).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(PmrvUser.builder().userId(userId).build());
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(AppUser.builder().userId(userId).build());
 
         when(userSignatureService.generateSignatureFileToken(userId, signatureUuid)).thenReturn(fileToken);
 
@@ -170,7 +147,6 @@ class UserControllerTest {
 
     @Test
     void provideUserFeedback() throws Exception {
-        PmrvUser pmrvUser = buildMockAuthenticatedUser("userId");
         UserFeedbackDto userFeedbackDto = UserFeedbackDto.builder()
             .creatingAccountRate(FeedbackRating.DISSATISFIED)
             .creatingAccountRateReason("Optional")
@@ -186,7 +162,6 @@ class UserControllerTest {
             .userRegistrationRate(FeedbackRating.DISSATISFIED)
             .userRegistrationRateReason("")
             .build();
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post(USER_CONTROLLER_PATH + "/feedback")
@@ -199,10 +174,8 @@ class UserControllerTest {
 
     @Test
     void provideUserFeedback_bad_request() throws Exception {
-        PmrvUser pmrvUser = buildMockAuthenticatedUser("userId");
         UserFeedbackDto userFeedbackDto = UserFeedbackDto.builder()
             .build();
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post(USER_CONTROLLER_PATH + "/feedback")
@@ -219,7 +192,7 @@ class UserControllerTest {
         RegisterUserLoginDomainDTO userLoginDomainDTO = RegisterUserLoginDomainDTO.builder()
             .loginDomain(AccountType.INSTALLATION)
             .build();
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(PmrvUser.builder().userId(userId).build());
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(AppUser.builder().userId(userId).build());
 
         mockMvc.perform(MockMvcRequestBuilders.put(USER_CONTROLLER_PATH + "/last-login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -228,17 +201,5 @@ class UserControllerTest {
 
         verify(userLoginDomainService, times(1))
             .registerUserLastLoginDomain(userId, userLoginDomainDTO.getLoginDomain());
-    }
-
-    private PmrvUser buildMockAuthenticatedUser(String userId) {
-        return PmrvUser.builder()
-            .authorities(
-                Collections.singletonList(
-                    PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()
-                )
-            )
-            .roleType(RoleType.REGULATOR)
-            .userId(userId)
-            .build();
     }
 }

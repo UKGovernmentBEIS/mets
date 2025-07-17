@@ -19,13 +19,11 @@ import { aemReportFormProvider } from './aem-report-form.provider';
       (formSubmit)="onSubmit()"
       [formGroup]="form"
       heading="Who will complete the annual emission report?"
-      [hideSubmit]="hideSubmit$ | async"
-    >
+      [hideSubmit]="hideSubmit$ | async">
       <div formControlName="aerLiable" govuk-radio legendSize="medium">
         <govuk-radio-option
           value="TRANSFERER"
-          label="We the transferring operator will complete it"
-        ></govuk-radio-option>
+          label="We the transferring operator will complete it"></govuk-radio-option>
         <govuk-radio-option value="RECEIVER" label="The new operator will complete it"></govuk-radio-option>
       </div>
     </app-wizard-step>

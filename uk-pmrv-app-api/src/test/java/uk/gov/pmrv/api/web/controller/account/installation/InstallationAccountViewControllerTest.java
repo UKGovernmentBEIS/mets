@@ -13,20 +13,20 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
-import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountHeaderInfoDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.permit.domain.dto.PermitDetailsDTO;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountPermitQueryOrchestrator;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountHeaderInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountPermitDTO;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
+import uk.gov.pmrv.api.web.orchestrator.account.installation.service.InstallationAccountPermitQueryOrchestrator;
 
 import java.util.Optional;
 
@@ -51,10 +51,10 @@ class InstallationAccountViewControllerTest {
     private InstallationAccountViewController accountViewController;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private InstallationAccountPermitQueryOrchestrator orchestrator;
@@ -64,7 +64,7 @@ class InstallationAccountViewControllerTest {
     @BeforeEach
     public void setUp() {
         authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(accountViewController);
         aspectJProxyFactory.addAspect(aspect);
@@ -81,7 +81,7 @@ class InstallationAccountViewControllerTest {
     @Test
     void getInstallationAccountById() throws Exception {
         final Long accountId = 1L;
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final InstallationAccountPermitDTO installationAccountPermitDTO =
         		InstallationAccountPermitDTO.builder()
         		.account(InstallationAccountDTO.builder()
@@ -109,12 +109,12 @@ class InstallationAccountViewControllerTest {
     @Test
     void getInstallationAccountById_account_forbidden() throws Exception {
         final long invalidAccountId = 1L;
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "getInstallationAccountById", Long.toString(invalidAccountId));
+            .when(appUserAuthorizationService)
+            .authorize(user, "getInstallationAccountById", Long.toString(invalidAccountId), null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders
@@ -128,7 +128,7 @@ class InstallationAccountViewControllerTest {
     @Test
     void getInstallationAccountById_account_not_found() throws Exception {
         final Long invalidAccountId = 1L;
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(orchestrator.getAccountWithPermit(invalidAccountId))
@@ -148,11 +148,12 @@ class InstallationAccountViewControllerTest {
         Long accountId = 1L;
         String accountName = "accountName";
         InstallationAccountStatus accountStatus = InstallationAccountStatus.LIVE;
-        PmrvUser user = PmrvUser.builder().userId("userId").build();
+        AppUser user = AppUser.builder().userId("userId").build();
         InstallationAccountHeaderInfoDTO accountHeaderInfo =
             InstallationAccountHeaderInfoDTO.builder()
                 .name(accountName)
                 .status(accountStatus)
+                .id(accountId)
                 .build();
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(orchestrator.getAccountHeaderInfoWithPermitId(accountId)).thenReturn(Optional.of(accountHeaderInfo));
@@ -163,7 +164,8 @@ class InstallationAccountViewControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value(accountName))
-            .andExpect(jsonPath("$.status").value(accountStatus.name()));
+            .andExpect(jsonPath("$.status").value(accountStatus.name()))
+            .andExpect(jsonPath("$.id").value(accountId));
 
         verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
         verify(orchestrator, times(1)).getAccountHeaderInfoWithPermitId(accountId);
@@ -172,12 +174,12 @@ class InstallationAccountViewControllerTest {
     @Test
     void getInstallationAccountHeaderInfoById_forbidden() throws Exception {
         String accountId = "1";
-        PmrvUser user = PmrvUser.builder().userId("userId").build();
+        AppUser user = AppUser.builder().userId("userId").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "getInstallationAccountHeaderInfoById", accountId);
+            .when(appUserAuthorizationService)
+            .authorize(user, "getInstallationAccountHeaderInfoById", accountId, null, null);
 
         mockMvc.perform(
             MockMvcRequestBuilders

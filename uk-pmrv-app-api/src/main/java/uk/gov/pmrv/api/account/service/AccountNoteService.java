@@ -1,33 +1,34 @@
 package uk.gov.pmrv.api.account.service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.authorityinfo.providers.AccountNoteAuthorityInfoProvider;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.note.NotePayload;
+import uk.gov.netz.api.common.note.NoteRequest;
+import uk.gov.netz.api.common.utils.DateService;
+import uk.gov.netz.api.files.notes.service.FileNoteService;
+import uk.gov.netz.api.files.notes.service.FileNoteTokenService;
+import uk.gov.netz.api.token.FileToken;
 import uk.gov.pmrv.api.account.domain.AccountNote;
 import uk.gov.pmrv.api.account.domain.dto.AccountNoteDto;
 import uk.gov.pmrv.api.account.domain.dto.AccountNoteRequest;
 import uk.gov.pmrv.api.account.domain.dto.AccountNoteResponse;
 import uk.gov.pmrv.api.account.repository.AccountNoteRepository;
 import uk.gov.pmrv.api.account.transform.AccountNoteMapper;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.providers.AccountNoteAuthorityInfoProvider;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.common.note.NotePayload;
-import uk.gov.pmrv.api.common.note.NoteRequest;
-import uk.gov.pmrv.api.common.service.DateService;
-import uk.gov.pmrv.api.files.notes.service.FileNoteService;
-import uk.gov.pmrv.api.files.notes.service.FileNoteTokenService;
-import uk.gov.pmrv.api.token.FileToken;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +62,7 @@ public class AccountNoteService implements AccountNoteAuthorityInfoProvider {
     }
     
     @Transactional
-    public void createNote(final PmrvUser authUser, final AccountNoteRequest accountNoteRequest) {
+    public void createNote(final AppUser authUser, final AccountNoteRequest accountNoteRequest) {
         
         final AccountNote accountNote = this.buildAccountNote(accountNoteRequest, authUser);
         accountNoteRepository.save(accountNote);
@@ -71,7 +72,7 @@ public class AccountNoteService implements AccountNoteAuthorityInfoProvider {
     }
 
     @Transactional
-    public void updateNote(final Long noteId, final NoteRequest noteRequest, final PmrvUser authUser) {
+    public void updateNote(final Long noteId, final NoteRequest noteRequest, final AppUser authUser) {
 
         final AccountNote accountNote = accountNoteRepository.findById(noteId)
             .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
@@ -84,13 +85,14 @@ public class AccountNoteService implements AccountNoteAuthorityInfoProvider {
             fileNoteService.deleteFiles(deletedFiles);
         }
         
-        final Map<UUID, String> newFileNames = this.getFileNames(currentFiles);
+        final Map<UUID, String> currentFileUuidsWithNames = this.getFileUuidWithNames(currentFiles);
 
         accountNote.getPayload().setNote(noteRequest.getNote());
-        accountNote.getPayload().setFiles(newFileNames);
+        accountNote.getPayload().setFiles(currentFileUuidsWithNames);
         accountNote.setSubmitterId(authUser.getUserId());
         accountNote.setSubmitter(authUser.getFirstName() + " " + authUser.getLastName());
         accountNote.setLastUpdatedOn(dateService.getLocalDateTime());
+        fileNoteService.submitFiles(currentFiles);
     }
 
     @Transactional
@@ -124,15 +126,15 @@ public class AccountNoteService implements AccountNoteAuthorityInfoProvider {
             });
     }
 
-    private AccountNote buildAccountNote(final AccountNoteRequest accountNoteRequest, final PmrvUser authUser) {
+    private AccountNote buildAccountNote(final AccountNoteRequest accountNoteRequest, final AppUser authUser) {
 
-        final Map<UUID, String> fileNames = this.getFileNames(accountNoteRequest.getFiles());
+        final Map<UUID, String> fileUuidWithNames = this.getFileUuidWithNames(accountNoteRequest.getFiles());
 
         return AccountNote.builder()
             .accountId(accountNoteRequest.getAccountId())
             .payload(NotePayload.builder()
                 .note(accountNoteRequest.getNote())
-                .files(fileNames)
+                .files(fileUuidWithNames)
                 .build())
             .submitterId(authUser.getUserId())
             .submitter(authUser.getFirstName() + " " + authUser.getLastName())
@@ -140,13 +142,15 @@ public class AccountNoteService implements AccountNoteAuthorityInfoProvider {
             .build();
     }
 
-    private Map<UUID, String> getFileNames(final Set<UUID> filesUuids) {
-
-        final Map<UUID, String> fileNames = fileNoteService.getFileNames(filesUuids);
-        final int filesFound = fileNames.size();
-        if (filesFound != filesUuids.size()) {
-            throw new BusinessException(ErrorCode.FORM_VALIDATION);
-        }
-        return fileNames;
+    private Map<UUID, String> getFileUuidWithNames(final Set<UUID> filesUuids) {
+        final Map<UUID, String> fileUuidWithNames = fileNoteService.getFileNames(filesUuids);
+        
+        filesUuids.forEach(uuid -> {
+        	if(fileUuidWithNames.get(uuid) == null) {
+        		log.warn("Account file note not found for uuid: " + uuid);
+        	}
+        });
+        
+        return fileUuidWithNames;
     }
 }

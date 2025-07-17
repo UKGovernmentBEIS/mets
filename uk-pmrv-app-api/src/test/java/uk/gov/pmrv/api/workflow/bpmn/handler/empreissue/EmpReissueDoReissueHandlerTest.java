@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.service.EmpReissueDoReissueService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 

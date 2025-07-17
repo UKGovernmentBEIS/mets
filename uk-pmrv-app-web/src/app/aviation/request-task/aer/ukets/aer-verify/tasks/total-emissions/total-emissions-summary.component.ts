@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { RouterLink, RouterLinkWithHref } from '@angular/router';
 
@@ -14,8 +13,6 @@ import { getSummaryHeaderForTaskType } from '@aviation/request-task/util';
 import { TotalEmissionsSummaryTemplateComponent } from '@aviation/shared/components/aer/total-emissions/total-emissions-summary-template/total-emissions-summary-template.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { SharedModule } from '@shared/shared.module';
-
-import { GovukComponentsModule } from 'govuk-components';
 
 import { AviationAerTotalEmissionsConfidentiality } from 'pmrv-api';
 
@@ -43,14 +40,10 @@ interface ViewModel {
   `,
   imports: [
     SharedModule,
-    GovukComponentsModule,
-    NgFor,
-    NgIf,
     RouterLinkWithHref,
     ReturnToLinkComponent,
     RouterLink,
     TotalEmissionsStandardFuelsTableComponent,
-    TotalEmissionsSchemeYearHeaderComponent,
     TotalEmissionsSchemeYearHeaderComponent,
     TotalEmissionsSummaryTemplateComponent,
   ],

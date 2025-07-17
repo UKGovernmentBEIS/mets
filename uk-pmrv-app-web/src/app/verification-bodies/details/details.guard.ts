@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { map, Observable, tap } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { catchElseRethrow } from '../../error/business-errors';
 import { viewNotFoundVerificationBodyError } from '../errors/business-error';
 
 @Injectable({ providedIn: 'root' })
-export class DetailsGuard implements CanActivate, Resolve<VerificationBodyDTO> {
+export class DetailsGuard {
   private body: VerificationBodyDTO;
 
   constructor(

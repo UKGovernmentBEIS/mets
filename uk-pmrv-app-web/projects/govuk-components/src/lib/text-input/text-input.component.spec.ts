@@ -20,7 +20,10 @@ describe('TextInputComponent', () => {
     template: `
       <div govuk-text-input [formControl]="control" [prefix]="prefix" [suffix]="suffix" label="First control"></div>
       <div govuk-text-input [formControl]="control" [prefix]="prefix" [suffix]="suffix">
-        <ng-container govukLabel>Second control <span class="govuk-visually-hidden">hidden</span></ng-container>
+        <ng-container govukLabel>
+          Second control
+          <span class="govuk-visually-hidden">hidden</span>
+        </ng-container>
       </div>
       <form [formGroup]="group">
         <div govuk-text-input formControlName="text" label="Form control"></div>
@@ -104,14 +107,22 @@ describe('TextInputComponent', () => {
   });
 
   it('should emit numeric value', () => {
+    const numericValue = '2.3';
+    const input = fixtureNumericComponent.debugElement.query(By.css('input'));
+    input.triggerEventHandler('input', { target: { value: numericValue } });
+    fixtureNumericComponent.detectChanges();
+
+    expect(hostNumericComponent.control.value).toEqual(2.3);
+    expect(hostNumericComponent.control.value).not.toEqual('2.3');
+  });
+
+  it('should not handle decimal numeric value not completed yet', () => {
     const numericValue = '2.';
     const input = fixtureNumericComponent.debugElement.query(By.css('input'));
     input.triggerEventHandler('input', { target: { value: numericValue } });
     fixtureNumericComponent.detectChanges();
 
-    expect(hostNumericComponent.control.value).toEqual(2);
-    expect(hostNumericComponent.control.value).not.toEqual('2.');
-    expect(hostNumericComponent.control.value).not.toEqual('2');
+    expect(hostNumericComponent.control.value).toEqual('2.');
   });
 
   it('should show and hide invalid number errors while typing if elements are not in form', () => {

@@ -6,7 +6,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,7 +40,7 @@ class EmpCorsiaOperatorDetailsSectionValidatorTest {
                         .issuingAuthority(issuingAuthority)
                         .build())
                     .subsidiaryCompanyExist(Boolean.TRUE)
-                    .subsidiaryCompanies(Set.of(SubsidiaryCompanyCorsia.builder()
+                    .subsidiaryCompanies(List.of(SubsidiaryCompanyCorsia.builder()
                         .airOperatingCertificate(AirOperatingCertificateCorsia.builder()
                             .certificateExist(Boolean.TRUE)
                             .issuingAuthority(issuingAuthority)
@@ -65,7 +65,7 @@ class EmpCorsiaOperatorDetailsSectionValidatorTest {
                         .certificateExist(Boolean.FALSE)
                         .build())
                     .subsidiaryCompanyExist(Boolean.TRUE)
-                    .subsidiaryCompanies(Set.of(SubsidiaryCompanyCorsia.builder()
+                    .subsidiaryCompanies(List.of(SubsidiaryCompanyCorsia.builder()
                         .airOperatingCertificate(AirOperatingCertificateCorsia.builder()
                             .certificateExist(Boolean.FALSE)
                             .build())
@@ -91,7 +91,7 @@ class EmpCorsiaOperatorDetailsSectionValidatorTest {
                         .certificateExist(Boolean.FALSE)
                         .build())
                     .subsidiaryCompanyExist(Boolean.TRUE)
-                    .subsidiaryCompanies(Set.of(SubsidiaryCompanyCorsia.builder()
+                    .subsidiaryCompanies(List.of(SubsidiaryCompanyCorsia.builder()
                         .airOperatingCertificate(AirOperatingCertificateCorsia.builder()
                             .certificateExist(Boolean.TRUE)
                             .issuingAuthority(issuingAuthority)
@@ -116,7 +116,7 @@ class EmpCorsiaOperatorDetailsSectionValidatorTest {
                         .certificateExist(Boolean.FALSE)
                         .build())
                     .subsidiaryCompanyExist(Boolean.FALSE)
-                    .subsidiaryCompanies(Collections.emptySet())
+                    .subsidiaryCompanies(Collections.emptyList())
                     .build())
                 .build())
             .build();

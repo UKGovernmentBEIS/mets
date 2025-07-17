@@ -12,6 +12,7 @@ describe('GasPipe', () => {
     expect(pipe.transform('PAPER_OR_CARDBOARD_PRODUCTION')).toEqual('Carbon dioxide');
     expect(pipe.transform('ADIPIC_ACID_PRODUCTION')).toEqual('Carbon dioxide and nitrous oxide');
     expect(pipe.transform('SECONDARY_ALUMINIUM_PRODUCTION')).toEqual('Carbon dioxide');
+    expect(pipe.transform('UPSTREAM_GHG_REMOVAL')).toEqual('Carbon dioxide');
   });
 
   it('should handle empty value', () => {

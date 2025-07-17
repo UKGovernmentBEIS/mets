@@ -20,7 +20,7 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.emissionsources.Air
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsources.enumeration.FuelTypeCorsia;
 
 @ExtendWith(MockitoExtension.class)
-public class EmpEmissionSourcesCorsiaTest {
+class EmpEmissionSourcesCorsiaTest {
 
     private Validator validator;
 

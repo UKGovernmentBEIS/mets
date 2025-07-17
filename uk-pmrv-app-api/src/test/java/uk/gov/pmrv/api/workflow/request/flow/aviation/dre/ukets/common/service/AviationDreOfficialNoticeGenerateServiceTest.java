@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.domain.AviationDreUkEtsRequestPayload;
@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -86,7 +85,7 @@ class AviationDreOfficialNoticeGenerateServiceTest {
         when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(ccRecipientsEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams)).thenReturn(templateParams);
         when(documentFileGeneratorService
-            .generateFileDocument(DocumentTemplateType.AVIATION_DRE_SUBMITTED, templateParams, "DRE_notice.pdf"))
+            .generateAndSaveFileDocument(DocumentTemplateType.AVIATION_DRE_SUBMITTED, templateParams, "DRE_notice.pdf"))
             .thenReturn(officialNoticeFileInfoDTO);
 
         //invoke
@@ -99,7 +98,7 @@ class AviationDreOfficialNoticeGenerateServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
             DocumentTemplateType.AVIATION_DRE_SUBMITTED, templateParams, filename);
 
     }

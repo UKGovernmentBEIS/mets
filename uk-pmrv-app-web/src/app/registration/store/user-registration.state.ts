@@ -1,4 +1,4 @@
-import { OperatorInvitedUserInfoDTO, OperatorUserRegistrationDTO } from 'pmrv-api';
+import { OperatorInvitedUserInfoDTO, OperatorUserRegistrationDTO, OperatorUserTokenVerificationResult } from 'pmrv-api';
 
 export interface UserRegistrationState {
   userRegistrationDTO?: Omit<OperatorUserRegistrationDTO, 'emailToken' | 'password'>;
@@ -8,6 +8,7 @@ export interface UserRegistrationState {
   isSummarized?: boolean;
   isInvited?: boolean;
   invitationStatus?: OperatorInvitedUserInfoDTO['invitationStatus'];
+  emailVerificationStatus?: OperatorUserTokenVerificationResult['status'];
 }
 
 export const initialState: UserRegistrationState = {
@@ -18,4 +19,5 @@ export const initialState: UserRegistrationState = {
   isSummarized: false,
   isInvited: false,
   invitationStatus: null,
+  emailVerificationStatus: null,
 };

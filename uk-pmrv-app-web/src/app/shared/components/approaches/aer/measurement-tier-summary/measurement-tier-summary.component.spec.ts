@@ -139,8 +139,7 @@ describe('MeasurementTierSummaryComponent', () => {
         [isEditable]="isEditable"
         [payload]="payload"
         [taskKey]="'MEASUREMENT_CO2'"
-        [index]="0"
-      ></app-measurement-tier-summary>
+        [index]="0"></app-measurement-tier-summary>
     `,
   })
   class TestComponent {

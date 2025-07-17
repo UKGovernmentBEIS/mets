@@ -10,7 +10,8 @@ import { CommencementComponent } from './commencement/commencement.component';
 import { ConfirmResponsibilityComponent } from './confirm-responsibility/confirm-responsibility.component';
 import { EtsSchemeComponent } from './ets-scheme/ets-scheme.component';
 import { installationFormFactory } from './factories/installation-form.factory';
-import { legalEntityFormFactory } from './factories/legal-entity-form.factory';
+import { legalEntityFormOpFactory } from './factories/legal-entity/legal-entity-form-op.factory';
+import { legalEntityFormRegFactory } from './factories/legal-entity/legal-entity-form-reg.factory';
 import { GasEmissionsDetailsComponent } from './gas-emissions-details/gas-emissions-details.component';
 import { GasEmissionsDetailsGuard } from './gas-emissions-details/gas-emissions-details.guard';
 import { ApplicationGuard } from './guards/application.guard';
@@ -18,8 +19,14 @@ import { FormGuard } from './guards/form.guard';
 import { LegalEntityDetailsGuard } from './guards/legal-entity-details.guard';
 import { InstallationAccountApplicationRoutingModule } from './installation-account-application-routing.module';
 import { InstallationTypeComponent } from './installation-type/installation-type.component';
-import { LegalEntitySelectComponent } from './legal-entity-select/legal-entity-select.component';
-import { LegalEntitySelectGuard } from './legal-entity-select/legal-entity-select.guard';
+import { LegalEntityDetailsOpComponent } from './legal-entity-operator/legal-entity-details-op/legal-entity-details-op.component';
+import { LegalEntityDetailsOpGuard } from './legal-entity-operator/legal-entity-details-op/legal-entity-details-op.guard';
+import { LegalEntityRegnoOpComponent } from './legal-entity-operator/legal-entity-regno-op/legal-entity-regno-op.component';
+import { LegalEntityRegnoOpGuard } from './legal-entity-operator/legal-entity-regno-op/legal-entity-regno-op.guard';
+import { LegalEntitySelectOpComponent } from './legal-entity-operator/legal-entity-select-op/legal-entity-select-op.component';
+import { LegalEntitySelectOpGuard } from './legal-entity-operator/legal-entity-select-op/legal-entity-select-op.guard';
+import { LegalEntitySelectRegComponent } from './legal-entity-regulator/legal-entity-select-reg/legal-entity-select-reg.component';
+import { LegalEntitySelectRegGuard } from './legal-entity-regulator/legal-entity-select-reg/legal-entity-select-reg.guard';
 import { OffshoreGuard } from './offshore-details/offshore.guard';
 import { OffshoreDetailsComponent } from './offshore-details/offshore-details.component';
 import { OnshoreGuard } from './onshore-details/onshore.guard';
@@ -42,7 +49,10 @@ import { TaskListComponent } from './task-list/task-list.component';
     GasEmissionsDetailsComponent,
     InstallationTypeComponent,
     LegalEntityDetailsComponent,
-    LegalEntitySelectComponent,
+    LegalEntityDetailsOpComponent,
+    LegalEntityRegnoOpComponent,
+    LegalEntitySelectOpComponent,
+    LegalEntitySelectRegComponent,
     OffshoreDetailsComponent,
     OnshoreDetailsComponent,
     OperatorApplicationComponent,
@@ -59,8 +69,12 @@ import { TaskListComponent } from './task-list/task-list.component';
     GasEmissionsDetailsGuard,
     installationFormFactory,
     LegalEntityDetailsGuard,
-    legalEntityFormFactory,
-    LegalEntitySelectGuard,
+    LegalEntityDetailsOpGuard,
+    legalEntityFormOpFactory,
+    legalEntityFormRegFactory,
+    LegalEntityRegnoOpGuard,
+    LegalEntitySelectOpGuard,
+    LegalEntitySelectRegGuard,
     OffshoreGuard,
     OnshoreGuard,
   ],

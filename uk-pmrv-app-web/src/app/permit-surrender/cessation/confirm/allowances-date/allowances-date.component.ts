@@ -12,12 +12,12 @@ import { allowancesDateFormProvider } from './allowances-date-form.provider';
 
 @Component({
   selector: 'app-allowances-date',
-  template: `<app-wizard-step
+  template: `
+    <app-wizard-step
       (formSubmit)="onContinue()"
       [formGroup]="form"
       submitText="Continue"
-      [hideSubmit]="(store.isEditable$ | async) === false"
-    >
+      [hideSubmit]="(store.isEditable$ | async) === false">
       <span class="govuk-caption-l">Confirm cessation of regulated activities</span>
 
       <app-page-heading>When were the installation allowances surrendered?</app-page-heading>
@@ -26,7 +26,8 @@ import { allowancesDateFormProvider } from './allowances-date-form.provider';
 
       <div formControlName="allowancesSurrenderDate" govuk-date-input [max]="today" [isRequired]="true"></div>
     </app-wizard-step>
-    <a govukLink routerLink="../..">Return to: Cessation</a> `,
+    <a govukLink routerLink="../..">Return to: Cessation</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [allowancesDateFormProvider],
 })

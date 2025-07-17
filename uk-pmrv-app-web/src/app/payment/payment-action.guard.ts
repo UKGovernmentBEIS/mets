@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
-import { mapTo, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 
 import { RequestActionsService } from 'pmrv-api';
 
@@ -10,7 +10,7 @@ import { PaymentState } from './store/payment.state';
 import { PaymentStore } from './store/payment.store';
 
 @Injectable({ providedIn: 'root' })
-export class PaymentActionGuard implements CanActivate {
+export class PaymentActionGuard {
   constructor(
     private readonly store: PaymentStore,
     private readonly incorporateHeaderStore: IncorporateHeaderStore,
@@ -40,7 +40,7 @@ export class PaymentActionGuard implements CanActivate {
           accountId: requestAction.requestAccountId,
         });
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 

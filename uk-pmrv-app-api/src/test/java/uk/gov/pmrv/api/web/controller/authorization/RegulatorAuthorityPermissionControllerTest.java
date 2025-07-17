@@ -15,22 +15,24 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.regulator.domain.AuthorityManagePermissionDTO;
-import uk.gov.pmrv.api.authorization.regulator.service.RegulatorAuthorityQueryService;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.regulator.domain.AuthorityManagePermissionDTO;
+import uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel;
+import uk.gov.netz.api.authorization.regulator.service.RegulatorAuthorityQueryService;
+import uk.gov.netz.api.authorization.regulator.transform.RegulatorPermissionsAdapter;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.List;
 import java.util.Map;
@@ -44,8 +46,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionGroup.MANAGE_USERS_AND_CONTACTS;
-import static uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionLevel.NONE;
+import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionGroup.MANAGE_USERS_AND_CONTACTS;
+import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.EXECUTE;
+import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.NONE;
+import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel.VIEW_ONLY;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.REVIEW_INSTALLATION_ACCOUNT;
 
 @ExtendWith(MockitoExtension.class)
 class RegulatorAuthorityPermissionControllerTest {
@@ -59,10 +64,10 @@ class RegulatorAuthorityPermissionControllerTest {
     private RegulatorAuthorityPermissionController regulatorAuthorityPermissionController;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RegulatorAuthorityQueryService regulatorAuthorityQueryService;
@@ -70,10 +75,13 @@ class RegulatorAuthorityPermissionControllerTest {
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
 
+    @Mock
+    private RegulatorPermissionsAdapter regulatorPermissionsAdapter;
+
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
         
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(regulatorAuthorityPermissionController);
@@ -86,19 +94,19 @@ class RegulatorAuthorityPermissionControllerTest {
         regulatorAuthorityPermissionController = (RegulatorAuthorityPermissionController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(regulatorAuthorityPermissionController)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .build();
     }
 
     @Test
     void getCurrentRegulatorUserPermissions() throws Exception {
-        PmrvUser currentUser = buildMockRegulatorUser();
+        AppUser currentUser = buildMockRegulatorUser();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         when(regulatorAuthorityQueryService.getCurrentRegulatorUserPermissions(currentUser))
             .thenReturn(AuthorityManagePermissionDTO.builder()
-                .permissions(Map.of(MANAGE_USERS_AND_CONTACTS, NONE))
+                .permissions(Map.of(MANAGE_USERS_AND_CONTACTS, RegulatorPermissionLevel.NONE))
                 .editable(false)
                 .build());
 
@@ -107,20 +115,20 @@ class RegulatorAuthorityPermissionControllerTest {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("editable").value(false))
-            .andExpect(jsonPath("$.permissions", Matchers.hasKey(MANAGE_USERS_AND_CONTACTS.name())))
-            .andExpect(jsonPath("$.permissions", Matchers.hasValue(NONE.name())));
+            .andExpect(jsonPath("$.permissions", Matchers.hasKey(MANAGE_USERS_AND_CONTACTS)))
+            .andExpect(jsonPath("$.permissions", Matchers.hasValue(RegulatorPermissionLevel.NONE.name())));
 
         verify(regulatorAuthorityQueryService, times(1)).getCurrentRegulatorUserPermissions(currentUser);
     }
 
     @Test
     void getCurrentRegulatorUserPermission_forbidden() throws Exception {
-        PmrvUser currentUser = buildMockRegulatorUser();
+        AppUser currentUser = buildMockRegulatorUser();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(currentUser, new RoleType[] {RoleType.REGULATOR});
+            .evaluate(currentUser, new String[] {RoleTypeConstants.REGULATOR});
 
         mockMvc.perform(MockMvcRequestBuilders
             .get(BASE_PATH)
@@ -132,12 +140,12 @@ class RegulatorAuthorityPermissionControllerTest {
 
     @Test
     void getRegulatorUserPermissionsByCaAndId() throws Exception {
-        PmrvUser currentUser = buildMockRegulatorUser();
+        AppUser currentUser = buildMockRegulatorUser();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         when(regulatorAuthorityQueryService.getRegulatorUserPermissionsByUserId(currentUser, USER_ID))
             .thenReturn(AuthorityManagePermissionDTO.builder()
-                .permissions(Map.of(MANAGE_USERS_AND_CONTACTS, NONE))
+                .permissions(Map.of(MANAGE_USERS_AND_CONTACTS, RegulatorPermissionLevel.NONE))
                 .editable(true)
                 .build());
 
@@ -147,8 +155,8 @@ class RegulatorAuthorityPermissionControllerTest {
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.editable").value(true))
-            .andExpect(jsonPath("$.permissions", Matchers.hasKey(MANAGE_USERS_AND_CONTACTS.name())))
-            .andExpect(jsonPath("$.permissions", Matchers.hasValue(NONE.name())));
+            .andExpect(jsonPath("$.permissions", Matchers.hasKey(MANAGE_USERS_AND_CONTACTS)))
+            .andExpect(jsonPath("$.permissions", Matchers.hasValue(RegulatorPermissionLevel.NONE.name())));
 
         verify(regulatorAuthorityQueryService, times(1))
             .getRegulatorUserPermissionsByUserId(currentUser, USER_ID);
@@ -156,11 +164,11 @@ class RegulatorAuthorityPermissionControllerTest {
 
     @Test
     void getRegulatorUserPermissionsByCaAndId_forbidden() throws Exception {
-        PmrvUser currentUser = buildMockRegulatorUser();
+        AppUser currentUser = buildMockRegulatorUser();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(currentUser, "getRegulatorUserPermissionsByCaAndId");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -173,6 +181,7 @@ class RegulatorAuthorityPermissionControllerTest {
 
     @Test
     void getRegulatorPermissionGroupLevels() throws Exception {
+        when(regulatorPermissionsAdapter.getPermissionGroupLevels()).thenReturn(Map.of(REVIEW_INSTALLATION_ACCOUNT, List.of(NONE, VIEW_ONLY, EXECUTE)));
 
         mockMvc.perform(MockMvcRequestBuilders
             .get(BASE_PATH + "/group-levels")
@@ -181,16 +190,18 @@ class RegulatorAuthorityPermissionControllerTest {
             .andExpect(jsonPath("$.REVIEW_INSTALLATION_ACCOUNT.[0]").value("NONE"))
             .andExpect(jsonPath("$.REVIEW_INSTALLATION_ACCOUNT.[1]").value("VIEW_ONLY"))
             .andExpect(jsonPath("$.REVIEW_INSTALLATION_ACCOUNT.[2]").value("EXECUTE"));
+
+        verify(regulatorPermissionsAdapter, times(1)).getPermissionGroupLevels();
     }
 
     @Test
     void getRegulatorPermissionGroupLevels_forbidden() throws Exception {
 
-        PmrvUser currentUser = buildMockRegulatorUser();
+        AppUser currentUser = buildMockRegulatorUser();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(currentUser, "getRegulatorPermissionGroupLevels");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -199,11 +210,11 @@ class RegulatorAuthorityPermissionControllerTest {
             .andExpect(status().isForbidden());
     }
 
-    private PmrvUser buildMockRegulatorUser() {
-        return PmrvUser.builder()
+    private AppUser buildMockRegulatorUser() {
+        return AppUser.builder()
             .userId(USER_ID)
-            .roleType(RoleType.REGULATOR)
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+            .roleType(RoleTypeConstants.REGULATOR)
+            .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
             .build();
     }
 

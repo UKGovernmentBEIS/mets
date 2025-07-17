@@ -30,6 +30,7 @@ describe('VerificationBodiesUsersComponent', () => {
   beforeEach(async () => {
     miReportsService = {
       generateReport: jest.fn().mockReturnValue(asyncData(mockVerificationBodiesUsersMiReportResult)),
+      getCurrentUserMiReports: jest.fn().mockReturnValue(asyncData(null)),
     };
     await TestBed.configureTestingModule({
       imports: [SharedModule, RouterTestingModule, MiReportsModule],

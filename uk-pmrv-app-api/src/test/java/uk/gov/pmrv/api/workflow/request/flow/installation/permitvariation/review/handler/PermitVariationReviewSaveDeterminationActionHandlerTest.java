@@ -13,9 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -53,7 +53,7 @@ class PermitVariationReviewSaveDeterminationActionHandlerTest {
     void process_valid() {
         final Long requestTaskId = 1L;
         final RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_VARIATION_SAVE_REVIEW_DETERMINATION;
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final PermitVariationSaveReviewDeterminationRequestTaskActionPayload payload = PermitVariationSaveReviewDeterminationRequestTaskActionPayload.builder()
         		.determination(PermitVariationGrantDetermination.builder().type(DeterminationType.GRANTED).build())
         		.build();
@@ -68,7 +68,7 @@ class PermitVariationReviewSaveDeterminationActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         when(permitReviewDeterminationValidatorService.isDeterminationAndDecisionsValid(payload.getDetermination(), requestTaskPayload, RequestType.PERMIT_VARIATION)).thenReturn(true);
 
-        handler.process(requestTaskId, requestTaskActionType, pmrvUser, payload);
+        handler.process(requestTaskId, requestTaskActionType, appUser, payload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(permitReviewDeterminationValidatorService, times(1)).isDeterminationAndDecisionsValid(payload.getDetermination(), requestTaskPayload, RequestType.PERMIT_VARIATION);
@@ -79,7 +79,7 @@ class PermitVariationReviewSaveDeterminationActionHandlerTest {
     void process_invalid() {
         final Long requestTaskId = 1L;
         final RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_VARIATION_SAVE_REVIEW_DETERMINATION;
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final PermitVariationSaveReviewDeterminationRequestTaskActionPayload payload = PermitVariationSaveReviewDeterminationRequestTaskActionPayload.builder()
         		.determination(PermitVariationGrantDetermination.builder().type(DeterminationType.GRANTED).build())
         		.build();
@@ -95,7 +95,7 @@ class PermitVariationReviewSaveDeterminationActionHandlerTest {
         when(permitReviewDeterminationValidatorService.isDeterminationAndDecisionsValid(payload.getDetermination(), requestTaskPayload, RequestType.PERMIT_VARIATION)).thenReturn(false);
 
         final BusinessException be = assertThrows(BusinessException.class,
-                () -> handler.process(requestTaskId, requestTaskActionType, pmrvUser, payload));
+                () -> handler.process(requestTaskId, requestTaskActionType, appUser, payload));
         
         assertThat(be.getErrorCode()).isEqualTo(ErrorCode.FORM_VALIDATION);
 

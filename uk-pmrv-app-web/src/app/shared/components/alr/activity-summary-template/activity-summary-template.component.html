@@ -1,0 +1,26 @@
+<ng-container *ngIf="alrFile">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded activity level report</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="[alrFile]"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+<ng-container *ngIf="files?.length">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="files"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

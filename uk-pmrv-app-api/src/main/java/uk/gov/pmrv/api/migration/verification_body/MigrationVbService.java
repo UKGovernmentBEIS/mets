@@ -1,22 +1,23 @@
 package uk.gov.pmrv.api.migration.verification_body;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.utils.ExceptionUtils;
-import uk.gov.pmrv.api.migration.MigrationBaseService;
-import uk.gov.pmrv.api.migration.MigrationEndpoint;
-import uk.gov.pmrv.api.referencedata.domain.Country;
-import uk.gov.pmrv.api.referencedata.repository.CountryRepository;
-import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEditDTO;
-
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.utils.ExceptionUtils;
+import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.migration.MigrationBaseService;
+import uk.gov.pmrv.api.migration.MigrationEndpoint;
+import uk.gov.netz.api.referencedata.domain.Country;
+import uk.gov.netz.api.referencedata.repository.CountryRepository;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEditDTO;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,6 @@ import java.util.stream.Collectors;
 @Service
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 @Log4j2
-@RequiredArgsConstructor
 public class MigrationVbService extends MigrationBaseService {
     private static final String QUERY_BASE =
         "select v.fldVerifierID id, \r\n" +
@@ -67,6 +67,16 @@ public class MigrationVbService extends MigrationBaseService {
     private final MigrationVbCreationService migrationVbCreationService;
     private final JdbcTemplate migrationJdbcTemplate;
     private final Validator validator;
+
+    public MigrationVbService(CountryRepository countryRepository,
+                              MigrationVbCreationService migrationVbCreationService,
+                              @Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                              Validator validator) {
+        this.countryRepository = countryRepository;
+        this.migrationVbCreationService = migrationVbCreationService;
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.validator = validator;
+    }
 
     @Override
     public String getResource() {

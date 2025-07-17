@@ -6,6 +6,6 @@ export function uncertaintyAnalysisStatus(state: PermitApplicationState): TaskIt
   return state.permitSectionsCompleted.uncertaintyAnalysis?.[0]
     ? 'complete'
     : uncertaintyAnalysis?.exist !== undefined
-    ? 'in progress'
-    : 'not started';
+      ? 'in progress'
+      : 'not started';
 }

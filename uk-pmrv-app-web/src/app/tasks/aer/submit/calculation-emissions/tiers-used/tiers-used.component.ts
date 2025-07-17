@@ -4,6 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, filter, first, iif, map, Observable, of, shareReplay, switchMap, takeUntil } from 'rxjs';
 
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { DestroySubject } from '@core/services/destroy-subject.service';
+import { BusinessErrorService } from '@error/business-error/business-error.service';
+import { catchBadRequest, ErrorCodes } from '@error/business-errors';
+
 import { GovukValidators } from 'govuk-components';
 
 import {
@@ -13,10 +18,6 @@ import {
   CalculationSourceStreamEmission,
 } from 'pmrv-api';
 
-import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
-import { DestroySubject } from '../../../../../core/services/destroy-subject.service';
-import { BusinessErrorService } from '../../../../../error/business-error/business-error.service';
-import { catchBadRequest, ErrorCodes } from '../../../../../error/business-errors';
 import { AerService } from '../../../core/aer.service';
 import { notCalculationPrimaryPFCError } from '../../../error/business-errors';
 import { areCalculationsTiersExtraConditionsMet } from '../../../shared/components/submit/emissions';
@@ -39,9 +40,8 @@ export class TiersUsedComponent {
 
   sourceStreamEmission$: Observable<CalculationSourceStreamEmission> = combineLatest([this.payload$, this.index$]).pipe(
     map(([payload, index]) => {
-      const res = (payload.aer.monitoringApproachEmissions.CALCULATION_CO2 as CalculationOfCO2Emissions)
+      return (payload.aer.monitoringApproachEmissions.CALCULATION_CO2 as CalculationOfCO2Emissions)
         ?.sourceStreamEmissions?.[index];
-      return res;
     }),
   );
 
@@ -261,13 +261,11 @@ export class TiersUsedComponent {
         : item,
     );
 
-    const data = buildTaskData(payload, sourceStreamEmissions);
-
-    return data;
+    return buildTaskData(payload, sourceStreamEmissions);
   }
 
   private navigateNext() {
-    combineLatest(this.sourceStreamEmission$, this.permitParamMonitoringTiers$)
+    combineLatest([this.sourceStreamEmission$, this.permitParamMonitoringTiers$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([sourceStreamEmission, permitParamMonitoringTiers]) => {
         let nextStep = '';
@@ -296,9 +294,15 @@ export class TiersUsedComponent {
   }
 
   private doAerTiersMatchPermitTiers(sourceStreamEmission, permitParamMonitoringTiers) {
-    const stringifiedSourceStreamEmissionTiers = JSON.stringify(sourceStreamEmission?.parameterMonitoringTiers);
-    const stringifiedPermitParamMonitoringTiers = JSON.stringify(permitParamMonitoringTiers);
+    const stringifiedSourceStreamEmissionTiers = JSON.stringify(
+      this.sortTiersByType(sourceStreamEmission?.parameterMonitoringTiers),
+    );
+    const stringifiedPermitParamMonitoringTiers = JSON.stringify(this.sortTiersByType(permitParamMonitoringTiers));
 
     return stringifiedSourceStreamEmissionTiers === stringifiedPermitParamMonitoringTiers;
+  }
+
+  private sortTiersByType(arr) {
+    return arr.sort((a, b) => a.type.localeCompare(b.type));
   }
 }

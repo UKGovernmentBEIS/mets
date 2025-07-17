@@ -5,12 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrender;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderContainer;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.PermitSurrenderAttachmentsValidator;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.PermitSurrenderSubmitValidatorService;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -65,7 +63,7 @@ class PermitSurrenderSubmitValidatorServiceTest {
         when(permitSurrenderAttachmentsValidator.attachmentsExist(Set.of(attachment1))).thenReturn(false);
         
         BusinessException be = assertThrows(BusinessException.class, () -> service.validatePermitSurrender(permitSurrenderContainer));
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_PERMIT_SURRENDER);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_PERMIT_SURRENDER);
         assertThat(be.getData()).isEqualTo(new Object[] {"Attachment not found"});
         
         verify(permitSurrenderAttachmentsValidator, times(1)).attachmentsExist(Set.of(attachment1));
@@ -86,7 +84,7 @@ class PermitSurrenderSubmitValidatorServiceTest {
         when(permitSurrenderAttachmentsValidator.sectionAttachmentsReferencedInPermitSurrender(Set.of(attachment1), Set.of(attachment1, attachment2))).thenReturn(false);
         
         BusinessException be = assertThrows(BusinessException.class, () -> service.validatePermitSurrender(permitSurrenderContainer));
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_PERMIT_SURRENDER);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_PERMIT_SURRENDER);
         assertThat(be.getData()).isEqualTo(new Object[] {"Attachment is not referenced in permit surrender"});
         
         verify(permitSurrenderAttachmentsValidator, times(1)).attachmentsExist(Set.of(attachment1));

@@ -1,25 +1,32 @@
 package uk.gov.pmrv.api.migration.permit.attachments;
 
-import static uk.gov.pmrv.api.migration.permit.MigrationPermitHelper.constructEtsSectionQuery;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.migration.MigrationConstants;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachment;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachmentRowMapper;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachmentType;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static uk.gov.pmrv.api.migration.permit.MigrationPermitHelper.constructEtsSectionQuery;
+
 @Service
-@RequiredArgsConstructor
 public class EtsPermitFileAttachmentQueryService {
 
     private final JdbcTemplate migrationJdbcTemplate;
     private final EtsFileAttachmentRowMapper fileAttachmentRowMapper;
+
+    public EtsPermitFileAttachmentQueryService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                               EtsFileAttachmentRowMapper fileAttachmentRowMapper) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.fileAttachmentRowMapper = fileAttachmentRowMapper;
+    }
 
     private static final String QUERY_BASE =
             "with XMLNAMESPACES (\r\n"

@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaRequestPayload;
@@ -42,7 +42,7 @@ public interface AviationAerCorsiaVerifyMapper {
                                    AviationAerCorsiaRequestPayload requestPayload) {
         verificationSubmitRequestTaskPayload.setAerAttachments(requestPayload.getAerAttachments());
     }
-
+    
     @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "serviceContactDetails", source = "aviationAccountInfo.serviceContactDetails")
     @Mapping(target = "aer.operatorDetails.attachmentIds", ignore = true)

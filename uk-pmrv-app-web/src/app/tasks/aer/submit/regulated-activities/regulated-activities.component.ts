@@ -14,14 +14,12 @@ import { regulatedActivitiesFormFactory } from '@tasks/aer/submit/regulated-acti
   templateUrl: './regulated-activities.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [regulatedActivitiesFormFactory],
-  styles: [
-    `
-      .float-right {
-        float: right;
-        cursor: pointer;
-      }
-    `,
-  ],
+  styles: `
+    .float-right {
+      float: right;
+      cursor: pointer;
+    }
+  `,
 })
 export class RegulatedActivitiesComponent {
   displayErrorSummary$ = new BehaviorSubject(false);

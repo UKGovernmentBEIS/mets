@@ -99,7 +99,7 @@ describe('TriggerAirComponent', () => {
             payloadType: 'EMPTY_PAYLOAD',
           },
         },
-        expectedAccountId,
+        String(expectedAccountId),
       );
     });
   });

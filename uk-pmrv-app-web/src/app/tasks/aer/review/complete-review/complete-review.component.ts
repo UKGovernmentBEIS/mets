@@ -21,7 +21,7 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
     <ng-template #completed>
       <div class="govuk-grid-row">
         <govuk-panel title="Task completed"></govuk-panel>
-        <a govukLink routerLink="/dashboard"> Return to dashboard </a>
+        <a govukLink routerLink="/dashboard">Return to dashboard</a>
       </div>
     </ng-template>
   `,

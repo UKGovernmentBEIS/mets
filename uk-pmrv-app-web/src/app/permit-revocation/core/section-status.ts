@@ -1,16 +1,20 @@
 import { PermitRevocationState } from '@permit-revocation/store/permit-revocation.state';
 import { TaskItemStatus } from '@shared/task-list/task-list.interface';
-import moment from 'moment';
+import { addDays, endOfDay, format, isAfter, isBefore, isEqual, startOfDay } from 'date-fns';
+
+const isSameOrBefore = (date1, date2) => isBefore(date1, date2) || isEqual(date1, date2);
+
+const isSameOrAfter = (date1, date2) => isEqual(date1, date2) || isAfter(date1, date2);
 
 export const resolveApplyStatus = (state: PermitRevocationState): TaskItemStatus => {
   const permitRevocation = state.permitRevocation;
   return !notInNeedsForReview(state)
     ? 'needs review'
     : state.sectionsCompleted?.REVOCATION_APPLY
-    ? 'complete'
-    : permitRevocation?.reason !== undefined
-    ? 'in progress'
-    : 'not started';
+      ? 'complete'
+      : permitRevocation?.reason !== undefined
+        ? 'in progress'
+        : 'not started';
 };
 
 export const resolveWithDrawStatus = (state: PermitRevocationState): TaskItemStatus => {
@@ -26,16 +30,16 @@ export const notInNeedsForReview = (state: PermitRevocationState): boolean => {
   const stoppedDate = state?.permitRevocation?.stoppedDate;
   const annualEmissionsReportDate = state?.permitRevocation?.annualEmissionsReportDate;
   const surrenderDate = state?.permitRevocation?.surrenderDate;
-  const add28Days = moment().add(28, 'd').set({ hour: 23, minute: 59, second: 59, millisecond: 59 });
-  add28Days.toISOString();
 
-  const effectiveDateMax = moment(add28Days).format('YYYY-MM-DD');
+  const effectiveDateMax = format(endOfDay(addDays(new Date(), 28)), 'yyyy-MM-dd');
+
   return (
     (effectiveDate && feeDate
-      ? moment(feeDate).isAfter(effectiveDate) && moment(effectiveDateMax).isSameOrBefore(effectiveDate)
+      ? isAfter(new Date(feeDate), new Date(effectiveDate)) &&
+        isSameOrBefore(new Date(effectiveDateMax), new Date(effectiveDate))
       : effectiveDate
-      ? moment(effectiveDateMax).isSameOrBefore(effectiveDate)
-      : true) &&
+        ? isSameOrBefore(new Date(effectiveDateMax), new Date(effectiveDate))
+        : true) &&
     isStoppedDateValid(stoppedDate) &&
     isAnnualEmissionsReportDateValid(annualEmissionsReportDate) &&
     isSurrenderDateValid(surrenderDate)
@@ -43,14 +47,16 @@ export const notInNeedsForReview = (state: PermitRevocationState): boolean => {
 };
 
 const isStoppedDateValid = (stoppedDate: string) => {
-  const todayMax = moment().set({ hour: 23, minute: 59, second: 59, millisecond: 59 });
-  return stoppedDate ? moment(stoppedDate).isSameOrBefore(todayMax) : true;
+  const todayMax = endOfDay(new Date());
+  return stoppedDate ? isSameOrBefore(new Date(stoppedDate), todayMax) : true;
 };
 const isAnnualEmissionsReportDateValid = (annualEmissionsReportDate: string) => {
-  const todayMin = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-  return annualEmissionsReportDate ? moment(annualEmissionsReportDate).isSameOrAfter(todayMin) : true;
+  const todayMin = startOfDay(new Date());
+
+  return annualEmissionsReportDate ? isSameOrAfter(new Date(annualEmissionsReportDate), todayMin) : true;
 };
-const isSurrenderDateValid = (surrenderDate: string) => {
-  const todayMin = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-  return surrenderDate ? moment(surrenderDate).isSameOrAfter(todayMin) : true;
+
+const isSurrenderDateValid = (surrenderDate) => {
+  const todayMin = startOfDay(new Date());
+  return surrenderDate ? isSameOrAfter(new Date(surrenderDate), todayMin) : true;
 };

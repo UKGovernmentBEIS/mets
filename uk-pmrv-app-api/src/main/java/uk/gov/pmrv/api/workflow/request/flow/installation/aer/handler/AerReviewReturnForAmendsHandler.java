@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -39,17 +39,17 @@ public class AerReviewReturnForAmendsHandler implements RequestTaskActionHandler
 
     @Override
     @Transactional
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser, RequestTaskActionEmptyPayload payload) {
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser, RequestTaskActionEmptyPayload payload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
         // Validate that at least one review group is 'Operator to amend'
         aerReviewReturnForAmendsValidatorService.validate((AerApplicationReviewRequestTaskPayload) requestTask.getPayload());
 
         // Update request payload
-        aerReviewService.saveRequestReturnForAmends(requestTask, pmrvUser);
+        aerReviewService.saveRequestReturnForAmends(requestTask, appUser);
 
         // Add AER_APPLICATION_RETURNED_FOR_AMENDS request action
-        createRequestAction(requestTask.getRequest(), pmrvUser, (AerApplicationReviewRequestTaskPayload) requestTask.getPayload());
+        createRequestAction(requestTask.getRequest(), appUser, (AerApplicationReviewRequestTaskPayload) requestTask.getPayload());
 
         // Close task
         workflowService.completeTask(requestTask.getProcessTaskId(),
@@ -61,7 +61,7 @@ public class AerReviewReturnForAmendsHandler implements RequestTaskActionHandler
         return List.of(RequestTaskActionType.AER_REVIEW_RETURN_FOR_AMENDS);
     }
 
-    private void createRequestAction(Request request, PmrvUser pmrvUser, AerApplicationReviewRequestTaskPayload taskPayload) {
+    private void createRequestAction(Request request, AppUser appUser, AerApplicationReviewRequestTaskPayload taskPayload) {
         AerApplicationReturnedForAmendsRequestActionPayload requestActionPayload = aerMapper
                 .toAerApplicationReturnedForAmendsRequestActionPayload(
                     taskPayload, 
@@ -69,6 +69,6 @@ public class AerReviewReturnForAmendsHandler implements RequestTaskActionHandler
                 );
 
         requestService.addActionToRequest(request, requestActionPayload, RequestActionType.AER_APPLICATION_RETURNED_FOR_AMENDS,
-                pmrvUser.getUserId());
+                appUser.getUserId());
     }
 }

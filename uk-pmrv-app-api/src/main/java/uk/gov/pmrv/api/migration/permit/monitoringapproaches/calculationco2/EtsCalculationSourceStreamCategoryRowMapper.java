@@ -1,10 +1,11 @@
 package uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.springframework.jdbc.core.RowMapper;
 
 public class EtsCalculationSourceStreamCategoryRowMapper implements RowMapper<EtsCalculationSourceStreamCategory> {
 

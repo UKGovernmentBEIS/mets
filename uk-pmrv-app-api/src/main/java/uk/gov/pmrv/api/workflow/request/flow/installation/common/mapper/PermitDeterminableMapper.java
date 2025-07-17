@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.common.mapper;
 
 import org.mapstruct.MappingTarget;
-
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.Determinateable;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.DeterminationType;

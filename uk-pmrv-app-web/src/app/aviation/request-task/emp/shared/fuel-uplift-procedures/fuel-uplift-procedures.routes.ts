@@ -43,7 +43,7 @@ export const EMP_FUEL_UPLIFT_PROCEDURES_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Fuel uplift procedures summary' },
+        data: { breadcrumb: 'Fuel uplift procedures' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () =>
           import('./fuel-uplift-summary/fuel-uplift-summary.component').then((c) => c.FuelUpliftSummaryComponent),

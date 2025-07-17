@@ -7,6 +7,7 @@ import {
   RequestActionUserInfo,
   RequestInfoDTO,
   RequestTaskDTO,
+  RequestTaskItemDTO,
 } from 'pmrv-api';
 
 export interface RdeState {
@@ -32,6 +33,9 @@ export interface RdeState {
   competentAuthority: RequestInfoDTO['competentAuthority'];
   isEditable: boolean;
   requestActionCreationDate?: string;
+  allowedRequestTaskActions?: RequestTaskItemDTO['allowedRequestTaskActions'];
+  assignable?: boolean;
+  userAssignCapable?: boolean;
 }
 
 export const initialState: RdeState = {

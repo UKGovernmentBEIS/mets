@@ -7,9 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.common.validation.WorkflowUsersValidator;
@@ -40,7 +40,7 @@ class SubmitRdeValidatorServiceTest {
 
     @Test
     void validate() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final RequestTask requestTask = RequestTask.builder()
                 .request(Request.builder().accountId(1L).build())
                 .dueDate(LocalDate.now())
@@ -49,20 +49,20 @@ class SubmitRdeValidatorServiceTest {
                 .deadline(LocalDate.now().plusDays(2))
                 .operators(Set.of("operator")).signatory("signatory").build();
 
-        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator"), pmrvUser)).thenReturn(true);
+        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator"), appUser)).thenReturn(true);
         when(workflowUsersValidator.isSignatoryValid(requestTask, "signatory")).thenReturn(true);
 
         // Invoke
-        service.validate(requestTask, rdePayload, pmrvUser);
+        service.validate(requestTask, rdePayload, appUser);
 
         // Verify
-        verify(workflowUsersValidator, times(1)).areOperatorsValid(1L, Set.of("operator"), pmrvUser);
+        verify(workflowUsersValidator, times(1)).areOperatorsValid(1L, Set.of("operator"), appUser);
         verify(workflowUsersValidator, times(1)).isSignatoryValid(requestTask, "signatory");
     }
 
     @Test
     void validate_whenIncompatibleType_thenThrowException() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final RequestTask requestTask = RequestTask.builder()
                 .request(Request.builder().accountId(1L).build())
                 .dueDate(LocalDate.now())
@@ -71,21 +71,21 @@ class SubmitRdeValidatorServiceTest {
                 .deadline(LocalDate.now().plusDays(2))
                 .operators(Set.of("operator")).signatory("signatory").build();
 
-        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator"), pmrvUser)).thenReturn(false);
+        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator"), appUser)).thenReturn(false);
 
         // Invoke
         BusinessException businessException = assertThrows(BusinessException.class, () ->
-                service.validate(requestTask, rdePayload, pmrvUser));
+                service.validate(requestTask, rdePayload, appUser));
 
         // Verify
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
-        verify(workflowUsersValidator, times(1)).areOperatorsValid(1L, Set.of("operator"), pmrvUser);
+        verify(workflowUsersValidator, times(1)).areOperatorsValid(1L, Set.of("operator"), appUser);
         verify(workflowUsersValidator, never()).isSignatoryValid(any(), anyString());
     }
 
     @Test
     void validate_whenExtensionDateBeforeDueDate_thenThrowException() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final RequestTask requestTask = RequestTask.builder()
                 .request(Request.builder().accountId(1L).build())
                 .dueDate(LocalDate.now().plusDays(5))
@@ -96,7 +96,7 @@ class SubmitRdeValidatorServiceTest {
 
         // Invoke
         BusinessException businessException = assertThrows(BusinessException.class, () ->
-                service.validate(requestTask, rdePayload, pmrvUser));
+                service.validate(requestTask, rdePayload, appUser));
 
         // Verify
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
@@ -106,7 +106,7 @@ class SubmitRdeValidatorServiceTest {
 
     @Test
     void validate_whenDeadlineAfterExtensionDate_thenThrowException() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final RequestTask requestTask = RequestTask.builder()
                 .request(Request.builder().accountId(1L).build())
                 .dueDate(LocalDate.now())
@@ -117,7 +117,7 @@ class SubmitRdeValidatorServiceTest {
 
         // Invoke
         BusinessException businessException = assertThrows(BusinessException.class, () ->
-                service.validate(requestTask, rdePayload, pmrvUser));
+                service.validate(requestTask, rdePayload, appUser));
 
         // Verify
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());

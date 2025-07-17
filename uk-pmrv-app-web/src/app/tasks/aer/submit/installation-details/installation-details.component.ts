@@ -13,8 +13,7 @@ import { AerApplicationSubmitRequestTaskPayload } from 'pmrv-api';
       <app-page-heading caption="Installation details">Installation and operator details</app-page-heading>
       <app-installation-details-summary
         cssClass="summary-list--edge-border"
-        [installationOperatorDetails]="installationOperatorDetails$ | async"
-      ></app-installation-details-summary>
+        [installationOperatorDetails]="installationOperatorDetails$ | async"></app-installation-details-summary>
       <app-return-link></app-return-link>
     </app-aer-task>
   `,

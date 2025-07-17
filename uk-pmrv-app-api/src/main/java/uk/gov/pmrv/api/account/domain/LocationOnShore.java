@@ -5,15 +5,14 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
+import uk.gov.pmrv.api.common.domain.Address;
 
 /**
  * The Location OnShore Entity.

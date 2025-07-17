@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountUpdateService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -62,7 +62,7 @@ class RequestAviationAccountClosureServiceTest {
 	@Test
     void applySubmitAction() {
 
-		PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+		AppUser appUser = AppUser.builder().userId("userId").build();
         AviationAccountClosureSubmitRequestTaskPayload taskPayload = createTaskPayload();
         AviationAccountClosureSubmittedRequestActionPayload actionPayload = createActionPayload();
 
@@ -71,7 +71,7 @@ class RequestAviationAccountClosureServiceTest {
 
         RequestTask requestTask = createRequestTask(taskPayload, request);
 
-        service.applySubmitAction(requestTask, pmrvUser);
+        service.applySubmitAction(requestTask, appUser);
 
         verify(validatorService, times(1)).validateAviationAccountClosureObject(
         		taskPayload.getAviationAccountClosure()
@@ -84,7 +84,7 @@ class RequestAviationAccountClosureServiceTest {
             );
         verify(aviationAccountUpdateService, times(1)).closeAviationAccount(
         		1L,
-        		pmrvUser,
+        		appUser,
         		taskPayload.getAviationAccountClosure().getReason()
             );
         assertEquals(taskPayload.getAviationAccountClosure(), requestPayload.getAviationAccountClosure());    

@@ -12,8 +12,10 @@ import { emissionPointDetailsFormProvider } from '@tasks/aer/submit/emission-poi
   selector: 'app-emission-point-details',
   template: `
     <app-aer-task>
-      <app-emission-point-details-template (formSubmit)="onSubmit()" [form]="form" [isEditing]="isEditing$ | async">
-      </app-emission-point-details-template>
+      <app-emission-point-details-template
+        (formSubmit)="onSubmit()"
+        [form]="form"
+        [isEditing]="isEditing$ | async"></app-emission-point-details-template>
     </app-aer-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,12 +23,10 @@ import { emissionPointDetailsFormProvider } from '@tasks/aer/submit/emission-poi
 })
 export class EmissionPointDetailsComponent {
   emissionPointId = this.form.get('id').value;
-  isEditing$ = this.aerService
-    .getTask('emissionPoints')
-    .pipe(
-      filter((emissionPoints) => !!emissionPoints),
-      map((emissionPoints) => emissionPoints.some((ep) => ep.id === this.emissionPointId)),
-    );
+  isEditing$ = this.aerService.getTask('emissionPoints').pipe(
+    filter((emissionPoints) => !!emissionPoints),
+    map((emissionPoints) => emissionPoints.some((ep) => ep.id === this.emissionPointId)),
+  );
 
   constructor(
     @Inject(AER_TASK_FORM) readonly form: UntypedFormGroup,

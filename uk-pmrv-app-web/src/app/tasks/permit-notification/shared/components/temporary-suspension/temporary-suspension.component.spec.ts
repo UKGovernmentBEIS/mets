@@ -3,10 +3,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ControlContainer, FormBuilder, FormGroup, FormGroupName } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
+import { SharedModule } from '@shared/shared.module';
+import { BasePage } from '@testing';
+
 import { TemporarySuspension } from 'pmrv-api';
 
-import { BasePage } from '../../../../../../testing';
-import { SharedModule } from '../../../../../shared/shared.module';
 import { TemporarySuspensionComponent } from './temporary-suspension.component';
 
 describe('TemporarySuspensionComponent', () => {

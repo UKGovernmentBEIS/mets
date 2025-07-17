@@ -17,17 +17,15 @@ import { InPersonSiteVisit, OpinionStatement } from 'pmrv-api';
   selector: 'app-in-person-visit',
   templateUrl: './in-person-visit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      .container {
-        position: relative;
-      }
+  styles: `
+    .container {
+      position: relative;
+    }
 
-      .float-right {
-        float: right;
-      }
-    `,
-  ],
+    .float-right {
+      float: right;
+    }
+  `,
   providers: [inPersonVisitFormProvider],
 })
 export class InPersonVisitComponent implements PendingRequest {

@@ -17,8 +17,7 @@ describe('AerVerificationReviewDecisionGroupSummaryComponent', () => {
   @Component({
     template: `
       <app-aer-verification-review-decision-group-summary
-        [data]="data"
-      ></app-aer-verification-review-decision-group-summary>
+        [data]="data"></app-aer-verification-review-decision-group-summary>
     `,
   })
   class TestComponent {

@@ -34,7 +34,7 @@ export class ResponseComponent implements OnInit {
   );
 
   getDownloadUrl(): string {
-    return this.permitNotificationService.createBaseFileDownloadUrl();
+    return this.permitNotificationService.getBaseFileDownloadUrl();
   }
   constructor(
     readonly route: ActivatedRoute,

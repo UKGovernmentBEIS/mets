@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.common.actionhandler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -25,7 +25,7 @@ public abstract class RequestRecallActionHandler implements RequestTaskActionHan
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final RequestTaskActionEmptyPayload payload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         final Request request = requestTask.getRequest();
@@ -33,7 +33,7 @@ public abstract class RequestRecallActionHandler implements RequestTaskActionHan
         requestService.addActionToRequest(request,
             null,
             getRequestActionType(),
-            pmrvUser.getUserId());
+            appUser.getUserId());
 
         workflowService.completeTask(requestTask.getProcessTaskId());
     }

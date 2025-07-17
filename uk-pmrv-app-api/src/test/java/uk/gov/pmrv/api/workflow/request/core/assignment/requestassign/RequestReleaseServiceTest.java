@@ -1,29 +1,27 @@
 package uk.gov.pmrv.api.workflow.request.core.assignment.requestassign;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
+import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningRequestPayload;
+
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW;
-
-import java.util.Optional;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.rules.domain.ResourceType;
-import uk.gov.pmrv.api.authorization.rules.services.AuthorizationRulesQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.workflow.request.core.domain.Request;
-import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
-import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningRequestPayload;
 
 @ExtendWith(MockitoExtension.class)
 class RequestReleaseServiceTest {
@@ -51,7 +49,7 @@ class RequestReleaseServiceTest {
             .build();
 
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.of(RoleType.OPERATOR));
+            .thenReturn(Optional.of(RoleTypeConstants.OPERATOR));
 
         service.releaseRequest(requestTask);
         assertEquals(regulatorAssignee, request.getPayload().getRegulatorAssignee());
@@ -76,7 +74,7 @@ class RequestReleaseServiceTest {
             .build();
 
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.of(RoleType.OPERATOR));
+            .thenReturn(Optional.of(RoleTypeConstants.OPERATOR));
 
         service.releaseRequest(requestTask);
 
@@ -100,7 +98,7 @@ class RequestReleaseServiceTest {
             .build();
 
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.of(RoleType.OPERATOR));
+            .thenReturn(Optional.of(RoleTypeConstants.OPERATOR));
 
         service.releaseRequest(requestTask);
 
@@ -121,7 +119,7 @@ class RequestReleaseServiceTest {
             .build();
 
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.of(RoleType.OPERATOR));
+            .thenReturn(Optional.of(RoleTypeConstants.OPERATOR));
 
         service.releaseRequest(requestTask);
 
@@ -146,7 +144,7 @@ class RequestReleaseServiceTest {
             .build();
 
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.of(RoleType.REGULATOR));
+            .thenReturn(Optional.of(RoleTypeConstants.REGULATOR));
 
         service.releaseRequest(requestTask);
 
@@ -173,7 +171,7 @@ class RequestReleaseServiceTest {
             .build();
 
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.of(RoleType.REGULATOR));
+            .thenReturn(Optional.of(RoleTypeConstants.REGULATOR));
 
         service.releaseRequest(requestTask);
         assertEquals(operatorAssignee, request.getPayload().getOperatorAssignee());
@@ -196,7 +194,7 @@ class RequestReleaseServiceTest {
             .build();
 
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.of(RoleType.REGULATOR));
+            .thenReturn(Optional.of(RoleTypeConstants.REGULATOR));
 
         service.releaseRequest(requestTask);
 
@@ -217,7 +215,7 @@ class RequestReleaseServiceTest {
             .build();
 
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.of(RoleType.REGULATOR));
+            .thenReturn(Optional.of(RoleTypeConstants.REGULATOR));
 
         service.releaseRequest(requestTask);
 
@@ -267,7 +265,7 @@ class RequestReleaseServiceTest {
             .build();
 
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-            .thenReturn(Optional.of(RoleType.VERIFIER));
+            .thenReturn(Optional.of(RoleTypeConstants.VERIFIER));
 
         service.releaseRequest(requestTask);
 

@@ -64,7 +64,7 @@ export class ImprovementExistingComponent {
   }
 
   getDownloadUrl() {
-    return this.airService.createBaseFileDownloadUrl();
+    return this.airService.getBaseFileDownloadUrl();
   }
 
   private getFormData(payload: AirApplicationSubmitRequestTaskPayload): OperatorAirImprovementAlreadyMadeResponse {

@@ -1,0 +1,45 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true"
+>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    caption="Monitoring Methodology Plan"
+    heading="Upload a flow diagram"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <p class="govuk-body">The diagram must include:</p>
+    <ul class="govuk-body">
+      <li>
+        the technical elements of the installation, identifying emission sources and heat-producing and consuming units
+      </li>
+      <li>
+        all energy and material flows, including source streams, emission sources, measurable and non-measurable heat
+        flows, relevant electricity flows and waste gases
+      </li>
+      <li>the points of measurement and metering devices</li>
+      <li>
+        boundaries of the sub-installations, indicating the split between sub-installations serving sectors at risk of
+        carbon leakage and those serving other sectors, based on NACE rev. 2 or PRODCOM 2010
+      </li>
+    </ul>
+    <p class="govuk-body">
+      In complex cases a more detailed flow diagram should be uploaded for each relevant sub-installation.
+    </p>
+
+    <app-multiple-file-input
+      [baseDownloadUrl]="getDownloadUrl()"
+      [label]="(isFileUploaded$ | async) ? 'Upload another file' : 'Upload a file'"
+      formControlName="flowDiagrams"
+      listTitle="Uploaded files"
+    ></app-multiple-file-input>
+  </app-wizard-step>
+
+  <app-list-return-link
+    reviewGroupTitle="Monitoring methodology"
+    reviewGroupUrl="monitoring-methodology-plan"
+  ></app-list-return-link>
+</app-permit-task>

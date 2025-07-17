@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { distinctUntilChanged, EMPTY, first, map, Observable, pluck, switchMap, tap } from 'rxjs';
+import { distinctUntilChanged, EMPTY, first, map, Observable, switchMap, tap } from 'rxjs';
 
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
@@ -11,6 +11,7 @@ import {
   taskSubmitNotFoundError,
 } from '@shared/errors/request-task-error';
 import { StatusKey } from '@tasks/aer/core/aer-task.type';
+import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 import { CommonTasksState } from '@tasks/store/common-tasks.state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
@@ -22,9 +23,9 @@ import {
   AerApplicationVerificationSubmitRequestTaskPayload,
   AerInherentReceivingTransferringInstallation,
   AerVerificationReportDataReviewDecision,
+  AerVerificationReturnToOperatorRequestTaskActionPayload,
   ChargingZoneDTO,
   ReportingDataService,
-  RequestMetadata,
   RequestTaskActionPayload,
   RequestTaskActionProcessDTO,
   SourceStreamCalculationParametersInfo,
@@ -36,14 +37,16 @@ import {
 import { AER_AMEND_STATUS_PREFIX, amendTasksPerReviewSection } from './aer.amend.types';
 
 @Injectable({ providedIn: 'root' })
-export class AerService {
+export class AerService extends TasksHelperService {
   constructor(
-    private readonly store: CommonTasksStore,
-    private readonly tasksService: TasksService,
+    store: CommonTasksStore,
+    tasksService: TasksService,
+    businessErrorService: BusinessErrorService,
     private readonly reportingDataService: ReportingDataService,
-    private readonly businessErrorService: BusinessErrorService,
     private readonly sourceStreamsService: SourceStreamsService,
-  ) {}
+  ) {
+    super(store, tasksService, businessErrorService);
+  }
 
   private get attachments() {
     let attachments: { [key: string]: string };
@@ -79,10 +82,6 @@ export class AerService {
     )?.verificationAttachments;
   }
 
-  getPayload(): Observable<any> {
-    return this.store.payload$.pipe(map((payload) => payload));
-  }
-
   getMappedPayload<T>(pathTree: string[]): Observable<T> {
     return this.store.payload$.pipe(
       first(),
@@ -95,12 +94,15 @@ export class AerService {
   }
 
   getTask<K extends keyof Aer>(aerTask: K): Observable<Aer[K]> {
-    return this.getPayload().pipe(pluck('aer', aerTask), distinctUntilChanged());
+    return this.getPayload().pipe(
+      map((x) => x?.['aer']?.[aerTask]),
+      distinctUntilChanged(),
+    );
   }
 
   getDownloadUrlFiles(files: string[], isVerification = false): { downloadUrl: string; fileName: string }[] {
     const attachments: { [key: string]: string } = isVerification ? this.verificationAttachments : this.attachments;
-    const url = this.createBaseFileDownloadUrl();
+    const url = this.getBaseFileDownloadUrl();
     return (
       files?.map((id) => ({
         downloadUrl: url + `${id}`,
@@ -109,25 +111,8 @@ export class AerService {
     );
   }
 
-  createBaseFileDownloadUrl() {
-    const requestTaskId = this.store.requestTaskId;
-    return `/tasks/${requestTaskId}/file-download/`;
-  }
-
   get requestTaskId() {
     return this.store.requestTaskId;
-  }
-
-  get isEditable$(): Observable<boolean> {
-    return this.store.isEditable$;
-  }
-
-  get requestMetadata$(): Observable<RequestMetadata> {
-    return this.store.requestMetadata$;
-  }
-
-  get daysRemaining$() {
-    return this.store.requestTaskItem$.pipe(map((task) => task?.requestTask?.daysRemaining));
   }
 
   get competentAuthority$() {
@@ -384,7 +369,7 @@ export class AerService {
       );
   }
 
-  postSubmit(actionType: RequestTaskActionProcessDTO['requestTaskActionType']) {
+  postSubmit(actionType: RequestTaskActionProcessDTO['requestTaskActionType'], payload?: any) {
     return this.store.pipe(
       first(),
       switchMap((state) =>
@@ -393,7 +378,7 @@ export class AerService {
           requestTaskId: state.requestTaskItem.requestTask.id,
           requestTaskActionPayload: this.createRequestTaskActionPayload(
             actionType,
-            state.requestTaskItem.requestTask.payload,
+            payload || state.requestTaskItem.requestTask.payload,
           ),
         }),
       ),
@@ -457,6 +442,12 @@ export class AerService {
           payloadType: 'AER_REQUEST_AMENDS_VERIFICATION_PAYLOAD',
           verificationSectionsCompleted: payload.verificationSectionsCompleted,
         } as RequestTaskActionPayload;
+      case 'AER_VERIFICATION_RETURN_TO_OPERATOR':
+        return {
+          payloadType: 'AER_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD',
+          changesRequired: payload.changesRequired,
+        } as AerVerificationReturnToOperatorRequestTaskActionPayload;
+
       default:
         return {
           payloadType: 'EMPTY_PAYLOAD',

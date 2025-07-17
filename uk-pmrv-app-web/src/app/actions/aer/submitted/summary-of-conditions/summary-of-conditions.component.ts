@@ -10,8 +10,8 @@ import { AerService } from '../../core/aer.service';
   selector: 'app-summary-of-conditions',
   template: `
     <app-action-task header="Summary of conditions, changes, clarifications and variations" [breadcrumb]="true">
-      <app-summary-of-conditions-group [summaryOfConditionsInfo]="summaryOfConditionsInfo$ | async">
-      </app-summary-of-conditions-group>
+      <app-summary-of-conditions-group
+        [summaryOfConditionsInfo]="summaryOfConditionsInfo$ | async"></app-summary-of-conditions-group>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

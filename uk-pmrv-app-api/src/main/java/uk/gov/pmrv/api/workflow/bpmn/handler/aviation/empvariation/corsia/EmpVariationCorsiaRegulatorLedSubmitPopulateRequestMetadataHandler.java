@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.submitregulatorled.service.EmpVariationCorsiaRegulatorLedSubmittedPopulateRequestMetadataService;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.common.service.EmpVariationCorsiaPopulateRequestMetadataService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 
 @Service
 @RequiredArgsConstructor
 public class EmpVariationCorsiaRegulatorLedSubmitPopulateRequestMetadataHandler implements JavaDelegate {
 
-    private final EmpVariationCorsiaRegulatorLedSubmittedPopulateRequestMetadataService service;
+    private final EmpVariationCorsiaPopulateRequestMetadataService service;
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {

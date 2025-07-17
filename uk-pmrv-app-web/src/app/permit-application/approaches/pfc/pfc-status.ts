@@ -15,20 +15,20 @@ export function status(state: PermitApplicationState): TaskItemStatus {
     tiersStatuses.every((status) => status === 'complete')
     ? 'complete'
     : tiersStatuses.some((status) => status === 'needs review')
-    ? 'needs review'
-    : staticStatuses.some((status) => state.permitSectionsCompleted[status]?.[0]) ||
-      tiersStatuses.some((status) => status === 'in progress' || status === 'complete') ||
-      PFCTier2EmissionFactorSubtaskStatus(state) === 'in progress'
-    ? 'in progress'
-    : 'not started';
+      ? 'needs review'
+      : staticStatuses.some((status) => state.permitSectionsCompleted[status]?.[0]) ||
+          tiersStatuses.some((status) => status === 'in progress' || status === 'complete') ||
+          PFCTier2EmissionFactorSubtaskStatus(state) === 'in progress'
+        ? 'in progress'
+        : 'not started';
 }
 
 export function PFCTier2EmissionFactorSubtaskStatus(state: PermitApplicationState) {
   return state.permitSectionsCompleted.CALCULATION_PFC_Tier2EmissionFactor?.[0]
     ? 'complete'
     : (state.permit.monitoringApproaches?.CALCULATION_PFC as CalculationOfPFCMonitoringApproach)?.tier2EmissionFactor
-    ? 'in progress'
-    : 'not started';
+      ? 'in progress'
+      : 'not started';
 }
 
 /** Returns the status of source stream category applier tier with given index */
@@ -37,8 +37,8 @@ export function categoryTierStatus(state: PermitApplicationState, index: number)
     ? categoryTierStatuses.every((status) => state.permitSectionsCompleted[status]?.[index])
       ? 'complete'
       : categoryTierStatuses.some((status) => state.permitSectionsCompleted[status]?.[index])
-      ? 'in progress'
-      : 'not started'
+        ? 'in progress'
+        : 'not started'
     : 'needs review';
 }
 
@@ -59,18 +59,18 @@ export function categoryTierSubtaskStatus(
       return categoryTierSubtaskStatus(state, 'CALCULATION_PFC_Category', index) === 'not started'
         ? 'cannot start yet'
         : activityDataExist(state, index)
-        ? state.permitSectionsCompleted[key]?.[index]
-          ? 'complete'
-          : 'in progress'
-        : 'not started';
+          ? state.permitSectionsCompleted[key]?.[index]
+            ? 'complete'
+            : 'in progress'
+          : 'not started';
     case 'CALCULATION_PFC_Emission_Factor':
       return categoryTierSubtaskStatus(state, 'CALCULATION_PFC_Category', index) === 'not started'
         ? 'cannot start yet'
         : isCategoryTierEmissionFactorExist(state, index)
-        ? state.permitSectionsCompleted[key]?.[index]
-          ? 'complete'
-          : 'in progress'
-        : 'not started';
+          ? state.permitSectionsCompleted[key]?.[index]
+            ? 'complete'
+            : 'in progress'
+          : 'not started';
     default:
       return state.permitSectionsCompleted[key]?.[index] ? 'complete' : 'not started';
   }
@@ -131,5 +131,5 @@ export const staticStatuses = [
 
 export type statuses =
   | 'CALCULATION_PFC_Category_Tier'
-  | typeof staticStatuses[number]
-  | typeof categoryTierStatuses[number];
+  | (typeof staticStatuses)[number]
+  | (typeof categoryTierStatuses)[number];

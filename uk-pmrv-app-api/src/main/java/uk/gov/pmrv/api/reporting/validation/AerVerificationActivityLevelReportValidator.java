@@ -19,6 +19,7 @@ public class AerVerificationActivityLevelReportValidator implements AerVerificat
     public AerValidationResult validate(AerVerificationReport verificationReport,
                                         PermitOriginatedData permitOriginatedData) {
         List<AerViolation> violations = new ArrayList<>();
+        //TODO: waste
         if (isActivityLevelReportNotApplicableForHSE(verificationReport, permitOriginatedData)) {
             violations.add(new AerViolation(AerVerificationReport.class.getSimpleName(),
                 AerViolation.AerViolationMessage.VERIFICATION_ACTIVITY_LEVEL_REPORT_NOT_APPLICABLE_HSE));

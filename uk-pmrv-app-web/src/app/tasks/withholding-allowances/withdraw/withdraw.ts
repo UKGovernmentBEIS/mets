@@ -16,6 +16,6 @@ export function getSectionStatus(
   return payload?.sectionsCompleted['WITHDRAWAL_REASON_CHANGE']
     ? 'complete'
     : payload?.sectionsCompleted['WITHDRAWAL_REASON_CHANGE'] === false
-    ? 'in progress'
-    : 'not started';
+      ? 'in progress'
+      : 'not started';
 }

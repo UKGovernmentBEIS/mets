@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 import org.springframework.util.CollectionUtils;
-
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerDataReviewDecision;
 import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerDataReviewDecisionType;

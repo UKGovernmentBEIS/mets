@@ -9,11 +9,9 @@ import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestExpirationType;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestExpirationVarsBuilder;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service.PermitNotificationSendEventService;
+import uk.gov.pmrv.api.workflow.utils.DateUtils;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 
@@ -38,7 +36,7 @@ class PermitNotificationSendEventServiceTest {
 
         final String requestId = "1";
         final LocalDate dueDate = LocalDate.of(2023, 1, 1);
-        final Date expirationDate = Date.from(dueDate.atTime(LocalTime.MIN).atZone(ZoneId.systemDefault()).toInstant());
+        final Date expirationDate = DateUtils.atEndOfDay(dueDate);
         Map<String, Object> vars = Map.of(
                 "var1", "val1"
                 );

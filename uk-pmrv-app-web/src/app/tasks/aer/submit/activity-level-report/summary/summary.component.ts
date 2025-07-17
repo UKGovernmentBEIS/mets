@@ -16,8 +16,7 @@ import { AerApplicationSubmitRequestTaskPayload } from 'pmrv-api';
       <app-activity-level-report-group
         [activityLevelReport]="activityLevelReport$ | async"
         [documentFiles]="documentFiles$ | async"
-        [isEditable]="isEditable$ | async"
-      ></app-activity-level-report-group>
+        [isEditable]="isEditable$ | async"></app-activity-level-report-group>
       <div class="govuk-button-group" *ngIf="isEditable$ | async">
         <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
       </div>

@@ -19,7 +19,7 @@ import { MaterialityLevelFormProvider } from '@aviation/request-task/aer/ukets/a
 import { canActivateAviationAerDataGaps } from '@aviation/request-task/aer/ukets/tasks/data-gaps/data-gaps.guard';
 import { DataGapsFormProvider } from '@aviation/request-task/aer/ukets/tasks/data-gaps/data-gaps-form.provider';
 import { canActivateAerEmissionsReductionClaim } from '@aviation/request-task/aer/ukets/tasks/emissions-reduction-claim/emissions-reduction-claim.guard';
-import { aerEmissionsReductionClaimFormProvider } from '@aviation/request-task/aer/ukets/tasks/emissions-reduction-claim/emissions-reduction-claim-form.provider';
+import { AerEmissionsReductionClaimFormProvider } from '@aviation/request-task/aer/ukets/tasks/emissions-reduction-claim/emissions-reduction-claim-form.provider';
 import { AerMonitoringApproachFormProvider } from '@aviation/request-task/aer/ukets/tasks/monitoring-approach';
 import { canActivateMonitoringApproach } from '@aviation/request-task/aer/ukets/tasks/monitoring-approach/monitoring-approach.guards';
 import { OperatorDetailsFormProvider } from '@aviation/request-task/aer/ukets/tasks/operator-details';
@@ -137,29 +137,34 @@ export const AER_VERIFY_CHILD_ROUTES: Routes = [
   // AER operator's completed tasks
   {
     path: 'service-contact-details-summary',
+    data: { pageTitle: 'Service contact details', breadcrumb: true },
     loadComponent: () => import('./tasks/service-contact-details/service-contact-details-summary.component'),
   },
   {
     path: 'operator-details-summary',
     canActivate: [canActivateOperatorDetails],
+    data: { pageTitle: 'Check your answers', breadcrumb: 'Operator details' },
     providers: [{ provide: TASK_FORM_PROVIDER, useClass: OperatorDetailsFormProvider }],
     loadComponent: () => import('./tasks/operator-details/operator-details-summary.component'),
   },
   {
     path: 'monitoring-plan-changes-summary',
     canActivate: [canActivateMonitoringPlanChanges],
+    data: { pageTitle: 'Check your answers', breadcrumb: 'Monitoring plan changes' },
     providers: [{ provide: TASK_FORM_PROVIDER, useClass: MonitoringPlanChangesFormProvider }],
     loadComponent: () => import('./tasks/monitoring-plan-changes/monitoring-plan-changes-summary.component'),
   },
   {
     path: 'monitoring-approach-summary',
     canActivate: [canActivateMonitoringApproach],
+    data: { pageTitle: 'Check your answers', breadcrumb: 'Monitoring approach' },
     providers: [{ provide: TASK_FORM_PROVIDER, useClass: AerMonitoringApproachFormProvider }],
     loadComponent: () => import('./tasks/monitoring-approach/monitoring-approach-summary.component'),
   },
   {
     path: 'aggregated-consumption-flight-data-summary',
     canActivate: [canActivateAggregatedConsumptionFlightData],
+    data: { pageTitle: 'Check your answers', breadcrumb: 'Aggregated consumption and flight data' },
     providers: [{ provide: TASK_FORM_PROVIDER, useClass: AggregatedConsumptionFlightDataFormProvider }],
     loadComponent: () =>
       import('./tasks/aggregated-consumption-flight-data/aggregated-consumption-flight-data-summary.component'),
@@ -167,30 +172,35 @@ export const AER_VERIFY_CHILD_ROUTES: Routes = [
   {
     path: 'aircraft-types-data-summary',
     canActivate: [canActivateAircraftTypesData],
+    data: { pageTitle: 'Check your answers', breadcrumb: 'Aircraft types data' },
     providers: [{ provide: TASK_FORM_PROVIDER, useClass: AircraftTypesDataFormProvider }],
     loadComponent: () => import('./tasks/aircraft-types-data/aircraft-types-data-summary.component'),
   },
   {
     path: 'saf-summary',
     canActivate: [canActivateAerEmissionsReductionClaim],
-    providers: [{ provide: TASK_FORM_PROVIDER, useClass: aerEmissionsReductionClaimFormProvider }],
+    data: { pageTitle: 'Check your answers', breadcrumb: 'Emissions reduction claim' },
+    providers: [{ provide: TASK_FORM_PROVIDER, useClass: AerEmissionsReductionClaimFormProvider }],
     loadComponent: () => import('./tasks/emissions-reduction-claim/emissions-reduction-claim-summary.component'),
   },
   {
     path: 'data-gaps-summary',
     canActivate: [canActivateAviationAerDataGaps],
+    data: { pageTitle: 'Check your answers', breadcrumb: 'Data gaps' },
     providers: [{ provide: TASK_FORM_PROVIDER, useClass: DataGapsFormProvider }],
     loadComponent: () => import('./tasks/data-gaps/data-gaps-summary.component'),
   },
   {
     path: 'additional-documents-summary',
     canActivate: [canActivateAdditionalDocuments],
+    data: { pageTitle: 'Check your answers', breadcrumb: 'Additional documents and information' },
     providers: [aerAdditionalDocumentsFormProvider],
     loadComponent: () => import('./tasks/additional-documents/additional-documents-summary.component'),
   },
   {
     path: 'total-emissions-summary',
     canActivate: [canActivateTotalEmissions],
+    data: { pageTitle: 'Total emissions', breadcrumb: true },
     providers: [{ provide: TASK_FORM_PROVIDER, useClass: TotalEmissionsFormProvider }],
     loadComponent: () => import('./tasks/total-emissions/total-emissions-summary.component'),
   },

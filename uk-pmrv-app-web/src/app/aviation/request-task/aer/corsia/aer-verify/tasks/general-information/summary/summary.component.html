@@ -2,6 +2,7 @@
   <app-page-heading>{{ vm.heading }}</app-page-heading>
 
   <app-general-information-corsia-template
+    *ngIf="vm.generalInformation"
     [data]="vm.generalInformation"
     [isEditable]="vm.isEditable"
     [queryParams]="{ change: true }"

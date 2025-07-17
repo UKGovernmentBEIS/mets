@@ -1,4 +1,4 @@
-type CrfCategory =
+export type CrfCategory =
   | '_1_A_1'
   | '_1_A_2'
   | '_1_A_3'
@@ -13,6 +13,7 @@ type CrfCategory =
   | '_2_E'
   | '_2_F'
   | '_2_G';
+
 type CrfCode =
   | '_1_A_1_A'
   | '_1_A_1_B'
@@ -82,6 +83,23 @@ type CrfCode =
   | '_2_G_2'
   | '_2_G_3'
   | '_2_G_4';
+
+export const crfCategories: CrfCategory[] = [
+  '_1_A_1',
+  '_1_A_2',
+  '_1_A_3',
+  '_1_A_4',
+  '_1_A_5',
+  '_1_B_1',
+  '_1_B_2',
+  '_2_A',
+  '_2_B',
+  '_2_C',
+  '_2_D',
+  '_2_E',
+  '_2_F',
+  '_2_G',
+];
 
 export const activityItemNameMap: Record<CrfCategory | CrfCode, string> = {
   _1_A_1: 'Energy Industries',

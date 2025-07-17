@@ -10,8 +10,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.reporting.domain.AerContainer;
 import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationReport;
 
@@ -60,7 +60,7 @@ class AerVerificationReportExistenceValidatorTest {
                 () -> aerVerificationReportExistenceValidator.validate(aerContainer, accountId));
 
         // Verify
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AER);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AER);
         verify(installationAccountQueryService, times(1)).getInstallationAccountInfoDTOById(accountId);
     }
 }

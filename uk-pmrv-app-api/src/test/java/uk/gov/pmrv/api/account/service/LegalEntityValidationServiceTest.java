@@ -8,11 +8,11 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityStatus;
 import uk.gov.pmrv.api.account.repository.LegalEntityRepository;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
 import java.util.List;
 
@@ -42,7 +42,7 @@ class LegalEntityValidationServiceTest {
 
         BusinessException be = assertThrows(BusinessException.class,
             () -> service.validateNameExistenceInOtherActiveLegalEntities(name, id));
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.LEGAL_ENTITY_ALREADY_EXISTS);
 
         verify(legalEntityRepository, times(1))
             .existsByNameAndStatusAndIdNot(name, LegalEntityStatus.ACTIVE, id);
@@ -63,12 +63,12 @@ class LegalEntityValidationServiceTest {
 
     @Test
     void isExistingActiveLegalEntity_regulator() {
-        final PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        final AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         final String leName = "lename";
         when(legalEntityRepository.existsByNameAndStatus(leName, LegalEntityStatus.ACTIVE)).thenReturn(true);
 
         //invoke
-        boolean result = service.isExistingActiveLegalEntityName(leName, pmrvUser);
+        boolean result = service.isExistingActiveLegalEntityName(leName, appUser);
 
         //assert
         assertThat(result).isTrue();
@@ -80,21 +80,21 @@ class LegalEntityValidationServiceTest {
 
     @Test
     void isExistingActiveLegalEntity_operator() {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").roleType(RoleType.OPERATOR)
+        AppUser appUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.OPERATOR)
                 .authorities(List.of(
-                        PmrvAuthority.builder().accountId(1L).build()
+                        AppAuthority.builder().accountId(1L).build()
                 )).build();
         final String leName = "lename";
-        when(legalEntityRepository.existsActiveLegalEntityNameInAnyOfAccounts(leName, pmrvUser.getAccounts())).thenReturn(true);
+        when(legalEntityRepository.existsActiveLegalEntityNameInAnyOfAccounts(leName, appUser.getAccounts())).thenReturn(true);
 
         //invoke
-        boolean result = service.isExistingActiveLegalEntityName(leName, pmrvUser);
+        boolean result = service.isExistingActiveLegalEntityName(leName, appUser);
 
         //assert
         assertThat(result).isTrue();
 
         //verify mocks
         verify(legalEntityRepository, never()).existsByNameAndStatus(leName, LegalEntityStatus.ACTIVE);
-        verify(legalEntityRepository, times(1)).existsActiveLegalEntityNameInAnyOfAccounts(leName, pmrvUser.getAccounts());
+        verify(legalEntityRepository, times(1)).existsActiveLegalEntityNameInAnyOfAccounts(leName, appUser.getAccounts());
     }
 }

@@ -51,7 +51,7 @@ export class EmissionSourcesPageComponent {
 
   aircraftTypes$ = this.form.controls.aircraftTypes.valueChanges.pipe(
     startWith(this.form.controls.aircraftTypes.value),
-    map((aircrafTypes) => aircrafTypes.map(appendIndex)),
+    map((aircrafTypes) => aircrafTypes.map(appendIndex as any)),
   );
 
   isFUMM = isFUMM(this.store.getValue().requestTaskItem?.requestTask?.payload as EmpRequestTaskPayloadUkEts);

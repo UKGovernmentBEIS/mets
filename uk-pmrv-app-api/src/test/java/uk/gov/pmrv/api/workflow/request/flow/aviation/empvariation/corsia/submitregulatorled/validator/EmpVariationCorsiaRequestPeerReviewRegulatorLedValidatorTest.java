@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -48,12 +48,12 @@ class EmpVariationCorsiaRequestPeerReviewRegulatorLedValidatorTest {
 				.peerReviewer("peer")
 				.build();
 		
-		PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+		AppUser appUser = AppUser.builder().userId("user").build();
 		
-		cut.validate(requestTask, payload, pmrvUser);
+		cut.validate(requestTask, payload, appUser);
 		
 		verify(peerReviewerTaskAssignmentValidator, timeout(1)).validate(RequestTaskType.EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW, payload.getPeerReviewer(),
-				pmrvUser);
+				appUser);
 		
 		verify(empValidator, times(1)).validateEmp(requestTaskPayload);
 	}

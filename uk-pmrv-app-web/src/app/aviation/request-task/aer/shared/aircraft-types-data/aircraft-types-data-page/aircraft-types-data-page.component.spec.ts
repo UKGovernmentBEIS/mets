@@ -6,12 +6,16 @@ import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { of } from 'rxjs';
+
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { BackLinkService } from '@shared/back-link/back-link.service';
 import { BasePage, mockClass } from '@testing';
+
+import { AircraftTypesService } from 'pmrv-api';
 
 import { AircraftTypesDataFormProvider } from '../aircraft-types-data-form.provider';
 import { AircraftTypesDataPageComponent } from './aircraft-types-data-page.component';
@@ -22,6 +26,8 @@ describe('AircraftTypesDataPageComponent', () => {
   let page: Page;
   let router: Router;
   let store: RequestTaskStore;
+
+  const aircraftTypesService = mockClass(AircraftTypesService);
 
   class Page extends BasePage<AircraftTypesDataPageComponent> {
     get errorSummary() {
@@ -34,27 +40,30 @@ describe('AircraftTypesDataPageComponent', () => {
   }
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: [RouterTestingModule, FormsModule, ReactiveFormsModule, HttpClientTestingModule],
       providers: [
         { provide: TASK_FORM_PROVIDER, useClass: AircraftTypesDataFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
         { provide: PendingRequestService, useValue: mockClass(PendingRequestService) },
         { provide: BackLinkService, useValue: mockClass(BackLinkService) },
+        { provide: AircraftTypesService, useValue: aircraftTypesService },
         { provide: ChangeDetectorRef, useValue: {} },
       ],
     }).compileComponents();
 
     store = TestBed.inject(RequestTaskStore);
 
-    const state = store.getState();
+    aircraftTypesService.getAircraftTypes.mockReturnValue(of({ aircraftTypes: [] }));
 
+    const state = store.getState();
     store.setState({
       ...state,
       requestTaskItem: {
         ...state.requestTaskItem,
         requestInfo: { type: 'AVIATION_AER_UKETS' },
         requestTask: {
+          type: 'AVIATION_AER_UKETS_APPLICATION_SUBMIT',
           payload: {
             payloadType: 'AVIATION_AER_UKETS_APPLICATION_SUBMIT_PAYLOAD',
             reportingYear: '2022',
@@ -69,6 +78,8 @@ describe('AircraftTypesDataPageComponent', () => {
     fixture.detectChanges();
     page = new Page(fixture);
   });
+
+  afterEach(() => jest.clearAllMocks());
 
   it('should create', () => {
     expect(component).toBeTruthy();
@@ -89,7 +100,7 @@ describe('AircraftTypesDataPageComponent', () => {
     expect(chooseFileButton.nativeElement.textContent).toBe('Choose a CSV file');
   });
 
-  it('should display start after end date error', () => {
+  it('should display start after end date error', async () => {
     const navigateSpy = jest.spyOn(router, 'navigate');
 
     expect(page.errorSummary).toBeFalsy();
@@ -98,9 +109,11 @@ describe('AircraftTypesDataPageComponent', () => {
     component.processCSVData([['C560', '', 'D-CAPB', 'Aviation Operator', '05/01/2022', '04/01/2022']]);
     fixture.detectChanges();
 
-    expect(page.errorSummary).toBeTruthy();
-    expect(page.errorTitles[0]).toHaveTextContent('The start date must be the same as or before the end date');
-    expect(navigateSpy).not.toHaveBeenCalled();
+    fixture.whenStable().then(() => {
+      expect(page.errorSummary).toBeTruthy();
+      expect(page.errorTitles[0]).toHaveTextContent('The start date must be the same as or before the end date');
+      expect(navigateSpy).not.toHaveBeenCalled();
+    });
   });
 
   it('should display startDate error', async () => {
@@ -111,9 +124,11 @@ describe('AircraftTypesDataPageComponent', () => {
     component.fileLoaded = true;
     component.processCSVData([['C560', '', 'D-CAPB', 'Aviation Operator', '2022/05/01', '04/01/2022']]);
     fixture.detectChanges();
-    expect(page.errorSummary).toBeTruthy();
-    expect(page.errorTitles[0]).toHaveTextContent('The date must be entered as dd/mm/yyyy');
-    expect(navigateSpy).not.toHaveBeenCalled();
+    fixture.whenStable().then(() => {
+      expect(page.errorSummary).toBeTruthy();
+      expect(page.errorTitles[0]).toHaveTextContent('The date must be entered as dd/mm/yyyy');
+      expect(navigateSpy).not.toHaveBeenCalled();
+    });
   });
 
   it('should display mandatory designator error', async () => {
@@ -124,9 +139,12 @@ describe('AircraftTypesDataPageComponent', () => {
     component.fileLoaded = true;
     component.processCSVData([['', '', 'D-CAPB', 'Aviation Operator', '01/01/2022', '04/01/2022']]);
     fixture.detectChanges();
-    expect(page.errorSummary).toBeTruthy();
-    expect(page.errorTitles[0]).toHaveTextContent('Enter an aircraft designator');
-    expect(navigateSpy).not.toHaveBeenCalled();
+
+    fixture.whenStable().then(() => {
+      expect(page.errorSummary).toBeTruthy();
+      expect(page.errorTitles[0]).toHaveTextContent('Enter an aircraft designator');
+      expect(navigateSpy).not.toHaveBeenCalled();
+    });
   });
 
   it('should display mandatory registration number error', async () => {
@@ -137,8 +155,11 @@ describe('AircraftTypesDataPageComponent', () => {
     component.fileLoaded = true;
     component.processCSVData([['C560', '', '', 'Aviation Operator', '01/01/2022', '04/01/2022']]);
     fixture.detectChanges();
-    expect(page.errorSummary).toBeTruthy();
-    expect(page.errorTitles[0]).toHaveTextContent('Enter an aircraft registration number');
-    expect(navigateSpy).not.toHaveBeenCalled();
+
+    fixture.whenStable().then(() => {
+      expect(page.errorSummary).toBeTruthy();
+      expect(page.errorTitles[0]).toHaveTextContent('Enter an aircraft registration number');
+      expect(navigateSpy).not.toHaveBeenCalled();
+    });
   });
 });

@@ -5,7 +5,7 @@ import { combineLatest, map, Observable, tap } from 'rxjs';
 
 import { AerVerificationReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-verification-review-decision-group/aer-verification-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
 import { AerMonitoringPlanVersionsComponent } from '@aviation/shared/components/aer/monitoring-plan-versions';
@@ -18,7 +18,7 @@ import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-lin
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
 
-import { AviationAerOpinionStatement, AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
+import { AviationAerOpinionStatement } from 'pmrv-api';
 
 import { aerVerifyQuery } from '../../../aer-verify.selector';
 import { OpinionStatementFormProvider } from '../opinion-statement-form.provider';
@@ -51,15 +51,19 @@ interface ViewModel {
 export default class OpinionStatementSummaryComponent {
   protected fuelTypes: { id: string; key: string; value: string }[] = [];
 
-  protected totalEmissionsProvided = (
-    this.store.getState().requestTaskItem.requestTask
-      .payload as AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload
-  ).totalEmissionsProvided;
+  requestTaskPayload$ = this.store.pipe(aerVerifyQuery.selectPayload);
 
-  protected aerMonitoringPlanChanges = (
-    this.store.getState().requestTaskItem.requestTask
-      .payload as AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload
-  ).aer.aerMonitoringPlanChanges;
+  aerMonitoringPlanVersions$ = this.requestTaskPayload$.pipe(
+    map((requestTaskPayload) => requestTaskPayload.aerMonitoringPlanVersions),
+  );
+
+  totalEmissionsProvided$ = this.requestTaskPayload$.pipe(
+    map((requestTaskPayload) => requestTaskPayload.totalEmissionsProvided),
+  );
+
+  aerMonitoringPlanChanges$ = this.requestTaskPayload$.pipe(
+    map((requestTaskPayload) => requestTaskPayload.aer.aerMonitoringPlanChanges),
+  );
 
   constructor(
     @Inject(TASK_FORM_PROVIDER) readonly formProvider: OpinionStatementFormProvider,
@@ -89,11 +93,13 @@ export default class OpinionStatementSummaryComponent {
   );
 
   onSubmit() {
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
       .saveAerVerify({ opinionStatement: this.formProvider.getFormValue() }, 'complete')
       .pipe(this.pendingRequest.trackRequest())
       .subscribe(() => {
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setOpinionStatement(this.formProvider.getFormValue());
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setOpinionStatement(
+          this.formProvider.getFormValue(),
+        );
         this.router.navigate(['../../..'], { relativeTo: this.route, replaceUrl: true });
       });
   }

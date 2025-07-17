@@ -11,6 +11,11 @@ import { EmissionsGuard } from '../../shared/emissions/emissions.guard';
 import { JustificationComponent } from '../../shared/emissions/justification/justification.component';
 import { SummaryComponent } from '../../shared/emissions/summary/summary.component';
 import { SummaryGuard } from '../../shared/summary.guard';
+import { AnalysisMethodComponent } from './category-tier/analysis-method/analysis-method.component';
+import { AnalysisMethodDeleteComponent } from './category-tier/analysis-method-delete/analysis-method-delete.component';
+import { AnalysisMethodListComponent } from './category-tier/analysis-method-list/analysis-method-list.component';
+import { AnalysisMethodUsedComponent } from './category-tier/analysis-method-used/analysis-method-used.component';
+import { AnswersComponent as BiomassFractionAnswersComponent } from './category-tier/answers/answers.component';
 import { AppliedStandardComponent } from './category-tier/applied-standard/applied-standard.component';
 import { SummaryComponent as AppliedStandardSummaryComponent } from './category-tier/applied-standard/summary/summary.component';
 import { CategoryComponent } from './category-tier/category/category.component';
@@ -20,8 +25,18 @@ import { TransferredCo2DetailsComponent } from './category-tier/category/transfe
 import { TransferredCO2DetailsGuard } from './category-tier/category/transferred-co2-details/transferred-co2-details.guard';
 import { CategoryTierComponent } from './category-tier/category-tier.component';
 import { CategoryTierGuard } from './category-tier/category-tier.guard';
+import { DefaultValueComponent } from './category-tier/default-value/default-value.component';
 import { DeleteComponent } from './category-tier/delete/delete.component';
 import { DeleteGuard } from './category-tier/delete/delete.guard';
+import { EntryStepComponent } from './category-tier/entry-step/entry-step.component';
+import { AnswersGuard as BiomassFractionAnswersGuard } from './category-tier/guards/answers.guard';
+import { WizardStepGuard } from './category-tier/guards/wizard-step.guard';
+import { ReferenceComponent } from './category-tier/reference/reference.component';
+import { SamplingJustificationComponent } from './category-tier/sampling-justification/sampling-justification.component';
+import { SubtaskHelpComponent } from './category-tier/subtask-help/subtask-help.component';
+import { SummaryComponent as BiomassFractionSummaryComponent } from './category-tier/summary/summary.component';
+import { TierComponent } from './category-tier/tier/tier.component';
+import { TierJustificationComponent } from './category-tier/tier-justification/tier-justification.component';
 import { DescriptionComponent } from './description/description.component';
 import { SummaryComponent as DescriptionSummaryComponent } from './description/summary/summary.component';
 import { MeasurementComponent } from './measurement.component';
@@ -29,6 +44,106 @@ import { OptionalComponent } from './optional/optional.component';
 import { SummaryComponent as OptionalSummaryComponent } from './optional/summary/summary.component';
 import { ProcedureComponent } from './procedure/procedure.component';
 import { SummaryComponent as ProcedureSummaryComponent } from './procedure/summary/summary.component';
+
+function getSubtaskChildrenRoutes(pageTitle: string) {
+  const routes: PermitRoute[] = [
+    {
+      path: '',
+      data: { pageTitle: `${pageTitle}` },
+      component: EntryStepComponent,
+      canActivate: [WizardStepGuard],
+      canDeactivate: [PendingRequestGuard],
+    },
+    {
+      path: 'tier',
+      data: { pageTitle: `${pageTitle} - Tier type`, backlink: '../' },
+      component: TierComponent,
+      canActivate: [WizardStepGuard],
+      canDeactivate: [PendingRequestGuard],
+    },
+    {
+      path: 'tier-justification',
+      data: { pageTitle: `${pageTitle} - No highest required tier justification`, backlink: '../tier' },
+      component: TierJustificationComponent,
+      canActivate: [WizardStepGuard],
+      canDeactivate: [PendingRequestGuard],
+    },
+    {
+      path: 'default-value',
+      data: { pageTitle: `${pageTitle} - Default value applied`, backlink: '../tier-justification' },
+      component: DefaultValueComponent,
+      canActivate: [WizardStepGuard],
+      canDeactivate: [PendingRequestGuard],
+    },
+    {
+      path: 'reference',
+      data: { pageTitle: `${pageTitle} - Standard reference source`, backlink: '../default-value' },
+      component: ReferenceComponent,
+      canActivate: [WizardStepGuard],
+      canDeactivate: [PendingRequestGuard],
+    },
+    {
+      path: 'analysis-method-used',
+      data: { pageTitle: `${pageTitle} - Using an analysis method?`, backlink: '../reference' },
+      component: AnalysisMethodUsedComponent,
+      canActivate: [WizardStepGuard],
+      canDeactivate: [PendingRequestGuard],
+    },
+    {
+      path: 'analysis-method/:methodIndex',
+      children: [
+        {
+          path: '',
+          data: { pageTitle: `${pageTitle} - Analysis method`, backlink: '../../analysis-method-used' },
+          component: AnalysisMethodComponent,
+          canActivate: [WizardStepGuard],
+        },
+        {
+          path: 'sampling-justification',
+          data: { pageTitle: `${pageTitle} - Reduced sampling frequency justification`, backlink: '../' },
+          component: SamplingJustificationComponent,
+          canActivate: [WizardStepGuard],
+          canDeactivate: [PendingRequestGuard],
+        },
+        {
+          path: 'delete',
+          data: { pageTitle: `${pageTitle} - Delete`, backlink: '../' },
+          component: AnalysisMethodDeleteComponent,
+          canActivate: [WizardStepGuard],
+          canDeactivate: [PendingRequestGuard],
+        },
+      ],
+    },
+    {
+      path: 'analysis-method-list',
+      data: { pageTitle: `${pageTitle} - Analysis method list` },
+      component: AnalysisMethodListComponent,
+      canActivate: [WizardStepGuard],
+      canDeactivate: [PendingRequestGuard],
+    },
+
+    {
+      path: 'answers',
+      data: { pageTitle: `${pageTitle} - Answers` },
+      component: BiomassFractionAnswersComponent,
+      canActivate: [BiomassFractionAnswersGuard],
+      canDeactivate: [PendingRequestGuard],
+    },
+    {
+      path: 'summary',
+      data: { pageTitle: `${pageTitle} - Summary`, breadcrumb: `${pageTitle}` },
+      component: BiomassFractionSummaryComponent,
+      canActivate: [SummaryGuard],
+    },
+    {
+      path: 'help',
+      data: { pageTitle: `${pageTitle} - Help` },
+      component: SubtaskHelpComponent,
+    },
+  ];
+
+  return routes;
+}
 
 const routes: PermitRoute[] = [
   {
@@ -143,6 +258,11 @@ const routes: PermitRoute[] = [
             canActivate: [SummaryGuard],
           },
         ],
+      },
+      {
+        path: 'biomass-fraction',
+        data: { statusKey: 'MEASUREMENT_CO2_Biomass_Fraction' },
+        children: getSubtaskChildrenRoutes('Biomass fraction'),
       },
     ],
   },

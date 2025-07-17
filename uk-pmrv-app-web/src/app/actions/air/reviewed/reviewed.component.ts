@@ -33,5 +33,8 @@ export class ReviewedComponent {
     map((payload) => this.userInfoResolverPipe.transform(payload?.decisionNotification?.signatory, payload.usersInfo)),
   );
 
-  constructor(private readonly airService: AirService, private readonly userInfoResolverPipe: UserInfoResolverPipe) {}
+  constructor(
+    private readonly airService: AirService,
+    private readonly userInfoResolverPipe: UserInfoResolverPipe,
+  ) {}
 }

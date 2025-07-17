@@ -15,7 +15,9 @@ describe('ReviewGroupDecisionSummaryComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    template: ` <app-review-group-decision-summary [decisionData]="decisionData"></app-review-group-decision-summary> `,
+    template: `
+      <app-review-group-decision-summary [decisionData]="decisionData"></app-review-group-decision-summary>
+    `,
   })
   class TestComponent {
     decisionData: AerDataReviewDecision = {

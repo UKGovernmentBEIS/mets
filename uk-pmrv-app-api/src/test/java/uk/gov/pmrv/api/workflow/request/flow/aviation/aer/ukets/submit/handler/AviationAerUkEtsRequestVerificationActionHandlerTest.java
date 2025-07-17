@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -49,7 +49,7 @@ class AviationAerUkEtsRequestVerificationActionHandlerTest {
             .request(Request.builder().id(requestId).build())
             .processTaskId(processId)
             .build();
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         AviationAerApplicationRequestVerificationRequestTaskActionPayload taskActionPayload =
             AviationAerApplicationRequestVerificationRequestTaskActionPayload.builder()
             .payloadType(RequestTaskActionPayloadType.AVIATION_AER_UKETS_REQUEST_VERIFICATION_PAYLOAD)

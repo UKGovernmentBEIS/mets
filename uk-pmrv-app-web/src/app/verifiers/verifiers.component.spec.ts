@@ -1,3 +1,4 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -116,6 +117,7 @@ describe('VerifiersComponent', () => {
         { provide: UsersService, useValue: mockUsersService },
         { provide: AuthoritiesService, useValue: mockAuthorityService },
         { provide: TermsAndConditionsService, useValue: mockTermsAndConditionsService },
+        { provide: APP_BASE_HREF, useValue: '/installation-aviation/' },
         DestroySubject,
       ],
     }).compileComponents();
@@ -208,7 +210,7 @@ describe('VerifiersComponent', () => {
     changeInputValue(fixture, '#verifiersArray\\.1\\.authorityStatus', 'ACTIVE');
     fixture.detectChanges();
 
-    expect(verifierAuthoritiesService.updateVerifierAuthorities).not.toHaveBeenCalled;
+    expect(verifierAuthoritiesService.updateVerifierAuthorities).not.toHaveBeenCalled();
 
     page.saveBtn.click();
     fixture.detectChanges();

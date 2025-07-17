@@ -12,7 +12,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 public class EmpCorsiaCreationRequestParamsBuilderService implements EmpCreationRequestParamsBuilderService {
 
     @Override
-    public RequestParams buildRequestParams(Long accountId) {;
+    public RequestParams buildRequestParams(Long accountId) {
         return RequestParams.builder()
             .type(RequestType.EMP_ISSUANCE_CORSIA)
             .accountId(accountId)

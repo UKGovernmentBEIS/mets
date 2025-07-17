@@ -8,7 +8,9 @@ import { OperatorImprovementResponse } from 'pmrv-api';
     <dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Operator's response</dt>
-        <dd govukSummaryListRowValue>{{ operatorImprovementResponse.addressedDescription | textEllipsis }}</dd>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ operatorImprovementResponse.addressedDescription | textEllipsis }}
+        </dd>
         <dd govukSummaryListRowActions></dd>
       </div>
     </dl>

@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, first, Observable, of, pluck, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, first, map, Observable, of, switchMap, takeUntil } from 'rxjs';
+
+import { DestroySubject } from '@core/services/destroy-subject.service';
+import { BackLinkService } from '@shared/back-link/back-link.service';
 
 import { DocumentTemplateDTO, DocumentTemplatesService } from 'pmrv-api';
 
-import { DestroySubject } from '../../../core/services/destroy-subject.service';
-import { BackLinkService } from '../../../shared/back-link/back-link.service';
 import { DOCUMENT_TEMPLATE_FORM, DocumentTemplateFormProvider } from './document-template-form.provider';
 
 @Component({
@@ -17,7 +18,7 @@ import { DOCUMENT_TEMPLATE_FORM, DocumentTemplateFormProvider } from './document
   providers: [DocumentTemplateFormProvider, DestroySubject],
 })
 export class DocumentTemplateComponent implements OnInit {
-  documentTemplate$: Observable<DocumentTemplateDTO> = this.route.data.pipe(pluck('documentTemplate'));
+  documentTemplate$: Observable<DocumentTemplateDTO> = this.route.data.pipe(map((x) => x?.documentTemplate));
   displayErrorSummary$ = new BehaviorSubject<boolean>(false);
 
   constructor(

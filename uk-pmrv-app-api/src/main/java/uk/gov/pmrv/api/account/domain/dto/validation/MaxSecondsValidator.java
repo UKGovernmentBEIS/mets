@@ -1,9 +1,8 @@
 package uk.gov.pmrv.api.account.domain.dto.validation;
 
-import uk.gov.pmrv.api.account.domain.dto.CoordinatesDTO;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import uk.gov.pmrv.api.account.domain.dto.CoordinatesDTO;
 
 /**
  * The max seconds validation.

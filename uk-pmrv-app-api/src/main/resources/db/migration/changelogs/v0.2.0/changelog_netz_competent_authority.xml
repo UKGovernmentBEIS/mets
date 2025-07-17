@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+		logicalFilePath="v0.2.0/changelog_netz_competent_authority.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+	<changeSet id="0_1_0_populate_competent_authority_type" author="P70453">
+		<sql>
+			update competent_authority set type='PmrvCompetentAuthority';
+		</sql>
+		<rollback>
+			<sql>
+				update competent_authority set type=NULL;
+			</sql>
+		</rollback>
+	</changeSet>
+
+</databaseChangeLog>

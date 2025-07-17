@@ -17,8 +17,7 @@ describe('ConfidentialitySummaryTemplateComponent', () => {
         [confidentialityData]="confidentialityData"
         [totalEmissionsFiles]="totalEmissionsFiles"
         [aggregatedStatePairDataFiles]="aggregatedStatePairDataFiles"
-        [isEditable]="isEditable"
-      ></app-confidentiality-summary-template>
+        [isEditable]="isEditable"></app-confidentiality-summary-template>
     `,
   })
   class TestComponent {

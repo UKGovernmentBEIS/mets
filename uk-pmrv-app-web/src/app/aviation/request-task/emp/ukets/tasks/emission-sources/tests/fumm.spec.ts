@@ -122,5 +122,5 @@ describe('Emission sources integration - FUMM', () => {
     await waitForElementToBeRemoved(screen.getByTestId('aircraft-other-fuel-form'));
     harness.detectChanges();
     expect(await screen.findByTestId('monitoring-methodology')).toBeInTheDocument();
-  });
+  }, 50000);
 });

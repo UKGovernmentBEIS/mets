@@ -12,13 +12,14 @@ export const EMP_OPERATOR_DETAILS_ROUTES: Routes = [
     children: [
       {
         path: '',
+        data: { pageTitle: 'Operator details' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./operator-details-name/operator-details-name.component').then((c) => c.OperatorDetailsNameComponent),
       },
       {
         path: 'flight-identification',
-        data: { backlink: '../' },
+        data: { pageTitle: 'Flight identification', backlink: '../' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./operator-details-flight-identification/operator-details-flight-identification.component').then(
@@ -27,7 +28,7 @@ export const EMP_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'air-operating-certificate',
-        data: { backlink: '../flight-identification' },
+        data: { pageTitle: 'Air Operating Certificate', backlink: '../flight-identification' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import(
@@ -36,9 +37,10 @@ export const EMP_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'organisation-structure',
+        data: { pageTitle: 'Organisation structure' },
         resolve: {
           backlink: () => {
-            return '../flight-identification';
+            return '../air-operating-certificate';
           },
         },
         canActivate: [canActivateTaskForm],
@@ -49,7 +51,7 @@ export const EMP_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'activities-description',
-        data: { backlink: '../organisation-structure' },
+        data: { pageTitle: 'Description of your activities', backlink: '../organisation-structure' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./operator-details-activities-description/operator-details-activities-description.component').then(
@@ -58,7 +60,7 @@ export const EMP_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'subsidiary-companies',
-        data: { backlink: '../activities-description' },
+        data: { pageTitle: 'Subsidiary companies', backlink: '../activities-description' },
         canActivate: [canActivateTaskForm],
         loadChildren: () =>
           import('./operator-details-subsidiary-companies/subsidiary-companies.routes').then(
@@ -67,7 +69,7 @@ export const EMP_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Operator details summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Operator details' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () =>
           import('./operator-details-summary/operator-details-summary.component').then(

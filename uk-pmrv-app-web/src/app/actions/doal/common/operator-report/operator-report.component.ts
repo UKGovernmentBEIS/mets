@@ -14,8 +14,7 @@ import { DoalActionService } from '../../core/doal-action.service';
       <app-operator-report-summary-template
         [operatorActivityLevelReport]="operatorActivityLevelReport$ | async"
         [editable]="false"
-        [document]="files$ | async"
-      ></app-operator-report-summary-template>
+        [document]="files$ | async"></app-operator-report-summary-template>
     </app-doal-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

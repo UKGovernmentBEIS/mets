@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { format, subDays } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import { DreApplicationSubmitRequestTaskPayload, RequestTaskPayload } from 'pmrv-api';
 
@@ -152,7 +152,7 @@ describe('SubmitContainerComponent', () => {
                 ).dre,
                 fee: {
                   feeDetails: {
-                    dueDate: moment().add(-1, 'day').format('YYYY-MM-DD'),
+                    dueDate: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
                     hourlyRate: '3',
                     totalBillableHours: '34',
                   },

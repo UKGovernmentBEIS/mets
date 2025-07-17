@@ -2,15 +2,16 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, pluck, startWith, switchMap, switchMapTo, tap } from 'rxjs';
+import { combineLatest, first, map, startWith, switchMap, tap } from 'rxjs';
+
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { DestroySubject } from '@core/services/destroy-subject.service';
 
 import {
   MeasurementOfCO2EmissionPointCategoryAppliedTier,
   MeasurementOfN2OEmissionPointCategoryAppliedTier,
 } from 'pmrv-api';
 
-import { PendingRequestService } from '../../../../core/guards/pending-request.service';
-import { DestroySubject } from '../../../../core/services/destroy-subject.service';
 import { PermitApplicationState } from '../../../store/permit-application.state';
 import { PermitApplicationStore } from '../../../store/permit-application.store';
 import { StatusKey, TaskKey } from '../../types/permit-task.type';
@@ -24,8 +25,7 @@ import { JUSTIFICATION_FORM, justificationFormProvider } from './justification-f
 })
 export class JustificationComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));
-
-  taskKey$ = this.route.data.pipe(pluck('taskKey'));
+  taskKey$ = this.route.data.pipe(map((x) => x?.taskKey));
   task$ = this.route.data.pipe(
     switchMap((data) =>
       this.store.findTask<
@@ -33,7 +33,6 @@ export class JustificationComponent {
       >(`monitoringApproaches.${data.taskKey}.emissionPointCategoryAppliedTiers`),
     ),
   );
-
   isFileUploaded$ = this.form.get('files').valueChanges.pipe(
     startWith(this.form.get('files').value),
     map((value) => value?.length > 0),
@@ -79,7 +78,7 @@ export class JustificationComponent {
               `${taskKey}_Measured_Emissions` as StatusKey,
             ),
           ),
-          switchMapTo(this.store),
+          switchMap(() => this.store),
           first(),
           tap((state) =>
             this.store.setState({

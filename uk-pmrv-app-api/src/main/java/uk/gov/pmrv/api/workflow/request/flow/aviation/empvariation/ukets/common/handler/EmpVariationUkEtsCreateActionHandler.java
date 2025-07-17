@@ -1,14 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.handler;
 
-import java.util.Map;
-
-import org.springframework.stereotype.Component;
-
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import org.springframework.stereotype.Component;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsDTO;
@@ -20,22 +17,24 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadTy
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCreateActionHandler;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestAccountCreateActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestCreateActionEmptyPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
-public class EmpVariationUkEtsCreateActionHandler implements RequestCreateActionHandler<RequestCreateActionEmptyPayload> {
+public class EmpVariationUkEtsCreateActionHandler implements RequestAccountCreateActionHandler<RequestCreateActionEmptyPayload> {
 
 	private final StartProcessRequestService startProcessRequestService;
 	private final EmissionsMonitoringPlanQueryService empQueryService;
 
     @Override
-    public String process(Long accountId, RequestCreateActionType type, RequestCreateActionEmptyPayload payload,
-            PmrvUser pmrvUser) {
-    	final RoleType currentUserRoleType = pmrvUser.getRoleType();
+    public String process(Long accountId, RequestCreateActionEmptyPayload payload,
+            AppUser appUser) {
+    	final String currentUserRoleType = appUser.getRoleType();
     	final EmissionsMonitoringPlanUkEtsContainer empContainer = 
     			empQueryService.getEmissionsMonitoringPlanUkEtsDTOByAccountId(accountId)
     			.map(EmissionsMonitoringPlanUkEtsDTO::getEmpContainer)
@@ -46,10 +45,10 @@ public class EmpVariationUkEtsCreateActionHandler implements RequestCreateAction
 	        .originalEmpContainer(empContainer)
 	        .build();
     	
-    	if(currentUserRoleType == RoleType.OPERATOR) {
-    		requestPayload.setOperatorAssignee(pmrvUser.getUserId());
-    	} else if (currentUserRoleType == RoleType.REGULATOR) {
-    		requestPayload.setRegulatorAssignee(pmrvUser.getUserId());
+    	if(RoleTypeConstants.OPERATOR.equals(currentUserRoleType)) {
+    		requestPayload.setOperatorAssignee(appUser.getUserId());
+    	} else if (RoleTypeConstants.REGULATOR.equals(currentUserRoleType)) {
+    		requestPayload.setRegulatorAssignee(appUser.getUserId());
     	} else {
     		throw new BusinessException(ErrorCode.REQUEST_CREATE_ACTION_NOT_ALLOWED, currentUserRoleType);
     	}
@@ -59,7 +58,7 @@ public class EmpVariationUkEtsCreateActionHandler implements RequestCreateAction
                 .accountId(accountId)
                 .requestPayload(requestPayload)
                 .processVars(Map.of(
-                		BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, currentUserRoleType.name()
+                		BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, currentUserRoleType
                 		))
                 .requestMetadata(EmpVariationRequestMetadata.builder()
 						.type(RequestMetadataType.EMP_VARIATION)
@@ -73,7 +72,7 @@ public class EmpVariationUkEtsCreateActionHandler implements RequestCreateAction
     }
 
     @Override
-    public RequestCreateActionType getType() {
+    public RequestCreateActionType getRequestCreateActionType() {
         return RequestCreateActionType.EMP_VARIATION_UKETS;
     }
 }

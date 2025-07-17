@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.PermitOriginatedData;
+import uk.gov.pmrv.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.MonitoringPlanVersion;
 
@@ -20,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -44,11 +47,21 @@ public class AerApplicationSubmittedRequestActionPayload extends RequestActionPa
     @Builder.Default
     private List<MonitoringPlanVersion> monitoringPlanVersions = new ArrayList<>();
 
+    private boolean verificationPerformed;
+
+    private AerVerificationReport verificationReport;
+
     @Builder.Default
     private Map<UUID, String> aerAttachments = new HashMap<>();
 
+    @Builder.Default
+    private Map<UUID, String> verificationAttachments = new HashMap<>();
+
     @Override
     public Map<UUID, String> getAttachments() {
-        return getAerAttachments();
+        return Stream.of(aerAttachments, verificationAttachments)
+                .flatMap(map -> map.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
+
 }

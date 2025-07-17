@@ -23,7 +23,7 @@ export class AddAnotherDirective implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.heading) {
+    if (changes.heading && this.heading) {
       this.heading.tabIndex = -1;
       this.heading.classList.add('moj-add-another__heading');
     }
@@ -40,6 +40,6 @@ export class AddAnotherDirective implements AfterViewInit, OnChanges {
   }
 
   focusHeading(): void {
-    this.heading.focus();
+    this.heading?.focus();
   }
 }

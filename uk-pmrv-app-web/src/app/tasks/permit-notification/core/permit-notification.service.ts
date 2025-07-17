@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { filter, first, map, Observable, switchMap, tap } from 'rxjs';
 
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
+import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 
 import {
   PermitNotificationApplicationReviewRequestTaskPayload,
@@ -11,30 +12,18 @@ import {
   PermitNotificationFollowUpRequestTaskPayload,
   PermitNotificationFollowUpReviewDecision,
   PermitNotificationFollowUpWaitForAmendsRequestTaskPayload,
+  PermitNotificationReviewDecision,
   RequestTaskActionPayload,
   RequestTaskActionProcessDTO,
-  TasksService,
 } from 'pmrv-api';
 
-import { BusinessErrorService } from '../../../error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '../../../error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '../../../error/not-found-error';
 import { CommonTasksState } from '../../store/common-tasks.state';
-import { CommonTasksStore } from '../../store/common-tasks.store';
 import { StatusKey } from './section-status';
 
 @Injectable({ providedIn: 'root' })
-export class PermitNotificationService {
-  constructor(
-    private readonly store: CommonTasksStore,
-    private readonly tasksService: TasksService,
-    private readonly businessErrorService: BusinessErrorService,
-  ) {}
-
-  getPayload(): Observable<any> {
-    return this.store.payload$.pipe(map((payload) => payload));
-  }
-
+export class PermitNotificationService extends TasksHelperService {
   get permitNotification$() {
     return this.getPayload().pipe(map((p) => p?.permitNotification));
   }
@@ -45,7 +34,10 @@ export class PermitNotificationService {
 
   get reviewDecision$() {
     return this.getPayload().pipe(
-      map((payload: PermitNotificationApplicationReviewRequestTaskPayload) => payload.reviewDecision),
+      map(
+        (payload: PermitNotificationApplicationReviewRequestTaskPayload) =>
+          payload.reviewDecision as PermitNotificationReviewDecision,
+      ),
     );
   }
 
@@ -74,7 +66,7 @@ export class PermitNotificationService {
 
   getDownloadUrlFiles(files: string[]): { downloadUrl: string; fileName: string }[] {
     const attachments: { [key: string]: string } = this.attachments;
-    const url = this.createBaseFileDownloadUrl();
+    const url = this.getBaseFileDownloadUrl();
     return (
       files?.map((id) => ({
         downloadUrl: url + `${id}`,
@@ -83,15 +75,10 @@ export class PermitNotificationService {
     );
   }
 
-  createBaseFileDownloadUrl() {
-    const requestTaskId = this.store.requestTaskId;
-    return `/tasks/${requestTaskId}/file-download/`;
-  }
-
   getFollowUpReviewDownloadUrlFiles(files: string[]): { downloadUrl: string; fileName: string }[] {
     const { followUpAttachments } = this.store.getValue().requestTaskItem.requestTask
       .payload as PermitNotificationFollowUpApplicationReviewRequestTaskPayload;
-    const url = this.createBaseFileDownloadUrl();
+    const url = this.getBaseFileDownloadUrl();
 
     return (
       files?.map((id) => ({

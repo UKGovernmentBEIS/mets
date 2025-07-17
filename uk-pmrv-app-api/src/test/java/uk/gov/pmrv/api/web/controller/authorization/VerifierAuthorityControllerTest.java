@@ -16,26 +16,26 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.authorization.verifier.domain.VerifierAuthorityUpdateDTO;
-import uk.gov.pmrv.api.authorization.verifier.service.VerifierAuthorityDeletionService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.authorization.verifier.domain.VerifierAuthorityUpdateDTO;
+import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityDeletionService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.orchestrator.authorization.service.VerifierUserAuthorityQueryOrchestrator;
-import uk.gov.pmrv.api.web.orchestrator.authorization.service.VerifierUserAuthorityUpdateOrchestrator;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.UserAuthorityInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.UsersAuthoritiesInfoDTO;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
+import uk.gov.pmrv.api.web.orchestrator.authorization.service.VerifierUserAuthorityQueryOrchestrator;
+import uk.gov.pmrv.api.web.orchestrator.authorization.service.VerifierUserAuthorityUpdateOrchestrator;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ class VerifierAuthorityControllerTest {
     private VerifierAuthorityController controller;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
 	@Mock
     private VerifierUserAuthorityUpdateOrchestrator verifierUserAuthorityUpdateOrchestrator;
@@ -73,7 +73,7 @@ class VerifierAuthorityControllerTest {
 	private VerifierAuthorityDeletionService verifierAuthorityDeletionService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -87,7 +87,7 @@ class VerifierAuthorityControllerTest {
     public void setUp() {
     	objectMapper = new ObjectMapper();
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
@@ -99,7 +99,7 @@ class VerifierAuthorityControllerTest {
 
         controller = (VerifierAuthorityController) aopProxy.getProxy();
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-				.setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+				.setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
 				.setValidator(validator)
             	.setControllerAdvice(new ExceptionControllerAdvice())
             	.build();
@@ -107,7 +107,7 @@ class VerifierAuthorityControllerTest {
     
     @Test
     void getVerifierAuthorities() throws Exception {
-    	PmrvUser user = PmrvUser.builder().userId("currentuser").build();
+    	AppUser user = AppUser.builder().userId("currentuser").build();
         UserAuthorityInfoDTO verifierUserAuthorityInfoDTO = UserAuthorityInfoDTO.builder()
     			.userId("user")
     			.firstName("fn")
@@ -135,12 +135,12 @@ class VerifierAuthorityControllerTest {
     
     @Test
     void getVerifierAuthorities_forbidden() throws Exception {
-    	PmrvUser user = PmrvUser.builder().userId("currentuser").build();
+    	AppUser user = AppUser.builder().userId("currentuser").build();
 
     	when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
 	        .when(roleAuthorizationService)
-	        .evaluate(user, new RoleType[] {RoleType.VERIFIER});
+	        .evaluate(user, new String[] {RoleTypeConstants.VERIFIER});
         
         mockMvc.perform(
 	        		MockMvcRequestBuilders.get(BASE_PATH)
@@ -153,7 +153,7 @@ class VerifierAuthorityControllerTest {
 
 	@Test
 	void getVerifierAuthoritiesByVerificationBodyId() throws Exception {
-		PmrvUser user = PmrvUser.builder().userId("userId").roleType(RoleType.REGULATOR).build();
+		AppUser user = AppUser.builder().userId("userId").roleType(RoleTypeConstants.REGULATOR).build();
 		final Long vbId = 1L;
 
         List<UserAuthorityInfoDTO> verifierUserAuthorities = List.of(
@@ -189,12 +189,12 @@ class VerifierAuthorityControllerTest {
 
 	@Test
 	void getVerifierAuthoritiesByVerificationBodyId_forbidden() throws Exception {
-		PmrvUser user = PmrvUser.builder().userId("userId").roleType(RoleType.REGULATOR).build();
+		AppUser user = AppUser.builder().userId("userId").roleType(RoleTypeConstants.REGULATOR).build();
 
 		// Mock
 		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-				.when(pmrvUserAuthorizationService)
+				.when(appUserAuthorizationService)
 				.authorize(user, "getVerifierAuthoritiesByVerificationBodyId");
 
 		// Invoke
@@ -210,11 +210,11 @@ class VerifierAuthorityControllerTest {
     @Test
     void updateVerifierAuthorities() throws Exception {
     	Long verificationBodyId = 1L;
-    	PmrvUser currentUser =
-    			PmrvUser.builder()
+    	AppUser currentUser =
+    			AppUser.builder()
     				.userId("currentuser")
-    				.roleType(RoleType.VERIFIER)
-    				.authorities(List.of(PmrvAuthority.builder().code("code1").verificationBodyId(verificationBodyId).build()))
+    				.roleType(RoleTypeConstants.VERIFIER)
+    				.authorities(List.of(AppAuthority.builder().code("code1").verificationBodyId(verificationBodyId).build()))
     				.build();
     	List<VerifierAuthorityUpdateDTO> verifiersUpdate =
 			List.of(
@@ -237,11 +237,11 @@ class VerifierAuthorityControllerTest {
     @Test
     void updateVerifierAuthorities_forbidden() throws Exception {
     	Long verificationBodyId = 1L;
-    	PmrvUser currentUser =
-    			PmrvUser.builder()
+    	AppUser currentUser =
+    			AppUser.builder()
     				.userId("currentuser")
-    				.roleType(RoleType.VERIFIER)
-    				.authorities(List.of(PmrvAuthority.builder().code("code1").verificationBodyId(verificationBodyId).build()))
+    				.roleType(RoleTypeConstants.VERIFIER)
+    				.authorities(List.of(AppAuthority.builder().code("code1").verificationBodyId(verificationBodyId).build()))
     				.build();
     	List<VerifierAuthorityUpdateDTO> verifiersUpdate =
 			List.of(
@@ -250,7 +250,7 @@ class VerifierAuthorityControllerTest {
 
     	when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
     	doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-	    	.when(pmrvUserAuthorizationService)
+	    	.when(appUserAuthorizationService)
 			.authorize(currentUser, "updateVerifierAuthorities");
 
         //invoke
@@ -266,7 +266,7 @@ class VerifierAuthorityControllerTest {
     @Test
     void updateVerifierAuthoritiesById() throws Exception {
         Long vbId = 1L;
-        PmrvUser currentUser = PmrvUser.builder().userId("currentuser").roleType(RoleType.REGULATOR).build();
+        AppUser currentUser = AppUser.builder().userId("currentuser").roleType(RoleTypeConstants.REGULATOR).build();
         List<VerifierAuthorityUpdateDTO> verifiersUpdate =
             List.of(
                 VerifierAuthorityUpdateDTO.builder().authorityStatus(AuthorityStatus.ACTIVE).roleCode("roleCode1").userId("user1").build()
@@ -286,7 +286,7 @@ class VerifierAuthorityControllerTest {
 
     @Test
     void updateVerifierAuthoritiesById_forbidden() throws Exception {
-        PmrvUser currentUser = PmrvUser.builder().userId("currentuser").roleType(RoleType.VERIFIER).build();
+        AppUser currentUser = AppUser.builder().userId("currentuser").roleType(RoleTypeConstants.VERIFIER).build();
         List<VerifierAuthorityUpdateDTO> verifiersUpdate =
             List.of(
                 VerifierAuthorityUpdateDTO.builder().authorityStatus(AuthorityStatus.ACTIVE).roleCode("roleCode1").userId("user1").build()
@@ -294,7 +294,7 @@ class VerifierAuthorityControllerTest {
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(currentUser, "updateVerifierAuthoritiesByVerificationBodyId");
 
         //invoke
@@ -309,7 +309,7 @@ class VerifierAuthorityControllerTest {
 
 	@Test
 	void deleteVerifierAuthority() throws Exception {
-		PmrvUser authUser = PmrvUser.builder().userId("currentuser").build();
+		AppUser authUser = AppUser.builder().userId("currentuser").build();
 		String userIdToBeDeleted = "userId";
 
 		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
@@ -324,15 +324,15 @@ class VerifierAuthorityControllerTest {
 
 	@Test
 	void deleteVerifierAuthority_forbidden() throws Exception {
-		PmrvUser authUser = PmrvUser.builder().userId("currentuser")
+		AppUser authUser = AppUser.builder().userId("currentuser")
 			.authorities(
-				List.of(PmrvAuthority.builder().verificationBodyId(1L).build()))
+				List.of(AppAuthority.builder().verificationBodyId(1L).build()))
 			.build();
 		String userIdToBeDeleted = "userId";
 
 		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-			.when(pmrvUserAuthorizationService)
+			.when(appUserAuthorizationService)
 			.authorize(authUser, "deleteVerifierAuthority");
 
 		// Invoke
@@ -346,9 +346,9 @@ class VerifierAuthorityControllerTest {
 
 	@Test
 	void deleteCurrentVerifierAuthority() throws Exception {
-		PmrvUser authUser = PmrvUser.builder().userId("currentuser")
+		AppUser authUser = AppUser.builder().userId("currentuser")
 			.authorities(
-				List.of(PmrvAuthority.builder().verificationBodyId(1L).build()))
+				List.of(AppAuthority.builder().verificationBodyId(1L).build()))
 			.build();
 
 		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
@@ -363,14 +363,14 @@ class VerifierAuthorityControllerTest {
 
 	@Test
 	void deleteCurrentVerifierAuthority_forbidden() throws Exception {
-		PmrvUser authUser = PmrvUser.builder().userId("currentuser")
+		AppUser authUser = AppUser.builder().userId("currentuser")
 			.authorities(
-				List.of(PmrvAuthority.builder().verificationBodyId(1L).build()))
+				List.of(AppAuthority.builder().verificationBodyId(1L).build()))
 			.build();
 
 		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-			.when(pmrvUserAuthorizationService)
+			.when(appUserAuthorizationService)
 			.authorize(authUser, "deleteCurrentVerifierAuthority");
 
 		// Invoke

@@ -3,11 +3,12 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.submit.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.domain.AviationDre;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.domain.AviationDreUkEtsRequestPayload;
@@ -34,13 +35,13 @@ public class RequestAviationDreUkEtsApplyService {
     }
 
     @Transactional
-    public void applySubmitNotify(RequestTask requestTask, DecisionNotification decisionNotification, PmrvUser pmrvUser) {
+    public void applySubmitNotify(RequestTask requestTask, DecisionNotification decisionNotification, AppUser appUser) {
         final AviationDreUkEtsApplicationSubmitRequestTaskPayload requestTaskPayload =
             (AviationDreUkEtsApplicationSubmitRequestTaskPayload) requestTask.getPayload();
         final AviationDre dre = requestTaskPayload.getDre();
 
         aviationDreUkEtsValidatorService.validateAviationDre(dre);
-        if(!decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser)) {
+        if(!decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser)) {
             throw new BusinessException(ErrorCode.FORM_VALIDATION);
         }
 
@@ -49,7 +50,7 @@ public class RequestAviationDreUkEtsApplyService {
         AviationAccountInfoDTO
             aviationAccountInfoDTO = aviationAccountQueryService.getAviationAccountInfoDTOById(accountId);
         if (aviationAccountInfoDTO.getLocation() == null) {
-            throw new BusinessException(ErrorCode.AVIATION_ACCOUNT_LOCATION_NOT_EXIST);
+            throw new BusinessException(MetsErrorCode.AVIATION_ACCOUNT_LOCATION_NOT_EXIST);
         }
         requestPayload.setDecisionNotification(decisionNotification);
         updateRequestPayloadWithSubmitRequestTaskPayload(requestPayload, requestTaskPayload);

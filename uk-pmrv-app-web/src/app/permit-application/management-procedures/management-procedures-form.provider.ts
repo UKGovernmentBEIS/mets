@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { GovukValidators } from 'govuk-components';
 
-import { DataFlowActivities, ManagementProceduresDefinition } from 'pmrv-api';
+import { AssessAndControlRisk, DataFlowActivities, ManagementProceduresDefinition } from 'pmrv-api';
 
 import { RequestTaskFileService } from '../../shared/services/request-task-file-service/request-task-file.service';
 import { GroupBuilderConfig } from '../../shared/types';
@@ -24,7 +24,9 @@ export const managementProceduresFormProvider = {
       ...managementProceduresControls(store.permit[route.snapshot.data.permitTask], !store.getValue().isEditable),
       ...(route.snapshot.data.permitTask === 'dataFlowActivities'
         ? dataFlowActivities(store, requestTaskFileService, !store.getValue().isEditable)
-        : null),
+        : route.snapshot.data.permitTask === 'assessAndControlRisk'
+          ? assessAndControlRisk(store, requestTaskFileService, !store.getValue().isEditable)
+          : null),
     }),
 };
 
@@ -113,6 +115,24 @@ function dataFlowActivities(
     diagramAttachmentId: requestTaskFileService.buildFormControl(
       store.getState().requestTaskId,
       value?.diagramAttachmentId,
+      store.getState().permitAttachments,
+      store.getFileUploadSectionAttachmentActionContext(),
+      false,
+      disabled,
+    ),
+  };
+}
+
+function assessAndControlRisk(
+  store: PermitApplicationStore<PermitApplicationState>,
+  requestTaskFileService: RequestTaskFileService,
+  disabled: boolean,
+): GroupBuilderConfig<AssessAndControlRisk> {
+  const value = store.permit.assessAndControlRisk;
+  return {
+    riskAssessmentAttachments: requestTaskFileService.buildFormControl(
+      store.getState().requestTaskId,
+      value?.riskAssessmentAttachments ?? [],
       store.getState().permitAttachments,
       store.getFileUploadSectionAttachmentActionContext(),
       false,

@@ -10,12 +10,14 @@ import {
 import { catchError, concatMap, map, of, take, tap, withLatestFrom } from 'rxjs';
 
 import { AuthStore, selectUserId } from '@core/store';
+import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
 import { IncorporateHeaderStore } from '@shared/incorporate-header/store/incorporate-header.store';
 import { AVIATION_REQUEST_TYPES } from '@shared/utils/request.utils';
+import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 import { RequestActionsService, RequestItemsService, TasksService } from 'pmrv-api';
 
-import { requestTaskQuery, RequestTaskStore } from '../store';
+import { requestTaskQuery, RequestTaskState, RequestTaskStore } from '../store';
 import { TASK_FORM_PROVIDER } from '../task-form.provider';
 import { isNotEditableByRequestTaskType } from '../util';
 
@@ -27,6 +29,7 @@ export const canActivateRequestTask: CanActivateFn = (route) => {
   const authStore = inject(AuthStore);
   const router = inject(Router);
   const incorporateHeaderStore = inject(IncorporateHeaderStore);
+  const commonStore = inject(CommonTasksStore);
 
   const id = +route.paramMap.get('taskId');
   if (!route.paramMap.has('taskId') || Number.isNaN(id)) {
@@ -67,13 +70,31 @@ export const canActivateRequestTask: CanActivateFn = (route) => {
       store.setIsEditable(
         isEditable && !isNotEditableByRequestTaskType.includes(state.requestTaskItem.requestTask.type),
       );
+
+      setCommonTaskStore(commonStore, authStore, store.getState());
+
       return true;
+    }),
+    catchNotFoundRequest(ErrorCode.NOTFOUND1001, () => {
+      router.navigate(['error', '404']);
+      return of(null);
     }),
     catchError(() => {
       return of(router.createUrlTree(['aviation', 'dashboard']));
     }),
   );
 };
+
+function setCommonTaskStore(commonStore, authStore, state: RequestTaskState) {
+  commonStore.setState({
+    requestTaskItem: state.requestTaskItem,
+    relatedTasks: state.relatedTasks,
+    timeLineActions: state.timeline,
+    storeInitialized: true,
+    isEditable: state.isEditable,
+    user: authStore.getState().userState,
+  });
+}
 
 /**
  * This assumes that all subtask routes have a parent empty route and a `summary` route which is child of that parent
@@ -138,8 +159,10 @@ export function getClosestParentEmptyRoute(route: ActivatedRouteSnapshot): Activ
 }
 
 export const canDeactivateRequestTask: CanDeactivateFn<any> = () => {
-  const incorporateHeaderStore = inject(IncorporateHeaderStore);
+  const commonStore = inject(CommonTasksStore);
+  commonStore.resetStoreInitialized();
 
+  const incorporateHeaderStore = inject(IncorporateHeaderStore);
   incorporateHeaderStore.reset();
   return true;
 };

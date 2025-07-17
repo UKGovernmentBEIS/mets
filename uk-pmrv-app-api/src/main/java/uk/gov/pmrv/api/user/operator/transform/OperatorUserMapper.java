@@ -7,19 +7,14 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.util.ObjectUtils;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.user.core.domain.dto.PhoneNumberDTO;
-import uk.gov.pmrv.api.user.core.domain.enumeration.AuthenticationStatus;
 import uk.gov.pmrv.api.user.core.domain.enumeration.KeycloakUserAttributes;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
+import uk.gov.pmrv.api.user.operator.domain.OperatorUserInvitationDTO;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-/**
- * The Operator Mapper.
- */
 @Mapper(componentModel = "spring", config = MapperConfig.class, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface OperatorUserMapper {
 
@@ -31,10 +26,6 @@ public interface OperatorUserMapper {
         if(ObjectUtils.isEmpty(userRepresentation.getAttributes())) {
             return;
         }
-
-        Optional.ofNullable(userRepresentation.getAttributes().get(KeycloakUserAttributes.USER_STATUS.getName()))
-                .ifPresent(list -> operatorUserDTO.setStatus(AuthenticationStatus.valueOf(list.get(0))));
-
 
         /* Set phone number */
         PhoneNumberDTO phoneNumber = new PhoneNumberDTO();
@@ -51,16 +42,14 @@ public interface OperatorUserMapper {
         Optional.ofNullable(userRepresentation.getAttributes().get(KeycloakUserAttributes.MOBILE_NUMBER.getName()))
                 .ifPresent(list -> mobileNumber.setNumber(ObjectUtils.isEmpty(list) ? null : list.get(0)));
         operatorUserDTO.setMobileNumber(mobileNumber);
-
-        Optional.ofNullable(userRepresentation.getAttributes().get(KeycloakUserAttributes.TERMS_VERSION.getName()))
-                .ifPresent(list -> operatorUserDTO.setTermsVersion(ObjectUtils.isEmpty(list) ? null : Short.valueOf(list.get(0))));
     }
 
-    @Mapping(target = "id", source = "userId")
+    @Mapping(target = "username", source = "operatorUserDTO.email")
+    @Mapping(target = "email", source = "operatorUserDTO.email")
     @Mapping(target = "firstName", source = "operatorUserDTO.firstName")
     @Mapping(target = "lastName", source = "operatorUserDTO.lastName")
-    @Mapping(target = "email", source = "email")
-    UserRepresentation toUserRepresentation(OperatorUserDTO operatorUserDTO, String userId, String username, String email, Map<String, List<String>> attributes);
+    @Mapping(target = "enabled", ignore = true)
+	UserRepresentation toUserRepresentation(OperatorUserDTO operatorUserDTO);
 
     @AfterMapping
     default void populateAttributesToUserRepresentation(OperatorUserDTO operatorUserDTO, @MappingTarget UserRepresentation userRepresentation) {
@@ -82,9 +71,10 @@ public interface OperatorUserMapper {
         });
     }
 
-    @Mapping(target = "username", source = "email")
-    @Mapping(target = "email", source = "email")
-    @Mapping(target = "firstName", source = "firstName")
-    @Mapping(target = "lastName", source = "lastName")
-    UserRepresentation toUserRepresentation(String email, String firstName, String lastName);
+    @Mapping(target = "username", source = "operatorUserInvitation.email")
+    @Mapping(target = "email", source = "operatorUserInvitation.email")
+    @Mapping(target = "firstName", source = "operatorUserInvitation.firstName")
+    @Mapping(target = "lastName", source = "operatorUserInvitation.lastName")
+    @Mapping(target = "enabled", ignore = true)
+    UserRepresentation toUserRepresentation(OperatorUserInvitationDTO operatorUserInvitation);
 }

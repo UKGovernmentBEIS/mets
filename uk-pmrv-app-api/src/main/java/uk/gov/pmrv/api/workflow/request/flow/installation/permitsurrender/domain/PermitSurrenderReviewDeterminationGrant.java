@@ -1,19 +1,17 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain;
 
-import java.time.LocalDate;
-
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
+
+import java.time.LocalDate;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

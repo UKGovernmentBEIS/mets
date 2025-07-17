@@ -18,9 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -83,7 +83,7 @@ class RequestCreatePermitBatchReissueValidatorTest {
     		.thenReturn(true);
     	
     	BusinessException be = assertThrows(BusinessException.class, () -> cut.validateAction(competentAuthority, payload));
-    	assertThat(be.getErrorCode()).isEqualTo(ErrorCode.BATCH_REISSUE_IN_PROGRESS_REQUEST_EXISTS);
+    	assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.BATCH_REISSUE_IN_PROGRESS_REQUEST_EXISTS);
     	
     	verify(requestQueryService, times(1)).existByRequestTypeAndRequestStatusAndCompetentAuthority(RequestType.PERMIT_BATCH_REISSUE, RequestStatus.IN_PROGRESS, competentAuthority);
     	verifyNoInteractions(permitBatchReissueQueryService);
@@ -108,7 +108,7 @@ class RequestCreatePermitBatchReissueValidatorTest {
 			.thenReturn(false);
     	
     	BusinessException be = assertThrows(BusinessException.class, () -> cut.validateAction(competentAuthority, payload));
-    	assertThat(be.getErrorCode()).isEqualTo(ErrorCode.BATCH_REISSUE_ZERO_EMITTERS_SELECTED);
+    	assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.BATCH_REISSUE_ZERO_EMITTERS_SELECTED);
     	
     	verify(requestQueryService, times(1)).existByRequestTypeAndRequestStatusAndCompetentAuthority(RequestType.PERMIT_BATCH_REISSUE, RequestStatus.IN_PROGRESS, competentAuthority);
     	verify(permitBatchReissueQueryService, times(1)).existAccountsByCAAndFilters(competentAuthority, filters);

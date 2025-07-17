@@ -6,15 +6,15 @@
 >
   <div class="govuk-!-width-two-thirds">
     <p class="govuk-body">
-      List the secondary data sources that can be used to determine fuel consumption if the data from your primary
-      source is missing or incorrect.
+      List the secondary data sources that can be used for reporting purposes if the data from your primary source is
+      missing or incorrect.
     </p>
 
     <p class="govuk-body">A secondary data source must provide the same emissions result as your primary source.</p>
 
     <p class="govuk-body" *ngIf="!isCert">
-      Where secondary data sources are not available, and the level of data gaps are less than 5%, you must must fill in
-      the data gap using the CERT.
+      Where secondary data sources are not available, and the level of data gaps are less than 5%, you must fill in the
+      data gap using the CERT.
     </p>
 
     <div formControlName="secondaryDataSources" govuk-textarea [maxLength]="10000"></div>

@@ -1,0 +1,19 @@
+<div *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.heading }}</app-page-heading>
+  <h2 class="govuk-heading-m">{{ vm.detailsHeader }}</h2>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Have there been any uncorrected non-compliances with the Air Navigation Order?</dt>
+      <dd govukSummaryListRowValue>{{ vm.data.exist ? 'Yes' : 'No' }}</dd>
+    </div>
+  </dl>
+  <app-uncorrected-item-group
+    [uncorrectedItems]="vm.data?.uncorrectedNonCompliances"
+    *ngIf="vm.data?.exist"
+  ></app-uncorrected-item-group>
+  <app-aviation-aer-verification-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="uncorrectedNonCompliances"
+  ></app-aviation-aer-verification-review-decision-group>
+  <div><app-return-to-link></app-return-to-link></div>
+</div>

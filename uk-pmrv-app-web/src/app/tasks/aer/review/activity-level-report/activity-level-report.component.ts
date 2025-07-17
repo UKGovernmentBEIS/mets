@@ -13,8 +13,7 @@ import { AerService } from '../../core/aer.service';
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Activity level report">
       <app-activity-level-report-group
         [activityLevelReport]="activityLevelReport$ | async"
-        [documentFiles]="documentFiles$ | async"
-      ></app-activity-level-report-group>
+        [documentFiles]="documentFiles$ | async"></app-activity-level-report-group>
       <app-aer-review-group-decision (notification)="notification = $event"></app-aer-review-group-decision>
     </app-aer-task-review>
   `,
@@ -30,5 +29,8 @@ export class ActivityLevelReportComponent {
     map((file) => (file ? this.aerService.getDownloadUrlFiles([file]) : [])),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

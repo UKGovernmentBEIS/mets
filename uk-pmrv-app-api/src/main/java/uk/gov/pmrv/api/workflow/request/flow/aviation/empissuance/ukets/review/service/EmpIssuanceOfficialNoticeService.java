@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.pmrv.api.common.config.RegistryConfig;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.submit.domain.EmpIssuanceUkEtsRequestPayload;
@@ -21,7 +21,6 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -40,6 +39,7 @@ public class EmpIssuanceOfficialNoticeService {
     private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
 
     private final OfficialNoticeSendService officialNoticeSendService;
+    
     private final RegistryConfig registryConfig;
 
     @Transactional
@@ -91,11 +91,9 @@ public class EmpIssuanceOfficialNoticeService {
                 List.of(requestPayload.getOfficialNotice(), requestPayload.getEmpDocument()) :
                 List.of(requestPayload.getOfficialNotice());
 
-        final List<String> ccRecipientsEmails = new ArrayList<>();
-        ccRecipientsEmails.add(registryConfig.getEmail());
-        ccRecipientsEmails.addAll(decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification()));
-
-        officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails);
+		officialNoticeSendService.sendOfficialNotice(attachments, request,
+				decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification()),
+				List.of(registryConfig.getEmail()));
     }
 
     private CompletableFuture<FileInfoDTO> generateOfficialNoticeAsync(final Request request,
@@ -109,7 +107,7 @@ public class EmpIssuanceOfficialNoticeService {
 
         final TemplateParams templateParams = constructTemplateParams(request, accountPrimaryContact,
                 ccRecipientsEmails, type, requestPayload, serviceContact);
-        return documentFileGeneratorService.generateFileDocumentAsync(documentTemplateType, templateParams,
+        return documentFileGeneratorService.generateAndSaveFileDocumentAsync(documentTemplateType, templateParams,
                 fileNameToGenerate);
     }
 
@@ -138,6 +136,6 @@ public class EmpIssuanceOfficialNoticeService {
 
         final TemplateParams templateParams = constructTemplateParams(request, accountPrimaryContact,
                 ccRecipientsEmails, type, requestPayload, serviceContact);
-        return documentFileGeneratorService.generateFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
+        return documentFileGeneratorService.generateAndSaveFileDocument(documentTemplateType, templateParams, fileNameToGenerate);
     }
 }

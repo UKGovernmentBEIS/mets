@@ -1,0 +1,23 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.heading }}</app-page-heading>
+  <h2 class="govuk-heading-m">Recommended improvements</h2>
+
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Are there any recommended improvements?</dt>
+      <dd govukSummaryListRowValue>{{ vm.data.exist ?'Yes' : 'No' }}</dd>
+    </div>
+  </dl>
+
+  <app-recommended-improvements-group-template
+    [verifierComments]="vm.data?.recommendedImprovements"
+    *ngIf="vm.data?.exist"
+  ></app-recommended-improvements-group-template>
+
+  <app-aviation-aer-verification-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="recommendedImprovements"
+  ></app-aviation-aer-verification-review-decision-group>
+
+</ng-container>
+<app-return-to-link></app-return-to-link>

@@ -14,8 +14,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.service.DateService;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.utils.DateService;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -53,7 +53,7 @@ class NerSubmitApplicationActionHandlerTest {
             RequestTaskActionEmptyPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD)
                 .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final String processTaskId = "processTaskId";
         final Request request = Request.builder().id("1").build();
         final RequestTask requestTask =
@@ -65,11 +65,11 @@ class NerSubmitApplicationActionHandlerTest {
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.NER_SUBMIT_APPLICATION,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         Assertions.assertEquals(request.getSubmissionDate(), submissionDate);
-        verify(applyService, times(1)).applySubmitAction(requestTask, pmrvUser);
+        verify(applyService, times(1)).applySubmitAction(requestTask, appUser);
         verify(workflowService, times(1)).completeTask(processTaskId,
             Map.of(
                 BpmnProcessConstants.NER_SUBMIT_OUTCOME, NerSubmitOutcome.SUBMITTED

@@ -3,6 +3,10 @@ import { RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
+import {
+  AER_CORSIA_REVIEW_APPLICATION_TASKS,
+  aerCorsiaReviewGroupMap,
+} from '@aviation/request-task/aer/corsia/shared/aer-review-corsia.types';
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { AER_APPLICATION_TASKS, aerReviewGroupMap } from '@aviation/request-task/aer/shared/util/aer.util';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
@@ -19,6 +23,7 @@ interface ViewModel {
   reviewAttachments?: { [key: string]: string };
   downloadBaseUrl?: string;
   requestTaskType: ItemDTO['taskType'];
+  isCorsia: boolean;
 }
 
 @Component({
@@ -33,7 +38,7 @@ interface ViewModel {
           [downloadBaseUrl]="vm.downloadBaseUrl"
           [requestTaskType]="vm.requestTaskType"
           [isAer]="true"
-        ></app-return-for-amends-shared>
+          [isCorsia]="vm.isCorsia"></app-return-for-amends-shared>
       </div>
     </div>
   `,
@@ -48,24 +53,33 @@ export class ReturnForAmendsPageComponent {
     this.store.pipe(aerQuery.selectReviewDecisions),
     this.store.pipe(aerQuery.selectReviewAttachments),
     this.store.pipe(requestTaskQuery.selectRequestTaskType),
+    this.store.pipe(aerQuery.selectIsCorsia),
   ]).pipe(
-    map(([reviewDecisions, reviewAttachments, requestTaskType]) => ({
+    map(([reviewDecisions, reviewAttachments, requestTaskType, isCorsia]) => ({
       pageHeader: 'Check your information before sending',
       decisionAmends: Object.keys(reviewDecisions ?? [])
         .filter((key) => reviewDecisions[key].type === 'OPERATOR_AMENDS_NEEDED')
-        .map((key) => ({
-          groupKey: Object.keys(aerReviewGroupMap).find((reviewKey) => aerReviewGroupMap[reviewKey] === key),
-          data: reviewDecisions[key],
-        }))
+        .map((key) => {
+          const groupKey = isCorsia
+            ? Object.keys(aerCorsiaReviewGroupMap).find((reviewKey) => aerCorsiaReviewGroupMap[reviewKey] === key)
+            : Object.keys(aerReviewGroupMap).find((reviewKey) => aerReviewGroupMap[reviewKey] === key);
+          return {
+            groupKey: groupKey,
+            data: reviewDecisions[key],
+          };
+        })
         .sort((a, b) => {
-          const allTasks = AER_APPLICATION_TASKS.map((t) => t.tasks)
+          const allTasks = isCorsia ? AER_CORSIA_REVIEW_APPLICATION_TASKS : AER_APPLICATION_TASKS;
+          const allTaskNames = allTasks
+            .map((t) => t.tasks)
             .reduce((acc, tasks) => acc.concat(tasks), [])
             .map((task) => task.name);
-          return allTasks.indexOf(a.groupKey) - allTasks.indexOf(b.groupKey);
+          return allTaskNames.indexOf(a.groupKey) - allTaskNames.indexOf(b.groupKey);
         }),
       reviewAttachments: reviewAttachments,
       downloadBaseUrl: this.store.aerDelegate.baseFileAttachmentDownloadUrl,
-      requestTaskType,
+      requestTaskType: requestTaskType,
+      isCorsia: isCorsia,
     })),
   );
 }

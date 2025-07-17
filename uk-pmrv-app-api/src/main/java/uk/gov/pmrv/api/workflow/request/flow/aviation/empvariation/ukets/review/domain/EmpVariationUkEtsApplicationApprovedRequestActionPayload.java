@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.common.domain.EmpUkEtsReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationReviewDecision;
@@ -75,5 +75,16 @@ public class EmpVariationUkEtsApplicationApprovedRequestActionPayload
                 )
             )
             .flatMap(m -> m.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    @Override
+    public Map<UUID, String> getAttachments() {
+
+        final Map<UUID, String> originalAttachments = originalEmpContainer != null ?
+            originalEmpContainer.getEmpAttachments() : new HashMap<>();
+
+        return Stream.of(super.getEmpAttachments(), originalAttachments).flatMap(m -> m.entrySet().stream()).collect(
+            Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (first, second) -> first)
+        );
     }
 }

@@ -16,8 +16,18 @@ import { SummaryGuard } from '@tasks/air/submit/summary/summary.guard';
 const routes: Routes = [
   {
     path: '',
-    data: { pageTitle: 'Annual improvement report submit' },
-    component: SubmitContainerComponent,
+    children: [
+      {
+        path: '',
+        data: { pageTitle: 'Annual improvement report submit' },
+        component: SubmitContainerComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+    ],
   },
   {
     path: 'send-report',

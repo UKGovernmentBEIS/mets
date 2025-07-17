@@ -1,10 +1,12 @@
 package uk.gov.pmrv.api.migration.legalentity;
 
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.Validator;
 import org.jetbrains.annotations.NotNull;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
@@ -14,7 +16,6 @@ import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 
-import jakarta.validation.Validator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,13 +26,20 @@ import java.util.stream.Collectors;
 
 @Service
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
-@RequiredArgsConstructor
 public class MigrationLegalEntityService extends MigrationBaseService {
 
     private final JdbcTemplate migrationJdbcTemplate;
     private final LegalEntityService legalEntityService;
     private final Validator validator;
     private final MigrationLegalEntityMapper migrationLegalEntityMapper = Mappers.getMapper(MigrationLegalEntityMapper.class);
+
+    public MigrationLegalEntityService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                       LegalEntityService legalEntityService,
+                                       Validator validator) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.legalEntityService = legalEntityService;
+        this.validator = validator;
+    }
 
     /**
      * tblOperator has one-to-many relationship with tblEmitter

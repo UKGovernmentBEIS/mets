@@ -27,4 +27,13 @@
       ></app-total-emissions-corsia-state-pairs-table-template>
     </ng-template>
   </govuk-tabs>
+
+  <ng-container *ngIf="vm.showDecision">
+    <h2 app-summary-header class="govuk-heading-m">Decision Summary</h2>
+    <app-aer-review-decision-group-summary
+      [data]="vm.reviewDecision"
+      [attachments]="vm.reviewAttachments"
+      [downloadBaseUrl]="store.aerDelegate.baseFileAttachmentDownloadUrl"
+    ></app-aer-review-decision-group-summary>
+  </ng-container>
 </app-request-action-task>

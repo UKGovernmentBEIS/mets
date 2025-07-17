@@ -32,7 +32,7 @@ export class AerReinitializeComponent {
         switchMap(([requestId, accountId]) =>
           this.requestsService.processRequestCreateAction(
             createRequestCreateActionProcessDTO('AER', requestId),
-            accountId,
+            String(accountId),
           ),
         ),
         this.pendingRequest.trackRequest(),

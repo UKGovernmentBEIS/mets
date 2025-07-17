@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -14,8 +14,11 @@ import {
 } from '../../non-compliance.wizard';
 
 @Injectable({ providedIn: 'root' })
-export class NoticeOfIntentGuard implements CanActivate {
-  constructor(private readonly store: CommonTasksStore, private readonly router: Router) {}
+export class NoticeOfIntentGuard {
+  constructor(
+    private readonly store: CommonTasksStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     return (

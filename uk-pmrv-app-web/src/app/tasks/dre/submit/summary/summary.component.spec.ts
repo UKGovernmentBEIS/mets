@@ -4,8 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
+import { addDays, setHours } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import { TasksService } from 'pmrv-api';
 
@@ -118,7 +118,7 @@ describe('SummaryComponent', () => {
     };
     const formatter = Intl.DateTimeFormat('en-GB-u-hc-h12', dateFormatOptions);
     const dueDateString = formatter
-      .formatToParts(new Date(moment().add(1, 'day').set('hour', 12).toISOString()))
+      .formatToParts(new Date(setHours(addDays(new Date(), 1), 12)))
       .map(({ value }, index) => (index === 9 ? '' : value))
       .join('');
 

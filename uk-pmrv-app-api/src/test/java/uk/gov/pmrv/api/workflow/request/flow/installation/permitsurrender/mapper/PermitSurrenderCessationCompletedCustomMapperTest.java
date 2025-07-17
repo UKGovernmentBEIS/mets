@@ -6,7 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -47,6 +48,6 @@ class PermitSurrenderCessationCompletedCustomMapperTest {
     @Test
     void getUserRoleTypes() {
         assertThat(cessationCompletedOperatorMapper.getUserRoleTypes())
-            .containsExactlyInAnyOrder(RoleType.OPERATOR, RoleType.VERIFIER);
+            .containsExactlyInAnyOrder(RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER);
     }
 }

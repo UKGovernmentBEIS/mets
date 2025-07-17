@@ -17,7 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
-import uk.gov.pmrv.api.common.domain.converter.YearAttributeConverter;
+import uk.gov.netz.api.common.config.YearAttributeConverter;
 
 @Getter
 @Setter

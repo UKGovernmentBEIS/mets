@@ -19,11 +19,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.common.config.KeycloakProperties;
+import uk.gov.netz.api.restclient.RestClientApi;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.user.core.config.KeycloakProperties;
 import uk.gov.pmrv.api.user.core.domain.enumeration.KeycloakRestEndPointEnum;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetails;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetailsRequest;
@@ -33,7 +33,6 @@ import uk.gov.pmrv.api.user.core.domain.model.keycloak.KeycloakUserDetails;
 import uk.gov.pmrv.api.user.core.domain.model.keycloak.KeycloakUserDetailsRequest;
 import uk.gov.pmrv.api.user.core.domain.model.keycloak.KeycloakUserOtpValidationInfo;
 
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -75,13 +74,19 @@ class KeycloakCustomClientTest {
 
         when(keycloakAdminClient.tokenManager().grantToken().getToken()).thenReturn(token);
 
-        UriComponents restPoint = UriComponentsBuilder
-                .fromHttpUrl(authServerUrl + "/realms/" + realm + KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_DETAILS.getEndPoint())
-                .queryParam("userId", userId)
-                .build();
-
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(token);
+
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_DETAILS.getPath())
+                        .queryParam("userId", "{userId}")
+                        .build(userId))
+                .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_DETAILS)
+                .headers(httpHeaders)
+                .restTemplate(restTemplate)
+                .build();
 
         String signatureUUID = UUID.randomUUID().toString();
         KeycloakUserDetails keycloakUserDetails = KeycloakUserDetails.builder()
@@ -89,9 +94,9 @@ class KeycloakCustomClientTest {
                 .signature(FileInfoDTO.builder().name("signature").uuid(signatureUUID).build())
                 .build();
 
-        when(restTemplate.exchange(restPoint.toString(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
-                new ParameterizedTypeReference<KeycloakUserDetails>() {}, new HashMap<>()))
-            .thenReturn(new ResponseEntity<KeycloakUserDetails>(keycloakUserDetails, HttpStatus.OK));
+        when(restTemplate.exchange(appRestApi.getUri(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<KeycloakUserDetails>() {}))
+                .thenReturn(new ResponseEntity<>(keycloakUserDetails, HttpStatus.OK));
 
         Optional<UserDetails> result = client.getUserDetails(userId);
         assertThat(result).isNotEmpty();
@@ -101,8 +106,8 @@ class KeycloakCustomClientTest {
                         .name("signature").uuid(signatureUUID)
                         .build()).build());
 
-        verify(restTemplate, times(1)).exchange(restPoint.toString(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
-                new ParameterizedTypeReference<KeycloakUserDetails>() {}, new HashMap<>());
+        verify(restTemplate, times(1)).exchange(appRestApi.getUri(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<KeycloakUserDetails>() {});
     }
 
     @Test
@@ -112,29 +117,35 @@ class KeycloakCustomClientTest {
 
         when(keycloakAdminClient.tokenManager().grantToken().getToken()).thenReturn(token);
 
-        UriComponents restPoint = UriComponentsBuilder
-                .fromHttpUrl(authServerUrl + "/realms/" + realm + KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_DETAILS.getEndPoint())
-                .queryParam("userId", userId)
-                .build();
-
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(token);
 
-        when(restTemplate.exchange(restPoint.toString(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
-                new ParameterizedTypeReference<KeycloakUserDetails>() {}, new HashMap<>()))
-            .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_DETAILS.getPath())
+                        .queryParam("userId", "{userId}")
+                        .build(userId))
+                .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_DETAILS)
+                .headers(httpHeaders)
+                .restTemplate(restTemplate)
+                .build();
 
-        try{
+        when(restTemplate.exchange(appRestApi.getUri(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<KeycloakUserDetails>() {}))
+                .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+
+        try {
             client.getUserDetails(userId);
             Assertions.fail("Should not reach here");
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             assertThat(e.getCause().getClass()).isEqualTo(HttpClientErrorException.class);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Assertions.fail("Should not reach here");
         }
 
-        verify(restTemplate, times(1)).exchange(restPoint.toString(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
-                new ParameterizedTypeReference<KeycloakUserDetails>() {}, new HashMap<>());
+        verify(restTemplate, times(1)).exchange(appRestApi.getUri(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<KeycloakUserDetails>() {});
     }
 
     @Test
@@ -149,8 +160,6 @@ class KeycloakCustomClientTest {
         String token = "token";
         when(keycloakAdminClient.tokenManager().grantToken().getToken()).thenReturn(token);
 
-        String restPoint = authServerUrl + "/realms/" + realm + KeycloakRestEndPointEnum.KEYCLOAK_POST_USER_DETAILS.getEndPoint();
-
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(token);
 
@@ -159,14 +168,27 @@ class KeycloakCustomClientTest {
                 .signature(signature)
                 .build();
 
-        when(restTemplate.exchange(restPoint, HttpMethod.POST, new HttpEntity<>(keycloakUserDetailsRequest, httpHeaders),
-                new ParameterizedTypeReference<Void>() {}, new HashMap<>()))
-            .thenReturn(new ResponseEntity<Void>(HttpStatus.OK));
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_POST_USER_DETAILS.getPath())
+                        .build()
+                        .toUri())
+                .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_POST_USER_DETAILS)
+                .headers(httpHeaders)
+                .body(keycloakUserDetailsRequest)
+                .restTemplate(restTemplate)
+                .build();
+
+        when(restTemplate.exchange(appRestApi.getUri(), HttpMethod.POST, new HttpEntity<>(keycloakUserDetailsRequest, httpHeaders),
+                new ParameterizedTypeReference<Void>() {}))
+                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
+
 
         client.saveUserDetails(userDetailsRequest);
 
-        verify(restTemplate, times(1)).exchange(restPoint, HttpMethod.POST, new HttpEntity<>(keycloakUserDetailsRequest, httpHeaders),
-                new ParameterizedTypeReference<Void>() {}, new HashMap<>());
+        verify(restTemplate, times(1)).exchange(appRestApi.getUri(), HttpMethod.POST, new HttpEntity<>(keycloakUserDetailsRequest, httpHeaders),
+                new ParameterizedTypeReference<Void>() {});
     }
 
     @Test
@@ -181,8 +203,6 @@ class KeycloakCustomClientTest {
         String token = "token";
         when(keycloakAdminClient.tokenManager().grantToken().getToken()).thenReturn(token);
 
-        String restPoint = authServerUrl + "/realms/" + realm + KeycloakRestEndPointEnum.KEYCLOAK_POST_USER_DETAILS.getEndPoint();
-
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(token);
 
@@ -191,21 +211,33 @@ class KeycloakCustomClientTest {
                 .signature(signature)
                 .build();
 
-        when(restTemplate.exchange(restPoint, HttpMethod.POST, new HttpEntity<>(keycloakUserDetailsRequest, httpHeaders),
-                new ParameterizedTypeReference<Void>() {}, new HashMap<>()))
-            .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_POST_USER_DETAILS.getPath())
+                        .build()
+                        .toUri())
+                .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_POST_USER_DETAILS)
+                .headers(httpHeaders)
+                .body(keycloakUserDetailsRequest)
+                .restTemplate(restTemplate)
+                .build();
 
-        try{
+        when(restTemplate.exchange(appRestApi.getUri(), HttpMethod.POST, new HttpEntity<>(keycloakUserDetailsRequest, httpHeaders),
+                new ParameterizedTypeReference<Void>() {}))
+                .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+
+        try {
             client.saveUserDetails(userDetailsRequest);
             Assertions.fail("Should not reach here");
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             assertThat(e.getCause().getClass()).isEqualTo(HttpClientErrorException.class);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Assertions.fail("Should not reach here");
         }
 
-        verify(restTemplate, times(1)).exchange(restPoint, HttpMethod.POST, new HttpEntity<>(keycloakUserDetailsRequest, httpHeaders),
-                new ParameterizedTypeReference<Void>() {}, new HashMap<>());
+        verify(restTemplate, times(1)).exchange(appRestApi.getUri(), HttpMethod.POST, new HttpEntity<>(keycloakUserDetailsRequest, httpHeaders),
+                new ParameterizedTypeReference<Void>() {});
     }
 
     @Test
@@ -215,11 +247,6 @@ class KeycloakCustomClientTest {
 
         when(keycloakAdminClient.tokenManager().grantToken().getToken()).thenReturn(token);
 
-        UriComponents restPoint = UriComponentsBuilder
-                .fromHttpUrl(authServerUrl + "/realms/" + realm + KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_SIGNATURE.getEndPoint())
-                .queryParam("signatureUuid", signatureUuid)
-                .build();
-
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(token);
 
@@ -227,20 +254,31 @@ class KeycloakCustomClientTest {
                 .name("name").content("content".getBytes()).size(1L).type("type")
                 .build();
 
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_SIGNATURE.getPath())
+                        .queryParam("signatureUuid", "{signatureUuid}")
+                        .build(signatureUuid))
+                .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_SIGNATURE)
+                .headers(httpHeaders)
+                .restTemplate(restTemplate)
+                .build();
+
         FileDTO fileDTO = FileDTO.builder()
                 .fileName("name").fileContent("content".getBytes()).fileSize(1L).fileType("type")
                 .build();
 
-        when(restTemplate.exchange(restPoint.toString(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
-                new ParameterizedTypeReference<KeycloakSignature>() {}, new HashMap<>()))
-            .thenReturn(new ResponseEntity<KeycloakSignature>(keycloakSignature, HttpStatus.OK));
+        when(restTemplate.exchange(appRestApi.getUri(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<KeycloakSignature>() {}))
+                .thenReturn(new ResponseEntity<>(keycloakSignature, HttpStatus.OK));
 
         Optional<FileDTO> result = client.getUserSignature(signatureUuid);
         assertThat(result).isNotEmpty();
         assertThat(result.get()).isEqualTo(fileDTO);
 
-        verify(restTemplate, times(1)).exchange(restPoint.toString(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
-                new ParameterizedTypeReference<KeycloakSignature>() {}, new HashMap<>());
+        verify(restTemplate, times(1)).exchange(appRestApi.getUri(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<KeycloakSignature>() {});
     }
 
     @Test
@@ -250,51 +288,69 @@ class KeycloakCustomClientTest {
 
         when(keycloakAdminClient.tokenManager().grantToken().getToken()).thenReturn(token);
 
-        UriComponents restPoint = UriComponentsBuilder
-                .fromHttpUrl(authServerUrl + "/realms/" + realm + KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_SIGNATURE.getEndPoint())
-                .queryParam("signatureUuid", signatureUuid)
-                .build();
-
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(token);
 
-        when(restTemplate.exchange(restPoint.toString(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
-                new ParameterizedTypeReference<KeycloakSignature>() {}, new HashMap<>()))
-            .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_SIGNATURE.getPath())
+                        .queryParam("signatureUuid", "{signatureUuid}")
+                        .build(signatureUuid))
+                .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_GET_USER_SIGNATURE)
+                .headers(httpHeaders)
+                .restTemplate(restTemplate)
+                .build();
+
+        when(restTemplate.exchange(appRestApi.getUri(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<KeycloakSignature>() {}))
+                .thenThrow(new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
 
         try{
             client.getUserSignature(signatureUuid);
             Assertions.fail("Should not reach here");
         } catch (RuntimeException e) {
             assertThat(e.getCause().getClass()).isEqualTo(HttpClientErrorException.class);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Assertions.fail("Should not reach here");
         }
 
-        verify(restTemplate, times(1)).exchange(restPoint.toString(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
-                new ParameterizedTypeReference<KeycloakSignature>() {}, new HashMap<>());
+        verify(restTemplate, times(1)).exchange(appRestApi.getUri(), HttpMethod.GET, new HttpEntity<>(httpHeaders),
+                new ParameterizedTypeReference<KeycloakSignature>() {});
     }
 
     @Test
-    void validateUnAuthenticatedUserOtp() {
+    void validateUnauthenticatedUserOtp() {
         String otp = "otp";
         String email = "email";
-
-        String restPoint = authServerUrl + "/realms/" + realm + KeycloakRestEndPointEnum.KEYCLOAK_VALIDATE_OTP.getEndPoint();
 
         KeycloakUserOtpValidationInfo otpValidation = KeycloakUserOtpValidationInfo.builder()
         		.otp(otp)
         		.email(email)
         		.build();
 
-        when(restTemplate.exchange(restPoint, HttpMethod.POST, new HttpEntity<>(otpValidation),
-                new ParameterizedTypeReference<Void>() {}, new HashMap<>()))
-            .thenReturn(new ResponseEntity<Void>(HttpStatus.OK));
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(realmEndpointUrl())
+                        .path(KeycloakRestEndPointEnum.KEYCLOAK_VALIDATE_OTP.getPath())
+                        .build()
+                        .toUri())
+                .restEndPoint(KeycloakRestEndPointEnum.KEYCLOAK_VALIDATE_OTP)
+                .body(otpValidation)
+                .restTemplate(restTemplate)
+                .build();
 
-        client.validateUnAuthenticatedUserOtp(otp, email);
+        when(restTemplate.exchange(appRestApi.getUri(), HttpMethod.POST, new HttpEntity<>(otpValidation),
+                new ParameterizedTypeReference<Void>() {}))
+                .thenReturn(new ResponseEntity<>(HttpStatus.OK));
 
-        verify(restTemplate, times(1)).exchange(restPoint, HttpMethod.POST, new HttpEntity<>(otpValidation),
-                new ParameterizedTypeReference<Void>() {}, new HashMap<>());
+        client.validateUnauthenticatedUserOtp(otp, email);
+
+        verify(restTemplate, times(1)).exchange(appRestApi.getUri(), HttpMethod.POST, new HttpEntity<>(otpValidation),
+                new ParameterizedTypeReference<Void>() {});
     }
 
+    private String realmEndpointUrl() {
+        return authServerUrl + "/realms/" + realm;
+    }
 }

@@ -66,7 +66,7 @@ describe('FallbackEmissionsGroupComponent', () => {
       'Description of the fallback approach',
       'asdf',
       'Document upload',
-      '100.bmp300.png',
+      '100.bmp  300.png',
       'Fossil emissions',
       '1.1 tonnes CO2e',
       'Fossil energy content',

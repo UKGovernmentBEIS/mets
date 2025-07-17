@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentTokenService;
-import uk.gov.pmrv.api.token.FileToken;
+import uk.gov.netz.api.files.documents.service.FileDocumentTokenService;
+import uk.gov.netz.api.token.FileToken;
 
 import java.util.UUID;
 
@@ -58,7 +58,8 @@ class EmpDocumentServiceTest {
         final String empId = "1";
         final UUID documentUuid = UUID.randomUUID();
 
-        when(emissionsMonitoringPlanQueryService.getEmpContainerByIdAndFileDocumentUuid(empId, documentUuid.toString())).thenThrow(new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
+        when(emissionsMonitoringPlanQueryService.getEmpContainerByIdAndFileDocumentUuid(empId, documentUuid.toString())).thenThrow(new BusinessException(
+            ErrorCode.RESOURCE_NOT_FOUND));
 
         final BusinessException be = assertThrows(BusinessException.class, () -> service.generateGetFileDocumentToken(empId, documentUuid));
         assertThat(be.getErrorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND);

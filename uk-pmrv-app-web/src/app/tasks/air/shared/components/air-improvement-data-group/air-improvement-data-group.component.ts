@@ -17,8 +17,7 @@ import { AirApplicationSubmitRequestTaskPayload, AirImprovement } from 'pmrv-api
           link="{{ airImprovement.key }}/summary"
           linkText="Provide information about this improvement"
           [status]="airRequestPayload | taskStatus: airImprovement.key"
-          [hasContent]="true"
-        ></li>
+          [hasContent]="true"></li>
       </ul>
     </ng-container>
   `,

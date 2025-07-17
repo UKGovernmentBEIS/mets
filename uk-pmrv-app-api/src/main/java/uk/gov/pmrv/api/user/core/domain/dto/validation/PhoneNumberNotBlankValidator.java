@@ -1,11 +1,9 @@
 package uk.gov.pmrv.api.user.core.domain.dto.validation;
 
-import org.springframework.util.ObjectUtils;
-
-import uk.gov.pmrv.api.user.core.domain.dto.PhoneNumberDTO;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.util.ObjectUtils;
+import uk.gov.pmrv.api.user.core.domain.dto.PhoneNumberDTO;
 
 /**
  * The PhoneNumber validation that validates if country code or number are blank.

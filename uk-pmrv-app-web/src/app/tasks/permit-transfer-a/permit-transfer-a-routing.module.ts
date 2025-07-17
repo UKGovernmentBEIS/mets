@@ -25,6 +25,11 @@ const routes: Routes = [
         component: SubmitContainerComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'reason',
         data: { pageTitle: 'Transfer details' },
         component: TransferAReasonComponent,
@@ -77,8 +82,18 @@ const routes: Routes = [
   },
   {
     path: 'wait',
-    data: { pageTitle: 'Full transfer of permit' },
-    component: TransferWaitComponent,
+    children: [
+      {
+        path: '',
+        data: { pageTitle: 'Full transfer of permit' },
+        component: TransferWaitComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+    ],
   },
 ];
 

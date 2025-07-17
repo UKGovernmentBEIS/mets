@@ -59,7 +59,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'PERMIT_ISSUANCE',
       taskType: 'PERMIT_ISSUANCE_MAKE_PAYMENT',
-      expectedPath: ['/payment', taskId, 'make', 'details'],
+      expectedPath: ['/payment', taskId, 'make'],
     },
     {
       requestType: 'PERMIT_ISSUANCE',
@@ -76,7 +76,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'PERMIT_REVOCATION',
       taskType: 'PERMIT_REVOCATION_MAKE_PAYMENT',
-      expectedPath: ['/payment', taskId, 'make', 'details'],
+      expectedPath: ['/payment', taskId, 'make'],
     },
     {
       requestType: 'PERMIT_REVOCATION',
@@ -133,7 +133,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'PERMIT_SURRENDER',
       taskType: 'PERMIT_SURRENDER_MAKE_PAYMENT',
-      expectedPath: ['/payment', taskId, 'make', 'details'],
+      expectedPath: ['/payment', taskId, 'make'],
     },
     {
       requestType: 'PERMIT_SURRENDER',
@@ -232,7 +232,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'PERMIT_VARIATION',
       taskType: 'PERMIT_VARIATION_MAKE_PAYMENT',
-      expectedPath: ['/payment', taskId, 'make', 'details'],
+      expectedPath: ['/payment', taskId, 'make'],
     },
     {
       requestType: 'PERMIT_VARIATION',
@@ -267,7 +267,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'PERMIT_VARIATION',
       taskType: 'PERMIT_VARIATION_REGULATOR_LED_MAKE_PAYMENT',
-      expectedPath: ['/payment', taskId, 'make', 'details'],
+      expectedPath: ['/payment', taskId, 'make'],
     },
     {
       requestType: 'PERMIT_VARIATION',
@@ -294,7 +294,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'PERMIT_TRANSFER_A',
       taskType: 'PERMIT_TRANSFER_A_MAKE_PAYMENT',
-      expectedPath: ['/payment', taskId, 'make', 'details'],
+      expectedPath: ['/payment', taskId, 'make'],
     },
     {
       requestType: 'PERMIT_TRANSFER_A',
@@ -321,7 +321,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'PERMIT_TRANSFER_B',
       taskType: 'PERMIT_TRANSFER_B_MAKE_PAYMENT',
-      expectedPath: ['/payment', taskId, 'make', 'details'],
+      expectedPath: ['/payment', taskId, 'make'],
     },
     {
       requestType: 'PERMIT_TRANSFER_B',
@@ -479,7 +479,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'DRE',
       taskType: 'DRE_MAKE_PAYMENT',
-      expectedPath: ['/payment', taskId, 'make', 'details'],
+      expectedPath: ['/payment', taskId, 'make'],
     },
     {
       requestType: 'DRE',
@@ -575,6 +575,67 @@ describe('ItemLinkPipe', () => {
       expectedPath: ['/tasks', taskId, 'doal', 'peer-review'],
     },
 
+    // PERMANENT_CESSATION
+    {
+      requestType: 'PERMANENT_CESSATION',
+      taskType: 'PERMANENT_CESSATION_APPLICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'permanent-cessation', 'submit'],
+    },
+    {
+      requestType: 'PERMANENT_CESSATION',
+      taskType: 'PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'permanent-cessation', 'submit'],
+    },
+    {
+      requestType: 'PERMANENT_CESSATION',
+      taskType: 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'permanent-cessation', 'submit'],
+    },
+
+    // INSTALLATION_ONSITE_INSPECTION
+    {
+      requestType: 'INSTALLATION_ONSITE_INSPECTION',
+      taskType: 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'inspection', 'onsite', 'submit'],
+    },
+    {
+      requestType: 'INSTALLATION_ONSITE_INSPECTION',
+      taskType: 'INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'inspection', 'onsite', 'peer-review-wait'],
+    },
+    {
+      requestType: 'INSTALLATION_ONSITE_INSPECTION',
+      taskType: 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'inspection', 'onsite', 'peer-review'],
+    },
+    {
+      requestType: 'INSTALLATION_ONSITE_INSPECTION',
+      taskType: 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS',
+      expectedPath: ['/tasks', taskId, 'inspection', 'onsite', 'respond'],
+    },
+
+    // INSTALLATION_AUDIT
+    {
+      requestType: 'INSTALLATION_AUDIT',
+      taskType: 'INSTALLATION_AUDIT_APPLICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'inspection', 'audit', 'submit'],
+    },
+    {
+      requestType: 'INSTALLATION_AUDIT',
+      taskType: 'INSTALLATION_AUDIT_WAIT_FOR_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'inspection', 'audit', 'peer-review-wait'],
+    },
+    {
+      requestType: 'INSTALLATION_AUDIT',
+      taskType: 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'inspection', 'audit', 'peer-review'],
+    },
+    {
+      requestType: 'INSTALLATION_AUDIT',
+      taskType: 'INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS',
+      expectedPath: ['/tasks', taskId, 'inspection', 'audit', 'respond'],
+    },
+
     // EMP_ISSUANCE_CORSIA
     {
       requestType: 'EMP_ISSUANCE_CORSIA',
@@ -594,7 +655,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'EMP_ISSUANCE_CORSIA',
       taskType: 'EMP_ISSUANCE_CORSIA_MAKE_PAYMENT',
-      expectedPath: ['/aviation/', 'payment', taskId, 'make', 'details'],
+      expectedPath: ['/aviation/', 'payment', taskId, 'make'],
     },
     {
       requestType: 'EMP_ISSUANCE_CORSIA',
@@ -718,7 +779,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'EMP_ISSUANCE_UKETS',
       taskType: 'EMP_ISSUANCE_UKETS_MAKE_PAYMENT',
-      expectedPath: ['/aviation/', 'payment', taskId, 'make', 'details'],
+      expectedPath: ['/aviation/', 'payment', taskId, 'make'],
     },
     {
       requestType: 'EMP_ISSUANCE_UKETS',
@@ -815,7 +876,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'EMP_VARIATION_UKETS',
       taskType: 'EMP_VARIATION_UKETS_MAKE_PAYMENT',
-      expectedPath: ['/aviation/', 'payment', taskId, 'make', 'details'],
+      expectedPath: ['/aviation/', 'payment', taskId, 'make'],
     },
     {
       requestType: 'EMP_VARIATION_UKETS',
@@ -875,7 +936,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'EMP_VARIATION_UKETS',
       taskType: 'EMP_VARIATION_UKETS_REGULATOR_LED_MAKE_PAYMENT',
-      expectedPath: ['/aviation/', 'payment', taskId, 'make', 'details'],
+      expectedPath: ['/aviation/', 'payment', taskId, 'make'],
     },
     {
       requestType: 'EMP_VARIATION_UKETS',
@@ -890,7 +951,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'EMP_VARIATION_CORSIA',
       taskType: 'EMP_VARIATION_CORSIA_REGULATOR_LED_MAKE_PAYMENT',
-      expectedPath: ['/aviation/', 'payment', taskId, 'make', 'details'],
+      expectedPath: ['/aviation/', 'payment', taskId, 'make'],
     },
     {
       requestType: 'EMP_VARIATION_CORSIA',
@@ -905,7 +966,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'EMP_VARIATION_CORSIA',
       taskType: 'EMP_VARIATION_CORSIA_MAKE_PAYMENT',
-      expectedPath: ['/aviation/', 'payment', taskId, 'make', 'details'],
+      expectedPath: ['/aviation/', 'payment', taskId, 'make'],
     },
     {
       requestType: 'EMP_VARIATION_CORSIA',
@@ -983,7 +1044,7 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'AVIATION_DRE_UKETS',
       taskType: 'AVIATION_DRE_UKETS_MAKE_PAYMENT',
-      expectedPath: ['/aviation/', 'payment', taskId, 'make', 'details'],
+      expectedPath: ['/aviation/', 'payment', taskId, 'make'],
     },
     {
       requestType: 'AVIATION_DRE_UKETS',
@@ -1017,6 +1078,36 @@ describe('ItemLinkPipe', () => {
     {
       requestType: 'AVIATION_AER_CORSIA',
       taskType: 'AVIATION_AER_CORSIA_WAIT_FOR_VERIFICATION',
+      expectedPath: ['/aviation/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_AER_CORSIA',
+      taskType: 'AVIATION_AER_CORSIA_WAIT_FOR_REVIEW',
+      expectedPath: ['/aviation/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_AER_CORSIA',
+      taskType: 'AVIATION_AER_CORSIA_APPLICATION_REVIEW',
+      expectedPath: ['/aviation/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_AER_CORSIA',
+      taskType: 'AVIATION_AER_CORSIA_WAIT_FOR_AMENDS',
+      expectedPath: ['/aviation/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_AER_CORSIA',
+      taskType: 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT',
+      expectedPath: ['/aviation/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_AER_CORSIA',
+      taskType: 'AVIATION_AER_CORSIA_AMEND_WAIT_FOR_VERIFICATION',
+      expectedPath: ['/aviation/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_AER_CORSIA',
+      taskType: 'AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT',
       expectedPath: ['/aviation/tasks', taskId],
     },
 
@@ -1121,6 +1212,141 @@ describe('ItemLinkPipe', () => {
       expectedPath: ['/aviation' + '/tasks', taskId],
     },
 
+    // AVIATION AER CORSIA ANNUAL OFFSETTING
+    {
+      requestType: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING',
+      taskType: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT',
+      expectedPath: ['/aviation' + '/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING',
+      taskType: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW',
+      expectedPath: ['/aviation' + '/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING',
+      taskType: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW',
+      expectedPath: ['/aviation' + '/tasks', taskId],
+    },
+
+    // AVIATION AER CORSIA 3YEAR PERIOD OFFSETTING
+    {
+      requestType: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING',
+      taskType: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT',
+      expectedPath: ['/aviation' + '/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING',
+      taskType: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW',
+      expectedPath: ['/aviation' + '/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING',
+      taskType: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW',
+      expectedPath: ['/aviation' + '/tasks', taskId],
+    },
+    //BDR
+    {
+      requestType: 'BDR',
+      taskType: 'BDR_APPLICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'bdr', 'submit'],
+    },
+    {
+      requestType: 'BDR',
+      taskType: 'BDR_APPLICATION_AMENDS_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'bdr', 'submit'],
+    },
+    {
+      requestType: 'BDR',
+      taskType: 'BDR_WAIT_FOR_VERIFICATION',
+      expectedPath: ['/tasks', taskId, 'bdr', 'submit'],
+    },
+    {
+      requestType: 'BDR',
+      taskType: 'BDR_AMEND_WAIT_FOR_VERIFICATION',
+      expectedPath: ['/tasks', taskId, 'bdr', 'submit'],
+    },
+
+    {
+      requestType: 'BDR',
+      taskType: 'BDR_WAIT_FOR_REGULATOR_REVIEW',
+      expectedPath: ['/tasks', taskId, 'bdr', 'submit'],
+    },
+    {
+      requestType: 'BDR',
+      taskType: 'BDR_APPLICATION_VERIFICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'bdr', 'verification-submit'],
+    },
+    {
+      requestType: 'BDR',
+      taskType: 'BDR_AMEND_APPLICATION_VERIFICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'bdr', 'verification-submit'],
+    },
+    {
+      requestType: 'BDR',
+      taskType: 'BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'bdr', 'review'],
+    },
+    {
+      requestType: 'BDR',
+      taskType: 'BDR_WAIT_FOR_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'bdr', 'peer-review-wait'],
+    },
+    {
+      requestType: 'BDR',
+      taskType: 'BDR_APPLICATION_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'bdr', 'review'],
+    },
+
+    //DOE
+    {
+      requestType: 'AVIATION_DOE_CORSIA',
+      taskType: 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT',
+      expectedPath: ['/aviation/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_DOE_CORSIA',
+      taskType: 'AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW',
+      expectedPath: ['/aviation/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_DOE_CORSIA',
+      taskType: 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW',
+      expectedPath: ['/aviation/tasks', taskId],
+    },
+    {
+      requestType: 'AVIATION_DOE_CORSIA',
+      taskType: 'AVIATION_DOE_CORSIA_MAKE_PAYMENT',
+      expectedPath: ['/aviation/', 'payment', taskId, 'make'],
+    },
+    {
+      requestType: 'AVIATION_DOE_CORSIA',
+      taskType: 'AVIATION_DOE_CORSIA_TRACK_PAYMENT',
+      expectedPath: ['/aviation/', 'payment', taskId, 'track'],
+    },
+    {
+      requestType: 'AVIATION_DOE_CORSIA',
+      taskType: 'AVIATION_DOE_CORSIA_CONFIRM_PAYMENT',
+      expectedPath: ['/aviation/', 'payment', taskId, 'track'],
+    },
+
+    //ALR
+    {
+      requestType: 'ALR',
+      taskType: 'ALR_APPLICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'alr', 'submit'],
+    },
+    {
+      requestType: 'ALR',
+      taskType: 'ALR_WAIT_FOR_VERIFICATION',
+      expectedPath: ['/tasks', taskId, 'alr', 'submit'],
+    },
+    {
+      requestType: 'ALR',
+      taskType: 'ALR_APPLICATION_VERIFICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'alr', 'verification-submit'],
+    },
+
     // NULL
     {
       requestType: null,
@@ -1137,11 +1363,14 @@ describe('ItemLinkPipe', () => {
     'should map $requestType . $taskType => $expectedPath',
     ({ requestType, taskType, expectedPath }) => {
       expect(
-        pipe.transform({
-          requestType: requestType,
-          taskType: taskType,
-          taskId: taskId,
-        }),
+        pipe.transform(
+          {
+            requestType: requestType,
+            taskType: taskType,
+            taskId: taskId,
+          },
+          false,
+        ),
       ).toEqual(expectedPath);
     },
   );

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { filter, first, Observable, switchMapTo } from 'rxjs';
+import { filter, first, Observable, switchMap } from 'rxjs';
 
 import { RequestActionDTO } from 'pmrv-api';
 
@@ -15,9 +15,7 @@ import { CommonActionsStore } from '../../../store/common-actions.store';
         *ngIf="dataLoaded"
         [header]="header"
         [requestAction]="requestAction$ | async"
-        [customContentTemplate]="customContentTemplate"
-      >
-      </app-action-layout>
+        [customContentTemplate]="customContentTemplate"></app-action-layout>
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,13 +29,16 @@ export class BaseActionContainerComponent implements OnInit {
   requestAction$: Observable<RequestActionDTO> = this.commonActionsStore.requestAction$;
   dataLoaded = false;
 
-  constructor(private readonly router: Router, private readonly commonActionsStore: CommonActionsStore) {}
+  constructor(
+    private readonly router: Router,
+    private readonly commonActionsStore: CommonActionsStore,
+  ) {}
 
   ngOnInit(): void {
     this.commonActionsStore.storeInitialized$
       .pipe(
         filter((storeInitialized) => !!storeInitialized),
-        switchMapTo(this.commonActionsStore.requestAction$),
+        switchMap(() => this.commonActionsStore.requestAction$),
         first(),
       )
       .subscribe((requestActionItem) => {

@@ -2,13 +2,14 @@ import { inject } from '@angular/core';
 import { CanDeactivateFn, Routes } from '@angular/router';
 
 import { aerAdditionalDocumentsFormProvider } from '@aviation/request-task/aer/shared/additional-documents/additional-documents-form.provider';
+import { AerReviewDecisionGroupFormProvider } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group-form.provider';
 import { AerVerificationReviewDecisionGroupFormProvider } from '@aviation/request-task/aer/shared/aer-verification-review-decision-group/aer-verification-review-decision-group-form-provider';
 import { AggregatedConsumptionFlightDataFormProvider } from '@aviation/request-task/aer/shared/aggregated-consumption-flight-data/aggregated-consumption-flight-data-form.provider';
 import { AircraftTypesDataFormProvider } from '@aviation/request-task/aer/shared/aircraft-types-data';
 import { MonitoringPlanChangesFormProvider } from '@aviation/request-task/aer/shared/monitoring-plan-changes';
 import { ReportingObligationFormProvider } from '@aviation/request-task/aer/shared/reporting-obligation';
 import { DataGapsFormProvider } from '@aviation/request-task/aer/ukets/tasks/data-gaps/data-gaps-form.provider';
-import { aerEmissionsReductionClaimFormProvider } from '@aviation/request-task/aer/ukets/tasks/emissions-reduction-claim/emissions-reduction-claim-form.provider';
+import { AerEmissionsReductionClaimFormProvider } from '@aviation/request-task/aer/ukets/tasks/emissions-reduction-claim/emissions-reduction-claim-form.provider';
 import { AerMonitoringApproachFormProvider } from '@aviation/request-task/aer/ukets/tasks/monitoring-approach/monitoring-approach-form.provider';
 import { OperatorDetailsFormProvider } from '@aviation/request-task/aer/ukets/tasks/operator-details';
 import { TotalEmissionsFormProvider } from '@aviation/request-task/aer/ukets/tasks/total-emissions/total-emissions-form.provider';
@@ -17,7 +18,6 @@ import { ReturnForAmendsPageComponent } from '@aviation/request-task/containers/
 
 import { RequestTaskStore } from '../../store';
 import { TASK_FORM_PROVIDER } from '../../task-form.provider';
-import { AerReviewDecisionGroupFormProvider } from './aer-review-decision-group/aer-review-decision-group-form.provider';
 import { AER_VERIFY_CHILD_ROUTES } from './aer-verify/aer-verify.routes';
 
 const canDeactivateAer: CanDeactivateFn<any> = () => {
@@ -52,7 +52,7 @@ export const AER_CHILD_ROUTES: Routes = [
   },
   {
     path: 'emissions-reduction-claim',
-    providers: [{ provide: TASK_FORM_PROVIDER, useClass: aerEmissionsReductionClaimFormProvider }],
+    providers: [{ provide: TASK_FORM_PROVIDER, useClass: AerEmissionsReductionClaimFormProvider }],
     loadChildren: () =>
       import('@aviation/request-task/aer/ukets/tasks/emissions-reduction-claim/emissions-reduction-claim.routes').then(
         (r) => r.AER_EMISSIONS_REDUCTION_CLAIM_ROUTES,

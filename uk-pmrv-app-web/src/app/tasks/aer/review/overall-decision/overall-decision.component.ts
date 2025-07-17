@@ -13,8 +13,7 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Overall decision">
       <app-overall-decision-group [overallAssessment]="overallAssessmentInfo$ | async"></app-overall-decision-group>
       <app-verification-review-group-decision
-        (notification)="notification = $event"
-      ></app-verification-review-group-decision>
+        (notification)="notification = $event"></app-verification-review-group-decision>
     </app-aer-task-review>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,5 +24,8 @@ export class OverallDecisionComponent {
     map((payload) => payload.verificationReport.overallAssessment),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

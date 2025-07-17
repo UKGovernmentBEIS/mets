@@ -1,12 +1,22 @@
 package uk.gov.pmrv.api.permit.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.documents.service.FileDocumentService;
+import uk.gov.pmrv.api.permit.domain.Permit;
+import uk.gov.pmrv.api.permit.domain.PermitContainer;
+import uk.gov.pmrv.api.permit.domain.PermitEntity;
+import uk.gov.pmrv.api.permit.domain.PermitType;
+import uk.gov.pmrv.api.permit.domain.dto.PermitDetailsDTO;
+import uk.gov.pmrv.api.permit.domain.dto.PermitEntityAccountDTO;
+import uk.gov.pmrv.api.permit.domain.estimatedannualemissions.EstimatedAnnualEmissions;
+import uk.gov.pmrv.api.permit.repository.PermitRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,24 +26,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentService;
-import uk.gov.pmrv.api.permit.domain.Permit;
-import uk.gov.pmrv.api.permit.domain.PermitContainer;
-import uk.gov.pmrv.api.permit.domain.PermitEntity;
-import uk.gov.pmrv.api.permit.domain.PermitType;
-import uk.gov.pmrv.api.permit.domain.dto.PermitDetailsDTO;
-import uk.gov.pmrv.api.permit.domain.dto.PermitEntityAccountDTO;
-import uk.gov.pmrv.api.permit.domain.estimatedannualemissions.EstimatedAnnualEmissions;
-import uk.gov.pmrv.api.permit.repository.PermitRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PermitQueryServiceTest {

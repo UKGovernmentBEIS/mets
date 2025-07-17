@@ -16,8 +16,7 @@ import { AerService } from '../../core/aer.service';
       <app-fallback-emissions-group
         [fallbackEmissions]="fallbackEmissions$ | async"
         [sourceStreams]="sourceStreams$ | async"
-        [documentFiles]="documentFiles$ | async"
-      ></app-fallback-emissions-group>
+        [documentFiles]="documentFiles$ | async"></app-fallback-emissions-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,

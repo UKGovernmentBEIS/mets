@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.permit.domain.measurementdevices;
 
-import java.math.BigDecimal;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
@@ -11,9 +10,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
-import uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.permit.domain.PermitIdSection;
+import uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType;
+
+import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

@@ -8,18 +8,18 @@ import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.config.WebAppProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.account.domain.dto.AccountInfoDTO;
 import uk.gov.pmrv.api.account.service.AccountCaSiteContactService;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.core.service.AuthorityService;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.service.AuthorityService;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 
@@ -27,22 +27,22 @@ import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 @RequiredArgsConstructor
 public class VirRespondToRegulatorCommentsNotificationService {
 
-    private final NotificationEmailService notificationEmailService;
+    private final NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
     private final UserAuthService userAuthService;
     private final AuthorityService authorityService;
     private final AccountCaSiteContactService accountCaSiteContactService;
     private final AccountQueryService accountQueryService;
-    private final AppProperties appProperties;
+    private final WebAppProperties webAppProperties;
 
     public void sendSubmittedResponseToRegulatorCommentsNotificationToRegulator(final Request request) {
-        sendNotification(request, NotificationTemplateName.VIR_NOTIFICATION_OPERATOR_RESPONSE);
+        sendNotification(request, PmrvNotificationTemplateName.VIR_NOTIFICATION_OPERATOR_RESPONSE);
     }
 
     public void sendDeadlineResponseToRegulatorCommentsNotificationToRegulator(final Request request) {
-        sendNotification(request, NotificationTemplateName.VIR_NOTIFICATION_OPERATOR_MISSES_DEADLINE);
+        sendNotification(request, PmrvNotificationTemplateName.VIR_NOTIFICATION_OPERATOR_MISSES_DEADLINE);
     }
 
-    private void sendNotification(final Request request, NotificationTemplateName templateName) {
+    private void sendNotification(final Request request, PmrvNotificationTemplateName templateName) {
         Set<String> recipientsEmails = new HashSet<>();
         String reviewer = request.getPayload().getRegulatorReviewer();
         Long accountId = request.getAccountId();
@@ -65,13 +65,13 @@ public class VirRespondToRegulatorCommentsNotificationService {
         if(!recipientsEmails.isEmpty()) {
             AccountInfoDTO accountInfoDTO = accountQueryService.getAccountInfoDTOById(accountId);
 
-            EmailData notifyInfo = EmailData.builder()
+            EmailData<EmailNotificationTemplateData> notifyInfo = EmailData.<EmailNotificationTemplateData>builder()
                     .notificationTemplateData(EmailNotificationTemplateData.builder()
-                            .templateName(templateName)
+                            .templateName(templateName.getName())
                             .templateParams(Map.of(
-                                    EmailNotificationTemplateConstants.ACCOUNT_NAME, accountInfoDTO.getName(),
-                                    EmailNotificationTemplateConstants.EMITTER_ID, accountInfoDTO.getEmitterId(),
-                                    EmailNotificationTemplateConstants.HOME_URL, appProperties.getWeb().getUrl()
+                            		PmrvEmailNotificationTemplateConstants.ACCOUNT_NAME, accountInfoDTO.getName(),
+                                    PmrvEmailNotificationTemplateConstants.EMITTER_ID, accountInfoDTO.getEmitterId(),
+                                    PmrvEmailNotificationTemplateConstants.HOME_URL, webAppProperties.getUrl()
                             ))
                             .build())
                     .build();

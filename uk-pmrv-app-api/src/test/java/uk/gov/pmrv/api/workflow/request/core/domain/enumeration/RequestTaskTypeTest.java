@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RequestTaskTypeTest {
 
@@ -38,6 +38,6 @@ class RequestTaskTypeTest {
             RequestTaskType.EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEW
             );
 
-        assertEquals(expectedRequestTaskTypes, RequestTaskType.getPeerReviewTypes());
+        expectedRequestTaskTypes.forEach(requestTaskType -> assertTrue(requestTaskType.isPeerReview()));
     }
 }

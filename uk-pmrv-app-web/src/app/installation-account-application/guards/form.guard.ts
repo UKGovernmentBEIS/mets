@@ -1,13 +1,16 @@
 import { Inject, Injectable } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
-import { CanActivate } from '@angular/router';
 
-import { combineLatest, mapTo, Observable, take, tap } from 'rxjs';
+import { combineLatest, map, Observable, take, tap } from 'rxjs';
 
 import { HoldingCompanyFormComponent } from '@shared/holding-company-form';
 
 import { INSTALLATION_FORM } from '../factories/installation-form.factory';
-import { LEGAL_ENTITY_FORM, legalEntityInitialValue } from '../factories/legal-entity-form.factory';
+import { LEGAL_ENTITY_FORM_OP } from '../factories/legal-entity/legal-entity-form-op.factory';
+import {
+  LEGAL_ENTITY_FORM_REG,
+  legalEntityInitialValue,
+} from '../factories/legal-entity/legal-entity-form-reg.factory';
 import {
   ApplicationSectionType,
   InstallationSection,
@@ -16,12 +19,13 @@ import {
 import { InstallationAccountApplicationStore } from '../store/installation-account-application.store';
 
 @Injectable()
-export class FormGuard implements CanActivate {
+export class FormGuard {
   constructor(
     private readonly store: InstallationAccountApplicationStore,
     private fb: UntypedFormBuilder,
     @Inject(INSTALLATION_FORM) private readonly installationForm: UntypedFormGroup,
-    @Inject(LEGAL_ENTITY_FORM) private readonly legalEntityForm: UntypedFormGroup,
+    @Inject(LEGAL_ENTITY_FORM_REG) private readonly legalEntityForm: UntypedFormGroup,
+    @Inject(LEGAL_ENTITY_FORM_OP) private readonly legalEntityOpForm: UntypedFormGroup,
   ) {}
 
   canActivate(): Observable<boolean> {
@@ -41,13 +45,14 @@ export class FormGuard implements CanActivate {
             );
           }
           this.legalEntityForm.reset({ ...legalEntityInitialValue, ...legalEntitySection.value });
+          this.legalEntityOpForm.reset();
           if (isReviewed) {
             this.installationForm.get('installationTypeGroup').disable();
             this.installationForm.get('locationGroup').disable();
           }
         },
       ),
-      mapTo(true),
+      map(() => true),
     );
   }
 }

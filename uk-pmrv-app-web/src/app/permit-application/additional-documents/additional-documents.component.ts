@@ -19,12 +19,10 @@ import { additionalDocumentsFormFactory } from './additional-documents-form.prov
         [form]="form"
         [isEditable]="store.isEditable$ | async"
         (formSubmit)="onSubmit()"
-        [downloadUrl]="getDownloadUrl()"
-      ></app-additional-documents-shared>
+        [downloadUrl]="getDownloadUrl()"></app-additional-documents-shared>
       <app-list-return-link
         reviewGroupTitle="Additional information"
-        reviewGroupUrl="additional-info"
-      ></app-list-return-link>
+        reviewGroupUrl="additional-info"></app-list-return-link>
     </app-permit-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

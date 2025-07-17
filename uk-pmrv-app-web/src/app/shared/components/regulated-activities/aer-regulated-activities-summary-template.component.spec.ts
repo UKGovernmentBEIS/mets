@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { AerRegulatedActivitiesSummaryTemplateComponent } from '@shared/components/regulated-activities/aer-regulated-activities-summary-template.component';
 import { SharedModule } from '@shared/shared.module';
@@ -18,8 +18,7 @@ describe('RegulatedActivitiesSummaryTemplateComponent', () => {
     template: `
       <app-aer-regulated-activities-summary-template
         [activity]="activity"
-        [isEditable]="isEditable"
-      ></app-aer-regulated-activities-summary-template>
+        [isEditable]="isEditable"></app-aer-regulated-activities-summary-template>
     `,
   })
   class TestComponent {
@@ -38,8 +37,9 @@ describe('RegulatedActivitiesSummaryTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       declarations: [TestComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 

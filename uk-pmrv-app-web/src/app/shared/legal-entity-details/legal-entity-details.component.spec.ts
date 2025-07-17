@@ -19,7 +19,7 @@ import { ErrorMessageComponent } from 'govuk-components';
 import { LegalEntitiesService } from 'pmrv-api';
 
 import { LegalEntitiesServiceStub } from '../../../testing/legal-entities.service.stub';
-import { legalEntityFormFactory } from '../../installation-account-application/factories/legal-entity-form.factory';
+import { legalEntityFormRegFactory } from '../../installation-account-application/factories/legal-entity/legal-entity-form-reg.factory';
 import { InstallationAccountApplicationStore } from '../../installation-account-application/store/installation-account-application.store';
 import { LegalEntityDetailsComponent } from './legal-entity-details.component';
 
@@ -67,7 +67,7 @@ describe('LegalEntityDetailsComponent', () => {
       providers: [
         { provide: CountryService, useClass: CountryServiceStub },
         { provide: LegalEntitiesService, useClass: LegalEntitiesServiceStub },
-        legalEntityFormFactory,
+        legalEntityFormRegFactory,
         InstallationAccountApplicationStore,
       ],
     })

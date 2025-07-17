@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -17,6 +17,8 @@ import { Observable } from 'rxjs';
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
 import { TermsDTO } from '../model/termsDTO';
+import { UserTermsVersionDTO } from '../model/userTermsVersionDTO';
+import { UserTermsVersionUpdateDTO } from '../model/userTermsVersionUpdateDTO';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -82,6 +84,84 @@ export class TermsAndConditionsService {
   }
 
   /**
+   * Updates accepted terms and conditions of the logged in user
+   * @param userTermsVersionUpdateDTO
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public editUserTerms(userTermsVersionUpdateDTO: UserTermsVersionUpdateDTO): Observable<UserTermsVersionUpdateDTO>;
+  public editUserTerms(
+    userTermsVersionUpdateDTO: UserTermsVersionUpdateDTO,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<UserTermsVersionUpdateDTO>>;
+  public editUserTerms(
+    userTermsVersionUpdateDTO: UserTermsVersionUpdateDTO,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<UserTermsVersionUpdateDTO>>;
+  public editUserTerms(
+    userTermsVersionUpdateDTO: UserTermsVersionUpdateDTO,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<UserTermsVersionUpdateDTO>;
+  public editUserTerms(
+    userTermsVersionUpdateDTO: UserTermsVersionUpdateDTO,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (userTermsVersionUpdateDTO === null || userTermsVersionUpdateDTO === undefined) {
+      throw new Error('Required parameter userTermsVersionUpdateDTO was null or undefined when calling editUserTerms.');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      headers = headers.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.patch<UserTermsVersionUpdateDTO>(
+      `${this.configuration.basePath}/v1.0/user-terms`,
+      userTermsVersionUpdateDTO,
+      {
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
    * Retrieves the latest version of terms and conditions
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
@@ -131,6 +211,64 @@ export class TermsAndConditionsService {
     }
 
     return this.httpClient.get<TermsDTO>(`${this.configuration.basePath}/v1.0/terms`, {
+      responseType: <any>responseType_,
+      withCredentials: this.configuration.withCredentials,
+      headers: headers,
+      observe: observe,
+      reportProgress: reportProgress,
+    });
+  }
+
+  /**
+   * Retrieves accepted terms and conditions version of the logged in user
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getUserTerms(): Observable<UserTermsVersionDTO>;
+  public getUserTerms(
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<UserTermsVersionDTO>>;
+  public getUserTerms(
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<UserTermsVersionDTO>>;
+  public getUserTerms(
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<UserTermsVersionDTO>;
+  public getUserTerms(
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.get<UserTermsVersionDTO>(`${this.configuration.basePath}/v1.0/user-terms`, {
       responseType: <any>responseType_,
       withCredentials: this.configuration.withCredentials,
       headers: headers,

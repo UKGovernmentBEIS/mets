@@ -20,8 +20,7 @@ describe('OperatorReportSummaryTemplateComponent', () => {
       <app-operator-report-summary-template
         [operatorActivityLevelReport]="operatorActivityLevelReport"
         [document]="document"
-        [editable]="editable"
-      ></app-operator-report-summary-template>
+        [editable]="editable"></app-operator-report-summary-template>
     `,
   })
   class TestComponent {

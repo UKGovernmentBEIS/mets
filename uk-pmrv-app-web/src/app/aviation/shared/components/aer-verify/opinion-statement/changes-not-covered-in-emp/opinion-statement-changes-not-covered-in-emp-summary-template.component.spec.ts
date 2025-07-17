@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { AviationAerMonitoringPlanChanges } from 'pmrv-api';
+
 import OpinionStatementChangesNotCoveredInEMPSummaryTemplateComponent from './opinion-statement-changes-not-covered-in-emp-summary-template.component';
 
 describe('OpinionStatementChangesNotCoveredInEMPSummaryTemplateComponent', () => {
@@ -18,18 +20,17 @@ describe('OpinionStatementChangesNotCoveredInEMPSummaryTemplateComponent', () =>
         [additionalChangesNotCovered]="additionalChangesNotCovered"
         [additionalChangesNotCoveredDetails]="additionalChangesNotCoveredDetails"
         [isEditable]="isEditable"
-        [queryParams]="queryParams"
-      ></app-opinion-statement-changes-not-covered-in-emp-summary-template>
+        [queryParams]="queryParams"></app-opinion-statement-changes-not-covered-in-emp-summary-template>
     `,
   })
   class TestComponent {
-    aerMonitoringPlanChanges: any = {
+    aerMonitoringPlanChanges: AviationAerMonitoringPlanChanges = {
       notCoveredChangesExist: true,
       details: 'details',
     };
 
     additionalChangesNotCovered = false;
-    additionalChangesNotCoveredDetails = 'details';
+    additionalChangesNotCoveredDetails = null;
 
     isEditable = false;
     queryParams = {};
@@ -63,10 +64,8 @@ describe('OpinionStatementChangesNotCoveredInEMPSummaryTemplateComponent', () =>
         Array.from(dl.querySelectorAll('dd')).map((el) => el.textContent.trim()),
       ]),
     ).toEqual([
-      [
-        ['Changes reported by the operator', 'Changes reported by the verifier'],
-        ['details', '', 'No changes reported.'],
-      ],
+      [['Changes reported by the operator'], ['details']],
+      [['Changes reported by the verifier'], ['None']],
     ]);
   });
 
@@ -80,10 +79,8 @@ describe('OpinionStatementChangesNotCoveredInEMPSummaryTemplateComponent', () =>
         Array.from(dl.querySelectorAll('dd')).map((el) => el.textContent.trim()),
       ]),
     ).toEqual([
-      [
-        ['Changes reported by the operator', 'Changes reported by the verifier'],
-        ['details', '', 'No changes reported.', 'Change'],
-      ],
+      [['Changes reported by the operator'], ['details']],
+      [['Changes reported by the verifier'], ['None', 'Change']],
     ]);
   });
 });

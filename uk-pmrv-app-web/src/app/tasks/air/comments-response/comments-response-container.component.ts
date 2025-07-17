@@ -22,7 +22,10 @@ export class CommentsResponseContainerComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
   readonly daysRemaining$ = this.airService.daysRemaining$;
 
-  constructor(private readonly airService: AirService, private readonly router: Router) {}
+  constructor(
+    private readonly airService: AirService,
+    private readonly router: Router,
+  ) {}
 
   /**
    * Filters out regulatorImprovementResponses where there is an index found in respondedItems.

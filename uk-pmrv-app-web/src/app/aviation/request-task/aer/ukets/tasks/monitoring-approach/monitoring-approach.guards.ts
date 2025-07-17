@@ -7,7 +7,7 @@ import { EmissionSmallEmittersSupportFacilityFormValues } from '@aviation/shared
 import produce from 'immer';
 
 import { RequestTaskStore } from '../../../../store';
-import { AerStoreDelegate } from '../../../../store/delegates';
+import { AerUkEtsStoreDelegate } from '../../../../store/delegates';
 import { TASK_FORM_PROVIDER } from '../../../../task-form.provider';
 import { aerQuery } from '../../../shared/aer.selectors';
 import { AerMonitoringApproachFormProvider } from './monitoring-approach-form.provider';
@@ -26,14 +26,14 @@ export const canActivateMonitoringApproach: CanActivateFn = () => {
         store.setPayload({
           ...payload,
           aer: {
-            monitoringApproach: AerStoreDelegate.INITIAL_STATE.monitoringApproach,
+            monitoringApproach: AerUkEtsStoreDelegate.INITIAL_STATE.monitoringApproach,
           },
         } as any);
       }
 
       if (!aer?.monitoringApproach) {
-        store.aerDelegate.setMonitoringApproach(
-          AerStoreDelegate.INITIAL_STATE.monitoringApproach as EmissionSmallEmittersSupportFacilityFormValues,
+        (store.aerDelegate as AerUkEtsStoreDelegate).setMonitoringApproach(
+          AerUkEtsStoreDelegate.INITIAL_STATE.monitoringApproach as EmissionSmallEmittersSupportFacilityFormValues,
         );
       }
 
@@ -47,7 +47,7 @@ export const canDeactivateMonitoringApproach: CanDeactivateFn<boolean> = () => {
   inject<AerMonitoringApproachFormProvider>(TASK_FORM_PROVIDER).destroyForm();
 
   const store = inject(RequestTaskStore);
-  const payload = store.aerDelegate.payload;
+  const payload = (store.aerDelegate as AerUkEtsStoreDelegate).payload;
 
   if (payload.aer.monitoringApproach.monitoringApproachType === null) {
     store.setPayload(

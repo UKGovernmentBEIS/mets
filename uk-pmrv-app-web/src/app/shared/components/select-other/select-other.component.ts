@@ -6,7 +6,7 @@ import {
   ContentChild,
   Input,
 } from '@angular/core';
-import { ControlValueAccessor, NgControl,UntypedFormControl } from '@angular/forms';
+import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 
 import { ConditionalContentDirective, FormService, GovukTextWidthClass } from 'govuk-components';
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0xeklly" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.15.2">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_0xeklly" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.11.0">
   <bpmn:process id="PROCESS_AVIATION_AER_CORSIA" name="Aviation AER Process" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0ionfvw</bpmn:outgoing>
@@ -54,12 +56,12 @@
       <bpmn:sequenceFlow id="Flow_1xga247" sourceRef="Gateway_06oym2o" targetRef="AVIATION_AER_CORSIA_WAIT_FOR_AMENDS" />
       <bpmn:sequenceFlow id="Flow_0m8stf8" sourceRef="AVIATION_AER_CORSIA_WAIT_FOR_AMENDS" targetRef="Event_0b8va0c" />
       <bpmn:sequenceFlow id="Flow_1igszmj" sourceRef="Event_1q0ntyd" targetRef="Gateway_06oym2o" />
-      <bpmn:sequenceFlow id="Flow_0545lea" name="Send for Regulator review" sourceRef="Gateway_0olyqq6" targetRef="Event_0b8va0c">
+      <bpmn:sequenceFlow id="Flow_0545lea" name="Send for Regulator review" sourceRef="Gateway_0olyqq6" targetRef="Activity_1u171nc">
         <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${aviationAerOutcome=='REVIEW_REQUESTED'}</bpmn:conditionExpression>
       </bpmn:sequenceFlow>
       <bpmn:endEvent id="Event_0b8va0c">
         <bpmn:incoming>Flow_0m8stf8</bpmn:incoming>
-        <bpmn:incoming>Flow_0545lea</bpmn:incoming>
+        <bpmn:incoming>Flow_17pmiws</bpmn:incoming>
         <bpmn:terminateEventDefinition id="TerminateEventDefinition_1kdo54u" />
       </bpmn:endEvent>
       <bpmn:sequenceFlow id="Flow_0ryq6bm" name="Send for Veification" sourceRef="Gateway_0olyqq6" targetRef="Activity_11nzs1l">
@@ -78,6 +80,11 @@
         <bpmn:outgoing>Flow_0iqonq8</bpmn:outgoing>
       </bpmn:callActivity>
       <bpmn:sequenceFlow id="Flow_0iqonq8" sourceRef="Activity_11nzs1l" targetRef="AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT" />
+      <bpmn:serviceTask id="Activity_1u171nc" name="Initiate VIR CORSIA" camunda:delegateExpression="#{aviationAerCorsiaInitiateVirHandler}">
+        <bpmn:incoming>Flow_0545lea</bpmn:incoming>
+        <bpmn:outgoing>Flow_17pmiws</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_17pmiws" sourceRef="Activity_1u171nc" targetRef="Event_0b8va0c" />
     </bpmn:subProcess>
     <bpmn:sequenceFlow id="Flow_0daerhw" sourceRef="Activity_1esichd" targetRef="Event_16zq4b1" />
     <bpmn:sequenceFlow id="Flow_0dmn7xy" name="amends needed" sourceRef="Gateway_1kh4rb4" targetRef="Activity_0ahurmt">
@@ -135,7 +142,7 @@
         <bpmn:incoming>Flow_0j38e9o</bpmn:incoming>
         <bpmn:outgoing>Flow_1kagpcl</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_03dk26d">
-          <bpmn:timeDate xsi:type="bpmn:tFormalExpression">${aerFirstReminderDate}</bpmn:timeDate>
+          <bpmn:timeDate xsi:type="bpmn:tFormalExpression">${aviationAerFirstReminderDate}</bpmn:timeDate>
         </bpmn:timerEventDefinition>
       </bpmn:intermediateCatchEvent>
       <bpmn:exclusiveGateway id="Gateway_1sl8f9u" name="is first reminder date in past?" default="Flow_0j38e9o">
@@ -162,7 +169,7 @@
         <bpmn:incoming>Flow_0qhjm9y</bpmn:incoming>
         <bpmn:outgoing>Flow_0aizpww</bpmn:outgoing>
         <bpmn:timerEventDefinition id="TimerEventDefinition_0o1zwq8">
-          <bpmn:timeDate xsi:type="bpmn:tFormalExpression">${aerSecondReminderDate}</bpmn:timeDate>
+          <bpmn:timeDate xsi:type="bpmn:tFormalExpression">${aviationAerSecondReminderDate}</bpmn:timeDate>
         </bpmn:timerEventDefinition>
       </bpmn:intermediateCatchEvent>
       <bpmn:endEvent id="Event_1v1n4jt">
@@ -279,7 +286,7 @@
         <dc:Bounds x="3272" y="345" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ahurmt_di" bpmnElement="Activity_0ahurmt" isExpanded="true">
-        <dc:Bounds x="2500" y="630" width="735" height="390" />
+        <dc:Bounds x="2500" y="630" width="850" height="390" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1q0ntyd_di" bpmnElement="Event_1q0ntyd">
         <dc:Bounds x="2522" y="797" width="36" height="36" />
@@ -301,10 +308,14 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0warxrt_di" bpmnElement="Event_0b8va0c">
-        <dc:Bounds x="3157" y="797" width="36" height="36" />
+        <dc:Bounds x="3282" y="797" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_11nzs1l_di" bpmnElement="Activity_11nzs1l">
         <dc:Bounds x="2845" y="680" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_00st7zo" bpmnElement="Activity_1u171nc">
+        <dc:Bounds x="3140" y="775" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_12guiwi_di" bpmnElement="Flow_12guiwi">
         <di:waypoint x="2650" y="815" />
@@ -321,8 +332,8 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0m8stf8_di" bpmnElement="Flow_0m8stf8">
         <di:waypoint x="2815" y="940" />
-        <di:waypoint x="3175" y="940" />
-        <di:waypoint x="3175" y="833" />
+        <di:waypoint x="3300" y="940" />
+        <di:waypoint x="3300" y="833" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1igszmj_di" bpmnElement="Flow_1igszmj">
         <di:waypoint x="2558" y="815" />
@@ -330,9 +341,9 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0545lea_di" bpmnElement="Flow_0545lea">
         <di:waypoint x="3030" y="815" />
-        <di:waypoint x="3157" y="815" />
+        <di:waypoint x="3140" y="815" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="3041" y="786" width="84" height="27" />
+          <dc:Bounds x="3037" y="786" width="84" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ryq6bm_di" bpmnElement="Flow_0ryq6bm">
@@ -347,6 +358,10 @@
         <di:waypoint x="2845" y="720" />
         <di:waypoint x="2765" y="720" />
         <di:waypoint x="2765" y="775" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17pmiws_di" bpmnElement="Flow_17pmiws">
+        <di:waypoint x="3240" y="815" />
+        <di:waypoint x="3282" y="815" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Activity_1kgbg55_di" bpmnElement="Activity_1kgbg55" isExpanded="true">
         <dc:Bounds x="260" y="80" width="1470" height="610" />

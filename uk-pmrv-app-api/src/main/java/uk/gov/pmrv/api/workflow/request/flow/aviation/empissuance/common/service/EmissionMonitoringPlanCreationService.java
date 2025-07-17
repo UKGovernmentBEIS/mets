@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 
@@ -23,7 +23,7 @@ public class EmissionMonitoringPlanCreationService {
     public void createRequestEmissionMonitoringPlan(Long accountId, EmissionTradingScheme emissionTradingScheme) {
         RequestParams requestParams = getRequestParamsBuilderService(emissionTradingScheme)
             .map(service -> service.buildRequestParams(accountId))
-            .orElseThrow(() -> new BusinessException(ErrorCode.NO_EMP_SERVICE_FOUND));
+            .orElseThrow(() -> new BusinessException(MetsErrorCode.NO_EMP_SERVICE_FOUND));
 
             startProcessRequestService.startProcess(requestParams);
     }

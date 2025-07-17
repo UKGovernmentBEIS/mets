@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { first, map, switchMap } from 'rxjs';
 
 import { reviewRequestTaskTypes } from '@permit-application/shared/utils/permit';
-import { descriptionOptions, typeOptions } from '@shared/components/source-streams/source-stream-options';
+import { typeOptions } from '@shared/components/source-streams/source-stream-options';
 
 import { SourceStream } from 'pmrv-api';
 
@@ -16,28 +16,7 @@ import { sourceStreamFormProvider } from './source-stream-form.provider';
 
 @Component({
   selector: 'app-source-streams-details',
-  template: `
-    <app-permit-task
-      [breadcrumb]="
-        (requestTaskType$ | async)
-          ? [
-              {
-                text: 'Fuels and equipment inventory',
-                link: ['fuels']
-              }
-            ]
-          : [
-              {
-                text: 'Source streams (fuels and materials)',
-                link: ['source-streams']
-              }
-            ]
-      "
-    >
-      <app-source-streams-details-template (formSubmit)="onSubmit()" [form]="form" [isEditing]="isEditing$ | async">
-      </app-source-streams-details-template>
-    </app-permit-task>
-  `,
+  templateUrl: './source-streams-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [sourceStreamFormProvider],
 })
@@ -45,7 +24,7 @@ export class SourceStreamDetailsComponent {
   isEditing$ = this.store
     .getTask('sourceStreams')
     .pipe(map((sourceStreams) => sourceStreams.some((item) => item.id === this.form.get('id').value)));
-  descriptionOptions = descriptionOptions;
+
   typeOptions = typeOptions;
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));
 

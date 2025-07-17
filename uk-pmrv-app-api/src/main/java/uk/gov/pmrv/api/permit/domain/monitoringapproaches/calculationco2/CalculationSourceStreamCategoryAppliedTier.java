@@ -2,12 +2,10 @@ package uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.Transfer;
 
 @Data
 @Builder

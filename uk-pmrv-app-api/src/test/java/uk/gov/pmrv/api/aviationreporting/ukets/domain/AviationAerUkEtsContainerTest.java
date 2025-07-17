@@ -43,9 +43,9 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringa
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.AirOperatingCertificate;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.AviationOperatorDetails;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.OperatingLicense;
-import uk.gov.pmrv.api.referencedata.domain.Country;
-import uk.gov.pmrv.api.referencedata.service.CountryService;
-import uk.gov.pmrv.api.referencedata.service.CountryValidator;
+import uk.gov.netz.api.referencedata.domain.Country;
+import uk.gov.netz.api.referencedata.service.CountryService;
+import uk.gov.netz.api.referencedata.service.CountryValidator;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

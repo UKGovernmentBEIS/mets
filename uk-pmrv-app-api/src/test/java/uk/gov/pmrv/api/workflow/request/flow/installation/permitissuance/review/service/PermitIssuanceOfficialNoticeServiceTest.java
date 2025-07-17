@@ -18,12 +18,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.common.config.RegistryConfig;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
 import uk.gov.pmrv.api.permit.domain.PermitType;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -58,9 +59,12 @@ class PermitIssuanceOfficialNoticeServiceTest {
 
     @Mock
     private OfficialNoticeSendService officialNoticeSendService;
+    
+    @Mock
+    private RegistryConfig registryConfig;
 
     @Test
-    void generateGrantedOfficialNotice() throws InterruptedException, ExecutionException {
+    void generateGrantedOfficialNotice_GHGE() throws InterruptedException, ExecutionException {
         String requestId = "1";
         String fileName = "GHGE_permit_application_approved.pdf";
 
@@ -97,7 +101,7 @@ class PermitIssuanceOfficialNoticeServiceTest {
             .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocumentAsync(
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(
             DocumentTemplateType.PERMIT_ISSUANCE_GHGE_ACCEPTED, templateParams, fileName))
             .thenReturn(CompletableFuture.completedFuture(officialDocFileInfoDTO));
 
@@ -111,8 +115,120 @@ class PermitIssuanceOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocumentAsync(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
             DocumentTemplateType.PERMIT_ISSUANCE_GHGE_ACCEPTED, templateParams, fileName);
+    }
+
+    @Test
+    void generateGrantedOfficialNotice_HSE() throws InterruptedException, ExecutionException {
+        String requestId = "1";
+        String fileName = "HSE_permit_application_approved.pdf";
+
+        DecisionNotification decisionNotification = DecisionNotification.builder()
+            .operators(Set.of("operator"))
+            .signatory("signatory")
+            .build();
+        PermitIssuanceRequestPayload requestPayload = PermitIssuanceRequestPayload.builder()
+            .permitType(PermitType.HSE)
+            .decisionNotification(decisionNotification)
+            .build();
+        Request request = Request.builder().payload(requestPayload).build();
+
+        TemplateParams templateParams = TemplateParams.builder().build();
+        FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
+
+        UserInfoDTO accountPrimaryContactInfo = UserInfoDTO.builder().email("user@pmrv.uk").build();
+        List<String> decisionNotificationUserEmails = List.of("operator@pmrv.uk");
+        DocumentTemplateParamsSourceData documentTemplateSourceParams =
+            DocumentTemplateParamsSourceData.builder()
+                .contextActionType(DocumentTemplateGenerationContextActionType.PERMIT_ISSUANCE_HSE_GRANTED)
+                .request(request)
+                .signatory(decisionNotification.getSignatory())
+                .accountPrimaryContact(accountPrimaryContactInfo)
+                .toRecipientEmail(accountPrimaryContactInfo.getEmail())
+                .ccRecipientsEmails(decisionNotificationUserEmails)
+                .build();
+
+        when(requestService.findRequestById(requestId))
+            .thenReturn(request);
+        when(requestAccountContactQueryService.getRequestAccountPrimaryContact(request))
+            .thenReturn(Optional.of(accountPrimaryContactInfo));
+        when(decisionNotificationUsersService.findUserEmails(decisionNotification))
+            .thenReturn(decisionNotificationUserEmails);
+        when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
+            .thenReturn(templateParams);
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(
+            DocumentTemplateType.PERMIT_ISSUANCE_HSE_ACCEPTED, templateParams, fileName))
+            .thenReturn(CompletableFuture.completedFuture(officialDocFileInfoDTO));
+
+        // Invoke
+        CompletableFuture<FileInfoDTO> result = officialNoticeService.generateGrantedOfficialNotice(requestId);
+
+        assertThat(result.get()).isEqualTo(officialDocFileInfoDTO);
+
+        // Verify
+        verify(requestService, times(1)).findRequestById(requestId);
+        verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
+        verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
+        verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
+            DocumentTemplateType.PERMIT_ISSUANCE_HSE_ACCEPTED, templateParams, fileName);
+    }
+
+    @Test
+    void generateGrantedOfficialNotice_WASTE() throws InterruptedException, ExecutionException {
+        String requestId = "1";
+        String fileName = "WASTE_permit_application_approved.pdf";
+
+        DecisionNotification decisionNotification = DecisionNotification.builder()
+            .operators(Set.of("operator"))
+            .signatory("signatory")
+            .build();
+        PermitIssuanceRequestPayload requestPayload = PermitIssuanceRequestPayload.builder()
+            .permitType(PermitType.WASTE)
+            .decisionNotification(decisionNotification)
+            .build();
+        Request request = Request.builder().payload(requestPayload).build();
+
+        TemplateParams templateParams = TemplateParams.builder().build();
+        FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
+
+        UserInfoDTO accountPrimaryContactInfo = UserInfoDTO.builder().email("user@pmrv.uk").build();
+        List<String> decisionNotificationUserEmails = List.of("operator@pmrv.uk");
+        DocumentTemplateParamsSourceData documentTemplateSourceParams =
+            DocumentTemplateParamsSourceData.builder()
+                .contextActionType(DocumentTemplateGenerationContextActionType.PERMIT_ISSUANCE_WASTE_GRANTED)
+                .request(request)
+                .signatory(decisionNotification.getSignatory())
+                .accountPrimaryContact(accountPrimaryContactInfo)
+                .toRecipientEmail(accountPrimaryContactInfo.getEmail())
+                .ccRecipientsEmails(decisionNotificationUserEmails)
+                .build();
+
+        when(requestService.findRequestById(requestId))
+            .thenReturn(request);
+        when(requestAccountContactQueryService.getRequestAccountPrimaryContact(request))
+            .thenReturn(Optional.of(accountPrimaryContactInfo));
+        when(decisionNotificationUsersService.findUserEmails(decisionNotification))
+            .thenReturn(decisionNotificationUserEmails);
+        when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
+            .thenReturn(templateParams);
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(
+            DocumentTemplateType.PERMIT_ISSUANCE_WASTE_ACCEPTED, templateParams, fileName))
+            .thenReturn(CompletableFuture.completedFuture(officialDocFileInfoDTO));
+
+        // Invoke
+        CompletableFuture<FileInfoDTO> result = officialNoticeService.generateGrantedOfficialNotice(requestId);
+
+        assertThat(result.get()).isEqualTo(officialDocFileInfoDTO);
+
+        // Verify
+        verify(requestService, times(1)).findRequestById(requestId);
+        verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
+        verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
+        verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
+            DocumentTemplateType.PERMIT_ISSUANCE_WASTE_ACCEPTED, templateParams, fileName);
     }
 
     @Test
@@ -152,7 +268,7 @@ class PermitIssuanceOfficialNoticeServiceTest {
                 .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(
+        when(documentFileGeneratorService.generateAndSaveFileDocument(
                 DocumentTemplateType.PERMIT_ISSUANCE_REJECTED, templateParams, fileName))
                 .thenReturn(officialDocFileInfoDTO);
 
@@ -164,7 +280,7 @@ class PermitIssuanceOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
                 DocumentTemplateType.PERMIT_ISSUANCE_REJECTED, templateParams, fileName);
 
         assertThat(requestPayload.getOfficialNotice()).isEqualTo(officialDocFileInfoDTO);
@@ -207,7 +323,7 @@ class PermitIssuanceOfficialNoticeServiceTest {
                 .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(
+        when(documentFileGeneratorService.generateAndSaveFileDocument(
                 DocumentTemplateType.PERMIT_ISSUANCE_DEEMED_WITHDRAWN, templateParams, fileName))
                 .thenReturn(officialDocFileInfoDTO);
 
@@ -219,7 +335,7 @@ class PermitIssuanceOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
                 DocumentTemplateType.PERMIT_ISSUANCE_DEEMED_WITHDRAWN, templateParams, fileName);
 
         assertThat(requestPayload.getOfficialNotice()).isEqualTo(officialDocFileInfoDTO);
@@ -243,16 +359,17 @@ class PermitIssuanceOfficialNoticeServiceTest {
                         .build())
                 .build();
 
-        List<String> ccRecipientsEmails = List.of("operator1@email");
+        List<String> decisionRecipientsEmails = List.of("operator1@email");
 
         when(requestService.findRequestById(requestId)).thenReturn(request);
-        when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(ccRecipientsEmails);
+        when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(decisionRecipientsEmails);
+        when(registryConfig.getEmail()).thenReturn("registry@email");
 
         officialNoticeService.sendOfficialNotice(requestId);
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
-        verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails);
+        verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialDocFileInfoDTO), request, decisionRecipientsEmails, List.of("registry@email"));
     }
 
     private FileInfoDTO buildOfficialFileInfo() {

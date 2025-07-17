@@ -1,14 +1,15 @@
 package uk.gov.pmrv.api.migration.report.aviation;
 
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDate;
-import java.time.Year;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import java.math.BigDecimal;
 import uk.gov.pmrv.api.aviationreporting.common.domain.verification.AviationAerVerificationDecisionType;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Year;
 
 @Data
 @NoArgsConstructor

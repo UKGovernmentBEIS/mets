@@ -17,9 +17,10 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.persistence.EntityManager;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
@@ -54,7 +55,8 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
         flushAndClear();
         
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
-                .accountId(accountId)
+        		.resourceType(ResourceType.ACCOUNT)
+                .resourceId(String.valueOf(accountId))
                 .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
                 .category(RequestHistoryCategory.PERMIT)
                 .build();
@@ -66,7 +68,7 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
         RequestDetailsDTO expectedWorkflowResult3 = new RequestDetailsDTO(request3.getId(), request3.getType(), request3.getStatus(), request3.getCreationDate(), null);
         
         assertThat(results).isNotNull();
-        assertThat(results.getRequestDetails()).isEqualTo(List.of(
+        assertThat(results.getRequestDetails()).containsExactlyInAnyOrderElementsOf(List.of(
         		expectedWorkflowResult3, expectedWorkflowResult2, expectedWorkflowResult1
                 ));
     }
@@ -83,7 +85,8 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
         flushAndClear();
         
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
-                .accountId(accountId)
+        		.resourceType(ResourceType.ACCOUNT)
+                .resourceId(String.valueOf(accountId))
                 .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
                 .category(RequestHistoryCategory.PERMIT)
                 .requestStatuses(Set.of(RequestStatus.IN_PROGRESS))
@@ -110,7 +113,8 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
         flushAndClear();
         
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
-                .accountId(accountId)
+        		.resourceType(ResourceType.ACCOUNT)
+                .resourceId(String.valueOf(accountId))
                 .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
                 .category(RequestHistoryCategory.PERMIT)
                 .requestTypes(Set.of(RequestType.INSTALLATION_ACCOUNT_OPENING))
@@ -138,7 +142,8 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
         flushAndClear();
         
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
-                .competentAuthority(CompetentAuthorityEnum.ENGLAND)
+        		.resourceType(ResourceType.CA)
+                .resourceId(CompetentAuthorityEnum.ENGLAND.name())
                 .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
                 .category(RequestHistoryCategory.CA)
                 .requestTypes(Set.of(RequestType.PERMIT_BATCH_REISSUE))
@@ -151,7 +156,7 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
         
         assertThat(results).isNotNull();
         assertThat(results.getTotal()).isEqualTo(2L);
-        assertThat(results.getRequestDetails()).isEqualTo(List.of(
+        assertThat(results.getRequestDetails()).containsExactlyInAnyOrderElementsOf(List.of(
                 expectedWorkflowResult2, expectedWorkflowResult1
                 ));
     }
@@ -189,7 +194,7 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
     private Request createRequest(Long accountId, RequestType type, RequestStatus status, CompetentAuthorityEnum ca, RequestMetadata metaData) {
         Request request =
             Request.builder()
-                    .id(RandomStringUtils.random(5))
+                    .id(RandomStringUtils.insecure().next(5))
                     .competentAuthority(ca)
                     .type(type)
                     .status(status)

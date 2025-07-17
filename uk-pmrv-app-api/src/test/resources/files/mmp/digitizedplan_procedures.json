@@ -1,0 +1,43 @@
+{
+      "ASSIGNMENT_OF_RESPONSIBILITIES": {
+        "procedureName": "nameA",
+        "procedureReference": "referenceA",
+        "diagramReference": "diagramReferenceA",
+        "procedureDescription": "descriptionA",
+        "dataMaintenanceResponsibleEntity": "entityA",
+        "locationOfRecords": "locationA",
+        "itSystemUsed": "itSystemA",
+        "standardsAppliedList": "listA"
+      },
+      "MONITORING_PLAN_APPROPRIATENESS": {
+        "procedureName": "nameB",
+        "procedureReference": "referenceB",
+        "diagramReference": "diagramReferenceB",
+        "procedureDescription": "descriptionB",
+        "dataMaintenanceResponsibleEntity": "entityB",
+        "locationOfRecords": "locationB",
+        "itSystemUsed": "itSystemB",
+        "standardsAppliedList": "listB"
+      },
+      "DATA_FLOW_ACTIVITIES": {
+        "procedureName": "nameC",
+        "procedureReference": "referenceC",
+        "diagramReference": "diagramReferenceC",
+        "procedureDescription": "descriptionC",
+        "dataMaintenanceResponsibleEntity": "entityC",
+        "locationOfRecords": "locationC",
+        "itSystemUsed": "itSystemC",
+        "standardsAppliedList": "listC"
+      },
+      "CONTROL_ACTIVITIES": {
+        "procedureName": "nameD",
+        "procedureReference": "referenceD",
+        "diagramReference": "diagramReferenceD",
+        "procedureDescription": "descriptionD",
+        "dataMaintenanceResponsibleEntity": "entityD",
+        "locationOfRecords": "locationD",
+        "itSystemUsed": "itSystemD",
+        "standardsAppliedList": "listD"
+      }
+
+}

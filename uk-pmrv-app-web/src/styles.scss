@@ -1,3 +1,32 @@
+@use 'sass:string';
+@use 'sass:list';
+
+$govuk-page-width: 1200px;
+.hmcts-primary-navigation__container {
+  max-width: $govuk-page-width !important;
+}
+
+// Flags for support of IE8
+$govuk-if-ie8: false;
+$govuk-suppressed-warnings: ie8;
+
+// Workaround for wrong assets relative url resolution
+// @TODO :: Check this
+@function image-url($filename) {
+  $filePaths: string.split($filename, '/');
+  $filePath: list.nth($filePaths, list.length($filePaths));
+  @return url('/installation-aviation/assets/images/' + $filePath);
+}
+
+@function font-url($filename) {
+  $filePaths: string.split($filename, '/');
+  $filePath: list.nth($filePaths, list.length($filePaths));
+  @return url('/installation-aviation/assets/fonts/#{$filePath}');
+}
+
+$govuk-image-url-function: 'image-url';
+$govuk-font-url-function: 'font-url';
+
 @import 'govuk-frontend/govuk/all';
 @import '@hmcts/frontend/all';
 @import 'header';
@@ -6,3 +35,4 @@
 @import 'text';
 @import 'task-list';
 @import 'lists';
+@import 'print';

@@ -35,7 +35,6 @@ export const mockVerifiersRouteData: { verifiers: UsersAuthoritiesInfoDTO } = {
         firstName: 'Alfyn',
         lastName: 'Octo',
         authorityStatus: 'DISABLED',
-        locked: false,
         authorityCreationDate: '2020-12-14T12:38:12.846716Z',
       },
       {
@@ -45,7 +44,6 @@ export const mockVerifiersRouteData: { verifiers: UsersAuthoritiesInfoDTO } = {
         firstName: 'Therion',
         lastName: 'Path',
         authorityStatus: 'ACTIVE',
-        locked: true,
         authorityCreationDate: '2020-12-15T12:38:12.846716Z',
       },
       {
@@ -55,7 +53,6 @@ export const mockVerifiersRouteData: { verifiers: UsersAuthoritiesInfoDTO } = {
         firstName: 'Olberik',
         lastName: 'Traveler',
         authorityStatus: 'PENDING',
-        locked: true,
         authorityCreationDate: '2020-11-10T12:38:12.846716Z',
       },
       {
@@ -65,7 +62,6 @@ export const mockVerifiersRouteData: { verifiers: UsersAuthoritiesInfoDTO } = {
         firstName: 'Tyrion',
         lastName: 'Lanister',
         authorityStatus: 'ACTIVE',
-        locked: false,
         authorityCreationDate: '2020-12-16T12:38:12.846716Z',
       },
     ] as UserAuthorityInfoDTO[],

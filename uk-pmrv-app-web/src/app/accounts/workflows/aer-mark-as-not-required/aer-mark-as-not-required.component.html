@@ -1,0 +1,31 @@
+<ng-container *ngIf="(isMarkedAsNotRequired$ | async) === false; else isMarkedAsNotRequired">
+  <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+  <form (ngSubmit)="onConfirmMarkAsNotRequired()" [formGroup]="form">
+    <div class="govuk-grid-row" [formGroup]="form">
+      <app-page-heading size="l">Mark the emissions report workflow as not required</app-page-heading>
+      <p class="govuk-body">
+        This will remove the operators emissions report task and mark the workflow as ‘not required’.
+      </p>
+      <p class="govuk-body">No emissions will be reported for this year.</p>
+      <h2 class="govuk-heading-m">Provide a reason</h2>
+      <div formControlName="reason" govuk-textarea hint="This cannot be viewed by the operator"></div>
+      <div class="govuk-button-group govuk-!-margin-bottom-8">
+        <button appPendingButton govukWarnButton govukButton type="submit">Mark as not required</button>
+      </div>
+    </div>
+  </form>
+</ng-container>
+<ng-template #isMarkedAsNotRequired>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="Workflow marked as not required">
+        Your reference is <br />
+        {{ reference$ | async }}
+      </govuk-panel>
+    </div>
+  </div>
+
+  <div class="govuk-grid-row govuk-!-margin-top-4">
+    <a govukLink routerLink="/dashboard"> Return to dashboard </a>
+  </div>
+</ng-template>

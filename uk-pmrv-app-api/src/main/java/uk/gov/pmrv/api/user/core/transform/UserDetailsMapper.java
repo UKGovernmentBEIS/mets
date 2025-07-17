@@ -3,8 +3,8 @@ package uk.gov.pmrv.api.user.core.transform;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import uk.gov.pmrv.api.common.transform.MapperConfig;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.common.config.MapperConfig;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetailsRequest;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class)

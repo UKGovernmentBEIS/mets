@@ -13,5 +13,8 @@ export class AmendSummaryTemplateComponent {
   section = this.route.snapshot.paramMap.get('section') as AerAmendGroup;
 
   amendTasksPerReviewGroup = amendTasksPerReviewGroup;
-  constructor(private readonly route: ActivatedRoute, readonly aerService: AerService) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    readonly aerService: AerService,
+  ) {}
 }

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, map, Observable, shareReplay, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, combineLatest, map, Observable, shareReplay, Subject, switchMap, take, tap } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore, selectCurrentDomain } from '@core/store/auth';
@@ -13,7 +13,7 @@ import { GovukDatePipe } from '@shared/pipes/govuk-date.pipe';
 import { ItemActionTypePipe } from '@shared/pipes/item-action-type.pipe';
 import { WorkflowStatusPipe } from '@shared/pipes/workflow-status.pipe';
 import { WorkflowTypePipe } from '@shared/pipes/workflow-type.pipe';
-import moment from 'moment';
+import { format, subDays } from 'date-fns';
 
 import { GovukTableColumn, GovukValidators } from 'govuk-components';
 
@@ -35,16 +35,17 @@ import { createTableColumns, createTablePage, manipulateResultsAndExportToExcel,
   providers: [DestroySubject],
 })
 export class CompletedWorkComponent implements OnInit {
+  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));
   readonly pageSize = pageSize;
-  executeClicked = false;
+
   reportItems$: Observable<ExecutedRequestAction[]>;
   pageItems$: Observable<ExecutedRequestAction[]>;
   totalNumOfItems$: Observable<number>;
-
   currentPage$ = new BehaviorSubject<number>(1);
   generateReport$ = new Subject<void>();
+
+  executeClicked = false;
   domain: string;
-  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));
 
   reportOptionsForm: FormGroup = this.fb.group({
     option: [null, [GovukValidators.required('Select an option')]],
@@ -52,7 +53,6 @@ export class CompletedWorkComponent implements OnInit {
       null,
       [
         GovukValidators.required('Enter a year value'),
-        GovukValidators.pattern('[0-9]*', 'Enter a valid year value e.g. 2022'),
         GovukValidators.builder(
           `Enter a valid year value e.g. 2022`,
           DateInputValidators.dateFieldValidator('year', 1900, 2100),
@@ -70,13 +70,13 @@ export class CompletedWorkComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly authStore: AuthStore,
-    private readonly destroy$: DestroySubject,
   ) {}
 
   ngOnInit(): void {
-    this.currentDomain$.pipe(takeUntil(this.destroy$)).subscribe((domain) => {
+    this.currentDomain$.subscribe((domain) => {
       this.domain = domain === 'AVIATION' ? domain.toLowerCase() : '';
     });
+
     this.backlinkService.show(this.domain + '/mi-reports');
 
     this.reportItems$ = combineLatest([this.currentDomain$, this.generateReport$]).pipe(
@@ -92,6 +92,7 @@ export class CompletedWorkComponent implements OnInit {
     this.pageItems$ = combineLatest([this.reportItems$, this.currentPage$]).pipe(
       map(([items, currentPage]) => createTablePage(currentPage, this.pageSize, items)),
     );
+
     this.totalNumOfItems$ = this.reportItems$.pipe(map((items) => items.length));
   }
 
@@ -146,14 +147,15 @@ export class CompletedWorkComponent implements OnInit {
       case 'LAST_30_DAYS': {
         return {
           reportType: 'COMPLETED_WORK',
-          fromDate: moment().subtract(30, 'd').format('YYYY-MM-DD'),
+          fromDate: format(subDays(new Date(), 30), 'yyyy-MM-dd'),
         };
       }
+
       case 'ANNUAL': {
         return {
           reportType: 'COMPLETED_WORK',
-          fromDate: moment([this.reportOptionsForm.get('year').value]).format('YYYY-MM-DD'),
-          toDate: moment([Number(this.reportOptionsForm.get('year').value) + 1]).format('YYYY-MM-DD'),
+          fromDate: format(new Date(this.reportOptionsForm.get('year').value, 0, 1), 'yyyy-MM-dd'),
+          toDate: format(new Date(Number(this.reportOptionsForm.get('year').value) + 1, 0, 1), 'yyyy-MM-dd'),
         };
       }
     }

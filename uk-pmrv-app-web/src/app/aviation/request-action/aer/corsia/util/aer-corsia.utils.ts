@@ -156,7 +156,7 @@ function getAerVerifySubTasks(payload: AerCorsiaRequestActionPayload): TaskSecti
       ],
     },
     {
-      title: 'Verifier Summary',
+      title: 'Verifier summary',
       tasks: [
         {
           name: 'verifiersConclusions',
@@ -179,19 +179,26 @@ function getAerVerifySubTasks(payload: AerCorsiaRequestActionPayload): TaskSecti
 }
 
 export function getAerCorsiaApplicationSubmittedTasks(payload: AerCorsiaRequestActionPayload): TaskSection<any>[] {
-  return [
-    {
-      title: 'Reporting obligation',
-      tasks: [
+  return payload.reportingRequired
+    ? getAerSubTasks()
+    : [
         {
-          name: 'reportingObligation',
-          linkText: aerHeaderTaskMap['reportingObligation'],
-          link: 'aer-corsia/submitted/reporting-obligation',
+          title: 'Reporting obligation',
+          tasks: [
+            {
+              name: 'reportingObligation',
+              linkText: aerHeaderTaskMap['reportingObligation'],
+              link: 'aer-corsia/submitted/reporting-obligation',
+            },
+          ],
         },
-      ],
-    },
-    ...(payload.reportingRequired ? getAerSubTasks() : []),
-  ]
+      ];
+}
+
+export function getAerCorsiaVerifyApplicationSubmittedTasks(
+  payload: AerCorsiaRequestActionPayload,
+): TaskSection<any>[] {
+  return [...getAerVerifySubTasks(payload), ...getAerSubTasks()]
     .filter((section) => !!section)
     .map((section) => ({
       ...section,
@@ -199,10 +206,11 @@ export function getAerCorsiaApplicationSubmittedTasks(payload: AerCorsiaRequestA
     }));
 }
 
-export function getAerCorsiaVerifyApplicationSubmittedTasks(
-  payload: AerCorsiaRequestActionPayload,
-): TaskSection<any>[] {
-  return [...getAerVerifySubTasks(payload), ...getAerSubTasks()]
+export function getAerCorsiaCompletedTasks(payload: AerCorsiaRequestActionPayload): TaskSection<any>[] {
+  return [
+    ...(payload.verificationReport ? getAerVerifySubTasks(payload) : []),
+    ...getAerCorsiaApplicationSubmittedTasks(payload),
+  ]
     .filter((section) => !!section)
     .map((section) => ({
       ...section,

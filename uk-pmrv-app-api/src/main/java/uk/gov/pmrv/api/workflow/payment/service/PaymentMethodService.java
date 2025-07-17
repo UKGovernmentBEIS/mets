@@ -1,13 +1,14 @@
 package uk.gov.pmrv.api.workflow.payment.service;
 
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.payment.domain.PaymentMethod;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.PaymentMethodType;
 import uk.gov.pmrv.api.workflow.payment.repository.PaymentMethodRepository;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

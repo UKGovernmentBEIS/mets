@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
+import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
 import { BasePage } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { PaymentModule } from '../payment.module';
 import { PaymentStore } from '../store/payment.store';
@@ -35,8 +34,8 @@ describe('TrackComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule, PaymentModule],
-      providers: [KeycloakService],
+      imports: [SharedModule, PaymentModule],
+      providers: [provideRouter([]), DestroySubject],
     }).compileComponents();
   });
 
@@ -70,7 +69,7 @@ describe('TrackComponent', () => {
 
     it('should navigate to mark as paid page', () => {
       expect(page.heading.textContent.trim()).toEqual(
-        'Pay permit application fee Assigned to: Foo BarDays Remaining: 10',
+        'Pay permit application fee Assigned to: Foo Bar Days Remaining: 10',
       );
 
       expect(page.summaryListValues).toEqual([

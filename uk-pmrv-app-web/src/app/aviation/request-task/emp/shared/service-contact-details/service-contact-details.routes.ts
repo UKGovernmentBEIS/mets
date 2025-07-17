@@ -6,7 +6,7 @@ export const EMP_SERVICE_CONTACT_DETAILS_ROUTES: Routes = [
     children: [
       {
         path: '',
-        data: { breadcrumb: 'Service contact details summary' },
+        data: { breadcrumb: 'Service contact details' },
         loadComponent: () => import('./service-contact-details-page/service-contact-details-page.component'),
       },
     ],

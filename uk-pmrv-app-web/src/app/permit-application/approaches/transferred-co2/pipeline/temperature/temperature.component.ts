@@ -4,6 +4,7 @@ import {
   Component,
   ElementRef,
   Inject,
+  OnInit,
   QueryList,
   ViewChild,
   ViewChildren,
@@ -11,11 +12,13 @@ import {
 import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { filter, first, switchMap, switchMapTo, takeUntil } from 'rxjs';
+import { filter, first, map, switchMap, takeUntil, tap } from 'rxjs';
 
-import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
-import { DestroySubject } from '../../../../../core/services/destroy-subject.service';
-import { WizardStepComponent } from '../../../../../shared/wizard/wizard-step.component';
+import { ConfigStore } from '@core/config/config.store';
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { DestroySubject } from '@core/services/destroy-subject.service';
+import { WizardStepComponent } from '@shared/wizard/wizard-step.component';
+
 import { typeOptions } from '../../../../measurement-devices/measurement-device-details/measurement-device-details-form.provider';
 import { PERMIT_TASK_FORM } from '../../../../shared/permit-task-form.token';
 import { PermitApplicationState } from '../../../../store/permit-application.state';
@@ -28,13 +31,15 @@ import { createAnotherMeasurementDevice, temperatureFormProvider } from './tempe
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [temperatureFormProvider, DestroySubject],
 })
-export class TemperatureComponent implements AfterViewInit {
+export class TemperatureComponent implements OnInit, AfterViewInit {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;
   @ViewChildren('removeButton') removeButtons: QueryList<ElementRef<HTMLButtonElement>>;
   measurementTypes = typeOptions;
 
   private measurementDevicesLength = this.measurementDevices.length;
+
+  private readonly configFeatures$ = this.configStore.asObservable().pipe(map((state) => state.features));
 
   constructor(
     @Inject(PERMIT_TASK_FORM) readonly form: UntypedFormGroup,
@@ -43,6 +48,7 @@ export class TemperatureComponent implements AfterViewInit {
     private readonly router: Router,
     private readonly destroy$: DestroySubject,
     private readonly pendingRequest: PendingRequestService,
+    private readonly configStore: ConfigStore,
   ) {}
 
   get heading(): HTMLHeadingElement {
@@ -55,6 +61,23 @@ export class TemperatureComponent implements AfterViewInit {
 
   getDeviceType(index: number): string {
     return this.measurementDevices.at(index).get('type').value;
+  }
+
+  ngOnInit(): void {
+    this.configFeatures$
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((features) => {
+          const wastePermitEnabled = features.wastePermitEnabled;
+
+          this.measurementTypes = typeOptions;
+
+          if (!wastePermitEnabled) {
+            this.measurementTypes = this.measurementTypes.filter((option) => option !== 'CRANE_WEIGHT');
+          }
+        }),
+      )
+      .subscribe();
   }
 
   ngAfterViewInit(): void {
@@ -72,7 +95,7 @@ export class TemperatureComponent implements AfterViewInit {
         first(),
         switchMap((data) => this.store.postTask(data.taskKey, this.form.value, false, data.statusKey)),
         this.pendingRequest.trackRequest(),
-        switchMapTo(this.store),
+        switchMap(() => this.store),
         first(),
       )
       .subscribe(() => this.router.navigate(['../transfer-co2'], { relativeTo: this.route }));

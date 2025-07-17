@@ -16,8 +16,8 @@ import { InPersonVisitComponent } from '@tasks/aer/verification-submit/opinion-s
 import { mockPostBuild, mockStateBuild } from '@tasks/aer/verification-submit/testing/mock-state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage, mockClass } from '@testing';
+import { addDays, subDays } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import { TasksService } from 'pmrv-api';
 
@@ -142,11 +142,11 @@ describe('InPersonVisitComponent', () => {
     });
 
     it('should display error on future and duplicate dates', () => {
-      const day1 = moment().add(1, 'd');
-      const day2 = moment();
+      const day1 = addDays(new Date(), 1);
+      const day2 = new Date();
 
       page.teamMembers = 'List of teamMembers';
-      page.visitDates = [day1.toDate()];
+      page.visitDates = [day1];
       page.submitButton.click();
       fixture.detectChanges();
 
@@ -156,7 +156,7 @@ describe('InPersonVisitComponent', () => {
 
       page.addAnotherButton.click();
       fixture.detectChanges();
-      page.visitDates = [day2.toDate(), day2.toDate()];
+      page.visitDates = [day2, day2];
       page.submitButton.click();
       fixture.detectChanges();
 
@@ -168,13 +168,19 @@ describe('InPersonVisitComponent', () => {
     it('should submit a valid form and navigate to `summary`', () => {
       const navigateSpy = jest.spyOn(router, 'navigate');
       tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
-      const day1 = moment().subtract(1, 'd').set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).utc(true);
-      const day2 = moment().set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).utc(true);
+      const day1 = new Date(
+        Date.UTC(
+          subDays(new Date(), 1).getUTCFullYear(),
+          subDays(new Date(), 1).getUTCMonth(),
+          subDays(new Date(), 1).getUTCDate(),
+        ),
+      );
+      const day2 = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
 
       page.teamMembers = 'List of teamMembers';
       page.addAnotherButton.click();
       fixture.detectChanges();
-      page.visitDates = [day1.toDate(), day2.toDate()];
+      page.visitDates = [day1, day2];
       page.submitButton.click();
       fixture.detectChanges();
 
@@ -187,7 +193,7 @@ describe('InPersonVisitComponent', () => {
               siteVisit: {
                 siteVisitType: 'IN_PERSON',
                 teamMembers: 'List of teamMembers',
-                visitDates: [day1.toDate(), day2.toDate()],
+                visitDates: [day1, day2],
               },
             },
           },
@@ -272,11 +278,17 @@ describe('InPersonVisitComponent', () => {
     it('should edit, submit a valid form and navigate to `summary`', () => {
       const navigateSpy = jest.spyOn(router, 'navigate');
       tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
-      const newDay2 = moment().subtract(1, 'd').set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).utc(true);
+      const newDay2 = new Date(
+        Date.UTC(
+          subDays(new Date(), 1).getUTCFullYear(),
+          subDays(new Date(), 1).getUTCMonth(),
+          subDays(new Date(), 1).getUTCDate(),
+        ),
+      );
 
       page.teamMembers = 'List of teamMembers edited';
       fixture.detectChanges();
-      page.visitDates = [day1, newDay2.toDate()];
+      page.visitDates = [day1, newDay2];
       page.submitButton.click();
       fixture.detectChanges();
 
@@ -289,7 +301,7 @@ describe('InPersonVisitComponent', () => {
               siteVisit: {
                 siteVisitType: 'IN_PERSON',
                 teamMembers: 'List of teamMembers edited',
-                visitDates: [day1, newDay2.toDate()],
+                visitDates: [day1, newDay2],
               },
             },
           },

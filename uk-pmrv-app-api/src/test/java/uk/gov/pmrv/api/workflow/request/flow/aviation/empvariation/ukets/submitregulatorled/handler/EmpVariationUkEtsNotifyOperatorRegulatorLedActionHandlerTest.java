@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -50,7 +50,7 @@ class EmpVariationUkEtsNotifyOperatorRegulatorLedActionHandlerTest {
 	void process() {
 		Long requestTaskId = 1L;
 		RequestTaskActionType requestTaskActionType = RequestTaskActionType.EMP_VARIATION_UKETS_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED;
-		PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+		AppUser appUser = AppUser.builder().userId("userId").build();
 		NotifyOperatorForDecisionRequestTaskActionPayload payload = NotifyOperatorForDecisionRequestTaskActionPayload.builder()
 				.decisionNotification(DecisionNotification.builder()
 						.operators(Set.of("op1"))
@@ -66,12 +66,12 @@ class EmpVariationUkEtsNotifyOperatorRegulatorLedActionHandlerTest {
 		
 		when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-		cut.process(requestTaskId, requestTaskActionType, pmrvUser, payload);
+		cut.process(requestTaskId, requestTaskActionType, appUser, payload);
 		
 		verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-		verify(validator, times(1)).validate(requestTask, payload, pmrvUser);
+		verify(validator, times(1)).validate(requestTask, payload, appUser);
 		verify(empVariationUkEtsSubmitRegulatorLedService, times(1)).saveDecisionNotification(requestTask,
-				payload.getDecisionNotification(), pmrvUser);
+				payload.getDecisionNotification(), appUser);
 		verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(),
 				Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
 		            	BpmnProcessConstants.EMP_VARIATION_SUBMIT_OUTCOME, EmpVariationSubmitOutcome.SUBMITTED,

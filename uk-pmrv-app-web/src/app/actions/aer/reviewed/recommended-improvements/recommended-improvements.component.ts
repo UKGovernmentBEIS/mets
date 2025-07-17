@@ -12,8 +12,9 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Recommended improvements" [breadcrumb]="true">
       <app-recommended-improvements-group
-        [recommendedImprovements]="(payload$ | async).verificationReport.recommendedImprovements"
-      ></app-recommended-improvements-group>
+        [recommendedImprovements]="
+          (payload$ | async).verificationReport.recommendedImprovements
+        "></app-recommended-improvements-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -25,5 +26,8 @@ export class RecommendedImprovementsComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

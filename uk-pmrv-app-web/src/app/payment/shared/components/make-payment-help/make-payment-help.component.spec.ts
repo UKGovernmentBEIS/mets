@@ -14,12 +14,13 @@ describe('MakePaymentHelpComponent', () => {
 
   @Component({
     selector: 'app-test-wrapper-component',
-    template: `<app-make-payment-help
-      [competentAuthority$]="competentAuthority$"
-      [requestType$]="requestType$"
-      [requestTaskType$]="requestTaskType$"
-      [defaultHelp]="defaultHelp"
-    ></app-make-payment-help>`,
+    template: `
+      <app-make-payment-help
+        [competentAuthority$]="competentAuthority$"
+        [requestType$]="requestType$"
+        [requestTaskType$]="requestTaskType$"
+        [defaultHelp]="defaultHelp"></app-make-payment-help>
+    `,
   })
   class TestWrapperComponent {
     competentAuthority$: Observable<RequestInfoDTO['competentAuthority']>;

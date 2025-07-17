@@ -7,7 +7,7 @@ import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 import { AerVerificationReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-verification-review-decision-group/aer-verification-review-decision-group.component';
 import { uncorrectedMisstatementsQuery } from '@aviation/request-task/aer/shared/uncorrected-misstatements/uncorrected-misstatements.selector';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { showReviewDecisionComponent } from '@aviation/request-task/util';
+import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
 import { UncorrectedItemGroupComponent } from '@aviation/shared/components/aer-verify/uncorrected-item-group/uncorrected-item-group.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -51,7 +51,7 @@ export class MisstatementsSummaryComponent {
     map(([type, uncorrectedMisstatements, isEditable, taskStatus]) => {
       return {
         data: uncorrectedMisstatements,
-        pageHeader: 'Check Your Answers',
+        pageHeader: getSummaryHeaderForTaskType(type, 'uncorrectedMisstatements'),
         isEditable,
         hideSubmit:
           !isEditable ||

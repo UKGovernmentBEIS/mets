@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerContainer;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerTotalReportableEmissions;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationReportableEmissionsEntity;
@@ -12,8 +13,7 @@ import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationReportableEmi
 import uk.gov.pmrv.api.aviationreporting.common.repository.AviationReportableEmissionsRepository;
 import uk.gov.pmrv.api.aviationreporting.common.transform.AviationReportableEmissionsMapper;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.time.Year;
 import java.util.List;
@@ -39,7 +39,7 @@ public class AviationReportableEmissionsService {
     }
     
     @Transactional
-    public AviationAerTotalReportableEmissions updateReportableEmissions(AviationAerContainer aerContainer, Long accountId) {
+    public AviationAerTotalReportableEmissions updateReportableEmissions(AviationAerContainer aerContainer, Long accountId, boolean isFromRegulator) {
         Year reportingYear = aerContainer.getReportingYear();
         AviationAerTotalReportableEmissions totalReportableEmissions =
             getReportableEmissionsCalculationService(aerContainer.getScheme()).calculateReportableEmissions(aerContainer);
@@ -50,6 +50,7 @@ public class AviationReportableEmissionsService {
                 .year(reportingYear)
                 .reportableEmissions(totalReportableEmissions)
                 .isFromDre(false)
+                .isFromRegulator(isFromRegulator)
                 .build();
 
         saveReportableEmissions(reportableEmissionsSaveParams, aerContainer.getScheme());

@@ -3,24 +3,36 @@
 
   <ul app-task-item-list>
     <div class="overflow-auto">
-      <ng-container *ngIf="(sourceStreamCategoryAppliedTiers$ | async)?.length > 0; else addNew">
+      <ng-container *ngIf="sourceStreamCategoryAppliedTiers?.length > 0; else addNew">
         <govuk-table [columns]="columns" [data]="sourceStreamCategoryAppliedTiers">
           <ng-template let-column="column" let-row="row" let-index="index">
             <ng-container [ngSwitch]="column.field">
               <ng-container *ngSwitchCase="'category'">
-                <a govukLink [routerLink]="['../../calculation/category-tier', index]">
+                <ng-container *ngIf="showOriginal; else currentCategory">
                   <ng-container
                     *ngIf="
-                      row?.sourceStreamCategory?.sourceStream | findSourceStream | async as sourceStream;
+                      row?.sourceStreamCategory?.sourceStream | findSourceStream: !showOriginal | async as sourceStream;
                       else noSourceStream
                     "
+                    >{{ sourceStream | tierSourceStreamName: row.sourceStreamCategory }}</ng-container
                   >
-                    {{ sourceStream | tierSourceStreamName: row.sourceStreamCategory }}
-                  </ng-container>
-                  <ng-template #noSourceStream>
-                    UNDEFINED: {{ row?.sourceStreamCategory?.categoryType | categoryTypeName }}
-                  </ng-template>
-                </a>
+                </ng-container>
+                <ng-template #currentCategory>
+                  <a govukLink [routerLink]="['../../calculation/category-tier', index]">
+                    <ng-container
+                      *ngIf="
+                        row?.sourceStreamCategory?.sourceStream
+                          | findSourceStream: !showOriginal
+                          | async as sourceStream;
+                        else noSourceStream
+                      "
+                      >{{ sourceStream | tierSourceStreamName: row.sourceStreamCategory }}</ng-container
+                    >
+                  </a>
+                </ng-template>
+                <ng-template #noSourceStream>
+                  UNDEFINED: {{ row?.sourceStreamCategory?.categoryType | categoryTypeName }}
+                </ng-template>
               </ng-container>
               <ng-container *ngSwitchCase="'emissions'">
                 {{ row?.sourceStreamCategory?.annualEmittedCO2Tonnes | number }}
@@ -47,12 +59,19 @@
                 {{ (row?.biomassFraction?.tier | appliedTier) ?? notUsed }}
               </ng-container>
               <ng-container *ngSwitchCase="'status'">
-                <govuk-tag
-                  [color]="'CALCULATION_CO2_Category_Tier' | taskStatus: index | async | tagColor"
-                  class="app-task-list__tag"
-                >
-                  {{ 'CALCULATION_CO2_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
-                </govuk-tag>
+                <ng-container *ngIf="!showOriginal; else originalStatus">
+                  <govuk-tag
+                    [color]="'CALCULATION_CO2_Category_Tier' | taskStatus: index | async | tagColor"
+                    class="app-task-list__tag"
+                  >
+                    {{ 'CALCULATION_CO2_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
+                  </govuk-tag>
+                </ng-container>
+                <ng-template #originalStatus>
+                  <govuk-tag [color]="'complete' | tagColor" class="app-task-list__tag">
+                    {{ 'complete' | i18nSelect: statusMap }}
+                  </govuk-tag>
+                </ng-template>
               </ng-container>
             </ng-container>
           </ng-template>

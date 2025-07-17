@@ -40,7 +40,7 @@ export class SummaryComponent {
     map(([isEditable, payload, taskStatus]) => {
       return {
         heading: 'Check your answers',
-        opinionStatement: this.formProvider.getFormValue(),
+        opinionStatement: this.formProvider.form.valid ? this.formProvider.getFormValue() : null,
         totalEmissionsProvided: payload.totalEmissionsProvided,
         totalOffsetEmissionsProvided: payload.totalOffsetEmissionsProvided,
         isEditable: isEditable,

@@ -23,7 +23,10 @@ export class EmpReviewDecisionGroupFormComponent implements OnInit {
   form = this.formProvider.form;
   uploadedFiles = [];
 
-  constructor(private store: RequestTaskStore, readonly formProvider: EmpReviewDecisionGroupFormProvider) {}
+  constructor(
+    private store: RequestTaskStore,
+    readonly formProvider: EmpReviewDecisionGroupFormProvider,
+  ) {}
 
   ngOnInit(): void {
     this.updateUploadedFiles();

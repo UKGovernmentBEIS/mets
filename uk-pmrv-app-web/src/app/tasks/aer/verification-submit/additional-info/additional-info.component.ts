@@ -12,8 +12,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
     <app-page-heading>Additional information</app-page-heading>
     <app-additional-info-group
       [aerData]="aerData$ | async"
-      [additionalDocumentFiles]="additionalDocumentFiles$ | async"
-    ></app-additional-info-group>
+      [additionalDocumentFiles]="additionalDocumentFiles$ | async"></app-additional-info-group>
     <app-return-link></app-return-link>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

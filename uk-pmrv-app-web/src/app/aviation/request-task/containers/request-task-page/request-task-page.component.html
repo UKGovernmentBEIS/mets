@@ -77,7 +77,7 @@
 
     <ng-container [ngSwitch]="vm.requestType">
       <ng-container *ngSwitchCase="'AVIATION_VIR'">
-        <app-vir-task-list [virPayload]="vm.requestTask.payload"></app-vir-task-list>
+        <app-vir-task-list [virPayload]="$any(vm.requestTask.payload)"></app-vir-task-list>
       </ng-container>
 
       <ng-container *ngSwitchDefault>
@@ -100,7 +100,7 @@
         <app-timeline-item
           *ngFor="let action of vm.timeline"
           [action]="action"
-          [link]="action | timelineItemLink: false:true"
+          [link]="action | timelineItemLink: false : true"
         ></app-timeline-item>
       </app-timeline>
     </ng-container>
@@ -114,6 +114,14 @@
       [requestInfo$]="vm.requestInfo$"
       baseUrl="/aviation"
     ></app-related-actions>
+    <app-preview-documents
+      [taskId]="vm.taskId$ | async"
+      [previewDocuments]="vm.previewDocuments"
+      [decisionNotification]="vm.decisionNotification"
+      linkFontSize="govuk-!-font-size-16"
+      *ngIf="vm.previewDocuments"
+    >
+    </app-preview-documents>
   </div>
 </div>
 

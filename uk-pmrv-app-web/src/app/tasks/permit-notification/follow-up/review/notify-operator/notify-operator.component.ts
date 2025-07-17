@@ -16,8 +16,7 @@ import { CommonTasksStore } from '../../../../store/common-tasks.store';
         [accountId]="accountId$ | async"
         confirmationMessage="The Permit Notification has been completed"
         requestTaskActionType="PERMIT_NOTIFICATION_FOLLOW_UP_NOTIFY_OPERATOR_FOR_DECISION"
-        [serviceContactNotAutomaticallyNotified]="true"
-      ></app-notify-operator>
+        [serviceContactAutomaticallyNotified]="false"></app-notify-operator>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

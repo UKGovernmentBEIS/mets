@@ -31,7 +31,7 @@ export const canActivateMonitoringApproachCorsia: CanActivateFn = () => {
 
       if (!emp?.emissionsMonitoringApproach) {
         store.empCorsiaDelegate.setEmissionsMonitoringApproach(
-          EmpCorsiaStoreDelegate.INITIAL_STATE.emissionsMonitoringApproach as any,
+          EmpCorsiaStoreDelegate.INITIAL_STATE.emissionsMonitoringApproach,
         );
       }
 

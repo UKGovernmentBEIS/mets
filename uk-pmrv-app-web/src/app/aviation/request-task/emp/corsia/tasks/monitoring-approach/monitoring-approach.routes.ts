@@ -32,7 +32,7 @@ export const EMP_MONITORING_APPROACH_CORSIA_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { breadcrumb: 'Monitoring approach summary' },
+        data: { breadcrumb: 'Monitoring approach' },
         loadComponent: () =>
           import('./monitoring-summary/monitoring-summary.component').then((c) => c.MonitoringSummaryComponent),
       },

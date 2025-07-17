@@ -17,4 +17,6 @@ public class AviationReportableEmissionsSaveParams {
     private Year year;
     private AviationAerTotalReportableEmissions reportableEmissions;
     private boolean isFromDre;
+    private boolean isFromRegulator;
+    private boolean isExempted;
 }

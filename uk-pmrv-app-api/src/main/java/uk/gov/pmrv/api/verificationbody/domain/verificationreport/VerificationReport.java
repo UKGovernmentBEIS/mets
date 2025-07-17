@@ -13,7 +13,6 @@ import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.Verificat
 @AllArgsConstructor
 public abstract class VerificationReport {
 
-    // To be set on Verification submit
     private Long verificationBodyId;
 
     private VerificationBodyDetails verificationBodyDetails;

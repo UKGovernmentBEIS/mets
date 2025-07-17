@@ -1,9 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;

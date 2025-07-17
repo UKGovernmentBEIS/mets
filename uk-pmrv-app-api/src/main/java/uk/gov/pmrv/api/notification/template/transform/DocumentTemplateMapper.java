@@ -2,8 +2,8 @@ package uk.gov.pmrv.api.notification.template.transform;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.config.MapperConfig;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.DocumentTemplate;
 import uk.gov.pmrv.api.notification.template.domain.dto.DocumentTemplateDTO;
 

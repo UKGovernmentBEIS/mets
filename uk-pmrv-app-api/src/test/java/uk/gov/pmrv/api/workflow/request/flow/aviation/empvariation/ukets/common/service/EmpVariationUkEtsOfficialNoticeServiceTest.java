@@ -11,20 +11,16 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
-import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsRequestPayload;
@@ -59,10 +55,6 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
 
     @Mock
     private OfficialNoticeSendService officialNoticeSendService;
-    
-    @Mock
-    private EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
-
 
     @Test
     void generateApprovedOfficialNotice() throws InterruptedException, ExecutionException {
@@ -85,10 +77,6 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
         UserInfoDTO accountPrimaryContactInfo = buildUserInfo("primaryContact@pmrv.uk");
         UserInfoDTO serviceContactInfo = buildUserInfo("serviceContact@pmrv.uk");
         List<String> decisionNotificationUserEmails = List.of("operator@pmrv.uk");
-        EmissionsMonitoringPlanUkEtsDTO empDto = EmissionsMonitoringPlanUkEtsDTO
-        		.builder()
-        		.consolidationNumber(5)
-        		.build();
         DocumentTemplateParamsSourceData documentTemplateSourceParams =
                 DocumentTemplateParamsSourceData.builder()
                         .contextActionType(DocumentTemplateGenerationContextActionType.EMP_VARIATION_ACCEPTED)
@@ -105,13 +93,11 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
                 .thenReturn(Optional.of(accountPrimaryContactInfo));
         when(requestAccountContactQueryService.getRequestAccountServiceContact(request))
         		.thenReturn(Optional.of(serviceContactInfo));
-        when(emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanUkEtsDTOByAccountId(accountId))
-				.thenReturn(Optional.of(empDto));
         when(decisionNotificationUsersService.findUserEmails(decisionNotification))
                 .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocumentAsync(
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(
                 DocumentTemplateType.EMP_VARIATION_UKETS_ACCEPTED, templateParams, fileName))
                 .thenReturn(CompletableFuture.completedFuture(officialDocFileInfoDTO));
 
@@ -125,7 +111,7 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountServiceContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocumentAsync(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
                 DocumentTemplateType.EMP_VARIATION_UKETS_ACCEPTED, templateParams, fileName);
     }
     
@@ -150,10 +136,6 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
         UserInfoDTO accountPrimaryContactInfo = buildUserInfo("primaryContact@pmrv.uk");
         UserInfoDTO serviceContactInfo = buildUserInfo("serviceContact@pmrv.uk");
         List<String> decisionNotificationUserEmails = List.of("operator@pmrv.uk");
-        EmissionsMonitoringPlanUkEtsDTO empDto = EmissionsMonitoringPlanUkEtsDTO
-        		.builder()
-        		.consolidationNumber(5)
-        		.build();
         DocumentTemplateParamsSourceData documentTemplateSourceParams =
                 DocumentTemplateParamsSourceData.builder()
                         .contextActionType(DocumentTemplateGenerationContextActionType.EMP_VARIATION_REGULATOR_LED_APPROVED)
@@ -170,13 +152,11 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
                 .thenReturn(Optional.of(accountPrimaryContactInfo));
         when(requestAccountContactQueryService.getRequestAccountServiceContact(request))
         		.thenReturn(Optional.of(serviceContactInfo));
-        when(emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanUkEtsDTOByAccountId(accountId))
-				.thenReturn(Optional.of(empDto));
         when(decisionNotificationUsersService.findUserEmails(decisionNotification))
                 .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocumentAsync(
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(
                 DocumentTemplateType.EMP_VARIATION_UKETS_REGULATOR_LED_APPROVED, templateParams, fileName))
                 .thenReturn(CompletableFuture.completedFuture(officialDocFileInfoDTO));
 
@@ -190,7 +170,7 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountServiceContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocumentAsync(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
                 DocumentTemplateType.EMP_VARIATION_UKETS_REGULATOR_LED_APPROVED, templateParams, fileName);
     }
     
@@ -234,7 +214,7 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
                 .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(
+        when(documentFileGeneratorService.generateAndSaveFileDocument(
                 DocumentTemplateType.EMP_VARIATION_UKETS_DEEMED_WITHDRAWN, templateParams, fileName))
                 .thenReturn(officialDocFileInfoDTO);
 
@@ -247,7 +227,7 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
                 DocumentTemplateType.EMP_VARIATION_UKETS_DEEMED_WITHDRAWN, templateParams, fileName);       
     }
     
@@ -291,7 +271,7 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
                 .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(
+        when(documentFileGeneratorService.generateAndSaveFileDocument(
                 DocumentTemplateType.EMP_VARIATION_UKETS_REJECTED, templateParams, fileName))
                 .thenReturn(officialDocFileInfoDTO);
 
@@ -304,7 +284,7 @@ class EmpVariationUkEtsOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
                 DocumentTemplateType.EMP_VARIATION_UKETS_REJECTED, templateParams, fileName);       
     }
     

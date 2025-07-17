@@ -15,13 +15,11 @@ import { deleteReturnUrl } from '../../../approaches';
 @Component({
   selector: 'app-category-tier-delete',
   templateUrl: './delete.component.html',
-  styles: [
-    `
-      .nowrap {
-        white-space: nowrap;
-      }
-    `,
-  ],
+  styles: `
+    .nowrap {
+      white-space: nowrap;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteComponent implements PendingRequest {
@@ -67,6 +65,9 @@ export class DeleteComponent implements PendingRequest {
               MEASUREMENT_CO2_Measured_Emissions:
                 state.permitSectionsCompleted.MEASUREMENT_CO2_Measured_Emissions?.filter((_, i) => i !== index),
               MEASUREMENT_CO2_Applied_Standard: state.permitSectionsCompleted.MEASUREMENT_CO2_Applied_Standard?.filter(
+                (_, i) => i !== index,
+              ),
+              MEASUREMENT_CO2_Biomass_Fraction: state.permitSectionsCompleted.MEASUREMENT_CO2_Biomass_Fraction?.filter(
                 (_, i) => i !== index,
               ),
             },

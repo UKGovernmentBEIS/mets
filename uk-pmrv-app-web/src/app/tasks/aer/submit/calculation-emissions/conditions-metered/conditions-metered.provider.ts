@@ -20,7 +20,7 @@ export const conditionsMeteredFormProvider = {
     const state = store.getValue();
     const disabled = !state.isEditable;
 
-    const payload: AerApplicationSubmitRequestTaskPayload = state.requestTaskItem.requestTask.payload;
+    const payload = state.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload;
 
     const sourceStreamEmission = route.snapshot.paramMap.get('index')
       ? (payload.aer.monitoringApproachEmissions.CALCULATION_CO2 as CalculationOfCO2Emissions)?.sourceStreamEmissions[

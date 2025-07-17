@@ -20,7 +20,7 @@ class Page extends BasePage<RequestActionPageComponent> {
   }
 }
 
-describe('RequestTaskPageComponent', () => {
+describe('RequestActionPageComponent', () => {
   let component: RequestActionPageComponent;
   let fixture: ComponentFixture<RequestActionPageComponent>;
   let store: RequestActionStore;

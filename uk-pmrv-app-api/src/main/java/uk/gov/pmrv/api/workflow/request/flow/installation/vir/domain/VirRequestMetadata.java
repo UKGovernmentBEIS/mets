@@ -3,14 +3,12 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadataReportable;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadataRfiable;

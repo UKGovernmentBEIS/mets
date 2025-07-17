@@ -6,8 +6,8 @@ import { of } from 'rxjs';
 import { PermitNotificationSharedModule } from '@shared/components/permit-notification/permit-notification-shared.module';
 import { SharedModule } from '@shared/shared.module';
 import { BasePage, MockType } from '@testing';
+import { addDays, format } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import { TasksService } from 'pmrv-api';
 
@@ -68,7 +68,7 @@ describe('ReturnForAmendsComponent', () => {
             followUpFiles: [],
             followUpRequest: 'sedfsdf',
             followUpResponse: 'the response 22',
-            followUpResponseExpirationDate: moment().add(1, 'd').utc(true).format('YYYY-MM-DD'),
+            followUpResponseExpirationDate: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
             permitNotificationType: 'OTHER_FACTOR',
             reviewDecision: mockReviewAmendsNeededDecision,
             reviewSectionsCompleted: {},

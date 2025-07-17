@@ -6,7 +6,8 @@ import { NotificationTypePipe } from '@shared/components/permit-notification/pip
 import { ReportingTypePipe } from '@shared/components/permit-notification/pipes/reporting-type.pipe';
 import { AccreditationReferenceDocumentNamePipe } from '@shared/pipes/accreditation-reference-document-name.pipe';
 import { ActivityCalculationMethodTypePipe } from '@shared/pipes/activity-calculation-method-type.pipe';
-import { ActivityItemNamePipe } from '@shared/pipes/activity-item-name.pipe';
+import { CrfActivityItemNamePipe } from '@shared/pipes/aer/crf-activity-item-name.pipe';
+import { PrtrActivityItemNamePipe } from '@shared/pipes/aer/prtr-activity-item-name.pipe';
 import { AuthorityDecisionTypePipe } from '@shared/pipes/authority-decision-type.pipe';
 import { CalculationMethodTypePipe } from '@shared/pipes/calculation-method-type.pipe';
 import { CapacityUnitPipe } from '@shared/pipes/capacity-unit.pipe';
@@ -50,6 +51,7 @@ import { AerTaskDescriptionPipe } from './aer/aer-task-description.pipe';
 import { ApplicationTypePipe } from './application-type.pipe';
 import { AppliedTierPipe } from './applied-tier.pipe';
 import { AviationNamePipePipe } from './aviation-name-pipe.pipe';
+import { StatusApplicationTypePipe } from './bdr/statusApplicationType.pipe';
 import { BigNumberPipe } from './big-number.pipe';
 import { CapitalizeFirstPipe } from './capitalize-first.pipe';
 import { CompetentAuthorityPipe } from './competent-authority.pipe';
@@ -59,8 +61,11 @@ import { InherentCo2InstrumentsPipe } from './inherent-co2-instruments.pipe';
 import { ItemActionTypePipe } from './item-action-type.pipe';
 import { ItemLinkPipe } from './item-link.pipe';
 import { NonComplianceReasonPipe } from './non-compliance-reason.pipe';
+import { OverallDecisionTypePipe } from './overall-decision-type.pipe';
+import { CessationScopePipePipe } from './permanent-cessation/cessation-scope.pipe.pipe';
 import { PermitTransferPartyPipe } from './permit-transfer-party.pipe';
 import { PfcCalculationMethodPipe } from './pfc-calculation-method.pipe';
+import { SnakeToKebabPipe } from './snake-to-kebab.pipe';
 import { TaskTypeToBreadcrumbPipe } from './task-type-to-breadcrumb.pipe';
 import { TransferredCO2N2ODirectionsPipe } from './transferred-co2-n2o-directions.pipe';
 import { TransportApproachDescriptionPipe } from './transport-approach-description.pipe';
@@ -69,13 +74,12 @@ import { WorkflowStatusPipe } from './workflow-status.pipe';
 import { WorkflowTypePipe } from './workflow-type.pipe';
 
 @NgModule({
-  imports: [TaskTypeToBreadcrumbPipe],
+  imports: [CessationScopePipePipe, OverallDecisionTypePipe, StatusApplicationTypePipe, TaskTypeToBreadcrumbPipe],
   declarations: [
     AccountStatusPipe,
     AccountTypePipe,
     AccreditationReferenceDocumentNamePipe,
     ActivityCalculationMethodTypePipe,
-    ActivityItemNamePipe,
     AerTaskDescriptionPipe,
     ApplicationTypePipe,
     AppliedTierPipe,
@@ -89,6 +93,7 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
     CompetentAuthorityPipe,
     CoordinatePipe,
     CountryPipe,
+    CrfActivityItemNamePipe,
     DaysRemainingPipe,
     DefaultIfEmptyPipe,
     DeterminationAssessmentPipe,
@@ -117,11 +122,13 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
     PermitTransferPartyPipe,
     PfcCalculationMethodPipe,
     PhoneNumberPipe,
+    PrtrActivityItemNamePipe,
     RegulatedActivitiesSortPipe,
     RegulatedActivityTypePipe,
     ReportingTypePipe,
     ReviewGroupDecisionPipe,
     SecondsToMinutesPipe,
+    SnakeToKebabPipe,
     SourceStreamDescriptionPipe,
     SourceStreamTypePipe,
     TagColorPipe,
@@ -142,7 +149,6 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
     AccountTypePipe,
     AccreditationReferenceDocumentNamePipe,
     ActivityCalculationMethodTypePipe,
-    ActivityItemNamePipe,
     AerTaskDescriptionPipe,
     ApplicationTypePipe,
     AppliedTierPipe,
@@ -152,10 +158,12 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
     CalculationMethodTypePipe,
     CapacityUnitPipe,
     CapitalizeFirstPipe,
+    CessationScopePipePipe,
     CompetentAuthorityLocationPipe,
     CompetentAuthorityPipe,
     CoordinatePipe,
     CountryPipe,
+    CrfActivityItemNamePipe,
     DaysRemainingPipe,
     DefaultIfEmptyPipe,
     DeterminationAssessmentPipe,
@@ -180,17 +188,21 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
     NonComplianceReasonPipe,
     NotificationTypePipe,
     NotVerifiedReasonTypePipe,
+    OverallDecisionTypePipe,
     ParameterTypePipe,
     PermitTransferPartyPipe,
     PfcCalculationMethodPipe,
     PhoneNumberPipe,
+    PrtrActivityItemNamePipe,
     RegulatedActivitiesSortPipe,
     RegulatedActivityTypePipe,
     ReportingTypePipe,
     ReviewGroupDecisionPipe,
     SecondsToMinutesPipe,
+    SnakeToKebabPipe,
     SourceStreamDescriptionPipe,
     SourceStreamTypePipe,
+    StatusApplicationTypePipe,
     TagColorPipe,
     TaskTypeToBreadcrumbPipe,
     TemplateFilePipe,

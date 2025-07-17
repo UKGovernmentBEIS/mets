@@ -62,10 +62,9 @@ describe('InstallationDetailsComponent', () => {
         'Installation address',
         `${location.gridReference} ${location.address.line1}, ${location.address.line2}${location.address.city}${location.address.postcode}Greece`,
       ],
-
+      ['Company registration number', mockAerApplyPayload.installationOperatorDetails.companyReferenceNumber],
       ['Operator name', mockAerApplyPayload.installationOperatorDetails.operator],
       ['Legal status', 'Limited Company'],
-      ['Company registration number', mockAerApplyPayload.installationOperatorDetails.companyReferenceNumber],
       [
         'Operator address',
         `${mockAerApplyPayload.installationOperatorDetails.operatorDetailsAddress.line1}, ${mockAerApplyPayload.installationOperatorDetails.operatorDetailsAddress.line2} ${mockAerApplyPayload.installationOperatorDetails.operatorDetailsAddress.city}${mockAerApplyPayload.installationOperatorDetails.operatorDetailsAddress.postcode}Greece`,

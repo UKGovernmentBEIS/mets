@@ -86,7 +86,7 @@ export class ImprovementResponseReviewComponent implements PendingRequest, After
   }
 
   getDownloadUrl() {
-    return this.airService.createBaseFileDownloadUrl();
+    return this.airService.getBaseFileDownloadUrl();
   }
 
   private getFormData(): RegulatorAirImprovementResponse {

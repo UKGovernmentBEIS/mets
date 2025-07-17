@@ -20,56 +20,104 @@
 <h2
   app-summary-header
   class="govuk-heading-m"
-  [changeRoute]="taskId ? ['/installation-account', taskId, 'application', 'legal-entity'] : null"
->
+  [changeRoute]="taskId ? ['/installation-account', taskId, 'application', 'legal-entity'] : null">
   Details of the organisation operating the permit
 </h2>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
-  <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>New or existing organisation</dt>
-    <dd govukSummaryListRowValue>{{ item.legalEntity.id ? 'Existing' : 'New' }}</dd>
-  </div>
-  <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>Type of the operator</dt>
-    <dd govukSummaryListRowValue>{{ item.legalEntity.type | i18nSelect: legalEntityTypeMap }}</dd>
-  </div>
-  <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>Name of the operator</dt>
-    <dd govukSummaryListRowValue>{{ item.legalEntity.name }}</dd>
+  <div govukSummaryListRow *ngIf="showCompaniesHouse()">
+    <dt govukSummaryListRowKey>Details</dt>
+    <dd govukSummaryListRowValue class="govuk-heading-s">Current input</dd>
+    <dd govukSummaryListRowValue class="govuk-heading-s">Companies house input</dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Company registration number</dt>
-    <dd govukSummaryListRowValue [class.pre-wrap]="!item.legalEntity.referenceNumber">
+    <dd govukSummaryListRowValue *ngIf="!showCompaniesHouse()" [class.pre-wrap]="!item.legalEntity.referenceNumber">
       {{ item.legalEntity.referenceNumber || item.legalEntity.noReferenceNumberReason }}
     </dd>
+    <dd govukSummaryListRowValue *ngIf="showCompaniesHouse()" [class.pre-wrap]="!item.legalEntity.referenceNumber">
+      <app-highlight-diff>
+        <div slot="previous">{{ companiesHouse?.registrationNumber }}</div>
+        <div slot="current">{{ item.legalEntity.referenceNumber || item.legalEntity.noReferenceNumberReason }}</div>
+      </app-highlight-diff>
+    </dd>
+    <dd
+      govukSummaryListRowValue
+      *ngIf="showCompaniesHouse()"
+      [ngClass]="{ 'govuk-error-message': !companiesHouse?.registrationNumber }">
+      {{ companiesHouse?.registrationNumber || companiesHouseErrorMessage }}
+    </dd>
   </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>New or existing organisation</dt>
+    <dd govukSummaryListRowValue>{{ item.legalEntity.id ? 'Existing' : 'New' }}</dd>
+    <dd govukSummaryListRowValue *ngIf="showCompaniesHouse()"></dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Type of the operator</dt>
+    <dd govukSummaryListRowValue *ngIf="!showCompaniesHouse()">
+      {{ item.legalEntity.type | i18nSelect: legalEntityTypeMap }}
+    </dd>
+    <dd govukSummaryListRowValue *ngIf="showCompaniesHouse()">
+      <app-highlight-diff>
+        <div slot="previous">{{ companiesHouse?.companyType?.description }}</div>
+        <div slot="current">{{ item.legalEntity.type | i18nSelect: legalEntityTypeMap }}</div>
+      </app-highlight-diff>
+    </dd>
+    <dd govukSummaryListRowValue *ngIf="showCompaniesHouse()">
+      {{ companiesHouse?.companyType?.description }}
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Name of the operator</dt>
+    <dd govukSummaryListRowValue *ngIf="!showCompaniesHouse()">
+      {{ item.legalEntity.name }}
+    </dd>
+
+    <dd govukSummaryListRowValue *ngIf="showCompaniesHouse()">
+      <app-highlight-diff>
+        <div slot="previous">{{ companiesHouse?.name }}</div>
+        <div slot="current">{{ item.legalEntity.name }}</div>
+      </app-highlight-diff>
+    </dd>
+
+    <dd govukSummaryListRowValue *ngIf="showCompaniesHouse()">
+      {{ companiesHouse?.name }}
+    </dd>
+  </div>
+
   <ng-container
     *ngIf="item.legalEntity.address"
-    [ngTemplateOutletContext]="{ $implicit: item.legalEntity.address }"
-    [ngTemplateOutlet]="address"
-  ></ng-container>
+    [ngTemplateOutletContext]="{
+      $implicit: item.legalEntity.address,
+      companiesHouseAddress: companiesHouse ? companiesHouse?.address || {} : null,
+    }"
+    [ngTemplateOutlet]="address"></ng-container>
 
   <ng-container *ngIf="item.legalEntity.holdingCompany as hc; else noHoldingCompanyTpl">
     <div govukSummaryListRow id="hc-name">
       <dt govukSummaryListRowKey>Holding company name</dt>
       <dd govukSummaryListRowValue>{{ hc.name }}</dd>
+      <dd *ngIf="showCompaniesHouse()" govukSummaryListRowValue></dd>
     </div>
     <div govukSummaryListRow id="hc-regnum" *ngIf="hc.registrationNumber">
       <dt govukSummaryListRowKey>Holding company registration number</dt>
       <dd govukSummaryListRowValue>
         {{ hc.registrationNumber }}
       </dd>
+      <dd *ngIf="showCompaniesHouse()" govukSummaryListRowValue></dd>
     </div>
     <div govukSummaryListRow id="hc-address" *ngIf="hc.address">
       <dt govukSummaryListRowKey>Holding company address</dt>
       <dd govukSummaryListRowValue>
         <div *ngIf="hc.address.line1">
           {{ hc.address.line1 }}
-          <span *ngIf="hc.address.line2">,</span> {{ hc.address.line2 }}
+          <span *ngIf="hc.address.line2">,</span>
+          {{ hc.address.line2 }}
         </div>
         <div *ngIf="hc.address.city">{{ hc.address.city }}</div>
         <div *ngIf="hc.address.postcode">{{ hc.address.postcode }}</div>
       </dd>
+      <dd *ngIf="showCompaniesHouse()" govukSummaryListRowValue></dd>
     </div>
   </ng-container>
   <ng-template #noHoldingCompanyTpl>
@@ -77,6 +125,7 @@
       <dt govukSummaryListRowKey>Does this organisation belong to a holding company?</dt>
       <dd govukSummaryListRowValue>No</dd>
       <dd govukSummaryListRowActions></dd>
+      <dd *ngIf="showCompaniesHouse()" govukSummaryListRowValue></dd>
     </div>
   </ng-template>
 </dl>
@@ -94,8 +143,7 @@
   class="govuk-heading-m"
   [changeRoute]="
     taskId ? ['/installation-account', taskId, 'application', 'installation', item.location.type | lowercase] : null
-  "
->
+  ">
   Installation details for {{ item.location.type | titlecase }}
 </h2>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
@@ -114,10 +162,8 @@
     </div>
     <ng-container
       *ngIf="item.location.address"
-      [ngTemplateOutletContext]="{ $implicit: item.location.address }"
-      [ngTemplateOutlet]="address"
-    >
-    </ng-container>
+      [ngTemplateOutletContext]="{ $implicit: item.location.address, companiesHouseAddress: null }"
+      [ngTemplateOutlet]="address"></ng-container>
   </ng-container>
   <ng-template #offshoreDetails>
     <div govukSummaryListRow>
@@ -152,8 +198,7 @@
 <h2
   app-summary-header
   class="govuk-heading-m"
-  [changeRoute]="taskId ? ['/installation-account', taskId, 'application', 'ets-scheme'] : null"
->
+  [changeRoute]="taskId ? ['/installation-account', taskId, 'application', 'ets-scheme'] : null">
   ETS scheme
 </h2>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
@@ -174,8 +219,7 @@
 <h2
   app-summary-header
   class="govuk-heading-m"
-  [changeRoute]="taskId ? ['/installation-account', taskId, 'application', 'type'] : null"
->
+  [changeRoute]="taskId ? ['/installation-account', taskId, 'application', 'type'] : null">
   Application type
 </h2>
 <dl govuk-summary-list class="govuk-!-margin-bottom-9">
@@ -187,21 +231,91 @@
 
 <hr class="govuk-!-margin-bottom-6" />
 
-<ng-template #address let-address>
+<ng-template #address let-address let-companiesHouseAddress="companiesHouseAddress">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Address</dt>
-    <dd govukSummaryListRowValue>{{ address.line1 }}<span *ngIf="address.line2">,</span> {{ address.line2 }}</dd>
+    <dd govukSummaryListRowValue *ngIf="!(showCompaniesHouse() && companiesHouseAddress)">
+      {{ address.line1 }}
+      <span *ngIf="address.line2">,</span>
+      {{ address.line2 }}
+    </dd>
+
+    <dd govukSummaryListRowValue *ngIf="showCompaniesHouse() && companiesHouseAddress">
+      <app-highlight-diff *ngIf="companiesHouse">
+        <div slot="previous">
+          {{ companiesHouseAddress?.line1 }}
+          <span *ngIf="companiesHouseAddress?.line2">,</span>
+          {{ companiesHouseAddress?.line2 }}
+        </div>
+        <div slot="current">
+          {{ address.line1 }}
+          <span *ngIf="address.line2">,</span>
+          {{ address.line2 }}
+        </div>
+      </app-highlight-diff>
+    </dd>
+
+    <dd *ngIf="showCompaniesHouse() && companiesHouseAddress" govukSummaryListRowValue>
+      {{ companiesHouseAddress?.line1 }}
+      <span *ngIf="companiesHouseAddress?.line2">,</span>
+      {{ companiesHouseAddress?.line2 }}
+    </dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Town or city</dt>
-    <dd govukSummaryListRowValue>{{ address.city }}</dd>
+    <dd govukSummaryListRowValue *ngIf="!(showCompaniesHouse() && companiesHouseAddress)">
+      {{ address.city }}
+    </dd>
+
+    <dd govukSummaryListRowValue *ngIf="showCompaniesHouse() && companiesHouseAddress">
+      <app-highlight-diff *ngIf="companiesHouse">
+        <div slot="previous">
+          {{ companiesHouseAddress?.city }}
+        </div>
+        <div slot="current">{{ address.city }}</div>
+      </app-highlight-diff>
+    </dd>
+
+    <dd *ngIf="showCompaniesHouse() && companiesHouseAddress" govukSummaryListRowValue>
+      {{ companiesHouseAddress?.city }}
+    </dd>
   </div>
   <div *ngIf="address.country" govukSummaryListRow>
     <dt govukSummaryListRowKey>Country</dt>
-    <dd govukSummaryListRowValue>{{ address.country | country }}</dd>
+    <dd govukSummaryListRowValue *ngIf="!(showCompaniesHouse() && companiesHouseAddress)">
+      {{ address.country | country }}
+    </dd>
+
+    <dd govukSummaryListRowValue *ngIf="showCompaniesHouse() && companiesHouseAddress">
+      <app-highlight-diff *ngIf="companiesHouse">
+        <div slot="previous">
+          {{ companiesHouseAddress?.country }}
+        </div>
+        <div slot="current">{{ address.country | country }}</div>
+      </app-highlight-diff>
+    </dd>
+
+    <dd *ngIf="showCompaniesHouse() && companiesHouseAddress" govukSummaryListRowValue>
+      {{ companiesHouseAddress?.country }}
+    </dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Post code</dt>
-    <dd govukSummaryListRowValue>{{ address.postcode }}</dd>
+    <dd govukSummaryListRowValue *ngIf="!(showCompaniesHouse() && companiesHouseAddress)">
+      {{ address.postcode }}
+    </dd>
+
+    <dd govukSummaryListRowValue *ngIf="showCompaniesHouse() && companiesHouseAddress">
+      <app-highlight-diff *ngIf="companiesHouse">
+        <div slot="previous">
+          {{ companiesHouseAddress?.postcode }}
+        </div>
+        <div slot="current">{{ address.postcode }}</div>
+      </app-highlight-diff>
+    </dd>
+
+    <dd *ngIf="showCompaniesHouse() && companiesHouseAddress" govukSummaryListRowValue>
+      {{ companiesHouseAddress?.postcode }}
+    </dd>
   </div>
 </ng-template>

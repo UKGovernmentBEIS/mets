@@ -6,11 +6,23 @@
   <app-wizard-step
     (formSubmit)="onContinue()"
     [formGroup]="form"
-    caption="Monitoring Methodology Plan"
-    heading="Are you providing a Monitoring Methodology Plan as part of your permit application?"
+    caption="Monitoring methodology plan"
+    heading="Are you providing a monitoring methodology plan as part of your permit application?"
     submitText="Save and continue"
     [hideSubmit]="(store.isEditable$ | async) === false"
   >
+    <div class="govuk-body">
+      <p>
+        A monitoring methodology plan is required for installations classified
+        as 'Free Allocation’ installations under the
+        Greenhouse Gas Emissions Trading Scheme Order 2020.
+      </p>
+      <p>
+        The operator must monitor the installation's activity level according
+        to the Free Allocation Regulation (FAR) and provide a monitoring methodology plan,
+        including written procedures, as specified in Article 8(3) of the FAR.
+      </p>
+    </div>
     <div formControlName="exist" govuk-radio legendSize="medium">
       <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
       <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>

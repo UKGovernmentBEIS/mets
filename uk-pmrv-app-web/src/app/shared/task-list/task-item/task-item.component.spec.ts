@@ -18,8 +18,7 @@ describe('TaskItemComponent', () => {
           [link]="task.link"
           [linkText]="task.linkText"
           [status]="task.status"
-          class="app-task-list__item"
-        >
+          class="app-task-list__item">
           <div class="custtmpl">tmpl</div>
         </li>
       </ul>

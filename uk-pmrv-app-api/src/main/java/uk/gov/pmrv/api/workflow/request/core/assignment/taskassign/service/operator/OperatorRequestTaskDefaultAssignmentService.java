@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
 import uk.gov.pmrv.api.workflow.request.core.assignment.requestassign.RequestReleaseService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.UserRoleRequestTaskDefaultAssignmentService;
@@ -25,8 +25,8 @@ public class OperatorRequestTaskDefaultAssignmentService implements UserRoleRequ
     private final RequestReleaseService requestReleaseService;
 
     @Override
-    public RoleType getRoleType() {
-        return RoleType.OPERATOR;
+    public String getRoleType() {
+        return RoleTypeConstants.OPERATOR;
     }
 
     @Transactional

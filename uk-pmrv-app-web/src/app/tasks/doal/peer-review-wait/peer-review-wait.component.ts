@@ -9,9 +9,7 @@ import { DoalService } from '@tasks/doal/core/doal.service';
     <app-base-task-container-component
       [header]="title"
       [customContentTemplate]="customContentTemplate"
-      expectedTaskType="DOAL_WAIT_FOR_PEER_REVIEW"
-    >
-    </app-base-task-container-component>
+      expectedTaskType="DOAL_WAIT_FOR_PEER_REVIEW"></app-base-task-container-component>
 
     <ng-template #customContentTemplate>
       <govuk-warning-text>Waiting for peer review, you cannot make any changes</govuk-warning-text>
@@ -23,5 +21,8 @@ import { DoalService } from '@tasks/doal/core/doal.service';
 export class PeerReviewWaitComponent {
   title = this.itemNamePipe.transform('DOAL_WAIT_FOR_PEER_REVIEW');
 
-  constructor(private readonly doalService: DoalService, private readonly itemNamePipe: ItemNamePipe) {}
+  constructor(
+    private readonly doalService: DoalService,
+    private readonly itemNamePipe: ItemNamePipe,
+  ) {}
 }

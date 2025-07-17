@@ -36,7 +36,7 @@ describe('AircraftTypeTableComponent', () => {
           designatorType: 'Designator Type',
         },
         numberOfAircrafts: 100,
-        idx: 0
+        idx: 0,
       },
     ];
     page = new Page(fixture);
@@ -50,7 +50,13 @@ describe('AircraftTypeTableComponent', () => {
 
   it('should show summary details', () => {
     expect(page.tierRows.map((row) => Array.from(row.cells).map((col) => col.textContent.trim()))).toEqual([
-      ['Manufacturer Model (Designator Type)', 'Sub Type', '100', 'Aviation gasoline,  Other', 'ChangeRemove'],
+      [
+        'Manufacturer Model (Designator Type)',
+        'Sub Type',
+        '100',
+        'Aviation gasoline (AV gas),  Other fuel (not including sustainable aviation fuel)',
+        'ChangeRemove',
+      ],
     ]);
   });
 });

@@ -1,5 +1,8 @@
 package uk.gov.pmrv.api.account.aviation.repository.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -7,11 +10,8 @@ import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountSearchResults;
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountCustomRepository;
 import uk.gov.pmrv.api.account.domain.dto.AccountSearchCriteria;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -33,14 +33,6 @@ public class AviationAccountCustomRepositoryImpl implements AviationAccountCusto
         return AviationAccountSearchResults.builder()
                 .accounts(constructQuery(null, compAuth, null, searchCriteria, false).getResultList())
                 .total(((Number) constructQuery(null, compAuth, null, searchCriteria, true).getSingleResult()).longValue())
-                .build();
-    }
-
-    @Override
-    public AviationAccountSearchResults findByVerificationBodyId(Long verificationBodyId, AccountSearchCriteria searchCriteria) {
-        return AviationAccountSearchResults.builder()
-                .accounts(constructQuery(null, null, verificationBodyId, searchCriteria, false).getResultList())
-                .total(((Number) constructQuery(null, null, verificationBodyId, searchCriteria, true).getSingleResult()).longValue())
                 .build();
     }
 

@@ -19,7 +19,7 @@ import { buildTaskData } from '../measurement';
         <span class="nowrap">
           ‘{{ emissionPoint?.emissionPointInfo?.reference }}
           {{ emissionPoint?.emissionPointInfo?.description }}
-          <ng-container *ngIf="emissionPoint?.isDataGap"> - Data gap</ng-container>
+          <ng-container *ngIf="emissionPoint?.isDataGap">- Data gap</ng-container>
           ’?
         </span>
       </ng-container>

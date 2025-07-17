@@ -2,10 +2,11 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler, Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { EMPTY, first, from, Observable, switchMap, throwError, withLatestFrom } from 'rxjs';
+import { EMPTY, first, from, Observable, switchMap, throwError } from 'rxjs';
 
-import { AuthStore, selectCurrentDomain } from '@core/store/auth';
+import { AuthStore } from '@core/store/auth';
 import { HttpStatuses } from '@error/http-status';
+import { GenericServiceErrorCode } from '@error/service-errors';
 
 import { AuthService } from './auth.service';
 
@@ -33,21 +34,25 @@ export class GlobalErrorHandlingService implements ErrorHandler {
     const urlContained = this.excludedUrls.some((url) => new RegExp(url).test(res.url));
     if (!urlContained) {
       switch (res.status) {
-        case HttpStatuses.InternalServerError:
+        case HttpStatuses.InternalServerError: {
+          const state: { forceNavigation: boolean; errorCode?: string } = { forceNavigation: true };
+
+          if (GenericServiceErrorCode[res.error?.code]) {
+            state.errorCode = res.error?.code;
+          }
           return from(
-            this.router.navigate(['/error', '500'], { state: { forceNavigation: true }, skipLocationChange: true }),
+            this.router.navigate(['/error', '500'], {
+              state,
+              skipLocationChange: true,
+            }),
           ).pipe(switchMap(() => EMPTY));
+        }
         case HttpStatuses.Unauthorized:
           return from(this.authService.login()).pipe(switchMap(() => EMPTY));
         case HttpStatuses.Forbidden:
           return this.authService.loadUserState().pipe(
-            withLatestFrom(this.authStore.pipe(selectCurrentDomain)),
             first(),
-            switchMap(([userState, currentDomain]) => {
-              return userState.domainsLoginStatuses[currentDomain] === 'DELETED'
-                ? from(this.authService.logout())
-                : from(this.router.navigate(['landing'], { state: { forceNavigation: true } }));
-            }),
+            switchMap(() => from(this.router.navigate(['landing'], { state: { forceNavigation: true } }))),
             switchMap(() => EMPTY),
           );
         default:

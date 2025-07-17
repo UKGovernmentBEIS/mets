@@ -5,7 +5,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -38,7 +38,7 @@ public class NonComplianceFinalDeterminationSubmitApplicationActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final RequestTaskActionEmptyPayload taskActionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -55,7 +55,7 @@ public class NonComplianceFinalDeterminationSubmitApplicationActionHandler
             request,
             actionPayload,
             RequestActionType.NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
 
         final boolean reissuePenalty = Boolean.TRUE.equals(taskPayload.getFinalDetermination().getReissuePenalty());

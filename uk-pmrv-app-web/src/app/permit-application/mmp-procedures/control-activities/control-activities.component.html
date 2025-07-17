@@ -1,0 +1,29 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true"
+>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    caption="Monitoring Methodology Plan"
+    heading="Control activities"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <div class="govuk-!-width-two-thirds">
+      <p class="govuk-body">
+        Provide a reference to the written procedures of the control activities pursuant to Article. 11(2), including
+        diagrams where appropriate for clarification text.
+      </p>
+
+      <app-mmp-procedure-form></app-mmp-procedure-form>
+    </div>
+  </app-wizard-step>
+
+  <app-list-return-link
+    reviewGroupTitle="Monitoring methodology"
+    reviewGroupUrl="monitoring-methodology-plan"
+    [innerRoute]="true"
+  ></app-list-return-link>
+</app-permit-task>

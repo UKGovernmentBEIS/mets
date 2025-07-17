@@ -1,8 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.handler;
 
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -13,12 +10,18 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPaylo
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecisionType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.DeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.utils.PermitReviewUtils;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitAcceptedVariationDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitVariationReviewDecision;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationGrantDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.mapper.PermitVariationReviewMapper;
+
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +51,10 @@ public class PermitVariationApplicationReviewRequestTaskInitializer implements I
             
             requestTaskPayload.setPermitVariationDetailsReviewDecision(PermitVariationReviewDecision.builder().type(ReviewDecisionType.ACCEPTED)
             		.details(PermitAcceptedVariationDecisionDetails.builder().build()).build());
+
+            requestTaskPayload.setDetermination(PermitVariationGrantDetermination.builder()
+                            .type(DeterminationType.GRANTED)
+                    .annualEmissionsTargets(requestPayload.getOriginalPermitContainer().getAnnualEmissionsTargets()).build());
         }
 
         return requestTaskPayload;

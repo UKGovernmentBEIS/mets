@@ -3,7 +3,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.aer.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.service.DateService;
+import uk.gov.netz.api.common.utils.DateService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -21,6 +21,7 @@ public class AerRequestQueryService {
 
     private final RequestRepository requestRepository;
     private final DateService dateService;
+
 
     public List<String> getApprovedPermitNotificationIdsByAccount(Long accountId){
         List<Request> requests = requestRepository.findByAccountIdAndTypeAndStatus(accountId, RequestType.PERMIT_NOTIFICATION,
@@ -46,4 +47,9 @@ public class AerRequestQueryService {
             .findFirst()
             .map(req -> req.getType() == RequestType.PERMIT_ISSUANCE ? req.getEndDate() : dateService.getLocalDateTime());
     }
+
+    public Optional<Request> findAerByAccountIdAndYear(Long accountId, int year) {
+        return requestRepository.findAllByAccountIdAndTypeInAndMetadataYear(accountId, List.of(RequestType.AER.name()), year).stream().findFirst();
+    }
+
 }

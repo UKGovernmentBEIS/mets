@@ -19,13 +19,11 @@ interface BatchReissue {
 @Component({
   selector: 'app-batch-reissue-requests',
   templateUrl: './batch-reissue-requests.component.html',
-  styles: [
-    `
-      button.start-batch-variation {
-        float: right;
-      }
-    `,
-  ],
+  styles: `
+    button.start-batch-variation {
+      float: right;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BatchReissueRequestsComponent implements OnInit {

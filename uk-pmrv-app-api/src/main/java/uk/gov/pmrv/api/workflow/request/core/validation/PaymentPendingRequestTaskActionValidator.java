@@ -1,13 +1,12 @@
 package uk.gov.pmrv.api.workflow.request.core.validation;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.stereotype.Service;
-
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskActionValidationResult;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class PaymentPendingRequestTaskActionValidator implements RequestTaskActionValidator {

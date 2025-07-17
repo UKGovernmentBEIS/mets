@@ -1,23 +1,23 @@
 package uk.gov.pmrv.api.mireport.common.verificationbodyusers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
-import uk.gov.pmrv.api.authorization.core.domain.Authority;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.core.domain.Role;
+import uk.gov.netz.api.authorization.core.domain.Authority;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.domain.Role;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
 import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
 import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -46,8 +46,8 @@ class VerificationBodyUsersRepositoryIT extends AbstractContainerBaseTest {
         String userId2 = UUID.randomUUID().toString();
         String verifierAdmin = "verifier_admin";
         String verifier = "verifier";
-        Role verifierAdminRole = createRole( "Verifier admin", verifierAdmin, RoleType.VERIFIER);
-        Role verifierRole = createRole( "Verifier", verifier, RoleType.VERIFIER);
+        Role verifierAdminRole = createRole( "Verifier admin", verifierAdmin, RoleTypeConstants.VERIFIER);
+        Role verifierRole = createRole( "Verifier", verifier, RoleTypeConstants.VERIFIER);
         Set<EmissionTradingScheme> ukEtsInstallations = Set.of(EmissionTradingScheme.UK_ETS_INSTALLATIONS);
         Set<EmissionTradingScheme> ukEtsAviation = Set.of(EmissionTradingScheme.UK_ETS_AVIATION);
         VerificationBody verificationBody1 = createVerificationBody( "Verification Body Name",
@@ -118,7 +118,7 @@ class VerificationBodyUsersRepositoryIT extends AbstractContainerBaseTest {
         return authority;
     }
 
-    private Role createRole(String name, String code, RoleType type) {
+    private Role createRole(String name, String code, String type) {
         Role role = Role.builder()
                 .name(name)
                 .code(code)

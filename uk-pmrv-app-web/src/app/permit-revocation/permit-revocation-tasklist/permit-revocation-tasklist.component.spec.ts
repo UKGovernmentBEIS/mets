@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 import { AuthService } from '@core/services/auth.service';
 import { CessationModule } from '@permit-revocation/cessation/cessation.module';
 import { ActivatedRouteStub, BasePage, mockClass, MockType } from '@testing';
-import moment from 'moment';
+import { addDays, format } from 'date-fns';
 
 import { AssigneeUserInfoDTO, TasksAssignmentService } from 'pmrv-api';
 
@@ -68,7 +68,7 @@ describe('PermitRevocationTaskListComponent', () => {
     },
   ];
 
-  const today = moment().format('YYYY-MM-DD');
+  const today = format(new Date(), 'yyyy-MM-dd');
 
   function createComponent() {
     fixture = TestBed.createComponent(PermitRevocationTasklistComponent);
@@ -91,7 +91,7 @@ describe('PermitRevocationTaskListComponent', () => {
             },
           };
         },
-      } as any
+      } as any,
     } as any;
     tasksAssignmentService = {
       getCandidateAssigneesByTaskId: jest.fn().mockReturnValue(of(candidateAssignees)),
@@ -136,7 +136,9 @@ describe('PermitRevocationTaskListComponent', () => {
 
   it('should display notify operator of decision action button', () => {
     const revocationState = store.getState();
-    const after28Days = moment().add(28, 'd').set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).utc(true);
+    const after28Days = addDays(new Date(), 28);
+    const after29Days = addDays(new Date(), 29);
+
     store.setState({
       ...revocationState,
       sectionsCompleted: { REVOCATION_APPLY: true },
@@ -150,7 +152,7 @@ describe('PermitRevocationTaskListComponent', () => {
         surrenderDate: today,
         feeCharged: true,
         effectiveDate: after28Days.toISOString(),
-        feeDate: after28Days.add(1, 'd').toISOString(),
+        feeDate: after29Days.toISOString(),
       },
     });
     createComponent();

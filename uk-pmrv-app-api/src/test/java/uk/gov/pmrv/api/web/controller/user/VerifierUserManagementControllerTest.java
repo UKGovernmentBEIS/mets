@@ -15,20 +15,20 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.user.verifier.domain.VerifierUserDTO;
 import uk.gov.pmrv.api.user.verifier.service.VerifierUserManagementService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -51,13 +51,13 @@ class VerifierUserManagementControllerTest {
     private VerifierUserManagementController controller;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent appSecurityComponent;
 
     @Mock
     private VerifierUserManagementService verifierUserManagementService;
     
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -69,8 +69,8 @@ class VerifierUserManagementControllerTest {
     
     @BeforeEach
     public void setUp() {
-        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
@@ -83,7 +83,7 @@ class VerifierUserManagementControllerTest {
         controller = (VerifierUserManagementController) aopProxy.getProxy();
         objectMapper = new ObjectMapper();
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-				.setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+				.setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
 				.setValidator(validator)
             	.setControllerAdvice(new ExceptionControllerAdvice())
             	.build();
@@ -92,12 +92,12 @@ class VerifierUserManagementControllerTest {
     @Test
     void getVerifierUserById() throws Exception {
         final String userId = "userId";
-        PmrvUser user = PmrvUser.builder().userId("currentuser").build();
+        AppUser user = AppUser.builder().userId("currentuser").build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().firstName("fName")
                 .lastName("lName").email("email").build();
 
         // Mock
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(verifierUserManagementService.getVerifierUserById(user, userId)).thenReturn(verifierUserDTO);
 
         // Invoke
@@ -110,19 +110,19 @@ class VerifierUserManagementControllerTest {
                 .andExpect(jsonPath("$.email").value(verifierUserDTO.getEmail()));
 
         // Verify
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(verifierUserManagementService, times(1)).getVerifierUserById(user, userId);
     }
 
     @Test
     void getVerifierUserById_forbidden() throws Exception {
         final String userId = "userId";
-        PmrvUser user = PmrvUser.builder().userId("currentuser").build();
+        AppUser user = AppUser.builder().userId("currentuser").build();
 
         // Mock
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
+                .when(appUserAuthorizationService)
                 .authorize(user, "getVerifierUserById");
 
         // Invoke
@@ -132,19 +132,19 @@ class VerifierUserManagementControllerTest {
                 .andExpect(status().isForbidden());
 
         // Verify
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(verifierUserManagementService, never()).getVerifierUserById(any(), anyString());
     }
 
     @Test
     void updateVerifierUserById() throws Exception {
         final String userId = "userId";
-        PmrvUser user = PmrvUser.builder().userId("currentuser").build();
+        AppUser user = AppUser.builder().userId("currentuser").build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().firstName("fName")
                 .lastName("lName").email("email").build();
 
         // Mock
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         // Invoke
         mockMvc.perform(
@@ -157,21 +157,21 @@ class VerifierUserManagementControllerTest {
                 .andExpect(jsonPath("$.email").value(verifierUserDTO.getEmail()));
 
         // Verify
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(verifierUserManagementService, times(1)).updateVerifierUserById(user, userId, verifierUserDTO);
     }
 
     @Test
     void updateVerifierUserById_forbidden() throws Exception {
         final String userId = "userId";
-        PmrvUser user = PmrvUser.builder().userId("currentuser").build();
+        AppUser user = AppUser.builder().userId("currentuser").build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().firstName("fName")
                 .lastName("lName").email("email").build();
 
         // Mock
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
+                .when(appUserAuthorizationService)
                 .authorize(user, "updateVerifierUserById");
 
         // Invoke
@@ -182,18 +182,14 @@ class VerifierUserManagementControllerTest {
                 .andExpect(status().isForbidden());
 
         // Verify
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(verifierUserManagementService, never()).updateVerifierUserById(any(), anyString(), any());
     }
 
     @Test
     void updateCurrentVerifierUser() throws Exception {
-        PmrvUser user = PmrvUser.builder().userId("currentuser").build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().firstName("fName")
                 .lastName("lName").email("email").build();
-
-        // Mock
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         // Invoke
         mockMvc.perform(
@@ -206,21 +202,21 @@ class VerifierUserManagementControllerTest {
                 .andExpect(jsonPath("$.email").value(verifierUserDTO.getEmail()));
 
         // Verify
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(verifierUserManagementService, times(1)).updateCurrentVerifierUser(user, verifierUserDTO);
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(verifierUserManagementService, times(1)).updateCurrentVerifierUser(verifierUserDTO);
     }
 
     @Test
     void updateCurrentVerifierUser_forbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().userId("currentuser").build();
+        AppUser user = AppUser.builder().userId("currentuser").build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().firstName("fName")
                 .lastName("lName").email("email").build();
 
         // Mock
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(user, new RoleType[] {RoleType.VERIFIER});
+                .evaluate(user, new String[] {RoleTypeConstants.VERIFIER});
 
         // Invoke
         mockMvc.perform(
@@ -230,17 +226,17 @@ class VerifierUserManagementControllerTest {
                 .andExpect(status().isForbidden());
 
         // Verify
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(verifierUserManagementService, never()).updateCurrentVerifierUser(any(), any());
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(verifierUserManagementService, never()).updateCurrentVerifierUser(any());
     }
     
     @Test
     void resetVerifier2Fa() throws Exception {
         final String userId = "userId";
-        PmrvUser user = PmrvUser.builder().userId("authId").build();
+        AppUser user = AppUser.builder().userId("authId").build();
 
         // Mock
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         // Invoke
         mockMvc.perform(
@@ -248,19 +244,19 @@ class VerifierUserManagementControllerTest {
                 .andExpect(status().isOk());
 
         // Verify
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(verifierUserManagementService, times(1)).resetVerifier2Fa(user, userId);
     }
 
     @Test
     void resetVerifier2Fa_forbidden() throws Exception {
         final String userId = "userId";
-        PmrvUser user = PmrvUser.builder().userId("authId").build();
+        AppUser user = AppUser.builder().userId("authId").build();
 
         // Mock
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
+                .when(appUserAuthorizationService)
                 .authorize(user, "resetVerifier2Fa");
 
         // Invoke
@@ -270,7 +266,7 @@ class VerifierUserManagementControllerTest {
                 .andExpect(status().isForbidden());
 
         // Verify
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(verifierUserManagementService, never()).resetVerifier2Fa(any(), anyString());
     }
 }

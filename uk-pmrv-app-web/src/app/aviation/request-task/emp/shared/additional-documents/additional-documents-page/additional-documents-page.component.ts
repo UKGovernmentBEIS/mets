@@ -4,13 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
+import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
+import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
 
-import { requestTaskQuery, RequestTaskStore } from '../../../../store';
-import { TASK_FORM_PROVIDER } from '../../../../task-form.provider';
-import { AdditionalDocumentsFormModel } from '../additional-documents-form.provider';
+import { AdditionalDocumentsFormModel, AdditionalDocumentsFormProvider } from '../additional-documents-form.provider';
 
 interface ViewModel {
   form: FormGroup<AdditionalDocumentsFormModel>;
@@ -27,7 +27,7 @@ interface ViewModel {
 })
 export class AdditionalDocumentsPageComponent {
   private store = inject(RequestTaskStore);
-  private form = inject<FormGroup>(TASK_FORM_PROVIDER);
+  private formProvider = inject<AdditionalDocumentsFormProvider>(TASK_FORM_PROVIDER);
   private pendingRequestService = inject(PendingRequestService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
@@ -35,7 +35,7 @@ export class AdditionalDocumentsPageComponent {
   vm$: Observable<ViewModel> = this.store.pipe(requestTaskQuery.selectIsEditable).pipe(
     map((isEditable) => {
       return {
-        form: this.form,
+        form: this.formProvider.form,
         downloadUrl: `${this.store.empDelegate.baseFileAttachmentDownloadUrl}/`,
         submitHidden: !isEditable,
       };
@@ -43,7 +43,8 @@ export class AdditionalDocumentsPageComponent {
   );
 
   onSubmit() {
-    const value = this.form.value;
+    const value = this.formProvider.getFormValue();
+
     this.store.empDelegate
       .saveEmp(
         { additionalDocuments: { exist: !!value.exist, documents: value?.documents?.map((doc) => doc.uuid) } },
@@ -54,6 +55,7 @@ export class AdditionalDocumentsPageComponent {
         value?.documents?.forEach((doc) => {
           this.store.empDelegate.addEmpAttachment({ [doc.uuid]: doc.file.name });
         });
+
         this.router.navigate(['summary'], { relativeTo: this.route });
       });
   }

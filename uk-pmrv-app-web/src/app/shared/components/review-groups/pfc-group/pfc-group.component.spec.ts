@@ -17,7 +17,9 @@ describe('PfcGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    template: ` <app-pfc-group [data]="data" [statuses]="statuses" [isReview]="isReview"></app-pfc-group> `,
+    template: `
+      <app-pfc-group [data]="data" [statuses]="statuses" [isReview]="isReview"></app-pfc-group>
+    `,
   })
   class TestComponent {
     data = {

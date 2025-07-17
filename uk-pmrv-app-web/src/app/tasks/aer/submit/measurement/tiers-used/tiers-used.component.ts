@@ -4,10 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, first, map, switchMap, takeUntil } from 'rxjs';
 
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { DestroySubject } from '@core/services/destroy-subject.service';
+
 import { AerApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
-import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
-import { DestroySubject } from '../../../../../core/services/destroy-subject.service';
 import { AerService } from '../../../core/aer.service';
 import { buildTaskData } from '../measurement';
 import { AER_MEASUREMENT_FORM, getCompletionStatus } from '../measurement-status';
@@ -29,8 +30,7 @@ export class TiersUsedComponent {
 
   emissionPointEmission$ = combineLatest([this.payload$, this.index$]).pipe(
     map(([payload, index]) => {
-      const res = (payload.aer.monitoringApproachEmissions?.[this.taskKey] as any)?.emissionPointEmissions?.[index];
-      return res;
+      return (payload.aer.monitoringApproachEmissions?.[this.taskKey] as any)?.emissionPointEmissions?.[index];
     }),
   );
 
@@ -99,13 +99,11 @@ export class TiersUsedComponent {
         : item,
     );
 
-    const data = buildTaskData(this.taskKey, payload, emissionPointEmissions);
-
-    return data;
+    return buildTaskData(this.taskKey, payload, emissionPointEmissions);
   }
 
   private navigateNext() {
-    combineLatest(this.emissionPointEmission$, this.permitParamMonitoringTier$)
+    combineLatest([this.emissionPointEmission$, this.permitParamMonitoringTier$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([emissionPointEmission, permitParamMonitoringTier]) => {
         let nextStep = '';

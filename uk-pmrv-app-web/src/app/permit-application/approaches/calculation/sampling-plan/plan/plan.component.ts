@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, map, startWith, switchMap, switchMapTo, tap } from 'rxjs';
+import { first, map, startWith, switchMap, tap } from 'rxjs';
 
-import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
-import { PendingRequest } from '../../../../../core/interfaces/pending-request.interface';
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { PendingRequest } from '@core/interfaces/pending-request.interface';
+
 import { PermitApplicationState } from '../../../../store/permit-application.state';
 import { PermitApplicationStore } from '../../../../store/permit-application.store';
 import { PLAN_FORM, planFormProvider } from './plan-form.provider';
@@ -57,7 +58,7 @@ export class PlanComponent implements PendingRequest {
                   data.statusKey,
                 ),
               ),
-              switchMapTo(this.store),
+              switchMap(() => this.store),
               first(),
               tap((state) =>
                 this.store.setState({

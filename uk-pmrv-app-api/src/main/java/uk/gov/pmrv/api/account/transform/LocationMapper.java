@@ -2,12 +2,11 @@ package uk.gov.pmrv.api.account.transform;
 
 import org.hibernate.Hibernate;
 import org.hibernate.proxy.HibernateProxy;
-
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.account.constants.LocationConstants;
 import uk.gov.pmrv.api.account.domain.Location;
 import uk.gov.pmrv.api.account.domain.LocationOffShore;
@@ -21,7 +20,6 @@ import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.CardinalDirection;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.common.domain.AddressState;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
 
 import java.util.Locale;
 

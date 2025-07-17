@@ -61,8 +61,8 @@ describe('TemplateFileDownloadComponent', () => {
         return subscribes === 1
           ? of({ token: 'abcf', tokenExpirationMinutes: 1 })
           : subscribes === 2
-          ? of({ token: 'abcd', tokenExpirationMinutes: 2 })
-          : of({ token: 'abce', tokenExpirationMinutes: 1 });
+            ? of({ token: 'abcd', tokenExpirationMinutes: 2 })
+            : of({ token: 'abce', tokenExpirationMinutes: 1 });
       });
     });
 

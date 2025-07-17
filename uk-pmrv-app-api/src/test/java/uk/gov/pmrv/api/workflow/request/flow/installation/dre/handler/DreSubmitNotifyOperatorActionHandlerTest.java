@@ -16,7 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -55,7 +55,7 @@ class DreSubmitNotifyOperatorActionHandlerTest {
 	void process_with_Fee() {
     	Long requestTaskId = 1L;
     	RequestTaskActionType requestTaskActionType = RequestTaskActionType.DRE_SUBMIT_NOTIFY_OPERATOR;
-    	PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+    	AppUser appUser = AppUser.builder().userId("user").build();
 		NotifyOperatorForDecisionRequestTaskActionPayload payload = NotifyOperatorForDecisionRequestTaskActionPayload.builder()
 				.payloadType(RequestTaskActionPayloadType.DRE_SUBMIT_NOTIFY_OPERATOR_PAYLOAD)
 				.decisionNotification(DecisionNotification.builder()
@@ -96,24 +96,24 @@ class DreSubmitNotifyOperatorActionHandlerTest {
 		
 		when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 		
-		cut.process(requestTaskId, requestTaskActionType,  pmrvUser, payload);
+		cut.process(requestTaskId, requestTaskActionType,  appUser, payload);
 		
 		assertThat(request.getSubmissionDate()).isNotNull();
 		
 		verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-		verify(dreApplyService, times(1)).applySubmitNotify(requestTask, payload.getDecisionNotification(), pmrvUser);
+		verify(dreApplyService, times(1)).applySubmitNotify(requestTask, payload.getDecisionNotification(), appUser);
         verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
             		BpmnProcessConstants.DRE_SUBMIT_OUTCOME, DreSubmitOutcome.SUBMITTED,
             		BpmnProcessConstants.DRE_IS_PAYMENT_REQUIRED, true,
-            		BpmnProcessConstants.PAYMENT_EXPIRATION_DATE, DateUtils.convertLocalDateToDate(dre.getFee().getFeeDetails().getDueDate())));
+            		BpmnProcessConstants.PAYMENT_EXPIRATION_DATE, DateUtils.atEndOfDay(dre.getFee().getFeeDetails().getDueDate())));
     }
     
     @Test
 	void process_without_Fee() {
     	Long requestTaskId = 1L;
     	RequestTaskActionType requestTaskActionType = RequestTaskActionType.DRE_SUBMIT_NOTIFY_OPERATOR;
-    	PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+    	AppUser appUser = AppUser.builder().userId("user").build();
 		NotifyOperatorForDecisionRequestTaskActionPayload payload = NotifyOperatorForDecisionRequestTaskActionPayload.builder()
 				.payloadType(RequestTaskActionPayloadType.DRE_SUBMIT_NOTIFY_OPERATOR_PAYLOAD)
 				.decisionNotification(DecisionNotification.builder()
@@ -146,12 +146,12 @@ class DreSubmitNotifyOperatorActionHandlerTest {
 		
 		when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 		
-		cut.process(requestTaskId, requestTaskActionType,  pmrvUser, payload);
+		cut.process(requestTaskId, requestTaskActionType,  appUser, payload);
 		
 		assertThat(request.getSubmissionDate()).isNotNull();
 		
 		verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-		verify(dreApplyService, times(1)).applySubmitNotify(requestTask, payload.getDecisionNotification(), pmrvUser);
+		verify(dreApplyService, times(1)).applySubmitNotify(requestTask, payload.getDecisionNotification(), appUser);
         verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
             		BpmnProcessConstants.DRE_SUBMIT_OUTCOME, DreSubmitOutcome.SUBMITTED,

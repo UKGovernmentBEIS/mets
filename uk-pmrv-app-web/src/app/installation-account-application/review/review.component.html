@@ -1,8 +1,7 @@
 <ng-container *ngIf="formSubmission$ | async as submission; else mainView">
   <app-decision-confirmation
     *ngIf="submission.form === 'decision'"
-    [isAccepted]="submission.isAccepted"
-  ></app-decision-confirmation>
+    [isAccepted]="submission.isAccepted"></app-decision-confirmation>
 </ng-container>
 
 <ng-template #mainView>
@@ -13,33 +12,29 @@
           <div *ngIf="info.requestTask.type | includes: 'INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE'; else newPermit">
             Share transfer code with operator
           </div>
-          <ng-template #newPermit> Installation account details </ng-template>
+          <ng-template #newPermit>Installation account details</ng-template>
           <app-task-header-info
             [assignee]="info.requestTask.assigneeFullName"
-            [daysRemaining]="info.requestTask.daysRemaining"
-          ></app-task-header-info>
+            [daysRemaining]="info.requestTask.daysRemaining"></app-task-header-info>
         </app-page-heading>
 
         <app-decision
           *ngIf="info.allowedRequestTaskActions | includes: 'INSTALLATION_ACCOUNT_OPENING_SUBMIT_DECISION'"
           [taskId]="info.requestTask.id"
-          (submitted)="submittedDecision($event)"
-        ></app-decision>
+          (submitted)="submittedDecision($event)"></app-decision>
 
         <app-archive
           *ngIf="info.allowedRequestTaskActions | includes: 'INSTALLATION_ACCOUNT_OPENING_ARCHIVE'"
           [taskId]="info.requestTask.id"
           type="INSTALLATION_ACCOUNT_OPENING_ARCHIVE"
           warningText="This task / item can be archived for future reference."
-          (submitted)="archived()"
-        ></app-archive>
+          (submitted)="archived()"></app-archive>
 
         <ng-container *ngIf="info.requestTask.type | includes: 'INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE'">
           <ng-template
             [ngIf]="!(info.allowedRequestTaskActions | includes: 'INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE')"
-            [ngIfElse]="archiveTaskTemplate"
-          >
-            <ng-container *ngTemplateOutlet="transferringArchiveBody"> </ng-container>
+            [ngIfElse]="archiveTaskTemplate">
+            <ng-container *ngTemplateOutlet="transferringArchiveBody"></ng-container>
             <hr class="govuk-!-margin-bottom-6" />
           </ng-template>
           <ng-template #archiveTaskTemplate>
@@ -47,9 +42,8 @@
               [taskId]="info.requestTask.id"
               type="INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE"
               (submitted)="archived()"
-              buttonText="Archive and return to dashboard."
-            >
-              <ng-container *ngTemplateOutlet="transferringArchiveBody"> </ng-container>
+              buttonText="Archive and return to dashboard.">
+              <ng-container *ngTemplateOutlet="transferringArchiveBody"></ng-container>
             </app-archive>
           </ng-template>
           <ng-template #transferringArchiveBody>
@@ -78,34 +72,52 @@
           </ng-template>
         </ng-container>
 
-        <app-review-summary
-          *ngIf="
-            info.requestTask?.payload &&
-            !(info.requestTask.type | includes: 'INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE')
-          "
-          [item]="info.requestTask.payload"
-          [taskId]="
-            (info.allowedRequestTaskActions | includes: 'INSTALLATION_ACCOUNT_OPENING_SUBMIT_DECISION')
-              ? info.requestTask.id
-              : null
-          "
-        ></app-review-summary>
+        <ng-container *ngIf="info.requestTask.payload?.['submitter']">
+          <h2 class="govuk-heading-m">Application submitted by</h2>
+          <dl govuk-summary-list class="govuk-!-margin-bottom-9">
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Name</dt>
+              <dd govukSummaryListRowValue>
+                {{ info.requestTask.payload?.['submitter']?.name }}
+              </dd>
+            </div>
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Email address</dt>
+              <dd govukSummaryListRowValue>{{ info.requestTask.payload?.['submitter']?.email }}</dd>
+            </div>
+          </dl>
+        </ng-container>
+
+        <ng-container *ngIf="companiesHouse$ | async as companiesHouse">
+          <app-review-summary
+            *ngIf="
+              info.requestTask?.payload &&
+              !(info.requestTask.type | includes: 'INSTALLATION_ACCOUNT_TRANSFERRING_ARCHIVE')
+            "
+            [item]="info.requestTask.payload"
+            [taskId]="
+              (info.allowedRequestTaskActions | includes: 'INSTALLATION_ACCOUNT_OPENING_SUBMIT_DECISION')
+                ? info.requestTask.id
+                : null
+            "
+            [companiesHouse]="companiesHouse"
+            [roleType]="userRoleType$ | async"
+            [companiesHouseErrorMessage]="errorMessage$ | async"></app-review-summary>
+        </ng-container>
 
         <app-timeline>
           <app-timeline-item
             *ngFor="let action of actions$ | async"
             [action]="action"
             [link]="action | timelineItemLink"
-            [state]="navigationState"
-          ></app-timeline-item>
+            [state]="navigationState"></app-timeline-item>
         </app-timeline>
       </div>
       <div class="govuk-grid-column-one-third" *ngIf="(hasRelatedActions$ | async) === true">
         <app-related-actions
           [isAssignable$]="isAssignableAndCapableToAssign$"
           [taskId$]="taskId$"
-          [allowedActions$]="allowedRequestTaskActions$"
-        ></app-related-actions>
+          [allowedActions$]="allowedRequestTaskActions$"></app-related-actions>
       </div>
     </ng-container>
   </div>

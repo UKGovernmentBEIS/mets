@@ -11,6 +11,7 @@ import {
   AviationAerCorsiaApplicationSubmitRequestTaskPayload,
   AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload,
   AviationAerCorsiaApplicationVerificationSubmittedRequestActionPayload,
+  AviationAerCorsiaInternationalFlightsEmissions,
   AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
   AviationAerCorsiaInternationalFlightsEmissionsDetails,
   AviationReportingService,
@@ -28,6 +29,9 @@ import { createTablePage } from '../../../../../mi-reports/core/mi-report';
 export class TotalEmissionsCorsiaStatePairsTableTemplateComponent {
   private aviationReportingService = inject(AviationReportingService);
 
+  @Input() showAllData = false;
+  @Input() internationalFlightsEmissions$: Observable<AviationAerCorsiaInternationalFlightsEmissions>;
+
   @Input() set corsiaRequestTaskPayload(
     requestTaskPayload:
       | AviationAerCorsiaApplicationSubmitRequestTaskPayload
@@ -40,11 +44,17 @@ export class TotalEmissionsCorsiaStatePairsTableTemplateComponent {
       aggregatedEmissionsData: aer?.aggregatedEmissionsData,
       emissionsReductionClaim: aer?.emissionsReductionClaim?.emissionsReductionClaimDetails?.totalEmissions,
     };
-    const internationalFlightsEmissions$ = this.aviationReportingService
-      .getInternationalFlightsEmissionsCorsia(internationalFlightsEmissionsCalculationDTO)
-      .pipe(shareReplay(1));
+    const internationalFlightsEmissions$ =
+      this.internationalFlightsEmissions$ ??
+      this.aviationReportingService
+        .getInternationalFlightsEmissionsCorsia(internationalFlightsEmissionsCalculationDTO)
+        .pipe(shareReplay(1));
     this.pageItems$ = combineLatest([internationalFlightsEmissions$, this.currentPage$]).pipe(
-      map(([items, currentPage]) => createTablePage(currentPage, this.pageSize, items?.flightsEmissionsDetails)),
+      map(([items, currentPage]) =>
+        this.showAllData
+          ? items?.flightsEmissionsDetails
+          : createTablePage(currentPage, this.pageSize, items?.flightsEmissionsDetails),
+      ),
     );
     this.totalNumOfItems$ = internationalFlightsEmissions$.pipe(map((items) => items?.flightsEmissionsDetails?.length));
   }

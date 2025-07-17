@@ -1,10 +1,5 @@
 package uk.gov.pmrv.api.web.controller.terms;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,11 +10,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import uk.gov.pmrv.api.terms.domain.Terms;
-import uk.gov.pmrv.api.terms.domain.dto.TermsDTO;
-import uk.gov.pmrv.api.terms.service.TermsService;
-import uk.gov.pmrv.api.terms.transform.TermsMapper;
+import uk.gov.netz.api.terms.Terms;
+import uk.gov.netz.api.terms.TermsDTO;
+import uk.gov.netz.api.terms.TermsMapper;
+import uk.gov.netz.api.terms.TermsService;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class TermsControllerTest {

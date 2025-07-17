@@ -27,7 +27,7 @@ export const AER_CORSIA_VERIFIERS_CONCLUSIONS_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Conclusions on data quality and materiality summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Conclusions on data quality and materiality' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./summary/summary.component').then((c) => c.SummaryComponent),
       },

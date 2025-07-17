@@ -16,7 +16,11 @@ export abstract class SignatoryAbstractComponent {
     signatory: [null, GovukValidators.required('Select a name to appear on the official notice document.')],
   });
 
-  constructor(readonly formBuilder: UntypedFormBuilder, readonly router: Router, readonly route: ActivatedRoute) {}
+  constructor(
+    readonly formBuilder: UntypedFormBuilder,
+    readonly router: Router,
+    readonly route: ActivatedRoute,
+  ) {}
 
   protected init(): void {
     this.regulators$ = this.route.data.pipe(

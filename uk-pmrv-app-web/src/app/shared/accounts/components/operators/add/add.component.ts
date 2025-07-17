@@ -86,13 +86,13 @@ export class AddComponent implements OnInit {
         catchError((res: unknown) => {
           if (isBadRequest(res)) {
             switch (res.error?.code) {
-              case ErrorCodes.AUTHORITY1000:
-              case ErrorCodes.AUTHORITY1005:
+              case ErrorCodes.AUTHORITY1005: // TODO review error message
                 this.form.get('email').setErrors({
                   emailExists: 'The email address of the new user must not already exist at your installation',
                 });
                 break;
-              case ErrorCodes.USER1001:
+              case ErrorCodes.USER1003:
+              case ErrorCodes.AUTHORITY1016:
                 this.form.get('email').setErrors({
                   emailExists: 'This email address is already linked to a non-operator account',
                 });

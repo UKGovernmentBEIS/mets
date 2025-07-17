@@ -26,9 +26,11 @@ import { createTablePage } from '../../../../../../mi-reports/core/mi-report';
 export class TotalEmissionsAerodromePairsTableTemplateComponent implements OnInit {
   @Input() data: AviationAerUkEts;
 
+  @Input() showAllData = false;
+  @Input() aerodromePairsTotalEmissions$: Observable<AerodromePairsTotalEmissions[]>;
+
   getSummaryDescription = getSummaryDescription;
   aviationAerEmissionsCalculationDTO: AviationAerEmissionsCalculationDTO;
-  aerodromePairsTotalEmissions$: Observable<AerodromePairsTotalEmissions[]>;
   pageItems$: Observable<AerodromePairsTotalEmissions[]>;
   totalNumOfItems$: Observable<number>;
   currentPage$ = new BehaviorSubject<number>(1);
@@ -43,17 +45,19 @@ export class TotalEmissionsAerodromePairsTableTemplateComponent implements OnIni
   constructor(private aviationReportingService: AviationReportingService) {}
 
   ngOnInit() {
-    const emissionData = this.data.aggregatedEmissionsData;
-    const safData = this.data.saf;
-    this.aviationAerEmissionsCalculationDTO = {
-      aggregatedEmissionsData: emissionData,
-      saf: safData,
-    };
-    this.aerodromePairsTotalEmissions$ = this.aviationReportingService
-      .getAerodromePairsEmissionsUkEts(this.aviationAerEmissionsCalculationDTO)
-      .pipe(shareReplay(1));
+    if (!this.aerodromePairsTotalEmissions$) {
+      const emissionData = this.data.aggregatedEmissionsData;
+      const safData = this.data.saf;
+      this.aviationAerEmissionsCalculationDTO = {
+        aggregatedEmissionsData: emissionData,
+        saf: safData,
+      };
+      this.aerodromePairsTotalEmissions$ = this.aviationReportingService
+        .getAerodromePairsEmissionsUkEts(this.aviationAerEmissionsCalculationDTO)
+        .pipe(shareReplay(1));
+    }
     this.pageItems$ = combineLatest([this.aerodromePairsTotalEmissions$, this.currentPage$]).pipe(
-      map(([items, currentPage]) => createTablePage(currentPage, this.pageSize, items)),
+      map(([items, currentPage]) => (this.showAllData ? items : createTablePage(currentPage, this.pageSize, items))),
     );
     this.totalNumOfItems$ = this.aerodromePairsTotalEmissions$.pipe(map((items) => items?.length));
   }

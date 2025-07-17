@@ -38,8 +38,7 @@ describe('OptionalSummaryTemplateComponent', () => {
     template: `
       <app-measurement-optional-summary-template
         [procedureOptionalForm]="procedureOptionalForm"
-        [taskKey]="taskKey"
-      ></app-measurement-optional-summary-template>
+        [taskKey]="taskKey"></app-measurement-optional-summary-template>
     `,
   })
   class TestComponent {

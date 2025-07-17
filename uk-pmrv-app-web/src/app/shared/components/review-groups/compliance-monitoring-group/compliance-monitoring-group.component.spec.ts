@@ -18,8 +18,7 @@ describe('ComplianceMonitoringGroupComponent', () => {
     template: `
       <app-compliance-monitoring-group
         [isEditable]="isEditable"
-        [compliance]="compliance"
-      ></app-compliance-monitoring-group>
+        [compliance]="compliance"></app-compliance-monitoring-group>
     `,
   })
   class TestComponent {

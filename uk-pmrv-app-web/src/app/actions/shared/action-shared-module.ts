@@ -4,9 +4,12 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '@shared/shared.module';
 
 import { ActionTaskComponent } from './action-task/action-task.component';
-import { ActionLayoutComponent } from './components/action-layout/action-layout.component';
-import { BaseActionContainerComponent } from './components/base-task-container-component/base-action-container.component';
-import { ReviewGroupDecisionSummaryComponent } from './components/review-group-decision-summary/review-group-decision-summary.component';
+import {
+  ActionLayoutComponent,
+  BaseActionContainerComponent,
+  RecipientsTemplateComponent,
+  ReviewGroupDecisionSummaryComponent,
+} from './components';
 
 @NgModule({
   declarations: [
@@ -19,8 +22,9 @@ import { ReviewGroupDecisionSummaryComponent } from './components/review-group-d
     ActionLayoutComponent,
     ActionTaskComponent,
     BaseActionContainerComponent,
+    RecipientsTemplateComponent,
     ReviewGroupDecisionSummaryComponent,
   ],
-  imports: [RouterModule, SharedModule],
+  imports: [RecipientsTemplateComponent, RouterModule, SharedModule],
 })
 export class ActionSharedModule {}

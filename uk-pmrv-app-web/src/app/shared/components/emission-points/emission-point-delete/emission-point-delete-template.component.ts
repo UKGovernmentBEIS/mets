@@ -8,7 +8,7 @@ import { EmissionPoint } from 'pmrv-api';
     <ng-container *ngIf="emissionPoint">
       <app-page-heading size="xl">
         Are you sure you want to delete
-        <span class="nowrap"> ‘{{ emissionPoint.reference }} {{ emissionPoint.description }}’? </span>
+        <span class="nowrap">‘{{ emissionPoint.reference }} {{ emissionPoint.description }}’?</span>
       </app-page-heading>
 
       <p class="govuk-body">Any reference to this item will be removed from your application.</p>
@@ -20,13 +20,11 @@ import { EmissionPoint } from 'pmrv-api';
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      .nowrap {
-        white-space: nowrap;
-      }
-    `,
-  ],
+  styles: `
+    .nowrap {
+      white-space: nowrap;
+    }
+  `,
 })
 export class EmissionPointDeleteTemplateComponent {
   @Input() emissionPoint: EmissionPoint;

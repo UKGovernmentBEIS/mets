@@ -54,11 +54,11 @@ describe('MonitoringApproachVerifyCorsiaTemplateComponent', () => {
         `Jet kerosene (Jet A1 or Jet A) at 3.16 tCO2 per tonne of fuelJet gasoline (Jet B) at 3.10 tCO2 per tonne of fuel`,
       ],
       ['Monitoring approach', 'CERT only'],
-      ['Emissions from all flights', '1500'],
-      ['Emissions from offset flights', '1200'],
+      ['Emissions from all flights', '1500 tCO2'],
+      ['Emissions from offset flights', '1200 tCO2'],
       ['Are the reported emissions correct?', 'No'],
-      ['Total verified emissions for the scheme year', '1000'],
-      ['Total verified emissions from offset flights for the scheme year', '2000'],
+      ['Total verified emissions for the scheme year', '1000 tCO2'],
+      ['Total verified emissions from offset flights for the scheme year', '2000 tCO2'],
     ]);
   });
 });

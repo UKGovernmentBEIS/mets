@@ -72,7 +72,7 @@ export class DecisionSummaryComponent implements OnInit {
             payload.reviewGroupDecisions,
             payload?.empVariationDetailsReviewDecision,
           ),
-        } as ViewModel),
+        }) as ViewModel,
     ),
   );
 
@@ -87,7 +87,10 @@ export class DecisionSummaryComponent implements OnInit {
     ),
   );
 
-  constructor(public store: RequestActionStore, private readonly backLinkService: BackLinkService) {}
+  constructor(
+    public store: RequestActionStore,
+    private readonly backLinkService: BackLinkService,
+  ) {}
 
   ngOnInit(): void {
     this.backLinkService.show();

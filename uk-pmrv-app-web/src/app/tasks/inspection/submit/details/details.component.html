@@ -1,0 +1,114 @@
+<app-inspection-task [returnToLink]="'..'">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [caption]="requestTasktype$ | async | detailsSubtaskHeader"
+    [heading]="requestTasktype$ | async | detailsSubtaskLinktext"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="!isEditable()"
+  >
+    @if (isOnsiteInspection$ | async) {
+      <div
+        formControlName="date"
+        govuk-date-input
+        label="On-site inspection date"
+        hint="For example, 25 7 2024"
+        [isRequired]="true"
+      ></div>
+    }
+
+    <legend govukLegend *ngIf="'Names of the officers who carried out the' as v">
+      @if (isOnsiteInspection$ | async) {
+        {{ v }} on-site inspection
+      } @else {
+        {{ v }} audit report
+      }
+    </legend>
+
+    <div
+      [options]="officers$ | async"
+      formControlName="officerName1"
+      govuk-select
+      label="Officer name 1"
+      class="officer-select"
+    ></div>
+
+    <div
+      *ngIf="(isOnsiteInspection$ | async) === false"
+      [options]="officers$ | async"
+      formControlName="officerName2"
+      govuk-select
+      label="Officer name 2"
+      class="officer-select"
+    ></div>
+
+    <div formArrayName="extraOfficers">
+      <fieldset
+        *ngFor="let extraOfficer of extraOfficers.controls; index as i"
+        [formGroupName]="i"
+        govukFieldset
+        id="extraOfficers-{{ i }}"
+        class="extra-officer-fieldset"
+      >
+        <legend govukLegend class="govuk-label">
+          @if ((isOnsiteInspection$ | async) === true) {
+            Officer name {{ i + 2 }} (Optional)
+          } @else {
+            Officer name {{ i + 3 }} (Optional)
+          }
+        </legend>
+        <button
+          (click)="extraOfficers.removeAt(i)"
+          *ngIf="extraOfficers.length > 0"
+          [heading]="null"
+          appAddAnother
+          govukSecondaryButton
+          type="button"
+          #removeButton
+        >
+          Remove
+        </button>
+
+        <div [options]="officers$ | async" formControlName="extraOfficer" govuk-select class="officer-select"></div>
+      </fieldset>
+
+      <button
+        *ngIf="
+          (isOnsiteInspection && this.form.get('extraOfficers')?.value?.length < 4) ||
+          (!isOnsiteInspection && this.form.get('extraOfficers')?.value?.length < 3)
+        "
+        #addAnother
+        (click)="addAnotherOfficer()"
+        govukSecondaryButton
+        type="button"
+      >
+        Add another officer
+      </button>
+    </div>
+
+    <app-multiple-file-input
+      [baseDownloadUrl]="getDownloadUrl()"
+      label="Upload files (visible to the Operator) (optional)"
+      headerSize="m"
+      listTitle="Uploaded attachments"
+      formControlName="files"
+    ></app-multiple-file-input>
+
+    <app-multiple-file-input
+      [baseDownloadUrl]="getDownloadUrl()"
+      label="Upload files (not visible to the Operator)  (optional)"
+      headerSize="m"
+      listTitle="Uploaded attachments"
+      formControlName="regulatorExtraFiles"
+    ></app-multiple-file-input>
+
+    <div
+      formControlName="additionalInformation"
+      govuk-textarea
+      label="Additional information (optional)"
+      labelSize="medium"
+      hint="This will appear in the notification letter"
+      [maxLength]="10000"
+    ></div>
+  </app-wizard-step>
+</app-inspection-task>

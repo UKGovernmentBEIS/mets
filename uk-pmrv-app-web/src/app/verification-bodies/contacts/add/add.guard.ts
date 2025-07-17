@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, UrlTree } from '@angular/router';
 
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 
 import { HttpStatuses } from '@error/http-status';
 
@@ -12,7 +12,7 @@ import { catchElseRethrow } from '../../../error/business-errors';
 import { disabledVerificationBodyError, viewNotFoundVerificationBodyError } from '../../errors/business-error';
 
 @Injectable({ providedIn: 'root' })
-export class AddGuard implements CanActivate {
+export class AddGuard {
   constructor(
     private readonly verificationBodyService: VerificationBodiesService,
     private readonly businessErrorService: BusinessErrorService,
@@ -27,11 +27,9 @@ export class AddGuard implements CanActivate {
         (res) => res.status === HttpStatuses.NotFound,
         () => this.businessErrorService.showError(viewNotFoundVerificationBodyError),
       ),
-      tap((canAccess) => {
-        if (!canAccess) {
-          this.businessErrorService.showError(disabledVerificationBodyError);
-        }
-      }),
+      switchMap((isNotDisabled) =>
+        isNotDisabled ? of(true) : this.businessErrorService.showError(disabledVerificationBodyError),
+      ),
     );
   }
 }

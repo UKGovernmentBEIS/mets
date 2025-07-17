@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -34,7 +34,7 @@ public class EmpReissueDoReissueService {
 
 		boolean isAccountApplicable = empReissueAccountValidationService.isAccountApplicableToReissue(request);
 		if(!isAccountApplicable) {
-			throw new BusinessException(ErrorCode.REISSUE_ACCOUNT_NOT_APPLICABLE, accountId);
+			throw new BusinessException(MetsErrorCode.REISSUE_ACCOUNT_NOT_APPLICABLE, accountId);
 		}
 		
 		request.setSubmissionDate(LocalDateTime.now());

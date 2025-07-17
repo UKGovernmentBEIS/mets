@@ -1,15 +1,13 @@
 package uk.gov.pmrv.api.account.service;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.domain.AccountIdentifier;
 import uk.gov.pmrv.api.account.repository.AccountIdentifierRepository;
-import uk.gov.pmrv.api.common.exception.BusinessException;
 
-import static uk.gov.pmrv.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor

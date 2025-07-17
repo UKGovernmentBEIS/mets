@@ -2,28 +2,29 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { map, pluck, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 
 @Component({
   selector: 'app-system-notification',
   templateUrl: './system-notification.component.html',
-  styleUrls: ['./system-notification.component.scss'],
+  styleUrl: './system-notification.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SystemNotificationComponent {
-  private readonly info$ = this.route.data.pipe(pluck('review'));
-  private readonly requestTask$ = this.info$.pipe(pluck('requestTask'));
-  private readonly payload$ = this.requestTask$.pipe(pluck('payload'));
+  private readonly info$ = this.route.data.pipe(map((x) => x?.review));
+  private readonly requestTask$ = this.info$.pipe(map((x) => x?.requestTask));
+  private readonly payload$ = this.requestTask$.pipe(map((x) => x?.payload));
 
-  readonly allowedActions$ = this.info$.pipe(pluck('allowedRequestTaskActions'));
-  readonly taskId$ = this.requestTask$.pipe(pluck('id'));
-  readonly date$ = this.requestTask$.pipe(pluck('startDate'));
+  readonly allowedActions$ = this.info$.pipe(map((x) => x?.allowedRequestTaskActions));
+  readonly taskId$ = this.requestTask$.pipe(map((x) => x?.id));
+  readonly date$ = this.requestTask$.pipe(map((x) => x?.startDate));
   readonly title$ = this.payload$.pipe(
-    pluck('subject'),
+    map((x) => x?.subject),
     tap((subject) => this.title.setTitle(subject)),
   );
   readonly data$ = this.payload$.pipe(
-    pluck('text'),
+    map((x) => x?.text),
+    map((x) => (x.includes('&quot;') ? this.toHTML(x) : x)),
     map((content) =>
       content.replace(
         /(?:__|[*#])|\[(.*?)]\(.*?\)/gm,
@@ -32,7 +33,11 @@ export class SystemNotificationComponent {
     ),
   );
 
-  constructor(private readonly route: ActivatedRoute, private readonly router: Router, private readonly title: Title) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly title: Title,
+  ) {}
 
   archived(): void {
     this.router.navigate(['/dashboard']);
@@ -47,5 +52,9 @@ export class SystemNotificationComponent {
       default:
         return '/';
     }
+  }
+
+  toHTML(text: string): string {
+    return new DOMParser().parseFromString(text, 'text/html').documentElement?.textContent;
   }
 }

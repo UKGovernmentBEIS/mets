@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -10,8 +10,11 @@ import { PermitNotificationFollowUpRequestTaskPayload } from 'pmrv-api';
 @Injectable({
   providedIn: 'root',
 })
-export class ResponseGuard implements CanActivate {
-  constructor(private readonly router: Router, private readonly store: CommonTasksStore) {}
+export class ResponseGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly store: CommonTasksStore,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): true | Observable<true | UrlTree> {
     return (

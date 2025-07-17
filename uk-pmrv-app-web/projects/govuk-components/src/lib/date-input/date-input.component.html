@@ -2,13 +2,9 @@
   <legend govukLegend>{{ label }}</legend>
   <span *ngIf="hint" govukFieldsetHint>{{ hint }}</span>
   <div [formGroup]="formGroup" class="govuk-date-input">
-    <govuk-error-message
-      *ngIf="shouldDisplayErrors"
-      [errors]="control.errors"
-      [identifier]="identifier"
-    ></govuk-error-message>
+    <govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="identifier" />
     <div class="govuk-date-input__item">
-      <label [for]="identifier + '-day'" class="govuk-label govuk-date-input__label"> Day </label>
+      <label [for]="identifier + '-day'" class="govuk-label govuk-date-input__label">Day</label>
       <input
         (blur)="onInputBlur()"
         [class.govuk-input--error]="hasFieldError('day')"
@@ -19,11 +15,10 @@
         inputmode="numeric"
         max="31"
         min="1"
-        type="text"
-      />
+        type="text" />
     </div>
     <div class="govuk-date-input__item">
-      <label [for]="identifier + '-month'" class="govuk-label govuk-date-input__label"> Month </label>
+      <label [for]="identifier + '-month'" class="govuk-label govuk-date-input__label">Month</label>
       <input
         (blur)="onInputBlur()"
         [class.govuk-input--error]="hasFieldError('month')"
@@ -33,11 +28,10 @@
         inputmode="numeric"
         max="12"
         min="1"
-        type="text"
-      />
+        type="text" />
     </div>
     <div class="govuk-date-input__item">
-      <label [for]="identifier + '-year'" class="govuk-label govuk-date-input__label"> Year </label>
+      <label [for]="identifier + '-year'" class="govuk-label govuk-date-input__label">Year</label>
       <input
         (blur)="onInputBlur()"
         [class.govuk-input--error]="hasFieldError('year')"
@@ -46,8 +40,7 @@
         class="govuk-input govuk-date-input__input govuk-input--width-4"
         formControlName="year"
         inputmode="numeric"
-        type="text"
-      />
+        type="text" />
     </div>
   </div>
 </fieldset>

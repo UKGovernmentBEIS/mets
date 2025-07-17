@@ -1,22 +1,5 @@
 package uk.gov.pmrv.api.permit.validation;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyCollection;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,7 +11,6 @@ import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitValidationResult;
 import uk.gov.pmrv.api.permit.domain.PermitViolation;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.CategoryType;
 import uk.gov.pmrv.api.permit.domain.emissionpoints.EmissionPoint;
 import uk.gov.pmrv.api.permit.domain.emissionpoints.EmissionPoints;
 import uk.gov.pmrv.api.permit.domain.emissionsources.EmissionSource;
@@ -42,9 +24,28 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationpfc.PFCActi
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationpfc.PFCCalculationMethod;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationpfc.PFCSourceStreamCategory;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationpfc.PFCSourceStreamCategoryAppliedTier;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.CategoryType;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.HighestRequiredTier;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStream;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreams;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PFCMonitoringApproachSectionValidatorTest {

@@ -6,9 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.files.attachments.service.FileAttachmentService;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.PermitSurrenderAttachmentsValidator;
+import uk.gov.netz.api.files.attachments.service.FileAttachmentService;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ class PermitSurrenderAttachmentsValidatorTest {
     void attachmentsExist() {
         UUID attachment1 = UUID.randomUUID();
         UUID attachment2 = UUID.randomUUID();
-        final Set<UUID> sectionAttachments = Set.of(attachment1, attachment2);
+        final Set<UUID> sectionAttachments = new HashSet<>(Arrays.asList(attachment1, attachment2, null));
         
         when(fileAttachmentService.fileAttachmentsExist(Set.of(attachment1.toString(), attachment2.toString()))).thenReturn(true);
         
@@ -65,7 +66,7 @@ class PermitSurrenderAttachmentsValidatorTest {
     void sectionAttachmentsReferencedInPermitSurrender_not_exist() {
         UUID attachment1 = UUID.randomUUID();
         UUID attachment2 = UUID.randomUUID();
-        final Set<UUID> sectionAttachments = Set.of(attachment1, attachment2);
+        final Set<UUID> sectionAttachments = new HashSet<>(Arrays.asList(attachment1, attachment2, null));;
         final Set<UUID> permitSurrenderAttachments = Set.of(attachment1, UUID.randomUUID());
         
         boolean result = validator.sectionAttachmentsReferencedInPermitSurrender(sectionAttachments, permitSurrenderAttachments);

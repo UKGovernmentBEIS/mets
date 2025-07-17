@@ -9,6 +9,7 @@ export const accountStatusLabelMap: Partial<Record<InstallationAccountDTO['statu
 export const accountTypeLabelMap: Partial<Record<InstallationAccountDTO['emitterType'], string>> = {
   HSE: 'HSE',
   GHGE: 'GHGE',
+  WASTE: 'Voluntary waste',
 };
 
 export const accountCategoryLabelMap: Partial<Record<InstallationAccountDTO['installationCategory'], string>> = {

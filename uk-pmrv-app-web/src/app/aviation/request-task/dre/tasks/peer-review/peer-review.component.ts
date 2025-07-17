@@ -10,7 +10,9 @@ import { GovukComponentsModule } from 'govuk-components';
   selector: 'app-dre-peer-review',
   standalone: true,
   imports: [GovukComponentsModule, SharedModule, RouterLinkWithHref, ReturnToLinkComponent],
-  template: ` <app-peer-review-shared></app-peer-review-shared> `,
+  template: `
+    <app-peer-review-shared></app-peer-review-shared>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DrePeerReviewComponent {}

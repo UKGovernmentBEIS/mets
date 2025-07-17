@@ -1,17 +1,18 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.handler;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationFollowUpRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationFollowUpSaveResponseRequestTaskActionPayload;
+
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Component
@@ -23,7 +24,7 @@ public class PermitNotificationFollowUpSaveResponseActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final PermitNotificationFollowUpSaveResponseRequestTaskActionPayload actionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);

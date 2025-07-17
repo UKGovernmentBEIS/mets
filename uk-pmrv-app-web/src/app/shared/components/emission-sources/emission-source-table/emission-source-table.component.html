@@ -1,0 +1,13 @@
+<govuk-table [columns]="columns" [data]="data()" [class.no-bottom-border]="false">
+  <ng-template let-column="column" let-row="row">
+    @switch (column.field) { @case ('reference') {
+    {{ row.reference }}
+    } @case ('description') {
+    {{ row.description }}
+    } @case ('change') { @if (isEditable() === true) {
+    <a [routerLink]="row.id" govukLink>Change</a>
+    } } @case ('delete') { @if (isEditable() === true) {
+    <a [routerLink]="['delete', row.id]" govukLink>Delete</a>
+    } } }
+  </ng-template>
+</govuk-table>

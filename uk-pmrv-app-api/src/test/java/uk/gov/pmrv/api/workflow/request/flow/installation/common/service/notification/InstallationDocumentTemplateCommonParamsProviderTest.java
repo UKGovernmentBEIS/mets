@@ -5,6 +5,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.config.CompetentAuthorityProperties;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.utils.DateService;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityWithoutHoldingCompanyDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
@@ -14,29 +22,21 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.common.config.AppProperties;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
-import uk.gov.pmrv.api.common.service.DateService;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.CompetentAuthorityTemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.SignatoryTemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.WorkflowTemplateParams;
 import uk.gov.pmrv.api.notification.template.installation.domain.InstallationAccountTemplateParams;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserDTO;
 import uk.gov.pmrv.api.user.regulator.service.RegulatorUserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.CompetentAuthorityDTOByRequestResolverDelegator;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateLocationInfoResolver;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
 
@@ -80,13 +80,13 @@ class InstallationDocumentTemplateCommonParamsProviderTest {
     private UserAuthService userAuthService;
 
     @Mock
-    private AppProperties appProperties;
+    private CompetentAuthorityProperties competentAuthorityProperties;
 
     @Mock
     private DateService dateService;
-    @Mock
-    private CompetentAuthorityService competentAuthorityService;
 
+    @Mock
+    private CompetentAuthorityDTOByRequestResolverDelegator competentAuthorityDTOByRequestResolverDelegator;
 
     @Test
     void constructCommonTemplateParams() throws IOException {
@@ -162,8 +162,10 @@ class InstallationDocumentTemplateCommonParamsProviderTest {
                 .signature(FileInfoDTO.builder().name("signature.pdf").uuid(UUID.randomUUID().toString()).build())
                 .build();
         when(regulatorUserAuthService.getRegulatorUserById(signatory)).thenReturn(signatoryUser);
-        when(appProperties.getCompetentAuthorityCentralInfo()).thenReturn(caCentralInfo);
-        when(competentAuthorityService.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND, AccountType.INSTALLATION)).thenReturn(ca);
+        when(competentAuthorityProperties.getCentralInfo()).thenReturn(caCentralInfo);
+        when(competentAuthorityDTOByRequestResolverDelegator.resolveCA(request, AccountType.INSTALLATION))
+                .thenReturn(ca);
+
 
         FileDTO signatorySignature = FileDTO.builder()
                 .fileContent("content".getBytes())
@@ -214,6 +216,7 @@ class InstallationDocumentTemplateCommonParamsProviderTest {
                 .permitId(permitId)
                 .build());
 
+        verify(competentAuthorityDTOByRequestResolverDelegator, times(1)).resolveCA(request, AccountType.INSTALLATION);
         verify(installationAccountQueryService, times(1)).getAccountWithoutLeHoldingCompanyDTOById(request.getAccountId());
         verify(permitQueryService, times(1)).getPermitIdByAccountId(request.getAccountId());
         verify(accountContactQueryService, times(1)).findContactByAccountAndContactType(accountId, AccountContactType.PRIMARY);
@@ -224,7 +227,7 @@ class InstallationDocumentTemplateCommonParamsProviderTest {
         verify(documentTemplateLocationInfoResolver, times(1)).constructAddressInfo(accountDetails.getLegalEntity().getAddress());
         verify(regulatorUserAuthService, times(1)).getRegulatorUserById(signatory);
         verify(userAuthService, times(1)).getUserSignature(signatoryUser.getSignature().getUuid());
-        verify(appProperties, times(1)).getCompetentAuthorityCentralInfo();
+        verify(competentAuthorityProperties, times(1)).getCentralInfo();
         verify(dateService, times(1)).getLocalDateTime();
     }
 
@@ -289,7 +292,9 @@ class InstallationDocumentTemplateCommonParamsProviderTest {
                 .firstName("signtoryFn").lastName("signatoryLn").jobTitle("signatoryJobTitle")
                 .build();
         when(regulatorUserAuthService.getRegulatorUserById(signatory)).thenReturn(signatoryUser);
-        when(competentAuthorityService.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND, AccountType.INSTALLATION)).thenReturn(ca);
+        when(competentAuthorityDTOByRequestResolverDelegator.resolveCA(request, AccountType.INSTALLATION))
+                .thenReturn(ca);
+
 
         //invoke
         BusinessException be = assertThrows(BusinessException.class, () -> provider.constructCommonTemplateParams(request, signatory));

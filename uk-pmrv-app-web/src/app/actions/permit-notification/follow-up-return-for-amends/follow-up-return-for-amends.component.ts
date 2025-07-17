@@ -11,7 +11,10 @@ import { PermitNotificationService } from '../core/permit-notification.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowUpReturnForAmendsComponent {
-  constructor(public permitNotificationService: PermitNotificationService, public route: ActivatedRoute) {}
+  constructor(
+    public permitNotificationService: PermitNotificationService,
+    public route: ActivatedRoute,
+  ) {}
 
   data$: Observable<any> = this.permitNotificationService.getPayload().pipe(map((results) => results?.decisionDetails));
 }

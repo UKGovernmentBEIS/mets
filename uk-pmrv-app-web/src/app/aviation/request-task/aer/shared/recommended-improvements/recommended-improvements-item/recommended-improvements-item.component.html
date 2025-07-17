@@ -10,23 +10,23 @@
     Suggest how the operator could improve their performance in monitoring and reporting emissions, and why you think an
     improvement is relevant.
   </p>
+
   <p *ngIf="vm.isCorsia" class="govuk-body">
     Suggest how the aeroplane operator could improve their performance in monitoring and reporting emissions, and why
     you think an improvement is relevant.
   </p>
+
   <p class="govuk-body">Improvements can cover a wide range of issues including:</p>
+
   <ul class="govuk-list govuk-list--bullet">
     <li>risk assessment</li>
     <li>data flow and control activities and procedures</li>
     <li>accuracy of monitoring and reporting</li>
   </ul>
 
-  <div
-    label="Description"
-    [maxLength]="10000"
-    formControlName="explanation"
-    govuk-textarea
-    class="govuk-!-width-two-thirds"
-  ></div>
+  <h2 class="govuk-heading-s">Description</h2>
+
+  <div [maxLength]="10000" formControlName="explanation" govuk-textarea class="govuk-!-width-two-thirds"></div>
 </app-wizard-step>
+
 <app-return-to-link></app-return-to-link>

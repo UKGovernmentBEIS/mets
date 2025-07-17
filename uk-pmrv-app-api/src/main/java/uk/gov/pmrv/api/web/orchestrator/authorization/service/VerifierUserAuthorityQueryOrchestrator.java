@@ -3,11 +3,11 @@ package uk.gov.pmrv.api.web.orchestrator.authorization.service;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserAuthoritiesDTO;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserAuthorityDTO;
-import uk.gov.pmrv.api.authorization.verifier.service.VerifierAuthorityQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.dto.UserAuthoritiesDTO;
+import uk.gov.netz.api.authorization.core.domain.dto.UserAuthorityDTO;
+import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityQueryService;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.verifier.service.VerifierUserInfoService;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.UserAuthorityInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.UsersAuthoritiesInfoDTO;
@@ -24,11 +24,11 @@ public class VerifierUserAuthorityQueryOrchestrator {
     private final VerifierUserInfoService verifierUserInfoService;
     private final UserAuthorityInfoMapper userAuthorityInfoMapper = Mappers.getMapper(UserAuthorityInfoMapper.class);
 
-    public UsersAuthoritiesInfoDTO getVerifierUsersAuthoritiesInfo(PmrvUser authUser) {
+    public UsersAuthoritiesInfoDTO getVerifierUsersAuthoritiesInfo(AppUser authUser) {
         UserAuthoritiesDTO verifierAuthorities  = verifierAuthorityQueryService.getVerifierAuthorities(authUser);
         List<String> userIds = verifierAuthorities.getAuthorities().stream().map(UserAuthorityDTO::getUserId).collect(Collectors.toList());
         List<UserInfoDTO> verifierUserInfoList = verifierUserInfoService
-            .getVerifierUsersInfo(authUser, authUser.getVerificationBodyId(), userIds);
+            .getVerifierUsersInfo(userIds);
 
         return getVerifierUsersAuthoritiesInfo(verifierAuthorities, verifierUserInfoList);
     }
@@ -37,7 +37,7 @@ public class VerifierUserAuthorityQueryOrchestrator {
         UserAuthoritiesDTO verifierAuthorities  = verifierAuthorityQueryService
             .getVerificationBodyAuthorities(verificationBodyId, true);
         List<String> userIds = verifierAuthorities.getAuthorities().stream().map(UserAuthorityDTO::getUserId).collect(Collectors.toList());
-        List<UserInfoDTO> verifierUserInfoList = verifierUserInfoService.getVerifierUserInfo(userIds);
+        List<UserInfoDTO> verifierUserInfoList = verifierUserInfoService.getVerifierUsersInfo(userIds);
         return getVerifierUsersAuthoritiesInfo(verifierAuthorities, verifierUserInfoList);
     }
 

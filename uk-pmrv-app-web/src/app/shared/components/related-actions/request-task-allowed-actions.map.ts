@@ -31,6 +31,20 @@ const relatedRequestTaskActions: Array<RequestTaskActionProcessDTO['requestTaskA
   'EMP_ISSUANCE_CORSIA_RECALL_FROM_AMENDS',
   'EMP_VARIATION_CORSIA_RECALL_FROM_AMENDS',
   'AVIATION_AER_UKETS_SKIP_REVIEW',
+  'AVIATION_AER_CORSIA_SKIP_REVIEW',
+  'INSTALLATION_AUDIT_CANCEL_APPLICATION',
+  'INSTALLATION_ONSITE_INSPECTION_CANCEL_APPLICATION',
+  'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_CANCEL_APPLICATION',
+  'AER_SKIP_REVIEW',
+  'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_CANCEL_APPLICATION',
+  'AVIATION_AER_UKETS_VERIFICATION_RETURN_TO_OPERATOR',
+  'AVIATION_AER_CORSIA_VERIFICATION_RETURN_TO_OPERATOR',
+  'BDR_RECALL_FROM_VERIFICATION',
+  'BDR_VERIFICATION_RETURN_TO_OPERATOR',
+  'PERMANENT_CESSATION_CANCEL_APPLICATION',
+  'AVIATION_DOE_CORSIA_SUBMIT_CANCEL',
+  'ALR_VERIFICATION_RETURN_TO_OPERATOR',
+  'ALR_RECALL_FROM_VERIFICATION',
 ];
 
 export function hasRelatedViewActions(type: RequestInfoDTO['type']) {
@@ -98,6 +112,8 @@ function actionDetails(
     case 'DRE_CANCEL_APPLICATION':
     case 'WITHHOLDING_OF_ALLOWANCES_CANCEL_APPLICATION':
     case 'RETURN_OF_ALLOWANCES_CANCEL_APPLICATION':
+    case 'INSTALLATION_AUDIT_CANCEL_APPLICATION':
+    case 'INSTALLATION_ONSITE_INSPECTION_CANCEL_APPLICATION':
       return { text: 'Cancel task', link: [routerLooks + 'tasks', taskId, 'cancel'] };
 
     case 'WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_CLOSE_APPLICATION':
@@ -128,7 +144,7 @@ function actionDetails(
     case 'NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION':
       return {
         text: 'Provide note on appeal',
-        link: ['/accounts', requestInfo.accountId, 'workflows', requestInfo.id],
+        link: [isAviation + '/accounts', requestInfo.accountId, 'workflows', requestInfo.id],
         fragment: 'notes',
       };
 
@@ -141,6 +157,8 @@ function actionDetails(
 
     case 'EMP_ISSUANCE_UKETS_RECALL_FROM_AMENDS':
     case 'EMP_ISSUANCE_CORSIA_RECALL_FROM_AMENDS':
+    case 'EMP_VARIATION_UKETS_RECALL_FROM_AMENDS':
+    case 'EMP_VARIATION_CORSIA_RECALL_FROM_AMENDS':
       return {
         text: 'Recall the application',
         link: ['/aviation' + routerLooks + 'tasks', taskId, 'recall-from-amends'],
@@ -149,18 +167,46 @@ function actionDetails(
     case 'AVIATION_AER_RECALL_FROM_VERIFICATION':
       return { text: 'Recall report from verifier', link: ['recall-report-from-verifier'] };
 
-    case 'EMP_VARIATION_UKETS_RECALL_FROM_AMENDS':
-    case 'EMP_VARIATION_CORSIA_RECALL_FROM_AMENDS':
-      return {
-        text: 'Recall the application',
-        link: ['/aviation' + routerLooks + 'tasks', taskId, 'recall-from-amends'],
-      };
-
     case 'AVIATION_AER_UKETS_SKIP_REVIEW':
+    case 'AVIATION_AER_CORSIA_SKIP_REVIEW':
       return {
         text: 'Skip review and complete report',
         link: [`/aviation/tasks/${taskId}/skip-review`],
       };
+
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_CANCEL_APPLICATION':
+      return { text: 'Cancel task', link: ['cancel'] };
+
+    case 'AER_SKIP_REVIEW':
+      return {
+        text: 'Skip review and complete report',
+        link: ['skip-review'],
+      };
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_CANCEL_APPLICATION':
+      return { text: 'Cancel task', link: ['cancel'] };
+
+    case 'AVIATION_AER_CORSIA_VERIFICATION_RETURN_TO_OPERATOR':
+    case 'AVIATION_AER_UKETS_VERIFICATION_RETURN_TO_OPERATOR':
+      return {
+        text: 'Return to operator for changes',
+        link: ['/aviation' + routerLooks + 'tasks', taskId, 'verifier-return'],
+      };
+
+    case 'BDR_RECALL_FROM_VERIFICATION':
+      return { text: 'Recall BDR application from verifier', link: ['recall-bdr-from-verifier'] };
+    case 'BDR_VERIFICATION_RETURN_TO_OPERATOR':
+      return { text: 'Return to operator for changes', link: ['return-to-operator-for-changes'] };
+
+    case 'PERMANENT_CESSATION_CANCEL_APPLICATION':
+      return { text: 'Cancel task', link: ['cancel'] };
+
+    case 'AVIATION_DOE_CORSIA_SUBMIT_CANCEL':
+      return { text: 'Cancel this task', link: ['/aviation' + routerLooks + 'tasks', taskId, 'cancel'] };
+
+    case 'ALR_VERIFICATION_RETURN_TO_OPERATOR':
+      return { text: 'Return to operator for changes', link: ['return-to-operator-for-changes'] };
+    case 'ALR_RECALL_FROM_VERIFICATION':
+      return { text: 'Recall ALR application from verifier', link: ['recall-from-verifier'] };
 
     default:
       return null;

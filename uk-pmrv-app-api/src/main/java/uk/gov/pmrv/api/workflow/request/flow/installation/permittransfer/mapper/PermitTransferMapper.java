@@ -1,18 +1,12 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.mapper;
 
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ChangesRequiredDecisionDetails;
@@ -30,6 +24,13 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBRequestPayload;
+
+import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface PermitTransferMapper {

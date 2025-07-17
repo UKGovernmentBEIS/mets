@@ -6,11 +6,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.common.config.RegistryConfig;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.submit.domain.EmpIssuanceUkEtsRequestPayload;
@@ -101,7 +101,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
                 .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocumentAsync(
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(
                 DocumentTemplateType.EMP_ISSUANCE_UKETS_GRANTED, templateParams, fileName))
                 .thenReturn(CompletableFuture.completedFuture(officialDocFileInfoDTO));
 
@@ -115,7 +115,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocumentAsync(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
                 DocumentTemplateType.EMP_ISSUANCE_UKETS_GRANTED, templateParams, fileName);
     }
 
@@ -159,7 +159,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
                 .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(
+        when(documentFileGeneratorService.generateAndSaveFileDocument(
                 DocumentTemplateType.EMP_ISSUANCE_UKETS_DEEMED_WITHDRAWN, templateParams, fileName))
                 .thenReturn(officialDocFileInfoDTO);
 
@@ -171,7 +171,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
                 DocumentTemplateType.EMP_ISSUANCE_UKETS_DEEMED_WITHDRAWN, templateParams, fileName);
 
         assertThat(requestPayload.getOfficialNotice()).isEqualTo(officialDocFileInfoDTO);
@@ -197,7 +197,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
                         .build())
                 .build();
 
-        List<String> ccRecipientsEmails = List.of(registryEmail, decisionNotificationUserEmail);
+        List<String> ccRecipientsEmails = List.of(decisionNotificationUserEmail);
 
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(registryConfig.getEmail()).thenReturn(registryEmail);
@@ -207,7 +207,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
-        verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails);
+        verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails, List.of(registryEmail));
     }
 
     private FileInfoDTO buildOfficialFileInfo() {

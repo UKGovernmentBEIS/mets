@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { combineLatest, first, map, Observable } from 'rxjs';
 
@@ -17,8 +17,11 @@ import { recommendedImprovementsWizardComplete } from '@tasks/aer/verification-s
 import { summaryOfConditionsWizardComplete } from '@tasks/aer/verification-submit/summary-of-conditions/summary-of-conditions.wizard';
 
 @Injectable({ providedIn: 'root' })
-export class SummaryGuard implements CanActivate {
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+export class SummaryGuard {
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     const baseUrl = state.url.slice(0, state.url.lastIndexOf(route.url[route.url.length - 1].path) - 1);

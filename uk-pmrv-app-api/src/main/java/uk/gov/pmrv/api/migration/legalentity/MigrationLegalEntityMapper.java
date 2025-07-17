@@ -5,11 +5,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.util.ObjectUtils;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.account.domain.dto.HoldingCompanyAddressDTO;
 import uk.gov.pmrv.api.account.domain.dto.HoldingCompanyDTO;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface MigrationLegalEntityMapper {

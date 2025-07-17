@@ -19,8 +19,7 @@ import { justificationFormProvider } from './justification-form.provider';
           (formSubmit)="onContinue()"
           [formGroup]="form"
           submitText="Continue"
-          [hideSubmit]="(store.isEditable$ | async) === false"
-        >
+          [hideSubmit]="(store.isEditable$ | async) === false">
           <span class="govuk-caption-l">Surrender your permit</span>
 
           <app-page-heading>Tell us why the activities have stopped</app-page-heading>

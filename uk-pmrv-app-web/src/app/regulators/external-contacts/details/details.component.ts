@@ -2,16 +2,17 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { filter, first, map, Observable, pluck, switchMap, tap } from 'rxjs';
+import { filter, first, map, Observable, switchMap, tap } from 'rxjs';
+
+import { BusinessErrorService } from '@error/business-error/business-error.service';
+import { catchBadRequest, ErrorCodes, isBadRequest } from '@error/business-errors';
+import { BackLinkService } from '@shared/back-link/back-link.service';
+import { requiredFieldsValidator } from '@shared-user/utils/validators';
 
 import { GovukValidators } from 'govuk-components';
 
 import { CaExternalContactDTO, CaExternalContactsService } from 'pmrv-api';
 
-import { BusinessErrorService } from '../../../error/business-error/business-error.service';
-import { catchBadRequest, ErrorCodes, isBadRequest } from '../../../error/business-errors';
-import { BackLinkService } from '../../../shared/back-link/back-link.service';
-import { requiredFieldsValidator } from '../../../shared-user/utils/validators';
 import { saveNotFoundExternalContactError } from '../../errors/business-error';
 
 @Component({
@@ -53,7 +54,7 @@ export class DetailsComponent implements OnInit {
   );
 
   userLoaded$: Observable<CaExternalContactDTO> = this.route.data.pipe(
-    pluck('contact'),
+    map((x) => x?.contact),
     filter((contact) => contact),
     tap((contact) => this.form.patchValue(contact)),
   );

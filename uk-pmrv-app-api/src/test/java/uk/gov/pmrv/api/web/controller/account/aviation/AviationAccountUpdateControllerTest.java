@@ -22,18 +22,18 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.support.GenericWebApplicationContext;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountUpdateDTO;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountUpdateService;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.controller.utils.TestConstrainValidatorFactory;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.time.LocalDate;
 
@@ -62,17 +62,17 @@ class AviationAccountUpdateControllerTest {
     private AviationAccountUpdateService aviationAccountUpdateService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent appSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
 
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver =
-                new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+                new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
@@ -84,7 +84,7 @@ class AviationAccountUpdateControllerTest {
         LocalValidatorFactoryBean validatorFactoryBean = mockValidatorFactoryBean();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .setValidator(validatorFactoryBean)
                 .build();
@@ -110,7 +110,7 @@ class AviationAccountUpdateControllerTest {
 
     @Test
     void updateAviationAccount() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
         AviationAccountUpdateDTO aviationAccountUpdateDTO = AviationAccountUpdateDTO.builder()
                 .name("name")
@@ -120,7 +120,7 @@ class AviationAccountUpdateControllerTest {
                 .commencementDate(LocalDate.now())
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -134,7 +134,7 @@ class AviationAccountUpdateControllerTest {
 
     @Test
     void updateAviationAccount_forbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         Long accountId = 1L;
 
         AviationAccountUpdateDTO aviationAccountUpdateDTO = AviationAccountUpdateDTO.builder()
@@ -145,10 +145,10 @@ class AviationAccountUpdateControllerTest {
                 .commencementDate(LocalDate.now())
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(user, "updateAviationAccount", String.valueOf(accountId));
+                .when(appUserAuthorizationService)
+                .authorize(user, "updateAviationAccount", String.valueOf(accountId), null, null);
 
         mockMvc.perform(
                         MockMvcRequestBuilders

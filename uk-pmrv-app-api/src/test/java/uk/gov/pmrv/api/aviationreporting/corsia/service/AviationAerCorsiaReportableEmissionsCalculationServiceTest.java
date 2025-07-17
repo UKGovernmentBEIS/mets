@@ -15,6 +15,7 @@ import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerC
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 
 import java.math.BigDecimal;
+import java.time.Year;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,7 +33,7 @@ class AviationAerCorsiaReportableEmissionsCalculationServiceTest {
     @Test
     void calculateReportableEmissions() {
         AviationAerCorsia aer = AviationAerCorsia.builder().build();
-        AviationAerCorsiaContainer aerContainer = AviationAerCorsiaContainer.builder().aer(aer).build();
+        AviationAerCorsiaContainer aerContainer = AviationAerCorsiaContainer.builder().aer(aer).reportingYear(Year.of(2023)).build();
 
         BigDecimal allFlightsEmissions = BigDecimal.valueOf(18660);
         BigDecimal offsetFlightsEmissions = BigDecimal.valueOf(12460);
@@ -44,7 +45,7 @@ class AviationAerCorsiaReportableEmissionsCalculationServiceTest {
             .emissionsReductionClaim(emissionsReductionClaim)
             .build();
 
-        when(emissionsCalculationService.calculateTotalSubmittedEmissions(aer)).thenReturn(corsiaTotalEmissions);
+        when(emissionsCalculationService.calculateTotalSubmittedEmissions(aer, Year.of(2023))).thenReturn(corsiaTotalEmissions);
 
         AviationAerCorsiaTotalReportableEmissions expected = AviationAerCorsiaTotalReportableEmissions.builder()
             .reportableEmissions(allFlightsEmissions)
@@ -62,7 +63,7 @@ class AviationAerCorsiaReportableEmissionsCalculationServiceTest {
     @Test
     void calculateReportableEmissions_no_emissions_reduction() {
         AviationAerCorsia aer = AviationAerCorsia.builder().build();
-        AviationAerCorsiaContainer aerContainer = AviationAerCorsiaContainer.builder().aer(aer).build();
+        AviationAerCorsiaContainer aerContainer = AviationAerCorsiaContainer.builder().aer(aer).reportingYear(Year.of(2023)).build();
 
         BigDecimal allFlightsEmissions = BigDecimal.valueOf(18660);
         BigDecimal offsetFlightsEmissions = BigDecimal.valueOf(12460);
@@ -73,7 +74,7 @@ class AviationAerCorsiaReportableEmissionsCalculationServiceTest {
             .emissionsReductionClaim(BigDecimal.ZERO)
             .build();
 
-        when(emissionsCalculationService.calculateTotalSubmittedEmissions(aer)).thenReturn(corsiaTotalEmissions);
+        when(emissionsCalculationService.calculateTotalSubmittedEmissions(aer, Year.of(2023))).thenReturn(corsiaTotalEmissions);
 
         AviationAerCorsiaTotalReportableEmissions expected = AviationAerCorsiaTotalReportableEmissions.builder()
             .reportableEmissions(allFlightsEmissions)
@@ -109,6 +110,7 @@ class AviationAerCorsiaReportableEmissionsCalculationServiceTest {
             .build();
         AviationAerCorsiaContainer aerContainer = AviationAerCorsiaContainer.builder()
             .aer(aer)
+            .reportingYear(Year.of(2023))
             .verificationReport(verificationReport)
             .build();
 
@@ -118,7 +120,7 @@ class AviationAerCorsiaReportableEmissionsCalculationServiceTest {
             .emissionsReductionClaim(emissionsReductionClaim)
             .build();
 
-        when(emissionsCalculationService.calculateTotalSubmittedEmissions(aer)).thenReturn(corsiaTotalEmissions);
+        when(emissionsCalculationService.calculateTotalSubmittedEmissions(aer, Year.of(2023))).thenReturn(corsiaTotalEmissions);
 
         AviationAerCorsiaTotalReportableEmissions expected = AviationAerCorsiaTotalReportableEmissions.builder()
             .reportableEmissions(manuallyInternationalFlightsProvidedEmissions)

@@ -29,6 +29,11 @@ const routes: Routes = [
     loadChildren: () => import('./accounts/aviation-accounts.module').then((m) => m.AviationAccountsModule),
   },
   {
+    path: 'message',
+    data: { breadcrumb: 'Messages' },
+    loadChildren: () => import('../message/message.module').then((m) => m.MessageModule),
+  },
+  {
     path: 'mi-reports',
     data: { breadcrumb: 'MI Reports' },
     loadChildren: () => import('../mi-reports/mi-reports.module').then((m) => m.MiReportsModule),

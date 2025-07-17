@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { PermitApplicationStore } from '../../../../../store/permit-application.
 import { categoryTierSubtaskStatus } from '../../../pfc-status';
 
 @Injectable()
-export class CategorySummaryGuard implements CanActivate {
+export class CategorySummaryGuard {
   constructor(
     private readonly store: PermitApplicationStore<PermitApplicationState>,
     private readonly router: Router,

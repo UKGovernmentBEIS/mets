@@ -17,8 +17,7 @@
         *ngIf="
           ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers as tiers;
           else addStream
-        "
-      >
+        ">
         <ng-container *ngIf="tiers && tiers[index$ | async]; else addStream">
           {{ tiers[index$ | async] | emissionPointCategoryName | async }}
           <button *ngIf="(store.isEditable$ | async) === true" routerLink="delete" govukSecondaryButton type="button">
@@ -36,17 +35,14 @@
         app-task-item
         link="category/summary"
         linkText="Emission point category"
-        [status]="'MEASUREMENT_CO2_Category' | taskStatus: (index$ | async) | async"
-      >
+        [status]="'MEASUREMENT_CO2_Category' | taskStatus: (index$ | async) | async">
         <app-category-summary-overview
           *ngIf="('MEASUREMENT_CO2_Category' | taskStatus: (index$ | async) | async) === 'complete'"
           [emissionPointCategory]="
             ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]
               .emissionPointCategory
           "
-          cssClass="govuk-!-margin-bottom-0"
-        >
-        </app-category-summary-overview>
+          cssClass="govuk-!-margin-bottom-0"></app-category-summary-overview>
       </li>
     </ul>
 
@@ -56,39 +52,46 @@
         app-task-item
         link="emissions/summary"
         linkText="Measured emissions"
-        [status]="'MEASUREMENT_CO2_Measured_Emissions' | taskStatus: (index$ | async) | async"
-      >
+        [status]="'MEASUREMENT_CO2_Measured_Emissions' | taskStatus: (index$ | async) | async">
         <app-measured-emissions-overview
           *ngIf="('MEASUREMENT_CO2_Measured_Emissions' | taskStatus: (index$ | async) | async) === 'complete'"
           [measuredEmissions]="
             ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]
               .measuredEmissions
           "
-          cssClass="govuk-!-margin-bottom-0"
-        >
-        </app-measured-emissions-overview>
+          cssClass="govuk-!-margin-bottom-0"></app-measured-emissions-overview>
       </li>
       <li
         app-task-item
         link="./applied-standard/summary"
         linkText="Applied standard"
-        [status]="'MEASUREMENT_CO2_Applied_Standard' | taskStatus: (index$ | async) | async"
-      >
+        [status]="'MEASUREMENT_CO2_Applied_Standard' | taskStatus: (index$ | async) | async">
         <app-applied-standard-form-summary
           *ngIf="('MEASUREMENT_CO2_Applied_Standard' | taskStatus: (index$ | async) | async) === 'complete'"
           [appliedStandard]="
             ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]
               .appliedStandard
           "
-          cssClass="govuk-!-margin-bottom-0"
-        >
-        </app-applied-standard-form-summary>
+          cssClass="govuk-!-margin-bottom-0"></app-applied-standard-form-summary>
       </li>
+      @if (stateFeatures()?.wastePermitEnabled === true) {
+        <li
+          app-task-item
+          *ngIf="'MEASUREMENT_CO2_Biomass_Fraction' | taskStatus: (index$ | async) | async as status"
+          link="biomass-fraction/summary"
+          linkText="Biomass fraction"
+          [status]="status">
+          <app-measurement-category-tier-subtasks-summary-template
+            *ngIf="status === 'complete'"
+            [isPreview]="true"
+            [statusKey]="'MEASUREMENT_CO2_Biomass_Fraction'"
+            cssClass="govuk-!-margin-bottom-0"></app-measurement-category-tier-subtasks-summary-template>
+        </li>
+      }
     </ul>
   </ng-template>
 
   <app-approach-return-link
     [parentTitle]="'MEASUREMENT_CO2' | monitoringApproachDescription"
-    reviewGroupUrl="measurement"
-  ></app-approach-return-link>
+    reviewGroupUrl="measurement"></app-approach-return-link>
 </app-permit-task>

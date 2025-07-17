@@ -19,5 +19,8 @@ export class ReviewContainerComponent {
   virPayload$ = this.virService.payload$ as Observable<VirApplicationReviewRequestTaskPayload>;
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
 
-  constructor(private readonly virService: VirService, private readonly router: Router) {}
+  constructor(
+    private readonly virService: VirService,
+    private readonly router: Router,
+  ) {}
 }

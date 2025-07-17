@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Resolve, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, UrlTree } from '@angular/router';
 
-import { mapTo, Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 import { RequestActionPayload, RequestActionsService } from 'pmrv-api';
 
@@ -9,7 +9,7 @@ import { updateState } from '../functions/update-state';
 import { InstallationAccountApplicationStore } from '../store/installation-account-application.store';
 
 @Injectable({ providedIn: 'root' })
-export class SummaryActionGuard implements CanActivate, Resolve<RequestActionPayload['payloadType']> {
+export class SummaryActionGuard {
   private type: RequestActionPayload['payloadType'];
 
   constructor(
@@ -21,7 +21,7 @@ export class SummaryActionGuard implements CanActivate, Resolve<RequestActionPay
     return this.requestActionsService.getRequestActionById(Number(route.paramMap.get('actionId'))).pipe(
       tap((res) => updateState(this.store, res)),
       tap((res) => (this.type = res.payload.payloadType)),
-      mapTo(true),
+      map(() => true),
     );
   }
 

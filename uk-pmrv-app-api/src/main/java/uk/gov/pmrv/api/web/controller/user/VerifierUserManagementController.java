@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.user.verifier.domain.VerifierUserDTO;
 import uk.gov.pmrv.api.user.verifier.service.VerifierUserManagementService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 
 /**
  * Controller for managing verifier users.
@@ -51,16 +51,16 @@ public class VerifierUserManagementController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<VerifierUserDTO> getVerifierUserById(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("userId") @Parameter(description = "The verifier user id") String userId) {
-        return new ResponseEntity<>(verifierUserManagementService.getVerifierUserById(pmrvUser, userId),
+        return new ResponseEntity<>(verifierUserManagementService.getVerifierUserById(appUser, userId),
                 HttpStatus.OK);
     }
 
     /**
      * Updates verifier user by user id.
      *
-     * @param pmrvUser {@link PmrvUser}
+     * @param appUser {@link AppUser}
      * @param verifierUserDTO {@link VerifierUserDTO}
      * @return {@link VerifierUserDTO}
      */
@@ -72,17 +72,16 @@ public class VerifierUserManagementController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<VerifierUserDTO> updateVerifierUserById(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("userId") @Parameter(description = "The verifier user id") String userId,
             @RequestBody @Valid @Parameter(description = "The modified verifier user", required = true) VerifierUserDTO verifierUserDTO) {
-        verifierUserManagementService.updateVerifierUserById(pmrvUser, userId, verifierUserDTO);
+        verifierUserManagementService.updateVerifierUserById(appUser, userId, verifierUserDTO);
         return new ResponseEntity<>(verifierUserDTO, HttpStatus.OK);
     }
 
     /**
      * Updates logged in verifier user.
      *
-     * @param pmrvUser {@link PmrvUser}
      * @param verifierUserDTO {@link VerifierUserDTO}
      * @return {@link VerifierUserDTO}
      */
@@ -92,18 +91,17 @@ public class VerifierUserManagementController {
     @ApiResponse(responseCode = "400", description = SwaggerApiInfo.AUTHORITY_USER_NOT_RELATED_TO_VERIFICATION_BODY, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @AuthorizedRole(roleType = RoleType.VERIFIER)
+    @AuthorizedRole(roleType = RoleTypeConstants.VERIFIER)
     public ResponseEntity<VerifierUserDTO> updateCurrentVerifierUser(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
             @RequestBody @Valid @Parameter(description = "The modified verifier user", required = true) VerifierUserDTO verifierUserDTO) {
-        verifierUserManagementService.updateCurrentVerifierUser(pmrvUser, verifierUserDTO);
+        verifierUserManagementService.updateCurrentVerifierUser(verifierUserDTO);
         return new ResponseEntity<>(verifierUserDTO, HttpStatus.OK);
     }
     
     /**
      * Resets the 2FA device for a verifier user by user id.
      *
-     * @param pmrvUser {@link PmrvUser}
+     * @param appUser {@link AppUser}
      * @param userId Keycloak user id
      */
     @PatchMapping(path = "/{userId}/reset-2fa")
@@ -114,9 +112,9 @@ public class VerifierUserManagementController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<Void> resetVerifier2Fa(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("userId") @Parameter(description = "The verifier user id") String userId) {
-        verifierUserManagementService.resetVerifier2Fa(pmrvUser, userId);
+        verifierUserManagementService.resetVerifier2Fa(appUser, userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

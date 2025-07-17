@@ -1,0 +1,24 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true">
+  <app-page-heading [caption]="productBenchmarkType$ | async | subInstallationType">
+    Check your answers
+  </app-page-heading>
+  <app-sub-installations-fallback-summary-template></app-sub-installations-fallback-summary-template>
+  <div class="govuk-button-group">
+    <button
+      appPendingButton
+      govukButton
+      type="button"
+      (click)="confirm()"
+      *ngIf="(store.isEditable$ | async) === true && (hideSubmit$ | async) === false">
+      Confirm and complete
+    </button>
+  </div>
+  <app-list-return-link
+    reviewGroupTitle="Monitoring Methodology Plan"
+    reviewGroupUrl="monitoring-methodology-plan"
+    [innerRoute]="isReview$ | async"
+    [doubleInner]="isReview$ | async"></app-list-return-link>
+</app-permit-task>

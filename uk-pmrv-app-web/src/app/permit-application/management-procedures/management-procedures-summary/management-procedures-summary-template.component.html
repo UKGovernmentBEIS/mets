@@ -60,4 +60,20 @@
       </ng-container>
     </ng-container>
   </ng-container>
+
+  <ng-container *ngIf="(task | IsRiskAssessment: taskKey) && task.riskAssessmentAttachments?.length > 0">
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Risk assessment document</dt>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files
+            [files]="
+              this.store.getDownloadUrlFiles(task?.riskAssessmentAttachments, 'permitAttachments', this.showOriginal)
+            "
+          >
+          </app-summary-download-files>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
 </ng-container>

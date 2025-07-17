@@ -2,14 +2,13 @@ package uk.gov.pmrv.api.user.core.domain.dto.validation;
 
 import com.nulabinc.zxcvbn.Strength;
 import com.nulabinc.zxcvbn.Zxcvbn;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.security.crypto.codec.Hex;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.security.crypto.codec.Hex;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -22,7 +21,7 @@ import java.util.List;
 @Log4j2
 public class PasswordValidator implements ConstraintValidator<Password, String> {
 
-    /** The {@link AppProperties} */
+    /** The {@link PasswordClientService} */
     private final PasswordClientService passwordClientService;
 
     /** The {@link Zxcvbn} */

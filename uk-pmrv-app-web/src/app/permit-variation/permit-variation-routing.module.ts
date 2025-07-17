@@ -1,6 +1,7 @@
 import { inject, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { ItemActionTypePipe } from '@shared/pipes/item-action-type.pipe';
 import { TaskTypeToBreadcrumbPipe } from '@shared/pipes/task-type-to-breadcrumb.pipe';
 import { TaskGuard } from '@tasks/task.guard';
 
@@ -32,51 +33,10 @@ import { SummaryComponent } from './summary/summary.component';
 const routes: PermitRoute[] = [
   {
     path: ':taskId',
-    data: {
-      breadcrumb: {
-        resolveText: ({ type }) => new TaskTypeToBreadcrumbPipe().transform(type),
-      },
-    },
-    resolve: { type: () => inject(PermitVariationStore).getState().requestTaskType },
     children: [
       {
-        path: '',
-        component: SectionsContainerComponent,
-      },
-      {
-        path: 'about',
-        children: [
-          {
-            path: '',
-            data: { pageTitle: 'About variation - Describe the details' },
-            component: AboutVariationComponent,
-            canActivate: [AboutVariationGuard],
-            canDeactivate: [PendingRequestGuard],
-          },
-          {
-            path: 'changes',
-            data: { pageTitle: 'About variation - What type of changes are you making?', backlink: '../' },
-            component: ChangesComponent,
-            canActivate: [ChangesGuard],
-            canDeactivate: [PendingRequestGuard],
-          },
-          {
-            path: 'answers',
-            data: { pageTitle: 'About variation - Answers' },
-            component: AboutVariationAnswersComponent,
-            canActivate: [PermitVariationDetailsAnswersGuard],
-            canDeactivate: [PendingRequestGuard],
-          },
-          {
-            path: 'summary',
-            data: { pageTitle: 'About variation - Summary', breadcrumb: 'About the variation' },
-            canActivate: [PermitVariationDetailsSummaryGuard],
-            component: AboutVariationSummaryComponent,
-          },
-        ],
-      },
-      {
         path: 'review',
+        data: { breadcrumb: 'Variation determination' },
         children: [
           {
             path: '',
@@ -128,21 +88,69 @@ const routes: PermitRoute[] = [
       },
       {
         path: '',
-        loadChildren: () =>
-          import('../permit-application/permit-application.module').then((m) => m.PermitApplicationModule),
-      },
-      {
-        path: 'summary',
-        component: SummaryComponent,
-      },
-      {
-        path: 'cancel',
-        loadChildren: () => import('../cancel-task/cancel-task.module').then((m) => m.CancelTaskModule),
-      },
-      {
-        path: 'change-assignee',
-        loadChildren: () =>
-          import('../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+        data: {
+          breadcrumb: {
+            resolveText: ({ type }) => new TaskTypeToBreadcrumbPipe().transform(type),
+          },
+        },
+        resolve: { type: () => inject(PermitVariationStore).getState().requestTaskType },
+        children: [
+          {
+            path: '',
+            component: SectionsContainerComponent,
+          },
+          {
+            path: 'about',
+            children: [
+              {
+                path: '',
+                data: { pageTitle: 'About variation - Describe the details' },
+                component: AboutVariationComponent,
+                canActivate: [AboutVariationGuard],
+                canDeactivate: [PendingRequestGuard],
+              },
+              {
+                path: 'changes',
+                data: { pageTitle: 'About variation - What type of changes are you making?', backlink: '../' },
+                component: ChangesComponent,
+                canActivate: [ChangesGuard],
+                canDeactivate: [PendingRequestGuard],
+              },
+              {
+                path: 'answers',
+                data: { pageTitle: 'About variation - Answers' },
+                component: AboutVariationAnswersComponent,
+                canActivate: [PermitVariationDetailsAnswersGuard],
+                canDeactivate: [PendingRequestGuard],
+              },
+              {
+                path: 'summary',
+                data: { pageTitle: 'About variation - Summary', breadcrumb: 'About the variation' },
+                canActivate: [PermitVariationDetailsSummaryGuard],
+                component: AboutVariationSummaryComponent,
+              },
+            ],
+          },
+
+          {
+            path: '',
+            loadChildren: () =>
+              import('../permit-application/permit-application.module').then((m) => m.PermitApplicationModule),
+          },
+          {
+            path: 'summary',
+            component: SummaryComponent,
+          },
+          {
+            path: 'cancel',
+            loadChildren: () => import('../cancel-task/cancel-task.module').then((m) => m.CancelTaskModule),
+          },
+          {
+            path: 'change-assignee',
+            loadChildren: () =>
+              import('../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+          },
+        ],
       },
     ],
     canActivate: [PermitVariationTaskGuard],
@@ -151,6 +159,8 @@ const routes: PermitRoute[] = [
 
   {
     path: 'action/:actionId',
+    data: { breadcrumb: { resolveText: ({ type }) => new ItemActionTypePipe().transform(type) } },
+    resolve: { type: () => inject(PermitVariationStore).getState().requestActionType },
     children: [
       {
         path: '',

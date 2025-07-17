@@ -182,6 +182,13 @@ describe('ItemActionHeaderPipe', () => {
         type: 'PERMIT_NOTIFICATION_FOLLOW_UP_APPLICATION_AMENDS_SUBMITTED',
       }),
     ).toEqual('Amended follow up response submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'PERMIT_NOTIFICATION_APPLICATION_CESSATION_COMPLETED',
+      }),
+    ).toEqual('Regulator review completed by John Bolt');
   });
 
   it('should return the permit variation actions', () => {
@@ -222,14 +229,14 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'AER_APPLICATION_SUBMITTED',
       }),
-    ).toEqual('Emissions report submitted by John Bolt');
+    ).toEqual('Emissions report submitted to regulator by John Bolt');
 
     expect(
       pipe.transform({
         ...baseRequestAction,
         type: 'AER_APPLICATION_SENT_TO_VERIFIER',
       }),
-    ).toEqual('Emissions report submitted by John Bolt');
+    ).toEqual('Emissions report submitted to verifier by John Bolt');
 
     expect(
       pipe.transform({
@@ -250,7 +257,7 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'AER_APPLICATION_VERIFICATION_SUBMITTED',
       }),
-    ).toEqual('Verification statement submitted by John Bolt');
+    ).toEqual('Verification statement submitted to operator by John Bolt');
 
     expect(
       pipe.transform({
@@ -258,6 +265,20 @@ describe('ItemActionHeaderPipe', () => {
         type: 'AER_APPLICATION_AMENDS_SENT_TO_VERIFIER',
       }),
     ).toEqual('Amended emissions report submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AER_APPLICATION_REVIEW_SKIPPED',
+      }),
+    ).toEqual('Completed without review by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AER_VERIFICATION_RETURNED_TO_OPERATOR',
+      }),
+    ).toEqual('Verifier returned to operator for changes by John Bolt');
 
     expect(
       pipe.transform({
@@ -784,7 +805,7 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED',
       }),
-    ).toEqual('Initial penalty sent to operator by John Bolt');
+    ).toEqual('Initial penalty notice sent to operator by John Bolt');
 
     expect(
       pipe.transform({
@@ -860,7 +881,7 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'AVIATION_AER_UKETS_APPLICATION_SENT_TO_VERIFIER',
       }),
-    ).toEqual('Submitted to verifier by John Bolt');
+    ).toEqual('Emissions report submitted to verifier by John Bolt');
   });
 
   it('should return Submitted to verifier', () => {
@@ -869,16 +890,16 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'AVIATION_AER_CORSIA_APPLICATION_SENT_TO_VERIFIER',
       }),
-    ).toEqual('Submitted to verifier by John Bolt');
+    ).toEqual('Emissions report submitted to verifier by John Bolt');
   });
 
-  it('should return Verification statement submitted', () => {
+  it('should return Verification statement submitted to operator by', () => {
     expect(
       pipe.transform({
         ...baseRequestAction,
         type: 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED',
       }),
-    ).toEqual('Verification statement submitted by John Bolt');
+    ).toEqual('Verification statement submitted to operator by John Bolt');
   });
 
   it('should return amends Submitted to verifier', () => {
@@ -890,13 +911,22 @@ describe('ItemActionHeaderPipe', () => {
     ).toEqual('Changes submitted by John Bolt');
   });
 
-  it('should return verification submitted', () => {
+  it('should return amends corsia Submitted to verifier', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER',
+      }),
+    ).toEqual('Changes submitted by John Bolt');
+  });
+
+  it('should return verification submitted to operator by', () => {
     expect(
       pipe.transform({
         ...baseRequestAction,
         type: 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED',
       }),
-    ).toEqual('Verification statement submitted by John Bolt');
+    ).toEqual('Verification statement submitted to operator by John Bolt');
   });
 
   it('should return emissions report reviewed', () => {
@@ -935,13 +965,22 @@ describe('ItemActionHeaderPipe', () => {
     ).toEqual('Returned to operator for changes by John Bolt');
   });
 
+  it('should return aer corsia returned for amends', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_APPLICATION_RETURNED_FOR_AMENDS',
+      }),
+    ).toEqual('Returned to operator for changes by John Bolt');
+  });
+
   it('should return Submitted to regulator', () => {
     expect(
       pipe.transform({
         ...baseRequestAction,
         type: 'AVIATION_AER_UKETS_APPLICATION_SUBMITTED',
       }),
-    ).toEqual('Submitted to regulator by John Bolt');
+    ).toEqual('Emissions report submitted to regulator by John Bolt');
   });
 
   it('should return corsia Submitted to regulator', () => {
@@ -950,7 +989,7 @@ describe('ItemActionHeaderPipe', () => {
         ...baseRequestAction,
         type: 'AVIATION_AER_CORSIA_APPLICATION_SUBMITTED',
       }),
-    ).toEqual('Submitted to regulator by John Bolt');
+    ).toEqual('Emissions report submitted to regulator by John Bolt');
   });
 
   it('should return amends Submitted to regulator', () => {
@@ -958,6 +997,15 @@ describe('ItemActionHeaderPipe', () => {
       pipe.transform({
         ...baseRequestAction,
         type: 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED',
+      }),
+    ).toEqual('Changes submitted by John Bolt');
+  });
+
+  it('should return amends corsia Submitted to regulator', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED',
       }),
     ).toEqual('Changes submitted by John Bolt');
   });
@@ -1049,5 +1097,343 @@ describe('ItemActionHeaderPipe', () => {
         type: 'RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_COMPLETED',
       }),
     ).toEqual('Returned allowances submitted by John Bolt');
+  });
+
+  it('should return installation inspection', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEWER_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEWER_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEWER_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEWER_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMITTED',
+      }),
+    ).toEqual('On-site inspection submitted to Operator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPONDED',
+      }),
+    ).toEqual('On-site inspection submitted to Regulator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'INSTALLATION_AUDIT_APPLICATION_SUBMITTED',
+      }),
+    ).toEqual(' Audit report submitted to Operator by John Bolt');
+  });
+
+  it('should return aer corsia annual offsetting', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMITTED',
+      }),
+    ).toEqual('Annual offsetting requirements submitted to Operator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_CANCELLED',
+      }),
+    ).toEqual('Annual offsetting requirements cancelled by John Bolt');
+  });
+
+  it('should return aer corsia 3 year period offsetting', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_CANCELLED',
+      }),
+    ).toEqual('3-year offsetting requirements cancelled by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED',
+      }),
+    ).toEqual('3-year offsetting requirements submitted to Operator by John Bolt');
+  });
+
+  it('should return aviation aer verifier return to operator for changes', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_CORSIA_VERIFICATION_RETURNED_TO_OPERATOR',
+      }),
+    ).toEqual('Verifier returned report to operator for changes by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_AER_UKETS_VERIFICATION_RETURNED_TO_OPERATOR',
+      }),
+    ).toEqual('Verifier returned report to operator for changes by John Bolt');
+  });
+
+  it('should return baseline data report', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDR_APPLICATION_SENT_TO_VERIFIER',
+      }),
+    ).toEqual('Baseline data report submitted to verifier by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDR_APPLICATION_AMENDS_SENT_TO_VERIFIER',
+      }),
+    ).toEqual('Baseline data report submitted to verifier by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDR_APPLICATION_SENT_TO_REGULATOR',
+      }),
+    ).toEqual('Baseline data report submitted to regulator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDR_RECALLED_FROM_VERIFICATION',
+      }),
+    ).toEqual('Baseline data report recalled by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDR_APPLICATION_VERIFICATION_SUBMITTED',
+      }),
+    ).toEqual('Baseline data report verification statement submitted to operator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDR_VERIFICATION_RETURNED_TO_OPERATOR',
+      }),
+    ).toEqual('Baseline data report returned to operator for changes by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDR_APPLICATION_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDR_APPLICATION_PEER_REVIEW_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDR_APPLICATION_PEER_REVIEW_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'BDR_APPLICATION_RE_INITIATED',
+      }),
+    ).toEqual('Baseline data report reopened by John Bolt');
+  });
+
+  it('should return permanent cessation', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'PERMANENT_CESSATION_SUBMITTED',
+      }),
+    ).toEqual('Permanent cessation started by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'PERMANENT_CESSATION_APPLICATION_CANCELLED',
+      }),
+    ).toEqual('Permanent cessation cancelled by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'PERMANENT_CESSATION_APPLICATION_SUBMITTED',
+      }),
+    ).toEqual('Permanent cessation notice sent to operator by John Bolt');
+  });
+
+  it('should return doe', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_DOE_CORSIA_SUBMIT_CANCELLED',
+      }),
+    ).toEqual('Estimation of emissions cancelled by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_DOE_CORSIA_SUBMITTED',
+      }),
+    ).toEqual('Aviation emissions updated by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_DOE_CORSIA_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_DOE_CORSIA_PEER_REVIEWER_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'AVIATION_DOE_CORSIA_PEER_REVIEWER_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
+  });
+
+  it('should return activity level report', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_SENT_TO_VERIFIER',
+      }),
+    ).toEqual('Activity level report submitted to verifier by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_VERIFICATION_SUBMITTED',
+      }),
+    ).toEqual('Activity level report submitted to operator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_VERIFICATION_RETURNED_TO_OPERATOR',
+      }),
+    ).toEqual('Activity level report returned to operator for changes by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_RECALLED_FROM_VERIFICATION',
+      }),
+    ).toEqual('Activity level report recalled by John Bolt');
   });
 });

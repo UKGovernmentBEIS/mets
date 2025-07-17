@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
 
 @Data
 @NoArgsConstructor

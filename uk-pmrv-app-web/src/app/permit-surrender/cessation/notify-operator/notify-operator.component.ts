@@ -1,27 +1,29 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { first, map, pluck, Subject, switchMap, tap } from 'rxjs';
+import { first, map, Subject, switchMap, tap } from 'rxjs';
+
+import { PendingRequestService } from '@core/guards/pending-request.service';
 
 import { RequestItemsService } from 'pmrv-api';
 
-import { PendingRequestService } from '../../../core/guards/pending-request.service';
 import { PermitSurrenderStore } from '../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-permit-surrender-cessation-notify-operator',
-  template: `<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <app-notify-operator
-        [taskId]="taskId$ | async"
-        [accountId]="accountId$ | async"
-        requestTaskActionType="PERMIT_SURRENDER_CESSATION_NOTIFY_OPERATOR_FOR_DECISION"
-        [pendingRfi]="pendingRfi$ | async"
-        [pendingRde]="pendingRde$ | async"
-        [confirmationMessage]="'Cessation complete'"
-      ></app-notify-operator>
+  template: `
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <app-notify-operator
+          [taskId]="taskId$ | async"
+          [accountId]="accountId$ | async"
+          requestTaskActionType="PERMIT_SURRENDER_CESSATION_NOTIFY_OPERATOR_FOR_DECISION"
+          [pendingRfi]="pendingRfi$ | async"
+          [pendingRde]="pendingRde$ | async"
+          [confirmationMessage]="'Cessation complete'"></app-notify-operator>
+      </div>
     </div>
-  </div> `,
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotifyOperatorComponent implements OnInit {
@@ -33,7 +35,7 @@ export class NotifyOperatorComponent implements OnInit {
   ) {}
 
   readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
-  readonly accountId$ = this.store.pipe(pluck('accountId'));
+  readonly accountId$ = this.store.pipe(map((state) => state?.accountId));
 
   pendingRfi$: Subject<boolean> = new Subject<boolean>();
   pendingRde$: Subject<boolean> = new Subject<boolean>();
@@ -42,7 +44,7 @@ export class NotifyOperatorComponent implements OnInit {
     this.store
       .pipe(
         first(),
-        pluck('requestId'),
+        map((state) => state?.requestId),
         switchMap((requestId) => this.requestItemsService.getItemsByRequest(requestId)),
         first(),
         tap((res) =>

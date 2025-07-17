@@ -2,9 +2,9 @@ package uk.gov.pmrv.api.user.operator.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.dto.AuthorityInfoDTO;
+import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
+import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserCredentialsDTO;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
-import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserEnableDTO;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserRegistrationDTO;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserRegistrationWithCredentialsDTO;
 
@@ -14,17 +14,25 @@ public class OperatorUserActivationService {
 
     private final OperatorUserAuthService operatorUserAuthService;
     private final OperatorUserTokenVerificationService operatorUserTokenVerificationService;
+    private final OperatorUserRegisterValidationService operatorUserRegisterValidationService;
     private final OperatorUserNotificationGateway operatorUserNotificationGateway;
+    private final OperatorUserRegisteredAcceptInvitationService operatorUserRegisteredAcceptInvitationService;
 
-    public OperatorUserDTO activateAndEnableOperatorInvitedUser(
+    public OperatorUserDTO acceptAuthorityAndEnableInvitedUserWithCredentials(
         OperatorUserRegistrationWithCredentialsDTO operatorUserRegistrationWithCredentialsDTO) {
         // Get user's authority
-        AuthorityInfoDTO authority = operatorUserTokenVerificationService
+        final AuthorityInfoDTO authorityInfo = operatorUserTokenVerificationService
             .verifyInvitationTokenForPendingAuthority(operatorUserRegistrationWithCredentialsDTO.getEmailToken());
+        
+        // validate
+		operatorUserRegisterValidationService.validateRegisterForAccount(authorityInfo.getUserId(), authorityInfo.getAccountId());
 
         // Activate and update User
-        OperatorUserDTO operatorUserDTO = operatorUserAuthService
-            .updatePendingOperatorUserToRegisteredAndEnabled(operatorUserRegistrationWithCredentialsDTO, authority.getUserId());
+        final OperatorUserDTO operatorUserDTO = operatorUserAuthService
+            .enableAndUpdateUserAndSetPassword(operatorUserRegistrationWithCredentialsDTO, authorityInfo.getUserId());
+        
+        // Accept authority and notify
+        operatorUserRegisteredAcceptInvitationService.acceptAuthorityAndNotify(authorityInfo.getId());
 
         // Send notification email
         operatorUserNotificationGateway.notifyRegisteredUser(operatorUserDTO);
@@ -32,20 +40,38 @@ public class OperatorUserActivationService {
         return operatorUserDTO;
     }
 
-    public OperatorUserDTO activateOperatorInvitedUser(OperatorUserRegistrationDTO operatorUserRegistrationDTO) {
-        AuthorityInfoDTO authority = operatorUserTokenVerificationService
+    public OperatorUserDTO acceptAuthorityAndEnableInvitedUser(OperatorUserRegistrationDTO operatorUserRegistrationDTO) {
+    	// Get user's authority
+    	final AuthorityInfoDTO authorityInfo = operatorUserTokenVerificationService
             .verifyInvitationTokenForPendingAuthority(operatorUserRegistrationDTO.getEmailToken());
+    	
+    	// validate
+    	operatorUserRegisterValidationService.validateRegisterForAccount(authorityInfo.getUserId(), authorityInfo.getAccountId());
 
-        return operatorUserAuthService
-            .updatePendingOperatorUserToRegistered(operatorUserRegistrationDTO, authority.getUserId());
+        // Enable and update User
+    	final OperatorUserDTO operatorUserDTO = operatorUserAuthService
+            .enableAndUpdateUser(operatorUserRegistrationDTO, authorityInfo.getUserId());
+        
+        // Accept authority and notify
+    	operatorUserRegisteredAcceptInvitationService.acceptAuthorityAndNotify(authorityInfo.getId());
+        
+        return operatorUserDTO;
     }
 
-    public void enableOperatorInvitedUser(InvitedUserEnableDTO invitedUserEnableDTO) {
-        AuthorityInfoDTO authority = operatorUserTokenVerificationService
-            .verifyInvitationTokenForPendingAuthority(invitedUserEnableDTO.getInvitationToken());
+    public void acceptAuthorityAndSetCredentialsToUser(InvitedUserCredentialsDTO invitedUserCredentialsDTO) {
+    	// Get user's authority
+    	final AuthorityInfoDTO authorityInfo = operatorUserTokenVerificationService
+            .verifyInvitationTokenForPendingAuthority(invitedUserCredentialsDTO.getInvitationToken());
+    	
+    	// validate
+    	operatorUserRegisterValidationService.validateRegisterForAccount(authorityInfo.getUserId(), authorityInfo.getAccountId());
 
-        OperatorUserDTO operatorUserDTO = operatorUserAuthService
-            .updateRegisteredOperatorUserToEnabled(authority.getUserId(), invitedUserEnableDTO.getPassword());
+        // set password
+    	final OperatorUserDTO operatorUserDTO = operatorUserAuthService
+            .setUserPassword(authorityInfo.getUserId(), invitedUserCredentialsDTO.getPassword());
+        
+        // Accept authority and notify
+    	operatorUserRegisteredAcceptInvitationService.acceptAuthorityAndNotify(authorityInfo.getId());
 
         operatorUserNotificationGateway.notifyRegisteredUser(operatorUserDTO);
     }

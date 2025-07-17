@@ -12,8 +12,7 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Compliance with ETS rules" [breadcrumb]="true">
       <app-compliance-ets-group
-        [etsComplianceRules]="(payload$ | async).verificationReport.etsComplianceRules"
-      ></app-compliance-ets-group>
+        [etsComplianceRules]="(payload$ | async).verificationReport.etsComplianceRules"></app-compliance-ets-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -25,5 +24,8 @@ export class ComplianceEtsComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

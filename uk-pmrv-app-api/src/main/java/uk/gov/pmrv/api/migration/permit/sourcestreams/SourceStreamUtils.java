@@ -17,6 +17,7 @@ import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescriptio
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.BLENDED_FUEL_GAS;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.CARBON_MONOXIDE;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.CHARCOAL;
+import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.CLINICAL_WASTE;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.COAL;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.COAL_TAR;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.COKE;
@@ -24,6 +25,7 @@ import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescriptio
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.COKE_OVEN_GAS;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.COKING_COAL;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.COLLIERY_METHANE;
+import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.COMMERCIAL_INDUSTRIAL_WASTE;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.CRUDE_OIL;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.ETHANE;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.FUEL_GAS;
@@ -32,6 +34,7 @@ import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescriptio
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.GAS_DIESEL_OIL;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.GAS_OIL;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.GAS_WORKS;
+import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.HAZARDOUS_WASTE;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.HIGH_PRESSURE_FLARE_GAS;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.IMPORT_FUEL_GAS;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.INDUSTRIAL_WASTES;
@@ -77,7 +80,9 @@ import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescriptio
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SLUDGE_GAS;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SOUR_GAS;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SOUR_GAS_FLARE;
+import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SDF;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SSF;
+import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SRF;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.SUB_BITUMINOUS_COAL;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.WASTE_OILS;
 import static uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamDescription.WASTE_SOLVENTS;
@@ -191,6 +196,7 @@ public class SourceStreamUtils {
         etsDescriptionMap.put("Blended Fuel Gas", BLENDED_FUEL_GAS);
         etsDescriptionMap.put("Carbon Monoxide", CARBON_MONOXIDE);
         etsDescriptionMap.put("Charcoal", CHARCOAL);
+        etsDescriptionMap.put("Clinical Waste", CLINICAL_WASTE);
         etsDescriptionMap.put("Coal", COAL);
         etsDescriptionMap.put("Coal Tar", COAL_TAR);
         etsDescriptionMap.put("Coke", COKE);
@@ -198,6 +204,7 @@ public class SourceStreamUtils {
         etsDescriptionMap.put("Coke Oven Gas", COKE_OVEN_GAS);
         etsDescriptionMap.put("Coking Coal", COKING_COAL);
         etsDescriptionMap.put("Colliery Methane", COLLIERY_METHANE);
+        etsDescriptionMap.put("Commercial and Industrial Waste", COMMERCIAL_INDUSTRIAL_WASTE);
         etsDescriptionMap.put("Crude Oil", CRUDE_OIL);
         etsDescriptionMap.put("Ethane", ETHANE);
         etsDescriptionMap.put("Fuel Gas", FUEL_GAS);
@@ -206,6 +213,7 @@ public class SourceStreamUtils {
         etsDescriptionMap.put("Gas/Diesel Oil", GAS_DIESEL_OIL);
         etsDescriptionMap.put("Gas/Oil", GAS_OIL);
         etsDescriptionMap.put("Gas Works", GAS_WORKS);
+        etsDescriptionMap.put("Hazardous Waste", HAZARDOUS_WASTE);
         etsDescriptionMap.put("High Pressure Flare Gas", HIGH_PRESSURE_FLARE_GAS);
         etsDescriptionMap.put("Import Fuel Gas", IMPORT_FUEL_GAS);
         etsDescriptionMap.put("Industrial Wastes", INDUSTRIAL_WASTES);
@@ -251,7 +259,9 @@ public class SourceStreamUtils {
         etsDescriptionMap.put("Sludge Gas", SLUDGE_GAS);
         etsDescriptionMap.put("Sour Gas", SOUR_GAS);
         etsDescriptionMap.put("Sour Gas Flare", SOUR_GAS_FLARE);
+        etsDescriptionMap.put("SDF", SDF);
         etsDescriptionMap.put("SSF", SSF);
+        etsDescriptionMap.put("SRF", SRF);
         etsDescriptionMap.put("Sub-Bituminous Coal", SUB_BITUMINOUS_COAL);
         etsDescriptionMap.put("Waste Oils", WASTE_OILS);
         etsDescriptionMap.put("Waste Solvents", WASTE_SOLVENTS);

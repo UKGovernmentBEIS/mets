@@ -14,7 +14,7 @@ import {
 @Component({
   selector: 'app-flight-data-table',
   templateUrl: './flight-data-table.component.html',
-  styleUrls: ['./flight-data-table.component.scss'],
+  styleUrl: './flight-data-table.component.scss',
   standalone: true,
   imports: [GovukComponentsModule, NgSwitch, NgSwitchCase, NgSwitchDefault, CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,15 +38,14 @@ export class FlightDataTableComponent implements OnInit, OnChanges {
 
   getSummaryDescription = getSummaryDescription;
 
-  ngOnInit(): void {
-    if (this.customColumns) {
-      this.columns = this.customColumns;
-    }
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.customColumns && changes.customColumns.currentValue) {
       this.columns = changes.customColumns.currentValue;
+    }
+  }
+  ngOnInit(): void {
+    if (this.customColumns) {
+      this.columns = this.customColumns;
     }
   }
 }

@@ -12,10 +12,17 @@
   *ngIf="withRegistryId"
   formControlName="registryId"
   govuk-text-input
+  inputType="number"
   label="UK ETS registry ID (optional)"
   widthClass="govuk-!-width-two-thirds"
 ></div>
-<div formControlName="sopId" govuk-text-input label="SOP ID (optional)" widthClass="govuk-!-width-two-thirds"></div>
+<div
+  formControlName="sopId"
+  govuk-text-input
+  inputType="number"
+  label="SOP ID (optional)"
+  widthClass="govuk-!-width-two-thirds"
+></div>
 <div
   formControlName="crcoCode"
   govuk-text-input

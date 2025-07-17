@@ -1,69 +1,33 @@
 package uk.gov.pmrv.api.notification.mail.service;
 
-import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.notification.mail.config.property.NotificationProperties;
-import uk.gov.pmrv.api.notification.mail.domain.Email;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
+
+import lombok.extern.log4j.Log4j2;
+import uk.gov.netz.api.notificationapi.mail.config.property.NotificationProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.SendEmailService;
 import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
 import uk.gov.pmrv.api.notification.template.service.NotificationTemplateProcessService;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
-/**
- * Service implementation for generating and sending email notifications
- */
 @Log4j2
 @Service
 @ConditionalOnProperty(name = "env.isProd", havingValue = "true")
-public class NotificationEmailServiceImpl implements NotificationEmailService {
+public class NotificationEmailServiceImpl extends NotificationEmailBaseServiceImpl<EmailNotificationTemplateData> {
 
-    private final SendEmailService sendEmailService;
-    private final NotificationTemplateProcessService notificationTemplateProcessService;
-    private final NotificationProperties notificationProperties;
+	public NotificationEmailServiceImpl(SendEmailService sendEmailService,
+			NotificationTemplateProcessService notificationTemplateProcessService,
+			NotificationProperties notificationProperties) {
+		super(sendEmailService, notificationTemplateProcessService, notificationProperties);
+	}
 
-    public NotificationEmailServiceImpl(SendEmailService sendEmailService,
-                                        NotificationTemplateProcessService notificationTemplateProcessService,
-                                        NotificationProperties notificationProperties) {
-        this.sendEmailService = sendEmailService;
-        this.notificationTemplateProcessService = notificationTemplateProcessService;
-        this.notificationProperties = notificationProperties;
-    }
-    
-    @Override
-    public void notifyRecipient(EmailData emailData, String recipientEmail) {
-        notifyRecipients(emailData, List.of(recipientEmail), Collections.emptyList());
-    }
-    
-    @Override
-    public void notifyRecipients(EmailData emailData, List<String> recipientsEmails, List<String> ccRecipientsEmails) {
-        EmailNotificationTemplateData notificationTemplateData = emailData.getNotificationTemplateData();
-        final NotificationContent emailNotificationContent =
-            notificationTemplateProcessService.processEmailNotificationTemplate(
-                notificationTemplateData.getTemplateName(),
-                notificationTemplateData.getCompetentAuthority(),
-                notificationTemplateData.getAccountType(),
-                notificationTemplateData.getTemplateParams());
-
-        Email email = Email.builder()
-            .sendFrom(notificationProperties.getEmail().getAutoSender())
-            .sendTo(recipientsEmails)
-            .sendCc(ccRecipientsEmails)
-            .subject(emailNotificationContent.getSubject())
-            .text(createEmailText(emailNotificationContent))
-            .attachments(emailData.getAttachments())
-            .build();
-        
-        //send the email
-        CompletableFuture.runAsync(() -> sendEmailService.sendMail(email));
-    }
-    
-    protected String createEmailText(NotificationContent notificationContent) {
-        return notificationContent.getText();
-    }
+	@Override
+	protected NotificationContent buildNotificationContent(EmailNotificationTemplateData notificationTemplateData) {
+		return notificationTemplateProcessService.processEmailNotificationTemplate(
+				notificationTemplateData.getTemplateName(), 
+				notificationTemplateData.getCompetentAuthority(), 
+				null,
+				notificationTemplateData.getTemplateParams());
+	}
 
 }

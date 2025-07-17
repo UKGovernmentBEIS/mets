@@ -12,8 +12,18 @@ import { AirImprovementItemResolver } from '@tasks/air/shared/resolvers/air-impr
 const routes: Routes = [
   {
     path: '',
-    data: { pageTitle: `Respond to regulator's comments` },
-    component: CommentsResponseContainerComponent,
+    children: [
+      {
+        path: '',
+        data: { pageTitle: `Respond to regulator's comments` },
+        component: CommentsResponseContainerComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+    ],
   },
   {
     path: ':id',

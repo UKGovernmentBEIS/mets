@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { isAfter, isSameDay, startOfDay } from 'date-fns';
 
 import {
   CalculationOfCO2ReportingEmissions,
@@ -76,8 +76,8 @@ export function isChargeOperatorStepCompleted(dre: Dre) {
   return dre !== undefined && dre.fee !== undefined && dre.fee.chargeOperator !== undefined;
 }
 
-export function isFeeStepCompleted(dre: Dre) {
-  const todayMin = moment(new Date()).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+export function isFeeStepCompleted(dre) {
+  const todayMin = startOfDay(new Date());
 
   return (
     dre !== undefined &&
@@ -85,7 +85,7 @@ export function isFeeStepCompleted(dre: Dre) {
     (dre.fee.chargeOperator === false ||
       (dre.fee.chargeOperator === true &&
         !!dre.fee?.feeDetails?.dueDate &&
-        moment(dre.fee?.feeDetails?.dueDate).isSameOrAfter(todayMin) &&
+        (isAfter(dre.fee?.feeDetails?.dueDate, todayMin) || isSameDay(dre.fee?.feeDetails?.dueDate, todayMin)) &&
         !!dre.fee?.feeDetails?.hourlyRate &&
         !!dre.fee?.feeDetails?.totalBillableHours))
   );

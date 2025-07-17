@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, map, pluck, switchMap, tap } from 'rxjs';
+import { combineLatest, map, switchMap, tap } from 'rxjs';
 
 import {
   MeasurementOfCO2EmissionPointCategoryAppliedTier,
@@ -17,13 +17,13 @@ import { measurementDevicesFormProvider } from '../measurement-devices-form.prov
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.scss'],
+  styleUrl: './summary.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [measurementDevicesFormProvider],
 })
 export class SummaryComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));
-  taskKey$ = this.route.data.pipe(pluck('taskKey'));
+  taskKey$ = this.route.data.pipe(map((x) => x?.taskKey));
   task$ = this.route.data.pipe(
     switchMap((data) =>
       this.store.findTask<

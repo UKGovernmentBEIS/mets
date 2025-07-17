@@ -29,18 +29,15 @@ interface ViewModel {
       *ngIf="vm$ | async as vm"
       [header]="vm.verificationDataItem.reference | verificationReferenceTitle"
       [requestActionType]="vm.requestActionType"
-      [breadcrumb]="true"
-    >
-      <app-verification-recommendation-item [verificationDataItem]="vm.verificationDataItem">
-      </app-verification-recommendation-item>
+      [breadcrumb]="true">
+      <app-verification-recommendation-item
+        [verificationDataItem]="vm.verificationDataItem"></app-verification-recommendation-item>
       <app-operator-response-item
         [reference]="vm.verificationDataItem.reference"
         [operatorImprovementResponse]="vm.operatorImprovementResponse"
         [attachedFiles]="vm.documentFiles"
         [isAviation]="true"
-        [isEditable]="false"
-      >
-      </app-operator-response-item>
+        [isEditable]="false"></app-operator-response-item>
     </app-request-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,7 +45,10 @@ interface ViewModel {
 export class ReferenceItemComponent {
   verificationDataItem = this.route.snapshot.data.verificationDataItem as VerificationDataItem;
 
-  constructor(public store: RequestActionStore, private readonly route: ActivatedRoute) {}
+  constructor(
+    public store: RequestActionStore,
+    private readonly route: ActivatedRoute,
+  ) {}
 
   vm$: Observable<ViewModel> = combineLatest([
     this.store.pipe(virQuery.selectRequestActionPayload),

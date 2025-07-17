@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.service.ApprovedAviationAccountQueryService;
-import uk.gov.pmrv.api.common.constants.StateConstants;
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.constants.StateConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
 
-import static uk.gov.pmrv.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor

@@ -13,8 +13,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
   template: `
     <app-aer-task-review
       heading="Changes not reported to the regulator by the end of the reporting period?"
-      returnToLink="../.."
-    >
+      returnToLink="../..">
       <p class="govuk-body">
         You should list anything that has been agreed in letters, emails or phone calls but not written into the plan.
         This could include things like new technical units, new processes or notification of closures.
@@ -22,8 +21,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
       <app-summary-of-conditions-list
         [isEditable]="isEditable$ | async"
         [list]="list$ | async"
-        baseChangeLink="../identified-changes-list"
-      >
+        baseChangeLink="../identified-changes-list">
         <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
           <button (click)="onSubmit()" govukButton type="button">Continue</button>
         </div>

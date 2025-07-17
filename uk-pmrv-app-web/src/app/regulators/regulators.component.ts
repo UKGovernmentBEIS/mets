@@ -2,18 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import {
-  BehaviorSubject,
-  map,
-  merge,
-  Observable,
-  pluck,
-  shareReplay,
-  Subject,
-  switchMapTo,
-  takeUntil,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, map, merge, Observable, shareReplay, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore, selectUserId } from '@core/store/auth';
@@ -71,10 +60,10 @@ export class RegulatorsComponent implements OnInit {
   ngOnInit(): void {
     const regulatorsManagement$ = merge(
       this.route.data.pipe(map((data: { regulators: RegulatorUsersAuthoritiesInfoDTO }) => data.regulators)),
-      this.refresh$.pipe(switchMapTo(this.regulatorAuthoritiesService.getCaRegulators())),
+      this.refresh$.pipe(switchMap(() => this.regulatorAuthoritiesService.getCaRegulators())),
     ).pipe(takeUntil(this.destroy$), shareReplay({ bufferSize: 1, refCount: false }));
-    this.regulators$ = regulatorsManagement$.pipe(pluck('caUsers'));
-    this.isEditable$ = regulatorsManagement$.pipe(pluck('editable'));
+    this.regulators$ = regulatorsManagement$.pipe(map((authoritiesInfoDTO) => authoritiesInfoDTO?.caUsers));
+    this.isEditable$ = regulatorsManagement$.pipe(map((authoritiesInfoDTO) => authoritiesInfoDTO?.editable));
   }
 
   saveRegulators(): void {

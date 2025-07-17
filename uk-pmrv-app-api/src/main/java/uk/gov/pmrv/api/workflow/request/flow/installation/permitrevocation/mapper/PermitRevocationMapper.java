@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.mapp
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
 

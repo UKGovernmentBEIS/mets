@@ -18,8 +18,7 @@ import { InstallationAccountApplicationStore } from '../store/installation-accou
       [formGroup]="form"
       (formSubmit)="onSubmit()"
       heading="Where is the installation located?"
-      caption="Installation details"
-    >
+      caption="Installation details">
       <div govuk-radio formControlName="location" hint="Select one option">
         <ng-container govukLegend>
           <span class="govuk-visually-hidden">
@@ -29,8 +28,7 @@ import { InstallationAccountApplicationStore } from '../store/installation-accou
         <govuk-radio-option
           *ngFor="let option of options | keyvalue: originalOrder"
           [label]="option.value"
-          [value]="option.key"
-        ></govuk-radio-option>
+          [value]="option.key"></govuk-radio-option>
       </div>
     </app-wizard-step>
     <a govukLink routerLink="../..">Return to: Request to open an installation account</a>

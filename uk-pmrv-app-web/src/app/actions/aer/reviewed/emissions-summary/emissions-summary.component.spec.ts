@@ -78,7 +78,7 @@ describe('EmissionsSummaryComponent', () => {
       ['Measurement of CO2', '0  t', '0  t'],
       ['Measurement of transferred CO2', '-37.026  t', '0  t'],
       ['Fallback', '9.9  t  (includes 8.8 t non-sustainable biomass)', '3.3  t'],
-      ['Total', '-9.126  tCO2e', '3.3  tCO2e'],
+      ['Total', '-9  tCO2e', '3  tCO2e'],
       ['Inherent CO2', '-4  t', '0  t'],
     ]);
   });

@@ -19,8 +19,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
@@ -43,14 +43,14 @@ class RequestTaskRepositoryIT extends AbstractContainerBaseTest {
     void findByRequestTypeAndAssignee() {
     	final String assignee = "assignee";
 		final String anotherAsignee = "another_assignee";
-    	Request requestInstallationAccountOpening = createRequest(RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING);
+    	Request requestInstallationAccountOpening = createRequest(CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING);
     	RequestTask requestTaskInstallationAccountOpeningAssignee = createRequestTask(requestInstallationAccountOpening, assignee, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW);
     	
-    	Request requestInstallationAccountOpeningAnotherAssignee = createRequest(RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING);
+    	Request requestInstallationAccountOpeningAnotherAssignee = createRequest(CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING);
         // requestTaskInstallationAccountOpeningAnotherAssignee
     	createRequestTask(requestInstallationAccountOpeningAnotherAssignee, anotherAsignee, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW);
     	
-    	Request requestPermitIssuance = createRequest(RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, RequestType.PERMIT_ISSUANCE);
+    	Request requestPermitIssuance = createRequest(CompetentAuthorityEnum.ENGLAND, RequestType.PERMIT_ISSUANCE);
     	// requestTaskPermitIssuanceAssignee
     	createRequestTask(requestPermitIssuance, assignee, RequestTaskType.PERMIT_ISSUANCE_APPLICATION_SUBMIT);
     	
@@ -70,16 +70,16 @@ class RequestTaskRepositoryIT extends AbstractContainerBaseTest {
 		final RequestType requestType = RequestType.SYSTEM_MESSAGE_NOTIFICATION;
 		final Long accountId = 1L;
 
-		Request request1 = createRequest(RequestStatus.IN_PROGRESS, accountId, CompetentAuthorityEnum.ENGLAND, requestType);
+		Request request1 = createRequest(accountId, CompetentAuthorityEnum.ENGLAND, requestType);
 		RequestTask requestTask1 = createRequestTask(request1, assignee, ACCOUNT_USERS_SETUP);
 
-		Request request2 = createRequest(RequestStatus.IN_PROGRESS, accountId, CompetentAuthorityEnum.ENGLAND, INSTALLATION_ACCOUNT_OPENING);
+		Request request2 = createRequest(accountId, CompetentAuthorityEnum.ENGLAND, INSTALLATION_ACCOUNT_OPENING);
 		createRequestTask(request2, assignee, INSTALLATION_ACCOUNT_OPENING_ARCHIVE);
 
-		Request request3 = createRequest(RequestStatus.IN_PROGRESS, 2L, CompetentAuthorityEnum.ENGLAND, requestType);
+		Request request3 = createRequest(2L, CompetentAuthorityEnum.ENGLAND, requestType);
 		createRequestTask(request3, assignee, ACCOUNT_USERS_SETUP);
 
-		Request request4 = createRequest(RequestStatus.IN_PROGRESS, 1L, CompetentAuthorityEnum.ENGLAND, requestType);
+		Request request4 = createRequest(1L, CompetentAuthorityEnum.ENGLAND, requestType);
 		createRequestTask(request4, "other_assignee", ACCOUNT_USERS_SETUP);
 		
 		flushAndClear();
@@ -93,56 +93,49 @@ class RequestTaskRepositoryIT extends AbstractContainerBaseTest {
 	}
 	
 	@Test
-    void findByAssigneeAndRequestStatus() {
+    void findByAssignee() {
         final String assignee = "assignee";
 		final String anotherAsignee = "another_assignee";
 
-        Request requestOpen1 = createRequest(RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, INSTALLATION_ACCOUNT_OPENING);
-        RequestTask requestTaskOpen1 = createRequestTask(requestOpen1, assignee, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW);
+        Request requestOpen1 = createRequest(CompetentAuthorityEnum.ENGLAND, INSTALLATION_ACCOUNT_OPENING);
+        RequestTask requestTask1 = createRequestTask(requestOpen1, assignee, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW);
         
-        Request requestClosed = createRequest(RequestStatus.COMPLETED, CompetentAuthorityEnum.ENGLAND, INSTALLATION_ACCOUNT_OPENING);
-        // requestTaskForClosedRequest
-        createRequestTask(requestClosed, assignee, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW);
-
-		Request requestOpen2 = createRequest(RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING);
+		Request requestOpen2 = createRequest(CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING);
 		createRequestTask(requestOpen2, anotherAsignee, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW);
 
 		flushAndClear();
         
         //invoke
-        List<RequestTask> tasksFound = repository.findByAssigneeAndRequestStatus(assignee, RequestStatus.IN_PROGRESS);
+        List<RequestTask> tasksFound = repository.findByAssignee(assignee);
         
         //assert
-        assertThat(tasksFound).hasSize(1);
-        assertThat(tasksFound.get(0).getId()).isEqualTo(requestTaskOpen1.getId());
+        assertThat(tasksFound).containsOnly(requestTask1);
     }
 
     @Test
-    void findByAssigneeAndRequestAccountIdAndRequestStatus() {
+    void findByAssigneeAndRequestAccountId() {
         String assignee1 = "assignee1";
 		String assignee2 = "assignee2";
 
 		Long accountId1 = 1L;
 		Long accountId2 = 2L;
 
-        Request request1 = createRequest(RequestStatus.IN_PROGRESS, accountId1, CompetentAuthorityEnum.ENGLAND, INSTALLATION_ACCOUNT_OPENING);
-        RequestTask request1Task1 = createRequestTask(request1, assignee1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW);
+        Request request1 = createRequest(accountId1, CompetentAuthorityEnum.ENGLAND, INSTALLATION_ACCOUNT_OPENING);
+		RequestTask requestTask1 = createRequestTask(request1, assignee1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW);
 
-		Request request2 = createRequest(RequestStatus.IN_PROGRESS, accountId1, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING);
+		Request request2 = createRequest(accountId1, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING);
 		createRequestTask(request2, assignee2, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW);
 
-		Request request3 = createRequest(RequestStatus.COMPLETED, accountId1, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING);
+		Request request3 = createRequest(accountId2, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING);
 		createRequestTask(request3, assignee1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW);
 
-		Request request4 = createRequest(RequestStatus.IN_PROGRESS, accountId2, CompetentAuthorityEnum.ENGLAND, RequestType.INSTALLATION_ACCOUNT_OPENING);
-		createRequestTask(request4, assignee1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW);
 
 		flushAndClear();
 
 		List<RequestTask> requestTasksFound =
-            repository.findByAssigneeAndRequestAccountIdAndRequestStatus(assignee1, accountId1, RequestStatus.IN_PROGRESS);
+            repository.findByAssigneeAndRequestAccountId(assignee1, accountId1);
 
-        assertThat(requestTasksFound).containsOnly(request1Task1);
+        assertThat(requestTasksFound).containsOnly(requestTask1);
     }
 
     @Test
@@ -150,11 +143,11 @@ class RequestTaskRepositoryIT extends AbstractContainerBaseTest {
         String user1 = "user1";
         String user2 = "user2";
 
-        Request request1 = createRequest(RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, RequestType.PERMIT_ISSUANCE);
+        Request request1 = createRequest(CompetentAuthorityEnum.ENGLAND, RequestType.PERMIT_ISSUANCE);
         RequestTask request1Task1 = createRequestTask(request1, user1, PERMIT_ISSUANCE_APPLICATION_REVIEW);
         RequestTask request1Task2 = createRequestTask(request1, user2, PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW);
 
-        Request request2 = createRequest(RequestStatus.IN_PROGRESS, CompetentAuthorityEnum.ENGLAND, RequestType.PERMIT_ISSUANCE);
+        Request request2 = createRequest(CompetentAuthorityEnum.ENGLAND, RequestType.PERMIT_ISSUANCE);
         createRequestTask(request2, user1, PERMIT_ISSUANCE_APPLICATION_REVIEW);
 
         flushAndClear();
@@ -165,22 +158,20 @@ class RequestTaskRepositoryIT extends AbstractContainerBaseTest {
     }
     
     private Request createRequest(
-    		RequestStatus status,
     		CompetentAuthorityEnum ca,
     		RequestType type) {
-        return createRequest(status, null, ca, type);
+        return createRequest(null, ca, type);
     }
 
 	private Request createRequest(
-		RequestStatus status,
 		Long accountId,
 		CompetentAuthorityEnum ca,
 		RequestType type) {
 		Request request =
 			Request.builder()
-				.id(RandomStringUtils.random(5))
+				.id(RandomStringUtils.insecure().next(5))
 				.type(type)
-				.status(status)
+				.status(RequestStatus.IN_PROGRESS)
 				.competentAuthority(ca)
 				.accountId(accountId)
 				.build();

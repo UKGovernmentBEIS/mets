@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -8,8 +8,11 @@ import { RdeStore } from '../../store/rde.store';
 @Injectable({
   providedIn: 'root',
 })
-export class AnswersGuard implements CanActivate {
-  constructor(private readonly router: Router, private readonly store: RdeStore) {}
+export class AnswersGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly store: RdeStore,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): true | Observable<true | UrlTree> {
     return this.store.pipe(

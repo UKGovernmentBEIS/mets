@@ -9,6 +9,9 @@ import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsia;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsiaContainer;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.datagaps.AviationAerCorsiaDataGaps;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.emissionsmonitoringapproach.AviationAerCorsiaMonitoringApproach;
+import uk.gov.pmrv.api.aviationreporting.corsia.domain.totalemissions.AviationAerCorsiaSubmittedEmissions;
+import uk.gov.pmrv.api.aviationreporting.corsia.domain.totalemissions.AviationAerCorsiaTotalEmissions;
+import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaInterestConflictAvoidance;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationData;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationTeamLeader;
@@ -379,6 +382,14 @@ class AviationAerCorsiaReviewMapperTest {
                 .aerAttachments(aerAttachments)
                 .build();
 
+        AviationAerCorsiaSubmittedEmissions submittedEmissions = AviationAerCorsiaSubmittedEmissions.builder()
+            .totalEmissions(AviationAerCorsiaTotalEmissions.builder()
+                .allFlightsEmissions(BigDecimal.valueOf(1200))
+                .offsetFlightsEmissions(BigDecimal.valueOf(900))
+                .emissionsReductionClaim(BigDecimal.valueOf(300))
+                .build())
+            .build();
+
         AviationAerCorsiaApplicationSubmittedRequestActionPayload expected =
             AviationAerCorsiaApplicationSubmittedRequestActionPayload.builder()
                 .payloadType(payloadType)
@@ -391,11 +402,69 @@ class AviationAerCorsiaReviewMapperTest {
                     .build())
                 .aerAttachments(aerAttachments)
                 .serviceContactDetails(serviceContactDetails)
+                .submittedEmissions(submittedEmissions)
                 .build();
 
         AviationAerCorsiaApplicationSubmittedRequestActionPayload result =
-            reviewMapper.toAviationAerCorsiaApplicationSubmittedRequestActionPayload(amendsSubmitRequestTaskPayload, accountInfo, payloadType);
+            reviewMapper.toAviationAerCorsiaApplicationSubmittedRequestActionPayload(amendsSubmitRequestTaskPayload, accountInfo, submittedEmissions, payloadType);
 
+        assertEquals(expected, result);
+    }
+
+    @Test
+    void toAviationAerCorsiaContainer_with_verification_report() {
+        EmissionTradingScheme scheme = EmissionTradingScheme.CORSIA;
+        ServiceContactDetails serviceContactDetails = ServiceContactDetails.builder()
+                .name("name")
+                .roleCode("roleCode")
+                .email("email@email.uk")
+                .build();
+        AviationAerCorsia aer = AviationAerCorsia.builder()
+                .operatorDetails(AviationCorsiaOperatorDetails.builder().operatorName("name").build())
+                .monitoringApproach(AviationAerCorsiaMonitoringApproach.builder().build())
+                .dataGaps(AviationAerCorsiaDataGaps.builder().exist(false).build())
+                .build();
+        Year reportingYear = Year.of(2022);
+        Map<UUID, String> aerAttachments = Map.of(
+                UUID.randomUUID(), "attachment1",
+                UUID.randomUUID(), "attachment2"
+        );
+        AviationAerCorsiaVerificationReport verificationReport = AviationAerCorsiaVerificationReport.builder()
+                .verificationData(AviationAerCorsiaVerificationData.builder()
+                        .verifierDetails(AviationAerCorsiaVerifierDetails.builder()
+                                .verificationTeamLeader(AviationAerCorsiaVerificationTeamLeader.builder().name("name").email("email").position("position").role("role").build())
+                                .interestConflictAvoidance(AviationAerCorsiaInterestConflictAvoidance.builder()
+                                        .sixVerificationsConducted(Boolean.TRUE)
+                                        .breakTaken(Boolean.TRUE)
+                                        .build())
+                                .build())
+                        .overallDecision(AviationAerVerifiedSatisfactoryDecision.builder().type(AviationAerVerificationDecisionType.VERIFIED_AS_SATISFACTORY).build())
+                        .build())
+                .build();
+        AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload amendsSubmitRequestTaskPayload =
+                AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload.builder()
+                        .reportingYear(reportingYear)
+                        .reportingRequired(true)
+                        .serviceContactDetails(serviceContactDetails)
+                        .aer(aer)
+                        .aerAttachments(aerAttachments)
+                        .build();
+
+        AviationAerCorsiaContainer expected = AviationAerCorsiaContainer.builder()
+                .scheme(scheme)
+                .reportingYear(reportingYear)
+                .reportingRequired(true)
+                .serviceContactDetails(serviceContactDetails)
+                .aer(aer)
+                .aerAttachments(aerAttachments)
+                .verificationReport(verificationReport)
+                .build();
+
+
+        //invoke
+        AviationAerCorsiaContainer result = reviewMapper.toAviationAerCorsiaContainer(amendsSubmitRequestTaskPayload, verificationReport, scheme);
+
+        //verify
         assertEquals(expected, result);
     }
 }

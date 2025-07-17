@@ -1,21 +1,5 @@
 package uk.gov.pmrv.api.account.aviation.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,6 +9,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.Permission;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusHistory;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
@@ -38,15 +28,26 @@ import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.aviation.transform.AviationAccountMapper;
 import uk.gov.pmrv.api.account.domain.dto.AccountSearchCriteria;
 import uk.gov.pmrv.api.account.service.VerifierAccountAccessByAccountTypeService;
-import uk.gov.pmrv.api.authorization.core.domain.Permission;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AviationAccountQueryServiceTest {
@@ -142,10 +143,10 @@ class AviationAccountQueryServiceTest {
         Long accountId2 = 2L;
         String accountName1 = "account1";
         String accountName2 = "account2";
-        PmrvUser operatorUser = PmrvUser.builder().userId("userId").roleType(RoleType.OPERATOR).build();
+        AppUser operatorUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.OPERATOR).build();
         operatorUser.setAuthorities(List.of(
-                PmrvAuthority.builder().accountId(accountId1).code("operator").build(),
-                PmrvAuthority.builder().accountId(accountId2).code("operator").build()
+                AppAuthority.builder().accountId(accountId1).code("operator").build(),
+                AppAuthority.builder().accountId(accountId2).code("operator").build()
         ));
 
         AccountSearchCriteria criteria = AccountSearchCriteria.builder().build();
@@ -178,9 +179,9 @@ class AviationAccountQueryServiceTest {
         String accountName1 = "account1";
         String accountName2 = "account2";
         CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
-        PmrvUser regulatorUser = PmrvUser.builder().userId("userId").roleType(RoleType.REGULATOR).build();
+        AppUser regulatorUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.REGULATOR).build();
         regulatorUser.setAuthorities(List.of(
-                PmrvAuthority.builder().competentAuthority(ca).permissions(List.of(Permission.PERM_CA_USERS_EDIT)).build()
+                AppAuthority.builder().competentAuthority(ca).permissions(List.of(Permission.PERM_CA_USERS_EDIT)).build()
         ));
 
         AccountSearchCriteria criteria = AccountSearchCriteria.builder().build();
@@ -215,9 +216,9 @@ class AviationAccountQueryServiceTest {
         String accountName1 = "account1";
         String accountName2 = "account2";
         Long vbId = 1L;
-        PmrvUser verifierUser = PmrvUser.builder().userId("userId").roleType(RoleType.VERIFIER).build();
+        AppUser verifierUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.VERIFIER).build();
         verifierUser.setAuthorities(List.of(
-                PmrvAuthority.builder()
+                AppAuthority.builder()
                         .verificationBodyId(vbId).permissions(List.of(Permission.PERM_CA_USERS_EDIT)).build()
         ));
 
@@ -255,9 +256,9 @@ class AviationAccountQueryServiceTest {
         String accountName1 = "account1";
         String accountName2 = "account2";
         Long vbId = 1L;
-        PmrvUser verifierUser = PmrvUser.builder().userId("userId").roleType(RoleType.VERIFIER).build();
+        AppUser verifierUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.VERIFIER).build();
         verifierUser.setAuthorities(List.of(
-            PmrvAuthority.builder()
+            AppAuthority.builder()
                 .verificationBodyId(vbId).permissions(List.of(Permission.PERM_CA_USERS_EDIT)).build()
         ));
 
@@ -288,13 +289,13 @@ class AviationAccountQueryServiceTest {
 
     @ParameterizedTest
     @MethodSource("provideGetAviationAccountDTOByIdAndUserTestArgs")
-    void getAviationAccountDTOByIdAndUser(RoleType userRoleType, AviationAccount aviationAccount, AviationAccountDTO expectedResult) {
+    void getAviationAccountDTOByIdAndUser(String userRoleType, AviationAccount aviationAccount, AviationAccountDTO expectedResult) {
         Long accountId = aviationAccount.getId();
-        PmrvUser user = PmrvUser.builder().roleType(userRoleType).build();
+        AppUser user = AppUser.builder().roleType(userRoleType).build();
 
         when(aviationAccountRepository.findAviationAccountById(accountId)).thenReturn(Optional.of(aviationAccount));
 
-        if(userRoleType.equals(RoleType.REGULATOR)) {
+        if(userRoleType.equals(RoleTypeConstants.REGULATOR)) {
             when(aviationAccountMapper.toAviationAccountDTO(aviationAccount)).thenReturn(expectedResult);
         }
         else {
@@ -306,7 +307,7 @@ class AviationAccountQueryServiceTest {
         assertEquals(expectedResult, aviationAccountDTO);
 
         verify(aviationAccountRepository, times(1)).findAviationAccountById(accountId);
-        if(userRoleType.equals(RoleType.REGULATOR)) {
+        if(userRoleType.equals(RoleTypeConstants.REGULATOR)) {
             verify(aviationAccountMapper, times(1)).toAviationAccountDTO(aviationAccount);
         }
         else {
@@ -339,8 +340,8 @@ class AviationAccountQueryServiceTest {
             .closedByName(closedByName)
             .closingDate(closingDate)
             .build();
-        
-        PmrvUser user = PmrvUser.builder().roleType(RoleType.OPERATOR).build();
+
+        AppUser user = AppUser.builder().roleType(RoleTypeConstants.OPERATOR).build();
 
         AviationAccountDTO expectedAviationAccountDTO = AviationAccountDTO.builder()
                 .id(accountId)
@@ -556,11 +557,11 @@ class AviationAccountQueryServiceTest {
 
         return Stream.of(
             //when operator
-            Arguments.of(RoleType.OPERATOR, aviationAccount, aviationAccountDTO),
+            Arguments.of(RoleTypeConstants.OPERATOR, aviationAccount, aviationAccountDTO),
             //when regulator
-            Arguments.of(RoleType.REGULATOR, aviationAccount, aviationAccountDTOForRegulator),
+            Arguments.of(RoleTypeConstants.REGULATOR, aviationAccount, aviationAccountDTOForRegulator),
             //when verifier
-            Arguments.of(RoleType.VERIFIER, aviationAccount, aviationAccountDTO)
+            Arguments.of(RoleTypeConstants.VERIFIER, aviationAccount, aviationAccountDTO)
         );
     }
 

@@ -1,22 +1,20 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.vir.validation;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
-import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.VirVerificationData;
+import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.service.VirRequestIdGenerator;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.Year;
 

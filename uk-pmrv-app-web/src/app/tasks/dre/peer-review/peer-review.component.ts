@@ -7,6 +7,7 @@ import { DreApplicationSubmitRequestTaskPayload, DreRequestMetadata } from 'pmrv
 
 import { CommonTasksStore } from '../../store/common-tasks.store';
 import { DreService } from '../core/dre.service';
+import { getPreviewDocumentsInfo } from '../shared/previewDocumentsDre.util';
 import { resolveSectionStatus } from '../submit/section-status';
 
 @Component({
@@ -15,6 +16,8 @@ import { resolveSectionStatus } from '../submit/section-status';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PeerReviewComponent {
+  previewDocuments = getPreviewDocumentsInfo('DRE_SUBMIT_PEER_REVIEW_DECISION');
+
   header$ = this.dreService.requestMetadata$.pipe(
     map((metadata) => `Peer review ${(metadata as DreRequestMetadata)?.year} reportable emissions`),
   );

@@ -2,18 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  first,
-  map,
-  Observable,
-  shareReplay,
-  switchMap,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
+import { BehaviorSubject, combineLatest, filter, first, map, Observable, shareReplay, switchMap, tap } from 'rxjs';
 
 import { AuthStore, selectCurrentDomain, selectUserState } from '@core/store/auth';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
@@ -42,7 +31,6 @@ export class DetailsComponent implements OnInit {
     map(([userState, parameters]) => userState.userId === parameters.get('userId')),
   );
   private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain);
-  domainUrlPrefix$ = this.currentDomain$.pipe(map((domain) => (domain === 'AVIATION' ? '/aviation' : '')));
   form$: Observable<UntypedFormGroup> = this.activatedRoute.data.pipe(
     map(({ user }: { user: OperatorUserDTO }) => {
       this.userFullName = user.firstName + ' ' + user.lastName;
@@ -109,10 +97,7 @@ export class DetailsComponent implements OnInit {
         }),
         catchBadRequest(ErrorCodes.AUTHORITY1004, () =>
           this.accountId$.pipe(
-            withLatestFrom(this.domainUrlPrefix$),
-            switchMap(([accountId, domain]) =>
-              this.businessErrorService.showError(saveNotFoundOperatorError(accountId, domain)),
-            ),
+            switchMap((accountId) => this.businessErrorService.showError(saveNotFoundOperatorError(accountId))),
           ),
         ),
       )

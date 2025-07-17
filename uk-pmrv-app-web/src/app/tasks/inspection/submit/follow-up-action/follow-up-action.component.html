@@ -1,0 +1,30 @@
+<app-inspection-task heading="Add a follow-up action" caption="Follow-up actions for the operator" returnToLink="../..">
+  <div class="govuk-body">Suggest what improvements the operator could make.</div>
+
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    submitText="Continue"
+    [hideSubmit]="(isEditable$ | async) === false">
+    <h2 class="govuk-heading-m">Select an action type</h2>
+    <div
+      class="govuk-body"
+      [options]="followUpActionTypes"
+      formControlName="followUpActionType"
+      govuk-select
+      widthClass="govuk-!-width-two-thirds"></div>
+    <div
+      formControlName="explanation"
+      govuk-textarea
+      label="Explanation"
+      labelSize="medium"
+      hint="This will be sent to the operator"
+      [maxLength]="10000"></div>
+    <app-multiple-file-input
+      [baseDownloadUrl]="getDownloadUrl()"
+      label="Upload files (optional)"
+      headerSize="m"
+      listTitle="Uploaded attachments"
+      formControlName="followUpActionAttachments"></app-multiple-file-input>
+  </app-wizard-step>
+</app-inspection-task>
