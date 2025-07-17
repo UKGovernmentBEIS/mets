@@ -4,18 +4,20 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.providers.EmpAuthorityInfoProvider;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.documents.service.FileDocumentService;
+import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.EmpAuthorityInfoProvider;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanEntity;
+import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmissionsMonitoringPlanDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmpAccountDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmpDetailsDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.repository.EmissionsMonitoringPlanRepository;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.transform.EmissionsMonitoringPlanMapper;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaDTO;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsDTO;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentService;
 
 import java.util.Map;
 import java.util.Optional;
@@ -55,6 +57,12 @@ public class EmissionsMonitoringPlanQueryService implements EmpAuthorityInfoProv
     @Transactional(readOnly = true)
     public Optional<EmissionsMonitoringPlanCorsiaDTO> getEmissionsMonitoringPlanCorsiaDTOByAccountId(Long accountId) {
         return emissionsMonitoringPlanRepository.findByAccountId(accountId).map(EMISSIONS_MONITORING_PLAN_MAPPER::toEmissionsMonitoringPlanCorsiaDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<EmissionsMonitoringPlanDTO> getEmissionsMonitoringPlanDTOByAccountId(Long accountId, EmissionTradingScheme accountEmissionTradingScheme) {
+        return emissionsMonitoringPlanRepository.findByAccountId(accountId)
+                .map(emp -> EMISSIONS_MONITORING_PLAN_MAPPER.toEmissionsMonitoringPlanDTO(emp, accountEmissionTradingScheme));
     }
 
     public EmissionsMonitoringPlanContainer getEmpContainerById(String id) {

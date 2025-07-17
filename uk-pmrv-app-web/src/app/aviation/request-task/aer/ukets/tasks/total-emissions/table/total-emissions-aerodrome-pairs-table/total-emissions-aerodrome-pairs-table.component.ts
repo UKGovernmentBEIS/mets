@@ -17,8 +17,7 @@ interface ViewModel {
   selector: 'app-total-emissions-aerodrome-pairs-table',
   template: `
     <app-total-emissions-aerodrome-pairs-table-template
-      [data]="(vm$ | async).data"
-    ></app-total-emissions-aerodrome-pairs-table-template>
+      [data]="(vm$ | async).data"></app-total-emissions-aerodrome-pairs-table-template>
   `,
   standalone: true,
   imports: [SharedModule, TotalEmissionsAerodromePairsTableTemplateComponent],

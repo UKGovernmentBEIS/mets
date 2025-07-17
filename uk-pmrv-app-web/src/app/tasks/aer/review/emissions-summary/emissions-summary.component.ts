@@ -23,5 +23,8 @@ export class EmissionsSummaryComponent {
     map((payload) => payload.aer),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

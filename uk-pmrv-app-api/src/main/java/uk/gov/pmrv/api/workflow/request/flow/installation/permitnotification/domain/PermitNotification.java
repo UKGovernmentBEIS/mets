@@ -24,6 +24,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = TemporaryFactor.class, value = "TEMPORARY_FACTOR"),
                 @DiscriminatorMapping(schema = TemporaryChange.class, value = "TEMPORARY_CHANGE"),
                 @DiscriminatorMapping(schema = TemporarySuspension.class, value = "TEMPORARY_SUSPENSION"),
+                @DiscriminatorMapping(schema = CessationNotification.class, value = "CESSATION"),
                 @DiscriminatorMapping(schema = NonSignificantChange.class, value = "NON_SIGNIFICANT_CHANGE"),
                 @DiscriminatorMapping(schema = OtherFactor.class, value = "OTHER_FACTOR"),
         },
@@ -33,6 +34,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = TemporaryFactor.class, name = "TEMPORARY_FACTOR"),
         @JsonSubTypes.Type(value = TemporaryChange.class, name = "TEMPORARY_CHANGE"),
         @JsonSubTypes.Type(value = TemporarySuspension.class, name = "TEMPORARY_SUSPENSION"),
+        @JsonSubTypes.Type(value = CessationNotification.class, name = "CESSATION"),
         @JsonSubTypes.Type(value = NonSignificantChange.class, name = "NON_SIGNIFICANT_CHANGE"),
         @JsonSubTypes.Type(value = OtherFactor.class, name = "OTHER_FACTOR")
 })

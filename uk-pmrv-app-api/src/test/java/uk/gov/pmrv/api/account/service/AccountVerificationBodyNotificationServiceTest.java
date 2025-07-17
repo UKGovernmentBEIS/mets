@@ -7,9 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
+import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityQueryService;
 import uk.gov.pmrv.api.account.domain.Account;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityService;
-import uk.gov.pmrv.api.authorization.verifier.service.VerifierAuthorityQueryService;
 import uk.gov.pmrv.api.notification.message.domain.SystemMessageNotificationInfo;
 import uk.gov.pmrv.api.notification.message.domain.enumeration.SystemMessageNotificationType;
 import uk.gov.pmrv.api.notification.message.service.SystemMessageNotificationService;
@@ -36,7 +36,7 @@ class AccountVerificationBodyNotificationServiceTest {
     private VerifierAuthorityQueryService verifierAuthorityQueryService;
     
     @Mock
-    private OperatorAuthorityService operatorAuthorityService;
+    private OperatorAuthorityQueryService operatorAuthorityQueryService;
     
     @Test
     void notifyUsersForVerificationBodyApppointment() {
@@ -78,12 +78,12 @@ class AccountVerificationBodyNotificationServiceTest {
         when(account.getId()).thenReturn(accountId);
         Set<Account> accountsUnappointed = Set.of(account);
         
-        when(operatorAuthorityService.findActiveOperatorAdminUsersByAccount(accountId)).thenReturn(operatorAdmins);
+        when(operatorAuthorityQueryService.findActiveOperatorAdminUsersByAccount(accountId)).thenReturn(operatorAdmins);
         
         //invoke
         service.notifyUsersForVerificationBodyUnapppointment(accountsUnappointed);
         
-        verify(operatorAuthorityService, times(1)).findActiveOperatorAdminUsersByAccount(accountId);
+        verify(operatorAuthorityQueryService, times(1)).findActiveOperatorAdminUsersByAccount(accountId);
         
         ArgumentCaptor<SystemMessageNotificationInfo> messageCaptor = ArgumentCaptor.forClass(
             SystemMessageNotificationInfo.class);

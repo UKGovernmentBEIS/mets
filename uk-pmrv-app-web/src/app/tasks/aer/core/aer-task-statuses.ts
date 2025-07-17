@@ -76,21 +76,21 @@ export function getSectionStatus(key: StatusKey, payload: AerApplicationSubmitRe
     case 'regulatedActivities':
       return payload.aerSectionsCompleted[key]?.[0]
         ? 'complete'
-        : payload.aer[key]?.length ?? Object.keys(payload.aer[key] || {})?.length
-        ? 'in progress'
-        : 'not started';
+        : (payload.aer[key]?.length ?? Object.keys(payload.aer[key] || {})?.length)
+          ? 'in progress'
+          : 'not started';
     case 'pollutantRegisterActivities':
       return payload.aerSectionsCompleted[key]?.[0]
         ? 'complete'
         : payload.aer[key]?.exist === false || payload.aer[key]?.activities?.length > 0
-        ? 'in progress'
-        : 'not started';
+          ? 'in progress'
+          : 'not started';
     case 'naceCodes':
       return payload.aerSectionsCompleted[key]?.[0]
         ? 'complete'
         : payload.aer[key]?.codes?.length > 0
-        ? 'in progress'
-        : 'not started';
+          ? 'in progress'
+          : 'not started';
     case 'CALCULATION_CO2':
     case 'CALCULATION_PFC':
       return getSourceStreamsStatus(key, payload);
@@ -121,8 +121,8 @@ export function getVerificationSectionStatus(
   return payload?.verificationSectionsCompleted[key]?.[0]
     ? 'complete'
     : payload?.verificationSectionsCompleted[key]?.[0] === false
-    ? 'in progress'
-    : 'not started';
+      ? 'in progress'
+      : 'not started';
 }
 
 export function verificationSubmitSendReportStatus(
@@ -163,8 +163,8 @@ export function getReviewSectionStatus(
   key: StatusKey,
   payload: any,
 ): TaskItemStatus | 'accepted' | 'operator to amend' {
-  return payload?.reviewSectionsCompleted[key]
-    ? payload.reviewGroupDecisions[key].type === 'ACCEPTED'
+  return payload?.reviewSectionsCompleted?.[key]
+    ? payload.reviewGroupDecisions?.[key]?.type === 'ACCEPTED'
       ? 'accepted'
       : 'operator to amend'
     : 'undecided';

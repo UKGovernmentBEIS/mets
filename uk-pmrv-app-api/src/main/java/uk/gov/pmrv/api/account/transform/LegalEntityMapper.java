@@ -2,11 +2,11 @@ package uk.gov.pmrv.api.account.transform;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityInfoDTO;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityWithoutHoldingCompanyDTO;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
 
 import java.util.List;
 

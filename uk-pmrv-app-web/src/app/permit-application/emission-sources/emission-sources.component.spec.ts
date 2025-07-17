@@ -4,6 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
+import { EmissionSourceTableComponent } from '@shared/components/emission-sources/emission-source-table/emission-source-table.component';
+
 import { TasksService } from 'pmrv-api';
 
 import { BasePage, mockClass } from '../../../testing';
@@ -46,12 +48,12 @@ describe('EmissionSourcesComponent', () => {
     }
 
     get emissionSources() {
-      return this.queryAll<HTMLDListElement>('dl');
+      return this.queryAll<HTMLDListElement>('tr');
     }
 
     get emissionSourcesTextContents() {
       return this.emissionSources.map((emissionSource) =>
-        Array.from(emissionSource.querySelectorAll('dd')).map((dd) => dd.textContent.trim()),
+        Array.from(emissionSource.querySelectorAll('td')).map((dd) => dd.textContent.trim()),
       );
     }
   }
@@ -59,7 +61,7 @@ describe('EmissionSourcesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [EmissionSourcesComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [RouterTestingModule, SharedModule, SharedPermitModule, EmissionSourceTableComponent],
       providers: [
         { provide: TasksService, useValue: tasksService },
         {
@@ -115,13 +117,14 @@ describe('EmissionSourcesComponent', () => {
       expect(page.submitButton).toBeTruthy();
       expect(page.addEmissionSourceBtn).toBeFalsy();
       expect(page.addAnotherEmissionSourceBtn).toBeTruthy();
-      expect(page.emissionSources.length).toEqual(2);
+      expect(page.emissionSources.length).toEqual(3);
     });
 
     it('should display the emission sources', () => {
       expect(page.emissionSourcesTextContents).toEqual([
-        ['S1 Boiler', 'Change | Delete'],
-        ['S2 Boiler 2', 'Change | Delete'],
+        [],
+        ['S1', 'Boiler', 'Change', 'Delete'],
+        ['S2', 'Boiler 2', 'Change', 'Delete'],
       ]);
     });
 

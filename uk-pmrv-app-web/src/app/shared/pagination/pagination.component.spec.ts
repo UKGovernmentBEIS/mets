@@ -18,8 +18,7 @@ describe('PaginationComponent', () => {
       <app-pagination
         [count]="count"
         [pageSize]="pageSize"
-        (currentPageChange)="this.currentPage = $event"
-      ></app-pagination>
+        (currentPageChange)="this.currentPage = $event"></app-pagination>
     `,
   })
   class TestComponent {

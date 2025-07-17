@@ -5,7 +5,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.ValueMapping;
 
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface EmissionTradingSchemeToOfficialNoticeFileNameMapper {

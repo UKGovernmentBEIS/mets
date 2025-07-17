@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, InjectionToken, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, InjectionToken, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { BackLinkService } from '@shared/back-link/back-link.service';
 import { SharedModule } from '@shared/shared.module';
 
 import {
-  aerEmissionsReductionClaimFormProvider,
+  AerEmissionsReductionClaimFormProvider,
   AviationAerSafPurchaseType,
 } from '../emissions-reduction-claim-form.provider';
 import { aerEmissionsReductionClaimBatchItemFormProvider } from './emissions-reduction-claim-add-batch-item-form.provider';
@@ -32,7 +32,7 @@ export const AER_BATCH_ITEM_FORM = new InjectionToken<{ form: AviationAerSafPurc
   templateUrl: './emissions-reduction-claim-add-batch-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EmissionsReductionClaimAddBatchItemComponent implements OnInit, OnDestroy {
+export class EmissionsReductionClaimAddBatchItemComponent implements OnInit {
   downloadUrl = `${this.store.aerDelegate.baseFileAttachmentDownloadUrl}/`;
 
   form = this.formProviderBatchItem.form;
@@ -47,21 +47,16 @@ export class EmissionsReductionClaimAddBatchItemComponent implements OnInit, OnD
     private route: ActivatedRoute,
     private backLinkService: BackLinkService,
     private pendingRequestService: PendingRequestService,
-    @Inject(TASK_FORM_PROVIDER) protected readonly formProvider: aerEmissionsReductionClaimFormProvider,
+    @Inject(TASK_FORM_PROVIDER) protected readonly formProvider: AerEmissionsReductionClaimFormProvider,
     @Inject(AER_BATCH_ITEM_FORM)
     protected readonly formProviderBatchItem: aerEmissionsReductionClaimBatchItemFormProvider,
   ) {}
 
   ngOnInit(): void {
-    this.backLinkService.show();
     this.lastSegment =
       this.previousRouteSegments?.length > 0
         ? this.previousRouteSegments[this.previousRouteSegments.length - 1].path
         : null;
-  }
-
-  ngOnDestroy(): void {
-    this.backLinkService.hide();
   }
 
   get editIndex(): number | null {

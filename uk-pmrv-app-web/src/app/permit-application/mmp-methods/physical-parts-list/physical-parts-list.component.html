@@ -1,0 +1,27 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true"
+  *ngIf="vm() as vm"
+>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Physical parts of the installation and units which serve more than one sub-installation"
+    caption="Monitoring methodology plan"
+    submitText="Continue"
+  >
+    <p class="govuk-body">
+      In line with Annex VI section 2(c) of the FAR, you must list all physical parts of installation and units which
+      serve more than one sub-installation, for example heat supply systems, jointly used boilers and CHP units.
+    </p>
+
+    <app-mmp-physical-parts-table></app-mmp-physical-parts-table>
+  </app-wizard-step>
+
+  <app-list-return-link
+    reviewGroupTitle="Monitoring methodology"
+    reviewGroupUrl="monitoring-methodology-plan"
+    [innerRoute]="true"
+  ></app-list-return-link>
+</app-permit-task>

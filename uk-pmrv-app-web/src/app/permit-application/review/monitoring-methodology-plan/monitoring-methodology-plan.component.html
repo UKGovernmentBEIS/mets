@@ -1,4 +1,8 @@
-<ng-template #contentTpl let-showOriginal>
+<ng-template
+  #contentTpl
+  let-showOriginal
+  let-productBenchmarks="productBenchmarks"
+  let-fallbackApproaches="fallbackApproaches">
   <ul app-task-item-list>
     <li
       *ngIf="'monitoringMethodologyPlans' | taskStatus | async as status"
@@ -6,30 +10,189 @@
       link="../../monitoring-methodology-plan/summary"
       linkText="Monitoring methodology plan"
       [status]="status"
-      [hasContent]="true"
-    >
+      [hasContent]="true">
       <app-monitoring-methodology-summary-details
         [showOriginal]="showOriginal"
         [hasBottomBorder]="false"
-        [isPreview]="true"
-      ></app-monitoring-methodology-summary-details>
+        [isPreview]="true"></app-monitoring-methodology-summary-details>
     </li>
+    @if (showMMPTasks) {
+      <li
+        *ngIf="'mmpInstallationDescription' | taskStatus | async as status"
+        app-task-item
+        link="../../mmp-installation-description/summary"
+        linkText="Installation description"
+        [status]="status"
+        [hasContent]="true">
+        <app-mmp-installation-description-summary-template
+          [showOriginal]="showOriginal"
+          [hasBottomBorder]="false"
+          [isPreview]="true"></app-mmp-installation-description-summary-template>
+
+        <app-connection-list-summary-template
+          [connections]="
+            ('monitoringMethodologyPlans' | task: !showOriginal | async)?.digitizedPlan?.installationDescription
+              ?.connections
+          "
+          [isEditable]="false"
+          [hasBottomBorder]="false"
+          baseLink="../connections/"></app-connection-list-summary-template>
+      </li>
+
+      <li
+        *ngIf="'MMP_SUB_INSTALLATION' | taskStatus | async as status"
+        app-task-item
+        link="../../mmp-sub-installations"
+        linkText="Sub-installations"
+        [status]="status"
+        [hasContent]="true">
+        <div class="govuk-summary-list">
+          <ng-container *ngIf="productBenchmarks?.length > 0">
+            <h2 class="govuk-heading-m">Sub-installations with product benchmarks</h2>
+            <govuk-table [columns]="columns" [data]="productBenchmarks">
+              <ng-template let-column="column" let-row="row" let-index="index">
+                <ng-container [ngSwitch]="column.field">
+                  <ng-container *ngSwitchCase="'type'">
+                    <ng-container *ngIf="showOriginal; else currentType">
+                      {{ row.subInstallationType | subInstallationType }}
+                    </ng-container>
+                    <ng-template #currentType>
+                      <a govukLink [routerLink]="['../../mmp-sub-installations', row.subInstallationNo, 'summary']">
+                        {{ row.subInstallationType | subInstallationType }}
+                      </a>
+                    </ng-template>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'carbon'">
+                    {{ row.subInstallationType | carbonLeakage }}
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'status'">
+                    <govuk-tag
+                      [color]="'MMP_SUB_INSTALLATION_Product_Benchmark' | taskStatus: index | async | tagColor"
+                      class="app-task-list__tag">
+                      {{ 'MMP_SUB_INSTALLATION_Product_Benchmark' | taskStatus: index | async | i18nSelect: statusMap }}
+                    </govuk-tag>
+                  </ng-container>
+                </ng-container>
+              </ng-template>
+            </govuk-table>
+          </ng-container>
+
+          <ng-container *ngIf="fallbackApproaches?.length > 0">
+            <h2 class="govuk-heading-m">Sub-installations with fallback approaches</h2>
+            <govuk-table [columns]="columns" [data]="fallbackApproaches">
+              <ng-template let-column="column" let-row="row" let-index="index">
+                <ng-container [ngSwitch]="column.field">
+                  <ng-container *ngSwitchCase="'type'">
+                    <ng-container *ngIf="showOriginal; else currentType">
+                      {{ row.subInstallationType | subInstallationType }}
+                    </ng-container>
+                    <ng-template #currentType>
+                      <a
+                        govukLink
+                        [routerLink]="['../../mmp-sub-installations/fallback', row.subInstallationNo, 'summary']">
+                        {{ row.subInstallationType | subInstallationType }}
+                      </a>
+                    </ng-template>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'carbon'">
+                    {{ row.subInstallationType | carbonLeakage }}
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'status'">
+                    <govuk-tag
+                      [color]="'MMP_SUB_INSTALLATION_Fallback_Approach' | taskStatus: index | async | tagColor"
+                      class="app-task-list__tag">
+                      {{ 'MMP_SUB_INSTALLATION_Fallback_Approach' | taskStatus: index | async | i18nSelect: statusMap }}
+                    </govuk-tag>
+                  </ng-container>
+                </ng-container>
+              </ng-template>
+            </govuk-table>
+          </ng-container>
+        </div>
+      </li>
+
+      <li
+        *ngIf="'mmpMethods' | taskStatus | async as status"
+        app-task-item
+        link="../../mmp-methods/summary"
+        linkText="Methods"
+        [status]="status"
+        [hasContent]="true">
+        <div class="govuk-summary-list">
+          <app-mmp-methods-summary-template
+            [showOriginal]="showOriginal"
+            [hasTwoOrMoreSubInstallationsCompleted]="true"
+            [isEditable]="false"
+            [hasBottomBorder]="false"></app-mmp-methods-summary-template>
+        </div>
+      </li>
+
+      <li
+        *ngIf="'mmpProcedures' | taskStatus | async as status"
+        app-task-item
+        link="../../mmp-procedures/summary"
+        linkText="Procedures"
+        [status]="status"
+        [hasContent]="true">
+        <div class="govuk-summary-list">
+          <app-mmp-procedures-summary-template
+            [showOriginal]="showOriginal"
+            [hasBottomBorder]="false"
+            [isEditable]="false"></app-mmp-procedures-summary-template>
+        </div>
+      </li>
+
+      <li
+        *ngIf="'mmpEnergyFlows' | taskStatus | async as status"
+        app-task-item
+        link="../../mmp-energy-flows/summary"
+        linkText="Energy flows"
+        [status]="status"
+        [hasContent]="true">
+        <div class="govuk-summary-list">
+          <app-mmp-energy-flows-summary-template
+            [showOriginal]="showOriginal"
+            [hasBottomBorder]="false"
+            [isPreview]="true"></app-mmp-energy-flows-summary-template>
+        </div>
+      </li>
+    }
   </ul>
 </ng-template>
 
 <app-permit-task-review [breadcrumb]="true" [notification]="notification" heading="Monitoring methodology plan">
-  <app-highlight-diff *ngIf="showDiff$ | async">
-    <ng-container slot="previous" *ngTemplateOutlet="contentTpl; context: { $implicit: true }"></ng-container>
-    <ng-container slot="current" *ngTemplateOutlet="contentTpl; context: { $implicit: false }"></ng-container>
+  <app-highlight-diff *ngIf="(showDiff$ | async) === true">
+    <ng-container
+      slot="previous"
+      *ngTemplateOutlet="
+        contentTpl;
+        context: {
+          $implicit: true,
+          productBenchmarks: originalProductBenchmarks$ | async,
+          fallbackApproaches: originalFallbackApproaches$ | async,
+        }
+      "></ng-container>
+    <ng-container
+      slot="current"
+      *ngTemplateOutlet="
+        contentTpl;
+        context: {
+          $implicit: false,
+          productBenchmarks: productBenchmarks$ | async,
+          fallbackApproaches: fallbackApproaches$ | async,
+        }
+      "></ng-container>
   </app-highlight-diff>
   <ng-container
     *ngIf="(showDiff$ | async) === false"
     [ngTemplateOutlet]="contentTpl"
-    [ngTemplateOutletContext]="{ $implicit: false }"
-  ></ng-container>
+    [ngTemplateOutletContext]="{
+      $implicit: false,
+      productBenchmarks: productBenchmarks$ | async,
+      fallbackApproaches: fallbackApproaches$ | async,
+    }"></ng-container>
 
   <app-review-group-decision-container
     [groupKey]="groupKey$ | async"
-    (notification)="notification = $event"
-  ></app-review-group-decision-container>
+    (notification)="notification = $event"></app-review-group-decision-container>
 </app-permit-task-review>

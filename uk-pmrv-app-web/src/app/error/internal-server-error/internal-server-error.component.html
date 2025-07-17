@@ -1,0 +1,22 @@
+@if (errorCode === genericServiceErrorCode.INTREGEMISSIONSINSTAVUKETS1007) {
+  <app-page-heading size="xl">Registry application data synchronisation error</app-page-heading>
+
+  <p class="govuk-body">
+    We're experiencing temporary difficulties in syncing data. Please try again later or contact the
+    <a href="mailto:METS@energysecurity.gov.uk" govukLink class="govuk-!-font-weight-bold">
+      UK ETS reporting helpdesk
+    </a>
+    for assistance.
+  </p>
+} @else {
+  <app-page-heading size="xl">Sorry, there is a problem with the service</app-page-heading>
+
+  <p class="govuk-body">Try again later.</p>
+
+  <p class="govuk-body">
+    <a href="mailto:METS@energysecurity.gov.uk" govukLink class="govuk-!-font-weight-bold">
+      Contact the UK ETS reporting helpdesk
+    </a>
+    if you have any questions.
+  </p>
+}

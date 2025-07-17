@@ -29,12 +29,13 @@
           ></div>
         </div>
       </govuk-radio-option>
+
       <govuk-radio-option
         value="AIRCRAFT_REGISTRATION_MARKINGS"
         [label]="'AIRCRAFT_REGISTRATION_MARKINGS' | operatorDetailsFlightIdentificationType: true"
       >
         <div govukConditionalContent>
-          <h3 class="govuk-heading-s">List the ICAO designators used</h3>
+          <h3 class="govuk-heading-s">List the aeroplane registration markings or codes used</h3>
           <div
             govuk-textarea
             formControlName="aircraftRegistrationMarkings"
@@ -63,6 +64,7 @@
             govuk-select
             label="Issuing authority"
           ></div>
+
           <app-multiple-file-input
             [baseDownloadUrl]="downloadUrl"
             label="Upload a file"
@@ -86,10 +88,12 @@
                 ></div>
               </div>
             </govuk-radio-option>
+
             <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
           </div>
         </div>
       </govuk-radio-option>
+
       <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
     </div>
   </div>
@@ -101,6 +105,7 @@
     label="Company registration number"
     class="govuk-!-width-two-thirds"
   ></div>
+
   <div formGroupName="registeredLocation">
     <h3 class="govuk-heading-m">Registered address</h3>
     <p class="govuk-body">This is the address provided when registering the company.</p>
@@ -112,6 +117,7 @@
       label="Address line 2 (optional)"
       widthClass="govuk-!-width-two-thirds"
     ></div>
+
     <div formControlName="city" govuk-text-input label="Town or city" widthClass="govuk-!-width-two-thirds"></div>
     <div
       formControlName="state"
@@ -119,12 +125,14 @@
       label="State, province or region (optional)"
       widthClass="govuk-!-width-two-thirds"
     ></div>
+
     <div
       formControlName="postcode"
       govuk-text-input
       label="Postal or zip code (Optional)"
       widthClass="govuk-!-width-one-third"
     ></div>
+
     <div
       [options]="countriesOptions$ | async"
       formControlName="country"
@@ -136,6 +144,7 @@
 
   <h3 class="govuk-heading-m">Description of your activities</h3>
   <h3 class="govuk-heading-s">Type of flights</h3>
+
   <div formControlName="flightTypes" govuk-checkboxes>
     <govuk-checkbox label="Scheduled flights" value="SCHEDULED"></govuk-checkbox>
     <govuk-checkbox label="Non-scheduled flights" value="NON_SCHEDULED"></govuk-checkbox>

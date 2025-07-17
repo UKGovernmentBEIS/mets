@@ -63,16 +63,21 @@ public class StartProcessRequestService {
 
         return request;
     }
-
-    public void reStartProcess(Request request) {
+    public void reStartProcess(Request request,  Map<String, Object> customProcessVars) {
         Map<String, Object> processVars = new HashMap<>();
         processVars.put(BpmnProcessConstants.REQUEST_ID, request.getId());
         processVars.put(BpmnProcessConstants.REQUEST_TYPE, request.getType().name());
+        processVars.putAll(customProcessVars);
 
         request.setStatus(IN_PROGRESS);
         String processInstanceId = startProcessDefinition(request, processVars);
 
         setProcessToRequest(processInstanceId, request);
+    }
+
+
+    public void reStartProcess(Request request) {
+        reStartProcess(request, Map.of());
     }
 
     private Request createRequest(RequestParams params) {

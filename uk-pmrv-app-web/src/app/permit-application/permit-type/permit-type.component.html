@@ -2,39 +2,34 @@
   <app-wizard-step
     (formSubmit)="onSubmit()"
     [formGroup]="form"
-    caption="Permit type"
-    heading="Define permit type"
+    caption="Define permit type"
+    heading="Which type of permit are you applying for?"
     submitText="Confirm and complete"
-    [hideSubmit]="(store.isEditable$ | async) === false"
-  >
-    <p class="govuk-body">
-      Based on the information you gave, this installation can apply for a Hospital and Small Emitter (HSE) permit or a
-      full Greenhouse Gas Emissions (GHGE) permit.
-    </p>
-    <p class="govuk-body">Ultra small emitters</p>
-    <p class="govuk-body">
-      You are an ultra small emitter if your installation emits less than 2,500 tonnes of carbon dioxide equivalent
-      (CO2eq) in the relevant period.
-    </p>
-    <p class="govuk-body">Applying for an HSE permit</p>
-    <p class="govuk-body">
-      You can only apply for an HSE permit if you have HSE status for the relevant allocation period.
-    </p>
-    <p class="govuk-body">Applying for a GHGE permit</p>
-    <p class="govuk-body">
-      Installations which carry out regulated activities and are not eligible for HSE status must have a GHGE permit.
+    [hideSubmit]="(store.isEditable$ | async) === false">
+    <p class="govuk-caption-m">
+      Based on the information you gave, this installation can apply for a Hospital and Small Emitter (HSE) permit, a
+      full Greenhouse Gas Emissions (GHGE) permit or a voluntary waste monitoring plan.
     </p>
 
     <div formControlName="type" govuk-radio legend="Which type of permit are you applying for?" legendSize="medium">
-      <govuk-radio-option [value]="'GHGE'" label="Apply for a GHGE permit"></govuk-radio-option>
-      <govuk-radio-option [value]="'HSE'" label="Apply for an HSE permit">
+      <govuk-radio-option
+        [value]="'GHGE'"
+        label="Apply for a GHGE permit"
+        hint="Installations which carry out regulated activities and are not eligible for HSE status must have a GHGE permit"></govuk-radio-option>
+      <govuk-radio-option
+        [value]="'HSE'"
+        label="Apply for an HSE permit"
+        hint="You are an ultra small emitter if your installation emits less than 2,500 tonnes of carbon dioxide equivalent (CO2 eq) in the relevant period. You can only apply for an HSE permit if you have HSE status for the relevant allocation period"></govuk-radio-option>
+      <govuk-radio-option
+        *ngIf="(wastePermitEnabled$ | async) === true"
+        [value]="'WASTE'"
+        label="Apply for a voluntary waste monitoring plan"
+        hint="Installations which process waste via incineration and are within scope of and participating in the voluntary monitoring, reporting and verification (MRV) period can apply for a voluntary waste monitoring plan. This includes facilities conducting advanced treatments and advanced conversion technologies, such as gasification and pyrolysis-based processes, as well as energy from waste facilities and waste incinerators without energy recovery.">
         <ng-container govukConditionalContent>
           <govuk-warning-text>
-            <p class="govuk-body">To apply for an HSE permit you must:</p>
-            <ul class="govuk-list govuk-list--bullet">
-              <li>already be known to the regulator as an ultra small emitter</li>
-              <li>qualify as either a hospital or small emitter</li>
-            </ul>
+            During the voluntary waste monitoring, reporting and verification period, the METS service will reflect the
+            full ETS scheme, so some references and data requests may not be relevant to waste operators. Contact your
+            regulator for further information on how to participate.
           </govuk-warning-text>
         </ng-container>
       </govuk-radio-option>

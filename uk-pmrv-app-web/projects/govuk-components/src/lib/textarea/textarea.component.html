@@ -2,15 +2,13 @@
   [class.govuk-visually-hidden]="isLabelHidden"
   [for]="identifier"
   [id]="'l.' + identifier"
-  [class]="currentLabelSize"
->
+  [class]="currentLabelSize">
   {{ currentLabel }}
 </label>
 <span *ngIf="hint" [id]="identifier + '-hint'" class="govuk-hint">
   {{ hint }}
 </span>
-<govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="identifier">
-</govuk-error-message>
+<govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="identifier" />
 <textarea
   #textArea
   (blur)="handleBlur(getInputValue($event))"
@@ -22,8 +20,7 @@
   class="govuk-textarea govuk-!-margin-bottom-1"
   [class.govuk-textarea--error]="
     shouldDisplayErrors || (maxLength !== undefined && exceedsMaxLength(textArea.value?.length))
-  "
-></textarea>
+  "></textarea>
 
 <span
   *ngIf="maxLength"
@@ -31,8 +28,7 @@
   [class.govuk-hint]="!exceedsMaxLength(textArea.value?.length)"
   [id]="identifier + '-info'"
   aria-live="polite"
-  class="govuk-character-count__message"
->
+  class="govuk-character-count__message">
   <ng-template [ngIf]="exceedsMaxLength(textArea.value?.length)">
     <ng-container *ngIf="textArea.value?.length - maxLength > 1">
       You have {{ textArea.value?.length - maxLength }} characters too many

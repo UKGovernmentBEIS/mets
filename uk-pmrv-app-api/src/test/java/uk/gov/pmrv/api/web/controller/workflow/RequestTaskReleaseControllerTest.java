@@ -13,16 +13,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskReleaseService;
 
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -45,10 +45,10 @@ class RequestTaskReleaseControllerTest {
     private RequestTaskReleaseController controller;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private RequestTaskReleaseService requestTaskReleaseService;
@@ -56,7 +56,7 @@ class RequestTaskReleaseControllerTest {
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
@@ -67,15 +67,15 @@ class RequestTaskReleaseControllerTest {
         controller = (RequestTaskReleaseController) aopProxy.getProxy();
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(new ExceptionControllerAdvice())
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .build();
     }
 
     @Test
     void releaseTask() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").roleType(RoleType.REGULATOR).build();
+        AppUser appUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.REGULATOR).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doNothing().when(requestTaskReleaseService).releaseTaskById(1L);
 
         mockMvc.perform(MockMvcRequestBuilders.delete(BASE_PATH + "/" + 1)
@@ -87,12 +87,12 @@ class RequestTaskReleaseControllerTest {
 
     @Test
     void releaseTask_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").roleType(RoleType.REGULATOR).build();
+        AppUser appUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.REGULATOR).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "releaseTask", "1");
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "releaseTask", "1", null, null);
 
         mockMvc.perform(MockMvcRequestBuilders.delete(BASE_PATH + "/" + 1)
             .contentType(MediaType.APPLICATION_JSON))

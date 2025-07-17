@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { AppliedStandard } from './appliedStandard';
+import { MeasurementBiomassFraction } from './measurementBiomassFraction';
 import { MeasurementOfCO2EmissionPointCategory } from './measurementOfCO2EmissionPointCategory';
 import { MeasurementOfCO2MeasuredEmissions } from './measurementOfCO2MeasuredEmissions';
 
@@ -17,4 +18,5 @@ export interface MeasurementOfCO2EmissionPointCategoryAppliedTier {
   emissionPointCategory: MeasurementOfCO2EmissionPointCategory;
   measuredEmissions: MeasurementOfCO2MeasuredEmissions;
   appliedStandard: AppliedStandard;
+  biomassFraction: MeasurementBiomassFraction;
 }

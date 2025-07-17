@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskActionPayload;
 

@@ -35,6 +35,11 @@ const routes: Routes = [
         component: SubmitContainerComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'provide-details',
         data: { pageTitle: 'Provide details for return of allowances' },
         component: ProvideDetailsComponent,
@@ -73,6 +78,11 @@ const routes: Routes = [
         component: PeerReviewWaitComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'summary',
         data: { pageTitle: 'Provide return of allowances details', breadcrumb: true },
         component: SummaryDetailsComponent,
@@ -87,6 +97,11 @@ const routes: Routes = [
         path: '',
         data: { pageTitle: 'Peer review' },
         component: ReturnOfAllowancesPeerReviewComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'summary',
@@ -128,6 +143,11 @@ const routes: Routes = [
         component: ReturnedAllowancesComponent,
         data: { pageTitle: 'Returned allowances' },
         canDeactivate: [PendingRequestGuard],
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'provide-returned-details',

@@ -42,6 +42,10 @@ export class OperatorDetailsOrganisationStructureComponent extends BaseOperatorD
 
   form = this.getform('organisationStructure');
 
+  get partnersControl(): FormArray | null {
+    return (this.form.get('partners') as FormArray) ?? null;
+  }
+
   constructor(
     public router: Router,
     public route: ActivatedRoute,
@@ -51,10 +55,6 @@ export class OperatorDetailsOrganisationStructureComponent extends BaseOperatorD
     protected readonly destroy$: DestroySubject,
   ) {
     super(router, route, pendingRequestService, formProvider, store, destroy$);
-  }
-
-  get partnersControl(): FormArray | null {
-    return (this.form.get('partners') as FormArray) ?? null;
   }
 
   onSubmit() {

@@ -10,7 +10,6 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
 import { mockTaskState } from '../../testing/mock-state';
 import { NotifyOperatorComponent } from './notify-operator.component';
 
-
 describe('NotifyOperatorComponent', () => {
   let route: ActivatedRouteStub;
   let store: PermitSurrenderStore;

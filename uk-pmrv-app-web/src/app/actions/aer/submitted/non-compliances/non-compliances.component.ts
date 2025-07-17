@@ -11,8 +11,7 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Uncorrected non-compliances" [breadcrumb]="true">
       <app-non-compliances-group
-        [uncorrectedNonCompliances]="uncorrectedNonCompliances$ | async"
-      ></app-non-compliances-group>
+        [uncorrectedNonCompliances]="uncorrectedNonCompliances$ | async"></app-non-compliances-group>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

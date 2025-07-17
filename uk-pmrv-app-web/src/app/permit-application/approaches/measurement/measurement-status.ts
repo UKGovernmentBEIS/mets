@@ -15,22 +15,39 @@ export function MEASUREMENTStatus(state: PermitApplicationState): TaskItemStatus
     tiersStatuses.every((status) => status === 'complete')
     ? 'complete'
     : tiersStatuses.some((status) => status === 'needs review')
-    ? 'needs review'
-    : measurementStaticStatuses.some((status) => state.permitSectionsCompleted[status]?.[0]) ||
-      tiersStatuses.some((status) => status === 'in progress' || status === 'complete')
-    ? 'in progress'
-    : 'not started';
+      ? 'needs review'
+      : measurementStaticStatuses.some((status) => state.permitSectionsCompleted[status]?.[0]) ||
+          tiersStatuses.some((status) => status === 'in progress' || status === 'complete')
+        ? 'in progress'
+        : 'not started';
+}
+
+function isCategoryTierBiomassFractionExist(state: PermitApplicationState, index: number): boolean {
+  return !!(state.permit.monitoringApproaches.MEASUREMENT_CO2 as MeasurementOfCO2MonitoringApproach)
+    ?.emissionPointCategoryAppliedTiers?.[index]?.biomassFraction;
 }
 
 /** Returns the status of emission point category applier tier */
 export function MEASUREMENTCategoryTierStatus(state: PermitApplicationState, index: number): TaskItemStatus {
+  let measurementCategoryTierStatusesForWaste: readonly MeasurementCategoryTierStatus[] =
+    measurementCategoryTierStatuses;
+
+  // Check if the waste permit feature is enabled
+  // and add the biomass fraction status if it is
+  if (state.features?.wastePermitEnabled) {
+    measurementCategoryTierStatusesForWaste = [
+      ...measurementCategoryTierStatuses,
+      ...measurementCategoryTierStatusesBiomassFraction,
+    ];
+  }
+
   return isMeasurementCategoryValid(state, index) &&
     MEASUREMENTCategoryTierSubtaskStatus(state, 'MEASUREMENT_CO2_Measured_Emissions', index) !== 'needs review'
-    ? measurementCategoryTierStatuses.every((status) => state.permitSectionsCompleted[status]?.[index])
+    ? measurementCategoryTierStatusesForWaste.every((status) => state.permitSectionsCompleted[status]?.[index])
       ? 'complete'
-      : measurementCategoryTierStatuses.some((status) => state.permitSectionsCompleted[status]?.[index])
-      ? 'in progress'
-      : 'not started'
+      : measurementCategoryTierStatusesForWaste.some((status) => state.permitSectionsCompleted[status]?.[index])
+        ? 'in progress'
+        : 'not started'
     : 'needs review';
 }
 
@@ -55,17 +72,26 @@ export function MEASUREMENTCategoryTierSubtaskStatus(
           ? 'cannot start yet'
           : 'not started'
         : !areMeasMeasuredEmissionsDevicesValid(state, index)
-        ? 'needs review'
-        : !state.permitSectionsCompleted[key]?.[index]
-        ? 'in progress'
-        : 'complete';
+          ? 'needs review'
+          : !state.permitSectionsCompleted[key]?.[index]
+            ? 'in progress'
+            : 'complete';
     }
     case 'MEASUREMENT_CO2_Applied_Standard':
       return state.permitSectionsCompleted[key]?.[index]
         ? 'complete'
         : MEASUREMENTCategoryTierSubtaskStatus(state, 'MEASUREMENT_CO2_Category', index) === 'complete'
-        ? 'not started'
-        : 'cannot start yet';
+          ? 'not started'
+          : 'cannot start yet';
+
+    case 'MEASUREMENT_CO2_Biomass_Fraction':
+      return MEASUREMENTCategoryTierSubtaskStatus(state, 'MEASUREMENT_CO2_Category', index) === 'not started'
+        ? 'cannot start yet'
+        : isCategoryTierBiomassFractionExist(state, index)
+          ? state.permitSectionsCompleted[key]?.[index]
+            ? 'complete'
+            : 'in progress'
+          : 'not started';
     default:
       return state.permitSectionsCompleted[key]?.[index] ? 'complete' : 'not started';
   }
@@ -115,6 +141,8 @@ export const measurementCategoryTierStatuses = [
   'MEASUREMENT_CO2_Applied_Standard',
 ] as const;
 
+export const measurementCategoryTierStatusesBiomassFraction = ['MEASUREMENT_CO2_Biomass_Fraction'] as const;
+
 export const measurementStaticStatuses = [
   'MEASUREMENT_CO2_Description',
   'MEASUREMENT_CO2_Emission',
@@ -126,8 +154,13 @@ export const measurementStaticStatuses = [
 
 export type MeasurementStatuses =
   | 'MEASUREMENT_CO2_Category_Tier'
-  | typeof measurementStaticStatuses[number]
-  | typeof measurementCategoryTierStatuses[number];
+  | (typeof measurementStaticStatuses)[number]
+  | (typeof measurementCategoryTierStatuses)[number]
+  | (typeof measurementCategoryTierStatusesBiomassFraction)[number];
+
+type MeasurementCategoryTierStatus =
+  | (typeof measurementCategoryTierStatuses)[number]
+  | (typeof measurementCategoryTierStatusesBiomassFraction)[number];
 
 /** Returns true if reference state is valid and all ids used in stream category exist */
 function isMeasurementCategoryValid(state: PermitApplicationState, index: number): boolean {

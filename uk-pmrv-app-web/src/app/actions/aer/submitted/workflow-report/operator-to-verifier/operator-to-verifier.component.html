@@ -1,0 +1,13 @@
+<ng-container *ngIf="payload$ | async as payload">
+  <app-page-heading>{{ aerTitle$ | async }}</app-page-heading>
+  <p class="govuk-caption-m">{{ (requestAction$ | async)?.creationDate | govukDate: 'datetime' }}</p>
+  <hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible" />
+
+  <app-operator-submitted-template
+    [payload]="payload"
+    [additionalDocumentFiles]="additionalDocumentFiles$ | async"
+    [activityLevelReportFiles]="activityLevelReportFiles$ | async"
+    [sourcesColumns]="sourcesColumns"
+    [pointsColumns]="pointsColumns"
+  ></app-operator-submitted-template>
+</ng-container>

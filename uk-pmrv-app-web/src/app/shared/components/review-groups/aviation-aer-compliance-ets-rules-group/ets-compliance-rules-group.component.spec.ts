@@ -19,8 +19,7 @@ describe('EtsComplianceRulesGroupComponent', () => {
       <app-ets-compliance-rules-group
         [isEditable]="isEditable"
         [etsComplianceRules]="etsComplianceRules"
-        [queryParams]="queryParams"
-      ></app-ets-compliance-rules-group>
+        [queryParams]="queryParams"></app-ets-compliance-rules-group>
     `,
   })
   class TestComponent {

@@ -1,0 +1,83 @@
+<app-request-action-task
+  *ngIf="vm$ | async as vm"
+  [header]="vm.pageHeader"
+  [requestActionType]="vm.requestActionType"
+  [breadcrumb]="true"
+>
+  <ng-template #contentTpl let-showOriginal>
+    <h1 class="govuk-heading-m">Aircraft currently in use</h1>
+    <app-aircraft-type-table
+      [editable]="vm.editable"
+      [aircraftTypes]="showOriginal ? vm.originalAircraftTypesInUse : vm.aircraftTypesInUse"
+      [isFUMM]="showOriginal ? vm.originalIsFUMM : vm.isFUMM"
+      [isCorsia]="vm.isCorsia"
+    ></app-aircraft-type-table>
+
+    <ng-container *ngIf="vm.aircraftTypesToBeUsed.length > 0 || vm.originalAircraftTypesToBeUsed.length > 0">
+      <h1 class="govuk-heading-m">Additional aircraft planned to be used</h1>
+      <app-aircraft-type-table
+        [aircraftTypes]="showOriginal ? vm.aircraftTypesToBeUsed : vm.aircraftTypesToBeUsed"
+        [isFUMM]="showOriginal ? vm.originalIsFUMM : vm.isFUMM"
+        [editable]="vm.editable"
+        [isCorsia]="vm.isCorsia"
+      ></app-aircraft-type-table>
+    </ng-container>
+
+    <app-emission-factors-summary-template
+      [fuelTypes]="showOriginal ? vm.originalFuelTypes : vm.fuelTypes"
+      [isEditable]="vm.editable"
+    ></app-emission-factors-summary-template>
+
+    <div *ngIf="vm.multipleMethodsExplanation || vm.originalMultipleMethodsExplanation">
+      <app-multiple-methods-summary-template
+        [editable]="vm.editable"
+        [multipleMethodsExplanation]="
+          showOriginal ? vm.originalMultipleMethodsExplanation : vm.multipleMethodsExplanation
+        "
+      >
+      </app-multiple-methods-summary-template>
+    </div>
+
+    <div *ngIf="vm.additionalAircraftsMonitoringApproach || vm.originalAdditionalAircraftsMonitoringApproach">
+      <app-procedure-form-summary
+        [isEditable]="vm.editable"
+        header="Monitoring approach for aircraft entering your fleet"
+        [procedureFormData]="
+          showOriginal ? vm.originalAdditionalAircraftsMonitoringApproach : vm.additionalAircraftsMonitoringApproach
+        "
+      >
+      </app-procedure-form-summary>
+    </div>
+  </ng-template>
+
+  <app-highlight-diff *ngIf="vm.showDiff">
+    <ng-container slot="previous" *ngTemplateOutlet="contentTpl; context: { $implicit: true }"></ng-container>
+    <ng-container slot="current" *ngTemplateOutlet="contentTpl; context: { $implicit: false }"></ng-container>
+  </app-highlight-diff>
+  <ng-container
+    *ngIf="vm.showDiff === false"
+    [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: false }"
+  ></ng-container>
+
+  <app-emp-review-decision-group-summary
+    *ngIf="vm.showDecision"
+    [data]="vm.reviewDecision"
+    [attachments]="vm.reviewAttachments"
+    [downloadBaseUrl]="vm.downloadBaseUrl"
+  ></app-emp-review-decision-group-summary>
+
+  <app-emp-variation-review-decision-group-summary
+    *ngIf="vm.showVariationDecision"
+    [data]="vm.variationDecision"
+    [attachments]="vm.reviewAttachments"
+    [downloadBaseUrl]="vm.downloadBaseUrl"
+  ></app-emp-variation-review-decision-group-summary>
+
+  <ng-container *ngIf="vm.showVariationRegLedDecision">
+    <h2 class="govuk-heading-m">List changes to include in the variation schedule</h2>
+    <app-emp-variation-regulator-led-decision-group-summary
+      [data]="vm.variationRegLedDecision"
+    ></app-emp-variation-regulator-led-decision-group-summary>
+  </ng-container>
+</app-request-action-task>

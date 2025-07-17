@@ -2,7 +2,6 @@ package uk.gov.pmrv.api.permit.domain.emissionpoints;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

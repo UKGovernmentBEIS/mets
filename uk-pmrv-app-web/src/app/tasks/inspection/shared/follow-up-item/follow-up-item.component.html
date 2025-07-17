@@ -1,0 +1,37 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters" *ngIf="!hideHeading">
+    <h2 class="govuk-heading-m">Follow-up action {{ index + 1 }}</h2>
+  </div>
+  <h3 *ngIf="extraTitle" class="govuk-heading-s govuk-grid-column-three-quarters">{{ extraTitle }}</h3>
+  <div class="govuk-grid-column-one-quarter">
+    <a govukLink routerLink="" (click)="onRemoveFollowUpItem(index)" *ngIf="isEditable"> Remove </a>
+  </div>
+</div>
+<dl govuk-summary-list [hasBorders]="true">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Action type</dt>
+    <dd govukSummaryListRowValue>
+      {{ $any(followUpAction).followUpActionType | followUpActionType }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['../', index, 'add-follow-up-action']">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Explanation</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">{{ followUpAction.explanation }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['../', index, 'add-follow-up-action']">Change</a>
+    </dd>
+  </div>
+  <div govukSummaryListRow *ngIf="$any(followUpAction)?.followUpActionAttachments?.length > 0">
+    <dt govukSummaryListRowKey>Uploaded files</dt>
+    <dd govukSummaryListRowValue>
+      <app-summary-download-files [files]="files"></app-summary-download-files>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['../', index, 'add-follow-up-action']">Change</a>
+    </dd>
+  </div>
+</dl>
+<ng-content></ng-content>

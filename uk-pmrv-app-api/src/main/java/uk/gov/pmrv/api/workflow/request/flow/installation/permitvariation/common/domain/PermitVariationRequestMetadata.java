@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadataRfiable;
 
@@ -31,5 +30,5 @@ public class PermitVariationRequestMetadata extends RequestMetadata implements R
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Integer permitConsolidationNumber;
 
-    private RoleType initiatorRoleType;
+    private String initiatorRoleType;
 }

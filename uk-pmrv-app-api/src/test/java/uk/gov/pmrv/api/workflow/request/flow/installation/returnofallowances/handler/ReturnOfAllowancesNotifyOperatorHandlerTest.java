@@ -5,9 +5,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -53,7 +53,7 @@ class ReturnOfAllowancesNotifyOperatorHandlerTest {
         Long requestTaskId = 123L;
         RequestTaskActionType requestTaskActionType =
             RequestTaskActionType.RETURN_OF_ALLOWANCES_NOTIFY_OPERATOR_FOR_DECISION;
-        PmrvUser pmrvUser = mock(PmrvUser.class);
+        AppUser appUser = mock(AppUser.class);
         NotifyOperatorForDecisionRequestTaskActionPayload payload =
             mock(NotifyOperatorForDecisionRequestTaskActionPayload.class);
         RequestTask requestTask = mock(RequestTask.class);
@@ -61,10 +61,10 @@ class ReturnOfAllowancesNotifyOperatorHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         doThrow(new BusinessException(ErrorCode.FORM_VALIDATION))
             .when(returnOfAllowancesSubmissionValidator)
-            .validate(requestTask, payload, pmrvUser);
+            .validate(requestTask, payload, appUser);
 
         assertThrows(BusinessException.class,
-            () -> actionHandler.process(requestTaskId, requestTaskActionType, pmrvUser, payload));
+            () -> actionHandler.process(requestTaskId, requestTaskActionType, appUser, payload));
     }
 
     @Test
@@ -73,7 +73,7 @@ class ReturnOfAllowancesNotifyOperatorHandlerTest {
         long requestId = 1L;
         RequestTaskActionType requestTaskActionType =
             RequestTaskActionType.RETURN_OF_ALLOWANCES_NOTIFY_OPERATOR_FOR_DECISION;
-        PmrvUser pmrvUser = mock(PmrvUser.class);
+        AppUser appUser = mock(AppUser.class);
         NotifyOperatorForDecisionRequestTaskActionPayload payload =
             NotifyOperatorForDecisionRequestTaskActionPayload.builder()
                 .decisionNotification(DecisionNotification.builder().build())
@@ -86,7 +86,7 @@ class ReturnOfAllowancesNotifyOperatorHandlerTest {
         when(request.getId()).thenReturn(Long.toString(requestId));
         when(requestTask.getProcessTaskId()).thenReturn("processTaskId");
 
-        actionHandler.process(requestTaskId, requestTaskActionType, pmrvUser, payload);
+        actionHandler.process(requestTaskId, requestTaskActionType, appUser, payload);
 
         verify(workflowService).completeTask("processTaskId", Map.of(
             BpmnProcessConstants.REQUEST_ID, Long.toString(requestId),
@@ -94,7 +94,7 @@ class ReturnOfAllowancesNotifyOperatorHandlerTest {
             ReturnOfAllowancesSubmitOutcome.SUBMITTED
         ));
         verify(returnOfAllowancesService).saveReturnOfAllowancesDecisionNotification(payload, requestTask);
-        verify(returnOfAllowancesSubmissionValidator).validate(requestTask, payload, pmrvUser);
+        verify(returnOfAllowancesSubmissionValidator).validate(requestTask, payload, appUser);
     }
 
     @Test

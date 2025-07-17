@@ -16,8 +16,7 @@ describe('OpinionStatementSiteVerificationSummaryTemplateComponent', () => {
       <app-opinion-statement-site-verification-summary-template
         [siteVisit]="siteVisit"
         [isEditable]="isEditable"
-        [queryParams]="queryParams"
-      ></app-opinion-statement-site-verification-summary-template>
+        [queryParams]="queryParams"></app-opinion-statement-site-verification-summary-template>
     `,
   })
   class TestComponent {

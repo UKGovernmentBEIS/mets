@@ -2,32 +2,20 @@ import { Injectable } from '@angular/core';
 
 import { first, Observable, of, switchMap, tap } from 'rxjs';
 
-import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
+import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 import { CommonTasksState } from '@tasks/store/common-tasks.state';
-import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 import {
   PermitTransferAApplicationRequestTaskPayload,
   RequestTaskActionPayload,
   RequestTaskActionProcessDTO,
-  TasksService,
 } from 'pmrv-api';
 
 @Injectable({ providedIn: 'root' })
-export class PermitTransferAService {
-  constructor(
-    private readonly store: CommonTasksStore,
-    private readonly tasksService: TasksService,
-    private readonly businessErrorService: BusinessErrorService,
-  ) {}
-
-  get isEditable$(): Observable<boolean> {
-    return this.store.isEditable$;
-  }
-
+export class PermitTransferAService extends TasksHelperService {
   get requestId(): Observable<string> {
     return of(this.store.requestId);
   }
@@ -47,24 +35,15 @@ export class PermitTransferAService {
     return attachments;
   }
 
-  getPayload(): Observable<any> {
-    return this.store.payload$;
-  }
-
   getDownloadUrlFiles(files: string[]): { downloadUrl: string; fileName: string }[] {
     const attachments: { [key: string]: string } = this.attachments;
-    const url = this.createBaseFileDownloadUrl();
+    const url = this.getBaseFileDownloadUrl();
     return (
       files?.map((id) => ({
         downloadUrl: url + `${id}`,
         fileName: attachments[id],
       })) ?? []
     );
-  }
-
-  createBaseFileDownloadUrl() {
-    const requestTaskId = this.store.requestTaskId;
-    return `/tasks/${requestTaskId}/file-download/`;
   }
 
   sendDataForPost(

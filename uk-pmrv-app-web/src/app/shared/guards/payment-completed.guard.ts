@@ -1,12 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  PRIMARY_OUTLET,
-  Router,
-  RouterStateSnapshot,
-  UrlTree,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, PRIMARY_OUTLET, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { first, map, Observable } from 'rxjs';
 
@@ -14,8 +7,11 @@ import { StoreContextResolver } from '../store-resolver/store-context.resolver';
 import { UrlRequestType, urlRequestTypes } from '../types/url-request-type';
 
 @Injectable()
-export class PaymentCompletedGuard implements CanActivate {
-  constructor(private readonly storeResolver: StoreContextResolver, private readonly router: Router) {}
+export class PaymentCompletedGuard {
+  constructor(
+    private readonly storeResolver: StoreContextResolver,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, routerState: RouterStateSnapshot): Observable<true | UrlTree> {
     const tree = this.router.parseUrl(routerState.url);

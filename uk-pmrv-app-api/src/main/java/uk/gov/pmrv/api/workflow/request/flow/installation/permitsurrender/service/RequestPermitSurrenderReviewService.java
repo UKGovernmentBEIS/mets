@@ -3,7 +3,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.servi
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -69,7 +69,7 @@ public class RequestPermitSurrenderReviewService {
     
     @Transactional
     public void saveReviewDecisionNotification(final RequestTask requestTask, final DecisionNotification decisionNotification,
-            final PmrvUser reviewer) {
+            final AppUser reviewer) {
         final Request request = requestTask.getRequest();
         final PermitSurrenderRequestPayload requestPayload = (PermitSurrenderRequestPayload) request.getPayload();
         final PermitSurrenderApplicationReviewRequestTaskPayload taskPayload = 

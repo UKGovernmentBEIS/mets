@@ -18,9 +18,11 @@ async function setup() {
 
 @Component({
   selector: 'app-mock-parent',
-  template: ` <form [formGroup]="form">
-    <app-confidentiality-form></app-confidentiality-form>
-  </form>`,
+  template: `
+    <form [formGroup]="form">
+      <app-confidentiality-form></app-confidentiality-form>
+    </form>
+  `,
   standalone: true,
   imports: [ReactiveFormsModule, ConfidentialityFormComponent],
   providers: [{ provide: TASK_FORM_PROVIDER, useClass: ConfidentialityFormProvider }],

@@ -15,22 +15,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.dto.EmpDetailsDTO;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.dto.AviationAccountEmpDTO;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.dto.AviationAccountHeaderInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.account.aviation.service.AviationAccountEmpQueryOrchestrator;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -56,10 +56,10 @@ class AviationAccountViewControllerTest {
     private AviationAccountEmpQueryOrchestrator orchestrator;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     private AuthorizationAspectUserResolver authorizationAspectUserResolver;
 
@@ -71,7 +71,7 @@ class AviationAccountViewControllerTest {
     @BeforeEach
     public void setUp() {
         authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
@@ -82,7 +82,7 @@ class AviationAccountViewControllerTest {
         controller = (AviationAccountViewController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice()).build();
 
         objectMapper = new ObjectMapper();
@@ -92,7 +92,7 @@ class AviationAccountViewControllerTest {
     void getInstallationAccountById() throws Exception {
         final Long accountId = 1L;
         final String empId = "empId";
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final AviationAccountEmpDTO aviationAccountEmpDTO =
                 AviationAccountEmpDTO.builder()
                         .aviationAccount(AviationAccountDTO.builder()
@@ -120,12 +120,12 @@ class AviationAccountViewControllerTest {
     @Test
     void getInstallationAccountById_account_forbidden() throws Exception {
         final long invalidAccountId = 1L;
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(user, "getAviationAccountById", Long.toString(invalidAccountId));
+                .when(appUserAuthorizationService)
+                .authorize(user, "getAviationAccountById", Long.toString(invalidAccountId), null, null);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -139,7 +139,7 @@ class AviationAccountViewControllerTest {
     @Test
     void getInstallationAccountById_account_not_found() throws Exception {
         final Long invalidAccountId = 1L;
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(orchestrator.getAviationAccountWithEMP(invalidAccountId, user))
@@ -158,6 +158,7 @@ class AviationAccountViewControllerTest {
     void getAviationAccountHeaderInfoById() throws Exception {
         Long accountId = 1L;
         AviationAccountHeaderInfoDTO accountHeaderInfo = AviationAccountHeaderInfoDTO.builder()
+            .id(accountId)
             .name("name")
             .emissionTradingScheme(EmissionTradingScheme.UK_ETS_AVIATION)
             .status(AviationAccountStatus.NEW)
@@ -166,6 +167,7 @@ class AviationAccountViewControllerTest {
         when(orchestrator.getAccountHeaderInfo(accountId)).thenReturn(accountHeaderInfo);
 
         AviationAccountHeaderInfoDTO expected = AviationAccountHeaderInfoDTO.builder()
+            .id(accountId)
             .name("name")
             .status(AviationAccountStatus.NEW)
             .emissionTradingScheme(EmissionTradingScheme.UK_ETS_AVIATION)
@@ -189,12 +191,12 @@ class AviationAccountViewControllerTest {
     @Test
     void getAviationAccountHeaderInfoById_forbidden() throws Exception {
         Long accountId = 1L;
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "getAviationAccountHeaderInfoById", Long.toString(accountId));
+            .when(appUserAuthorizationService)
+            .authorize(user, "getAviationAccountHeaderInfoById", Long.toString(accountId), null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders

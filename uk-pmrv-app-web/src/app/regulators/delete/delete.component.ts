@@ -8,7 +8,7 @@ import { AuthStore, selectCurrentDomain, selectUserId } from '@core/store/auth';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchBadRequest, ErrorCodes } from '@error/business-errors';
 
-import { ApplicationUserDTO, RegulatorAuthoritiesService, RegulatorUserDTO } from 'pmrv-api';
+import { RegulatorAuthoritiesService, RegulatorUserDTO, UserDTO } from 'pmrv-api';
 
 import { saveNotFoundRegulatorError } from '../errors/business-error';
 
@@ -18,7 +18,7 @@ import { saveNotFoundRegulatorError } from '../errors/business-error';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteComponent {
-  regulator$: Observable<any> = (this.route.data as Observable<{ user: ApplicationUserDTO | RegulatorUserDTO }>).pipe(
+  regulator$: Observable<any> = (this.route.data as Observable<{ user: UserDTO | RegulatorUserDTO }>).pipe(
     map(({ user }) => user),
   );
   isConfirmationDisplayed$ = new BehaviorSubject<boolean>(false);

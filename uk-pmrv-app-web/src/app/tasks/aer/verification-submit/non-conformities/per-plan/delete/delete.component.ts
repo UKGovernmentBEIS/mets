@@ -14,7 +14,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
   template: `
     <app-page-heading size="xl">
       Are you sure you want to delete
-      <span class="nowrap"> '{{ item$ | async }}'? </span>
+      <span class="nowrap">'{{ item$ | async }}'?</span>
     </app-page-heading>
     <p class="govuk-body">Any reference to this item will be removed from your application.</p>
     <div class="govuk-button-group">

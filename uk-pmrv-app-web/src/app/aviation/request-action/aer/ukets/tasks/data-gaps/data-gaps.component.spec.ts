@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import DataGapsComponent from '@aviation/request-action/aer/ukets/tasks/data-gaps/data-gaps.component';
 import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
-import { AerRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
+import { AerUkEtsRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage } from '@testing';
@@ -46,7 +46,7 @@ describe('DataGapsComponent', () => {
               exist: false,
             },
           },
-        } as AerRequestActionPayload,
+        } as AerUkEtsRequestActionPayload,
       },
       regulatorViewer: false,
     });

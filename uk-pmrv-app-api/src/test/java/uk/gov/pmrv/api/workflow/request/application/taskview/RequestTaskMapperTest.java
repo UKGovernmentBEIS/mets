@@ -2,17 +2,20 @@ package uk.gov.pmrv.api.workflow.request.application.taskview;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.user.core.domain.dto.ApplicationUserDTO;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.user.core.domain.dto.UserDTO;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.utils.DateUtils;
 
 class RequestTaskMapperTest {
 	
@@ -27,9 +30,10 @@ class RequestTaskMapperTest {
 	void toTaskDTO_no_assignee_user_assignable() {
 		final String requestId = "1";
 	    Long requestTaskId = 2L;
+	    LocalDate dueDate = LocalDate.now().plusDays(10);
 	    Request request = createRequest(requestId, RequestType.INSTALLATION_ACCOUNT_OPENING);
 		RequestTaskType requestTaskType = RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW;
-		RequestTask requestTask = createRequestTask(requestTaskId, null, requestTaskType, request);
+		RequestTask requestTask = createRequestTask(requestTaskId, null, requestTaskType, request, dueDate, null);
 		
 		//invoke
 		RequestTaskDTO result = mapper.toTaskDTO(requestTask, null);
@@ -40,6 +44,31 @@ class RequestTaskMapperTest {
 		assertThat(result.getType()).isEqualTo(requestTaskType);
 		assertThat(result.getId()).isEqualTo(requestTaskId);
 		assertThat(result.isAssignable()).isTrue();
+		assertThat(result.getDaysRemaining())
+				.isEqualTo(DateUtils.getTaskExpirationDaysRemaining(LocalDate.now(), dueDate));
+    }
+	
+	@Test
+	void toTaskDTO_no_assignee_user_assignable_with_pause_Date() {
+		final String requestId = "1";
+	    Long requestTaskId = 2L;
+	    LocalDate dueDate = LocalDate.now().plusDays(10);
+	    LocalDate pauseDate = LocalDate.now().plusDays(8);
+	    Request request = createRequest(requestId, RequestType.INSTALLATION_ACCOUNT_OPENING);
+		RequestTaskType requestTaskType = RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW;
+		RequestTask requestTask = createRequestTask(requestTaskId, null, requestTaskType, request, dueDate, pauseDate);
+		
+		//invoke
+		RequestTaskDTO result = mapper.toTaskDTO(requestTask, null);
+		
+		//assert
+		assertThat(result.getAssigneeFullName()).isNull();
+		assertThat(result.getAssigneeUserId()).isNull();
+		assertThat(result.getType()).isEqualTo(requestTaskType);
+		assertThat(result.getId()).isEqualTo(requestTaskId);
+		assertThat(result.isAssignable()).isTrue();
+		assertThat(result.getDaysRemaining())
+			.isEqualTo(DateUtils.getTaskExpirationDaysRemaining(pauseDate, dueDate));
     }
 	
 	@Test
@@ -48,7 +77,8 @@ class RequestTaskMapperTest {
         Long requestTaskId = 2L;
         Request request = createRequest(requestId, RequestType.INSTALLATION_ACCOUNT_OPENING);
 		RequestTaskType requestTaskType = RequestTaskType.ACCOUNT_USERS_SETUP;
-		RequestTask requestTask = createRequestTask(requestTaskId, null, requestTaskType, request);
+		LocalDate dueDate = LocalDate.now();
+		RequestTask requestTask = createRequestTask(requestTaskId, null, requestTaskType, request, dueDate, null);
 		
 		//invoke
 		RequestTaskDTO result = mapper.toTaskDTO(requestTask, null);
@@ -59,6 +89,8 @@ class RequestTaskMapperTest {
 		assertThat(result.getType()).isEqualTo(requestTaskType);
 		assertThat(result.getId()).isEqualTo(requestTaskId);
 		assertThat(result.isAssignable()).isFalse();
+		assertThat(result.getDaysRemaining())
+		.isEqualTo(DateUtils.getTaskExpirationDaysRemaining(LocalDate.now(), dueDate));
 	}
 	
 	@Test
@@ -68,10 +100,11 @@ class RequestTaskMapperTest {
         String task_assignee = "task_assignee";
         Request request = createRequest(requestId, RequestType.INSTALLATION_ACCOUNT_OPENING);
 		RequestTaskType requestTaskType = RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW;
-		RequestTask requestTask = createRequestTask(requestTaskId, task_assignee, requestTaskType, request);
+		LocalDate dueDate = LocalDate.now();
+		RequestTask requestTask = createRequestTask(requestTaskId, task_assignee, requestTaskType, request, dueDate, null);
 		final String fn = "fn";
 		final String ln = "ln";
-		ApplicationUserDTO assigneeUser = OperatorUserDTO.builder()
+		UserDTO assigneeUser = OperatorUserDTO.builder()
 							.firstName(fn)
 							.lastName(ln)
 							.build();
@@ -98,12 +131,14 @@ class RequestTaskMapperTest {
     }
 	
     private RequestTask createRequestTask(Long requestTaskId, String assignee, RequestTaskType requestTaskType,
-            Request request) {
+            Request request, LocalDate dueDate, LocalDate pauseDate) {
 		return RequestTask.builder()
 	            .id(requestTaskId)
 	            .request(request)
 	            .type(requestTaskType)
 	            .assignee(assignee)
+	            .dueDate(dueDate)
+	            .pauseDate(pauseDate)
 	            .build();
     }
 }

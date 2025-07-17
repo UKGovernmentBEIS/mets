@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, pluck } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { TaskKey } from '../../../../shared/types/permit-task.type';
 import { PermitApplicationState } from '../../../../store/permit-application.state';
@@ -15,7 +15,7 @@ import { headingMap } from '../../heading';
 })
 export class SummaryComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
-  taskKey$: Observable<TaskKey> = this.route.data.pipe(pluck('taskKey'));
+  taskKey$: Observable<TaskKey> = this.route.data.pipe(map((x) => x?.taskKey));
   headingMap = headingMap;
 
   constructor(

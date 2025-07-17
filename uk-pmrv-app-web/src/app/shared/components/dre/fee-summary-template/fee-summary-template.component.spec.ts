@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { SharedModule } from '@shared/shared.module';
 import { BasePage } from '@testing';
-import moment from 'moment-timezone';
+import { addDays, formatISO, setHours } from 'date-fns';
 
 import { Dre } from 'pmrv-api';
 
@@ -17,7 +17,9 @@ describe('FeeSummaryTemplateComponent', () => {
   let hostComponent: TestComponent;
 
   @Component({
-    template: ` <app-fee-summary-template [fee]="dre.fee" [editable]="editable"> </app-fee-summary-template>`,
+    template: `
+      <app-fee-summary-template [fee]="dre.fee" [editable]="editable"></app-fee-summary-template>
+    `,
   })
   class TestComponent {
     editable = false;
@@ -33,7 +35,7 @@ describe('FeeSummaryTemplateComponent', () => {
       informationSources: [],
       fee: {
         feeDetails: {
-          dueDate: moment().tz('Europe/London').add(1, 'day').format('YYYY-MM-DD'),
+          dueDate: formatISO(addDays(new Date(), 1), { representation: 'date' }),
           hourlyRate: '3',
           totalBillableHours: '34',
         },
@@ -78,7 +80,7 @@ describe('FeeSummaryTemplateComponent', () => {
     };
     const formatter = Intl.DateTimeFormat('en-GB-u-hc-h12', dateFormatOptions);
     const dueDateString = formatter
-      .formatToParts(new Date(moment().add(1, 'day').toISOString()))
+      .formatToParts(new Date(setHours(addDays(new Date(), 1), 12)))
       .map(({ value }, index) => (index === 9 ? '' : value))
       .join('');
 

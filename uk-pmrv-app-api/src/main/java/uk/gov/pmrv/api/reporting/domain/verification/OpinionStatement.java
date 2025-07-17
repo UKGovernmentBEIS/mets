@@ -1,17 +1,16 @@
 package uk.gov.pmrv.api.reporting.domain.verification;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
-import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivityType;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.util.EnumMap;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import uk.gov.netz.api.common.validation.SpELExpression;
+import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivityType;
+
 import java.util.HashSet;
 import java.util.Set;
 

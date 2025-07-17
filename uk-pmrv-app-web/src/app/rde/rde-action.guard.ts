@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
-import { mapTo, Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 import { RequestActionsService } from 'pmrv-api';
 
@@ -11,7 +11,7 @@ import { RdeStore } from './store/rde.store';
 @Injectable({
   providedIn: 'root',
 })
-export class RdeActionGuard implements CanActivate {
+export class RdeActionGuard {
   constructor(
     private readonly store: RdeStore,
     private readonly requestActionsService: RequestActionsService,
@@ -41,7 +41,7 @@ export class RdeActionGuard implements CanActivate {
           accountId: requestAction.requestAccountId,
         });
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 

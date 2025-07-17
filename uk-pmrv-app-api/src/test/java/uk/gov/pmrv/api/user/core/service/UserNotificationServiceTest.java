@@ -9,17 +9,17 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.notification.mail.config.property.NotificationProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.token.JwtTokenService;
-import uk.gov.pmrv.api.token.JwtTokenActionEnum;
+import uk.gov.netz.api.common.config.WebAppProperties;
+import uk.gov.netz.api.notificationapi.mail.config.property.NotificationProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.netz.api.token.JwtTokenAction;
+import uk.gov.netz.api.token.JwtTokenService;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.user.NavigationParams;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.domain.model.UserNotificationWithRedirectionLinkInfo;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
@@ -31,14 +31,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants.APPLICANT_FNAME;
-import static uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants.APPLICANT_LNAME;
-import static uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants.OPERATOR_INVITATION_CONFIRMATION_LINK;
-import static uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants.USER_ROLE_TYPE;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.INVITATION_TO_EMITTER_CONTACT;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.RESET_2FA_CONFIRMATION;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.RESET_PASSWORD_CONFIRMATION;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.USER_ACCOUNT_ACTIVATION;
 import static uk.gov.pmrv.api.user.NavigationOutcomes.OPERATOR_REGISTRATION_INVITATION_ACCEPTED_URL;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,12 +43,12 @@ class UserNotificationServiceTest {
     private UserAuthService userAuthService;
 
     @Mock
-    private NotificationEmailService notificationEmailService;
+    private NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
     @Mock
     private JwtTokenService jwtTokenService;
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private AppProperties appProperties;
+    private WebAppProperties webAppProperties;
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private NotificationProperties notificationProperties;
@@ -64,11 +56,11 @@ class UserNotificationServiceTest {
     @Test
     void notifyInvitedUser() {
         String token = "token";
+        String url = "http://www.pmrv.org.uk";
         UserNotificationWithRedirectionLinkInfo notificationInfo = createNotificationInfo();
         UserNotificationWithRedirectionLinkInfo.TokenParams tokenParams = notificationInfo.getTokenParams();
-        AppProperties.Web web = createAppWeb();
+        when(webAppProperties.getUrl()).thenReturn(url);
 
-        when(appProperties.getWeb()).thenReturn(web);
         when(jwtTokenService
             .generateToken(tokenParams.getJwtTokenAction(), tokenParams.getClaimValue(), tokenParams.getExpirationInterval()))
             .thenReturn(token);
@@ -77,19 +69,19 @@ class UserNotificationServiceTest {
 
         verify(jwtTokenService, times(1))
             .generateToken(tokenParams.getJwtTokenAction(), tokenParams.getClaimValue(), tokenParams.getExpirationInterval());
-        verify(appProperties, times(1)).getWeb();
+        verify(webAppProperties, times(1)).getUrl();
 
-        ArgumentCaptor<EmailData> emailInfoCaptor =
+        ArgumentCaptor<EmailData<EmailNotificationTemplateData>> emailInfoCaptor =
             ArgumentCaptor.forClass(EmailData.class);
         verify(notificationEmailService, times(1)).notifyRecipient(emailInfoCaptor.capture(), Mockito.eq(notificationInfo.getUserEmail()));
 
-        EmailData emailInfo = emailInfoCaptor.getValue();
+        EmailData<EmailNotificationTemplateData> emailInfo = emailInfoCaptor.getValue();
 
-        assertThat(emailInfo.getNotificationTemplateData().getTemplateName()).isEqualTo(notificationInfo.getTemplateName());
+        assertThat(emailInfo.getNotificationTemplateData().getTemplateName()).isEqualTo(notificationInfo.getTemplateName().getName());
         assertThat(emailInfo.getNotificationTemplateData().getTemplateParams()).containsExactlyInAnyOrderEntriesOf(
             Map.of(
-                EmailNotificationTemplateConstants.APPLICANT_FNAME, "firstName",
-                OPERATOR_INVITATION_CONFIRMATION_LINK, expectedNotificationLink(token, web)
+            		PmrvEmailNotificationTemplateConstants.APPLICANT_FNAME, "firstName",
+            		PmrvEmailNotificationTemplateConstants.OPERATOR_INVITATION_CONFIRMATION_LINK, expectedNotificationLink(token, webAppProperties)
             ));
         assertThat(emailInfo.getAttachments()).isEmpty();
     }
@@ -100,18 +92,18 @@ class UserNotificationServiceTest {
         String roleName = "roleName";
         String email = "email";
         UserInfoDTO userInfo = UserInfoDTO.builder().email(email).build();
-        EmailData emailInfo = EmailData.builder()
+        EmailData<EmailNotificationTemplateData> emailInfo = EmailData.<EmailNotificationTemplateData>builder()
                 .notificationTemplateData(EmailNotificationTemplateData.builder()
-                        .templateName(USER_ACCOUNT_ACTIVATION)
-                        .templateParams(Map.of(USER_ROLE_TYPE, roleName,
-                                EmailNotificationTemplateConstants.CONTACT_REGULATOR, "link",
-                                EmailNotificationTemplateConstants.HOME_URL, "url"))
+                        .templateName(PmrvNotificationTemplateName.USER_ACCOUNT_ACTIVATION.getName())
+                        .templateParams(Map.of(PmrvEmailNotificationTemplateConstants.USER_ROLE_TYPE, roleName,
+                        		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, "link",
+                        		PmrvEmailNotificationTemplateConstants.HOME_URL, "url"))
                         .build())
                 .build();
 
         when(userAuthService.getUserByUserId(userId)).thenReturn(userInfo);
         when(notificationProperties.getEmail().getContactUsLink()).thenReturn("link");
-        when(appProperties.getWeb().getUrl()).thenReturn("url");
+        when(webAppProperties.getUrl()).thenReturn("url");
 
         userNotificationService.notifyUserAccountActivation(userId, roleName);
 
@@ -127,13 +119,13 @@ class UserNotificationServiceTest {
                 .firstName("firstName")
                 .lastName("lastName")
                 .email("email").build();
-        EmailData emailInfo = EmailData.builder()
+        EmailData<EmailNotificationTemplateData> emailInfo = EmailData.<EmailNotificationTemplateData>builder()
                 .notificationTemplateData(EmailNotificationTemplateData.builder()
-                        .templateName(INVITATION_TO_EMITTER_CONTACT)
-                        .templateParams(Map.of(APPLICANT_FNAME, userInfo.getFirstName(),
-                                APPLICANT_LNAME, userInfo.getLastName(),
-                                EmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
-                                EmailNotificationTemplateConstants.CONTACT_REGULATOR, "link"))
+                        .templateName(PmrvNotificationTemplateName.INVITATION_TO_EMITTER_CONTACT.getName())
+                        .templateParams(Map.of(PmrvEmailNotificationTemplateConstants.APPLICANT_FNAME, userInfo.getFirstName(),
+                        		PmrvEmailNotificationTemplateConstants.APPLICANT_LNAME, userInfo.getLastName(),
+                        		PmrvEmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
+                        		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, "link"))
                         .build())
                 .build();
 
@@ -153,19 +145,17 @@ class UserNotificationServiceTest {
         String url = "home.com";
         String contactUsLink = url + "/contact-us";
         UserInfoDTO userInfo = UserInfoDTO.builder().email(email).build();
-        AppProperties.Web web = mock(AppProperties.Web.class);
-        when(appProperties.getWeb()).thenReturn(web);
-        when(web.getUrl()).thenReturn(url);
+        when(webAppProperties.getUrl()).thenReturn(url);
         NotificationProperties.Email notificationEmail = mock(NotificationProperties.Email.class);
         when(notificationProperties.getEmail()).thenReturn(notificationEmail);
         when(notificationEmail.getContactUsLink()).thenReturn(contactUsLink);
         
-        EmailData emailInfo = EmailData.builder()
+        EmailData<EmailNotificationTemplateData> emailInfo = EmailData.<EmailNotificationTemplateData>builder()
                 .notificationTemplateData(EmailNotificationTemplateData.builder()
-                        .templateName(RESET_PASSWORD_CONFIRMATION)
+                        .templateName(PmrvNotificationTemplateName.RESET_PASSWORD_CONFIRMATION.getName())
                         .templateParams(Map.of(
-                        		EmailNotificationTemplateConstants.HOME_URL, url,
-                        		EmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink))
+                        		PmrvEmailNotificationTemplateConstants.HOME_URL, url,
+                        		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink))
                         .build())
                 .build();
 
@@ -174,7 +164,7 @@ class UserNotificationServiceTest {
         userNotificationService.notifyUserPasswordReset(userId);
 
         verify(userAuthService, times(1)).getUserByUserId(userId);
-        verify(appProperties, times(1)).getWeb();
+        verify(webAppProperties, times(1)).getUrl();
         verify(notificationProperties, times(1)).getEmail();
         verify(notificationEmailService, times(1)).notifyRecipient(emailInfo, email);
     }
@@ -186,19 +176,17 @@ class UserNotificationServiceTest {
         String url = "home.com";
         String contactUsLink = url + "/contact-us";
         UserInfoDTO userInfo = UserInfoDTO.builder().email(email).build();
-        AppProperties.Web web = mock(AppProperties.Web.class);
-        when(appProperties.getWeb()).thenReturn(web);
-        when(web.getUrl()).thenReturn(url);
+        when(webAppProperties.getUrl()).thenReturn(url);
         NotificationProperties.Email notificationEmail = mock(NotificationProperties.Email.class);
         when(notificationProperties.getEmail()).thenReturn(notificationEmail);
         when(notificationEmail.getContactUsLink()).thenReturn(contactUsLink);
         
-        EmailData emailInfo = EmailData.builder()
+        EmailData<EmailNotificationTemplateData> emailInfo = EmailData.<EmailNotificationTemplateData>builder()
                 .notificationTemplateData(EmailNotificationTemplateData.builder()
-                        .templateName(RESET_2FA_CONFIRMATION)
+                        .templateName(PmrvNotificationTemplateName.RESET_2FA_CONFIRMATION.getName())
                         .templateParams(Map.of(
-                        		EmailNotificationTemplateConstants.HOME_URL, url,
-                        		EmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink))
+                        		PmrvEmailNotificationTemplateConstants.HOME_URL, url,
+                        		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink))
                         .build())
                 .build();
 
@@ -212,14 +200,14 @@ class UserNotificationServiceTest {
 
     private UserNotificationWithRedirectionLinkInfo createNotificationInfo() {
         return UserNotificationWithRedirectionLinkInfo.builder()
-            .templateName(NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT)
+            .templateName(PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT)
             .userEmail("email")
-            .linkParamName(OPERATOR_INVITATION_CONFIRMATION_LINK)
+            .linkParamName(PmrvEmailNotificationTemplateConstants.OPERATOR_INVITATION_CONFIRMATION_LINK)
             .linkPath(OPERATOR_REGISTRATION_INVITATION_ACCEPTED_URL)
             .notificationParams(new HashMap<>(
-                Map.of(EmailNotificationTemplateConstants.APPLICANT_FNAME, "firstName")))
+                Map.of(PmrvEmailNotificationTemplateConstants.APPLICANT_FNAME, "firstName")))
             .tokenParams(UserNotificationWithRedirectionLinkInfo.TokenParams.builder()
-                .jwtTokenAction(JwtTokenActionEnum.OPERATOR_INVITATION)
+                .jwtTokenAction(JwtTokenAction.OPERATOR_INVITATION)
                 .claimValue("claimValue")
                 .expirationInterval(5L)
                 .build()
@@ -227,9 +215,9 @@ class UserNotificationServiceTest {
             .build();
     }
 
-    private String expectedNotificationLink(String token, AppProperties.Web web) {
+    private String expectedNotificationLink(String token, WebAppProperties web) {
         return UriComponentsBuilder
-            .fromHttpUrl(web.getUrl())
+            .fromUriString(web.getUrl())
             .path("/")
             .path(OPERATOR_REGISTRATION_INVITATION_ACCEPTED_URL)
             .queryParam(NavigationParams.TOKEN, token)
@@ -237,9 +225,4 @@ class UserNotificationServiceTest {
             .toUriString();
     }
 
-    private AppProperties.Web createAppWeb() {
-        AppProperties.Web web = new AppProperties.Web();
-        web.setUrl("http://www.pmrv.org.uk");
-        return web;
-    }
 }

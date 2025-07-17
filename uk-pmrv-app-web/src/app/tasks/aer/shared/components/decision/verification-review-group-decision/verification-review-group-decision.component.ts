@@ -34,8 +34,7 @@ export class VerificationReviewGroupDecisionComponent implements PendingRequest 
   );
   canEdit$ = combineLatest([this.route.data, this.aerService.getPayload()]).pipe(
     map(
-      ([data, payload]) =>
-        !(payload as AerApplicationReviewRequestTaskPayload)?.reviewSectionsCompleted[data.groupKey] ?? true,
+      ([data, payload]) => !(payload as AerApplicationReviewRequestTaskPayload)?.reviewSectionsCompleted[data.groupKey],
     ),
   );
 

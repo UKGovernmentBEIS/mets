@@ -1,9 +1,9 @@
 package uk.gov.pmrv.api.migration.permit.envpermitsandlicences;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.springframework.jdbc.core.RowMapper;
 
 public class EnvPermitOrLicenceRowMapper implements RowMapper<EnvPermitOrLicence>{
 

@@ -24,10 +24,11 @@ import { FileUpload, FileUploadEvent } from './file-upload-event';
 @Component({
   selector: 'app-file-input',
   templateUrl: './file-input.component.html',
-  styleUrls: ['../multiple-file-input/multiple-file-input.component.scss'],
+  styleUrl: '../multiple-file-input/multiple-file-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileInputComponent implements OnInit, ControlValueAccessor {
+  @Input() headerSize: 'm' | 's';
   @Input() listTitle: string;
   @Input() label: string;
   @Input() text: string;
@@ -35,6 +36,8 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
   @Input() hint: string;
   @Input() accepted = '*/*';
   @Input() downloadUrl: (uuid: string) => string | string[];
+  @Input() fileNameTransformer!: (file: File | null) => File | null;
+
   uploadedFiles$: Observable<FileUploadEvent[]>;
   isDisabled: boolean;
   onFileBlur: () => any;
@@ -125,17 +128,18 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
     const files = (event.target as HTMLInputElement).files;
 
     if (files.length === 1) {
-      if (this.isImage(files[0])) {
-        const fileAsDataURL = window.URL.createObjectURL(files[0]);
+      const renamedFile = this.fileNameTransformer ? this.fileNameTransformer(files[0]) : files[0];
+      if (this.isImage(renamedFile)) {
+        const fileAsDataURL = window.URL.createObjectURL(renamedFile);
         this.getImageFileDimensionsResolver(fileAsDataURL)
           .then((dimensions) => {
-            this.uploadFile(files[0], dimensions);
+            this.uploadFile(renamedFile, dimensions);
           })
           .catch(() => {
-            this.uploadFile(files[0], null);
+            this.uploadFile(renamedFile, null);
           });
       } else {
-        this.uploadFile(files[0], null);
+        this.uploadFile(renamedFile, null);
       }
     }
   }

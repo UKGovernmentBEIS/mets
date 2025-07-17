@@ -126,6 +126,8 @@ import { VerificationWaitComponent } from '@tasks/aer/verification-wait/verifica
 
 import { EmissionsSummaryComponent as ReviewEmissionsSummaryComponent } from './review/emissions-summary/emissions-summary.component';
 import { ReturnForAmendsComponent } from './review/return-for-amends/return-for-amends.component';
+import { SkipReviewComponent } from './review/skip-review/skip-review.component';
+import { canSkipReview } from './review/skip-review/skip-review.guard';
 import { MeasurementTierReviewSummaryComponent } from './shared/components/measurement-tier-review-summary/measurement-tier-review-summary.component';
 import { AdditionalDocumentsComponent } from './submit/additional-documents/additional-documents.component';
 import { AmendComponent } from './submit/amend/amend.component';
@@ -139,6 +141,7 @@ import { ActivityLevelReportComponent } from './verification-submit/activity-lev
 import { FuelsComponent } from './verification-submit/fuels/fuels.component';
 import { MeasurementVerificationComponent } from './verification-submit/measurement/measurement-verification.component';
 import { PfcVerificationComponent } from './verification-submit/pfc/pfc-verification.component';
+import { AerVerifyReturnToOperatorForChangesComponent } from './verification-submit/return-to-operator-for-changes/return-to-operator-for-changes.component';
 
 const routes: Routes = [
   {
@@ -148,6 +151,11 @@ const routes: Routes = [
         path: '',
         data: { pageTitle: 'Emissions report' },
         component: SubmitContainerComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'installation-details',
@@ -532,13 +540,13 @@ const routes: Routes = [
           },
           {
             path: 'verification',
-            data: { pageTitle: 'Send report for verification', backlink: '../' },
+            data: { pageTitle: 'Send report for verification', backlink: '../..' },
             component: VerificationComponent,
             canActivate: [VerificationGuard],
           },
           {
             path: 'regulator',
-            data: { pageTitle: 'Send report to regulator', backlink: '../' },
+            data: { pageTitle: 'Send report to regulator', backlink: '../..' },
             component: RegulatorComponent,
             canDeactivate: [PendingRequestGuard],
           },
@@ -617,6 +625,11 @@ const routes: Routes = [
         component: VerificationWaitComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'recall',
         data: { pageTitle: 'Recall AER application from verifier' },
         component: RecallComponent,
@@ -632,6 +645,11 @@ const routes: Routes = [
         data: { pageTitle: 'Emissions report' },
         component: ReviewWaitComponent,
       },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
     ],
   },
 
@@ -642,6 +660,16 @@ const routes: Routes = [
         path: '',
         data: { pageTitle: 'Emissions report' },
         component: VerificationSubmitContainerComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
+        path: 'return-to-operator-for-changes',
+        data: { pageTitle: 'Return to operator for changes' },
+        component: AerVerifyReturnToOperatorForChangesComponent,
       },
       {
         path: 'details',
@@ -1035,6 +1063,23 @@ const routes: Routes = [
         path: '',
         data: { pageTitle: 'Review emissions report' },
         component: ReviewContainerComponent,
+      },
+      {
+        path: 'skip-review',
+        children: [
+          {
+            path: '',
+            component: SkipReviewComponent,
+            data: { pageTitle: 'Skip review', breadcrumb: true },
+            canActivate: [canSkipReview],
+            canDeactivate: [PendingRequestGuard],
+          },
+        ],
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'details',

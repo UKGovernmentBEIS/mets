@@ -1,0 +1,116 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    [heading]="'Sub-installation details'"
+    [caption]="
+      (isEditing$ | async)
+        ? 'Edit a sub-installation with fallback approach'
+        : 'Add a sub-installation with fallback approach'
+    "
+    submitText="Continue">
+    <div class="govuk-!-width-two-thirds">
+      <h2 class="govuk-heading-m">Choose a sub-installation fallback type</h2>
+      <p class="govuk-caption-m">
+        For heat benchmark, fuel benchmark, and process emissions, you can have up to two sub-installations: one exposed
+        to significant carbon leakage risk and one not exposed.
+      </p>
+      <p class="govuk-caption-m">
+        For measurable heat, you can have an additional sub-installation for the delivery of district heating that is
+        not exposed to carbon leakage.
+      </p>
+
+      <div formGroupName="subInstallationTypeOptions">
+        <div
+          govuk-radio
+          formControlName="parentOption"
+          [ngClass]="{ 'govuk-form-group--error': isInvalid('subInstallationType') }">
+          <govuk-radio-option value="HEAT_BENCHMARK" label="Heat benchmark">
+            <ng-container govukConditionalContent>
+              <div formGroupName="HEAT_BENCHMARK">
+                <div govuk-radio formControlName="selectedValue" legend="Choose a carbon leakage status">
+                  <ng-container formArrayName="subOptions">
+                    <govuk-radio-option
+                      *ngFor="let sub of heatBenchmark; index as i"
+                      [formControlName]="i"
+                      [value]="sub"
+                      [label]="sub?.endsWith('_NON_CL') ? 'Not exposed' : 'Exposed'"
+                      [disable]="(fallbackApproachFallbackTypes$ | async)?.includes(sub)"></govuk-radio-option>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </govuk-radio-option>
+
+          <govuk-radio-option value="FUEL_BENCHMARK" label="Fuel benchmark">
+            <ng-container govukConditionalContent>
+              <div formGroupName="FUEL_BENCHMARK">
+                <div govuk-radio formControlName="selectedValue" legend="Choose a carbon leakage status">
+                  <ng-container formArrayName="subOptions">
+                    <govuk-radio-option
+                      *ngFor="let sub of fuelBenchmark; index as i"
+                      [formControlName]="i"
+                      [value]="sub"
+                      [label]="sub?.endsWith('_NON_CL') ? 'Not exposed' : 'Exposed'"
+                      [disable]="(fallbackApproachFallbackTypes$ | async)?.includes(sub)"></govuk-radio-option>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </govuk-radio-option>
+
+          <govuk-radio-option value="PROCESS_EMISSIONS" label="Process emissions">
+            <ng-container govukConditionalContent>
+              <div formGroupName="PROCESS_EMISSIONS">
+                <div govuk-radio formControlName="selectedValue" legend="Choose a carbon leakage status">
+                  <ng-container formArrayName="subOptions">
+                    <govuk-radio-option
+                      *ngFor="let sub of processEmissions; index as i"
+                      [formControlName]="i"
+                      [value]="sub"
+                      [label]="sub?.endsWith('_NON_CL') ? 'Not exposed' : 'Exposed'"
+                      [disable]="(fallbackApproachFallbackTypes$ | async)?.includes(sub)"></govuk-radio-option>
+                  </ng-container>
+                </div>
+              </div>
+            </ng-container>
+          </govuk-radio-option>
+
+          <govuk-radio-option
+            value="DISTRICT_HEATING_NON_CL"
+            label="District heating"
+            [disable]="
+              (fallbackApproachFallbackTypes$ | async)?.includes('DISTRICT_HEATING_NON_CL')
+            "></govuk-radio-option>
+        </div>
+      </div>
+
+      <h2 class="govuk-heading-m">Describe the system boundaries of this sub-installation</h2>
+      <div class="govuk-caption-m">
+        You must specify which:
+        <ul class="govuk-list govuk-list--bullet govuk-!-width-two-thirds govuk-caption-m">
+          <li>technical units are included</li>
+          <li>processes are carried out</li>
+          <li>input materials and fuels</li>
+          <li>products and outputs are attributed</li>
+        </ul>
+      </div>
+
+      <p class="govuk-caption-m">This is in line with the requirements of Annex VI, section 2(b) of the FAR.</p>
+      <p class="govuk-caption-m">
+        If this information is already covered in the description of the installation and its main processes, you can
+        include a brief reference to it in this description.
+      </p>
+      <div formControlName="description" govuk-textarea [maxLength]="10000" rows="10"></div>
+
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload supporting files (optional)"
+        formControlName="supportingFiles"
+        listTitle="Uploaded files"
+        hint="In complex cases a detailed flow diagram can be uploaded for this sub-installation."></app-multiple-file-input>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink [routerLink]="(isEditing$ | async) ? '../../' : '../'">Return to: Sub-installations</a>
+</app-permit-task>

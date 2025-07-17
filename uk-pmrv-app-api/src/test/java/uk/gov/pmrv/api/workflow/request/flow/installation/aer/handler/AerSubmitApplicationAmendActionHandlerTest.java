@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.abbreviations.Abbreviations;
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
@@ -48,7 +48,7 @@ class AerSubmitApplicationAmendActionHandlerTest {
         long accountId = 1L;
         String requestId = "1";
         RequestTaskActionType actionType = RequestTaskActionType.AER_SUBMIT_APPLICATION_AMEND;
-        PmrvUser pmrvUser = new PmrvUser();
+        AppUser appUser = new AppUser();
         AerSubmitApplicationAmendRequestTaskActionPayload payload =
             new AerSubmitApplicationAmendRequestTaskActionPayload();
 
@@ -66,10 +66,10 @@ class AerSubmitApplicationAmendActionHandlerTest {
             .build();
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        actionHandler.process(requestTaskId, actionType, pmrvUser, payload);
+        actionHandler.process(requestTaskId, actionType, appUser, payload);
 
         verify(requestTaskService).findTaskById(requestTaskId);
-        verify(requestAerSubmitService).sendAmendsToRegulator(requestTask, payload, pmrvUser);
+        verify(requestAerSubmitService).sendAmendsToRegulator(requestTask, payload, appUser);
         verify(workflowService).completeTask(requestTaskId.toString(), Map.of(BpmnProcessConstants.REQUEST_ID,
             requestId,
             BpmnProcessConstants.AER_OUTCOME, AerOutcome.REVIEW_REQUESTED));

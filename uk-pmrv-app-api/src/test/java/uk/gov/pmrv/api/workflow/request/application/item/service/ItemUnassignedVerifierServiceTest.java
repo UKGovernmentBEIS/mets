@@ -7,10 +7,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.application.authorization.VerifierAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
@@ -57,7 +57,7 @@ class ItemUnassignedVerifierServiceTest {
         final AccountType accountType = AccountType.INSTALLATION;
         Map<Long, Set<RequestTaskType>> scopedRequestTaskTypes = Map.of(1L, Set.of(INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
 
-        PmrvUser pmrvUser = PmrvUser.builder().userId("vb1Id").roleType(RoleType.VERIFIER).build();
+        AppUser appUser = AppUser.builder().userId("vb1Id").roleType(RoleTypeConstants.VERIFIER).build();
         Item expectedItem = mock(Item.class);
         ItemPage expectedItemPage = ItemPage.builder()
                 .items(List.of(expectedItem))
@@ -68,21 +68,21 @@ class ItemUnassignedVerifierServiceTest {
                 .totalItems(1L).build();
 
         // Mock
-        when(verifierAuthorityResourceService.getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType))
+        when(verifierAuthorityResourceService.getUserScopedRequestTaskTypesByAccountType(appUser, accountType))
                 .thenReturn(scopedRequestTaskTypes);
-        when(itemRepository.findItems(pmrvUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
+        when(itemRepository.findItems(appUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
                 .thenReturn(expectedItemPage);
-        when(itemResponseService.toItemDTOResponse(expectedItemPage, accountType, pmrvUser))
+        when(itemResponseService.toItemDTOResponse(expectedItemPage, accountType, appUser))
                 .thenReturn(expectedItemDTOResponse);
 
         // Invoke
-        ItemDTOResponse actualResponse = service.getUnassignedItems(pmrvUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
 
         // Assert
         assertThat(actualResponse).isEqualTo(expectedItemDTOResponse);
 
         verify(verifierAuthorityResourceService, times(1))
-            .getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType);
+            .getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
     }
 
     @Test
@@ -90,20 +90,20 @@ class ItemUnassignedVerifierServiceTest {
         final AccountType accountType = AccountType.INSTALLATION;
         Map<Long, Set<RequestTaskType>> scopedRequestTaskTypes = Map.of();
 
-        PmrvUser pmrvUser = PmrvUser.builder().userId("vb1Id").roleType(RoleType.VERIFIER).build();
+        AppUser appUser = AppUser.builder().userId("vb1Id").roleType(RoleTypeConstants.VERIFIER).build();
 
         // Mock
-        when(verifierAuthorityResourceService.getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType))
+        when(verifierAuthorityResourceService.getUserScopedRequestTaskTypesByAccountType(appUser, accountType))
                 .thenReturn(scopedRequestTaskTypes);
 
         // Invoke
-        ItemDTOResponse actualResponse = service.getUnassignedItems(pmrvUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
 
         // Assert
         assertThat(actualResponse).isEqualTo(ItemDTOResponse.emptyItemDTOResponse());
 
         verify(verifierAuthorityResourceService, times(1))
-            .getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType);
+            .getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
         verify(itemRepository, never()).findItems(anyString(), Mockito.any(), anyMap(), any(PagingRequest.class));
         verify(itemResponseService, never()).toItemDTOResponse(any(), any(), any());
     }
@@ -113,22 +113,22 @@ class ItemUnassignedVerifierServiceTest {
         final AccountType accountType = AccountType.INSTALLATION;
         Map<Long, Set<RequestTaskType>> scopedRequestTaskTypes = Map.of(1L, Set.of(INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
 
-        PmrvUser pmrvUser = PmrvUser.builder().userId("vb1Id").roleType(RoleType.VERIFIER).build();
+        AppUser appUser = AppUser.builder().userId("vb1Id").roleType(RoleTypeConstants.VERIFIER).build();
         ItemPage itemPage = ItemPage.builder()
                 .items(List.of())
                 .totalItems(0L).build();
         ItemDTOResponse expectedItemDTOResponse = ItemDTOResponse.emptyItemDTOResponse();
 
         // Mock
-        when(verifierAuthorityResourceService.getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType))
+        when(verifierAuthorityResourceService.getUserScopedRequestTaskTypesByAccountType(appUser, accountType))
                 .thenReturn(scopedRequestTaskTypes);
-        when(itemRepository.findItems(pmrvUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
+        when(itemRepository.findItems(appUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
                 .thenReturn(itemPage);
-        when(itemResponseService.toItemDTOResponse(itemPage, accountType, pmrvUser))
+        when(itemResponseService.toItemDTOResponse(itemPage, accountType, appUser))
                 .thenReturn(expectedItemDTOResponse);
 
         // Invoke
-        ItemDTOResponse actualResponse = service.getUnassignedItems(pmrvUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
 
         // Assert
         assertThat(actualResponse).isEqualTo(expectedItemDTOResponse);
@@ -136,6 +136,6 @@ class ItemUnassignedVerifierServiceTest {
 
     @Test
     void getRoleType() {
-        assertEquals(RoleType.VERIFIER, service.getRoleType());
+        assertEquals(RoleTypeConstants.VERIFIER, service.getRoleType());
     }
 }

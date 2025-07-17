@@ -1,16 +1,17 @@
 package uk.gov.pmrv.api.migration.permit.measurementdevices;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
-import uk.gov.pmrv.api.permit.domain.measurementdevices.MeasurementDeviceOrMethod;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.permit.domain.common.MeasurementDeviceType;
+import uk.gov.pmrv.api.permit.domain.measurementdevices.MeasurementDeviceOrMethod;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class, imports = {UUID.class, MeasurementDeviceTypeMapper.class})
 public interface MeasurementDeviceOrMethodMapper {

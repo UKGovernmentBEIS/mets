@@ -10,7 +10,10 @@ import { AerService } from '../../../core/aer.service';
   providedIn: 'root',
 })
 export class RegionalInventoryService {
-  constructor(private readonly reportingDataService: ReportingDataService, private readonly aerService: AerService) {}
+  constructor(
+    private readonly reportingDataService: ReportingDataService,
+    private readonly aerService: AerService,
+  ) {}
 
   getRegionalInventoryData(localZoneCode): Observable<RegionalInventoryEmissionCalculationParamsDTO> {
     return this.aerService.getPayload().pipe(

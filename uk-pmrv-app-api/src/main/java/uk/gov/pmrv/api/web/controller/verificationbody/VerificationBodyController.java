@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyInfoDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyInfoResponseDTO;
@@ -32,14 +34,12 @@ import uk.gov.pmrv.api.verificationbody.service.VerificationBodyQueryService;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyUpdateService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.orchestrator.verificationbody.service.VerificationBodyAndUserOrchestrator;
 import uk.gov.pmrv.api.web.orchestrator.verificationbody.dto.VerificationBodyCreationDTO;
-import uk.gov.pmrv.api.web.security.Authorized;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
+import uk.gov.pmrv.api.web.orchestrator.verificationbody.service.VerificationBodyAndUserOrchestrator;
 
 import java.util.List;
 
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 
 @RestController
 @RequestMapping(path = "/v1.0/verification-bodies")
@@ -56,7 +56,7 @@ public class VerificationBodyController {
     /**
      * Retrieves all verification bodies.
      *
-     * @param pmrvUser {@link PmrvUser}
+     * @param appUser {@link AppUser}
      * @return List of {@link VerificationBodyInfoResponseDTO}
      */
     @GetMapping
@@ -65,8 +65,8 @@ public class VerificationBodyController {
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = REGULATOR)
-    public ResponseEntity<VerificationBodyInfoResponseDTO> getVerificationBodies(@Parameter(hidden = true) PmrvUser pmrvUser) {
-        return new ResponseEntity<>(verificationBodyQueryService.getVerificationBodies(pmrvUser),
+    public ResponseEntity<VerificationBodyInfoResponseDTO> getVerificationBodies(@Parameter(hidden = true) AppUser appUser) {
+        return new ResponseEntity<>(verificationBodyQueryService.getVerificationBodies(appUser),
                 HttpStatus.OK);
     }
 
@@ -105,11 +105,11 @@ public class VerificationBodyController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<VerificationBodyInfoDTO> createVerificationBody(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @RequestBody @Valid @Parameter(description = "The verification body creation dto", required = true)
                     VerificationBodyCreationDTO verificationBodyCreationDTO) {
         VerificationBodyInfoDTO vbInfo =
-                verificationBodyAndUserOrchestrator.createVerificationBody(pmrvUser, verificationBodyCreationDTO);
+                verificationBodyAndUserOrchestrator.createVerificationBody(appUser, verificationBodyCreationDTO);
         return new ResponseEntity<>(vbInfo, HttpStatus.OK);
     }
 

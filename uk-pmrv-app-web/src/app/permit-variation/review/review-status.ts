@@ -24,16 +24,16 @@ export function resolveReviewGroupStatusRegulatorLed(
       return tasksStatuses.includes('needs review')
         ? 'needs review'
         : (['not started', 'cannot start yet'] as TaskItemStatus[]).every((status) => tasksStatuses.includes(status))
-        ? 'not started'
-        : tasksStatuses.every((status) => status === 'cannot start yet')
-        ? 'cannot start yet'
-        : tasksStatuses.every((status) => status === 'complete')
-        ? 'complete'
-        : (['in progress', 'cannot start yet', 'complete'] as TaskItemStatus[]).some((status) =>
-            tasksStatuses.includes(status),
-          )
-        ? 'in progress'
-        : 'not started'; //fallback, should never happen
+          ? 'not started'
+          : tasksStatuses.every((status) => status === 'cannot start yet')
+            ? 'cannot start yet'
+            : tasksStatuses.every((status) => status === 'complete')
+              ? 'complete'
+              : (['in progress', 'cannot start yet', 'complete'] as TaskItemStatus[]).some((status) =>
+                    tasksStatuses.includes(status),
+                  )
+                ? 'in progress'
+                : 'not started'; //fallback, should never happen
     }
   }
 }

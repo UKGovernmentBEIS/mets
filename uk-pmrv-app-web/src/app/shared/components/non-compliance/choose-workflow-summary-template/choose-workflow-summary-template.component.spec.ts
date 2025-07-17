@@ -8,9 +8,8 @@ describe('ChooseWorkflowSummaryTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChooseWorkflowSummaryTemplateComponent ]
-    })
-    .compileComponents();
+      declarations: [ChooseWorkflowSummaryTemplateComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ChooseWorkflowSummaryTemplateComponent);
     component = fixture.componentInstance;

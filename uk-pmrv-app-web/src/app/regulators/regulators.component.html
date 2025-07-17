@@ -23,7 +23,6 @@
               <ng-container *ngSwitchCase="'authorityStatus'">
                 <ng-container *ngIf="regulatorsArray.at(index).value.authorityStatus; let authorityStatus">
                   <ng-container *ngIf="authorityStatus !== 'PENDING'; else pendingStatus">
-                    <app-user-locked *ngIf="row.locked"></app-user-locked>
                     <div
                       [options]="authorityStatus === 'ACCEPTED' ? authorityStatusesAccepted : authorityStatuses"
                       formControlName="authorityStatus"

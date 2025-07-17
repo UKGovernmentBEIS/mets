@@ -7,11 +7,11 @@ export function emissionSummariesStatus(state: PermitApplicationState): TaskItem
       ? 'cannot start yet'
       : 'not started'
     : !areEmissionSummariesValid(state) ||
-      (!areEmissionSummariesUsingEverything(state) && state.permitSectionsCompleted.emissionSummaries?.[0])
-    ? 'needs review'
-    : !state.permitSectionsCompleted.emissionSummaries?.[0]
-    ? 'in progress'
-    : 'complete';
+        (!areEmissionSummariesUsingEverything(state) && state.permitSectionsCompleted.emissionSummaries?.[0])
+      ? 'needs review'
+      : !state.permitSectionsCompleted.emissionSummaries?.[0]
+        ? 'in progress'
+        : 'complete';
 }
 
 export function areEmissionSummariesPrerequisitesMet(state: PermitApplicationState): boolean {

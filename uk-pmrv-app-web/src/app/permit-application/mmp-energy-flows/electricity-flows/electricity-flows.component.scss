@@ -1,0 +1,16 @@
+.inline-rm-btn {
+  display: flex;
+  justify-content: space-between;
+
+  a {
+    flex-basis: content;
+    font-family: 'GDS Transport', arial, sans-serif;
+    text-decoration: underline;
+
+    font-size: 1.3rem;
+
+    color: #003078;
+    cursor: pointer;
+    float: right;
+  }
+}

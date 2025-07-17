@@ -8,13 +8,11 @@ import { UncorrectedNonConformities } from 'pmrv-api';
     <app-non-conformities-per-plan-group
       [isEditable]="isEditable"
       [uncorrectedNonConformities]="uncorrectedNonConformities"
-      baseLink=".."
-    ></app-non-conformities-per-plan-group>
+      baseLink=".."></app-non-conformities-per-plan-group>
     <app-non-conformities-previous-year-group
       [isEditable]="isEditable"
       [uncorrectedNonConformities]="uncorrectedNonConformities"
-      baseLink="../previous-year"
-    ></app-non-conformities-previous-year-group>
+      baseLink="../previous-year"></app-non-conformities-previous-year-group>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

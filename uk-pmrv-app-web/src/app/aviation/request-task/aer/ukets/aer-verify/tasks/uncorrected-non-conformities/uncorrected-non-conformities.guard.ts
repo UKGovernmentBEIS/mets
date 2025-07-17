@@ -5,7 +5,7 @@ import { map, take, tap } from 'rxjs';
 
 import { aerVerifyQuery } from '@aviation/request-task/aer/ukets/aer-verify/aer-verify.selector';
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 
 import { UncorrectedNonConformitiesFormProvider } from './uncorrected-non-conformities-form.provider';
@@ -23,13 +23,13 @@ export const canActivateUncorrectedNonConformities: CanActivateFn = () => {
         store.setPayload({
           ...payload,
           uncorrectedNonConformities:
-            AerVerifyStoreDelegate.INITIAL_STATE.verificationReport?.uncorrectedNonConformities,
+            AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport?.uncorrectedNonConformities,
         } as any);
       }
 
       if (!verificationReport?.uncorrectedNonConformities) {
-        (store.aerVerifyDelegate as AerVerifyStoreDelegate).setUncorrectedNonConformities(
-          AerVerifyStoreDelegate.INITIAL_STATE.verificationReport.uncorrectedNonConformities,
+        (store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setUncorrectedNonConformities(
+          AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport.uncorrectedNonConformities,
         );
       }
 

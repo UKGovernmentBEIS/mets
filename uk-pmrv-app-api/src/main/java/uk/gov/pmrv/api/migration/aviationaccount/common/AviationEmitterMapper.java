@@ -1,9 +1,9 @@
 package uk.gov.pmrv.api.migration.aviationaccount.common;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.springframework.jdbc.core.RowMapper;
 
 public class AviationEmitterMapper implements RowMapper<AviationEmitter>{
 

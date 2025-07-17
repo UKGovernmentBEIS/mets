@@ -1,12 +1,9 @@
 package uk.gov.pmrv.api.allowance.service;
 
 import lombok.RequiredArgsConstructor;
-
 import org.mapstruct.factory.Mappers;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import uk.gov.pmrv.api.allowance.domain.ActivityLevel;
 import uk.gov.pmrv.api.allowance.domain.AllowanceActivityLevelEntity;
 import uk.gov.pmrv.api.allowance.mapper.AllowanceMapper;

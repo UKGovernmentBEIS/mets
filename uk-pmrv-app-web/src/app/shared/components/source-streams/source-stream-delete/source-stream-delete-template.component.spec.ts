@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { SourceStreamDeleteTemplateComponent } from '@shared/components/source-streams/source-stream-delete/source-stream-delete-template.component';
 import { SharedModule } from '@shared/shared.module';
@@ -18,8 +18,7 @@ describe('SourceStreamDeleteTemplateComponent', () => {
     template: `
       <app-source-stream-delete-template
         (delete)="onDelete()"
-        [sourceStream]="sourceStream"
-      ></app-source-stream-delete-template>
+        [sourceStream]="sourceStream"></app-source-stream-delete-template>
     `,
   })
   class TestComponent {
@@ -34,8 +33,9 @@ describe('SourceStreamDeleteTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       declarations: [TestComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -55,7 +55,7 @@ describe('SourceStreamDeleteTemplateComponent', () => {
   it('should render the remove button and stream reference', () => {
     expect(element.querySelectorAll<HTMLButtonElement>('button[govukwarnbutton]').length).toEqual(1);
     expect(element.querySelector('h1').textContent.trim()).toEqual(
-      'Are you sure you want to delete  ‘reference Anthracite’?',
+      'Are you sure you want to delete ‘reference Anthracite’?',
     );
   });
 });

@@ -1,7 +1,7 @@
 <ng-container *ngIf="data">
-  <ng-container *ngIf="data?.monitoringReportingRoles">
+  <ng-container *ngIf="data?.monitoringReportingRoles?.monitoringReportingRoles">
     <h2 class="govuk-heading-m">Monitoring and reporting roles</h2>
-    <dl *ngFor="let role of $any(data.monitoringReportingRoles)" govuk-summary-list>
+    <dl *ngFor="let role of $any(data.monitoringReportingRoles.monitoringReportingRoles)" govuk-summary-list>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>{{ role.jobTitle }}</dt>
         <dd govukSummaryListRowValue>{{ role.mainDuties }}</dd>

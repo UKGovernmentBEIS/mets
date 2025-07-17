@@ -12,21 +12,22 @@ import { supportDocumentsFormProvider } from './support-documents-form.provider'
 
 @Component({
   selector: 'app-support-documents',
-  template: ` <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <app-wizard-step
-        (formSubmit)="onContinue()"
-        [formGroup]="form"
-        submitText="Continue"
-        [hideSubmit]="(store.isEditable$ | async) === false"
-      >
-        <span class="govuk-caption-l">Surrender your permit</span>
-        <app-page-heading>Do you want to provide any supporting documents?</app-page-heading>
-        <app-boolean-radio-group controlName="documentsExist"> </app-boolean-radio-group>
-      </app-wizard-step>
-      <a govukLink routerLink="../..">Return to: Surrender your permit</a>
+  template: `
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <app-wizard-step
+          (formSubmit)="onContinue()"
+          [formGroup]="form"
+          submitText="Continue"
+          [hideSubmit]="(store.isEditable$ | async) === false">
+          <span class="govuk-caption-l">Surrender your permit</span>
+          <app-page-heading>Do you want to provide any supporting documents?</app-page-heading>
+          <app-boolean-radio-group controlName="documentsExist"></app-boolean-radio-group>
+        </app-wizard-step>
+        <a govukLink routerLink="../..">Return to: Surrender your permit</a>
+      </div>
     </div>
-  </div>`,
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [supportDocumentsFormProvider],
 })

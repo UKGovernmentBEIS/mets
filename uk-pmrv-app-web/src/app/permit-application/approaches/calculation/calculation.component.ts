@@ -22,7 +22,10 @@ export class CalculationComponent {
   );
   sumOfAnnualEmitted$ = this.sourceStreamCategoryAppliedTiers$.pipe(
     map((appliedTiers) =>
-      appliedTiers.reduce((total, tier) => total + (+tier?.sourceStreamCategory?.annualEmittedCO2Tonnes ?? 0), 0),
+      appliedTiers.reduce(
+        (total, tier) => total + (Number(tier?.sourceStreamCategory?.annualEmittedCO2Tonnes) || 0),
+        0,
+      ),
     ),
   );
   hasTransfer$ = this.store.pipe(

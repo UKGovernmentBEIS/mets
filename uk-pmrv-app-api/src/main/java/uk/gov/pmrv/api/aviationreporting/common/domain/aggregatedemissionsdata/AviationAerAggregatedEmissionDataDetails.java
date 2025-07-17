@@ -1,33 +1,35 @@
 package uk.gov.pmrv.api.aviationreporting.common.domain.aggregatedemissionsdata;
 
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import uk.gov.netz.api.common.validation.uniqueelements.UniqueField;
 import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationRptAirportsDTO;
 
-import java.math.BigDecimal;
+
+
 
 @Data
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public abstract class AviationAerAggregatedEmissionDataDetails {
 
     @NotNull
     @Valid
-    @EqualsAndHashCode.Include()
+    @UniqueField
     private AviationRptAirportsDTO airportFrom;
 
     @NotNull
     @Valid
-    @EqualsAndHashCode.Include()
+    @UniqueField
     private AviationRptAirportsDTO airportTo;
 
     @NotNull

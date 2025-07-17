@@ -16,7 +16,9 @@ describe('InstallationDetailsGroupComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    template: ` <app-installation-details-group [payload]="payload"></app-installation-details-group> `,
+    template: `
+      <app-installation-details-group [payload]="payload"></app-installation-details-group>
+    `,
   })
   class TestComponent {
     payload = mockAerApplyPayload as AerApplicationVerificationSubmitRequestTaskPayload;

@@ -4,12 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, combineLatest, first, map, switchMap, tap } from 'rxjs';
 
+import { GovukTableColumn } from 'govuk-components';
+
 import { PendingRequestService } from '../../core/guards/pending-request.service';
 import { PendingRequest } from '../../core/interfaces/pending-request.interface';
 import { PERMIT_TASK_FORM } from '../shared/permit-task-form.token';
 import { SectionComponent } from '../shared/section/section.component';
 import { PermitApplicationState } from '../store/permit-application.state';
 import { PermitApplicationStore } from '../store/permit-application.store';
+import { editColumns, emissionSummariesColumns } from './emission-summaries';
 import { emisionSummariesFormFactory } from './emission-summaries-form.provider';
 
 @Component({
@@ -17,7 +20,7 @@ import { emisionSummariesFormFactory } from './emission-summaries-form.provider'
   templateUrl: './emission-summaries.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [emisionSummariesFormFactory],
-  styleUrls: ['./emission-summaries.component.scss'],
+  styleUrl: './emission-summaries.component.scss',
 })
 export class EmissionSummariesComponent extends SectionComponent implements PendingRequest {
   displayErrorSummary$ = new BehaviorSubject(false);
@@ -37,6 +40,8 @@ export class EmissionSummariesComponent extends SectionComponent implements Pend
             this.form.errors?.regulatedActivitiesNotUsed)),
     ),
   );
+
+  emissionSummariesColumns: GovukTableColumn[] = [...emissionSummariesColumns, ...editColumns];
 
   constructor(
     @Inject(PERMIT_TASK_FORM) readonly form: UntypedFormGroup,

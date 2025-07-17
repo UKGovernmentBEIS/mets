@@ -1,9 +1,16 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateFn, CanDeactivateFn, createUrlTreeFromSnapshot } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  CanActivateFn,
+  CanDeactivateFn,
+  createUrlTreeFromSnapshot,
+  Router,
+} from '@angular/router';
 
 import { map, take, tap } from 'rxjs';
 
-import { RequestTaskStore } from '@aviation/request-task/store';
+import { EmpReviewRequestTaskPayload } from '@aviation/request-task/emp/shared/util/emp.util';
+import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 
 import { empQuery } from '../emp.selectors';
@@ -16,7 +23,7 @@ export const canActivateOverallDecision: CanActivateFn = () => {
   const payload = store.getState().requestTaskItem.requestTask.payload;
 
   return store.pipe(
-    empQuery.selectReviewDetermination,
+    empQuery.selectDetermination,
     take(1),
     tap((determination) => {
       if (!determination) {
@@ -59,22 +66,30 @@ export const canActivateOverallDecisionReason = () => {
 export const canActivateOverallDecisionForms = (route: ActivatedRouteSnapshot) => {
   const store = inject(RequestTaskStore);
   const change = route.queryParamMap.get('change') === 'true';
-  const formProvider = inject<OverallDecisionFormProvider>(TASK_FORM_PROVIDER);
-  const formValues = formProvider.form.value;
 
   return store.pipe(
-    empQuery.selectPayload,
+    requestTaskQuery.selectRequestTaskPayload,
     take(1),
     map((payload) => {
       return (
         change ||
-        (!payload.reviewSectionsCompleted['decision'] && formProvider.form.invalid) ||
-        !formValues.reason ||
-        createUrlTreeFromSnapshot(
-          route,
-          ['reason', 'decision'].includes(route.url.toString()) ? ['../', 'summary'] : ['summary'],
-        )
+        (payload as EmpReviewRequestTaskPayload).reviewSectionsCompleted['decision'] !== true ||
+        createUrlTreeFromSnapshot(route, ['reason'].includes(route.url.toString()) ? ['../', 'summary'] : ['summary'])
       );
     }),
+  );
+};
+
+export const canActivateOverallDecisionSummaryPage: CanActivateFn = (route) => {
+  const force = inject(Router).getCurrentNavigation().extras?.state?.force;
+  return inject(RequestTaskStore).pipe(
+    requestTaskQuery.selectRequestTaskPayload,
+    take(1),
+    map(
+      (payload) =>
+        force === true ||
+        (payload as EmpReviewRequestTaskPayload).reviewSectionsCompleted['decision'] === true ||
+        createUrlTreeFromSnapshot(route, ['../']),
+    ),
   );
 };

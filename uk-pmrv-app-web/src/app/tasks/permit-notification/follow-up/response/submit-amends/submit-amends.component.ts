@@ -14,15 +14,15 @@ import { PermitNotificationService } from '../../../core/permit-notification.ser
 
 @Component({
   selector: 'app-submit-amends',
-  template: `<app-submit
+  template: `
+    <app-submit
       [allowSubmit]="allowSubmit$ | async"
       [isEditable]="store.isEditable$ | async"
       [isActionSubmitted]="isActionSubmitted$ | async"
       [returnUrlConfig]="{ text: 'follow up response', url: '..' }"
       [competentAuthority]="competentAuthority$ | async"
       [customSubmitContentTemplate]="test"
-      (submitClicked)="onSubmit()"
-    ></app-submit>
+      (submitClicked)="onSubmit()"></app-submit>
     <ng-template #test>
       <p class="govuk-body"><strong>Send your application</strong></p>
 
@@ -30,7 +30,8 @@ import { PermitNotificationService } from '../../../core/permit-notification.ser
         By submitting this application you are confirming that, to the best of your knowledge, the details you are
         providing are correct.
       </p>
-    </ng-template>`,
+    </ng-template>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubmitAmendsContainerComponent implements OnInit {

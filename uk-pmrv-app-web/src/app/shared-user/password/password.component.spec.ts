@@ -8,7 +8,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { BasePage, changeInputValue } from '@testing';
-import { PasswordStrengthMeterModule, PasswordStrengthMeterService } from 'angular-password-strength-meter';
+import { PasswordStrengthMeterComponent } from 'angular-password-strength-meter';
+import { provideZxvbnServiceForPSM } from 'angular-password-strength-meter/zxcvbn';
 
 import { GovukComponentsModule } from 'govuk-components';
 
@@ -64,12 +65,12 @@ describe('PasswordComponent', () => {
         HttpClientTestingModule,
         ReactiveFormsModule,
         GovukComponentsModule,
-        PasswordStrengthMeterModule.forRoot(),
+        PasswordStrengthMeterComponent,
         RouterTestingModule,
         SharedUserModule,
       ],
       declarations: [PasswordComponent, TestComponent],
-      providers: [PasswordService, PasswordStrengthMeterService],
+      providers: [PasswordService, provideZxvbnServiceForPSM()],
     }).compileComponents();
   });
 

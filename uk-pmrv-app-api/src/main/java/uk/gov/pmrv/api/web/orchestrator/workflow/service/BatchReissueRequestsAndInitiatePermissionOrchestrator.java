@@ -1,21 +1,21 @@
 package uk.gov.pmrv.api.web.orchestrator.workflow.service;
 
 import lombok.RequiredArgsConstructor;
-
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.authorization.rules.domain.Scope;
-import uk.gov.pmrv.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.domain.Scope;
+import uk.gov.netz.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
+import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.pmrv.api.web.orchestrator.workflow.dto.BatchReissuesResponseDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsSearchResults;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestSearchCriteria;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestHistoryCategory;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.mapper.AccountTypeBatchReissueRequestTypeMapper;
-import uk.gov.pmrv.api.web.orchestrator.workflow.dto.BatchReissuesResponseDTO;
 
 import java.util.Set;
 
@@ -28,10 +28,11 @@ public class BatchReissueRequestsAndInitiatePermissionOrchestrator {
 	private static final AccountTypeBatchReissueRequestTypeMapper accountTypeBatchReissueRequestTypeMapper = Mappers
 			.getMapper(AccountTypeBatchReissueRequestTypeMapper.class);
 	
-	public BatchReissuesResponseDTO findBatchReissueRequests(PmrvUser authUser, AccountType accountType, PagingRequest pagingRequestInfo) {
+	public BatchReissuesResponseDTO findBatchReissueRequests(AppUser authUser, AccountType accountType, PagingRequest pagingRequestInfo) {
 		final RequestType batchReissueRequestType = accountTypeBatchReissueRequestTypeMapper.accountTypeToBatchReissueRequestType(accountType);
 		final RequestDetailsSearchResults requestDetailsSearchResults = requestQueryService.findRequestDetailsBySearchCriteria(RequestSearchCriteria.builder()
-				.competentAuthority(authUser.getCompetentAuthority())
+				.resourceType(ResourceType.CA)
+				.resourceId(authUser.getCompetentAuthority().name())
 				.category(RequestHistoryCategory.CA)
 				.requestTypes(Set.of(batchReissueRequestType))
 				.paging(pagingRequestInfo)

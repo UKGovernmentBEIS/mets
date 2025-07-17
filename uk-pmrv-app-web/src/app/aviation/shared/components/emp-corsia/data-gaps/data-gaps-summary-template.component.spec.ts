@@ -6,7 +6,7 @@ import { render, RenderResult, screen } from '@testing-library/angular';
 
 import { EmpDataGapsCorsia } from 'pmrv-api';
 
-import { DataGapsSummaryTemplateComponent } from './data-gaps-summary-template.component';
+import { DataGapsCorsiaSummaryTemplateComponent } from './data-gaps-summary-template.component';
 
 describe('DataGapsSummaryTemplate', () => {
   describe('DataGapsSummaryTemplate with FUM', () => {
@@ -15,9 +15,9 @@ describe('DataGapsSummaryTemplate', () => {
       secondaryDataSources: 'Secodary data sources description',
       secondarySourcesDataGapsExist: false,
     };
-    let result: RenderResult<DataGapsSummaryTemplateComponent>;
+    let result: RenderResult<DataGapsCorsiaSummaryTemplateComponent>;
     beforeEach(async () => {
-      result = await render(DataGapsSummaryTemplateComponent, {
+      result = await render(DataGapsCorsiaSummaryTemplateComponent, {
         imports: [RouterTestingModule, SharedModule, CommonModule],
         componentProperties: { isEditable: true, data: dataGapsData, corsiaMonitoringApproach: 'FUEL_USE_MONITORING' },
       });
@@ -44,9 +44,9 @@ describe('DataGapsSummaryTemplate', () => {
       secondaryDataSources: 'Secodary data sources description',
       secondarySourcesDataGapsExist: false,
     };
-    let result: RenderResult<DataGapsSummaryTemplateComponent>;
+    let result: RenderResult<DataGapsCorsiaSummaryTemplateComponent>;
     beforeEach(async () => {
-      result = await render(DataGapsSummaryTemplateComponent, {
+      result = await render(DataGapsCorsiaSummaryTemplateComponent, {
         imports: [RouterTestingModule, SharedModule, CommonModule],
         componentProperties: { isEditable: true, data: dataGapsData, corsiaMonitoringApproach: 'CERT_MONITORING' },
       });

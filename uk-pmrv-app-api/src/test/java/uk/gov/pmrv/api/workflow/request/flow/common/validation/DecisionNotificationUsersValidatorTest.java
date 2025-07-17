@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.LocationOffShore;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -47,15 +47,15 @@ class DecisionNotificationUsersValidatorTest {
                 .signatory("signatory")
                 .build();
         
-        final PmrvUser pmrvUser = PmrvUser.builder()
-                .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+        final AppUser appUser = AppUser.builder()
+                .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
                 .build();
         
-        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator1"), pmrvUser)).thenReturn(true);
-        when(workflowUsersValidator.areExternalContactsValid(Set.of(10L), pmrvUser)).thenReturn(true);
+        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator1"), appUser)).thenReturn(true);
+        when(workflowUsersValidator.areExternalContactsValid(Set.of(10L), appUser)).thenReturn(true);
         when(workflowUsersValidator.isSignatoryValid(requestTask, "signatory")).thenReturn(true);
         
-        boolean result = validator.areUsersValid(requestTask, decisionNotification, pmrvUser);
+        boolean result = validator.areUsersValid(requestTask, decisionNotification, appUser);
 
         assertThat(result).isTrue();
     }
@@ -72,13 +72,13 @@ class DecisionNotificationUsersValidatorTest {
                 .signatory("signatory")
                 .build();
         
-        final PmrvUser pmrvUser = PmrvUser.builder()
-                .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+        final AppUser appUser = AppUser.builder()
+                .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
                 .build();
         
-        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator1"), pmrvUser)).thenReturn(false);
+        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator1"), appUser)).thenReturn(false);
         
-        boolean result = validator.areUsersValid(requestTask, decisionNotification, pmrvUser);
+        boolean result = validator.areUsersValid(requestTask, decisionNotification, appUser);
 
         assertThat(result).isFalse();
     }
@@ -95,14 +95,14 @@ class DecisionNotificationUsersValidatorTest {
                 .signatory("signatory")
                 .build();
         
-        final PmrvUser pmrvUser = PmrvUser.builder()
-                .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+        final AppUser appUser = AppUser.builder()
+                .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
                 .build();
         
-        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator1"), pmrvUser)).thenReturn(true);
-        when(workflowUsersValidator.areExternalContactsValid(Set.of(10L), pmrvUser)).thenReturn(false);
+        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator1"), appUser)).thenReturn(true);
+        when(workflowUsersValidator.areExternalContactsValid(Set.of(10L), appUser)).thenReturn(false);
         
-        boolean result = validator.areUsersValid(requestTask, decisionNotification, pmrvUser);
+        boolean result = validator.areUsersValid(requestTask, decisionNotification, appUser);
 
         assertThat(result).isFalse();
     }
@@ -119,15 +119,15 @@ class DecisionNotificationUsersValidatorTest {
                 .signatory("signatory")
                 .build();
         
-        final PmrvUser pmrvUser = PmrvUser.builder()
-                .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+        final AppUser appUser = AppUser.builder()
+                .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
                 .build();
         
-        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator1"), pmrvUser)).thenReturn(true);
-        when(workflowUsersValidator.areExternalContactsValid(Set.of(10L), pmrvUser)).thenReturn(true);
+        when(workflowUsersValidator.areOperatorsValid(1L, Set.of("operator1"), appUser)).thenReturn(true);
+        when(workflowUsersValidator.areExternalContactsValid(Set.of(10L), appUser)).thenReturn(true);
         when(workflowUsersValidator.isSignatoryValid(requestTask, "signatory")).thenReturn(false);
         
-        boolean result = validator.areUsersValid(requestTask, decisionNotification, pmrvUser);
+        boolean result = validator.areUsersValid(requestTask, decisionNotification, appUser);
 
         assertThat(result).isFalse();
     }

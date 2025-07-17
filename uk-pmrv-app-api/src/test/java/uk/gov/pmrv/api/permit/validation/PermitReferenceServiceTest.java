@@ -1,5 +1,22 @@
 package uk.gov.pmrv.api.permit.validation;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.files.attachments.service.FileAttachmentService;
+import uk.gov.pmrv.api.permit.domain.PermitViolation;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anySet;
@@ -10,24 +27,6 @@ import static org.mockito.Mockito.when;
 import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.ATTACHMENT_NOT_FOUND;
 import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.EMISSION_SUMMARIES_EMISSION_POINT_SHOULD_EXIST;
 import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.INVALID_EMISSION_POINT;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-
-import org.apache.commons.lang3.tuple.Pair;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.pmrv.api.files.attachments.service.FileAttachmentService;
-import uk.gov.pmrv.api.permit.domain.PermitViolation;
 
 @ExtendWith(MockitoExtension.class)
 class PermitReferenceServiceTest {
@@ -97,7 +96,7 @@ class PermitReferenceServiceTest {
         when(fileAttachmentService.fileAttachmentsExist(Set.of(file1.toString(), file2.toString()))).thenReturn(true);
 
         final Optional<Pair<PermitViolation.PermitViolationMessage, List<String>>> permitViolation = validator
-                .validateFilesExist(Set.of(file1, file2), Set.of(file1, file2, UUID.randomUUID()));
+                .validateFilesExist(new HashSet<>(Arrays.asList(file1, file2, null)), Set.of(file1, file2, UUID.randomUUID()));
 
         assertTrue(permitViolation.isEmpty());
         verify(fileAttachmentService, times(1))
@@ -112,7 +111,7 @@ class PermitReferenceServiceTest {
         when(fileAttachmentService.fileAttachmentsExist(Set.of(file1.toString(), file2.toString()))).thenReturn(false);
 
         final Optional<Pair<PermitViolation.PermitViolationMessage, List<String>>> permitViolation = validator
-                .validateFilesExist(Set.of(file1, file2), Set.of(file1, file2, UUID.randomUUID()));
+                .validateFilesExist(new HashSet<>(Arrays.asList(file1, file2)), Set.of(file1, file2, UUID.randomUUID()));
 
         assertTrue(permitViolation.isPresent());
         assertEquals(ATTACHMENT_NOT_FOUND, permitViolation.get().getLeft());

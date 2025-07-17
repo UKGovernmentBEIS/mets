@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,9 +11,10 @@
  */
 import { CalculationPfcParameterMonitoringTier } from './calculationPfcParameterMonitoringTier';
 import { DurationRange } from './durationRange';
+import { OverVoltageSourceStreamEmissionCalculationMethodData } from './overVoltageSourceStreamEmissionCalculationMethodData';
 import { ParameterMonitoringTierDiffReason } from './parameterMonitoringTierDiffReason';
 import { PfcManuallyProvidedEmissions } from './pfcManuallyProvidedEmissions';
-import { PfcSourceStreamEmissionCalculationMethodData } from './pfcSourceStreamEmissionCalculationMethodData';
+import { SlopeSourceStreamEmissionCalculationMethodData } from './slopeSourceStreamEmissionCalculationMethodData';
 
 export interface PfcSourceStreamEmission {
   id?: string;
@@ -23,7 +24,9 @@ export interface PfcSourceStreamEmission {
   totalPrimaryAluminium: string;
   durationRange: DurationRange;
   parameterMonitoringTierDiffReason?: ParameterMonitoringTierDiffReason;
-  pfcSourceStreamEmissionCalculationMethodData: PfcSourceStreamEmissionCalculationMethodData;
+  pfcSourceStreamEmissionCalculationMethodData:
+    | OverVoltageSourceStreamEmissionCalculationMethodData
+    | SlopeSourceStreamEmissionCalculationMethodData;
   calculationCorrect: boolean;
   massBalanceApproachUsed?: boolean;
   providedEmissions?: PfcManuallyProvidedEmissions;

@@ -17,8 +17,7 @@ describe('AerEmissionsReductionClaimCorsiaTemplateComponent', () => {
         [emissionsReductionClaim]="emissionsReductionClaim"
         [cefFiles]="cefFiles"
         [declarationFiles]="declarationFiles"
-        [isEditable]="isEditable"
-      ></app-aer-emissions-reduction-claim-corsia-template>
+        [isEditable]="isEditable"></app-aer-emissions-reduction-claim-corsia-template>
     `,
   })
   class TestComponent {
@@ -60,7 +59,7 @@ describe('AerEmissionsReductionClaimCorsiaTemplateComponent', () => {
     expect(summaryListValues()).toEqual([
       ['Will you be making a claim for emissions reductions from the use of CORSIA eligible fuels?', ['Yes', 'Change']],
       ['CEF template', ['cefFile.png', 'Change']],
-      ['Total emissions reduction claimed, from the template', ['1000', 'Change']],
+      ['Total emissions reduction claimed, from the template', ['1000 tonnes CO2', 'Change']],
       ['Declaration of no double claiming', ['declarationFile.png', 'Change']],
     ]);
 

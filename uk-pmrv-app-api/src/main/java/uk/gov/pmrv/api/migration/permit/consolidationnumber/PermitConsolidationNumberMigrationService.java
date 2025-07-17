@@ -1,24 +1,29 @@
 package uk.gov.pmrv.api.migration.permit.consolidationnumber;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.permit.PermitMigrationContainer;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class PermitConsolidationNumberMigrationService {
 
     private final JdbcTemplate migrationJdbcTemplate;
+
+    public PermitConsolidationNumberMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+    }
 
     private static final String QUERY_BASE = "with XMLNAMESPACES ("
         + "'urn:www-toplev-com:officeformsofd' AS fd"

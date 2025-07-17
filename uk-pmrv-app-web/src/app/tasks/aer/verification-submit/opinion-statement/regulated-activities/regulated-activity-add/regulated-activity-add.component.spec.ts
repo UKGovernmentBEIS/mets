@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -12,7 +11,6 @@ import { mockPostBuild } from '@tasks/aer/verification-submit/testing/mock-state
 import { mockState } from '@tasks/aer/verification-submit/testing/mock-verification-apply-action';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { AerApplicationVerificationSubmitRequestTaskPayload, TasksService } from 'pmrv-api';
 
@@ -56,8 +54,8 @@ describe('RegulatedActivityAddComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OpinionStatementModule, RouterTestingModule],
-      providers: [KeycloakService, { provide: TasksService, useValue: tasksService }, DestroySubject],
+      imports: [OpinionStatementModule],
+      providers: [{ provide: TasksService, useValue: tasksService }, DestroySubject, provideRouter([])],
     }).compileComponents();
   });
 
@@ -80,7 +78,7 @@ describe('RegulatedActivityAddComponent', () => {
   it('should display all HTMLElements and form with 0 errors', () => {
     expect(page.heading1).toBeTruthy();
     expect(page.heading1.textContent.trim()).toEqual('Select a regulated activity used at the installation');
-    expect(page.categoryInputs).toHaveLength(8);
+    expect(page.categoryInputs).toHaveLength(9);
     expect(page.activityInputs).toHaveLength(26);
     expect(page.submitButton).toBeTruthy();
     expect(page.errorSummary).toBeFalsy();
@@ -96,7 +94,7 @@ describe('RegulatedActivityAddComponent', () => {
   });
 
   it('should display error when already existing category gets selected', () => {
-    page.categoryInputs[0].click();
+    page.categoryInputs[1].click();
     page.submitButton.click();
     fixture.detectChanges();
 
@@ -105,11 +103,14 @@ describe('RegulatedActivityAddComponent', () => {
     expect(page.errorSummaryListContents.length).toEqual(1);
   });
 
-  it('should submit a valid form and navigate to previous route', () => {
+  it('should submit a valid form and navigate to previous route', async () => {
     const navigateSpy = jest.spyOn(router, 'navigate');
     tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
 
+    page.categoryInputs[7].click();
+    fixture.detectChanges();
     page.activityInputs[24].click();
+
     page.submitButton.click();
     fixture.detectChanges();
 

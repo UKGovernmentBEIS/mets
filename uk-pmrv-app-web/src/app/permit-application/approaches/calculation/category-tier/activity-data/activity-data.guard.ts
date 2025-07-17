@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { categoryTierSubtaskStatus } from '../../calculation-status';
 import { isWizardComplete } from './activity-data-wizard';
 
 @Injectable()
-export class ActivityDataGuard implements CanActivate {
+export class ActivityDataGuard {
   constructor(
     private readonly router: Router,
     private readonly store: PermitApplicationStore<PermitApplicationState>,

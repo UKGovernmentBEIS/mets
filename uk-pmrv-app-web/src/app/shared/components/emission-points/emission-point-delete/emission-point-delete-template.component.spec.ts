@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { EmissionPointDeleteTemplateComponent } from '@shared/components/emission-points/emission-point-delete/emission-point-delete-template.component';
 import { SharedModule } from '@shared/shared.module';
@@ -18,8 +18,7 @@ describe('EmissionPointDeleteTemplateComponent', () => {
     template: `
       <app-emission-point-delete-template
         (delete)="onDelete()"
-        [emissionPoint]="emissionPoint"
-      ></app-emission-point-delete-template>
+        [emissionPoint]="emissionPoint"></app-emission-point-delete-template>
     `,
   })
   class TestComponent {
@@ -33,8 +32,9 @@ describe('EmissionPointDeleteTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       declarations: [TestComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -53,6 +53,6 @@ describe('EmissionPointDeleteTemplateComponent', () => {
 
   it('should render the remove button and the emission point to be deleted', () => {
     expect(element.querySelectorAll<HTMLButtonElement>('button[govukwarnbutton]').length).toEqual(1);
-    expect(element.querySelector('h1').textContent.trim()).toEqual('Are you sure you want to delete  ‘EP1 boiler’?');
+    expect(element.querySelector('h1').textContent.trim()).toEqual('Are you sure you want to delete ‘EP1 boiler’?');
   });
 });

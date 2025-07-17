@@ -18,8 +18,7 @@ describe('EmissionSourceDetailsTemplateComponent', () => {
       <app-emission-source-details-template
         [form]="formGroup"
         [isEditing]="isEditing"
-        [caption]="'the caption'"
-      ></app-emission-source-details-template>
+        [caption]="'the caption'"></app-emission-source-details-template>
     `,
   })
   class TestComponent {

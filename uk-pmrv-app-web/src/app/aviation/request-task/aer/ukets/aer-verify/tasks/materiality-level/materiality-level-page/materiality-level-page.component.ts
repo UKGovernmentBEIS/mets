@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MaterialityLevelFormProvider } from '@aviation/request-task/aer/ukets/aer-verify/tasks/materiality-level/materiality-level-form.provider';
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -35,11 +35,13 @@ export default class MaterialityLevelPageComponent {
   onSubmit() {
     if (this.form.invalid) return;
 
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
       .saveAerVerify({ materialityLevel: this.formProvider.getFormValue() }, 'in progress')
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setMaterialityLevel(this.formProvider.getFormValue());
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setMaterialityLevel(
+          this.formProvider.getFormValue(),
+        );
 
         this.router.navigate(['reference-documents'], { relativeTo: this.route });
       });

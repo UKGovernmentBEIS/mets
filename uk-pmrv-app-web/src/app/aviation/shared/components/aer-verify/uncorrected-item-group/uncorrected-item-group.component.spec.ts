@@ -24,8 +24,7 @@ describe('UncorrectedItemGroupComponent', () => {
       <app-uncorrected-item-group
         [isEditable]="isEditable"
         [queryParams]="queryParams"
-        [uncorrectedItems]="uncorrectedItems"
-      ></app-uncorrected-item-group>
+        [uncorrectedItems]="uncorrectedItems"></app-uncorrected-item-group>
     `,
   })
   class TestComponent {

@@ -10,7 +10,10 @@ import { DoalAuthorityResponseRequestTaskPayload, DoalGrantAuthorityResponse } f
 
 @Injectable({ providedIn: 'root' })
 export class PreliminaryAllocationGuard {
-  constructor(private readonly store: CommonTasksStore, private readonly router: Router) {}
+  constructor(
+    private readonly store: CommonTasksStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(_route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return (

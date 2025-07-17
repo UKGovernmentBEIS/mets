@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.note.Note;
+import uk.gov.netz.api.common.note.Note;
 
 @Entity
 @SequenceGenerator(name = "default_note_id_generator", sequenceName = "account_note_seq", allocationSize = 1)

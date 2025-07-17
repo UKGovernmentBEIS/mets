@@ -24,9 +24,10 @@ import {
 export class TotalEmissionsStandardFuelsTableTemplateComponent implements OnInit {
   @Input() data: AviationAerUkEts;
 
+  @Input() standardFuelsTotalEmissions$: Observable<StandardFuelsTotalEmissions[]>;
+
   getSummaryDescription = getSummaryDescription;
   aviationAerEmissionsCalculationDTO: AviationAerEmissionsCalculationDTO;
-  standardFuelsTotalEmissions$: Observable<StandardFuelsTotalEmissions[]>;
   columns: GovukTableColumn[] = [
     { header: 'Fuel type', field: 'fuelType' },
     { header: 'Emissions factor', field: 'emissionsFactor' },
@@ -38,14 +39,16 @@ export class TotalEmissionsStandardFuelsTableTemplateComponent implements OnInit
   constructor(private aviationReportingService: AviationReportingService) {}
 
   ngOnInit() {
-    const emissionData = this.data.aggregatedEmissionsData;
-    const safData = this.data.saf;
-    this.aviationAerEmissionsCalculationDTO = {
-      aggregatedEmissionsData: emissionData,
-      saf: safData,
-    };
-    this.standardFuelsTotalEmissions$ = this.aviationReportingService
-      .getStandardFuelsEmissionsUkEts(this.aviationAerEmissionsCalculationDTO)
-      .pipe(shareReplay(1));
+    if (!this.standardFuelsTotalEmissions$) {
+      const emissionData = this.data.aggregatedEmissionsData;
+      const safData = this.data.saf;
+      this.aviationAerEmissionsCalculationDTO = {
+        aggregatedEmissionsData: emissionData,
+        saf: safData,
+      };
+      this.standardFuelsTotalEmissions$ = this.aviationReportingService
+        .getStandardFuelsEmissionsUkEts(this.aviationAerEmissionsCalculationDTO)
+        .pipe(shareReplay(1));
+    }
   }
 }

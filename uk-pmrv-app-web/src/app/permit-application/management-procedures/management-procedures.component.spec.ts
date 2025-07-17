@@ -863,4 +863,197 @@ describe('ManagementProceduresFormComponent', () => {
       });
     });
   });
+
+  describe('for assess and control risk', () => {
+    let fixture: ComponentFixture<ManagementProceduresComponent>;
+    let page: Page;
+    const activatedRoute = new ActivatedRouteStub({ taskId: taskId }, null, {
+      permitTask: 'assessAndControlRisk',
+    });
+
+    class Page extends BasePage<ManagementProceduresComponent> {
+      get heading() {
+        return this.query<HTMLHeadingElement>('h1');
+      }
+
+      get caption() {
+        return this.heading.previousElementSibling;
+      }
+
+      get subtitles() {
+        return this.queryAll<HTMLParagraphElement>('p.govuk-body');
+      }
+
+      get errorSummary() {
+        return this.query<HTMLDivElement>('.govuk-error-summary');
+      }
+
+      get errorSummaryErrorList() {
+        return Array.from(this.query<HTMLDivElement>('.govuk-error-summary').querySelectorAll('a')).map((anchor) =>
+          anchor.textContent.trim(),
+        );
+      }
+
+      get submitButton() {
+        return this.query<HTMLButtonElement>('button[type="submit"]');
+      }
+
+      get procedureDocumentName() {
+        return this.getInputValue('#procedureDocumentName');
+      }
+
+      set procedureDocumentName(value: string) {
+        this.setInputValue('#procedureDocumentName', value);
+      }
+
+      get procedureReference() {
+        return this.getInputValue('#procedureReference');
+      }
+
+      set procedureReference(value: string) {
+        this.setInputValue('#procedureReference', value);
+      }
+
+      get diagramReference() {
+        return this.getInputValue('#diagramReference');
+      }
+
+      set diagramReference(value: string) {
+        this.setInputValue('#diagramReference', value);
+      }
+
+      get procedureDescription() {
+        return this.getInputValue('#procedureDescription');
+      }
+
+      set procedureDescription(value: string) {
+        this.setInputValue('#procedureDescription', value);
+      }
+
+      get responsibleDepartmentOrRole() {
+        return this.getInputValue('#responsibleDepartmentOrRole');
+      }
+
+      set responsibleDepartmentOrRole(value: string) {
+        this.setInputValue('#responsibleDepartmentOrRole', value);
+      }
+
+      get locationOfRecords() {
+        return this.getInputValue('#locationOfRecords');
+      }
+
+      set locationOfRecords(value: string) {
+        this.setInputValue('#locationOfRecords', value);
+      }
+
+      get itSystemUsed() {
+        return this.getInputValue('#itSystemUsed');
+      }
+
+      set itSystemUsed(value: string) {
+        this.setInputValue('#itSystemUsed', value);
+      }
+
+      get appliedStandards() {
+        return this.getInputValue('#appliedStandards');
+      }
+
+      set appliedStandards(value: string) {
+        this.setInputValue('#appliedStandards', value);
+      }
+
+      get files() {
+        return (
+          this.query<HTMLSpanElement>('.moj-multi-file-upload__filename') ??
+          this.query<HTMLSpanElement>('.moj-multi-file-upload__success')
+        );
+      }
+
+      set fileValue(value: File) {
+        this.setInputValue('input[type="file"]', value);
+      }
+    }
+
+    beforeEach(async () => {
+      tasksService = mockClass(TasksService);
+      attachmentService = mockClass(RequestTaskAttachmentsHandlingService);
+
+      await TestBed.configureTestingModule({
+        declarations: [ManagementProceduresComponent, ManagementProceduresHeadingPipe, ManagementProceduresBodyPipe],
+        imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+        providers: [
+          { provide: TasksService, useValue: tasksService },
+          { provide: RequestTaskAttachmentsHandlingService, useValue: attachmentService },
+          { provide: ActivatedRoute, useValue: activatedRoute },
+          {
+            provide: PermitApplicationStore,
+            useExisting: PermitIssuanceStore,
+          },
+        ],
+      }).compileComponents();
+    });
+
+    const createComponent = () => {
+      fixture = TestBed.createComponent(ManagementProceduresComponent);
+      component = fixture.componentInstance;
+      page = new Page(fixture);
+      router = TestBed.inject(Router);
+      fixture.detectChanges();
+      jest.clearAllMocks();
+    };
+
+    describe('for submitting risk assessment document', () => {
+      const riskAssessmentFileId = '8a18a8b6-272f-4d09-bc84-cf384276d7db';
+      const riskAssessmentFileName = 'risk_assessment_diagram.pdf';
+
+      beforeEach(() => {
+        attachmentService.uploadRequestTaskAttachment.mockReturnValue(
+          asyncData<any>(new HttpResponse({ body: { uuid: riskAssessmentFileId } })),
+        );
+        store = TestBed.inject(PermitIssuanceStore);
+        store.setState(mockState);
+      });
+      beforeEach(createComponent);
+
+      it('should display heading, caption and subtitle', () => {
+        expect(page.heading.textContent).toEqual('Assessing and controlling risks');
+        expect(page.caption.textContent).toEqual('Management procedures');
+      });
+
+      it('should attach risk assessment file and submit a valid form, update the store and navigate to summary', async () => {
+        const file = new File(['some content'], riskAssessmentFileName);
+        page.fileValue = file;
+        fixture.detectChanges();
+
+        expect(page.files.textContent.trim()).toEqual(riskAssessmentFileName + ' has been uploaded');
+        expect(attachmentService.uploadRequestTaskAttachment).toHaveBeenCalledWith(
+          { requestTaskActionType: 'PERMIT_ISSUANCE_UPLOAD_SECTION_ATTACHMENT', requestTaskId: taskId },
+          file,
+          'events',
+          true,
+        );
+
+        page.submitButton.click();
+        fixture.detectChanges();
+
+        expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
+
+        expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith(
+          mockPostBuild(
+            {
+              ...mockPermitApplyPayload.permit,
+              assessAndControlRisk: {
+                ...mockPermitApplyPayload.permit.assessAndControlRisk,
+                riskAssessmentAttachments: [riskAssessmentFileId],
+              },
+            },
+            {
+              ...mockPermitApplyPayload.permitSectionsCompleted,
+              ...{ assessAndControlRisk: [true] },
+            },
+          ),
+        );
+      });
+    });
+  });
 });

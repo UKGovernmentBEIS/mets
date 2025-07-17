@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, first, Observable, of, pluck, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, first, map, Observable, of, switchMap, tap } from 'rxjs';
 
 import { AddressInputComponent } from '@shared/address-input/address-input.component';
 import { BackLinkService } from '@shared/back-link/back-link.service';
@@ -35,7 +35,7 @@ export class AddressComponent implements OnInit {
     this.route.data as Observable<{
       accountPermit: InstallationAccountPermitDTO;
     }>
-  ).pipe(pluck('accountPermit', 'account'));
+  ).pipe(map((x) => x?.accountPermit?.account));
 
   latitudeDirections: GovukSelectOption<CoordinatesDTO['cardinalDirection']>[] = [
     { text: 'North', value: 'NORTH' },

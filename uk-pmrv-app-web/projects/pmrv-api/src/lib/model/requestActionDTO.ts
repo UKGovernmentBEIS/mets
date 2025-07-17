@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,7 +9,139 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { RequestActionPayload } from './requestActionPayload';
+import { AerApplicationAmendsSubmittedRequestActionPayload } from './aerApplicationAmendsSubmittedRequestActionPayload';
+import { AerApplicationCompletedRequestActionPayload } from './aerApplicationCompletedRequestActionPayload';
+import { AerApplicationMarkNotRequiredRequestActionPayload } from './aerApplicationMarkNotRequiredRequestActionPayload';
+import { AerApplicationReturnedForAmendsRequestActionPayload } from './aerApplicationReturnedForAmendsRequestActionPayload';
+import { AerApplicationSubmittedRequestActionPayload } from './aerApplicationSubmittedRequestActionPayload';
+import { AerApplicationVerificationSubmittedRequestActionPayload } from './aerApplicationVerificationSubmittedRequestActionPayload';
+import { AerVerificationReturnedToOperatorRequestActionPayload } from './aerVerificationReturnedToOperatorRequestActionPayload';
+import { AirApplicationRespondedToRegulatorCommentsRequestActionPayload } from './airApplicationRespondedToRegulatorCommentsRequestActionPayload';
+import { AirApplicationReviewedRequestActionPayload } from './airApplicationReviewedRequestActionPayload';
+import { AirApplicationSubmittedRequestActionPayload } from './airApplicationSubmittedRequestActionPayload';
+import { ALRApplicationSubmittedRequestActionPayload } from './aLRApplicationSubmittedRequestActionPayload';
+import { ALRApplicationVerificationSubmittedRequestActionPayload } from './aLRApplicationVerificationSubmittedRequestActionPayload';
+import { ALRVerificationReturnedToOperatorRequestActionPayload } from './aLRVerificationReturnedToOperatorRequestActionPayload';
+import { AviationAccountClosureSubmittedRequestActionPayload } from './aviationAccountClosureSubmittedRequestActionPayload';
+import { AviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload } from './aviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload';
+import { AviationAerCorsiaAnnualOffsettingApplicationSubmittedRequestActionPayload } from './aviationAerCorsiaAnnualOffsettingApplicationSubmittedRequestActionPayload';
+import { AviationAerCorsiaAnnualOffsettingPeerReviewDescisionActionPayload } from './aviationAerCorsiaAnnualOffsettingPeerReviewDescisionActionPayload';
+import { AviationAerCorsiaApplicationCompletedRequestActionPayload } from './aviationAerCorsiaApplicationCompletedRequestActionPayload';
+import { AviationAerCorsiaApplicationReturnedForAmendsRequestActionPayload } from './aviationAerCorsiaApplicationReturnedForAmendsRequestActionPayload';
+import { AviationAerCorsiaApplicationSubmittedRequestActionPayload } from './aviationAerCorsiaApplicationSubmittedRequestActionPayload';
+import { AviationAerCorsiaApplicationVerificationSubmittedRequestActionPayload } from './aviationAerCorsiaApplicationVerificationSubmittedRequestActionPayload';
+import { AviationAerCorsiaVerificationReturnedToOperatorRequestActionPayload } from './aviationAerCorsiaVerificationReturnedToOperatorRequestActionPayload';
+import { AviationAerUkEtsApplicationCompletedRequestActionPayload } from './aviationAerUkEtsApplicationCompletedRequestActionPayload';
+import { AviationAerUkEtsApplicationReturnedForAmendsRequestActionPayload } from './aviationAerUkEtsApplicationReturnedForAmendsRequestActionPayload';
+import { AviationAerUkEtsApplicationSubmittedRequestActionPayload } from './aviationAerUkEtsApplicationSubmittedRequestActionPayload';
+import { AviationAerUkEtsApplicationVerificationSubmittedRequestActionPayload } from './aviationAerUkEtsApplicationVerificationSubmittedRequestActionPayload';
+import { AviationAerUkEtsVerificationReturnedToOperatorRequestActionPayload } from './aviationAerUkEtsVerificationReturnedToOperatorRequestActionPayload';
+import { AviationDoECorsiaSubmittedRequestActionPayload } from './aviationDoECorsiaSubmittedRequestActionPayload';
+import { AviationDreApplicationSubmittedRequestActionPayload } from './aviationDreApplicationSubmittedRequestActionPayload';
+import { AviationVirApplicationRespondedToRegulatorCommentsRequestActionPayload } from './aviationVirApplicationRespondedToRegulatorCommentsRequestActionPayload';
+import { AviationVirApplicationReviewedRequestActionPayload } from './aviationVirApplicationReviewedRequestActionPayload';
+import { AviationVirApplicationSubmittedRequestActionPayload } from './aviationVirApplicationSubmittedRequestActionPayload';
+import { BatchReissueCompletedRequestActionPayload } from './batchReissueCompletedRequestActionPayload';
+import { BatchReissueSubmittedRequestActionPayload } from './batchReissueSubmittedRequestActionPayload';
+import { BDRApplicationAmendsSubmittedRequestActionPayload } from './bDRApplicationAmendsSubmittedRequestActionPayload';
+import { BDRApplicationCompletedRequestActionPayload } from './bDRApplicationCompletedRequestActionPayload';
+import { BDRApplicationSubmittedRequestActionPayload } from './bDRApplicationSubmittedRequestActionPayload';
+import { BDRApplicationVerificationSubmittedRequestActionPayload } from './bDRApplicationVerificationSubmittedRequestActionPayload';
+import { BDRRegulatorReviewReturnedForAmendsRequestActionPayload } from './bDRRegulatorReviewReturnedForAmendsRequestActionPayload';
+import { BDRVerificationReturnedToOperatorRequestActionPayload } from './bDRVerificationReturnedToOperatorRequestActionPayload';
+import { DoalApplicationAcceptedRequestActionPayload } from './doalApplicationAcceptedRequestActionPayload';
+import { DoalApplicationAcceptedWithCorrectionsRequestActionPayload } from './doalApplicationAcceptedWithCorrectionsRequestActionPayload';
+import { DoalApplicationClosedRequestActionPayload } from './doalApplicationClosedRequestActionPayload';
+import { DoalApplicationProceededToAuthorityRequestActionPayload } from './doalApplicationProceededToAuthorityRequestActionPayload';
+import { DoalApplicationRejectedRequestActionPayload } from './doalApplicationRejectedRequestActionPayload';
+import { DreApplicationSubmittedRequestActionPayload } from './dreApplicationSubmittedRequestActionPayload';
+import { EmpIssuanceCorsiaApplicationAmendsSubmittedRequestActionPayload } from './empIssuanceCorsiaApplicationAmendsSubmittedRequestActionPayload';
+import { EmpIssuanceCorsiaApplicationApprovedRequestActionPayload } from './empIssuanceCorsiaApplicationApprovedRequestActionPayload';
+import { EmpIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload } from './empIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload';
+import { EmpIssuanceCorsiaApplicationReturnedForAmendsRequestActionPayload } from './empIssuanceCorsiaApplicationReturnedForAmendsRequestActionPayload';
+import { EmpIssuanceCorsiaApplicationSubmittedRequestActionPayload } from './empIssuanceCorsiaApplicationSubmittedRequestActionPayload';
+import { EmpIssuanceUkEtsApplicationAmendsSubmittedRequestActionPayload } from './empIssuanceUkEtsApplicationAmendsSubmittedRequestActionPayload';
+import { EmpIssuanceUkEtsApplicationApprovedRequestActionPayload } from './empIssuanceUkEtsApplicationApprovedRequestActionPayload';
+import { EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload } from './empIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload';
+import { EmpIssuanceUkEtsApplicationReturnedForAmendsRequestActionPayload } from './empIssuanceUkEtsApplicationReturnedForAmendsRequestActionPayload';
+import { EmpIssuanceUkEtsApplicationSubmittedRequestActionPayload } from './empIssuanceUkEtsApplicationSubmittedRequestActionPayload';
+import { EmpVariationCorsiaApplicationAmendsSubmittedRequestActionPayload } from './empVariationCorsiaApplicationAmendsSubmittedRequestActionPayload';
+import { EmpVariationCorsiaApplicationApprovedRequestActionPayload } from './empVariationCorsiaApplicationApprovedRequestActionPayload';
+import { EmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload } from './empVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload';
+import { EmpVariationCorsiaApplicationRegulatorLedApprovedRequestActionPayload } from './empVariationCorsiaApplicationRegulatorLedApprovedRequestActionPayload';
+import { EmpVariationCorsiaApplicationRejectedRequestActionPayload } from './empVariationCorsiaApplicationRejectedRequestActionPayload';
+import { EmpVariationCorsiaApplicationReturnedForAmendsRequestActionPayload } from './empVariationCorsiaApplicationReturnedForAmendsRequestActionPayload';
+import { EmpVariationCorsiaApplicationSubmittedRequestActionPayload } from './empVariationCorsiaApplicationSubmittedRequestActionPayload';
+import { EmpVariationUkEtsApplicationAmendsSubmittedRequestActionPayload } from './empVariationUkEtsApplicationAmendsSubmittedRequestActionPayload';
+import { EmpVariationUkEtsApplicationApprovedRequestActionPayload } from './empVariationUkEtsApplicationApprovedRequestActionPayload';
+import { EmpVariationUkEtsApplicationDeemedWithdrawnRequestActionPayload } from './empVariationUkEtsApplicationDeemedWithdrawnRequestActionPayload';
+import { EmpVariationUkEtsApplicationRegulatorLedApprovedRequestActionPayload } from './empVariationUkEtsApplicationRegulatorLedApprovedRequestActionPayload';
+import { EmpVariationUkEtsApplicationRejectedRequestActionPayload } from './empVariationUkEtsApplicationRejectedRequestActionPayload';
+import { EmpVariationUkEtsApplicationReturnedForAmendsRequestActionPayload } from './empVariationUkEtsApplicationReturnedForAmendsRequestActionPayload';
+import { EmpVariationUkEtsApplicationSubmittedRequestActionPayload } from './empVariationUkEtsApplicationSubmittedRequestActionPayload';
+import { InstallationAccountOpeningApplicationSubmittedRequestActionPayload } from './installationAccountOpeningApplicationSubmittedRequestActionPayload';
+import { InstallationAccountOpeningApprovedRequestActionPayload } from './installationAccountOpeningApprovedRequestActionPayload';
+import { InstallationAccountOpeningDecisionRequestActionPayload } from './installationAccountOpeningDecisionRequestActionPayload';
+import { InstallationInspectionApplicationSubmittedRequestActionPayload } from './installationInspectionApplicationSubmittedRequestActionPayload';
+import { InstallationInspectionOperatorRespondedRequestActionPayload } from './installationInspectionOperatorRespondedRequestActionPayload';
+import { NerApplicationAcceptedRequestActionPayload } from './nerApplicationAcceptedRequestActionPayload';
+import { NerApplicationEndedRequestActionPayload } from './nerApplicationEndedRequestActionPayload';
+import { NerApplicationProceededToAuthorityRequestActionPayload } from './nerApplicationProceededToAuthorityRequestActionPayload';
+import { NerApplicationRejectedRequestActionPayload } from './nerApplicationRejectedRequestActionPayload';
+import { NerApplicationReturnedForAmendsRequestActionPayload } from './nerApplicationReturnedForAmendsRequestActionPayload';
+import { NerApplicationSubmittedRequestActionPayload } from './nerApplicationSubmittedRequestActionPayload';
+import { NonComplianceApplicationClosedRequestActionPayload } from './nonComplianceApplicationClosedRequestActionPayload';
+import { NonComplianceApplicationSubmittedRequestActionPayload } from './nonComplianceApplicationSubmittedRequestActionPayload';
+import { NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload } from './nonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload';
+import { NonComplianceDailyPenaltyNoticeApplicationSubmittedRequestActionPayload } from './nonComplianceDailyPenaltyNoticeApplicationSubmittedRequestActionPayload';
+import { NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload } from './nonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload';
+import { NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload } from './nonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload';
+import { PaymentCancelledRequestActionPayload } from './paymentCancelledRequestActionPayload';
+import { PaymentProcessedRequestActionPayload } from './paymentProcessedRequestActionPayload';
+import { PeerReviewDecisionSubmittedRequestActionPayload } from './peerReviewDecisionSubmittedRequestActionPayload';
+import { PermanentCessationApplicationSubmittedRequestActionPayload } from './permanentCessationApplicationSubmittedRequestActionPayload';
+import { PermitCessationCompletedRequestActionPayload } from './permitCessationCompletedRequestActionPayload';
+import { PermitIssuanceApplicationDeemedWithdrawnRequestActionPayload } from './permitIssuanceApplicationDeemedWithdrawnRequestActionPayload';
+import { PermitIssuanceApplicationGrantedRequestActionPayload } from './permitIssuanceApplicationGrantedRequestActionPayload';
+import { PermitIssuanceApplicationRejectedRequestActionPayload } from './permitIssuanceApplicationRejectedRequestActionPayload';
+import { PermitIssuanceApplicationReturnedForAmendsRequestActionPayload } from './permitIssuanceApplicationReturnedForAmendsRequestActionPayload';
+import { PermitIssuanceApplicationSubmittedRequestActionPayload } from './permitIssuanceApplicationSubmittedRequestActionPayload';
+import { PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload } from './permitNotificationApplicationReviewCompletedDecisionRequestActionPayload';
+import { PermitNotificationApplicationReviewSubmittedDecisionRequestActionPayload } from './permitNotificationApplicationReviewSubmittedDecisionRequestActionPayload';
+import { PermitNotificationApplicationSubmittedRequestActionPayload } from './permitNotificationApplicationSubmittedRequestActionPayload';
+import { PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActionPayload } from './permitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActionPayload';
+import { PermitNotificationFollowUpResponseSubmittedRequestActionPayload } from './permitNotificationFollowUpResponseSubmittedRequestActionPayload';
+import { PermitNotificationFollowUpReturnedForAmendsRequestActionPayload } from './permitNotificationFollowUpReturnedForAmendsRequestActionPayload';
+import { PermitRevocationApplicationSubmittedRequestActionPayload } from './permitRevocationApplicationSubmittedRequestActionPayload';
+import { PermitRevocationApplicationWithdrawnRequestActionPayload } from './permitRevocationApplicationWithdrawnRequestActionPayload';
+import { PermitSurrenderApplicationDeemedWithdrawnRequestActionPayload } from './permitSurrenderApplicationDeemedWithdrawnRequestActionPayload';
+import { PermitSurrenderApplicationGrantedRequestActionPayload } from './permitSurrenderApplicationGrantedRequestActionPayload';
+import { PermitSurrenderApplicationRejectedRequestActionPayload } from './permitSurrenderApplicationRejectedRequestActionPayload';
+import { PermitSurrenderApplicationSubmittedRequestActionPayload } from './permitSurrenderApplicationSubmittedRequestActionPayload';
+import { PermitTransferAApplicationDeterminedRequestActionPayload } from './permitTransferAApplicationDeterminedRequestActionPayload';
+import { PermitTransferAApplicationSubmittedRequestActionPayload } from './permitTransferAApplicationSubmittedRequestActionPayload';
+import { PermitTransferBApplicationGrantedRequestActionPayload } from './permitTransferBApplicationGrantedRequestActionPayload';
+import { PermitTransferBApplicationSubmittedRequestActionPayload } from './permitTransferBApplicationSubmittedRequestActionPayload';
+import { PermitVariationApplicationDeemedWithdrawnRequestActionPayload } from './permitVariationApplicationDeemedWithdrawnRequestActionPayload';
+import { PermitVariationApplicationGrantedRequestActionPayload } from './permitVariationApplicationGrantedRequestActionPayload';
+import { PermitVariationApplicationRegulatorLedApprovedRequestActionPayload } from './permitVariationApplicationRegulatorLedApprovedRequestActionPayload';
+import { PermitVariationApplicationRejectedRequestActionPayload } from './permitVariationApplicationRejectedRequestActionPayload';
+import { PermitVariationApplicationReturnedForAmendsRequestActionPayload } from './permitVariationApplicationReturnedForAmendsRequestActionPayload';
+import { PermitVariationApplicationSubmittedRequestActionPayload } from './permitVariationApplicationSubmittedRequestActionPayload';
+import { RdeDecisionForcedRequestActionPayload } from './rdeDecisionForcedRequestActionPayload';
+import { RdeRejectedRequestActionPayload } from './rdeRejectedRequestActionPayload';
+import { RdeSubmittedRequestActionPayload } from './rdeSubmittedRequestActionPayload';
+import { ReissueCompletedRequestActionPayload } from './reissueCompletedRequestActionPayload';
+import { ReturnOfAllowancesApplicationSubmittedRequestActionPayload } from './returnOfAllowancesApplicationSubmittedRequestActionPayload';
+import { ReturnOfAllowancesReturnedApplicationCompletedRequestActionPayload } from './returnOfAllowancesReturnedApplicationCompletedRequestActionPayload';
+import { RfiResponseSubmittedRequestActionPayload } from './rfiResponseSubmittedRequestActionPayload';
+import { RfiSubmittedRequestActionPayload } from './rfiSubmittedRequestActionPayload';
+import { VirApplicationRespondedToRegulatorCommentsRequestActionPayload } from './virApplicationRespondedToRegulatorCommentsRequestActionPayload';
+import { VirApplicationReviewedRequestActionPayload } from './virApplicationReviewedRequestActionPayload';
+import { VirApplicationSubmittedRequestActionPayload } from './virApplicationSubmittedRequestActionPayload';
+import { WithholdingOfAllowancesApplicationClosedRequestActionPayload } from './withholdingOfAllowancesApplicationClosedRequestActionPayload';
+import { WithholdingOfAllowancesApplicationSubmittedRequestActionPayload } from './withholdingOfAllowancesApplicationSubmittedRequestActionPayload';
+import { WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload } from './withholdingOfAllowancesApplicationWithdrawnRequestActionPayload';
 
 export interface RequestActionDTO {
   id?: number;
@@ -39,6 +171,7 @@ export interface RequestActionDTO {
     | 'PERMIT_SURRENDER_CESSATION_COMPLETED'
     | 'PERMIT_NOTIFICATION_APPLICATION_SUBMITTED'
     | 'PERMIT_NOTIFICATION_APPLICATION_GRANTED'
+    | 'PERMIT_NOTIFICATION_APPLICATION_CESSATION_COMPLETED'
     | 'PERMIT_NOTIFICATION_APPLICATION_REJECTED'
     | 'PERMIT_NOTIFICATION_APPLICATION_CANCELLED'
     | 'PERMIT_NOTIFICATION_PEER_REVIEW_REQUESTED'
@@ -124,12 +257,15 @@ export interface RequestActionDTO {
     | 'AER_APPLICATION_SUBMITTED'
     | 'AER_APPLICATION_SENT_TO_VERIFIER'
     | 'AER_RECALLED_FROM_VERIFICATION'
+    | 'AER_APPLICATION_REVIEW_SKIPPED'
     | 'AER_APPLICATION_COMPLETED'
     | 'AER_APPLICATION_VERIFICATION_SUBMITTED'
     | 'AER_APPLICATION_RE_INITIATED'
     | 'AER_APPLICATION_RETURNED_FOR_AMENDS'
     | 'AER_APPLICATION_AMENDS_SUBMITTED'
     | 'AER_APPLICATION_AMENDS_SENT_TO_VERIFIER'
+    | 'AER_APPLICATION_NOT_REQUIRED'
+    | 'AER_VERIFICATION_RETURNED_TO_OPERATOR'
     | 'DRE_APPLICATION_SUBMITTED'
     | 'DRE_APPLICATION_CANCELLED'
     | 'DRE_APPLICATION_PEER_REVIEW_REQUESTED'
@@ -172,6 +308,40 @@ export interface RequestActionDTO {
     | 'RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_COMPLETED'
     | 'RETURN_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_ACCEPTED'
     | 'RETURN_OF_ALLOWANCES_APPLICATION_PEER_REVIEWER_REJECTED'
+    | 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMITTED'
+    | 'INSTALLATION_AUDIT_APPLICATION_SUBMITTED'
+    | 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_CANCELLED'
+    | 'INSTALLATION_AUDIT_APPLICATION_CANCELLED'
+    | 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW_REQUESTED'
+    | 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW_REQUESTED'
+    | 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEWER_ACCEPTED'
+    | 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEWER_ACCEPTED'
+    | 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEWER_REJECTED'
+    | 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEWER_REJECTED'
+    | 'BDR_APPLICATION_SENT_TO_VERIFIER'
+    | 'BDR_RECALLED_FROM_VERIFICATION'
+    | 'BDR_APPLICATION_SENT_TO_REGULATOR'
+    | 'BDR_VERIFICATION_RETURNED_TO_OPERATOR'
+    | 'BDR_APPLICATION_VERIFICATION_SUBMITTED'
+    | 'BDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS'
+    | 'BDR_APPLICATION_AMENDS_SENT_TO_VERIFIER'
+    | 'BDR_APPLICATION_COMPLETED'
+    | 'BDR_APPLICATION_PEER_REVIEW_REQUESTED'
+    | 'BDR_APPLICATION_PEER_REVIEW_ACCEPTED'
+    | 'BDR_APPLICATION_PEER_REVIEW_REJECTED'
+    | 'BDR_APPLICATION_RE_INITIATED'
+    | 'PERMANENT_CESSATION_APPLICATION_CANCELLED'
+    | 'PERMANENT_CESSATION_APPLICATION_SUBMITTED'
+    | 'PERMANENT_CESSATION_SUBMITTED'
+    | 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REQUESTED'
+    | 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_ACCEPTED'
+    | 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REJECTED'
+    | 'ALR_APPLICATION_SENT_TO_VERIFIER'
+    | 'ALR_RECALLED_FROM_VERIFICATION'
+    | 'ALR_VERIFICATION_RETURNED_TO_OPERATOR'
+    | 'ALR_APPLICATION_VERIFICATION_SUBMITTED'
+    | 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPONDED'
+    | 'INSTALLATION_AUDIT_OPERATOR_RESPONDED'
     | 'REQUEST_TERMINATED'
     | 'VERIFICATION_STATEMENT_CANCELLED'
     | 'EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED'
@@ -204,6 +374,7 @@ export interface RequestActionDTO {
     | 'AVIATION_AER_UKETS_APPLICATION_RETURNED_FOR_AMENDS'
     | 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED'
     | 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER'
+    | 'AVIATION_AER_UKETS_VERIFICATION_RETURNED_TO_OPERATOR'
     | 'AVIATION_AER_RECALLED_FROM_VERIFICATION'
     | 'AVIATION_AER_APPLICATION_CANCELLED_DUE_TO_EXEPMT'
     | 'AVIATION_AER_APPLICATION_RE_INITIATED'
@@ -214,6 +385,11 @@ export interface RequestActionDTO {
     | 'AVIATION_DRE_UKETS_PEER_REVIEW_REQUESTED'
     | 'AVIATION_DRE_UKETS_PEER_REVIEWER_ACCEPTED'
     | 'AVIATION_DRE_UKETS_PEER_REVIEWER_REJECTED'
+    | 'AVIATION_DOE_CORSIA_SUBMIT_CANCELLED'
+    | 'AVIATION_DOE_CORSIA_SUBMITTED'
+    | 'AVIATION_DOE_CORSIA_PEER_REVIEW_REQUESTED'
+    | 'AVIATION_DOE_CORSIA_PEER_REVIEWER_ACCEPTED'
+    | 'AVIATION_DOE_CORSIA_PEER_REVIEWER_REJECTED'
     | 'AVIATION_VIR_APPLICATION_SUBMITTED'
     | 'AVIATION_VIR_APPLICATION_REVIEWED'
     | 'AVIATION_VIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS'
@@ -240,8 +416,157 @@ export interface RequestActionDTO {
     | 'AVIATION_AER_CORSIA_APPLICATION_SENT_TO_VERIFIER'
     | 'AVIATION_AER_CORSIA_APPLICATION_SUBMITTED'
     | 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMITTED'
-    | 'AVIATION_AER_CORSIA_APPLICATION_COMPLETED';
-  payload?: RequestActionPayload;
+    | 'AVIATION_AER_CORSIA_APPLICATION_REVIEW_SKIPPED'
+    | 'AVIATION_AER_CORSIA_APPLICATION_CANCELLED_DUE_TO_DOE'
+    | 'AVIATION_AER_CORSIA_APPLICATION_COMPLETED'
+    | 'AVIATION_AER_CORSIA_APPLICATION_RETURNED_FOR_AMENDS'
+    | 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER'
+    | 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED'
+    | 'AVIATION_AER_CORSIA_VERIFICATION_RETURNED_TO_OPERATOR'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_CANCELLED'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMITTED'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_REQUESTED'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_CANCELLED'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REQUESTED'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED';
+  payload?:
+    | ALRApplicationSubmittedRequestActionPayload
+    | ALRApplicationVerificationSubmittedRequestActionPayload
+    | ALRVerificationReturnedToOperatorRequestActionPayload
+    | AerApplicationAmendsSubmittedRequestActionPayload
+    | AerApplicationCompletedRequestActionPayload
+    | AerApplicationMarkNotRequiredRequestActionPayload
+    | AerApplicationReturnedForAmendsRequestActionPayload
+    | AerApplicationSubmittedRequestActionPayload
+    | AerApplicationVerificationSubmittedRequestActionPayload
+    | AerVerificationReturnedToOperatorRequestActionPayload
+    | AirApplicationRespondedToRegulatorCommentsRequestActionPayload
+    | AirApplicationReviewedRequestActionPayload
+    | AirApplicationSubmittedRequestActionPayload
+    | AviationAccountClosureSubmittedRequestActionPayload
+    | AviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload
+    | AviationAerCorsiaAnnualOffsettingApplicationSubmittedRequestActionPayload
+    | AviationAerCorsiaAnnualOffsettingPeerReviewDescisionActionPayload
+    | AviationAerCorsiaApplicationCompletedRequestActionPayload
+    | AviationAerCorsiaApplicationReturnedForAmendsRequestActionPayload
+    | AviationAerCorsiaApplicationSubmittedRequestActionPayload
+    | AviationAerCorsiaApplicationVerificationSubmittedRequestActionPayload
+    | AviationAerCorsiaVerificationReturnedToOperatorRequestActionPayload
+    | AviationAerUkEtsApplicationCompletedRequestActionPayload
+    | AviationAerUkEtsApplicationReturnedForAmendsRequestActionPayload
+    | AviationAerUkEtsApplicationSubmittedRequestActionPayload
+    | AviationAerUkEtsApplicationVerificationSubmittedRequestActionPayload
+    | AviationAerUkEtsVerificationReturnedToOperatorRequestActionPayload
+    | AviationDoECorsiaSubmittedRequestActionPayload
+    | AviationDreApplicationSubmittedRequestActionPayload
+    | AviationVirApplicationRespondedToRegulatorCommentsRequestActionPayload
+    | AviationVirApplicationReviewedRequestActionPayload
+    | AviationVirApplicationSubmittedRequestActionPayload
+    | BDRApplicationAmendsSubmittedRequestActionPayload
+    | BDRApplicationCompletedRequestActionPayload
+    | BDRApplicationSubmittedRequestActionPayload
+    | BDRApplicationVerificationSubmittedRequestActionPayload
+    | BDRRegulatorReviewReturnedForAmendsRequestActionPayload
+    | BDRVerificationReturnedToOperatorRequestActionPayload
+    | BatchReissueCompletedRequestActionPayload
+    | BatchReissueSubmittedRequestActionPayload
+    | DoalApplicationAcceptedRequestActionPayload
+    | DoalApplicationAcceptedWithCorrectionsRequestActionPayload
+    | DoalApplicationClosedRequestActionPayload
+    | DoalApplicationProceededToAuthorityRequestActionPayload
+    | DoalApplicationRejectedRequestActionPayload
+    | DreApplicationSubmittedRequestActionPayload
+    | EmpIssuanceCorsiaApplicationAmendsSubmittedRequestActionPayload
+    | EmpIssuanceCorsiaApplicationApprovedRequestActionPayload
+    | EmpIssuanceCorsiaApplicationDeemedWithdrawnRequestActionPayload
+    | EmpIssuanceCorsiaApplicationReturnedForAmendsRequestActionPayload
+    | EmpIssuanceCorsiaApplicationSubmittedRequestActionPayload
+    | EmpIssuanceUkEtsApplicationAmendsSubmittedRequestActionPayload
+    | EmpIssuanceUkEtsApplicationApprovedRequestActionPayload
+    | EmpIssuanceUkEtsApplicationDeemedWithdrawnRequestActionPayload
+    | EmpIssuanceUkEtsApplicationReturnedForAmendsRequestActionPayload
+    | EmpIssuanceUkEtsApplicationSubmittedRequestActionPayload
+    | EmpVariationCorsiaApplicationAmendsSubmittedRequestActionPayload
+    | EmpVariationCorsiaApplicationApprovedRequestActionPayload
+    | EmpVariationCorsiaApplicationDeemedWithdrawnRequestActionPayload
+    | EmpVariationCorsiaApplicationRegulatorLedApprovedRequestActionPayload
+    | EmpVariationCorsiaApplicationRejectedRequestActionPayload
+    | EmpVariationCorsiaApplicationReturnedForAmendsRequestActionPayload
+    | EmpVariationCorsiaApplicationSubmittedRequestActionPayload
+    | EmpVariationUkEtsApplicationAmendsSubmittedRequestActionPayload
+    | EmpVariationUkEtsApplicationApprovedRequestActionPayload
+    | EmpVariationUkEtsApplicationDeemedWithdrawnRequestActionPayload
+    | EmpVariationUkEtsApplicationRegulatorLedApprovedRequestActionPayload
+    | EmpVariationUkEtsApplicationRejectedRequestActionPayload
+    | EmpVariationUkEtsApplicationReturnedForAmendsRequestActionPayload
+    | EmpVariationUkEtsApplicationSubmittedRequestActionPayload
+    | InstallationAccountOpeningApplicationSubmittedRequestActionPayload
+    | InstallationAccountOpeningApprovedRequestActionPayload
+    | InstallationAccountOpeningDecisionRequestActionPayload
+    | InstallationInspectionApplicationSubmittedRequestActionPayload
+    | InstallationInspectionOperatorRespondedRequestActionPayload
+    | NerApplicationAcceptedRequestActionPayload
+    | NerApplicationEndedRequestActionPayload
+    | NerApplicationProceededToAuthorityRequestActionPayload
+    | NerApplicationRejectedRequestActionPayload
+    | NerApplicationReturnedForAmendsRequestActionPayload
+    | NerApplicationSubmittedRequestActionPayload
+    | NonComplianceApplicationClosedRequestActionPayload
+    | NonComplianceApplicationSubmittedRequestActionPayload
+    | NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload
+    | NonComplianceDailyPenaltyNoticeApplicationSubmittedRequestActionPayload
+    | NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload
+    | NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload
+    | PaymentCancelledRequestActionPayload
+    | PaymentProcessedRequestActionPayload
+    | PeerReviewDecisionSubmittedRequestActionPayload
+    | PermanentCessationApplicationSubmittedRequestActionPayload
+    | PermitCessationCompletedRequestActionPayload
+    | PermitIssuanceApplicationDeemedWithdrawnRequestActionPayload
+    | PermitIssuanceApplicationGrantedRequestActionPayload
+    | PermitIssuanceApplicationRejectedRequestActionPayload
+    | PermitIssuanceApplicationReturnedForAmendsRequestActionPayload
+    | PermitIssuanceApplicationSubmittedRequestActionPayload
+    | PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload
+    | PermitNotificationApplicationReviewSubmittedDecisionRequestActionPayload
+    | PermitNotificationApplicationSubmittedRequestActionPayload
+    | PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActionPayload
+    | PermitNotificationFollowUpResponseSubmittedRequestActionPayload
+    | PermitNotificationFollowUpReturnedForAmendsRequestActionPayload
+    | PermitRevocationApplicationSubmittedRequestActionPayload
+    | PermitRevocationApplicationWithdrawnRequestActionPayload
+    | PermitSurrenderApplicationDeemedWithdrawnRequestActionPayload
+    | PermitSurrenderApplicationGrantedRequestActionPayload
+    | PermitSurrenderApplicationRejectedRequestActionPayload
+    | PermitSurrenderApplicationSubmittedRequestActionPayload
+    | PermitTransferAApplicationDeterminedRequestActionPayload
+    | PermitTransferAApplicationSubmittedRequestActionPayload
+    | PermitTransferBApplicationGrantedRequestActionPayload
+    | PermitTransferBApplicationSubmittedRequestActionPayload
+    | PermitVariationApplicationDeemedWithdrawnRequestActionPayload
+    | PermitVariationApplicationGrantedRequestActionPayload
+    | PermitVariationApplicationRegulatorLedApprovedRequestActionPayload
+    | PermitVariationApplicationRejectedRequestActionPayload
+    | PermitVariationApplicationReturnedForAmendsRequestActionPayload
+    | PermitVariationApplicationSubmittedRequestActionPayload
+    | RdeDecisionForcedRequestActionPayload
+    | RdeRejectedRequestActionPayload
+    | RdeSubmittedRequestActionPayload
+    | ReissueCompletedRequestActionPayload
+    | ReturnOfAllowancesApplicationSubmittedRequestActionPayload
+    | ReturnOfAllowancesReturnedApplicationCompletedRequestActionPayload
+    | RfiResponseSubmittedRequestActionPayload
+    | RfiSubmittedRequestActionPayload
+    | VirApplicationRespondedToRegulatorCommentsRequestActionPayload
+    | VirApplicationReviewedRequestActionPayload
+    | VirApplicationSubmittedRequestActionPayload
+    | WithholdingOfAllowancesApplicationClosedRequestActionPayload
+    | WithholdingOfAllowancesApplicationSubmittedRequestActionPayload
+    | WithholdingOfAllowancesApplicationWithdrawnRequestActionPayload;
   requestId?: string;
   requestType?:
     | 'INSTALLATION_ACCOUNT_OPENING'
@@ -264,6 +589,11 @@ export interface RequestActionDTO {
     | 'DRE'
     | 'WITHHOLDING_OF_ALLOWANCES'
     | 'RETURN_OF_ALLOWANCES'
+    | 'INSTALLATION_ONSITE_INSPECTION'
+    | 'INSTALLATION_AUDIT'
+    | 'BDR'
+    | 'PERMANENT_CESSATION'
+    | 'ALR'
     | 'AVIATION_ACCOUNT_CLOSURE'
     | 'AVIATION_NON_COMPLIANCE'
     | 'EMP_BATCH_REISSUE'
@@ -275,7 +605,10 @@ export interface RequestActionDTO {
     | 'AVIATION_DRE_UKETS'
     | 'EMP_ISSUANCE_CORSIA'
     | 'EMP_VARIATION_CORSIA'
-    | 'AVIATION_AER_CORSIA';
+    | 'AVIATION_AER_CORSIA'
+    | 'AVIATION_DOE_CORSIA'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING';
   requestAccountId?: number;
   competentAuthority?: 'ENGLAND' | 'NORTHERN_IRELAND' | 'OPRED' | 'SCOTLAND' | 'WALES';
   submitter?: string;

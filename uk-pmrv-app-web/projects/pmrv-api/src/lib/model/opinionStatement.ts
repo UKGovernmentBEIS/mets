@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,12 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { InPersonSiteVisit } from './inPersonSiteVisit';
 import { MonitoringApproachTypeEmissions } from './monitoringApproachTypeEmissions';
-import { SiteVisit } from './siteVisit';
+import { NoSiteVisit } from './noSiteVisit';
+import { VirtualSiteVisit } from './virtualSiteVisit';
 
 export interface OpinionStatement {
   regulatedActivities?: Array<
+    | 'WASTE'
     | 'COMBUSTION'
+    | 'UPSTREAM_GHG_REMOVAL'
     | 'MINERAL_OIL_REFINING'
     | 'COKE_PRODUCTION'
     | 'ORE_ROASTING_OR_SINTERING'
@@ -51,5 +55,5 @@ export interface OpinionStatement {
   monitoringApproachTypeEmissions?: MonitoringApproachTypeEmissions;
   additionalChangesNotCovered: boolean;
   additionalChangesNotCoveredDetails?: string;
-  siteVisit: SiteVisit;
+  siteVisit: InPersonSiteVisit | NoSiteVisit | VirtualSiteVisit;
 }

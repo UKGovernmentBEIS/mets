@@ -1,16 +1,15 @@
 package uk.gov.pmrv.api.workflow.request.flow.rfi.handler;
 
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
-import uk.gov.pmrv.api.user.core.domain.model.UserInfo;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfo;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -37,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -85,7 +85,7 @@ class RfiSubmitActionHandlerTest {
     void process() {
 
         final Long requestTaskId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         
         final UUID referencedFile = UUID.randomUUID();
         final UUID unreferencedFile = UUID.randomUUID();
@@ -142,7 +142,7 @@ class RfiSubmitActionHandlerTest {
                 .build();
         
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
-        doNothing().when(validator).validate(requestTask, rfiSubmitPayload, pmrvUser);
+        doNothing().when(validator).validate(requestTask, rfiSubmitPayload, appUser);
         doNothing().when(rfiSendEventService).send("2", deadline);
         when(requestActionUserInfoResolver.getUsersInfo(any(), anyString(), any())).thenReturn(Map.of());
         when(requestAccountContactQueryService.getRequestAccountPrimaryContact(requestTask.getRequest()))
@@ -154,7 +154,7 @@ class RfiSubmitActionHandlerTest {
         handler.process(
             requestTaskId,
             RequestTaskActionType.RFI_SUBMIT,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         assertThat(requestTaskPayload.getRfiAttachments()).isEmpty();
@@ -163,7 +163,7 @@ class RfiSubmitActionHandlerTest {
             Map.of(referencedFile, "rfiFileReferenced", unreferencedFile, "rfiFileUnreferenced"));
         
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-        verify(validator, times(1)).validate(requestTask, rfiSubmitPayload, pmrvUser);
+        verify(validator, times(1)).validate(requestTask, rfiSubmitPayload, appUser);
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(requestTask.getRequest());
         verify(userAuthService, times(1)).getUsers(new ArrayList<>(rfiSubmitPayload.getOperators()));
         verify(rfiSubmitOfficialNoticeService, times(1)).generateOfficialNotice(requestTask.getRequest(), rfiSubmitPayload.getSignatory(), accountPrimaryContact, List.of(operator.getEmail()));
@@ -173,7 +173,7 @@ class RfiSubmitActionHandlerTest {
             .addActionToRequest(requestTask.getRequest(),
                 timelinePayload,
                 RFI_SUBMITTED,
-                pmrvUser.getUserId());
+                appUser.getUserId());
         verify(rfiSendEventService, times(1)).send(requestTask.getRequest().getId(), deadline);
         verify(rfiSubmitOfficialNoticeService, times(1)).sendOfficialNotice(officialNotice, requestTask.getRequest(), List.of(operator.getEmail()));
     }

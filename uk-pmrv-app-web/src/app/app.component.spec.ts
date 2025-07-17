@@ -1,3 +1,4 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -69,7 +70,7 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule, SharedModule, TimeoutModule],
       declarations: [AppComponent],
-      providers: [KeycloakService],
+      providers: [KeycloakService, { provide: APP_BASE_HREF, useValue: '/installation-aviation/' }],
     }).compileComponents();
 
     authStore = TestBed.inject(AuthStore);
@@ -192,7 +193,7 @@ describe('AppComponent', () => {
     breadcrumbItem$.next([{ text: 'Dashboard', link: ['/dashboard'] }, { text: 'Apply for a GHGE permit' }]);
     fixture.detectChanges();
 
-    expect(Array.from(page.breadcrumbs).map((breacrumb) => breacrumb.textContent)).toEqual([
+    expect(Array.from(page.breadcrumbs).map((breacrumb) => breacrumb.textContent.trim())).toEqual([
       'Dashboard',
       'Apply for a GHGE permit',
     ]);

@@ -18,8 +18,9 @@ import java.util.UUID;
 public class RegulatedActivitiesMapper {
     
     private final Map<String, RegulatedActivityType> etsToPmrvMap = new HashMap<>();
-    
+
     static {
+        etsToPmrvMap.put("Waste", RegulatedActivityType.WASTE);
         etsToPmrvMap.put("Combustion", RegulatedActivityType.COMBUSTION);
         etsToPmrvMap.put("Manufacture of ceramics", RegulatedActivityType.CERAMICS_MANUFACTURING);
         etsToPmrvMap.put("Manufacture of glass", RegulatedActivityType.GLASS_MANUFACTURING);

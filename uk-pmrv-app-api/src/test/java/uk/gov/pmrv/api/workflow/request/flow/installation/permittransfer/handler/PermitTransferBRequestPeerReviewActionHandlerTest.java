@@ -14,9 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -60,7 +60,7 @@ class PermitTransferBRequestPeerReviewActionHandlerTest {
     void process() {
         
         final Long requestTaskId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final String selectedPeerReviewer = "selectedPeerReviewer";
         final PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
@@ -82,19 +82,19 @@ class PermitTransferBRequestPeerReviewActionHandlerTest {
         handler.process(
             requestTaskId,
             RequestTaskActionType.PERMIT_TRANSFER_B_REQUEST_PEER_REVIEW,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(validator, times(1))
-            .validate(requestTask, RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW, taskActionPayload, pmrvUser);
+            .validate(requestTask, RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW, taskActionPayload, appUser);
         verify(permitTransferBReviewService, times(1))
-            .saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, pmrvUser);
+            .saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, appUser);
         verify(requestService, times(1)).addActionToRequest(
             requestTask.getRequest(),
             null, 
             RequestActionType.PERMIT_TRANSFER_B_PEER_REVIEW_REQUESTED, 
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
         verify(workflowService, times(1)).completeTask(
             requestTask.getProcessTaskId(),
@@ -108,7 +108,7 @@ class PermitTransferBRequestPeerReviewActionHandlerTest {
     void process_invalid_determination() {
         
         final Long requestTaskId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final String selectedPeerReviewer = "selectedPeerReviewer";
         final PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
@@ -128,20 +128,20 @@ class PermitTransferBRequestPeerReviewActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         doThrow(new BusinessException(ErrorCode.FORM_VALIDATION))
             .when(validator)
-            .validate(requestTask, RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW, taskActionPayload, pmrvUser);
+            .validate(requestTask, RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW, taskActionPayload, appUser);
 
         BusinessException be = assertThrows(BusinessException.class,
             () -> handler.process(
                 requestTaskId,
                 RequestTaskActionType.PERMIT_TRANSFER_B_REQUEST_PEER_REVIEW,
-                pmrvUser,
+                appUser,
                 taskActionPayload));
 
         assertEquals(ErrorCode.FORM_VALIDATION, be.getErrorCode());
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(validator, times(1))
-            .validate(requestTask, RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW, taskActionPayload, pmrvUser);
+            .validate(requestTask, RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW, taskActionPayload, appUser);
     }
 
     @Test

@@ -3,7 +3,6 @@ package uk.gov.pmrv.api.aviationreporting.corsia.validation;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerViolation;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
-import uk.gov.pmrv.api.aviationreporting.corsia.validation.AviationAerCorsiaVerificationReportReferenceValidator;
 import uk.gov.pmrv.api.common.reporting.verification.VerifierComment;
 
 import java.util.Set;

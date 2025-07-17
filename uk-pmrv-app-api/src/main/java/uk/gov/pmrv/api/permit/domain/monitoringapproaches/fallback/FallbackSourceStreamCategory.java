@@ -2,8 +2,6 @@ package uk.gov.pmrv.api.permit.domain.monitoringapproaches.fallback;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +11,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.MeteringUncertainty;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.SourceStreamCategoryBase;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

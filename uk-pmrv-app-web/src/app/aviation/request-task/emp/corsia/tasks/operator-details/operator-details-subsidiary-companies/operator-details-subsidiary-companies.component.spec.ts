@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
+import { EmpCorsiaStoreDelegate } from '@aviation/request-task/store/delegates/emp-corsia';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { OperatorDetailsSubsidiaryListComponent } from '@aviation/shared/components/emp-corsia/operator-details/operator-details-subsidiary-list/operator-details-subsidiary-list.component';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
@@ -22,6 +23,7 @@ describe('OperatorDetailsSubsidiaryCompaniesComponent', () => {
   const tasksService = mockClass(TasksService);
   const requestTaskFileService = mockClass(RequestTaskFileService);
   const destroySubject = mockClass(DestroySubject);
+  let store: RequestTaskStore;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -35,6 +37,29 @@ describe('OperatorDetailsSubsidiaryCompaniesComponent', () => {
         { provide: DestroySubject, useValue: destroySubject },
       ],
     }).compileComponents();
+
+    store = TestBed.inject(RequestTaskStore);
+
+    const state = store.getState();
+
+    store.setState({
+      ...state,
+      requestTaskItem: {
+        ...state.requestTaskItem,
+        requestTask: {
+          type: 'EMP_ISSUANCE_CORSIA_APPLICATION_SUBMIT',
+          payload: {
+            emissionsMonitoringPlan: {
+              ...EmpCorsiaStoreDelegate.INITIAL_STATE,
+              // operatorDetails: {
+              //   organisationStructure: { partners: [] } as PartnershipOrganisation,
+              // },
+            },
+            reviewSectionsCompleted: {},
+          } as any,
+        },
+      },
+    });
 
     fixture = TestBed.createComponent(OperatorDetailsSubsidiaryCompaniesComponent);
     component = fixture.componentInstance;

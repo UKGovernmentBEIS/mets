@@ -1,9 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service;
 
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -14,6 +13,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInf
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service.notification.PermitRevocationOfficialNoticeService;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -54,6 +55,6 @@ public class PermitRevocationSubmittedService {
             request.getPayload().getRegulatorAssignee());
         
         // send official notice
-        permitRevocationOfficialNoticeService.sendOfficialNoticeForSubmitted(request, officialNotice, decisionNotification);
+        permitRevocationOfficialNoticeService.sendOfficialNotice(request, officialNotice, decisionNotification);
     }
 }

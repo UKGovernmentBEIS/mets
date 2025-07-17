@@ -16,8 +16,7 @@ describe('DeterminationCloseSummaryTemplateComponent', () => {
     template: `
       <app-doal-determination-close-summary-template
         [determination]="determination"
-        [editable]="editable"
-      ></app-doal-determination-close-summary-template>
+        [editable]="editable"></app-doal-determination-close-summary-template>
     `,
   })
   class TestComponent {

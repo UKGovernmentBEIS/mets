@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -70,16 +70,16 @@ class PermitSurrenderCessationNotifyOperatorActionHandlerTest {
                 .payloadType(RequestActionPayloadType.PERMIT_SURRENDER_CESSATION_COMPLETED_PAYLOAD)
                 .build();
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_SURRENDER_CESSATION_NOTIFY_OPERATOR_FOR_DECISION;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        AppUser appUser = AppUser.builder().userId("user").build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         //invoke
-        handler.process(requestTaskId, requestTaskActionType, pmrvUser, taskActionPayload);
+        handler.process(requestTaskId, requestTaskActionType, appUser, taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(requestPermitSurrenderCessationService, times(1))
-            .executeNotifyOperatorActions(requestTask, pmrvUser, taskActionPayload);
+            .executeNotifyOperatorActions(requestTask, appUser, taskActionPayload);
         verify(workflowService, times(1))
             .completeTask(requestTask.getProcessTaskId());
     }

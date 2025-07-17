@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -52,7 +52,7 @@ class NerSubmitApplicationAmendActionHandlerTest {
             NerSubmitApplicationAmendRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.NER_SUBMIT_APPLICATION_AMEND_PAYLOAD)
                 .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final String processTaskId = "processTaskId";
         final Request request = Request.builder().id("1").build();
         final RequestTask requestTask =
@@ -62,7 +62,7 @@ class NerSubmitApplicationAmendActionHandlerTest {
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.NER_SUBMIT_APPLICATION_AMEND,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(applyService, times(1)).submitAmendedNer(taskActionPayload, requestTask);
@@ -70,7 +70,7 @@ class NerSubmitApplicationAmendActionHandlerTest {
             requestTask.getRequest(),
             null,
             RequestActionType.NER_APPLICATION_AMENDS_SUBMITTED,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
         verify(workflowService, times(1)).completeTask(processTaskId);
     }

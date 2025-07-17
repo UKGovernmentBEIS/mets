@@ -4,9 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, combineLatest, map, Observable, switchMap } from 'rxjs';
 
 import { aerCorsiaQuery } from '@aviation/request-action/aer/corsia/aer-corsia.selectors';
+import { AerDecisionViewModel, getAerDecisionReview } from '@aviation/request-action/aer/shared/util/aer.util';
 import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
-import { requestActionQuery, RequestActionStore } from '@aviation/request-action/store';
+import { AerCorsiaRequestActionPayload, requestActionQuery, RequestActionStore } from '@aviation/request-action/store';
 import { aerHeaderTaskMap } from '@aviation/request-task/aer/shared/util/aer.util';
+import { AerReviewDecisionGroupSummaryComponent } from '@aviation/shared/components/aer/aer-review-decision-group-summary/aer-review-decision-group-summary.component';
+import { TotalEmissionAviationAerCorsia } from '@aviation/shared/components/aer-corsia/total-emission-aviation-aer-corsia.model';
 import { TotalEmissionsCorsiaAerodromePairsTableTemplateComponent } from '@aviation/shared/components/aer-corsia/total-emissions-corsia-aerodrome-pairs-table-template/total-emissions-corsia-aerodrome-pairs-table-template.component';
 import { TotalEmissionsCorsiaSchemeYearSummaryComponent } from '@aviation/shared/components/aer-corsia/total-emissions-corsia-scheme-year-summary';
 import { TotalEmissionsCorsiaStandardFuelsTableTemplateComponent } from '@aviation/shared/components/aer-corsia/total-emissions-corsia-standard-fuels-table-template/total-emissions-corsia-standard-fuels-table-template.component';
@@ -14,7 +17,6 @@ import { TotalEmissionsCorsiaStatePairsTableTemplateComponent } from '@aviation/
 import { SharedModule } from '@shared/shared.module';
 
 import {
-  AviationAerCorsia,
   AviationAerCorsiaApplicationVerificationSubmittedRequestActionPayload,
   AviationAerCorsiaTotalEmissions,
   AviationReportingService,
@@ -25,7 +27,7 @@ interface ViewModel {
   requestActionType: RequestActionDTO['type'];
   pageHeader: string;
   corsiaRequestTaskPayload: AviationAerCorsiaApplicationVerificationSubmittedRequestActionPayload;
-  aviationAerCorsia: AviationAerCorsia;
+  aviationAerCorsia: TotalEmissionAviationAerCorsia;
   totalEmissions: AviationAerCorsiaTotalEmissions;
 }
 
@@ -39,22 +41,25 @@ interface ViewModel {
     TotalEmissionsCorsiaSchemeYearSummaryComponent,
     TotalEmissionsCorsiaStandardFuelsTableTemplateComponent,
     TotalEmissionsCorsiaStatePairsTableTemplateComponent,
+    AerReviewDecisionGroupSummaryComponent,
   ],
   templateUrl: './total-emissions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class TotalEmissionsComponent implements OnDestroy {
   currentTab$ = new BehaviorSubject<string>(null);
-  vm$: Observable<ViewModel> = combineLatest([
+  vm$: Observable<ViewModel & AerDecisionViewModel> = combineLatest([
     this.store.pipe(aerCorsiaQuery.selectRequestActionPayload),
+    this.store.pipe(requestActionQuery.selectRegulatorViewer),
     this.store.pipe(aerCorsiaQuery.selectAer),
     this.store.pipe(requestActionQuery.selectRequestActionType),
   ]).pipe(
-    switchMap(([payload, aer, requestActionType]) =>
+    switchMap(([payload, regulatorViewer, aer, requestActionType]) =>
       this.aviationReportingService
         .getTotalEmissionsCorsia({
           aggregatedEmissionsData: aer.aggregatedEmissionsData,
           emissionsReductionClaim: aer.emissionsReductionClaim?.emissionsReductionClaimDetails?.totalEmissions,
+          year: (payload as AerCorsiaRequestActionPayload).reportingYear,
         })
         .pipe(
           map((totalEmissions) => {
@@ -62,8 +67,9 @@ export default class TotalEmissionsComponent implements OnDestroy {
               requestActionType: requestActionType,
               pageHeader: aerHeaderTaskMap['totalEmissionsCorsia'],
               corsiaRequestTaskPayload: payload,
-              aviationAerCorsia: aer,
+              aviationAerCorsia: { ...aer, reportingYear: (payload as AerCorsiaRequestActionPayload).reportingYear },
               totalEmissions: totalEmissions,
+              ...getAerDecisionReview(payload, requestActionType, regulatorViewer, 'totalEmissionsCorsia', true),
             };
           }),
         ),

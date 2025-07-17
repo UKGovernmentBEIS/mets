@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
 
 import { BackLinkService } from '@shared/back-link/back-link.service';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { PermitRevocationStore } from '../store/permit-revocation-store';
 
@@ -16,9 +17,7 @@ import { PermitRevocationStore } from '../store/permit-revocation-store';
           [taskId]="taskId$ | async"
           [accountId]="accountId$ | async"
           [requestTaskActionType]="(route.data | async)?.requestTaskActionType"
-          [confirmationMessage]="confirmationMessage$ | async"
-          [isRegistryToBeNotified]="isForSubmission$ | async"
-        ></app-notify-operator>
+          [confirmationMessage]="confirmationMessage$ | async"></app-notify-operator>
       </div>
     </div>
   `,
@@ -29,6 +28,7 @@ export class NotifyOperatorComponent implements OnInit {
     readonly route: ActivatedRoute,
     private store: PermitRevocationStore,
     private readonly backLinkService: BackLinkService,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
 
   readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
@@ -40,15 +40,13 @@ export class NotifyOperatorComponent implements OnInit {
         case 'PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_SUBMISSION':
           return 'Permit revocation notice sent to operator';
         case 'PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_WITHDRAWAL':
+          this.breadcrumbService.addToLastBreadcrumbAndShow('wait-for-appeal');
           return 'Permit revocation withdrawn successfully';
         case 'PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_CESSATION':
+          this.breadcrumbService.addToLastBreadcrumbAndShow('cessation');
           return 'Cessation complete';
       }
     }),
-  );
-  readonly isForSubmission$ = this.route.data.pipe(
-    map((state) => state.requestTaskActionType),
-    map((requestTaskActionType) => requestTaskActionType === 'PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_SUBMISSION'),
   );
 
   ngOnInit(): void {

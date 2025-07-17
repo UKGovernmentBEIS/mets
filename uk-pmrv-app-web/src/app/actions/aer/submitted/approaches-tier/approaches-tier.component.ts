@@ -3,11 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { combineLatest, first, map, Observable } from 'rxjs';
 
-import { SourceStreamDescriptionPipe } from '@shared/pipes/source-streams-description.pipe';
-
 import { AerApplicationCompletedRequestActionPayload, AerApplicationSubmittedRequestActionPayload } from 'pmrv-api';
 
 import { AerService } from '../../core/aer.service';
+import { getCalculationHeading } from './approaches-tier';
 
 @Component({
   selector: 'app-approaches-tier',
@@ -22,18 +21,11 @@ export class ApproachesTierComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));
   heading$ = combineLatest([this.payload$, this.index$]).pipe(
     first(),
-    map(([payload, index]) => {
-      const sourceStreamEmission = (payload.aer.monitoringApproachEmissions[this.taskKey] as any).sourceStreamEmissions[
-        index
-      ];
-      const sourceStreamDescriptionPipe = new SourceStreamDescriptionPipe();
-      const aerSourceStream = payload.aer.sourceStreams.find(
-        (sourceStream) => sourceStream.id === sourceStreamEmission.sourceStream,
-      );
-
-      return `${aerSourceStream.reference} ${sourceStreamDescriptionPipe.transform(aerSourceStream.description)}`;
-    }),
+    map(([payload, index]) => getCalculationHeading(payload, index, this.taskKey)),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

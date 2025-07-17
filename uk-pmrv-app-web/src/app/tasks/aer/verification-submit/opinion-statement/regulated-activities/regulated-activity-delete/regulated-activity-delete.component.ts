@@ -16,7 +16,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload, RegulatedActivity }
     <ng-container *ngIf="activityType$ | async as activityType">
       <app-page-heading size="xl">
         Are you sure you want to delete
-        <span class="nowrap"> ‘{{ activityType | regulatedActivityType }}’? </span>
+        <span class="nowrap">‘{{ activityType | regulatedActivityType }}’?</span>
       </app-page-heading>
 
       <p class="govuk-body">Any reference to this item will be removed from your application.</p>

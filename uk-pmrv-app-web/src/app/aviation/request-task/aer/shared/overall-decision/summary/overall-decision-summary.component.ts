@@ -8,7 +8,7 @@ import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { AerVerificationReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-verification-review-decision-group/aer-verification-review-decision-group.component';
 import { overallDecisionQuery } from '@aviation/request-task/aer/shared/overall-decision/overall-decision.selector';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { showReviewDecisionComponent } from '@aviation/request-task/util';
+import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
 import { OverallDecisionGroupComponent } from '@aviation/shared/components/aer-verify/overall-decision-group/overall-decision-group.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -61,7 +61,7 @@ export class OverallDecisionSummaryComponent {
     map(([type, overallDecision, isEditable, taskStatus, isCorsia]) => {
       return {
         data: overallDecision,
-        pageHeader: 'Check Your Answers',
+        pageHeader: getSummaryHeaderForTaskType(type, 'overallDecision'),
         isEditable,
         hideSubmit: !isEditable || ['complete', 'cannot start yet'].includes(taskStatus),
         showDecision: showReviewDecisionComponent.includes(type),

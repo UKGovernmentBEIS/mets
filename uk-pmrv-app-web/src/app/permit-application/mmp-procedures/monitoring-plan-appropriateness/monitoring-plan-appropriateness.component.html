@@ -1,0 +1,34 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true"
+>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    caption="Monitoring Methodology Plan"
+    heading="Monitoring Plan Appropriateness"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <div class="govuk-!-width-two-thirds">
+      <p class="govuk-body">
+        Provide a reference to the procedure for regular evaluation of the monitoring methodology plan’s appropriateness
+        in accordance with Article 9(1).
+      </p>
+      <p class="govuk-body">
+        This procedure shall in particular ensure that monitoring methods are in place for all data items listed in
+        Annex IV which are relevant at the installation, and that most accurate available data sources in accordance
+        with section 4 of Annex VII are used.
+      </p>
+
+      <app-mmp-procedure-form></app-mmp-procedure-form>
+    </div>
+  </app-wizard-step>
+
+  <app-list-return-link
+    reviewGroupTitle="Monitoring methodology"
+    reviewGroupUrl="monitoring-methodology-plan"
+    [innerRoute]="true"
+  ></app-list-return-link>
+</app-permit-task>

@@ -1,20 +1,17 @@
 package uk.gov.pmrv.api.user.regulator.domain;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.user.core.domain.dto.ApplicationUserDTO;
-import uk.gov.pmrv.api.user.core.domain.enumeration.AuthenticationStatus;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.user.core.domain.dto.UserDTO;
 
 @Getter
 @Setter
@@ -22,10 +19,8 @@ import uk.gov.pmrv.api.user.core.domain.enumeration.AuthenticationStatus;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class RegulatorUserDTO extends ApplicationUserDTO {
+public class RegulatorUserDTO extends UserDTO {
 	
-    private AuthenticationStatus status;
-
     @NotBlank(message = "{userAccount.jobTitle.notEmpty}")
     @Size(max = 255, message = "{userAccount.jobTitle.typeMismatch}")
     private String jobTitle;
@@ -39,4 +34,5 @@ public class RegulatorUserDTO extends ApplicationUserDTO {
     
     @JsonProperty(access = Access.READ_ONLY)
     private FileInfoDTO signature;
+    
 }

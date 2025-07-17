@@ -45,7 +45,7 @@ export default class DataGapsInformationComponent implements OnInit {
   }
 
   onSubmit() {
-    const value = this.formProvider.getFormValue().dataGaps ? [...this.formProvider.getFormValue()?.dataGaps] : [];
+    const value = this.formProvider.getFormValue()?.dataGaps ? [...this.formProvider.getFormValue().dataGaps] : [];
 
     if (value.length > 0 && !this.isAddPath) {
       value[this.index] = this.form.value;

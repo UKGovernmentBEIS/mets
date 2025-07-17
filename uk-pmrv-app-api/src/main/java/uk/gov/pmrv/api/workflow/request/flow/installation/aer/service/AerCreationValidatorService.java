@@ -1,10 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.service;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;

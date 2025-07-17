@@ -2,15 +2,12 @@ package uk.gov.pmrv.api.web.orchestrator.authorization.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.pmrv.api.authorization.verifier.domain.VerifierAuthorityUpdateDTO;
-import uk.gov.pmrv.api.authorization.verifier.service.VerifierAuthorityUpdateService;
+import uk.gov.netz.api.authorization.verifier.domain.VerifierAuthorityUpdateDTO;
+import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityUpdateService;
 import uk.gov.pmrv.api.user.verifier.service.VerifierUserNotificationGateway;
-import uk.gov.pmrv.api.web.orchestrator.authorization.service.VerifierUserAuthorityUpdateOrchestrator;
 
 import java.util.List;
 

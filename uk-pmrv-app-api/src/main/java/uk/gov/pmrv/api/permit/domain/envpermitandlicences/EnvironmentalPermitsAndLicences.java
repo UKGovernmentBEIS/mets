@@ -1,17 +1,15 @@
 package uk.gov.pmrv.api.permit.domain.envpermitandlicences;
 
-import java.util.List;
-
-import jakarta.validation.Valid;
-
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.permit.domain.PermitSection;
+
+import java.util.List;
 
 @Data
 @Builder

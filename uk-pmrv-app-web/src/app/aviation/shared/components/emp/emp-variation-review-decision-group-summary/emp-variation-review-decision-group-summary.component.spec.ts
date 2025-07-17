@@ -20,8 +20,7 @@ describe('EmpVariationReviewDecisionGroupSummaryComponent', () => {
       <app-emp-variation-review-decision-group-summary
         [data]="data"
         [attachments]="attachments"
-        downloadBaseUrl="test-link"
-      ></app-emp-variation-review-decision-group-summary>
+        downloadBaseUrl="test-link"></app-emp-variation-review-decision-group-summary>
     `,
   })
   class TestComponent {
@@ -76,7 +75,7 @@ describe('EmpVariationReviewDecisionGroupSummaryComponent', () => {
     ).toEqual([
       [
         ['Decision status', 'Changes required by operator', 'Notes'],
-        ['Operator changes required', '1. My first reason fileName 2. My second reason', 'My notes'],
+        ['Operator changes required', '1. My first reason  fileName  2. My second reason', 'My notes'],
       ],
     ]);
 

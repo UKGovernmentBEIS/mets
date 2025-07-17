@@ -15,8 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitType;
@@ -52,10 +52,9 @@ class PermitVariationCreateActionHandlerTest {
 	@Test
 	void process_regulator() {
 		Long accountId = 1L;
-		RequestCreateActionType type = RequestCreateActionType.PERMIT_VARIATION;
 		RequestCreateActionEmptyPayload payload = RequestCreateActionEmptyPayload.builder().build();
-        PmrvUser pmrvUser = PmrvUser.builder()
-        		.roleType(RoleType.REGULATOR)
+        AppUser appUser = AppUser.builder()
+        		.roleType(RoleTypeConstants.REGULATOR)
         		.userId("userId")
         		.build();
 
@@ -79,14 +78,14 @@ class PermitVariationCreateActionHandlerTest {
                 .requestPayload(PermitVariationRequestPayload.builder()
             	        .payloadType(RequestPayloadType.PERMIT_VARIATION_REQUEST_PAYLOAD)
 						.originalPermitContainer(originalPermitContainer)
-            	        .regulatorAssignee(pmrvUser.getUserId())
+            	        .regulatorAssignee(appUser.getUserId())
             	        .build())
                 .processVars(Map.of(
-                		BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, RoleType.REGULATOR.name()
+                		BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, RoleTypeConstants.REGULATOR
                 		))
 				.requestMetadata(PermitVariationRequestMetadata.builder()
 						.type(RequestMetadataType.PERMIT_VARIATION)
-						.initiatorRoleType(RoleType.REGULATOR)
+						.initiatorRoleType(RoleTypeConstants.REGULATOR)
 						.build())
                 .build();
 
@@ -94,7 +93,7 @@ class PermitVariationCreateActionHandlerTest {
         when(startProcessRequestService.startProcess(requestParams))
         	.thenReturn(Request.builder().id("1").build());
         
-        String result = handler.process(accountId, type, payload, pmrvUser);
+        String result = handler.process(accountId, payload, appUser);
         
         assertThat(result).isEqualTo("1");
         verify(startProcessRequestService, times(1)).startProcess(requestParams);
@@ -104,10 +103,9 @@ class PermitVariationCreateActionHandlerTest {
 	@Test
 	void process_operator() {
 		Long accountId = 1L;
-		RequestCreateActionType type = RequestCreateActionType.PERMIT_VARIATION;
 		RequestCreateActionEmptyPayload payload = RequestCreateActionEmptyPayload.builder().build();
-        PmrvUser pmrvUser = PmrvUser.builder()
-        		.roleType(RoleType.OPERATOR)
+        AppUser appUser = AppUser.builder()
+        		.roleType(RoleTypeConstants.OPERATOR)
         		.userId("userId")
         		.build();
         
@@ -116,28 +114,28 @@ class PermitVariationCreateActionHandlerTest {
                 .accountId(accountId)
                 .requestPayload(PermitVariationRequestPayload.builder()
             	        .payloadType(RequestPayloadType.PERMIT_VARIATION_REQUEST_PAYLOAD)
-            	        .operatorAssignee(pmrvUser.getUserId())
+            	        .operatorAssignee(appUser.getUserId())
             	        .build())
                 .processVars(Map.of(
-                		BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, RoleType.OPERATOR.name()
+                		BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, RoleTypeConstants.OPERATOR
                 		))
 				.requestMetadata(PermitVariationRequestMetadata.builder()
 						.type(RequestMetadataType.PERMIT_VARIATION)
-						.initiatorRoleType(RoleType.OPERATOR)
+						.initiatorRoleType(RoleTypeConstants.OPERATOR)
 						.build())
                 .build();
         
         when(startProcessRequestService.startProcess(requestParams))
         	.thenReturn(Request.builder().id("1").build());
         
-        String result = handler.process(accountId, type, payload, pmrvUser);
+        String result = handler.process(accountId, payload, appUser);
         
         assertThat(result).isEqualTo("1");
         verify(startProcessRequestService, times(1)).startProcess(requestParams);
 	}
 	
 	@Test
-	void getType() {
-		assertThat(handler.getType()).isEqualTo(RequestCreateActionType.PERMIT_VARIATION);
+	void getRequestCreateActionType() {
+		assertThat(handler.getRequestCreateActionType()).isEqualTo(RequestCreateActionType.PERMIT_VARIATION);
 	}
 }

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
@@ -41,7 +41,7 @@ class PermitNotificationFollowUpExtendDateActionHandlerTest {
                 .payloadType(RequestTaskActionPayloadType.PERMIT_NOTIFICATION_FOLLOW_UP_EXTEND_DATE_PAYLOAD)
                 .dueDate(dueDate)
                 .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final RequestTask requestTask =
             RequestTask.builder()
                 .id(1L)
@@ -52,7 +52,7 @@ class PermitNotificationFollowUpExtendDateActionHandlerTest {
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(requestTask.getId(), RequestTaskActionType.PERMIT_NOTIFICATION_FOLLOW_UP_EXTEND_DATE, pmrvUser,
+        handler.process(requestTask.getId(), RequestTaskActionType.PERMIT_NOTIFICATION_FOLLOW_UP_EXTEND_DATE, appUser,
             taskActionPayload);
 
         // Verify

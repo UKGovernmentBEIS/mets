@@ -19,7 +19,7 @@ import uk.gov.pmrv.api.aviationreporting.common.domain.aircraftdata.AviationAerA
 import uk.gov.pmrv.api.aviationreporting.common.domain.aircraftdata.AviationAerAircraftDataDetails;
 
 @ExtendWith(MockitoExtension.class)
-public class AviationAerAircraftDataTest {
+class AviationAerAircraftDataTest {
 
     private Validator validator;
 

@@ -1,9 +1,13 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, Observable, switchMap, takeUntil } from 'rxjs';
+import { BehaviorSubject, combineLatest, first, Observable, switchMap, take, takeUntil, tap } from 'rxjs';
 
+import { selectIsFeatureEnabled } from '@core/config/config.selectors';
+import { ConfigStore } from '@core/config/config.store';
+import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
+import { AuthStore, selectCurrentDomain } from '@core/store';
 import { ItemLinkPipe } from '@shared/pipes/item-link.pipe';
 
 import {
@@ -23,24 +27,35 @@ import { createRequestCreateActionProcessDTO, requestCreateActionTypeLabelMap } 
       <nav role="navigation" aria-labelledby="subsection-title">
         <ul class="govuk-list govuk-!-font-size-16">
           <li *ngFor="let requestCreateActionType of requestCreateActionsTypes$ | async">
-            <a govukLink routerLink="." (click)="onClick(requestCreateActionType)">{{
-              requestCreateActionType | i18nSelect: requestCreateActionTypeLabelMap
-            }}</a>
+            <a govukLink routerLink="." (click)="onClick(requestCreateActionType)">
+              {{ requestCreateActionType | i18nSelect: requestCreateActionTypeLabelMap }}
+            </a>
+          </li>
+          <li *ngIf="hasMarkAsNotRequiredAccess$ | async">
+            <a govukLink routerLink="." (click)="onMarkAsNotRequired()">Mark workflow as not required</a>
           </li>
         </ul>
       </nav>
     </aside>
   `,
-  styleUrls: ['./workflow-related-create-actions.component.scss'],
+  styleUrl: './workflow-related-create-actions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })
-export class WorkflowRelatedCreateActionsComponent {
+export class WorkflowRelatedCreateActionsComponent implements OnInit {
   @Input() accountId$: Observable<number>;
   @Input() requestId$: Observable<string>;
   @Input() requestCreateActionsTypes$: Observable<RequestCreateActionProcessDTO['requestCreateActionType'][]>;
 
+  private readonly currentDomain$ = this.authStore.pipe(selectCurrentDomain, take(1));
+  private readonly corsia3yearOffsettingEnabled$ = this.configStore.pipe(
+    selectIsFeatureEnabled('corsia3yearOffsettingEnabled'),
+  );
+
+  isAviation: boolean;
+
   requestCreateActionTypeLabelMap = requestCreateActionTypeLabelMap;
+  hasMarkAsNotRequiredAccess$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private readonly requestsService: RequestsService,
@@ -48,7 +63,39 @@ export class WorkflowRelatedCreateActionsComponent {
     private readonly destroy$: DestroySubject,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly authStore: AuthStore,
+    readonly pendingRequest: PendingRequestService,
+    private readonly configStore: ConfigStore,
   ) {}
+
+  ngOnInit(): void {
+    this.corsia3yearOffsettingEnabled$
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((corsia3yearOffsettingEnabled) => {
+          if (!corsia3yearOffsettingEnabled) {
+            delete this.requestCreateActionTypeLabelMap.AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING;
+          }
+        }),
+      )
+      .subscribe();
+
+    this.currentDomain$.subscribe((domain) => {
+      this.isAviation = domain === 'AVIATION';
+    });
+
+    this.requestId$
+      .pipe(
+        first(),
+        switchMap((requestId) => {
+          return this.requestsService.hasAccessMarkAsNotRequired(requestId);
+        }),
+        this.pendingRequest.trackRequest(),
+      )
+      .subscribe((access: boolean) => {
+        this.hasMarkAsNotRequiredAccess$.next(access);
+      });
+  }
 
   onClick(requestCreateActionType: RequestCreateActionProcessDTO['requestCreateActionType']): void {
     if (requestCreateActionType === 'AER') {
@@ -60,7 +107,7 @@ export class WorkflowRelatedCreateActionsComponent {
           switchMap(([requestId, accountId]) =>
             this.requestsService.processRequestCreateAction(
               createRequestCreateActionProcessDTO(requestCreateActionType, requestId),
-              accountId,
+              String(accountId),
             ),
           ),
           switchMap((response: RequestCreateActionProcessResponseDTO) =>
@@ -69,9 +116,13 @@ export class WorkflowRelatedCreateActionsComponent {
         )
         .subscribe(({ items }) => {
           const itemLinkPipe = new ItemLinkPipe();
-          const link = items?.length == 1 ? itemLinkPipe.transform(items[0]) : ['/dashboard'];
+          const link = items?.length == 1 ? itemLinkPipe.transform(items[0], this.isAviation) : ['/dashboard'];
           this.router.navigate(link);
         });
     }
+  }
+
+  onMarkAsNotRequired(): void {
+    this.router.navigate(['aer-mark-as-not-required'], { relativeTo: this.route });
   }
 }

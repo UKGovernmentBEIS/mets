@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
-import { mapTo, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 
+import { BusinessErrorService } from '@error/business-error/business-error.service';
+import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
 import { taskNotFoundError } from '@shared/errors/request-task-error';
+import { IncorporateHeaderStore } from '@shared/incorporate-header/store/incorporate-header.store';
 
 import { TasksService } from 'pmrv-api';
 
-import { BusinessErrorService } from '../error/business-error/business-error.service';
-import { catchNotFoundRequest, ErrorCode } from '../error/not-found-error';
-import { IncorporateHeaderStore } from '../shared/incorporate-header/store/incorporate-header.store';
 import { RdeStore } from './store/rde.store';
 
 @Injectable({ providedIn: 'root' })
-export class RdeGuard implements CanActivate, CanDeactivate<any> {
+export class RdeGuard {
   constructor(
     private readonly store: RdeStore,
     private readonly incorporateHeaderStore: IncorporateHeaderStore,
@@ -37,6 +37,9 @@ export class RdeGuard implements CanActivate, CanDeactivate<any> {
             assigneeUserId: requestTaskItem.requestTask.assigneeUserId,
             assigneeFullName: requestTaskItem.requestTask.assigneeFullName,
           },
+          userAssignCapable: requestTaskItem.userAssignCapable,
+          assignable: requestTaskItem.requestTask.assignable,
+          allowedRequestTaskActions: requestTaskItem.allowedRequestTaskActions,
           paymentCompleted: requestTaskItem.requestInfo.paymentCompleted,
           accountId: requestTaskItem.requestInfo.accountId,
           daysRemaining: requestTaskItem.requestTask.daysRemaining,
@@ -54,7 +57,7 @@ export class RdeGuard implements CanActivate, CanDeactivate<any> {
           accountId: requestTaskItem.requestInfo.accountId,
         });
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 

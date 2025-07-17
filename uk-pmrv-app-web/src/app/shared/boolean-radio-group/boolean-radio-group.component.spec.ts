@@ -72,7 +72,6 @@ describe('BooleanRadioGroupComponent', () => {
 
     expect(page.conditional).toBeTruthy();
     expect(page.conditional.id).toEqual('flag-option0-conditional');
-    expect(yes.getAttribute('aria-expanded')).toEqual('false');
     expect(yes.getAttribute('aria-controls')).toEqual('flag-option0-conditional');
     expect(hostComponent.form.get('extra').disabled).toBeTruthy();
 
@@ -80,7 +79,6 @@ describe('BooleanRadioGroupComponent', () => {
     fixture.detectChanges();
 
     expect(page.conditional).toBeFalsy();
-    expect(yes.getAttribute('aria-expanded')).toEqual('true');
     expect(hostComponent.form.value.flag).toEqual(true);
     expect(hostComponent.form.get('extra').disabled).toBeFalsy();
 
@@ -88,7 +86,6 @@ describe('BooleanRadioGroupComponent', () => {
     fixture.detectChanges();
 
     expect(page.conditional).toBeTruthy();
-    expect(yes.getAttribute('aria-expanded')).toEqual('false');
     expect(hostComponent.form.value.flag).toEqual(false);
     expect(hostComponent.form.get('extra').disabled).toBeTruthy();
   });

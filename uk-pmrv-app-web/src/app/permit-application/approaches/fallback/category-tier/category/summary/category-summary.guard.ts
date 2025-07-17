@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -10,7 +10,7 @@ import { PermitApplicationStore } from '../../../../../store/permit-application.
 import { FALLBACKCategoryTierSubtaskStatus } from '../../../fallback-status';
 
 @Injectable()
-export class CategorySummaryGuard implements CanActivate {
+export class CategorySummaryGuard {
   constructor(
     private readonly store: PermitApplicationStore<PermitApplicationState>,
     private readonly router: Router,
@@ -24,9 +24,7 @@ export class CategorySummaryGuard implements CanActivate {
           ?.sourceStreamCategoryAppliedTiers;
 
         return (
-          (tiers &&
-            !!tiers[index] &&
-            FALLBACKCategoryTierSubtaskStatus(state, 'FALLBACK_Category', index) === 'complete') ||
+          (tiers && !!tiers[index] && FALLBACKCategoryTierSubtaskStatus(state, index) === 'complete') ||
           this.router.parseUrl(
             `/${this.store.urlRequestType}/${route.paramMap.get('taskId')}/fall-back/category-tier/${index}/category`,
           )

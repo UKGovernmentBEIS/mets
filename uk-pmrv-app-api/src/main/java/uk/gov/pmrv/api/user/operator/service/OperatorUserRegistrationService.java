@@ -3,14 +3,15 @@ package uk.gov.pmrv.api.user.operator.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.user.core.domain.enumeration.AuthenticationStatus;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserInvitationDTO;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserRegistrationWithCredentialsDTO;
+import uk.gov.pmrv.api.user.operator.domain.OperatorUserTokenVerificationResult;
 
 @Service
 @RequiredArgsConstructor
@@ -23,27 +24,26 @@ public class OperatorUserRegistrationService {
     private final OperatorUserNotificationGateway operatorUserNotificationGateway;
 
     /**
-     * Registers a new user with status {@link AuthenticationStatus#PENDING} and
-     * adds him as {@link RoleType#OPERATOR}to the provided account.
+     * Registers a new user and adds him as OPERATOR to the provided account.
      * @param operatorUserInvitationDTO the {@link OperatorUserInvitationDTO}
      * @param accountId the account id
-     * @param currentUser the logged-in {@link PmrvUser}
+     * @param currentUser the logged-in {@link AppUser}
      */
     @Transactional
-    public void registerUserToAccountWithStatusPending(OperatorUserInvitationDTO operatorUserInvitationDTO,
-                                                       Long accountId, PmrvUser currentUser) {
-        String roleCode = operatorUserInvitationDTO.getRoleCode();
+    public void registerUserToAccount(OperatorUserInvitationDTO operatorUserInvitationDTO,
+                                                       Long accountId, AppUser currentUser) {
+        final String roleCode = operatorUserInvitationDTO.getRoleCode();
 
-		String userId = 
-				operatorUserAuthService.registerOperatorUserAsPending(
-						operatorUserInvitationDTO.getEmail(),
-						operatorUserInvitationDTO.getFirstName(), 
-						operatorUserInvitationDTO.getLastName());
-        String authorityUuid = 
-        		operatorAuthorityService.createPendingAuthorityForOperator(accountId, roleCode, userId, currentUser);
-        
-        String accountName = accountQueryService.getAccountName(accountId);
+        // register in keycloak
+		final String userId = operatorUserAuthService.registerOperatorUser(operatorUserInvitationDTO);
+		
+        // create authority
+		final String authorityUuid = operatorAuthorityService.createPendingAuthorityForOperator(accountId, roleCode,
+				userId, currentUser);
+		
+        final String accountName = accountQueryService.getAccountName(accountId);
 
+        // notify
         operatorUserNotificationGateway.notifyInvitedUser(
         		operatorUserInvitationDTO,
         		accountName,
@@ -55,13 +55,22 @@ public class OperatorUserRegistrationService {
      * @param operatorUserRegistrationWithCredentialsDTO {@link OperatorUserRegistrationWithCredentialsDTO} user's under registration
      * @return {@link OperatorUserDTO}
      */
+    @Transactional
     public OperatorUserDTO registerUser(OperatorUserRegistrationWithCredentialsDTO operatorUserRegistrationWithCredentialsDTO) {
-        final String email = operatorUserTokenVerificationService
-            .verifyRegistrationToken(operatorUserRegistrationWithCredentialsDTO.getEmailToken());
+		final OperatorUserTokenVerificationResult result = operatorUserTokenVerificationService
+				.verifyRegistrationTokenAndResolveAndValidateUserExistence(
+						operatorUserRegistrationWithCredentialsDTO.getEmailToken());
+		
+		// register in keycloak
+        final OperatorUserDTO operatorUserDTO = operatorUserAuthService
+            .registerAndEnableOperatorUser(operatorUserRegistrationWithCredentialsDTO, result.getEmail());
+        
+		final String userId = operatorUserAuthService.getUserIdByEmail(result.getEmail())
+				.orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_EXIST));
+        // create user role type
+        operatorAuthorityService.createUserRoleType(userId);
 
-        OperatorUserDTO operatorUserDTO = operatorUserAuthService
-            .registerOperatorUser(operatorUserRegistrationWithCredentialsDTO, email);
-
+        // notify
         operatorUserNotificationGateway.notifyRegisteredUser(operatorUserDTO);
 
         return operatorUserDTO;

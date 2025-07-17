@@ -98,7 +98,7 @@ function dueDateValidator(dateToCompare: string): ValidatorFn {
     return control.value && control.value < new Date()
       ? { invalidDate: `The date must be in the future` }
       : control.value && control.value <= new Date(dateToCompare)
-      ? { invalidDate: `The new due date must be after the current due date` }
-      : null;
+        ? { invalidDate: `The new due date must be after the current due date` }
+        : null;
   };
 }

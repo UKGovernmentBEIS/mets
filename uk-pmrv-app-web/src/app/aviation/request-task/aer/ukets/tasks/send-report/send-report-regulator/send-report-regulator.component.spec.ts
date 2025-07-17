@@ -82,7 +82,8 @@ describe('SendReportRegulatorComponent', () => {
       requestTaskActionType: 'AVIATION_AER_UKETS_SUBMIT_APPLICATION',
       requestTaskId: mockState.requestTaskItem.requestTask.id,
       requestTaskActionPayload: {
-        payloadType: 'EMPTY_PAYLOAD',
+        payloadType: 'AVIATION_AER_UKETS_SUBMIT_APPLICATION_PAYLOAD',
+        verificationSectionsCompleted: {},
       },
     });
 
@@ -103,6 +104,7 @@ describe('SendReportRegulatorComponent', () => {
             ...mockState.requestTaskItem.requestTask.payload,
             payloadType: 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT_PAYLOAD',
             verificationSectionsCompleted: {},
+            reviewSectionsCompleted: {},
           },
         },
       },
@@ -131,6 +133,8 @@ describe('SendReportRegulatorComponent', () => {
           aerMonitoringPlanChanges: [true],
           aviationAerTotalEmissionsConfidentiality: [true],
         },
+        reviewSectionsCompleted: {},
+        verificationSectionsCompleted: {},
       },
     });
 

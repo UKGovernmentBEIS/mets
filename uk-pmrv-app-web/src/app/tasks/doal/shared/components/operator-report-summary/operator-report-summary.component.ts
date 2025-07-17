@@ -11,8 +11,7 @@ import { DoalService } from '@tasks/doal/core/doal.service';
       <app-page-heading>Upload operator activity level report</app-page-heading>
       <app-operator-report-summary-template
         [operatorActivityLevelReport]="operatorActivityLevelReport$ | async"
-        [document]="documentFile$ | async"
-      ></app-operator-report-summary-template>
+        [document]="documentFile$ | async"></app-operator-report-summary-template>
       <app-task-return-link [levelsUp]="2" [taskType]="taskType$ | async"></app-task-return-link>
     </app-doal-task>
   `,

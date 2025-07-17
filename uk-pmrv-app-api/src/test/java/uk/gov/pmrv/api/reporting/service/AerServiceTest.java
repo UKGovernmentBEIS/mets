@@ -79,6 +79,7 @@ class AerServiceTest {
                 .accountId(accountId)
                 .year(reportingYear)
                 .reportableEmissions(totalEmissions)
+                .isFromRegulator(true)
                 .build();
 
         when(reportableEmissionsCalculationService.calculateYearEmissions(aerContainer))

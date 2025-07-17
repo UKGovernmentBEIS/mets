@@ -1,54 +1,53 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.time.LocalDate;
 import java.util.Map;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateGenerationContextActionType;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.FollowUp;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationAcceptedDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationReviewDecision;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationReviewDecisionType;
 
 @ExtendWith(MockitoExtension.class)
 class PermitNotificationRejectedDocumentTemplateWorkflowParamsProviderTest {
 
-    @InjectMocks
-    private PermitNotificationRejectedDocumentTemplateWorkflowParamsProvider provider;
+    private PermitNotificationCommonDocumentTemplateWorkflowParamsProvider commonParamsProvider;
+    private PermitNotificationRejectedDocumentTemplateWorkflowParamsProvider grantedParamsProvider;
 
-    @Test
-    void getRequestTaskActionType() {
-        assertThat(provider.getContextActionType()).isEqualTo(
-            DocumentTemplateGenerationContextActionType.PERMIT_NOTIFICATION_REJECTED);
+    @BeforeEach
+    void setUp() {
+        commonParamsProvider = mock(PermitNotificationCommonDocumentTemplateWorkflowParamsProvider.class);
+        grantedParamsProvider = new PermitNotificationRejectedDocumentTemplateWorkflowParamsProvider(commonParamsProvider);
     }
 
     @Test
-    void constructParams() {
+    void getContextActionType_shouldReturn_PERMIT_NOTIFICATION_GRANTED() {
+        assertThat(grantedParamsProvider.getContextActionType())
+                .isEqualTo(DocumentTemplateGenerationContextActionType.PERMIT_NOTIFICATION_REJECTED);
+    }
 
-        final PermitNotificationRequestPayload payload = PermitNotificationRequestPayload.builder()
-            .reviewDecision(PermitNotificationReviewDecision.builder()
-                .type(PermitNotificationReviewDecisionType.ACCEPTED)
-                .details(
-                    PermitNotificationAcceptedDecisionDetails.builder()
-                        .officialNotice("the official notice")
-                        .followUp(FollowUp.builder()
-                            .followUpRequest("the request")
-                            .followUpResponseExpirationDate(LocalDate.of(2023, 1, 1))
-                            .build())
-                        .build()
-                )
-                .build()
-            )
-            .build();
-        String requestId = "1";
-        
-        final Map<String, Object> result = provider.constructParams(payload, requestId);
-        assertThat(result).containsExactlyEntriesOf(Map.of("officialNotice", "the official notice"));
+    @Test
+    void constructParams_shouldDelegateToCommonParamsProvider() {
+        // Arrange
+        PermitNotificationRequestPayload payload = mock(PermitNotificationRequestPayload.class);
+        String requestId = "REQ-123";
+        Map<String, Object> expectedParams = Map.of("key", "value");
+
+        when(commonParamsProvider.constructParams(payload)).thenReturn(expectedParams);
+
+        // Act
+        Map<String, Object> result = grantedParamsProvider.constructParams(payload, requestId);
+
+        // Assert
+        assertThat(result).isEqualTo(expectedParams);
+        verify(commonParamsProvider, times(1)).constructParams(payload);
     }
 
 }

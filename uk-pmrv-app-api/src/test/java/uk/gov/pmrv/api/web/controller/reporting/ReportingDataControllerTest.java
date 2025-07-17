@@ -17,19 +17,22 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamType;
 import uk.gov.pmrv.api.reporting.domain.ActivityDataMeasurementUnit;
 import uk.gov.pmrv.api.reporting.domain.EmissionFactorMeasurementUnit;
 import uk.gov.pmrv.api.reporting.domain.NCVMeasurementUnit;
-import uk.gov.pmrv.api.reporting.domain.dto.InventoryCalculationMethodType;
 import uk.gov.pmrv.api.reporting.domain.dto.CalculationParameterMeasurementUnits;
-import uk.gov.pmrv.api.reporting.domain.dto.InventoryDataYearExistenceDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.ChargingZoneDTO;
+import uk.gov.pmrv.api.reporting.domain.dto.InventoryCalculationMethodType;
+import uk.gov.pmrv.api.reporting.domain.dto.InventoryDataYearExistenceDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.InventoryEmissionCalculationParamsDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.NationalInventoryDataDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.RegionalInventoryEmissionCalculationParamsDTO;
@@ -38,11 +41,8 @@ import uk.gov.pmrv.api.reporting.service.ChargingZoneService;
 import uk.gov.pmrv.api.reporting.service.NationalInventoryDataService;
 import uk.gov.pmrv.api.reporting.service.RegionalInventoryDataService;
 import uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.calculation.SourceStreamCalculationParametersInfoService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.math.BigDecimal;
 import java.time.Year;
@@ -82,7 +82,7 @@ class ReportingDataControllerTest {
     private SourceStreamCalculationParametersInfoService calculationParametersInfoService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -104,7 +104,7 @@ class ReportingDataControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(reportingDataController)
             .setControllerAdvice(new ExceptionControllerAdvice())
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .addFilters(new FilterChainProxy(Collections.emptyList()))
             .build();
 
@@ -192,12 +192,12 @@ class ReportingDataControllerTest {
     @Test
     void getChargingZonesByPostCode_forbidden() throws Exception {
         String code = "A2 2";
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+            .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(REPORTING_DATA_BASE_CONTROLLER_PATH + "/charging-zones")
@@ -262,12 +262,12 @@ class ReportingDataControllerTest {
     void getRegionalEmissionCalculationParameters_forbidden() throws Exception {
         Year year = Year.of(2021);
         String chargingZoneCode = "SE";
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+            .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(REPORTING_DATA_BASE_CONTROLLER_PATH + "/regional-inventory-data")
@@ -318,12 +318,12 @@ class ReportingDataControllerTest {
     @Test
     void getNationalInventoryData_forbidden() throws Exception {
         Year year = Year.of(2021);
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+            .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(REPORTING_DATA_BASE_CONTROLLER_PATH + "/national-inventory-data")
@@ -371,12 +371,12 @@ class ReportingDataControllerTest {
     @Test
     void getCalculationParameterTypesBySourceStreamType_forbidden() throws Exception {
         SourceStreamType sourceStreamType = SourceStreamType.REFINERIES_MASS_BALANCE;
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+            .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(REPORTING_DATA_BASE_CONTROLLER_PATH + "/calculation-parameters-info")

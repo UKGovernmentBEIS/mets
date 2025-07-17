@@ -7,7 +7,6 @@ import { of } from 'rxjs';
 
 import { SharedModule } from '@shared/shared.module';
 import { BasePage, mockClass, MockType } from '@testing';
-import { IPasswordStrengthMeterService, PasswordStrengthMeterService } from 'angular-password-strength-meter';
 
 import { GovukComponentsModule } from 'govuk-components';
 
@@ -23,7 +22,6 @@ describe('ChoosePasswordComponent', () => {
   let fixture: ComponentFixture<ChoosePasswordComponent>;
   let page: Page;
   let passwordService: jest.Mocked<PasswordService>;
-  let passwordStrengthMeterService: jest.Mocked<IPasswordStrengthMeterService>;
 
   class Page extends BasePage<ChoosePasswordComponent> {
     get emailValue() {
@@ -52,13 +50,11 @@ describe('ChoosePasswordComponent', () => {
   }
 
   const operatorUsersRegistrationService: MockType<OperatorUsersRegistrationService> = {
-    enableOperatorInvitedUser: jest.fn().mockReturnValue(of(null)),
-    acceptOperatorInvitation: jest.fn().mockReturnValue(of(null)),
+    acceptAuthorityAndSetCredentialsToUser: jest.fn().mockReturnValue(of(null)),
   };
 
   beforeEach(async () => {
     passwordService = mockClass(PasswordService);
-    passwordStrengthMeterService = mockClass(PasswordStrengthMeterService);
 
     await TestBed.configureTestingModule({
       imports: [GovukComponentsModule, SharedModule, RouterTestingModule, ReactiveFormsModule, SharedUserModule],
@@ -67,7 +63,6 @@ describe('ChoosePasswordComponent', () => {
         UserRegistrationStore,
         { provide: OperatorUsersRegistrationService, useValue: operatorUsersRegistrationService },
         { provide: PasswordService, useValue: passwordService },
-        { provide: IPasswordStrengthMeterService, useValue: passwordStrengthMeterService },
       ],
     }).compileComponents();
   });
@@ -130,7 +125,7 @@ describe('ChoosePasswordComponent', () => {
       passwordService.blacklisted.mockReturnValue(of(null));
 
       store.setState({
-        invitationStatus: 'PENDING_USER_ENABLE',
+        invitationStatus: 'ALREADY_REGISTERED_SET_PASSWORD_ONLY',
         token: token,
         password: password,
       });
@@ -141,12 +136,9 @@ describe('ChoosePasswordComponent', () => {
       page.submitButton.click();
       fixture.detectChanges();
 
-      expect(operatorUsersRegistrationService.enableOperatorInvitedUser).toHaveBeenCalledWith({
+      expect(operatorUsersRegistrationService.acceptAuthorityAndSetCredentialsToUser).toHaveBeenCalledWith({
         invitationToken: token,
         password: password,
-      });
-      expect(operatorUsersRegistrationService.acceptOperatorInvitation).toHaveBeenCalledWith({
-        token,
       });
 
       expect(navigateSpy).toHaveBeenCalledWith(['../success'], {

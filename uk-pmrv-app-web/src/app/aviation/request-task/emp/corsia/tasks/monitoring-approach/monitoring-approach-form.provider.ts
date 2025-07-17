@@ -11,7 +11,7 @@ import { RequestTaskFileService } from '@shared/services/request-task-file-servi
 
 import { GovukValidators } from 'govuk-components';
 
-import { CertMonitoringApproach, EmpEmissionsMonitoringApproachCorsia } from 'pmrv-api';
+import { CertMonitoringApproach, EmpEmissionsMonitoringApproachCorsia, FuelMonitoringApproachCorsia } from 'pmrv-api';
 
 export interface MonitoringApproachFormModel {
   emissionsMonitoringApproach: FormGroup<MonitoringApproachTypeFormModel | null>;
@@ -40,7 +40,7 @@ export interface MonitoringApproachCorsiaValues {
 
 @Injectable()
 export class MonitoringApproachCorsiaFormProvider
-  implements TaskFormProvider<EmpEmissionsMonitoringApproachCorsia, MonitoringApproachFormModel>
+  implements TaskFormProvider<CertMonitoringApproach | FuelMonitoringApproachCorsia, MonitoringApproachFormModel>
 {
   private fb = inject(FormBuilder);
   private _form: FormGroup;
@@ -62,64 +62,45 @@ export class MonitoringApproachCorsiaFormProvider
     this._form = null;
   }
 
-  setFormValue(emissionsMonitoringApproach): void {
-    if (emissionsMonitoringApproach) {
-      if (emissionsMonitoringApproach?.certEmissionsType) {
-        this.addCertEmissionsType();
-      }
-      let value = {
-        emissionsMonitoringApproach: {
-          monitoringApproachType: emissionsMonitoringApproach.monitoringApproachType ?? null,
-          certEmissionsType: emissionsMonitoringApproach.certEmissionsType ?? null,
-        },
-      } as any;
-
-      if (emissionsMonitoringApproach?.monitoringApproachType === 'CERT_MONITORING') {
-        this.addSimplifiedApproach();
-
-        value = {
-          ...value,
-          simplifiedApproach: {
-            explanation: emissionsMonitoringApproach?.explanation ?? null,
-            supportingEvidenceFiles:
-              emissionsMonitoringApproach.supportingEvidenceFiles?.map((uuid) => ({
-                file: { name: this.store.empCorsiaDelegate.payload.empAttachments[uuid] } as File,
-                uuid,
-              })) ?? [],
-          },
-        };
-      } else {
-        this.removeSimplifiedApproach();
-      }
-
-      this.form.patchValue({
-        ...value,
-      });
+  setFormValue(emissionsMonitoringApproach: CertMonitoringApproach | FuelMonitoringApproachCorsia): void {
+    const isCertMonitoringType = emissionsMonitoringApproach?.monitoringApproachType === 'CERT_MONITORING';
+    if (isCertMonitoringType) {
+      this.addCertEmissionsType();
     }
+
+    this.form.setValue({
+      emissionsMonitoringApproach: {
+        monitoringApproachType: emissionsMonitoringApproach?.monitoringApproachType ?? null,
+        ...(isCertMonitoringType && {
+          certEmissionsType: (emissionsMonitoringApproach as CertMonitoringApproach)?.certEmissionsType,
+        }),
+      },
+      ...(isCertMonitoringType && {
+        simplifiedApproach: {
+          explanation: (emissionsMonitoringApproach as CertMonitoringApproach)?.explanation ?? null,
+          supportingEvidenceFiles:
+            (emissionsMonitoringApproach as CertMonitoringApproach)?.supportingEvidenceFiles?.map((uuid) => ({
+              file: { name: this.store.empCorsiaDelegate.payload.empAttachments[uuid] } as File,
+              uuid,
+            })) ?? [],
+        },
+      }),
+    });
+    this.form.updateValueAndValidity();
   }
 
-  getFormValue() {
-    const value = this.form.value;
+  getFormValue(): CertMonitoringApproach | FuelMonitoringApproachCorsia {
+    const formValue = this.form.value;
+    const isCertMonitoringType = formValue.emissionsMonitoringApproach?.monitoringApproachType === 'CERT_MONITORING';
 
-    const ret: any = {
-      monitoringApproachType: value.emissionsMonitoringApproach.monitoringApproachType,
+    return {
+      monitoringApproachType: formValue.emissionsMonitoringApproach.monitoringApproachType,
+      ...(isCertMonitoringType && {
+        certEmissionsType: formValue.emissionsMonitoringApproach.certEmissionsType,
+        explanation: formValue?.simplifiedApproach?.explanation,
+        supportingEvidenceFiles: formValue?.simplifiedApproach?.supportingEvidenceFiles.map((fu) => fu?.uuid),
+      }),
     };
-
-    if (value.emissionsMonitoringApproach?.certEmissionsType) {
-      ret.certEmissionsType = value.emissionsMonitoringApproach.certEmissionsType;
-    }
-
-    if (value?.emissionsMonitoringApproach?.monitoringApproachType === 'CERT_MONITORING') {
-      if (value?.simplifiedApproach?.explanation) {
-        ret.explanation = value.simplifiedApproach.explanation;
-      }
-      if (value?.simplifiedApproach?.supportingEvidenceFiles) {
-        ret.supportingEvidenceFiles = value.simplifiedApproach.supportingEvidenceFiles.map((fu) => fu.uuid);
-      }
-    }
-    this.setFormValue(ret);
-
-    return ret;
   }
 
   addSimplifiedApproach() {
@@ -152,24 +133,18 @@ export class MonitoringApproachCorsiaFormProvider
   removeSimplifiedApproach() {
     if (this.form.contains('simplifiedApproach')) {
       this.form.removeControl('simplifiedApproach');
+      this.form.updateValueAndValidity();
     }
   }
 
   addCertEmissionsType() {
-    if (!this.form.contains('emissionsMonitoringApproach.certEmissionsType')) {
+    if (!(this.form.get('emissionsMonitoringApproach') as FormGroup).contains('certEmissionsType')) {
       const monitoringApproachGroup = this.form.get('emissionsMonitoringApproach') as FormGroup;
       monitoringApproachGroup.addControl(
         'certEmissionsType',
-        new FormControl(null as string, [
-          GovukValidators.required("Select either 'Great circle distance' or 'Block time'"),
-        ]),
+        new FormControl(null, [GovukValidators.required("Select either 'Great circle distance' or 'Block time'")]),
       );
-    }
-  }
-
-  removeCertEmissionsType() {
-    if (this.form.contains('emissionsMonitoringApproach.certEmissionsType')) {
-      this.form.removeControl('emissionsMonitoringApproach.certEmissionsType' as any);
+      this.form.updateValueAndValidity();
     }
   }
 
@@ -186,14 +161,24 @@ export class MonitoringApproachCorsiaFormProvider
       {
         emissionsMonitoringApproach: this.fb.group(
           {
-            monitoringApproachType: new FormControl(null as string, [
-              GovukValidators.required('You must select one approach'),
-            ]),
+            monitoringApproachType: new FormControl(null, [GovukValidators.required('You must select one approach')]),
           },
           { updateOn: 'change' },
         ),
       },
       { updateOn: 'change' },
     );
+
+    (this._form.get('emissionsMonitoringApproach') as FormGroup)
+      .get('monitoringApproachType')
+      .valueChanges.subscribe((monitoringApproachType) => {
+        if (monitoringApproachType === 'CERT_MONITORING') {
+          this.addSimplifiedApproach();
+        } else {
+          (this._form.get('emissionsMonitoringApproach') as FormGroup).get('certEmissionsType')?.setValue(null);
+          this.removeSimplifiedApproach();
+        }
+        this._form.updateValueAndValidity();
+      });
   }
 }

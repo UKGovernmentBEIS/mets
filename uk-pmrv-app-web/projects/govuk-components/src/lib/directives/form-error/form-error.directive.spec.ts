@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -45,20 +44,13 @@ describe('FormErrorDirective', () => {
     ];
   }
 
-  @NgModule({
-    imports: [CommonModule],
-    declarations: [ErrorMessageComponent],
-    entryComponents: [ErrorMessageComponent],
-  })
-  class FormErrorTestModule {}
-
   let directive: FormErrorDirective;
   let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, FormErrorTestModule],
-      declarations: [FormErrorDirective, TestComponent],
+      imports: [ReactiveFormsModule],
+      declarations: [FormErrorDirective, TestComponent, ErrorMessageComponent],
     }).createComponent(TestComponent);
 
     fixture.detectChanges();

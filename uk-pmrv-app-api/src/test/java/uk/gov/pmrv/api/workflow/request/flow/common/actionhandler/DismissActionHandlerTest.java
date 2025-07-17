@@ -12,8 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -35,11 +35,11 @@ class DismissActionHandlerTest {
     @Mock
     private RequestTaskService requestTaskService;
 
-    private PmrvUser pmrvUser;
+    private AppUser appUser;
 
     @BeforeEach
-    public void buildPmrvUser() {
-        pmrvUser = PmrvUser.builder().userId("user").build();
+    public void buildAppUser() {
+        appUser = AppUser.builder().userId("user").build();
     }
 
     @Test
@@ -50,7 +50,7 @@ class DismissActionHandlerTest {
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 
         //invoke
-        handler.process(requestTask.getId(), RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE, pmrvUser, new RequestTaskActionEmptyPayload());
+        handler.process(requestTask.getId(), RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE, appUser, new RequestTaskActionEmptyPayload());
         
         //verify
         verify(workflowService, times(1))

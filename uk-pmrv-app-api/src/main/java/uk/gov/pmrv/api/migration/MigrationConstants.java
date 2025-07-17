@@ -1,7 +1,8 @@
 package uk.gov.pmrv.api.migration;
 
-import java.util.List;
 import lombok.experimental.UtilityClass;
+
+import java.util.List;
 
 @UtilityClass
 public class MigrationConstants {

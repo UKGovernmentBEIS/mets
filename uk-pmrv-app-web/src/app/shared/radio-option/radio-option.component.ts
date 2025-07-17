@@ -1,5 +1,5 @@
 import { Component, HostBinding, Input, Optional, Self } from '@angular/core';
-import { ControlValueAccessor, NgControl,UntypedFormControl } from '@angular/forms';
+import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 
 import { FormService } from 'govuk-components';
 
@@ -20,7 +20,10 @@ export class RadioOptionComponent implements ControlValueAccessor {
 
   @HostBinding('class.govuk-radios__item') readonly govukRadiosItem = true;
 
-  constructor(@Self() @Optional() readonly ngControl: NgControl, private readonly formService: FormService) {
+  constructor(
+    @Self() @Optional() readonly ngControl: NgControl,
+    private readonly formService: FormService,
+  ) {
     ngControl.valueAccessor = this;
   }
 

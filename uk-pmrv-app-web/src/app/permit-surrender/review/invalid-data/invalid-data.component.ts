@@ -11,7 +11,7 @@ import { noticeDateFormProvider } from '../determination/grant/notice-date/notic
   selector: 'app-invalid-data',
   template: `
     <govuk-error-summary *ngIf="invalidNoticeDate$ | async" [form]="form"></govuk-error-summary>
-    <a govukLink routerLink=".."> Return to surrender permit determination </a>
+    <a govukLink routerLink="..">Return to surrender permit determination</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [noticeDateFormProvider],

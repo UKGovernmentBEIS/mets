@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,6 +11,7 @@
  */
 
 export interface AviationAccountHeaderInfoDTO {
+  id?: number;
   name?: string;
   status?: 'NEW' | 'LIVE' | 'CLOSED';
   emissionTradingScheme?: 'UK_ETS_INSTALLATIONS' | 'EU_ETS_INSTALLATIONS' | 'UK_ETS_AVIATION' | 'CORSIA';

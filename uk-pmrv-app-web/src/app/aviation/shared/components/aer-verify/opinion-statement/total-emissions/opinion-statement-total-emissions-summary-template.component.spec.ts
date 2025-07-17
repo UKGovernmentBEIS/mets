@@ -20,8 +20,7 @@ describe('OpinionStatementTotalEmissionsSummaryTemplateComponent', () => {
         [emissionsCorrect]="emissionsCorrect"
         [manuallyProvidedEmissions]="manuallyProvidedEmissions"
         [isEditable]="isEditable"
-        [queryParams]="queryParams"
-      ></app-opinion-statement-total-emissions-summary-template>
+        [queryParams]="queryParams"></app-opinion-statement-total-emissions-summary-template>
     `,
   })
   class TestComponent {

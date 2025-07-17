@@ -20,7 +20,7 @@ export const AER_CORSIA_GENERAL_INFORMATION_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Verification criteria and operator data summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Verification criteria and operator data' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./summary/summary.component').then((c) => c.SummaryComponent),
       },

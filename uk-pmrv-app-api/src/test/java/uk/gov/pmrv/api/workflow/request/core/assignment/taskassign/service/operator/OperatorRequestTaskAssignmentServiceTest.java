@@ -6,10 +6,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskReleaseService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -57,14 +57,14 @@ class OperatorRequestTaskAssignmentServiceTest {
         RequestTask requestTask = RequestTask.builder().assignee(userId).build();
 
         when(requestTaskRepository
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(userId, accountId, RequestStatus.IN_PROGRESS))
+            .findByAssigneeAndRequestAccountId(userId, accountId))
             .thenReturn(List.of(requestTask));
         when(accountContactQueryService.findPrimaryContactByAccount(accountId)).thenReturn(Optional.of(primaryContact));
 
         operatorRequestTaskAssignmentService.assignUserTasksToAccountPrimaryContactOrRelease(userId, accountId);
 
         verify(requestTaskRepository, times(1))
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(userId, accountId, RequestStatus.IN_PROGRESS);
+            .findByAssigneeAndRequestAccountId(userId, accountId);
         verify(accountContactQueryService, times(1)).findPrimaryContactByAccount(accountId);
         verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, primaryContact);
         verifyNoInteractions(requestTaskReleaseService);
@@ -79,7 +79,7 @@ class OperatorRequestTaskAssignmentServiceTest {
         RequestTask requestTask = RequestTask.builder().assignee(userId).build();
 
         when(requestTaskRepository
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(userId, accountId, RequestStatus.IN_PROGRESS))
+            .findByAssigneeAndRequestAccountId(userId, accountId))
             .thenReturn(List.of(requestTask));
         when(accountContactQueryService.findPrimaryContactByAccount(accountId)).thenReturn(Optional.of(primaryContact));
         doThrow(BusinessCheckedException.class).when(requestTaskAssignmentService).assignToUser(requestTask, primaryContact);
@@ -87,7 +87,7 @@ class OperatorRequestTaskAssignmentServiceTest {
         operatorRequestTaskAssignmentService.assignUserTasksToAccountPrimaryContactOrRelease(userId, accountId);
 
         verify(requestTaskRepository, times(1))
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(userId, accountId, RequestStatus.IN_PROGRESS);
+            .findByAssigneeAndRequestAccountId(userId, accountId);
         verify(accountContactQueryService, times(1)).findPrimaryContactByAccount(accountId);
         verify(requestTaskAssignmentService, times(1)).assignToUser(requestTask, primaryContact);
         verify(requestTaskReleaseService, times(1)).releaseTaskForced(requestTask);
@@ -101,14 +101,14 @@ class OperatorRequestTaskAssignmentServiceTest {
         RequestTask requestTask = RequestTask.builder().assignee(userId).build();
 
         when(requestTaskRepository
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(userId, accountId, RequestStatus.IN_PROGRESS))
+            .findByAssigneeAndRequestAccountId(userId, accountId))
             .thenReturn(List.of(requestTask));
         when(accountContactQueryService.findPrimaryContactByAccount(accountId)).thenReturn(Optional.empty());
 
         operatorRequestTaskAssignmentService.assignUserTasksToAccountPrimaryContactOrRelease(userId, accountId);
 
         verify(requestTaskRepository, times(1))
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(userId, accountId, RequestStatus.IN_PROGRESS);
+            .findByAssigneeAndRequestAccountId(userId, accountId);
         verify(accountContactQueryService, times(1)).findPrimaryContactByAccount(accountId);
         verify(requestTaskReleaseService, times(1)).releaseTaskForced(requestTask);
         verifyNoInteractions(requestTaskAssignmentService);
@@ -120,13 +120,13 @@ class OperatorRequestTaskAssignmentServiceTest {
         String userId = "userId";
 
         when(requestTaskRepository
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(userId, accountId, RequestStatus.IN_PROGRESS))
+            .findByAssigneeAndRequestAccountId(userId, accountId))
             .thenReturn(Collections.emptyList());
 
         operatorRequestTaskAssignmentService.assignUserTasksToAccountPrimaryContactOrRelease(userId, accountId);
 
         verify(requestTaskRepository, times(1))
-            .findByAssigneeAndRequestAccountIdAndRequestStatus(userId, accountId, RequestStatus.IN_PROGRESS);
+            .findByAssigneeAndRequestAccountId(userId, accountId);
     }
 
     @Test
@@ -161,7 +161,7 @@ class OperatorRequestTaskAssignmentServiceTest {
 
     @Test
     void getRoleType() {
-        assertEquals(RoleType.OPERATOR, operatorRequestTaskAssignmentService.getRoleType());
+        assertEquals(RoleTypeConstants.OPERATOR, operatorRequestTaskAssignmentService.getRoleType());
     }
 
 }

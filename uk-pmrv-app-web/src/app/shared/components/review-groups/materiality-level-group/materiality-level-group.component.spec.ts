@@ -18,8 +18,7 @@ describe('MaterialityLevelGroupComponent', () => {
     template: `
       <app-materiality-level-group
         [isEditable]="isEditable"
-        [materialityLevelInfo]="materialityLevelInfo"
-      ></app-materiality-level-group>
+        [materialityLevelInfo]="materialityLevelInfo"></app-materiality-level-group>
     `,
   })
   class TestComponent {

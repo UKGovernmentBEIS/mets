@@ -55,7 +55,7 @@ export const exampleData: any = [
       icao: 'Aerodrome of arrival ICAO code',
     },
     fuelType: 'Name of fuel used',
-    fuelConsumption: 'Amount of fuel used in tonnes',
+    fuelConsumption: 'Amount of fuel used in tonnes (to 3 decimal places)',
     flightsNumber: 'Number of flights',
   },
 ];

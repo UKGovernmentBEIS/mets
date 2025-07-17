@@ -8,9 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
-import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
-import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
-import uk.gov.pmrv.api.workflow.bpmn.handler.aer.CollectInstallationAccountsForAerHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 
 import java.util.List;

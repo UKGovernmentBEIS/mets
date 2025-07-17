@@ -1,4 +1,3 @@
-import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -43,12 +42,6 @@ describe('TransferCodeComponent', () => {
     }
   }
 
-  const runOnPushChangeDetection = async (fixture: ComponentFixture<any>): Promise<void> => {
-    const changeDetectorRef = fixture.debugElement.injector.get<ChangeDetectorRef>(ChangeDetectorRef);
-    changeDetectorRef.detectChanges();
-    return fixture.whenStable();
-  };
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [TransferACodeComponent],
@@ -84,7 +77,7 @@ describe('TransferCodeComponent', () => {
   it('should validate form and display an error message', async () => {
     page.transferCode = '12345678';
     page.submitButton.click();
-    await runOnPushChangeDetection(fixture);
+    fixture.detectChanges();
 
     expect(page.errorSummary).toBeTruthy();
     expect(page.errors.map((error) => error.textContent.trim())).toEqual(['Enter a valid transfer code']);
@@ -97,7 +90,7 @@ describe('TransferCodeComponent', () => {
 
     page.transferCode = '123456789';
     page.submitButton.click();
-    await runOnPushChangeDetection(fixture);
+    fixture.detectChanges();
 
     expect(page.errorSummary).toBeFalsy();
     expect(navigateSpy).toHaveBeenCalledTimes(1);

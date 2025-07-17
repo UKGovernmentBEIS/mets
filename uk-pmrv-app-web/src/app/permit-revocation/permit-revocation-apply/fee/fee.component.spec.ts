@@ -8,7 +8,7 @@ import { CessationModule } from '@permit-revocation/cessation/cessation.module';
 import { PermitRevocationModule } from '@permit-revocation/permit-revocation.module';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
 import { GovukDatePipe } from '@shared/pipes/govuk-date.pipe';
-import moment from 'moment';
+import { addDays, format, formatISO } from 'date-fns';
 
 import { TasksService } from 'pmrv-api';
 
@@ -101,8 +101,8 @@ describe('Fee Component', () => {
 
   const effectiveDate = (format: string, days: number): string => {
     const govukDatePipe = new GovukDatePipe();
-    const add28Days = moment().add(days, 'd');
-    const effectiveDate = govukDatePipe.transform(add28Days.toISOString(), 'date');
+    const add28Days = formatISO(addDays(new Date(), days));
+    const effectiveDate = govukDatePipe.transform(add28Days, 'date');
 
     return effectiveDate;
   };
@@ -186,7 +186,7 @@ describe('Fee Component', () => {
   });
 
   it('should validate form with an error message for minimum date limit', () => {
-    const today = moment().add(26, 'd').format('YYYY-MM-DD');
+    const today = format(addDays(new Date(), 26), 'yyyy-MM-dd');
     const date = today.split('-');
     const year = date[0];
     const month = date[1];
@@ -211,7 +211,7 @@ describe('Fee Component', () => {
 
   it('Should submit form and navigate to the next step', () => {
     const navigateSpy = jest.spyOn(router, 'navigate');
-    const today = moment().add(40, 'd').format('YYYY-MM-DD');
+    const today = format(addDays(new Date(), 40), 'yyyy-MM-dd');
     const date = today.split('-');
     const year = date[0];
     const month = date[1];

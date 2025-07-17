@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.resource.OperatorAuthorityResourceService;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.rules.services.resource.OperatorAuthorityResourceService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 import java.util.List;
@@ -63,11 +63,11 @@ class OperatorAuthorityResourceAdapterTest {
         final Long accountId2 = 2L;
         final List<Long> accounts = List.of(accountId1, accountId2);
         final String userId = "userId";
-        final PmrvUser pmrvUser = PmrvUser.builder()
+        final AppUser appUser = AppUser.builder()
             .userId(userId)
             .authorities(List.of(
-                PmrvAuthority.builder().accountId(accountId1).build(),
-                PmrvAuthority.builder().accountId(accountId2).build()
+                AppAuthority.builder().accountId(accountId1).build(),
+                AppAuthority.builder().accountId(accountId2).build()
                 )
             )
             .build();
@@ -82,7 +82,7 @@ class OperatorAuthorityResourceAdapterTest {
             );
 
         Map<Long, Set<RequestTaskType>> userScopedRequestTaskTypesByAccountType =
-            operatorAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType);
+            operatorAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
 
         assertThat(userScopedRequestTaskTypesByAccountType).containsExactlyEntriesOf(
             Map.of(accountId1, Set.of(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_SUBMIT))

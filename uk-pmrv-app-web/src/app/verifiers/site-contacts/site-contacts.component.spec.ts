@@ -59,8 +59,7 @@ describe('SiteContactsComponent', () => {
         [pageSize]="pageSize"
         [contacts]="contacts"
         [verifiers]="verifiers"
-        (siteContactChange)="siteContactChange($any($event))"
-      ></app-site-contacts>
+        (siteContactChange)="siteContactChange($any($event))"></app-site-contacts>
     `,
   })
   class TestComponent {

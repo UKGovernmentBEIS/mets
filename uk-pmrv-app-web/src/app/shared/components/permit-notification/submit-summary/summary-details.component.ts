@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 
-import { PermitNotification } from 'pmrv-api';
+import { CessationNotification, PermitNotification } from 'pmrv-api';
 
 interface SummaryDetails {
   description: string;
@@ -20,7 +20,13 @@ interface SummaryDetails {
   proof?: string;
   startDateOfNonCompliance?: string;
   endDateOfNonCompliance?: string;
-  type?: 'NON_SIGNIFICANT_CHANGE' | 'OTHER_FACTOR' | 'TEMPORARY_CHANGE' | 'TEMPORARY_FACTOR' | 'TEMPORARY_SUSPENSION';
+  type?:
+    | 'NON_SIGNIFICANT_CHANGE'
+    | 'OTHER_FACTOR'
+    | 'TEMPORARY_CHANGE'
+    | 'TEMPORARY_FACTOR'
+    | 'TEMPORARY_SUSPENSION'
+    | 'CESSATION';
 }
 
 @Component({
@@ -40,6 +46,10 @@ export class SummaryDetailsComponent {
     return this.notification as SummaryDetails;
   }
 
+  get permanentCessation(): CessationNotification | null {
+    return this.notification?.type === 'CESSATION' ? (this.notification as CessationNotification) : null;
+  }
+
   relatedChangesLabelMap: Partial<Record<'MONITORING_METHODOLOGY_PLAN' | 'MONITORING_PLAN', string>> = {
     MONITORING_PLAN: 'Monitoring plan',
     MONITORING_METHODOLOGY_PLAN: 'Monitoring methodology plan (MMP)',
@@ -50,13 +60,23 @@ export class SummaryDetailsComponent {
     OTHER_FACTOR: 'Description of the issue',
     TEMPORARY_CHANGE: 'Description of the temporary change',
     TEMPORARY_FACTOR: 'Description of the factors preventing compliance',
+    CESSATION: 'Describe the cessation of regulated activities',
     TEMPORARY_SUSPENSION: 'Description of the regulated activities which are temporarily suspended',
+  };
+
+  changeHiddenLabelMap: Partial<Record<PermitNotification['type'], string>> = {
+    NON_SIGNIFICANT_CHANGE: 'non-significant change',
+    OTHER_FACTOR: 'any other factor',
+    TEMPORARY_CHANGE: 'temporary change to the permitted installation',
+    TEMPORARY_FACTOR: 'temporary factor preventing compliance with a permit condition',
+    CESSATION: 'cessation of all regulated activities',
   };
 
   startDateLabelMap: Partial<Record<PermitNotification['type'], string>> = {
     OTHER_FACTOR: 'Date started',
     TEMPORARY_CHANGE: 'Date the temporary change started',
     TEMPORARY_FACTOR: 'Date the non-compliance started',
+    CESSATION: 'Date of cessation',
     TEMPORARY_SUSPENSION: 'Date the regulated activity stopped',
   };
 
@@ -64,7 +84,17 @@ export class SummaryDetailsComponent {
     OTHER_FACTOR: 'Date ends',
     TEMPORARY_CHANGE: 'Date the temporary change ends',
     TEMPORARY_FACTOR: 'Date the non-compliance ends',
+    CESSATION: 'Expected date to resume regulated activities',
     TEMPORARY_SUSPENSION: 'Date the regulated activity is proposed to restart',
+  };
+
+  technicalCapabilityLabelMap: Partial<
+    Record<CessationNotification['technicalCapabilityDetails']['technicalCapability'], string>
+  > = {
+    RESUME_REG_ACTIVITIES_WITHOUT_PHYSICAL_CHANGES:
+      'The installation is technically capable of resuming regulated activities without physical changes being made',
+    RESTORE_TECHNICAL_CAPABILITY_TO_RESUME_REG_ACTIVITIES:
+      'We intend to restore the technical capability required for regulated activities to resume',
   };
 
   createRelatedChangesLabel(notification: SummaryDetails) {

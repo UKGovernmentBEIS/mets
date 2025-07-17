@@ -12,13 +12,11 @@ import { getCompletionStatus } from '../measurement-status';
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.component.html',
-  styles: [
-    `
-      .float-right {
-        float: right;
-      }
-    `,
-  ],
+  styles: `
+    .float-right {
+      float: right;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })

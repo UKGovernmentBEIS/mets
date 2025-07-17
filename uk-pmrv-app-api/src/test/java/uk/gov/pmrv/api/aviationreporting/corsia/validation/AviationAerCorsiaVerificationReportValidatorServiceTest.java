@@ -11,8 +11,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerValidationResult;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsia;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,7 +63,7 @@ class AviationAerCorsiaVerificationReportValidatorServiceTest {
         BusinessException be = assertThrows(BusinessException.class,
                 () -> verificationReportValidatorService.validate(verificationReport, aerCorsia));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AVIATION_AER_VERIFICATION_REPORT);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AVIATION_AER_VERIFICATION_REPORT);
         verify(ercVerificationValidator, times(1)).validate(verificationReport, aerCorsia);
     }
 }

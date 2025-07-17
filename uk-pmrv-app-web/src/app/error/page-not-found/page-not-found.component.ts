@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     <p class="govuk-body">If you pasted the web address, check you copied the entire address.</p>
     <p class="govuk-body">
       If the web address is correct,
-      <a govukLink [routerLink]="['/contact-us']"> contact your regulator </a>
+      <a govukLink [routerLink]="['/contact-us']">contact your regulator</a>
       for help.
     </p>
   `,

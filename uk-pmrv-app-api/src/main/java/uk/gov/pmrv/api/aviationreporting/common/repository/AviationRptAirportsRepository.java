@@ -24,7 +24,7 @@ public interface AviationRptAirportsRepository extends JpaRepository<AviationRpt
     @Transactional(readOnly = true)
     @Query("select airport.icao " +
             " from AviationRptCountriesEntity country join AviationRptAirportsEntity airport on country.country = airport.country " +
-            " where airport.icao in (:icaos) and country.isChapter3 ")
-    List<String> findChapter3Icaos(Set<String> icaos);
+            " where airport.icao in (:icaos) and country.isChapter3 and country.year = :year ")
+    List<String> findChapter3Icaos(Set<String> icaos, Year year);
 
 }

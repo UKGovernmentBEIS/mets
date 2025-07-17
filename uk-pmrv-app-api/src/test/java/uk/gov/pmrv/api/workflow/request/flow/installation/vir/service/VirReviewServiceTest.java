@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.common.reporting.verification.UncorrectedItem;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -90,7 +90,7 @@ class VirReviewServiceTest {
     @Test
     void submitReview() {
         final String userId = "userId";
-        final PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        final AppUser appUser = AppUser.builder().userId(userId).build();
         final DecisionNotification decisionNotification = DecisionNotification.builder()
                 .operators(Set.of("operator"))
                 .signatory("signatory")
@@ -115,7 +115,7 @@ class VirReviewServiceTest {
                 .build();
 
         // Invoke
-        virReviewService.submitReview(requestTask, decisionNotification, pmrvUser);
+        virReviewService.submitReview(requestTask, decisionNotification, appUser);
 
         // Verify
         assertThat(request.getPayload()).isInstanceOf(VirRequestPayload.class);

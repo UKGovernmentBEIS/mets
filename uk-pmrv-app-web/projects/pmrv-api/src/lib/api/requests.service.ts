@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -16,13 +16,14 @@ import { Observable } from 'rxjs';
 
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
+import { AerMarkNotRequiredDetails } from '../model/aerMarkNotRequiredDetails';
 import { BatchReissuesResponseDTO } from '../model/batchReissuesResponseDTO';
 import { RequestCreateActionProcessDTO } from '../model/requestCreateActionProcessDTO';
 import { RequestCreateActionProcessResponseDTO } from '../model/requestCreateActionProcessResponseDTO';
 import { RequestCreateValidationResult } from '../model/requestCreateValidationResult';
 import { RequestDetailsDTO } from '../model/requestDetailsDTO';
 import { RequestDetailsSearchResults } from '../model/requestDetailsSearchResults';
-import { RequestSearchByAccountCriteria } from '../model/requestSearchByAccountCriteria';
+import { RequestSearchCriteria } from '../model/requestSearchCriteria';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -146,9 +147,7 @@ export class RequestsService {
     }
 
     return this.httpClient.get<{ [key: string]: RequestCreateValidationResult }>(
-      `${this.configuration.basePath}/v1.0/requests/available-workflows/permit/${encodeURIComponent(
-        String(accountId),
-      )}`,
+      `${this.configuration.basePath}/v1.0/requests/available-workflows/permit/${encodeURIComponent(String(accountId))}`,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
@@ -218,9 +217,7 @@ export class RequestsService {
     }
 
     return this.httpClient.get<{ [key: string]: RequestCreateValidationResult }>(
-      `${this.configuration.basePath}/v1.0/requests/available-workflows/reporting/aer/${encodeURIComponent(
-        String(aerRequestId),
-      )}`,
+      `${this.configuration.basePath}/v1.0/requests/available-workflows/reporting/aer/${encodeURIComponent(String(aerRequestId))}`,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
@@ -331,88 +328,6 @@ export class RequestsService {
   }
 
   /**
-   * Get the workflows for the given search criteria
-   * @param requestSearchByAccountCriteria
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public getRequestDetailsByAccountId(
-    requestSearchByAccountCriteria: RequestSearchByAccountCriteria,
-  ): Observable<RequestDetailsSearchResults>;
-  public getRequestDetailsByAccountId(
-    requestSearchByAccountCriteria: RequestSearchByAccountCriteria,
-    observe: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpResponse<RequestDetailsSearchResults>>;
-  public getRequestDetailsByAccountId(
-    requestSearchByAccountCriteria: RequestSearchByAccountCriteria,
-    observe: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpEvent<RequestDetailsSearchResults>>;
-  public getRequestDetailsByAccountId(
-    requestSearchByAccountCriteria: RequestSearchByAccountCriteria,
-    observe: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<RequestDetailsSearchResults>;
-  public getRequestDetailsByAccountId(
-    requestSearchByAccountCriteria: RequestSearchByAccountCriteria,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<any> {
-    if (requestSearchByAccountCriteria === null || requestSearchByAccountCriteria === undefined) {
-      throw new Error(
-        'Required parameter requestSearchByAccountCriteria was null or undefined when calling getRequestDetailsByAccountId.',
-      );
-    }
-
-    let headers = this.defaultHeaders;
-
-    // authentication (bearerAuth) required
-    const credential = this.configuration.lookupCredential('bearerAuth');
-    if (credential) {
-      headers = headers.set('Authorization', 'Bearer ' + credential);
-    }
-
-    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (httpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (httpHeaderAcceptSelected !== undefined) {
-      headers = headers.set('Accept', httpHeaderAcceptSelected);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = ['application/json'];
-    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      headers = headers.set('Content-Type', httpContentTypeSelected);
-    }
-
-    let responseType_: 'text' | 'json' = 'json';
-    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
-      responseType_ = 'text';
-    }
-
-    return this.httpClient.post<RequestDetailsSearchResults>(
-      `${this.configuration.basePath}/v1.0/requests/workflows`,
-      requestSearchByAccountCriteria,
-      {
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: headers,
-        observe: observe,
-        reportProgress: reportProgress,
-      },
-    );
-  }
-
-  /**
    * Get request details by id
    * @param id The request id
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -483,40 +398,280 @@ export class RequestsService {
   }
 
   /**
+   * Get the workflows for the given search criteria
+   * @param requestSearchCriteria
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public getRequestDetailsByResource(
+    requestSearchCriteria: RequestSearchCriteria,
+  ): Observable<RequestDetailsSearchResults>;
+  public getRequestDetailsByResource(
+    requestSearchCriteria: RequestSearchCriteria,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpResponse<RequestDetailsSearchResults>>;
+  public getRequestDetailsByResource(
+    requestSearchCriteria: RequestSearchCriteria,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<HttpEvent<RequestDetailsSearchResults>>;
+  public getRequestDetailsByResource(
+    requestSearchCriteria: RequestSearchCriteria,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<RequestDetailsSearchResults>;
+  public getRequestDetailsByResource(
+    requestSearchCriteria: RequestSearchCriteria,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: 'application/json' },
+  ): Observable<any> {
+    if (requestSearchCriteria === null || requestSearchCriteria === undefined) {
+      throw new Error(
+        'Required parameter requestSearchCriteria was null or undefined when calling getRequestDetailsByResource.',
+      );
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['application/json'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      headers = headers.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.post<RequestDetailsSearchResults>(
+      `${this.configuration.basePath}/v1.0/requests/workflows`,
+      requestSearchCriteria,
+      {
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Check if the user has access to mark as not required
+   * @param id The request id
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public hasAccessMarkAsNotRequired(id: string): Observable<boolean>;
+  public hasAccessMarkAsNotRequired(
+    id: string,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<HttpResponse<boolean>>;
+  public hasAccessMarkAsNotRequired(
+    id: string,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<HttpEvent<boolean>>;
+  public hasAccessMarkAsNotRequired(
+    id: string,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<boolean>;
+  public hasAccessMarkAsNotRequired(
+    id: string,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling hasAccessMarkAsNotRequired.');
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['*/*'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.get<boolean>(
+      `${this.configuration.basePath}/v1.0/mets/requests/access-to-mark-as-not-required/${encodeURIComponent(String(id))}`,
+      {
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
+   * Mark as not required the given request and terminate Aer workflow
+   * @param id The request id
+   * @param aerMarkNotRequiredDetails
+   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+   * @param reportProgress flag to report request and response progress.
+   */
+  public markAsNotRequired(id: string, aerMarkNotRequiredDetails: AerMarkNotRequiredDetails): Observable<string>;
+  public markAsNotRequired(
+    id: string,
+    aerMarkNotRequiredDetails: AerMarkNotRequiredDetails,
+    observe: 'response',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<HttpResponse<string>>;
+  public markAsNotRequired(
+    id: string,
+    aerMarkNotRequiredDetails: AerMarkNotRequiredDetails,
+    observe: 'events',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<HttpEvent<string>>;
+  public markAsNotRequired(
+    id: string,
+    aerMarkNotRequiredDetails: AerMarkNotRequiredDetails,
+    observe: 'body',
+    reportProgress?: boolean,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<string>;
+  public markAsNotRequired(
+    id: string,
+    aerMarkNotRequiredDetails: AerMarkNotRequiredDetails,
+    observe: any = 'body',
+    reportProgress: boolean = false,
+    options?: { httpHeaderAccept?: '*/*' },
+  ): Observable<any> {
+    if (id === null || id === undefined) {
+      throw new Error('Required parameter id was null or undefined when calling markAsNotRequired.');
+    }
+    if (aerMarkNotRequiredDetails === null || aerMarkNotRequiredDetails === undefined) {
+      throw new Error(
+        'Required parameter aerMarkNotRequiredDetails was null or undefined when calling markAsNotRequired.',
+      );
+    }
+
+    let headers = this.defaultHeaders;
+
+    // authentication (bearerAuth) required
+    const credential = this.configuration.lookupCredential('bearerAuth');
+    if (credential) {
+      headers = headers.set('Authorization', 'Bearer ' + credential);
+    }
+
+    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+    if (httpHeaderAcceptSelected === undefined) {
+      // to determine the Accept header
+      const httpHeaderAccepts: string[] = ['*/*'];
+      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+    }
+    if (httpHeaderAcceptSelected !== undefined) {
+      headers = headers.set('Accept', httpHeaderAcceptSelected);
+    }
+
+    // to determine the Content-Type header
+    const consumes: string[] = ['application/json'];
+    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+    if (httpContentTypeSelected !== undefined) {
+      headers = headers.set('Content-Type', httpContentTypeSelected);
+    }
+
+    let responseType_: 'text' | 'json' = 'json';
+    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+      responseType_ = 'text';
+    }
+
+    return this.httpClient.post<string>(
+      `${this.configuration.basePath}/v1.0/mets/requests/mark-as-not-required/${encodeURIComponent(String(id))}`,
+      aerMarkNotRequiredDetails,
+      {
+        responseType: <any>responseType_,
+        withCredentials: this.configuration.withCredentials,
+        headers: headers,
+        observe: observe,
+        reportProgress: reportProgress,
+      },
+    );
+  }
+
+  /**
    * Processes a request create action
    * @param requestCreateActionProcessDTO
-   * @param accountId The account id
+   * @param resourceId The resource id on which a request will be created (e.g accountId, CA etc.)
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public processRequestCreateAction(
     requestCreateActionProcessDTO: RequestCreateActionProcessDTO,
-    accountId?: number,
+    resourceId?: string,
   ): Observable<RequestCreateActionProcessResponseDTO>;
   public processRequestCreateAction(
     requestCreateActionProcessDTO: RequestCreateActionProcessDTO,
-    accountId: number,
+    resourceId: string,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpResponse<RequestCreateActionProcessResponseDTO>>;
   public processRequestCreateAction(
     requestCreateActionProcessDTO: RequestCreateActionProcessDTO,
-    accountId: number,
+    resourceId: string,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpEvent<RequestCreateActionProcessResponseDTO>>;
   public processRequestCreateAction(
     requestCreateActionProcessDTO: RequestCreateActionProcessDTO,
-    accountId: number,
+    resourceId: string,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<RequestCreateActionProcessResponseDTO>;
   public processRequestCreateAction(
     requestCreateActionProcessDTO: RequestCreateActionProcessDTO,
-    accountId?: number,
+    resourceId?: string,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -528,8 +683,8 @@ export class RequestsService {
     }
 
     let queryParameters = new HttpParams({ encoder: this.encoder });
-    if (accountId !== undefined && accountId !== null) {
-      queryParameters = this.addToHttpParams(queryParameters, <any>accountId, 'accountId');
+    if (resourceId !== undefined && resourceId !== null) {
+      queryParameters = this.addToHttpParams(queryParameters, <any>resourceId, 'resourceId');
     }
 
     let headers = this.defaultHeaders;

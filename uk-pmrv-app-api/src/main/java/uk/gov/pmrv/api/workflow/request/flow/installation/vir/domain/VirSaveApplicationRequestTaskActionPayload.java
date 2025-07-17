@@ -6,12 +6,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.OperatorImprovementResponse;
 
 import java.util.HashMap;
 import java.util.Map;
-import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.OperatorImprovementResponse;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

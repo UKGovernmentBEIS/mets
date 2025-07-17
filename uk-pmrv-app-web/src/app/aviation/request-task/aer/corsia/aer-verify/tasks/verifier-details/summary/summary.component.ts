@@ -40,7 +40,7 @@ export class SummaryComponent {
       return {
         heading: 'Check your answers',
         verificationBodyDetails: verificationBodyDetails,
-        verifierDetails: this.formProvider.getFormValue(),
+        verifierDetails: this.formProvider.form.valid ? this.formProvider.getFormValue() : null,
         isEditable: isEditable,
         hideSubmit: !isEditable || ['complete', 'cannot start yet'].includes(taskStatus),
       };

@@ -3,6 +3,7 @@ import { CanActivateFn, CanDeactivateFn, Router } from '@angular/router';
 
 import { catchError, concatMap, map, of, tap } from 'rxjs';
 
+import { CommonActionsStore } from '@actions/store/common-actions.store';
 import { AuthStore, selectUserRoleType } from '@core/store';
 import { AVIATION_REQUEST_TYPES } from '@shared/utils/request.utils';
 
@@ -17,6 +18,7 @@ export const canActivateRequestAction: CanActivateFn = (route) => {
   const store = inject(RequestActionStore);
   const router = inject(Router);
   const incorporateHeaderStore = inject(IncorporateHeaderStore);
+  const commonStore = inject(CommonActionsStore);
 
   const id = +route.paramMap.get('actionId');
   if (!route.paramMap.has('actionId') || Number.isNaN(id)) {
@@ -41,6 +43,11 @@ export const canActivateRequestAction: CanActivateFn = (route) => {
       incorporateHeaderStore.setState({
         ...incorporateHeaderStore.getState(),
         accountId: requestActionItem.requestAccountId,
+      });
+
+      commonStore.setState({
+        action: store.getState().requestActionItem,
+        storeInitialized: true,
       });
     }),
     map(() => true),

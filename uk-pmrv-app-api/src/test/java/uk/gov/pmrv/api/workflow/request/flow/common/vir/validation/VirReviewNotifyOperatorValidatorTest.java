@@ -13,9 +13,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
@@ -56,7 +56,7 @@ class VirReviewNotifyOperatorValidatorTest {
                         .build())
                 .build();
 
-        final PmrvUser user = PmrvUser.builder().build();
+        final AppUser user = AppUser.builder().build();
         final DecisionNotification decisionNotification = DecisionNotification.builder()
                 .operators(Set.of("operatorUser"))
                 .signatory("signatoryUser")
@@ -97,7 +97,7 @@ class VirReviewNotifyOperatorValidatorTest {
                         .build())
                 .build();
 
-        final PmrvUser user = PmrvUser.builder().build();
+        final AppUser user = AppUser.builder().build();
         final DecisionNotification decisionNotification = DecisionNotification.builder()
                 .operators(Set.of("operatorUser"))
                 .signatory("signatoryUser")

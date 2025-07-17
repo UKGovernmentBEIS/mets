@@ -24,8 +24,7 @@ describe('TransferDetailsTemplateComponent', () => {
         [isEditable]="isEditable"
         [heading]="heading"
         [returnToLink]="returnToLink"
-        [showBackLink]="showBackLink"
-      ></app-transfer-details-template>
+        [showBackLink]="showBackLink"></app-transfer-details-template>
     `,
   })
   class TestComponent {

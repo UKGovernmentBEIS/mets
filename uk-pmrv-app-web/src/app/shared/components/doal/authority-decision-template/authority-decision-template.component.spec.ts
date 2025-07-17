@@ -17,7 +17,9 @@ describe('AuthorityDecisionTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    template: ` <app-doal-authority-decision-template [data]="data"></app-doal-authority-decision-template> `,
+    template: `
+      <app-doal-authority-decision-template [data]="data"></app-doal-authority-decision-template>
+    `,
   })
   class TestComponent {
     data = {

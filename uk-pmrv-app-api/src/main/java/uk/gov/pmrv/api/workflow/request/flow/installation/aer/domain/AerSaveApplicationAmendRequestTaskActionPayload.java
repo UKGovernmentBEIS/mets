@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceReviewRequestTaskActionPayload;
 
 import java.util.HashMap;
 import java.util.List;

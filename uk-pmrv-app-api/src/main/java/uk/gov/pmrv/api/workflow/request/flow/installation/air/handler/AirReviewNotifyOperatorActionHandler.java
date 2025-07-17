@@ -1,10 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.air.handler;
 
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -15,9 +13,12 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.NotifyOperatorForDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.ReviewOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.RegulatorAirImprovementResponse;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.service.AirReviewService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.validation.AirReviewNotifyOperatorValidator;
-import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.RegulatorAirImprovementResponse;
+
+import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -31,18 +32,18 @@ public class AirReviewNotifyOperatorActionHandler implements RequestTaskActionHa
     @Override
     public void process(final Long requestTaskId, 
                         final RequestTaskActionType requestTaskActionType, 
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final NotifyOperatorForDecisionRequestTaskActionPayload payload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         final AirApplicationReviewRequestTaskPayload taskPayload = (AirApplicationReviewRequestTaskPayload) requestTask.getPayload();
 
         // Validate review and action payload
-        reviewNotifyOperatorValidator.validate(requestTask, payload, pmrvUser);
+        reviewNotifyOperatorValidator.validate(requestTask, payload, appUser);
 
         // Submit review
         final DecisionNotification decisionNotification = payload.getDecisionNotification();
-        reviewService.submitReview(requestTask, decisionNotification, pmrvUser);
+        reviewService.submitReview(requestTask, decisionNotification, appUser);
 
         // Complete task
         final boolean airNeedsImprovements = taskPayload.getRegulatorReviewResponse().getRegulatorImprovementResponses()

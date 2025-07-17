@@ -1,16 +1,16 @@
 package uk.gov.pmrv.api.permit.service;
 
-import static uk.gov.pmrv.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.service.AccountSearchAdditionalKeywordService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitEntity;
 import uk.gov.pmrv.api.permit.repository.PermitRepository;
 import uk.gov.pmrv.api.permit.validation.PermitGrantedValidatorService;
+
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor

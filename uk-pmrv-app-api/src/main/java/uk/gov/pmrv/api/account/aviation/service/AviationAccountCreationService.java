@@ -1,12 +1,13 @@
 package uk.gov.pmrv.api.account.aviation.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountCreatedEvent;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountReportingStatusHistory;
@@ -15,13 +16,10 @@ import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReport
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.aviation.transform.AviationAccountMapper;
 import uk.gov.pmrv.api.account.service.AccountIdentifierService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
-import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 
 @Validated
@@ -36,9 +34,9 @@ public class AviationAccountCreationService {
     private final AviationAccountMapper aviationAccountMapper;
 
     @Transactional
-    public void createAccount(@Valid AviationAccountCreationDTO aviationAccountCreationDTO, PmrvUser pmrvUser) {
+    public void createAccount(@Valid AviationAccountCreationDTO aviationAccountCreationDTO, AppUser appUser) {
         EmissionTradingScheme emissionTradingScheme = aviationAccountCreationDTO.getEmissionTradingScheme();
-        CompetentAuthorityEnum competentAuthority = pmrvUser.getCompetentAuthority();
+        CompetentAuthorityEnum competentAuthority = appUser.getCompetentAuthority();
 
         validateAccountNameUniqueness(aviationAccountCreationDTO.getName(), competentAuthority, emissionTradingScheme);
         validateCrcoCodeUniqueness(aviationAccountCreationDTO.getCrcoCode(), competentAuthority, emissionTradingScheme);
@@ -49,14 +47,14 @@ public class AviationAccountCreationService {
         AviationAccount account = aviationAccountMapper.toAviationAccount(aviationAccountCreationDTO, competentAuthority, identifier);
         account.setAcceptedDate(LocalDateTime.now());
         account.setCreatedDate(LocalDateTime.now());
-        account.setCreatedByUserId(pmrvUser.getUserId());
+        account.setCreatedByUserId(appUser.getUserId());
         
         final AviationAccountReportingStatus initialReportingStatus = AviationAccountReportingStatus.REQUIRED_TO_REPORT;
         account.setReportingStatus(initialReportingStatus);
         account.addReportingStatusHistory(AviationAccountReportingStatusHistory.builder()
                 .status(initialReportingStatus)
-                .submitterId(pmrvUser.getUserId())
-                .submitterName(pmrvUser.getFullName())
+                .submitterId(appUser.getUserId())
+                .submitterName(appUser.getFullName())
                 .build());
         
         aviationAccountRepository.save(account);
@@ -70,14 +68,14 @@ public class AviationAccountCreationService {
     private void validateAccountNameUniqueness(String name, CompetentAuthorityEnum competentAuthority,
                                               EmissionTradingScheme emissionTradingScheme) {
         if(aviationAccountQueryService.isExistingAccountName(name, competentAuthority, emissionTradingScheme)) {
-            throw new BusinessException(ErrorCode.ACCOUNT_ALREADY_EXISTS, name, competentAuthority, emissionTradingScheme);
+            throw new BusinessException(MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS, name, competentAuthority, emissionTradingScheme);
         }
     }
 
     private void validateCrcoCodeUniqueness(String crcoCode, CompetentAuthorityEnum competentAuthority,
                                            EmissionTradingScheme emissionTradingScheme) {
         if(aviationAccountQueryService.isExistingCrcoCode(crcoCode, competentAuthority, emissionTradingScheme)) {
-            throw new BusinessException(ErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT,
+            throw new BusinessException(MetsErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT,
                 crcoCode, competentAuthority, emissionTradingScheme);
         }
     }

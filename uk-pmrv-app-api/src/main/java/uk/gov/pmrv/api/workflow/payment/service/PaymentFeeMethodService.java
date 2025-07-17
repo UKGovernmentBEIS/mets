@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.payment.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.payment.domain.PaymentFeeMethod;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeMethodType;
 import uk.gov.pmrv.api.workflow.payment.repository.PaymentFeeMethodRepository;

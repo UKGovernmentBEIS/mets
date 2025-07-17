@@ -182,8 +182,7 @@ describe('CalculationEmissionsTierSummaryComponent', () => {
         [isEditable]="isEditable"
         [payload]="payload"
         [index]="0"
-        [areTiersExtraConditionsMet]="areTiersExtraConditionsMet"
-      ></app-calculation-emissions-tier-summary>
+        [areTiersExtraConditionsMet]="areTiersExtraConditionsMet"></app-calculation-emissions-tier-summary>
     `,
   })
   class TestComponent {

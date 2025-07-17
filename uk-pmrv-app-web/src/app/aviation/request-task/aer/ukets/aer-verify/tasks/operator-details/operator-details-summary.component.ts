@@ -46,8 +46,7 @@ interface ViewModel {
         *ngIf="vm.operatorDetails"
         [data]="vm.operatorDetails"
         [certificationFiles]="vm.certificationFiles"
-        [evidenceFiles]="vm.evidenceFiles"
-      ></app-operator-details-summary-template>
+        [evidenceFiles]="vm.evidenceFiles"></app-operator-details-summary-template>
     </ng-container>
 
     <app-return-to-link></app-return-to-link>

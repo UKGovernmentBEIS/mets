@@ -24,9 +24,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 import uk.gov.pmrv.api.allowance.domain.enums.SubInstallationName;
 import uk.gov.pmrv.api.allowance.validation.AllowanceAllocationValidator;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecisionType;
@@ -186,7 +186,7 @@ class NerReviewValidatorTest {
                 PreliminaryAllocation.builder().year(Year.of(2021)).subInstallationName(SubInstallationName.ALUMINIUM).build(),
                 PreliminaryAllocation.builder().year(Year.of(2022)).subInstallationName(SubInstallationName.ALUMINIUM).build()
         );
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final NerDeterminationType type = NerDeterminationType.PROCEED_TO_AUTHORITY;
         final NerApplicationReviewRequestTaskPayload taskPayload =
             NerApplicationReviewRequestTaskPayload.builder()
@@ -221,7 +221,7 @@ class NerReviewValidatorTest {
         verify(peerReviewerTaskAssignmentValidator, never()).validate(
             RequestTaskType.NER_APPLICATION_PEER_REVIEW,
             "peerReviewer",
-            pmrvUser
+            appUser
         );
         verify(allowanceAllocationValidator, times(1)).isValid(allocations);
     }
@@ -229,7 +229,7 @@ class NerReviewValidatorTest {
     @Test
     void validatePeerReview_whenPaymentRefundedMissing_thenThrowException() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final NerDeterminationType type = NerDeterminationType.CLOSED;
         final NerApplicationReviewRequestTaskPayload taskPayload =
             NerApplicationReviewRequestTaskPayload.builder()
@@ -258,7 +258,7 @@ class NerReviewValidatorTest {
         verify(peerReviewerTaskAssignmentValidator, never()).validate(
             RequestTaskType.NER_APPLICATION_PEER_REVIEW,
             "peerReviewer",
-            pmrvUser
+            appUser
         );
         verifyNoInteractions(allowanceAllocationValidator);
     }
@@ -266,18 +266,18 @@ class NerReviewValidatorTest {
     @Test
     void validatePeerReview_whenValid_thenDoNothing() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer("peerReviewer")
             .build();
 
 
-        validator.validatePeerReview(taskActionPayload, pmrvUser);
+        validator.validatePeerReview(taskActionPayload, appUser);
 
         verify(peerReviewerTaskAssignmentValidator, times(1)).validate(
             RequestTaskType.NER_APPLICATION_PEER_REVIEW,
             "peerReviewer",
-            pmrvUser
+            appUser
         );
     }
 }

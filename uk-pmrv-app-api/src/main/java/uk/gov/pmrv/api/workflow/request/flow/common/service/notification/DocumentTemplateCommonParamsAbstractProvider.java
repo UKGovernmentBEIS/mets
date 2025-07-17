@@ -1,15 +1,16 @@
 package uk.gov.pmrv.api.workflow.request.flow.common.service.notification;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.config.AppProperties;
+import uk.gov.netz.api.common.config.CompetentAuthorityProperties;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.utils.DateService;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.common.service.DateService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.competentauthority.PmrvCompetentAuthorityService;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.AccountTemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.CompetentAuthorityTemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.SignatoryTemplateParams;
@@ -19,6 +20,7 @@ import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserDTO;
 import uk.gov.pmrv.api.user.regulator.service.RegulatorUserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.CompetentAuthorityDTOByRequestResolverDelegator;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -26,14 +28,16 @@ import java.util.Date;
 
 @RequiredArgsConstructor
 public abstract class DocumentTemplateCommonParamsAbstractProvider implements DocumentTemplateCommonParamsProvider {
+
     private final RegulatorUserAuthService regulatorUserAuthService;
     private final UserAuthService userAuthService;
-    private final AppProperties appProperties;
+    private final CompetentAuthorityProperties competentAuthorityProperties;
     private final DateService dateService;
-    private final CompetentAuthorityService competentAuthorityService;
+    private final CompetentAuthorityDTOByRequestResolverDelegator competentAuthorityDTOByRequestResolverDelegator;
 
     public abstract String getPermitReferenceId(Long accountId);
     public abstract AccountTemplateParams getAccountTemplateParams(Long accountId);
+
 
     public TemplateParams constructCommonTemplateParams(final Request request,
                                                         final String signatory) {
@@ -46,9 +50,11 @@ public abstract class DocumentTemplateCommonParamsAbstractProvider implements Do
 
         // CA params
         final CompetentAuthorityEnum competentAuthority = accountTemplateParams.getCompetentAuthority();
+        final CompetentAuthorityDTO competentAuthorityDTO = competentAuthorityDTOByRequestResolverDelegator
+                .resolveCA(request, accountType);
         final CompetentAuthorityTemplateParams competentAuthorityParams = CompetentAuthorityTemplateParams.builder()
-            .competentAuthority(competentAuthorityService.getCompetentAuthority(competentAuthority, accountType))
-            .logo(CompetentAuthorityService.getCompetentAuthorityLogo(competentAuthority))
+            .competentAuthority(competentAuthorityDTO)
+            .logo(PmrvCompetentAuthorityService.getCompetentAuthorityLogo(competentAuthority))
             .build();
 
         // Signatory params
@@ -68,10 +74,12 @@ public abstract class DocumentTemplateCommonParamsAbstractProvider implements Do
         // workflow params
         // request end date is set when the request closes, so for the permit issuance flow it is null at this point
         final LocalDateTime requestEndDate = request.getEndDate() != null ? request.getEndDate() : dateService.getLocalDateTime();
+        final Date requestSubmissionDate = request.getSubmissionDate() != null ? 
+            Date.from(request.getSubmissionDate().atZone(ZoneId.systemDefault()).toInstant()) :
+            Date.from(dateService.getLocalDateTime().atZone(ZoneId.systemDefault()).toInstant());
         final WorkflowTemplateParams workflowParams = WorkflowTemplateParams.builder()
             .requestId(request.getId())
-            .requestSubmissionDate(
-                Date.from(request.getSubmissionDate().atZone(ZoneId.systemDefault()).toInstant()))
+            .requestSubmissionDate(requestSubmissionDate)
             .requestEndDate(requestEndDate)
             .requestTypeInfo(RequestTypeDocumentTemplateInfoMapper.getTemplateInfo(request.getType()))
             .requestType(request.getType().name())
@@ -79,7 +87,7 @@ public abstract class DocumentTemplateCommonParamsAbstractProvider implements Do
 
         return TemplateParams.builder()
             .competentAuthorityParams(competentAuthorityParams)
-            .competentAuthorityCentralInfo(appProperties.getCompetentAuthorityCentralInfo())
+            .competentAuthorityCentralInfo(competentAuthorityProperties.getCentralInfo())
             .signatoryParams(signatoryParams)
             .accountParams(accountTemplateParams)
             .permitId(permitReferenceId)

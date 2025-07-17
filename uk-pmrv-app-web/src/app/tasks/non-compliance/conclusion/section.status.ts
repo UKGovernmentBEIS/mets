@@ -6,6 +6,6 @@ export function resolveSectionStatus(payload: NonComplianceFinalDeterminationReq
   return payload.determinationCompleted
     ? 'complete'
     : payload.complianceRestored === undefined
-    ? 'not started'
-    : 'in progress';
+      ? 'not started'
+      : 'in progress';
 }

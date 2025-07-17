@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 import { combineLatest, map, Observable, take, tap } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
+import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
@@ -15,7 +16,6 @@ import { SharedModule } from '@shared/shared.module';
 
 import { AviationAerDataGap, AviationAerDataGaps, AviationAerUkEtsAggregatedEmissionDataDetails } from 'pmrv-api';
 
-import { AerReviewDecisionGroupComponent } from '../../../aer-review-decision-group/aer-review-decision-group.component';
 import { DataGapsSummaryViewModel } from '../data-gaps.interface';
 import { DataGapsFormProvider } from '../data-gaps-form.provider';
 import { calculateAffectedFlightsPercentage } from '../util/data-gaps.util';
@@ -73,7 +73,7 @@ export default class DataGapsSummaryComponent {
   );
 
   onRemoveDataGap(index: number) {
-    const data = [...this.dataGaps?.dataGaps];
+    const data = [...(this.dataGaps?.dataGaps || [])];
 
     if (data[index]) {
       data.splice(index, 1);

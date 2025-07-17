@@ -2,24 +2,24 @@ package uk.gov.pmrv.api.account.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.authorization.rules.services.authorityinfo.providers.AccountAuthorityInfoProvider;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.Location;
 import uk.gov.pmrv.api.account.domain.dto.AccountInfoDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.transform.AccountMapper;
-import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.providers.AccountAuthorityInfoProvider;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static uk.gov.pmrv.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -107,5 +107,10 @@ public class AccountQueryService implements AccountAuthorityInfoProvider {
     Account getAccountById(Long accountId) {
         return accountRepository.findById(accountId)
             .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+    }
+
+    public Account findAccountByRegistryId(Integer registryId) {
+        return accountRepository.findAccountByRegistryId(registryId)
+                .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
     }
 }

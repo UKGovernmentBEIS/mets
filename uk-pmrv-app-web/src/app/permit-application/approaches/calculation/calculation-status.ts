@@ -15,11 +15,11 @@ export function status(state: PermitApplicationState): TaskItemStatus {
     tiersStatuses.every((status) => status === 'complete')
     ? 'complete'
     : tiersStatuses.some((status) => status === 'needs review')
-    ? 'needs review'
-    : staticStatuses.some((status) => state.permitSectionsCompleted[status]?.[0]) ||
-      tiersStatuses.some((status) => status === 'in progress' || status === 'complete')
-    ? 'in progress'
-    : 'not started';
+      ? 'needs review'
+      : staticStatuses.some((status) => state.permitSectionsCompleted[status]?.[0]) ||
+          tiersStatuses.some((status) => status === 'in progress' || status === 'complete')
+        ? 'in progress'
+        : 'not started';
 }
 
 /** Returns the status of source stream category applier tier with given index */
@@ -28,8 +28,8 @@ export function categoryTierStatus(state: PermitApplicationState, index: number)
     ? categoryTierStatuses.every((status) => state.permitSectionsCompleted[status]?.[index])
       ? 'complete'
       : categoryTierStatuses.some((status) => state.permitSectionsCompleted[status]?.[index])
-      ? 'in progress'
-      : 'not started'
+        ? 'in progress'
+        : 'not started'
     : 'needs review';
 }
 
@@ -52,60 +52,60 @@ export function categoryTierSubtaskStatus(
       return categoryTierSubtaskStatus(state, 'CALCULATION_CO2_Category', index) === 'not started'
         ? 'cannot start yet'
         : isCategoryTierEmissionFactorExist(state, index)
-        ? state.permitSectionsCompleted[key]?.[index]
-          ? 'complete'
-          : 'in progress'
-        : 'not started';
+          ? state.permitSectionsCompleted[key]?.[index]
+            ? 'complete'
+            : 'in progress'
+          : 'not started';
     case 'CALCULATION_CO2_Calorific':
       return categoryTierSubtaskStatus(state, 'CALCULATION_CO2_Category', index) === 'not started'
         ? 'cannot start yet'
         : isCategoryTierCalorificValueExist(state, index)
-        ? state.permitSectionsCompleted[key]?.[index]
-          ? 'complete'
-          : 'in progress'
-        : 'not started';
+          ? state.permitSectionsCompleted[key]?.[index]
+            ? 'complete'
+            : 'in progress'
+          : 'not started';
     case 'CALCULATION_CO2_Oxidation_Factor':
       return categoryTierSubtaskStatus(state, 'CALCULATION_CO2_Category', index) === 'not started'
         ? 'cannot start yet'
         : isCategoryTierOxidationFactorExist(state, index)
-        ? state.permitSectionsCompleted[key]?.[index]
-          ? 'complete'
-          : 'in progress'
-        : 'not started';
+          ? state.permitSectionsCompleted[key]?.[index]
+            ? 'complete'
+            : 'in progress'
+          : 'not started';
     case 'CALCULATION_CO2_Biomass_Fraction':
       return categoryTierSubtaskStatus(state, 'CALCULATION_CO2_Category', index) === 'not started'
         ? 'cannot start yet'
         : isCategoryTierBiomassFractionExist(state, index)
-        ? state.permitSectionsCompleted[key]?.[index]
-          ? 'complete'
-          : 'in progress'
-        : 'not started';
+          ? state.permitSectionsCompleted[key]?.[index]
+            ? 'complete'
+            : 'in progress'
+          : 'not started';
     case 'CALCULATION_CO2_Carbon_Content':
       return categoryTierSubtaskStatus(state, 'CALCULATION_CO2_Category', index) === 'not started'
         ? 'cannot start yet'
         : isCategoryTierCarbonContentExist(state, index)
-        ? state.permitSectionsCompleted[key]?.[index]
-          ? 'complete'
-          : 'in progress'
-        : 'not started';
+          ? state.permitSectionsCompleted[key]?.[index]
+            ? 'complete'
+            : 'in progress'
+          : 'not started';
     case 'CALCULATION_CO2_Conversion_Factor':
       return categoryTierSubtaskStatus(state, 'CALCULATION_CO2_Category', index) === 'not started'
         ? 'cannot start yet'
         : isCategoryTierConversionFactorExist(state, index)
-        ? state.permitSectionsCompleted[key]?.[index]
-          ? 'complete'
-          : 'in progress'
-        : 'not started';
+          ? state.permitSectionsCompleted[key]?.[index]
+            ? 'complete'
+            : 'in progress'
+          : 'not started';
     case 'CALCULATION_CO2_Activity_Data':
       return !doActivityDataExist(state, index)
         ? !areActivityDataPrerequisitesMet(state, index)
           ? 'cannot start yet'
           : 'not started'
         : !areActivityDataValid(state, index)
-        ? 'needs review'
-        : state.permitSectionsCompleted[key]?.[index]
-        ? 'complete'
-        : 'in progress';
+          ? 'needs review'
+          : state.permitSectionsCompleted[key]?.[index]
+            ? 'complete'
+            : 'in progress';
     default:
       return state.permitSectionsCompleted[key]?.[index] ? 'complete' : 'not started';
   }
@@ -200,8 +200,8 @@ export function planStatus(state: PermitApplicationState): TaskItemStatus {
   return state.permitSectionsCompleted.CALCULATION_CO2_Plan?.[0]
     ? 'complete'
     : plan?.exist !== undefined
-    ? 'in progress'
-    : 'not started';
+      ? 'in progress'
+      : 'not started';
 }
 
 export const categoryTierStatuses = [
@@ -218,5 +218,5 @@ export const categoryTierStatuses = [
 export const staticStatuses = ['CALCULATION_CO2_Description', 'CALCULATION_CO2_Plan'] as const;
 export type statuses =
   | 'CALCULATION_CO2_Category_Tier'
-  | typeof staticStatuses[number]
-  | typeof categoryTierStatuses[number];
+  | (typeof staticStatuses)[number]
+  | (typeof categoryTierStatuses)[number];

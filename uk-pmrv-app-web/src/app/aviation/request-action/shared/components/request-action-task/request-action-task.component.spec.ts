@@ -36,8 +36,7 @@ describe('RequestActionTaskComponent', () => {
       <app-request-action-task
         [breadcrumb]="true"
         header="Abbreviations and definitions"
-        requestActionType="EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED"
-      >
+        requestActionType="EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED">
         <h2 app-summary-header changeRoute=".." class="govuk-heading-m">
           Uploaded additional documents and information
         </h2>

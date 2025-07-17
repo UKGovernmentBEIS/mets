@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
@@ -33,13 +33,13 @@ class AerSaveApplicationAmendActionHandlerTest {
     void process_should_save_the_aer_amends() {
         Long requestTaskId = 1L;
         RequestTaskActionType actionType = RequestTaskActionType.AER_SAVE_APPLICATION_AMEND;
-        PmrvUser pmrvUser = new PmrvUser();
+        AppUser appUser = new AppUser();
         AerSaveApplicationAmendRequestTaskActionPayload payload = new AerSaveApplicationAmendRequestTaskActionPayload();
 
         RequestTask requestTask = new RequestTask();
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        actionHandler.process(requestTaskId, actionType, pmrvUser, payload);
+        actionHandler.process(requestTaskId, actionType, appUser, payload);
 
         verify(requestTaskService).findTaskById(requestTaskId);
         verify(aerReviewService).saveAmendOfAer(payload, requestTask);

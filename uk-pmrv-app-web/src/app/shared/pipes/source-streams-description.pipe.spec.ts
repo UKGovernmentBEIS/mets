@@ -18,6 +18,7 @@ describe('SourceStreamDescriptionPipe', () => {
     expect(pipe.transform('BLENDED_FUEL_GAS')).toEqual('Blended Fuel Gas');
     expect(pipe.transform('CARBON_MONOXIDE')).toEqual('Carbon Monoxide');
     expect(pipe.transform('CHARCOAL')).toEqual('Charcoal');
+    expect(pipe.transform('CLINICAL_WASTE')).toEqual('Clinical Waste');
     expect(pipe.transform('COAL')).toEqual('Coal');
     expect(pipe.transform('COAL_TAR')).toEqual('Coal Tar');
     expect(pipe.transform('COKE')).toEqual('Coke');
@@ -25,6 +26,7 @@ describe('SourceStreamDescriptionPipe', () => {
     expect(pipe.transform('COKE_OVEN_GAS')).toEqual('Coke Oven Gas');
     expect(pipe.transform('COKING_COAL')).toEqual('Coking Coal');
     expect(pipe.transform('COLLIERY_METHANE')).toEqual('Colliery Methane');
+    expect(pipe.transform('COMMERCIAL_INDUSTRIAL_WASTE')).toEqual('Commercial and Industrial Waste');
     expect(pipe.transform('CRUDE_OIL')).toEqual('Crude Oil');
     expect(pipe.transform('ETHANE')).toEqual('Ethane');
     expect(pipe.transform('FUEL_GAS')).toEqual('Fuel Gas');
@@ -33,6 +35,7 @@ describe('SourceStreamDescriptionPipe', () => {
     expect(pipe.transform('GAS_DIESEL_OIL')).toEqual('Gas/Diesel Oil');
     expect(pipe.transform('GAS_OIL')).toEqual('Gas/Oil');
     expect(pipe.transform('GAS_WORKS')).toEqual('Gas Works');
+    expect(pipe.transform('HAZARDOUS_WASTE')).toEqual('Hazardous Waste');
     expect(pipe.transform('HIGH_PRESSURE_FLARE_GAS')).toEqual('High Pressure Flare Gas');
     expect(pipe.transform('IMPORT_FUEL_GAS')).toEqual('Import Fuel Gas');
     expect(pipe.transform('INDUSTRIAL_WASTES')).toEqual('Industrial Wastes');
@@ -78,6 +81,8 @@ describe('SourceStreamDescriptionPipe', () => {
     expect(pipe.transform('SLUDGE_GAS')).toEqual('Sludge Gas');
     expect(pipe.transform('SOUR_GAS')).toEqual('Sour Gas');
     expect(pipe.transform('SOUR_GAS_FLARE')).toEqual('Sour Gas Flare');
+    expect(pipe.transform('SDF')).toEqual('SDF');
+    expect(pipe.transform('SRF')).toEqual('SRF');
     expect(pipe.transform('SSF')).toEqual('SSF');
     expect(pipe.transform('SUB_BITUMINOUS_COAL')).toEqual('Sub-Bituminous Coal');
     expect(pipe.transform('WASTE_OILS')).toEqual('Waste Oils');
@@ -85,6 +90,7 @@ describe('SourceStreamDescriptionPipe', () => {
     expect(pipe.transform('WASTE_TYRES')).toEqual('Waste Tyres');
     expect(pipe.transform('WHITE_SPIRIT_SBP')).toEqual('White Spirit & SBP');
     expect(pipe.transform('WOOD_WOOD_WASTE')).toEqual('Wood/Wood Waste');
+    expect(pipe.transform('VENTED_GAS')).toEqual('Vented Gas');
     expect(pipe.transform(null)).toEqual('');
   });
 

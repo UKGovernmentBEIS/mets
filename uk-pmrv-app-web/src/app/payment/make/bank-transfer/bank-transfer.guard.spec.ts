@@ -53,12 +53,12 @@ describe('BankTransferGuard', () => {
 
     await expect(
       firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>),
-    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshot.params.taskId}/make/details`));
+    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshot.params.taskId}/make`));
 
     store.setState(mockPaymentState);
 
     await expect(
       firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>),
-    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshot.params.taskId}/make/details`));
+    ).resolves.toEqual(router.parseUrl(`/payment/${activatedRouteSnapshot.params.taskId}/make`));
   });
 });

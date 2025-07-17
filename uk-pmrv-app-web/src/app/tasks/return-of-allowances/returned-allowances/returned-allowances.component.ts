@@ -25,5 +25,8 @@ export class ReturnedAllowancesComponent {
     map(([isEditable, sectionStatus]) => isEditable || sectionStatus === 'complete'),
   );
 
-  constructor(private readonly returnOfAllowancesService: ReturnOfAllowancesService, readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly returnOfAllowancesService: ReturnOfAllowancesService,
+    readonly route: ActivatedRoute,
+  ) {}
 }

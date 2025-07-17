@@ -39,7 +39,16 @@ public class InstallationCategoryBasedFeePaymentService extends PaymentService {
         InstallationCategory installationCategory;
         if(request.getType() == RequestType.PERMIT_ISSUANCE) {
             PermitIssuanceRequestPayload requestPayload = (PermitIssuanceRequestPayload) request.getPayload();
-            emitterType = requestPayload.getPermitType() == PermitType.HSE ? EmitterType.HSE : EmitterType.GHGE;
+            PermitType permitType = requestPayload.getPermitType();
+
+            if(permitType.equals(PermitType.HSE)) {
+                emitterType = EmitterType.HSE;
+            } else if (permitType.equals(PermitType.GHGE)) {
+                emitterType = EmitterType.GHGE;
+            } else {
+                emitterType = EmitterType.WASTE;
+            }
+
             BigDecimal estimatedAnnualEmissions = requestPayload.getPermit().getEstimatedAnnualEmissions().getQuantity();
             installationCategory = InstallationCategoryMapper.getInstallationCategory(emitterType, estimatedAnnualEmissions);
         } else {
@@ -58,18 +67,15 @@ public class InstallationCategoryBasedFeePaymentService extends PaymentService {
 
         if(emitterType == EmitterType.HSE) {
             return FeeType.HSE;
+        } else if (emitterType == EmitterType.GHGE) {
+            return switch (installationCategory) {
+                case A_LOW_EMITTER, A -> FeeType.CAT_A;
+                case B -> FeeType.CAT_B;
+                case C -> FeeType.CAT_C;
+                default -> null;
+            };
         } else {
-            switch(installationCategory) {
-                case A_LOW_EMITTER:
-                case A:
-                    return  FeeType.CAT_A;
-                case B:
-                    return FeeType.CAT_B;
-                case C:
-                    return FeeType.CAT_C;
-                default:
-                    return null;
-            }
+            return FeeType.WASTE;
         }
     }
 }

@@ -21,7 +21,7 @@ import { AviationVirRequestMetadata, RequestInfoDTO, RequestTaskActionProcessDTO
       </nav>
     </aside>
   `,
-  styleUrls: ['./related-actions.component.scss'],
+  styleUrl: './related-actions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RelatedActionsComponent implements OnInit {
@@ -33,7 +33,10 @@ export class RelatedActionsComponent implements OnInit {
 
   allActions$: Observable<{ text: string; link: any[]; fragment?: string }[]>;
 
-  constructor(private readonly router: Router, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
     this.allActions$ = combineLatest([this.taskId$, this.allowedActions$, this.isAssignable$]).pipe(
@@ -59,15 +62,15 @@ export class RelatedActionsComponent implements OnInit {
           const assigneeLink = hasChangeAssigneeRelatedRoute
             ? ['change-assignee']
             : this.router.url.includes('/workflows/')
-            ? this.router.url.includes('/tasks/')
-              ? [
-                  ...this.router.url.substring(0, this.router.url.indexOf('/tasks/')).split('/'),
-                  'tasks',
-                  taskId,
-                  'change-assignee',
-                ]
-              : ['tasks', taskId, 'change-assignee']
-            : ['/tasks', taskId, 'change-assignee'];
+              ? this.router.url.includes('/tasks/')
+                ? [
+                    ...this.router.url.substring(0, this.router.url.indexOf('/tasks/')).split('/'),
+                    'tasks',
+                    taskId,
+                    'change-assignee',
+                  ]
+                : ['tasks', taskId, 'change-assignee']
+              : ['/tasks', taskId, 'change-assignee'];
 
           if (!isAviation) {
             assigneeLink[0] = `${this.baseUrl + assigneeLink[0]}`;
@@ -89,6 +92,13 @@ export class RelatedActionsComponent implements OnInit {
           allActions.push({
             text: 'View annual emissions report',
             link: [`/aviation/accounts/${requestInfo.accountId}/workflows/${aerRequestId}`],
+          });
+        }
+
+        if (allowedActions?.includes('AER_VERIFICATION_RETURN_TO_OPERATOR')) {
+          allActions.push({
+            text: 'Return to operator for changes',
+            link: [`/tasks/${taskId}/aer/verification-submit/return-to-operator-for-changes`],
           });
         }
 

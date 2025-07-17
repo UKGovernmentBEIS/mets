@@ -17,7 +17,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode
 @SuperBuilder
-public abstract class UserDTO {
+public class UserDTO {
 
 	/** The user email. */
 	@Email(message = "{userAccount.email.typeMismatch}")
@@ -35,8 +35,15 @@ public abstract class UserDTO {
 	@Size(max = 255, message = "{userAccount.lastName.typeMismatch}")
 	private String lastName;
 	
+	/**
+	 * Annotated with JsonIgnore because enabled should never served/posted to/by the web layer.
+	 */
+	@JsonIgnore
+    private Boolean enabled;
+	
 	@JsonIgnore
 	public String getFullName() {
 	    return firstName + " " + lastName;
 	}
+	
 }

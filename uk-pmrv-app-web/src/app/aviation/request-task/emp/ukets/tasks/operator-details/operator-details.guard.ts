@@ -4,7 +4,7 @@ import { CanActivateFn, CanDeactivateFn } from '@angular/router';
 import { map, take, tap } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { EmpUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/emp-uk-ets';
+import { EmpUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/emp-ukets';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 
 import { empQuery } from '../../../shared/emp.selectors';

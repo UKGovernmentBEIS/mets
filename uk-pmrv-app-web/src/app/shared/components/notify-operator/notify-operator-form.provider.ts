@@ -11,7 +11,13 @@ export const notifyOperatorFormFactory: FactoryProvider = {
     fb.group({
       users: [[], { updateOn: 'change' }],
       contacts: [[], { updateOn: 'change' }],
-      assignees: [null, GovukValidators.required('Select a name to appear on the official notice document.')],
+      assignees: [
+        null,
+        {
+          validators: GovukValidators.required('Select a name to appear on the official notice document.'),
+          updateOn: 'change',
+        },
+      ],
     }),
   deps: [UntypedFormBuilder],
 };

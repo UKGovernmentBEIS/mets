@@ -20,8 +20,7 @@ import { PermitSurrenderStore } from '../../store/permit-surrender.store';
             govukButton
             type="button"
             (click)="confirm()"
-            *ngIf="(store.isEditable$ | async) === true"
-          >
+            *ngIf="(store.isEditable$ | async) === true">
             Confirm and complete
           </button>
         </div>

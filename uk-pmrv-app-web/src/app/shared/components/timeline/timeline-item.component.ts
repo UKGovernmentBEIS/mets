@@ -5,7 +5,7 @@ import { RequestActionInfoDTO } from 'pmrv-api';
 @Component({
   selector: 'app-timeline-item',
   template: `
-    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{ action | itemActionHeader }}</h3>
+    <h3 class="govuk-heading-s govuk-!-margin-bottom-1">{{ action | itemActionHeader: year }}</h3>
     <p class="govuk-body govuk-!-margin-bottom-1">{{ action.creationDate | govukDate: 'datetime' }}</p>
     <span *ngIf="link"><a [routerLink]="link" [state]="state" govukLink>View details</a></span>
     <hr class="govuk-!-margin-top-6" />
@@ -16,4 +16,5 @@ export class TimelineItemComponent {
   @Input() action: RequestActionInfoDTO;
   @Input() link: any[];
   @Input() state: any;
+  @Input() year: string | number;
 }

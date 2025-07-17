@@ -1,27 +1,26 @@
 package uk.gov.pmrv.api.mireport.aviation.accountuserscontacts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.authorization.core.domain.Authority;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.domain.Role;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.authorization.core.domain.Authority;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.core.domain.Role;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.mireport.common.accountuserscontacts.AccountUserContact;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +51,7 @@ class AviationAccountUsersContactsRepositoryIT extends AbstractContainerBaseTest
         Role role = Role.builder()
             .code(operatorRoleCode)
             .name(roleName)
-            .type(RoleType.OPERATOR)
+            .type(RoleTypeConstants.OPERATOR)
             .build();
         entityManager.persist(role);
 
@@ -97,24 +96,24 @@ class AviationAccountUsersContactsRepositoryIT extends AbstractContainerBaseTest
 
         flushAndClear();
 
-        List<AccountUserContact> expectedAccountUserContacts = List.of(
+        List<AviationAccountUserContact> expectedAccountUserContacts = List.of(
             createAccountUserContact(account,  userId1, user1Authority.getStatus(), roleName),
             createAccountUserContact(account,  userId2, user2Authority.getStatus(), roleName)
         );
 
 
         //invoke
-        List<AccountUserContact> accountUserContacts = repository.findAccountUserContacts(entityManager);
+        List<AviationAccountUserContact> accountUserContacts = repository.findAccountUserContacts(entityManager);
 
         assertEquals(2, accountUserContacts.size());
         assertThat(accountUserContacts).containsExactlyInAnyOrderElementsOf(expectedAccountUserContacts);
 
     }
 
-    private AccountUserContact createAccountUserContact(AviationAccount account, String userId, AuthorityStatus authorityStatus, String roleName ) {
+    private AviationAccountUserContact createAccountUserContact(AviationAccount account, String userId, AuthorityStatus authorityStatus, String roleName ) {
         Map<AccountContactType, String> contacts = account.getContacts();
 
-        return AccountUserContact.builder()
+        return AviationAccountUserContact.builder()
             .userId(userId)
             .accountType(account.getAccountType().name())
             .accountId(account.getEmitterId())
@@ -126,6 +125,7 @@ class AviationAccountUsersContactsRepositoryIT extends AbstractContainerBaseTest
             .serviceContact(userId.equals(contacts.get(AccountContactType.SERVICE)))
             .authorityStatus(authorityStatus.name())
             .role(roleName)
+            .crcoCode(account.getCrcoCode())
             .build();
     }
 

@@ -1,0 +1,40 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  [heading]="heading"
+  [caption]="form.value.schemeYear + ' offsetting requirements'"
+  submitText="Continue"
+>
+  <div class="govuk-body">
+    Scheme year <br />
+    {{ form.value.schemeYear }}
+  </div>
+
+  <div
+    formControlName="totalChapter"
+    govuk-text-input
+    inputType="number"
+    label="Total Chapter 3 State Emissions (tCO2)"
+    widthClass="govuk-!-width-one-quarter"
+  ></div>
+
+  <div
+    formControlName="sectorGrowth"
+    govuk-text-input
+    inputType="number"
+    label="Sector Growth Value"
+    widthClass="govuk-!-width-one-quarter"
+    suffix="%"
+  ></div>
+
+  <div class="govuk-body">
+    Calculated annual offsetting requirements <br />
+    @if (form.value.calculatedAnnualOffsetting !== null) {
+      {{ form.value.calculatedAnnualOffsetting }}
+    } @else {
+      Not calculated yet.
+    }
+  </div>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

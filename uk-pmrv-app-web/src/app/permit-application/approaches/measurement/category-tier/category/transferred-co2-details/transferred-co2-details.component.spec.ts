@@ -89,6 +89,7 @@ describe('TransferredCo2DetailsComponent', () => {
           MEASUREMENT_CO2_Category: [true],
           MEASUREMENT_CO2_Measured_Emissions: [false],
           MEASUREMENT_CO2_Applied_Standard: [false],
+          MEASUREMENT_CO2_Biomass_Fraction: [false],
         }),
       );
     });
@@ -161,6 +162,7 @@ describe('TransferredCo2DetailsComponent', () => {
             MEASUREMENT_CO2_Category: [true],
             MEASUREMENT_CO2_Measured_Emissions: [false],
             MEASUREMENT_CO2_Applied_Standard: [false],
+            MEASUREMENT_CO2_Biomass_Fraction: [false],
           },
         ),
       );

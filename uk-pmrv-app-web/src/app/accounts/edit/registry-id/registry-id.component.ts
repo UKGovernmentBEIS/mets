@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { AbstractControl, UntypedFormBuilder, ValidatorFn } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, combineLatest, filter, first, map, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
 
 import { BackLinkService } from '@shared/back-link/back-link.service';
+
+import { GovukValidators } from 'govuk-components';
 
 import { InstallationAccountDTO, InstallationAccountPermitDTO, InstallationAccountUpdateService } from 'pmrv-api';
 
@@ -17,7 +19,7 @@ import { InstallationAccountDTO, InstallationAccountPermitDTO, InstallationAccou
       <govuk-error-summary *ngIf="isSummaryDisplayed | async" [form]="form"></govuk-error-summary>
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-half">
-          <div formControlName="registryId" govuk-text-input></div>
+          <div formControlName="registryId" govuk-text-input inputType="number"></div>
         </div>
       </div>
       <button appPendingButton govukButton type="submit">Confirm and complete</button>
@@ -38,7 +40,10 @@ export class RegistryIdComponent implements OnInit {
   form$ = this.account$.pipe(
     map((account) =>
       this.fb.group({
-        registryId: [(account as InstallationAccountDTO)?.registryId, [this.registryIdValidator()]],
+        registryId: [
+          (account as InstallationAccountDTO)?.registryId,
+          [GovukValidators.minMaxRangeNumberValidator(1000000, 9999999, 'Enter a 7 digit number')],
+        ],
       }),
     ),
     shareReplay({ bufferSize: 1, refCount: true }),
@@ -77,16 +82,5 @@ export class RegistryIdComponent implements OnInit {
         ),
       )
       .subscribe(() => this.router.navigate(['../..'], { relativeTo: this.route }));
-  }
-
-  private registryIdValidator(): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: string } | null => {
-      if (!control.value) {
-        return null;
-      }
-      return control.value < 1000000 || control.value > 9999999 || isNaN(control.value)
-        ? { invalidValue: `Enter a 7 digit number` }
-        : null;
-    };
   }
 }

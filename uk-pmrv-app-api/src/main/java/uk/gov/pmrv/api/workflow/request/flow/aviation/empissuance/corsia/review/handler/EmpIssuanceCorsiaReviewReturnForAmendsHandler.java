@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -39,7 +39,7 @@ public class EmpIssuanceCorsiaReviewReturnForAmendsHandler implements RequestTas
 
     @Override
     @Transactional
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser, RequestTaskActionEmptyPayload payload) {
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser, RequestTaskActionEmptyPayload payload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
         // Validate that at least one review group is 'Operator to amend'
@@ -47,10 +47,10 @@ public class EmpIssuanceCorsiaReviewReturnForAmendsHandler implements RequestTas
         		(EmpIssuanceCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload());
 
         // Update request payload
-        requestEmpCorsiaReviewService.saveRequestReturnForAmends(requestTask, pmrvUser);
+        requestEmpCorsiaReviewService.saveRequestReturnForAmends(requestTask, appUser);
 
         // Add request action
-        createRequestAction(requestTask.getRequest(), pmrvUser, (EmpIssuanceCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload());
+        createRequestAction(requestTask.getRequest(), appUser, (EmpIssuanceCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload());
 
         // Close task
         workflowService.completeTask(requestTask.getProcessTaskId(),
@@ -62,7 +62,7 @@ public class EmpIssuanceCorsiaReviewReturnForAmendsHandler implements RequestTas
         return List.of(RequestTaskActionType.EMP_ISSUANCE_CORSIA_REVIEW_RETURN_FOR_AMENDS);
     }
 
-    private void createRequestAction(Request request, PmrvUser pmrvUser, EmpIssuanceCorsiaApplicationReviewRequestTaskPayload taskPayload) {
+    private void createRequestAction(Request request, AppUser appUser, EmpIssuanceCorsiaApplicationReviewRequestTaskPayload taskPayload) {
         EmpIssuanceCorsiaApplicationReturnedForAmendsRequestActionPayload requestActionPayload = empCorsiaReviewMapper
                 .toEmpIssuanceCorsiaApplicationReturnedForAmendsRequestActionPayload(
                     taskPayload, 
@@ -70,6 +70,6 @@ public class EmpIssuanceCorsiaReviewReturnForAmendsHandler implements RequestTas
                 );
 
         requestService.addActionToRequest(request, requestActionPayload, RequestActionType.EMP_ISSUANCE_CORSIA_APPLICATION_RETURNED_FOR_AMENDS,
-                pmrvUser.getUserId());
+                appUser.getUserId());
     }
 }

@@ -24,7 +24,7 @@ export const emissionsFormProvider = {
       ?.inherentReceivingTransferringInstallations;
 
     const totalEmissions = installations
-      ? installations[Number(route.snapshot.paramMap.get('index'))]?.totalEmissions ?? null
+      ? (installations[Number(route.snapshot.paramMap.get('index'))]?.totalEmissions ?? null)
       : null;
 
     return fb.group({

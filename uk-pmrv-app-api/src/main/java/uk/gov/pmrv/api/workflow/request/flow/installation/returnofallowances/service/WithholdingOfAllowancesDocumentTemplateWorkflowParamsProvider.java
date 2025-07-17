@@ -3,11 +3,9 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.returnofallowances.se
 import org.springframework.stereotype.Component;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateGenerationContextActionType;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateWorkflowParamsProvider;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesReasonType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesRequestPayload;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 

@@ -29,12 +29,10 @@ class PermitBatchPermitReissueCompletedHandlerTest {
     @Test
     void execute() throws Exception {
         String requestId = "1";
-        String permitReissueRequestId = "2";
         Long accountId = 3L;
         boolean reissueSucceeded = true;
         Integer numberOfAccountsCompleted = 0;
         when(execution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);
-        when(execution.getVariable(BpmnProcessConstants.REISSUE_REQUEST_ID)).thenReturn(permitReissueRequestId);
         when(execution.getVariable(BpmnProcessConstants.ACCOUNT_ID)).thenReturn(accountId);
         when(execution.getVariable(BpmnProcessConstants.REISSUE_REQUEST_SUCCEEDED)).thenReturn(reissueSucceeded);
         when(execution.getVariable(BpmnProcessConstants.BATCH_NUMBER_OF_ACCOUNTS_COMPLETED)).thenReturn(numberOfAccountsCompleted);
@@ -42,12 +40,11 @@ class PermitBatchPermitReissueCompletedHandlerTest {
         cut.execute(execution);
         
         verify(execution, times(1)).getVariable(BpmnProcessConstants.REQUEST_ID);
-        verify(execution, times(1)).getVariable(BpmnProcessConstants.REISSUE_REQUEST_ID);
         verify(execution, times(1)).getVariable(BpmnProcessConstants.ACCOUNT_ID);
         verify(execution, times(1)).getVariable(BpmnProcessConstants.REISSUE_REQUEST_SUCCEEDED);
         verify(execution, times(1)).getVariable(BpmnProcessConstants.BATCH_NUMBER_OF_ACCOUNTS_COMPLETED);
         verify(execution, times(1)).setVariable(BpmnProcessConstants.BATCH_NUMBER_OF_ACCOUNTS_COMPLETED, 1);
-        verify(service, times(1)).reissueCompleted(requestId, accountId, permitReissueRequestId, reissueSucceeded);
+        verify(service, times(1)).reissueCompleted(requestId, accountId, reissueSucceeded);
     }
     
 }

@@ -25,9 +25,10 @@ import {
 export class TotalEmissionsDomesticFlightsTableTemplateComponent implements OnInit {
   @Input() data: AviationAerUkEts;
 
+  @Input() domesticFlightsTotalEmissions$: Observable<AviationAerDomesticFlightsEmissions>;
+
   getSummaryDescription = getSummaryDescription;
   aviationAerEmissionsCalculationDTO: AviationAerEmissionsCalculationDTO;
-  domesticFlightsTotalEmissions$: Observable<AviationAerDomesticFlightsEmissions>;
   columns: GovukTableColumn[] = [
     { header: 'State', field: 'country' },
     { header: 'Number of flights', field: 'flightsNumber' },
@@ -39,14 +40,16 @@ export class TotalEmissionsDomesticFlightsTableTemplateComponent implements OnIn
   constructor(private aviationReportingService: AviationReportingService) {}
 
   ngOnInit() {
-    const emissionData = this.data.aggregatedEmissionsData;
-    const safData = this.data.saf;
-    this.aviationAerEmissionsCalculationDTO = {
-      aggregatedEmissionsData: emissionData,
-      saf: safData,
-    };
-    this.domesticFlightsTotalEmissions$ = this.aviationReportingService
-      .getDomesticFlightsEmissionsUkEts(this.aviationAerEmissionsCalculationDTO)
-      .pipe(shareReplay(1));
+    if (!this.domesticFlightsTotalEmissions$) {
+      const emissionData = this.data.aggregatedEmissionsData;
+      const safData = this.data.saf;
+      this.aviationAerEmissionsCalculationDTO = {
+        aggregatedEmissionsData: emissionData,
+        saf: safData,
+      };
+      this.domesticFlightsTotalEmissions$ = this.aviationReportingService
+        .getDomesticFlightsEmissionsUkEts(this.aviationAerEmissionsCalculationDTO)
+        .pipe(shareReplay(1));
+    }
   }
 }

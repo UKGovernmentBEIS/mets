@@ -1,14 +1,13 @@
 package uk.gov.pmrv.api.workflow.request.application.item.service;
 
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
 
 public interface ItemUnassignedService {
 
-    ItemDTOResponse getUnassignedItems(PmrvUser pmrvUser, AccountType accountType, PagingRequest paging);
+    ItemDTOResponse getUnassignedItems(AppUser appUser, AccountType accountType, PagingRequest paging);
 
-    RoleType getRoleType();
+    String getRoleType();
 }

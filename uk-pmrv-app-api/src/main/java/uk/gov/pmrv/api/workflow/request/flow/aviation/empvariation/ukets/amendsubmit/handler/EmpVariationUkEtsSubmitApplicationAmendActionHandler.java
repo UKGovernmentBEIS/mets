@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -24,12 +24,12 @@ public class EmpVariationUkEtsSubmitApplicationAmendActionHandler implements
     private final WorkflowService workflowService;
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser,
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser,
                         EmpVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload payload) {
 
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
-        empVariationUkEtsAmendService.submitAmend(payload, requestTask, pmrvUser);
+        empVariationUkEtsAmendService.submitAmend(payload, requestTask, appUser);
 
         workflowService.completeTask(requestTask.getProcessTaskId());
     }

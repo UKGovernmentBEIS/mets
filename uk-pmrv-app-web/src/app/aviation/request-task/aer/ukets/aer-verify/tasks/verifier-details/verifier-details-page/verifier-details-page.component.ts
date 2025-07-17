@@ -5,7 +5,7 @@ import { combineLatest, map, Observable, tap } from 'rxjs';
 
 import { aerVerifyQuery } from '@aviation/request-task/aer/ukets/aer-verify/aer-verify.selector';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -77,11 +77,11 @@ export default class AerVerifierDetailsPageComponent {
       },
     };
 
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
       .saveAerVerify({ verificationReport }, 'in progress')
       .pipe(this.pendingRequest.trackRequest())
       .subscribe(() => {
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setVerificationReport(verificationReport);
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setVerificationReport(verificationReport);
         this.router.navigate(['summary'], { relativeTo: this.route });
       });
   }

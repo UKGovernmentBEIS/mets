@@ -9,7 +9,7 @@ import { AuthStore, selectUserState } from '@core/store/auth';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchBadRequest, ErrorCodes } from '@error/business-errors';
 
-import { ApplicationUserDTO, VerifierAuthoritiesService, VerifierUserDTO } from 'pmrv-api';
+import { UserDTO, VerifierAuthoritiesService, VerifierUserDTO } from 'pmrv-api';
 
 import { deleteUniqueActiveVerifierError, saveNotFoundVerifierError } from '../errors/business-error';
 
@@ -19,7 +19,7 @@ import { deleteUniqueActiveVerifierError, saveNotFoundVerifierError } from '../e
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteComponent {
-  verifier$: Observable<any> = (this.route.data as Observable<{ user: ApplicationUserDTO | VerifierUserDTO }>).pipe(
+  verifier$: Observable<any> = (this.route.data as Observable<{ user: UserDTO | VerifierUserDTO }>).pipe(
     map((data) => data.user),
   );
   isConfirmationDisplayed$ = new BehaviorSubject<boolean>(false);

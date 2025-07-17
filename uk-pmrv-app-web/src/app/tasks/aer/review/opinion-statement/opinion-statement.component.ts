@@ -12,8 +12,8 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Opinion statement">
       <app-opinion-statement-group [payload]="payload$ | async" [showVerifiedData]="true"></app-opinion-statement-group>
-      <app-verification-review-group-decision (notification)="notification = $event">
-      </app-verification-review-group-decision>
+      <app-verification-review-group-decision
+        (notification)="notification = $event"></app-verification-review-group-decision>
     </app-aer-task-review>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,5 +24,8 @@ export class OpinionStatementComponent {
     map((payload) => payload),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

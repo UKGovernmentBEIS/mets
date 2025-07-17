@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.service.EmpVariationAddCancelledRequestActionService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 
@@ -30,7 +30,7 @@ class EmpVariationUkEtsAddCancelledRequestActionHandlerTest {
     @Test
     void execute() throws Exception {
     	String requestId = "1";
-    	RoleType userRole = RoleType.REGULATOR;
+    	String userRole = RoleTypeConstants.REGULATOR;
         when(execution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);
         when(execution.getVariable(BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE)).thenReturn(userRole);
 

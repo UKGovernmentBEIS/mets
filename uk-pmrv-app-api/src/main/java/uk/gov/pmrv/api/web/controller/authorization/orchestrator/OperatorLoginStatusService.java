@@ -2,10 +2,10 @@ package uk.gov.pmrv.api.web.controller.authorization.orchestrator;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.authorization.core.domain.Authority;
+import uk.gov.netz.api.authorization.core.repository.AuthorityRepository;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.authorization.core.domain.Authority;
-import uk.gov.pmrv.api.authorization.core.repository.AuthorityRepository;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
 import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.LoginStatus;
 import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.UserDomainsLoginStatusInfo;
 
@@ -44,8 +44,8 @@ public class OperatorLoginStatusService implements UserRoleLoginStatusService {
     }
 
     @Override
-    public RoleType getRoleType() {
-        return RoleType.OPERATOR;
+    public String getRoleType() {
+        return RoleTypeConstants.OPERATOR;
     }
 
     private LoginStatus getOperatorUserLoginStatus(List<Authority> userAuthorities, AccountType accountType) {

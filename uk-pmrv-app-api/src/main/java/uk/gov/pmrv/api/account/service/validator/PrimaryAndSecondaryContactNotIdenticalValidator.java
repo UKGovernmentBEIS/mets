@@ -1,10 +1,11 @@
 package uk.gov.pmrv.api.account.service.validator;
 
-import java.util.Map;
 import org.springframework.stereotype.Component;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+
+import java.util.Map;
 
 @Component
 public class PrimaryAndSecondaryContactNotIdenticalValidator implements AccountContactTypeUpdateValidator {

@@ -5,8 +5,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { firstValueFrom, Observable } from 'rxjs';
 
+import { subDays } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import { OtherFactor, PermitNotificationApplicationReviewRequestTaskPayload } from 'pmrv-api';
 
@@ -116,7 +116,7 @@ describe('NotifyOperatorGuard', () => {
                 officialNotice: 'officialNotice',
                 followUp: {
                   followUpResponseRequired: true,
-                  followUpResponseExpirationDate: moment().subtract(1, 'days'),
+                  followUpResponseExpirationDate: subDays(new Date(), 1),
                 },
                 notes: 'some notes',
               },

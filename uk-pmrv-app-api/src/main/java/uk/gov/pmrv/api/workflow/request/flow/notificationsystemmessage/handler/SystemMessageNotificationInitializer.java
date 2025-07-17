@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.handler;
 
-import java.util.Set;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
@@ -9,6 +8,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandler;
 import uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.domain.SystemMessageNotificationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.domain.SystemMessageNotificationRequestTaskPayload;
+
+import java.util.Set;
 
 @Service
 public class SystemMessageNotificationInitializer implements InitializeRequestTaskHandler {

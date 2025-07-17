@@ -3,15 +3,12 @@ package uk.gov.pmrv.api.user.operator.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.dto.AuthorityInfoDTO;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.user.operator.domain.OperatorInvitedUserInfoDTO;
-import uk.gov.pmrv.api.user.operator.domain.OperatorUserAcceptInvitationDTO;
-import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 import uk.gov.pmrv.api.user.core.domain.enumeration.UserInvitationStatus;
+import uk.gov.pmrv.api.user.operator.domain.OperatorInvitedUserInfoDTO;
+import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
+import uk.gov.pmrv.api.user.operator.domain.OperatorUserWithAuthorityDTO;
 import uk.gov.pmrv.api.user.operator.transform.OperatorUserAcceptInvitationMapper;
 
 @Service
@@ -19,7 +16,7 @@ import uk.gov.pmrv.api.user.operator.transform.OperatorUserAcceptInvitationMappe
 public class OperatorUserAcceptInvitationService {
 
     private final OperatorUserAuthService operatorUserAuthService;
-    private final UserRoleTypeService userRoleTypeService;
+    private final OperatorUserRegisterValidationService operatorUserRegisterValidationService;
     private final OperatorUserTokenVerificationService operatorUserTokenVerificationService;
     private final OperatorUserAcceptInvitationMapper operatorUserAcceptInvitationMapper;
     private final AccountQueryService accountQueryService;
@@ -27,24 +24,21 @@ public class OperatorUserAcceptInvitationService {
 
     @Transactional
     public OperatorInvitedUserInfoDTO acceptInvitation(String invitationToken) {
-        AuthorityInfoDTO authority =
+        final AuthorityInfoDTO authorityInfo =
             operatorUserTokenVerificationService.verifyInvitationTokenForPendingAuthority(invitationToken);
 
-        if(!userRoleTypeService.isUserOperator(authority.getUserId())){
-            throw new BusinessException(ErrorCode.AUTHORITY_USER_IS_NOT_OPERATOR);
-        }
+        operatorUserRegisterValidationService.validateRegisterForAccount(authorityInfo.getUserId(), authorityInfo.getAccountId());
+        
+        final OperatorUserDTO operatorUser = operatorUserAuthService.getOperatorUserById(authorityInfo.getUserId());
 
-        OperatorUserDTO userDTO = operatorUserAuthService.getOperatorUserById(authority.getUserId());
+		final OperatorUserWithAuthorityDTO operatorUserWithAuthorityDTO = operatorUserAcceptInvitationMapper
+				.toOperatorUserWithAuthorityDTO(operatorUser, authorityInfo,
+						accountQueryService.getAccountName(authorityInfo.getAccountId()));
 
-        String accountInstallationName = accountQueryService.getAccountName(authority.getAccountId());
-
-        OperatorUserAcceptInvitationDTO operatorUserAcceptInvitation = operatorUserAcceptInvitationMapper
-            .toOperatorUserAcceptInvitationDTO(userDTO, authority, accountInstallationName);
-
-        UserInvitationStatus invitationStatus = operatorRoleCodeAcceptInvitationServiceDelegator
-            .acceptInvitation(operatorUserAcceptInvitation, authority.getCode());
+        final UserInvitationStatus invitationStatus = operatorRoleCodeAcceptInvitationServiceDelegator
+            .acceptInvitation(operatorUserWithAuthorityDTO, authorityInfo.getCode());
 
         return operatorUserAcceptInvitationMapper
-            .toOperatorInvitedUserInfoDTO(operatorUserAcceptInvitation, authority.getCode(), invitationStatus);
+            .toOperatorInvitedUserInfoDTO(operatorUserWithAuthorityDTO, authorityInfo.getCode(), invitationStatus);
     }
 }

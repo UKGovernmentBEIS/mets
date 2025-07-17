@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -9,8 +9,11 @@ import { recallFromAmendsTaskActionTypes } from '../util';
 @Injectable({
   providedIn: 'root',
 })
-export class RecallFromAmendsGuard implements CanActivate {
-  constructor(private readonly store: RequestTaskStore, private readonly router: Router) {}
+export class RecallFromAmendsGuard {
+  constructor(
+    private readonly store: RequestTaskStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return this.store.pipe(

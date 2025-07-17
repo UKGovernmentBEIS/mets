@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.handler
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -36,7 +36,7 @@ public class AviationAerCorsiaReviewReturnForAmendsActionHandler implements Requ
 
     private final AviationAerCorsiaReviewMapper aviationAerCorsiaReviewMapper;
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser, RequestTaskActionEmptyPayload payload) {
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser, RequestTaskActionEmptyPayload payload) {
 
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         AviationAerCorsiaApplicationReviewRequestTaskPayload requestTaskPayload = (AviationAerCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -45,10 +45,10 @@ public class AviationAerCorsiaReviewReturnForAmendsActionHandler implements Requ
         aerCorsiaReviewValidatorService.validateAtLeastOneReviewGroupAmendsNeeded(requestTaskPayload);
 
         // Update request payload
-        aerCorsiaReviewService.updateRequestPayloadWithReviewOutcome(requestTask, pmrvUser);
+        aerCorsiaReviewService.updateRequestPayloadWithReviewOutcome(requestTask, appUser);
 
         // Add request action
-        createRequestAction(requestTask, pmrvUser);
+        createRequestAction(requestTask, appUser);
 
         // Close task
         workflowService.completeTask(requestTask.getProcessTaskId(),
@@ -61,7 +61,7 @@ public class AviationAerCorsiaReviewReturnForAmendsActionHandler implements Requ
         return List.of(RequestTaskActionType.AVIATION_AER_CORSIA_REVIEW_RETURN_FOR_AMENDS);
     }
 
-    private void createRequestAction(RequestTask requestTask, PmrvUser pmrvUser) {
+    private void createRequestAction(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         AviationAerCorsiaApplicationReviewRequestTaskPayload requestTaskPayload = (AviationAerCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload();
 
@@ -75,6 +75,6 @@ public class AviationAerCorsiaReviewReturnForAmendsActionHandler implements Requ
                 request,
                 requestActionPayload,
                 RequestActionType.AVIATION_AER_CORSIA_APPLICATION_RETURNED_FOR_AMENDS,
-                pmrvUser.getUserId());
+                appUser.getUserId());
     }
 }

@@ -14,8 +14,8 @@ import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEts;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsContainer;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachType;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class AviationAerUkEtsValidatorService implements
         boolean isValid = aerValidationResults.stream().allMatch(AviationAerValidationResult::isValid);
 
         if(!isValid) {
-            throw new BusinessException(ErrorCode.INVALID_AVIATION_AER, AviationAerValidatorHelper.extractAviationAerViolations(aerValidationResults));
+            throw new BusinessException(MetsErrorCode.INVALID_AVIATION_AER, AviationAerValidatorHelper.extractAviationAerViolations(aerValidationResults));
         }
     }
 
@@ -72,7 +72,7 @@ public class AviationAerUkEtsValidatorService implements
                 EmissionsMonitoringApproachType.EUROCONTROL_SMALL_EMITTERS.equals(aviationAerUkEts.getMonitoringApproach().getMonitoringApproachType())
             ) && ObjectUtils.isEmpty(aerContainer.getVerificationReport())
         ) {
-                throw new BusinessException(ErrorCode.INVALID_AVIATION_AER,
+                throw new BusinessException(MetsErrorCode.INVALID_AVIATION_AER,
                     AviationAerValidationResult.builder().valid(false).aerViolations(List.of(
                         new AviationAerViolation(AviationAerUkEtsVerificationReport.class.getSimpleName(),
                             AviationAerViolation.AviationAerViolationMessage.NO_VERIFICATION_REPORT_FOUND))).build()

@@ -3,7 +3,6 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.vir.service;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -11,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirApplicationSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.vir.service.VirUploadAttachmentService;
 
 import java.util.UUID;
 

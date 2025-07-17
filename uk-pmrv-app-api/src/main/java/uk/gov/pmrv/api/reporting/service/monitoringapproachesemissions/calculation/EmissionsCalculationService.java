@@ -3,8 +3,8 @@ package uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.calculat
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamCategory;
 import uk.gov.pmrv.api.reporting.domain.dto.EmissionsCalculationDTO;
 import uk.gov.pmrv.api.reporting.domain.dto.EmissionsCalculationParamsDTO;
@@ -28,6 +28,6 @@ public class EmissionsCalculationService {
             .filter(service -> sourceStreamCategory.equals(service.getSourceStreamCategory()))
             .findFirst()
             .map(service -> service.calculateEmissions(calculationParams))
-            .orElseThrow(() -> new BusinessException(ErrorCode.AER_EMISSIONS_CALCULATION_FAILED));
+            .orElseThrow(() -> new BusinessException(MetsErrorCode.AER_EMISSIONS_CALCULATION_FAILED));
     }
 }

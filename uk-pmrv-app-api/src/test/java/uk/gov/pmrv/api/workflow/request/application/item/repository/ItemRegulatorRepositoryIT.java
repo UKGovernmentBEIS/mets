@@ -8,9 +8,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemAssignmentType;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
@@ -194,7 +194,7 @@ class ItemRegulatorRepositoryIT extends AbstractContainerBaseTest {
 
     private Request createRequest(Long accountId, RequestType type, RequestStatus status, CompetentAuthorityEnum ca, LocalDateTime creationDate) {
         Request request = Request.builder()
-            .id(RandomStringUtils.random(5))
+            .id(RandomStringUtils.insecure().next(5))
             .competentAuthority(ca)
             .type(type)
             .status(status)

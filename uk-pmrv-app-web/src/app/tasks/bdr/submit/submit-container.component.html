@@ -1,0 +1,44 @@
+<ng-container *ngIf="vm() as vm">
+  <app-base-task-container-component
+    [header]="vm.title"
+    [customContentTemplate]="vm.isWaitTask ? waitContentTemplate : taskContentTemplate"
+    [expectedTaskType]="vm.expectedTaskType"
+    [notification]="vm.notification"
+    [daysRemaining]="vm.daysRemaining"></app-base-task-container-component>
+
+  <ng-template #waitContentTemplate>
+    <govuk-warning-text>{{ vm.warningText }}</govuk-warning-text>
+  </ng-template>
+
+  <ng-template #taskContentTemplate>
+    <ng-container *ngIf="requestTaskType() === 'BDR_APPLICATION_AMENDS_SUBMIT'">
+      <h2 class="govuk-heading-m govuk-!-margin-0">Regulator comments</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="changes-requested"
+          linkText="Changes requested by the regulator"
+          [status]="'changesRequested' | taskStatus | async"></li>
+      </ul>
+    </ng-container>
+
+    <h2 class="govuk-heading-m govuk-!-margin-0">Baseline data report details</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        link="baseline/summary"
+        linkText="Provide baseline data report and details"
+        [status]="'baseline' | taskStatus | async"></li>
+    </ul>
+
+    <h2 class="govuk-heading-m govuk-!-margin-0">Send report</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.sectionsCompleted ? 'send-report' : null"
+        linkText="Send report"
+        [status]="'sendReport' | taskStatus | async"
+        [hasContent]="true"></li>
+    </ul>
+  </ng-template>
+</ng-container>

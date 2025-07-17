@@ -12,7 +12,9 @@ export class AircraftTypeFuelTypesPipe implements PipeTransform {
   transform(atd: AircraftTypeDetails | AircraftTypeDetailsCorsia, isCorsia = false): string[] {
     if (!atd.fuelTypes.length) return [];
     return atd.fuelTypes.map((ft) =>
-      isCorsia ? FUEL_TYPES_CORSIA.find((t) => t.value === ft).label : FUEL_TYPES.find((t) => t.value === ft).label,
+      isCorsia
+        ? FUEL_TYPES_CORSIA.find((t) => t.value === ft).summaryDescription
+        : FUEL_TYPES.find((t) => t.value === ft).summaryDescription,
     );
   }
 }

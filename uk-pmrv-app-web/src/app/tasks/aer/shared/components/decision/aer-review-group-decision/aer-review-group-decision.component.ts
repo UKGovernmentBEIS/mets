@@ -46,8 +46,7 @@ export class AerReviewGroupDecisionComponent implements OnInit, PendingRequest {
   );
   canEdit$ = combineLatest([this.route.data, this.aerService.getPayload()]).pipe(
     map(
-      ([data, payload]) =>
-        !(payload as AerApplicationReviewRequestTaskPayload)?.reviewSectionsCompleted[data.groupKey] ?? true,
+      ([data, payload]) => !(payload as AerApplicationReviewRequestTaskPayload)?.reviewSectionsCompleted[data.groupKey],
     ),
   );
 
@@ -115,7 +114,7 @@ export class AerReviewGroupDecisionComponent implements OnInit, PendingRequest {
   }
 
   getDownloadUrl() {
-    return this.aerService.createBaseFileDownloadUrl();
+    return this.aerService.getBaseFileDownloadUrl();
   }
 
   addOtherRequiredChange(): void {

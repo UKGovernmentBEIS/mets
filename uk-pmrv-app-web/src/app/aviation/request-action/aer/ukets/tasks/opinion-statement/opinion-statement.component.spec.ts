@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
 import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
-import { AerRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
+import { AerUkEtsRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage } from '@testing';
@@ -61,7 +61,7 @@ describe('OpinionStatementComponent', () => {
               },
             },
           },
-        } as AerRequestActionPayload,
+        } as AerUkEtsRequestActionPayload,
       },
       regulatorViewer: false,
     });
@@ -83,6 +83,8 @@ describe('OpinionStatementComponent', () => {
       ['Monitoring approach', 'Unmodified Eurocontrol Support Facility data'],
       ['Total emissions reported by the operator', 'tCO2'],
       ['Are the reported emissions correct?', 'Yes'],
+      ['Changes reported by the operator', 'None'],
+      ['Changes reported by the verifier', 'details'],
       ['What kind of site visit did your team make?', 'In person site visit'],
       ['Site visits', ''],
       ['Team members involved', ''],

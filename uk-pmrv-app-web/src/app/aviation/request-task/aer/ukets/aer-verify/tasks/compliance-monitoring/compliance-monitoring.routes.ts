@@ -21,7 +21,7 @@ export const AER_COMPLIANCE_MONITORING_ROUTES: Routes = [
         path: 'summary',
         data: {
           pageTitle: 'Check your answers',
-          breadcrumb: 'Compliance with the monitoring and reporting principles summary',
+          breadcrumb: 'Compliance with the monitoring and reporting principles',
         },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./compliance-monitoring-summary/compliance-monitoring-summary.component'),

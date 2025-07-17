@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { TaskGuard } from '@tasks/task.guard';
+
 import { PendingRequestGuard } from '../../core/guards/pending-request.guard';
 import { CessationComponent } from './cessation.component';
 import { CompletedComponent } from './completed/completed.component';
@@ -34,6 +36,12 @@ const routes: Routes = [
         path: '',
         data: { pageTitle: 'Surrender cessation' },
         component: CessationComponent,
+      },
+      {
+        path: 'change-assignee',
+        canActivate: [TaskGuard],
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'confirm',

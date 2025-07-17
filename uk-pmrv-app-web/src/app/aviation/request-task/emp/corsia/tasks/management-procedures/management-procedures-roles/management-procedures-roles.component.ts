@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import {
+  AfterContentChecked,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Inject,
+  ViewChild,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -21,7 +29,7 @@ import { ManagementProceduresRolesFormComponent } from '../management-procedures
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ManagementProceduresRolesComponent {
+export class ManagementProceduresRolesComponent implements AfterContentChecked {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;
 
   form = new FormGroup({
@@ -34,7 +42,12 @@ export class ManagementProceduresRolesComponent {
     private pendingRequestService: PendingRequestService,
     private router: Router,
     private route: ActivatedRoute,
+    private cd: ChangeDetectorRef,
   ) {}
+
+  ngAfterContentChecked(): void {
+    this.cd.detectChanges();
+  }
 
   onSubmit() {
     this.store.empCorsiaDelegate

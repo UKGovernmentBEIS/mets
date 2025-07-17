@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { filter, first, Observable, switchMap } from 'rxjs';
 
+import { DocumentFilenameAndDocumentType } from '@shared/interfaces/previewDocumentFilenameAndDocumentType';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 import { ItemDTO, RequestActionInfoDTO, RequestTaskDTO, RequestTaskItemDTO } from 'pmrv-api';
@@ -22,8 +23,7 @@ import { ItemDTO, RequestActionInfoDTO, RequestTaskDTO, RequestTaskItemDTO } fro
         [timelineActions]="timelineActions$ | async"
         [customContentTemplate]="customContentTemplate"
         [showSectionBreak]="showSectionBreak"
-      >
-      </app-task-layout>
+        [previewDocuments]="previewDocuments"></app-task-layout>
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,6 +35,7 @@ export class BaseTaskContainerComponent implements OnInit {
   @Input() customContentTemplate: TemplateRef<any>;
   @Input() showSectionBreak = true;
   @Input() notification: boolean;
+  @Input() previewDocuments: DocumentFilenameAndDocumentType[];
 
   requestTaskItem$: Observable<RequestTaskItemDTO> = this.commonTaskStore.requestTaskItem$.pipe(
     filter((requestTaskItem) => !!requestTaskItem),
@@ -43,7 +44,10 @@ export class BaseTaskContainerComponent implements OnInit {
   timelineActions$: Observable<RequestActionInfoDTO[]> = this.commonTaskStore.timeLineActions$;
   dataLoaded = false;
 
-  constructor(private readonly router: Router, private readonly commonTaskStore: CommonTasksStore) {}
+  constructor(
+    private readonly router: Router,
+    private readonly commonTaskStore: CommonTasksStore,
+  ) {}
 
   ngOnInit(): void {
     this.commonTaskStore.storeInitialized$

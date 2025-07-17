@@ -20,6 +20,19 @@
         </div>
       </dl>
     </ng-container>
-    <a govukLink routerLink="../../../..">Return to: Non-compliance</a>
+    <ng-container *ngIf="notificationUsers$ | async as notificationUsers">
+      <h2 app-summary-header class="govuk-heading-m">Recipients</h2>
+      <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Users</dt>
+          <dd govukSummaryListRowValue>
+            <div *ngFor="let user of notificationUsers">
+              {{ user }}
+            </div>
+          </dd>
+        </div>
+      </dl>
+    </ng-container>
+    <a govukLink [routerLink]="(isAviation$ | async) ? '../..' : '../../../..'">Return to: Non-compliance</a>
   </div>
 </div>

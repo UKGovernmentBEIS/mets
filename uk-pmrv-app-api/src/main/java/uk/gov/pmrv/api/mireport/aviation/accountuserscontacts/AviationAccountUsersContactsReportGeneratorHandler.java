@@ -2,17 +2,16 @@ package uk.gov.pmrv.api.mireport.aviation.accountuserscontacts;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.mireport.accountuserscontacts.AccountUsersContactsReportGenerator;
+import uk.gov.netz.api.mireport.domain.EmptyMiReportParams;
 import uk.gov.pmrv.api.mireport.aviation.AviationMiReportGeneratorHandler;
-import uk.gov.pmrv.api.mireport.common.accountuserscontacts.AccountUserContact;
-import uk.gov.pmrv.api.mireport.common.accountuserscontacts.AccountUsersContactsReportGenerator;
-import uk.gov.pmrv.api.mireport.common.domain.dto.EmptyMiReportParams;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
 import java.util.List;
 
 @Service
 public class AviationAccountUsersContactsReportGeneratorHandler
-    extends AccountUsersContactsReportGenerator
+    extends AccountUsersContactsReportGenerator<AviationAccountUserContact>
     implements AviationMiReportGeneratorHandler<EmptyMiReportParams> {
 
     private final AviationAccountUsersContactsRepository accountUsersContactsRepository;
@@ -24,7 +23,12 @@ public class AviationAccountUsersContactsReportGeneratorHandler
     }
 
     @Override
-    public List<AccountUserContact> findAccountUserContacts(EntityManager entityManager) {
+    public List<AviationAccountUserContact> findAccountUserContacts(EntityManager entityManager) {
         return accountUsersContactsRepository.findAccountUserContacts(entityManager);
+    }
+
+    @Override
+    public List<String> getColumnNames() {
+        return AviationAccountUserContact.getColumnNames();
     }
 }

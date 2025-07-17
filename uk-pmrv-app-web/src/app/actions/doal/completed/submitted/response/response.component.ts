@@ -14,8 +14,7 @@ import { DoalActionService } from '../../../core/doal-action.service';
       <app-doal-authority-decision-template
         [data]="authorityResponse$ | async"
         [documents]="documentFiles$ | async"
-        [editable]="false"
-      ></app-doal-authority-decision-template>
+        [editable]="false"></app-doal-authority-decision-template>
     </app-doal-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

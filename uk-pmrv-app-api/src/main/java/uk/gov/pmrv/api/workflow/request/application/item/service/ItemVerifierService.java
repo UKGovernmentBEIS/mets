@@ -3,9 +3,9 @@ package uk.gov.pmrv.api.workflow.request.application.item.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.workflow.request.application.authorization.VerifierAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
@@ -27,12 +27,12 @@ public class ItemVerifierService implements ItemService {
     private final RequestService requestService;
 
     @Override
-    public ItemDTOResponse getItemsByRequest(PmrvUser pmrvUser, String requestId) {
+    public ItemDTOResponse getItemsByRequest(AppUser appUser, String requestId) {
         Request request = requestService.findRequestById(requestId);
         AccountType accountType = request.getType().getAccountType();
 
         Map<Long, Set<RequestTaskType>> scopedRequestTaskTypes = verifierAuthorityResourceAdapter
-            .getUserScopedRequestTaskTypesByAccountType(pmrvUser, accountType);
+            .getUserScopedRequestTaskTypesByAccountType(appUser, accountType);
 
         if (ObjectUtils.isEmpty(scopedRequestTaskTypes)) {
             return ItemDTOResponse.emptyItemDTOResponse();
@@ -40,11 +40,11 @@ public class ItemVerifierService implements ItemService {
 
         ItemPage itemPage = itemByRequestVerifierRepository.findItemsByRequestId(scopedRequestTaskTypes, requestId);
 
-        return itemResponseService.toItemDTOResponse(itemPage, accountType, pmrvUser);
+        return itemResponseService.toItemDTOResponse(itemPage, accountType, appUser);
     }
 
     @Override
-    public RoleType getRoleType() {
-        return RoleType.VERIFIER;
+    public String getRoleType() {
+        return RoleTypeConstants.VERIFIER;
     }
 }

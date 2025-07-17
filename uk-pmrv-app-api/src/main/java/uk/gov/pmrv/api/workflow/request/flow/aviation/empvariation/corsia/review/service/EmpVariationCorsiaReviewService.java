@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.common.domain.EmpCorsiaReviewGroup;
@@ -91,18 +91,18 @@ public class EmpVariationCorsiaReviewService {
 	
 	@Transactional
     public void saveDecisionNotification(RequestTask requestTask, DecisionNotification decisionNotification,
-                                         PmrvUser pmrvUser) {
+                                         AppUser appUser) {
         EmpVariationCorsiaApplicationReviewRequestTaskPayload taskPayload =
             (EmpVariationCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload();
 
         EmpVariationCorsiaRequestPayload requestPayload =
             (EmpVariationCorsiaRequestPayload) requestTask.getRequest().getPayload();
 
-        updateRequestPayload(requestPayload, taskPayload, pmrvUser);
+        updateRequestPayload(requestPayload, taskPayload, appUser);
         requestPayload.setDecisionNotification(decisionNotification);
 	}
 	
-    public void saveRequestPeerReviewAction(RequestTask requestTask, String selectedPeerReviewer, PmrvUser pmrvUser) {
+    public void saveRequestPeerReviewAction(RequestTask requestTask, String selectedPeerReviewer, AppUser appUser) {
         Request request = requestTask.getRequest();
         EmpVariationCorsiaApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
             (EmpVariationCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -110,12 +110,12 @@ public class EmpVariationCorsiaReviewService {
         EmpVariationCorsiaRequestPayload requestPayload =
             (EmpVariationCorsiaRequestPayload) request.getPayload();
 
-        updateRequestPayload(requestPayload, reviewRequestTaskPayload, pmrvUser);
+        updateRequestPayload(requestPayload, reviewRequestTaskPayload, appUser);
         requestPayload.setRegulatorPeerReviewer(selectedPeerReviewer);
     }
 
     @Transactional
-    public void saveRequestReturnForAmends(RequestTask requestTask, PmrvUser pmrvUser) {
+    public void saveRequestReturnForAmends(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         EmpVariationCorsiaApplicationReviewRequestTaskPayload taskPayload =
             (EmpVariationCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -123,7 +123,7 @@ public class EmpVariationCorsiaReviewService {
         EmpVariationCorsiaRequestPayload requestPayload =
             (EmpVariationCorsiaRequestPayload) request.getPayload();
 
-        updateRequestPayload(requestPayload, taskPayload, pmrvUser);
+        updateRequestPayload(requestPayload, taskPayload, appUser);
     }
 	
 	private void updateRequestTaskPayload(
@@ -156,9 +156,9 @@ public class EmpVariationCorsiaReviewService {
     
     private void updateRequestPayload(EmpVariationCorsiaRequestPayload requestPayload,
             EmpVariationCorsiaApplicationReviewRequestTaskPayload taskPayload,
-            PmrvUser pmrvUser) {
+            AppUser appUser) {
     	
-		requestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+		requestPayload.setRegulatorReviewer(appUser.getUserId());
 		requestPayload.setEmpVariationDetails(taskPayload.getEmpVariationDetails());
 		requestPayload.setEmpVariationDetailsCompleted(taskPayload.getEmpVariationDetailsCompleted());
 		requestPayload.setEmpVariationDetailsReviewCompleted(taskPayload.getEmpVariationDetailsReviewCompleted());

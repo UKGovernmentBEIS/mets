@@ -36,7 +36,11 @@ export class FollowUpReviewComponent {
     }),
   );
 
-  constructor(readonly store: CommonTasksStore, readonly route: ActivatedRoute, private readonly router: Router) {}
+  constructor(
+    readonly store: CommonTasksStore,
+    readonly route: ActivatedRoute,
+    private readonly router: Router,
+  ) {}
 
   notifyOperator() {
     this.router.navigate(['notify-operator'], { relativeTo: this.route });

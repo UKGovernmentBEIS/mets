@@ -6,8 +6,8 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
@@ -36,7 +36,7 @@ public class EmpVariationCorsiaApplicationSubmitInitializer implements Initializ
 		final EmissionsMonitoringPlanCorsiaContainer empContainer = 
     			empQueryService.getEmissionsMonitoringPlanCorsiaDTOByAccountId(request.getAccountId())
     			.map(EmissionsMonitoringPlanCorsiaDTO::getEmpContainer)
-    			.orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));	
+    			.orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
 		final RequestAviationAccountInfo accountInfo = 
 				requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 		

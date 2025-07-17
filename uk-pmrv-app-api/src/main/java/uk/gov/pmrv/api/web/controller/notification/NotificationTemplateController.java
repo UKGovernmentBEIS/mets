@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.notification.template.domain.dto.NotificationTemplateDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.NotificationTemplateSearchCriteria;
 import uk.gov.pmrv.api.notification.template.domain.dto.NotificationTemplateUpdateDTO;
@@ -34,10 +34,8 @@ import uk.gov.pmrv.api.notification.template.service.NotificationTemplateQuerySe
 import uk.gov.pmrv.api.notification.template.service.NotificationTemplateUpdateService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
 
@@ -57,9 +55,9 @@ public class NotificationTemplateController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = REGULATOR)
     public ResponseEntity<TemplateSearchResults> getCurrentUserNotificationTemplates(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("accountType") @Parameter(description = "The account type") AccountType accountType,
-            @RequestParam(value = "role")  @NotNull @Parameter(name = "role", description = "The role type") RoleType roleType,
+            @RequestParam(value = "role")  @NotNull @Parameter(name = "role", description = "The role type") String roleType,
             @RequestParam(value = "term", required = false) @Size(min = 3, max=256) @Parameter(name = "term", description = "The term to search") String term,
             @RequestParam(value = "page") @NotNull @Parameter(name = "page", description = "The page number starting from zero") @Min(value = 0, message = "{parameter.page.typeMismatch}") Long page,
             @RequestParam(value = "size") @NotNull @Parameter(name = "size", description = "The page size") @Min(value = 1, message = "{parameter.pageSize.typeMismatch}")  Long pageSize
@@ -67,7 +65,7 @@ public class NotificationTemplateController {
         return new ResponseEntity<>(
             notificationTemplateQueryService.getNotificationTemplatesBySearchCriteria(
                 NotificationTemplateSearchCriteria.builder()
-                    .competentAuthority(pmrvUser.getCompetentAuthority())
+                    .competentAuthority(appUser.getCompetentAuthority())
                     .accountType(accountType)
                     .term(term)
                     .roleType(roleType)

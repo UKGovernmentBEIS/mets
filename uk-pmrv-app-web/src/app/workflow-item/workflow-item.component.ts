@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, combineLatest, map, of, shareReplay, switchMap, takeUntil, withLatestFrom } from 'rxjs';
@@ -16,19 +17,18 @@ import {
 } from 'pmrv-api';
 
 import { statusesTagMap } from './shared/statusesTagMap';
+import { requestCreateActionTypeLabelMap } from './shared/workflow-related-create-actions/workflowCreateAction';
 import { workflowDetailsTypesMap } from './shared/workflowDetailsTypesMap';
 import { WorkflowItemAbstractComponent } from './workflow-item-abstract.component';
 
 @Component({
   selector: 'app-workflow-item',
   templateUrl: './workflow-item.component.html',
-  styles: [
-    `
-      span.search-results-list_item_status {
-        float: right;
-      }
-    `,
-  ],
+  styles: `
+    span.search-results-list_item_status {
+      float: right;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })
@@ -66,17 +66,24 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
     switchMap(([requestInfo, roleType]) => {
       if (
         roleType === 'REGULATOR' &&
-        (requestInfo.requestType === 'AER' || requestInfo.requestType === 'AVIATION_AER_UKETS')
+        ['AER', 'AVIATION_AER_CORSIA', 'AVIATION_AER_UKETS'].includes(requestInfo.requestType)
       ) {
         return this.requestsService.getAvailableAerWorkflows(requestInfo.id);
+      } else if (
+        roleType === 'REGULATOR' &&
+        ['BDR'].includes(requestInfo.requestType) &&
+        requestInfo.requestStatus === 'COMPLETED'
+      ) {
+        return of({ BDR: { valid: true } });
       } else {
         return of({});
       }
     }),
-    map((availableCreateActions) =>
-      (Object.keys(availableCreateActions) as RequestCreateActionProcessDTO['requestCreateActionType'][]).filter(
-        (createActionType) => availableCreateActions[createActionType].valid,
-      ),
+    map(
+      (availableCreateActions: RequestCreateActionProcessDTO['requestCreateActionType']) =>
+        Object.keys(requestCreateActionTypeLabelMap).filter(
+          (key) => availableCreateActions[key]?.valid,
+        ) as RequestCreateActionProcessDTO['requestCreateActionType'][],
     ),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
@@ -90,6 +97,7 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
     private readonly requestsService: RequestsService,
     private readonly requestItemsService: RequestItemsService,
     private readonly requestActionsService: RequestActionsService,
+    private readonly titleService: Title,
   ) {
     super(authStore, router, route, backLinkService, destroy$);
   }
@@ -100,6 +108,8 @@ export class WorkflowItemComponent extends WorkflowItemAbstractComponent impleme
       .subscribe(([prefixUrl, accountId]) =>
         accountId ? this.backLinkService.show(prefixUrl, 'workflows') : this.backLinkService.show(prefixUrl),
       );
+
+    this.requestInfo$.subscribe(({ requestType }) => this.titleService.setTitle(workflowDetailsTypesMap[requestType]));
   }
 
   private sortTimeline(res: RequestActionInfoDTO[]): RequestActionInfoDTO[] {

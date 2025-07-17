@@ -1,28 +1,32 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, CanDeactivate, Router, UrlTree } from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 
 import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
+import { selectIsFeatureEnabled } from '@core/config/config.selectors';
+import { ConfigStore } from '@core/config/config.store';
 import { AuthService } from '@core/services/auth.service';
 import {
   AuthStore,
   selectIsLoggedIn,
   selectSwitchingDomain,
-  selectTerms,
-  selectUser,
   selectUserState,
+  selectUserTerms,
   UserState,
 } from '@core/store/auth';
+import { LatestTermsStore } from '@core/store/latest-terms/latest-terms.store';
 
-import { LandingPageComponent } from './landing-page.component';
+import { environment } from '../../environments/environment';
 
 @Injectable()
-export class LandingPageGuard implements CanActivate, CanDeactivate<LandingPageComponent> {
+export class LandingPageGuard {
   private readonly installationDashboard = this.router.parseUrl('dashboard');
   private readonly aviationDashboard = this.router.parseUrl('aviation/dashboard');
 
   constructor(
     private readonly authStore: AuthStore,
+    private readonly configStore: ConfigStore,
+    private readonly latestTermsStore: LatestTermsStore,
     private readonly authService: AuthService,
     private readonly router: Router,
   ) {}
@@ -38,34 +42,67 @@ export class LandingPageGuard implements CanActivate, CanDeactivate<LandingPageC
         combineLatest([
           this.authStore.pipe(selectIsLoggedIn),
           this.authStore.pipe(selectUserState),
-          this.authStore.pipe(selectTerms),
-          this.authStore.pipe(selectUser),
+          this.latestTermsStore,
+          this.configStore.pipe(selectIsFeatureEnabled('terms')),
+          this.configStore.pipe(selectIsFeatureEnabled('serviceGatewayEnabled')),
+          this.authStore.pipe(selectUserTerms),
           this.authStore.pipe(selectSwitchingDomain),
         ]),
       ),
-      map(([isLoggedIn, userState, terms, user, switchingDomain]) => {
-        if (!isLoggedIn) {
-          return true;
-        }
+      map(
+        ([
+          isLoggedIn,
+          userState,
+          latestTerms,
+          termsFeatureEnabled,
+          serviceGatewayEnabled,
+          userTerms,
+          switchingDomain,
+        ]) => {
+          if (!isLoggedIn) {
+            if (!environment.production) {
+              return true; // show app's landing page
+            }
 
-        if (terms.version !== user.termsVersion) {
-          return this.router.parseUrl('terms');
-        }
+            if (!serviceGatewayEnabled) {
+              return true; // show app's landing page
+            }
 
-        if (['REGULATOR', 'VERIFIER'].includes(userState.roleType) && this.allNoAuthority(userState)) {
-          return this.router.parseUrl('dashboard');
-        }
+            // otherwise redirect to gateway's landing page
+            const url = new URL(location.origin);
+            url.searchParams.set(
+              'appRedirectPath',
+              /(\/registration\/|\/2fa\/|\/forgot-password\/\/error\/)/.test(location.href)
+                ? this.authService.baseRedirectUri
+                : location.href,
+            );
+            window.location.href = url.toString();
+            return false;
+          }
 
-        if (
-          this.shouldShowDisabled(userState) ||
-          this.allNoAuthority(userState) ||
-          this.shouldShowAccepted(userState, switchingDomain)
-        ) {
-          return true;
-        }
+          if (!userState.roleType) {
+            return true;
+          }
 
-        return this.resolveInitialNavigation(userState, switchingDomain);
-      }),
+          if (termsFeatureEnabled && latestTerms.version !== userTerms.termsVersion) {
+            return this.router.parseUrl('terms');
+          }
+
+          if (['REGULATOR', 'VERIFIER'].includes(userState.roleType) && this.allNoAuthority(userState)) {
+            return this.router.parseUrl('dashboard');
+          }
+
+          if (
+            this.shouldShowDisabled(userState) ||
+            this.allNoAuthority(userState) ||
+            this.shouldShowAccepted(userState, switchingDomain)
+          ) {
+            return true;
+          }
+
+          return this.resolveInitialNavigation(userState, switchingDomain);
+        },
+      ),
       first(),
     );
   }

@@ -77,7 +77,7 @@ export class MonitoringApproachFormProvider
             GovukValidators.required(
               'Enter the total verified emissions from all international flights for the scheme year',
             ),
-            GovukValidators.naturalNumber('Enter a whole number without decimal places (you can use zero)'),
+            GovukValidators.integerNumber('Enter a whole number without decimal places (you can use zero)'),
           ],
         }),
         manuallyOffsettingFlightsProvidedEmissions: new FormControl<
@@ -87,7 +87,7 @@ export class MonitoringApproachFormProvider
             GovukValidators.required(
               'Enter the total verified emissions from flights with offsetting requirements for the scheme year',
             ),
-            GovukValidators.naturalNumber('Enter a whole number without decimal places (you can use zero)'),
+            GovukValidators.integerNumber('Enter a whole number without decimal places (you can use zero)'),
           ],
         }),
       },

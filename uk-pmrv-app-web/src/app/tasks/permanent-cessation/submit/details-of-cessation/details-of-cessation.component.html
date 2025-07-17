@@ -1,0 +1,54 @@
+<app-permanent-cessation-task>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Permanent cessation details"
+    caption="Permanent cessation">
+    <div
+      formControlName="description"
+      govuk-textarea
+      label="Describe the cessation of regulated activities"
+      labelSize="medium"
+      [maxLength]="10000"></div>
+
+    <app-multiple-file-input
+      [baseDownloadUrl]="getDownloadUrl()"
+      label="Upload supporting files (optional)"
+      headerSize="s"
+      listTitle="Uploaded attachments"
+      formControlName="files"></app-multiple-file-input>
+
+    <div
+      formControlName="cessationDate"
+      label="Date of cessation"
+      errorMessage="Enter the date of cessation"
+      govuk-date-input
+      [isRequired]="true"></div>
+
+    <div
+      formControlName="cessationScope"
+      govuk-radio
+      legend="Scope of the cessation"
+      hint="Your selection will automatically add the relevant legal wording to the notice document."
+      legendSize="medium">
+      <govuk-radio-option
+        value="WHOLE_INSTALLATION"
+        label="Whole installation, including sub-installations"></govuk-radio-option>
+      <govuk-radio-option value="SUB_INSTALLATIONS_ONLY" label="Sub-installations only"></govuk-radio-option>
+    </div>
+    <div
+      formControlName="additionalDetails"
+      govuk-textarea
+      label="Provide additional details to be included in the notice document"
+      labelSize="medium"
+      [maxLength]="10000"></div>
+
+    <div
+      formControlName="regulatorComments"
+      govuk-textarea
+      label="Regulator comments (optional)"
+      hint="The operator cannot view this"
+      labelSize="medium"
+      [maxLength]="10000"></div>
+  </app-wizard-step>
+</app-permanent-cessation-task>

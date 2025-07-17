@@ -1,9 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -16,6 +12,11 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetai
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

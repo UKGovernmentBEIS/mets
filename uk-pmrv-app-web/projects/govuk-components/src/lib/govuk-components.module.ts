@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -101,7 +101,6 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     TextInputComponent,
     WarningTextComponent,
   ],
-  imports: [CommonModule, HttpClientModule, InlineSVGModule.forRoot(), ReactiveFormsModule, RouterModule],
   exports: [
     AccordionComponent,
     AccordionItemComponent,
@@ -153,10 +152,12 @@ import { WarningTextComponent } from './warning-text/warning-text.component';
     TextInputComponent,
     WarningTextComponent,
   ],
+  schemas: [NO_ERRORS_SCHEMA],
+  imports: [CommonModule, InlineSVGModule.forRoot(), ReactiveFormsModule, RouterModule],
   providers: [
     { provide: UntypedFormBuilder, useClass: FormBuilderService },
     { provide: FormBuilder, useClass: FormBuilderService },
+    provideHttpClient(withInterceptorsFromDi()),
   ],
-  schemas: [NO_ERRORS_SCHEMA],
 })
 export class GovukComponentsModule {}

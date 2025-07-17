@@ -7,7 +7,10 @@ import { UserRolePipe } from './user-role.pipe';
 
 @Pipe({ name: 'userInfoResolver' })
 export class UserInfoResolverPipe implements PipeTransform {
-  constructor(private userContact: UserContactPipe, private userRole: UserRolePipe) {}
+  constructor(
+    private userContact: UserContactPipe,
+    private userRole: UserRolePipe,
+  ) {}
 
   transform(userId: string, info: { [key: string]: RequestActionUserInfo }): string {
     const user = info[userId];

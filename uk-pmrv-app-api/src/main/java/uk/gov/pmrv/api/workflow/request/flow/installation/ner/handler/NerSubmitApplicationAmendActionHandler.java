@@ -1,9 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.ner.handler;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -15,6 +14,8 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSubmitApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.service.NerApplyReviewService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.validation.NerReviewValidator;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class NerSubmitApplicationAmendActionHandler implements
     @Override
     public void process(final Long requestTaskId, 
                         final RequestTaskActionType requestTaskActionType, 
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final NerSubmitApplicationAmendRequestTaskActionPayload payload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -45,7 +46,7 @@ public class NerSubmitApplicationAmendActionHandler implements
             requestTask.getRequest(),
             null,
             RequestActionType.NER_APPLICATION_AMENDS_SUBMITTED,
-            pmrvUser.getUserId());
+            appUser.getUserId());
 
         workflowService.completeTask(requestTask.getProcessTaskId());
     }

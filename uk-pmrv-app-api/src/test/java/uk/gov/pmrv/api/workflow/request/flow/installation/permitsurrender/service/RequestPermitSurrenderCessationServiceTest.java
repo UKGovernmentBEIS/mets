@@ -1,26 +1,13 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType.PERMIT_SURRENDER_CESSATION_SUBMIT_PAYLOAD;
-
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountStatusService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -43,6 +30,19 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.common.mapper.PermitCe
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.validation.PermitCessationNotifyOperatorValidator;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.notification.PermitSurrenderOfficialNoticeService;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType.PERMIT_SURRENDER_CESSATION_SUBMIT_PAYLOAD;
 
 @ExtendWith(MockitoExtension.class)
 class RequestPermitSurrenderCessationServiceTest {
@@ -134,7 +134,7 @@ class RequestPermitSurrenderCessationServiceTest {
             PermitCessationCompletedRequestActionPayload.builder()
                 .payloadType(RequestActionPayloadType.PERMIT_SURRENDER_CESSATION_COMPLETED_PAYLOAD)
                 .build();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        AppUser appUser = AppUser.builder().userId("user").build();
         
         FileInfoDTO cessationOfficialNotice = FileInfoDTO.builder()
                 .name("off notice").uuid(UUID.randomUUID().toString())
@@ -150,17 +150,17 @@ class RequestPermitSurrenderCessationServiceTest {
             .thenReturn(cessationCompletedRequestActionPayload);
 
         //invoke
-        requestPermitSurrenderCessationService.executeNotifyOperatorActions(requestTask, pmrvUser, taskActionPayload);
+        requestPermitSurrenderCessationService.executeNotifyOperatorActions(requestTask, appUser, taskActionPayload);
 
         verify(cessationNotifyOperatorValidator, times(1))
-            .validate(requestTask, pmrvUser, taskActionPayload);
+            .validate(requestTask, appUser, taskActionPayload);
         verify(permitSurrenderOfficialNoticeService, times(1))
             .generateCessationOfficialNotice(request, taskActionPayload.getDecisionNotification());
         verify(installationAccountStatusService, times(1)).handleSurrenderCessationCompleted(request.getAccountId());
         verify(requestService, times(1))
             .addActionToRequest(request, cessationCompletedRequestActionPayload, RequestActionType.PERMIT_SURRENDER_CESSATION_COMPLETED, request.getPayload().getRegulatorReviewer());
         verify(permitSurrenderOfficialNoticeService, times(1))
-            .sendOfficialNotice(request, cessationOfficialNotice, taskActionPayload.getDecisionNotification());
+            .sendOfficialNoticeForDecisionNotification(request, cessationOfficialNotice, taskActionPayload.getDecisionNotification());
         assertThat(requestPayload.getPermitCessation()).isEqualTo(PermitCessation.builder().notes("notes").build());
     }
 }

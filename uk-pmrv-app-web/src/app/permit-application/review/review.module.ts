@@ -1,9 +1,14 @@
 import { NgModule } from '@angular/core';
 
+import { MeasurementDevicesTableComponent } from '@permit-application/shared/measurement-devices-table/measurement-devices-table.component';
+
 import { SharedPermitVariationModule } from '../../permit-variation/shared/shared-permit-variation.module';
 import { PeerReviewDecisionGuard } from '../../shared/components/peer-review-decision/peer-review-decision.guard';
 import { PaymentCompletedGuard } from '../../shared/guards/payment-completed.guard';
 import { SharedModule } from '../../shared/shared.module';
+import { MmpEnergyFlowsSummaryTemplateComponent } from '../mmp-energy-flows/mmp-energy-flows-summary/mmp-energy-flows-summary-template/mmp-energy-flows-summary-template.component';
+import { MethodsSummaryTemplateComponent } from '../mmp-methods/methods-summary/methods-summary-template/methods-summary-template.component';
+import { MmpProceduresSummaryTemplateComponent } from '../mmp-procedures/mmp-procedures-summary/mmp-procedures-summary-template/mmp-procedures-summary-template.component';
 import { SharedPermitModule } from '../shared/shared-permit.module';
 import { AdditionalInfoComponent } from './additional-info/additional-info.component';
 import { ConfirmationComponent as ReturnForAmendsConfirmationComponent } from './amend/return-for-amends/confirmation/confirmation.component';
@@ -68,7 +73,16 @@ import { UncertaintyAnalysisComponent } from './uncertainty-analysis/uncertainty
     TransferredCO2Component,
     UncertaintyAnalysisComponent,
   ],
-  imports: [ReviewRoutingModule, SharedModule, SharedPermitModule, SharedPermitVariationModule],
+  imports: [
+    MeasurementDevicesTableComponent,
+    MethodsSummaryTemplateComponent,
+    MmpEnergyFlowsSummaryTemplateComponent,
+    MmpProceduresSummaryTemplateComponent,
+    ReviewRoutingModule,
+    SharedModule,
+    SharedPermitModule,
+    SharedPermitVariationModule,
+  ],
   providers: [PaymentCompletedGuard, PeerReviewDecisionGuard],
 })
 export class ReviewModule {}

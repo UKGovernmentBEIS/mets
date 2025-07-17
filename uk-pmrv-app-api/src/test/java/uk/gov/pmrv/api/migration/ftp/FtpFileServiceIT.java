@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 
 @Testcontainers
 @SpringBootTest

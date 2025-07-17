@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { EmpIssuanceDetermination, EmpVariationDetermination } from 'pmrv-api';
+import { EmpDetermination } from '@aviation/request-task/emp/shared/util/emp.util';
 
 @Pipe({
   name: 'empReviewDeterminationType',
@@ -8,13 +8,21 @@ import { EmpIssuanceDetermination, EmpVariationDetermination } from 'pmrv-api';
   standalone: true,
 })
 export class EmpReviewDeterminationTypePipe implements PipeTransform {
-  transform(type: EmpIssuanceDetermination['type'] | EmpVariationDetermination['type']): string | null {
-    if (type === 'APPROVED') {
-      return 'Approve';
-    } else if (type === 'REJECTED') {
-      return 'Reject';
-    } else {
-      return 'Withdraw';
+  transform(type: EmpDetermination['type']): string | null {
+    let val: string = null;
+    switch (type) {
+      case 'APPROVED':
+        val = 'Approve';
+        break;
+      case 'REJECTED':
+        val = 'Reject';
+        break;
+      case 'DEEMED_WITHDRAWN':
+        val = 'Withdraw';
+        break;
+      default:
+        break;
     }
+    return val;
   }
 }

@@ -1,8 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.init;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.permit.domain.Permit;
@@ -13,6 +10,10 @@ import uk.gov.pmrv.api.permit.mapper.PermitEntityMapper;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.AerMonitoringApproachEmissions;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.inherent.AerInherentReceivingTransferringInstallation;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.inherent.InherentCO2Emissions;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AerInherentCO2EmissionsInitService implements AerMonitoringApproachTypeEmissionsInitService {

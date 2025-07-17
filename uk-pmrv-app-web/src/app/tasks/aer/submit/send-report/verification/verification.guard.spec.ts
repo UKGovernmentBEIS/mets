@@ -4,18 +4,19 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { lastValueFrom, of } from 'rxjs';
 
+import { AuthStore } from '@core/store';
+import { expectBusinessErrorToBe } from '@error/testing/business-error';
+import { notFoundVerificationBodyError } from '@tasks/aer/error/business-errors';
 import { VerificationGuard } from '@tasks/aer/submit/send-report/verification/verification.guard';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
-import { mockClass } from '@testing';
 import { KeycloakService } from 'keycloak-angular';
 
 import { AccountVerificationBodyService } from 'pmrv-api';
 
-import { BusinessErrorService } from '../../../../../error/business-error/business-error.service';
-
 describe('VerificationGuard', () => {
   let guard: VerificationGuard;
   let store: CommonTasksStore;
+  let authStore: AuthStore;
   let accountVerificationBodyService: Partial<jest.Mocked<AccountVerificationBodyService>>;
 
   beforeEach(() => {
@@ -28,12 +29,14 @@ describe('VerificationGuard', () => {
       providers: [
         KeycloakService,
         { provide: AccountVerificationBodyService, useValue: accountVerificationBodyService },
-        { provide: BusinessErrorService, useValue: mockClass(BusinessErrorService) },
       ],
     });
 
     guard = TestBed.inject(VerificationGuard);
     store = TestBed.inject(CommonTasksStore);
+
+    authStore = TestBed.inject(AuthStore);
+    authStore.setCurrentDomain('AVIATION');
   });
 
   it('should be created', () => {
@@ -59,6 +62,7 @@ describe('VerificationGuard', () => {
     );
     accountVerificationBodyService.getVerificationBodyOfAccount.mockReturnValue(of(null));
 
-    await expect(lastValueFrom(guard.canActivate())).resolves.toBeFalsy();
+    await expect(lastValueFrom(guard.canActivate())).rejects.toBeTruthy();
+    await expectBusinessErrorToBe(notFoundVerificationBodyError());
   });
 });

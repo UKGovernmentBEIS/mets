@@ -11,7 +11,6 @@ import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstan
 
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

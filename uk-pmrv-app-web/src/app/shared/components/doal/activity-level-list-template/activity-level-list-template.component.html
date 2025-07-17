@@ -27,12 +27,12 @@
           {{ row.creationDate | govukDate }}
         </ng-container>
 
-        <ng-container *ngSwitchCase="'change'"
-          ><a [routerLink]="index" [state]="{ changing: true }" govukLink>Change</a></ng-container
-        >
-        <ng-container *ngSwitchCase="'delete'"
-          ><a [routerLink]="[index, 'delete']" [state]="{ changing: true }" govukLink>Delete</a></ng-container
-        >
+        <ng-container *ngSwitchCase="'change'">
+          <a [routerLink]="index" [state]="{ changing: true }" govukLink>Change</a>
+        </ng-container>
+        <ng-container *ngSwitchCase="'delete'">
+          <a [routerLink]="[index, 'delete']" [state]="{ changing: true }" govukLink>Delete</a>
+        </ng-container>
       </ng-container>
     </ng-template>
   </govuk-table>

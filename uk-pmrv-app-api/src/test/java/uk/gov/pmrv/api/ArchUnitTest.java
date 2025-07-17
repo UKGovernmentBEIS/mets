@@ -18,13 +18,9 @@ public class ArchUnitTest {
 
     static final String BASE_PACKAGE = "uk.gov.pmrv.api";
 
-    static final String TERMS_PACKAGE = BASE_PACKAGE + ".terms..";
-
     static final String COMMON_PACKAGE = BASE_PACKAGE + ".common..";
-    static final String REFERENCE_DATA_PACKAGE = BASE_PACKAGE + ".referencedata..";
-    static final String FILES_PACKAGE = BASE_PACKAGE + ".files..";
+    static final String NOTIFICATIONAPI_PACKAGE = BASE_PACKAGE + ".notificationapi..";
     static final String NOTIFICATION_PACKAGE = BASE_PACKAGE + ".notification..";
-    static final String TOKEN_PACKAGE = BASE_PACKAGE + ".token..";
     static final String AUTHORIZATION_PACKAGE = BASE_PACKAGE + ".authorization..";
     static final String CA_PACKAGE = BASE_PACKAGE + ".competentauthority..";
     static final String VERIFICATION_BODY_PACKAGE = BASE_PACKAGE + ".verificationbody..";
@@ -43,12 +39,9 @@ public class ArchUnitTest {
     static final String WEB_PACKAGE = BASE_PACKAGE + ".web..";
 
     static final List<String> ALL_PACKAGES = List.of(
-            TERMS_PACKAGE,
             COMMON_PACKAGE,
-            REFERENCE_DATA_PACKAGE,
-            FILES_PACKAGE,
+            NOTIFICATIONAPI_PACKAGE,
             NOTIFICATION_PACKAGE,
-            TOKEN_PACKAGE,
             AUTHORIZATION_PACKAGE,
             CA_PACKAGE,
             VERIFICATION_BODY_PACKAGE,
@@ -63,20 +56,10 @@ public class ArchUnitTest {
     );
 
     /**
-     CYCLIC1: common/referencedata due to @Country in AddressDTO
      CYCLIC2: verificationBody/authorization due to impact on Verifier authorities on VB status change (event)
      CYCLIC3: account/users
      CYCLIC4: permit/reporting for CalculationActivityDataMonitoringTier in CalculationParameterType
      **/
-
-    @ArchTest
-    public static final ArchRule termsPackageChecks =
-            noClasses().that()
-                    .resideInAPackage(TERMS_PACKAGE)
-                    .should().dependOnClassesThat()
-                    .resideInAnyPackage(except(
-                            TERMS_PACKAGE,
-                            COMMON_PACKAGE));
 
     @ArchTest
     public static final ArchRule commonPackageChecks =
@@ -84,28 +67,7 @@ public class ArchUnitTest {
                     .resideInAPackage(COMMON_PACKAGE)
                     .should().dependOnClassesThat()
                     .resideInAnyPackage(except(
-                            COMMON_PACKAGE,
-                            REFERENCE_DATA_PACKAGE /* CYCLIC1: due to @Country in AddressDTO */));
-
-    @ArchTest
-    public static final ArchRule referencedataPackageChecks =
-            noClasses().that()
-                    .resideInAPackage(REFERENCE_DATA_PACKAGE)
-                    .should().dependOnClassesThat()
-                    .resideInAnyPackage(except(
-                            REFERENCE_DATA_PACKAGE,
                             COMMON_PACKAGE));
-
-    @ArchTest
-    public static final ArchRule filesPackageChecks =
-            noClasses().that()
-                    .resideInAPackage(FILES_PACKAGE)
-                    .should().dependOnClassesThat()
-                    .resideInAnyPackage(except(
-                            FILES_PACKAGE,
-                            COMMON_PACKAGE,
-                            AUTHORIZATION_PACKAGE,
-                            TOKEN_PACKAGE));
 
     @ArchTest
     public static final ArchRule notificationPackageChecks =
@@ -113,21 +75,11 @@ public class ArchUnitTest {
                     .resideInAPackage(NOTIFICATION_PACKAGE)
                     .should().dependOnClassesThat()
                     .resideInAnyPackage(except(
+                    		NOTIFICATIONAPI_PACKAGE,
                             NOTIFICATION_PACKAGE,
                             COMMON_PACKAGE,
                             AUTHORIZATION_PACKAGE,
-                            CA_PACKAGE,
-                            FILES_PACKAGE,
-                            TOKEN_PACKAGE));
-
-    @ArchTest
-    public static final ArchRule tokenPackageChecks =
-            noClasses().that()
-                    .resideInAPackage(TOKEN_PACKAGE)
-                    .should().dependOnClassesThat()
-                    .resideInAnyPackage(except(
-                            TOKEN_PACKAGE,
-                            COMMON_PACKAGE));
+                            CA_PACKAGE));
 
     @ArchTest
     public static final ArchRule authorizationPackageChecks =
@@ -167,12 +119,12 @@ public class ArchUnitTest {
                     .resideInAnyPackage(except(
                             USER_PACKAGE,
                             COMMON_PACKAGE,
-                            TOKEN_PACKAGE,
                             AUTHORIZATION_PACKAGE,
+                            NOTIFICATIONAPI_PACKAGE,
                             NOTIFICATION_PACKAGE,
                             ACCOUNT_PACKAGE /* CYCLIC3: to get installation name for notification */,
-                            VERIFICATION_BODY_PACKAGE /* for verifier invitation */,
-                            FILES_PACKAGE /* for signatures */));
+                            CA_PACKAGE, /* for regulator invitation */
+                            VERIFICATION_BODY_PACKAGE /* for verifier invitation */));
     @ArchTest
     public static final ArchRule accountPackageChecks =
             noClasses().that()
@@ -183,12 +135,9 @@ public class ArchUnitTest {
                             COMMON_PACKAGE,
                             AUTHORIZATION_PACKAGE,
                             CA_PACKAGE,
-                            FILES_PACKAGE, /* for notes */
-                            TOKEN_PACKAGE,
                             USER_PACKAGE, /* CYCLIC3:  getServiceContactDetails */
                             VERIFICATION_BODY_PACKAGE,
-                            NOTIFICATION_PACKAGE,
-                            REFERENCE_DATA_PACKAGE));
+                            NOTIFICATION_PACKAGE));
 
     @ArchTest
     public static final ArchRule permitPackageChecks =
@@ -201,8 +150,6 @@ public class ArchUnitTest {
                             AUTHORIZATION_PACKAGE,
                             CA_PACKAGE,
                             ACCOUNT_PACKAGE,
-                            FILES_PACKAGE /* for file attachments */,
-                            TOKEN_PACKAGE /* for file tokens */,
                             REPORTING_PACKAGE /* CYCLIC4: for CalculationActivityDataMonitoringTier in CalculationParameterType*/));
 
     @ArchTest
@@ -227,8 +174,6 @@ public class ArchUnitTest {
                             COMMON_PACKAGE,
                             AUTHORIZATION_PACKAGE,
                             CA_PACKAGE,
-                            FILES_PACKAGE /* for file attachments */,
-                            TOKEN_PACKAGE /* for file tokens */,
                             ACCOUNT_PACKAGE,
                             AVIATION_REPORTING_PACKAGE));
 
@@ -242,8 +187,7 @@ public class ArchUnitTest {
                             COMMON_PACKAGE,
                             EMP_PACKAGE,
                             VERIFICATION_BODY_PACKAGE,
-                            ACCOUNT_PACKAGE,
-                            REFERENCE_DATA_PACKAGE));
+                            ACCOUNT_PACKAGE));
 
     @ArchTest
     public static final ArchRule workflowPackageChecks =
@@ -253,16 +197,14 @@ public class ArchUnitTest {
                     .resideInAnyPackage(except(
                             WORKFLOW_PACKAGE,
                             COMMON_PACKAGE,
-                            TOKEN_PACKAGE,
                             AUTHORIZATION_PACKAGE,
                             CA_PACKAGE,
+                            NOTIFICATIONAPI_PACKAGE,
                             NOTIFICATION_PACKAGE,
                             ACCOUNT_PACKAGE,
                             PERMIT_PACKAGE,
                             REPORTING_PACKAGE,
-                            FILES_PACKAGE,
                             USER_PACKAGE,
-                            REFERENCE_DATA_PACKAGE,
                             VERIFICATION_BODY_PACKAGE));
 
 

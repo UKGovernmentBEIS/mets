@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, filter, first, map, Observable, switchMap } from 'rxjs';
 
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 import { hasRequestTaskAllowedActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
 
 import {
@@ -22,7 +23,7 @@ import { resolveConfirmSectionStatus } from './confirm/core/cessation-status';
   templateUrl: './cessation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CessationComponent {
+export class CessationComponent implements OnInit {
   readonly navigationState = { returnUrl: this.router.url };
 
   hasRelatedActions$ = this.store.pipe(
@@ -88,13 +89,22 @@ export class CessationComponent {
     map((state) => resolveConfirmSectionStatus(state)),
   );
 
+  canViewSectionDetails$ = combineLatest([this.store, this.confirmSectionStatus$]).pipe(
+    map(([store, sectionStatus]) => store.isEditable || sectionStatus !== 'not started'),
+  );
+
   constructor(
     readonly store: PermitRevocationStore,
     private readonly requestActionsService: RequestActionsService,
     private router: Router,
     readonly route: ActivatedRoute,
     private readonly requestItemsService: RequestItemsService,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
+
+  ngOnInit(): void {
+    this.breadcrumbService.cutLastBreadcrumbWithLinkandShow();
+  }
 
   private sortTimeline(res: RequestActionInfoDTO[], key: string): RequestActionInfoDTO[] {
     return res.slice().sort((a, b) => new Date(b[key]).getTime() - new Date(a[key]).getTime());

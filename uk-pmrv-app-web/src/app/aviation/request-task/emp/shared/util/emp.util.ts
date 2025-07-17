@@ -16,6 +16,7 @@ import {
   EmpVariationUkEtsApplicationReviewRequestTaskPayload,
   EmpVariationUkEtsApplicationSubmitRequestTaskPayload,
   RequestTaskActionProcessDTO,
+  RequestTaskAttachmentActionProcessDTO,
   RequestTaskDTO,
   RequestTaskItemDTO,
   RequestTaskPayload,
@@ -23,9 +24,22 @@ import {
 
 import { EmpCorsiaTaskKey, EmpRequestTaskPayloadCorsia, EmpRequestTaskPayloadUkEts, EmpTaskKey } from '../../../store';
 
+export type EmpDetermination = EmpIssuanceDetermination | EmpVariationDetermination;
+export type EmpReviewDecision = EmpIssuanceReviewDecision | EmpVariationReviewDecision;
+
 export type EmpVariationSubmitRequestTaskPayload =
   | EmpVariationUkEtsApplicationSubmitRequestTaskPayload
   | EmpVariationCorsiaApplicationSubmitRequestTaskPayload;
+
+export type EmpIssuanceReviewRequestTaskPayload =
+  | EmpIssuanceUkEtsApplicationReviewRequestTaskPayload
+  | EmpIssuanceCorsiaApplicationReviewRequestTaskPayload;
+
+export type EmpVariationReviewRequestTaskPayload =
+  | EmpVariationUkEtsApplicationReviewRequestTaskPayload
+  | EmpVariationCorsiaApplicationReviewRequestTaskPayload;
+
+export type EmpReviewRequestTaskPayload = EmpIssuanceReviewRequestTaskPayload | EmpVariationReviewRequestTaskPayload;
 
 export type EmpReviewGroup = EmpUkEtsReviewGroup | EmpCorsiaReviewGroup;
 
@@ -143,6 +157,29 @@ export const variationOperatorLedReviewRequestTaskTypes: RequestTaskDTO['type'][
   'EMP_VARIATION_CORSIA_APPLICATION_REVIEW',
 ];
 
+export const issuanceReviewRequestTaskTypes: RequestTaskDTO['type'][] = [
+  'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW',
+  'EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW',
+];
+
+export function uploadReviewGroupDecisionAttachmentActionTypeByRequestTaskTypeMap(
+  requestTaskType: RequestTaskDTO['type'],
+): RequestTaskAttachmentActionProcessDTO['requestTaskActionType'] {
+  switch (requestTaskType) {
+    case 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW':
+      return 'EMP_ISSUANCE_UKETS_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT';
+
+    case 'EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW':
+      return 'EMP_ISSUANCE_CORSIA_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT';
+
+    case 'EMP_VARIATION_UKETS_APPLICATION_REVIEW':
+      return 'EMP_VARIATION_UKETS_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT';
+
+    case 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW':
+      return 'EMP_VARIATION_CORSIA_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT';
+  }
+}
+
 export function notifyOperatorRequestTaskActionTypesMap(
   requestTaskType: RequestTaskDTO['type'],
 ): RequestTaskActionProcessDTO['requestTaskActionType'] {
@@ -164,6 +201,15 @@ export function notifyOperatorRequestTaskActionTypesMap(
 
     case 'EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT':
       return 'EMP_VARIATION_CORSIA_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED';
+  }
+}
+
+export function documentPreviewRequestTaskActionTypesMap(
+  requestTaskType: RequestTaskDTO['type'],
+): RequestTaskActionProcessDTO['requestTaskActionType'] {
+  switch (requestTaskType) {
+    case 'EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW':
+      return 'EMP_ISSUANCE_UKETS_SAVE_REVIEW_DETERMINATION';
   }
 }
 
@@ -218,8 +264,8 @@ export function resolveSubmissionTaskStatus(
       ? 'not started'
       : 'cannot start yet'
     : allEmpTasksCompleted
-    ? 'not started'
-    : 'cannot start yet';
+      ? 'not started'
+      : 'cannot start yet';
 }
 
 function resolveSubmissionTaskLink(
@@ -239,8 +285,8 @@ function resolveSubmissionTaskLink(
       ? `${prefix}/variation/submission`
       : null
     : allEmpTasksCompleted
-    ? `${prefix}/submit/submission`
-    : null;
+      ? `${prefix}/submit/submission`
+      : null;
 }
 
 function resolveCorsiaDataGapsStatus(payload: EmpRequestTaskPayloadCorsia): TaskItemStatus {
@@ -259,7 +305,11 @@ function resolveCorsiaDataGapsTaskLink(
   taskType: RequestTaskDTO['type'],
 ): string | null {
   const prefix =
-    taskType === 'EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT' ? 'variation-regulator-led' : 'submit';
+    taskType === 'EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT' ||
+    taskType === 'EMP_VARIATION_CORSIA_REGULATOR_LED_WAIT_FOR_PEER_REVIEW' ||
+    taskType === 'EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW'
+      ? 'variation-regulator-led'
+      : 'submit';
   return monitoringApproachCorsiaCompleted(payload) ? `emp-corsia/${prefix}/data-gaps` : null;
 }
 
@@ -283,8 +333,8 @@ const resolveDeterminationTaskStatus = (determination: EmpIssuanceDetermination,
     ? determination?.type === 'APPROVED'
       ? 'approved'
       : determination?.type === 'DEEMED_WITHDRAWN'
-      ? 'withdrawn'
-      : 'undecided'
+        ? 'withdrawn'
+        : 'undecided'
     : 'undecided';
 };
 
@@ -374,7 +424,9 @@ function extractCorsiaDataGapsStatus(payload: EmpRequestTaskPayloadCorsia, compl
   if (!monitoringApproachStatus || !monitoringApproachStatus[0]) {
     return 'cannot start yet';
   } else {
-    return completionState != null ? (completionState[0] ? 'complete' : 'in progress') : 'not started';
+    if (!payload.emissionsMonitoringPlan?.dataGaps?.dataGaps) {
+      return 'needs review';
+    } else return completionState != null ? (completionState[0] ? 'complete' : 'in progress') : 'not started';
   }
 }
 
@@ -423,9 +475,18 @@ export function getEmpSections(
             'EMP_VARIATION_CORSIA_APPLICATION_SUBMIT',
           ].includes(taskType);
 
-          if (isVariationApplicationSubmit && addedMethodTasks.includes(task.name)) {
-            status = 'complete';
+          if (isVariationApplicationSubmit) {
+            if (
+              task.name === 'empVariationDetails' ||
+              payload.empSectionsCompleted[task.name] != null ||
+              addedMethodTasks.includes(task.name)
+            ) {
+              status = getTaskStatusByTaskCompletionState(task.name as EmpTaskKey, payload);
+            } else {
+              status = 'complete';
+            }
           }
+
           let link: string;
 
           if (status !== 'complete') {
@@ -505,12 +566,12 @@ export function getEmpCorsiaReviewSections(
 
           const link =
             submitStatus === 'complete'
-              ? (task.name as EmpCorsiaTaskKey) === 'serviceContactDetails'
+              ? task.name === 'serviceContactDetails'
                 ? task.link
                 : `${task.link}/summary`
               : task.link;
 
-          const reviewKey = empReviewGroupMap[task.name as EmpCorsiaTaskKey];
+          const reviewKey = empReviewGroupMap[task.name];
 
           const status = getEmpReviewTaskStatusByTaskCompletionState(
             payload.reviewGroupDecisions[reviewKey],
@@ -1039,7 +1100,7 @@ export function getVariationScheduleItems(
   varDetailsReviewDecision: EmpVariationReviewDecision,
 ): string[] {
   const aboutVariationScheduleItems: string[] =
-    (reviewDecision as any)?.details?.variationScheduleItems ||
+    (reviewDecision as any)?.details?.variationScheduleItems || //TODO possible bug. no details exists in reviewDecision object
     (varDetailsReviewDecision as any)?.details?.variationScheduleItems ||
     [];
 

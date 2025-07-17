@@ -2,15 +2,14 @@ package uk.gov.pmrv.api.allowance.domain;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-import java.time.Year;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.allowance.domain.enums.SubInstallationName;
+
+import java.time.Year;
 
 @Data
 @NoArgsConstructor

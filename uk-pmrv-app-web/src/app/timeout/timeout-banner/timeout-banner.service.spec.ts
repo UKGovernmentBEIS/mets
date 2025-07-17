@@ -3,12 +3,12 @@ import { TestBed } from '@angular/core/testing';
 import { firstValueFrom, Subject } from 'rxjs';
 import { TestScheduler } from 'rxjs/testing';
 
+import { AuthService } from '@core/services/auth.service';
+import { mockClass } from '@testing';
 import { KeycloakEvent, KeycloakEventType, KeycloakService } from 'keycloak-angular';
 import { KeycloakInstance } from 'keycloak-js';
 
-import { mockClass } from '../../../testing';
 import { testSchedulerFactory } from '../../../testing/marble-helpers';
-import { AuthService } from '../../core/services/auth.service';
 import { TimeoutBannerService } from './timeout-banner.service';
 
 describe('TimeoutBannerService', () => {
@@ -54,7 +54,7 @@ describe('TimeoutBannerService', () => {
 
       flush();
 
-      expect(keycloakService.logout).toHaveBeenCalled();
+      expect(authService.logout).toHaveBeenCalled();
     });
   });
 

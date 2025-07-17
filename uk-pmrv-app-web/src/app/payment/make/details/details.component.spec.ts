@@ -1,13 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
+import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
 import { BasePage } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { RequestInfoDTO, RequestTaskDTO } from 'pmrv-api';
 
@@ -26,12 +25,14 @@ describe('DetailsComponent', () => {
 
   @Component({
     selector: 'app-make-payment-help',
-    template: `<div class="help">
-      <p class="competentAuthority">{{ competentAuthority$ | async }}</p>
-      <p class="requestType">{{ requestType$ | async }}</p>
-      <p class="requestTaskType">{{ requestTaskType$ | async }}</p>
-      <p class="default">{{ default }}</p>
-    </div>`,
+    template: `
+      <div class="help">
+        <p class="competentAuthority">{{ competentAuthority$ | async }}</p>
+        <p class="requestType">{{ requestType$ | async }}</p>
+        <p class="requestTaskType">{{ requestTaskType$ | async }}</p>
+        <p class="default">{{ default }}</p>
+      </div>
+    `,
   })
   class MockPaymentHelpComponent {
     @Input() competentAuthority$: Observable<RequestInfoDTO['competentAuthority']>;
@@ -61,9 +62,9 @@ describe('DetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       declarations: [DetailsComponent, MockPaymentHelpComponent],
-      providers: [KeycloakService],
+      providers: [DestroySubject, provideRouter([])],
     }).compileComponents();
   });
 
@@ -86,7 +87,7 @@ describe('DetailsComponent', () => {
 
     it('should display payment details', () => {
       expect(page.heading.textContent.trim()).toEqual(
-        'Pay permit application fee Assigned to: Foo BarDays Remaining: 10',
+        'Pay permit application fee Assigned to: Foo Bar Days Remaining: 10',
       );
       expect(page.paymentDetails).toEqual([
         ['Date created', '5 May 2022'],
@@ -98,7 +99,7 @@ describe('DetailsComponent', () => {
       page.makePaymentButton.click();
       fixture.detectChanges();
 
-      expect(navigateSpy).toHaveBeenCalledWith(['../options'], { relativeTo: activatedRoute });
+      expect(navigateSpy).toHaveBeenCalledWith(['options'], { relativeTo: activatedRoute });
     });
 
     it('should display help details', () => {
@@ -185,7 +186,7 @@ describe('DetailsComponent', () => {
 
     it('should display year in header', () => {
       expect(hostElement.querySelector<HTMLElement>('app-page-heading h1.govuk-heading-xl').textContent.trim()).toEqual(
-        'Pay 2022 reportable emissions fee Assigned to: Foo BarDays Remaining: 10',
+        'Pay 2022 reportable emissions fee Assigned to: Foo Bar Days Remaining: 10',
       );
     });
   });

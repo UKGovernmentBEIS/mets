@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.handler
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -25,10 +25,11 @@ public class AviationAerCorsiaRequestVerificationActionHandler
     private final RequestAviationAerCorsiaSubmitService requestAviationAerCorsiaSubmitService;
     private final WorkflowService workflowService;
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser, AviationAerApplicationRequestVerificationRequestTaskActionPayload payload) {
+	public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser,
+			AviationAerApplicationRequestVerificationRequestTaskActionPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
-        requestAviationAerCorsiaSubmitService.sendToVerifier(payload, requestTask, pmrvUser);
+        requestAviationAerCorsiaSubmitService.sendToVerifier(payload, requestTask, appUser);
 
         // Complete task
         workflowService.completeTask(requestTask.getProcessTaskId(),

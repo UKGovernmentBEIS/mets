@@ -37,7 +37,10 @@ export class VirTaskComponent {
     }),
   );
 
-  constructor(private readonly backLinkService: BackLinkService, private readonly virService: VirService) {
+  constructor(
+    private readonly backLinkService: BackLinkService,
+    private readonly virService: VirService,
+  ) {
     this.backLinkService.show();
   }
 }

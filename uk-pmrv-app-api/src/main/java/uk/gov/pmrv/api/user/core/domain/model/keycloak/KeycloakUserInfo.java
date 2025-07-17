@@ -1,11 +1,12 @@
 package uk.gov.pmrv.api.user.core.domain.model.keycloak;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Map;
 
 @Data
 @Builder

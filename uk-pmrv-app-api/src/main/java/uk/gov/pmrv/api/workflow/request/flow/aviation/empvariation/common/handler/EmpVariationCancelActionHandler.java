@@ -6,8 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -27,11 +26,11 @@ public class EmpVariationCancelActionHandler implements RequestTaskActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final RequestTaskActionEmptyPayload taskActionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
-        final RoleType userRole = pmrvUser.getRoleType();
+        final String userRole = appUser.getRoleType();
 
         workflowService.completeTask(requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.EMP_VARIATION_SUBMIT_OUTCOME, EmpVariationSubmitOutcome.CANCELLED,

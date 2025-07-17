@@ -6,11 +6,14 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.time.Year;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.commons.beanutils.BeanUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -72,7 +75,7 @@ class AviationAerCorsiaEmissionsCalculationServiceTest {
                 .emissionsReductionClaim(BigDecimal.valueOf(123.45))
                 .build();
 
-        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6")))
+        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6"), Year.of(2023)))
                 .thenReturn(List.of("ICAO1", "ICAO2", "ICAO5", "ICAO6"));
 
         // Invoke
@@ -85,7 +88,7 @@ class AviationAerCorsiaEmissionsCalculationServiceTest {
         assertThat(result.getStandardFuelsTotalEmissions()).hasSize(2);
         assertThat(result.getFlightsEmissions().getFlightsEmissionsDetails()).hasSize(2);
         verify(airportsService, times(3))
-                .findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6"));
+                .findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6"), Year.of(2023));
     }
 
     @Test
@@ -111,7 +114,7 @@ class AviationAerCorsiaEmissionsCalculationServiceTest {
                 .emissionsReductionClaim(BigDecimal.ZERO)
                 .build();
 
-        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6")))
+        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6"), Year.of(2023)))
                 .thenReturn(List.of("ICAO1", "ICAO2", "ICAO5", "ICAO6"));
 
         // Invoke
@@ -124,13 +127,13 @@ class AviationAerCorsiaEmissionsCalculationServiceTest {
         assertThat(result.getStandardFuelsTotalEmissions()).hasSize(2);
         assertThat(result.getFlightsEmissions().getFlightsEmissionsDetails()).hasSize(2);
         verify(airportsService, times(3))
-                .findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6"));
+                .findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6"), Year.of(2023));
     }
 
     @Test
-    void calculateTotalEmissions() {
+    void calculateTotalEmissions() throws InvocationTargetException, IllegalAccessException {
 
-        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6")))
+        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6"), Year.of(2023)))
                 .thenReturn(List.of("ICAO1", "ICAO2", "ICAO5", "ICAO6"));
 
         final AviationAerCorsiaTotalEmissions actual = aviationAerCorsiaEmissionsCalculationService.calculateTotalEmissions(createEmissionsCalculationDTO());
@@ -146,7 +149,7 @@ class AviationAerCorsiaEmissionsCalculationServiceTest {
     @Test
     void calculateTotalEmissions_no_offsetting_flights() {
 
-        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6")))
+        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6"), Year.of(2023)))
                 .thenReturn(List.of());
 
         final AviationAerCorsiaTotalEmissions actual = aviationAerCorsiaEmissionsCalculationService.calculateTotalEmissions(createEmissionsCalculationDTO());
@@ -160,9 +163,9 @@ class AviationAerCorsiaEmissionsCalculationServiceTest {
     }
 
     @Test
-    void calculateTotalEmissions_no_non_offsetting_flights() {
+    void calculateTotalEmissions_no_non_offsetting_flights() throws InvocationTargetException, IllegalAccessException {
 
-        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6")))
+        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6"), Year.of(2023)))
                 .thenReturn(List.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6"));
 
         final AviationAerCorsiaTotalEmissions actual = aviationAerCorsiaEmissionsCalculationService.calculateTotalEmissions(createEmissionsCalculationDTO());
@@ -184,7 +187,7 @@ class AviationAerCorsiaEmissionsCalculationServiceTest {
     @Test
     void calculateAerodromePairsTotalEmissions() {
 
-        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6")))
+        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6"), Year.of(2023)))
                 .thenReturn(List.of("ICAO1", "ICAO2", "ICAO4", "ICAO5", "ICAO6"));
 
         final List<AviationAerCorsiaAerodromePairsTotalEmissions> actual = aviationAerCorsiaEmissionsCalculationService.calculateAerodromePairsTotalEmissions(createEmissionsCalculationDTO());
@@ -573,7 +576,7 @@ class AviationAerCorsiaEmissionsCalculationServiceTest {
                 .year(Year.of(2023))
                 .build();
 
-        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6", "ICAO7", "ICAO8", "ICAO9", "ICAO10", "ICAO11", "ICAO12")))
+        when(airportsService.findChapter3Icaos(Set.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO5", "ICAO6", "ICAO7", "ICAO8", "ICAO9", "ICAO10", "ICAO11", "ICAO12"), Year.of(2023)))
             .thenReturn(List.of("ICAO1", "ICAO2", "ICAO3", "ICAO4", "ICAO8", "ICAO9", "ICAO10", "ICAO11"));
 
         AviationAerCorsiaInternationalFlightsEmissions result = aviationAerCorsiaEmissionsCalculationService
@@ -589,7 +592,7 @@ class AviationAerCorsiaEmissionsCalculationServiceTest {
         assertThat(flightsEmissionsDetails).extracting(AviationAerCorsiaInternationalFlightsEmissionsDetails::getArrivalState).containsOnly("STATE2", "STATE4", "STATE6", "STATE6", "STATE6", "STATE8");
     }
 
-    private AviationAerCorsiaEmissionsCalculationDTO createEmissionsCalculationDTO() {
+    private AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO createEmissionsCalculationDTO() {
         Set<AviationAerCorsiaAggregatedEmissionDataDetails> aggregatedEmissionDataDetails = new HashSet<>();
         aggregatedEmissionDataDetails.add(AviationAerCorsiaAggregatedEmissionDataDetails.builder()
                 .airportFrom(AviationRptAirportsDTO.builder()
@@ -650,9 +653,10 @@ class AviationAerCorsiaEmissionsCalculationServiceTest {
                 .aggregatedEmissionDataDetails(aggregatedEmissionDataDetails)
                 .build();
 
-        return AviationAerCorsiaEmissionsCalculationDTO.builder()
+        return AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO.builder()
                 .aggregatedEmissionsData(aggregatedEmissionsData)
                 .emissionsReductionClaim(BigDecimal.valueOf(123.45))
+                .year(Year.of(2023))
                 .build();
     }
 }

@@ -9,8 +9,11 @@ export function isFiltersWizardStepCompleted(batchReissueState: PermitBatchReiss
     batchReissueState !== undefined &&
     batchReissueState.accountStatuses?.length > 0 &&
     batchReissueState.emitterTypes?.length > 0 &&
-    ((batchReissueState.emitterTypes?.length === 1 && batchReissueState.emitterTypes[0] === 'HSE') ||
-      batchReissueState?.installationCategories?.length > 0)
+    (((batchReissueState.emitterTypes?.includes('GHGE') || batchReissueState.emitterTypes?.includes('WASTE')) &&
+      batchReissueState?.installationCategories?.length > 0) ||
+      (!batchReissueState.emitterTypes?.includes('GHGE') &&
+        !batchReissueState.emitterTypes?.includes('WASTE') &&
+        (!batchReissueState?.installationCategories || batchReissueState?.installationCategories.length === 0)))
   );
 }
 

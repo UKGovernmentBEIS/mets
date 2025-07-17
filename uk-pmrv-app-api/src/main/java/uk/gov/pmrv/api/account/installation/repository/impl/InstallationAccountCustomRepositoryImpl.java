@@ -1,5 +1,8 @@
 package uk.gov.pmrv.api.account.installation.repository.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -7,11 +10,8 @@ import uk.gov.pmrv.api.account.domain.dto.AccountSearchCriteria;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountSearchResults;
 import uk.gov.pmrv.api.account.installation.repository.InstallationAccountCustomRepository;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
 import java.util.List;
 
 @Repository
@@ -34,13 +34,6 @@ public class InstallationAccountCustomRepositoryImpl implements InstallationAcco
         return AccountSearchResults.builder()
             .accounts(constructQuery(null, compAuth, null, searchCriteria, false).getResultList())
             .total(((Number) constructQuery(null, compAuth, null, searchCriteria, true).getSingleResult()).longValue())
-            .build();
-    }
-
-    public AccountSearchResults findByVerificationBodyId(Long verificationBodyId, AccountSearchCriteria searchCriteria) {
-        return AccountSearchResults.builder()
-            .accounts(constructQuery(null, null, verificationBodyId, searchCriteria, false).getResultList())
-            .total(((Number) constructQuery(null, null, verificationBodyId, searchCriteria, true).getSingleResult()).longValue())
             .build();
     }
 

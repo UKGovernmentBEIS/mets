@@ -11,14 +11,12 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
       [notification]="notification"
       [breadcrumb]="true"
       reviewGroupTitle="Installation details"
-      reviewGroupUrl="details"
-    >
+      reviewGroupUrl="details">
       <app-page-heading caption="Installation details">Description of the installation</app-page-heading>
       <h2
         [changeRoute]="(store.isEditable$ | async) === true ? '..' : undefined"
         app-summary-header
-        class="govuk-heading-m"
-      >
+        class="govuk-heading-m">
         <span class="govuk-visually-hidden">List of installation categories</span>
       </h2>
       <app-description-summary-template></app-description-summary-template>
@@ -30,5 +28,8 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 export class InstallationDescriptionSummaryComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly router: Router) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly router: Router,
+  ) {}
 }

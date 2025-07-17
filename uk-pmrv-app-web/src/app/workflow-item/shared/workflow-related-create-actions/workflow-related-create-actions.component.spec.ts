@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
 
@@ -30,8 +29,7 @@ describe('WorkflowRelatedCreateActionsComponent', () => {
       <app-workflow-related-create-actions
         [accountId$]="accountId$"
         [requestId$]="requestId$"
-        [requestCreateActionsTypes$]="requestCreateActionsTypes$"
-      ></app-workflow-related-create-actions>
+        [requestCreateActionsTypes$]="requestCreateActionsTypes$"></app-workflow-related-create-actions>
     `,
   })
   class TestComponent {
@@ -48,9 +46,10 @@ describe('WorkflowRelatedCreateActionsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, SharedModule],
+      imports: [SharedModule],
       declarations: [WorkflowRelatedCreateActionsComponent, TestComponent],
       providers: [
+        provideRouter([]),
         { provide: RequestsService, useValue: requestService },
         { provide: RequestItemsService, useValue: requestItemsService },
         ItemLinkPipe,
@@ -90,7 +89,7 @@ describe('WorkflowRelatedCreateActionsComponent', () => {
     testComponent.requestCreateActionsTypes$ = of(['AER']);
     fixture.detectChanges();
 
-    expect(page.links.map((el) => el.textContent)).toEqual(['Return to operator for changes']);
+    expect(page.links.map((el) => el.textContent.trim())).toEqual(['Return to operator for changes']);
 
     page.links[0].click();
     fixture.detectChanges();
@@ -118,7 +117,7 @@ describe('WorkflowRelatedCreateActionsComponent', () => {
     testComponent.requestCreateActionsTypes$ = of(['DRE']);
     fixture.detectChanges();
 
-    expect(page.links.map((el) => el.textContent)).toEqual(['Determine reportable emissions']);
+    expect(page.links.map((el) => el.textContent.trim())).toEqual(['Determine reportable emissions']);
 
     page.links[0].click();
     fixture.detectChanges();
@@ -132,10 +131,50 @@ describe('WorkflowRelatedCreateActionsComponent', () => {
           requestId: 'AEM00001-2022',
         },
       },
-      1,
+      String(1),
     );
 
     expect(navigateSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith(['/tasks', 4, 'dre', 'submit']);
+  });
+
+  it('when DOE action is available it should display it and when click to navigate to submit task page', () => {
+    requestService.processRequestCreateAction.mockReturnValueOnce(of({ requestId: '1234' }));
+    requestItemsService.getItemsByRequest.mockReturnValueOnce(
+      of({
+        items: [
+          {
+            requestId: '123',
+            requestType: 'AVIATION_DOE_CORSIA',
+            taskId: 4,
+            taskType: 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT',
+          },
+        ],
+      }),
+    );
+    const navigateSpy = jest.spyOn(router, 'navigate');
+
+    testComponent.requestCreateActionsTypes$ = of(['AVIATION_DOE_CORSIA']);
+    fixture.detectChanges();
+
+    expect(page.links.map((el) => el.textContent.trim())).toEqual(['Initiate estimation of emissions']);
+
+    page.links[0].click();
+    fixture.detectChanges();
+
+    expect(requestService.processRequestCreateAction).toHaveBeenCalledTimes(1);
+    expect(requestService.processRequestCreateAction).toHaveBeenCalledWith(
+      {
+        requestCreateActionType: 'AVIATION_DOE_CORSIA',
+        requestCreateActionPayload: {
+          payloadType: 'REPORT_RELATED_REQUEST_CREATE_ACTION_PAYLOAD',
+          requestId: 'AEM00001-2022',
+        },
+      },
+      String(1),
+    );
+
+    expect(navigateSpy).toHaveBeenCalledTimes(1);
+    expect(navigateSpy).toHaveBeenCalledWith(['/aviation/tasks', 4]);
   });
 });

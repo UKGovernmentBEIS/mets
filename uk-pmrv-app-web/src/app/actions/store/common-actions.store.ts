@@ -12,7 +12,10 @@ import { CommonActionsState, initialState } from './common-actions.state';
 
 @Injectable({ providedIn: 'root' })
 export class CommonActionsStore extends Store<CommonActionsState> {
-  constructor(private readonly router: Router, private readonly requestActionsService: RequestActionsService) {
+  constructor(
+    private readonly router: Router,
+    private readonly requestActionsService: RequestActionsService,
+  ) {
     super(initialState);
   }
 

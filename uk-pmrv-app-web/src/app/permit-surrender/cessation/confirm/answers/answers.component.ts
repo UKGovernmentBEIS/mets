@@ -11,18 +11,19 @@ import { PermitSurrenderStore } from '../../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-answers',
-  template: `<app-page-heading>Check your answers</app-page-heading>
+  template: `
+    <app-page-heading>Check your answers</app-page-heading>
     <app-cessation-summary-details
       [cessation]="store.select('cessation') | async"
       [allowancesSurrenderRequired]="store.select('allowancesSurrenderRequired') | async"
-      [isEditable]="store.select('isEditable') | async"
-    ></app-cessation-summary-details>
+      [isEditable]="store.select('isEditable') | async"></app-cessation-summary-details>
     <div class="govuk-button-group">
       <button appPendingButton govukButton type="button" (click)="confirm()" *ngIf="store.select('isEditable') | async">
         Confirm and complete
       </button>
     </div>
-    <a govukLink routerLink="../..">Return to: Cessation</a> `,
+    <a govukLink routerLink="../..">Return to: Cessation</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })

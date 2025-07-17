@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -23,10 +23,10 @@ public class EmpIssuanceCorsiaApplySubmitActionHandler implements RequestTaskAct
 
     @Override
     public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType,
-                        PmrvUser pmrvUser, RequestTaskActionEmptyPayload payload) {
+                        AppUser appUser, RequestTaskActionEmptyPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
-        requestEmpCorsiaService.applySubmitAction(requestTask, pmrvUser);
+        requestEmpCorsiaService.applySubmitAction(requestTask, appUser);
 
         requestTask.getRequest().setSubmissionDate(LocalDateTime.now());
 

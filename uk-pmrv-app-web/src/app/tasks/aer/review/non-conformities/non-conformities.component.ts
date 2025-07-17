@@ -12,11 +12,9 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
   template: `
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Uncorrected non-conformities">
       <app-non-conformities-group
-        [uncorrectedNonConformities]="uncorrectedNonConformities$ | async"
-      ></app-non-conformities-group>
+        [uncorrectedNonConformities]="uncorrectedNonConformities$ | async"></app-non-conformities-group>
       <app-verification-review-group-decision
-        (notification)="notification = $event"
-      ></app-verification-review-group-decision>
+        (notification)="notification = $event"></app-verification-review-group-decision>
     </app-aer-task-review>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,5 +25,8 @@ export class NonConformitiesComponent {
     this.aerService.getPayload() as Observable<AerApplicationReviewRequestTaskPayload>
   ).pipe(map((payload) => payload.verificationReport.uncorrectedNonConformities));
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

@@ -60,7 +60,7 @@ class EmpVariationUkEtsRegulatorLedPeerReviewServiceTest {
 				.build();
 		
 		String selectedPeerReviewer = "peerReviewr";
-		String pmrvUserId = "userId";
+		String appUserId = "userId";
 		
 		EmpVariationUkEtsRequestPayload requestPayload = EmpVariationUkEtsRequestPayload.builder()
 				.build();
@@ -71,10 +71,10 @@ class EmpVariationUkEtsRegulatorLedPeerReviewServiceTest {
 				.request(request)
 				.build();
 		
-		cut.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, pmrvUserId);
+		cut.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, appUserId);
 		
 		assertThat(requestPayload.getRegulatorPeerReviewer()).isEqualTo(selectedPeerReviewer);
-		assertThat(requestPayload.getRegulatorReviewer()).isEqualTo(pmrvUserId);
+		assertThat(requestPayload.getRegulatorReviewer()).isEqualTo(appUserId);
 		assertThat(requestPayload.getEmissionsMonitoringPlan()).isEqualTo(emp);
 		assertThat(requestPayload.getEmpVariationDetails()).isEqualTo(requestTaskPayload.getEmpVariationDetails());
 		assertThat(requestPayload.getEmpAttachments()).isEqualTo(requestTaskPayload.getEmpAttachments());

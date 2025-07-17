@@ -7,9 +7,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeUntil, tap } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
+import { parseCsv } from '@aviation/request-task/util';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
-import { FileUpload, UuidFilePair } from '@shared/file-input/file-upload-event';
+import { UuidFilePair } from '@shared/file-input/file-upload-event';
 import { TaskItemStatus } from '@shared/task-list/task-list.interface';
 
 import { GovukSelectOption } from 'govuk-components';
@@ -42,10 +43,10 @@ export abstract class BaseOperatorDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getOperatorDetails();
+    this.updateOperatorDetails();
   }
 
-  getOperatorDetails() {
+  updateOperatorDetails() {
     this.store
       .pipe(OperatorDetailsQuery.selectOperatorDetails, takeUntil(this.destroy$))
       .subscribe((operatorDetails: EmpCorsiaOperatorDetails) => {
@@ -63,7 +64,7 @@ export abstract class BaseOperatorDetailsComponent implements OnInit {
       .pipe(
         map((issuingAuthorityNames: string[]) =>
           issuingAuthorityNames.map(
-            (authorityNames) => ({ text: authorityNames, value: authorityNames } as GovukSelectOption<string>),
+            (authorityNames) => ({ text: authorityNames, value: authorityNames }) as GovukSelectOption<string>,
           ),
         ),
       );
@@ -78,7 +79,7 @@ export abstract class BaseOperatorDetailsComponent implements OnInit {
   ) {
     const currentForm = this.getform(formControlName);
     let operatorDetails = { ...this.operatorDetails, ...payload };
-    operatorDetails = this.getSubsidiaryFiles(operatorDetails);
+    operatorDetails = this.transformSubsidiaryCompanies(formControlName, operatorDetails);
 
     if (formControlName ? currentForm.valid : this.formProvider.form?.valid) {
       this.store.empCorsiaDelegate
@@ -107,26 +108,46 @@ export abstract class BaseOperatorDetailsComponent implements OnInit {
     });
   }
 
-  getSubsidiaryFiles(operatorDetails) {
+  transformSubsidiaryCompanies(
+    formControlName: keyof EmpCorsiaOperatorDetails,
+    operatorDetails: EmpCorsiaOperatorDetails,
+  ) {
+    if (formControlName === 'subsidiaryCompanies') {
+      operatorDetails.subsidiaryCompanyExist = this.getform('subsidiaryCompanyExist').value;
+    }
+
     if (operatorDetails?.subsidiaryCompanies) {
-      for (const item of operatorDetails.subsidiaryCompanies) {
-        if (item.airOperatingCertificate.certificateExist) {
+      operatorDetails.subsidiaryCompanies.forEach((item) => {
+        const airOperatingCertificate = item.airOperatingCertificate;
+        if (airOperatingCertificate.certificateExist) {
           if (
-            item.airOperatingCertificate.certificateFiles &&
-            typeof item.airOperatingCertificate.certificateFiles[0] === 'object'
+            airOperatingCertificate.certificateFiles &&
+            typeof airOperatingCertificate.certificateFiles[0] === 'object'
           ) {
-            if (item.airOperatingCertificate.certificateFiles[0]?.uuid) {
-              item.airOperatingCertificate.certificateFiles = item.airOperatingCertificate.certificateFiles?.map(
-                (doc: FileUpload) => doc.uuid,
+            if ((airOperatingCertificate.certificateFiles as any)[0]?.uuid) {
+              item.airOperatingCertificate.certificateFiles = airOperatingCertificate.certificateFiles?.map(
+                (doc: any) => doc.uuid,
               );
             } else {
               item.airOperatingCertificate.certificateFiles = this.transformCertificateFileToUuid(
-                item.airOperatingCertificate.certificateFiles[0].downloadUrl,
+                (airOperatingCertificate.certificateFiles[0] as any).downloadUrl,
               );
             }
           }
         }
-      }
+
+        const flightIdentification = item.flightIdentification;
+
+        if (
+          flightIdentification.flightIdentificationType === 'AIRCRAFT_REGISTRATION_MARKINGS' &&
+          flightIdentification.aircraftRegistrationMarkings.length > 0 &&
+          typeof flightIdentification.aircraftRegistrationMarkings === 'string'
+        ) {
+          item.flightIdentification.aircraftRegistrationMarkings = parseCsv(
+            flightIdentification.aircraftRegistrationMarkings as unknown as string,
+          );
+        }
+      });
     }
     return operatorDetails;
   }

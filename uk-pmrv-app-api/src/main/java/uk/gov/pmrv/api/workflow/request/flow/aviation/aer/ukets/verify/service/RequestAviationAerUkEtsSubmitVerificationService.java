@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.verify.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.aviationreporting.ukets.validation.AviationAerUkEtsVerificationReportValidatorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -30,7 +30,7 @@ public class RequestAviationAerUkEtsSubmitVerificationService {
     private final RequestAviationAccountQueryService requestAviationAccountQueryService;
     private final AviationAerUkEtsVerifyMapper aviationAerUkEtsVerifyMapper;
 
-    public void submitVerificationReport(RequestTask requestTask, PmrvUser pmrvUser) {
+    public void submitVerificationReport(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload taskPayload =
             (AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload) requestTask.getPayload();
@@ -42,7 +42,7 @@ public class RequestAviationAerUkEtsSubmitVerificationService {
         updateRequestPayload(request, taskPayload);
 
         // add request action
-        addVerificationSubmittedRequestAction(taskPayload, request, pmrvUser);
+        addVerificationSubmittedRequestAction(taskPayload, request, appUser);
     }
 
     private void updateRequestPayload(Request request, AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload verificationSubmitRequestTaskPayload) {
@@ -63,7 +63,7 @@ public class RequestAviationAerUkEtsSubmitVerificationService {
     }
 
     private void addVerificationSubmittedRequestAction(AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload verificationSubmitRequestTaskPayload,
-                                                      Request request, PmrvUser pmrvUser) {
+                                                      Request request, AppUser appUser) {
         RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 
         AviationAerUkEtsApplicationSubmittedRequestActionPayload aviationAerUkEtsApplicationSubmittedPayload =
@@ -74,7 +74,7 @@ public class RequestAviationAerUkEtsSubmitVerificationService {
             request,
             aviationAerUkEtsApplicationSubmittedPayload,
             RequestActionType.AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
     }
 

@@ -1,10 +1,9 @@
 package uk.gov.pmrv.api.web.orchestrator.authorization.validate;
 
-import org.springframework.util.ObjectUtils;
-import uk.gov.pmrv.api.web.orchestrator.authorization.dto.AccountOperatorAuthorityUpdateWrapperDTO;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.util.ObjectUtils;
+import uk.gov.pmrv.api.web.orchestrator.authorization.dto.AccountOperatorAuthorityUpdateWrapperDTO;
 
 public class AccountOperatorAuthorityUpdateValidator 
             implements ConstraintValidator<AccountOperatorAuthorityUpdate, AccountOperatorAuthorityUpdateWrapperDTO>{

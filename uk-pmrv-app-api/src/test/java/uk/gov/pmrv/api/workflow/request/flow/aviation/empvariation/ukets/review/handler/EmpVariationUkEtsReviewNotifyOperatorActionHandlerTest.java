@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -52,7 +52,7 @@ class EmpVariationUkEtsReviewNotifyOperatorActionHandlerTest {
         Long requestTaskId = 1L;
         String requestId = "REQUEST-1";
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.EMP_VARIATION_UKETS_NOTIFY_OPERATOR_FOR_DECISION;
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         DecisionNotification decisionNotification = DecisionNotification.builder().build();
         NotifyOperatorForDecisionRequestTaskActionPayload requestTaskActionPayload =
         		NotifyOperatorForDecisionRequestTaskActionPayload.builder()
@@ -74,13 +74,13 @@ class EmpVariationUkEtsReviewNotifyOperatorActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         //invoke
-        notifyOperatorActionHandler.process(requestTaskId, requestTaskActionType, pmrvUser, requestTaskActionPayload);
+        notifyOperatorActionHandler.process(requestTaskId, requestTaskActionType, appUser, requestTaskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(empVariationUkEtsReviewService,times(1))
-            .saveDecisionNotification(requestTask, decisionNotification, pmrvUser);
+            .saveDecisionNotification(requestTask, decisionNotification, appUser);
         verify(reviewNotifyOperatorValidatorService, times(1))
-            .validate(requestTask, requestTaskActionPayload, pmrvUser);
+            .validate(requestTask, requestTaskActionPayload, appUser);
         verify(workflowService, times(1))
             .completeTask(requestTask.getProcessTaskId(), Map.of(
                 BpmnProcessConstants.REQUEST_ID, requestId,

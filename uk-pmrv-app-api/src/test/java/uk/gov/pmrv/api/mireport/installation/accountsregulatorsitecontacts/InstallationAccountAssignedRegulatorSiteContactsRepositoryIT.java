@@ -7,22 +7,22 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
+import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityStatus;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.ApplicationType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
-import uk.gov.pmrv.api.authorization.core.domain.Authority;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.domain.Authority;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.pmrv.api.common.domain.Address;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.mireport.common.accountsregulatorsitecontacts.AccountAssignedRegulatorSiteContact;
 
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
@@ -63,7 +63,7 @@ class InstallationAccountAssignedRegulatorSiteContactsRepositoryIT extends Abstr
             InstallationAccountStatus.LIVE, CompetentAuthorityEnum.ENGLAND, legalEntity, new HashMap<>());
         createAuthority(userId3, "code2", AuthorityStatus.ACTIVE, CompetentAuthorityEnum.ENGLAND);
 
-        List<AccountAssignedRegulatorSiteContact> assignedRegulatorSiteContacts =
+        List<InstallationAccountAssignedRegulatorSiteContact> assignedRegulatorSiteContacts =
                 accountAssignedRegulatorSiteContactsRepository.findAccountAssignedRegulatorSiteContacts(entityManager);
 
         assertEquals(2, assignedRegulatorSiteContacts.size());
@@ -77,7 +77,7 @@ class InstallationAccountAssignedRegulatorSiteContactsRepositoryIT extends Abstr
 
     }
 
-    private void makeAssertions(InstallationAccount account, AccountAssignedRegulatorSiteContact accountAssignedRegulatorSiteContact) {
+    private void makeAssertions(InstallationAccount account, InstallationAccountAssignedRegulatorSiteContact accountAssignedRegulatorSiteContact) {
 
         assertEquals(account.getEmitterId(), accountAssignedRegulatorSiteContact.getAccountId());
         assertEquals(account.getName(), accountAssignedRegulatorSiteContact.getAccountName());
@@ -117,6 +117,7 @@ class InstallationAccountAssignedRegulatorSiteContactsRepositoryIT extends Abstr
                 .location(getLocation())
                 .contacts(contacts)
                 .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
+                .emitterType(EmitterType.GHGE)
                 .build();
 
         entityManager.persist(account);

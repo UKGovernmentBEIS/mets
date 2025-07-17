@@ -16,10 +16,9 @@ describe('PaymentSummaryComponent', () => {
   let page: Page;
 
   @Component({
-    template: `<app-payment-summary
-      [details]="details"
-      [shouldDisplayAmount]="shouldDisplayAmount"
-    ></app-payment-summary>`,
+    template: `
+      <app-payment-summary [details]="details" [shouldDisplayAmount]="shouldDisplayAmount"></app-payment-summary>
+    `,
   })
   class TestComponent {
     details = {

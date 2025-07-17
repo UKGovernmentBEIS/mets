@@ -1,6 +1,6 @@
 export interface TaskSection<T> {
   type?: T;
-  title: string;
+  title: string; // TODO: title is used as key to filter out entries from arrays. Change values with caution
   tasks: TaskItem<any>[];
 }
 

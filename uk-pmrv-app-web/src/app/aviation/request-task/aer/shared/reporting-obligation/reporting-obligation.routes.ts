@@ -11,12 +11,13 @@ export const AER_REPORTING_OBLIGATION_ROUTES: Routes = [
     children: [
       {
         path: '',
+        data: { pageTitle: 'Reporting obligation' },
         canActivate: [canActivateTaskForm],
         loadComponent: () => import('./reporting-obligation-page/reporting-obligation-page.component'),
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Reporting obligation' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Reporting obligation' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./reporting-obligation-summary/reporting-obligation-summary.component'),
       },

@@ -8,9 +8,9 @@ export function TRANSFERRED_CO2Status(state: PermitApplicationState): TaskItemSt
   return transferredCo2Statuses.every((status) => state.permitSectionsCompleted[status]?.[0])
     ? 'complete'
     : transferredCo2Statuses.some((status) => state.permitSectionsCompleted[status]?.[0]) ||
-      TRANSFERRED_CO2_PipelineStatus(state) === 'in progress'
-    ? 'in progress'
-    : 'not started';
+        TRANSFERRED_CO2_PipelineStatus(state) === 'in progress'
+      ? 'in progress'
+      : 'not started';
 }
 
 export function TRANSFERRED_CO2_PipelineStatus(state: PermitApplicationState): TaskItemStatus {
@@ -21,8 +21,8 @@ export function TRANSFERRED_CO2_PipelineStatus(state: PermitApplicationState): T
   return state.permitSectionsCompleted?.TRANSFERRED_CO2_N2O_Pipeline?.[0]
     ? 'complete'
     : transportCO2AndN2OPipelineSystems !== undefined
-    ? 'in progress'
-    : 'not started';
+      ? 'in progress'
+      : 'not started';
 }
 
 export const transferredCo2Statuses = [
@@ -32,4 +32,4 @@ export const transferredCo2Statuses = [
   'TRANSFERRED_CO2_N2O_Pipeline',
 ] as const;
 
-export type TransferredCo2Status = typeof transferredCo2Statuses[number];
+export type TransferredCo2Status = (typeof transferredCo2Statuses)[number];

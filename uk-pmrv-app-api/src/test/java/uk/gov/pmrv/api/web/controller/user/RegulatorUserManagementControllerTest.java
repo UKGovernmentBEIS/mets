@@ -17,26 +17,26 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.MimeTypeUtils;
-
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.token.FileToken;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
+import uk.gov.netz.api.token.FileToken;
 import uk.gov.pmrv.api.user.core.service.UserSignatureService;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserDTO;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserUpdateDTO;
 import uk.gov.pmrv.api.user.regulator.service.RegulatorUserManagementService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.orchestrator.authorization.service.RegulatorUserAuthorityUpdateOrchestrator;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.Map;
 import java.util.UUID;
@@ -51,8 +51,7 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionGroup.MANAGE_USERS_AND_CONTACTS;
-import static uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionLevel.NONE;
+import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionGroup.MANAGE_USERS_AND_CONTACTS;
 
 @ExtendWith(MockitoExtension.class)
 class RegulatorUserManagementControllerTest {
@@ -65,10 +64,10 @@ class RegulatorUserManagementControllerTest {
     private RegulatorUserManagementController controller;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent appSecurityComponent;
 
 	@Mock
-	private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+	private AppUserAuthorizationService appUserAuthorizationService;
 
 	@Mock
 	private RegulatorUserAuthorityUpdateOrchestrator regulatorUserAuthorityUpdateOrchestrator;
@@ -88,8 +87,8 @@ class RegulatorUserManagementControllerTest {
     public void setUp() {
     	objectMapper = new ObjectMapper();
 
-        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
@@ -103,7 +102,7 @@ class RegulatorUserManagementControllerTest {
 		controller = (RegulatorUserManagementController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-				.setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+				.setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
             	.setControllerAdvice(new ExceptionControllerAdvice())
             	.build();
     }
@@ -111,7 +110,7 @@ class RegulatorUserManagementControllerTest {
 	@Test
 	void getRegulatorUserByCaAndId() throws Exception {
 		final String userId = "userId";
-		PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 		RegulatorUserDTO regulator = RegulatorUserDTO.builder()
 				.firstName("firstName")
 				.lastName("lastName")
@@ -119,7 +118,7 @@ class RegulatorUserManagementControllerTest {
 				.jobTitle("jobTitle")
 				.build();
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		when(regulatorUserManagementService.getRegulatorUserByUserId(currentUser, userId))
 				.thenReturn(regulator);
 
@@ -139,11 +138,11 @@ class RegulatorUserManagementControllerTest {
 	@Test
 	void getRegulatorUserByCaAndId_forbidden() throws Exception {
 		final String userId = "userId";
-		PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-				.when(pmrvUserAuthorizationService)
+				.when(appUserAuthorizationService)
 				.authorize(currentUser, "getRegulatorUserByCaAndId");
 
 		//invoke
@@ -158,9 +157,9 @@ class RegulatorUserManagementControllerTest {
 	@Test
 	void getRegulatorUserByCaAndId_bad_request() throws Exception {
 		final String userId = "userId";
-		PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		when(regulatorUserManagementService.getRegulatorUserByUserId(currentUser, userId))
 				.thenThrow(new BusinessException(ErrorCode.AUTHORITY_USER_NOT_RELATED_TO_CA));
 
@@ -176,7 +175,7 @@ class RegulatorUserManagementControllerTest {
 	@Test
 	void updateRegulatorUserByCaAndId() throws Exception {
 		final String userId = "userId";
-		PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 		RegulatorUserUpdateDTO regulatorUserUpdateDTO = buildRegulatorUserUpdateDTO();
 		MockMultipartFile regulatorUserUpdateDTORequestPart = new MockMultipartFile(
                 "regulatorUserUpdateDTO", 
@@ -189,7 +188,7 @@ class RegulatorUserManagementControllerTest {
         byte[] fileContent = "content".getBytes();
         MockMultipartFile signatureRequestPart = new MockMultipartFile("signature", originalFilename, contentType, fileContent);
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
 		//invoke
         mockMvc
@@ -199,8 +198,8 @@ class RegulatorUserManagementControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.user.firstName").value("firstName"))
             .andExpect(jsonPath("$.user.lastName").value("lastName"))
-            .andExpect(jsonPath("$.permissions", Matchers.hasKey(MANAGE_USERS_AND_CONTACTS.name())))
-            .andExpect(jsonPath("$.permissions", Matchers.hasValue(NONE.name())));
+            .andExpect(jsonPath("$.permissions", Matchers.hasKey(MANAGE_USERS_AND_CONTACTS)))
+            .andExpect(jsonPath("$.permissions", Matchers.hasValue(RegulatorPermissionLevel.NONE.name())));
     
         FileDTO expectedSignatureDTO = FileDTO.builder()
                 .fileName(originalFilename)
@@ -216,7 +215,7 @@ class RegulatorUserManagementControllerTest {
 	@Test
 	void updateRegulatorUserByCaAndId_forbidden() throws Exception {
 	    final String userId = "userId";
-        PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+        AppUser currentUser = AppUser.builder().userId("currentuser").build();
         RegulatorUserUpdateDTO regulatorUserUpdateDTO = buildRegulatorUserUpdateDTO();
         MockMultipartFile regulatorUserUpdateDTORequestPart = new MockMultipartFile(
                 "regulatorUserUpdateDTO", 
@@ -229,9 +228,9 @@ class RegulatorUserManagementControllerTest {
         byte[] fileContent = "content".getBytes();
         MockMultipartFile signatureRequestPart = new MockMultipartFile("signature", originalFilename, contentType, fileContent);
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-				.when(pmrvUserAuthorizationService)
+				.when(appUserAuthorizationService)
 				.authorize(currentUser, "updateRegulatorUserByCaAndId");
 
 		//invoke
@@ -245,7 +244,7 @@ class RegulatorUserManagementControllerTest {
 
 	@Test
 	void updateCurrentRegulatorUser() throws Exception {
-		PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 		RegulatorUserUpdateDTO regulatorUserUpdateDTO = buildRegulatorUserUpdateDTO();
 		MockMultipartFile regulatorUserUpdateDTORequestPart = new MockMultipartFile(
                 "regulatorUserUpdateDTO", 
@@ -258,7 +257,7 @@ class RegulatorUserManagementControllerTest {
         byte[] fileContent = "content".getBytes();
         MockMultipartFile signatureRequestPart = new MockMultipartFile("signature", originalFilename, contentType, fileContent);
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
 		// Invoke
 		mockMvc.perform(MockMvcRequestBuilders.multipart(BASE_PATH)
@@ -267,8 +266,8 @@ class RegulatorUserManagementControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.user.firstName").value("firstName"))
 			.andExpect(jsonPath("$.user.lastName").value("lastName"))
-			.andExpect(jsonPath("$.permissions", Matchers.hasKey(MANAGE_USERS_AND_CONTACTS.name())))
-			.andExpect(jsonPath("$.permissions", Matchers.hasValue(NONE.name())));
+			.andExpect(jsonPath("$.permissions", Matchers.hasKey(MANAGE_USERS_AND_CONTACTS)))
+			.andExpect(jsonPath("$.permissions", Matchers.hasValue(RegulatorPermissionLevel.NONE.name())));
 
 		FileDTO expectedSignatureDTO = FileDTO.builder()
                 .fileName(originalFilename)
@@ -282,7 +281,7 @@ class RegulatorUserManagementControllerTest {
 
 	@Test
 	void updateCurrentRegulatorUser_forbidden() throws Exception {
-		PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 		RegulatorUserUpdateDTO regulatorUserUpdateDTO = buildRegulatorUserUpdateDTO();
 		MockMultipartFile regulatorUserUpdateDTORequestPart = new MockMultipartFile(
                 "regulatorUserUpdateDTO", 
@@ -296,10 +295,10 @@ class RegulatorUserManagementControllerTest {
         MockMultipartFile signatureRequestPart = new MockMultipartFile("signature", originalFilename, contentType, fileContent);
 
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(currentUser, new RoleType[] {RoleType.REGULATOR});
+            .evaluate(currentUser, new String[] {RoleTypeConstants.REGULATOR});
 
 		//invoke
 		mockMvc.perform(MockMvcRequestBuilders.multipart(BASE_PATH)
@@ -332,14 +331,14 @@ class RegulatorUserManagementControllerTest {
 	
 	@Test
     void generateGetRegulatorSignatureToken_forbidden() throws Exception {
-	    PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+		AppUser currentUser = AppUser.builder().userId("currentuser").build();
         String userId = "userId";
         UUID signatureUuid = UUID.randomUUID();
         
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-        .when(pmrvUserAuthorizationService)
+        .when(appUserAuthorizationService)
         .authorize(currentUser, "generateGetRegulatorSignatureToken");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -354,9 +353,9 @@ class RegulatorUserManagementControllerTest {
 	@Test
 	void resetRegulator2Fa() throws Exception {
 		final String userId = "userId";
-		PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
 		//invoke
         mockMvc
@@ -369,11 +368,11 @@ class RegulatorUserManagementControllerTest {
 	@Test
 	void resetRegulator2Fa_forbidden() throws Exception {
 	    final String userId = "userId";
-        PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+		AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-				.when(pmrvUserAuthorizationService)
+				.when(appUserAuthorizationService)
 				.authorize(currentUser, "resetRegulator2Fa");
 
 		//invoke
@@ -392,7 +391,7 @@ class RegulatorUserManagementControllerTest {
 						.jobTitle("jobTitle")
 						.phoneNumber("2101313131")
 						.build())
-			.permissions(Map.of(MANAGE_USERS_AND_CONTACTS, NONE))
+			.permissions(Map.of(MANAGE_USERS_AND_CONTACTS, RegulatorPermissionLevel.NONE))
 			.build();
 	}
 }

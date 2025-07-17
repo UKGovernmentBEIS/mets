@@ -5,14 +5,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.regulator.service.RegulatorAuthorityService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.regulator.service.RegulatorAuthorityService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.pmrv.api.user.core.service.UserSecuritySetupService;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserDTO;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserUpdateDTO;
@@ -48,8 +48,8 @@ class RegulatorUserManagementServiceTest {
 	void getRegulatorUserByUserId() {
 		final String userId = "userId";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
-        PmrvAuthority pmrvAuthority = createRegulatorAuthority("code1", ca);
-        PmrvUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(pmrvAuthority));
+        AppAuthority appAuthority = createRegulatorAuthority("code1", ca);
+		AppUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(appAuthority));
 
 		when(regulatorAuthorityService.existsByUserIdAndCompetentAuthority(userId, ca)).thenReturn(true);
 		when(regulatorUserAuthService.getRegulatorUserById(userId)).thenReturn(RegulatorUserDTO.builder().build());
@@ -66,8 +66,8 @@ class RegulatorUserManagementServiceTest {
 	void getRegulatorUserByUserId_user_not_belongs_to_ca() {
 		final String userId = "userId";
 		final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
-        PmrvAuthority pmrvAuthority = createRegulatorAuthority("code1", ca);
-        PmrvUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(pmrvAuthority));
+        AppAuthority appAuthority = createRegulatorAuthority("code1", ca);
+		AppUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(appAuthority));
 
 		when(regulatorAuthorityService.existsByUserIdAndCompetentAuthority(userId, ca)).thenReturn(false);
 
@@ -85,8 +85,8 @@ class RegulatorUserManagementServiceTest {
 	void updateRegulatorUserByUserId() {
 		final String userId = "userId";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
-        PmrvAuthority pmrvAuthority = createRegulatorAuthority("code1", ca);
-        PmrvUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(pmrvAuthority));
+        AppAuthority appAuthority = createRegulatorAuthority("code1", ca);
+		AppUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(appAuthority));
 		RegulatorUserDTO regulatorUserDTO = RegulatorUserDTO.builder().build();
 		
 		FileDTO signature = FileDTO.builder()
@@ -110,8 +110,8 @@ class RegulatorUserManagementServiceTest {
 	void updateRegulatorUserByUserId_user_not_belongs_to_ca() {
 		final String userId = "userId";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
-        PmrvAuthority pmrvAuthority = createRegulatorAuthority("code1", ca);
-        PmrvUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(pmrvAuthority));
+        AppAuthority appAuthority = createRegulatorAuthority("code1", ca);
+		AppUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(appAuthority));
         RegulatorUserDTO regulatorUserDTO = RegulatorUserDTO.builder().build();
         
         FileDTO signature = FileDTO.builder()
@@ -135,8 +135,8 @@ class RegulatorUserManagementServiceTest {
 
 	@Test
 	void updateCurrentRegulatorUser() {
-		PmrvUser authUser = PmrvUser.builder().userId("authId").roleType(RoleType.REGULATOR)
-				.authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build())).build();
+		AppUser authUser = AppUser.builder().userId("authId").roleType(RoleTypeConstants.REGULATOR)
+				.authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build())).build();
 		RegulatorUserUpdateDTO regulator = RegulatorUserUpdateDTO.builder()
 				.user(RegulatorUserDTO.builder().build()).permissions(Map.of()).build();
 		
@@ -158,8 +158,8 @@ class RegulatorUserManagementServiceTest {
 	void resetRegulator2Fa() {
 		final String userId = "userId";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
-        PmrvAuthority pmrvAuthority = createRegulatorAuthority("code1", ca);
-        PmrvUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(pmrvAuthority));
+        AppAuthority appAuthority = createRegulatorAuthority("code1", ca);
+		AppUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(appAuthority));
 
 		when(regulatorAuthorityService.existsByUserIdAndCompetentAuthority(userId, ca)).thenReturn(true);
 
@@ -175,8 +175,8 @@ class RegulatorUserManagementServiceTest {
 	void resetRegulator2Fa_user_not_belongs_to_ca() {
 		final String userId = "userId";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
-        PmrvAuthority pmrvAuthority = createRegulatorAuthority("code1", ca);
-        PmrvUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(pmrvAuthority));
+        AppAuthority appAuthority = createRegulatorAuthority("code1", ca);
+		AppUser authUser = buildRegulatorUser("reg1Id", "reg1", List.of(appAuthority));
 
 		when(regulatorAuthorityService.existsByUserIdAndCompetentAuthority(userId, ca)).thenReturn(false);
 
@@ -190,19 +190,19 @@ class RegulatorUserManagementServiceTest {
 		verify(userSecuritySetupService, never()).resetUser2Fa(anyString());
 	}
 
-	private PmrvUser buildRegulatorUser(String userId, String username, List<PmrvAuthority> pmrvAuthorities) {
+	private AppUser buildRegulatorUser(String userId, String username, List<AppAuthority> pmrvAuthorities) {
 
-		return PmrvUser.builder()
+		return AppUser.builder()
 				.userId(userId)
 				.firstName(username)
 				.lastName(username)
 				.authorities(pmrvAuthorities)
-				.roleType(RoleType.REGULATOR)
+				.roleType(RoleTypeConstants.REGULATOR)
 				.build();
 	}
 
-	private PmrvAuthority createRegulatorAuthority(String code, CompetentAuthorityEnum competentAuthority) {
-		return PmrvAuthority.builder()
+	private AppAuthority createRegulatorAuthority(String code, CompetentAuthorityEnum competentAuthority) {
+		return AppAuthority.builder()
 				.code(code)
 				.competentAuthority(competentAuthority)
 				.build();

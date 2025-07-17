@@ -46,7 +46,7 @@ export class CivilPenaltyNoticeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.breadcrumbService.clear();
+    this.breadcrumbService.cutLastBreadcrumbWithLinkandShow();
   }
 
   notifyOperator(): void {

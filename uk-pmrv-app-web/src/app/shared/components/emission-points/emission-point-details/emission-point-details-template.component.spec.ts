@@ -19,8 +19,7 @@ describe('EmissionPointDetailsTemplateComponent', () => {
     template: `
       <app-emission-point-details-template
         [form]="formGroup"
-        [isEditing]="isEditing"
-      ></app-emission-point-details-template>
+        [isEditing]="isEditing"></app-emission-point-details-template>
     `,
   })
   class TestComponent {
@@ -35,23 +34,23 @@ describe('EmissionPointDetailsTemplateComponent', () => {
 
   class Page extends BasePage<TestComponent> {
     get heading() {
-        return this.query<HTMLElement>('app-page-heading h1.govuk-heading-l');
+      return this.query<HTMLElement>('app-page-heading h1.govuk-heading-l');
     }
 
     get inputForm() {
-        return this.query<HTMLFormElement>('form');
+      return this.query<HTMLFormElement>('form');
     }
 
     get reference() {
-        return this.inputForm.querySelector<HTMLInputElement>('#reference');
+      return this.inputForm.querySelector<HTMLInputElement>('#reference');
     }
-  
+
     get description() {
-        return this.inputForm.querySelector<HTMLInputElement>('#description');
+      return this.inputForm.querySelector<HTMLInputElement>('#description');
     }
 
     get submitButton(): HTMLButtonElement {
-        return this.query('button[type="submit"]');
+      return this.query('button[type="submit"]');
     }
   }
 

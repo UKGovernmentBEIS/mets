@@ -8,21 +8,25 @@ import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <govuk-panel class="pre-wrap" [title]="title">{{ titleContent }}</govuk-panel>
+        <govuk-panel class="pre-wrap" [title]="title">
+          {{ titleContent }}
+          <div *ngIf="titleContentId" style="font-weight: bold;">{{ titleContentId }}</div>
+        </govuk-panel>
         <ng-container
-          *ngTemplateOutlet="whatHappensNextTemplate ? whatHappensNextTemplate : defaultWhatHappensNextTemplate"
-        >
-        </ng-container>
+          *ngTemplateOutlet="
+            whatHappensNextTemplate ? whatHappensNextTemplate : defaultWhatHappensNextTemplate
+          "></ng-container>
         <ng-template #defaultWhatHappensNextTemplate></ng-template>
-        <a govukLink [routerLink]="returnToLink"> Return to dashboard </a>
+        <a govukLink [routerLink]="returnToLink">Return to dashboard</a>
       </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ConfirmationComponent implements OnInit {
+export class ConfirmationSharedComponent implements OnInit {
   @Input() title: string;
   @Input() titleContent: string;
+  @Input() titleContentId: string;
   @Input() whatHappensNextTemplate: TemplateRef<any>;
   @Input() returnToLink = '/dashboard';
 

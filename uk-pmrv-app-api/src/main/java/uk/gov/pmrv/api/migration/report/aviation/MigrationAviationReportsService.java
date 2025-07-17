@@ -2,21 +2,17 @@ package uk.gov.pmrv.api.migration.report.aviation;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.utils.ExceptionUtils;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationReportableEmissionsEntity;
 import uk.gov.pmrv.api.aviationreporting.common.repository.AviationReportableEmissionsRepository;
-import uk.gov.pmrv.api.common.utils.ExceptionUtils;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
@@ -29,10 +25,15 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.common.domain.Aviation
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.AerInitiatorRequest;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 @Service
 @Log4j2
-@RequiredArgsConstructor
 public class MigrationAviationReportsService extends MigrationBaseService {
 
     private final JdbcTemplate migrationJdbcTemplate;
@@ -41,51 +42,66 @@ public class MigrationAviationReportsService extends MigrationBaseService {
     private final RequestCreateService requestCreateService;
     private final AviationReportableEmissionsRepository aviationReportableEmissionsRepository;
 
-    private static final String QUERY_BASE = """           
+    public MigrationAviationReportsService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                           Validator validator,
+                                           AccountRepository accountRepository,
+                                           RequestCreateService requestCreateService,
+                                           AviationReportableEmissionsRepository aviationReportableEmissionsRepository) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.validator = validator;
+        this.accountRepository = accountRepository;
+        this.requestCreateService = requestCreateService;
+        this.aviationReportableEmissionsRepository = aviationReportableEmissionsRepository;
+    }
+
+    private static final String QUERY_BASE = """
         with XMLNAMESPACES (
             'urn:www-toplev-com:officeformsofd' AS fd
         ), emitters as (
             select m.scope, m.fldEmitterID, m.fldEmitterDisplayID from mig_aviation_emitters m
         ), wf_aer1 as (
-            select e.scope, e.fldEmitterDisplayID, w.fldEmitterID, w.fldWorkflowID wf_aer_id, ws.fldDisplayName wf_aer_status,
-                   fd.fldFormDataID, fd.fldMajorVersion, max(fd.fldMajorVersion) over (partition by fd.fldFormID) maxMajorVersion,
-                   year(rp.fldMonitoringStartDate) reporting_year,
-                   replace(replace(replace(replace(wtp.fldDisplayFormat,
-                   '[[EmitterDisplayID]]', format(e.fldEmitterDisplayID, '00000')),
-                   '[[PhaseDisplayID]]', p.fldDisplayID),
-                   '[[WorkflowDisplayID]]', w.fldDisplayID),
-                   '[[ReportingYear]]', isnull(YEAR(rp.fldMonitoringStartDate), '')) wf_aer_identifier
-              from emitters e
-              join tblWorkflow w            on w.fldEmitterID = e.fldEmitterID
-              join tblWorkflowTypePhase wtp on wtp.fldWorkflowTypePhaseID = w.fldWorkflowTypePhaseID
-              join tlkpWorkflowType wt      on wtp.fldWorkflowTypeID = wt.fldWorkflowTypeID   and wt.fldName = 'AEMReport'
-              join tlkpPhase p              on p.fldPhaseID = wtp.fldPhaseID
-              join tblReportingPeriod rp    on rp.fldReportingPeriodID = w.fldReportingPeriodID
-              join tlkpWorkflowStatus ws    on ws.fldWorkflowStatusID = w.fldWorkflowStatusID
-              join tlnkWorkflowForm wf      on wf.fldWorkflowID = w.fldWorkflowID
-              join tblForm f                on f.fldFormID = wf.fldFormID
-              join tlnkFormTypePhase ftp    on ftp.fldFormTypePhaseID = f.fldFormTypePhaseID
-              join tlkpFormType ft          on ft.fldFormTypeID = ftp.fldFormTypeID           and ft.fldName = 'AEMReport'
-              join tblFormData fd           on fd.fldFormID = f.fldFormID and fldMinorVersion = 0
+               select e.scope, e.fldEmitterDisplayID, w.fldEmitterID, w.fldWorkflowID wf_aer_id, ws.fldDisplayName wf_aer_status,
+                      fd.fldFormDataID, fd.fldMajorVersion, max(fd.fldMajorVersion) over (partition by fd.fldFormID) maxMajorVersion,
+                      year(rp.fldMonitoringStartDate) reporting_year,
+                      replace(replace(replace(replace(wtp.fldDisplayFormat,
+                      '[[EmitterDisplayID]]', format(e.fldEmitterDisplayID, '00000')),
+                      '[[PhaseDisplayID]]', p.fldDisplayID),
+                      '[[WorkflowDisplayID]]', w.fldDisplayID),
+                      '[[ReportingYear]]', isnull(YEAR(rp.fldMonitoringStartDate), '')) wf_aer_identifier
+                 from emitters e
+                 join tblWorkflow w            on w.fldEmitterID = e.fldEmitterID
+                 join tblWorkflowTypePhase wtp on wtp.fldWorkflowTypePhaseID = w.fldWorkflowTypePhaseID
+                 join tlkpWorkflowType wt      on wtp.fldWorkflowTypeID = wt.fldWorkflowTypeID   and wt.fldName = 'AEMReport'
+                 join tlkpPhase p              on p.fldPhaseID = wtp.fldPhaseID
+                 join tblReportingPeriod rp    on rp.fldReportingPeriodID = w.fldReportingPeriodID
+                 join tlkpWorkflowStatus ws    on ws.fldWorkflowStatusID = w.fldWorkflowStatusID
+            left join (
+                select wf.fldWorkflowID, f.fldFormID
+                  from  tlnkWorkflowForm wf
+                  join tblForm f                on f.fldFormID = wf.fldFormID
+                  join tlnkFormTypePhase ftp    on ftp.fldFormTypePhaseID = f.fldFormTypePhaseID
+                  join tlkpFormType ft          on ft.fldFormTypeID = ftp.fldFormTypeID           and ft.fldName = 'AEMReport'
+            ) wf on wf.fldWorkflowID = w.fldWorkflowID
+            left join tblFormData fd           on fd.fldFormID = wf.fldFormID and fldMinorVersion = 0
         ), wf_aer2 as (
-            select * from wf_aer1 where fldMajorVersion = maxMajorVersion
+            select * from wf_aer1 where fldMajorVersion = maxMajorVersion or fldFormDataID is null
         ), wf_aer3 as (
-            select wf_aer2.*, fd.fldSubmittedXML,
-                   try_parse(nullif(T1.c.value('@value[1]', 'nvarchar(255)'), '') as numeric(20,5) using 'en-gb') wf_aer_approved_reportable_emissions,
-                   coalesce(nullif(fd.fldSubmittedXML.value('(fd:formdata/fielddata/Vos_opinion)[1]', 'nvarchar(255)'), ''),
-                            nullif(fd.fldSubmittedXML.value('(fd:formdata/fielddata/Vos_conclusion_and_sign_off-Opinion_conclusion)[1]', 'nvarchar(255)'), '')
-                   ) Vos_opinion,
-                   try_parse(nullif(fd.fldSubmittedXML.value('(fd:formdata/fielddata/Vcos_corsia_total_co2_emission)[1]', 'nvarchar(255)'), '') as numeric(20,5) using 'en-gb') Vcos_corsia_total_co2_emission,
-                   try_parse(nullif(fd.fldSubmittedXML.value('(fd:formdata/fielddata/Vcos_verified_corsia_total_co2_emission_chapter3_routes)[1]', 'nvarchar(255)'), '') as numeric(20,5) using 'en-gb') Vcos_verified_corsia_total_co2_emission_chapter3_routes,
-                   nullif(fd.fldSubmittedXML.value('(fd:formdata/fielddata/Vcos_opinion)[1]', 'nvarchar(255)'), '') Vcos_opinion
-              from wf_aer2
-              join tblWorkflow w  on w.fldWorkflowID  = wf_aer2.wf_aer_id
-              join tblFormData fd on fd.fldFormDataID = wf_aer2.fldFormDataID
-             outer apply w.fldWorkflowData.nodes('(workflowData/dataItem[@key="TotalEmissions"])') as T1(c)
+                 select wf_aer2.*, fd.fldSubmittedXML,
+                        try_parse(nullif(T1.c.value('@value[1]', 'nvarchar(255)'), '') as numeric(20,5) using 'en-gb') wf_aer_approved_reportable_emissions,
+                        coalesce(nullif(fd.fldSubmittedXML.value('(fd:formdata/fielddata/Vos_opinion)[1]', 'nvarchar(255)'), ''),
+                                 nullif(fd.fldSubmittedXML.value('(fd:formdata/fielddata/Vos_conclusion_and_sign_off-Opinion_conclusion)[1]', 'nvarchar(255)'), '')
+                        ) Vos_opinion,
+                        try_parse(nullif(fd.fldSubmittedXML.value('(fd:formdata/fielddata/Vcos_corsia_total_co2_emission)[1]', 'nvarchar(255)'), '') as numeric(20,5) using 'en-gb') Vcos_corsia_total_co2_emission,
+                        try_parse(nullif(fd.fldSubmittedXML.value('(fd:formdata/fielddata/Vcos_verified_corsia_total_co2_emission_chapter3_routes)[1]', 'nvarchar(255)'), '') as numeric(20,5) using 'en-gb') Vcos_verified_corsia_total_co2_emission_chapter3_routes,
+                        nullif(fd.fldSubmittedXML.value('(fd:formdata/fielddata/Vcos_opinion)[1]', 'nvarchar(255)'), '') Vcos_opinion
+                   from wf_aer2
+                   join tblWorkflow w  on w.fldWorkflowID  = wf_aer2.wf_aer_id
+              left join tblFormData fd on fd.fldFormDataID = wf_aer2.fldFormDataID
+            outer apply w.fldWorkflowData.nodes('(workflowData/dataItem[@key="TotalEmissions"])') as T1(c)
         )
         select * into mig_report_history_aviation_aer_1 from wf_aer3;
-                
-                
+        
+        
         with XMLNAMESPACES (
             'urn:www-toplev-com:officeformsofd' AS fd
         ), wf_aer4 as (
@@ -108,8 +124,8 @@ public class MigrationAviationReportsService extends MigrationBaseService {
           left join wf_aer4 t2 on t2.wf_aer_id = a.wf_aer_id and t2.scope = a.scope and t2.Ded_corsia_total_name = 'Total CO2 emissions from flights subject to offsetting requirements (in tonnes)'
           left join wf_aer4 t3 on t3.wf_aer_id = a.wf_aer_id and t3.scope = a.scope and t3.Ded_corsia_total_name = 'Total emissions reductions claimed from the use of CORSIA eligible fuels (in tonnes)'
          where a.scope = 'UKETS' or a.scope = 'CORSIA' and reporting_year >= 2019;
-                
-                
+        
+        
         with XMLNAMESPACES (
             'urn:www-toplev-com:officeformsofd' AS fd
         ), emitters as (
@@ -136,7 +152,8 @@ public class MigrationAviationReportsService extends MigrationBaseService {
             select * from wf_dre2 where wf_dre_date_updated = latest_wf_dre_date_updated
         )
         select * into mig_report_history_aviation_dre from wf_dre where scope = 'UKETS';
-                
+        
+        
         with params as (
             select 2012 as mig_reporting_year_start, year(getdate()) - 1 as mig_reporting_year_end
         ), mig_years as (
@@ -154,7 +171,7 @@ public class MigrationAviationReportsService extends MigrationBaseService {
           join mig_report_history_aviation_aer a on a.reporting_year = y.reporting_year
           left join mig_report_history_aviation_dre b on b.fldEmitterID = a.fldEmitterID and b.wf_aer_id = a.wf_aer_id and b.scope = a.scope
          where 1 = 1
-        """;
+         """;
 
     @Override
     public String getResource() {
@@ -327,21 +344,35 @@ public class MigrationAviationReportsService extends MigrationBaseService {
 
     private void createReportableEmissions(final AviationReport report, final List<String> results) {
 
-        if (report.getAerApprovedReportableEmissions() == null) {
+        if (report.getAerApprovedReportableEmissions() == null && report.getTotalEmissionsInternationalFlight() == null) {
             return;
         }
 
-        final AviationReportableEmissionsEntity reportableEmissionsEntity = AviationReportableEmissionsEntity.builder()
-            .accountId(report.getAccountId())
-            .year(report.getReportingYear())
-            .reportableEmissions(report.getAerApprovedReportableEmissions())
-            .isFromDre(report.getDreCreatedDate() != null)
-            .isExempted("Exemption".equals(report.getAerStatus()))
-            .build();
+        final AviationReportableEmissionsEntity reportableEmissionsEntity;
+
+        if (AviationAccountType.CORSIA.equals(report.getAccountType())) {
+            reportableEmissionsEntity = AviationReportableEmissionsEntity.builder()
+                    .accountId(report.getAccountId())
+                    .year(report.getReportingYear())
+                    .reportableEmissions(report.getTotalEmissionsInternationalFlight())
+                    .reportableOffsetEmissions(report.getTotalEmissionsOffsettingFlights())
+                    .reportableReductionClaimEmissions(report.getTotalEmissionsClaimedReductions())
+                    .isFromDre(report.getDreCreatedDate() != null)
+                    .isExempted("Exemption".equals(report.getAerStatus()))
+                    .build();
+        } else {
+            reportableEmissionsEntity = AviationReportableEmissionsEntity.builder()
+                    .accountId(report.getAccountId())
+                    .year(report.getReportingYear())
+                    .reportableEmissions(report.getAerApprovedReportableEmissions())
+                    .isFromDre(report.getDreCreatedDate() != null)
+                    .isExempted("Exemption".equals(report.getAerStatus()))
+                    .build();
+        }
 
         aviationReportableEmissionsRepository.save(reportableEmissionsEntity);
 
         results.add("emitterDisplayId: " + report.getAccountId() + " | year: " + report.getReportingYear() +
-            " #AVIATION REPORTABLE EMISSIONS#");
+                " #AVIATION REPORTABLE EMISSIONS#");
     }
 }

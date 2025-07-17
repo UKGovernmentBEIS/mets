@@ -1,4 +1,4 @@
-<app-page-heading size="xl">{{ heading }}</app-page-heading>
+<app-page-heading *ngIf="heading" size="xl">{{ heading }}</app-page-heading>
 
 <ol class="app-task-list">
   <li *ngFor="let section of sections" app-task-section [title]="section.title" [tasks]="section.tasks"></li>

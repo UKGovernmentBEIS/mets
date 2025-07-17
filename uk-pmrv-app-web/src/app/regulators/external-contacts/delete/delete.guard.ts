@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { Observable } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { saveNotFoundExternalContactError } from '../../errors/business-error';
 import { DetailsGuard } from '../details/details.guard';
 
 @Injectable({ providedIn: 'root' })
-export class DeleteGuard implements CanActivate, Resolve<CaExternalContactDTO> {
+export class DeleteGuard {
   constructor(
     private readonly externalContactDetailsGuard: DetailsGuard,
     private readonly businessErrorService: BusinessErrorService,

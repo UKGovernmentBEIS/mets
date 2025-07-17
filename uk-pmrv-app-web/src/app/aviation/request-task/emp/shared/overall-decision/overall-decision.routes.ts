@@ -1,11 +1,10 @@
 import { Routes } from '@angular/router';
 
-import { canActivateSummaryPage } from '@aviation/request-task/guards';
-
 import {
   canActivateOverallDecision,
   canActivateOverallDecisionForms,
   canActivateOverallDecisionReason,
+  canActivateOverallDecisionSummaryPage,
   canDeactivateOverallDecision,
 } from './overall-decision.guard';
 
@@ -33,7 +32,7 @@ export const EMP_OVERALL_DECISION_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        canActivate: [canActivateOverallDecisionReason, canActivateSummaryPage],
+        canActivate: [canActivateOverallDecisionSummaryPage],
         loadComponent: () =>
           import('./overall-decision-summary/overall-decision-summary.component').then(
             (c) => c.OverallDecisionSummaryComponent,

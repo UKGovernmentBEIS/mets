@@ -5,7 +5,9 @@ import { NavigationComponent } from './navigation.component';
 
 describe('NavigationComponent', () => {
   @Component({
-    template: `<app-navigation [ariaLabel]="ariaLabel"></app-navigation>`,
+    template: `
+      <app-navigation [ariaLabel]="ariaLabel"></app-navigation>
+    `,
   })
   class TestComponent {
     ariaLabel = 'Primary navigation';

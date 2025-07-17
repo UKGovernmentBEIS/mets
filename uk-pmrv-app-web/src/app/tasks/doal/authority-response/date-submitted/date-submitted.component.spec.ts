@@ -13,8 +13,8 @@ import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 import { initialState } from '@tasks/store/common-tasks.state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
+import { addDays, format } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment/moment';
 
 import { RequestTaskPayload, TasksService } from 'pmrv-api';
 
@@ -117,7 +117,7 @@ describe('DateSubmittedComponent', () => {
       expect(page.errorSummaryList).toEqual(['Enter a date']);
       expect(tasksService.processRequestTaskAction).not.toHaveBeenCalled();
 
-      const today = moment().add(26, 'd').format('YYYY-MM-DD');
+      const today = format(addDays(new Date(), 26), 'yyyy-MM-dd');
       const date = today.split('-');
 
       page.dateYear = date[0];
@@ -136,10 +136,10 @@ describe('DateSubmittedComponent', () => {
       const navigateSpy = jest.spyOn(router, 'navigate');
       tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
 
-      const date = moment().format('YYYY-MM-DD').split('-');
-      page.dateYear = date[0];
-      page.dateMonth = date[1];
-      page.dateDay = date[2];
+      const [dateYear, dateMonth, dateDay] = format(new Date(), 'yyyy-MM-dd').split('-');
+      page.dateYear = dateYear;
+      page.dateMonth = dateMonth;
+      page.dateDay = dateDay;
 
       page.submitButton.click();
       fixture.detectChanges();

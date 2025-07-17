@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+		logicalFilePath="v0.2.0/main.xml"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+	<!-- application changelogs -->
+	<include file="db/migration/changelogs/changelog_configuration_ddl.xml" />
+	<include file="db/migration/changelogs/competent_authority_ddl.xml" />
+	<include file="db/migration/changelogs/au_authority_ddl.xml" />
+	<include file="db/migration/changelogs/au_authorization_rules_ddl.xml" />
+	<include file="db/migration/changelogs/au_user_role_type_ddl.xml" />
+	<include file="db/migration/changelogs/ref_country.xml" />
+    <include file="db/migration/changelogs/ref_county.xml" />
+	<include file="db/migration/changelogs/mi_reports_ddl.xml" />
+	<include file="db/migration/changelogs/mi_reports_views_ddl.xml" />
+
+	<include file="changelog_configuration.xml" relativeToChangelogFile="true" />
+    <include file="changelog_authorization_rules.xml" relativeToChangelogFile="true" />
+    <include file="changelog_user_authority.xml" relativeToChangelogFile="true" />
+    <include file="changelog_notification_template.xml" relativeToChangelogFile="true" />
+    <include file="changelog_reporting.xml" relativeToChangelogFile="true" />
+    <include file="changelog_aviation_rpt_corsia_sector_growth.xml" relativeToChangelogFile="true" />
+    <include file="changelog_aviation_rpt_countries.xml" relativeToChangelogFile="true" />
+ 	<include file="changelog_mmp_migration.xml" relativeToChangelogFile="true" />
+	<include file="changelog_netz_authorization.xml" relativeToChangelogFile="true" />
+	<include file="changelog_netz_competent_authority.xml" relativeToChangelogFile="true" />
+	<include file="changelog_netz_mi_report.xml" relativeToChangelogFile="true" />
+	<include file="changelog_emissions_monitoring_plan.xml" relativeToChangelogFile="true" />
+	<include file="changelog_aviation_rpt_airports.xml" relativeToChangelogFile="true" />
+	<include file="changelog_request_payment.xml" relativeToChangelogFile="true" />
+	<include file="changelog_competent_authority.xml" relativeToChangelogFile="true" />
+</databaseChangeLog>

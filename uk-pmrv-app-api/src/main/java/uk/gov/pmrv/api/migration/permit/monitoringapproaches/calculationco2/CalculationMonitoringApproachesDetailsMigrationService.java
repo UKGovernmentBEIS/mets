@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2;
 
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
@@ -28,13 +29,18 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class CalculationMonitoringApproachesDetailsMigrationService implements PermitSectionMigrationService<CalculationOfCO2MonitoringApproach> {
 
     private final JdbcTemplate migrationJdbcTemplate;
     private final EtsPermitFileAttachmentQueryService etsPermitFileAttachmentQueryService;
     private final EtsFileAttachmentMapper etsFileAttachmentMapper = Mappers.getMapper(EtsFileAttachmentMapper.class);
+
+    public CalculationMonitoringApproachesDetailsMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                                                  EtsPermitFileAttachmentQueryService etsPermitFileAttachmentQueryService) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.etsPermitFileAttachmentQueryService = etsPermitFileAttachmentQueryService;
+    }
 
     private static final String QUERY_BASE  =
             "with XMLNAMESPACES (\r\n" +

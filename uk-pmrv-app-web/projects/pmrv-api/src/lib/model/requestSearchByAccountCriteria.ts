@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -36,6 +36,9 @@ export interface RequestSearchByAccountCriteria {
     | 'DRE'
     | 'WITHHOLDING_OF_ALLOWANCES'
     | 'RETURN_OF_ALLOWANCES'
+    | 'INSTALLATION_ONSITE_INSPECTION'
+    | 'INSTALLATION_AUDIT'
+    | 'BDR'
     | 'AVIATION_ACCOUNT_CLOSURE'
     | 'AVIATION_NON_COMPLIANCE'
     | 'EMP_BATCH_REISSUE'
@@ -48,11 +51,22 @@ export interface RequestSearchByAccountCriteria {
     | 'EMP_ISSUANCE_CORSIA'
     | 'EMP_VARIATION_CORSIA'
     | 'AVIATION_AER_CORSIA'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING'
   >;
   requestStatuses?: Array<
-    'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED' | 'WITHDRAWN' | 'APPROVED' | 'REJECTED' | 'CLOSED' | 'EXEMPT' | 'MIGRATED'
+    | 'IN_PROGRESS'
+    | 'COMPLETED'
+    | 'CANCELLED'
+    | 'WITHDRAWN'
+    | 'APPROVED'
+    | 'REJECTED'
+    | 'CLOSED'
+    | 'EXEMPT'
+    | 'MIGRATED'
+    | 'NOT_REQUIRED'
   >;
-  category: 'PERMIT' | 'REPORTING' | 'CA';
+  category: 'PERMIT' | 'REPORTING' | 'INSPECTION' | 'CA';
   pageNumber: number;
   pageSize: number;
 }

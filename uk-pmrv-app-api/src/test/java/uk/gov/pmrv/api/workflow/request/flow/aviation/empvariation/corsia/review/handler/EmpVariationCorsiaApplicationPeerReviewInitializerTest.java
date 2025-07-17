@@ -24,7 +24,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.common
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.review.domain.EmpVariationCorsiaApplicationReviewRequestTaskPayload;
 
 @ExtendWith(MockitoExtension.class)
-public class EmpVariationCorsiaApplicationPeerReviewInitializerTest {
+class EmpVariationCorsiaApplicationPeerReviewInitializerTest {
 
 	@InjectMocks
     private EmpVariationCorsiaApplicationPeerReviewInitializer initializer;

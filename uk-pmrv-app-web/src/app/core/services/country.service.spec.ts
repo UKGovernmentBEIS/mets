@@ -61,4 +61,12 @@ describe('CountryService', () => {
     expect(request.request.method).toEqual('GET');
     request.flush(mockCountries);
   });
+
+  it('should return country code by name', () => {
+    service.getCountryCode('United Kingdom').subscribe((code) => expect(code).toEqual('GB'));
+
+    const request = httpTestingController.expectOne('http://localhost:8080/api/v1.0/data?types=COUNTRIES');
+    expect(request.request.method).toEqual('GET');
+    request.flush(mockCountries);
+  });
 });

@@ -1,0 +1,25 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-product-benchmark-form
+    [form]="form"
+    [heading]="'Calculation of historical activity levels for hydrogen'"
+    [caption]="productBenchmarkType$ | async | subInstallationType"
+    [downloadUrl]="getDownloadUrl()"
+    [dataSourcesHeading]="'Data sources for hydrogen volume fraction'"
+    [dataSourcesText]="
+      'Add the data sources used for the properties of hydrogen (CaO and MgO content) in line with section 4.6 of Annex VII of the FAR.'
+    "
+    [dataSourcesNames]="['HYDROGEN_TOTAL_PRODUCTION', 'HYDROGEN_VOLUME_FRACTION']"
+    [dataSourcesField]="{
+      HYDROGEN_TOTAL_PRODUCTION: 'Total hydrogen production',
+      HYDROGEN_VOLUME_FRACTION: 'Volume fraction of hydrogen',
+    }"
+    [dataSourcesType]="{
+      HYDROGEN_TOTAL_PRODUCTION: '44',
+      HYDROGEN_VOLUME_FRACTION: '46',
+    }"
+    (submitForm)="onSubmit()"
+    (addDataSource)="addDataSource()"
+    (removeDataSource)="removeDataSource($event)"
+    [subInstallationType]="productBenchmarkType$ | async"></app-product-benchmark-form>
+  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+</app-permit-task>

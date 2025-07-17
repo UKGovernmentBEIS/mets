@@ -5,15 +5,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.DocumentTemplate;
 import uk.gov.pmrv.api.notification.template.domain.NotificationTemplate;
 import uk.gov.pmrv.api.notification.template.domain.dto.DocumentTemplateDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.TemplateInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -36,9 +36,9 @@ class DocumentTemplateMapperTest {
         String documentTemplateName = "document template name";
         String workflow = " workflow";
         Long firstNotificationTemplateId = 11L;
-        NotificationTemplateName firstNotificationTemplateName = NotificationTemplateName.EMAIL_CONFIRMATION;
+        PmrvNotificationTemplateName firstNotificationTemplateName = PmrvNotificationTemplateName.EMAIL_CONFIRMATION;
         Long secondNotificationTemplateId = 12L;
-        NotificationTemplateName secondNotificationTemplateName = NotificationTemplateName.CHANGE_2FA;
+        PmrvNotificationTemplateName secondNotificationTemplateName = PmrvNotificationTemplateName.CHANGE_2FA;
         String fileUuid = UUID.randomUUID().toString();
         String filename = "filename";
 
@@ -72,7 +72,7 @@ class DocumentTemplateMapperTest {
             .containsExactlyInAnyOrder(notificationTemplateInfoDTO1, notificationTemplateInfoDTO2);
     }
 
-    private NotificationTemplate createNotificationTemplate(Long notificationTemplateId, NotificationTemplateName name) {
+    private NotificationTemplate createNotificationTemplate(Long notificationTemplateId, PmrvNotificationTemplateName name) {
         return NotificationTemplate.builder()
             .id(notificationTemplateId)
             .name(name)
@@ -80,7 +80,7 @@ class DocumentTemplateMapperTest {
             .text("text")
             .competentAuthority(CompetentAuthorityEnum.WALES)
             .workflow("workflow")
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .managed(true)
             .lastUpdatedDate(LocalDateTime.now())
             .build();

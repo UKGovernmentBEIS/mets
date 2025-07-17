@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <govuk-panel title="Returned to operator for amends"></govuk-panel>
-        <a govukLink routerLink="/dashboard"> Return to dashboard </a>
+        <a govukLink routerLink="/dashboard">Return to dashboard</a>
       </div>
     </div>
   `,

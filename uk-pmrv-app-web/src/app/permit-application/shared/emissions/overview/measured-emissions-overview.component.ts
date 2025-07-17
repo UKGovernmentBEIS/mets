@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { combineLatest, map, pluck, switchMap } from 'rxjs';
+import { combineLatest, map, switchMap } from 'rxjs';
 
 import {
   MeasurementOfCO2EmissionPointCategoryAppliedTier,
@@ -23,10 +23,7 @@ export class MeasuredEmissionsOverviewComponent {
   @Input() cssClass: string;
 
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));
-  taskKey$ = this.route.data.pipe(
-    pluck('taskKey'),
-    map((taskKey) => taskKey.split('.')[1]),
-  );
+  taskKey$ = this.route.data.pipe(map((x) => x?.taskKey.split('.')[1]));
 
   task$ = this.route.data.pipe(
     switchMap((data) =>
@@ -40,5 +37,8 @@ export class MeasuredEmissionsOverviewComponent {
     map(([index, tiers]) => [...(tiers?.[index].measuredEmissions?.noHighestRequiredTierJustification?.files ?? [])]),
   );
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly route: ActivatedRoute) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

@@ -1,9 +1,7 @@
 <app-base-action-container-component
   [header]="(route.data | async)?.pageTitle"
   [customContentTemplate]="customContentTemplate"
-  [expectedActionType]="['PERMIT_NOTIFICATION_APPLICATION_COMPLETED']"
->
-</app-base-action-container-component>
+  [expectedActionType]="['PERMIT_NOTIFICATION_APPLICATION_COMPLETED']"></app-base-action-container-component>
 
 <ng-template #customContentTemplate>
   <div class="govuk-!-margin-bottom-8">
@@ -13,8 +11,7 @@
       sectionHeading="Follow up response details"
       [summaryListMapper]="followUpResponseDetailsSummaryListMapper"
       [data]="followUpResponseDetailsData$ | async"
-      [files]="followUpResponseDetailsFiles$ | async"
-    ></app-follow-up-summary>
+      [files]="followUpResponseDetailsFiles$ | async"></app-follow-up-summary>
 
     <h2 app-summary-header class="govuk-heading-m">Decision Details</h2>
     <dl govuk-summary-list *ngIf="decisionDetails$ | async as reviewDecision">

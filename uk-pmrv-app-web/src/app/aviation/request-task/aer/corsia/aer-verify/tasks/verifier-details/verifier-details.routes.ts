@@ -27,7 +27,7 @@ export const AER_CORSIA_VERIFIER_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Verifier details and impartiality summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Verifier details and impartiality' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./summary/summary.component').then((c) => c.SummaryComponent),
       },

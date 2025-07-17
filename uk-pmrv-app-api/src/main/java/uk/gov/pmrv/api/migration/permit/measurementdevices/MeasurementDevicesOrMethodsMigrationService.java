@@ -1,8 +1,9 @@
 package uk.gov.pmrv.api.migration.permit.measurementdevices;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
@@ -17,14 +18,18 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class MeasurementDevicesOrMethodsMigrationService
     implements PermitSectionMigrationService<MeasurementDevicesOrMethods> {
 
     private final JdbcTemplate migrationJdbcTemplate;
-
     private final MeasurementDeviceOrMethodMapper measurementDeviceOrMethodMapper;
+
+    public MeasurementDevicesOrMethodsMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                                       MeasurementDeviceOrMethodMapper measurementDeviceOrMethodMapper) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.measurementDeviceOrMethodMapper = measurementDeviceOrMethodMapper;
+    }
 
     private static final String QUERY_BASE =
         "\t with XMLNAMESPACES (\r\n" +

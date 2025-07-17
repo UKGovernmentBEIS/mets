@@ -38,6 +38,7 @@ export class ReportableEmissionsSummaryTemplateComponent implements OnInit {
   };
   @Input() editable: boolean;
 
+  DECIMAL_DIGITS: number = 0;
   emissions: EmissionRow[] = [];
 
   columns: GovukTableColumn[] = [
@@ -162,8 +163,14 @@ export class ReportableEmissionsSummaryTemplateComponent implements OnInit {
   private populateTotalEmissions() {
     this.emissions.push({
       label: 'Total',
-      reportableEmissions: calculateTotalReportableEmissionsAmount(this.approachEmissions),
-      sustainableBiomass: calculateTotalSustainableBiomassAmount(this.approachEmissions),
+      reportableEmissions: format(
+        new BigNumber(calculateTotalReportableEmissionsAmount(this.approachEmissions)),
+        this.DECIMAL_DIGITS,
+      ),
+      sustainableBiomass: format(
+        new BigNumber(calculateTotalSustainableBiomassAmount(this.approachEmissions)),
+        this.DECIMAL_DIGITS,
+      ),
     });
   }
 }

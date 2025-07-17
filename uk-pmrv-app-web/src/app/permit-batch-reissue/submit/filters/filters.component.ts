@@ -4,6 +4,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { startWith, takeUntil, tap } from 'rxjs';
 
+import { selectIsFeatureEnabled } from '@core/config/config.selectors';
+import { ConfigStore } from '@core/config/config.store';
+
 import { GovukValidators } from '../../../../../projects/govuk-components/src/public-api';
 import { DestroySubject } from '../../../core/services/destroy-subject.service';
 import { originalOrder } from '../../../shared/keyvalue-order';
@@ -24,8 +27,10 @@ export class FiltersComponent implements OnInit {
 
   readonly originalOrder = originalOrder;
   readonly accountStatusLabelMap = accountStatusLabelMap;
-  readonly accountTypeLabelMap = accountTypeLabelMap;
+  readonly initialAccountTypeLabelMap = accountTypeLabelMap;
+  accountTypeLabelMap = accountTypeLabelMap;
   readonly accountCategoryLabelMap = accountCategoryLabelMap;
+  private readonly wastePermitEnabled$ = this.configStore.pipe(selectIsFeatureEnabled('wastePermitEnabled'));
 
   displayInstallationCategories = true;
 
@@ -35,9 +40,12 @@ export class FiltersComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly store: PermitBatchReissueStore,
     private readonly destroy$: DestroySubject,
+    private readonly configStore: ConfigStore,
   ) {}
 
   ngOnInit(): void {
+    this.filterWasteBasedOnConfiguration();
+
     this.store
       .pipe(
         tap((state) => this.form.patchValue(state)),
@@ -51,17 +59,22 @@ export class FiltersComponent implements OnInit {
       .pipe(startWith(emitterTypesControl.value), takeUntil(this.destroy$))
       .subscribe((value) => {
         const val = value as string[];
-        if (val?.length === 1 && val[0] === 'HSE') {
-          this.displayInstallationCategories = false;
-          installationCategoriesControl.reset();
-          installationCategoriesControl.clearValidators();
-        } else {
+        if (val?.includes('GHGE') || val?.includes('WASTE')) {
           this.displayInstallationCategories = true;
           installationCategoriesControl.addValidators(GovukValidators.required('Select a category'));
+        } else {
+          this.displayInstallationCategories = false;
+          installationCategoriesControl.setValue(null, { emitEvent: false });
+          installationCategoriesControl.clearValidators();
+          installationCategoriesControl.markAsDirty();
         }
+
         installationCategoriesControl.updateValueAndValidity();
         this.form.updateValueAndValidity();
       });
+    installationCategoriesControl.addValidators(GovukValidators.required('Select a category'));
+    installationCategoriesControl.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+    this.displayInstallationCategories = true;
   }
 
   onSubmit(): void {
@@ -69,5 +82,15 @@ export class FiltersComponent implements OnInit {
       this.store.patchState(this.form.value);
     }
     this.router.navigate(['..', 'signatory'], { relativeTo: this.route });
+  }
+
+  private filterWasteBasedOnConfiguration(): void {
+    this.wastePermitEnabled$.subscribe((wastePermitEnabled: boolean) => {
+      const labelMapCopy = { ...this.initialAccountTypeLabelMap };
+      if (!wastePermitEnabled) {
+        delete labelMapCopy['WASTE'];
+      }
+      this.accountTypeLabelMap = labelMapCopy;
+    });
   }
 }

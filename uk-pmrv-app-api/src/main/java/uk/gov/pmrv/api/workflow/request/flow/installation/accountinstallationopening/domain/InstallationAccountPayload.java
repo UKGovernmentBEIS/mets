@@ -8,13 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationDTO;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.ApplicationType;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDate;
 
@@ -35,6 +35,8 @@ public class InstallationAccountPayload {
     @NotBlank(message = "{account.name.notEmpty}")
     @Size(max = 255, message = "{account.name.typeMismatch}")
     private String name;
+
+    private InstallationAccountSubmitter submitter;
 
     @NotBlank(message = "{account.siteName.notEmpty}")
     @Size(max = 255, message = "{account.siteName.invalidSize}")

@@ -6,7 +6,7 @@ export const AER_SERVICE_CONTACT_DETAILS_ROUTES: Routes = [
     children: [
       {
         path: '',
-        data: { breadcrumb: 'Service contact details' },
+        data: { pageTitle: 'Service contact details', breadcrumb: true },
         loadComponent: () => import('./service-contact-details-page/service-contact-details-page.component'),
       },
     ],

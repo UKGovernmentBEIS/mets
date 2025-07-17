@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -54,12 +54,12 @@ class AerReviewSaveGroupDecisionActionHandlerTest {
                         .build();
 
         RequestTask requestTask = RequestTask.builder().id(requestTaskId).build();
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(requestTask.getId(), RequestTaskActionType.AER_SAVE_REVIEW_GROUP_DECISION, pmrvUser, payload);
+        handler.process(requestTask.getId(), RequestTaskActionType.AER_SAVE_REVIEW_GROUP_DECISION, appUser, payload);
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);

@@ -6,8 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -20,6 +20,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPaylo
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
+import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.AccountOpeningDecisionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningApplicationRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningApprovedRequestActionPayload;
@@ -51,11 +52,11 @@ class InstallationAccountOpeningSubmitDecisionActionHandlerTest {
     @Mock
     private WorkflowService workflowService;
 
-    private PmrvUser pmrvUser;
+    private AppUser appUser;
 
     @BeforeEach
-    public void buildPmrvUser() {
-        pmrvUser = PmrvUser.builder().userId("user").build();
+    public void buildAppUser() {
+        appUser = AppUser.builder().userId("user").build();
     }
 
     @Test
@@ -87,21 +88,22 @@ class InstallationAccountOpeningSubmitDecisionActionHandlerTest {
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 
         //invoke
-        handler.process(requestTask.getId(), RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_DECISION, pmrvUser, payload);
+        handler.process(requestTask.getId(), RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_DECISION, appUser, payload);
         
         //verify
         verify(requestService, times(1))
             .addActionToRequest(requestTask.getRequest(),
                 accountSubmittedDecisionPayload,
                 RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCEPTED,
-                pmrvUser.getUserId());
+                appUser.getUserId());
         verify(requestService, times(1))
             .addActionToRequest(requestTask.getRequest(),
                 accountApprovedPayload,
                 RequestActionType.INSTALLATION_ACCOUNT_OPENING_ACCOUNT_APPROVED,
-                pmrvUser.getUserId());
+                appUser.getUserId());
         verify(workflowService, times(1))
-            .completeTask(taskProcessId, Map.of(APPLICATION_ACCEPTED, Boolean.TRUE));
+            .completeTask(taskProcessId, Map.of(APPLICATION_ACCEPTED, Boolean.TRUE,
+                    BpmnProcessConstants.APPLICATION_TYPE_IS_TRANSFER, false));
     }
 
     @Test
@@ -127,16 +129,17 @@ class InstallationAccountOpeningSubmitDecisionActionHandlerTest {
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
         
         //invoke
-        handler.process(requestTask.getId(), RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_DECISION, pmrvUser, payload);
+        handler.process(requestTask.getId(), RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_DECISION, appUser, payload);
         
         //verify
         verify(requestService, times(1))
             .addActionToRequest(requestTask.getRequest(),
                 accountSubmittedDecisionPayload,
                 RequestActionType.INSTALLATION_ACCOUNT_OPENING_REJECTED,
-                pmrvUser.getUserId());
+                appUser.getUserId());
         verify(workflowService, times(1))
-            .completeTask(taskProcessId, Map.of(APPLICATION_ACCEPTED, Boolean.FALSE));
+            .completeTask(taskProcessId, Map.of(APPLICATION_ACCEPTED, Boolean.FALSE,
+                    BpmnProcessConstants.APPLICATION_TYPE_IS_TRANSFER, false));
         verifyNoMoreInteractions(requestService);
     }
 

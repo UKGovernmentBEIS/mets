@@ -24,124 +24,82 @@
           {{ emissionSummaries.length > 1 ? 'summaries' : 'summary' }}
         </h2>
 
-        <ng-container *ngFor="let emissionSummary of emissionSummaries; let i = index">
-          <dl appGroupedSummaryList govuk-summary-list>
-            <div govukSummaryListRow>
-              <ng-container
-                *ngIf="
-                  'sourceStreams' | task | async | sourceStream: emissionSummary.sourceStream as sourceStream;
-                  else missingSourceStream
-                "
-              >
-                <dt govukSummaryListRowKey>Source stream</dt>
-                <dd govukSummaryListRowValue>
+        <govuk-table [columns]="emissionSummariesColumns" [data]="emissionSummaries" [class.no-bottom-border]="false">
+          <ng-template let-column="column" let-row="row" let-i="index">
+            @switch (column.field) {
+              @case ('sourceStream') {
+                @if ('sourceStreams' | task | async | sourceStream: row.sourceStream; as sourceStream) {
                   {{ sourceStream.reference }}
                   {{ sourceStream | sourceStreamDescription }}
-                </dd>
-              </ng-container>
-              <ng-template #missingSourceStream>
-                <dt class="missing-row-key" govukSummaryListRowKey><span>Source stream</span></dt>
-                <dd govukSummaryListRowValue>
+                } @else {
                   <span class="error">{{ form.errors.sourceStreamNotExist }}</span>
-                </dd>
-              </ng-template>
-              <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
-                <a [routerLink]="'' + i" govukLink>Change</a> |
-                <a [routerLink]="['delete', '' + i]" govukLink>Delete</a>
-              </dd>
-            </div>
-
-            <div govukSummaryListRow>
-              <ng-container
-                *ngIf="
-                  emissionSummary.emissionSources.length === 1 &&
-                    !('emissionSources' | task | async | emissionSource: emissionSummary.emissionSources[0]);
-                  else emissionSources
-                "
-              >
-                <dt class="missing-row-key" govukSummaryListRowKey><span>Emission sources</span></dt>
-                <dd govukSummaryListRowValue>
-                  <span class="error">{{ form.errors.emissionSourceNotExist }}</span>
-                </dd>
-              </ng-container>
-              <ng-template #emissionSources>
-                <dt govukSummaryListRowKey>Emission sources</dt>
-                <dd govukSummaryListRowValue>
-                  <ng-container *ngFor="let emissionSourceId of emissionSummary.emissionSources; let isLast = last">
-                    <ng-container
-                      *ngIf="'emissionSources' | task | async | emissionSource: emissionSourceId as emissionSource"
-                    >
+                }
+              }
+              @case ('emissionSources') {
+                @if (row.emissionSources.length === 1) {
+                  @if ('emissionSources' | task | async | emissionSource: row.emissionSources[0]; as emissionSource) {
+                    {{ emissionSource.reference }}
+                    {{ emissionSource.description }}
+                  } @else {
+                    <span class="error">{{ form.errors.emissionSourceNotExist }}</span>
+                  }
+                } @else {
+                  @for (emissionSourceId of row.emissionSources; track emissionSourceId) {
+                    @if ('emissionSources' | task | async | emissionSource: emissionSourceId; as emissionSource) {
                       {{ emissionSource.reference }}
                       {{ emissionSource.description }}
-                      <ng-container *ngIf="!isLast">
-                        <br />
-                      </ng-container>
-                    </ng-container>
-                  </ng-container>
-                </dd>
-              </ng-template>
-            </div>
-
-            <div govukSummaryListRow>
-              <ng-container
-                *ngIf="
-                  emissionSummary.emissionPoints.length === 1 &&
-                    !('emissionPoints' | task | async | emissionPoint: emissionSummary.emissionPoints[0]);
-                  else emissionPoints
-                "
-              >
-                <dt class="missing-row-key" govukSummaryListRowKey><span>Emission points</span></dt>
-                <dd govukSummaryListRowValue>
-                  <span class="error">{{ form.errors.emissionPointNotExist }}</span>
-                </dd>
-              </ng-container>
-              <ng-template #emissionPoints>
-                <dt govukSummaryListRowKey>Emission points</dt>
-                <dd govukSummaryListRowValue>
-                  <ng-container *ngFor="let emissionPointId of emissionSummary.emissionPoints; let isLast = last">
-                    <ng-container
-                      *ngIf="'emissionPoints' | task | async | emissionPoint: emissionPointId as emissionPoint"
-                    >
+                      <br />
+                    }
+                  }
+                }
+              }
+              @case ('emissionPoints') {
+                @if (row.emissionPoints.length === 1) {
+                  @if ('emissionPoints' | task | async | emissionPoint: row.emissionPoints[0]; as emissionPoint) {
+                    {{ emissionPoint.reference }}
+                    {{ emissionPoint.description }}
+                  } @else {
+                    <span class="error">{{ form.errors.emissionPointNotExist }}</span>
+                  }
+                } @else {
+                  @for (emissionPointId of row.emissionPoints; track emissionPointId) {
+                    @if ('emissionPoints' | task | async | emissionPoint: emissionPointId; as emissionPoint) {
                       {{ emissionPoint.reference }}
                       {{ emissionPoint.description }}
-                      <ng-container *ngIf="!isLast">
-                        <br />
-                      </ng-container>
-                    </ng-container>
-                  </ng-container>
-                </dd>
-              </ng-template>
-            </div>
-
-            <div govukSummaryListRow>
-              <ng-container *ngIf="'regulatedActivities' | task | async as regulatedActivities">
-                <ng-container
-                  *ngIf="
-                    !emissionSummary.excludedRegulatedActivity &&
-                      !(regulatedActivities | regulatedActivity: emissionSummary.regulatedActivity);
-                    else regulatedActivity
-                  "
-                >
-                  <dt class="missing-row-key" govukSummaryListRowKey><span>Regulated activity</span></dt>
-                  <dd govukSummaryListRowValue>
+                      <br />
+                    }
+                  }
+                }
+              }
+              @case ('regulatedActivity') {
+                @if ('regulatedActivities' | task | async; as regulatedActivities) {
+                  @if (
+                    !row.excludedRegulatedActivity && !(regulatedActivities | regulatedActivity: row.regulatedActivity)
+                  ) {
                     <span class="error">{{ form.errors.regulatedActivityNotExist }}</span>
-                  </dd>
-                </ng-container>
-                <ng-template #regulatedActivity>
-                  <dt govukSummaryListRowKey>Regulated activity</dt>
-                  <dd govukSummaryListRowValue>
+                  } @else {
                     {{
-                      (emissionSummary.excludedRegulatedActivity
+                      (row.excludedRegulatedActivity
                         ? 'excludedRegulatedActivity'
-                        : (regulatedActivities | regulatedActivity: emissionSummary.regulatedActivity).type
+                        : (regulatedActivities | regulatedActivity: row.regulatedActivity).type
                       ) | regulatedActivityType
                     }}
-                  </dd>
-                </ng-template>
-              </ng-container>
-            </div>
-          </dl>
-        </ng-container>
+                  }
+                }
+              }
+              @case ('change') {
+                @if ((store.isEditable$ | async) === true) {
+                  <a [routerLink]="'' + i" govukLink>Change</a>
+                }
+              }
+              @case ('delete') {
+                @if ((store.isEditable$ | async) === true) {
+                  <a [routerLink]="['delete', '' + i]" govukLink>Delete</a>
+                }
+              }
+            }
+          </ng-template>
+        </govuk-table>
 
         <ng-container *ngIf="(store.isEditable$ | async) === true">
           <button govukSecondaryButton routerLink="add" type="button">Add another emission summary</button>

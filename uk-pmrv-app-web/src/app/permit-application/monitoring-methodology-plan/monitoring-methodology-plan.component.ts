@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, switchMap } from 'rxjs';
+import { first, switchMap, tap } from 'rxjs';
 
 import { PendingRequestService } from '../../core/guards/pending-request.service';
 import { PendingRequest } from '../../core/interfaces/pending-request.interface';
 import { PERMIT_TASK_FORM } from '../shared/permit-task-form.token';
 import { PermitApplicationState } from '../store/permit-application.state';
 import { PermitApplicationStore } from '../store/permit-application.store';
+import { mmpStatuses } from './mmp-status';
 import { monitoringMethodologyPlanAddFormFactory } from './monitoring-methodology-plan-form.provider';
 
 @Component({
@@ -35,13 +36,30 @@ export class MonitoringMethodologyPlanComponent implements PendingRequest {
           first(),
           switchMap((data) =>
             this.store
-              .patchTask(
+              .postTask(
                 data.permitTask,
                 this.form.value.exist ? this.form.value : { exist: this.form.value.exist, plans: null },
                 false,
               )
               .pipe(this.pendingRequest.trackRequest()),
           ),
+          switchMap(() => this.store),
+          first(),
+          tap((state) => {
+            const newInitialPermitSections = { ...state.permitSectionsCompleted };
+            delete newInitialPermitSections?.['MMP_SUB_INSTALLATION_Fallback_Approach'];
+            delete newInitialPermitSections?.['MMP_SUB_INSTALLATION_Product_Benchmark'];
+            this.store.setState({
+              ...state,
+              permitSectionsCompleted:
+                !state.permit.monitoringMethodologyPlans?.exist && state?.features?.['digitized-mmp']
+                  ? mmpStatuses.reduce((acc, section) => ({ ...acc, [section]: [false] }), {
+                      ...newInitialPermitSections,
+                    })
+                  : state.permitSectionsCompleted,
+            });
+          }),
+          this.pendingRequest.trackRequest(),
         )
         .subscribe(() => this.router.navigate(['upload-file'], { relativeTo: this.route }));
     }

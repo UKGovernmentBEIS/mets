@@ -15,7 +15,7 @@ import { SharedModule } from '@shared/shared.module';
         <p class="govuk-body">The account has been permanently closed.</p>
       </div>
     </div>
-    <a govukLink routerLink="/aviation/dashboard"> Return to your tasks </a>
+    <a govukLink routerLink="/aviation/dashboard">Return to your tasks</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

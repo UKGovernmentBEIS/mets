@@ -18,9 +18,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -71,7 +71,7 @@ class PermitTransferBReviewReturnForAmendsHandlerTest {
         final long taskId = 1L;
         final RequestTaskActionEmptyPayload emptyPayload = RequestTaskActionEmptyPayload.builder().payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD).build();
         final String userId = "userId";
-        final PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        final AppUser appUser = AppUser.builder().userId(userId).build();
 
         final String processTaskId = "processTaskId";
 
@@ -116,12 +116,12 @@ class PermitTransferBReviewReturnForAmendsHandlerTest {
         when(requestTaskService.findTaskById(taskId)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(taskId, RequestTaskActionType.PERMIT_TRANSFER_B_REVIEW_RETURN_FOR_AMENDS, pmrvUser, emptyPayload);
+        handler.process(taskId, RequestTaskActionType.PERMIT_TRANSFER_B_REVIEW_RETURN_FOR_AMENDS, appUser, emptyPayload);
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(taskId);
         verify(permitReviewReturnForAmendsValidatorService, times(1)).validate(payload);
-        verify(permitTransferBReviewService, times(1)).updatePermitTransferBRequestPayload(requestTask, pmrvUser);
+        verify(permitTransferBReviewService, times(1)).updatePermitTransferBRequestPayload(requestTask, appUser);
         verify(requestService, times(1))
             .addActionToRequest(newRequest, actionPayload, RequestActionType.PERMIT_TRANSFER_B_APPLICATION_RETURNED_FOR_AMENDS, userId);
         verify(workflowService, times(1))
@@ -134,7 +134,7 @@ class PermitTransferBReviewReturnForAmendsHandlerTest {
         final long taskId = 1L;
         final RequestTaskActionEmptyPayload emptyPayload = RequestTaskActionEmptyPayload.builder().payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD).build();
         final String userId = "userId";
-        final PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        final AppUser appUser = AppUser.builder().userId(userId).build();
 
         final String processTaskId = "processTaskId";
 
@@ -152,15 +152,15 @@ class PermitTransferBReviewReturnForAmendsHandlerTest {
             .build();
 
         when(requestTaskService.findTaskById(taskId)).thenReturn(requestTask);
-        doThrow(new BusinessException((ErrorCode.INVALID_PERMIT_REVIEW))).when(permitReviewReturnForAmendsValidatorService)
+        doThrow(new BusinessException((MetsErrorCode.INVALID_PERMIT_REVIEW))).when(permitReviewReturnForAmendsValidatorService)
             .validate(payload);
 
         // Invoke
         BusinessException businessException = assertThrows(BusinessException.class,
-            () -> handler.process(taskId, RequestTaskActionType.PERMIT_TRANSFER_B_REVIEW_RETURN_FOR_AMENDS, pmrvUser, emptyPayload));
+            () -> handler.process(taskId, RequestTaskActionType.PERMIT_TRANSFER_B_REVIEW_RETURN_FOR_AMENDS, appUser, emptyPayload));
 
         // Verify
-        assertEquals(ErrorCode.INVALID_PERMIT_REVIEW, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_PERMIT_REVIEW, businessException.getErrorCode());
         verify(requestTaskService, times(1)).findTaskById(taskId);
         verify(permitReviewReturnForAmendsValidatorService, times(1)).validate(payload);
         verify(permitTransferBReviewService, never()).updatePermitTransferBRequestPayload(any(), any());

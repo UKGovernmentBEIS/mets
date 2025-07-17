@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -12,14 +12,16 @@
 import { ActivitiesDescriptionCorsia } from './activitiesDescriptionCorsia';
 import { AirOperatingCertificateCorsia } from './airOperatingCertificateCorsia';
 import { FlightIdentification } from './flightIdentification';
-import { OrganisationStructure } from './organisationStructure';
+import { IndividualOrganisation } from './individualOrganisation';
+import { LimitedCompanyOrganisation } from './limitedCompanyOrganisation';
+import { PartnershipOrganisation } from './partnershipOrganisation';
 import { SubsidiaryCompanyCorsia } from './subsidiaryCompanyCorsia';
 
 export interface EmpCorsiaOperatorDetails {
   operatorName: string;
   flightIdentification: FlightIdentification;
   airOperatingCertificate: AirOperatingCertificateCorsia;
-  organisationStructure: OrganisationStructure;
+  organisationStructure: IndividualOrganisation | LimitedCompanyOrganisation | PartnershipOrganisation;
   activitiesDescription: ActivitiesDescriptionCorsia;
   subsidiaryCompanyExist: boolean;
   subsidiaryCompanies?: Array<SubsidiaryCompanyCorsia>;

@@ -6,6 +6,7 @@ import { catchError, EMPTY, map, Observable, of, switchMap, takeUntil } from 'rx
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { selectCurrentDomain } from '@core/store/auth/auth.selectors';
 import { AuthStore } from '@core/store/auth/auth.store';
+import { permitTypeMap } from '@permit-application/shared/utils/permit';
 
 import {
   AviationAccountHeaderInfoDTO,
@@ -22,15 +23,19 @@ import { IncorporateHeaderStore } from './store/incorporate-header.store';
     <div *ngIf="(currentDomain$ | async) === 'INSTALLATION'; else aviationHeader">
       <div class="govuk-phase-banner" *ngIf="accountDetails$ | async as accountDetails">
         <div class="govuk-phase-banner__content">
-          <span class="govuk-!-font-weight-bold"> {{ accountDetails.name }} </span>
+          <a class="govuk-!-font-weight-bold" govukLink [routerLink]="['accounts', accountDetails.id]">
+            {{ accountDetails.name }}
+          </a>
           <span class="govuk-!-padding-left-3" *ngIf="accountDetails.permitId">
             Permit ID:
-            <span> {{ accountDetails.permitId }} / {{ accountDetails.status | accountStatus }} </span>
+            <span>{{ accountDetails.permitId }} / {{ accountDetails.status | accountStatus }}</span>
           </span>
           <span class="govuk-!-padding-left-3" *ngIf="accountDetails?.emitterType">
             Type:
-            <ng-container *ngIf="accountDetails.emitterType === 'GHGE'; else hseTemplate">
-              {{ accountDetails.emitterType }} / {{ accountDetails.installationCategory | installationCategory }}
+            <ng-container
+              *ngIf="accountDetails.emitterType === 'GHGE' || accountDetails.emitterType === 'WASTE'; else hseTemplate">
+              {{ permitTypeMap?.[accountDetails.emitterType] }} /
+              {{ accountDetails.installationCategory | installationCategory }}
             </ng-container>
             <ng-template #hseTemplate>
               {{ accountDetails.emitterType }}
@@ -42,10 +47,12 @@ import { IncorporateHeaderStore } from './store/incorporate-header.store';
     <ng-template #aviationHeader>
       <div class="govuk-phase-banner" *ngIf="aviationAccountDetails$ | async as accountDetails">
         <div class="govuk-phase-banner__content">
-          <span class="govuk-!-font-weight-bold"> {{ accountDetails.name }} </span>
+          <a class="govuk-!-font-weight-bold" govukLink [routerLink]="['aviation', 'accounts', accountDetails.id]">
+            {{ accountDetails.name }}
+          </a>
           <span class="govuk-!-padding-left-3" *ngIf="accountDetails.empId">
             Emissions Plan ID:
-            <span> {{ accountDetails.empId }} / {{ accountDetails.status | accountStatus }} </span>
+            <span>{{ accountDetails.empId }} / {{ accountDetails.status | accountStatus }}</span>
           </span>
           <span class="govuk-!-padding-left-3" *ngIf="accountDetails?.emissionTradingScheme">
             Schema: {{ accountDetails.emissionTradingScheme | aviationNamePipe }}
@@ -61,6 +68,7 @@ export class IncorporateHeaderComponent implements OnInit {
   aviationAccountDetails$: Observable<AviationAccountHeaderInfoDTO>;
   currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));
 
+  permitTypeMap = permitTypeMap;
   constructor(
     private readonly store: IncorporateHeaderStore,
     private readonly accountViewService: InstallationAccountViewService,

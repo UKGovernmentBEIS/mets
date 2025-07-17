@@ -1,12 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.handler;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +18,14 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.dom
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationFollowupRequiredChangesDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationReviewDecision;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.handler.PermitNotificationFollowUpWaitForAmendsInitializer;
+
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class PermitNotificationFollowUpWaitForAmendsInitializerTest {

@@ -20,7 +20,7 @@ export const AER_CORSIA_VERIFY_MONITORING_APPROACH_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Monitoring approach and emissions summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Monitoring approach and emissions' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./summary/summary.component').then((c) => c.SummaryComponent),
       },

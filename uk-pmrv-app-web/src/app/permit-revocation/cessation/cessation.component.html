@@ -28,7 +28,7 @@
       <ul app-task-item-list>
         <li
           app-task-item
-          link="confirm/outcome"
+          [link]="(canViewSectionDetails$ | async) ? 'confirm/outcome' : null"
           linkText="Confirm cessation of regulated activities"
           [status]="confirmSectionStatus$ | async"
         ></li>

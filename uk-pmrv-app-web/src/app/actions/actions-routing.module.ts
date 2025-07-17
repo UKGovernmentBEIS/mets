@@ -112,6 +112,10 @@ const routes: Routes = [
         loadChildren: () => import('./doal/doal-action.module').then((m) => m.DoalActionModule),
       },
       {
+        path: 'inspection',
+        loadChildren: () => import('./inspection/inspection-action.module').then((m) => m.InspectionActionModule),
+      },
+      {
         path: 'file-download/:fileType/:uuid',
         component: FileDownloadComponent,
       },
@@ -119,6 +123,21 @@ const routes: Routes = [
         path: 'return-of-allowances',
         loadChildren: () =>
           import('./return-of-allowances/return-of-allowances.module').then((m) => m.ReturnOfAllowancesModule),
+      },
+      {
+        path: 'bdr',
+        loadChildren: () => import('./bdr/bdr.routes').then((r) => r.BDR_ACTION_ROUTES),
+      },
+      {
+        path: 'permanent-cessation',
+        loadChildren: () =>
+          import('./permanent-cessation/permanent-cessation-routing.module').then(
+            (m) => m.PermanentCessationRoutingModule,
+          ),
+      },
+      {
+        path: 'alr',
+        loadChildren: () => import('./alr/alr.routes').then((r) => r.ALR_ACTION_ROUTES),
       },
     ],
   },

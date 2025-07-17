@@ -1,6 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.common.service;
 
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestSequence;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestSequenceRepository;
@@ -10,7 +10,7 @@ public abstract class CompetentAuthoritySequenceRequestIdGenerator extends Reque
 
 	private static final String REQUEST_ID_FORMATTER = "%s%04d-%s";
 
-	public CompetentAuthoritySequenceRequestIdGenerator(RequestSequenceRepository repository) {
+	protected CompetentAuthoritySequenceRequestIdGenerator(RequestSequenceRepository repository) {
 		super(repository);
 	}
 

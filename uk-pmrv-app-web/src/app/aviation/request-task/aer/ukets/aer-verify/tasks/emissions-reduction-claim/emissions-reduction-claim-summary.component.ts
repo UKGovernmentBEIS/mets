@@ -4,7 +4,7 @@ import { RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
-import { aerEmissionsReductionClaimFormProvider } from '@aviation/request-task/aer/ukets/tasks/emissions-reduction-claim/emissions-reduction-claim-form.provider';
+import { AerEmissionsReductionClaimFormProvider } from '@aviation/request-task/aer/ukets/tasks/emissions-reduction-claim/emissions-reduction-claim-form.provider';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { EmissionsReductionClaimSummaryTemplateComponent } from '@aviation/shared/components/aer/emissions-reduction-claim-summary-template';
@@ -45,8 +45,7 @@ interface ViewModel {
         <app-aer-emissions-reduction-claim-summary-template
           [data]="vm.data"
           [declarationFile]="vm.declarationFile"
-          [purchases]="vm.purchases"
-        ></app-aer-emissions-reduction-claim-summary-template>
+          [purchases]="vm.purchases"></app-aer-emissions-reduction-claim-summary-template>
       </ng-container>
     </ng-container>
 
@@ -89,7 +88,7 @@ export default class EmissionsReductionClaimSummaryComponent {
   );
 
   constructor(
-    @Inject(TASK_FORM_PROVIDER) private formProvider: aerEmissionsReductionClaimFormProvider,
+    @Inject(TASK_FORM_PROVIDER) private formProvider: AerEmissionsReductionClaimFormProvider,
     private store: RequestTaskStore,
   ) {}
 }

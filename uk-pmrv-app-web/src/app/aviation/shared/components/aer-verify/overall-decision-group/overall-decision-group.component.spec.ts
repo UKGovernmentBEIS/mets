@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
-
-import { SharedModule } from '@shared/shared.module';
+import { provideRouter } from '@angular/router';
 
 import { AviationAerVerifiedSatisfactoryWithCommentsDecision } from 'pmrv-api';
 
@@ -15,12 +13,6 @@ describe('OverallDecisionGroupComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
   let element: HTMLElement;
 
-  function getRows() {
-    return Array.from(element.querySelectorAll('tr')).map((el) =>
-      Array.from(el.querySelectorAll('td')).map((td) => td.textContent.trim()),
-    );
-  }
-
   function getSummaryListValues() {
     return Array.from(element.querySelectorAll('dl')).map((el) => [
       el.querySelector('dt').textContent.trim(),
@@ -28,12 +20,15 @@ describe('OverallDecisionGroupComponent', () => {
     ]);
   }
 
+  function getBodyStatements() {
+    return Array.from(element.querySelectorAll('.govuk-body'));
+  }
+
   @Component({
     template: `
       <app-aviation-overall-decision-group
         [isEditable]="isEditable"
-        [overallAssessment]="overallAssessmentInfo"
-      ></app-aviation-overall-decision-group>
+        [overallAssessment]="overallAssessmentInfo"></app-aviation-overall-decision-group>
     `,
   })
   class TestComponent {
@@ -46,8 +41,9 @@ describe('OverallDecisionGroupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OverallDecisionGroupComponent, SharedModule, RouterTestingModule],
+      imports: [OverallDecisionGroupComponent],
       declarations: [TestComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -63,14 +59,26 @@ describe('OverallDecisionGroupComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should show body statements', () => {
+    expect(getBodyStatements()[0].textContent.trim()).toEqual(
+      'You have conducted a verification of the greenhouse gas data reported by this operator in its annual emissions report.',
+    );
+
+    expect(getBodyStatements()[1].textContent.trim()).toEqual(
+      'On the basis of your verification work these data are fairly stated, with the exception of the following reasons.',
+    );
+  });
+
   it('should render the summary', () => {
-    expect(getRows()).toEqual([[], ['Reason 1', '', ''], ['Reason 2', '', '']]);
-    expect(getSummaryListValues()).toEqual([['Decision', ['Verified with comments']]]);
+    expect(getSummaryListValues()).toEqual([
+      ['Decision', ['Verified as satisfactory with comments', '1. Reason 1 2. Reason 2']],
+    ]);
 
     hostComponent.isEditable = true;
     fixture.detectChanges();
 
-    expect(getRows()).toEqual([[], ['Reason 1', 'Change', 'Remove'], ['Reason 2', 'Change', 'Remove']]);
-    expect(getSummaryListValues()).toEqual([['Decision', ['Verified with comments', 'Change']]]);
+    expect(getSummaryListValues()).toEqual([
+      ['Decision', ['Verified as satisfactory with comments', 'Change', '1. Reason 1 2. Reason 2', 'Change']],
+    ]);
   });
 });

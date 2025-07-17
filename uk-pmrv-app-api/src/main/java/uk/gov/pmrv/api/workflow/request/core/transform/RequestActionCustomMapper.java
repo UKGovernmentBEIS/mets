@@ -1,10 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.core.transform;
 
-import java.util.Set;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
+
+import java.util.Set;
 
 public interface RequestActionCustomMapper {
 
@@ -12,5 +12,5 @@ public interface RequestActionCustomMapper {
 
     RequestActionType getRequestActionType();
 
-    Set<RoleType> getUserRoleTypes();
+    Set<String> getUserRoleTypes();
 }

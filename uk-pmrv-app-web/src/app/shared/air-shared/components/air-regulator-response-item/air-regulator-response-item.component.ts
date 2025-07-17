@@ -8,7 +8,7 @@ import { RegulatorAirImprovementResponse } from 'pmrv-api';
 @Component({
   selector: 'app-air-regulator-response-item',
   templateUrl: './air-regulator-response-item.component.html',
-  styleUrls: ['./air-regulator-response-item.component.scss'],
+  styleUrl: './air-regulator-response-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AirRegulatorResponseItemComponent {

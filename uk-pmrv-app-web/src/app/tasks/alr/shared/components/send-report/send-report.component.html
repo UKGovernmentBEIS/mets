@@ -1,0 +1,61 @@
+<ng-container *ngIf="vm() as vm">
+  <ng-container *ngIf="!isSubmitted(); else submittedTemplate">
+    <app-page-heading>
+      @if (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT') {
+        Send report for verification
+      } @else {
+        Send verification report to the operator
+      }
+    </app-page-heading>
+    <div *ngIf="vm.requestTaskType === 'ALR_APPLICATION_SUBMIT'" class="govuk-heading-m">
+      Current verifier
+      <p class="govuk-body">{{ assignedVerifier$ | async }}</p>
+    </div>
+    <p
+      class="govuk-body"
+      *ngIf="
+        vm.requestTaskType === 'ALR_APPLICATION_SUBMIT'
+          ? 'in your report'
+          : 'you have provided in this verification report' as v
+      ">
+      By selecting ‘Confirm and send’ you confirm that the information {{ v }} is correct to the best of your knowledge.
+    </p>
+    <div class="govuk-button-group" *ngIf="vm.isEditable">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and send</button>
+    </div>
+    <app-alr-return-link
+      returnLink="../"
+      [title]="
+        vm.requestTaskType === 'ALR_APPLICATION_SUBMIT'
+          ? 'Complete activity level report'
+          : 'Verify activity level report'
+      "></app-alr-return-link>
+  </ng-container>
+
+  <ng-template #submittedTemplate>
+    <app-confirmation-shared
+      [title]="
+        vm.requestTaskType === 'ALR_APPLICATION_SUBMIT'
+          ? 'Sent to verifier for review'
+          : 'Verification report sent to operator'
+      "
+      titleContent="Your reference number"
+      [whatHappensNextTemplate]="whatHappensNextTemplate"
+      [titleContentId]="alrService.requestId"></app-confirmation-shared>
+  </ng-template>
+
+  <ng-template #whatHappensNextTemplate>
+    <ng-container *ngIf="vm.requestTaskType === 'ALR_APPLICATION_VERIFICATION_SUBMIT'">
+      <div id="whatHappensNextTemplate">
+        <h3 class="govuk-heading-m">What happens next</h3>
+
+        <p class="govuk-body">The operator can either:</p>
+
+        <ul class="govuk-list govuk-list--bullet">
+          <li>submit the report to the regulator</li>
+          <li>make changes and repeat the submission process</li>
+        </ul>
+      </div>
+    </ng-container>
+  </ng-template>
+</ng-container>

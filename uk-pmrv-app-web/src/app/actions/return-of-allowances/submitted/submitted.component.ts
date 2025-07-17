@@ -45,5 +45,8 @@ export class SubmittedComponent {
 
   actionId$ = this.store.pipe(map((state) => state.action.id));
 
-  constructor(readonly returnOfAllowancesService: ReturnOfAllowancesService, readonly store: CommonActionsStore) {}
+  constructor(
+    readonly returnOfAllowancesService: ReturnOfAllowancesService,
+    readonly store: CommonActionsStore,
+  ) {}
 }

@@ -6,13 +6,11 @@ import { FallbackSourceStreamCategory } from 'pmrv-api';
 @Component({
   selector: 'app-category-summary-overview',
   templateUrl: './category-summary-overview.component.html',
-  styles: [
-    `
-      .pre-line {
-        white-space: pre-line;
-      }
-    `,
-  ],
+  styles: `
+    .pre-line {
+      white-space: pre-line;
+    }
+  `,
 })
 export class CategorySummaryOverviewComponent {
   @Input() sourceStreamCategory: FallbackSourceStreamCategory;

@@ -1,11 +1,10 @@
 package uk.gov.pmrv.api.permit.domain.sourcestreams;
 
-import java.util.List;
-import java.util.Set;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.CalculationParameterType;
+
+import java.util.Set;
 
 @Getter
 @AllArgsConstructor

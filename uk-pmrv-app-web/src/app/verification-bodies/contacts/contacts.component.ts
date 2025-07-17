@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 
-import { BehaviorSubject, first, merge, Observable, shareReplay, Subject, switchMap, switchMapTo, tap } from 'rxjs';
+import { BehaviorSubject, first, merge, Observable, shareReplay, Subject, switchMap, tap } from 'rxjs';
+
+import { BusinessErrorService } from '@error/business-error/business-error.service';
+import { catchBadRequest, ErrorCodes } from '@error/business-errors';
 
 import { UsersAuthoritiesInfoDTO, VerifierAuthoritiesService, VerifierAuthorityUpdateDTO } from 'pmrv-api';
 
-import { BusinessErrorService } from '../../error/business-error/business-error.service';
-import { catchBadRequest, ErrorCodes } from '../../error/business-errors';
 import { savePartiallyNotFoundVerifierError } from '../../verifiers/errors/business-error';
 
 @Component({
@@ -17,8 +18,7 @@ import { savePartiallyNotFoundVerifierError } from '../../verifiers/errors/busin
     <app-verifiers-table
       [verifiersAuthorities]="verifiersAuthorities$"
       (verifiersFormSubmitted)="onVerifiersFormSubmitted($event)"
-      (discard)="this.refresh$.next()"
-    ></app-verifiers-table>
+      (discard)="this.refresh$.next()"></app-verifiers-table>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -43,7 +43,7 @@ export class ContactsComponent implements OnInit {
     this.verifiersAuthorities$ = merge(
       verifiersAuthorities$,
       this.refresh$.pipe(
-        switchMapTo(this.verificationBodyId),
+        switchMap(() => this.verificationBodyId),
         switchMap((vbId) => this.verifierAuthoritiesService.getVerifierAuthoritiesByVerificationBodyId(vbId)),
       ),
     ).pipe(shareReplay({ bufferSize: 1, refCount: true }));

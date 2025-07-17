@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 import { combineLatest, first, map, Observable, switchMap, takeUntil } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
-import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/ukets/aer-review-decision-group/aer-review-decision-group.component';
+import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { getSummaryHeaderForTaskType } from '@aviation/request-task/util';
@@ -84,6 +84,7 @@ export default class DataGapsSummaryComponent implements OnInit {
         switchMap((payload) => {
           return this.aviationReportingService.getTotalEmissionsCorsia({
             aggregatedEmissionsData: payload.aer.aggregatedEmissionsData,
+            year: payload.reportingYear,
           });
         }),
       )
@@ -92,7 +93,7 @@ export default class DataGapsSummaryComponent implements OnInit {
   }
 
   onRemoveDataGap(index: number) {
-    const data = [...this.dataGaps?.dataGapsDetails?.dataGaps];
+    const data = [...(this.dataGaps?.dataGapsDetails?.dataGaps ?? [])];
 
     if (data[index]) {
       data.splice(index, 1);
@@ -107,7 +108,7 @@ export default class DataGapsSummaryComponent implements OnInit {
 
   onSubmit(noData: boolean = false) {
     if (this.dataGaps?.dataGapsDetails?.dataGaps)
-      this._updateFormProviderAndDataGaps([...this.dataGaps.dataGapsDetails?.dataGaps]);
+      this._updateFormProviderAndDataGaps([...(this.dataGaps?.dataGapsDetails?.dataGaps ?? [])]);
 
     this.store.aerDelegate
       .saveAer({ dataGaps: this.formProvider.getFormValue() }, noData ? 'in progress' : 'complete')

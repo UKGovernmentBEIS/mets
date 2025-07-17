@@ -1,12 +1,18 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.service;
 
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerTotalReportableEmissions;
+import uk.gov.pmrv.api.aviationreporting.common.service.AviationReportableEmissionsService;
 import uk.gov.pmrv.api.aviationreporting.common.validation.AviationAerTradingSchemeValidatorService;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsia;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsiaContainer;
+import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsiaTotalReportableEmissions;
+import uk.gov.pmrv.api.aviationreporting.corsia.domain.totalemissions.AviationAerCorsiaSubmittedEmissions;
+import uk.gov.pmrv.api.aviationreporting.corsia.service.AviationAerCorsiaSubmittedEmissionsCalculationService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -14,8 +20,12 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPay
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerApplicationRequestVerificationRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerSubmitApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.service.AviationAerCorsiaSubmitRequestTaskSyncAerAttachmentsService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaReviewGroup;
@@ -34,6 +44,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerVerificationRe
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecisionDetails;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -43,6 +54,9 @@ public class RequestAviationAerCorsiaReviewService {
     private final RequestAviationAccountQueryService requestAviationAccountQueryService;
     private final RequestService requestService;
     private final AviationAerTradingSchemeValidatorService<AviationAerCorsiaContainer> aviationAerCorsiaValidatorService;
+    private final AviationAerCorsiaSubmitRequestTaskSyncAerAttachmentsService syncAerAttachmentsService;
+    private final AviationAerCorsiaSubmittedEmissionsCalculationService aviationAerCorsiaSubmittedEmissionsCalculationService;
+    private final AviationReportableEmissionsService aviationReportableEmissionsService;
     private final AviationAerCorsiaReviewMapper aviationAerCorsiaReviewMapper;
 
     @Transactional
@@ -59,20 +73,20 @@ public class RequestAviationAerCorsiaReviewService {
     }
 
     @Transactional
-    public void updateRequestPayloadWithReviewOutcome(RequestTask requestTask, PmrvUser pmrvUser) {
+    public void updateRequestPayloadWithReviewOutcome(RequestTask requestTask, AppUser appUser) {
         AviationAerCorsiaApplicationReviewRequestTaskPayload requestTaskPayload =
             (AviationAerCorsiaApplicationReviewRequestTaskPayload) requestTask.getPayload();
         Request request = requestTask.getRequest();
         AviationAerCorsiaRequestPayload requestPayload = (AviationAerCorsiaRequestPayload) request.getPayload();
 
-        requestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+        requestPayload.setRegulatorReviewer(appUser.getUserId());
         requestPayload.setReviewGroupDecisions(requestTaskPayload.getReviewGroupDecisions());
         requestPayload.setReviewAttachments(requestTaskPayload.getReviewAttachments());
         requestPayload.setReviewSectionsCompleted(requestTaskPayload.getReviewSectionsCompleted());
     }
 
     @Transactional
-    public void updateRequestPayloadWithSkipReviewOutcome(final RequestTask requestTask, final PmrvUser pmrvUser) {
+    public void updateRequestPayloadWithSkipReviewOutcome(final RequestTask requestTask, final AppUser appUser) {
 
         final Request request = requestTask.getRequest();
         final AviationAerCorsiaRequestPayload requestPayload = (AviationAerCorsiaRequestPayload) request.getPayload();
@@ -104,7 +118,7 @@ public class RequestAviationAerCorsiaReviewService {
             reviewGroupDecisions.put(group, decision);
         }
 
-        requestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+        requestPayload.setRegulatorReviewer(appUser.getUserId());
     }
 
     @Transactional
@@ -112,11 +126,14 @@ public class RequestAviationAerCorsiaReviewService {
         AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload taskPayload =
                 (AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload) requestTask.getPayload();
 
+        syncAerAttachmentsService.sync(taskActionPayload.getReportingRequired(), taskPayload);
+
         taskPayload.setAer(taskActionPayload.getAer());
-        taskPayload.setReportingRequired(taskActionPayload.getReportingRequired());
-        taskPayload.setReportingObligationDetails(taskActionPayload.getReportingObligationDetails());
         taskPayload.setAerSectionsCompleted(taskActionPayload.getAerSectionsCompleted());
         taskPayload.setReviewSectionsCompleted(taskActionPayload.getReviewSectionsCompleted());
+
+        taskPayload.setReportingRequired(taskActionPayload.getReportingRequired());
+        taskPayload.setReportingObligationDetails(taskActionPayload.getReportingObligationDetails());
 
         // Reset verification
         taskPayload.setVerificationPerformed(false);
@@ -124,7 +141,7 @@ public class RequestAviationAerCorsiaReviewService {
 
     @Transactional
     public void sendAmendedAerToVerifier(AviationAerApplicationRequestVerificationRequestTaskActionPayload taskActionPayload,
-                                         RequestTask requestTask, PmrvUser pmrvUser) {
+                                         RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         AviationAerCorsiaRequestPayload requestPayload = (AviationAerCorsiaRequestPayload) request.getPayload();
         final AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload amendsSubmitRequestTaskPayload =
@@ -135,52 +152,129 @@ public class RequestAviationAerCorsiaReviewService {
             .toAviationAerCorsiaContainer(amendsSubmitRequestTaskPayload, EmissionTradingScheme.CORSIA);
         aviationAerCorsiaValidatorService.validateAer(aerCorsiaContainer);
 
+        //calculate submitted emissions
+        AviationAerCorsiaSubmittedEmissions submittedEmissions = calculateSubmittedEmissions(aerCorsiaContainer);
+
         //update request payload
-        updateAviationAerCorsiaRequestPayload(requestPayload, amendsSubmitRequestTaskPayload);
+        updateAviationAerCorsiaRequestPayloadUponAmendSubmit(requestPayload, amendsSubmitRequestTaskPayload, submittedEmissions);
         requestPayload.setAerSectionsCompleted(amendsSubmitRequestTaskPayload.getAerSectionsCompleted());
+        requestPayload.setReviewSectionsCompleted(taskActionPayload.getReviewSectionsCompleted());
         requestPayload.setVerificationSectionsCompleted(taskActionPayload.getVerificationSectionsCompleted());
 
         //add request action
         addApplicationSubmittedRequestAction(amendsSubmitRequestTaskPayload,
+            submittedEmissions,
             request,
-            pmrvUser,
+            appUser,
             RequestActionType.AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER
         );
     }
 
-    private void updateAviationAerCorsiaRequestPayload(AviationAerCorsiaRequestPayload aviationAerCorsiaRequestPayload,
-                                                       AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload aviationAerAmendsSubmitRequestTaskPayload) {
+    @Transactional
+    public void sendAmendedAerToRegulator(AviationAerSubmitApplicationAmendRequestTaskActionPayload taskActionPayload,
+                                          RequestTask requestTask, AppUser appUser) {
+        Request request = requestTask.getRequest();
+        AviationAerCorsiaRequestPayload requestPayload = (AviationAerCorsiaRequestPayload) request.getPayload();
+        final AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload amendsSubmitRequestTaskPayload =
+                (AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload) requestTask.getPayload();
 
-        //clean up aer data related review groups that are deprecated after operator amends
-        cleanUpDeprecatedAerDataReviewGroupDecisionsFromRequestPayload(aviationAerCorsiaRequestPayload, aviationAerAmendsSubmitRequestTaskPayload);
+        //Delete verificationReport and verification review decisions if verificationPerformed = false as in this case verification report is obsolete.
+        if (!amendsSubmitRequestTaskPayload.isVerificationPerformed()) {
+            requestPayload.setVerificationReport(null);
+            AviationAerCorsiaReviewUtils.removeVerificationDataReviewGroupDecisionsFromRequestPayload(requestPayload);
+        }
 
-        aviationAerCorsiaRequestPayload.setReportingRequired(aviationAerAmendsSubmitRequestTaskPayload.getReportingRequired());
-        aviationAerCorsiaRequestPayload.setReportingObligationDetails(aviationAerAmendsSubmitRequestTaskPayload.getReportingObligationDetails());
-        aviationAerCorsiaRequestPayload.setAer(aviationAerAmendsSubmitRequestTaskPayload.getAer());
-        aviationAerCorsiaRequestPayload.setAerAttachments(aviationAerAmendsSubmitRequestTaskPayload.getAerAttachments());
-        aviationAerCorsiaRequestPayload.setVerificationPerformed(aviationAerAmendsSubmitRequestTaskPayload.isVerificationPerformed());
-        aviationAerCorsiaRequestPayload.setAerMonitoringPlanVersions(aviationAerAmendsSubmitRequestTaskPayload.getAerMonitoringPlanVersions());
-        aviationAerCorsiaRequestPayload.setReviewSectionsCompleted(aviationAerAmendsSubmitRequestTaskPayload.getReviewSectionsCompleted());
-    }
+        //validate aer
+        AviationAerCorsiaContainer aerCorsiaContainer = aviationAerCorsiaReviewMapper
+                .toAviationAerCorsiaContainer(amendsSubmitRequestTaskPayload, requestPayload.getVerificationReport(), EmissionTradingScheme.CORSIA);
+        aviationAerCorsiaValidatorService.validate(aerCorsiaContainer);
 
-    private void cleanUpDeprecatedAerDataReviewGroupDecisionsFromRequestPayload(AviationAerCorsiaRequestPayload requestPayload,
-                                                                                AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload amendsSubmitRequestTaskPayload) {
-        Set<AviationAerCorsiaReviewGroup> deprecatedAerDataReviewGroups =
-            AviationAerCorsiaReviewUtils.getDeprecatedAerDataReviewGroups(requestPayload, amendsSubmitRequestTaskPayload);
+        //calculate submitted emissions
+        AviationAerCorsiaSubmittedEmissions submittedEmissions = calculateSubmittedEmissions(aerCorsiaContainer);
 
-        if (!deprecatedAerDataReviewGroups.isEmpty()) {
-            requestPayload.getReviewGroupDecisions().keySet().removeAll(deprecatedAerDataReviewGroups);
+        //update request payload
+        updateAviationAerCorsiaRequestPayloadUponAmendSubmit(requestPayload, amendsSubmitRequestTaskPayload, submittedEmissions);
+        requestPayload.setAerSectionsCompleted(taskActionPayload.getAerSectionsCompleted());
+        requestPayload.setReviewSectionsCompleted(taskActionPayload.getReviewSectionsCompleted());
+        requestPayload.setVerificationSectionsCompleted(taskActionPayload.getVerificationSectionsCompleted());
+
+        //add request action
+        addApplicationSubmittedRequestAction(
+            amendsSubmitRequestTaskPayload,
+            submittedEmissions,
+            request,
+            appUser,
+            RequestActionType.AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED
+        );
+
+        //update request metadata with reportable emissions
+        if(Boolean.TRUE.equals(aerCorsiaContainer.getReportingRequired())) {
+            updateReportableEmissionsAndRequestMetadata(request, aerCorsiaContainer);
+        } else {
+            deleteReportableAndRequestMetadataEmissions(request, aerCorsiaContainer);
         }
     }
 
+    private AviationAerCorsiaSubmittedEmissions calculateSubmittedEmissions(AviationAerCorsiaContainer aerCorsiaContainer) {
+        return Boolean.TRUE.equals(aerCorsiaContainer.getReportingRequired())
+            ? aviationAerCorsiaSubmittedEmissionsCalculationService.calculateSubmittedEmissions(aerCorsiaContainer)
+            : null;
+    }
+
+    private void updateAviationAerCorsiaRequestPayloadUponAmendSubmit(AviationAerCorsiaRequestPayload requestPayload,
+                                                       AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload amendsSubmitRequestTaskPayload,
+                                                       AviationAerCorsiaSubmittedEmissions submittedEmissions) {
+		AviationAerCorsiaReviewUtils.cleanUpDeprecatedAerDataReviewGroupDecisionsFromRequestPayload(
+				requestPayload, amendsSubmitRequestTaskPayload.getReportingRequired());
+		
+		AviationAerCorsiaReviewUtils.cleanUpDeprecatedVerificationDataReviewGroupDecisionsFromRequestPayload(
+				requestPayload, amendsSubmitRequestTaskPayload.getAer());
+        
+		requestPayload.setReportingRequired(amendsSubmitRequestTaskPayload.getReportingRequired());
+		requestPayload.setReportingObligationDetails(amendsSubmitRequestTaskPayload.getReportingObligationDetails());
+		requestPayload.setAer(amendsSubmitRequestTaskPayload.getAer());
+		requestPayload.setAerAttachments(amendsSubmitRequestTaskPayload.getAerAttachments());
+		requestPayload.setVerificationPerformed(amendsSubmitRequestTaskPayload.isVerificationPerformed());
+		requestPayload.setAerMonitoringPlanVersions(amendsSubmitRequestTaskPayload.getAerMonitoringPlanVersions());
+		requestPayload.setSubmittedEmissions(submittedEmissions);
+        Optional.ofNullable(submittedEmissions).ifPresent(emissions -> {
+            requestPayload.setTotalEmissionsProvided(emissions.getTotalEmissions().getAllFlightsEmissions());
+            requestPayload.setTotalOffsetEmissionsProvided(emissions.getTotalEmissions().getOffsetFlightsEmissions());
+        });
+    }
+
     private void addApplicationSubmittedRequestAction(AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload aviationAerAmendsSubmitRequestTaskPayload,
-                                                      Request request, PmrvUser pmrvUser, RequestActionType requestActionType) {
+                                                      AviationAerCorsiaSubmittedEmissions submittedEmissions,
+                                                      Request request, AppUser appUser, RequestActionType requestActionType) {
         RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 
         AviationAerCorsiaApplicationSubmittedRequestActionPayload aviationAerCorsiaApplicationSubmittedPayload =
             aviationAerCorsiaReviewMapper.toAviationAerCorsiaApplicationSubmittedRequestActionPayload(
-                aviationAerAmendsSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED_PAYLOAD);
+                aviationAerAmendsSubmitRequestTaskPayload, accountInfo, submittedEmissions, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED_PAYLOAD);
+        if (aviationAerAmendsSubmitRequestTaskPayload.isVerificationPerformed()) {
+            aviationAerCorsiaApplicationSubmittedPayload.setVerificationReport(((AviationAerCorsiaRequestPayload) request.getPayload()).getVerificationReport());
+        }
+        requestService.addActionToRequest(request, aviationAerCorsiaApplicationSubmittedPayload, requestActionType, appUser.getUserId());
+    }
 
-        requestService.addActionToRequest(request, aviationAerCorsiaApplicationSubmittedPayload, requestActionType, pmrvUser.getUserId());
+    private void updateReportableEmissionsAndRequestMetadata(Request request, AviationAerCorsiaContainer aerCorsiaContainer) {
+        AviationAerTotalReportableEmissions totalReportableEmissions =
+                aviationReportableEmissionsService.updateReportableEmissions(aerCorsiaContainer, request.getAccountId(), false);
+        AviationAerCorsiaTotalReportableEmissions totalEmissions = (AviationAerCorsiaTotalReportableEmissions) totalReportableEmissions;
+
+        AviationAerCorsiaRequestMetadata metadata = (AviationAerCorsiaRequestMetadata) request.getMetadata();
+        metadata.setEmissions(totalReportableEmissions.getReportableEmissions());
+        metadata.setTotalEmissionsOffsettingFlights(totalEmissions.getReportableOffsetEmissions());
+        metadata.setTotalEmissionsClaimedReductions(totalEmissions.getReportableReductionClaimEmissions());
+
+        Optional.ofNullable(aerCorsiaContainer.getVerificationReport()).ifPresent(report ->
+    		metadata.setOverallAssessmentType(report.getVerificationData().getOverallDecision().getType()));
+    }
+
+    private void deleteReportableAndRequestMetadataEmissions(Request request, AviationAerCorsiaContainer aerCorsiaContainer) {
+        aviationReportableEmissionsService.deleteReportableEmissions(request.getAccountId(), aerCorsiaContainer.getReportingYear());
+        AviationAerRequestMetadata metadata = (AviationAerRequestMetadata) request.getMetadata();
+        metadata.setEmissions(null);
+        metadata.setOverallAssessmentType(null);
     }
 }

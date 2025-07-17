@@ -1,28 +1,27 @@
 package uk.gov.pmrv.api.account.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.TaskService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.transaction.AfterTransaction;
 import org.springframework.test.context.transaction.BeforeTransaction;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.repository.AccountCustomRepositoryImpl;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.transform.AccountMapper;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.workflow.request.WorkflowService;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -32,11 +31,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
-@SpringBootTest(
-    properties = {
-        "camunda.bpm.enabled=false"
-    }
-)
+@DataJpaTest
 @Log4j2
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public abstract class AbstractAccountCustomRepositoryIT extends AbstractContainerBaseTest {
@@ -55,13 +50,11 @@ public abstract class AbstractAccountCustomRepositoryIT extends AbstractContaine
     @Autowired
     private TransactionTemplate txTemplate;
 
-    @MockBean
+    @MockitoBean
     AccountMapper accountMapper;
 
-    @MockBean
-    RuntimeService runtimeService;
-    @MockBean
-    TaskService taskService;
+    @MockitoBean
+    WorkflowService workflowService;
 
     @BeforeEach
     @BeforeTransaction // without this annotation, the test does not see the db entry

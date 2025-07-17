@@ -5,6 +5,7 @@ import { combineLatest, first, map, switchMap } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
+import { permitTypeMapLowercase } from '@permit-application/shared/utils/permit';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
 
 import { PermitIssuanceSubmitApplicationAmendRequestTaskActionPayload, TasksService } from 'pmrv-api';
@@ -29,7 +30,8 @@ export class SummaryComponent implements PendingRequest {
     map((statuses) => statuses.every((status) => status === 'complete')),
   );
 
-  permitType$ = this.store.pipe(map((state) => state.permitType));
+  permitTypeMapLowercase = permitTypeMapLowercase;
+  permitType$ = this.store.pipe(map((state) => permitTypeMapLowercase?.[state.permitType]));
 
   constructor(
     readonly pendingRequest: PendingRequestService,

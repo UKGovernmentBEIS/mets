@@ -26,7 +26,7 @@ describe('ReviewComponent', () => {
 
   class Page extends BasePage<ReviewComponent> {
     get relatedActionsLinks() {
-      return this.queryAll<HTMLLinkElement>('aside li a');
+      return this.queryAll<HTMLLinkElement>('app-related-actions aside li a');
     }
 
     get reviewSections() {

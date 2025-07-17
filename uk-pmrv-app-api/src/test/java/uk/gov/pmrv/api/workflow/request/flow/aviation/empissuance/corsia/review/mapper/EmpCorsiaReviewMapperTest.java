@@ -19,7 +19,7 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.Fli
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OperatorType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproach;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproachCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.ActivitiesDescriptionCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.EmpCorsiaOperatorDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -47,7 +47,7 @@ class EmpCorsiaReviewMapperTest {
         RequestTaskPayloadType empApplicationReviewRequestTaskPayloadType = RequestTaskPayloadType.EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW_PAYLOAD;
         EmissionsMonitoringPlanCorsia emissionsMonitoringPlan = EmissionsMonitoringPlanCorsia.builder()
             .abbreviations(EmpAbbreviations.builder().exist(false).build())
-            .emissionsMonitoringApproach(FuelMonitoringApproach.builder().build())
+            .emissionsMonitoringApproach(FuelMonitoringApproachCorsia.builder().build())
             .operatorDetails(EmpCorsiaOperatorDetails.builder()
                 .operatorName("operatorName")
                 .flightIdentification(FlightIdentification.builder()
@@ -120,7 +120,7 @@ class EmpCorsiaReviewMapperTest {
         EmissionsMonitoringPlanCorsia emissionsMonitoringPlan = EmissionsMonitoringPlanCorsia.builder()
             .abbreviations(EmpAbbreviations.builder().exist(false).build())
             .emissionsMonitoringApproach(
-                FuelMonitoringApproach.builder().build())
+                FuelMonitoringApproachCorsia.builder().build())
             .operatorDetails(EmpCorsiaOperatorDetails.builder()
                 .operatorName("empOpertorDetailsOperatorName")
                 .flightIdentification(FlightIdentification.builder()
@@ -244,7 +244,7 @@ class EmpCorsiaReviewMapperTest {
     void toEmissionsMonitoringPlanCorsiaContainer() {
         EmissionsMonitoringPlanCorsia emissionsMonitoringPlan = EmissionsMonitoringPlanCorsia.builder()
             .abbreviations(EmpAbbreviations.builder().exist(false).build())
-            .emissionsMonitoringApproach(FuelMonitoringApproach.builder().build())
+            .emissionsMonitoringApproach(FuelMonitoringApproachCorsia.builder().build())
             .operatorDetails(EmpCorsiaOperatorDetails.builder()
                 .operatorName("empOperatorDetailsOperatorName")
                 .flightIdentification(FlightIdentification.builder()

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -9,8 +9,11 @@ import { isWizardComplete } from '../../core/section-status';
 @Injectable({
   providedIn: 'root',
 })
-export class DetailsOfChangeGuard implements CanActivate {
-  constructor(private readonly router: Router, private readonly permitNotificationService: PermitNotificationService) {}
+export class DetailsOfChangeGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly permitNotificationService: PermitNotificationService,
+  ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,

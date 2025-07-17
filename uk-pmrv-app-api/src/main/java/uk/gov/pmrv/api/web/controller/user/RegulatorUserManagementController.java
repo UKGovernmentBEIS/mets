@@ -21,10 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.token.FileToken;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.security.AuthorizedRole;
+import uk.gov.netz.api.token.FileToken;
 import uk.gov.pmrv.api.user.core.service.UserSignatureService;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserDTO;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserUpdateDTO;
@@ -32,8 +34,6 @@ import uk.gov.pmrv.api.user.regulator.service.RegulatorUserManagementService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
 import uk.gov.pmrv.api.web.orchestrator.authorization.service.RegulatorUserAuthorityUpdateOrchestrator;
-import uk.gov.pmrv.api.web.security.Authorized;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 import uk.gov.pmrv.api.web.util.FileDtoMapper;
 
 import java.io.IOException;
@@ -61,9 +61,9 @@ public class RegulatorUserManagementController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<RegulatorUserDTO> getRegulatorUserByCaAndId(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("userId") @Parameter(description = "The regulator user id") String userId) {
-        return new ResponseEntity<>(regulatorUserManagementService.getRegulatorUserByUserId(pmrvUser, userId),
+        return new ResponseEntity<>(regulatorUserManagementService.getRegulatorUserByUserId(appUser, userId),
                 HttpStatus.OK);
     }
 
@@ -75,10 +75,10 @@ public class RegulatorUserManagementController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<RegulatorUserUpdateDTO> updateRegulatorUserByCaAndId(
-            @Parameter(hidden = true)PmrvUser currentUser,
+            @Parameter(hidden = true) AppUser currentUser,
             @PathVariable("userId") @Parameter(description = "The regulator user id to update") String userId,
             @RequestPart @Valid @Parameter(description = "The regulator user to update", required = true) RegulatorUserUpdateDTO regulatorUserUpdateDTO,
-            @RequestPart(name = "signature", required = false) @Valid @Parameter(description = "The signature file", required = false) MultipartFile signature
+            @RequestPart(name = "signature", required = false) @Parameter(description = "The signature file") MultipartFile signature
     ) throws IOException {
         FileDTO signatureDTO = fileDtoMapper.toFileDTO(signature);
         regulatorUserAuthorityUpdateOrchestrator.updateRegulatorUserByUserId(currentUser, userId, regulatorUserUpdateDTO, signatureDTO);
@@ -90,11 +90,11 @@ public class RegulatorUserManagementController {
     @ApiResponse(responseCode = "200", description = SwaggerApiInfo.OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = RegulatorUserUpdateDTO.class))})
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @AuthorizedRole(roleType = RoleType.REGULATOR)
+    @AuthorizedRole(roleType = RoleTypeConstants.REGULATOR)
     public ResponseEntity<RegulatorUserUpdateDTO> updateCurrentRegulatorUser(
-            @Parameter(hidden = true) PmrvUser currentUser,
+            @Parameter(hidden = true) AppUser currentUser,
             @RequestPart @Valid @Parameter(description = "The regulator user to update", required = true) RegulatorUserUpdateDTO regulatorUserUpdateDTO,
-            @RequestPart(name = "signature", required = false) @Valid @Parameter(description = "The signature file", required = false) MultipartFile signature
+            @RequestPart(name = "signature", required = false) @Parameter(description = "The signature file") MultipartFile signature
     ) throws IOException {
         FileDTO signatureDTO = fileDtoMapper.toFileDTO(signature);
         regulatorUserAuthorityUpdateOrchestrator
@@ -125,7 +125,7 @@ public class RegulatorUserManagementController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<Void> resetRegulator2Fa(
-            @Parameter(hidden = true)PmrvUser currentUser,
+            @Parameter(hidden = true) AppUser currentUser,
             @PathVariable("userId") @Parameter(description = "Regulator's user id to reset 2FA") String userId) {
     	regulatorUserManagementService.resetRegulator2Fa(currentUser, userId);
         return new ResponseEntity<>(HttpStatus.OK);

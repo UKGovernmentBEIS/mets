@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -95,14 +95,14 @@ export class NotificationTemplatesService {
    */
   public getCurrentUserNotificationTemplates(
     accountType: 'INSTALLATION' | 'AVIATION',
-    role: 'OPERATOR' | 'VERIFIER' | 'REGULATOR',
+    role: string,
     page: number,
     size: number,
     term?: string,
   ): Observable<TemplateSearchResults>;
   public getCurrentUserNotificationTemplates(
     accountType: 'INSTALLATION' | 'AVIATION',
-    role: 'OPERATOR' | 'VERIFIER' | 'REGULATOR',
+    role: string,
     page: number,
     size: number,
     term: string,
@@ -112,7 +112,7 @@ export class NotificationTemplatesService {
   ): Observable<HttpResponse<TemplateSearchResults>>;
   public getCurrentUserNotificationTemplates(
     accountType: 'INSTALLATION' | 'AVIATION',
-    role: 'OPERATOR' | 'VERIFIER' | 'REGULATOR',
+    role: string,
     page: number,
     size: number,
     term: string,
@@ -122,7 +122,7 @@ export class NotificationTemplatesService {
   ): Observable<HttpEvent<TemplateSearchResults>>;
   public getCurrentUserNotificationTemplates(
     accountType: 'INSTALLATION' | 'AVIATION',
-    role: 'OPERATOR' | 'VERIFIER' | 'REGULATOR',
+    role: string,
     page: number,
     size: number,
     term: string,
@@ -132,7 +132,7 @@ export class NotificationTemplatesService {
   ): Observable<TemplateSearchResults>;
   public getCurrentUserNotificationTemplates(
     accountType: 'INSTALLATION' | 'AVIATION',
-    role: 'OPERATOR' | 'VERIFIER' | 'REGULATOR',
+    role: string,
     page: number,
     size: number,
     term?: string,

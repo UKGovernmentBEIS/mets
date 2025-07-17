@@ -8,18 +8,23 @@ import { DestroySubject } from '@core/services/destroy-subject.service';
 
 @Component({
   selector: 'app-back-link',
-  template: ` <govuk-back-link
-    *ngIf="backlink$ | async as backlink"
-    [link]="backlink.link"
-    [route]="backlink.route"
-  ></govuk-back-link>`,
+  template: `
+    <govuk-back-link
+      *ngIf="backlink$ | async as backlink"
+      [link]="backlink.link"
+      [route]="backlink.route"></govuk-back-link>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })
 export class BackLinkComponent {
   protected backlink$ = new BehaviorSubject<{ link: string; route: ActivatedRouteSnapshot }>(null);
 
-  constructor(private router: Router, private injector: Injector, private destroy$: DestroySubject) {
+  constructor(
+    private router: Router,
+    private injector: Injector,
+    private destroy$: DestroySubject,
+  ) {
     router.events
       .pipe(
         takeUntil(this.destroy$),

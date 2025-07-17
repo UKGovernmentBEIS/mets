@@ -1,0 +1,69 @@
+<ng-container
+  *ngIf="
+    ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async]
+      .emissionPointCategory as emissionPointCategory
+  ">
+  <app-permit-task
+    *ngIf="emissionPointCategory.emissionPoint | findEmissionPoint | async as emissionPoint"
+    [breadcrumb]="[
+      {
+        text: 'MEASUREMENT_CO2' | monitoringApproachDescription,
+        link: ['measurement'],
+      },
+      {
+        text: emissionPoint | tierEmissionPointName: emissionPointCategory,
+        link: ['measurement', 'category-tier', index$ | async],
+      },
+    ]">
+    <ng-container
+      *ngIf="
+        ('MEASUREMENT_CO2' | monitoringApproachTask | async).emissionPointCategoryAppliedTiers[index$ | async] as tier
+      ">
+      <app-wizard-step
+        [showBackLink]="true"
+        (formSubmit)="onContinue()"
+        [formGroup]="form"
+        caption="{{ 'MEASUREMENT_CO2' | monitoringApproachDescription }}, {{
+          tier | emissionPointCategoryName | async
+        }}"
+        heading="Reasons for not applying the highest required tier"
+        submitText="Continue"
+        [hideSubmit]="(store.isEditable$ | async) === false">
+        <h2 class="govuk-heading-m">Why are you not applying the highest required tier?</h2>
+
+        <p class="govuk-body">Select all that apply</p>
+
+        <div formControlName="justification" govuk-checkboxes>
+          <ng-container govukLegend>
+            <span class="govuk-visually-hidden">Unreasonable cost</span>
+          </ng-container>
+          <govuk-checkbox value="isCostUnreasonable" label="Unreasonable cost"></govuk-checkbox>
+
+          <ng-container govukLegend>
+            <span class="govuk-visually-hidden">Technical infeasibility</span>
+          </ng-container>
+          <govuk-checkbox value="isTechnicallyInfeasible" label="Technical infeasibility">
+            <ng-container govukConditionalContent>
+              <div
+                formControlName="technicalInfeasibilityExplanation"
+                govuk-textarea
+                [maxLength]="10000"
+                label="Explain why it is not technically feasible to meet the highest tier, as set out in Article 17 of the Monitoring and Reporting Regulations (MRR)"></div>
+            </ng-container>
+          </govuk-checkbox>
+        </div>
+
+        <app-multiple-file-input
+          [baseDownloadUrl]="getDownloadUrl()"
+          [label]="
+            (isFileUploaded$ | async)
+              ? 'Upload a different file'
+              : 'Upload any supporting files or completed templates (optional)'
+          "
+          formControlName="files"
+          listTitle="Upload any supporting files or completed templates (optional)"></app-multiple-file-input>
+      </app-wizard-step>
+      <a govukLink routerLink="../..">Return to: {{ tier | emissionPointCategoryName | async }}</a>
+    </ng-container>
+  </app-permit-task>
+</ng-container>

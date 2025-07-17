@@ -28,7 +28,7 @@ public class AerService {
         AerContainer aerContainer = params.getAerContainer();
         Long accountId = params.getAccountId();
         Year reportingYear = aerContainer.getReportingYear();
-        BigDecimal reportableEmissions = updateReportableEmissions(params);
+        BigDecimal reportableEmissions = updateReportableEmissions(params, true);
 
         aerContainer.setReportableEmissions(reportableEmissions);
         aerValidatorService.validate(aerContainer, accountId);
@@ -45,7 +45,7 @@ public class AerService {
         return reportableEmissions;
     }
 
-    public BigDecimal updateReportableEmissions(AerSubmitParams params) {
+    public BigDecimal updateReportableEmissions(AerSubmitParams params, boolean isFromRegulator) {
         AerContainer aerContainer = params.getAerContainer();
         Long accountId = params.getAccountId();
         Year reportingYear = aerContainer.getReportingYear();
@@ -56,6 +56,7 @@ public class AerService {
             .year(reportingYear)
             .reportableEmissions(reportableEmissions)
             .isFromDre(false)
+            .isFromRegulator(isFromRegulator)
             .build();
         reportableEmissionsService.saveReportableEmissions(emissionsParams);
         return reportableEmissions;

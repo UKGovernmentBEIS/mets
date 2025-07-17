@@ -1,9 +1,9 @@
 package uk.gov.pmrv.api.migration.emp.corsia.fummethods;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.springframework.jdbc.core.RowMapper;
 
 public class EtsFuelUseMonitoringMethodsCorsiaRowMapper implements RowMapper<EtsFuelUseMonitoringMethodsCorsia> {
 

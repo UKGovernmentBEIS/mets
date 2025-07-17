@@ -4,16 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.attachments.domain.FileAttachment;
-import uk.gov.pmrv.api.files.attachments.repository.FileAttachmentRepository;
-import uk.gov.pmrv.api.files.common.FileConstants;
-import uk.gov.pmrv.api.files.common.domain.FileStatus;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.service.FileScanService;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.attachments.domain.FileAttachment;
+import uk.gov.netz.api.files.attachments.repository.FileAttachmentRepository;
+import uk.gov.netz.api.files.common.FileConstants;
+import uk.gov.netz.api.files.common.domain.FileStatus;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.service.FileScanService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.ftp.FtpFileDTOResult;
 import uk.gov.pmrv.api.migration.ftp.FtpFileService;
+import uk.gov.pmrv.api.migration.ftp.FtpProperties;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -21,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import uk.gov.pmrv.api.migration.ftp.FtpProperties;
 
 @Service
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)

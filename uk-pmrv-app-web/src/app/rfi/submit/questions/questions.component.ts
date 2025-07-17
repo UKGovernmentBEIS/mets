@@ -1,6 +1,8 @@
 import {
+  AfterContentChecked,
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
@@ -24,7 +26,7 @@ import { createAnotherQuestion, questionFormProvider, RFI_FORM } from './questio
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject, questionFormProvider],
 })
-export class QuestionsComponent implements AfterViewInit {
+export class QuestionsComponent implements AfterViewInit, AfterContentChecked {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;
   @ViewChildren('removeButton') removeButtons: QueryList<ElementRef<HTMLButtonElement>>;
 
@@ -43,8 +45,12 @@ export class QuestionsComponent implements AfterViewInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly destroy$: DestroySubject,
+    private cd: ChangeDetectorRef,
   ) {}
 
+  ngAfterContentChecked(): void {
+    this.cd.detectChanges();
+  }
   ngAfterViewInit(): void {
     this.removeButtons.changes.pipe(takeUntil(this.destroy$)).subscribe((buttons) => {
       if (buttons.length > this.questionsLength) {

@@ -17,9 +17,11 @@ async function setup() {
 
 @Component({
   selector: 'app-mock-parent',
-  template: ` <form [formGroup]="form">
-    <app-emissions-reduction-claim-form></app-emissions-reduction-claim-form>
-  </form>`,
+  template: `
+    <form [formGroup]="form">
+      <app-emissions-reduction-claim-form></app-emissions-reduction-claim-form>
+    </form>
+  `,
   standalone: true,
   imports: [ReactiveFormsModule, EmissionsReductionClaimFormComponent],
   providers: [{ provide: TASK_FORM_PROVIDER, useClass: EmissionsReductionClaimFormProvider }],

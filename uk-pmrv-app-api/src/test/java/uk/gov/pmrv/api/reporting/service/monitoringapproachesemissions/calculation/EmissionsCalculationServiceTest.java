@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamCategory;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamType;
 import uk.gov.pmrv.api.reporting.domain.ActivityDataMeasurementUnit;
@@ -95,7 +95,7 @@ class EmissionsCalculationServiceTest {
         BusinessException be = assertThrows(BusinessException.class,
             () -> emissionsCalculationService.calculateEmissions(calculationParams));
 
-        assertEquals(ErrorCode.AER_EMISSIONS_CALCULATION_FAILED, be.getErrorCode());
+        assertEquals(MetsErrorCode.AER_EMISSIONS_CALCULATION_FAILED, be.getErrorCode());
 
         verify(firstCategoryEmissionsCalculationService, times(1)).getSourceStreamCategory();
         verifyNoMoreInteractions(firstCategoryEmissionsCalculationService);

@@ -8,14 +8,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.notification.template.domain.DocumentTemplate;
 import uk.gov.pmrv.api.notification.template.domain.NotificationTemplate;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -39,13 +39,13 @@ class NotificationTemplateRepositoryIT extends AbstractContainerBaseTest {
     @Test
     void findByNameAndCompetentAuthorityAndAccountType() {
         Optional<NotificationTemplate> result = repo.findByNameAndCompetentAuthorityAndAccountType(
-            NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
+        		PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
             CompetentAuthorityEnum.ENGLAND,
             AccountType.INSTALLATION);
         assertThat(result).isEmpty();
         
         NotificationTemplate notificationTemplate = createNotificationTemplate(
-                NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
+        		PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
                 CompetentAuthorityEnum.ENGLAND,
                 "subject",
                 "content",
@@ -57,7 +57,7 @@ class NotificationTemplateRepositoryIT extends AbstractContainerBaseTest {
         flushAndClear();
         
         result = repo.findByNameAndCompetentAuthorityAndAccountType(
-            NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
+        		PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
             CompetentAuthorityEnum.ENGLAND,
             AccountType.INSTALLATION);
         assertThat(result).isNotEmpty();
@@ -66,11 +66,11 @@ class NotificationTemplateRepositoryIT extends AbstractContainerBaseTest {
     @Test
     void findByNameAndCompetentAuthorityAndAccountType_empty_ca_and_account_type() {
         Optional<NotificationTemplate> result = repo.findByNameAndCompetentAuthorityAndAccountType(
-            NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT, null, null);
+        		PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT, null, null);
         assertThat(result).isEmpty();
         
         NotificationTemplate notificationTemplate = createNotificationTemplate(
-                NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
+        		PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
                 null,
                 "subject",
                 "content",
@@ -82,7 +82,7 @@ class NotificationTemplateRepositoryIT extends AbstractContainerBaseTest {
         flushAndClear();
         
         result = repo.findByNameAndCompetentAuthorityAndAccountType(
-            NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT, null, null);
+        		PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT, null, null);
         assertThat(result).isNotEmpty();
     }
 
@@ -90,7 +90,7 @@ class NotificationTemplateRepositoryIT extends AbstractContainerBaseTest {
     void findManagedNotificationTemplateByIdWithDocumentTemplates() {
         String permitWorkflow = "Permit Workflow";
         NotificationTemplate notificationTemplate1 = createNotificationTemplate(
-            NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
+        		PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
             CompetentAuthorityEnum.WALES,
             "Invitation To Operator Account",
             "Invitation To Operator Account",
@@ -103,7 +103,7 @@ class NotificationTemplateRepositoryIT extends AbstractContainerBaseTest {
         addDocumentTemplateToNotificationTemplate(documentTemplate1, notificationTemplate1);
 
         NotificationTemplate notificationTemplate2 = createNotificationTemplate(
-            NotificationTemplateName.INVITATION_TO_VERIFIER_ACCOUNT,
+        		PmrvNotificationTemplateName.INVITATION_TO_VERIFIER_ACCOUNT,
             CompetentAuthorityEnum.WALES,
             "Invitation To Verifier Account",
             "Invitation To Verifier Account",
@@ -128,7 +128,7 @@ class NotificationTemplateRepositoryIT extends AbstractContainerBaseTest {
         assertThat(optionalNotificationTemplate).isNotEmpty();
 
         NotificationTemplate notificationTemplate = optionalNotificationTemplate.get();
-        assertEquals(NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT, notificationTemplate.getName());
+        assertEquals(PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT, notificationTemplate.getName());
 
         Set<DocumentTemplate> documentTemplates = notificationTemplate.getDocumentTemplates();
         assertThat(documentTemplates).hasSize(1);
@@ -139,7 +139,7 @@ class NotificationTemplateRepositoryIT extends AbstractContainerBaseTest {
     void findManagedNotificationTemplateByIdWithDocumentTemplates_not_managed() {
         String permitWorkflow = "Permit Workflow";
         NotificationTemplate notificationTemplate1 = createNotificationTemplate(
-            NotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
+        		PmrvNotificationTemplateName.INVITATION_TO_OPERATOR_ACCOUNT,
             CompetentAuthorityEnum.WALES,
             "Invitation To Operator Account",
             "Invitation To Operator Account",
@@ -157,7 +157,7 @@ class NotificationTemplateRepositoryIT extends AbstractContainerBaseTest {
         assertThat(optionalNotificationTemplate).isEmpty();
     }
 
-    private NotificationTemplate createNotificationTemplate(NotificationTemplateName name, CompetentAuthorityEnum ca, String subject, String text,
+    private NotificationTemplate createNotificationTemplate(PmrvNotificationTemplateName name, CompetentAuthorityEnum ca, String subject, String text,
                                                             String workflow, boolean managed, AccountType accountType) {
         return NotificationTemplate.builder()
             .name(name)
@@ -165,7 +165,7 @@ class NotificationTemplateRepositoryIT extends AbstractContainerBaseTest {
             .text(text)
             .competentAuthority(ca)
             .workflow(workflow)
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .managed(managed)
             .accountType(accountType)
             .lastUpdatedDate(LocalDateTime.now())

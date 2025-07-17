@@ -3,10 +3,10 @@ package uk.gov.pmrv.api.web.orchestrator.authorization.service;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserAuthoritiesDTO;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserAuthorityDTO;
-import uk.gov.pmrv.api.authorization.regulator.service.RegulatorAuthorityQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.dto.UserAuthoritiesDTO;
+import uk.gov.netz.api.authorization.core.domain.dto.UserAuthorityDTO;
+import uk.gov.netz.api.authorization.regulator.service.RegulatorAuthorityQueryService;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserInfoDTO;
 import uk.gov.pmrv.api.user.regulator.service.RegulatorUserInfoService;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.RegulatorUserAuthorityInfoDTO;
@@ -24,12 +24,12 @@ public class RegulatorUserAuthorityQueryOrchestrator {
     private final RegulatorUserInfoService regulatorUserInfoService;
     private final RegulatorUserAuthorityInfoMapper regulatorUserAuthorityInfoMapper = Mappers.getMapper(RegulatorUserAuthorityInfoMapper.class);
 
-    public RegulatorUsersAuthoritiesInfoDTO getCaUsersAuthoritiesInfo(PmrvUser pmrvUser) {
-        UserAuthoritiesDTO caAuthorities = regulatorAuthorityQueryService.getCaAuthorities(pmrvUser);
+    public RegulatorUsersAuthoritiesInfoDTO getCaUsersAuthoritiesInfo(AppUser appUser) {
+        UserAuthoritiesDTO caAuthorities = regulatorAuthorityQueryService.getCaAuthorities(appUser);
         List<String> userIds = caAuthorities.getAuthorities().stream().map(UserAuthorityDTO::getUserId).collect(Collectors.toList());
 
         List<RegulatorUserInfoDTO> regulatorAuthorityUsersInfo =
-                regulatorUserInfoService.getRegulatorUsersInfo(pmrvUser, userIds);
+                regulatorUserInfoService.getRegulatorUsersInfo(appUser, userIds);
 
         return getRegulatorUsersAuthoritiesInfo(caAuthorities, regulatorAuthorityUsersInfo);
     }

@@ -16,7 +16,7 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.Fli
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.FlightType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OperatorType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproach;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproachCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.ActivitiesDescriptionCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.EmpCorsiaOperatorDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -171,7 +171,7 @@ class EmpVariationCorsiaAmendSubmitMapperTest {
     private EmissionsMonitoringPlanCorsia buildEmp() {
 		return EmissionsMonitoringPlanCorsia.builder()
             .abbreviations(EmpAbbreviations.builder().exist(false).build())
-            .emissionsMonitoringApproach(FuelMonitoringApproach.builder().build())
+            .emissionsMonitoringApproach(FuelMonitoringApproachCorsia.builder().build())
             .additionalDocuments(EmpAdditionalDocuments.builder().exist(false).build())
             .operatorDetails(EmpCorsiaOperatorDetails.builder()
                 .operatorName("empOperatorDetailsOperatorName")

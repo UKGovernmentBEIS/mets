@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -50,6 +50,7 @@ export interface EmissionsCalculationParamsDTO {
     | 'REFINERIES_HYDROGEN_PRODUCTION'
     | 'CEMENT_CLINKER_CKD'
     | 'CERAMICS_SCRUBBING'
+    | 'UPSTREAM_GHG_REMOVAL_VENTING_CO2'
     | 'REFINERIES_CATALYTIC_CRACKER_REGENERATION'
     | 'COKE_FUEL_AS_PROCESS_INPUT'
     | 'IRON_STEEL_FUEL_AS_PROCESS_INPUT'

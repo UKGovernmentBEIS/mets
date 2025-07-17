@@ -18,10 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.user.core.domain.model.UserInfo;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.Authorized;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.dto.AssigneeUserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.dto.RequestTaskAssignmentDTO;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentQueryService;
@@ -70,7 +69,7 @@ public class RequestTaskAssignmentController {
     /**
      * Retrieves a list of users that can be assigned to the provided task id.
      * @param taskId the task id
-     * @return {@link List} of {@link UserInfo}
+     * @return {@link List} of {@link AssigneeUserInfoDTO}
      */
     @GetMapping(path = "/{taskId}/candidate-assignees")
     @Operation(summary = "Returns all users to whom can be assigned the provided task ")
@@ -81,7 +80,7 @@ public class RequestTaskAssignmentController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#taskId")
     public ResponseEntity<List<AssigneeUserInfoDTO>> getCandidateAssigneesByTaskId(
-            @Parameter(hidden = true) PmrvUser user,
+            @Parameter(hidden = true) AppUser user,
             @Parameter(description = "The task id") @PathVariable("taskId") Long taskId) {
         return new ResponseEntity<>(
                 requestTaskAssignmentQueryService.getCandidateAssigneesByTaskId(taskId, user), HttpStatus.OK);
@@ -95,7 +94,7 @@ public class RequestTaskAssignmentController {
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#taskId")
     public ResponseEntity<List<AssigneeUserInfoDTO>> getCandidateAssigneesByTaskType(
-            @Parameter(hidden = true) PmrvUser user,
+            @Parameter(hidden = true) AppUser user,
             @Parameter(description = "The current task id that user works on. Not related to the task type for which we search candidate assignees")
             @PathVariable("taskId") Long taskId,
             @Parameter(description = "The task type for which you need to retrieve candidate assignees")

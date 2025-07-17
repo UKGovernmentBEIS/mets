@@ -48,6 +48,7 @@ export class OperatorDetailsAirOperatingCertificateComponent extends BaseOperato
 
   onSubmit() {
     const certificateExist = this.form.value.certificateExist as AirOperatingCertificate['certificateExist'];
+
     if (!certificateExist) {
       this.form.patchValue({
         certificateNumber: null,
@@ -64,6 +65,7 @@ export class OperatorDetailsAirOperatingCertificateComponent extends BaseOperato
         certificateFiles: this.form.value.certificateFiles?.map((doc: FileUpload) => doc.uuid),
       },
     };
+
     this.submitForm('airOperatingCertificate', operatorDetails, 'organisation-structure');
   }
 }

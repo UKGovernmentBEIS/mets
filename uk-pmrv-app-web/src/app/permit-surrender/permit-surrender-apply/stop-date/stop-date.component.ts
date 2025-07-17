@@ -19,8 +19,7 @@ import { stopDateFormProvider } from './stop-date-form.provider';
           (formSubmit)="onContinue()"
           [formGroup]="form"
           submitText="Continue"
-          [hideSubmit]="(store.isEditable$ | async) === false"
-        >
+          [hideSubmit]="(store.isEditable$ | async) === false">
           <span class="govuk-caption-l">Surrender your permit</span>
 
           <app-page-heading>On what date did the regulated activities at the installation stop?</app-page-heading>

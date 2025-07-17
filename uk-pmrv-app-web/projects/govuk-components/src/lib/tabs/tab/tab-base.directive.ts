@@ -9,7 +9,10 @@ export abstract class TabBaseDirective implements OnChanges {
 
   isSelected = new BehaviorSubject<boolean>(false);
 
-  constructor(public cdRef: ChangeDetectorRef, public templateRef: TemplateRef<void>) {}
+  constructor(
+    public cdRef: ChangeDetectorRef,
+    public templateRef: TemplateRef<void>,
+  ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ngOnChanges(changes: SimpleChanges): void {

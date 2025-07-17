@@ -13,8 +13,7 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
     <app-aer-task-review
       [breadcrumb]="true"
       [notification]="notification"
-      heading="{{ this.groupKey | monitoringApproachEmissionDescription }}"
-    >
+      heading="{{ this.groupKey | monitoringApproachEmissionDescription }}">
       <div [ngSwitch]="this.groupKey">
         <div *ngSwitchCase="'CALCULATION_CO2'">
           <app-calculation-emissions-group [data]="aerData$ | async"></app-calculation-emissions-group>

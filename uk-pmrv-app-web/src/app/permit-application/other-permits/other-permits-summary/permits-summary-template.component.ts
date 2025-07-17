@@ -12,8 +12,7 @@ import { EnvironmentalPermitsAndLicences } from 'pmrv-api';
       [details]="detail"
       appGroupedSummaryList
       govuk-summary-list
-      [hasBottomBorder]="hasBottomBorder"
-    ></dl>
+      [hasBottomBorder]="hasBottomBorder"></dl>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

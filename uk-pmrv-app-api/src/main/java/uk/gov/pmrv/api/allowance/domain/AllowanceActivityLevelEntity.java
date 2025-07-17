@@ -12,17 +12,15 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import uk.gov.netz.api.common.config.YearAttributeConverter;
 import uk.gov.pmrv.api.allowance.domain.enums.ChangeType;
 import uk.gov.pmrv.api.allowance.domain.enums.SubInstallationName;
-import uk.gov.pmrv.api.common.domain.converter.YearAttributeConverter;
 
 import java.time.LocalDateTime;
 import java.time.Year;

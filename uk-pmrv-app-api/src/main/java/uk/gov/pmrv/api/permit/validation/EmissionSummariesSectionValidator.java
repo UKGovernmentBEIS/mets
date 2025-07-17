@@ -1,15 +1,5 @@
 package uk.gov.pmrv.api.permit.validation;
 
-import static uk.gov.pmrv.api.permit.validation.PermitReferenceService.Rule.EMISSION_POINTS_USED;
-import static uk.gov.pmrv.api.permit.validation.PermitReferenceService.Rule.EMISSION_SOURCES_USED;
-import static uk.gov.pmrv.api.permit.validation.PermitReferenceService.Rule.REGULATED_ACTIVITIES_USED;
-import static uk.gov.pmrv.api.permit.validation.PermitReferenceService.Rule.SOURCE_STREAMS_USED;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,6 +9,17 @@ import uk.gov.pmrv.api.permit.domain.PermitValidationResult;
 import uk.gov.pmrv.api.permit.domain.PermitViolation;
 import uk.gov.pmrv.api.permit.domain.emissionsummaries.EmissionSummaries;
 import uk.gov.pmrv.api.permit.domain.emissionsummaries.EmissionSummary;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static uk.gov.pmrv.api.permit.validation.PermitReferenceService.Rule.EMISSION_POINTS_USED;
+import static uk.gov.pmrv.api.permit.validation.PermitReferenceService.Rule.EMISSION_SOURCES_USED;
+import static uk.gov.pmrv.api.permit.validation.PermitReferenceService.Rule.REGULATED_ACTIVITIES_USED;
+import static uk.gov.pmrv.api.permit.validation.PermitReferenceService.Rule.SOURCE_STREAMS_USED;
 
 @Component
 @RequiredArgsConstructor

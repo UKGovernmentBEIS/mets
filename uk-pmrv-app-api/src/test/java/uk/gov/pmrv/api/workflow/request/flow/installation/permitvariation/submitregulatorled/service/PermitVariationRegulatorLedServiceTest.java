@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.domain.abbreviations.Abbreviations;
@@ -108,7 +108,7 @@ class PermitVariationRegulatorLedServiceTest {
     
     @Test
     void saveRequestPeerReviewActionRegulatorLed() {
-    	final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+    	final AppUser appUser = AppUser.builder().userId("userId").build();
     	final String selectedPeerReviewer = "peerReviewer";
     	
     	final PermitVariationRequestPayload requestPayload = PermitVariationRequestPayload.builder().build();
@@ -140,10 +140,10 @@ class PermitVariationRegulatorLedServiceTest {
             .payload(requestTaskPayload)
             .build();
         
-        cut.saveRequestPeerReviewActionRegulatorLed(requestTask, selectedPeerReviewer, pmrvUser.getUserId());
+        cut.saveRequestPeerReviewActionRegulatorLed(requestTask, selectedPeerReviewer, appUser.getUserId());
         
         assertThat(requestPayload.getRegulatorPeerReviewer()).isEqualTo(selectedPeerReviewer);
-    	assertThat(requestPayload.getRegulatorReviewer()).isEqualTo(pmrvUser.getUserId());
+    	assertThat(requestPayload.getRegulatorReviewer()).isEqualTo(appUser.getUserId());
     	assertThat(requestPayload.getPermitType()).isEqualTo(requestTaskPayload.getPermitType());
     	assertThat(requestPayload.getPermit()).isEqualTo(requestTaskPayload.getPermit());
     	assertThat(requestPayload.getPermitVariationDetails()).isEqualTo(requestTaskPayload.getPermitVariationDetails());
@@ -184,12 +184,12 @@ class PermitVariationRegulatorLedServiceTest {
     			.signatory("sign")
     			.operators(Set.of("oper"))
     			.build();
-    	PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+    	AppUser appUser = AppUser.builder().userId("userId").build();
     	
-    	cut.savePermitVariationDecisionNotificationRegulatorLed(requestTask, decisionNotification, pmrvUser);
+    	cut.savePermitVariationDecisionNotificationRegulatorLed(requestTask, decisionNotification, appUser);
     	
     	assertThat(requestPayload.getDecisionNotification()).isEqualTo(decisionNotification);
-    	assertThat(requestPayload.getRegulatorReviewer()).isEqualTo(pmrvUser.getUserId());
+    	assertThat(requestPayload.getRegulatorReviewer()).isEqualTo(appUser.getUserId());
     	assertThat(requestPayload.getReviewSectionsCompleted()).isEqualTo(requestTaskPayload.getReviewSectionsCompleted());
     	assertThat(requestPayload.getReviewGroupDecisionsRegulatorLed()).isEqualTo(requestTaskPayload.getReviewGroupDecisions());
     	assertThat(requestPayload.getPermitVariationDetailsReviewDecisionRegulatorLed()).isEqualTo(requestTaskPayload.getPermitVariationDetailsReviewDecision());

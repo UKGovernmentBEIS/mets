@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -19,14 +19,14 @@ import { activityItemNameMap } from '../crf-codes/crf-codes-item';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [energyCrfCodeFormProvider],
 })
-export class EnergyCrfCodeComponent implements PendingRequest, OnInit {
+export class EnergyCrfCodeComponent implements PendingRequest, AfterViewInit {
   caption$ = combineLatest([this.aerService.getTask('regulatedActivities'), this.route.paramMap]).pipe(
     map(
       ([regulatedActivities, paramMap]) =>
         regulatedActivities.find((activity) => activity.id === paramMap.get('activityId')).type,
     ),
   );
-  activityItemName = activityItemNameMap;
+  activityItemNameMap = activityItemNameMap;
 
   constructor(
     @Inject(AER_TASK_FORM) readonly form: FormGroup,
@@ -35,10 +35,25 @@ export class EnergyCrfCodeComponent implements PendingRequest, OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly destroy$: DestroySubject,
+    private cdr: ChangeDetectorRef,
   ) {}
 
-  ngOnInit(): void {
-    this.enableOptionalFields();
+  ngAfterViewInit(): void {
+    if (this.form.get('energyCrfCategory')) {
+      this.form.get('energyCrf').enable();
+      this.cdr.detectChanges();
+    }
+
+    this.form
+      .get('energyCrfCategory')
+      .valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.form.get('energyCrfCategory')) {
+          this.form.get('energyCrf').setValue(null);
+          this.form.get('energyCrf').enable();
+          this.cdr.detectChanges();
+        }
+      });
   }
 
   onSubmit(): void {
@@ -56,17 +71,5 @@ export class EnergyCrfCodeComponent implements PendingRequest, OnInit {
         }),
       )
       .subscribe();
-  }
-
-  private enableOptionalFields() {
-    this.form
-      .get('energyCrfCategory')
-      .valueChanges.pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.form.get('energyCrfCategory')) {
-          this.form.get('energyCrf').setValue(null);
-          this.form.get('energyCrf').enable();
-        }
-      });
   }
 }

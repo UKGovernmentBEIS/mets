@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.payment.client.service;
 
-import java.math.BigDecimal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.mapstruct.factory.Mappers;
@@ -10,10 +9,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.provider.PMRVRestApi;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.restclient.RestClientApi;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.payment.client.domain.CreatePaymentRequest;
 import uk.gov.pmrv.api.workflow.payment.client.domain.PaymentResponse;
 import uk.gov.pmrv.api.workflow.payment.client.domain.enumeration.RestEndPointEnum;
@@ -23,6 +22,8 @@ import uk.gov.pmrv.api.workflow.payment.domain.dto.PaymentCreateResult;
 import uk.gov.pmrv.api.workflow.payment.domain.dto.PaymentGetInfo;
 import uk.gov.pmrv.api.workflow.payment.domain.dto.PaymentGetResult;
 import uk.gov.pmrv.api.workflow.payment.transform.PaymentMapper;
+
+import java.math.BigDecimal;
 
 @Log4j2
 @Component
@@ -57,8 +58,12 @@ public class GovukPayService {
     }
 
     private PaymentResponse performCreatePaymentApiCall(PaymentCreateInfo paymentCreateInfo) {
-        PMRVRestApi pmrvRestApi = PMRVRestApi.builder()
-            .baseUrl(govukPayProperties.getServiceUrl())
+    	RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(govukPayProperties.getServiceUrl())
+                        .path(RestEndPointEnum.GOV_UK_CREATE_PAYMENT.getPath())
+                        .build()
+                        .toUri())
             .restEndPoint(RestEndPointEnum.GOV_UK_CREATE_PAYMENT)
             .headers(httpHeaders(paymentCreateInfo.getCompetentAuthority()))
             .body(CreatePaymentRequest.builder()
@@ -71,7 +76,7 @@ public class GovukPayService {
             .build();
 
         try{
-            ResponseEntity<PaymentResponse> res = pmrvRestApi.performApiCall();
+            ResponseEntity<PaymentResponse> res = appRestApi.performApiCall();
             return res.getBody();
         } catch (HttpClientErrorException e) {
             log.error(e.getMessage());
@@ -80,19 +85,18 @@ public class GovukPayService {
     }
 
     private PaymentResponse performGetPaymentApiCall(PaymentGetInfo paymentGetInfo) {
-        PMRVRestApi pmrvRestApi = PMRVRestApi.builder()
-            .uri(UriComponentsBuilder
-                .fromHttpUrl(govukPayProperties.getServiceUrl())
-                .path(RestEndPointEnum.GOV_UK_GET_PAYMENT.getEndPoint())
-                .buildAndExpand(paymentGetInfo.getPaymentId())
-            )
-            .restEndPoint(RestEndPointEnum.GOV_UK_GET_PAYMENT)
-            .headers(httpHeaders(paymentGetInfo.getCompetentAuthority()))
-            .restTemplate(restTemplate)
-            .build();
+    	RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(govukPayProperties.getServiceUrl())
+                        .path(RestEndPointEnum.GOV_UK_GET_PAYMENT.getPath())
+                        .build(paymentGetInfo.getPaymentId()))
+                .restEndPoint(RestEndPointEnum.GOV_UK_GET_PAYMENT)
+                .headers(httpHeaders(paymentGetInfo.getCompetentAuthority()))
+                .restTemplate(restTemplate)
+                .build();
 
         try{
-            ResponseEntity<PaymentResponse> res = pmrvRestApi.performApiCall();
+            ResponseEntity<PaymentResponse> res = appRestApi.performApiCall();
             return res.getBody();
         } catch (HttpClientErrorException e) {
             log.error(e.getMessage());

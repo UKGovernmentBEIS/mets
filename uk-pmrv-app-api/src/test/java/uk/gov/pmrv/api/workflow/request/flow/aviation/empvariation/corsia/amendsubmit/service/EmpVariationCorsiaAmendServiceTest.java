@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmpProcedureForm;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviationDefinition;
@@ -24,7 +24,7 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchem
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachTypeCorsia;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproach;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproachCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.EmpCorsiaOperatorDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -125,7 +125,7 @@ class EmpVariationCorsiaAmendServiceTest {
     void submitAmend() {
         String operator = "operator";
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId(operator).build();
+        AppUser appUser = AppUser.builder().userId(operator).build();
         EmissionsMonitoringPlanCorsia monitoringPlan = EmissionsMonitoringPlanCorsia.builder()
             .operatorDetails(EmpCorsiaOperatorDetails.builder()
                 .build())
@@ -153,7 +153,7 @@ class EmpVariationCorsiaAmendServiceTest {
                 .build();
         EmpVariationCorsiaRequestPayload requestPayload = EmpVariationCorsiaRequestPayload.builder()
             .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
-                .emissionsMonitoringApproach(FuelMonitoringApproach.builder().monitoringApproachType(
+                .emissionsMonitoringApproach(FuelMonitoringApproachCorsia.builder().monitoringApproachType(
                     EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING).build())
                 .methodAProcedures(EmpMethodAProcedures.builder()
                     .fuelDensity(EmpProcedureForm.builder()
@@ -219,7 +219,7 @@ class EmpVariationCorsiaAmendServiceTest {
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(aviationAccountInfo);
 
         // Invoke
-        service.submitAmend(actionPayload, requestTask, pmrvUser);
+        service.submitAmend(actionPayload, requestTask, appUser);
 
         // Verify
         assertThat(requestTask.getRequest().getPayload()).isInstanceOf(EmpVariationCorsiaRequestPayload.class);

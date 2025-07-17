@@ -96,6 +96,8 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Follow up response recalled';
       case 'PERMIT_NOTIFICATION_FOLLOW_UP_APPLICATION_AMENDS_SUBMITTED':
         return 'Amended follow up response submitted';
+      case 'PERMIT_NOTIFICATION_APPLICATION_CESSATION_COMPLETED':
+        return 'Regulator review completed';
 
       case 'PERMIT_VARIATION_APPLICATION_SUBMITTED':
         return 'Permit variation submitted';
@@ -122,14 +124,17 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Variation application recalled';
 
       case 'AER_APPLICATION_SUBMITTED':
+        return 'Emissions report submitted to regulator';
       case 'AER_APPLICATION_SENT_TO_VERIFIER':
-        return 'Emissions report submitted';
+        return 'Emissions report submitted to verifier';
       case 'AER_RECALLED_FROM_VERIFICATION':
         return 'Emissions report recalled';
       case 'AER_APPLICATION_COMPLETED':
         return 'Emissions report reviewed';
+      case 'AER_APPLICATION_NOT_REQUIRED':
+        return 'Marked as not required';
       case 'AER_APPLICATION_VERIFICATION_SUBMITTED':
-        return 'Verification statement submitted';
+        return 'Verification statement submitted to operator';
       case 'AER_APPLICATION_RE_INITIATED':
         return 'Emissions report returned for amends';
       case 'AER_APPLICATION_RETURNED_FOR_AMENDS':
@@ -137,6 +142,10 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'AER_APPLICATION_AMENDS_SUBMITTED':
       case 'AER_APPLICATION_AMENDS_SENT_TO_VERIFIER':
         return 'Amended emissions report submitted';
+      case 'AER_APPLICATION_REVIEW_SKIPPED':
+        return 'Completed without review';
+      case 'AER_VERIFICATION_RETURNED_TO_OPERATOR':
+        return 'Verifier returned to operator for changes';
 
       case 'DRE_APPLICATION_CANCELLED':
         return 'Reportable emissions cancelled';
@@ -322,7 +331,7 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'NON_COMPLIANCE_APPLICATION_SUBMITTED':
         return 'Non-compliance details provided';
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED':
-        return `Initial penalty sent to operator`;
+        return `Initial penalty notice sent to operator`;
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED':
         return 'Peer review of initial penalty requested';
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED':
@@ -386,19 +395,20 @@ export class ItemActionTypePipe implements PipeTransform {
 
       case 'AVIATION_AER_UKETS_APPLICATION_SENT_TO_VERIFIER':
       case 'AVIATION_AER_CORSIA_APPLICATION_SENT_TO_VERIFIER':
-        return 'Submitted to verifier';
+        return 'Emissions report submitted to verifier';
       case 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED':
       case 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMITTED':
-        return 'Verification statement submitted';
+        return 'Verification statement submitted to operator';
       case 'AVIATION_AER_UKETS_APPLICATION_COMPLETED':
       case 'AVIATION_AER_CORSIA_APPLICATION_COMPLETED':
         return 'Emissions report reviewed';
       case 'AVIATION_AER_UKETS_APPLICATION_REVIEW_SKIPPED':
+      case 'AVIATION_AER_CORSIA_APPLICATION_REVIEW_SKIPPED':
         return 'Completed without review';
 
       case 'AVIATION_AER_UKETS_APPLICATION_SUBMITTED':
       case 'AVIATION_AER_CORSIA_APPLICATION_SUBMITTED':
-        return 'Submitted to regulator';
+        return 'Emissions report submitted to regulator';
       case 'AVIATION_AER_RECALLED_FROM_VERIFICATION':
         return 'Recalled from verifier';
       case 'AVIATION_AER_APPLICATION_CANCELLED_DUE_TO_EXEPMT':
@@ -406,11 +416,18 @@ export class ItemActionTypePipe implements PipeTransform {
       case 'AVIATION_AER_APPLICATION_RE_INITIATED':
         return 'Re-initiate after exemption';
       case 'AVIATION_AER_UKETS_APPLICATION_RETURNED_FOR_AMENDS':
+      case 'AVIATION_AER_CORSIA_APPLICATION_RETURNED_FOR_AMENDS':
         return 'Returned to operator for changes';
 
       case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER':
+      case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER':
       case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED':
+      case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED':
         return 'Changes submitted';
+
+      case 'AVIATION_AER_CORSIA_VERIFICATION_RETURNED_TO_OPERATOR':
+      case 'AVIATION_AER_UKETS_VERIFICATION_RETURNED_TO_OPERATOR':
+        return 'Verifier returned report to operator for changes';
 
       case 'AVIATION_VIR_APPLICATION_SUBMITTED':
         return 'Verifier improvement report submitted';
@@ -418,6 +435,28 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Verifier improvement report decision submitted';
       case 'AVIATION_VIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS':
         return 'Follow up response submitted';
+
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMITTED':
+        return 'Annual offsetting requirements submitted to Operator';
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_REQUESTED':
+        return 'Peer review requested';
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED':
+        return 'Peer review agreement submitted';
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED':
+        return 'Peer review disagreement submitted';
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_CANCELLED':
+        return 'Annual offsetting requirements cancelled';
+
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REQUESTED':
+        return 'Peer review requested';
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED':
+        return 'Peer review agreement submitted';
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED':
+        return 'Peer review disagreement submitted';
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_CANCELLED':
+        return '3-year offsetting requirements cancelled';
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED':
+        return '3-year offsetting requirements submitted to Operator';
 
       case 'RETURN_OF_ALLOWANCES_APPLICATION_SUBMITTED':
         return 'Return of allowances submitted';
@@ -431,6 +470,89 @@ export class ItemActionTypePipe implements PipeTransform {
         return `Return of allowances cancelled`;
       case 'RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_COMPLETED':
         return `Returned allowances submitted`;
+
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW_REQUESTED':
+      case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW_REQUESTED':
+        return `Peer review requested`;
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEWER_ACCEPTED':
+      case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEWER_ACCEPTED':
+        return 'Peer review agreement submitted';
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEWER_REJECTED':
+      case 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEWER_REJECTED':
+        return 'Peer review disagreement submitted';
+
+      case 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPONDED':
+        return 'On-site inspection submitted to Regulator';
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_CANCELLED':
+        return 'On-site inspection cancelled';
+      case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMITTED':
+        return 'On-site inspection submitted to Operator';
+
+      case 'INSTALLATION_AUDIT_APPLICATION_CANCELLED':
+        return 'Audit report cancelled';
+      case 'INSTALLATION_AUDIT_OPERATOR_RESPONDED':
+        return 'Audit report submitted to Regulator';
+      case 'INSTALLATION_AUDIT_APPLICATION_SUBMITTED':
+        return 'Audit report submitted to Operator';
+
+      case 'BDR_APPLICATION_SENT_TO_VERIFIER':
+      case 'BDR_APPLICATION_AMENDS_SENT_TO_VERIFIER':
+        return 'Baseline data report submitted to verifier';
+      case 'BDR_APPLICATION_SENT_TO_REGULATOR':
+        return 'Baseline data report submitted to regulator';
+      case 'BDR_RECALLED_FROM_VERIFICATION':
+        return 'Baseline data report recalled';
+      case 'BDR_APPLICATION_VERIFICATION_SUBMITTED':
+        return 'Baseline data report verification statement submitted to operator';
+      case 'BDR_VERIFICATION_RETURNED_TO_OPERATOR':
+        return 'Baseline data report returned to operator for changes';
+      case 'BDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+        return 'Baseline data report returned to operator';
+      case 'BDR_APPLICATION_PEER_REVIEW_REQUESTED':
+        return 'Peer review requested';
+      case 'BDR_APPLICATION_COMPLETED':
+        return 'Baseline data report reviewed';
+      case 'BDR_APPLICATION_RE_INITIATED':
+        return 'Baseline data report reopened';
+      case 'BDR_APPLICATION_PEER_REVIEW_ACCEPTED':
+        return 'Peer review agreement submitted';
+      case 'BDR_APPLICATION_PEER_REVIEW_REJECTED':
+        return 'Peer review disagreement submitted';
+
+      case 'PERMANENT_CESSATION_SUBMITTED':
+        return 'Permanent cessation started';
+      case 'PERMANENT_CESSATION_APPLICATION_CANCELLED':
+        return 'Permanent cessation cancelled';
+      case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REQUESTED':
+        return 'Peer review requested';
+      case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REJECTED':
+        return 'Peer review disagreement submitted';
+      case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_ACCEPTED':
+        return 'Peer review agreement submitted';
+      case 'PERMANENT_CESSATION_APPLICATION_SUBMITTED':
+        return 'Permanent cessation notice sent to operator';
+
+      case 'AVIATION_DOE_CORSIA_SUBMIT_CANCELLED':
+        return 'Estimation of emissions cancelled';
+      case 'AVIATION_DOE_CORSIA_SUBMITTED':
+        return 'Aviation emissions updated';
+      case 'AVIATION_AER_CORSIA_APPLICATION_CANCELLED_DUE_TO_DOE':
+        return 'Cancelled due to an estimation of emissions workflow';
+      case 'AVIATION_DOE_CORSIA_PEER_REVIEW_REQUESTED':
+        return 'Peer review requested';
+      case 'AVIATION_DOE_CORSIA_PEER_REVIEWER_ACCEPTED':
+        return 'Peer review agreement submitted';
+      case 'AVIATION_DOE_CORSIA_PEER_REVIEWER_REJECTED':
+        return 'Peer review disagreement submitted';
+
+      case 'ALR_APPLICATION_SENT_TO_VERIFIER':
+        return 'Activity level report submitted to verifier';
+      case 'ALR_APPLICATION_VERIFICATION_SUBMITTED':
+        return 'Activity level report submitted to operator';
+      case 'ALR_VERIFICATION_RETURNED_TO_OPERATOR':
+        return 'Activity level report returned to operator for changes';
+      case 'ALR_RECALLED_FROM_VERIFICATION':
+        return 'Activity level report recalled';
 
       default:
         return 'Approved Application';

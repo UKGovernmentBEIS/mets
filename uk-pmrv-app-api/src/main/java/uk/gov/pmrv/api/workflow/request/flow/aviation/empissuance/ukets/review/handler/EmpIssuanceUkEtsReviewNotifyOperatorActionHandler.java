@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -32,13 +32,13 @@ public class EmpIssuanceUkEtsReviewNotifyOperatorActionHandler
 
     @Override
     public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType,
-                        PmrvUser pmrvUser, EmpIssuanceUkEtsNotifyOperatorForDecisionRequestTaskActionPayload payload) {
+                        AppUser appUser, EmpIssuanceUkEtsNotifyOperatorForDecisionRequestTaskActionPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
-        reviewNotifyOperatorValidatorService.validate(requestTask, payload, pmrvUser);
+        reviewNotifyOperatorValidatorService.validate(requestTask, payload, appUser);
 
         DecisionNotification decisionNotification = payload.getDecisionNotification();
-        requestEmpUkEtsReviewService.saveDecisionNotification(requestTask, decisionNotification, pmrvUser);
+        requestEmpUkEtsReviewService.saveDecisionNotification(requestTask, decisionNotification, appUser);
 
         // complete task
         EmpIssuanceUkEtsApplicationReviewRequestTaskPayload taskPayload =

@@ -26,7 +26,7 @@ export const categoryFormProvider = {
     const tiers = (state.permit.monitoringApproaches.FALLBACK as FallbackMonitoringApproach)
       .sourceStreamCategoryAppliedTiers;
     const sourceStreamCategoryTier = tiers
-      ? tiers[Number(route.snapshot.paramMap.get('index'))]?.sourceStreamCategory ?? null
+      ? (tiers[Number(route.snapshot.paramMap.get('index'))]?.sourceStreamCategory ?? null)
       : null;
 
     const disabled = !state.isEditable;

@@ -14,7 +14,6 @@ import {
   showVariationReviewDecisionComponent,
 } from '@aviation/request-task/util';
 import { MonitoringApproachSummaryTemplateComponent } from '@aviation/shared/components/emp/monitoring-approach-summary-template/monitoring-approach-summary-template.component';
-import { SimplifiedMonitoringApproach } from '@aviation/shared/components/emp/monitoring-approach-summary-template/monitoring-approach-types.interface';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { MonitoringApproachTypePipe } from '@aviation/shared/pipes/monitoring-approach-type.pipe';
 import { SharedModule } from '@shared/shared.module';
@@ -29,6 +28,7 @@ import { empQuery } from '../../../../shared/emp.selectors';
 import { EmpReviewDecisionGroupComponent } from '../../../../shared/emp-review-decision-group/emp-review-decision-group.component';
 import { EmpVariationReviewDecisionGroupComponent } from '../../../../shared/emp-variation-review-decision-group/emp-variation-review-decision-group.component';
 import { BaseMonitoringApproachComponent } from '../base-monitoring-approach.component';
+import { SimplifiedMonitoringApproach } from '../monitoring-approach-types.interface';
 
 interface ViewModel {
   emissionsMonitoringApproach: SimplifiedMonitoringApproach;

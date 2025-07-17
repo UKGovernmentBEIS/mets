@@ -33,12 +33,12 @@ describe('InvitationComponent', () => {
   });
 
   it('should display the installation name for emitter contacts', () => {
-    const installation = {
-      accountInstallationName: 'Test Faculty',
+    const operatorInvitationResultData = {
+      accountName: 'Test Faculty',
       roleCode: 'emitter_contact',
     };
 
-    activatedRoute.setResolveMap({ installation });
+    activatedRoute.setResolveMap({ operatorInvitationResultData });
     fixture.detectChanges();
 
     expect(element.querySelector('.govuk-panel__title').textContent).toEqual(
@@ -47,12 +47,12 @@ describe('InvitationComponent', () => {
   });
 
   it('should display the installation name for operators', () => {
-    const installation = {
-      accountInstallationName: 'Operator Faculty',
+    const operatorInvitationResultData = {
+      accountName: 'Operator Faculty',
       roleCode: 'operator',
     };
 
-    activatedRoute.setResolveMap({ installation });
+    activatedRoute.setResolveMap({ operatorInvitationResultData });
     fixture.detectChanges();
 
     expect(element.querySelector('.govuk-panel__title').textContent).toEqual(

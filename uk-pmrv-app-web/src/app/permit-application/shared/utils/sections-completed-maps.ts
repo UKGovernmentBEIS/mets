@@ -38,6 +38,7 @@ const fallbackStreamMapper: Record<keyof FallbackSourceStreamCategoryAppliedTier
 const measurementStreamMapper: Partial<Record<keyof MeasurementOfCO2EmissionPointCategoryAppliedTier, string>> = {
   appliedStandard: 'MEASUREMENT_CO2_Applied_Standard',
   measuredEmissions: 'MEASUREMENT_CO2_Measured_Emissions',
+  biomassFraction: 'MEASUREMENT_CO2_Biomass_Fraction',
   emissionPointCategory: 'MEASUREMENT_CO2_Category',
 };
 

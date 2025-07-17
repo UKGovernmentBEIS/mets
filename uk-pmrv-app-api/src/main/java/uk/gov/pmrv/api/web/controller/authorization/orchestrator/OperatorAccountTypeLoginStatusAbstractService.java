@@ -1,17 +1,16 @@
 package uk.gov.pmrv.api.web.controller.authorization.orchestrator;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.domain.Authority;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.Authority;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.LoginStatus;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus.ACTIVE;
 import static uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.LoginStatus.ACCEPTED;
 import static uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.LoginStatus.DISABLED;
 import static uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.LoginStatus.ENABLED;
@@ -58,7 +57,7 @@ public abstract class OperatorAccountTypeLoginStatusAbstractService implements O
 
     private List<Authority> getActiveUserAuthorities(List<Authority> userAuthorities) {
         return userAuthorities.stream()
-            .filter(au -> au.getStatus().equals(ACTIVE)).collect(Collectors.toList());
+            .filter(au -> au.getStatus().equals(AuthorityStatus.ACTIVE)).collect(Collectors.toList());
     }
 
     private List<Authority> getActiveUserAuthoritiesWithPermissions(List<Authority> activeUserAuthorities) {

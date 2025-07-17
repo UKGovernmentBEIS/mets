@@ -22,7 +22,10 @@ export class N2oComponent {
   );
   sumOfAnnualEmitted$ = this.emissionPointCategoryAppliedTiers$.pipe(
     map((appliedTiers) =>
-      appliedTiers.reduce((total, tier) => total + (+tier?.emissionPointCategory?.annualEmittedCO2Tonnes ?? 0), 0),
+      appliedTiers.reduce(
+        (total, tier) => total + (Number(tier?.emissionPointCategory?.annualEmittedCO2Tonnes) || 0),
+        0,
+      ),
     ),
   );
   columns: GovukTableColumn<any>[] = [

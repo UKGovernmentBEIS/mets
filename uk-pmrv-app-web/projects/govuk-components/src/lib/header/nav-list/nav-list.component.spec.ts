@@ -12,8 +12,7 @@ describe('HeaderNavListComponent', () => {
       <govuk-header-nav-list
         ariaLabel="Aria label for test navigation"
         identifier="testNavigation"
-        menuButtonAriaLabel="Aria label for menu button"
-      >
+        menuButtonAriaLabel="Aria label for menu button">
         <a govukLink="header" href="/">Test Link</a>
       </govuk-header-nav-list>
     `,

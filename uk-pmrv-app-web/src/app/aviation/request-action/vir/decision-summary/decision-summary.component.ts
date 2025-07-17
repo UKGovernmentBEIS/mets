@@ -40,7 +40,7 @@ export class DecisionSummaryComponent {
           usersInfo: payload.usersInfo,
           officialNotice: payload.officialNotice,
           downloadUrl: this.store.virDelegate.baseFileDocumentDownloadUrl + '/',
-        } as ViewModel),
+        }) as ViewModel,
     ),
   );
 

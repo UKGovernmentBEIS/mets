@@ -5,8 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
 import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivity;
 import uk.gov.pmrv.api.reporting.domain.AerContainer;
 import uk.gov.pmrv.api.reporting.domain.regulatedactivities.AerRegulatedActivity;
@@ -19,14 +19,15 @@ import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerReviewDataType
 import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerReviewDecision;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ChangesRequiredDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationAmendsSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationAmendsSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationCompletedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationMarkNotRequiredRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationVerificationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationVerificationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerMarkNotRequiredDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerReviewGroup;
@@ -54,21 +55,12 @@ public interface AerMapper {
                                 InstallationOperatorDetails installationOperatorDetails,
                                 AerRequestMetadata metadata);
 
-    @Mapping(target = "payloadType", expression = "java(uk.gov.pmrv.api.workflow.request.core.domain.enumeration" +
-        ".RequestActionPayloadType.AER_APPLICATION_SUBMITTED_PAYLOAD)")
+    @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "attachments", ignore = true)
     @Mapping(target = "installationOperatorDetails", ignore = true)
     @Mapping(target = "aerAttachments", ignore = true)
-    AerApplicationSubmittedRequestActionPayload toAerApplicationSubmittedRequestActionPayload(
-        AerApplicationSubmitRequestTaskPayload taskPayload);
-
-    @Mapping(target = "payloadType", expression = "java(uk.gov.pmrv.api.workflow.request.core.domain.enumeration" +
-        ".RequestActionPayloadType.AER_APPLICATION_AMENDS_SUBMITTED_PAYLOAD)")
-    @Mapping(target = "attachments", ignore = true)
-    @Mapping(target = "installationOperatorDetails", ignore = true)
-    @Mapping(target = "aerAttachments", ignore = true)
-    AerApplicationAmendsSubmittedRequestActionPayload toAerApplicationAmendsSubmittedRequestActionPayload(
-        AerApplicationSubmitRequestTaskPayload taskPayload);
+    AerApplicationSubmittedRequestActionPayload toAerApplicationSubmittedRequestActionPayload(AerApplicationSubmitRequestTaskPayload taskPayload,
+                                                                                              RequestActionPayloadType payloadType);
 
     @AfterMapping
     default void setAerAttachments(@MappingTarget AerApplicationSubmittedRequestActionPayload actionPayload,
@@ -114,7 +106,6 @@ public interface AerMapper {
     @Mapping(target = "reviewGroupDecisions", source = "payload.reviewGroupDecisions", qualifiedByName =
         "reviewGroupDecisionsForOperatorAmend")
     @Mapping(target = "attachments", ignore = true)
-    @Mapping(target = "reviewAttachments", ignore = true)
     AerApplicationReturnedForAmendsRequestActionPayload toAerApplicationReturnedForAmendsRequestActionPayload(
         AerApplicationReviewRequestTaskPayload payload,
         RequestActionPayloadType payloadType);
@@ -129,6 +120,10 @@ public interface AerMapper {
     @Mapping(target = "permitType", source = "aerRequestPayload.permitOriginatedData.permitType")
     AerApplicationAmendsSubmitRequestTaskPayload toAerApplicationAmendsSubmitRequestTaskPayload(
         AerRequestPayload aerRequestPayload, AerRequestMetadata metadata);
+
+    @Mapping(target = "payloadType", expression = "java(uk.gov.pmrv.api.workflow.request.core.domain.enumeration" +
+            ".RequestActionPayloadType.AER_APPLICATION_MARK_NOT_REQUIRED_PAYLOAD)")
+    AerApplicationMarkNotRequiredRequestActionPayload toAerApplicationMarkNotRequiredRequestActionPayload(AerMarkNotRequiredDetails markNotRequiredDetails);
 
     @Named("reviewGroupDecisionsForOperatorAmend")
     default Map<AerReviewGroup, AerReviewDecision> setReviewGroupDecisionsForOperatorAmend(

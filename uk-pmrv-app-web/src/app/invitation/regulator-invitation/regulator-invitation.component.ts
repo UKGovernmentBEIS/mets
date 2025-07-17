@@ -40,14 +40,22 @@ export class RegulatorInvitationComponent implements OnInit {
           map((paramMap) => paramMap.get('token')),
           first(),
           switchMap((invitationToken) =>
-            this.regulatorUsersRegistrationService.enableRegulatorInvitedUser({
+            this.regulatorUsersRegistrationService.acceptAuthorityAndActivateRegulatorUserFromInvite({
               invitationToken,
               password: this.form.get('password').value,
             }),
           ),
           map(() => ({ url: 'confirmed' })),
-          catchBadRequest([ErrorCodes.EMAIL1001, ErrorCodes.TOKEN1001, ErrorCodes.USER1004], (res) =>
-            of({ url: 'invalid-link', queryParams: { code: res.error.code } }),
+          catchBadRequest(
+            [
+              ErrorCodes.EMAIL1001,
+              ErrorCodes.TOKEN1001,
+              ErrorCodes.USER1004,
+              ErrorCodes.USER1001,
+              ErrorCodes.AUTHORITY1005,
+              ErrorCodes.AUTHORITY1014,
+            ],
+            (res) => of({ url: 'invalid-link', queryParams: { code: res.error.code } }),
           ),
         )
         .subscribe(({ queryParams, url }: { url: string; queryParams?: any }) =>

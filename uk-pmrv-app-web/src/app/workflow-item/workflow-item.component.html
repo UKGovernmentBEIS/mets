@@ -21,14 +21,15 @@
     </ng-container>
 
     <govuk-tabs (selectedTab)="selectedTab($event)">
-      <ng-template govukTab id="timeline" label="Timeline">
+      <ng-template govukTab id="timeline" label="Timeline" *ngIf="userRoleType$ | async as roleType">
         <div class="govuk-grid-row" *ngIf="actions$ | async as actions">
           <app-timeline class="govuk-grid-column-full">
             <app-timeline-item
               *ngFor="let action of actions"
               [action]="action"
-              [link]="action | timelineItemLink: true:isAviation"
+              [link]="action | timelineItemLink: true : isAviation : roleType"
               [state]="navigationState"
+              [year]="title$ | async"
             ></app-timeline-item>
 
             <p class="govuk-body" *ngIf="actions?.length === 0">No timeline events</p>

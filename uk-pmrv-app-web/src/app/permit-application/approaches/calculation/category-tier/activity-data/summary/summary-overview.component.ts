@@ -11,7 +11,7 @@ import { PermitApplicationStore } from '../../../../../store/permit-application.
 @Component({
   selector: 'app-activity-data-summary-overview',
   templateUrl: './summary-overview.component.html',
-  styleUrls: ['./summary-overview.component.scss'],
+  styleUrl: './summary-overview.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryOverviewComponent {

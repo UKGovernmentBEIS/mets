@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -46,7 +46,7 @@ public class VirRespondToRegulatorCommentsService {
 
     @Transactional
     public void applySubmitAction(final VirSubmitRespondToRegulatorCommentsRequestTaskActionPayload payload,
-                                  RequestTask requestTask, PmrvUser pmrvUser) {
+                                  RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         VirApplicationRespondToRegulatorCommentsRequestTaskPayload taskPayload =
                 (VirApplicationRespondToRegulatorCommentsRequestTaskPayload) requestTask.getPayload();
@@ -71,7 +71,7 @@ public class VirRespondToRegulatorCommentsService {
                 request,
                 actionPayload,
                 RequestActionType.VIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS,
-                pmrvUser.getUserId());
+                appUser.getUserId());
 
         // Send notification email to Regulator
         virRespondToRegulatorCommentsNotificationService

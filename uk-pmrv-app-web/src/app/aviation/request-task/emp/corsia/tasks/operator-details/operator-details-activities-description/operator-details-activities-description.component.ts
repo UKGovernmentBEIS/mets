@@ -36,12 +36,6 @@ export class OperatorDetailsActivitiesDescriptionComponent extends BaseOperatorD
   }
 
   onSubmit() {
-    this.submitForm(
-      'activitiesDescription',
-      { activitiesDescription: this.form.value },
-      '../subsidiary-companies',
-      'in progress',
-      'true',
-    );
+    this.submitForm('activitiesDescription', { activitiesDescription: this.form.value }, '../subsidiary-companies');
   }
 }

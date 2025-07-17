@@ -5,7 +5,7 @@ import { FileUploadEvent } from '../file-input/file-upload-event';
 @Component({
   selector: 'app-file-upload-list',
   templateUrl: './file-upload-list.component.html',
-  styleUrls: ['../multiple-file-input/multiple-file-input.component.scss'],
+  styleUrl: '../multiple-file-input/multiple-file-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileUploadListComponent {

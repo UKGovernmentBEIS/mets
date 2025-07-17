@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentTemplateTokenService;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.documents.service.FileDocumentTemplateTokenService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
+
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping(path = "/v1.0/file-document-templates")
@@ -44,7 +46,7 @@ public class FileDocumentTemplateController {
         FileDTO file = fileDocumentTemplateTokenService.getFileDTOByToken(token);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
-                        ContentDisposition.builder("document").filename(file.getFileName()).build().toString())
+                        ContentDisposition.builder("document").filename(file.getFileName(), StandardCharsets.UTF_8).build().toString())
                 .contentType(MediaType.parseMediaType(file.getFileType()))
                 .body(new ByteArrayResource(file.getFileContent()));
     }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -10,8 +10,11 @@ import { NonComplianceApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 import { isWizardCompleted } from '../non-compliance.wizard';
 
 @Injectable({ providedIn: 'root' })
-export class DetailsOfBreachGuard implements CanActivate {
-  constructor(private readonly store: CommonTasksStore, private readonly router: Router) {}
+export class DetailsOfBreachGuard {
+  constructor(
+    private readonly store: CommonTasksStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(
     _route: ActivatedRouteSnapshot,

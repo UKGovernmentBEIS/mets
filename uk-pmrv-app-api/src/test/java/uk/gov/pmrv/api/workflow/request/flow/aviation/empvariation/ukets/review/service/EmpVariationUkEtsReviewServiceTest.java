@@ -17,7 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEts;
@@ -125,7 +125,7 @@ class EmpVariationUkEtsReviewServiceTest {
 
         assertThat(taskPayload.getEmpVariationDetailsReviewDecision()).isNull();
         assertThat(taskPayload.getReviewSectionsCompleted()).isEqualTo(taskActionPayload.getReviewSectionsCompleted());
-        assertThat(taskPayload.getReviewGroupDecisions().get(taskActionPayload.getGroup())).isEqualTo(taskActionPayload.getDecision());
+        assertThat(taskPayload.getReviewGroupDecisions().containsValue(taskActionPayload.getDecision()));
         assertThat(taskPayload.getEmpSectionsCompleted()).isEqualTo(taskActionPayload.getEmpSectionsCompleted());
         verify(reviewDeterminationValidatorService, times(1)).isValid(taskPayload, EmpVariationDeterminationType.APPROVED);
     }
@@ -196,7 +196,7 @@ class EmpVariationUkEtsReviewServiceTest {
     @Test
     void saveDecisionNotification() {
         String reviewer = "regUser";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(reviewer).build();
+        AppUser appUser = AppUser.builder().userId(reviewer).build();
         EmpVariationUkEtsRequestPayload requestPayload = EmpVariationUkEtsRequestPayload.builder()
             .payloadType(RequestPayloadType.EMP_VARIATION_UKETS_REQUEST_PAYLOAD)
             .build();
@@ -246,7 +246,7 @@ class EmpVariationUkEtsReviewServiceTest {
             .build();
 
         //invoke
-        service.saveDecisionNotification(requestTask, decisionNotification, pmrvUser);
+        service.saveDecisionNotification(requestTask, decisionNotification, appUser);
 
         EmpVariationUkEtsRequestPayload updatedRequestPayload = (EmpVariationUkEtsRequestPayload) request.getPayload();
 
@@ -272,7 +272,7 @@ class EmpVariationUkEtsReviewServiceTest {
         String selectedPeerReviewer = "peerReviewer";
         String reviewer = "reviewer";
         String reason = "reason";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(reviewer).build();
+        AppUser appUser = AppUser.builder().userId(reviewer).build();
         EmpVariationUkEtsRequestPayload requestPayload = EmpVariationUkEtsRequestPayload.builder()
             .payloadType(RequestPayloadType.EMP_VARIATION_UKETS_REQUEST_PAYLOAD)
             .build();
@@ -323,7 +323,7 @@ class EmpVariationUkEtsReviewServiceTest {
             .request(request)
             .build();
 
-        service.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, pmrvUser);
+        service.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, appUser);
 
         EmpVariationUkEtsRequestPayload updatedRequestPayload = (EmpVariationUkEtsRequestPayload) request.getPayload();
 
@@ -346,7 +346,7 @@ class EmpVariationUkEtsReviewServiceTest {
     @Test
     void saveRequestReturnForAmends() {
         String reviewer = "reviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(reviewer).build();
+        AppUser appUser = AppUser.builder().userId(reviewer).build();
         EmpVariationUkEtsRequestPayload requestPayload = EmpVariationUkEtsRequestPayload.builder()
             .payloadType(RequestPayloadType.EMP_VARIATION_UKETS_REQUEST_PAYLOAD)
             .build();
@@ -399,7 +399,7 @@ class EmpVariationUkEtsReviewServiceTest {
             .request(request)
             .build();
 
-        service.saveRequestReturnForAmends(requestTask, pmrvUser);
+        service.saveRequestReturnForAmends(requestTask, appUser);
 
         EmpVariationUkEtsRequestPayload updatedRequestPayload = (EmpVariationUkEtsRequestPayload) request.getPayload();
 

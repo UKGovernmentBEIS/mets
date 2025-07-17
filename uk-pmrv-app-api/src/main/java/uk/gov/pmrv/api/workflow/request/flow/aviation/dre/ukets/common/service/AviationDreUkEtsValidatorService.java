@@ -10,5 +10,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.domain.Av
 @Validated
 public class AviationDreUkEtsValidatorService {
 
-    public void validateAviationDre(@NotNull @Valid AviationDre aviationDre) {}
+    public void validateAviationDre(@NotNull @Valid AviationDre aviationDre) {
+        //validates aviationDre
+    }
 }

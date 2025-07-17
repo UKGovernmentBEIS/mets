@@ -27,8 +27,7 @@ describe('DecisionContainerComponent', () => {
       <app-review-group-decision-container
         [groupKey]="groupKey"
         [canEdit]="canEdit"
-        (notification)="notification = true"
-      ></app-review-group-decision-container>
+        (notification)="notification = true"></app-review-group-decision-container>
     `,
   })
   class TestComponent {
@@ -39,11 +38,13 @@ describe('DecisionContainerComponent', () => {
 
   @Component({
     selector: 'app-variation-regulator-led-review-group-decision',
-    template: `<div>
-      Review group decision regulator led component.
-      <p>Key:{{ groupKey }}</p>
-      <p>Can edit:{{ canEdit }}</p>
-    </div>`,
+    template: `
+      <div>
+        Review group decision regulator led component.
+        <p>Key:{{ groupKey }}</p>
+        <p>Can edit:{{ canEdit }}</p>
+      </div>
+    `,
   })
   class MockDecisionRegulatorLedComponent {
     @Input() groupKey: PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload['group'];
@@ -53,11 +54,13 @@ describe('DecisionContainerComponent', () => {
 
   @Component({
     selector: 'app-variation-operator-led-review-group-decision',
-    template: `<div>
-      Review group decision operator led component.
-      <p>Key:{{ groupKey }}</p>
-      <p>Can edit:{{ canEdit }}</p>
-    </div>`,
+    template: `
+      <div>
+        Review group decision operator led component.
+        <p>Key:{{ groupKey }}</p>
+        <p>Can edit:{{ canEdit }}</p>
+      </div>
+    `,
   })
   class MockDecisionOperatorLedComponent {
     @Input() groupKey: PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload['group'];
@@ -67,11 +70,13 @@ describe('DecisionContainerComponent', () => {
 
   @Component({
     selector: 'app-review-group-decision',
-    template: `<div>
-      Review group decision component.
-      <p>Key:{{ groupKey }}</p>
-      <p>Can edit:{{ canEdit }}</p>
-    </div>`,
+    template: `
+      <div>
+        Review group decision component.
+        <p>Key:{{ groupKey }}</p>
+        <p>Can edit:{{ canEdit }}</p>
+      </div>
+    `,
   })
   class MockDecisionComponent {
     @Input() groupKey: PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload['group'];

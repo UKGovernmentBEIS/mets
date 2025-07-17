@@ -16,20 +16,21 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
   selector: 'app-process-source-add',
-  template: ` <app-aer-task-review heading="Add a process source" returnToLink="../../..">
-    <app-wizard-step
-      (formSubmit)="onSubmit()"
-      [formGroup]="form"
-      submitText="Continue"
-      [hideSubmit]="(isEditable$ | async) === false"
-    >
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          <div formControlName="processSource" govuk-text-input></div>
+  template: `
+    <app-aer-task-review heading="Add a process source" returnToLink="../../..">
+      <app-wizard-step
+        (formSubmit)="onSubmit()"
+        [formGroup]="form"
+        submitText="Continue"
+        [hideSubmit]="(isEditable$ | async) === false">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <div formControlName="processSource" govuk-text-input></div>
+          </div>
         </div>
-      </div>
-    </app-wizard-step>
-  </app-aer-task-review>`,
+      </app-wizard-step>
+    </app-aer-task-review>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProcessSourceAddComponent implements PendingRequest {

@@ -1,19 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.handler;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Component;
-import static java.time.temporal.ChronoUnit.DAYS;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
-import uk.gov.pmrv.api.workflow.utils.DateUtils;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -27,6 +18,17 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domai
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.validation.PermitRevocationValidator;
+import uk.gov.pmrv.api.workflow.utils.DateUtils;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Component
 @RequiredArgsConstructor
@@ -40,7 +42,7 @@ public class PermitRevocationNotifyOperatorActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final NotifyOperatorForDecisionRequestTaskActionPayload taskActionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -50,7 +52,7 @@ public class PermitRevocationNotifyOperatorActionHandler
         final PermitRevocationApplicationSubmitRequestTaskPayload taskPayload =
             (PermitRevocationApplicationSubmitRequestTaskPayload) requestTask.getPayload();
 
-        validator.validateNotifyUsers(requestTask, permitDecisionNotification, pmrvUser);
+        validator.validateNotifyUsers(requestTask, permitDecisionNotification, appUser);
         validator.validateSubmitRequestTaskPayload(taskPayload);
 
         final PermitRevocation permitRevocation = taskPayload.getPermitRevocation();
@@ -83,16 +85,15 @@ public class PermitRevocationNotifyOperatorActionHandler
         taskVariables.put(BpmnProcessConstants.REVOCATION_OUTCOME, PermitRevocationOutcome.NOTIFY_OPERATOR);
 
         final LocalDate effectiveLocalDate = permitRevocation.getEffectiveDate();
-        final Date effectiveDate = DateUtils.convertLocalDateToDate(effectiveLocalDate);
-        taskVariables.put(BpmnProcessConstants.REVOCATION_EFFECTIVE_DATE, effectiveDate);
+		taskVariables.put(BpmnProcessConstants.REVOCATION_EFFECTIVE_DATE, DateUtils.atEndOfDay(effectiveLocalDate));
         
         final LocalDate reminderEffectiveLocalDate = effectiveLocalDate.minus(28, DAYS);
 		taskVariables.put(BpmnProcessConstants.REVOCATION_REMINDER_EFFECTIVE_DATE,
-				DateUtils.convertLocalDateToDate(reminderEffectiveLocalDate));
+				DateUtils.atEndOfDay(reminderEffectiveLocalDate));
 
         final LocalDate feeDate = permitRevocation.getFeeDate();
         taskVariables.put(BpmnProcessConstants.PAYMENT_EXPIRES, feeDate != null);
-        final Date paymentExpirationDate = feeDate != null ? DateUtils.convertLocalDateToDate(feeDate) : null;
+        final Date paymentExpirationDate = feeDate != null ? DateUtils.atEndOfDay(feeDate) : null;
         taskVariables.put(BpmnProcessConstants.PAYMENT_EXPIRATION_DATE, paymentExpirationDate);
         
         return taskVariables;

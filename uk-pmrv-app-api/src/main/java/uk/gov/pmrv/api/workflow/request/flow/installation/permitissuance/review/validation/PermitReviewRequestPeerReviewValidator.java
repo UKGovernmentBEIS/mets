@@ -1,12 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.validation;
 
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.validation.PermitGrantedValidatorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -32,9 +31,9 @@ public class PermitReviewRequestPeerReviewValidator {
     public void validate(RequestTask requestTask,
                          RequestTaskType peerReviewRequestTaskType,
                          PeerReviewRequestTaskActionPayload payload,
-                         PmrvUser pmrvUser) {
+                         AppUser appUser) {
 
-        peerReviewerTaskAssignmentValidator.validate(peerReviewRequestTaskType, payload.getPeerReviewer(), pmrvUser);
+        peerReviewerTaskAssignmentValidator.validate(peerReviewRequestTaskType, payload.getPeerReviewer(), appUser);
 
         PermitIssuanceApplicationReviewRequestTaskPayload taskPayload =
             (PermitIssuanceApplicationReviewRequestTaskPayload) requestTask.getPayload();

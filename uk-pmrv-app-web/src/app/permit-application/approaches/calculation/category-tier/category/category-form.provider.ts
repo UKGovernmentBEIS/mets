@@ -27,7 +27,7 @@ export const categoryFormProvider = {
     const tiers = (state.permit.monitoringApproaches.CALCULATION_CO2 as CalculationOfCO2MonitoringApproach)
       .sourceStreamCategoryAppliedTiers;
     const sourceStreamCategoryTier = tiers
-      ? tiers[Number(route.snapshot.paramMap.get('index'))]?.sourceStreamCategory ?? null
+      ? (tiers[Number(route.snapshot.paramMap.get('index'))]?.sourceStreamCategory ?? null)
       : null;
     const hasTransfer = (state.permit.monitoringApproaches.CALCULATION_CO2 as CalculationOfCO2MonitoringApproach)
       ?.hasTransfer;

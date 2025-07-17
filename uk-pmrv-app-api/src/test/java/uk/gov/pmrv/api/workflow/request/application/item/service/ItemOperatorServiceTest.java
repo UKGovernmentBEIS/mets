@@ -5,10 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.application.authorization.OperatorAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
@@ -57,7 +58,7 @@ class ItemOperatorServiceTest {
         final Long accountId = 1L;
         final AccountType accountType = AccountType.INSTALLATION;
         final Request request = Request.builder().id(requestId).accountId(accountId).type(RequestType.PERMIT_ISSUANCE).build();
-        PmrvUser pmrvUser = buildOperatorUser("oper1Id", "oper1", "oper1", accountId);
+        AppUser appUser = buildOperatorUser("oper1Id", "oper1", "oper1", accountId);
         Map<Long, Set<RequestTaskType>> scopedRequestTaskTypes = Map.of(accountId, Set.of(ACCOUNT_USERS_SETUP));
 
         Item expectedItem = mock(Item.class);
@@ -74,12 +75,12 @@ class ItemOperatorServiceTest {
         // Mock
         doReturn(request).when(requestService).findRequestById(requestId);
         doReturn(scopedRequestTaskTypes)
-            .when(operatorAuthorityResourceAdapter).getUserScopedRequestTaskTypesByAccountId(pmrvUser.getUserId(), accountId);
+            .when(operatorAuthorityResourceAdapter).getUserScopedRequestTaskTypesByAccountId(appUser.getUserId(), accountId);
         doReturn(expectedItemPage).when(itemByRequestOperatorRepository).findItemsByRequestId(scopedRequestTaskTypes, requestId);
-        doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, pmrvUser);
+        doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, appUser);
 
         // Invoke
-        ItemDTOResponse actualItemDTOResponse = itemService.getItemsByRequest(pmrvUser, requestId);
+        ItemDTOResponse actualItemDTOResponse = itemService.getItemsByRequest(appUser, requestId);
 
         // Assert
         assertEquals(expectedItemDTOResponse, actualItemDTOResponse);
@@ -90,16 +91,16 @@ class ItemOperatorServiceTest {
         final String requestId = "1";
         Long accountId = 1L;
         final Request request = Request.builder().id(requestId).accountId(accountId).build();
-        PmrvUser pmrvUser = buildOperatorUser("oper1Id", "oper1", "oper1", accountId);
+        AppUser appUser = buildOperatorUser("oper1Id", "oper1", "oper1", accountId);
         Map<Long, Set<RequestTaskType>> scopedRequestTaskTypesAsString = emptyMap();
 
         // Mock
         doReturn(request).when(requestService).findRequestById(requestId);
         doReturn(scopedRequestTaskTypesAsString)
-            .when(operatorAuthorityResourceAdapter).getUserScopedRequestTaskTypesByAccountId(pmrvUser.getUserId(), accountId);
+            .when(operatorAuthorityResourceAdapter).getUserScopedRequestTaskTypesByAccountId(appUser.getUserId(), accountId);
 
         // Invoke
-        ItemDTOResponse actualItemDTOResponse = itemService.getItemsByRequest(pmrvUser, requestId);
+        ItemDTOResponse actualItemDTOResponse = itemService.getItemsByRequest(appUser, requestId);
 
         // Assert
         assertEquals(ItemDTOResponse.emptyItemDTOResponse(), actualItemDTOResponse);
@@ -108,24 +109,24 @@ class ItemOperatorServiceTest {
         verifyNoInteractions(itemResponseService);
 
         verify(operatorAuthorityResourceAdapter, times(1))
-                .getUserScopedRequestTaskTypesByAccountId(pmrvUser.getUserId(), accountId);
+                .getUserScopedRequestTaskTypesByAccountId(appUser.getUserId(), accountId);
     }
 
     @Test
     void getRoleType() {
-        assertEquals(RoleType.OPERATOR, itemService.getRoleType());
+        assertEquals(RoleTypeConstants.OPERATOR, itemService.getRoleType());
     }
 
-    private PmrvUser buildOperatorUser(String userId, String firstName, String lastName, Long accountId) {
-        PmrvAuthority pmrvAuthority = PmrvAuthority.builder()
+    private AppUser buildOperatorUser(String userId, String firstName, String lastName, Long accountId) {
+        AppAuthority pmrvAuthority = AppAuthority.builder()
                 .accountId(accountId).build();
 
-        return PmrvUser.builder()
+        return AppUser.builder()
                 .userId(userId)
                 .firstName(firstName)
                 .lastName(lastName)
                 .authorities(List.of(pmrvAuthority))
-                .roleType(RoleType.OPERATOR)
+                .roleType(RoleTypeConstants.OPERATOR)
                 .build();
     }
 }

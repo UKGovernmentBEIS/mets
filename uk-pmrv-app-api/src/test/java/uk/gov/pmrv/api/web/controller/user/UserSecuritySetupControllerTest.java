@@ -1,11 +1,5 @@
 package uk.gov.pmrv.api.web.controller.user;
 
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,12 +12,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.pmrv.api.user.core.domain.dto.OneTimePasswordDTO;
 import uk.gov.pmrv.api.user.core.domain.dto.TokenDTO;
 import uk.gov.pmrv.api.user.core.service.UserSecuritySetupService;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
+
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith({MockitoExtension.class})
 class UserSecuritySetupControllerTest {
@@ -39,7 +39,7 @@ class UserSecuritySetupControllerTest {
     private UserSecuritySetupService userSecuritySetupService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private Validator validator;
@@ -59,14 +59,14 @@ class UserSecuritySetupControllerTest {
 
     @Test
     void requestTwoFactorAuthChange() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         String otp = "otp";
         String accessToken = "accessToken";
 
         OneTimePasswordDTO otpDTO = OneTimePasswordDTO.builder().password(otp).build();
 
         when(pmrvSecurityComponent.getAccessToken()).thenReturn(accessToken);
-        doNothing().when(userSecuritySetupService).requestTwoFactorAuthChange(pmrvUser, accessToken, otp);
+        doNothing().when(userSecuritySetupService).requestTwoFactorAuthChange(appUser, accessToken, otp);
 
         mockMvc.perform(MockMvcRequestBuilders.post(BASE_PATH + REQUEST_TO_CHANGE_2FA_PATH)
             .contentType(MediaType.APPLICATION_JSON)

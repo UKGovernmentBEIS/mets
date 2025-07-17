@@ -4,7 +4,7 @@ import { CanActivateFn } from '@angular/router';
 import { map, take, tap } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 
 import { aerVerifyQuery } from '../../aer-verify.selector';
@@ -22,13 +22,13 @@ export const canActivateEtsComplianceRules: CanActivateFn = () => {
       if (!verificationReport) {
         store.setPayload({
           ...payload,
-          verificationReport: AerVerifyStoreDelegate.INITIAL_STATE.verificationReport,
+          verificationReport: AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport,
         } as any);
       }
 
       if (!verificationReport?.etsComplianceRules) {
-        (store.aerVerifyDelegate as AerVerifyStoreDelegate).setEtsComplianceRules(
-          AerVerifyStoreDelegate.INITIAL_STATE.verificationReport.etsComplianceRules,
+        (store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setEtsComplianceRules(
+          AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport.etsComplianceRules,
         );
       }
 

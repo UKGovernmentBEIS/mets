@@ -1,0 +1,17 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-product-benchmark-form
+    [form]="form"
+    [heading]="'Calculation of historical activity levels for lime'"
+    [caption]="productBenchmarkType$ | async | subInstallationType"
+    [downloadUrl]="getDownloadUrl()"
+    [dataSourcesHeading]="'Data sources for lime'"
+    [dataSourcesText]="
+      'Add the data sources used for the properties of lime (CaO and MgO content) in line with section 4.6 of Annex VII of the FAR.'
+    "
+    (submitForm)="onSubmit()"
+    (addDataSource)="addDataSource()"
+    (removeDataSource)="removeDataSource($event)"
+  >
+  </app-product-benchmark-form>
+  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+</app-permit-task>

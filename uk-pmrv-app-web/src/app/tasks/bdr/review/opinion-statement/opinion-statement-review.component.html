@@ -1,0 +1,9 @@
+<app-bdr-task-review returnToLink="../" [breadcrumb]="true">
+  <app-page-heading caption="BDR verification opinion statement">
+    Review the BDR verification opinion statement
+  </app-page-heading>
+  <app-opinion-statement-summary-template
+    [notes]="bdrPayload()?.verificationReport?.opinionStatement?.notes"
+    [opinionStatementFiles]="opinionStatementFiles()"></app-opinion-statement-summary-template>
+  <app-bdr-verification-review-group-decision></app-bdr-verification-review-group-decision>
+</app-bdr-task-review>

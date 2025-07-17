@@ -6,7 +6,7 @@ import { combineLatest, map, Observable, tap } from 'rxjs';
 import { AerVerificationReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-verification-review-decision-group/aer-verification-review-decision-group.component';
 import { aerVerifyQuery } from '@aviation/request-task/aer/ukets/aer-verify/aer-verify.selector';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -70,11 +70,11 @@ export default class AerVerifierDetailsSummaryComponent {
   );
 
   onSubmit() {
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
       .saveAerVerify({ verificationReport: this.verificationReport }, 'complete')
       .pipe(this.pendingRequest.trackRequest())
       .subscribe(() => {
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setVerificationReport(this.verificationReport);
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setVerificationReport(this.verificationReport);
         this.router.navigate(['../../..'], { relativeTo: this.route, replaceUrl: true });
       });
   }

@@ -4,8 +4,7 @@
       (formSubmit)="onContinue()"
       [formGroup]="form"
       submitText="Continue"
-      [hideSubmit]="(store | async).isEditable === false"
-    >
+      [hideSubmit]="(store | async).isEditable === false">
       <span class="govuk-caption-l">Notify the regulator of a change</span>
 
       <ng-container [ngSwitch]="(permitNotificationService.getPayload() | async).permitNotification.type">
@@ -15,8 +14,7 @@
               [baseDownloadUrl]="getDownloadUrl()"
               [label]="(isFileUploaded$ | async) ? 'Upload a different file' : 'Upload a file'"
               formControlName="documents"
-              listTitle="Upload any supporting documents (optional)"
-            ></app-multiple-file-input>
+              listTitle="Upload any supporting documents (optional)"></app-multiple-file-input>
           </app-temporary-factor>
         </ng-container>
         <ng-container *ngSwitchCase="'TEMPORARY_CHANGE'">
@@ -25,19 +23,34 @@
               [baseDownloadUrl]="getDownloadUrl()"
               [label]="(isFileUploaded$ | async) ? 'Upload a different file' : 'Upload a file'"
               formControlName="documents"
-              listTitle="Upload any supporting documents (optional)"
-            ></app-multiple-file-input>
+              listTitle="Upload any supporting documents (optional)"></app-multiple-file-input>
           </app-temporary-change>
         </ng-container>
         <ng-container *ngSwitchCase="'TEMPORARY_SUSPENSION'">
           <app-temporary-suspension formGroupName="notification" [today]="today">
             <app-multiple-file-input
               [baseDownloadUrl]="getDownloadUrl()"
-              [label]="(isFileUploaded$ | async) ? 'Upload a different file' : 'Upload a file'"
+              [label]="
+                (isFileUploaded$ | async)
+                  ? 'Upload a different supporting document (optional)'
+                  : 'Upload supporting documents (optional)'
+              "
               formControlName="documents"
-              listTitle="Upload any supporting documents (optional)"
-            ></app-multiple-file-input>
+              listTitle="Upload any supporting documents (optional)"></app-multiple-file-input>
           </app-temporary-suspension>
+        </ng-container>
+        <ng-container *ngSwitchCase="'CESSATION'">
+          <app-permanent-cessation formGroupName="notification" [today]="today" [form]="form">
+            <app-multiple-file-input
+              [baseDownloadUrl]="getDownloadUrl()"
+              [label]="
+                (isFileUploaded$ | async)
+                  ? 'Upload a different supporting document (optional)'
+                  : 'Upload supporting documents (optional)'
+              "
+              formControlName="documents"
+              listTitle="Upload any supporting documents (optional)"></app-multiple-file-input>
+          </app-permanent-cessation>
         </ng-container>
         <ng-container *ngSwitchCase="'NON_SIGNIFICANT_CHANGE'">
           <app-non-significant-change formGroupName="notification">
@@ -45,8 +58,7 @@
               [baseDownloadUrl]="getDownloadUrl()"
               [label]="(isFileUploaded$ | async) ? 'Upload a different file' : 'Upload a file'"
               formControlName="documents"
-              listTitle="Upload any supporting documents (optional)"
-            ></app-multiple-file-input>
+              listTitle="Upload any supporting documents (optional)"></app-multiple-file-input>
           </app-non-significant-change>
         </ng-container>
         <ng-container *ngSwitchCase="'OTHER_FACTOR'">
@@ -55,8 +67,7 @@
               [baseDownloadUrl]="getDownloadUrl()"
               [label]="(isFileUploaded$ | async) ? 'Upload a different file' : 'Upload a file'"
               formControlName="documents"
-              listTitle="Upload any supporting documents (optional)"
-            ></app-multiple-file-input>
+              listTitle="Upload any supporting documents (optional)"></app-multiple-file-input>
           </app-other-factor>
         </ng-container>
       </ng-container>

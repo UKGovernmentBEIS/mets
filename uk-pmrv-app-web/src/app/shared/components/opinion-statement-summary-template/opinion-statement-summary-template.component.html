@@ -1,0 +1,29 @@
+<dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>{{ opinionStatementFilesText }}</dt>
+    <dd govukSummaryListRowValue>
+      <app-summary-download-files [files]="opinionStatementFiles"></app-summary-download-files>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="supportingFiles?.length > 0">
+    <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+    <dd govukSummaryListRowValue>
+      <app-summary-download-files [files]="supportingFiles"></app-summary-download-files>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="notes">
+    <dt govukSummaryListRowKey>Notes</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">{{ notes }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>

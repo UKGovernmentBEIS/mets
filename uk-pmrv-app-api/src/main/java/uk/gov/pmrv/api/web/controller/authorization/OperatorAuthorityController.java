@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityDeletionService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityDeletionService;
+import uk.gov.netz.api.security.Authorized;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.orchestrator.authorization.service.AccountOperatorUserAuthorityQueryOrchestrator;
-import uk.gov.pmrv.api.web.orchestrator.authorization.service.AccountOperatorUserAuthorityUpdateOrchestrator;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.AccountOperatorAuthorityUpdateWrapperDTO;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.AccountOperatorsUsersAuthoritiesInfoDTO;
-import uk.gov.pmrv.api.web.security.Authorized;
+import uk.gov.pmrv.api.web.orchestrator.authorization.service.AccountOperatorUserAuthorityQueryOrchestrator;
+import uk.gov.pmrv.api.web.orchestrator.authorization.service.AccountOperatorUserAuthorityUpdateOrchestrator;
 
 @Validated
 @RestController
@@ -48,7 +48,7 @@ public class OperatorAuthorityController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#accountId")
     public ResponseEntity<AccountOperatorsUsersAuthoritiesInfoDTO> getAccountOperatorAuthorities(
-            @Parameter(hidden = true) PmrvUser currentUser,
+            @Parameter(hidden = true) AppUser currentUser,
             @PathVariable("accountId") @Parameter(description = "The account id") Long accountId) {
         return new ResponseEntity<>(
                 accountOperatorUserAuthorityQueryOrchestrator.getAccountOperatorsUsersAuthoritiesInfo(currentUser, accountId),
@@ -100,9 +100,9 @@ public class OperatorAuthorityController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#accountId")
     public ResponseEntity<Void> deleteCurrentUserAccountOperatorAuthority(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("accountId") @Parameter(description = "The account id") Long accountId) {
-        operatorAuthorityDeletionService.deleteAccountOperatorAuthority(pmrvUser.getUserId(), accountId);
+        operatorAuthorityDeletionService.deleteAccountOperatorAuthority(appUser.getUserId(), accountId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

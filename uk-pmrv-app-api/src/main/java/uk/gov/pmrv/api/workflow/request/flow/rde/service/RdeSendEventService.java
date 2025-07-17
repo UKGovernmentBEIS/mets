@@ -6,11 +6,9 @@ import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestExpirationType;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestExpirationVarsBuilder;
+import uk.gov.pmrv.api.workflow.utils.DateUtils;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,14 +20,9 @@ public class RdeSendEventService {
     private final RequestExpirationVarsBuilder requestExpirationVarsBuilder;
 
     public void send(final String requestId, final LocalDate deadline) {
-        final Date deadlineDate = Date.from(deadline
-                .atTime(LocalTime.MIN)
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
-        
         final Map<String, Object> rdeVariables = new HashMap<>();
         rdeVariables.putAll(requestExpirationVarsBuilder
-                .buildExpirationVars(RequestExpirationType.RDE, deadlineDate));
+                .buildExpirationVars(RequestExpirationType.RDE, DateUtils.atEndOfDay(deadline)));
         
         workflowService.sendEvent(requestId, BpmnProcessConstants.RDE_REQUESTED, rdeVariables);
     }

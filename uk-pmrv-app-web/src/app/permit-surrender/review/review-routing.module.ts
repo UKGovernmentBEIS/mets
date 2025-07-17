@@ -60,6 +60,7 @@ const routes: PermitSurrenderRoute[] = [
       },
       {
         path: 'change-assignee',
+        canActivate: [TaskGuard],
         loadChildren: () =>
           import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
@@ -216,6 +217,12 @@ const routes: PermitSurrenderRoute[] = [
             component: WaitReviewComponent,
           },
           {
+            path: 'change-assignee',
+            canActivate: [TaskGuard],
+            loadChildren: () =>
+              import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+          },
+          {
             path: 'tasks/:taskId/change-assignee',
             canActivate: [TaskGuard],
             canDeactivate: [TaskGuard],
@@ -236,6 +243,7 @@ const routes: PermitSurrenderRoute[] = [
           },
           {
             path: 'change-assignee',
+            canActivate: [TaskGuard],
             loadChildren: () =>
               import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
           },

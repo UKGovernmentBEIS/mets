@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -13,7 +12,6 @@ import {
 } from '@tasks/aer/verification-submit/testing/mock-verification-apply-action';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { TasksService } from 'pmrv-api';
 
@@ -39,9 +37,8 @@ describe('NotIncludedDeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
+      imports: [AerModule],
       providers: [
-        KeycloakService,
         { provide: TasksService, useValue: tasksService },
         { provide: ActivatedRoute, useValue: route },
       ],
@@ -66,7 +63,7 @@ describe('NotIncludedDeleteComponent', () => {
   });
 
   it('should display the item name', () => {
-    expect(page.header.textContent.trim()).toEqual(`Are you sure you want to delete  'A1 Explanation A1'?`);
+    expect(page.header.textContent.trim()).toEqual(`Are you sure you want to delete 'A1 Explanation A1'?`);
   });
 
   it('should delete and navigate to list', () => {

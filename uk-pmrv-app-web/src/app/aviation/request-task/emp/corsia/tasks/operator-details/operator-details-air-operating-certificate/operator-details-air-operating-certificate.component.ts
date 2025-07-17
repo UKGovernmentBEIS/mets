@@ -12,7 +12,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
 
-import { AirOperatingCertificate, IssuingAuthoritiesService } from 'pmrv-api';
+import { IssuingAuthoritiesService } from 'pmrv-api';
 
 import { BaseOperatorDetailsComponent } from '../base-operator-details.component';
 import { OperatorDetailsCorsiaFormProvider } from '../operator-details-form.provider';
@@ -33,6 +33,7 @@ import { OperatorDetailsCorsiaFormProvider } from '../operator-details-form.prov
 export class OperatorDetailsAirOperatingCertificateComponent extends BaseOperatorDetailsComponent {
   form = this.getform('airOperatingCertificate');
   issuingAuthorityOptions$ = this.getIssuingAuthorityOptions(this.issuingAuthorityService);
+
   constructor(
     public router: Router,
     public route: ActivatedRoute,
@@ -46,18 +47,27 @@ export class OperatorDetailsAirOperatingCertificateComponent extends BaseOperato
   }
 
   onSubmit() {
-    const certificateExist = this.form.value.certificateExist as AirOperatingCertificate['certificateExist'];
-
-    if (!certificateExist) {
-      this.form.patchValue({ certificateNumber: null, issuingAuthority: null, certificateFiles: [] });
+    if (!this.form.value.certificateExist) {
+      this.form.patchValue({
+        certificateNumber: null,
+        issuingAuthority: null,
+        certificateFiles: [],
+        restrictionsExist: null,
+        restrictionsDetails: null,
+      });
+    } else {
+      if (!this.form.value.restrictionsExist) {
+        this.form.patchValue({ restrictionsDetails: null });
+      }
     }
 
     const payload = {
       airOperatingCertificate: {
         ...this.form.value,
-        certificateFiles: this.form.value.certificateFiles?.map((doc: FileUpload) => doc.uuid),
+        certificateFiles: this.form.value.certificateFiles?.map((doc: FileUpload) => doc.uuid) ?? [],
       },
     };
+
     this.submitForm('airOperatingCertificate', payload, '../organisation-structure');
   }
 }

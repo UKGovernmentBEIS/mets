@@ -7,13 +7,13 @@ import { SharedModule } from '@shared/shared.module';
 import { EmpDataGapsCorsia, EmpEmissionsMonitoringApproachCorsia } from 'pmrv-api';
 
 @Component({
-  selector: 'app-data-gaps-summary-template',
+  selector: 'app-data-gaps-corsia-summary-template',
   templateUrl: './data-gaps-summary-template.component.html',
   standalone: true,
   imports: [CommonModule, RouterModule, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DataGapsSummaryTemplateComponent {
+export class DataGapsCorsiaSummaryTemplateComponent {
   @Input() data: EmpDataGapsCorsia | null;
   @Input() isEditable = false;
   @Input() corsiaMonitoringApproach: EmpEmissionsMonitoringApproachCorsia['monitoringApproachType'];

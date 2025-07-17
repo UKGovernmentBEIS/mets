@@ -26,7 +26,6 @@ export const mockOperatorListData: AccountOperatorsUsersAuthoritiesInfoDTO = {
       roleName: 'Operator admin',
       userId: 'userTest1',
       authorityCreationDate: '2019-12-21T13:42:43.050682Z',
-      locked: true,
     },
     {
       authorityStatus: 'ACTIVE',
@@ -36,7 +35,6 @@ export const mockOperatorListData: AccountOperatorsUsersAuthoritiesInfoDTO = {
       roleName: 'Operator',
       userId: 'userTest2',
       authorityCreationDate: '2020-12-21T13:42:43.050682Z',
-      locked: false,
     },
     {
       authorityStatus: 'DISABLED',
@@ -46,7 +44,6 @@ export const mockOperatorListData: AccountOperatorsUsersAuthoritiesInfoDTO = {
       roleName: 'Operator',
       userId: 'userTest3',
       authorityCreationDate: '2020-10-13T13:42:43.050682Z',
-      locked: false,
     },
     {
       authorityStatus: 'ACTIVE',
@@ -56,7 +53,6 @@ export const mockOperatorListData: AccountOperatorsUsersAuthoritiesInfoDTO = {
       roleName: 'Operator',
       userId: 'userTest4',
       authorityCreationDate: '2021-01-13T13:42:43.050682Z',
-      locked: false,
     },
   ] as UserAuthorityInfoDTO[],
   contactTypes: {
@@ -231,6 +227,51 @@ export const mockWorkflowResults: RequestDetailsSearchResults = {
   total: 2,
 };
 
+export const mockInspectionsResults: RequestDetailsSearchResults = {
+  requestDetails: [
+    {
+      id: 'INS00055-2022-1',
+      requestType: 'INSTALLATION_AUDIT',
+      requestStatus: 'COMPLETED',
+      creationDate: '2024-08-27',
+      requestMetadata: {
+        type: 'INSTALLATION_INSPECTION',
+        year: '2022',
+      } as any,
+    },
+    {
+      id: 'INS00055-2021-1',
+      requestType: 'INSTALLATION_AUDIT',
+      requestStatus: 'IN_PROGRESS',
+      creationDate: '2024-08-26',
+      requestMetadata: {
+        type: 'INSTALLATION_INSPECTION',
+        year: '2021',
+      } as any,
+    },
+    {
+      id: 'INS00055-4',
+      requestType: 'INSTALLATION_ONSITE_INSPECTION',
+      requestStatus: 'IN_PROGRESS',
+      creationDate: '2024-08-26',
+      requestMetadata: {
+        type: 'INSTALLATION_INSPECTION',
+        year: '2024',
+      } as any,
+    },
+    {
+      id: 'INS00055-3',
+      requestType: 'INSTALLATION_ONSITE_INSPECTION',
+      requestStatus: 'COMPLETED',
+      creationDate: '2024-08-26',
+      requestMetadata: {
+        type: 'INSTALLATION_INSPECTION',
+        year: '2024',
+      } as any,
+    },
+  ],
+};
+
 export const mockReportsResults: RequestDetailsSearchResults = {
   requestDetails: [
     {
@@ -310,6 +351,7 @@ export const mockRequestNotesResults: RequestNoteResponse = {
 };
 
 export const mockedAccountHeaderInfo: InstallationAccountHeaderInfoDTO = {
+  id: 1,
   emitterType: 'GHGE',
   installationCategory: 'A',
   name: 'accountName',
@@ -318,6 +360,7 @@ export const mockedAccountHeaderInfo: InstallationAccountHeaderInfoDTO = {
 };
 
 export const mockedAviationAccountHeaderInfo: AviationAccountHeaderInfoDTO = {
+  id: 1,
   name: 'aviationUser',
   empId: 'empId',
   status: 'LIVE',

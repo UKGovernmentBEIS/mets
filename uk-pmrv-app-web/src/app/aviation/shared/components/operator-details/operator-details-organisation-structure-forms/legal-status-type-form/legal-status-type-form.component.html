@@ -1,4 +1,5 @@
-<h3 class="govuk-heading-s">What is the legal status of your organisation?</h3>
+<h2 class="govuk-heading-s">What is the legal status of your organisation?</h2>
+
 <div formControlName="legalStatusType" govuk-radio>
   <govuk-radio-option value="LIMITED_COMPANY" [label]="'LIMITED_COMPANY' | operatorDetailsLegalStatusType">
     <div govukConditionalContent>
@@ -7,11 +8,13 @@
       ></app-organisation-structure-limited-company-form>
     </div>
   </govuk-radio-option>
+
   <govuk-radio-option value="INDIVIDUAL" [label]="'INDIVIDUAL' | operatorDetailsLegalStatusType">
     <div govukConditionalContent>
       <app-organisation-structure-individual-form></app-organisation-structure-individual-form>
     </div>
   </govuk-radio-option>
+
   <govuk-radio-option value="PARTNERSHIP" [label]="'PARTNERSHIP' | operatorDetailsLegalStatusType">
     <div govukConditionalContent>
       <app-organisation-structure-partnership-form

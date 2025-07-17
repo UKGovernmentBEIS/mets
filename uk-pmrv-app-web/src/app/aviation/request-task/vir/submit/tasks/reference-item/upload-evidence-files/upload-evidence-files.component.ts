@@ -33,15 +33,13 @@ interface ViewModel {
       [formGroup]="vm.form"
       submitText="Continue"
       [heading]="vm.heading"
-      [hideSubmit]="vm.isEditable === false"
-    >
+      [hideSubmit]="vm.isEditable === false">
       <app-multiple-file-input
         [baseDownloadUrl]="vm.downloadUrl"
         label="Upload files"
         headerSize="s"
         listTitle="Uploaded attachments"
-        formControlName="files"
-      ></app-multiple-file-input>
+        formControlName="files"></app-multiple-file-input>
     </app-wizard-step>
     <app-return-to-link></app-return-to-link>
   `,

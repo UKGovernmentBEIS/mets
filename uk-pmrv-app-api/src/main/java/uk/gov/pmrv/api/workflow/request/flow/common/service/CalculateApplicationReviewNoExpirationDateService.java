@@ -21,6 +21,6 @@ public class CalculateApplicationReviewNoExpirationDateService implements Calcul
 
     @Override
     public Set<RequestType> getTypes() {
-        return Set.of(RequestType.VIR);
+        return Set.of(RequestType.VIR, RequestType.AVIATION_VIR, RequestType.AIR);
     }
 }

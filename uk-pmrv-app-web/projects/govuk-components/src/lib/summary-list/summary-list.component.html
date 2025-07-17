@@ -1,4 +1,4 @@
-<ng-content *ngIf="rows.length !== 0; else detailsContainer"></ng-content>
+<ng-content *ngIf="rows.length !== 0; else detailsContainer" />
 <ng-template #detailsContainer>
   <ng-container *ngFor="let item of details; let i = index">
     <div *ngIf="item.value" govukSummaryListRow>
@@ -7,7 +7,7 @@
           *ngIf="keyTemplate; else bareKey"
           [ngTemplateOutlet]="keyTemplate"
           [ngTemplateOutletContext]="{ $implicit: item, index: i }"
-        ></ng-container>
+        />
         <ng-template #bareKey>{{ item.key }}</ng-template>
       </dt>
       <dd govukSummaryListRowValue>
@@ -15,7 +15,7 @@
           *ngIf="valueTemplate; else bareValue"
           [ngTemplateOutlet]="valueTemplate"
           [ngTemplateOutletContext]="{ $implicit: item, index: i }"
-        ></ng-container>
+        />
         <ng-template #bareValue>{{ item.value }}</ng-template>
       </dd>
     </div>

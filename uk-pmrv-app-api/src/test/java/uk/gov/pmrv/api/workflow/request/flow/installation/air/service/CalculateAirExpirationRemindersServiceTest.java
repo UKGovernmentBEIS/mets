@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.service.DateService;
+import uk.gov.netz.api.common.utils.DateService;
 
 @ExtendWith(MockitoExtension.class)
 class CalculateAirExpirationRemindersServiceTest {

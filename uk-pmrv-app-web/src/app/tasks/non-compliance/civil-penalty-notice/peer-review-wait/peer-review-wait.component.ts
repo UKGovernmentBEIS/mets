@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { first, map } from 'rxjs';
+
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { NonComplianceCivilPenaltyRequestTaskPayload } from 'pmrv-api';
 
@@ -13,11 +15,19 @@ import { resolveSectionStatus } from '../section.status';
   templateUrl: './peer-review-wait.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PeerReviewWaitComponent {
+export class PeerReviewWaitComponent implements OnInit {
   sectionStatus$ = this.nonComplianceService.payload$.pipe(
     first(),
     map((payload) => resolveSectionStatus(payload as NonComplianceCivilPenaltyRequestTaskPayload)),
   );
 
-  constructor(readonly store: CommonTasksStore, private readonly nonComplianceService: NonComplianceService) {}
+  constructor(
+    readonly store: CommonTasksStore,
+    private readonly nonComplianceService: NonComplianceService,
+    private readonly breadcrumbService: BreadcrumbService,
+  ) {}
+
+  ngOnInit(): void {
+    this.breadcrumbService.cutLastBreadcrumbWithLinkandShow();
+  }
 }

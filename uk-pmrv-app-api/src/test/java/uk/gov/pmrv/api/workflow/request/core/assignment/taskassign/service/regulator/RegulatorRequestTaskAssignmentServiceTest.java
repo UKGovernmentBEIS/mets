@@ -14,10 +14,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.SiteContactRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -122,6 +122,6 @@ class RegulatorRequestTaskAssignmentServiceTest {
 
     @Test
     void getRoleType() {
-        assertEquals(RoleType.REGULATOR, regulatorRequestTaskAssignmentService.getRoleType());
+        assertEquals(RoleTypeConstants.REGULATOR, regulatorRequestTaskAssignmentService.getRoleType());
     }
 }

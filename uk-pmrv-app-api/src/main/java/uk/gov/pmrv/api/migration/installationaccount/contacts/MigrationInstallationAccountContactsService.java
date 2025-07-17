@@ -1,22 +1,23 @@
 package uk.gov.pmrv.api.migration.installationaccount.contacts;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import uk.gov.netz.api.authorization.core.service.AuthorityService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.utils.ExceptionUtils;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.service.validator.AccountContactTypeUpdateValidator;
-import uk.gov.pmrv.api.authorization.core.service.AuthorityService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.utils.ExceptionUtils;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.installationaccount.InstallationAccountHelper;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
 import java.util.ArrayList;
@@ -28,7 +29,6 @@ import java.util.Objects;
 @Log4j2
 @Service
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
-@RequiredArgsConstructor
 public class MigrationInstallationAccountContactsService extends MigrationBaseService {
 
     private final JdbcTemplate migrationJdbcTemplate;
@@ -36,6 +36,18 @@ public class MigrationInstallationAccountContactsService extends MigrationBaseSe
     private final AccountRepository accountRepository;
     private final AuthorityService authorityService;
     private final List<AccountContactTypeUpdateValidator> contactTypeValidators;
+
+    public MigrationInstallationAccountContactsService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                                       UserAuthService userAuthService,
+                                                       AccountRepository accountRepository,
+                                                       AuthorityService authorityService,
+                                                       List<AccountContactTypeUpdateValidator> contactTypeValidators) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.userAuthService = userAuthService;
+        this.accountRepository = accountRepository;
+        this.authorityService = authorityService;
+        this.contactTypeValidators = contactTypeValidators;
+    }
 
     private static final String QUERY_BASE = """
            select e.fldEmitterId AS account_id,

@@ -7,18 +7,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.account.domain.dto.AccountInfoDTO;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -46,9 +45,10 @@ class RequestExpirationReminderServiceTest {
     private AccountQueryService accountQueryService;
 
     @Mock
-    private NotificationEmailService notificationEmailService;
+    private NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
+
     @Mock
-    private CompetentAuthorityService competentAuthorityService;
+    private CompetentAuthorityDTOByRequestResolverDelegator competentAuthorityDTOByRequestResolverDelegator;
 
 
     @Test
@@ -84,35 +84,37 @@ class RequestExpirationReminderServiceTest {
         
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(accountQueryService.getAccountInfoDTOById(accountId)).thenReturn(account);
-        when(competentAuthorityService.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND, AccountType.INSTALLATION)).thenReturn(ca);
+        when(competentAuthorityDTOByRequestResolverDelegator.resolveCA(request, AccountType.INSTALLATION))
+                .thenReturn(ca);
 
         //invoke
         service.sendExpirationReminderNotification(requestId, expirationParams);
-        
+
+        verify(competentAuthorityDTOByRequestResolverDelegator, times(1)).resolveCA(request, AccountType.INSTALLATION);
         verify(requestService, times(1)).findRequestById(requestId);
         verify(accountQueryService, times(1)).getAccountInfoDTOById(accountId);
 
-        ArgumentCaptor<EmailData> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
+        ArgumentCaptor<EmailData<PmrvEmailNotificationTemplateData>> emailDataCaptor = ArgumentCaptor.forClass(EmailData.class);
         
         verify(notificationEmailService, times(1)).notifyRecipient(emailDataCaptor.capture(), Mockito.eq("recipient@email"));
-        EmailData emailDataCaptured = emailDataCaptor.getValue();
+        EmailData<PmrvEmailNotificationTemplateData> emailDataCaptured = emailDataCaptor.getValue();
         
         final Map<String, Object> expectedTemplateParams = new HashMap<>();
-        expectedTemplateParams.put(EmailNotificationTemplateConstants.ACCOUNT_NAME, account.getName());
-        expectedTemplateParams.put(EmailNotificationTemplateConstants.EMITTER_ID, emitterId);
-        expectedTemplateParams.put(EmailNotificationTemplateConstants.WORKFLOW_ID, request.getId());
-        expectedTemplateParams.put(EmailNotificationTemplateConstants.WORKFLOW, request.getType().getDescription());
-        expectedTemplateParams.put(EmailNotificationTemplateConstants.WORKFLOW_TASK, expirationParams.getWorkflowTask());
-        expectedTemplateParams.put(EmailNotificationTemplateConstants.WORKFLOW_USER, expirationParams.getRecipient().getFullName());
-        expectedTemplateParams.put(EmailNotificationTemplateConstants.WORKFLOW_EXPIRATION_TIME, expirationParams.getExpirationTime());
-        expectedTemplateParams.put(EmailNotificationTemplateConstants.WORKFLOW_EXPIRATION_TIME_LONG, expirationParams.getExpirationTimeLong());
-        expectedTemplateParams.put(EmailNotificationTemplateConstants.WORKFLOW_DEADLINE, expirationParams.getDeadline());
-        expectedTemplateParams.put(EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, ca.getEmail());
+        expectedTemplateParams.put(PmrvEmailNotificationTemplateConstants.ACCOUNT_NAME, account.getName());
+        expectedTemplateParams.put(PmrvEmailNotificationTemplateConstants.EMITTER_ID, emitterId);
+        expectedTemplateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_ID, request.getId());
+        expectedTemplateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW, request.getType().getDescription());
+        expectedTemplateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_TASK, expirationParams.getWorkflowTask());
+        expectedTemplateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_USER, expirationParams.getRecipient().getFullName());
+        expectedTemplateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_EXPIRATION_TIME, expirationParams.getExpirationTime());
+        expectedTemplateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_EXPIRATION_TIME_LONG, expirationParams.getExpirationTimeLong());
+        expectedTemplateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_DEADLINE, expirationParams.getDeadline());
+        expectedTemplateParams.put(PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, ca.getEmail());
         
         assertThat(emailDataCaptured).isEqualTo(EmailData.builder()
-                .notificationTemplateData(EmailNotificationTemplateData.builder()
+                .notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
                         .competentAuthority(CompetentAuthorityEnum.ENGLAND)
-                        .templateName(NotificationTemplateName.GENERIC_EXPIRATION_REMINDER)
+                        .templateName(PmrvNotificationTemplateName.GENERIC_EXPIRATION_REMINDER.getName())
                         .accountType(AccountType.INSTALLATION)
                         .templateParams(expectedTemplateParams)
                         .build())

@@ -10,7 +10,7 @@ import { BaseSuccessComponent } from '@shared/base-success/base-success.componen
         <govuk-panel title="Task cancelled"></govuk-panel>
       </div>
     </div>
-    <a govukLink routerLink="/dashboard"> Return to dashboard </a>
+    <a govukLink routerLink="/dashboard">Return to dashboard</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

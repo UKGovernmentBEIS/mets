@@ -94,7 +94,7 @@ describe('EmissionsReductionClaimComponent', () => {
       ['Total emissions reduction claim for the scheme Year', '37.8 tCO2'],
     ]);
     expect(page.tableRows.map((row) => Array.from(row.cells).map((col) => col.textContent.trim()))).toEqual([
-      ['Fuel name', '12', '12 t', 'File 1File 2', ''],
+      ['Fuel name', '12', '12 t', 'File 1  File 2', ''],
     ]);
   });
 });

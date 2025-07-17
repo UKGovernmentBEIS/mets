@@ -15,6 +15,7 @@ export const AER_CORSIA_EMISSIONS_REDUCTION_CLAIM_ROUTES: Routes = [
     children: [
       {
         path: '',
+        data: { pageTitle: 'CORSIA eligible fuels reduction claim' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./emissions-reduction-claim-page/emissions-reduction-claim-page.component').then(
@@ -23,14 +24,14 @@ export const AER_CORSIA_EMISSIONS_REDUCTION_CLAIM_ROUTES: Routes = [
       },
       {
         path: 'upload-template',
-        data: { backlink: '../' },
+        data: { pageTitle: 'Upload a template and supporting documents', backlink: '../' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./upload-template/upload-template.component').then((c) => c.UploadTemplateComponent),
       },
       {
         path: 'declaration-of-no-double-claiming',
-        data: { backlink: '../upload-template' },
+        data: { pageTitle: 'Declaration of no double claiming', backlink: '../upload-template' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./declaration-of-no-double-claiming/declaration-of-no-double-claiming.component').then(
@@ -39,7 +40,7 @@ export const AER_CORSIA_EMISSIONS_REDUCTION_CLAIM_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'CORSIA eligible fuels reduction claim summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'CORSIA eligible fuels reduction claim' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () =>
           import('./emissions-reduction-claim-summary/emissions-reduction-claim-summary.component').then(

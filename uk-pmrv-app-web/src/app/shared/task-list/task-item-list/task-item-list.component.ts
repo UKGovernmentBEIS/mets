@@ -10,8 +10,7 @@ import { TaskItem } from '../task-list.interface';
       *ngFor="let task of taskItems"
       [link]="task.link"
       [linkText]="task.linkText"
-      [status]="task.status"
-    ></li>
+      [status]="task.status"></li>
     <ng-content></ng-content>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -6,8 +6,9 @@ import { lastValueFrom, of } from 'rxjs';
 
 import { RequestTaskState, RequestTaskStore } from '@aviation/request-task/store';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
-import { BusinessErrorService } from '@error/business-error/business-error.service';
-import { mockClass } from '@testing';
+import { AuthStore } from '@core/store';
+import { expectBusinessErrorToBe } from '@error/testing/business-error';
+import { notFoundVerificationBodyError } from '@tasks/aer/error/business-errors';
 import { KeycloakService } from 'keycloak-angular';
 
 import { AccountVerificationBodyService } from 'pmrv-api';
@@ -18,6 +19,7 @@ import { VerificationGuard } from './send-report-verification.guard';
 describe('VerificationGuard', () => {
   let guard: VerificationGuard;
   let store: RequestTaskStore;
+  let authStore: AuthStore;
   let accountVerificationBodyService: Partial<jest.Mocked<AccountVerificationBodyService>>;
 
   beforeEach(async () => {
@@ -30,7 +32,6 @@ describe('VerificationGuard', () => {
       providers: [
         KeycloakService,
         { provide: AccountVerificationBodyService, useValue: accountVerificationBodyService },
-        { provide: BusinessErrorService, useValue: mockClass(BusinessErrorService) },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
       ],
     });
@@ -41,6 +42,9 @@ describe('VerificationGuard', () => {
     } as RequestTaskState);
 
     guard = TestBed.inject(VerificationGuard);
+
+    authStore = TestBed.inject(AuthStore);
+    authStore.setCurrentDomain('AVIATION');
   });
 
   it('should be created', () => {
@@ -55,6 +59,7 @@ describe('VerificationGuard', () => {
   it('should not activate if vb not exist', async () => {
     accountVerificationBodyService.getVerificationBodyOfAccount.mockReturnValue(of(null));
 
-    await expect(lastValueFrom(guard.canActivate())).resolves.toBeFalsy();
+    await expect(lastValueFrom(guard.canActivate())).rejects.toBeTruthy();
+    await expectBusinessErrorToBe(notFoundVerificationBodyError());
   });
 });

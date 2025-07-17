@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.service.DateService;
+import uk.gov.netz.api.common.utils.DateService;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -26,7 +26,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.AerCreatio
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferARequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.TransferParty;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.PermitTransferAAerService;
 
 @ExtendWith(MockitoExtension.class)
 class PermitTransferAAerServiceTest {

@@ -23,10 +23,11 @@ describe('FiltersTemplateComponent', () => {
 
   @Component({
     selector: 'app-test-wrapper-component',
-    template: `<app-permit-batch-reissue-filters-template
-      [filters]="filters"
-      [editable]="editable"
-    ></app-permit-batch-reissue-filters-template>`,
+    template: `
+      <app-permit-batch-reissue-filters-template
+        [filters]="filters"
+        [editable]="editable"></app-permit-batch-reissue-filters-template>
+    `,
   })
   class TestWrapperComponent {
     filters: FiltersModel = {

@@ -1,23 +1,21 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
-
-import jakarta.validation.Valid;
+import uk.gov.netz.api.common.validation.SpELExpression;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@SpELExpression(expression = "{#startDateOfNonCompliance != null && #endDateOfNonCompliance != null}", message = "permitNotification.dateOfNonCompliance.exist")
+@SpELExpression(expression = "{#startDateOfNonCompliance != null && #endDateOfNonCompliance != null}",
+        message = "permitNotification.dateOfNonCompliance.exist")
 public class TemporarySuspension extends PermitNotification {
 
     @JsonUnwrapped

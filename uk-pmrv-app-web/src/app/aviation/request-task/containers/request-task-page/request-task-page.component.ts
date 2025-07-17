@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, Observable, of } from 'rxjs';
@@ -6,18 +7,22 @@ import { combineLatest, map, Observable, of } from 'rxjs';
 import { isAllSectionsApproved } from '@aviation/request-task/aer/shared/util/aer.util';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { hasRelatedViewActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
+import { DocumentFilenameAndDocumentType } from '@shared/interfaces/previewDocumentFilenameAndDocumentType';
 import { TaskSection } from '@shared/task-list/task-list.interface';
 
-import { ItemDTO, RequestActionInfoDTO, RequestInfoDTO, RequestTaskDTO, RequestTaskItemDTO } from 'pmrv-api';
-
 import {
-  AerUkEtsRequestTaskPayload,
-  EmpRequestTaskPayloadUkEts,
-  requestTaskQuery,
-  RequestTaskStore,
-} from '../../store';
+  DecisionNotification,
+  ItemDTO,
+  RequestActionInfoDTO,
+  RequestInfoDTO,
+  RequestTaskDTO,
+  RequestTaskItemDTO,
+} from 'pmrv-api';
+
+import { requestTaskQuery, RequestTaskStore } from '../../store';
 import {
   getMessageForTaskType,
+  getPreviewDocumentsInfo,
   getRequestTaskHeaderForTaskType,
   getSectionsForTaskType,
   isAnySectionForAmends,
@@ -53,6 +58,8 @@ interface ViewModel {
   showStartPeerReview: boolean;
   awaitForVerifierMsg: string;
   isCompleteReportDisplayed: boolean;
+  decisionNotification: DecisionNotification;
+  previewDocuments: DocumentFilenameAndDocumentType[];
 }
 
 @Component({
@@ -60,14 +67,12 @@ interface ViewModel {
   templateUrl: './request-task-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
-  styles: [
-    `
-      :host ::ng-deep .app-task-list {
-        list-style-type: none;
-        padding-left: 0;
-      }
-    `,
-  ],
+  styles: `
+    :host ::ng-deep .app-task-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+  `,
 })
 export class RequestTaskPageComponent implements OnInit {
   vm$: Observable<ViewModel> = combineLatest([
@@ -81,6 +86,7 @@ export class RequestTaskPageComponent implements OnInit {
   ]).pipe(
     map(([requestTask, timeline, relatedTasks, capableToAssign, relatedActions, payload, requestInfo]) => {
       const isDeterminationCompleted = isDeterminationCompletedFn(requestTask.type, requestInfo.type, payload);
+
       return {
         header: getRequestTaskHeaderForTaskType(requestTask.type, requestInfo.requestMetadata),
         showDeadlineMessage: true,
@@ -102,9 +108,7 @@ export class RequestTaskPageComponent implements OnInit {
         showNotifyOperator: relatedActions.some(
           (action) => isDeterminationCompleted && notifyOperatorRequestTaskActionTypes.includes(action),
         ),
-        isAnySectionForAmends: isAnySectionForAmends(
-          payload as EmpRequestTaskPayloadUkEts & AerUkEtsRequestTaskPayload,
-        ),
+        isAnySectionForAmends: isAnySectionForAmends(payload, requestTask.type),
         showReturnForAmends: relatedActions.some((action) => returnForAmendsRequestTaskActionTypes.includes(action)),
         showSendForPeerReview:
           isDeterminationCompleted &&
@@ -112,6 +116,8 @@ export class RequestTaskPageComponent implements OnInit {
         showStartPeerReview: relatedActions.some((action) => startPeerReviewRequestTaskActionTypes.includes(action)),
         awaitForVerifierMsg: getMessageForTaskType(requestTask.type),
         isCompleteReportDisplayed: isAllSectionsApproved(payload, requestTask.type),
+        decisionNotification: { signatory: requestTask.assigneeUserId },
+        previewDocuments: getPreviewDocumentsInfo(requestTask.type, payload),
       } as ViewModel;
     }),
   );
@@ -120,6 +126,7 @@ export class RequestTaskPageComponent implements OnInit {
     private readonly store: RequestTaskStore,
     protected readonly router: Router,
     protected readonly route: ActivatedRoute,
+    private titleService: Title,
   ) {}
 
   ngOnInit(): void {
@@ -131,6 +138,13 @@ export class RequestTaskPageComponent implements OnInit {
     ) {
       this.router.navigate(['account-closure'], { relativeTo: this.route });
     }
+
+    this.store
+      .pipe(
+        requestTaskQuery.selectRequestTaskItem,
+        map((rti) => getRequestTaskHeaderForTaskType(rti.requestTask.type, rti.requestInfo.requestMetadata)),
+      )
+      .subscribe((title) => this.titleService.setTitle(title));
   }
 
   onSubmit() {

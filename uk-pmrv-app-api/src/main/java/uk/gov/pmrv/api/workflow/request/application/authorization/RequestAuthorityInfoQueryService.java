@@ -2,9 +2,9 @@ package uk.gov.pmrv.api.workflow.request.application.authorization;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.dto.RequestAuthorityInfoDTO;
-import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.dto.ResourceAuthorityInfo;
-import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.providers.RequestAuthorityInfoProvider;
+import uk.gov.netz.api.authorization.rules.services.authorityinfo.dto.RequestAuthorityInfoDTO;
+import uk.gov.netz.api.authorization.rules.services.authorityinfo.dto.ResourceAuthorityInfo;
+import uk.gov.netz.api.authorization.rules.services.authorityinfo.providers.RequestAuthorityInfoProvider;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 
@@ -25,9 +25,8 @@ public class RequestAuthorityInfoQueryService implements RequestAuthorityInfoPro
         Request request = requestService.findRequestById(id);
         return RequestAuthorityInfoDTO.builder()
                 .authorityInfo(ResourceAuthorityInfo.builder()
-                        .accountId(request.getAccountId())
-                        .competentAuthority(request.getCompetentAuthority())
-                        .verificationBodyId(request.getVerificationBodyId()).build())
+                        .requestResources(request.getRequestResourcesMap())
+                        .build())
                 .build();
     }
 }

@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -10,8 +10,16 @@
  * Do not edit the class manually.
  */
 import { BiomassPercentages } from './biomassPercentages';
-import { CalculationParameterCalculationMethod } from './calculationParameterCalculationMethod';
-import { CalculationParameterMonitoringTier } from './calculationParameterMonitoringTier';
+import { CalculationActivityDataMonitoringTier } from './calculationActivityDataMonitoringTier';
+import { CalculationBiomassFractionMonitoringTier } from './calculationBiomassFractionMonitoringTier';
+import { CalculationCarbonContentMonitoringTier } from './calculationCarbonContentMonitoringTier';
+import { CalculationConversionFactorMonitoringTier } from './calculationConversionFactorMonitoringTier';
+import { CalculationEmissionFactorMonitoringTier } from './calculationEmissionFactorMonitoringTier';
+import { CalculationManualCalculationMethod } from './calculationManualCalculationMethod';
+import { CalculationNationalInventoryDataCalculationMethod } from './calculationNationalInventoryDataCalculationMethod';
+import { CalculationNetCalorificValueMonitoringTier } from './calculationNetCalorificValueMonitoringTier';
+import { CalculationOxidationFactorMonitoringTier } from './calculationOxidationFactorMonitoringTier';
+import { CalculationRegionalDataCalculationMethod } from './calculationRegionalDataCalculationMethod';
 import { DurationRange } from './durationRange';
 import { ParameterMonitoringTierDiffReason } from './parameterMonitoringTierDiffReason';
 import { TransferCO2 } from './transferCO2';
@@ -20,10 +28,21 @@ export interface CalculationSourceStreamEmission {
   id?: string;
   sourceStream: string;
   emissionSources: Array<string>;
-  parameterMonitoringTiers: Array<CalculationParameterMonitoringTier>;
+  parameterMonitoringTiers: Array<
+    | CalculationActivityDataMonitoringTier
+    | CalculationBiomassFractionMonitoringTier
+    | CalculationCarbonContentMonitoringTier
+    | CalculationConversionFactorMonitoringTier
+    | CalculationEmissionFactorMonitoringTier
+    | CalculationNetCalorificValueMonitoringTier
+    | CalculationOxidationFactorMonitoringTier
+  >;
   biomassPercentages: BiomassPercentages;
   durationRange: DurationRange;
   parameterMonitoringTierDiffReason?: ParameterMonitoringTierDiffReason;
-  parameterCalculationMethod: CalculationParameterCalculationMethod;
+  parameterCalculationMethod:
+    | CalculationManualCalculationMethod
+    | CalculationNationalInventoryDataCalculationMethod
+    | CalculationRegionalDataCalculationMethod;
   transfer?: TransferCO2;
 }

@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import uk.gov.pmrv.api.common.utils.MimeTypeUtils;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.utils.MimeTypeUtils;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 
 @Log4j2
@@ -74,6 +74,15 @@ public class FtpFileService {
             log.error("Error occurred when trying to fetch files from FTP server", e);
         } 
         return ftpFileDTOResult;
+    }
+
+    public List<String> fetchFilePaths(String directory) {
+        try {
+            return ftpClient.getFilePaths(directory);
+        } catch (FtpException e) {
+            log.error("Error occurred when trying to fetch file paths from FTP server:", e);
+        }
+        return new ArrayList<>();
     }
     
     private FileDTO buildFileDTO(String fileName, byte[] fileContent) {

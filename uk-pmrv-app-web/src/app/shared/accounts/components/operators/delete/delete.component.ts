@@ -8,7 +8,7 @@ import { AuthStore, selectCurrentDomain, selectLoginStatus, selectUserState } fr
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchBadRequest, ErrorCodes } from '@error/business-errors';
 
-import { ApplicationUserDTO, OperatorAuthoritiesService, OperatorUserDTO } from 'pmrv-api';
+import { OperatorAuthoritiesService, OperatorUserDTO, UserDTO } from 'pmrv-api';
 
 import {
   activeOperatorAdminError,
@@ -24,9 +24,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteComponent {
-  user$ = (this.route.data as Observable<{ user: OperatorUserDTO | ApplicationUserDTO }>).pipe(
-    map((data) => data.user),
-  );
+  user$ = (this.route.data as Observable<{ user: OperatorUserDTO | UserDTO }>).pipe(map((data) => data.user));
   deleteStatus = new BehaviorSubject<'success' | null>(null);
   accountId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('accountId'))));
   isCurrentUser$ = combineLatest([this.route.paramMap, this.authStore.pipe(selectUserState)]).pipe(
@@ -67,21 +65,20 @@ export class DeleteComponent {
           (res) =>
             this.accountId$.pipe(
               first(),
-              withLatestFrom(this.domainUrlPrefix$),
-              switchMap(([accountId, domain]) =>
+              switchMap((accountId) =>
                 this.businessErrorService.showError(
                   (() => {
                     switch (res.error.code) {
                       case ErrorCodes.AUTHORITY1001:
-                        return activeOperatorAdminError(accountId, domain);
+                        return activeOperatorAdminError(accountId);
                       case ErrorCodes.AUTHORITY1004:
-                        return saveNotFoundOperatorError(accountId, domain);
+                        return saveNotFoundOperatorError(accountId);
                       case ErrorCodes.ACCOUNT_CONTACT1001:
-                        return primaryContactError(accountId, domain);
+                        return primaryContactError(accountId);
                       case ErrorCodes.ACCOUNT_CONTACT1002:
-                        return financialContactError(accountId, domain);
+                        return financialContactError(accountId);
                       case ErrorCodes.ACCOUNT_CONTACT1003:
-                        return serviceContactError(accountId, domain);
+                        return serviceContactError(accountId);
                     }
                   })(),
                 ),

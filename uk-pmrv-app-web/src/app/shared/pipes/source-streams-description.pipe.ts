@@ -27,6 +27,8 @@ export class SourceStreamDescriptionPipe implements PipeTransform {
         return 'Carbon Monoxide';
       case 'CHARCOAL':
         return 'Charcoal';
+      case 'CLINICAL_WASTE':
+        return 'Clinical Waste';
       case 'COAL':
         return 'Coal';
       case 'COAL_TAR':
@@ -41,6 +43,8 @@ export class SourceStreamDescriptionPipe implements PipeTransform {
         return 'Coking Coal';
       case 'COLLIERY_METHANE':
         return 'Colliery Methane';
+      case 'COMMERCIAL_INDUSTRIAL_WASTE':
+        return 'Commercial and Industrial Waste';
       case 'CRUDE_OIL':
         return 'Crude Oil';
       case 'ETHANE':
@@ -57,6 +61,8 @@ export class SourceStreamDescriptionPipe implements PipeTransform {
         return 'Gas/Oil';
       case 'GAS_WORKS':
         return 'Gas Works';
+      case 'HAZARDOUS_WASTE':
+        return 'Hazardous Waste';
       case 'HIGH_PRESSURE_FLARE_GAS':
         return 'High Pressure Flare Gas';
       case 'IMPORT_FUEL_GAS':
@@ -139,6 +145,8 @@ export class SourceStreamDescriptionPipe implements PipeTransform {
         return 'Residual Fuel Oil';
       case 'SCRAP_TYRES':
         return 'Scrap Tyres';
+      case 'SDF':
+        return 'SDF';
       case 'SHALE_OIL':
         return 'Shale Oil';
       case 'SLUDGE_GAS':
@@ -147,10 +155,14 @@ export class SourceStreamDescriptionPipe implements PipeTransform {
         return 'Sour Gas';
       case 'SOUR_GAS_FLARE':
         return 'Sour Gas Flare';
+      case 'SRF':
+        return 'SRF';
       case 'SSF':
         return 'SSF';
       case 'SUB_BITUMINOUS_COAL':
         return 'Sub-Bituminous Coal';
+      case 'VENTED_GAS':
+        return 'Vented Gas';
       case 'WASTE_OILS':
         return 'Waste Oils';
       case 'WASTE_SOLVENTS':

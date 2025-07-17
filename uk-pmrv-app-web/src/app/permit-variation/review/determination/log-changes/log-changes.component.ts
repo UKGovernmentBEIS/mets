@@ -19,8 +19,7 @@ import { logChangesFormProvider } from './log-changes-form.provider';
         (formSubmit)="onContinue()"
         [formGroup]="form"
         submitText="Continue"
-        [hideSubmit]="(store.isEditable$ | async) === false"
-      >
+        [hideSubmit]="(store.isEditable$ | async) === false">
         <span class="govuk-caption-l">{{ determination$ | async }}</span>
 
         <app-page-heading>Enter a summary of the changes for the permit variation log</app-page-heading>

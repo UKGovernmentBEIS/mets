@@ -21,8 +21,8 @@ public class AviationRptAirportsService {
     }
 
     @Transactional(readOnly = true)
-    public List<String> findChapter3Icaos(Set<String> icaoCodes) {
-        return repository.findChapter3Icaos(icaoCodes);
+    public List<String> findChapter3Icaos(Set<String> icaoCodes, Year year) {
+        return repository.findChapter3Icaos(icaoCodes, year);
     }
 }
 

@@ -182,7 +182,7 @@ const NON_COMPLIANCE_NOTICE_OF_INTENT_TASKS: TaskSection<any>[] = [
     tasks: [
       {
         name: 'non-compliance',
-        linkText: 'Upload daily penalty notice',
+        linkText: 'Upload notice of intent',
         link: 'non-compliance/notice-of-intent/upload-notice-of-intent',
       },
     ],

@@ -125,7 +125,7 @@ export class InventoryDataReviewComponent {
     this.precalculatedEmissions$,
   ]).pipe(
     switchMap(([sourceStreamEmission, sourceStreamType, precalculatedEmissions]) => {
-      const { calculationActivityDataCalculationMethod } = sourceStreamEmission?.parameterCalculationMethod;
+      const { calculationActivityDataCalculationMethod } = sourceStreamEmission?.parameterCalculationMethod ?? {};
       const containsBiomass = sourceStreamEmission?.biomassPercentages?.contains;
 
       const emissionsCalculationParams: EmissionsCalculationParamsDTO = {

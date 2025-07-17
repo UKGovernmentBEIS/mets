@@ -19,17 +19,14 @@ import { paymentFormProvider } from './payment-form.provider';
       (formSubmit)="onSubmit()"
       [formGroup]="form"
       heading="Who will be paying for the transfer?"
-      [hideSubmit]="hideSubmit$ | async"
-    >
+      [hideSubmit]="hideSubmit$ | async">
       <div formControlName="payer" govuk-radio legendSize="medium">
         <govuk-radio-option
           value="TRANSFERER"
-          label="The business or organisation making the transfer"
-        ></govuk-radio-option>
+          label="The business or organisation making the transfer"></govuk-radio-option>
         <govuk-radio-option
           value="RECEIVER"
-          label="The business or organisation receiving the transfer"
-        ></govuk-radio-option>
+          label="The business or organisation receiving the transfer"></govuk-radio-option>
       </div>
     </app-wizard-step>
     <a govukLink routerLink="..">Return to: Permit transfer application</a>

@@ -1,5 +1,21 @@
 package uk.gov.pmrv.api.user.verifier.service;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.user.core.service.UserSecuritySetupService;
+import uk.gov.pmrv.api.user.verifier.domain.VerifierUserDTO;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -9,21 +25,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-
-import java.util.List;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.verifier.service.VerifierAuthorityService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.user.core.service.UserSecuritySetupService;
-import uk.gov.pmrv.api.user.verifier.domain.VerifierUserDTO;
 
 @ExtendWith(MockitoExtension.class)
 class VerifierUserManagementServiceTest {
@@ -44,17 +45,17 @@ class VerifierUserManagementServiceTest {
 	void getVerifierUserById_verifier_auth_user() {
 		final String userId = "userId";
 		final Long verBodyId = 1L;
-		PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.VERIFIER)
-            .authorities(List.of(PmrvAuthority.builder().verificationBodyId(verBodyId).build()))
+            .roleType(RoleTypeConstants.VERIFIER)
+            .authorities(List.of(AppAuthority.builder().verificationBodyId(verBodyId).build()))
             .build();
 
 		// Mock
 		when(verifierAuthorityService.existsByUserIdAndVerificationBodyId(userId, verBodyId)).thenReturn(true);
 
 		// Invoke
-		service.getVerifierUserById(pmrvUser, userId);
+		service.getVerifierUserById(appUser, userId);
 
 		// Assert
 		verify(verifierAuthorityService, times(1)).existsByUserIdAndVerificationBodyId(userId, verBodyId);
@@ -65,16 +66,16 @@ class VerifierUserManagementServiceTest {
     @Test
     void getVerifierUserById_regulator_auth_user() {
         final String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
         // Mock
         when(verifierAuthorityService.existsByUserIdAndVerificationBodyIdNotNull(userId)).thenReturn(true);
 
         // Invoke
-        service.getVerifierUserById(pmrvUser, userId);
+        service.getVerifierUserById(appUser, userId);
 
         // Assert
         verify(verifierAuthorityService, times(1)).existsByUserIdAndVerificationBodyIdNotNull(userId);
@@ -85,12 +86,12 @@ class VerifierUserManagementServiceTest {
     @Test
     void getVerifierUserById_auth_user_role_not_supported() {
         final String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .build();
 
-        assertThrows(UnsupportedOperationException.class, () -> service.getVerifierUserById(pmrvUser, userId));
+        assertThrows(UnsupportedOperationException.class, () -> service.getVerifierUserById(appUser, userId));
 
         verifyNoInteractions(verifierUserAuthService);
         verifyNoInteractions(verifierAuthorityService);
@@ -100,10 +101,10 @@ class VerifierUserManagementServiceTest {
 	void getVerifierUserById_verifier_auth_user_wanted_user_not_verifier() {
         final String userId = "userId";
         final Long verBodyId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.VERIFIER)
-            .authorities(List.of(PmrvAuthority.builder().verificationBodyId(verBodyId).build()))
+            .roleType(RoleTypeConstants.VERIFIER)
+            .authorities(List.of(AppAuthority.builder().verificationBodyId(verBodyId).build()))
             .build();
 
 		// Mock
@@ -111,7 +112,7 @@ class VerifierUserManagementServiceTest {
 
 		// Invoke
 		BusinessException businessException = assertThrows(BusinessException.class,
-				() -> service.getVerifierUserById(pmrvUser, userId));
+				() -> service.getVerifierUserById(appUser, userId));
 
 		// Assert
 		assertEquals(ErrorCode.AUTHORITY_USER_NOT_RELATED_TO_VERIFICATION_BODY, businessException.getErrorCode());
@@ -123,9 +124,9 @@ class VerifierUserManagementServiceTest {
     @Test
     void getVerifierUserById_regulator_auth_user_wanted_user_not_verifier() {
         final String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
         // Mock
@@ -133,7 +134,7 @@ class VerifierUserManagementServiceTest {
 
         // Invoke
         BusinessException businessException = assertThrows(BusinessException.class,
-            () -> service.getVerifierUserById(pmrvUser, userId));
+            () -> service.getVerifierUserById(appUser, userId));
 
         // Assert
         assertEquals(ErrorCode.AUTHORITY_USER_IS_NOT_VERIFIER, businessException.getErrorCode());
@@ -146,10 +147,10 @@ class VerifierUserManagementServiceTest {
 	void updateVerifierUserById_verifier_auth_user() {
 		String userId = "userId";
 		final Long verBodyId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.VERIFIER)
-            .authorities(List.of(PmrvAuthority.builder().verificationBodyId(verBodyId).build()))
+            .roleType(RoleTypeConstants.VERIFIER)
+            .authorities(List.of(AppAuthority.builder().verificationBodyId(verBodyId).build()))
             .build();
 		VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().build();
 
@@ -157,20 +158,20 @@ class VerifierUserManagementServiceTest {
 		when(verifierAuthorityService.existsByUserIdAndVerificationBodyId(userId, verBodyId)).thenReturn(true);
 
 		// Invoke
-		service.updateVerifierUserById(pmrvUser, userId, verifierUserDTO);
+		service.updateVerifierUserById(appUser, userId, verifierUserDTO);
 
 		// Assert
 		verify(verifierAuthorityService, times(1)).existsByUserIdAndVerificationBodyId(userId, verBodyId);
-		verify(verifierUserAuthService, times(1)).updateVerifierUser(userId, verifierUserDTO);
+		verify(verifierUserAuthService, times(1)).updateVerifierUser(verifierUserDTO);
         verifyNoMoreInteractions(verifierAuthorityService);
 	}
 
     @Test
     void updateVerifierUserById_regulator_auth_user() {
         String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().build();
 
@@ -178,25 +179,25 @@ class VerifierUserManagementServiceTest {
         when(verifierAuthorityService.existsByUserIdAndVerificationBodyIdNotNull(userId)).thenReturn(true);
 
         // Invoke
-        service.updateVerifierUserById(pmrvUser, userId, verifierUserDTO);
+        service.updateVerifierUserById(appUser, userId, verifierUserDTO);
 
         // Assert
         verify(verifierAuthorityService, times(1)).existsByUserIdAndVerificationBodyIdNotNull(userId);
-        verify(verifierUserAuthService, times(1)).updateVerifierUser(userId, verifierUserDTO);
+        verify(verifierUserAuthService, times(1)).updateVerifierUser(verifierUserDTO);
         verifyNoMoreInteractions(verifierAuthorityService);
     }
 
     @Test
     void updateVerifierUserById_auth_user_role_not_supported() {
         String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().build();
 
         assertThrows(UnsupportedOperationException.class,
-            () -> service.updateVerifierUserById(pmrvUser, userId, verifierUserDTO));
+            () -> service.updateVerifierUserById(appUser, userId, verifierUserDTO));
 
         verifyNoInteractions(verifierUserAuthService);
         verifyNoInteractions(verifierAuthorityService);
@@ -206,10 +207,10 @@ class VerifierUserManagementServiceTest {
 	void updateVerifierUserById_verifier_auth_user_wanted_user_not_verifier() {
 		String userId = "userId";
 		final Long verBodyId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.VERIFIER)
-            .authorities(List.of(PmrvAuthority.builder().verificationBodyId(verBodyId).build()))
+            .roleType(RoleTypeConstants.VERIFIER)
+            .authorities(List.of(AppAuthority.builder().verificationBodyId(verBodyId).build()))
             .build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().build();
 
@@ -218,7 +219,7 @@ class VerifierUserManagementServiceTest {
 
 		// Invoke
 		BusinessException businessException = assertThrows(BusinessException.class,
-				() -> service.updateVerifierUserById(pmrvUser, userId, verifierUserDTO));
+				() -> service.updateVerifierUserById(appUser, userId, verifierUserDTO));
 
 		// Assert
 		assertEquals(ErrorCode.AUTHORITY_USER_NOT_RELATED_TO_VERIFICATION_BODY, businessException.getErrorCode());
@@ -230,9 +231,9 @@ class VerifierUserManagementServiceTest {
     @Test
     void updateVerifierUserById_regulator_auth_user_wanted_user_not_verifier() {
         String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().build();
 
@@ -241,7 +242,7 @@ class VerifierUserManagementServiceTest {
 
         // Invoke
         BusinessException businessException = assertThrows(BusinessException.class,
-            () -> service.updateVerifierUserById(pmrvUser, userId, verifierUserDTO));
+            () -> service.updateVerifierUserById(appUser, userId, verifierUserDTO));
 
         // Assert
         assertEquals(ErrorCode.AUTHORITY_USER_IS_NOT_VERIFIER, businessException.getErrorCode());
@@ -252,34 +253,30 @@ class VerifierUserManagementServiceTest {
 
 	@Test
 	void updateCurrentVerifierUser() {
-		String userId = "userId";
-		final Long verBodyId = 1L;
-		PmrvUser pmrvUser = PmrvUser.builder().userId(userId)
-				.authorities(List.of(PmrvAuthority.builder().verificationBodyId(verBodyId).build())).build();
 		VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder().build();
 
 		// Invoke
-		service.updateCurrentVerifierUser(pmrvUser, verifierUserDTO);
+		service.updateCurrentVerifierUser(verifierUserDTO);
 
 		// Assert
-		verify(verifierUserAuthService, times(1)).updateVerifierUser(userId, verifierUserDTO);
+		verify(verifierUserAuthService, times(1)).updateVerifierUser(verifierUserDTO);
 	}
 	
 	@Test
     void resetVerifier2Fa() {
         String userId = "userId";
         final Long verBodyId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.VERIFIER)
-            .authorities(List.of(PmrvAuthority.builder().verificationBodyId(verBodyId).build()))
+            .roleType(RoleTypeConstants.VERIFIER)
+            .authorities(List.of(AppAuthority.builder().verificationBodyId(verBodyId).build()))
             .build();
 
         // Mock
         when(verifierAuthorityService.existsByUserIdAndVerificationBodyId(userId, verBodyId)).thenReturn(true);
 
         // Invoke
-        service.resetVerifier2Fa(pmrvUser, userId);
+        service.resetVerifier2Fa(appUser, userId);
 
         // Assert
         verify(verifierAuthorityService, times(1)).existsByUserIdAndVerificationBodyId(userId, verBodyId);
@@ -289,9 +286,9 @@ class VerifierUserManagementServiceTest {
     @Test
     void resetVerifier2Fa_user_not_verifier() {
         String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
         // Mock
@@ -299,7 +296,7 @@ class VerifierUserManagementServiceTest {
 
         // Invoke
         BusinessException businessException = assertThrows(BusinessException.class,
-            () -> service.resetVerifier2Fa(pmrvUser, userId));
+            () -> service.resetVerifier2Fa(appUser, userId));
 
         // Assert
         assertEquals(ErrorCode.AUTHORITY_USER_IS_NOT_VERIFIER, businessException.getErrorCode());

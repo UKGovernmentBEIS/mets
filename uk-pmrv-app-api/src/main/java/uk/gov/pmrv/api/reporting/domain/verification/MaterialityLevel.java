@@ -1,17 +1,15 @@
 package uk.gov.pmrv.api.reporting.domain.verification;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import uk.gov.netz.api.common.validation.SpELExpression;
 
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 

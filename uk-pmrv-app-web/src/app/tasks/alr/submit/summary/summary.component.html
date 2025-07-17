@@ -1,0 +1,13 @@
+<app-alr-task returnLinkTitle="Complete activity level report" [breadcrumb]="true">
+  <app-page-heading caption="Provide the activity level report">Check your answers</app-page-heading>
+
+  <app-alr-activity-summary-template
+    [isEditable]="isEditable()"
+    [data]="alrPayload().alr"
+    [alrFile]="alrFiles()"
+    [files]="files()"></app-alr-activity-summary-template>
+
+  <div *ngIf="isEditable() && hideSubmit() === false" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+</app-alr-task>

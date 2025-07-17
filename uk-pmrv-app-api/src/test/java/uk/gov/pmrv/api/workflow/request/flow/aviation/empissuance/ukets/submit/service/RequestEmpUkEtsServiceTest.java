@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmpProcedureForm;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviationDefinition;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
@@ -128,7 +128,7 @@ class RequestEmpUkEtsServiceTest {
 
     @Test
     void applySubmitAction() {
-        PmrvUser user = PmrvUser.builder().userId("userId").build();
+        AppUser user = AppUser.builder().userId("userId").build();
         EmissionsMonitoringPlanUkEts emissionsMonitoringPlan = EmissionsMonitoringPlanUkEts.builder()
             .applicationTimeframeInfo(EmpApplicationTimeframeInfo.builder()
                 .dateOfStart(LocalDate.of(2023, Month.APRIL, 26))

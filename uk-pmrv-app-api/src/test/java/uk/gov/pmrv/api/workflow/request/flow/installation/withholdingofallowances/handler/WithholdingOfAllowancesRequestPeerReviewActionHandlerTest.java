@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -30,7 +30,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class WithholdingOfAllowancesRequestPeerReviewActionHandlerTest {
+class WithholdingOfAllowancesRequestPeerReviewActionHandlerTest {
 
     @Mock
     private RequestTaskService requestTaskService;
@@ -49,10 +49,10 @@ public class WithholdingOfAllowancesRequestPeerReviewActionHandlerTest {
     private WithholdingOfAllowancesRequestPeerReviewActionHandler actionHandler;
 
     @Test
-    public void process() {
+    void process() {
         Long requestTaskId = 1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.WITHHOLDING_OF_ALLOWANCES_REQUEST_PEER_REVIEW;
-        PmrvUser pmrvUser = new PmrvUser();
+        AppUser appUser = new AppUser();
         PeerReviewRequestTaskActionPayload actionPayload = new PeerReviewRequestTaskActionPayload();
 
         RequestTask requestTask = new RequestTask();
@@ -63,24 +63,24 @@ public class WithholdingOfAllowancesRequestPeerReviewActionHandlerTest {
         requestTask.setRequest(request);
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        actionHandler.process(requestTaskId, requestTaskActionType, pmrvUser, actionPayload);
+        actionHandler.process(requestTaskId, requestTaskActionType, appUser, actionPayload);
 
         verify(withholdingOfAllowancesValidator).validate(payload.getWithholdingOfAllowances());
         verify(peerReviewerTaskAssignmentValidator).validate(
             RequestTaskType.WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEW,
             actionPayload.getPeerReviewer(),
-            pmrvUser
+            appUser
         );
         verify(withholdingOfAllowancesService).requestPeerReview(
             requestTask,
             actionPayload.getPeerReviewer(),
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
         verify(requestService).addActionToRequest(
             request,
             null,
             RequestActionType.WITHHOLDING_OF_ALLOWANCES_PEER_REVIEW_REQUESTED,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
         verify(workflowService).completeTask(
             requestTask.getProcessTaskId(),
@@ -89,7 +89,7 @@ public class WithholdingOfAllowancesRequestPeerReviewActionHandlerTest {
     }
 
     @Test
-    public void getTypes() {
+    void getTypes() {
         List<RequestTaskActionType> types = actionHandler.getTypes();
 
         assertNotNull(types);

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.2.0/changelog_aviation_rpt_airports.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+
+    <changeSet id="0_2_0_aviation_rpt_airport_insert_LSZM" author="spapagiannakopoulou">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(1) from aviation_rpt_airports where icao='LSZM';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            INSERT INTO aviation_rpt_airports (id, icao, name, country, country_type) VALUES (nextval('aviation_rpt_airports_seq'), 'LSZM', 'MOLLIS', 'Switzerland', 'EFTA_COUNTRY');
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from aviation_rpt_airports where icao = 'LSZM';
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

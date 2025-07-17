@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { TaskHeaderInfoComponent } from "@shared/components/task-header-info/task-header-info.component";
+import { TaskHeaderInfoComponent } from '@shared/components/task-header-info/task-header-info.component';
 import { BasePage } from '@testing';
 
 import { SharedModule } from '../../shared.module';
@@ -38,10 +38,8 @@ describe('TaskHeaderInfoComponent', () => {
     component.assignee = 'Adam Smith';
     component.daysRemaining = 13;
     fixture.detectChanges();
-    
-    expect(page.info.map((el) => el.textContent.trim())).toEqual([
-      'Assigned to: Adam Smith', 'Days Remaining: 13'
-    ]);
+
+    expect(page.info.map((el) => el.textContent.trim())).toEqual(['Assigned to: Adam Smith', 'Days Remaining: 13']);
   });
 
   it('should display the content with no deadline', () => {
@@ -49,9 +47,7 @@ describe('TaskHeaderInfoComponent', () => {
     component.daysRemaining = null;
     fixture.detectChanges();
 
-    expect(page.info.map((el) => el.textContent.trim())).toEqual([
-      'Assigned to: Adam Smith'
-    ]);
+    expect(page.info.map((el) => el.textContent.trim())).toEqual(['Assigned to: Adam Smith']);
   });
 
   it('should display the content with no assignee', () => {
@@ -59,8 +55,6 @@ describe('TaskHeaderInfoComponent', () => {
     component.daysRemaining = 13;
     fixture.detectChanges();
 
-    expect(page.info.map((el) => el.textContent.trim())).toEqual([
-      'Assigned to:', 'Days Remaining: 13'
-    ]);
+    expect(page.info.map((el) => el.textContent.trim())).toEqual(['Assigned to:', 'Days Remaining: 13']);
   });
 });

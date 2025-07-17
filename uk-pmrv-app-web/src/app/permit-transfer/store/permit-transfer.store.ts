@@ -227,8 +227,8 @@ export class PermitTransferStore extends PermitIssuanceStore<PermitTransferState
           state.requestTaskType === 'PERMIT_TRANSFER_B_APPLICATION_REVIEW'
             ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_REVIEW'
             : state.requestTaskType === 'PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMIT'
-            ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_AMEND'
-            : 'PERMIT_TRANSFER_B_SAVE_APPLICATION',
+              ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_AMEND'
+              : 'PERMIT_TRANSFER_B_SAVE_APPLICATION',
         requestTaskId: state.requestTaskId,
         requestTaskActionPayload: {
           permitType: state.permitType,
@@ -236,8 +236,8 @@ export class PermitTransferStore extends PermitIssuanceStore<PermitTransferState
             state.requestTaskType === 'PERMIT_TRANSFER_B_APPLICATION_REVIEW'
               ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_REVIEW_PAYLOAD'
               : state.requestTaskType === 'PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMIT'
-              ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_AMEND_PAYLOAD'
-              : 'PERMIT_TRANSFER_B_SAVE_APPLICATION_PAYLOAD',
+                ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_AMEND_PAYLOAD'
+                : 'PERMIT_TRANSFER_B_SAVE_APPLICATION_PAYLOAD',
           permit: state.permit,
           permitSectionsCompleted: state.permitSectionsCompleted,
           ...(['PERMIT_TRANSFER_B_APPLICATION_REVIEW', 'PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMIT'].includes(
@@ -310,15 +310,15 @@ export class PermitTransferStore extends PermitIssuanceStore<PermitTransferState
       return permitTransferDetailsConfirmationDecision?.type === 'ACCEPTED'
         ? 'accepted'
         : permitTransferDetailsConfirmationDecision?.type === 'REJECTED'
-        ? 'rejected'
-        : 'operator to amend';
+          ? 'rejected'
+          : 'operator to amend';
     } else {
       return state?.reviewSectionsCompleted['CONFIRM_TRANSFER_DETAILS']
         ? permitTransferDetailsConfirmationDecision?.type === 'ACCEPTED'
           ? 'accepted'
           : permitTransferDetailsConfirmationDecision?.type === 'REJECTED'
-          ? 'rejected'
-          : 'operator to amend'
+            ? 'rejected'
+            : 'operator to amend'
         : 'undecided';
     }
   }

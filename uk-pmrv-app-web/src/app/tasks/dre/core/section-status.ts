@@ -1,12 +1,12 @@
-import moment from 'moment';
+import { format } from 'date-fns';
 
 import { DreApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function isFeeDueDateValid(payload: DreApplicationSubmitRequestTaskPayload): boolean {
-  const feeDate = moment(payload?.dre?.fee?.feeDetails?.dueDate).format('YYYY-MM-DD');
+  const feeDate = format(payload?.dre?.fee?.feeDetails?.dueDate ?? new Date(), 'yyyy-MM-dd');
 
-  const currentDate = moment().format('YYYY-MM-DD');
+  const currentDate = format(new Date(), 'yyyy-MM-dd');
 
   return feeDate >= currentDate;
 }

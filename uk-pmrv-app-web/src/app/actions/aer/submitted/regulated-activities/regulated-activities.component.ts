@@ -12,8 +12,7 @@ import { AerService } from '../../core/aer.service';
     <app-action-task header="Regulated activities carried out at the installation" [breadcrumb]="true">
       <ng-container *ngFor="let activity of activities$ | async | regulatedActivitiesSort">
         <app-aer-regulated-activities-summary-template
-          [activity]="activity"
-        ></app-aer-regulated-activities-summary-template>
+          [activity]="activity"></app-aer-regulated-activities-summary-template>
       </ng-container>
     </app-action-task>
   `,

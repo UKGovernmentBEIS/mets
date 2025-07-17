@@ -71,7 +71,7 @@ export class AccountNoteComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentDomain$.pipe(takeUntil(this.destroy$)).subscribe((domain) => {
-      this.domain = domain === 'AVIATION' ? domain.toLowerCase() + '/' : '';
+      this.domain = domain === 'AVIATION' ? '/' + domain.toLowerCase() + '/' : '';
     });
     this.backlinkService.show();
 
@@ -96,21 +96,21 @@ export class AccountNoteComponent implements OnInit {
 
   getDownloadUrl() {
     const accountId = this.route.snapshot.paramMap.get('accountId');
-    return `/accounts/${accountId}/file-download/`;
+    return `${this.domain}/accounts/${accountId}/file-download/`;
   }
 
   onSubmit() {
     if (this.form.valid) {
       const note = this.form.get('note').value;
-      const files = this.form.get('files').value?.map((file) => file.uuid);
+      const fileUuids = (this.form.get('files').value?.map((file) => file.uuid) as string[]).filter((uuid) => uuid);
 
       combineLatest([this.accountId$, this.noteId$])
         .pipe(
           first(),
           switchMap(([accountId, noteId]) => {
             return noteId
-              ? this.accountNotesService.updateAccountNote(noteId, { note, files })
-              : this.accountNotesService.createAccountNote({ accountId, note, files });
+              ? this.accountNotesService.updateAccountNote(noteId, { note, files: fileUuids })
+              : this.accountNotesService.createAccountNote({ accountId, note, files: fileUuids });
           }),
           this.pendingRequest.trackRequest(),
         )

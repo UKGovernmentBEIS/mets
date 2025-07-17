@@ -2,8 +2,8 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.revie
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationReviewDecisionType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.review.domain.EmpVariationCorsiaApplicationReviewRequestTaskPayload;
 
@@ -19,7 +19,7 @@ public class EmpVariationCorsiaReviewReturnForAmendsValidatorService {
             || (taskPayload.getEmpVariationDetailsReviewDecision() != null 
             	&& taskPayload.getEmpVariationDetailsReviewDecision().getType() == EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED);
         if (!amendExists) {
-            throw new BusinessException(ErrorCode.INVALID_EMP_VARIATION_REVIEW);
+            throw new BusinessException(MetsErrorCode.INVALID_EMP_VARIATION_REVIEW);
         }
     }
 }

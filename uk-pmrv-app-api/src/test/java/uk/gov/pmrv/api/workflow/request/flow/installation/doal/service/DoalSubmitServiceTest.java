@@ -3,15 +3,13 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.doal.service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 import uk.gov.pmrv.api.allowance.domain.enums.SubInstallationName;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -195,7 +193,7 @@ class DoalSubmitServiceTest {
     @Test
     void requestPeerReview() {
         final String userId = "userId";
-        final PmrvUser user = PmrvUser.builder().userId(userId).build();
+        final AppUser user = AppUser.builder().userId(userId).build();
         final String selectedPeerReviewer = "selectedPeerReviewer";
         final Doal doal = Doal.builder()
                 .determination(DoalClosedDetermination.builder()

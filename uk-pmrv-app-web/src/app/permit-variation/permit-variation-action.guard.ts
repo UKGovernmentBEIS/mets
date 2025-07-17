@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { combineLatest, first, map } from 'rxjs';
 
+import { selectFeatures } from '@core/config/config.selectors';
+import { ConfigStore } from '@core/config/config.store';
 import { AuthStore, selectUserState } from '@core/store/auth';
 import { PermitApplicationActionGuard } from '@permit-application/permit-application-action.guard';
 
@@ -12,12 +14,13 @@ import { IncorporateHeaderStore } from '../shared/incorporate-header/store/incor
 import { PermitVariationStore } from './store/permit-variation.store';
 
 @Injectable({ providedIn: 'root' })
-export class PermitVariationActionGuard extends PermitApplicationActionGuard implements CanActivate {
+export class PermitVariationActionGuard extends PermitApplicationActionGuard {
   constructor(
     private readonly store: PermitVariationStore,
     private readonly incorporateHeaderStore: IncorporateHeaderStore,
     private readonly requestActionsService: RequestActionsService,
     private readonly authStore: AuthStore,
+    private readonly configStore: ConfigStore,
   ) {
     super();
   }
@@ -28,15 +31,18 @@ export class PermitVariationActionGuard extends PermitApplicationActionGuard imp
     return combineLatest([
       this.requestActionsService.getRequestActionById(actionId),
       this.authStore.pipe(selectUserState),
+      this.configStore.pipe(selectFeatures),
     ]).pipe(
       first(),
-      map(([requestAction, userState]) => {
+      map(([requestAction, userState, features]) => {
         this.store.reset();
         const state = this.store.getState();
         this.store.setState({
           ...state,
           ...this.buildPermitApplicationState(requestAction, userState),
           actionId: actionId,
+
+          features: features,
         });
         this.incorporateHeaderStore.reset();
         this.incorporateHeaderStore.setState({

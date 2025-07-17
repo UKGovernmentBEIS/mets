@@ -9,7 +9,10 @@
         {{ summary.type | notificationType }}
       </dd>
       <dd govukSummaryListRowActions *ngIf="allowChange">
-        <a govukLink [routerLink]="['../details-of-change']" [state]="{ changing: true }">Change</a>
+        <a govukLink [routerLink]="['../details-of-change']" [state]="{ changing: true }">
+          Change
+          <span class="govuk-visually-hidden">what do you want to notify the regulator about</span>
+        </a>
       </dd>
     </div>
   </dl>
@@ -22,7 +25,10 @@
           {{ summary.reportingType | reportingType }}
         </dd>
         <dd govukSummaryListRowActions *ngIf="allowChange">
-          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">Change</a>
+          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">{{ summary.type | i18nSelect: changeHiddenLabelMap }}</span>
+          </a>
         </dd>
       </div>
       <div *ngIf="summary.startDateOfNonCompliance" govukSummaryListRow>
@@ -44,7 +50,10 @@
           {{ createRelatedChangesLabel(summary) }}
         </dd>
         <dd govukSummaryListRowActions *ngIf="allowChange">
-          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">Change</a>
+          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">{{ summary.type | i18nSelect: changeHiddenLabelMap }}</span>
+          </a>
         </dd>
       </div>
     </dl>
@@ -55,7 +64,10 @@
       <dt govukSummaryListRowKey>{{ summary.type | i18nSelect: descriptionLabelMap }}</dt>
       <dd govukSummaryListRowValue class="pre-wrap">{{ summary.description }}</dd>
       <dd govukSummaryListRowActions *ngIf="allowChange">
-        <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">Change</a>
+        <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">
+          Change
+          <span class="govuk-visually-hidden">{{ summary.type | i18nSelect: changeHiddenLabelMap }}</span>
+        </a>
       </dd>
     </div>
   </dl>
@@ -68,7 +80,10 @@
           {{ summary.justification }}
         </dd>
         <dd govukSummaryListRowActions *ngIf="allowChange">
-          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">Change</a>
+          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">{{ summary.type | i18nSelect: changeHiddenLabelMap }}</span>
+          </a>
         </dd>
       </div>
     </dl>
@@ -79,12 +94,15 @@
       <dt govukSummaryListRowKey>Supporting documents</dt>
       <dd govukSummaryListRowValue>
         <ng-container *ngIf="summary.documents && summary.documents.length > 0; else noDocumentsSupport">
-          <app-summary-download-files [files]="files"> </app-summary-download-files>
+          <app-summary-download-files [files]="files"></app-summary-download-files>
         </ng-container>
-        <ng-template #noDocumentsSupport> No </ng-template>
+        <ng-template #noDocumentsSupport>No</ng-template>
       </dd>
       <dd govukSummaryListRowActions *ngIf="allowChange">
-        <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">Change</a>
+        <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">
+          Change
+          <span class="govuk-visually-hidden">{{ summary.type | i18nSelect: changeHiddenLabelMap }}</span>
+        </a>
       </dd>
     </div>
   </dl>
@@ -97,11 +115,33 @@
           {{ summary.startDateOfNonCompliance | govukDate }}
         </dd>
         <dd govukSummaryListRowActions *ngIf="allowChange">
-          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">Change</a>
+          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">{{ summary.type | i18nSelect: changeHiddenLabelMap }}</span>
+          </a>
         </dd>
       </div>
     </dl>
+  </ng-container>
 
+  <ng-container *ngIf="summary.type === 'CESSATION'">
+    <dl govuk-summary-list [class]="cssClass" [hasBorders]="false" *ngIf="permanentCessation.isTemporary !== undefined">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Do you intend to resume one or more of the regulated activities?</dt>
+        <dd govukSummaryListRowValue>
+          {{ permanentCessation?.isTemporary ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="allowChange">
+          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">{{ summary.type | i18nSelect: changeHiddenLabelMap }}</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <ng-container *ngIf="summary.type !== 'OTHER_FACTOR' && summary.type !== 'NON_SIGNIFICANT_CHANGE'">
     <dl govuk-summary-list [class]="cssClass" [hasBorders]="false" *ngIf="summary.endDateOfNonCompliance">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>{{ summary.type | i18nSelect: endDateLabelMap }}</dt>
@@ -109,7 +149,35 @@
           {{ summary.endDateOfNonCompliance | govukDate }}
         </dd>
         <dd govukSummaryListRowActions *ngIf="allowChange">
-          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">Change</a>
+          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">{{ summary.type | i18nSelect: changeHiddenLabelMap }}</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
+
+  <ng-container *ngIf="summary.type === 'CESSATION'">
+    <dl govuk-summary-list [class]="cssClass" [hasBorders]="false" *ngIf="permanentCessation.isTemporary">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Technical capability to resume regulated activities</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{
+            permanentCessation?.technicalCapabilityDetails?.technicalCapability
+              | i18nSelect: technicalCapabilityLabelMap
+          }}
+          @if (permanentCessation?.technicalCapabilityDetails?.details) {
+            <div class="govuk-!-margin-top-5">
+              {{ permanentCessation?.technicalCapabilityDetails?.details }}
+            </div>
+          }
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="allowChange">
+          <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">{{ summary.type | i18nSelect: changeHiddenLabelMap }}</span>
+          </a>
         </dd>
       </div>
     </dl>
@@ -122,7 +190,10 @@
           <dt govukSummaryListRowKey>This non-compliance in respect of the monitoring and reporting methodology</dt>
           <dd govukSummaryListRowValue class="pre-wrap">Yes</dd>
           <dd govukSummaryListRowActions *ngIf="allowChange">
-            <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">Change</a>
+            <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">
+              Change
+              <span class="govuk-visually-hidden">{{ summary.type | i18nSelect: changeHiddenLabelMap }}</span>
+            </a>
           </dd>
         </div>
         <div govukSummaryListRow>
@@ -154,7 +225,10 @@
           <dt govukSummaryListRowKey>Is this non-compliance in respect of the monitoring and reporting methodology</dt>
           <dd govukSummaryListRowValue class="pre-wrap">No</dd>
           <dd govukSummaryListRowActions *ngIf="allowChange">
-            <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">Change</a>
+            <a govukLink [routerLink]="['../description']" [state]="{ changing: true }">
+              Change
+              <span class="govuk-visually-hidden">{{ summary.type | i18nSelect: changeHiddenLabelMap }}</span>
+            </a>
           </dd>
         </div>
       </dl>

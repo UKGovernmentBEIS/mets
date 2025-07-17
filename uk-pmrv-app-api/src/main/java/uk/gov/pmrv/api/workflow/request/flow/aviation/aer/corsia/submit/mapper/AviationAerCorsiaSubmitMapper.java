@@ -5,9 +5,10 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsiaContainer;
+import uk.gov.pmrv.api.aviationreporting.corsia.domain.totalemissions.AviationAerCorsiaSubmittedEmissions;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.domain.AviationAerCorsiaApplicationSubmitRequestTaskPayload;
@@ -28,7 +29,10 @@ public interface AviationAerCorsiaSubmitMapper {
     @Mapping(target = "aer.operatorDetails.attachmentIds", ignore = true)
     @Mapping(target = "aer.aerSectionAttachmentIds", ignore = true)
     AviationAerCorsiaApplicationSubmittedRequestActionPayload toAviationAerCorsiaApplicationSubmittedRequestActionPayload(
-            AviationAerCorsiaApplicationSubmitRequestTaskPayload taskPayload, RequestAviationAccountInfo accountInfo, RequestActionPayloadType payloadType);
+            AviationAerCorsiaApplicationSubmitRequestTaskPayload taskPayload,
+            RequestAviationAccountInfo accountInfo,
+            AviationAerCorsiaSubmittedEmissions submittedEmissions,
+            RequestActionPayloadType payloadType);
 
     @AfterMapping
     default void setAerAttachments(@MappingTarget AviationAerCorsiaApplicationSubmittedRequestActionPayload requestActionPayload,

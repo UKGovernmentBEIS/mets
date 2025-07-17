@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeMethodType;
 import uk.gov.pmrv.api.workflow.payment.service.FeePaymentService;
 import uk.gov.pmrv.api.workflow.payment.service.PaymentFeeMethodService;

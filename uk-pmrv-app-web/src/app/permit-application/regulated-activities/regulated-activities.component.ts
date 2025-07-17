@@ -1,13 +1,16 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Inject, OnInit, Signal, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, first, map } from 'rxjs';
+import { BehaviorSubject, first, map, takeUntil } from 'rxjs';
 
+import { DestroySubject } from '@core/services/destroy-subject.service';
 import {
   activityGroupMap,
   activityHintMap,
   formGroupOptions,
+  RegulatedActivitiesFormGroup,
   unitOptions,
 } from '@shared/components/regulated-activities/regulated-activities-form-options';
 
@@ -27,16 +30,45 @@ import { regulatedActivitiesFormProvider } from './regulated-activities-form.pro
   selector: 'app-regulated-activities',
   templateUrl: './regulated-activities.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [regulatedActivitiesFormProvider, IdGeneratorService],
+  providers: [DestroySubject, regulatedActivitiesFormProvider, IdGeneratorService],
 })
-export class RegulatedActivitiesComponent extends SectionComponent implements PendingRequest {
+export class RegulatedActivitiesComponent extends SectionComponent implements PendingRequest, OnInit {
   readonly originalOrder = originalOrder;
-  readonly activityGroups = formGroupOptions;
+  private readonly stateFeatures = toSignal(this.store.pipe(map((state) => state.features)));
+
+  activityGroups: Signal<{
+    [K in keyof RegulatedActivitiesFormGroup]: RegulatedActivity['type'][];
+  }> = computed(() => {
+    const features = this.stateFeatures();
+
+    let groupOptions: {
+      [K in keyof RegulatedActivitiesFormGroup]: RegulatedActivity['type'][];
+    };
+
+    if (features?.['co2-venting.permit-workflows.enabled'] && !this.hideUpstream()) {
+      groupOptions = {
+        ...formGroupOptions,
+        COMBUSTION_GROUP: [...formGroupOptions.COMBUSTION_GROUP, 'UPSTREAM_GHG_REMOVAL'],
+      };
+    } else {
+      groupOptions = formGroupOptions;
+    }
+
+    if (!features?.['wastePermitEnabled']) {
+      if (groupOptions.WASTE_GROUP) {
+        delete groupOptions.WASTE_GROUP;
+      }
+    }
+
+    return groupOptions;
+  });
+
   uncheckedRegulatedActivities: RegulatedActivity[];
   isDeleteConfirmationDisplayed$ = new BehaviorSubject<boolean>(false);
   activityGroupMap = activityGroupMap;
   unitOptions = unitOptions;
   activityHintMap = activityHintMap;
+  hideUpstream = signal(false);
 
   private newRegulatedActivities: RegulatedActivity[];
 
@@ -47,8 +79,26 @@ export class RegulatedActivitiesComponent extends SectionComponent implements Pe
     readonly router: Router,
     readonly route: ActivatedRoute,
     private readonly idGeneratorService: IdGeneratorService,
+    private readonly destroy$: DestroySubject,
   ) {
     super(store, router, route);
+  }
+
+  ngOnInit(): void {
+    this.form
+      .get('COMBUSTION_GROUP')
+      .valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((groupValue: RegulatedActivitiesFormGroup['COMBUSTION_GROUP']) => {
+        if (!groupValue?.includes('COMBUSTION')) {
+          this.hideUpstream.set(true);
+          if (groupValue?.includes('UPSTREAM_GHG_REMOVAL')) {
+            this.form.get('COMBUSTION_GROUP').patchValue(null);
+          }
+        } else {
+          this.hideUpstream.set(false);
+        }
+      });
+    this.form.get('COMBUSTION_GROUP').updateValueAndValidity();
   }
 
   onSubmit(): void {

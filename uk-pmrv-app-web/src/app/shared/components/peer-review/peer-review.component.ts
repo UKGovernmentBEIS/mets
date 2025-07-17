@@ -13,6 +13,7 @@ import {
   shareReplay,
   switchMap,
   take,
+  tap,
   withLatestFrom,
 } from 'rxjs';
 
@@ -39,6 +40,7 @@ import { requestTaskReassignedError, taskNotFoundError } from '../../errors/requ
 import { UserFullNamePipe } from '../../pipes/user-full-name.pipe';
 import { resolveRequestType } from '../../store-resolver/request-type.resolver';
 import { StoreContextResolver } from '../../store-resolver/store-context.resolver';
+import { referenceNoTextResolver } from './peer-review.utils';
 import { PEER_REVIEW_FORM, peerReviewFormFactory } from './peer-review-form.provider';
 import {
   resolvePeerReviewTaskType,
@@ -58,19 +60,20 @@ export class PeerReviewComponent implements OnInit {
   private readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
   private readonly requestType = resolveRequestType(this.location.path());
 
-  private requestTaskType$ = this.storeResolver.getRequestTaskType(this.requestType);
-  private requestTaskActionType$: Observable<RequestTaskActionProcessDTO['requestTaskActionType']> =
+  private readonly requestTaskType$ = this.storeResolver.getRequestTaskType(this.requestType);
+  private readonly requestTaskActionType$: Observable<RequestTaskActionProcessDTO['requestTaskActionType']> =
     this.requestTaskType$.pipe(map((type) => resolveRequestTaskActionType(type)));
 
-  private payloadType$: Observable<RequestTaskActionPayload['payloadType']> = this.requestTaskType$.pipe(
+  private readonly payloadType$: Observable<RequestTaskActionPayload['payloadType']> = this.requestTaskType$.pipe(
     map((type) => resolveRequestTaskActionPayloadType(type)),
   );
 
-  private waitActions$: Observable<ItemDTO['taskType'][]> = this.requestTaskType$.pipe(
+  private readonly waitActions$: Observable<ItemDTO['taskType'][]> = this.requestTaskType$.pipe(
     map((type) => resolveWaitActionTypes(type)),
   );
 
   isAviation = this.router.url.includes('/aviation/') ? '/aviation' : '';
+  referenceNoText: string;
 
   pendingRfi$: Observable<boolean> = combineLatest([
     this.waitActions$,
@@ -132,6 +135,9 @@ export class PeerReviewComponent implements OnInit {
     this.requestTaskType$
       .pipe(
         take(1),
+        tap((requestTaskType) => {
+          this.referenceNoText = referenceNoTextResolver(requestTaskType);
+        }),
         withLatestFrom(this.breadcrumbs$),
         map(([requestTaskType, breadcrumbs]) => {
           if (

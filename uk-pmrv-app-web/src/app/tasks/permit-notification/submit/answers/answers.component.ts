@@ -3,11 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, map, switchMap } from 'rxjs';
 
+import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
-
-import { PendingRequestService } from '../../../../core/guards/pending-request.service';
-import { CommonTasksStore } from '../../../store/common-tasks.store';
-import { PermitNotificationService } from '../../core/permit-notification.service';
+import { PermitNotificationService } from '@tasks/permit-notification/core/permit-notification.service';
+import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 @Component({
   selector: 'app-answers',

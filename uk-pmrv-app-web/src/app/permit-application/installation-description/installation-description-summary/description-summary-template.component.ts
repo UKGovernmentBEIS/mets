@@ -7,8 +7,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
       *ngIf="'installationDescription' | task: !showOriginal | async as task"
       appGroupedSummaryList
       govuk-summary-list
-      [class.summary-list--edge-border]="hasBottomBorder"
-    >
+      [class.summary-list--edge-border]="hasBottomBorder">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Activities at the installation</dt>
         <dd class="pre-wrap" govukSummaryListRowValue>{{ task.mainActivitiesDesc }}</dd>

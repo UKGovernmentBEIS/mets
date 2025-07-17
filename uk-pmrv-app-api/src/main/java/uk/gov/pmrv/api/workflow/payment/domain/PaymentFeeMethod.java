@@ -1,8 +1,5 @@
 package uk.gov.pmrv.api.workflow.payment.domain;
 
-import java.math.BigDecimal;
-import java.util.EnumMap;
-import java.util.Map;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -23,10 +20,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeMethodType;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.FeeType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+
+import java.math.BigDecimal;
+import java.util.EnumMap;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor

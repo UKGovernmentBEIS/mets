@@ -9,8 +9,6 @@ import { RequestTaskStore } from '../../request-task.store';
 import { AerRequestTaskPayload, AerTask, AerTaskKey } from '../../request-task.types';
 import { RequestTaskSideEffectsHandler } from '../../requst-task-side-effects.handler';
 
-export type AerSideEffectFn<T extends AerTask> = (payload: AerRequestTaskPayload, update: T) => AerRequestTaskPayload;
-
 export class AerCorsiaStoreSideEffectsHandler extends RequestTaskSideEffectsHandler<AerTaskKey, AerTask> {
   private reportingObligationHandler = reportingObligationSideEffects;
   private aerCorsiaEmissionsReductionHandler = aerCorsiaEmissionsReductionClaimSideEffects;

@@ -17,7 +17,7 @@ export const EMP_ADDITIONAL_DOCUMENTS_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { breadcrumb: 'Additional documents summary' },
+        data: { breadcrumb: 'Additional documents' },
         loadComponent: () =>
           import('./additional-documents-summary').then((c) => c.AdditionalDocumentsSummaryComponent),
       },

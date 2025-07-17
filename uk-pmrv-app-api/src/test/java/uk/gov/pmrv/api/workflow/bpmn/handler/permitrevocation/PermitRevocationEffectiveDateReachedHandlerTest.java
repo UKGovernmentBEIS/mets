@@ -42,7 +42,7 @@ class PermitRevocationEffectiveDateReachedHandlerTest {
         }};
 
         when(execution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);
-        when(service.getAerVariables(requestId)).thenReturn(variables);
+        when(service.constructAerVariables(requestId)).thenReturn(variables);
 
         handler.execute(execution);
 

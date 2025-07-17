@@ -1,13 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.service.lettertemplate;
 
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import org.springframework.stereotype.Component;
-
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecisionType;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateGenerationContextActionType;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateWorkflowParamsProvider;
@@ -16,6 +9,12 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitAcceptedVariationDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitVariationReviewDecision;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationGrantDetermination;
+
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class PermitVariationGrantedDocumentTemplateWorkflowParamsProvider

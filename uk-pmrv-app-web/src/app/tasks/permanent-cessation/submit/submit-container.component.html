@@ -1,0 +1,47 @@
+<ng-container *ngIf="vm() as vm">
+  <app-base-task-container-component
+    [header]="vm.header"
+    [customContentTemplate]="vm.isWaitTask ? waitContentTemplate : taskContentTemplate"
+    [expectedTaskType]="vm.expectedTaskType"
+    [previewDocuments]="vm.previewDocuments"></app-base-task-container-component>
+
+  <ng-template #waitContentTemplate>
+    <govuk-warning-text>Waiting for peer review, you cannot make any changes</govuk-warning-text>
+  </ng-template>
+
+  <ng-template #taskContentTemplate>
+    <div class="govuk-button-group">
+      <button
+        *ngIf="vm.allowNotifyOperator"
+        (click)="notifyOperator()"
+        govukButton
+        title="Notify operator of decision"
+        type="button">
+        Notify operator of decision
+      </button>
+
+      <button
+        *ngIf="vm.allowSendForPeerReview"
+        (click)="sendForPeerReview()"
+        govukButton
+        title="Send for peer review"
+        type="button">
+        Send for peer review
+      </button>
+
+      <button
+        *ngIf="vm.allowStartPeerReview"
+        (click)="startPeerReview()"
+        govukButton
+        title="Start peer review"
+        type="button">
+        Start peer review
+      </button>
+    </div>
+
+    <h2 class="govuk-heading-m">Form details</h2>
+    <ul app-task-item-list>
+      <li app-task-item link="./details" linkText="Permanent cessation details" [status]="vm.sectionStatus"></li>
+    </ul>
+  </ng-template>
+</ng-container>

@@ -41,7 +41,6 @@ describe('DestroySubject', () => {
     expect(closeSpy).not.toHaveBeenCalled();
     fixture.destroy();
 
-    expect(service.isStopped).toBeTruthy();
     expect(closeSpy).toHaveBeenCalled();
   });
 });

@@ -3,9 +3,9 @@ package uk.gov.pmrv.api.workflow.request.flow.payment.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.PaymentMethodType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;
@@ -26,7 +26,7 @@ public class PaymentCompleteService {
     private final RequestActionUserInfoResolver requestActionUserInfoResolver;
 
     @Transactional
-    public void markAsPaid(RequestTask requestTask, PmrvUser authUser) {
+    public void markAsPaid(RequestTask requestTask, AppUser authUser) {
         PaymentMakeRequestTaskPayload requestTaskPayload = (PaymentMakeRequestTaskPayload) requestTask.getPayload();
         validatePaymentMethod(requestTaskPayload);
 
@@ -89,7 +89,7 @@ public class PaymentCompleteService {
     }
 
     @Transactional
-    public void complete(RequestTask requestTask, PmrvUser authUser) {
+    public void complete(RequestTask requestTask, AppUser authUser) {
         String authUserId = authUser.getUserId();
         PaymentMakeRequestTaskPayload requestTaskPayload = (PaymentMakeRequestTaskPayload) requestTask.getPayload();
         RequestPayload requestPayload = requestTask.getRequest().getPayload();

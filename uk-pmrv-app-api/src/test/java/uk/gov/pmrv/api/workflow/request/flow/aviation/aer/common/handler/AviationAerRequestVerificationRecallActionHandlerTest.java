@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -42,7 +42,7 @@ class AviationAerRequestVerificationRecallActionHandlerTest {
         Long requestTaskId = 1L;
         String processTaskId = "processTaskId";
         String requestId = "REQ-ID";
-        PmrvUser user = PmrvUser.builder().userId("userId").build();
+        AppUser user = AppUser.builder().userId("userId").build();
         RequestTaskActionEmptyPayload taskActionEmptyPayload = RequestTaskActionEmptyPayload.builder()
             .payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD).build();
         RequestTask requestTask = RequestTask.builder()

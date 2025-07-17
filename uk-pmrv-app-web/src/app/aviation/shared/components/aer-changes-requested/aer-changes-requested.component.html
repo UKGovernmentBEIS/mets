@@ -20,8 +20,9 @@
             <div class="pre-wrap">
               {{ i + 1 }}. {{ requiredChange.reason }} <br />
               <ng-container *ngIf="requiredChange?.files?.length > 0">
-                <app-summary-download-files [files]="getDownloadUrlFiles(requiredChange?.files)">
-                </app-summary-download-files>
+                <app-summary-download-files
+                  [files]="getDownloadUrlFiles(requiredChange?.files, vm.reviewAttachments)"
+                ></app-summary-download-files>
               </ng-container>
             </div>
             <br *ngIf="!isLast" />

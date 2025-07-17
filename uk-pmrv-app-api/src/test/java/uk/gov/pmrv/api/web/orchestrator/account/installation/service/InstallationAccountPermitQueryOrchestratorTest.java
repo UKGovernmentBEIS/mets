@@ -13,7 +13,7 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
 import uk.gov.pmrv.api.account.installation.service.ApprovedInstallationAccountQueryService;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.permit.domain.dto.PermitDetailsDTO;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.web.orchestrator.account.installation.dto.InstallationAccountPermitDTO;
@@ -107,6 +107,7 @@ class InstallationAccountPermitQueryOrchestratorTest {
 		InstallationAccountHeaderInfoDTO accountHeaderInfo = optionalAccountHeaderInfo.get();
 
 		assertThat(accountHeaderInfo).isEqualTo(InstallationAccountHeaderInfoDTO.builder()
+			.id(accountId)
 			.name(accountName)
 			.status(status)
 			.emitterType(emitterType)

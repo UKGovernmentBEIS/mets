@@ -1,6 +1,8 @@
 import {
+  AfterContentChecked,
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -26,7 +28,7 @@ import { WizardStepComponent } from '@shared/wizard/wizard-step.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })
-export class ConfidentialityStatementTemplateComponent implements AfterViewInit {
+export class ConfidentialityStatementTemplateComponent implements AfterViewInit, AfterContentChecked {
   @Input() submitText = 'Confirm and complete';
   @Input() form: UntypedFormGroup;
   @Input() isEditable: boolean;
@@ -44,6 +46,7 @@ export class ConfidentialityStatementTemplateComponent implements AfterViewInit 
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly destroy$: DestroySubject,
+    private cd: ChangeDetectorRef,
   ) {}
 
   get heading(): HTMLHeadingElement {
@@ -52,6 +55,10 @@ export class ConfidentialityStatementTemplateComponent implements AfterViewInit 
 
   get sections(): UntypedFormArray {
     return this.form?.get('confidentialSections') as UntypedFormArray;
+  }
+
+  ngAfterContentChecked(): void {
+    this.cd.detectChanges();
   }
 
   ngAfterViewInit(): void {

@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { permitRevocationMapper } from '@permit-revocation/constants/permit-revocation-consts';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
 import { GovukDatePipe } from '@shared/pipes/govuk-date.pipe';
-import moment from 'moment';
+import { addDays, endOfDay, format, isAfter, isBefore, isEqual, isValid, startOfDay, subDays } from 'date-fns';
 
 import { GovukValidators, MessageValidatorFn } from 'govuk-components';
 
@@ -48,8 +48,10 @@ export const permitRevocationFormProvider = {
 
 export const effectiveDateMinValidator = (): ValidatorFn => {
   return (group: UntypedFormGroup): ValidationErrors => {
-    const after28Days = moment().add(28, 'd').set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-    return moment(group.value?.effectiveDate ? group.value.effectiveDate : group.value).isAfter(after28Days)
+    const after28Days = startOfDay(addDays(new Date(), 28));
+    const effectiveDate = group.value?.effectiveDate ? group.value.effectiveDate : group.value;
+
+    return isAfter(effectiveDate, after28Days)
       ? null
       : {
           invalidEffectiveDate: `The effective date of the notice must be at least 28 days after today`,
@@ -60,14 +62,16 @@ export const effectiveDateMinValidator = (): ValidatorFn => {
 export const feeDateMinValidator = (): ValidatorFn => {
   return (group: UntypedFormGroup): ValidationErrors => {
     const govukDatePipe = new GovukDatePipe();
-    const currentEffectiveDate = moment(new Date(effectiveDate));
+    const currentEffectiveDate = new Date(effectiveDate);
     const errorProperty = permitRevocationMapper['feeDate'].error;
 
-    return moment(group.value?.feeDate ? group.value.feeDate : group.value).isAfter(currentEffectiveDate)
+    const feeDate = group.value?.feeDate ? group.value.feeDate : group.value;
+
+    return isAfter(feeDate, currentEffectiveDate)
       ? null
       : {
           [errorProperty]: `The date must be after ${govukDatePipe.transform(
-            new Date(currentEffectiveDate.format('YYYY-MM-DD')),
+            format(currentEffectiveDate, 'yyyy-MM-dd'),
           )}`,
         };
   };
@@ -75,11 +79,14 @@ export const feeDateMinValidator = (): ValidatorFn => {
 
 export const stoppedDateMaxDateValidator = (): ValidatorFn => {
   return (group: UntypedFormGroup): ValidationErrors => {
-    const maxDate = moment().set({ hour: 23, minute: 59, second: 59, millisecond: 59 }).subtract(1, 'days');
+    const maxDate = subDays(endOfDay(new Date()), 1);
     const errorProperty = permitRevocationMapper['stoppedDate'].error;
-    const stoppedDate = !group.value ? null : group.value.stoppedDate || group.value;
+    const stoppedDate = group.value ? group.value.stoppedDate || group.value : null;
 
-    return moment(stoppedDate).isSameOrBefore(maxDate) || !stoppedDate || stoppedDate?.stoppedDate === null
+    return !stoppedDate ||
+      stoppedDate.stoppedDate === null ||
+      isBefore(stoppedDate, maxDate) ||
+      isEqual(stoppedDate, maxDate)
       ? null
       : {
           [errorProperty]: `The date must be in the past`,
@@ -90,15 +97,15 @@ export const stoppedDateMaxDateValidator = (): ValidatorFn => {
 export const genericMinDateValidator = (property: string): ValidatorFn => {
   const govukDatePipe = new GovukDatePipe();
   return (group: UntypedFormGroup): ValidationErrors => {
-    const minDate = moment(new Date()).set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
+    const minDate = startOfDay(new Date());
     const errorProperty = permitRevocationMapper[property].error;
     const fieldValue = !group.value ? null : group.value[property] || group.value;
 
-    return moment(fieldValue).isSameOrAfter(minDate) || !fieldValue
+    return !fieldValue || !isValid(fieldValue) || isAfter(fieldValue, minDate) || isEqual(fieldValue, minDate)
       ? null
       : {
           [errorProperty]: `This date must be the same as or after ${govukDatePipe.transform(
-            new Date(minDate.format('YYYY-MM-DD')),
+            format(minDate, 'yyyy-MM-dd'),
           )}`,
         };
   };

@@ -12,12 +12,13 @@ export const AER_MONITORING_PLAN_CHANGES_ROUTES: Routes = [
     children: [
       {
         path: '',
+        data: { pageTitle: 'Monitoring plan changes' },
         canActivate: [canActivateTaskForm],
         loadComponent: () => import('./monitoring-plan-changes-page').then((c) => c.MonitoringPlanChangesPageComponent),
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Monitoring plan changes' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Monitoring plan changes' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () =>
           import('./monitoring-plan-changes-summary').then((c) => c.MonitoringPlanChangesSummaryComponent),

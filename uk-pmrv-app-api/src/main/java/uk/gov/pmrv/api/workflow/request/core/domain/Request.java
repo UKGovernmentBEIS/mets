@@ -25,13 +25,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -79,12 +83,24 @@ import java.util.List;
         "and req.type not in (:requestTypes) " +
         "order by req.creationDate"
 )
+@NamedNativeQuery(
+    name = Request.FIND_BY_ACCOUNT_ID_AND_TYPE_IN_AND_METADATA_YEAR_AND_STATUS_IN_ORDER_BY_END_DATE_DESC,
+    resultClass = Request.class,
+    query = "select r.* "
+        + "from request r "
+        + "where r.account_id = :accountId "
+        + "and r.type in (:types) "
+        + "and r.status in (:statuses)"
+        + "and cast(r.metadata->>'year' as INTEGER) = :year "
+        + "order by r.end_date desc"
+)
 public class Request {
 
     public static final String NAMED_QUERY_FIND_BY_ACCOUNT_ID_AND_STATUS_AND_TYPE_NOT_NOTIFICATION = "Request.findRequestsByAccountIdAndStatusAndTypeNotNotification";
     public static final String NAMED_NATIVE_QUERY_EXIST_BY_TYPE_AND_STATUS_AND_ACCOUNT_ID_AND_METADATA_YEAR = "Request.existByTypeAndStatusAndAccountIdAndMetadataYear";
     public static final String NAMED_QUERY_FIND_BY_ACCOUNT_ID_AND_TYPE_NOT_IN = "Request.findByAccountIdAndTypeNotIn";
     public static final String NAMED_NATIVE_QUERY_FIND_BY_ACCOUNT_ID_AND_TYPE_IN_AND_METADATA_YEAR = "Request.findByAccountIdAndTypeInAndMetadataYear";
+    public static final String FIND_BY_ACCOUNT_ID_AND_TYPE_IN_AND_METADATA_YEAR_AND_STATUS_IN_ORDER_BY_END_DATE_DESC = "Request.findAllByAccountIdAndTypeInAndMetadataYearAndStatusInOrderByEndDateDesc";
 
     @Id
     private String id;
@@ -172,4 +188,18 @@ public class Request {
         this.getRequestTasks().remove(requestTask);
     }
 
+
+    public Map<String, String> getRequestResourcesMap() {
+        Map<String, String> requestResources = new HashMap<>();
+        if (this.getAccountId() != null) {
+            requestResources.put(ResourceType.ACCOUNT, this.getAccountId().toString());
+        }
+        if (this.getCompetentAuthority() != null) {
+            requestResources.put(ResourceType.CA, this.getCompetentAuthority().name());
+        }
+        if (this.getVerificationBodyId() != null) {
+            requestResources.put(ResourceType.VERIFICATION_BODY, this.getVerificationBodyId().toString());
+        }
+        return requestResources;
+    }
 }

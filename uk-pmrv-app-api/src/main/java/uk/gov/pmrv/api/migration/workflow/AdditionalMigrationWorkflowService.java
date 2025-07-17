@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration.workflow;
 
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import uk.gov.pmrv.api.account.domain.Account;
@@ -23,7 +24,6 @@ import java.util.stream.Collectors;
 
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 @Service
-@RequiredArgsConstructor
 //TODO: Merge it with MigrationWorkflowService after release!
 public class AdditionalMigrationWorkflowService extends MigrationBaseService {
 
@@ -31,6 +31,14 @@ public class AdditionalMigrationWorkflowService extends MigrationBaseService {
     private final AccountRepository accountRepository;
     private final RequestRepository requestRepository;
     private final MigrationRequestMapper requestMapper = Mappers.getMapper(MigrationRequestMapper.class);
+
+    public AdditionalMigrationWorkflowService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                              AccountRepository accountRepository,
+                                              RequestRepository requestRepository) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.accountRepository = accountRepository;
+        this.requestRepository = requestRepository;
+    }
 
     private static final String QUERY_BASE = """
 with mig_wf_status as (
@@ -111,14 +119,19 @@ select w.fldEmitterID, w.fldWorkflowID, w.ETSWAPWorkflowType, w.ETSWAPWorkflowSt
   left join v on v.fldWorkflowID = w.fldWorkflowID
   left join mig_wf_status s on w.ETSWAPWorkflowType like s.wf_type_etswap and w.ETSWAPWorkflowStatus like s.wf_status_etswap
   left join mig_wf z on z.wf_type_etswap = w.ETSWAPWorkflowType
- where w.ETSWAPWorkflowType in ('INAllowances','INPartialCessation','AEMPlan','AEMPlanVariation')
+ where w.ETSWAPWorkflowType in ('INAllowances','AEMPlan','AEMPlanVariation')
    and w.fldDateCreated >= '2021/01/01'
    and wf_status_pmrv is not null
 """;
 
     @Override
     public List<String> migrate(String ids) {
-        List<String> onlyCorsiaAccountIds = List.of("A50F92BA-2DC2-48B0-8F59-AE2900ED2F3B", "5C7B035D-7EAA-4B59-BA04-AE98009B9FFF");
+        List<String> onlyCorsiaAccountIds = List.of(
+                "A50F92BA-2DC2-48B0-8F59-AE2900ED2F3B",
+                "5C7B035D-7EAA-4B59-BA04-AE98009B9FFF",
+                "A7DA18F8-8B18-4178-B890-A93E00738454",
+                "67A29236-2575-41F2-813C-AA3901042845",
+                "3149FEFC-27BB-4525-A989-ABED00F155D4");
         Map<String, Account> allMigratedAccounts = accountRepository.findByMigratedAccountIdIsNotNull().stream()
                 .filter(account -> account.getEmissionTradingScheme() != EmissionTradingScheme.CORSIA || onlyCorsiaAccountIds.contains(account.getMigratedAccountId()))
                 .collect(Collectors.toMap(Account::getMigratedAccountId, acc -> acc));

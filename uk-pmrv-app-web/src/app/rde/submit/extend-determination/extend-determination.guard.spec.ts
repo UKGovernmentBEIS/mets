@@ -4,9 +4,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { firstValueFrom, Observable, of } from 'rxjs';
 
+import { mockClass } from '@testing';
+
 import { RequestItemsService } from 'pmrv-api';
 
-import { mockClass } from '../../../../testing';
 import { ExtendDeterminationGuard } from './extend-determination.guard';
 
 describe('ExtendDeterminationGuard', () => {
@@ -193,6 +194,46 @@ describe('ExtendDeterminationGuard', () => {
           {
             requestType: 'EMP_VARIATION_UKETS',
             taskType: 'EMP_VARIATION_UKETS_APPLICATION_REVIEW',
+          },
+        ],
+      }),
+    );
+
+    await expect(
+      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>),
+    ).resolves.toEqual(router.parseUrl(`/aviation/rde/${activatedRouteSnapshot.params.taskId}/not-allowed`));
+
+    requestItemsService.getItemsByRequest.mockReturnValueOnce(
+      of({
+        totalItems: 1,
+        items: [
+          {
+            requestType: 'EMP_VARIATION_CORSIA',
+            taskType: 'EMP_VARIATION_CORSIA_WAIT_FOR_RDE_RESPONSE',
+          },
+          {
+            requestType: 'EMP_VARIATION_CORSIA',
+            taskType: 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW',
+          },
+        ],
+      }),
+    );
+
+    await expect(
+      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>),
+    ).resolves.toEqual(router.parseUrl(`/aviation/rde/${activatedRouteSnapshot.params.taskId}/not-allowed`));
+
+    requestItemsService.getItemsByRequest.mockReturnValueOnce(
+      of({
+        totalItems: 1,
+        items: [
+          {
+            requestType: 'EMP_VARIATION_CORSIA',
+            taskType: 'EMP_VARIATION_CORSIA_WAIT_FOR_RFI_RESPONSE',
+          },
+          {
+            requestType: 'EMP_VARIATION_CORSIA',
+            taskType: 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW',
           },
         ],
       }),

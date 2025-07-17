@@ -3,10 +3,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { lastValueFrom, of, throwError } from 'rxjs';
 
+import { BusinessTestingModule, expectBusinessErrorToBe } from '@error/testing/business-error';
+import { ActivatedRouteSnapshotStub } from '@testing';
+
 import { AccountVerificationBodyService } from 'pmrv-api';
 
-import { ActivatedRouteSnapshotStub } from '../../../../../../../testing';
-import { BusinessTestingModule, expectBusinessErrorToBe } from '../../../../../../error/testing/business-error';
 import { appointedVerificationBodyError } from '../../errors/business-error';
 import { AppointGuard } from './appoint.guard';
 
@@ -20,10 +21,12 @@ describe('AppointGuard', () => {
     accountVerificationBodyService = {
       getVerificationBodyOfAccount: jest.fn(),
     };
+
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, BusinessTestingModule],
       providers: [{ provide: AccountVerificationBodyService, useValue: accountVerificationBodyService }],
     });
+
     guard = TestBed.inject(AppointGuard);
   });
 

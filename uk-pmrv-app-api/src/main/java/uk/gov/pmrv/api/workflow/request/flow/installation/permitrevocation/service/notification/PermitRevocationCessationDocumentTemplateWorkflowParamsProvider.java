@@ -1,14 +1,13 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service.notification;
 
-import java.time.ZoneId;
-import java.util.Date;
-import java.util.Map;
-
 import org.springframework.stereotype.Component;
-
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateGenerationContextActionType;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateWorkflowParamsProvider;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
+
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Map;
 
 @Component
 public class PermitRevocationCessationDocumentTemplateWorkflowParamsProvider implements DocumentTemplateWorkflowParamsProvider<PermitRevocationRequestPayload> {

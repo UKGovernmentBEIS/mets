@@ -5,8 +5,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { GovukDatePipe } from '@shared/pipes/govuk-date.pipe';
 import { SharedModule } from '@shared/shared.module';
+import { addDays, format } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import {
   PermitNotificationFollowUpApplicationReviewRequestTaskPayload,
@@ -146,7 +146,7 @@ describe('FollowUpSummaryComponent', () => {
             followUpFiles: [],
             followUpRequest: 'sedfsdf',
             followUpResponse: 'the response 22',
-            followUpResponseExpirationDate: moment().add(1, 'd').utc(true).format('YYYY-MM-DD'),
+            followUpResponseExpirationDate: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
             permitNotificationType: 'OTHER_FACTOR',
             reviewDecision: mockReviewAcceptedDecision,
             reviewSectionsCompleted: {},

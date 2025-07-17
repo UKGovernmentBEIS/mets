@@ -1089,4 +1089,437 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_1_0_ADD_UNIQUE_CONSTRAINT_TO_RPT_NATIONAL_INVENTORY_DATA_TABLE" author="dimopoulosc@unisystems.gr">
+        <addUniqueConstraint tableName="rpt_national_inventory_data" columnNames="reporting_year, fuel, sector_id" constraintName="rpt_national_inventory_data_reporting_year_fuel_sector_id_uc"/>
+        <rollback>
+            <dropUniqueConstraint tableName="rpt_national_inventory_data" constraintName="rpt_national_inventory_data_reporting_year_fuel_sector_id_uc"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_INSERT_DATA_TO_RPT_NATIONAL_INVENTORY_DATA_TABLE_FOR_YEAR_2023" author="dimopoulosc@unisystems.gr">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT count(*) FROM rpt_national_inventory_data where reporting_year = 2023;</sqlCheck>
+        </preConditions>
+        <sql>
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coal', 91.172408032709400, 23.992326164324600, 0.982795794257924, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coke', 105.142711553209000, 29.800000000000000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Petroleum Coke', 111.192724728926000, 28.590000000000000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Fuel Oil', 79.073124333662600, 40.618101407134700, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Gas Oil', 74.937503780818000, 42.568805191727700, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'MSW', 60.943447642501300, 7.000000000000000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Sour gas', 74.316419311375900, 0.034122208734941, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Waste oils', 74.493168019335400, 42.568805191727700, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Fuel Oil', 78.499056610650300, 40.863073873102600, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1b';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Gas Oil', 74.937503780818000, 42.568805191727700, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1b';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'LPG', 63.883017070794000, 45.955648216499500, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1b';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Naphtha', 68.942521891194000, 45.419477666849000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1b';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'OPG', 54.639299699988300, 48.449782788856600, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1b';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Petroleum coke', 100.376780878370000, 33.972000000000000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1b';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Blast furnace gas', 259.714880903141000, 0.002970000000000, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1ci';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coke Oven Gas', 43.204608263355800, 0.016200000000000, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1ci';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Natural Gas (Upstream oil production)', 61.576201584992100, 0.035510000000000, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1cii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Natural Gas (Upstream gas production)', 60.040442805620500, 0.035510000000000, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1cii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coal', 91.262255333333300, 27.440000000000000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1ciii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Colliery methane', 68.607727883837300, 0.015572623828452, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1ciii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'LPG', 63.883017070794000, 45.955648216499500, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1ciii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'OPG', 54.639299699988300, 48.449782788856600, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A1ciii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Blast Furnace Gas', 259.714880903141000, 0.002970000000000, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coke Oven Gas', 43.204608263355800, 0.016200000000000, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coke (Iron and steel - combustion plant)', 105.142711553209000, 29.800000000000000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Gas Oil', 74.937503780818000, 42.568805191727700, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Fuel Oil', 78.780963625246400, 40.910898416164400, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coke (Sinter Production)', 105.142711553209000, 29.800000000000000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coke Oven Gas', 43.204608263355800, 0.016200000000000, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1B1b';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Blast Furnace Gas', 259.714880903141000, 0.002970000000000, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '2C1';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Burning Oil', 71.808965904156600, 43.861746607944800, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coke', 105.142711553209000, 29.800000000000000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coke Oven Gas', 43.204608263355800, 0.016200000000000, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Colliery methane', 68.607727883837300, 0.015572623828452, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Fuel Oil', 78.780963625246400, 40.910898416164400, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Gas Oil (All Other Manufacturing Industry ' || chr(38) || ' Construction)', 74.937503780818000, 42.568805191727700, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'LPG', 63.883017070794000, 45.955648216499500, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Lubricants', 74.493168019335400, 42.568805191727700, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'OPG', 54.639299699988300, 48.449782788856600, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'SSF', 93.269845589211200, 31.056839950443000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coal', 94.027776330343000, 25.404692680807900, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Gas Oil (All off-road machinery)', 74.937503780818000, 42.568805191727700, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Petrol', 70.248513817404200, 44.627278637506200, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2gviii';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coal', 93.269293293290300, 25.826050126160300, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2f';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Petroleum coke', 87.862687072009300, 31.210248129395900, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2f';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Waste solvent', 80.893072860886100, 21.550867643012200, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2f';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Waste oils', 78.637320869073800, 40.730125523012600, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2f';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Scrap tyres', 58.131660064929300, 27.725478875649400, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2f';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'waste', 42.669296610204500, 20.172407524466600, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A2f';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coal', 94.027776349761300, 27.191699525249200, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A4a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Fuel Oil', 78.780963625246400, 40.910898416164400, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A4a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Gas Oil', 74.937503780818000, 42.568805191727700, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A4a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'MSW', 60.943447642501300, 7.000000000000000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A4a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Burning Oil', 71.808965904156600, 43.861746607944800, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A4a';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coal (Agriculture - stationary combustion)', 90.266667333333300, 28.050000000000000, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A4ci';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Fuel Oil', 78.780963625246400, 40.910898416164400, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A4ci';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Gas Oil', 74.937503780818000, 42.568805191727700, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A4ci';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Coal (Miscellaneous industrial/commercial combustion)', 94.027776349761300, 27.191699525249200, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A4ci';
+
+            insert into rpt_national_inventory_data (id, reporting_year, fuel, emission_factor, net_calorific_value, oxidation_factor, ncv_measurement_unit, ef_measurement_unit, sector_id)
+            select nextval('rpt_national_inventory_data_seq'), 2023, 'Burning Oil', 71.808965904156600, 43.861746607944800, 1.00, 'GJ_PER_TONNE', 'TONNES_OF_CO2_PER_TJ', sector.id
+            from rpt_ipcc_sector sector
+            where sector.name = '1A4ci';
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE
+                FROM rpt_national_inventory_data
+                WHERE reporting_year=2023;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_INSERT_DATA_TO_RPT_REGIONAL_DATA_TABLE_FOR_YEAR_2023" author="dimopoulosc@unisystems.gr">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT count(*) FROM rpt_regional_inventory_data where reporting_year = 2023;</sqlCheck>
+        </preConditions>
+        <sql>
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 56.2967000000, 0.037422963275644, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'EA';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 56.3925000000, 0.037504326720135, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'EM';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 57.6530000000, 0.038412093710426, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'NE';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 57.2070000000, 0.038320915998312, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'NO';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 56.3074000000, 0.037420536091178, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'NT';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 57.2784000000, 0.038130434782609, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'NW';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 56.9984000000, 0.037797699451245, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'SC';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 55.9849000000, 0.037151435204728, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'SE';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 56.4267000000, 0.037288623891938, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'SO';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 56.1748920000, 0.037124017517940, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'SW';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 56.2039037700, 0.037543547868299, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'WM';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 56.9982100000, 0.037928292528493, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'WN';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 55.5192500000, 0.037203765301815, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'WS';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 55.5225000000, 0.037554031236809, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'SIU';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 64.6282000000, 0.093033136344449, 0.94760, 1.00, 'GJ_PER_NM3','TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'Stornoway';
+
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 57.5551000000, 0.038054031236809, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'Stranraer';
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE
+                FROM rpt_regional_inventory_data
+                WHERE reporting_year=2023;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_INSERT_DATA_TO_RPT_REGIONAL_DATA_TABLE_FOR_YEAR_2023_ADDING_NI" author="dimopoulosc@unisystems.gr">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT count(*) FROM rpt_regional_inventory_data where reporting_year = 2023 and charging_zone_id = (SELECT id FROM rpt_charging_zone WHERE code = 'NI');</sqlCheck>
+        </preConditions>
+        <sql>
+            insert into rpt_regional_inventory_data (id, charging_zone_id, reporting_year, emission_factor, net_calorific_value, calculation_factor, oxidation_factor, ncv_measurement_unit, ef_measurement_unit)
+            select nextval('rpt_regional_inventory_data_seq'), zone.id, 2023, 57.5551000000, 0.038054031236809, 0.94760, 1.00, 'GJ_PER_NM3', 'TONNES_OF_CO2_PER_TJ'
+            from rpt_charging_zone zone
+            where zone.code = 'NI';
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE
+                FROM rpt_regional_inventory_data
+                WHERE reporting_year=2023
+                AND charging_zone_id=(SELECT id FROM rpt_charging_zone where code='NI');
+            </sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

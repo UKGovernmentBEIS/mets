@@ -36,7 +36,7 @@ export const activityLevelFormProvider = {
       ],
       otherChangeTypeName: [
         {
-          value: index === null ? null : activityLevels[index]?.otherChangeTypeName ?? null,
+          value: index === null ? null : (activityLevels[index]?.otherChangeTypeName ?? null),
           disabled,
         },
         {

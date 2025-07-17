@@ -1,5 +1,27 @@
 package uk.gov.pmrv.api.workflow.request.application.requestaction;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
+import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
+import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionInfoDTO;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
+import uk.gov.pmrv.api.workflow.request.core.repository.RequestActionRepository;
+import uk.gov.pmrv.api.workflow.request.core.transform.RequestActionCustomMapperHandler;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -7,27 +29,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.rules.domain.ResourceType;
-import uk.gov.pmrv.api.authorization.rules.services.AuthorizationRulesQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
-import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
-import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionInfoDTO;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
-import uk.gov.pmrv.api.workflow.request.core.repository.RequestActionRepository;
-import uk.gov.pmrv.api.workflow.request.core.transform.RequestActionCustomMapperHandler;
 
 @ExtendWith(MockitoExtension.class)
 class RequestActionQueryServiceTest {
@@ -46,7 +47,7 @@ class RequestActionQueryServiceTest {
 
     @Test
     void getRequestActionById() {
-        PmrvUser user = PmrvUser.builder().userId("user").build();
+        AppUser user = AppUser.builder().userId("user").build();
         Long requestActionId = 1L; 
         String submitterId = "submitterId";
         RequestAction requestAction = RequestAction.builder().id(requestActionId).submitterId(submitterId).submitter("fn ln").build();
@@ -64,7 +65,7 @@ class RequestActionQueryServiceTest {
     
     @Test
     void getRequestActionById_not_found() {
-        PmrvUser user = PmrvUser.builder().userId("user").build();
+        AppUser user = AppUser.builder().userId("user").build();
         Long requestActionId = 1L; 
         
         when(requestActionRepository.findById(requestActionId)).thenReturn(Optional.empty());
@@ -79,7 +80,7 @@ class RequestActionQueryServiceTest {
     @Test
     void getRequestActionsByRequestId() {
         final String requestId = "1";
-        PmrvUser authUser = PmrvUser.builder().userId("user").roleType(RoleType.OPERATOR).build();
+        AppUser authUser = AppUser.builder().userId("user").roleType(RoleTypeConstants.OPERATOR).build();
         
         RequestAction requestAction1 = RequestAction.builder()
                 .id(1L)
@@ -101,7 +102,7 @@ class RequestActionQueryServiceTest {
             .thenReturn(requestActions);
             
         Set<String> userAllowedRequestActionTypes = Set.of(RequestActionType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED.name());
-        when(authorizationRulesQueryService.findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_ACTION, RoleType.OPERATOR))
+        when(authorizationRulesQueryService.findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_ACTION, RoleTypeConstants.OPERATOR))
             .thenReturn(userAllowedRequestActionTypes);
         
         List<RequestActionInfoDTO> result = service.getRequestActionsByRequestId(requestId, authUser);
@@ -113,7 +114,7 @@ class RequestActionQueryServiceTest {
                 .submitter("fn ln 1")
                 .build());
         verify(requestActionRepository, times(1)).findAllByRequestId(requestId);
-        verify(authorizationRulesQueryService, times(1)).findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_ACTION, RoleType.OPERATOR);
+        verify(authorizationRulesQueryService, times(1)).findResourceSubTypesByResourceTypeAndRoleType(ResourceType.REQUEST_ACTION, RoleTypeConstants.OPERATOR);
         verifyNoMoreInteractions(requestActionRepository, authorizationRulesQueryService);
     }
     

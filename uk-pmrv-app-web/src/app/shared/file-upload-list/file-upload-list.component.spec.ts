@@ -19,8 +19,7 @@ describe('FileUploadListComponent', () => {
         [listTitle]="listTitle"
         [files]="files"
         (fileDelete)="onDelete($event)"
-        [isDisabled]="isDisabled"
-      ></app-file-upload-list>
+        [isDisabled]="isDisabled"></app-file-upload-list>
     `,
   })
   class TestComponent {

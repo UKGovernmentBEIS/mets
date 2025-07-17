@@ -11,8 +11,7 @@ import { DoalService } from '@tasks/doal/core/doal.service';
       <app-page-heading>Upload additional documents</app-page-heading>
       <app-doal-additional-documents-summary-template
         [additionalDocuments]="additionalDocuments$ | async"
-        [documents]="documentFiles$ | async"
-      ></app-doal-additional-documents-summary-template>
+        [documents]="documentFiles$ | async"></app-doal-additional-documents-summary-template>
       <app-task-return-link [levelsUp]="2" [taskType]="taskType$ | async"></app-task-return-link>
     </app-doal-task>
   `,

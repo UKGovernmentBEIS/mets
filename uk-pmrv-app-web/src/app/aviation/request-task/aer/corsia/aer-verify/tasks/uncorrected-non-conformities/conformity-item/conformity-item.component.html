@@ -5,27 +5,25 @@
   heading="Add a non-conformity with the approved emissions monitoring plan"
 >
   <p class="govuk-body">You should include:</p>
+
   <ul class="govuk-list govuk-list--bullet govuk-!-width-two-thirds">
     <li>its nature and size</li>
     <li>which part of the report it relates to</li>
     <li>any discrepancies between the approved plan and fuel types</li>
   </ul>
 
-  <div
-    label="Explanation"
-    [maxLength]="10000"
-    formControlName="explanation"
-    govuk-textarea
-    class="govuk-!-width-two-thirds"
-  ></div>
+  <h2 class="govuk-heading-s">Description</h2>
 
-  <p class="govuk-body govuk-!-width-two-thirds">
+  <div [maxLength]="10000" formControlName="explanation" govuk-textarea class="govuk-!-width-two-thirds"></div>
+
+  <h2 class="govuk-heading-s govuk-!-width-two-thirds">
     Does this have a material (significant) effect on the total emissions reported?
-  </p>
+  </h2>
 
   <div formControlName="materialEffect" govuk-radio>
     <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
     <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
   </div>
 </app-wizard-step>
+
 <app-return-to-link></app-return-to-link>

@@ -1,10 +1,8 @@
 package uk.gov.pmrv.api.web.util;
 
 import lombok.experimental.UtilityClass;
-
 import org.springframework.http.ResponseEntity;
-
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.NetzErrorCode;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
 
 /**
@@ -17,10 +15,10 @@ public class ErrorUtil {
      * Constructs the {@link ErrorResponse}.
      *
      * @param data Error data populated
-     * @param errorCode {@link ErrorCode}
+     * @param errorCode {@link NetzErrorCode}
      * @return {@link ErrorResponse}
      */
-    public ResponseEntity<ErrorResponse> getErrorResponse(Object[] data, ErrorCode errorCode) {
+    public ResponseEntity<ErrorResponse> getErrorResponse(Object[] data, NetzErrorCode errorCode) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())

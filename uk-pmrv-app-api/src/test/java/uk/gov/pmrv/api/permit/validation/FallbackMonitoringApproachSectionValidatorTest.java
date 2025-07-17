@@ -1,22 +1,5 @@
 package uk.gov.pmrv.api.permit.validation;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyCollection;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -28,7 +11,6 @@ import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitValidationResult;
 import uk.gov.pmrv.api.permit.domain.PermitViolation;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.CategoryType;
 import uk.gov.pmrv.api.permit.domain.emissionsources.EmissionSource;
 import uk.gov.pmrv.api.permit.domain.emissionsources.EmissionSources;
 import uk.gov.pmrv.api.permit.domain.measurementdevices.MeasurementDeviceOrMethod;
@@ -36,12 +18,31 @@ import uk.gov.pmrv.api.permit.domain.measurementdevices.MeasurementDevicesOrMeth
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.MonitoringApproachType;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.MonitoringApproaches;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.CalculationOfCO2MonitoringApproach;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.CategoryType;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.MeteringUncertainty;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.fallback.FallbackMonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.fallback.FallbackSourceStreamCategory;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.fallback.FallbackSourceStreamCategoryAppliedTier;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStream;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreams;
+
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class FallbackMonitoringApproachSectionValidatorTest {

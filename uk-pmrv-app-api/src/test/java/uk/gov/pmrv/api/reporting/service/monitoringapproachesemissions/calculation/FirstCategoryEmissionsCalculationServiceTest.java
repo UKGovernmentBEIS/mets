@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamCategory;
 import uk.gov.pmrv.api.reporting.domain.ActivityDataMeasurementUnit;
 import uk.gov.pmrv.api.reporting.domain.EmissionFactorMeasurementUnit;
@@ -82,7 +82,7 @@ class FirstCategoryEmissionsCalculationServiceTest {
 
         BusinessException be = assertThrows(BusinessException.class, () -> service.calculateEmissions(calculationParams));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.AER_EMISSIONS_CALCULATION_INVALID_MEASUREMENT_UNITS_COMBINATION);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.AER_EMISSIONS_CALCULATION_INVALID_MEASUREMENT_UNITS_COMBINATION);
     }
 
     @Test
@@ -104,7 +104,7 @@ class FirstCategoryEmissionsCalculationServiceTest {
 
         BusinessException be = assertThrows(BusinessException.class, () -> service.calculateEmissions(calculationParams));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.AER_EMISSIONS_CALCULATION_PARAMETER_VALUE_MISSING);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.AER_EMISSIONS_CALCULATION_PARAMETER_VALUE_MISSING);
     }
 
     @Test

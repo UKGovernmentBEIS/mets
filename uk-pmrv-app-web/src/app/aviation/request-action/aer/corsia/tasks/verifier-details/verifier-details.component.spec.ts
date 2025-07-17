@@ -90,8 +90,8 @@ describe('VerifierDetailsComponent', () => {
       ['Position', 'My position'],
       ['Role and expertise', 'My role'],
       ['Email', 'test@pmrv.com'],
-      ['Have you conducted six or more annual verifications as a team leader for this aeroplane operator?', 'No'],
-      ['Describe the main results of impartiality and avoidance of conflict of interest assessment', 'My results'],
+      ['Has the team leader made six or more annual verifications for this aeroplane operator?', 'No'],
+      ['Results of the impartiality and conflict of interest assessment', 'My results'],
     ]);
   });
 });

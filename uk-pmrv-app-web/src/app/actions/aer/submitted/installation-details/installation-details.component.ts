@@ -12,8 +12,7 @@ import { AerService } from '../../core/aer.service';
     <app-action-task header="Installation and operator details" [breadcrumb]="true">
       <app-installation-details-summary
         cssClass="summary-list--edge-border"
-        [installationOperatorDetails]="installationOperatorDetails$ | async"
-      ></app-installation-details-summary>
+        [installationOperatorDetails]="installationOperatorDetails$ | async"></app-installation-details-summary>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

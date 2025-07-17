@@ -41,8 +41,7 @@ describe('SummaryComponent', () => {
     template: `
       <app-permit-transfer-details-summary-template
         [allowChange]="isEditable$ | async"
-        [payload]="payload"
-      ></app-permit-transfer-details-summary-template>
+        [payload]="payload"></app-permit-transfer-details-summary-template>
     `,
   })
   class TestComponent {

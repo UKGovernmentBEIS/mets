@@ -1,8 +1,9 @@
 package uk.gov.pmrv.api.migration.permit.emissionSources;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.springframework.jdbc.core.RowMapper;
 
 public class EtsEmissionSourceRowMapper implements RowMapper<EtsEmissionSource> {
     @Override

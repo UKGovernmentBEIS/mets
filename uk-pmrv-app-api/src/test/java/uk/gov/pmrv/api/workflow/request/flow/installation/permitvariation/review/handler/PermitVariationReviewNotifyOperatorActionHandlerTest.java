@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -58,7 +58,7 @@ public class PermitVariationReviewNotifyOperatorActionHandlerTest {
     void process() {
     	Long requestTaskId = 1L;
     	RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_VARIATION_NOTIFY_OPERATOR_FOR_DECISION;
-    	PmrvUser pmrvUser = PmrvUser.builder().build();
+    	AppUser appUser = AppUser.builder().build();
 		PermitVariationNotifyOperatorForDecisionRequestTaskActionPayload payload = PermitVariationNotifyOperatorForDecisionRequestTaskActionPayload.builder()
 				.payloadType(RequestTaskActionPayloadType.PERMIT_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD)
 				.decisionNotification(DecisionNotification.builder().signatory("sign").build())
@@ -75,11 +75,11 @@ public class PermitVariationReviewNotifyOperatorActionHandlerTest {
 		
 		when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 		
-		cut.process(requestTaskId, requestTaskActionType,  pmrvUser, payload);
+		cut.process(requestTaskId, requestTaskActionType,  appUser, payload);
 		
 		verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-		verify(validator, times(1)).validate(requestTask, payload, pmrvUser);
-        verify(permitVariationReviewService, times(1)).savePermitVariationDecisionNotification(requestTask, payload.getDecisionNotification(), pmrvUser);
+		verify(validator, times(1)).validate(requestTask, payload, appUser);
+        verify(permitVariationReviewService, times(1)).savePermitVariationDecisionNotification(requestTask, payload.getDecisionNotification(), appUser);
         verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
                 BpmnProcessConstants.REVIEW_DETERMINATION, DeterminationType.GRANTED,

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { first, map, Observable, tap } from 'rxjs';
 
@@ -8,7 +8,7 @@ import { InstallationAccountPermitDTO, InstallationAccountViewService } from 'pm
 @Injectable({
   providedIn: 'root',
 })
-export class AccountGuard implements CanActivate, CanDeactivate<any>, Resolve<InstallationAccountPermitDTO> {
+export class AccountGuard {
   accountPermit: InstallationAccountPermitDTO;
 
   constructor(private readonly accountViewService: InstallationAccountViewService) {}

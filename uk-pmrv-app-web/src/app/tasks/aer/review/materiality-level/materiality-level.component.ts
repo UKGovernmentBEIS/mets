@@ -13,12 +13,10 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
     <app-aer-task-review
       [breadcrumb]="true"
       [notification]="notification"
-      heading="Materiality level and reference documents"
-    >
+      heading="Materiality level and reference documents">
       <app-materiality-level-group [materialityLevelInfo]="materialityLevelInfo$ | async"></app-materiality-level-group>
       <app-verification-review-group-decision
-        (notification)="notification = $event"
-      ></app-verification-review-group-decision>
+        (notification)="notification = $event"></app-verification-review-group-decision>
     </app-aer-task-review>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,5 +27,8 @@ export class MaterialityLevelComponent {
     map((payload) => payload.verificationReport.materialityLevel),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

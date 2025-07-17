@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -57,7 +57,7 @@ class AviationAccountClosureSubmitActionHandlerTest {
             RequestTaskActionEmptyPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD)
                 .build();
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         String processTaskId = "processTaskId";
         Request request1 = Request.builder().id("1").accountId(100L).build();
         Request request2 = Request.builder().id("2").accountId(200L).build();
@@ -70,11 +70,11 @@ class AviationAccountClosureSubmitActionHandlerTest {
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.AVIATION_ACCOUNT_CLOSURE_SUBMIT_APPLICATION,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         assertThat(request1.getSubmissionDate()).isNotNull();
-        verify(requestAviationAccountClosureService, times(1)).applySubmitAction(requestTask, pmrvUser);
+        verify(requestAviationAccountClosureService, times(1)).applySubmitAction(requestTask, appUser);
         verify(workflowService, times(1)).completeTask(processTaskId);
         verify(workflowService, times(2)).deleteProcessInstance(
         		null, "Workflow terminated by the system because the account was closed");

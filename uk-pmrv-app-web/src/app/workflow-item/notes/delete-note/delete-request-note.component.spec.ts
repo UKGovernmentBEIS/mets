@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
-import { ActivatedRouteStub, BasePage, MockType } from '@testing';
+import { ActivatedRouteStub, BasePage, MockType, RouterStubComponent } from '@testing';
 
 import { RequestNotesService } from 'pmrv-api';
 
@@ -44,7 +44,12 @@ describe('DeleteRequestNoteComponent', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         declarations: [DeleteRequestNoteComponent],
-        imports: [RouterTestingModule, SharedModule],
+        imports: [
+          RouterTestingModule.withRoutes([
+            { path: 'accounts/:accountId/workflows/:requestId', component: RouterStubComponent },
+          ]),
+          SharedModule,
+        ],
         providers: [
           DestroySubject,
           { provide: RequestNotesService, useValue: requestNotesService },
@@ -81,7 +86,12 @@ describe('DeleteRequestNoteComponent', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         declarations: [DeleteRequestNoteComponent],
-        imports: [RouterTestingModule, SharedModule],
+        imports: [
+          RouterTestingModule.withRoutes([
+            { path: 'workflows/batch-variations/requestId', component: RouterStubComponent },
+          ]),
+          SharedModule,
+        ],
         providers: [
           DestroySubject,
           { provide: RequestNotesService, useValue: requestNotesService },

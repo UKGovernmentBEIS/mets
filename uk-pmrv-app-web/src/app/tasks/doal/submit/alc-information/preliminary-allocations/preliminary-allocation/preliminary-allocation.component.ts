@@ -18,8 +18,7 @@ import { preliminaryAllocationFormProvider } from './preliminary-allocation-form
         (formSubmit)="onSubmit()"
         [form]="form"
         [isEditable]="editable$ | async"
-        [isEditing]="createMode === false"
-      ></app-preliminary-allocation-details-template>
+        [isEditing]="createMode === false"></app-preliminary-allocation-details-template>
       <a govukLink routerLink="..">Return to: Provide allocation for each sub installation</a>
     </app-doal-task>
   `,

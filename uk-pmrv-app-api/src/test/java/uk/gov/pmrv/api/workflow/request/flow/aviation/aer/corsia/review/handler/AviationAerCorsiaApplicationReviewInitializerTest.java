@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationData;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
-import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
@@ -24,7 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -37,13 +35,13 @@ class AviationAerCorsiaApplicationReviewInitializerTest {
     private RequestAviationAccountQueryService requestAviationAccountQueryService;
 
     @Mock
-    private RequestVerificationService<AviationAerCorsiaVerificationReport> requestVerificationService;
+    private RequestVerificationService requestVerificationService;
 
     @Mock
     private AviationAerCorsiaReviewMapper aviationAerCorsiaReviewMapper;
 
     @Test
-    void initializePayload_when_verification_report_exists() {
+    void initializePayload() {
         String requestId = "REQ_ID";
         Long accountId = 1L;
         Long vbId = 2L;
@@ -63,37 +61,6 @@ class AviationAerCorsiaApplicationReviewInitializerTest {
             .metadata(requestMetadata)
             .build();
         RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder().crcoCode("code").build();
-        VerificationBodyDetails verificationBodyDetails = VerificationBodyDetails.builder().name("name").build();
-
-        when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(accountInfo);
-        when(requestVerificationService.getVerificationBodyDetails(verificationReport, vbId)).thenReturn(verificationBodyDetails);
-
-        //invoke
-        initializer.initializePayload(request);
-
-        //verify
-        verify(requestAviationAccountQueryService, times(1)).getAccountInfo(accountId);
-        verify(requestVerificationService, times(1)).getVerificationBodyDetails(verificationReport, vbId);
-        verify(aviationAerCorsiaReviewMapper, times(1))
-            .toAviationAerCorsiaApplicationReviewRequestTaskPayload(requestPayload, accountInfo, RequestTaskPayloadType.AVIATION_AER_CORSIA_APPLICATION_REVIEW_PAYLOAD, reportingYear);
-    }
-
-    @Test
-    void initializePayload_when_verification_report_not_exists() {
-        String requestId = "REQ_ID";
-        Long accountId = 1L;
-        Long vbId = 2L;
-        Year reportingYear = Year.of(2023);
-        AviationAerCorsiaRequestMetadata requestMetadata = AviationAerCorsiaRequestMetadata.builder().year(reportingYear).build();
-        AviationAerCorsiaRequestPayload requestPayload = AviationAerCorsiaRequestPayload.builder().build();
-        Request request = Request.builder()
-            .id(requestId)
-            .accountId(accountId)
-            .verificationBodyId(vbId)
-            .payload(requestPayload)
-            .metadata(requestMetadata)
-            .build();
-        RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder().crcoCode("code").build();
 
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(accountInfo);
 
@@ -102,9 +69,9 @@ class AviationAerCorsiaApplicationReviewInitializerTest {
 
         //verify
         verify(requestAviationAccountQueryService, times(1)).getAccountInfo(accountId);
+        verify(requestVerificationService, times(1)).refreshVerificationReportVBDetails(verificationReport, vbId);
         verify(aviationAerCorsiaReviewMapper, times(1))
             .toAviationAerCorsiaApplicationReviewRequestTaskPayload(requestPayload, accountInfo, RequestTaskPayloadType.AVIATION_AER_CORSIA_APPLICATION_REVIEW_PAYLOAD, reportingYear);
-        verifyNoInteractions(requestVerificationService);
     }
 
     @Test

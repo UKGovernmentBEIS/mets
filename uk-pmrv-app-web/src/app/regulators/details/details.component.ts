@@ -13,9 +13,11 @@ import {
   shareReplay,
   switchMap,
   takeUntil,
+  tap,
   withLatestFrom,
 } from 'rxjs';
 
+import { ConfigStore } from '@core/config/config.store';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore, selectUserId } from '@core/store/auth';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
@@ -142,6 +144,7 @@ export class DetailsComponent implements OnInit {
       PEER_REVIEW_PERMIT_TRANSFER: ['NONE'],
       SUBMIT_PERMIT_BATCH_REISSUE: ['NONE'],
       REVIEW_AER: ['NONE'],
+      MARK_NOT_REQUIRED_AER: ['NONE'],
       REVIEW_VIR: ['NONE'],
       SUBMIT_DRE: ['NONE'],
       PEER_REVIEW_DRE: ['NONE'],
@@ -168,6 +171,20 @@ export class DetailsComponent implements OnInit {
       SUBMIT_AVIATION_NON_COMPLIANCE: ['NONE'],
       PEER_REVIEW_AVIATION_NON_COMPLIANCE: ['NONE'],
       REVIEW_AVIATION_VIR: ['NONE'],
+      SUBMIT_INSTALLATION_AUDIT: ['NONE'],
+      PEER_REVIEW_INSTALLATION_AUDIT: ['NONE'],
+      SUBMIT_INSTALLATION_ONSITE_INSPECTION: ['NONE'],
+      PEER_REVIEW_INSTALLATION_ONSITE_INSPECTION: ['NONE'],
+      AVIATION_AER_ANNUAL_OFFSETTING: ['NONE'],
+      PEER_REVIEW_AVIATION_AER_ANNUAL_OFFSETTING: ['NONE'],
+      AVIATION_AER_3YEAR_PERIOD_OFFSETTING: ['NONE'],
+      PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING: ['NONE'],
+      SUBMIT_BDR_REVIEW: ['NONE'],
+      PEER_REVIEW_BDR: ['NONE'],
+      PEER_REVIEW_PERMANENT_CESSATION: ['NONE'],
+      SUBMIT_PERMANENT_CESSATION: ['NONE'],
+      SUBMIT_AVIATION_DOE_CORSIA: ['NONE'],
+      PEER_REVIEW_AVIATION_DOE_CORSIA: ['NONE'],
     }),
   });
 
@@ -274,6 +291,11 @@ export class DetailsComponent implements OnInit {
       permission: 'REVIEW_AER',
       task: 'Review',
       type: 'AER',
+    },
+    {
+      permission: 'MARK_NOT_REQUIRED_AER',
+      task: 'Submit',
+      type: 'Installation: AER marking as not required',
     },
     {
       permission: 'REVIEW_VIR',
@@ -405,7 +427,79 @@ export class DetailsComponent implements OnInit {
       task: 'Review',
       type: 'Aviation: VIR',
     },
+    {
+      permission: 'SUBMIT_INSTALLATION_AUDIT',
+      task: 'Submit',
+      type: 'Audit',
+    },
+    {
+      permission: 'PEER_REVIEW_INSTALLATION_AUDIT',
+      task: 'Peer review',
+      type: 'Audit',
+    },
+    {
+      permission: 'SUBMIT_INSTALLATION_ONSITE_INSPECTION',
+      task: 'Submit',
+      type: 'Onsite inspection',
+    },
+    {
+      permission: 'PEER_REVIEW_INSTALLATION_ONSITE_INSPECTION',
+      task: 'Peer review',
+      type: 'Onsite inspection',
+    },
+    {
+      permission: 'AVIATION_AER_ANNUAL_OFFSETTING',
+      task: 'Submit',
+      type: 'Aviation: AER annual offsetting',
+    },
+    {
+      permission: 'PEER_REVIEW_AVIATION_AER_ANNUAL_OFFSETTING',
+      task: 'Peer review',
+      type: 'Aviation: AER annual offsetting',
+    },
+    {
+      permission: 'AVIATION_AER_3YEAR_PERIOD_OFFSETTING',
+      task: 'Submit',
+      type: 'Aviation: AER 3 year period offsetting',
+    },
+    {
+      permission: 'PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING',
+      task: 'Peer review',
+      type: 'Aviation: AER 3 year period offsetting',
+    },
+    {
+      permission: 'SUBMIT_BDR_REVIEW',
+      task: 'Review/Submit',
+      type: 'BDR',
+    },
+    {
+      permission: 'PEER_REVIEW_BDR',
+      task: 'Peer review',
+      type: 'BDR',
+    },
+    {
+      permission: 'SUBMIT_PERMANENT_CESSATION',
+      task: 'Submit',
+      type: 'Permanent cessation',
+    },
+    {
+      permission: 'PEER_REVIEW_PERMANENT_CESSATION',
+      task: 'Peer review',
+      type: 'Permanent cessation',
+    },
+    {
+      permission: 'SUBMIT_AVIATION_DOE_CORSIA',
+      task: 'Submit',
+      type: 'Aviation: DoE CORSIA',
+    },
+    {
+      permission: 'PEER_REVIEW_AVIATION_DOE_CORSIA',
+      task: 'Peer review',
+      type: 'Aviation: DoE CORSIA',
+    },
   ];
+
+  private readonly configFeatures$ = this.configStore.asObservable().pipe(map((state) => state.features));
 
   constructor(
     private readonly fb: UntypedFormBuilder,
@@ -418,9 +512,31 @@ export class DetailsComponent implements OnInit {
     private readonly destroy$: DestroySubject,
     private readonly businessErrorService: BusinessErrorService,
     private readonly backLinkService: BackLinkService,
+    private readonly configStore: ConfigStore,
   ) {}
 
   ngOnInit(): void {
+    this.configFeatures$
+      .pipe(
+        takeUntil(this.destroy$),
+        tap((features) => {
+          const corsia3yearOffsettingEnabled = features.corsia3yearOffsettingEnabled;
+          const bdrEnabled = features.bdrEnabled;
+
+          if (!corsia3yearOffsettingEnabled) {
+            this.filterTableRows([
+              'AVIATION_AER_3YEAR_PERIOD_OFFSETTING',
+              'PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING',
+            ]);
+          }
+
+          if (!bdrEnabled) {
+            this.filterTableRows(['SUBMIT_BDR_REVIEW', 'PEER_REVIEW_BDR']);
+          }
+        }),
+      )
+      .subscribe();
+
     this.confirmedAddedRegulator$.pipe(takeUntil(this.destroy$)).subscribe((res) => {
       if (res === null) {
         this.backLinkService.show();
@@ -454,6 +570,10 @@ export class DetailsComponent implements OnInit {
         this.form.get('user').get('email').disable();
         this.userFullName = user.firstName + ' ' + user.lastName;
       });
+  }
+
+  filterTableRows(typesToBeExcepted: Array<string>) {
+    this.tableRows = this.tableRows.filter((row) => !typesToBeExcepted.includes(row.permission));
   }
 
   setBasePermissions(roleCode: string): void {
@@ -501,7 +621,7 @@ export class DetailsComponent implements OnInit {
               return this.regulatorUsersService.inviteRegulatorUserToCA(payloadWithoutSignature, signatureBlob);
             }
           }),
-          catchBadRequest([ErrorCodes.USER1001, ErrorCodes.AUTHORITY1005], () => {
+          catchBadRequest([ErrorCodes.USER1001, ErrorCodes.AUTHORITY1005, ErrorCodes.AUTHORITY1014], () => {
             this.form.get('user').get('email').setErrors({
               emailExists: 'This user email already exists in the service',
             });

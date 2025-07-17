@@ -21,10 +21,10 @@ export class SubmitSectionListComponent {
       resolveSectionStatus(payload, 'determination') === 'cannot start yet'
         ? null
         : !payload.doal?.determination?.type
-        ? './determination'
-        : payload.doal?.determination?.type === 'CLOSED'
-        ? './determination/close/summary'
-        : './determination/proceed-authority/summary',
+          ? './determination'
+          : payload.doal?.determination?.type === 'CLOSED'
+            ? './determination/close/summary'
+            : './determination/proceed-authority/summary',
     ),
   );
 

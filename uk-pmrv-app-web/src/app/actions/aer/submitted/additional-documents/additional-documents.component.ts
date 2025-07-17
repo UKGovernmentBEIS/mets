@@ -12,8 +12,7 @@ import { AerService } from '../../core/aer.service';
     <app-action-task header="Additional documents and information" [breadcrumb]="true">
       <app-documents-summary-template
         [data]="additionalDocuments$ | async"
-        [files]="additionalDocumentFiles$ | async"
-      ></app-documents-summary-template>
+        [files]="additionalDocumentFiles$ | async"></app-documents-summary-template>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

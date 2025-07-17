@@ -11,13 +11,14 @@ export const AER_OPERATOR_DETAILS_ROUTES: Routes = [
     children: [
       {
         path: '',
+        data: { pageTitle: 'Operator details' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./operator-details-name/operator-details-name.component').then((c) => c.OperatorDetailsNameComponent),
       },
       {
         path: 'flight-identification',
-        data: { backlink: '../' },
+        data: { pageTitle: 'Flight identification', backlink: '../' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./operator-details-flight-identification/operator-details-flight-identification.component').then(
@@ -26,7 +27,7 @@ export const AER_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'air-operating-certificate',
-        data: { backlink: '../flight-identification' },
+        data: { pageTitle: 'Air operating certificate', backlink: '../flight-identification' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import(
@@ -35,7 +36,7 @@ export const AER_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'operating-license',
-        data: { backlink: '../air-operating-certificate' },
+        data: { pageTitle: 'Operating licence', backlink: '../air-operating-certificate' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./operator-details-operating-license/operator-details-operating-license.component').then(
@@ -44,7 +45,7 @@ export const AER_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'organisation-structure',
-        data: { backlink: '../operating-license' },
+        data: { pageTitle: 'Organisation structure', backlink: '../operating-license' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./operator-details-organisation-structure/operator-details-organisation-structure.component').then(
@@ -53,7 +54,7 @@ export const AER_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Operator details summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Operator details' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () =>
           import('./operator-details-summary/operator-details-summary.component').then(

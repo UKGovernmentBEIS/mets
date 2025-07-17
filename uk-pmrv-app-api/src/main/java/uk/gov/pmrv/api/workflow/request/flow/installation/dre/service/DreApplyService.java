@@ -1,12 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.dre.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.validation.DecisionNotificationUsersValidator;
@@ -31,13 +30,13 @@ public class DreApplyService {
     }
 	
 	@Transactional
-	public void applySubmitNotify(RequestTask requestTask, DecisionNotification decisionNotification, PmrvUser pmrvUser) {
+	public void applySubmitNotify(RequestTask requestTask, DecisionNotification decisionNotification, AppUser appUser) {
 		final DreApplicationSubmitRequestTaskPayload requestTaskPayload = (DreApplicationSubmitRequestTaskPayload) requestTask
 				.getPayload();
 		final Dre dre = requestTaskPayload.getDre();
 		
 		dreValidatorService.validateDre(dre);
-		if(!decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser)) {
+		if(!decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser)) {
 			 throw new BusinessException(ErrorCode.FORM_VALIDATION);
 		}
 
@@ -47,12 +46,13 @@ public class DreApplyService {
 	}
 	
 	@Transactional
-	public void requestPeerReview(RequestTask requestTask, String peerReviewer) {
+	public void requestPeerReview(RequestTask requestTask, String peerReviewer, AppUser appUser) {
 		final DreRequestPayload requestPayload = (DreRequestPayload) requestTask.getRequest().getPayload();
 		final DreApplicationSubmitRequestTaskPayload requestTaskPayload = (DreApplicationSubmitRequestTaskPayload) requestTask
 				.getPayload();
 		
 		requestPayload.setRegulatorPeerReviewer(peerReviewer);
+		requestPayload.setRegulatorReviewer(appUser.getUserId());
 		updateRequestPayloadWithSubmitRequestTaskPayload(requestPayload, requestTaskPayload);
 	}
 	

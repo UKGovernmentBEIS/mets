@@ -15,8 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.additionaldocuments.EmpAdditionalDocuments;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEts;
@@ -96,7 +96,7 @@ class EmpVariationUkEtsReviewReturnForAmendsValidatorServiceTest {
         BusinessException ex = assertThrows(BusinessException.class, () -> validator.validate(payload));
 
         // Verify
-        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.INVALID_EMP_VARIATION_REVIEW);
+        assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_EMP_VARIATION_REVIEW);
     }
     
     private EmissionsMonitoringPlanUkEts buildEmp() {

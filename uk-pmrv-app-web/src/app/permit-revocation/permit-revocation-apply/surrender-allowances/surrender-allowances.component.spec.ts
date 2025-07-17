@@ -8,7 +8,7 @@ import { CessationModule } from '@permit-revocation/cessation/cessation.module';
 import { PermitRevocationModule } from '@permit-revocation/permit-revocation.module';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
 import { GovukDatePipe } from '@shared/pipes/govuk-date.pipe';
-import moment from 'moment';
+import { format, subDays } from 'date-fns';
 
 import { TasksService } from 'pmrv-api';
 
@@ -173,7 +173,8 @@ describe('Surrender Allowances Component', () => {
   });
 
   it('should validate form with an error message for minimum date limit', () => {
-    const today = moment().subtract(1, 'd').format('YYYY-MM-DD');
+    const today = format(subDays(new Date(), 1), 'yyyy-MM-dd');
+
     const date = today.split('-');
     const year = date[0];
     const month = date[1];
@@ -189,7 +190,8 @@ describe('Surrender Allowances Component', () => {
     page.submitButton.click();
     fixture.detectChanges();
     const govukDatePipe = new GovukDatePipe();
-    const dateForErrorMsg = moment().format('YYYY-MM-DD');
+    const dateForErrorMsg = format(new Date(), 'yyyy-MM-dd');
+
     expect(page.errorSummary).toBeTruthy();
     expect(page.errors.map((error) => error.textContent.trim())).toEqual([
       `This date must be the same as or after ${govukDatePipe.transform(new Date(dateForErrorMsg))}`,
@@ -199,7 +201,8 @@ describe('Surrender Allowances Component', () => {
 
   it('Should submit form and navigate to the next step', () => {
     const navigateSpy = jest.spyOn(router, 'navigate');
-    const today = moment().format('YYYY-MM-DD');
+    const today = format(new Date(), 'yyyy-MM-dd');
+
     const date = today.split('-');
     const year = date[0];
     const month = date[1];

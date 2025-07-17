@@ -2,13 +2,13 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.handle
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
-import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCreateActionHandler;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestAccountCreateActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestCreateActionEmptyPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferARequestPayload;
@@ -16,15 +16,14 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.
 
 @Component
 @RequiredArgsConstructor
-public class PermitTransferACreateActionHandler implements RequestCreateActionHandler<RequestCreateActionEmptyPayload> {
+public class PermitTransferACreateActionHandler implements RequestAccountCreateActionHandler<RequestCreateActionEmptyPayload> {
 
     private final StartProcessRequestService startProcessRequestService;
 
     @Override
     public String process(final Long accountId,
-                          final RequestCreateActionType type,
                           final RequestCreateActionEmptyPayload payload,
-                          final PmrvUser pmrvUser) {
+                          final AppUser appUser) {
 
         final RequestParams requestParams = RequestParams.builder()
             .type(RequestType.PERMIT_TRANSFER_A)
@@ -32,7 +31,7 @@ public class PermitTransferACreateActionHandler implements RequestCreateActionHa
             .requestPayload(PermitTransferARequestPayload.builder()
                 .payloadType(RequestPayloadType.PERMIT_TRANSFER_A_REQUEST_PAYLOAD)
                 .permitTransferDetails(PermitTransferDetails.builder().build())
-                .operatorAssignee(pmrvUser.getUserId())
+                .operatorAssignee(appUser.getUserId())
                 .build())
             .build();
 
@@ -42,7 +41,7 @@ public class PermitTransferACreateActionHandler implements RequestCreateActionHa
     }
 
     @Override
-    public RequestCreateActionType getType() {
+    public RequestCreateActionType getRequestCreateActionType() {
         return RequestCreateActionType.PERMIT_TRANSFER_A;
     }
 

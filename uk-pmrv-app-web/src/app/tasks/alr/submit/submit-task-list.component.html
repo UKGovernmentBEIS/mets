@@ -1,0 +1,33 @@
+<ng-container *ngIf="vm() as vm">
+  <app-base-task-container-component
+    [header]="vm.pageTitle"
+    [customContentTemplate]="vm.isWaitTask ? waitContentTemplate : taskContentTemplate"
+    [expectedTaskType]="vm.expectedTaskType"
+    [daysRemaining]="vm.daysRemaining"></app-base-task-container-component>
+
+  <ng-template #waitContentTemplate>
+    <govuk-warning-text>{{ vm.warningText }}</govuk-warning-text>
+  </ng-template>
+
+  <ng-template #taskContentTemplate>
+    <h2 class="govuk-heading-m">Activity level report details</h2>
+
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectDetailsLink"
+        linkText="Provide the activity level report"
+        [status]="vm.detailsSectionStatus"></li>
+    </ul>
+
+    <h2 class="govuk-heading-m">Send report</h2>
+
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.detailsSectionStatus === 'complete' ? vm.redirectSendReportLink : null"
+        linkText="Send report"
+        [status]="vm.sendReportSectionStatus"></li>
+    </ul>
+  </ng-template>
+</ng-container>

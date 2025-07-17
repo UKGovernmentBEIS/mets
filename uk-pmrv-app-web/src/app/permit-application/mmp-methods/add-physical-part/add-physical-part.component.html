@@ -1,0 +1,27 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    caption="Monitoring Methodology Plan"
+    heading="Add a physical part of the installation or unit that serves more than one sub-installation"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false">
+    <div class="govuk-body govuk-!-width-three-quarters">
+      <h2 class="govuk-heading-s">Physical part of the installation or unit</h2>
+      <div govuk-text-input formControlName="itemName"></div>
+
+      <h2 class="govuk-heading-s">Choose the relevant sub-installations</h2>
+
+      <div govuk-checkboxes formControlName="subInstallations">
+        <ng-container *ngFor="let subType of subInstallationTypes$ | async">
+          <govuk-checkbox [value]="subType" [label]="subType | subInstallationType"></govuk-checkbox>
+        </ng-container>
+      </div>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink [routerLink]="'../'">Return to: Physical parts</a>
+</app-permit-task>

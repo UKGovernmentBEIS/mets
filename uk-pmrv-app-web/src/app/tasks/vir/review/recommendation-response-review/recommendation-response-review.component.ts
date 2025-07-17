@@ -23,8 +23,7 @@ import { RegulatorImprovementResponse, VirApplicationReviewRequestTaskPayload } 
         [operatorImprovementResponse]="operatorImprovementResponse$ | async"
         [attachedFiles]="documentFiles$ | async"
         [isEditable]="isEditable$ | async"
-        (formSubmit)="onSubmit()"
-      ></app-recommendation-response-item-form>
+        (formSubmit)="onSubmit()"></app-recommendation-response-item-form>
     </app-vir-task>
   `,
   providers: [recommendationResponseReviewFormProvider],

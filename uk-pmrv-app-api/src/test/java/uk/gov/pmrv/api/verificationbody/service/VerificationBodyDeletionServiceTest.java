@@ -9,9 +9,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import org.springframework.context.ApplicationEventPublisher;
 
+import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityDeletionService;
 import uk.gov.pmrv.api.verificationbody.domain.event.VerificationBodyDeletedEvent;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.verificationbody.repository.VerificationBodyRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,6 +36,9 @@ class VerificationBodyDeletionServiceTest {
     @Mock
     private ApplicationEventPublisher eventPublisher;
 
+    @Mock
+    private VerifierAuthorityDeletionService verifierAuthorityDeletionService;
+
     @Test
     void deleteVerificationBodyById() {
         Long verificationBodyId = 1L;
@@ -48,6 +52,7 @@ class VerificationBodyDeletionServiceTest {
         // Assert
         verify(verificationBodyRepository, times(1)).existsById(verificationBodyId);
         verify(verificationBodyRepository, times(1)).deleteById(verificationBodyId);
+        verify(verifierAuthorityDeletionService, times(1)).deleteVerifierAuthorities(verificationBodyId);
         verify(eventPublisher, times(1)).publishEvent(new VerificationBodyDeletedEvent(verificationBodyId));
     }
 

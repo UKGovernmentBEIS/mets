@@ -20,7 +20,7 @@ export const monitoringApproachesFormProvider = {
     const state = store.getValue();
     const disabled = !state.isEditable;
 
-    const payload: DreApplicationSubmitRequestTaskPayload = state.requestTaskItem.requestTask.payload;
+    const payload = state.requestTaskItem.requestTask.payload as DreApplicationSubmitRequestTaskPayload;
 
     if (payload?.dre?.monitoringApproachReportingEmissions) {
       Object.keys(payload?.dre?.monitoringApproachReportingEmissions).forEach((key) => {

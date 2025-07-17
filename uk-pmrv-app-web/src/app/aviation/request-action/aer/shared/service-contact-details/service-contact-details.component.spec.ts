@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import ServiceContactDetailsComponent from '@aviation/request-action/aer/shared/service-contact-details/service-contact-details.component';
 import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
-import { AerRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
+import { AerUkEtsRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage } from '@testing';
@@ -46,7 +46,7 @@ describe('ServiceContactDetailsComponent', () => {
             email: 'test@xx.gr',
             roleCode: 'operator_admin',
           },
-        } as AerRequestActionPayload,
+        } as AerUkEtsRequestActionPayload,
       },
       regulatorViewer: false,
     });

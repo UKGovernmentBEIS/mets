@@ -39,16 +39,18 @@ export class OperatorDetailsSubsidiaryCompaniesComponent extends BaseOperatorDet
   @Input() isEditable = false;
   @Input() queryParams: Params = {};
 
+  form = this.formProvider.form;
+
   vm$: Observable<ViewModel> = combineLatest([this.store.pipe(requestTaskQuery.selectIsEditable)]).pipe(
     map(([requestActionType]) => {
       return {
-        subsidiaryCompanies: requestActionType
-          ? getSubtaskSummaryValues(this.formProvider.form)?.subsidiaryCompanies
-          : null,
+        subsidiaryCompanies: requestActionType ? getSubtaskSummaryValues(this.form)?.subsidiaryCompanies : null,
         isEditable: requestActionType,
       };
     }),
   );
+
+  subsidiaryCompanies$ = this.vm$.pipe(map((vm) => vm.subsidiaryCompanies));
 
   constructor(
     public router: Router,
@@ -64,10 +66,15 @@ export class OperatorDetailsSubsidiaryCompaniesComponent extends BaseOperatorDet
   handleSubsidiaryList(index: number) {
     this.formProvider.removeSubsidiaryCompanyItem(index);
 
-    this.submitForm(
-      'subsidiaryCompanies',
-      { subsidiaryCompanies: this.formProvider.form.value.subsidiaryCompanies },
-      '../list',
-    );
+    this.submitForm('subsidiaryCompanies', { subsidiaryCompanies: this.form.value.subsidiaryCompanies }, '../list');
+  }
+
+  addAnotherSubsidiaryCompany() {
+    this.formProvider.addSubsidiaryCompany();
+
+    this.router.navigate(['..', 'add'], {
+      relativeTo: this.route,
+      queryParams: this.queryParams,
+    });
   }
 }

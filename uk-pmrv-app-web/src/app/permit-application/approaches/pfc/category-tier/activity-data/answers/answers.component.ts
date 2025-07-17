@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, pluck, switchMap } from 'rxjs';
+import { combineLatest, first, map, switchMap } from 'rxjs';
 
-import { PendingRequestService } from '../../../../../../core/guards/pending-request.service';
-import { PendingRequest } from '../../../../../../core/interfaces/pending-request.interface';
-import { DestroySubject } from '../../../../../../core/services/destroy-subject.service';
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { PendingRequest } from '@core/interfaces/pending-request.interface';
+import { DestroySubject } from '@core/services/destroy-subject.service';
+
 import { PermitApplicationState } from '../../../../../store/permit-application.state';
 import { PermitApplicationStore } from '../../../../../store/permit-application.store';
 
@@ -26,7 +27,7 @@ export class AnswersComponent implements PendingRequest {
   ) {}
 
   onConfirm() {
-    combineLatest([this.index$, this.route.data.pipe(pluck('statusKey')), this.store])
+    combineLatest([this.index$, this.route.data.pipe(map((x) => x?.statusKey)), this.store])
       .pipe(
         first(),
         switchMap(([index, statusKey, state]) =>

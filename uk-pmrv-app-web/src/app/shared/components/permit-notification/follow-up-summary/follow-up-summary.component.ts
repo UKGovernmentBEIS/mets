@@ -17,7 +17,10 @@ export class FollowUpSummaryComponent {
   @Input() changeLink: string = undefined;
   @Input() files: { downloadUrl: string; fileName: string }[];
 
-  constructor(private readonly router: Router, readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly router: Router,
+    readonly route: ActivatedRoute,
+  ) {}
 
   changeClick(url?: string): void {
     this.router.navigate(['../' + url], { relativeTo: this.route, state: { changing: true } });

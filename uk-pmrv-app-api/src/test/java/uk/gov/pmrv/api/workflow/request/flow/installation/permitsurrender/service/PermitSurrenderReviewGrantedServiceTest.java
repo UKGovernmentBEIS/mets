@@ -7,8 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +31,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderReviewDeterminationGrant;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderReviewDeterminationType;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.PermitSurrenderReviewGrantedService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.notification.PermitSurrenderOfficialNoticeService;
 import uk.gov.pmrv.api.workflow.utils.DateUtils;
 
@@ -91,7 +88,7 @@ class PermitSurrenderReviewGrantedServiceTest {
         verify(installationAccountStatusService, times(1)).handlePermitSurrenderGranted(accountId);
         verify(requestActionUserInfoResolver, times(1))
             .getUsersInfo(reviewDecisionNotification.getOperators(), reviewDecisionNotification.getSignatory(), request);
-        verify(permitSurrenderOfficialNoticeService, times(1)).sendReviewDeterminationOfficialNoticeForGranted(request);
+        verify(permitSurrenderOfficialNoticeService, times(1)).sendReviewDeterminationOfficialNotice(request);
         
         ArgumentCaptor<PermitSurrenderApplicationGrantedRequestActionPayload> requestActionPayloadCaptor = ArgumentCaptor.forClass(PermitSurrenderApplicationGrantedRequestActionPayload.class);
         verify(requestService, times(1)).addActionToRequest(Mockito.eq(request), requestActionPayloadCaptor.capture(), Mockito.eq(RequestActionType.PERMIT_SURRENDER_APPLICATION_GRANTED), Mockito.eq(requestPayload.getRegulatorReviewer()));
@@ -127,18 +124,15 @@ class PermitSurrenderReviewGrantedServiceTest {
     	
     	Date result = service.resolveNoticeReminderDate(requestId);
     	
-    	assertThat(result).isEqualTo(DateUtils.convertLocalDateToDate(noticeDate.minus(28, DAYS)));
+    	assertThat(result).isEqualTo(DateUtils.atEndOfDay(noticeDate.minus(28, DAYS)));
     	verify(requestService).findRequestById(requestId);
     }
 
     @Test
-    void getAerVariables() {
+    void constructAerVariables() {
         final String requestId = "1";
         LocalDate reportLocalDate = LocalDate.now();
-        Date reportDate = Date.from(reportLocalDate
-                .atTime(LocalTime.MIN)
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
+        Date reportDate = DateUtils.atEndOfDay(reportLocalDate);
 
         PermitSurrenderRequestPayload requestPayload = PermitSurrenderRequestPayload.builder()
                 .payloadType(RequestPayloadType.PERMIT_SURRENDER_REQUEST_PAYLOAD)
@@ -156,7 +150,7 @@ class PermitSurrenderReviewGrantedServiceTest {
         when(requestService.findRequestById(requestId)).thenReturn(request);
 
         // Invoke
-        Map<String, Object> result = service.getAerVariables(requestId);
+        Map<String, Object> result = service.constructAerVariables(requestId);
 
         // Verify
         assertThat(result).isEqualTo(Map.of(

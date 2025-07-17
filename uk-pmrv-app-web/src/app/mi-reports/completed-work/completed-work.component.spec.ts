@@ -96,6 +96,13 @@ describe('CompletedWorkComponent', () => {
     fixture.detectChanges();
 
     expect(page.yearOptionErrorMessage).toBeTruthy();
+    expect(page.yearOptionErrorMessage.textContent.trim()).toContain('Enter a numerical value');
+
+    page.yearOptionValue = '20123';
+    page.submitButton.click();
+    fixture.detectChanges();
+
+    expect(page.yearOptionErrorMessage).toBeTruthy();
     expect(page.yearOptionErrorMessage.textContent.trim()).toContain('Enter a valid year value e.g. 2022');
 
     page.yearOptionValue = '2022';

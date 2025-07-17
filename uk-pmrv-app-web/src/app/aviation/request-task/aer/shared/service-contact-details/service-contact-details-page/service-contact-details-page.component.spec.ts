@@ -6,7 +6,7 @@ import { of } from 'rxjs';
 
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { SharedModule } from '@shared/shared.module';
-import { ActivatedRouteStub, mockClass } from '@testing';
+import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
 
 import { TasksService } from 'pmrv-api';
 
@@ -19,10 +19,17 @@ export class FixNavigationTriggeredOutsideAngularZoneNgModule {
   constructor(_router: Router) {}
 }
 
+class Page extends BasePage<ServiceContactDetailsPageComponent> {
+  get body() {
+    return this.query<HTMLElement>('.govuk-body');
+  }
+}
+
 describe('ServiceContactDetailsPageComponent', () => {
   let component: ServiceContactDetailsPageComponent;
   let fixture: ComponentFixture<ServiceContactDetailsPageComponent>;
   let store: RequestTaskStore;
+  let page: Page;
 
   const route = new ActivatedRouteStub();
   const tasksService = mockClass(TasksService);
@@ -41,12 +48,19 @@ describe('ServiceContactDetailsPageComponent', () => {
     setupStore(store);
 
     fixture = TestBed.createComponent(ServiceContactDetailsPageComponent);
+    page = new Page(fixture);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('body should be correct', () => {
+    expect(page.body.textContent).toContain(
+      'You can change this information in the users and contacts section, but will not see the changes until you submit the application.',
+    );
   });
 
   it('should submit task status', () => {

@@ -1,3 +1,27 @@
+<ng-container *ngIf="overallAssessment">
+  <p class="govuk-body">
+    You have conducted a verification of the greenhouse gas data reported by this operator in its annual emissions
+    report.
+  </p>
+  <ng-container [ngSwitch]="overallAssessment.type">
+    <ng-container *ngSwitchCase="'VERIFIED_AS_SATISFACTORY'">
+      <p class="govuk-body">On the basis of your verification work these data are fairly stated.</p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'VERIFIED_AS_SATISFACTORY_WITH_COMMENTS'">
+      <p class="govuk-body">
+        On the basis of your verification work these data are fairly stated, with the exception of the following
+        reasons.
+      </p>
+    </ng-container>
+    <ng-container *ngSwitchCase="'NOT_VERIFIED'">
+      <p class="govuk-body">
+        On the basis of your verification work these data cannot be verified due to the following reasons.
+      </p>
+    </ng-container>
+  </ng-container>
+</ng-container>
+<h2 class="govuk-heading-m">Details</h2>
+
 <dl govuk-summary-list [hasBorders]="true">
   <div govukSummaryListRow *ngIf="overallAssessment">
     <dt govukSummaryListRowKey>Decision</dt>
@@ -18,10 +42,16 @@
       <a govukLink routerLink="../not-verified" [queryParams]="{ change: true }">Change</a>
     </dd>
   </div>
+  <div *ngIf="reasons" govukSummaryListRow>
+    <dt govukSummaryListRowKey>Reason</dt>
+    <dd class="pre-wrap" govukSummaryListRowValue>
+      <ng-container *ngFor="let reason of reasons; let isLast = last; let i = index">
+        <div>{{ i + 1 }}. {{ reason }} <br /></div>
+        <br *ngIf="!isLast" />
+      </ng-container>
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink routerLink="../reason-list" [queryParams]="{ change: true }">Change</a>
+    </dd>
+  </div>
 </dl>
-<app-overall-decision-list
-  *ngIf="reasons"
-  [isEditable]="isEditable"
-  [list]="reasons"
-  [queryParams]="{ change: true }"
-></app-overall-decision-list>

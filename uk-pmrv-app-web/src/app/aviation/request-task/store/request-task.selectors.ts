@@ -1,7 +1,7 @@
 import { map, OperatorFunction, pipe } from 'rxjs';
 
+import { compareAsc } from 'date-fns';
 import produce from 'immer';
-import moment from 'moment';
 
 import {
   ItemDTO,
@@ -66,7 +66,7 @@ const selectRelatedTasks: OperatorFunction<RequestTaskState, ItemDTO[]> = pipe(
 const selectTimeline: OperatorFunction<RequestTaskState, RequestActionInfoDTO[]> = pipe(
   map((state) =>
     produce(state.timeline, (timeline) =>
-      timeline.sort((a, b) => (moment(a.creationDate).isBefore(moment(b.creationDate)) ? 1 : -1)),
+      timeline.sort((a, b) => compareAsc(new Date(b.creationDate), new Date(a.creationDate))),
     ),
   ),
 );

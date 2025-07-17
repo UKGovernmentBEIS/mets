@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -10,6 +10,8 @@
  * Do not edit the class manually.
  */
 import { AviationAerCorsia } from './aviationAerCorsia';
+import { AviationAerCorsiaSubmittedEmissions } from './aviationAerCorsiaSubmittedEmissions';
+import { AviationAerCorsiaVerificationReport } from './aviationAerCorsiaVerificationReport';
 import { AviationAerMonitoringPlanVersion } from './aviationAerMonitoringPlanVersion';
 import { AviationAerReportingObligationDetails } from './aviationAerReportingObligationDetails';
 import { RequestActionPayload } from './requestActionPayload';
@@ -22,5 +24,9 @@ export interface AviationAerCorsiaApplicationSubmittedRequestActionPayload exten
   reportingYear?: number;
   serviceContactDetails?: ServiceContactDetails;
   aerMonitoringPlanVersions?: Array<AviationAerMonitoringPlanVersion>;
+  verificationPerformed?: boolean;
+  submittedEmissions?: AviationAerCorsiaSubmittedEmissions;
+  verificationReport?: AviationAerCorsiaVerificationReport;
   aerAttachments?: { [key: string]: string };
+  verificationAttachments?: { [key: string]: string };
 }

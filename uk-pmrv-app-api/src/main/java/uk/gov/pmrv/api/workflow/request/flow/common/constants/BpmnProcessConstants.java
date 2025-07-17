@@ -36,6 +36,7 @@ public class BpmnProcessConstants {
     public static final String APPLICATION_REVIEW_EXPIRATION_DATE = RequestExpirationType.APPLICATION_REVIEW.getCode() + _EXPIRATION_DATE;
     public static final String REVIEW_DETERMINATION = "reviewDetermination";
     public static final String REVIEW_OUTCOME = "reviewOutcome";
+    public static final String REVIEW_DECISION_TYPE_OUTCOME = "reviewDecisionTypeOutcome";
 
     // rfi
     public static final String RFI_REQUESTED = "rfiRequested";
@@ -97,16 +98,21 @@ public class BpmnProcessConstants {
     public static final String DOAL_DETERMINATION = "doalDetermination";
     public static final String DOAL_SEND_NOTICE = "doalSendNotice";
     public static final String DOAL_AUTHORITY_RESPONSE = "doalAuthorityResponse";
-    
+
     // AER
     public static final String AER_REQUIRED = "aerRequired";
     public static final String AER_OUTCOME = "aerOutcome";
     public static final String AER_REVIEW_OUTCOME = "aerReviewOutcome";
     public static final String AER_EXPIRATION_DATE = RequestExpirationType.AER.getCode() + _EXPIRATION_DATE;
-    
+    public static final String AER_MARK_NOT_REQUIRED = "aerMarkNotRequired";
+
     // DRE
     public static final String DRE_SUBMIT_OUTCOME = "dreSubmitOutcome";
     public static final String DRE_IS_PAYMENT_REQUIRED = "paymentRequired";
+
+    //AVIATION DOE CORSIA
+    public static final String AVIATION_DOE_CORSIA_SUBMIT_OUTCOME = "aviationDoECorsiaSubmitOutcome";
+    public static final String AVIATION_DOE_CORSIA_IS_PAYMENT_REQUIRED = "paymentRequired";
 
     // VIR
     public static final String VIR_NEEDS_IMPROVEMENTS = "virNeedsImprovements";
@@ -133,6 +139,26 @@ public class BpmnProcessConstants {
     //return of allowances
     public static final String RETURN_OF_ALLOWANCES_SUBMIT_OUTCOME = "returnOfAllowancesSubmitOutcome";
 
+    //installation inspection
+    public static final String INSTALLATION_AUDIT_SUBMIT_OUTCOME = "installationAuditSubmitOutcome";
+    public static final String INSTALLATION_ONSITE_INSPECTION_SUBMIT_OUTCOME = "installationOnsiteInspectionSubmitOutcome";
+    public static final String INSTALLATION_AUDIT_EXPIRATION_DATE = RequestExpirationType.INSTALLATION_AUDIT.getCode() + _EXPIRATION_DATE;
+    public static final String INSTALLATION_ONSITE_INSPECTION_EXPIRATION_DATE = RequestExpirationType.INSTALLATION_ONSITE_INSPECTION.getCode() + _EXPIRATION_DATE;
+    public static final String INSTALLATION_INSPECTION_ARE_FOLLOWUP_ACTIONS_REQUIRED = "installationInspectionAreFollowupActionsRequired";
+
+    //BDR
+    public static final String BDR_INITIATION_TYPE = "bdrInitiationType";
+    public static final String BDR_EXPIRATION_DATE = RequestExpirationType.BDR.getCode() + _EXPIRATION_DATE;
+    public static final String BDR_OUTCOME = "bdrOutcome";
+    public static final String BDR_REGULATOR_REVIEW_OUTCOME = "bdrRegulatorReviewOutcome";
+
+    //Permanent Cessation
+    public static final String PERMANENT_CESSATION_SUBMIT_OUTCOME = "permanentCessationSubmitOutcome";
+
+    //ALR
+    public static final String ALR_EXPIRATION_DATE = RequestExpirationType.ALR.getCode() + _EXPIRATION_DATE;
+    public static final String ALR_OUTCOME = "alrOutcome";
+
     // messaging
     public static final String PROCESS_TO_MESSAGE_BUSINESS_KEY = "processToMessageBusinessKey";
     public static final String VARIABLES = "variables";
@@ -141,7 +167,9 @@ public class BpmnProcessConstants {
     public static final String AVIATION_AER_EXPIRATION_DATE = RequestExpirationType.AVIATION_AER.getCode() + _EXPIRATION_DATE;
     public static final String AVIATION_AER_OUTCOME = "aviationAerOutcome";
     public static final String AVIATION_AER_REVIEW_OUTCOME = "aviationAerReviewOutcome";
-    
+    public static final String AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_OUTCOME = "aviationAerCorsiaAnnualOffsettingSubmitOutcome";
+    public static final String AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_OUTCOME = "aviationAerCorsia3YearPeriodOffsettingSubmitOutcome";
+
     //aviation vir
     public static final String AVIATION_VIR_EXPIRATION_DATE = RequestExpirationType.AVIATION_VIR.getCode() + _EXPIRATION_DATE;
     

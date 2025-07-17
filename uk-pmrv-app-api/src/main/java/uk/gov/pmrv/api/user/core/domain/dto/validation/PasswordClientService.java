@@ -5,15 +5,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.common.domain.provider.PMRVRestApi;
+import org.springframework.web.util.UriComponentsBuilder;
+import uk.gov.netz.api.restclient.RestClientApi;
 import uk.gov.pmrv.api.user.core.domain.enumeration.RestEndPointEnum;
 
 import java.util.Collections;
-import java.util.List;
 
 /**
- *  The client for https://haveibeenpwned.com/API/v3#PwnedPasswords
+ *  The client for <a href="https://haveibeenpwned.com/API/v3#PwnedPasswords">...</a>
  */
 @Service
 public class PasswordClientService {
@@ -21,20 +20,20 @@ public class PasswordClientService {
     /** The {@link RestTemplate} */
     private final RestTemplate restTemplate;
 
-    /** The {@link AppProperties} */
-    private final AppProperties appProperties;
+    /** The {@link PwnedPasswordProperties} */
+    private final PwnedPasswordProperties pwnedPasswordProperties;
 
     /**
      * The PasswordClient constructor
      *
      * @param restTemplate {@link RestTemplate}
-     * @param appProperties {@link AppProperties}
+     * @param pwnedPasswordProperties {@link PwnedPasswordProperties}
      */
     public PasswordClientService(
             RestTemplate restTemplate,
-            AppProperties appProperties) {
+            PwnedPasswordProperties pwnedPasswordProperties) {
         this.restTemplate = restTemplate;
-        this.appProperties = appProperties;
+        this.pwnedPasswordProperties = pwnedPasswordProperties;
     }
 
     /**
@@ -49,15 +48,17 @@ public class PasswordClientService {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(Collections.singletonList(MediaType.parseMediaType("text/plain")));
 
-        PMRVRestApi pmrvRestApi = PMRVRestApi.builder()
-                .baseUrl(appProperties.getClient().getPasswordUrl())
+        RestClientApi appRestApi = RestClientApi.builder()
+                .uri(UriComponentsBuilder
+                        .fromUriString(pwnedPasswordProperties.getServiceUrl())
+                        .path(RestEndPointEnum.PWNED_PASSWORDS.getPath())
+                        .build(passwordHash))
                 .restEndPoint(RestEndPointEnum.PWNED_PASSWORDS)
                 .headers(httpHeaders)
-                .requestParams(List.of(passwordHash))
                 .restTemplate(restTemplate)
                 .build();
 
-        ResponseEntity<String> res = pmrvRestApi.performApiCall();
+        ResponseEntity<String> res = appRestApi.performApiCall();
 
         return res.getBody();
     }

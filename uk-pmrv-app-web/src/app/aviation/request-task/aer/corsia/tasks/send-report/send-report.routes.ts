@@ -11,11 +11,13 @@ export const AER_CORSIA_SEND_REPORT_ROUTES: Routes = [
     children: [
       {
         path: 'verifier',
+        data: { pageTitle: 'Send report for verification' },
         canActivate: [canActivateSendReportVerifier],
         loadComponent: () => import('./send-report-verifier').then((c) => c.SendReportVerifierComponent),
       },
       {
         path: 'regulator',
+        data: { pageTitle: 'Send report to regulator' },
         canActivate: [canActivateSendReportRegulator],
         loadComponent: () => import('./send-report-regulator').then((c) => c.SendReportRegulatorComponent),
       },

@@ -16,7 +16,12 @@ describe('AircraftTypeFuelTypesPipe', () => {
   });
 
   it('should properly transform fuel types', () => {
-    expect(pipe.transform(aircraftType)).toEqual(['Jet kerosene', 'Jet gasoline', 'Aviation gasoline', 'Other']);
+    expect(pipe.transform(aircraftType)).toEqual([
+      'Jet kerosene (Jet A1 or Jet A)',
+      'Jet gasoline (Jet B)',
+      'Aviation gasoline (AV gas)',
+      'Other fuel (not including sustainable aviation fuel)',
+    ]);
 
     aircraftType.fuelTypes = [];
     expect(pipe.transform(aircraftType)).toEqual([]);

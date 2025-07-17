@@ -16,11 +16,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
@@ -77,7 +77,7 @@ class OfficialNoticeGeneratorServiceTest {
         when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(documentTemplateType, templateParams, filename))
+        when(documentFileGeneratorService.generateAndSaveFileDocument(documentTemplateType, templateParams, filename))
             .thenReturn(officialNotice);
 
         FileInfoDTO generatedOfficialNotice =
@@ -88,7 +88,7 @@ class OfficialNoticeGeneratorServiceTest {
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
         verify(documentFileGeneratorService, times(1))
-            .generateFileDocument(documentTemplateType, templateParams, filename);
+            .generateAndSaveFileDocument(documentTemplateType, templateParams, filename);
 
         assertEquals(officialNotice, generatedOfficialNotice);
     }

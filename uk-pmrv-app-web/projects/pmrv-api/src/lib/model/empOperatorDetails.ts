@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -12,8 +12,10 @@
 import { ActivitiesDescription } from './activitiesDescription';
 import { AirOperatingCertificate } from './airOperatingCertificate';
 import { FlightIdentification } from './flightIdentification';
+import { IndividualOrganisation } from './individualOrganisation';
+import { LimitedCompanyOrganisation } from './limitedCompanyOrganisation';
 import { OperatingLicense } from './operatingLicense';
-import { OrganisationStructure } from './organisationStructure';
+import { PartnershipOrganisation } from './partnershipOrganisation';
 
 export interface EmpOperatorDetails {
   operatorName: string;
@@ -21,6 +23,6 @@ export interface EmpOperatorDetails {
   flightIdentification: FlightIdentification;
   airOperatingCertificate: AirOperatingCertificate;
   operatingLicense: OperatingLicense;
-  organisationStructure: OrganisationStructure;
+  organisationStructure: IndividualOrganisation | LimitedCompanyOrganisation | PartnershipOrganisation;
   activitiesDescription: ActivitiesDescription;
 }

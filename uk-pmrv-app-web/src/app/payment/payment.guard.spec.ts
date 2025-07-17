@@ -12,6 +12,7 @@ import { IncorporateHeaderStore } from '../shared/incorporate-header/store/incor
 import { PaymentGuard } from './payment.guard';
 import { initialState } from './store/payment.state';
 import { PaymentStore } from './store/payment.store';
+
 describe('PaymentGuard', () => {
   let guard: PaymentGuard;
   let store: PaymentStore;

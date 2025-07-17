@@ -2,11 +2,11 @@ package uk.gov.pmrv.api.account.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactRegistrationDTO;
 import uk.gov.pmrv.api.account.repository.CaExternalContactRepository;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +21,7 @@ public class CaExternalContactValidator {
         if (caExternalContactRepository.existsByCompetentAuthorityAndName(ca, caExternalContactRegistration.getName()))
             caNameAlreadyExists = true;
 
-        if (caExternalContactRepository.existsByCompetentAuthorityAndEmail(ca, caExternalContactRegistration.getEmail()))
+        if (caExternalContactRepository.existsByCompetentAuthorityAndEmailIgnoreCase(ca, caExternalContactRegistration.getEmail()))
             caEmailAlreadyExists = true;
 
         validateEmailAndName(caNameAlreadyExists, caEmailAlreadyExists);
@@ -34,7 +34,7 @@ public class CaExternalContactValidator {
         if (caExternalContactRepository.existsByCompetentAuthorityAndNameAndIdNot(ca, caExternalContactRegistration.getName(), id))
             caNameAlreadyExists = true;
 
-        if (caExternalContactRepository.existsByCompetentAuthorityAndEmailAndIdNot(ca, caExternalContactRegistration.getEmail(), id))
+        if (caExternalContactRepository.existsByCompetentAuthorityAndEmailIgnoreCaseAndIdNot(ca, caExternalContactRegistration.getEmail(), id))
             caEmailAlreadyExists = true;
 
         validateEmailAndName(caNameAlreadyExists, caEmailAlreadyExists);

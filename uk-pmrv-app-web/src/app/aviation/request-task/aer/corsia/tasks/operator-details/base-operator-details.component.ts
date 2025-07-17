@@ -59,7 +59,7 @@ export abstract class BaseOperatorDetailsComponent implements OnInit {
       .pipe(
         map((issuingAuthorityNames: string[]) =>
           issuingAuthorityNames.map(
-            (authorityNames) => ({ text: authorityNames, value: authorityNames } as GovukSelectOption<string>),
+            (authorityNames) => ({ text: authorityNames, value: authorityNames }) as GovukSelectOption<string>,
           ),
         ),
       );

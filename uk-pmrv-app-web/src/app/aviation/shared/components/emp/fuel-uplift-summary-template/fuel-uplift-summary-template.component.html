@@ -1,6 +1,6 @@
 <ng-container *ngIf="data?.blockHoursPerFlight">
   <app-procedure-form-summary
-    header="Measurement of the block hours per flight"
+    [header]="'Measurement of fuel uplift and block hours per flight'"
     [isEditable]="isEditable"
     [procedureFormData]="data.blockHoursPerFlight"
     formRouterLink="../"

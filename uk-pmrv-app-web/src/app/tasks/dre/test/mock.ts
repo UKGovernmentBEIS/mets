@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { addDays, format } from 'date-fns';
 
 import { Dre, RequestTaskItemDTO, RequestTaskPayload } from 'pmrv-api';
 
@@ -22,7 +22,7 @@ export const dreCompleted: Dre = {
   informationSources: ['fgf'],
   fee: {
     feeDetails: {
-      dueDate: moment().add(1, 'day').format('YYYY-MM-DD'),
+      dueDate: format(addDays(new Date(), 1), 'yyyy-MM-dd'),
       hourlyRate: '3',
       totalBillableHours: '34',
     },

@@ -14,10 +14,10 @@ export function fallbackStatus(payload: AerApplicationSubmitRequestTaskPayload):
   return !aerSectionsCompleted['sourceStreams']?.[0]
     ? 'cannot start yet'
     : !sourceStreamsExist && sourceStreamEmissions?.length
-    ? 'needs review'
-    : !!sourceStreamEmissions?.length && aerSectionsCompleted?.['FALLBACK']?.[0]
-    ? 'complete'
-    : sourceStreamEmissions?.length
-    ? 'in progress'
-    : 'not started';
+      ? 'needs review'
+      : !!sourceStreamEmissions?.length && aerSectionsCompleted?.['FALLBACK']?.[0]
+        ? 'complete'
+        : sourceStreamEmissions?.length
+          ? 'in progress'
+          : 'not started';
 }

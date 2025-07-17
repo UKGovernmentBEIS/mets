@@ -3,17 +3,18 @@
     [listTitle]="listTitle"
     (fileDelete)="onFileDeleteClick()"
     [files]="uploadedFiles$ | async"
-    [isDisabled]="isDisabled"
-  ></app-file-upload-list>
+    [isDisabled]="isDisabled"></app-file-upload-list>
 
-  <label [for]="id" class="govuk-label" id="{{ 'l.' + id }}">{{ label }}</label>
+  <label [for]="id" class="govuk-label" id="{{ 'l.' + id }}" [ngClass]="headerSize ? 'govuk-label--' + headerSize : ''">
+    {{ label }}
+  </label>
   <span *ngIf="text" class="govuk-body">{{ text }}</span>
   <span *ngIf="showFilesizeHint" [id]="id + '-hint-file-size'" class="govuk-hint">
     Your document must be a DOC, DOCX, XLS, XLSX, PPT, PPTX, VSD, VSDX, JPG, JPEG, PDF, PNG, TIF, TXT, DIB, BMP or CSV
     file, no more than 20MB.
   </span>
   <span *ngIf="hint" [id]="id + '-hint'" class="govuk-hint">{{ hint }}</span>
-  <govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="id"> </govuk-error-message>
+  <govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="id"></govuk-error-message>
   <input
     #input
     (blur)="onFileBlur()"
@@ -24,6 +25,5 @@
     [id]="id"
     [name]="id"
     class="govuk-file-upload"
-    type="file"
-  />
+    type="file" />
 </div>

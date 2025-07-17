@@ -1,0 +1,57 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  [submitText]="'Continue'"
+  caption="Identity and contact details of the operator"
+  [heading]="'Add the organisation details'"
+>
+  <h3 class="govuk-heading-m">Operator details</h3>
+  <p class="govuk-body">
+    The operator is the organisation or individual responsible for operating the installation account.
+  </p>
+  <div
+    formControlName="type"
+    govuk-radio
+    hint="Select one option"
+    legend="Choose the operator type"
+    legendSize="medium"
+  >
+    <govuk-radio-option
+      *ngFor="let option of radioOptions | keyvalue: originalOrder"
+      [label]="option.value"
+      [value]="option.key"
+    ></govuk-radio-option>
+  </div>
+  <div
+    appAsyncValidationField
+    formControlName="name"
+    govuk-text-input
+    hint="The name of the organisation that will operate the installation"
+    label="Operator name"
+  ></div>
+
+  <fieldset govukFieldset>
+    <legend govukLegend>Organisation address</legend>
+    <p class="govuk-body">This should be the address registered with Companies House</p>
+    <app-address-input formGroupName="address"></app-address-input>
+  </fieldset>
+
+  <div
+    formControlName="belongsToHoldingCompany"
+    govuk-radio
+    legend="Does this organisation belong to a holding company?"
+    legendSize="medium"
+    class="govuk-heading-m"
+  >
+    <govuk-radio-option label="Yes" [value]="true">
+      <ng-container govukConditionalContent>
+        <fieldset govukFieldset>
+          <legend govukLegend>Enter the holding company details</legend>
+          <app-holding-company-form formGroupName="holdingCompanyGroup"></app-holding-company-form>
+        </fieldset>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option label="No" [value]="false"> </govuk-radio-option>
+  </div>
+</app-wizard-step>
+<a govukLink routerLink="../../"> Return to: Request to open an installation account </a>

@@ -1,26 +1,23 @@
 package uk.gov.pmrv.api.workflow.request.core.assignment.requestassign;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.dto.UserRoleTypeDTO;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserRoleTypeDTO;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.workflow.request.core.domain.Request;
-import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
 
 @ExtendWith(MockitoExtension.class)
 class RequestAssignmentServiceTest {
@@ -40,7 +37,7 @@ class RequestAssignmentServiceTest {
             .build();
         UserRoleTypeDTO candidateAssigneeRoleType = UserRoleTypeDTO.builder()
             .userId(candidateAssignee)
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .build();
 
         when(userRoleTypeService.getUserRoleTypeByUserId(candidateAssignee)).thenReturn(candidateAssigneeRoleType);
@@ -59,7 +56,7 @@ class RequestAssignmentServiceTest {
             .build();
         UserRoleTypeDTO candidateAssigneeRoleType = UserRoleTypeDTO.builder()
             .userId(operatorAssignee)
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .build();
 
         when(userRoleTypeService.getUserRoleTypeByUserId(operatorAssignee)).thenReturn(candidateAssigneeRoleType);
@@ -78,7 +75,7 @@ class RequestAssignmentServiceTest {
             .build();
         UserRoleTypeDTO candidateAssigneeRoleType = UserRoleTypeDTO.builder()
             .userId(candidateAssignee)
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
         when(userRoleTypeService.getUserRoleTypeByUserId(candidateAssignee)).thenReturn(candidateAssigneeRoleType);
@@ -97,7 +94,7 @@ class RequestAssignmentServiceTest {
             .build();
         UserRoleTypeDTO candidateAssigneeRoleType = UserRoleTypeDTO.builder()
             .userId(regulatorAssignee)
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
 
         when(userRoleTypeService.getUserRoleTypeByUserId(regulatorAssignee)).thenReturn(candidateAssigneeRoleType);
@@ -128,7 +125,7 @@ class RequestAssignmentServiceTest {
             .build();
         UserRoleTypeDTO candidateAssigneeRoleType = UserRoleTypeDTO.builder()
             .userId(verifierAssignee)
-            .roleType(RoleType.VERIFIER)
+            .roleType(RoleTypeConstants.VERIFIER)
             .build();
 
         when(userRoleTypeService.getUserRoleTypeByUserId(verifierAssignee)).thenReturn(candidateAssigneeRoleType);
@@ -147,7 +144,7 @@ class RequestAssignmentServiceTest {
                 .build();
         UserRoleTypeDTO candidateAssigneeRoleType = UserRoleTypeDTO.builder()
                 .userId(candidateAssignee)
-                .roleType(RoleType.VERIFIER)
+                .roleType(RoleTypeConstants.VERIFIER)
                 .build();
 
         when(userRoleTypeService.getUserRoleTypeByUserId(candidateAssignee)).thenReturn(candidateAssigneeRoleType);

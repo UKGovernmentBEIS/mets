@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, map, Observable, pluck, switchMap } from 'rxjs';
+import { first, map, Observable, switchMap } from 'rxjs';
+
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { PermitApplicationState } from '@permit-application/store/permit-application.state';
+import { PermitApplicationStore } from '@permit-application/store/permit-application.store';
 
 import { TransportCO2AndN2OPipelineSystems } from 'pmrv-api';
 
-import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
-import { PermitApplicationState } from '../../../../../permit-application/store/permit-application.state';
-import { PermitApplicationStore } from '../../../../../permit-application/store/permit-application.store';
 import { TaskKey } from '../../../../shared/types/permit-task.type';
 import { headingMap } from '../../heading';
 
@@ -18,7 +19,7 @@ import { headingMap } from '../../heading';
 })
 export class AnswersComponent {
   taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
-  taskKey$: Observable<TaskKey> = this.route.data.pipe(pluck('taskKey'));
+  taskKey$: Observable<TaskKey> = this.route.data.pipe(map((x) => x?.taskKey));
   transportCO2AndN2OPipelineSystems$ = this.taskKey$.pipe(
     switchMap((taskKey) => this.store.findTask<TransportCO2AndN2OPipelineSystems>(taskKey)),
   );

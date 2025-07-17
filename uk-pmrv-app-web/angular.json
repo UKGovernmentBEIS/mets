@@ -20,15 +20,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "customWebpackConfig": {
-              "path": "./webpack.custom.js"
-            },
             "outputPath": "dist/uk-pmrv-main-web",
             "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "browser": "src/main.ts",
+            "polyfills": ["src/polyfills.ts"],
             "tsConfig": "tsconfig.app.json",
             "sourceMap": {
               "styles": true,
@@ -88,9 +85,7 @@
               "outputHashing": "all"
             },
             "development": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true
@@ -102,10 +97,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "uk-pmrv-main-web:build:production"
+              "buildTarget": "uk-pmrv-main-web:build:production"
             },
             "development": {
-              "browserTarget": "uk-pmrv-main-web:build:development"
+              "buildTarget": "uk-pmrv-main-web:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -113,7 +108,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "uk-pmrv-main-web:build"
+            "buildTarget": "uk-pmrv-main-web:build"
           }
         },
         "test": {

@@ -6,8 +6,8 @@ export function resolveApplyStatus(state: PermitSurrenderState): TaskItemStatus 
   return state.sectionsCompleted?.SURRENDER_APPLY
     ? 'complete'
     : permitSurrender?.stopDate !== undefined
-    ? 'in progress'
-    : 'not started';
+      ? 'in progress'
+      : 'not started';
 }
 
 export function resolveSubmitStatus(state: PermitSurrenderState): TaskItemStatus {

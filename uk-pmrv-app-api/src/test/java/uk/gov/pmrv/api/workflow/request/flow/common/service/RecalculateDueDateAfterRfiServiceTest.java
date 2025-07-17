@@ -1,6 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.common.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -8,8 +8,8 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.service.DateService;
+import uk.gov.netz.api.common.utils.DateService;
 
 @ExtendWith(MockitoExtension.class)
 class RecalculateDueDateAfterRfiServiceTest {
@@ -30,43 +30,37 @@ class RecalculateDueDateAfterRfiServiceTest {
     private DateService dateService;
 
     @Test
-    void recalculateDueDate_whenDueDateIsAfterExpirationDateAndTaskApplicable_thenReturnNewDate() {
-        final Calendar calendarRfiStart = Calendar.getInstance();
-        calendarRfiStart.set(2020, Calendar.JANUARY, 1);
-        final Date rfiStart = calendarRfiStart.getTime();
+    void recalculateDueDate_days_passed_from_rfi_Start() {
+    	LocalDateTime rfiStartDateTime = LocalDate.of(2020, Month.JANUARY, 1).atTime(11, 45);
+        Date rfiStart = Date.from(rfiStartDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
-        final Calendar calendarExpiration = Calendar.getInstance();
-        calendarExpiration.set(2020, Calendar.FEBRUARY, 1);
-        final Date expiration = calendarExpiration.getTime();
+        LocalDateTime expirationDateTime = LocalDate.of(2020, Month.FEBRUARY, 1).atTime(LocalTime.MAX);
+        Date expiration = Date.from(expirationDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
-        final LocalDate expectedDueDate = LocalDate.of(2020, 2, 5);
+        when(dateService.getLocalDateTime()).thenReturn(LocalDateTime.of(2020, Month.JANUARY, 5, 12, 0));
+        
+        final LocalDateTime expectedDueDateTime = LocalDate.of(2020, Month.FEBRUARY, 1 + 4).atTime(LocalTime.MAX);
+        final LocalDateTime actualDueDateTime = service.recalculateDueDate(rfiStart, expiration);
 
-        when(dateService.getLocalDateTime()).thenReturn(LocalDateTime.of(2020, 1, 5, 12, 0));
-
-        final LocalDateTime dueDate = service.recalculateDueDate(rfiStart, expiration);
-
-        assertEquals(LocalDateTime.of(expectedDueDate, LocalTime.MIN), dueDate);
+        assertThat(actualDueDateTime).isEqualToIgnoringNanos(expectedDueDateTime);
 
         verify(dateService, times(1)).getLocalDateTime();
     }
 
     @Test
-    void recalculateDueDate_whenExpirationDateIsAfterDueDateAndTaskNotApplicable_thenReturnExpirationDate() {
-        final Calendar calendarRfiStart = Calendar.getInstance();
-        calendarRfiStart.set(2020, Calendar.JANUARY, 1);
-        final Date rfiStart = calendarRfiStart.getTime();
+    void recalculateDueDate_0_days_passed_from_rfi_Start() {
+    	LocalDateTime rfiStartDateTime = LocalDate.of(2020, Month.JANUARY, 1).atTime(11, 45);
+        Date rfiStart = Date.from(rfiStartDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
-        final Calendar calendarExpiration = Calendar.getInstance();
-        calendarExpiration.set(2020, Calendar.FEBRUARY, 1);
-        final Date expiration = calendarExpiration.getTime();
+        LocalDateTime expirationDateTime = LocalDate.of(2020, Month.FEBRUARY, 1).atTime(LocalTime.MAX);
+        Date expiration = Date.from(expirationDateTime.atZone(ZoneId.systemDefault()).toInstant());
 
-        final LocalDateTime expectedDueDate = LocalDateTime.ofInstant(expiration.toInstant(), ZoneId.systemDefault());
+        when(dateService.getLocalDateTime()).thenReturn(LocalDateTime.of(2020, Month.JANUARY, 1, 15, 45));
+        
+        final LocalDateTime expectedDueDateTime = LocalDate.of(2020, Month.FEBRUARY, 1 + 0).atTime(LocalTime.MAX);
+        final LocalDateTime actualDueDateTime = service.recalculateDueDate(rfiStart, expiration);
 
-        when(dateService.getLocalDateTime()).thenReturn(LocalDateTime.of(2020, 1, 1, 12, 0));
-
-        final LocalDateTime dueDate = service.recalculateDueDate(rfiStart, expiration);
-
-        assertEquals(expectedDueDate, dueDate);
+        assertThat(actualDueDateTime).isEqualToIgnoringNanos(expectedDueDateTime);
 
         verify(dateService, times(1)).getLocalDateTime();
     }

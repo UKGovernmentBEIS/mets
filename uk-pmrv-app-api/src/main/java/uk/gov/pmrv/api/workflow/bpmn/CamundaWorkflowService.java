@@ -68,6 +68,14 @@ public class CamundaWorkflowService implements WorkflowService {
     }
 
     @Override
+    public boolean hasMessageEventSubscriptionWithName(final String requestId, final String messageName) {
+        return runtimeService
+            .createExecutionQuery()
+            .processInstanceBusinessKey(this.constructBusinessKey(requestId))
+            .messageEventSubscriptionName(messageName).count() > 0;
+    }
+
+    @Override
     public void deleteProcessInstance(String processInstanceId, String deleteReason) {
         runtimeService.deleteProcessInstance(processInstanceId, deleteReason);
     }

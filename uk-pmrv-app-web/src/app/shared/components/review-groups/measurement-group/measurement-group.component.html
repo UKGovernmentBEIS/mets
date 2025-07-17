@@ -3,7 +3,11 @@
     <ng-container [ngSwitch]="column.field">
       <ng-container *ngSwitchCase="'emissionPointDescription'">
         <ng-container *ngIf="row?.emissionPointDescription !== 'totals'; else totals">
-          <a [routerLink]="['./', index, 'summary']" govukLink>
+          <a
+            [routerLink]="['./', index, 'summary']"
+            govukLink
+            attr.data-print-text="{{ row?.emissionPointDescription }}"
+          >
             <ng-container *ngIf="row?.emissionPointDescription; else noEmissionPoint">
               {{ row.emissionPointDescription }}
               <ng-container *ngIf="row?.parameterMonitoringTierDiffReason?.type === 'DATA_GAP'">

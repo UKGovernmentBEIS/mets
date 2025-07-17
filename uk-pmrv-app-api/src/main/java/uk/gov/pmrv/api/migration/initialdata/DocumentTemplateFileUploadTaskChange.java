@@ -8,10 +8,10 @@ import liquibase.exception.ValidationErrors;
 import liquibase.resource.ResourceAccessor;
 import lombok.Getter;
 import lombok.Setter;
-import uk.gov.pmrv.api.common.domain.dto.ResourceFile;
+import uk.gov.netz.api.common.domain.ResourceFile;
+import uk.gov.netz.api.files.common.utils.ResourceFileUtils;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.utils.ResourceFileUtil;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public abstract class DocumentTemplateFileUploadTaskChange implements CustomTask
         throws CustomChangeException {
         String resourcePath = "templates" + File.separator + "ca" + File.separator + competentAuthority.name().toLowerCase() + File.separator + accountType.name().toLowerCase() + File.separator + fileDocumentName;
         try {
-            return ResourceFileUtil.getResourceFile(resourcePath);
+            return ResourceFileUtils.getResourceFile(resourcePath);
         } catch (IOException e) {
             throw new CustomChangeException(e.getMessage());
         }

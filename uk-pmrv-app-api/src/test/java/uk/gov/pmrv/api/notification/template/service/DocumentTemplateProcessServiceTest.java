@@ -1,22 +1,29 @@
 package uk.gov.pmrv.api.notification.template.service;
 
 import fr.opensagres.xdocreport.template.freemarker.FreemarkerTemplateEngine;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.utils.MimeTypeUtils;
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
+import uk.gov.pmrv.api.common.config.CustomFreeMarkerConfiguration;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.utils.MimeTypeUtils;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityDTO;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.competentauthority.PmrvCompetentAuthorityService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmpProcedureForm;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviationDefinition;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
@@ -40,6 +47,7 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.Org
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.datagaps.EmpDataGapsCorsia;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.CertEmissionsType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachTypeCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsources.AircraftTypeDetailsCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsources.EmpEmissionSourcesCorsia;
@@ -60,8 +68,6 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringP
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.datagaps.EmpDataGaps;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringapproach.FuelMonitoringApproach;
-import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringapproach.SimplifiedMonitoringApproach;
-import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringapproach.SupportFacilityMonitoringApproach;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsources.AircraftTypeDetails;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsources.EmpEmissionSources;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsreductionclaim.EmpEmissionsReductionClaim;
@@ -75,7 +81,6 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.Acti
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.AirOperatingCertificate;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.EmpOperatorDetails;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.OperatingLicense;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
 import uk.gov.pmrv.api.notification.template.TemplatesConfiguration;
 import uk.gov.pmrv.api.notification.template.aviation.domain.AviationAccountTemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.CompetentAuthorityTemplateParams;
@@ -102,6 +107,7 @@ import uk.gov.pmrv.api.permit.domain.envpermitandlicences.EnvPermitOrLicence;
 import uk.gov.pmrv.api.permit.domain.envpermitandlicences.EnvironmentalPermitsAndLicences;
 import uk.gov.pmrv.api.permit.domain.estimatedannualemissions.EstimatedAnnualEmissions;
 import uk.gov.pmrv.api.permit.domain.installationdesc.InstallationDescription;
+import uk.gov.pmrv.api.permit.domain.managementprocedures.AssessAndControlRisk;
 import uk.gov.pmrv.api.permit.domain.managementprocedures.DataFlowActivities;
 import uk.gov.pmrv.api.permit.domain.managementprocedures.ManagementProcedures;
 import uk.gov.pmrv.api.permit.domain.managementprocedures.ManagementProceduresDefinition;
@@ -187,6 +193,7 @@ import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamType;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreams;
 import uk.gov.pmrv.api.reporting.domain.verification.ReportableAndBiomassEmission;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.common.domain.TemplateSubsidiaryCompany;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.AerInitiatorRequest;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.service.notification.DocumentTemplatePermitParamsProvider;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreFeeDetails;
@@ -201,9 +208,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowances.domain.WithholdingOfAllowancesReasonType;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -213,9 +220,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -224,24 +234,35 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class DocumentTemplateProcessServiceTest {
+	
     private static FreemarkerTemplateEngine freemarkerTemplateEngine;
 
+    @Mock
+    private DocumentGeneratorRemoteClientService documentGeneratorClientService;
+    
     @BeforeAll
     public static void init() {
+        CustomFreeMarkerConfiguration customFreeMarkerConfiguration = new CustomFreeMarkerConfiguration();
+        freemarker.template.Configuration freemarkerConfig = customFreeMarkerConfiguration.freemarkerConfig();
+
         TemplatesConfiguration templatesConfiguration = new TemplatesConfiguration();
-        freemarker.template.Configuration freemarkerConfig = templatesConfiguration.freemarkerConfig();
         freemarkerTemplateEngine = templatesConfiguration.freemarkerTemplateEngine(freemarkerConfig);
     }
 
     @Test
-    void generateFileDocumentFromTemplate_rfi_template() throws IOException, DocumentTemplateProcessException {
+    void generateFileDocumentFromTemplate_rfi_template() throws Exception {
         CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
+        String fileNameToGenerate = "fileNameToGenerate";
         String signatoryUser = "Signatory user full name";
-        Path rfiTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "installation", "L025_P3_Request_for_further_information_notice_20130402.docx");
-        FileDTO rfiTemplateEnglandFile = createFile(rfiTemplateFilePath);
+        Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "installation", "L025_P3_Request_for_further_information_notice_20130402.docx");
+        FileDTO templateFile = createFile(templateFilePath);
 
         Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         FileDTO signatureFile = createFile(signatureFilePath);
@@ -252,27 +273,35 @@ class DocumentTemplateProcessServiceTest {
         params.put("questions", List.of("question1", "question2"));
 
         TemplateParams templateParams = buildTemplateParams(ca, signatoryUser, signatureFile, params);
+        
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-        byte[] generatedPdfFile = new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(rfiTemplateEnglandFile, templateParams, "fileNameToGenerate");
-
-        //assertions
-        try (PDDocument pdfDoc = PDDocument.load(generatedPdfFile)) {
-            PDFTextStripper pdfStripper = new PDFTextStripper();
-            pdfStripper.setSortByPosition(true);
-            pdfStripper.setStartPage(0);
-            pdfStripper.setLineSeparator(" ");
-            pdfStripper.setEndPage(pdfDoc.getNumberOfPages());
-            String pdfText = pdfStripper.getText(pdfDoc);
-
-            assertThat(pdfText).contains(templateParams.getPermitId());
-            assertThat(pdfText).contains(templateParams.getCompetentAuthorityParams().getName());
-            assertThat(pdfText).contains(templateParams.getSignatoryParams().getFullName());
-            assertThat(pdfText).contains(((InstallationAccountTemplateParams) templateParams.getAccountParams()).getLegalEntityName());
-            assertThat(pdfText).contains(((InstallationAccountTemplateParams) templateParams.getAccountParams()).getLegalEntityLocation().split("\\n")[0]);
-            assertThat(pdfText).contains("question1");
-            assertThat(pdfText).contains("question2");
-            assertThat(pdfText).contains(new SimpleDateFormat("dd MMMM yyyy").format(deadlineDate));
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
+        
+        ArgumentCaptor<byte[]> postProcessedDocumentCaptor = ArgumentCaptor.forClass(byte[].class);
+        
+        verify(documentGeneratorClientService, times(1)).generateDocument(postProcessedDocumentCaptor.capture(), eq(fileNameToGenerate));
+        
+        byte[] postProcessedDocument = postProcessedDocumentCaptor.getValue();
+        
+        try (InputStream bais = new ByteArrayInputStream(postProcessedDocument);
+                XWPFDocument document = new XWPFDocument(bais);
+        		XWPFWordExtractor xwpfWordExtractor = new XWPFWordExtractor(document)) {
+            final String docText = xwpfWordExtractor.getText();
+			assertThat(docText).contains(templateParams.getPermitId());
+			assertThat(docText).contains(templateParams.getCompetentAuthorityParams().getName());
+			assertThat(docText).contains(templateParams.getSignatoryParams().getFullName());
+			assertThat(docText).contains(
+					((InstallationAccountTemplateParams) templateParams.getAccountParams()).getLegalEntityName());
+			assertThat(docText).contains(((InstallationAccountTemplateParams) templateParams.getAccountParams())
+					.getLegalEntityLocation().split("\\n")[0]);
+			assertThat(docText).contains("question1");
+			assertThat(docText).contains("question2");
+			assertThat(docText).contains(new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH).format(deadlineDate));
         }
     }
 
@@ -280,8 +309,8 @@ class DocumentTemplateProcessServiceTest {
     void generateFileDocumentFromTemplate_rfi_template_when_processing_fails_should_throw_DocumentTemplateProcessException() throws IOException {
         CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         String signatoryUser = "Signatory user full name";
-        Path rfiTemplateForCAEnglandFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "installation", "L025_P3_Request_for_further_information_notice_20130402.docx");
-        FileDTO rfiTemplateForCAEnglandFile = createFile(rfiTemplateForCAEnglandFilePath);
+        Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "installation", "L025_P3_Request_for_further_information_notice_20130402.docx");
+        FileDTO templateFile = createFile(templateFilePath);
 
         Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         FileDTO signatureFile = createFile(signatureFilePath);
@@ -291,8 +320,8 @@ class DocumentTemplateProcessServiceTest {
         TemplateParams templateParams = buildTemplateParams(ca, signatoryUser, signatureFile, params);
 
         try {
-            new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                    .generateFileDocumentFromTemplate(rfiTemplateForCAEnglandFile, templateParams, "fileNameToGenerate");
+            new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                    .generateFileDocumentFromTemplate(templateFile, templateParams, "fileNameToGenerate");
         } catch (DocumentTemplateProcessException e) {
             return;
         }
@@ -301,7 +330,8 @@ class DocumentTemplateProcessServiceTest {
     }
 
     @Test
-    void generateFileDocumentFromTemplate_rde_opred_template() throws IOException, DocumentTemplateProcessException {
+    void generateFileDocumentFromTemplate_rde_opred_template() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         CompetentAuthorityEnum ca = CompetentAuthorityEnum.OPRED;
         String signatoryUser = "Signatory user full name";
         Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "opred", "installation", "L026 P3 Request for time extension notice.docx");
@@ -319,31 +349,39 @@ class DocumentTemplateProcessServiceTest {
         params.put("ccRecipients", List.of("cc1@email", "cc2@email"));
 
         TemplateParams templateParams = buildTemplateParams(ca, signatoryUser, signatureFile, params);
+        
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-        byte[] generatedPdfFile = new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(templateFile, templateParams, "fileNameToGenerate");
-
-        //assertions
-        try (PDDocument pdfDoc = PDDocument.load(generatedPdfFile)) {
-            PDFTextStripper pdfStripper = new PDFTextStripper();
-            pdfStripper.setSortByPosition(true);
-            pdfStripper.setStartPage(0);
-            pdfStripper.setLineSeparator(" ");
-            pdfStripper.setEndPage(pdfDoc.getNumberOfPages());
-            String pdfText = pdfStripper.getText(pdfDoc);
-
-            assertThat(pdfText).contains(templateParams.getPermitId());
-            assertThat(pdfText).contains("ca central info");
-            assertThat(pdfText).contains(templateParams.getCompetentAuthorityParams().getName());
-            assertThat(pdfText).contains(templateParams.getSignatoryParams().getFullName());
-            assertThat(pdfText).contains(((InstallationAccountTemplateParams) templateParams.getAccountParams()).getLegalEntityName());
-            assertThat(pdfText).contains(((InstallationAccountTemplateParams) templateParams.getAccountParams()).getLegalEntityLocation().split("\\n")[0]);
-            assertThat(pdfText).contains(new SimpleDateFormat("dd MMMM yyyy").format(extensionDate));
-        }
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
+        
+        ArgumentCaptor<byte[]> postProcessedDocumentCaptor = ArgumentCaptor.forClass(byte[].class);
+        
+        verify(documentGeneratorClientService, times(1)).generateDocument(postProcessedDocumentCaptor.capture(), eq(fileNameToGenerate));
+        
+        byte[] postProcessedDocument = postProcessedDocumentCaptor.getValue();
+        
+        try (InputStream bais = new ByteArrayInputStream(postProcessedDocument);
+                XWPFDocument document = new XWPFDocument(bais);
+        		XWPFWordExtractor xwpfWordExtractor = new XWPFWordExtractor(document)) {
+            final String docText = xwpfWordExtractor.getText();
+			assertThat(docText).contains(templateParams.getPermitId());
+			assertThat(docText).contains(templateParams.getPermitId());
+	        assertThat(docText).contains("ca central info");
+	        assertThat(docText).contains(templateParams.getCompetentAuthorityParams().getName());
+	        assertThat(docText).contains(templateParams.getSignatoryParams().getFullName());
+	        assertThat(docText).contains(((InstallationAccountTemplateParams) templateParams.getAccountParams()).getLegalEntityName());
+	        assertThat(docText).contains(((InstallationAccountTemplateParams) templateParams.getAccountParams()).getLegalEntityLocation().split("\\n")[0]);
+	        assertThat(docText).contains(new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH).format(extensionDate));
+        };
     }
 
     @Test
-    void generate_dre() throws IOException, DocumentTemplateProcessException {
+    void generate_dre() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         CompetentAuthorityEnum ca = CompetentAuthorityEnum.NORTHERN_IRELAND;
         String signatoryUser = "Signatory user full name";
         Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "northern_ireland", "installation", "L019 Determination Notice.docx");
@@ -401,30 +439,36 @@ class DocumentTemplateProcessServiceTest {
 
         params.put("reportableEmissions", monApproaches);
         TemplateParams templateParams = buildTemplateParams(ca, signatoryUser, signatureFile, params);
+        
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-        byte[] generatedPdfFile = new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(templateFile, templateParams, "fileNameToGenerate");
-
-        //assertions
-        try (PDDocument pdfDoc = PDDocument.load(generatedPdfFile)) {
-            PDFTextStripper pdfStripper = new PDFTextStripper();
-            pdfStripper.setSortByPosition(true);
-            pdfStripper.setStartPage(0);
-            pdfStripper.setLineSeparator(" ");
-            pdfStripper.setEndPage(pdfDoc.getNumberOfPages());
-            String pdfText = pdfStripper.getText(pdfDoc);
-
-            assertThat(pdfText).contains("400");
-        }
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
+        
+        ArgumentCaptor<byte[]> postProcessedDocumentCaptor = ArgumentCaptor.forClass(byte[].class);
+        
+        verify(documentGeneratorClientService, times(1)).generateDocument(postProcessedDocumentCaptor.capture(), eq(fileNameToGenerate));
+        
+        byte[] postProcessedDocument = postProcessedDocumentCaptor.getValue();
+        
+        try (InputStream bais = new ByteArrayInputStream(postProcessedDocument);
+                XWPFDocument document = new XWPFDocument(bais);
+        		XWPFWordExtractor xwpfWordExtractor = new XWPFWordExtractor(document)) {
+            final String docText = xwpfWordExtractor.getText();
+            assertThat(docText).contains("400");
+        };
     }
 
     @Test
-    void generate_permit() throws IOException {
-
+    void generate_permit() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.NORTHERN_IRELAND;
         final String signatoryUser = "Signatory user full name";
-        final Path rfiTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "northern_ireland", "installation", "INPermitApplication_Permit_UK ETS Final v5.docx");
-        final FileDTO rfiTemplateEnglandFile = createFile(rfiTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "northern_ireland", "installation", "INPermitApplication_Permit_UK ETS Final v5.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -490,12 +534,19 @@ class DocumentTemplateProcessServiceTest {
 
         final UUID procedurePlanId1 = UUID.randomUUID();
         final UUID procedurePlanId2 = UUID.randomUUID();
+        final UUID someOtherFileId = UUID.randomUUID();
+        final UUID assessAndControlRiskFileId1 = UUID.randomUUID();
+        final UUID assessAndControlRiskFileId2 = UUID.randomUUID();
+        final Set<UUID> assessAndControlRiskFiles = new HashSet<>(Arrays.asList(assessAndControlRiskFileId1, assessAndControlRiskFileId2));
 
         final PermitContainer permitContainer = PermitContainer.builder()
                 .permitAttachments(Map.of(
                         procedurePlanId1, "procedurePlan1.txt",
                         procedurePlanId2, "procedurePlan2.txt",
-                        UUID.randomUUID(), "someOtherFile.txt")
+                        someOtherFileId, "someOtherFile.txt",
+                        assessAndControlRiskFileId1, "assessAndControlRiskFile.txt",
+                        assessAndControlRiskFileId2, "assessAndControlRiskFile2.txt"
+                    )
                 )
                 .installationOperatorDetails(InstallationOperatorDetails.builder()
                         .companyReferenceNumber("companyReferenceNumber")
@@ -633,7 +684,7 @@ class DocumentTemplateProcessServiceTest {
                                                 )
                                         )
                                         .build())
-                                .assessAndControlRisk(buildManagementProceduresDefinition())
+                                .assessAndControlRisk(buildAssessAndControlRisk(assessAndControlRiskFiles))
                                 .assignmentOfResponsibilities(buildManagementProceduresDefinition())
                                 .controlOfOutsourcedActivities(buildManagementProceduresDefinition())
                                 .correctionsAndCorrectiveActions(buildManagementProceduresDefinition())
@@ -758,22 +809,19 @@ class DocumentTemplateProcessServiceTest {
                 "analysisMethods", analysisMethods,
                 "transfers", List.of(transfer))
         );
+        
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(rfiTemplateEnglandFile, templateParams, "fileNameToGenerate"));
-
-        /*var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(rfiTemplateEnglandFile, templateParams, "fileNameToGenerate"));
-
-        File outputFile = new File("output.pdf");
-        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-            outputStream.write(fileContent);
-        }*/
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     @Test
-    void generate_emp() throws IOException {
-
+    void generate_emp() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         final String signatoryUser = "Signatory user full name";
         final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "UK ETS monitoring plan_template_aviation_MR.docx");
@@ -1306,8 +1354,13 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 "consolidationNumber", 24)
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(empTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
+
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(empTemplateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
 
 //        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
 //                .generateFileDocumentFromTemplate(empTemplateFile, templateParams, "fileNameToGenerate"));
@@ -1319,11 +1372,12 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
     }
 
     @Test
-    void generate_emp_approval_official_letter() throws IOException {
+    void generate_emp_approval_official_letter() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "UK ETS EMP Approval Notice_METS.docx");
-        final FileDTO empApprovalTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "UK ETS EMP Approval Notice_METS.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -1334,8 +1388,13 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 )
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(empApprovalTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
+
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
 
 //        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
 //                .generateFileDocumentFromTemplate(empApprovalTemplateFile, templateParams, "fileNameToGenerate"));
@@ -1347,11 +1406,12 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
     }
 
     @Test
-    void generate_emp_deemed_withdrawn_official_letter() throws IOException {
+    void generate_emp_deemed_withdrawn_official_letter() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "UK ETS EMP Withdrawn Notice_METS.docx");
-        final FileDTO empDeemedWithdrawnTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "UK ETS EMP Withdrawn Notice_METS.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -1362,8 +1422,13 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 )
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(empDeemedWithdrawnTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
+
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
 
 //        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
 //                .generateFileDocumentFromTemplate(empDeemedWithdrawnTemplateFile, templateParams, "fileNameToGenerate"));
@@ -2080,6 +2145,23 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 .build();
     }
 
+    private AssessAndControlRisk buildAssessAndControlRisk(Set<UUID> assessAndControlRiskFiles) {
+        return AssessAndControlRisk.builder()
+            .procedureDescription("Procedure Description\r\n"
+                + "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vestibulum et tortor nec aliquam. Duis ac feugiat risus, sit amet laoreet urna. Duis consectetur quam non ex vestibulum consequat. Fusce in sem leo. Suspendisse venenatis eget mi at pulvinar. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Integer quis faucibus tortor. Maecenas feugiat posuere augue, a sagittis massa blandit non. Nunc interdum felis eget nunc semper porta. Integer consectetur, mi vitae feugiat interdum, nisi nulla bibendum metus, eget suscipit dui nulla vitae massa. Morbi quis dictum nunc. Vivamus luctus ante nunc, id accumsan ex bibendum eu. Suspendisse in ligula lectus.\r\n"
+                + "Quisque arcu est, pellentesque sit amet tincidunt eu, luctus nec sem. Aliquam vulputate arcu sed justo venenatis luctus. Proin quis rutrum dolor, nec accumsan ex. Sed vestibulum, tellus ut euismod commodo, purus dui faucibus tellus, eu consectetur ipsum nisi ut elit. Nam sit amet dui non nunc viverra blandit ac a velit. Pellentesque elementum vulputate libero ut varius. Sed convallis tempus malesuada. Etiam eget fringilla erat. Aliquam a finibus dolor. Morbi scelerisque convallis vestibulum. Vestibulum suscipit lacus a ex fringilla, vitae facilisis nulla tempor. Nam porta sem id condimentum ornare. Phasellus non felis a urna tincidunt rhoncus sit amet eu augue.\r\n"
+                + "Praesent finibus volutpat sem eu volutpat. Ut ullamcorper sapien ligula, suscipit ullamcorper velit tincidunt vel. Morbi vel volutpat risus, vel vulputate neque. Mauris lobortis sit amet lorem sed posuere. Morbi tincidunt, orci at viverra dapibus, leo ipsum hendrerit quam, vel facilisis justo augue eu nisl. Mauris molestie neque eu efficitur bibendum. Aliquam imperdiet aliquet aliquam. Donec lacus neque, fringilla vitae eros ac, vehicula tempus nunc. Nulla ut commodo purus. Phasellus eu interdum nibh, in mollis velit. Ut bibendum rutrum erat non posuere. Integer vitae porttitor enim, vitae consequat nisi. ")
+            .procedureReference("Procedure Reference")
+            .procedureDocumentName("Procedure Document Name")
+            .itSystemUsed("System Used")
+            .appliedStandards("Applied Standards")
+            .diagramReference("Diagram Reference")
+            .locationOfRecords("Location of Records")
+            .responsibleDepartmentOrRole("Responsible department")
+            .riskAssessmentAttachments(assessAndControlRiskFiles)
+            .build();
+    }
+
     private DataFlowActivities buildDataflowActivities(UUID diagramAttachmentId) {
         return DataFlowActivities.builder()
                 .procedureDescription("Procedure Description")
@@ -2096,44 +2178,6 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 .build();
     }
 
-    private TemplateParams buildTemplateParams(CompetentAuthorityEnum ca, String signatoryUser, FileDTO signatureFile,
-                                               Map<String, Object> params) {
-        CompetentAuthorityDTO caDto = CompetentAuthorityDTO.builder().id(ca).email("email").name("name").build();
-        return TemplateParams.builder()
-                .competentAuthorityParams(CompetentAuthorityTemplateParams.builder()
-                        .competentAuthority(caDto)
-                        .logo(CompetentAuthorityService.getCompetentAuthorityLogo(ca))
-                        .build())
-                .competentAuthorityCentralInfo("ca central info")
-                .signatoryParams(SignatoryTemplateParams.builder()
-                        .fullName(signatoryUser)
-                        .signature(signatureFile.getFileContent())
-                        .jobTitle("Project Manager")
-                        .build())
-                .accountParams(InstallationAccountTemplateParams.builder()
-                        .emitterType(EmitterType.GHGE.name())
-                        .legalEntityName("LE name")
-                        .legalEntityLocation("LE ethnikis antistaseos\nLE street number 124\nLE postal code 15125")
-                        .name("account name")
-                        .siteName("Account site name")
-                        .location("Account ethnikis  \nAccount street number 125 \nAccount postal code 15126")
-                        .primaryContact("primary contact")
-                        .primaryContactEmail("primary contact email")
-                        .serviceContact("service contact")
-                        .serviceContactEmail("service contact email")
-                        .installationCategory("B")
-                        .build())
-                .permitId("UK-E-IN-12345")
-                .workflowParams(WorkflowTemplateParams.builder()
-                        .requestId("123")
-                        .requestType("PERMIT_VARIATION") //("PERMIT_ISSUANCE")
-                        .requestTypeInfo("your permit variation")
-                        .requestSubmissionDate(new Date())
-                        .requestEndDate(LocalDateTime.of(1998, 1, 1, 1, 1))
-                        .build())
-                .params(params)
-                .build();
-    }
 
     private TemplateParams buildTemplateParamsForOfficialNotice(CompetentAuthorityEnum ca, String signatoryUser, FileDTO signatureFile,
                                                Map<String, Object> params) {
@@ -2141,7 +2185,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
         return TemplateParams.builder()
                 .competentAuthorityParams(CompetentAuthorityTemplateParams.builder()
                         .competentAuthority(caDto)
-                        .logo(CompetentAuthorityService.getCompetentAuthorityLogo(ca))
+                        .logo(PmrvCompetentAuthorityService.getCompetentAuthorityLogo(ca))
                         .build())
                 .competentAuthorityCentralInfo("ca central info")
                 .signatoryParams(SignatoryTemplateParams.builder()
@@ -2170,11 +2214,12 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
     }
     
     @Test
-    void generate_Withholding_of_allowances_notice() throws IOException {
+    void generate_Withholding_of_allowances_notice() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "installation", "L008 IN Withholding Allowances Notice UKETS_Draft_KB_Temp_CL_IW.docx");
-        final FileDTO empApprovalTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "installation", "L008 IN Withholding Allowances Notice UKETS_Draft_KB_Temp_CL_IW.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -2186,24 +2231,22 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 )
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(empApprovalTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(empApprovalTemplateFile, templateParams, "fileNameToGenerate"));
-
-//        File outputFile = new File("Withholding_of_allowances_notice.pdf");
-//        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-//            outputStream.write(fileContent);
-//        }
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     @Test
-    void generate_Withdrawal_of_withholding_of_allowances_notice() throws IOException {
+    void generate_Withdrawal_of_withholding_of_allowances_notice() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.OPRED;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "opred", "installation", "L009 P3 Issue Allowances.docx");
-        final FileDTO empApprovalTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "opred", "installation", "L009 P3 Issue Allowances.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -2214,24 +2257,22 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 )
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(empApprovalTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(empApprovalTemplateFile, templateParams, "fileNameToGenerate"));
-
-//        File outputFile = new File("Withdrawal_of_withholding_of_allowances_notice.pdf");
-//        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-//            outputStream.write(fileContent);
-//        }
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     @Test
-    void generate_emp_approval_official_letter_corsia() throws IOException {
+    void generate_emp_approval_official_letter_corsia() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_EMP_Approval_Notice_METS_final.docx");
-        final FileDTO empApprovalTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_EMP_Approval_Notice_METS_final.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -2242,24 +2283,22 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
             )
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-            .generateFileDocumentFromTemplate(empApprovalTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-//        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-//                .generateFileDocumentFromTemplate(empApprovalTemplateFile, templateParams, "fileNameToGenerate"));
-//
-//        File outputFile = new File("empApprovedOfficialNoticeOutput.pdf");
-//        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-//            outputStream.write(fileContent);
-//        }
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     @Test
-    void generate_emp_deemed_withdrawn_official_letter_corsia() throws IOException {
+    void generate_emp_deemed_withdrawn_official_letter_corsia() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_EMP_Withdrawn_Notice_METS_final.docx");
-        final FileDTO empDeemedWithdrawnTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_EMP_Withdrawn_Notice_METS_final.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -2270,25 +2309,22 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
             )
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-            .generateFileDocumentFromTemplate(empDeemedWithdrawnTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-//        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-//                .generateFileDocumentFromTemplate(empDeemedWithdrawnTemplateFile, templateParams, "fileNameToGenerate"));
-//
-//        File outputFile = new File("empWithdrawnOfficialNoticeOutput.pdf");
-//        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-//            outputStream.write(fileContent);
-//        }
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     @Test
-    void generate_emp_corsia() throws IOException {
-
+    void generate_emp_corsia() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_monitoring_plan_template_METS_final.docx");
-        final FileDTO empTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_monitoring_plan_template_METS_final.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -2302,8 +2338,10 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 .build())
             .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
                 .emissionsMonitoringApproach(uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach
-                    .FuelMonitoringApproach.builder()
-                    .monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
+                    .CertMonitoringApproach.builder()
+                    .monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.CERT_MONITORING)
+                    .certEmissionsType(CertEmissionsType.GREAT_CIRCLE_DISTANCE)
+                    .explanation("Cert explanation")
                     .build())
                 .operatorDetails(EmpCorsiaOperatorDetails.builder()
                     .operatorName("operator name")
@@ -2341,7 +2379,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                             .build())
                         .build())
                         .subsidiaryCompanyExist(Boolean.TRUE)
-                        .subsidiaryCompanies(Set.of(SubsidiaryCompanyCorsia.builder()
+                        .subsidiaryCompanies(List.of(SubsidiaryCompanyCorsia.builder()
                             .operatorName("subsidiary Company")
                             .activityDescription("activity description")
                                 .flightTypes(Set.of(FlightType.SCHEDULED))
@@ -2546,7 +2584,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam elementum tinci
 In ac posuere mauris, id blandit magna. Donec tempor nulla nunc, a ultrices nulla malesuada ac. Nunc viverra pulvinar nulla, non condimentum justo imperdiet non. Vestibulum eget libero quis ligula consectetur ultrices. Praesent tincidunt hendrerit tortor, nec vestibulum ligula placerat eget. Duis ac semper nulla, quis convallis ligula. Donec non eros at justo rutrum facilisis eu ac metus. Duis enim justo, convallis in lacus vel, condimentum dapibus turpis. Aenean nec molestie lorem. Duis imperdiet posuere turpis, tempus convallis arcu mattis non. Pellentesque sed enim ut neque tempus congue eget eget erat. Cras condimentum malesuada ex, vitae fringilla elit lacinia vitae. Cras sed commodo dolor, at tristique metus. Nunc dapibus, enim sit amet dapibus semper, velit est ultrices magna, lobortis feugiat arcu ligula sed dolor.
 Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc imperdiet faucibus dignissim. Phasellus vitae tincidunt erat. In nec ex eu est porta venenatis. In feugiat cursus commodo. Praesent at dolor imperdiet, sollicitudin ipsum vel, sollicitudin nisi. Maecenas eget lorem nec arcu tincidunt faucibus. Nam lacinia mollis magna, non congue ante volutpat at. Mauris laoreet nibh sit amet eros ultrices, in ornare lectus facilisis.
                                         """)
-                    .secondarySourcesDataGapsExist(Boolean.FALSE)
+                    .secondarySourcesDataGapsExist(Boolean.TRUE)
+                    .secondarySourcesDataGapsConditions("Secondary sources data gaps conditions")
                     .build())
                 .managementProcedures(EmpManagementProceduresCorsia.builder()
                     .monitoringReportingRoles(EmpMonitoringReportingRolesCorsia.builder()
@@ -2697,27 +2736,143 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         final TemplateParams templateParams = buildTemplateParams(ca, signatoryUser, signatureFile, Map.of(
             "empContainer", empContainer,
-            "consolidationNumber", 24)
+            "consolidationNumber", 24,
+            "organisationLocation", "line1 \n " +
+                        "line2 \n " +
+                        "city \n " +
+                        "state \n " +
+                        "postcode \n " +
+                        "country",
+            "differentContactLocation", "diff line1 \n " +
+                        "diff city \n " +
+                        "diff state \n " +
+                        "diff postcode \n " +
+                        "diff country",
+                "subsidiaryCompanies", List.of(
+                        TemplateSubsidiaryCompany.builder()
+                                .subsidiaryCompany(
+                                        SubsidiaryCompanyCorsia.builder()
+                                                .operatorName("subsidiary Company")
+                                                .activityDescription("activity description")
+                                                .flightTypes(Set.of(FlightType.SCHEDULED))
+                                                .flightIdentification(FlightIdentification.builder()
+                                                        .flightIdentificationType(FlightIdentificationType.AIRCRAFT_REGISTRATION_MARKINGS)
+                                                        .aircraftRegistrationMarkings(Set.of("registration marking 1",
+                                                                "registration marking 2", "registration maqrking 3"))
+                                                        .build())
+                                                .registeredLocation(LocationOnShoreStateDTO.builder()
+                                                        .type(LocationType.ONSHORE_STATE)
+                                                        .line1("line1")
+                                                        .city("city")
+                                                        .state("state")
+                                                        .postcode("1234")
+                                                        .country("country")
+                                                        .build())
+                                                .companyRegistrationNumber("companyNumber")
+                                                .airOperatingCertificate(AirOperatingCertificateCorsia.builder()
+                                                        .certificateExist(Boolean.TRUE)
+                                                        .restrictionsExist(Boolean.TRUE)
+                                                        .restrictionsDetails("Restriction Details")
+                                                        .certificateNumber("Certificate Number 123")
+                                                        .issuingAuthority("Certificate issuing authority")
+                                                        .build())
+                                                .build())
+                                .registeredAddress("subsidiary line1 \n " +
+                                        "subsidiary city \n " +
+                                        "subsidiary state \n " +
+                                        "subsidiary postcode \n " +
+                                        "subsidiary country")
+                                .build(),
+                        TemplateSubsidiaryCompany.builder()
+                                .subsidiaryCompany(
+                                        SubsidiaryCompanyCorsia.builder()
+                                                .operatorName("subsidiary Company 2")
+                                                .activityDescription("activity description 2")
+                                                .flightTypes(Set.of(FlightType.SCHEDULED, FlightType.NON_SCHEDULED))
+                                                .flightIdentification(FlightIdentification.builder()
+                                                        .flightIdentificationType(FlightIdentificationType.INTERNATIONAL_CIVIL_AVIATION_ORGANISATION)
+                                                        .icaoDesignators("icao designators")
+                                                        .build())
+                                                .registeredLocation(LocationOnShoreStateDTO.builder()
+                                                        .type(LocationType.ONSHORE_STATE)
+                                                        .line1("line1")
+                                                        .city("city")
+                                                        .state("state")
+                                                        .postcode("1234")
+                                                        .country("country")
+                                                        .build())
+                                                .companyRegistrationNumber("companyNumber 2")
+                                                .airOperatingCertificate(AirOperatingCertificateCorsia.builder()
+                                                        .certificateExist(Boolean.TRUE)
+                                                        .restrictionsExist(Boolean.TRUE)
+                                                        .restrictionsDetails("Restriction Details")
+                                                        .certificateNumber("Certificate Number 234")
+                                                        .issuingAuthority("Certificate issuing authority")
+                                                        .restrictionsExist(Boolean.TRUE)
+                                                        .restrictionsDetails("restrictions details")
+                                                        .build())
+                                                .build())
+                                .registeredAddress("subsidiary line1 \n " +
+                                        "subsidiary city 2 \n " +
+                                        "subsidiary state 2 \n " +
+                                        "subsidiary postcode 2 \n " +
+                                        "subsidiary country 2")
+                                .build(),
+                        TemplateSubsidiaryCompany.builder()
+                                .subsidiaryCompany(
+                                        SubsidiaryCompanyCorsia.builder()
+                                                .operatorName("subsidiary Company 3")
+                                                .activityDescription("activity description 3")
+                                                .flightTypes(Set.of(FlightType.SCHEDULED, FlightType.NON_SCHEDULED))
+                                                .flightIdentification(FlightIdentification.builder()
+                                                        .flightIdentificationType(FlightIdentificationType.INTERNATIONAL_CIVIL_AVIATION_ORGANISATION)
+                                                        .icaoDesignators("icao designators 3")
+                                                        .build())
+                                                .registeredLocation(LocationOnShoreStateDTO.builder()
+                                                        .type(LocationType.ONSHORE_STATE)
+                                                        .line1("line1")
+                                                        .city("city")
+                                                        .state("state")
+                                                        .postcode("1234")
+                                                        .country("country")
+                                                        .build())
+                                                .companyRegistrationNumber("companyNumber 3")
+                                                .airOperatingCertificate(AirOperatingCertificateCorsia.builder()
+                                                        .certificateExist(Boolean.TRUE)
+                                                        .restrictionsExist(Boolean.TRUE)
+                                                        .restrictionsDetails("Restriction Details 3")
+                                                        .certificateNumber("Certificate Number 456")
+                                                        .issuingAuthority("Certificate issuing authority 3")
+                                                        .restrictionsExist(Boolean.TRUE)
+                                                        .restrictionsDetails("restrictions details 3")
+                                                        .build())
+                                                .build())
+                                .registeredAddress("subsidiary line1 \n " +
+                                        "subsidiary city 3 \n " +
+                                        "subsidiary state 3 \n " +
+                                        "subsidiary postcode 3 \n " +
+                                        "subsidiary country 3")
+                                .build()
+                        )
+                )
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-            .generateFileDocumentFromTemplate(empTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-//        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-//                .generateFileDocumentFromTemplate(empTemplateFile, templateParams, "fileNameToGenerate"));
-//
-//        File outputFile = new File("empOutput.pdf");
-//        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-//            outputStream.write(fileContent);
-//        }
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     @Test
-    void generate_emp_approval_official_letter_corsia_blank() throws IOException {
+    void generate_emp_approval_official_letter_corsia_blank() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.NORTHERN_IRELAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "northern_ireland", "aviation", "CORSIA_EMP_Approval_Notice_NIEA.docx");
-        final FileDTO empApprovalTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "northern_ireland", "aviation", "CORSIA_EMP_Approval_Notice_NIEA.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -2728,16 +2883,22 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
             )
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-            .generateFileDocumentFromTemplate(empApprovalTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
+
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     @Test
-    void generate_emp_deemed_withdrawn_official_letter_corsia_blank() throws IOException {
+    void generate_emp_deemed_withdrawn_official_letter_corsia_blank() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.NORTHERN_IRELAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "northern_ireland", "aviation", "CORSIA_EMP_Withdrawn_Notice_NIEA.docx");
-        final FileDTO empDeemedWithdrawnTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "northern_ireland", "aviation", "CORSIA_EMP_Withdrawn_Notice_NIEA.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -2748,16 +2909,22 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
             )
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-            .generateFileDocumentFromTemplate(empDeemedWithdrawnTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
+
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     @Test
-    void generate_emp_corsia_blank() throws IOException {
+    void generate_emp_corsia_blank() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.NORTHERN_IRELAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "northern_ireland", "aviation", "CORSIA_monitoring_plan_template_NIEA.docx");
-        final FileDTO empTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "northern_ireland", "aviation", "CORSIA_monitoring_plan_template_NIEA.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -2770,16 +2937,22 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
             "consolidationNumber", 24)
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-            .generateFileDocumentFromTemplate(empTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
+
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     @Test
-    void generate_emp_variation_approval_official_letter_corsia() throws IOException {
+    void generate_emp_variation_approval_official_letter_corsia() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_EMP_Variation_Approve_Notice_METS_final.docx");
-        final FileDTO empApprovalTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_EMP_Variation_Approve_Notice_METS_final.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -2792,24 +2965,22 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 )
             );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-            .generateFileDocumentFromTemplate(empApprovalTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-//        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-//                .generateFileDocumentFromTemplate(empApprovalTemplateFile, templateParams, "fileNameToGenerate"));
-//
-//        File outputFile = new File("corsia_emp_variation_approved.pdf");
-//        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-//            outputStream.write(fileContent);
-//        }
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     @Test
-    void generate_emp_variation_deemed_withdrawn_official_letter_corsia() throws IOException {
+    void generate_emp_variation_deemed_withdrawn_official_letter_corsia() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_EMP_Withdrawn_Notice_METS_final.docx");
-        final FileDTO empDeemedWithdrawnTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_EMP_Withdrawn_Notice_METS_final.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -2820,24 +2991,22 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
             )
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-            .generateFileDocumentFromTemplate(empDeemedWithdrawnTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-//        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-//                .generateFileDocumentFromTemplate(empDeemedWithdrawnTemplateFile, templateParams, "fileNameToGenerate"));
-//
-//        File outputFile = new File("corsia_emp_variation_withdrawn.pdf");
-//        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-//            outputStream.write(fileContent);
-//        }
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     @Test
-    void generate_emp_variation_refusal_official_letter_corsia() throws IOException {
+    void generate_emp_variation_refusal_official_letter_corsia() throws Exception {
+    	String fileNameToGenerate = "fileNameToGenerate";
         final CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
         final String signatoryUser = "Signatory user full name";
-        final Path empTemplateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_EMP_Variation_Refusal_Notice_METS_final.docx");
-        final FileDTO empDeemedWithdrawnTemplateFile = createFile(empTemplateFilePath);
+        final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "england", "aviation", "CORSIA_EMP_Variation_Refusal_Notice_METS_final.docx");
+        final FileDTO templateFile = createFile(templateFilePath);
 
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
@@ -2848,16 +3017,13 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
             )
         );
 
-        assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-            .generateFileDocumentFromTemplate(empDeemedWithdrawnTemplateFile, templateParams, "fileNameToGenerate"));
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-//        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
-//                .generateFileDocumentFromTemplate(empDeemedWithdrawnTemplateFile, templateParams, "fileNameToGenerate"));
-//
-//        File outputFile = new File("corsia_emp_variation_rejected.pdf");
-//        try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-//            outputStream.write(fileContent);
-//        }
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+        
+        assertThat(resultActual).isEqualTo(resultExpected);
     }
 
     private FileDTO createFile(Path sampleFilePath) throws IOException {
@@ -2869,4 +3035,43 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 .fileType(MimeTypeUtils.detect(bytes, sampleFilePath.getFileName().toString()))
                 .build();
     }
+    
+    private TemplateParams buildTemplateParams(CompetentAuthorityEnum ca, String signatoryUser, FileDTO signatureFile,
+            Map<String, Object> params) {
+		CompetentAuthorityDTO caDto = CompetentAuthorityDTO.builder().id(ca).email("email").name("name").build();
+		return TemplateParams.builder()
+				.competentAuthorityParams(CompetentAuthorityTemplateParams.builder()
+				.competentAuthority(caDto)
+				.logo(PmrvCompetentAuthorityService.getCompetentAuthorityLogo(ca))
+				.build())
+				.competentAuthorityCentralInfo("ca central info")
+				.signatoryParams(SignatoryTemplateParams.builder()
+				.fullName(signatoryUser)
+				.signature(signatureFile.getFileContent())
+				.jobTitle("Project Manager")
+				.build())
+				.accountParams(InstallationAccountTemplateParams.builder()
+				.emitterType(EmitterType.GHGE.name())
+				.legalEntityName("LE name")
+				.legalEntityLocation("LE ethnikis antistaseos\nLE street number 124\nLE postal code 15125")
+				.name("account name")
+				.siteName("Account site name")
+				.location("Account ethnikis  \nAccount street number 125 \nAccount postal code 15126")
+				.primaryContact("primary contact")
+				.primaryContactEmail("primary contact email")
+				.serviceContact("service contact")
+				.serviceContactEmail("service contact email")
+				.installationCategory("B")
+				.build())
+				.permitId("UK-E-IN-12345")
+				.workflowParams(WorkflowTemplateParams.builder()
+				.requestId("123")
+				.requestType("PERMIT_VARIATION") //("PERMIT_ISSUANCE")
+				.requestTypeInfo("your permit variation")
+				.requestSubmissionDate(new Date())
+				.requestEndDate(LocalDateTime.of(1998, 1, 1, 1, 1))
+				.build())
+				.params(params)
+				.build();
+	}
 }

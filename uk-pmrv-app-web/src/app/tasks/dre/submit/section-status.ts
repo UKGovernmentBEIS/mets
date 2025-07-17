@@ -7,8 +7,8 @@ export function resolveSectionStatus(payload: DreApplicationSubmitRequestTaskPay
   return !isFeeDueDateValid(payload)
     ? 'needs review'
     : payload.sectionCompleted
-    ? 'complete'
-    : !payload.dre || !Object.keys(payload.dre).length
-    ? 'not started'
-    : 'in progress';
+      ? 'complete'
+      : !payload.dre || !Object.keys(payload.dre).length
+        ? 'not started'
+        : 'in progress';
 }

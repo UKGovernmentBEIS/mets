@@ -1,0 +1,31 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-product-benchmark-form
+    [form]="form"
+    [heading]="'Calculation of historical activity levels for ethylene oxide and ethylene glycols'"
+    [caption]="productBenchmarkType$ | async | subInstallationType"
+    [subInstallationType]="productBenchmarkType$ | async"
+    [downloadUrl]="getDownloadUrl()"
+    [dataSourcesHeading]="'Data sources for production of ethylene oxide and glycols'"
+    [dataSourcesText]="
+      'Add the data sources used for the quantities of the supplemental feed in line with section 4.4 of Annex VII of the FAR. '
+    "
+    [dataSourcesNames]="['ETHYLEN_OXIDE', 'MONOTHYLENE_GLYCOL', 'DIETHYLENE_GLYCOL', 'TRIETHYLENE_GLYCOL']"
+    [dataSourcesField]="{
+      ETHYLEN_OXIDE: 'Ethylene oxide',
+      MONOTHYLENE_GLYCOL: 'Monoethylene glycol',
+      DIETHYLENE_GLYCOL: 'Diethylene glycol',
+      TRIETHYLENE_GLYCOL: 'Triethylene glycol',
+    }"
+    [dataSourcesType]="{
+      ETHYLEN_OXIDE: '44',
+      MONOTHYLENE_GLYCOL: '44',
+      DIETHYLENE_GLYCOL: '44',
+      TRIETHYLENE_GLYCOL: '44',
+    }"
+    (submitForm)="onSubmit()"
+    (addDataSource)="addDataSource()"
+    (removeDataSource)="removeDataSource($event)"
+  >
+  </app-product-benchmark-form>
+  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+</app-permit-task>

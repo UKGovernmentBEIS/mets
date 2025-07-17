@@ -1,24 +1,27 @@
 package uk.gov.pmrv.api.workflow.request.flow.common.service.notification;
 
-import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityDTO;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentService;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.documents.service.FileDocumentService;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.pmrv.api.account.service.AccountQueryService;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.CompetentAuthorityDTOByRequestResolverDelegator;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,46 +33,49 @@ import java.util.stream.Stream;
 public class OfficialNoticeSendService {
 
     private final RequestAccountContactQueryService requestAccountContactQueryService;
-    private final NotificationEmailService notificationEmailService;
+    private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
     private final FileDocumentService fileDocumentService;
-    private final CompetentAuthorityService competentAuthorityService;
+    private final CompetentAuthorityDTOByRequestResolverDelegator competentAuthorityDTOByRequestResolverDelegator;
+    private final AccountQueryService accountQueryService;
 
     public void sendOfficialNotice(List<FileInfoDTO> attachments, Request request) {
-        this.sendOfficialNotice(attachments, request, List.of());
+        this.sendOfficialNotice(attachments, request, List.of(), List.of());
+    }
+    
+    public void sendOfficialNotice(List<FileInfoDTO> attachments, Request request, 
+			List<String> ccRecipientsEmails) {
+    	this.sendOfficialNotice(attachments, request, ccRecipientsEmails, Collections.emptyList());
     }
 
-    public void sendOfficialNotice(List<FileInfoDTO> attachments, Request request, List<String> ccRecipientsEmails) {
-        this.sendOfficialNotice(attachments, request, List.of(), ccRecipientsEmails);
-    }
-
-    public void sendOfficialNotice(List<FileInfoDTO> attachments, Request request, List<String> toRecipientsEmails, List<String> ccRecipientsEmails) {
+	public void sendOfficialNotice(List<FileInfoDTO> attachments, Request request, 
+			List<String> ccRecipientsEmails, List<String> bccRecipientsEmails) {
         final UserInfoDTO accountPrimaryContact = requestAccountContactQueryService.getRequestAccountPrimaryContact(request)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
 
-        Set<UserInfoDTO> defaultOfficialNoticeRecipients = getDefaultOfficialNoticeRecipients(request);
+		final List<String> toRecipientsEmails = getOfficialNoticeToRecipients(request).stream()
+				.map(UserInfoDTO::getEmail)
+				.collect(Collectors.toList());
 
-        Stream<String> defaultRecipientEmails = defaultOfficialNoticeRecipients.stream().map(UserInfoDTO::getEmail);
-        final List<String> toRecipientEmailsFinal = Stream.concat(defaultRecipientEmails, toRecipientsEmails.stream())
-                .distinct()
-                .collect(Collectors.toList());
+        final List<String> ccRecipientsEmailsFinal = new ArrayList<>(ccRecipientsEmails);
+        ccRecipientsEmailsFinal.removeIf(toRecipientsEmails::contains);
 
-        List<String> ccRecipientsEmailsFinal = new ArrayList<>(ccRecipientsEmails);
-        ccRecipientsEmailsFinal.removeIf(toRecipientEmailsFinal::contains);
-
-        Map<String, Object> templateParams = new HashMap<>();
-        templateParams.put(EmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT,
+        final Map<String, Object> templateParams = new HashMap<>();
+        templateParams.put(PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT,
             accountPrimaryContact.getFullName());
 
-        CompetentAuthorityDTO competentAuthority = competentAuthorityService
-            .getCompetentAuthority(request.getCompetentAuthority(), request.getType().getAccountType());
-        templateParams.put(EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail());
-        templateParams.put(EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName());
+        final AccountType accountType = accountQueryService.getAccountType(request.getAccountId());
+
+		final CompetentAuthorityDTO competentAuthority =
+                competentAuthorityDTOByRequestResolverDelegator.resolveCA(request, accountType);
+		
+        templateParams.put(PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail());
+        templateParams.put(PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName());
 
         //notify
         notificationEmailService.notifyRecipients(
-                EmailData.builder()
-                        .notificationTemplateData(EmailNotificationTemplateData.builder()
-                                .templateName(NotificationTemplateName.GENERIC_EMAIL)
+                EmailData.<PmrvEmailNotificationTemplateData>builder()
+                        .notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
+                                .templateName(PmrvNotificationTemplateName.GENERIC_EMAIL.getName())
                                 .competentAuthority(request.getCompetentAuthority())
                                 .accountType(request.getType().getAccountType())
                                 .templateParams(templateParams)
@@ -81,11 +87,12 @@ public class OfficialNoticeSendService {
                                 )
                         )
                         .build(),
-                toRecipientEmailsFinal,
-                ccRecipientsEmailsFinal);
+                toRecipientsEmails,
+                ccRecipientsEmailsFinal,
+                bccRecipientsEmails);
     }
 
-    public Set<UserInfoDTO> getDefaultOfficialNoticeRecipients(Request request) {
+    public Set<UserInfoDTO> getOfficialNoticeToRecipients(Request request) {
         final UserInfoDTO accountPrimaryContact = requestAccountContactQueryService.getRequestAccountPrimaryContact(request)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
         final UserInfoDTO accountServiceContact = requestAccountContactQueryService.getRequestAccountServiceContact(request)

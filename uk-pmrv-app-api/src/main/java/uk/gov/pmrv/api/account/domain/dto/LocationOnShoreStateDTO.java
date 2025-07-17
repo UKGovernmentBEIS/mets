@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.referencedata.service.Country;
+import uk.gov.netz.api.referencedata.service.Country;
 
 @Data
 @AllArgsConstructor

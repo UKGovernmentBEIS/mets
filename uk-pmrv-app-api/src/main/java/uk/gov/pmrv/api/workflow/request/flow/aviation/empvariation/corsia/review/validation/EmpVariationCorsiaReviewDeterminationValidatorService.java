@@ -1,18 +1,17 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.review.validation;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.review.domain.EmpVariationCorsiaApplicationReviewRequestTaskPayload;
+
+import java.util.List;
 
 @Validated
 @Service
@@ -34,5 +33,7 @@ public class EmpVariationCorsiaReviewDeterminationValidatorService {
         return validator.isValid(requestTaskPayload);
     }
     
-    public void validateDeterminationObject(@NotNull @Valid EmpVariationDetermination determination) {}
+    public void validateDeterminationObject(@NotNull @Valid EmpVariationDetermination determination) {
+        //validates determination
+    }
 }

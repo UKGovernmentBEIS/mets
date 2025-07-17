@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -54,7 +54,7 @@ class DreRequestPeerReviewActionHandlerTest {
     	String requestId = "1";
     	Long requestTaskId = 2L;
     	RequestTaskActionType requestTaskActionType = RequestTaskActionType.DRE_REQUEST_PEER_REVIEW;
-    	PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+    	AppUser appUser = AppUser.builder().userId("user").build();
     	PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
 				.payloadType(RequestTaskActionPayloadType.DRE_REQUEST_PEER_REVIEW_PAYLOAD)
 				.peerReviewer("reg2")
@@ -69,13 +69,13 @@ class DreRequestPeerReviewActionHandlerTest {
 		
 		when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 		
-		cut.process(requestTaskId, requestTaskActionType,  pmrvUser, taskActionPayload);
+		cut.process(requestTaskId, requestTaskActionType,  appUser, taskActionPayload);
 		
 		verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-		verify(dreRequestPeerReviewValidator, times(1)).validate(requestTask, taskActionPayload, pmrvUser);
-		verify(dreApplyService, times(1)).requestPeerReview(requestTask, "reg2");
+		verify(dreRequestPeerReviewValidator, times(1)).validate(requestTask, taskActionPayload, appUser);
+		verify(dreApplyService, times(1)).requestPeerReview(requestTask, "reg2", appUser);
 		verify(requestService, times(1))
-			.addActionToRequest(request, null, RequestActionType.DRE_APPLICATION_PEER_REVIEW_REQUESTED, pmrvUser.getUserId());
+			.addActionToRequest(request, null, RequestActionType.DRE_APPLICATION_PEER_REVIEW_REQUESTED, appUser.getUserId());
 		
         verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),

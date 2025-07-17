@@ -7,7 +7,6 @@ import { KeycloakConfig, KeycloakInitOptions } from 'keycloak-js';
 
 // Add here your keycloak setup infos
 const keycloakConfig: KeycloakConfig = {
-  url: '/auth',
   realm: 'uk-pmrv',
   clientId: 'uk-pmrv-web-app',
 };
@@ -28,7 +27,7 @@ const keycloakOptions: KeycloakOptions = {
 };
 
 const apiOptions = {
-  baseUrl: '/api',
+  baseUrl: '/installation-aviation/api',
 };
 
 const timeoutBanner = {

@@ -1,0 +1,12 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.heading }}</app-page-heading>
+  <app-aviation-overall-decision-group
+    [overallAssessment]="vm.data"
+    [isCorsia]="vm.isCorsia"
+  ></app-aviation-overall-decision-group>
+  <app-aviation-aer-verification-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="overallDecision"
+  ></app-aviation-aer-verification-review-decision-group>
+</ng-container>
+<app-return-to-link></app-return-to-link>

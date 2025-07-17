@@ -19,8 +19,8 @@ describe('EmissionSummariesSummaryComponent', () => {
 
   class Page extends BasePage<EmissionSummariesSummaryComponent> {
     get emissionSummaries() {
-      return this.queryAll<HTMLDListElement>('dl').map((emissionSummary) =>
-        Array.from(emissionSummary.querySelectorAll('dd')).map((dd) => dd.textContent.trim()),
+      return this.queryAll<HTMLDListElement>('tr').map((emissionSummary) =>
+        Array.from(emissionSummary.querySelectorAll('td')).map((dd) => dd.textContent.trim()),
       );
     }
 
@@ -59,6 +59,7 @@ describe('EmissionSummariesSummaryComponent', () => {
 
   it('should display the list of data', () => {
     expect(page.emissionSummaries).toEqual([
+      [],
       [
         '13123124 White Spirit & SBP',
         'S1 Boiler  S2 Boiler 2',

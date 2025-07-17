@@ -19,9 +19,9 @@ import { GovukComponentsModule } from 'govuk-components';
             govukLink
             *ngIf="ft.id === 'OTHER' && isEditable"
             [routerLink]="['../other-fuel']"
-            [queryParams]="changeUrlQueryParams"
-            >Change</a
-          >
+            [queryParams]="changeUrlQueryParams">
+            Change
+          </a>
         </dd>
       </div>
     </dl>

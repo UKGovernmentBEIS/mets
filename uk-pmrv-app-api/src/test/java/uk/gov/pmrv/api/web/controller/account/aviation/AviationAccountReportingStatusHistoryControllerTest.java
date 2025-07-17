@@ -19,25 +19,25 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.support.GenericWebApplicationContext;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingStatusHistoryCreationDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingStatusHistoryDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountReportingStatusHistoryListResponse;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusHistoryCreationService;
 import uk.gov.pmrv.api.account.aviation.service.reportingstatus.AviationAccountReportingStatusHistoryQueryService;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.controller.utils.TestConstrainValidatorFactory;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -66,10 +66,10 @@ class AviationAccountReportingStatusHistoryControllerTest {
     private AviationAccountReportingStatusHistoryCreationService aviationAccountReportingStatusCreationService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent appSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
@@ -77,8 +77,8 @@ class AviationAccountReportingStatusHistoryControllerTest {
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver =
-                new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+                new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
         aspectJProxyFactory.addAspect(aspect);
@@ -90,7 +90,7 @@ class AviationAccountReportingStatusHistoryControllerTest {
         LocalValidatorFactoryBean validatorFactoryBean = mockValidatorFactoryBean();
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .setValidator(validatorFactoryBean)
                 .build();
@@ -116,9 +116,9 @@ class AviationAccountReportingStatusHistoryControllerTest {
     @Test
     void getReportingStatusHistory() throws Exception {
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
                 .userId("authUserId")
-                .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+                .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
                 .build();
         AviationAccountReportingStatusHistoryListResponse reportingStatusHistory = AviationAccountReportingStatusHistoryListResponse.builder()
             .reportingStatusHistoryList(List.of(AviationAccountReportingStatusHistoryDTO.builder()
@@ -130,7 +130,7 @@ class AviationAccountReportingStatusHistoryControllerTest {
             .total(1L)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(aviationAccountReportingStatusQueryService.getReportingStatusHistoryListResponse(accountId, 0, 1))
                 .thenReturn(reportingStatusHistory);
 
@@ -151,15 +151,15 @@ class AviationAccountReportingStatusHistoryControllerTest {
     @Test
     void getReportingStatusHistory_forbidden() throws Exception {
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
                 .userId("authUserId")
-                .roleType(RoleType.VERIFIER)
+                .roleType(RoleTypeConstants.VERIFIER)
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(pmrvUser, "getReportingStatusHistory", String.valueOf(accountId));
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "getReportingStatusHistory", String.valueOf(accountId), null, null);
 
         mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + "/history")
                         .param("accountId", String.valueOf(accountId))
@@ -174,15 +174,15 @@ class AviationAccountReportingStatusHistoryControllerTest {
     @Test
     void submitReportingStatus() throws Exception {
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
                 .userId("authUserId")
-                .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+                .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
                 .build();
 
         final AviationAccountReportingStatusHistoryCreationDTO reportingStatusCreationDTO =
                 AviationAccountReportingStatusHistoryCreationDTO.builder().status(AviationAccountReportingStatus.REQUIRED_TO_REPORT).reason("reason").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -192,24 +192,24 @@ class AviationAccountReportingStatusHistoryControllerTest {
                 .andExpect(status().isNoContent());
 
         verify(aviationAccountReportingStatusCreationService, times(1))
-                .submitReportingStatus(accountId,reportingStatusCreationDTO, pmrvUser);
+                .submitReportingStatus(accountId,reportingStatusCreationDTO, appUser);
     }
 
     @Test
     void submitReportingStatus_forbidden() throws Exception {
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
                 .userId("authUserId")
-                .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+                .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
                 .build();
 
         final AviationAccountReportingStatusHistoryCreationDTO reportingStatusCreationDTO =
                 AviationAccountReportingStatusHistoryCreationDTO.builder().status(AviationAccountReportingStatus.REQUIRED_TO_REPORT).reason("reason").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(pmrvUser, "submitReportingStatus", String.valueOf(accountId));
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "submitReportingStatus", String.valueOf(accountId), null, null);
 
         mockMvc.perform(
                         MockMvcRequestBuilders
@@ -219,6 +219,6 @@ class AviationAccountReportingStatusHistoryControllerTest {
                 .andExpect(status().isForbidden());
 
         verify(aviationAccountReportingStatusCreationService, never())
-                .submitReportingStatus(accountId, reportingStatusCreationDTO, pmrvUser);
+                .submitReportingStatus(accountId, reportingStatusCreationDTO, appUser);
     }
 }

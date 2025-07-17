@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { combineLatest, Subject, takeUntil } from 'rxjs';
 
@@ -21,8 +21,8 @@ export interface AviationAerSmallEmittersMonitoringApproachFormModel {
 }
 export interface AviationAerSupportFacilityMonitoringApproachFormModel {
   totalEmissionsType: FormControl<AviationAerSupportFacilityMonitoringApproach['totalEmissionsType'] | null>;
-  fullScopeTotalEmissions?: FormControl<string | null>;
-  aviationActivityTotalEmissions?: FormControl<string | null>;
+  fullScopeTotalEmissions?: FormControl<string | null>; //TODO change it to BigNumber | null
+  aviationActivityTotalEmissions?: FormControl<string | null>; //TODO change it to BigNumber | null
 }
 export interface MonitoringApproachFormModel {
   monitoringApproachType: FormControl<EmissionsMonitoringApproach['monitoringApproachType'] | null>;
@@ -34,14 +34,14 @@ interface EmissionSmallEmittersSupportFacilityFormModel {
   monitoringApproachType: EmissionsMonitoringApproach['monitoringApproachType'] | null;
   aviationAerSupportFacilityMonitoringApproach?: {
     totalEmissionsType: AviationAerSupportFacilityMonitoringApproach['totalEmissionsType'] | null;
-    fullScopeTotalEmissions: string | null;
-    aviationActivityTotalEmissions: string | null;
+    fullScopeTotalEmissions: string | null; //TODO change it to BigNumber | null
+    aviationActivityTotalEmissions: string | null; //TODO change it to BigNumber | null
   };
   aviationAerSmallEmittersMonitoringApproach?: {
     numOfFlightsJanApr: number | null;
     numOfFlightsMayAug: number | null;
     numOfFlightsSepDec: number | null;
-    totalEmissions: string | null;
+    totalEmissions: string | null; //TODO change it to BigNumber | null
   };
 }
 
@@ -153,7 +153,7 @@ export class AerMonitoringApproachFormProvider
 
       totalEmissionsType.valueChanges.pipe(takeUntil(this.destroy$)).subscribe((value) => {
         if (value === 'FULL_SCOPE_FLIGHTS') {
-          fullScopeTotalEmissions.setValidators([
+          fullScopeTotalEmissions.addValidators([
             GovukValidators.required('Enter the total amount of emissions from full-scope flights'),
             GovukValidators.positiveNumber('Enter a number greater than 0, up to 24999.999'),
             GovukValidators.maxDecimalsValidator(3),
@@ -162,7 +162,7 @@ export class AerMonitoringApproachFormProvider
           aviationActivityTotalEmissions.clearValidators();
           aviationActivityTotalEmissions.setValue(null);
         } else if (value === 'AVIATION_ACTIVITY') {
-          aviationActivityTotalEmissions.setValidators([
+          aviationActivityTotalEmissions.addValidators([
             GovukValidators.required('Enter the total amount of emissions from aviation activity'),
             GovukValidators.positiveNumber('Enter a number greater than 0, up to 2999.999'),
             GovukValidators.maxDecimalsValidator(3),
@@ -181,13 +181,6 @@ export class AerMonitoringApproachFormProvider
     if (this.form.contains('aviationAerSupportFacilityMonitoringApproach')) {
       this.form.removeControl('aviationAerSupportFacilityMonitoringApproach');
     }
-  }
-
-  integerValidator(control) {
-    if (control.value % 1 !== 0) {
-      return { integer: 'The value must be an integer' };
-    }
-    return null;
   }
 
   addAviationAerSmallEmittersMonitoringApproach() {
@@ -253,39 +246,39 @@ export class AerMonitoringApproachFormProvider
     }
   }
 
-  private initValidatorsForTotalEmissions(totalEmissions) {
-    totalEmissions.setValidators([
+  private initValidatorsForTotalEmissions(totalEmissions: AbstractControl) {
+    totalEmissions.addValidators([
       GovukValidators.required('Enter the total amount of emissions from full-scope flights'),
       GovukValidators.positiveNumber('Enter a number greater than 0'),
       GovukValidators.maxDecimalsValidator(3),
     ]);
   }
 
-  private initValidatorsForNumFlightsJanApr(numOfFlightsJanApr) {
-    numOfFlightsJanApr.setValidators([
+  private initValidatorsForNumFlightsJanApr(numOfFlightsJanApr: AbstractControl) {
+    numOfFlightsJanApr.addValidators([
       GovukValidators.required('Enter the number of flights from 1 January to 30 April'),
       GovukValidators.min(0, 'Must be integer greater than or equal to 0'),
-      this.integerValidator,
+      GovukValidators.integerNumber('The value must be an integer'),
     ]);
   }
 
-  private initValidatorsForNumFlightsMayAug(numOfFlightsMayAug) {
-    numOfFlightsMayAug.setValidators([
+  private initValidatorsForNumFlightsMayAug(numOfFlightsMayAug: AbstractControl) {
+    numOfFlightsMayAug.addValidators([
       GovukValidators.required('Enter the number of flights from 1 May to 31 August'),
       GovukValidators.min(0, 'Must be integer greater than or equal to 0'),
-      this.integerValidator,
+      GovukValidators.integerNumber('The value must be an integer'),
     ]);
   }
 
-  private initValidatorsForNumFlightsSepDec(numOfFlightsSepDec) {
-    numOfFlightsSepDec.setValidators([
+  private initValidatorsForNumFlightsSepDec(numOfFlightsSepDec: AbstractControl) {
+    numOfFlightsSepDec.addValidators([
       GovukValidators.required('Enter the number of flights from 1 September to 31 December'),
       GovukValidators.min(0, 'Must be integer greater than or equal to 0'),
-      this.integerValidator,
+      GovukValidators.integerNumber('The value must be an integer'),
     ]);
   }
 
-  private addMaxValidatorForNumberOfFlights(numOfFlights) {
+  private addMaxValidatorForNumberOfFlights(numOfFlights: AbstractControl) {
     numOfFlights.addValidators([
       GovukValidators.max(
         242,

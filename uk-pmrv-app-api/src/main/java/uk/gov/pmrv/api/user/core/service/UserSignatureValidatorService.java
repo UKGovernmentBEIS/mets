@@ -1,22 +1,20 @@
 package uk.gov.pmrv.api.user.core.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.FileType;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.service.FileValidatorService;
+import uk.gov.pmrv.api.user.core.domain.model.core.SignatureConstants;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
-
-import javax.imageio.ImageIO;
-
-import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.FileType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.service.FileValidatorService;
-import uk.gov.pmrv.api.user.core.domain.model.core.SignatureConstants;
 
 @Log4j2
 @Service
@@ -39,7 +37,7 @@ public class UserSignatureValidatorService {
         
         // size
         if (signature.getFileSize() >= SignatureConstants.MAX_ALLOWED_SIZE_BYTES) {
-            throw new BusinessException(ErrorCode.MAX_FILE_SIZE_ERROR);
+            throw new BusinessException(ErrorCode.MAX_FILE_SIZE_ERROR, signature.getFileSize());
         }
         
         // image dimensions
@@ -47,7 +45,7 @@ public class UserSignatureValidatorService {
             BufferedImage image = ImageIO.read(imageStream);
             if(image.getWidth() > SignatureConstants.MAX_ALLOWED_WIDTH_PIXELS || 
                     image.getHeight() > SignatureConstants.MAX_ALLOWED_HEIGHT_PIXELS) {
-                throw new BusinessException(ErrorCode.INVALID_IMAGE_DIMENSIONS);
+                throw new BusinessException(ErrorCode.INVALID_IMAGE_DIMENSIONS, image.getWidth(), image.getHeight());
             }
         } catch (IOException e) {
             log.error(e);

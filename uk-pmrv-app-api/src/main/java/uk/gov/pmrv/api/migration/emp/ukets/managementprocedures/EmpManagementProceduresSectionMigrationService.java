@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration.emp.ukets.managementprocedures;
 
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.emissionsources.FuelConsumptionMeasuringMethod;
@@ -11,15 +12,13 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringP
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsources.AircraftTypeDetails;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.managementprocedures.EmpManagementProcedures;
-import uk.gov.pmrv.api.files.attachments.domain.FileAttachment;
+import uk.gov.netz.api.files.attachments.domain.FileAttachment;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.emp.common.attachments.FileAttachmentUtil;
 import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanMigrationContainer;
 import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanSectionMigrationService;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachment;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachmentMapper;
-
-import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,8 +27,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
+
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class EmpManagementProceduresSectionMigrationService implements EmissionsMonitoringPlanSectionMigrationService<EmpMigrationManagementProcedures> {
 
@@ -37,7 +37,11 @@ public class EmpManagementProceduresSectionMigrationService implements Emissions
 
     private final EtsFileAttachmentMapper etsFileAttachmentMapper = Mappers.getMapper(EtsFileAttachmentMapper.class);
 
-    private static final String BLANK_FILE_PATH = "migration" + File.separator + "attachments" + File.separator + "Blank file Risk assessment not required.pdf";
+	public EmpManagementProceduresSectionMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+		this.migrationJdbcTemplate = migrationJdbcTemplate;
+	}
+
+	private static final String BLANK_FILE_PATH = "migration" + File.separator + "attachments" + File.separator + "Blank file Risk assessment not required.pdf";
     private static final String QUERY_BASE = "with XMLNAMESPACES (\n"
     		+ "    'urn:www-toplev-com:officeformsofd' AS fd\n"
     		+ "), r1 as (\n"

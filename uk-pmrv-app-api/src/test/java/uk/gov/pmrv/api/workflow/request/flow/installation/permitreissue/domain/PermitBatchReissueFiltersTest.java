@@ -45,7 +45,7 @@ class PermitBatchReissueFiltersTest {
 				.installationCategories(null)
 				.build();
 		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
-		assertThat(violations).hasSize(0);
+		assertThat(violations).isEmpty();
 	}
 	
 	@Test
@@ -56,7 +56,7 @@ class PermitBatchReissueFiltersTest {
 				.installationCategories(Set.of(InstallationCategory.A))
 				.build();
 		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
-		assertThat(violations).hasSize(0);
+		assertThat(violations).isEmpty();
 	}
 	
 	@Test
@@ -82,7 +82,19 @@ class PermitBatchReissueFiltersTest {
 		assertThat(violations).hasSize(1);
 		assertThat(violations.iterator().next().getMessage()).isEqualTo("{permit.reissue.batch.create.emitterTypeAndInstallationCategory}");
 	}
-	
+
+	@Test
+	void emitterTypeWasteAndGHGEAndInstallationCategoryEmpty_should_be_invalid() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE, EmitterType.GHGE))
+				.installationCategories(Set.of())
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).hasSize(1);
+		assertThat(violations.iterator().next().getMessage()).isEqualTo("{permit.reissue.batch.create.emitterTypeAndInstallationCategory}");
+	}
+
 	@Test
 	void installationCategoryNA_should_be_invalid() {
 		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
@@ -93,5 +105,44 @@ class PermitBatchReissueFiltersTest {
 		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
 		assertThat(violations).hasSize(1);
 		assertThat(violations.iterator().next().getMessage()).isEqualTo("{permit.reissue.batch.create.installationCategory.notAvailable}");
+	}
+
+	@Test
+	void installationCategoryNA_should_be_invalid_forWaste() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE, EmitterType.GHGE))
+				.installationCategories(Set.of(InstallationCategory.N_A))
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).hasSize(1);
+		assertThat(violations.iterator().next().getMessage()).isEqualTo("{permit.reissue.batch.create.installationCategory.notAvailable}");
+	}
+
+	@Test
+	void installationCategoryNA_should_be_invalid_forWasteOnly() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE))
+				.installationCategories(Set.of(InstallationCategory.N_A))
+				.build();
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).hasSize(1);
+		assertThat(violations.iterator().next().getMessage()).isEqualTo("{permit.reissue.batch.create.installationCategory.notAvailable}");
+	}
+
+
+	@Test
+	void validNonGHGEWithoutInstallations() {
+		PermitBatchReissueFilters payload = PermitBatchReissueFilters.builder()
+				.accountStatuses(Set.of(InstallationAccountStatus.LIVE))
+				.emitterTypes(Set.of(EmitterType.WASTE))
+				.installationCategories(null)
+				.build();
+
+		Set<ConstraintViolation<PermitBatchReissueFilters>> violations = validator.validate(payload);
+		assertThat(violations).hasSize(1);
+		assertThat(violations.iterator().next().getMessage()).isEqualTo("{permit.reissue.batch.create.emitterTypeAndInstallationCategory}");
+
 	}
 }

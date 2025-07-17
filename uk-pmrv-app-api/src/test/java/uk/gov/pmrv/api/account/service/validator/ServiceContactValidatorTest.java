@@ -1,9 +1,9 @@
 package uk.gov.pmrv.api.account.service.validator;
 
 import org.junit.jupiter.api.Test;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.util.Map;
 

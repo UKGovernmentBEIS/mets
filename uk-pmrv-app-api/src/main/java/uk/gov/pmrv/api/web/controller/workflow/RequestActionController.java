@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.Authorized;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
 import uk.gov.pmrv.api.workflow.request.application.requestaction.RequestActionQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionInfoDTO;
@@ -46,9 +46,9 @@ public class RequestActionController {
     @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#requestActionId")
-    public ResponseEntity<RequestActionDTO> getRequestActionById(@Parameter(hidden = true) PmrvUser pmrvUser,
+    public ResponseEntity<RequestActionDTO> getRequestActionById(@Parameter(hidden = true) AppUser appUser,
                                                                  @PathVariable("id") @Parameter(description = "The request action id") Long requestActionId){
-        final RequestActionDTO requestAction = requestActionQueryService.getRequestActionById(requestActionId, pmrvUser);
+        final RequestActionDTO requestAction = requestActionQueryService.getRequestActionById(requestActionId, appUser);
         return new ResponseEntity<>(requestAction, HttpStatus.OK);
     }
 
@@ -57,8 +57,8 @@ public class RequestActionController {
     @ApiResponse(responseCode = "200", description = OK, content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = RequestActionInfoDTO.class))))
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized(resourceId = "#requestId")
-    public ResponseEntity<List<RequestActionInfoDTO>> getRequestActionsByRequestId(@Parameter(hidden = true) PmrvUser pmrvUser,
+    public ResponseEntity<List<RequestActionInfoDTO>> getRequestActionsByRequestId(@Parameter(hidden = true) AppUser appUser,
                                                                                    @RequestParam("requestId") @Parameter(name = "requestId", description = "The request id") String requestId) {
-        return new ResponseEntity<>(requestActionQueryService.getRequestActionsByRequestId(requestId, pmrvUser), HttpStatus.OK);
+        return new ResponseEntity<>(requestActionQueryService.getRequestActionsByRequestId(requestId, appUser), HttpStatus.OK);
     }
 }

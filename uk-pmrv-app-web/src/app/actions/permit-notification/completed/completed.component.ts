@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { combineLatest, first, map, Observable, pluck } from 'rxjs';
+import { combineLatest, first, map, Observable } from 'rxjs';
 
 import { SummaryList } from '@permit-notification/follow-up/model/model';
 
@@ -10,12 +10,15 @@ import { PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActi
 import { PermitNotificationService } from '../core/permit-notification.service';
 
 @Component({
-  selector: 'app-completed',
+  selector: 'app-action-notification-completed',
   templateUrl: './completed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CompletedComponent {
-  constructor(readonly route: ActivatedRoute, public readonly permitNotificationService: PermitNotificationService) {}
+export class NotificationCompletedActionComponent {
+  constructor(
+    readonly route: ActivatedRoute,
+    public readonly permitNotificationService: PermitNotificationService,
+  ) {}
 
   decisionDetails$ = this.permitNotificationService.getPayload().pipe(
     first(),
@@ -45,11 +48,11 @@ export class CompletedComponent {
 
   usersInfo$ = (
     this.permitNotificationService.getPayload() as Observable<PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActionPayload>
-  ).pipe(pluck('usersInfo'));
+  ).pipe(map((payload) => payload?.usersInfo));
 
   signatory$ = (
     this.permitNotificationService.getPayload() as Observable<PermitNotificationFollowUpApplicationReviewSubmittedDecisionRequestActionPayload>
-  ).pipe(pluck('reviewDecisionNotification', 'signatory'));
+  ).pipe(map((payload) => payload?.reviewDecisionNotification?.signatory));
 
   operators$: Observable<string[]> = combineLatest([this.usersInfo$, this.signatory$]).pipe(
     map(([usersInfo, signatory]) => Object.keys(usersInfo).filter((userId) => userId !== signatory)),

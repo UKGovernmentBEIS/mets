@@ -1,10 +1,12 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { ActivatedRouteStub, mockClass } from '../../../testing';
-import { AuthService } from '../../core/services/auth.service';
-import { SharedModule } from '../../shared/shared.module';
+import { AuthService } from '@core/services/auth.service';
+import { SharedModule } from '@shared/shared.module';
+import { ActivatedRouteStub, mockClass } from '@testing';
+
 import { TimedOutComponent } from './timed-out.component';
 
 describe('TimedOutComponent', () => {
@@ -20,6 +22,7 @@ describe('TimedOutComponent', () => {
       providers: [
         { provide: AuthService, useValue: authService },
         { provide: ActivatedRoute, useValue: activatedRoute },
+        { provide: APP_BASE_HREF, useValue: '/installation-aviation/' },
       ],
     }).compileComponents();
   });

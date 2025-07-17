@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
@@ -39,7 +39,7 @@ class EmpVariationUkEtsSubmitApplicationAmendActionHandlerTest {
     void process() {
         Long requestTaskId = 1L;
         String processTaskId = "processTaskId";
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         EmpVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload actionPayload =
         		EmpVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload.builder()
                         .payloadType(RequestTaskActionPayloadType.EMP_VARIATION_UKETS_SUBMIT_APPLICATION_AMEND_PAYLOAD)
@@ -52,11 +52,11 @@ class EmpVariationUkEtsSubmitApplicationAmendActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(requestTaskId, RequestTaskActionType.EMP_VARIATION_UKETS_SUBMIT_APPLICATION_AMEND, pmrvUser, actionPayload);
+        handler.process(requestTaskId, RequestTaskActionType.EMP_VARIATION_UKETS_SUBMIT_APPLICATION_AMEND, appUser, actionPayload);
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-        verify(empVariationUkEtsAmendService, times(1)).submitAmend(actionPayload, requestTask, pmrvUser);
+        verify(empVariationUkEtsAmendService, times(1)).submitAmend(actionPayload, requestTask, appUser);
         verify(workflowService, times(1)).completeTask(processTaskId);
     }
 

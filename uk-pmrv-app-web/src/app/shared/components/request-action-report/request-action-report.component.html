@@ -1,0 +1,14 @@
+<aside class="app-related-items" role="complementary">
+  <h2 class="govuk-heading-m" id="subsection-title">Related actions</h2>
+  <nav role="navigation" aria-labelledby="subsection-title">
+    <ul class="govuk-list govuk-!-font-size-16">
+      <li>
+        <a govukLink (click)="printRequestAction()" routerLink=".">Download PDF of workflow</a>
+      </li>
+    </ul>
+  </nav>
+</aside>
+
+<app-print #printComp>
+  <ng-template #printContainerRef></ng-template>
+</app-print>

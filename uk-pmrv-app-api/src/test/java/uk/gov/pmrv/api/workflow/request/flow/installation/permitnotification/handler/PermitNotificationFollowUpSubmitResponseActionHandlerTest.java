@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -49,7 +49,7 @@ class PermitNotificationFollowUpSubmitResponseActionHandlerTest {
     @Test
     void process() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final String processTaskId = "processTaskId";
         final UUID file = UUID.randomUUID();
         final PermitNotificationFollowUpRequestTaskPayload taskPayload =
@@ -83,7 +83,7 @@ class PermitNotificationFollowUpSubmitResponseActionHandlerTest {
         // Invoke
         handler.process(requestTask.getId(),
             RequestTaskActionType.PERMIT_NOTIFICATION_NOTIFY_OPERATOR_FOR_DECISION,
-            pmrvUser,
+            appUser,
             RequestTaskActionEmptyPayload.builder().build());
 
         // Verify

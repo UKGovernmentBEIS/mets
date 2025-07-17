@@ -71,6 +71,9 @@ describe('OverallDecisionReasonComponent', () => {
 
     expect(saveEmpOverallDecision).toHaveBeenCalledTimes(1);
     expect(saveEmpOverallDecision).toHaveBeenCalledWith(component.form.value, false);
-    expect(navigateSpy).toHaveBeenCalledWith(['../', 'summary'], { relativeTo: activatedRouteStub });
+    expect(navigateSpy).toHaveBeenCalledWith(['../', 'summary'], {
+      relativeTo: activatedRouteStub,
+      state: { force: true },
+    });
   });
 });

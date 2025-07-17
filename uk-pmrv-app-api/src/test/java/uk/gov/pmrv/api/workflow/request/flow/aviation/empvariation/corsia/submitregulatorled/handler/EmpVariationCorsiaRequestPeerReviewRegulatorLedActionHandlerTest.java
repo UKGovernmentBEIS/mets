@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -61,18 +61,18 @@ class EmpVariationCorsiaRequestPeerReviewRegulatorLedActionHandlerTest {
         		.builder()
         		.peerReviewer(peerReviewer)
         		.build();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        handler.process(requestTaskId, requestTaskActionType, pmrvUser, taskActionPayload);
+        handler.process(requestTaskId, requestTaskActionType, appUser, taskActionPayload);
 
-        verify(validator, times(1)).validate(requestTask, taskActionPayload, pmrvUser);
+        verify(validator, times(1)).validate(requestTask, taskActionPayload, appUser);
         verify(ledPeerReviewService, times(1))
-            .saveRequestPeerReviewAction(requestTask, peerReviewer, pmrvUser.getUserId());
+            .saveRequestPeerReviewAction(requestTask, peerReviewer, appUser.getUserId());
         verify(requestService, times(1))
             .addActionToRequest(requestTask.getRequest(), null, 
-            		RequestActionType.EMP_VARIATION_CORSIA_PEER_REVIEW_REQUESTED, pmrvUser.getUserId());
+            		RequestActionType.EMP_VARIATION_CORSIA_PEER_REVIEW_REQUESTED, appUser.getUserId());
         verify(workflowService, times(1))
             .completeTask(requestTask.getProcessTaskId(), Map.of(
                 BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),

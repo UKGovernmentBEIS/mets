@@ -12,8 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionPayloadType;
@@ -34,19 +34,18 @@ class PermitRevocationCreateActionHandlerTest {
     private StartProcessRequestService startProcessRequestService;
 
     @Test
-    void getType() {
-        assertThat(handler.getType()).isEqualTo(RequestCreateActionType.PERMIT_REVOCATION);
+    void getRequestCreateActionType() {
+        assertThat(handler.getRequestCreateActionType()).isEqualTo(RequestCreateActionType.PERMIT_REVOCATION);
     }
 
     @Test
     void process() {
         
         final Long accountId = 1L;
-        final RequestCreateActionType type = RequestCreateActionType.PERMIT_REVOCATION;
         final RequestCreateActionEmptyPayload payload =
             RequestCreateActionEmptyPayload.builder().payloadType(RequestCreateActionPayloadType.EMPTY_PAYLOAD).build();
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("user")
-            .authorities(List.of(PmrvAuthority.builder().accountId(accountId).build()))
+        final AppUser appUser = AppUser.builder().userId("user")
+            .authorities(List.of(AppAuthority.builder().accountId(accountId).build()))
             .build();
 
         RequestParams expectedRequestParams = RequestParams.builder()
@@ -54,14 +53,14 @@ class PermitRevocationCreateActionHandlerTest {
             .accountId(accountId)
             .requestPayload(PermitRevocationRequestPayload.builder()
                 .payloadType(RequestPayloadType.PERMIT_REVOCATION_REQUEST_PAYLOAD)
-                .regulatorAssignee(pmrvUser.getUserId())
+                .regulatorAssignee(appUser.getUserId())
                 .build())
             .build();
 
         when(startProcessRequestService.startProcess(expectedRequestParams))
             .thenReturn(Request.builder().id("requestId").build());
 
-        final String requestId = handler.process(accountId, type, payload, pmrvUser);
+        final String requestId = handler.process(accountId, payload, appUser);
 
         verify(startProcessRequestService, times(1)).startProcess(expectedRequestParams);
 

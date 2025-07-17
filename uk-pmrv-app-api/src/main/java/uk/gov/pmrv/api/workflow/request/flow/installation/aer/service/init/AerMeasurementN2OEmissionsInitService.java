@@ -9,8 +9,8 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.Measure
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.TransferN2O;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.AerMonitoringApproachEmissions;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.common.DurationRange;
-import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.n2o.MeasurementOfN2OEmissions;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.n2o.MeasurementN2OEmissionPointEmission;
+import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.measurement.n2o.MeasurementOfN2OEmissions;
 
 import java.util.ArrayList;
 import java.util.List;

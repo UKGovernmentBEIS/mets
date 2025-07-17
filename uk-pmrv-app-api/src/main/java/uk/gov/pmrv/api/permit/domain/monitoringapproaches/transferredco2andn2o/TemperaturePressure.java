@@ -1,15 +1,13 @@
 package uk.gov.pmrv.api.permit.domain.monitoringapproaches.transferredco2andn2o;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uk.gov.netz.api.common.validation.SpELExpression;
 
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
-
-import jakarta.validation.Valid;
 import java.util.List;
 
 @Data

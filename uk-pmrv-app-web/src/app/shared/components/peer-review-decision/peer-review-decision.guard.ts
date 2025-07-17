@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -9,9 +9,9 @@ import { StoreContextResolver } from '../../store-resolver/store-context.resolve
 import { resolvePeerReviewBaseUrl, resolveRequestTaskActionType } from './peer-review-decision-type-resolver';
 
 @Injectable()
-export class PeerReviewDecisionGuard implements CanActivate {
+export class PeerReviewDecisionGuard {
   constructor(
-    private storeResolver: StoreContextResolver,
+    private readonly storeResolver: StoreContextResolver,
     private readonly router: Router,
     private readonly location: Location,
   ) {}

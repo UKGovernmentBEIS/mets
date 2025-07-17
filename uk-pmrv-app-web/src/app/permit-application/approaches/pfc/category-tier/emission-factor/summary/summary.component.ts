@@ -12,5 +12,8 @@ export class SummaryComponent {
   index$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('index'))));
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
 
-  constructor(private readonly route: ActivatedRoute, private readonly router: Router) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+  ) {}
 }

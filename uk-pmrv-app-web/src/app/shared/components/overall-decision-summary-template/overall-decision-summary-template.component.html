@@ -1,0 +1,27 @@
+<dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Decision</dt>
+    <dd govukSummaryListRowValue>
+      {{ overallDecision.type | verificationDecisionType }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="overallDecision.reasons">
+    <dt govukSummaryListRowKey>
+      {{
+        overallDecision.type === 'VERIFIED_WITH_COMMENTS'
+          ? 'Your comments'
+          : 'Explanation why this report cannot be verified'
+      }}
+    </dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ overallDecision.reasons }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>

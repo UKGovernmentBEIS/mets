@@ -40,7 +40,7 @@ export class DeliveryZoneComponent {
     }),
   );
 
-  deliveryZones$ = combineLatest(this.payload$, this.index$).pipe(
+  deliveryZones$ = combineLatest([this.payload$, this.index$]).pipe(
     map(([payload, index]) => {
       const parameterCalculationMethod = (
         payload.aer.monitoringApproachEmissions.CALCULATION_CO2 as CalculationOfCO2Emissions

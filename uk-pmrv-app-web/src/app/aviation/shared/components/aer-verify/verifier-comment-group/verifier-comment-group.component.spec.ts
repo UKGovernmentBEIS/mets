@@ -24,8 +24,7 @@ describe('VerifierCommentGroupComponent', () => {
       <app-verifier-comment-group
         [isEditable]="isEditable"
         [queryParams]="queryParams"
-        [verifierComments]="verifierComments"
-      ></app-verifier-comment-group>
+        [verifierComments]="verifierComments"></app-verifier-comment-group>
     `,
   })
   class TestComponent {

@@ -87,11 +87,22 @@
       </app-timeline>
     </ng-container>
   </div>
-  <div class="govuk-grid-column-one-third" *ngIf="(hasRelatedActions$ | async) === true">
-    <app-related-actions
-      [isAssignable$]="store.isAssignableAndCapable$"
-      [taskId$]="taskId$"
-      [allowedActions$]="store.select('allowedRequestTaskActions')"
-    ></app-related-actions>
-  </div>
+  <ng-container *ngIf="vmPreviewDocuments$ | async as vm">
+    <div class="govuk-grid-column-one-third">
+      <app-related-actions
+        *ngIf="(hasRelatedActions$ | async) === true"
+        [isAssignable$]="store.isAssignableAndCapable$"
+        [taskId$]="taskId$"
+        [allowedActions$]="store.select('allowedRequestTaskActions')"
+      ></app-related-actions>
+
+      <app-preview-documents
+        *ngIf="vm.previewDocuments?.length > 0"
+        [taskId]="vm.taskId"
+        [previewDocuments]="vm.previewDocuments"
+        [decisionNotification]="vm.decision"
+        linkFontSize="govuk-!-font-size-16"
+      ></app-preview-documents>
+    </div>
+  </ng-container>
 </div>

@@ -7,8 +7,8 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -48,7 +48,7 @@ public class NonComplianceNoticeOfIntentNotifyOperatorActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final NonComplianceNotifyOperatorRequestTaskActionPayload taskActionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -61,7 +61,7 @@ public class NonComplianceNoticeOfIntentNotifyOperatorActionHandler
 
         // validate
         validator.validateNoticeOfIntent(taskPayload);
-        validator.validateUsers(requestTask, operators, externalContacts,  pmrvUser);
+        validator.validateUsers(requestTask, operators, externalContacts,  appUser);
         validator.validateContactAddress(request);
 
         // add timeline action
@@ -75,7 +75,7 @@ public class NonComplianceNoticeOfIntentNotifyOperatorActionHandler
             request,
             actionPayload,
             RequestActionType.NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
 
         // complete task

@@ -101,14 +101,24 @@ describe('TimelineItemLinkPipe', () => {
       'EMP_ISSUANCE_CORSIA_PEER_REVIEW_REQUESTED',
       'EMP_ISSUANCE_UKETS_RECALLED_FROM_AMENDS',
       'EMP_ISSUANCE_CORSIA_RECALLED_FROM_AMENDS',
+
       'AVIATION_DRE_APPLICATION_CANCELLED',
       'AVIATION_AER_UKETS_APPLICATION_CANCELLED_DUE_TO_DRE',
       'AVIATION_DRE_UKETS_PEER_REVIEW_REQUESTED',
+
       'EMP_VARIATION_APPLICATION_CANCELLED',
       'EMP_VARIATION_UKETS_PEER_REVIEW_REQUESTED',
       'EMP_VARIATION_CORSIA_PEER_REVIEW_REQUESTED',
       'EMP_VARIATION_UKETS_RECALLED_FROM_AMENDS',
       'EMP_VARIATION_CORSIA_RECALLED_FROM_AMENDS',
+
+      'BDR_RECALLED_FROM_VERIFICATION',
+      'BDR_APPLICATION_PEER_REVIEW_REQUESTED',
+      'BDR_APPLICATION_RE_INITIATED',
+
+      'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REQUESTED',
+
+      'ALR_RECALLED_FROM_VERIFICATION',
     ];
 
     noLinkActionTypes.forEach((type) => {
@@ -190,6 +200,17 @@ describe('TimelineItemLinkPipe', () => {
       requestAction.id,
       'permit-notification',
       'follow-up-return-for-amends',
+    ]);
+
+    requestAction.type = 'PERMIT_NOTIFICATION_APPLICATION_COMPLETED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'permit-notification', 'completed']);
+
+    requestAction.type = 'PERMIT_NOTIFICATION_APPLICATION_CESSATION_COMPLETED';
+    expect(pipe.transform(requestAction)).toEqual([
+      '/actions',
+      requestAction.id,
+      'permit-notification',
+      'cessation-completed',
     ]);
   });
 
@@ -343,8 +364,14 @@ describe('TimelineItemLinkPipe', () => {
     requestAction.type = 'AER_APPLICATION_COMPLETED';
     expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'aer', 'completed']);
 
+    requestAction.type = 'AER_APPLICATION_REVIEW_SKIPPED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'aer', 'completed']);
+
     requestAction.type = 'AER_APPLICATION_AMENDS_SENT_TO_VERIFIER';
     expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'aer', 'submitted']);
+
+    requestAction.type = 'AER_VERIFICATION_RETURNED_TO_OPERATOR';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'aer', 'returned-to-operator']);
   });
 
   it('should return link for vir', () => {
@@ -412,13 +439,7 @@ describe('TimelineItemLinkPipe', () => {
 
   it('should return link for emp batch reissue submitted', () => {
     requestAction.type = 'BATCH_REISSUE_SUBMITTED';
-    expect(pipe.transform(requestAction, false, true)).toEqual([
-      '/actions',
-      requestAction.id,
-      'emp-batch-variation',
-      'batch-reissue',
-      'submitted',
-    ]);
+    expect(pipe.transform(requestAction, false, true)).toEqual(['/actions', requestAction.id]);
   });
 
   it('should return link for permit batch reissue completed', () => {
@@ -433,13 +454,7 @@ describe('TimelineItemLinkPipe', () => {
 
   it('should return link for emp batch reissue completed', () => {
     requestAction.type = 'BATCH_REISSUE_COMPLETED';
-    expect(pipe.transform(requestAction, false, true)).toEqual([
-      '/actions',
-      requestAction.id,
-      'emp-batch-variation',
-      'batch-reissue',
-      'completed',
-    ]);
+    expect(pipe.transform(requestAction, false, true)).toEqual(['/actions', requestAction.id]);
   });
 
   it('should return link for permit reissue completed', () => {
@@ -449,13 +464,7 @@ describe('TimelineItemLinkPipe', () => {
 
   it('should return link for emp reissue completed', () => {
     requestAction.type = 'REISSUE_COMPLETED';
-    expect(pipe.transform(requestAction, false, true)).toEqual([
-      '/actions',
-      requestAction.id,
-      'emp-batch-variation',
-      'reissue',
-      'completed',
-    ]);
+    expect(pipe.transform(requestAction, false, true)).toEqual(['/actions', requestAction.id]);
   });
 
   it('should return link for EMP', () => {
@@ -475,7 +484,7 @@ describe('TimelineItemLinkPipe', () => {
 
   it('should return link for EMP returned to operator for changes', () => {
     requestAction.type = 'EMP_ISSUANCE_UKETS_APPLICATION_RETURNED_FOR_AMENDS';
-    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id, 'return-for-amends']);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
   });
 
   it('should return link for ammended EMP submitted', () => {
@@ -490,7 +499,7 @@ describe('TimelineItemLinkPipe', () => {
 
   it('should return link for EMP CORSIA returned to operator for changes', () => {
     requestAction.type = 'EMP_ISSUANCE_CORSIA_APPLICATION_RETURNED_FOR_AMENDS';
-    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id, 'return-for-amends']);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
   });
 
   it('should return link for EMP CORSIA approved by regulator', () => {
@@ -520,7 +529,7 @@ describe('TimelineItemLinkPipe', () => {
 
   it('should return link for Aviation Account Closure Submitted', () => {
     requestAction.type = 'AVIATION_ACCOUNT_CLOSURE_SUBMITTED';
-    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'account-closure-submitted']);
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id]);
   });
 
   it('should return link for EMP Variation UK ETS', () => {
@@ -552,42 +561,22 @@ describe('TimelineItemLinkPipe', () => {
     expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id, 'decision-summary']);
 
     requestAction.type = 'EMP_VARIATION_UKETS_APPLICATION_PEER_REVIEWER_ACCEPTED';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'peer-reviewer-submitted',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
 
     requestAction.type = 'EMP_VARIATION_UKETS_APPLICATION_PEER_REVIEWER_REJECTED';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'peer-reviewer-submitted',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
 
     requestAction.type = 'EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEWER_ACCEPTED';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'peer-reviewer-submitted',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
 
     requestAction.type = 'EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEWER_REJECTED';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'peer-reviewer-submitted',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
 
     requestAction.type = 'EMP_VARIATION_UKETS_APPLICATION_RETURNED_FOR_AMENDS';
-    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id, 'return-for-amends']);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
 
     requestAction.type = 'EMP_VARIATION_CORSIA_APPLICATION_RETURNED_FOR_AMENDS';
-    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id, 'return-for-amends']);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
 
     requestAction.type = 'EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMITTED';
     expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
@@ -610,22 +599,12 @@ describe('TimelineItemLinkPipe', () => {
 
   it('should return link for EMP CORSIA peer review accepted', () => {
     requestAction.type = 'EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEWER_ACCEPTED';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'peer-reviewer-submitted',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
   });
 
   it('should return link for EMP CORSIA peer review accepted', () => {
     requestAction.type = 'EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEWER_REJECTED';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'peer-reviewer-submitted',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
   });
 
   it('should return link for daily penalty notice submitted', () => {
@@ -861,13 +840,7 @@ describe('TimelineItemLinkPipe', () => {
 
   it('should return link for aviation aer returned for amends', () => {
     requestAction.type = 'AVIATION_AER_UKETS_APPLICATION_RETURNED_FOR_AMENDS';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'aer',
-      'return-for-amends',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
   });
   it('should return link for aviation aer completed', () => {
     requestAction.type = 'AVIATION_AER_UKETS_APPLICATION_COMPLETED';
@@ -892,6 +865,21 @@ describe('TimelineItemLinkPipe', () => {
 
   it('should return link for aviation aer corsia verification statement submitted', () => {
     requestAction.type = 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
+  });
+
+  it('should return link for aviation aer corsia amends sent to verifier', () => {
+    requestAction.type = 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
+  });
+
+  it('should return link for aviation aer corsia amends submitted', () => {
+    requestAction.type = 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
+  });
+
+  it('should return link for aviation aer corsia returned for amends', () => {
+    requestAction.type = 'AVIATION_AER_CORSIA_APPLICATION_RETURNED_FOR_AMENDS';
     expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
   });
 
@@ -934,51 +922,26 @@ describe('TimelineItemLinkPipe', () => {
 
   it('should return link for EMP peer review accepted', () => {
     requestAction.type = 'EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEWER_ACCEPTED';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'peer-reviewer-submitted',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
   });
-  it('should return link for EMP peer review accepted', () => {
+  it('should return link for EMP peer review rejected', () => {
     requestAction.type = 'EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEWER_REJECTED';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'peer-reviewer-submitted',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
   });
 
   it('should return link for DRE peer review accepted', () => {
     requestAction.type = 'AVIATION_DRE_UKETS_PEER_REVIEWER_ACCEPTED';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'peer-reviewer-submitted',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
   });
 
-  it('should return link for DRE peer review accepted', () => {
+  it('should return link for DRE peer review rejected', () => {
     requestAction.type = 'AVIATION_DRE_UKETS_PEER_REVIEWER_REJECTED';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'peer-reviewer-submitted',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
   });
 
   it('should return link for DRE submitted', () => {
     requestAction.type = 'AVIATION_DRE_UKETS_APPLICATION_SUBMITTED';
-    expect(pipe.transform(requestAction)).toEqual([
-      '/aviation',
-      'actions',
-      requestAction.id,
-      'aviation-emissions-updated',
-    ]);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
   });
 
   it('should return link for Aviation VIR', () => {
@@ -986,7 +949,7 @@ describe('TimelineItemLinkPipe', () => {
     expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
 
     requestAction.type = 'AVIATION_VIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS';
-    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id, 'vir', 'responded']);
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
 
     requestAction.type = 'AVIATION_VIR_APPLICATION_REVIEWED';
     expect(pipe.transform(requestAction)).toEqual([
@@ -996,5 +959,166 @@ describe('TimelineItemLinkPipe', () => {
       'vir',
       'decision-summary',
     ]);
+  });
+
+  it('should return links for installation inspection', () => {
+    requestAction.type = 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW_REQUESTED';
+    expect(pipe.transform(requestAction)).toEqual(null);
+
+    requestAction.type = 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEWER_ACCEPTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'inspection', 'peer-review-decision']);
+
+    requestAction.type = 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEWER_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'inspection', 'peer-review-decision']);
+
+    requestAction.type = 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW_REQUESTED';
+    expect(pipe.transform(requestAction)).toEqual(null);
+
+    requestAction.type = 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEWER_ACCEPTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'inspection', 'peer-review-decision']);
+
+    requestAction.type = 'INSTALLATION_AUDIT_APPLICATION_PEER_REVIEWER_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', requestAction.id, 'inspection', 'peer-review-decision']);
+
+    requestAction.type = 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'inspection', 'onsite-audit-submitted']);
+
+    requestAction.type = 'INSTALLATION_AUDIT_APPLICATION_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'inspection', 'onsite-audit-submitted']);
+  });
+
+  it('should return links for aer corsia annual offsetting', () => {
+    requestAction.type = 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_REQUESTED';
+    expect(pipe.transform(requestAction)).toEqual(null);
+
+    requestAction.type = 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', 1]);
+
+    requestAction.type = 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', 1]);
+
+    requestAction.type = 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', 1]);
+
+    requestAction.type = 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_CANCELLED';
+    expect(pipe.transform(requestAction)).toEqual(null);
+  });
+
+  it('should return links for aer corsia 3 year period offsetting', () => {
+    requestAction.type = 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_CANCELLED';
+    expect(pipe.transform(requestAction)).toEqual(null);
+
+    requestAction.type = 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REQUESTED';
+    expect(pipe.transform(requestAction)).toEqual(null);
+
+    requestAction.type = 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_ACCEPTED';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', 1]);
+
+    requestAction.type = 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', 1]);
+
+    requestAction.type = 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', 1]);
+  });
+
+  it('should return link with details for mark as not required', () => {
+    requestAction.type = 'AER_APPLICATION_NOT_REQUIRED';
+    expect(pipe.transform(requestAction, true, true, 'REGULATOR')).toEqual([
+      './actions',
+      1,
+      'aer',
+      'decision',
+      'details',
+    ]);
+  });
+
+  it('should return link with details for verifier returned to operator', () => {
+    requestAction.type = 'AVIATION_AER_CORSIA_VERIFICATION_RETURNED_TO_OPERATOR';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', 1]);
+
+    requestAction.type = 'AVIATION_AER_UKETS_VERIFICATION_RETURNED_TO_OPERATOR';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', 1]);
+  });
+
+  it('should return NULL link with details for mark as not required', () => {
+    requestAction.type = 'AER_APPLICATION_NOT_REQUIRED';
+    expect(pipe.transform(requestAction, true, true, 'OPERATOR')).toBe(null);
+  });
+
+  it('should return links for baseline data report (BDR)', () => {
+    requestAction.type = 'BDR_APPLICATION_SENT_TO_VERIFIER';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdr', 'submitted']);
+
+    requestAction.type = 'BDR_APPLICATION_AMENDS_SENT_TO_VERIFIER';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdr', 'submitted']);
+
+    requestAction.type = 'BDR_APPLICATION_SENT_TO_REGULATOR';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdr', 'submitted']);
+
+    requestAction.type = 'BDR_APPLICATION_VERIFICATION_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdr', 'submitted']);
+
+    requestAction.type = 'BDR_VERIFICATION_RETURNED_TO_OPERATOR';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdr', 'returned-to-operator']);
+
+    requestAction.type = 'BDR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdr', 'return-for-amends']);
+
+    requestAction.type = 'BDR_APPLICATION_COMPLETED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdr', 'submitted']);
+
+    requestAction.type = 'BDR_APPLICATION_PEER_REVIEW_ACCEPTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdr', 'peer-review-decision']);
+
+    requestAction.type = 'BDR_APPLICATION_PEER_REVIEW_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'bdr', 'peer-review-decision']);
+  });
+
+  it('should return links for PERMANENT CESSATION', () => {
+    requestAction.type = 'PERMANENT_CESSATION_SUBMITTED';
+    expect(pipe.transform(requestAction, true, true, 'REGULATOR')).toBe(null);
+
+    requestAction.type = 'PERMANENT_CESSATION_APPLICATION_CANCELLED';
+    expect(pipe.transform(requestAction, true, true, 'REGULATOR')).toBe(null);
+
+    requestAction.type = 'PERMANENT_CESSATION_APPLICATION_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'permanent-cessation', 'submitted']);
+
+    requestAction.type = 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'permanent-cessation', 'peer-reviewer-submitted']);
+
+    requestAction.type = 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_ACCEPTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'permanent-cessation', 'peer-reviewer-submitted']);
+  });
+
+  it('should return links for DOE CORSIA', () => {
+    requestAction.type = 'AVIATION_DOE_CORSIA_SUBMIT_CANCELLED';
+    expect(pipe.transform(requestAction)).toBe(null);
+
+    requestAction.type = 'AVIATION_AER_CORSIA_APPLICATION_CANCELLED_DUE_TO_DOE';
+    expect(pipe.transform(requestAction)).toBe(null);
+
+    requestAction.type = 'AVIATION_DOE_CORSIA_PEER_REVIEW_REQUESTED';
+    expect(pipe.transform(requestAction)).toBe(null);
+
+    requestAction.type = 'AVIATION_DOE_CORSIA_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
+
+    requestAction.type = 'AVIATION_DOE_CORSIA_PEER_REVIEWER_ACCEPTED';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
+
+    requestAction.type = 'AVIATION_DOE_CORSIA_PEER_REVIEWER_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
+  });
+
+  it('should return links for activity level report (ALR)', () => {
+    requestAction.type = 'ALR_APPLICATION_SENT_TO_VERIFIER';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'submitted']);
+
+    requestAction.type = 'ALR_APPLICATION_VERIFICATION_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'submitted']);
+
+    requestAction.type = 'ALR_VERIFICATION_RETURNED_TO_OPERATOR';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'returned-to-operator']);
   });
 });

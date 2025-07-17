@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -18,10 +18,12 @@ import { AviationAerCorsiaTimeAllocationScope } from './aviationAerCorsiaTimeAll
 import { AviationAerCorsiaUncorrectedNonConformities } from './aviationAerCorsiaUncorrectedNonConformities';
 import { AviationAerCorsiaVerifierDetails } from './aviationAerCorsiaVerifierDetails';
 import { AviationAerCorsiaVerifiersConclusions } from './aviationAerCorsiaVerifiersConclusions';
+import { AviationAerNotVerifiedDecision } from './aviationAerNotVerifiedDecision';
 import { AviationAerRecommendedImprovements } from './aviationAerRecommendedImprovements';
 import { AviationAerUncorrectedMisstatements } from './aviationAerUncorrectedMisstatements';
 import { AviationAerUncorrectedNonCompliances } from './aviationAerUncorrectedNonCompliances';
-import { AviationAerVerificationDecision } from './aviationAerVerificationDecision';
+import { AviationAerVerifiedSatisfactoryDecision } from './aviationAerVerifiedSatisfactoryDecision';
+import { AviationAerVerifiedSatisfactoryWithCommentsDecision } from './aviationAerVerifiedSatisfactoryWithCommentsDecision';
 import { VerificationBodyDetails } from './verificationBodyDetails';
 
 export interface AviationAerCorsiaVerificationReport {
@@ -34,7 +36,10 @@ export interface AviationAerCorsiaVerificationReport {
   timeAllocationScope: AviationAerCorsiaTimeAllocationScope;
   processAnalysis: AviationAerCorsiaProcessAnalysis;
   generalInformation: AviationAerCorsiaGeneralInformation;
-  overallDecision: AviationAerVerificationDecision;
+  overallDecision:
+    | AviationAerNotVerifiedDecision
+    | AviationAerVerifiedSatisfactoryDecision
+    | AviationAerVerifiedSatisfactoryWithCommentsDecision;
   opinionStatement: AviationAerCorsiaOpinionStatement;
   uncorrectedMisstatements: AviationAerUncorrectedMisstatements;
   recommendedImprovements: AviationAerRecommendedImprovements;

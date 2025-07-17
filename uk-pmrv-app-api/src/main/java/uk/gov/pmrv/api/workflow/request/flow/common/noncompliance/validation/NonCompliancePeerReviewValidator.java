@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceCivilPenaltyRequestTaskPayload;
@@ -23,26 +23,26 @@ public class NonCompliancePeerReviewValidator {
         @Valid @SuppressWarnings("unused") final NonComplianceDailyPenaltyNoticeRequestTaskPayload requestTaskPayload,
         final RequestTaskType peerReviewRequestTaskType,
         final PeerReviewRequestTaskActionPayload payload,
-        final PmrvUser pmrvUser
+        final AppUser appUser
     ) {
-        peerReviewerTaskAssignmentValidator.validate(peerReviewRequestTaskType, payload.getPeerReviewer(), pmrvUser);
+        peerReviewerTaskAssignmentValidator.validate(peerReviewRequestTaskType, payload.getPeerReviewer(), appUser);
     }
 
     public void validateNoticeOfIntentPeerReview(
         @Valid @SuppressWarnings("unused") final NonComplianceNoticeOfIntentRequestTaskPayload requestTaskPayload,
         final RequestTaskType peerReviewRequestTaskType,
         final PeerReviewRequestTaskActionPayload payload,
-        final PmrvUser pmrvUser
+        final AppUser appUser
     ) {
-        peerReviewerTaskAssignmentValidator.validate(peerReviewRequestTaskType, payload.getPeerReviewer(), pmrvUser);
+        peerReviewerTaskAssignmentValidator.validate(peerReviewRequestTaskType, payload.getPeerReviewer(), appUser);
     }
 
     public void validateCivilPenaltyPeerReview(
         @Valid @SuppressWarnings("unused") final NonComplianceCivilPenaltyRequestTaskPayload requestTaskPayload,
         final RequestTaskType peerReviewRequestTaskType,
         final PeerReviewRequestTaskActionPayload payload,
-        final PmrvUser pmrvUser
+        final AppUser appUser
     ) {
-        peerReviewerTaskAssignmentValidator.validate(peerReviewRequestTaskType, payload.getPeerReviewer(), pmrvUser);
+        peerReviewerTaskAssignmentValidator.validate(peerReviewRequestTaskType, payload.getPeerReviewer(), appUser);
     }
 }

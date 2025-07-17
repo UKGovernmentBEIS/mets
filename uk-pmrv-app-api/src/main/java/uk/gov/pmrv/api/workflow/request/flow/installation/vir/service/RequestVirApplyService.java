@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -33,17 +33,17 @@ public class RequestVirApplyService {
     }
 
     @Transactional
-    public void applySubmitAction(RequestTask requestTask, PmrvUser pmrvUser) {
+    public void applySubmitAction(RequestTask requestTask, AppUser appUser) {
         final VirApplicationSubmitRequestTaskPayload taskPayload = (VirApplicationSubmitRequestTaskPayload) requestTask.getPayload();
 
         // Validate VIR
         virSubmitValidatorService.validate(taskPayload.getOperatorImprovementResponses(), taskPayload.getVerificationData());
 
         // Submit VIR
-        submitVir(requestTask, pmrvUser);
+        submitVir(requestTask, appUser);
     }
 
-    private void submitVir(RequestTask requestTask, PmrvUser pmrvUser) {
+    private void submitVir(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         VirRequestPayload virRequestPayload = (VirRequestPayload) request.getPayload();
         final VirApplicationSubmitRequestTaskPayload taskPayload = (VirApplicationSubmitRequestTaskPayload) requestTask.getPayload();
@@ -62,6 +62,6 @@ public class RequestVirApplyService {
                 requestTask.getRequest(),
                 actionPayload,
                 RequestActionType.VIR_APPLICATION_SUBMITTED,
-                pmrvUser.getUserId());
+                appUser.getUserId());
     }
 }

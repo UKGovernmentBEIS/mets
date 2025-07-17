@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -17,7 +17,7 @@ import { PermitTransferDetailsConfirmation } from './permitTransferDetailsConfir
 export interface PermitTransferBApplicationSubmittedRequestActionPayloadAllOf {
   permitTransferDetails?: PermitTransferDetails;
   permitTransferDetailsConfirmation?: PermitTransferDetailsConfirmation;
-  permitType?: 'GHGE' | 'HSE';
+  permitType?: 'GHGE' | 'HSE' | 'WASTE';
   permit?: Permit;
   installationOperatorDetails?: InstallationOperatorDetails;
   permitSectionsCompleted?: { [key: string]: Array<boolean> };

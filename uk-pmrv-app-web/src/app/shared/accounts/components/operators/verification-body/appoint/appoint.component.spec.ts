@@ -95,6 +95,7 @@ describe('AppointComponent', () => {
 
     it('should populate the form with active verification bodies', () => {
       expect(page.options.map((option) => option.textContent.trim())).toEqual([
+        'No verification body',
         'Verifying company 1',
         'Verifying company 2',
       ]);

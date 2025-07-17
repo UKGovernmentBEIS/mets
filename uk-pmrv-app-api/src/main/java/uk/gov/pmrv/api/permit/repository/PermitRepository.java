@@ -1,7 +1,5 @@
 package uk.gov.pmrv.api.permit.repository;
 
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.pmrv.api.permit.domain.PermitEntity;
 import uk.gov.pmrv.api.permit.domain.dto.PermitEntityAccountDTO;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PermitRepository extends JpaRepository<PermitEntity, String> {

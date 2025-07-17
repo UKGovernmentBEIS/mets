@@ -16,25 +16,25 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactVbInfoDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactVbInfoResponse;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.service.AccountVbSiteContactService;
 import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ class VbSiteContactControllerTest {
     private VbSiteContactController controller;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent appSecurityComponent;
 
     @Mock
     private AccountVbSiteContactService service;
@@ -69,14 +69,14 @@ class VbSiteContactControllerTest {
     private RoleAuthorizationService roleAuthorizationService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp() {
-        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
@@ -91,7 +91,7 @@ class VbSiteContactControllerTest {
         conversionService.addConverter(new StringToAccountTypeEnumConverter());
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .setConversionService(conversionService)
                 .build();
@@ -102,7 +102,7 @@ class VbSiteContactControllerTest {
     @Test
     void getVbSiteContacts() throws Exception {
         final AccountType accountType = AccountType.INSTALLATION;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.VERIFIER).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
 
         AccountContactVbInfoResponse accountVbSiteContactInfoResponse = AccountContactVbInfoResponse.builder()
                 .contacts(List.of(
@@ -111,7 +111,7 @@ class VbSiteContactControllerTest {
                     ))
                 .editable(false).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(service.getAccountsAndVbSiteContacts(user, accountType, 0, 2)).thenReturn(accountVbSiteContactInfoResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get(VB_SITE_CONTACT_CONTROLLER_PATH + "?page=0&size=2")
@@ -127,37 +127,37 @@ class VbSiteContactControllerTest {
                 .andExpect(jsonPath("contacts[1].type").value("EU ETS Installations"))
                 .andExpect(jsonPath("contacts[1].userId").value("userId2"));
 
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(service, times(1)).getAccountsAndVbSiteContacts(user, accountType,0, 2);
     }
 
     @Test
     void getVbSiteContacts_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.VERIFIER).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(user, new RoleType[] {RoleType.VERIFIER});
+                .evaluate(user, new String[] {RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders.get(VB_SITE_CONTACT_CONTROLLER_PATH + "?page=0&size=2")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(service, never()).getAccountsAndVbSiteContacts(any(), any(), anyInt(), anyInt());
     }
 
     @Test
     void updateVbSiteContacts() throws Exception {
         final AccountType accountType = AccountType.INSTALLATION;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.VERIFIER).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
         List<AccountContactDTO> accountVbSiteContacts = List.of(
                 AccountContactDTO.builder().accountId(1L).userId("userId1").build(),
                 AccountContactDTO.builder().accountId(2L).userId("userId2").build()
         );
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 //        when(applicationConversionService.convert("INSTALLATION", AccountType.class)).thenReturn(accountType);
 
         mockMvc.perform(MockMvcRequestBuilders.post(VB_SITE_CONTACT_CONTROLLER_PATH)
@@ -165,21 +165,21 @@ class VbSiteContactControllerTest {
                 .content(objectMapper.writeValueAsString(accountVbSiteContacts)))
                 .andExpect(status().isNoContent());
 
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(service, times(1)).updateVbSiteContacts(user, accountType, accountVbSiteContacts);
     }
 
     @Test
     void updateVbSiteContacts_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.VERIFIER).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.VERIFIER).build();
         List<AccountContactDTO> accountVbSiteContacts = List.of(
                 AccountContactDTO.builder().accountId(1L).userId("userId1").build(),
                 AccountContactDTO.builder().accountId(2L).userId("userId2").build()
         );
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
+                .when(appUserAuthorizationService)
                 .authorize(user, "updateVbSiteContacts");
 
         mockMvc.perform(MockMvcRequestBuilders.post(VB_SITE_CONTACT_CONTROLLER_PATH)
@@ -187,7 +187,7 @@ class VbSiteContactControllerTest {
                 .content(objectMapper.writeValueAsString(accountVbSiteContacts)))
                 .andExpect(status().isForbidden());
 
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(service, never()).updateVbSiteContacts(any(), any(), anyList());
     }
 }

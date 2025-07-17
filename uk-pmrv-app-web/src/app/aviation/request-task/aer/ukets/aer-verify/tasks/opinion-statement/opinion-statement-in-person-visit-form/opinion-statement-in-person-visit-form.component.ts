@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Inject, InjectionToken, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -10,21 +11,32 @@ import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
 import { WizardStepComponent } from '@shared/wizard/wizard-step.component';
 
-import { OpinionStatementFormProvider } from '../opinion-statement-form.provider';
+import { AviationAerInPersonSiteVisitType, OpinionStatementFormProvider } from '../opinion-statement-form.provider';
+import { OpinionStatementInPersonVisitFormProvider } from './opinion-statement-in-person-visit-form.provider';
+
+export const AER_SITE_VISIT_FORM = new InjectionToken<{ form: AviationAerInPersonSiteVisitType; reset: () => void }>(
+  'In Person Site Visit form',
+);
 
 @Component({
   selector: 'app-opinion-statement-in-person-visit-form',
   templateUrl: './opinion-statement-in-person-visit-form.component.html',
   standalone: true,
   imports: [SharedModule, ReturnToLinkComponent],
-  providers: [DestroySubject],
+  providers: [
+    {
+      provide: AER_SITE_VISIT_FORM,
+      useClass: OpinionStatementInPersonVisitFormProvider,
+    },
+    DestroySubject,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class OpinionStatementInPersonVisitFormComponent {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;
 
-  protected inPersonSiteVisitGroup = this.formProvider.inPersonSiteVisitGroup;
-  protected visitDatesCtrl = this.formProvider.visitDatesCtrl;
+  protected inPersonSiteVisitGroup = this.formProviderInPersonSiteVisit.form;
+  protected visitDatesCtrl = this.formProviderInPersonSiteVisit.visitDatesCtrl;
 
   get heading(): HTMLHeadingElement {
     return this.wizardStep.nativeElement.querySelector('h1');
@@ -32,6 +44,9 @@ export default class OpinionStatementInPersonVisitFormComponent {
 
   constructor(
     @Inject(TASK_FORM_PROVIDER) public formProvider: OpinionStatementFormProvider,
+    @Inject(AER_SITE_VISIT_FORM)
+    protected readonly formProviderInPersonSiteVisit: OpinionStatementInPersonVisitFormProvider,
+    private fb: FormBuilder,
     private pendingRequestService: PendingRequestService,
     private router: Router,
     private route: ActivatedRoute,
@@ -39,21 +54,33 @@ export default class OpinionStatementInPersonVisitFormComponent {
   ) {}
 
   addVisitDatesCtrl() {
-    this.formProvider.addVisitDatesCtrl();
+    this.formProviderInPersonSiteVisit.addVisitDatesCtrl();
   }
 
   removeVisitDatesCtrl(index: number) {
-    this.formProvider.removeVisitDatesCtrl(index);
+    this.formProviderInPersonSiteVisit.removeVisitDatesCtrl(index);
   }
 
   onSubmit() {
     if (this.inPersonSiteVisitGroup.invalid) return;
 
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
-      .saveAerVerify({ opinionStatement: this.formProvider.getFormValue() }, 'in progress')
+    this.formProvider.inPersonSiteVisitGroup.patchValue({
+      ...this.inPersonSiteVisitGroup.value,
+    });
+
+    (this.formProvider.inPersonSiteVisitGroup.controls.visitDates as FormArray).clear();
+    this.formProvider.inPersonSiteVisitGroup.setControl(
+      'visitDates',
+      this.fb.array(this.inPersonSiteVisitGroup.value.visitDates ?? []),
+    );
+
+    const value = this.formProvider.getFormValue();
+
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
+      .saveAerVerify({ opinionStatement: { ...value } }, 'in progress')
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setOpinionStatement(this.formProvider.getFormValue());
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setOpinionStatement({ ...value });
         this.router.navigate(['../..', 'summary'], { relativeTo: this.route });
       });
   }

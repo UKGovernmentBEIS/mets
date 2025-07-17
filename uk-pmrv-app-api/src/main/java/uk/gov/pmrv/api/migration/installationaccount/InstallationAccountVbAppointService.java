@@ -1,9 +1,7 @@
 package uk.gov.pmrv.api.migration.installationaccount;
 
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +10,8 @@ import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
 import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
 import uk.gov.pmrv.api.verificationbody.repository.VerificationBodyRepository;
+
+import java.util.Optional;
 
 @Log4j2
 @Service

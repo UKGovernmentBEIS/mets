@@ -9,9 +9,9 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDT
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.domain.estimatedannualemissions.EstimatedAnnualEmissions;
@@ -180,5 +180,28 @@ class InstallationCategoryBasedFeePaymentServiceTest {
         assertEquals(CAT_B, installationCategoryBasedFeePaymentService.resolveFeeType(request));
 
         verifyNoInteractions(installationAccountQueryService);
+    }
+
+    @Test
+    void resolveFeeType_emitterWaste_returnWasteFeeType() {
+        CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.ENGLAND;
+        RequestType requestType = RequestType.PERMIT_SURRENDER;
+        Request request = Request.builder()
+            .competentAuthority(competentAuthority)
+            .type(requestType)
+            .accountId(1L)
+            .build();
+        EmitterType emitterType = EmitterType.WASTE;
+        InstallationCategory accountInstallationCategory = InstallationCategory.N_A;
+        InstallationAccountInfoDTO accountInfo = InstallationAccountInfoDTO.builder()
+                .emitterType(emitterType)
+                .installationCategory(accountInstallationCategory)
+                .build();
+
+        when(installationAccountQueryService.getInstallationAccountInfoDTOById(request.getAccountId())).thenReturn(accountInfo);
+
+        assertEquals(FeeType.WASTE, installationCategoryBasedFeePaymentService.resolveFeeType(request));
+
+        verify(installationAccountQueryService, times(1)).getInstallationAccountInfoDTOById(request.getAccountId());
     }
 }

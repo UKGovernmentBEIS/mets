@@ -13,8 +13,7 @@ import { AerService } from '../../core/aer.service';
     <app-action-task header="Additional information" [breadcrumb]="true">
       <app-additional-info-group
         [aerData]="aerData$ | async"
-        [additionalDocumentFiles]="additionalDocumentFiles$ | async"
-      ></app-additional-info-group>
+        [additionalDocumentFiles]="additionalDocumentFiles$ | async"></app-additional-info-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -34,5 +33,8 @@ export class AdditionalInfoComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

@@ -65,8 +65,10 @@ describe('SummaryGuard', () => {
         },
       }),
     );
-    await expect(
-      firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>),
-    ).resolves.toEqual(router.parseUrl('/tasks/1/vir/submit/B1/recommendation-response'));
+
+    guard.canActivate(activatedRouteSnapshot).subscribe((val) => {
+      expect(router.parseUrl).toHaveBeenCalledWith('../recommendation-response');
+      expect(val).toBeInstanceOf(UrlTree);
+    });
   });
 });

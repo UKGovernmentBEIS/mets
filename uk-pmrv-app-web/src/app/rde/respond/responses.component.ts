@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, map, of, switchMap, withLatestFrom } from 'rxjs';
 
+import { hasRequestTaskAllowedActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
+
 import {
   ItemDTOResponse,
   RequestActionInfoDTO,
@@ -28,7 +30,7 @@ import { RDE_FORM, responseFormProvider } from './responses-form.provider';
   providers: [responseFormProvider],
 })
 export class ResponsesComponent {
-  private readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
+  taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
   navigationState = { returnUrl: this.router.url };
   isAviation = this.router.url.includes('/aviation/');
   readonly actions$ = this.store.pipe(
@@ -45,6 +47,15 @@ export class ResponsesComponent {
     ),
     withLatestFrom(this.store),
     map(([items, state]) => items?.items.filter((item) => item.taskId !== state?.requestTaskId)),
+  );
+
+  readonly allowedRequestTaskActions$ = this.store.pipe(map((state) => state?.allowedRequestTaskActions));
+
+  hasRelatedActions$ = this.store.pipe(
+    map(
+      (state) =>
+        (state.assignable && state.userAssignCapable) || hasRequestTaskAllowedActions(state.allowedRequestTaskActions),
+    ),
   );
 
   constructor(

@@ -10,7 +10,11 @@ describe('ReviewSummaryComponent', () => {
   let hostComponent: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
 
-  @Component({ template: `<app-review-summary [item]="item" [taskId]="taskId"></app-review-summary>` })
+  @Component({
+    template: `
+      <app-review-summary [item]="item" [taskId]="taskId"></app-review-summary>
+    `,
+  })
   class TestComponent {
     item = {
       legalEntity: {

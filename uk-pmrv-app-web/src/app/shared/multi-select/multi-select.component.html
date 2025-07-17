@@ -18,7 +18,7 @@
   (click)="click()"
   [id]="identifier"
 >
-  {{ !currentValue || currentValue.length === 0 ? '' : currentValue.length + ' selected' }}
+  {{ !currentValue || currentValue.length === 0 ? '0 selected' : currentValue.length + ' selected' }}
   <span class="arrow"></span>
 </button>
 <ng-container *ngIf="isOpen | async; else closed">

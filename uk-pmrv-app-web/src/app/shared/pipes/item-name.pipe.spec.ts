@@ -23,6 +23,9 @@ describe('ItemNamePipe', () => {
     expect(pipe.transform('AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT', '2022')).toEqual(
       'Verify 2022 emissions report',
     );
+    expect(pipe.transform('AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT', '2022')).toEqual(
+      'Verify 2022 emissions report',
+    );
     expect(pipe.transform('AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT', '2022')).toEqual(
       'Verify 2022 emissions report',
     );
@@ -157,6 +160,28 @@ describe('ItemNamePipe', () => {
     expect(pipe.transform('DRE_TRACK_PAYMENT', '2022')).toEqual('Track payment for 2022 reportable emissions');
     expect(pipe.transform('DRE_CONFIRM_PAYMENT', '2022')).toEqual('Track payment for 2022 reportable emissions');
 
+    expect(pipe.transform('INSTALLATION_AUDIT_APPLICATION_SUBMIT', 2022)).toEqual('Create 2022 audit report');
+    expect(pipe.transform('INSTALLATION_AUDIT_WAIT_FOR_PEER_REVIEW', 2022)).toEqual(
+      '2022 Audit report sent to peer reviewer',
+    );
+    expect(pipe.transform('INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW', 2022)).toEqual('Peer review 2022 audit report');
+    expect(pipe.transform('INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS', 2022)).toEqual(
+      '2022 audit report',
+    );
+
+    expect(pipe.transform('INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT', 2022)).toEqual(
+      'Create an on-site inspection',
+    );
+    expect(pipe.transform('INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW', 2022)).toEqual(
+      'On-site inspection sent to peer reviewer',
+    );
+    expect(pipe.transform('INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW', 2022)).toEqual(
+      'Peer review on-site inspection',
+    );
+    expect(pipe.transform('INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS', 2022)).toEqual(
+      'On-site inspection',
+    );
+
     expect(pipe.transform('NON_COMPLIANCE_APPLICATION_SUBMIT')).toEqual('Provide details of breach: non-compliance');
     expect(pipe.transform('NON_COMPLIANCE_DAILY_PENALTY_NOTICE')).toEqual('Upload penalty notice: non-compliance');
     expect(pipe.transform('NON_COMPLIANCE_DAILY_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW')).toEqual(
@@ -172,6 +197,12 @@ describe('ItemNamePipe', () => {
     expect(pipe.transform('NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW')).toEqual(
       'Notice of intent sent to peer reviewer: non-compliance',
     );
+
+    expect(pipe.transform('PERMANENT_CESSATION_APPLICATION_SUBMIT')).toEqual('Complete permanent cessation');
+    expect(pipe.transform('PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW')).toEqual(
+      'Permanent cessation sent to peer reviewer',
+    );
+    expect(pipe.transform('PERMANENT_CESSATION_APPLICATION_PEER_REVIEW')).toEqual('Peer review permanent cessation');
 
     expect(pipe.transform('DOAL_APPLICATION_SUBMIT')).toEqual('Determination of activity level');
     expect(pipe.transform('DOAL_AUTHORITY_RESPONSE')).toEqual(
@@ -320,28 +351,29 @@ describe('ItemNamePipe', () => {
       `Respond to regulator's extension request`,
     );
     expect(pipe.transform('EMP_VARIATION_CORSIA_REGULATOR_LED_MAKE_PAYMENT')).toEqual(
-        'Pay emissions monitoring plan variation fee',
+      'Pay emissions monitoring plan variation fee',
     );
     expect(pipe.transform('EMP_VARIATION_CORSIA_REGULATOR_LED_TRACK_PAYMENT')).toEqual(
-        'Track payment for emissions monitoring plan variation',
+      'Track payment for emissions monitoring plan variation',
     );
     expect(pipe.transform('EMP_VARIATION_CORSIA_REGULATOR_LED_CONFIRM_PAYMENT')).toEqual(
-        'Track payment for emissions monitoring plan variation',
+      'Track payment for emissions monitoring plan variation',
     );
-    expect(pipe.transform('EMP_VARIATION_CORSIA_MAKE_PAYMENT')).toEqual(
-        'Pay emissions monitoring plan variation fee',
-    );
+    expect(pipe.transform('EMP_VARIATION_CORSIA_MAKE_PAYMENT')).toEqual('Pay emissions monitoring plan variation fee');
     expect(pipe.transform('EMP_VARIATION_CORSIA_TRACK_PAYMENT')).toEqual(
-        'Track payment for emissions monitoring plan variation',
+      'Track payment for emissions monitoring plan variation',
     );
     expect(pipe.transform('EMP_VARIATION_CORSIA_CONFIRM_PAYMENT')).toEqual(
-        'Track payment for emissions monitoring plan variation',
+      'Track payment for emissions monitoring plan variation',
     );
 
     expect(pipe.transform('AVIATION_AER_UKETS_APPLICATION_SUBMIT', '2022')).toEqual('Complete 2022 emissions report');
     expect(pipe.transform('AVIATION_AER_CORSIA_APPLICATION_SUBMIT', '2022')).toEqual('Complete 2022 emissions report');
 
     expect(pipe.transform('AVIATION_AER_UKETS_AMEND_WAIT_FOR_VERIFICATION', '2022')).toEqual(
+      '2022 emissions report sent to verifier',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_AMEND_WAIT_FOR_VERIFICATION', '2022')).toEqual(
       '2022 emissions report sent to verifier',
     );
     expect(pipe.transform('AVIATION_AER_UKETS_WAIT_FOR_VERIFICATION', '2022')).toEqual(
@@ -351,13 +383,23 @@ describe('ItemNamePipe', () => {
       '2022 emissions report sent to verifier',
     );
     expect(pipe.transform('AVIATION_AER_UKETS_APPLICATION_REVIEW', '2022')).toEqual('Review 2022 emissions report');
+    expect(pipe.transform('AVIATION_AER_CORSIA_APPLICATION_REVIEW', '2022')).toEqual('Review 2022 emissions report');
     expect(pipe.transform('AVIATION_AER_UKETS_WAIT_FOR_REVIEW', '2022')).toEqual(
       '2022 emissions report sent to regulator for review',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_WAIT_FOR_REVIEW', '2022')).toEqual(
+      '2022 emissions report sent to regulator for review',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_WAIT_FOR_AMENDS', '2022')).toEqual(
+      '2022 emissions report returned to operator',
     );
     expect(pipe.transform('AVIATION_AER_UKETS_WAIT_FOR_AMENDS', '2022')).toEqual(
       '2022 emissions report returned to operator',
     );
     expect(pipe.transform('AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT', '2022')).toEqual(
+      'Amend 2022 emissions report',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT', '2022')).toEqual(
       'Amend 2022 emissions report',
     );
 
@@ -485,6 +527,64 @@ describe('ItemNamePipe', () => {
       'Peer review upload penalty: non-compliance',
     );
     expect(pipe.transform('AVIATION_NON_COMPLIANCE_FINAL_DETERMINATION')).toEqual('Provide conclusion: non-compliance');
+
+    expect(pipe.transform('AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT')).toEqual(
+      'Calculate annual offsetting requirements',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW')).toEqual(
+      'Annual offsetting requirements sent to peer reviewer',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW')).toEqual(
+      'Peer review annual offsetting requirements',
+    );
+
+    expect(pipe.transform('AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT')).toEqual(
+      'Calculate 3-year period offsetting requirements',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW')).toEqual(
+      'Peer review 3-year period offsetting requirements',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW')).toEqual(
+      '3-year period offsetting requirements sent to peer reviewer',
+    );
+
+    expect(pipe.transform('BDR_APPLICATION_SUBMIT', 2022)).toEqual('Complete 2022 baseline data report');
+    expect(pipe.transform('BDR_WAIT_FOR_VERIFICATION', 2022)).toEqual('2022 baseline data report sent to verifier');
+    expect(pipe.transform('BDR_AMEND_WAIT_FOR_VERIFICATION', 2022)).toEqual(
+      '2022 baseline data report sent to verifier',
+    );
+
+    expect(pipe.transform('BDR_WAIT_FOR_REGULATOR_REVIEW', 2022)).toEqual(
+      '2022 baseline data report sent to regulator',
+    );
+    expect(pipe.transform('BDR_APPLICATION_VERIFICATION_SUBMIT', 2022)).toEqual('Verify 2022 baseline data report');
+    expect(pipe.transform('BDR_AMEND_APPLICATION_VERIFICATION_SUBMIT', 2022)).toEqual(
+      'Verify 2022 baseline data report',
+    );
+    expect(pipe.transform('BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT', 2022)).toEqual('Review 2022 baseline data report');
+    expect(pipe.transform('BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT', 2022)).toEqual('Review 2022 baseline data report');
+    expect(pipe.transform('BDR_APPLICATION_PEER_REVIEW', 2025)).toEqual('Peer review 2025 baseline data report');
+    expect(pipe.transform('BDR_WAIT_FOR_PEER_REVIEW', 2025)).toEqual('2025 baseline data report sent to peer reviewer');
+    expect(pipe.transform('BDR_APPLICATION_AMENDS_SUBMIT', 2022)).toEqual('Amend 2022 baseline data report');
+
+    expect(pipe.transform('AVIATION_DOE_CORSIA_APPLICATION_SUBMIT', 2022)).toEqual('Estimate 2022 emissions');
+    expect(pipe.transform('AVIATION_DOE_CORSIA_MAKE_PAYMENT', 2022)).toEqual('Pay 2022 emissions estimation fee');
+    expect(pipe.transform('AVIATION_DOE_CORSIA_TRACK_PAYMENT', 2022)).toEqual(
+      'Track payment for 2022 emissions estimation',
+    );
+    expect(pipe.transform('AVIATION_DOE_CORSIA_CONFIRM_PAYMENT', 2022)).toEqual(
+      'Track payment for 2022 emissions estimation',
+    );
+    expect(pipe.transform('AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW', 2022)).toEqual(
+      '2022 emissions estimation sent to peer reviewer',
+    );
+    expect(pipe.transform('AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW', 2022)).toEqual(
+      'Peer review 2022 emissions estimation',
+    );
+
+    expect(pipe.transform('ALR_APPLICATION_SUBMIT', 2022)).toEqual('Complete 2022 activity level report');
+    expect(pipe.transform('ALR_WAIT_FOR_VERIFICATION', 2022)).toEqual('2022 activity level report sent to verifier');
+    expect(pipe.transform('ALR_APPLICATION_VERIFICATION_SUBMIT', 2022)).toEqual('Verify 2022 activity level report');
 
     expect(pipe.transform(null)).toBeNull();
   });

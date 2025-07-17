@@ -60,7 +60,7 @@ export const EMP_MANAGEMENT_PROCEDURES_CORSIA_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { breadcrumb: 'Management procedures summary' },
+        data: { breadcrumb: 'Management procedures' },
         loadComponent: () =>
           import('./management-procedures-summary/management-procedures-summary.component').then(
             (c) => c.ManagementProceduresSummaryComponent,

@@ -47,7 +47,7 @@ export class DailyPenaltyNoticeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.breadcrumbService.clear();
+    this.breadcrumbService.cutLastBreadcrumbWithLinkandShow();
   }
 
   notifyOperator(): void {

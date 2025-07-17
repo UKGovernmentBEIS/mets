@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.revie
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -13,10 +13,10 @@ public class PermitVariationAddCancelledRequestActionService {
 
     private final RequestService requestService;
 
-    public void add(final String requestId, final RoleType userRole) {
+    public void add(final String requestId, final String userRole) {
 
         final Request request = requestService.findRequestById(requestId);
-        final String assignee = userRole == RoleType.OPERATOR ?
+        final String assignee = RoleTypeConstants.OPERATOR.equals(userRole) ?
             request.getPayload().getOperatorAssignee() : request.getPayload().getRegulatorAssignee();
 
         requestService.addActionToRequest(request,

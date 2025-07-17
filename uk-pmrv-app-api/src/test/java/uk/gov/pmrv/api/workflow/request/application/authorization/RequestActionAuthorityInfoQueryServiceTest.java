@@ -5,9 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.dto.RequestActionAuthorityInfoDTO;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.authorityinfo.dto.RequestActionAuthorityInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 
 @ExtendWith(MockitoExtension.class)
 class RequestActionAuthorityInfoQueryServiceTest {
@@ -54,8 +55,7 @@ class RequestActionAuthorityInfoQueryServiceTest {
         assertThat(requestActionInfo.getId()).isEqualTo(requestActionId);
         assertThat(requestActionInfo.getType()).isEqualTo(requestAction.getType().name());
         assertEquals(request.getAccountId(), requestActionInfo.getAuthorityInfo().getAccountId());
-        assertEquals(request.getCompetentAuthority(), requestActionInfo.getAuthorityInfo().getCompetentAuthority());
-        assertEquals(request.getVerificationBodyId(), requestActionInfo.getAuthorityInfo().getVerificationBodyId());
+        assertEquals(request.getRequestResourcesMap(), requestActionInfo.getAuthorityInfo().getRequestResources());
     }
 
     @Test

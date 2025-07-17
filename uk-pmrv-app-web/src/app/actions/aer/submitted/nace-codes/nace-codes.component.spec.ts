@@ -52,8 +52,8 @@ describe('NaceCodesComponent', () => {
     expect(page.heading).toEqual('NACE codes');
     expect(page.naceCodes).toEqual([
       [],
-      ['Main activity', '1011 Processing and preserving of meat', ''],
-      ['Main activity', '1012 Processing and preserving of poultry meat', ''],
+      ['1011 Processing and preserving of meat', ''],
+      ['1012 Processing and preserving of poultry meat', ''],
     ]);
   });
 });

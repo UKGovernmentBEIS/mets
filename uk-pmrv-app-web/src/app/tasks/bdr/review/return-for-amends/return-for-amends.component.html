@@ -1,0 +1,52 @@
+<ng-container *ngIf="(isSubmitted$ | async) === false; else completed">
+  <app-bdr-task-review [breadcrumb]="true" heading="Check your answers">
+    <p class="govuk-body">Check your information before sending</p>
+    <ng-container *ngIf="payload()">
+      <div *ngFor="let decision of decisionAmends()">
+        <h2 app-summary-header class="govuk-heading-m">Baseline data report details</h2>
+
+        <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Changes required</dt>
+            <dd govukSummaryListRowValue>
+              <ng-container
+                *ngFor="let requiredChange of decision.data.details?.requiredChanges; let i = index; let isLast = last">
+                <div class="pre-wrap">
+                  {{ i + 1 }}. {{ requiredChange.reason }}
+                  <br />
+                  <ng-container *ngIf="requiredChange?.files?.length > 0">
+                    <app-summary-download-files
+                      [files]="
+                        bdrService.getRegulatorDownloadUrlFiles(requiredChange?.files)
+                      "></app-summary-download-files>
+                  </ng-container>
+                </div>
+                <br *ngIf="!isLast" />
+              </ng-container>
+            </dd>
+          </div>
+          <div govukSummaryListRow *ngIf="decision?.data?.details?.notes">
+            <dt govukSummaryListRowKey>Notes</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">{{ decision.data.details.notes }}</dd>
+          </div>
+        </dl>
+      </div>
+    </ng-container>
+    <div *ngIf="(store.isEditable$ | async) === true" class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onSubmit()">Confirm and complete</button>
+    </div>
+  </app-bdr-task-review>
+</ng-container>
+
+<ng-template #completed>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="Returned to the operator for amends"></govuk-panel>
+
+      <h3 class="govuk-heading-m">What happens next</h3>
+      <p class="govuk-body">The operator will return the application to you when the amendments have been made.</p>
+
+      <a govukLink routerLink="/dashboard">Return to dashboard</a>
+    </div>
+  </div>
+</ng-template>

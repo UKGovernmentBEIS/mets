@@ -5,7 +5,9 @@ import { DestroySubject } from '../core/services/destroy-subject.service';
 
 @Component({
   selector: 'app-task-component',
-  template: `<router-outlet></router-outlet>`,
+  template: `
+    <router-outlet></router-outlet>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })

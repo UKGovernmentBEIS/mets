@@ -31,7 +31,7 @@ class PermitNotificationCancelledServiceTest {
 
     @Test
     void cancel() {
-        final String requestId = RandomStringUtils.random(5);
+        final String requestId = RandomStringUtils.insecure().next(5);
         final String assignee = "assignee";
         final PermitNotificationRequestPayload payload = PermitNotificationRequestPayload.builder()
                 .operatorAssignee(assignee)

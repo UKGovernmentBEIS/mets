@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -17,7 +16,7 @@ import { SubmittedComponent } from './submitted.component';
 describe('SubmittedComponent', () => {
   let component: SubmittedComponent;
   let fixture: ComponentFixture<SubmittedComponent>;
-  let activatedRouteSpy;
+  let activatedRouteSpy: any;
   let page: Page;
   let store: CommonActionsStore;
 
@@ -40,7 +39,7 @@ describe('SubmittedComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [SubmittedComponent],
-      imports: [ActionSharedModule, RouterTestingModule, SharedModule],
+      imports: [ActionSharedModule, SharedModule],
       providers: [KeycloakService, { provide: ActivatedRoute, useValue: activatedRouteSpy }],
     }).compileComponents();
 

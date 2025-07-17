@@ -18,10 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
-import uk.gov.pmrv.api.common.domain.dto.validation.Violation;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.common.utils.ExceptionUtils;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.utils.ExceptionUtils;
+import uk.gov.netz.api.common.validation.Violation;
 import uk.gov.pmrv.api.web.util.ErrorUtil;
 
 
@@ -172,6 +173,14 @@ public class ExceptionControllerAdvice {
         return HttpStatus.UNAUTHORIZED.equals(e.getStatusCode()) 
         		? ErrorUtil.getErrorResponse(new Object[] {}, ErrorCode.UNAUTHORIZED)
         		: ErrorUtil.getErrorResponse(new Object[]{}, ErrorCode.INTERNAL_SERVER);
+    }
+    
+    @ExceptionHandler(NoResourceFoundException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleNoResourceFoundException(NoResourceFoundException e) {
+        log.error("No Resource Found Exception:", ExceptionUtils.getRootCause(e));
+
+        return ErrorUtil.getErrorResponse(new Object[]{}, ErrorCode.RESOURCE_NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

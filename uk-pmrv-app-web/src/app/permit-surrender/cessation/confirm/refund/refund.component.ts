@@ -12,12 +12,12 @@ import { refundFormProvider } from './refund-form.provider';
 
 @Component({
   selector: 'app-refund',
-  template: `<app-wizard-step
+  template: `
+    <app-wizard-step
       (formSubmit)="onContinue()"
       [formGroup]="form"
       submitText="Continue"
-      [hideSubmit]="(store.isEditable$ | async) === false"
-    >
+      [hideSubmit]="(store.isEditable$ | async) === false">
       <span class="govuk-caption-l">Confirm cessation of regulated activities</span>
 
       <app-page-heading>Should the installations subsistence fee be refunded?</app-page-heading>
@@ -25,13 +25,13 @@ import { refundFormProvider } from './refund-form.provider';
       <div
         govuk-radio
         formControlName="subsistenceFeeRefunded"
-        hint="The refund will take place outside of the UK ETS reporting service"
-      >
+        hint="The refund will take place outside of the UK ETS reporting service">
         <govuk-radio-option label="Yes" [value]="true"></govuk-radio-option>
         <govuk-radio-option label="No" [value]="false"></govuk-radio-option>
       </div>
     </app-wizard-step>
-    <a govukLink routerLink="../..">Return to: Cessation</a> `,
+    <a govukLink routerLink="../..">Return to: Cessation</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [refundFormProvider],
 })

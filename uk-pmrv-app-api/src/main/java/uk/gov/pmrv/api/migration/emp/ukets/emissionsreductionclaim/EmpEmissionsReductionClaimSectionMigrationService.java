@@ -1,6 +1,15 @@
 package uk.gov.pmrv.api.migration.emp.ukets.emissionsreductionclaim;
 
-import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+import uk.gov.pmrv.api.account.domain.Account;
+import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsreductionclaim.EmpEmissionsReductionClaim;
+import uk.gov.pmrv.api.migration.MigrationEndpoint;
+import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanMigrationContainer;
+import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanSectionMigrationService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,23 +18,17 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.account.domain.Account;
-import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsreductionclaim.EmpEmissionsReductionClaim;
-import uk.gov.pmrv.api.migration.MigrationEndpoint;
-import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanMigrationContainer;
-import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanSectionMigrationService;
+import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
 
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class EmpEmissionsReductionClaimSectionMigrationService implements EmissionsMonitoringPlanSectionMigrationService<EmpEmissionsReductionClaim> {
 
 	private final JdbcTemplate migrationJdbcTemplate;
+
+    public EmpEmissionsReductionClaimSectionMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+    }
 
     private static final String QUERY_BASE  =
         "select e.fldEmitterID, saf.fldEmitterDisplayID, saf.purchase_delivery_title, saf.purchase_delivery_reference, saf.purchase_delivery_description, saf.purchase_delivery_post, saf.purchase_delivery_location, saf.purchase_delivery_system,\r\n"

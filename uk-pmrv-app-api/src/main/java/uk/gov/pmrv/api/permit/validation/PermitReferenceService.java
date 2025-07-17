@@ -1,5 +1,24 @@
 package uk.gov.pmrv.api.permit.validation;
 
+import com.google.common.collect.ImmutableMap;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.stereotype.Service;
+import uk.gov.netz.api.files.attachments.service.FileAttachmentService;
+import uk.gov.pmrv.api.permit.domain.PermitViolation;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.ATTACHMENT_NOT_FOUND;
 import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.EMISSION_SUMMARIES_EMISSION_POINT_SHOULD_EXIST;
 import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.EMISSION_SUMMARIES_EMISSION_SOURCE_SHOULD_EXIST;
@@ -10,28 +29,6 @@ import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessa
 import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.INVALID_MEASUREMENT_DEVICE_OR_METHOD;
 import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.INVALID_REGULATED_ACTIVITY;
 import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.INVALID_SOURCE_STREAM;
-
-import com.google.common.collect.ImmutableMap;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import lombok.RequiredArgsConstructor;
-
-import org.apache.commons.lang3.tuple.Pair;
-
-import org.springframework.stereotype.Service;
-
-import uk.gov.pmrv.api.files.attachments.service.FileAttachmentService;
-import uk.gov.pmrv.api.permit.domain.PermitViolation;
 
 @Service
 @RequiredArgsConstructor
@@ -64,7 +61,7 @@ public class PermitReferenceService {
                 .put(EMISSION_POINTS_USED, EMISSION_SUMMARIES_EMISSION_POINT_SHOULD_EXIST)
                 .put(REGULATED_ACTIVITIES_USED, EMISSION_SUMMARIES_REGULATED_ACTIVITY_SHOULD_EXIST)
             .build();
-        
+
         public static PermitViolation.PermitViolationMessage getViolationMessage(final Rule type) {
             return MAP.get(type);
         }
@@ -89,7 +86,7 @@ public class PermitReferenceService {
         final Map<String, String> referencesInPermit,
         final Collection<String> referencesInSections,
         final Rule rule) {
-        
+
         final Map<String, String> diff = new HashMap<>(referencesInPermit).entrySet().stream()
             .filter(entry -> !referencesInSections.contains(entry.getKey()))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -102,12 +99,14 @@ public class PermitReferenceService {
 
     public Optional<Pair<PermitViolation.PermitViolationMessage, List<String>>> validateFilesExist(
             final Set<UUID> filesInPermitSections, final Set<UUID> files) {
-        if (filesInPermitSections.isEmpty()) {
+        Set<UUID> nonNullFiles =  filesInPermitSections.stream().filter(Objects::nonNull).collect(Collectors.toSet());
+
+        if (nonNullFiles.isEmpty()) {
             return Optional.empty();
         }
-        
-        if (!files.containsAll(filesInPermitSections) || 
-                !fileAttachmentService.fileAttachmentsExist(filesInPermitSections.stream().map(UUID::toString).collect(Collectors.toSet()))) {
+
+        if (!files.containsAll(nonNullFiles) ||
+                !fileAttachmentService.fileAttachmentsExist(nonNullFiles.stream().map(UUID::toString).collect(Collectors.toSet()))) {
             return Optional.of(Pair.of(ATTACHMENT_NOT_FOUND, Collections.emptyList()));
         } else {
             return Optional.empty();

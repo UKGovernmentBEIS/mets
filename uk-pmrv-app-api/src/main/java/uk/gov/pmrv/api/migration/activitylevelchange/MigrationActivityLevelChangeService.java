@@ -1,11 +1,12 @@
 package uk.gov.pmrv.api.migration.activitylevelchange;
 
 import jakarta.validation.Validator;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.allowance.domain.AllowanceActivityLevelEntity;
@@ -22,7 +23,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
-@RequiredArgsConstructor
 public class MigrationActivityLevelChangeService extends MigrationBaseService {
 
     private final JdbcTemplate migrationJdbcTemplate;
@@ -31,6 +31,16 @@ public class MigrationActivityLevelChangeService extends MigrationBaseService {
     private final Validator validator;
     private final MigrationActivityLevelChangeMapper migrationActivityLevelChangeMapper = Mappers.getMapper(MigrationActivityLevelChangeMapper.class);
     private static final AllowanceMapper ALLOWANCE_MAPPER = Mappers.getMapper(AllowanceMapper.class);
+
+    public MigrationActivityLevelChangeService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                               AllowanceActivityLevelRepository allowanceActivityLevelRepository,
+                                               AccountRepository accountRepository,
+                                               Validator validator) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.allowanceActivityLevelRepository = allowanceActivityLevelRepository;
+        this.accountRepository = accountRepository;
+        this.validator = validator;
+    }
 
     private static final String QUERY_BASE = """
         with XMLNAMESPACES (

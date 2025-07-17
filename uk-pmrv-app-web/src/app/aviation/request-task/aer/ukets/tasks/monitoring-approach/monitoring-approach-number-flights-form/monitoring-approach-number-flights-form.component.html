@@ -2,12 +2,19 @@
   <div class="govuk-grid-column-three-quarters">
     <div
       formControlName="numOfFlightsJanApr"
+      inputType="number"
       govuk-text-input
       label="Number of flights from 1 January to 30 April"
     ></div>
-    <div formControlName="numOfFlightsMayAug" govuk-text-input label="Number of flights from 1 May to 31 August"></div>
+    <div
+      formControlName="numOfFlightsMayAug"
+      inputType="number"
+      govuk-text-input
+      label="Number of flights from 1 May to 31 August"
+    ></div>
     <div
       formControlName="numOfFlightsSepDec"
+      inputType="number"
       govuk-text-input
       label="Number of flights from 1 September to 31 December"
     ></div>
@@ -18,6 +25,7 @@
     <div
       formControlName="totalEmissions"
       govuk-text-input
+      inputType="big-number"
       label="Enter your annual emissions from full-scope flights"
       suffix="tonnes CO2"
     ></div>

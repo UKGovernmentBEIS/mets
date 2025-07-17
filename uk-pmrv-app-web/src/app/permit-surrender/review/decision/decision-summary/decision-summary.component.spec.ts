@@ -15,8 +15,7 @@ describe('DecisionSummaryComponent', () => {
     template: `
       <app-permit-surrender-decision-summary
         [reviewDecision$]="reviewDecision$"
-        [isEditable]="isEditable$ | async"
-      ></app-permit-surrender-decision-summary>
+        [isEditable]="isEditable$ | async"></app-permit-surrender-decision-summary>
     `,
   })
   class TestComponent {

@@ -281,16 +281,16 @@ export class PermitIssuanceStore<
           state.requestTaskType === 'PERMIT_ISSUANCE_APPLICATION_REVIEW'
             ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_REVIEW'
             : state.requestTaskType === 'PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT'
-            ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_AMEND'
-            : 'PERMIT_ISSUANCE_SAVE_APPLICATION',
+              ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_AMEND'
+              : 'PERMIT_ISSUANCE_SAVE_APPLICATION',
         requestTaskId: state.requestTaskId,
         requestTaskActionPayload: {
           payloadType:
             state.requestTaskType === 'PERMIT_ISSUANCE_APPLICATION_REVIEW'
               ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_REVIEW_PAYLOAD'
               : state.requestTaskType === 'PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT'
-              ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_AMEND_PAYLOAD'
-              : 'PERMIT_ISSUANCE_SAVE_APPLICATION_PAYLOAD',
+                ? 'PERMIT_ISSUANCE_SAVE_APPLICATION_AMEND_PAYLOAD'
+                : 'PERMIT_ISSUANCE_SAVE_APPLICATION_PAYLOAD',
           permit: state.permit,
           permitSectionsCompleted: state.permitSectionsCompleted,
           ...(['PERMIT_ISSUANCE_APPLICATION_REVIEW', 'PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT'].includes(
@@ -323,7 +323,7 @@ export class PermitIssuanceStore<
     return (
       !!state?.determination?.reason &&
       !!state?.determination?.activationDate &&
-      (state.permitType === 'GHGE' || this.isHSEAnnualEmissionTargetsCompleted(state))
+      (state.permitType === 'GHGE' || state.permitType === 'WASTE' || this.isHSEAnnualEmissionTargetsCompleted(state))
     );
   }
 

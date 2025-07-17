@@ -25,7 +25,7 @@
       [id]="accordion.id + '-summary-' + itemIndex"
       class="govuk-accordion__section-summary govuk-body"
     >
-      <ng-content select="[govukAccordionItemSummary]"></ng-content>
+      <ng-content select="[govukAccordionItemSummary]" />
     </div>
   </div>
   <div
@@ -33,6 +33,6 @@
     [attr.aria-labelledby]="accordion.id + '-heading-' + itemIndex"
     class="govuk-accordion__section-content"
   >
-    <ng-content></ng-content>
+    <ng-content />
   </div>
 </div>

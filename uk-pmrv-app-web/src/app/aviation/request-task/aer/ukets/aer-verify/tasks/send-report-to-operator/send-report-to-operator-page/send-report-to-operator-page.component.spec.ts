@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { AerVerifyTaskPayload, RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import produce from 'immer';
 

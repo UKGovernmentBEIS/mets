@@ -77,7 +77,7 @@ describe('FiltersComponent', () => {
       expect(component).toBeTruthy();
     });
 
-    it('should submit', () => {
+    it('should submit when waste config is disabled', () => {
       const navigateSpy = jest.spyOn(router, 'navigate');
       expect(page.accountStatusesCheckboxes.length).toEqual(3);
       expect(page.emitterTypesCheckboxes.length).toEqual(2);

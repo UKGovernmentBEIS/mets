@@ -1,0 +1,40 @@
+<div *ngIf="(isVerifierReturnSubmitted$ | async) === false; else confirmationTemplate">
+  <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+  <form (ngSubmit)="onConfirmReturn()" [formGroup]="form">
+    <div class="govuk-!-width-two-thirds">
+      <app-page-heading size="xl"> Return to operator for changes </app-page-heading>
+
+      <p class="govuk-body">The operator will be notified by email that the report has been returned for changes.</p>
+
+      <p class="govuk-body">
+        Verification progress is saved so that you can continue your review if the operator resubmits the report for
+        verification.
+      </p>
+      <h2 class="govuk-heading-m">Changes required by the operator</h2>
+      <div
+        formControlName="changesRequired"
+        govuk-textarea
+        hint="This will be sent to the operator when you return the report"
+      ></div>
+      <div class="govuk-button-group govuk-!-margin-bottom-8">
+        <button appPendingButton govukButton type="submit">Return to operator for changes</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<ng-template #confirmationTemplate>
+  <app-confirmation-shared
+    title="Returned to operator for changes"
+    [whatHappensNextTemplate]="whatHappensNextTemplate"
+    returnToLink="/aviation/dashboard"
+  ></app-confirmation-shared>
+</ng-template>
+
+<ng-template #whatHappensNextTemplate>
+  <p class="govuk-body">The report has been returned to the operator so they can make the necessary changes.</p>
+
+  <h3 class="govuk-heading-m">What happens next</h3>
+
+  <p class="govuk-body">They will return the report to you when the changes have been made.</p>
+</ng-template>

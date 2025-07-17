@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AerRequestTaskPayload, AerVerifyTaskPayload, RequestTaskStore } from '@aviation/request-task/store';
-import { AerStoreDelegate } from '@aviation/request-task/store/delegates';
+import { AerUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { screen } from '@testing-library/angular';
@@ -18,8 +18,7 @@ import OpinionStatementEmissionsFormComponent from './opinion-statement-emission
   template: `
     <form [formGroup]="emissionsGroup">
       <app-opinion-statement-emissions-form
-        [totalEmissionsProvided]="totalEmissionsProvided"
-      ></app-opinion-statement-emissions-form>
+        [totalEmissionsProvided]="totalEmissionsProvided"></app-opinion-statement-emissions-form>
     </form>
   `,
   standalone: true,
@@ -54,7 +53,7 @@ describe('OpinionStatementEmissionsFormComponent', () => {
           requestTask: {
             type: 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT',
             payload: {
-              aer: AerStoreDelegate.INITIAL_STATE as AerRequestTaskPayload,
+              aer: AerUkEtsStoreDelegate.INITIAL_STATE as AerRequestTaskPayload,
               verificationReport: {
                 ...VERIFICATION_REPORT,
               },

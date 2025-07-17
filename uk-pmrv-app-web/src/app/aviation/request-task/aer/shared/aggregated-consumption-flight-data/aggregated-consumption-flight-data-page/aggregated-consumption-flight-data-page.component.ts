@@ -96,7 +96,6 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
         'Each row must have 5 comma separated values, labelled ‘aerodrome of departure’, ' +
           '‘aerodrome of arrival’, ‘fuel used’, ‘fuel consumption’, ‘number of flights',
       ),
-      this.noHeaderValidator('The file must not contain a header row'),
     ],
   );
 
@@ -136,7 +135,7 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
       .saveAer(payload, 'in progress')
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
-        this.store.aerDelegate.setAggregatedEmissionsData(this.formProvider.getFormValue());
+        this.store.aerDelegate.setAggregatedEmissionsData(this.formProvider.getFormValue() as any);
         this.router.navigate(['summary'], { relativeTo: this.route });
       });
   }
@@ -257,6 +256,11 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
             }
 
             for (const row of rows) {
+              if (row.trim() === '') {
+                //empty line
+                continue;
+              }
+
               const values = row.split(',');
 
               if (values.length !== 5) {
@@ -264,43 +268,6 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
                 observer.complete();
                 return;
               }
-            }
-
-            observer.next(null);
-            observer.complete();
-          };
-
-          reader.onerror = () => {
-            observer.next({ readError: { message: 'Error reading the file.' } });
-            observer.complete();
-          };
-
-          reader.readAsText(file);
-        } else {
-          observer.next(null);
-          observer.complete();
-        }
-      });
-    };
-  }
-
-  noHeaderValidator(message: string): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return new Observable((observer) => {
-        const file = control.value;
-
-        if (file instanceof File) {
-          const reader = new FileReader();
-
-          reader.onload = (e: any) => {
-            const fileContent = e.target.result;
-            const firstRow = fileContent.split('\n')[0];
-            const values = firstRow.split(',');
-
-            if (!/^[A-Z]{4}$/.test(values[0]) || !/^[A-Z]{4}$/.test(values[1])) {
-              observer.next({ headerDetected: { message } });
-              observer.complete();
-              return;
             }
 
             observer.next(null);
@@ -334,6 +301,7 @@ export class AggregatedConsumptionFlightDataPageComponent implements OnInit, OnD
     }
     if (this.errorList.length === 0 && this.uploadedFile) {
       Papa.parse(this.uploadedFile, {
+        skipEmptyLines: true,
         complete: (result) => {
           this.processCSVData(result.data);
         },

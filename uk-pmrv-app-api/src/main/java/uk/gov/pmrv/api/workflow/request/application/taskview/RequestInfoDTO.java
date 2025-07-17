@@ -1,13 +1,14 @@
 package uk.gov.pmrv.api.workflow.request.application.taskview;
 
-import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestMetadata;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+
+import java.math.BigDecimal;
 
 @Data
 @Builder

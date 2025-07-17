@@ -39,6 +39,7 @@ export class TagColorPipe implements PipeTransform {
       case 'operator to amend':
       case 'in progress':
       case 'IN_PROGRESS':
+      case 'NOT_REQUIRED':
         return 'blue';
       case 'rejected':
       case 'deemed withdrawn':

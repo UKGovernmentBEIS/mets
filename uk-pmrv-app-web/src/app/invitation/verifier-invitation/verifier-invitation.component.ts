@@ -42,14 +42,21 @@ export class VerifierInvitationComponent implements OnInit {
           map((paramMap) => paramMap.get('token')),
           first(),
           switchMap((invitationToken) =>
-            this.verifierUsersRegistrationService.acceptAndEnableVerifierInvitedUser({
+            this.verifierUsersRegistrationService.acceptAuthorityAndActivateVerifierUserFromInvite({
               invitationToken,
               password: this.form.get('password').value,
             }),
           ),
           map(() => ({ url: 'confirmed' })),
-          catchBadRequest([ErrorCodes.EMAIL1001, ErrorCodes.TOKEN1001, ErrorCodes.USER1004], (res) =>
-            of({ url: 'invalid-link', queryParams: { code: res.error.code } }),
+          catchBadRequest(
+            [
+              ErrorCodes.EMAIL1001,
+              ErrorCodes.TOKEN1001,
+              ErrorCodes.USER1004,
+              ErrorCodes.USER1001,
+              ErrorCodes.AUTHORITY1015,
+            ],
+            (res) => of({ url: 'invalid-link', queryParams: { code: res.error.code } }),
           ),
         )
         .subscribe(({ queryParams, url }: { url: string; queryParams?: any }) =>

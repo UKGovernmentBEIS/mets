@@ -14,9 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
@@ -41,7 +41,7 @@ class ProcessRequestTaskAspectTest {
 
     @Test
     void validateProcessRequestTask() {
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final Object[] arguments = new Object[]{1L,
                 RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_AMEND_APPLICATION, user, new InstallationAccountOpeningAmendApplicationRequestTaskActionPayload()};
         final RequestTask requestTask = RequestTask.builder()
@@ -64,7 +64,7 @@ class ProcessRequestTaskAspectTest {
 
     @Test
     void validateProcessRequestTask_not_valid_assignee() {
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final Object[] arguments = new Object[]{1L,
             RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_AMEND_APPLICATION, user, new InstallationAccountOpeningAmendApplicationRequestTaskActionPayload()};
         final RequestTask requestTask = RequestTask.builder()
@@ -85,7 +85,7 @@ class ProcessRequestTaskAspectTest {
 
     @Test
     void validateProcessRequestTask_not_valid_action() {
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final Object[] arguments = new Object[]{1L,
             RequestTaskActionType.SYSTEM_MESSAGE_DISMISS, user, new InstallationAccountOpeningAmendApplicationRequestTaskActionPayload()};
         final RequestTask requestTask = RequestTask.builder()
@@ -106,7 +106,7 @@ class ProcessRequestTaskAspectTest {
 
     @Test
     void validateProcessRequestTask_no_task_exists() {
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final Object[] arguments = new Object[]{1L,
             RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_AMEND_APPLICATION, user, new InstallationAccountOpeningAmendApplicationRequestTaskActionPayload()};
 
@@ -126,7 +126,7 @@ class ProcessRequestTaskAspectTest {
     @Test
     void validateProcessRequestTask_whenCustomValidationFails_thenThrowException() {
         
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final Object[] arguments = new Object[]{1L,
             RequestTaskActionType.INSTALLATION_ACCOUNT_OPENING_AMEND_APPLICATION, user, 
             new InstallationAccountOpeningAmendApplicationRequestTaskActionPayload()};

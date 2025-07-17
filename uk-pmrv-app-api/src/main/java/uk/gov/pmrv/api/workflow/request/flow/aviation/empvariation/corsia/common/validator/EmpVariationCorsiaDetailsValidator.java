@@ -11,5 +11,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.common
 @Validated
 public class EmpVariationCorsiaDetailsValidator {
 
-	public void validate(@Valid @NotNull EmpVariationCorsiaDetails empVariationCorsiaDetails) {};
+	public void validate(@Valid @NotNull EmpVariationCorsiaDetails empVariationCorsiaDetails) {
+		//validates empVariationCorsiaDetails
+	}
 }

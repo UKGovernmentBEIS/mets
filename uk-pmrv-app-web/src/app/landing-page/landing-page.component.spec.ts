@@ -1,3 +1,4 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -60,6 +61,7 @@ describe('LandingPageComponent', () => {
         { provide: UsersService, useValue: mockUsersService },
         { provide: AuthoritiesService, useValue: mockAuthorityService },
         { provide: TermsAndConditionsService, useValue: mockTermsAndConditionsService },
+        { provide: APP_BASE_HREF, useValue: '/installation-aviation/' },
       ],
     }).compileComponents();
 
@@ -81,6 +83,15 @@ describe('LandingPageComponent', () => {
   it('should display the landing page buttons if not logged in', () => {
     expect(page.installationLink).toBeFalsy();
     expect(page.notLoggedInLandingPageLinks).toHaveLength(2);
+  });
+
+  it('should display not registered when is logged in and no role type exist', () => {
+    authStore.setIsLoggedIn(true);
+    setUser(null, null);
+
+    expect(page.pageHeadingContent).toEqual(
+      'You need to create a sign in or contact your regulator or administrator to create a sign in for you.',
+    );
   });
 
   it('should only display installation application button to operators', () => {

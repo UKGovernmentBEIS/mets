@@ -1,0 +1,115 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    [heading]="'Exchangeability of fuel and electricity'"
+    [caption]="productBenchmarkType$ | async | subInstallationType"
+    submitText="Continue">
+    <div class="govuk-!-width-two-thirds">
+      <div class="govuk-body">
+        For the specific purpose of the baseline data collection, this section should cover all data provided in section
+        F.(c) in the "baseline data collection" template.
+      </div>
+      <div class="govuk-body">
+        The relevant electricity consumption must be described in line with Article 22 of the FAR, taking into account
+        the sub-installations system boundaries listed in Annex I.
+      </div>
+
+      <h2 class="govuk-heading-m">Data sources for energy flows</h2>
+
+      <p class="govuk-caption-m">
+        Add the data sources used for the energy flows in line with section 4.5 of Annex VII of the FAR.
+      </p>
+
+      <div formArrayName="fuelAndElectricityExchangeabilityEnergyFlowDataSources">
+        <fieldset
+          *ngFor="let energyFlowDataSource of energyFlowDataSourcesFormArray.controls; index as i"
+          [formGroupName]="i"
+          govukFieldset
+          id="dataSource-def-{{ i }}">
+          <legend govukLegend>Data source {{ i + 1 }}</legend>
+
+          <button
+            (click)="energyFlowDataSourcesFormArray.removeAt(i)"
+            *ngIf="energyFlowDataSourcesFormArray.length > 1"
+            appAddAnother
+            govukSecondaryButton
+            type="button"
+            #removeButton>
+            Remove
+          </button>
+
+          <div class="govuk-body">Relevant electricity consumption</div>
+
+          <div>
+            <div formControlName="relevantElectricityConsumption" govuk-select widthClass="govuk-!-width-full">
+              <option [value]="''">Select an option</option>
+              <option
+                *ngFor="let relevantElectricityConsumptionType of relevantElectricityConsumptionTypes"
+                [value]="relevantElectricityConsumptionType">
+                {{ relevantElectricityConsumptionType | relevantElectricityConsumptionDataSource }}
+              </option>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <button
+        (click)="addElectricityConsumptionDataSource()"
+        govukSecondaryButton
+        type="button"
+        *ngIf="energyFlowDataSourcesFormArray.controls.length < 6">
+        Add another data source
+      </button>
+
+      <h2 class="govuk-heading-m">Description of methodology applied for each data source</h2>
+
+      <app-include-answer-details></app-include-answer-details>
+
+      <div formControlName="methodologyAppliedDescription" govuk-textarea [maxLength]="10000" rows="10"></div>
+
+      <div formGroupName="hierarchicalOrder">
+        <div
+          formControlName="followed"
+          govuk-radio
+          legend="Has the hierarchical order been followed?"
+          hint="Select yes if the data source with the highest rank within the hierarchy has been used, as set out in section 4 of Annex VII of the FAR."
+          [legendSize]="'medium'">
+          <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+          <govuk-radio-option [value]="false" label="No">
+            <ng-container govukConditionalContent>
+              <div
+                formControlName="notFollowingHierarchicalOrderReason"
+                govuk-radio
+                legend="Reason for not following the hierarchy">
+                <govuk-radio-option
+                  [value]="'OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY'"
+                  label="Other data sources lead to lower uncertainty according to the simplified uncertainty assessment in line with Article 7(2) of the FAR"></govuk-radio-option>
+                <govuk-radio-option
+                  [value]="'USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE'"
+                  label="Use of better data sources is technically infeasible"></govuk-radio-option>
+                <govuk-radio-option
+                  [value]="'USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS'"
+                  label="Use of better data sources would incur unreasonable costs"></govuk-radio-option>
+              </div>
+              <div
+                formControlName="notFollowingHierarchicalOrderDescription"
+                label="Provide more details on any deviation from the hierarchy"
+                govuk-textarea
+                [maxLength]="10000"
+                rows="10"></div>
+            </ng-container>
+          </govuk-radio-option>
+        </div>
+      </div>
+
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload supporting files (optional)"
+        formControlName="supportingFiles"
+        listTitle="Uploaded files"></app-multiple-file-input>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+</app-permit-task>

@@ -25,7 +25,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 import jakarta.persistence.EntityManager;
 import jakarta.validation.Validator;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.SpringValidatorConfiguration;
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
@@ -358,7 +358,7 @@ class EmissionsMonitoringPlanRepositoryIT extends AbstractContainerBaseTest {
                         .activityDescription("activity description")
                         .build())
                     .subsidiaryCompanyExist(Boolean.TRUE)
-                    .subsidiaryCompanies(Set.of(SubsidiaryCompanyCorsia.builder()
+                    .subsidiaryCompanies(List.of(SubsidiaryCompanyCorsia.builder()
                             .operatorName("operator2")
                             .flightIdentification(FlightIdentification.builder()
                                 .flightIdentificationType(FlightIdentificationType.INTERNATIONAL_CIVIL_AVIATION_ORGANISATION)

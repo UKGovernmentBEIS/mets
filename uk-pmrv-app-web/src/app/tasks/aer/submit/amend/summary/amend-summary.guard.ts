@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { first, map, Observable } from 'rxjs';
 
@@ -10,8 +10,11 @@ import { TaskStatusPipe } from '../../../shared/pipes/task-status.pipe';
 @Injectable({
   providedIn: 'root',
 })
-export class AmendSummaryGuard implements CanActivate {
-  constructor(private readonly router: Router, private readonly aerService: AerService) {}
+export class AmendSummaryGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly aerService: AerService,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<UrlTree | boolean> {
     const amendGroup = route.paramMap.get('section') as AerAmendGroup;

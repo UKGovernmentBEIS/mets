@@ -21,6 +21,9 @@ describe('TaskTypeToBreadcrumbPipe', () => {
     expect(pipe.transform('AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT')).toEqual(
       'Verify emissions report',
     );
+    expect(pipe.transform('AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT')).toEqual(
+      'Verify emissions report',
+    );
     expect(pipe.transform('VERIFIER_NO_LONGER_AVAILABLE')).toEqual('Verification body is no longer available');
     expect(pipe.transform('PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT')).toEqual('Amend your permit application');
     expect(pipe.transform('PERMIT_ISSUANCE_WAIT_FOR_AMENDS')).toEqual('Permit application returned to operator');
@@ -147,6 +150,22 @@ describe('TaskTypeToBreadcrumbPipe', () => {
     expect(pipe.transform('DRE_TRACK_PAYMENT')).toEqual('Track payment for reportable emissions');
     expect(pipe.transform('DRE_CONFIRM_PAYMENT')).toEqual('Track payment for reportable emissions');
 
+    expect(pipe.transform('INSTALLATION_AUDIT_APPLICATION_SUBMIT')).toEqual('Create audit report');
+    expect(pipe.transform('INSTALLATION_AUDIT_WAIT_FOR_PEER_REVIEW')).toEqual('Audit report sent to peer reviewer');
+    expect(pipe.transform('INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW')).toEqual('Peer review audit report');
+    expect(pipe.transform('INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS')).toEqual('Audit report');
+
+    expect(pipe.transform('INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT')).toEqual('Create on-site inspection');
+    expect(pipe.transform('INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW')).toEqual(
+      'On-site inspection sent to peer reviewer',
+    );
+    expect(pipe.transform('INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW')).toEqual(
+      'Peer review on-site inspection',
+    );
+    expect(pipe.transform('INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS')).toEqual(
+      'On-site inspection',
+    );
+
     expect(pipe.transform('NON_COMPLIANCE_APPLICATION_SUBMIT')).toEqual('Provide details of breach: non-compliance');
 
     expect(pipe.transform('DOAL_APPLICATION_SUBMIT')).toEqual('Determination of activity level change');
@@ -214,16 +233,23 @@ describe('TaskTypeToBreadcrumbPipe', () => {
     );
 
     expect(pipe.transform('AVIATION_AER_UKETS_WAIT_FOR_REVIEW')).toEqual('Emissions report sent to regulator');
+    expect(pipe.transform('AVIATION_AER_CORSIA_WAIT_FOR_REVIEW')).toEqual('Emissions report sent to regulator');
     expect(pipe.transform('AVIATION_AER_UKETS_APPLICATION_SUBMIT')).toEqual('Emissions report');
     expect(pipe.transform('AVIATION_AER_CORSIA_APPLICATION_SUBMIT')).toEqual('Emissions report');
     expect(pipe.transform('AVIATION_AER_UKETS_APPLICATION_REVIEW')).toEqual('Review emissions report');
+    expect(pipe.transform('AVIATION_AER_CORSIA_APPLICATION_REVIEW')).toEqual('Review emissions report');
     expect(pipe.transform('AVIATION_AER_UKETS_AMEND_WAIT_FOR_VERIFICATION')).toEqual(
+      'Emissions report sent to verifier',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_AMEND_WAIT_FOR_VERIFICATION')).toEqual(
       'Emissions report sent to verifier',
     );
     expect(pipe.transform('AVIATION_AER_UKETS_WAIT_FOR_VERIFICATION')).toEqual('Emissions report sent to verifier');
     expect(pipe.transform('AVIATION_AER_CORSIA_WAIT_FOR_VERIFICATION')).toEqual('Emissions report sent to verifier');
     expect(pipe.transform('AVIATION_AER_UKETS_WAIT_FOR_AMENDS')).toEqual('Emission report returned to operator');
+    expect(pipe.transform('AVIATION_AER_CORSIA_WAIT_FOR_AMENDS')).toEqual('Emission report returned to operator');
     expect(pipe.transform('AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT')).toEqual('Amend your emissions report');
+    expect(pipe.transform('AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT')).toEqual('Amend your emissions report');
 
     expect(pipe.transform('AVIATION_DRE_UKETS_APPLICATION_SUBMIT')).toEqual('Determine emissions');
     expect(pipe.transform('AVIATION_DRE_UKETS_MAKE_PAYMENT')).toEqual('Pay emissions determination fee');
@@ -352,6 +378,60 @@ describe('TaskTypeToBreadcrumbPipe', () => {
     expect(pipe.transform('AVIATION_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW')).toEqual(
       `Peer review upload penalty: non-compliance`,
     );
+    expect(pipe.transform('AVIATION_NON_COMPLIANCE_FINAL_DETERMINATION')).toEqual(
+      `Provide conclusion of non-compliance`,
+    );
+
+    expect(pipe.transform('AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT')).toEqual(
+      'Calculate annual offsetting requirements',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW')).toEqual(
+      'Peer review annual offsetting requirements',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW')).toEqual(
+      'Annual offsetting requirements sent to peer reviewer',
+    );
+
+    expect(pipe.transform('AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT')).toEqual(
+      'Calculate 3-year period offsetting requirements',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW')).toEqual(
+      'Peer review 3-year period offsetting requirements',
+    );
+    expect(pipe.transform('AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW')).toEqual(
+      '3-year period offsetting requirements sent to peer reviewer',
+    );
+
+    expect(pipe.transform('BDR_APPLICATION_SUBMIT')).toEqual('Complete baseline data report');
+    expect(pipe.transform('BDR_WAIT_FOR_VERIFICATION')).toEqual('Baseline data report sent to verifier');
+    expect(pipe.transform('BDR_AMEND_WAIT_FOR_VERIFICATION')).toEqual('Baseline data report sent to verifier');
+    expect(pipe.transform('BDR_WAIT_FOR_REGULATOR_REVIEW')).toEqual('Baseline data report sent to regulator');
+    expect(pipe.transform('BDR_APPLICATION_VERIFICATION_SUBMIT')).toEqual('Verify baseline data report');
+    expect(pipe.transform('BDR_AMEND_APPLICATION_VERIFICATION_SUBMIT')).toEqual('Verify baseline data report');
+    expect(pipe.transform('BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT')).toEqual('Review baseline data report');
+    expect(pipe.transform('BDR_WAIT_FOR_AMENDS')).toEqual('Baseline data report');
+    expect(pipe.transform('BDR_APPLICATION_AMENDS_SUBMIT')).toEqual('Amend baseline data report');
+    expect(pipe.transform('BDR_APPLICATION_PEER_REVIEW')).toEqual('Peer review baseline data report');
+    expect(pipe.transform('BDR_WAIT_FOR_PEER_REVIEW')).toEqual('Peer review baseline data report');
+
+    expect(pipe.transform('PERMANENT_CESSATION_APPLICATION_SUBMIT')).toEqual('Complete permanent cessation');
+    expect(pipe.transform('PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW')).toEqual(
+      'Permanent cessation sent to peer reviewer',
+    );
+    expect(pipe.transform('PERMANENT_CESSATION_APPLICATION_PEER_REVIEW')).toEqual('Peer review permanent cessation');
+
+    expect(pipe.transform('AVIATION_DOE_CORSIA_APPLICATION_SUBMIT')).toEqual('Estimate emissions');
+    expect(pipe.transform('AVIATION_DOE_CORSIA_MAKE_PAYMENT')).toEqual('Pay emissions estimation fee');
+    expect(pipe.transform('AVIATION_DOE_CORSIA_TRACK_PAYMENT')).toEqual('Track payment for emissions estimation');
+    expect(pipe.transform('AVIATION_DOE_CORSIA_CONFIRM_PAYMENT')).toEqual('Track payment for emissions estimation');
+    expect(pipe.transform('AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW')).toEqual(
+      'Aviation emissions report estimation sent to peer reviewer',
+    );
+    expect(pipe.transform('AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW')).toEqual('Peer review emissions estimation');
+
+    expect(pipe.transform('ALR_APPLICATION_SUBMIT')).toEqual('Complete activity level report');
+    expect(pipe.transform('ALR_WAIT_FOR_VERIFICATION')).toEqual('Activity level report sent to verifier');
+    expect(pipe.transform('ALR_APPLICATION_VERIFICATION_SUBMIT')).toEqual('Verify activity level report');
 
     expect(pipe.transform(null)).toBeNull();
   });

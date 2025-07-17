@@ -17,6 +17,7 @@ import uk.gov.pmrv.api.account.domain.dto.LegalEntityWithoutHoldingCompanyDTO;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountWithoutLeHoldingCompanyDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
+import uk.gov.pmrv.api.permit.service.PermitIdentifierGenerator;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateLocationInfoResolver;
@@ -39,7 +40,9 @@ class PermitTransferAcceptedCommonDocumentTemplateWorkflowParamsProviderTest {
 
     @Mock
     private DocumentTemplateLocationInfoResolver documentTemplateLocationInfoResolver;
-    
+
+    @Mock
+    private PermitIdentifierGenerator generator;
 
     @Test
     void constructParams() {
@@ -87,6 +90,7 @@ class PermitTransferAcceptedCommonDocumentTemplateWorkflowParamsProviderTest {
                     .build())
                 .build());
         when(permitQueryService.getPermitIdByAccountId(receiverAccountId)).thenReturn(Optional.of(receiverPermitId));
+        when(generator.generate(receiverRequest.getAccountId())).thenReturn(receiverPermitId);
         
         final Map<String, Object> result = provider.constructParams(receiverRequest, transfererRequest);
 

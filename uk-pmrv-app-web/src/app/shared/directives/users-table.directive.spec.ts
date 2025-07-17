@@ -25,7 +25,6 @@ describe('UsersTableDirective', () => {
           firstName: 'Alfyn',
           lastName: 'Octo',
           authorityStatus: 'DISABLED',
-          locked: false,
           authorityCreationDate: '2020-12-14T12:38:12.846716Z',
         },
         {
@@ -33,7 +32,6 @@ describe('UsersTableDirective', () => {
           firstName: 'Therion',
           lastName: 'Path',
           authorityStatus: 'ACTIVE',
-          locked: true,
           authorityCreationDate: '2020-12-15T12:38:12.846716Z',
         },
         {
@@ -41,7 +39,6 @@ describe('UsersTableDirective', () => {
           firstName: 'Olberik',
           lastName: 'Traveler',
           authorityStatus: 'ACTIVE',
-          locked: true,
           authorityCreationDate: '2020-11-10T12:38:12.846716Z',
         },
         {
@@ -49,7 +46,6 @@ describe('UsersTableDirective', () => {
           firstName: 'andrew',
           lastName: 'webber',
           authorityStatus: 'ACTIVE',
-          locked: false,
           authorityCreationDate: '2021-01-10T12:38:12.846716Z',
         },
         {
@@ -57,7 +53,6 @@ describe('UsersTableDirective', () => {
           firstName: 'William',
           lastName: 'Walker',
           authorityStatus: 'PENDING',
-          locked: false,
           authorityCreationDate: '2021-02-8T12:38:12.846716Z',
         },
       ],
@@ -95,8 +90,7 @@ describe('UsersTableDirective', () => {
           [columns]="[{ field: 'name', header: 'Name', isSortable: true }]"
           appUsersTable
           [users]="users$"
-          [form]="usersForm"
-        >
+          [form]="usersForm">
           <ng-template let-column="column" let-index="index" let-row="row">
             <ng-container formArrayName="usersArray">
               <div [formGroupName]="index" [ngSwitch]="column.field" class="cell-container">

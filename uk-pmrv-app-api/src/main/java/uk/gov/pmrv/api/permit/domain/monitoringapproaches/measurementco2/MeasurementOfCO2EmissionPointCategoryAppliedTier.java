@@ -26,4 +26,7 @@ public class MeasurementOfCO2EmissionPointCategoryAppliedTier {
     @Valid
     @NotNull
     private AppliedStandard appliedStandard;
+
+    @Valid
+    private MeasurementBiomassFraction biomassFraction;
 }

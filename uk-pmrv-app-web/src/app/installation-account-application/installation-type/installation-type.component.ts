@@ -13,8 +13,7 @@ import { InstallationAccountApplicationStore } from '../store/installation-accou
       [formGroup]="form"
       heading="Select the installation type"
       caption="Installation details"
-      (formSubmit)="onSubmit()"
-    >
+      (formSubmit)="onSubmit()">
       <div govuk-radio formControlName="type" hint="Select one option">
         <ng-container govukLegend>
           <span class="govuk-visually-hidden">Select one option</span>

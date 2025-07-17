@@ -5,15 +5,15 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { first, mergeMapTo, Subject, throwError } from 'rxjs';
+import { first, mergeMap, Subject, throwError } from 'rxjs';
 
 import { HttpStatuses } from '@error/http-status';
+import { BasePage } from '@testing';
 
 import { GovukComponentsModule } from 'govuk-components';
 
 import { FileUuidDTO } from 'pmrv-api';
 
-import { BasePage } from '../../../testing';
 import { FileUploadListComponent } from '../file-upload-list/file-upload-list.component';
 import { FileInputComponent } from './file-input.component';
 import { FileUploadService } from './file-upload.service';
@@ -140,7 +140,7 @@ describe('FileInputComponent', () => {
       TestBed.inject(FileUploadService).upload(() =>
         uploadSubject.pipe(
           first(),
-          mergeMapTo(
+          mergeMap(() =>
             throwError(
               () =>
                 new HttpErrorResponse({

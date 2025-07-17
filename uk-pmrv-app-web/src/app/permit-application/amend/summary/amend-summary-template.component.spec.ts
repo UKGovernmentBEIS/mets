@@ -102,12 +102,12 @@ describe('AmendSummaryTemplateComponent', () => {
       expect(page.summaryLists).toHaveLength(2);
       expect(page.summaryLists[0].querySelector('dt').textContent.trim()).toEqual('Changes required');
       expect(page.summaryLists[0].querySelector('dd').textContent.trim()).toEqual(
-        '1. Changes required for monitoring approaches 16.pdf',
+        '1. Changes required for monitoring approaches  16.pdf',
       );
 
       expect(page.summaryLists[1].querySelector('dt').textContent.trim()).toEqual('Changes required');
       expect(page.summaryLists[1].querySelector('dd').textContent.trim()).toEqual(
-        '1. Changes required for calculation approach 15.pdf',
+        '1. Changes required for calculation approach  15.pdf',
       );
     });
   });

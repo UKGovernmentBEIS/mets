@@ -30,8 +30,7 @@ describe('MisstatementsGroupComponent', () => {
       <app-misstatements-group
         [isEditable]="isEditable"
         [uncorrectedMisstatements]="uncorrectedMisstatements"
-        baseChangeLink=".."
-      ></app-misstatements-group>
+        baseChangeLink=".."></app-misstatements-group>
     `,
   })
   class TestComponent {

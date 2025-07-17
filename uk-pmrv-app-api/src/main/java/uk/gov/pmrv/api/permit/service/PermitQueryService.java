@@ -3,10 +3,10 @@ package uk.gov.pmrv.api.permit.service;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.providers.PermitAuthorityInfoProvider;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.documents.service.FileDocumentService;
+import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.PermitAuthorityInfoProvider;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitEntity;
 import uk.gov.pmrv.api.permit.domain.dto.PermitDetailsDTO;
@@ -70,7 +70,8 @@ public class PermitQueryService implements PermitAuthorityInfoProvider {
     
     public PermitEntityDto getPermitByIdAndFileDocumentUuid(final String permitId, final String fileDocumentUuid) {
         return PERMIT_ENTITY_MAPPER.toPermitEntityDto(
-            permitRepo.findPermitByIdAndFileDocumentUuid(permitId, fileDocumentUuid).orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND))
+            permitRepo.findPermitByIdAndFileDocumentUuid(permitId, fileDocumentUuid).orElseThrow(() -> new BusinessException(
+                ErrorCode.RESOURCE_NOT_FOUND))
         );
     }
     

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviationDefinition;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
@@ -120,7 +120,7 @@ class EmpVariationUkEtsAmendServiceTest {
     void submitAmend() {
         String operator = "operator";
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId(operator).build();
+        AppUser appUser = AppUser.builder().userId(operator).build();
         EmissionsMonitoringPlanUkEts monitoringPlan = EmissionsMonitoringPlanUkEts.builder()
                 .operatorDetails(EmpOperatorDetails.builder()
                         .build())
@@ -197,7 +197,7 @@ class EmpVariationUkEtsAmendServiceTest {
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(aviationAccountInfo);
 
         // Invoke
-        service.submitAmend(actionPayload, requestTask, pmrvUser);
+        service.submitAmend(actionPayload, requestTask, appUser);
 
         // Verify
         assertThat(requestTask.getRequest().getPayload()).isInstanceOf(EmpVariationUkEtsRequestPayload.class);

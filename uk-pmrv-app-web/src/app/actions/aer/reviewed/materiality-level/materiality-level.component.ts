@@ -12,8 +12,7 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Materiality level and reference documents" [breadcrumb]="true">
       <app-materiality-level-group
-        [materialityLevelInfo]="(payload$ | async).verificationReport.materialityLevel"
-      ></app-materiality-level-group>
+        [materialityLevelInfo]="(payload$ | async).verificationReport.materialityLevel"></app-materiality-level-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -25,5 +24,8 @@ export class MaterialityLevelComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

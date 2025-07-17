@@ -10,7 +10,9 @@ import { AviationAccountSummaryInfoComponent } from './aviation-account-summary-
 
 @Component({
   selector: 'app-test-parent',
-  template: ` <app-aviation-account-summary-info [summaryInfo]="summaryInfo"></app-aviation-account-summary-info> `,
+  template: `
+    <app-aviation-account-summary-info [summaryInfo]="summaryInfo"></app-aviation-account-summary-info>
+  `,
 })
 class TestParentComponent {
   summaryInfo: AviationAccountDetails = {

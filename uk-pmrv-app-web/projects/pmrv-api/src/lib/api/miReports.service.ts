@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -16,12 +16,9 @@ import { Observable } from 'rxjs';
 
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
-import { CustomMiReportParams } from '../model/customMiReportParams';
-import { EmptyMiReportParams } from '../model/emptyMiReportParams';
-import { ExecutedRequestActionsMiReportParams } from '../model/executedRequestActionsMiReportParams';
+import { MiReportParams } from '../model/miReportParams';
 import { MiReportResult } from '../model/miReportResult';
 import { MiReportSearchResult } from '../model/miReportSearchResult';
-import { OutstandingRegulatorRequestTasksMiReportParams } from '../model/outstandingRegulatorRequestTasksMiReportParams';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -89,58 +86,38 @@ export class MiReportsService {
   /**
    * Generates custom report
    * @param accountType The account type
-   * @param customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams
+   * @param miReportParams
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public generateCustomReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams:
-      | CustomMiReportParams
-      | EmptyMiReportParams
-      | ExecutedRequestActionsMiReportParams
-      | OutstandingRegulatorRequestTasksMiReportParams,
+    miReportParams: MiReportParams,
   ): Observable<MiReportResult>;
   public generateCustomReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams:
-      | CustomMiReportParams
-      | EmptyMiReportParams
-      | ExecutedRequestActionsMiReportParams
-      | OutstandingRegulatorRequestTasksMiReportParams,
+    miReportParams: MiReportParams,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpResponse<MiReportResult>>;
   public generateCustomReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams:
-      | CustomMiReportParams
-      | EmptyMiReportParams
-      | ExecutedRequestActionsMiReportParams
-      | OutstandingRegulatorRequestTasksMiReportParams,
+    miReportParams: MiReportParams,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpEvent<MiReportResult>>;
   public generateCustomReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams:
-      | CustomMiReportParams
-      | EmptyMiReportParams
-      | ExecutedRequestActionsMiReportParams
-      | OutstandingRegulatorRequestTasksMiReportParams,
+    miReportParams: MiReportParams,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<MiReportResult>;
   public generateCustomReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams:
-      | CustomMiReportParams
-      | EmptyMiReportParams
-      | ExecutedRequestActionsMiReportParams
-      | OutstandingRegulatorRequestTasksMiReportParams,
+    miReportParams: MiReportParams,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -148,15 +125,8 @@ export class MiReportsService {
     if (accountType === null || accountType === undefined) {
       throw new Error('Required parameter accountType was null or undefined when calling generateCustomReport.');
     }
-    if (
-      customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams ===
-        null ||
-      customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams ===
-        undefined
-    ) {
-      throw new Error(
-        'Required parameter customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams was null or undefined when calling generateCustomReport.',
-      );
+    if (miReportParams === null || miReportParams === undefined) {
+      throw new Error('Required parameter miReportParams was null or undefined when calling generateCustomReport.');
     }
 
     let headers = this.defaultHeaders;
@@ -191,7 +161,7 @@ export class MiReportsService {
 
     return this.httpClient.post<MiReportResult>(
       `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/mireports/custom`,
-      customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams,
+      miReportParams,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
@@ -205,58 +175,38 @@ export class MiReportsService {
   /**
    * Generates the report identified by the provided report type
    * @param accountType The account type
-   * @param customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams
+   * @param miReportParams
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public generateReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams:
-      | CustomMiReportParams
-      | EmptyMiReportParams
-      | ExecutedRequestActionsMiReportParams
-      | OutstandingRegulatorRequestTasksMiReportParams,
+    miReportParams: MiReportParams,
   ): Observable<MiReportResult>;
   public generateReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams:
-      | CustomMiReportParams
-      | EmptyMiReportParams
-      | ExecutedRequestActionsMiReportParams
-      | OutstandingRegulatorRequestTasksMiReportParams,
+    miReportParams: MiReportParams,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpResponse<MiReportResult>>;
   public generateReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams:
-      | CustomMiReportParams
-      | EmptyMiReportParams
-      | ExecutedRequestActionsMiReportParams
-      | OutstandingRegulatorRequestTasksMiReportParams,
+    miReportParams: MiReportParams,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpEvent<MiReportResult>>;
   public generateReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams:
-      | CustomMiReportParams
-      | EmptyMiReportParams
-      | ExecutedRequestActionsMiReportParams
-      | OutstandingRegulatorRequestTasksMiReportParams,
+    miReportParams: MiReportParams,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<MiReportResult>;
   public generateReport(
     accountType: 'INSTALLATION' | 'AVIATION',
-    customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams:
-      | CustomMiReportParams
-      | EmptyMiReportParams
-      | ExecutedRequestActionsMiReportParams
-      | OutstandingRegulatorRequestTasksMiReportParams,
+    miReportParams: MiReportParams,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
@@ -264,15 +214,8 @@ export class MiReportsService {
     if (accountType === null || accountType === undefined) {
       throw new Error('Required parameter accountType was null or undefined when calling generateReport.');
     }
-    if (
-      customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams ===
-        null ||
-      customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams ===
-        undefined
-    ) {
-      throw new Error(
-        'Required parameter customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams was null or undefined when calling generateReport.',
-      );
+    if (miReportParams === null || miReportParams === undefined) {
+      throw new Error('Required parameter miReportParams was null or undefined when calling generateReport.');
     }
 
     let headers = this.defaultHeaders;
@@ -307,7 +250,7 @@ export class MiReportsService {
 
     return this.httpClient.post<MiReportResult>(
       `${this.configuration.basePath}/v1.0/${encodeURIComponent(String(accountType))}/mireports`,
-      customMiReportParamsEmptyMiReportParamsExecutedRequestActionsMiReportParamsOutstandingRegulatorRequestTasksMiReportParams,
+      miReportParams,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

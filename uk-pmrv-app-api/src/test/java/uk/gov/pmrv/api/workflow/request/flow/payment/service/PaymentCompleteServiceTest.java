@@ -5,10 +5,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.payment.domain.enumeration.PaymentMethodType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -49,7 +49,7 @@ class PaymentCompleteServiceTest {
     void markAsPaid() {
         String userId = "userId";
         String userFullName = "userFullName";
-        PmrvUser authUser = PmrvUser.builder().userId(userId).build();
+        AppUser authUser = AppUser.builder().userId(userId).build();
         BigDecimal paymentAmount = BigDecimal.valueOf(545.56);
         PermitIssuanceRequestPayload requestPayload = PermitIssuanceRequestPayload.builder()
                 .payloadType(RequestPayloadType.PERMIT_ISSUANCE_REQUEST_PAYLOAD)
@@ -95,7 +95,7 @@ class PaymentCompleteServiceTest {
     @Test
     void markAsPaid_bank_transfer_not_supported() {
         String userId = "userId";
-        PmrvUser authUser = PmrvUser.builder().userId(userId).build();
+        AppUser authUser = AppUser.builder().userId(userId).build();
         PaymentMakeRequestTaskPayload requestTaskPayload = PaymentMakeRequestTaskPayload.builder()
                 .paymentMethodTypes(Set.of(PaymentMethodType.CREDIT_OR_DEBIT_CARD))
                 .build();
@@ -302,7 +302,7 @@ class PaymentCompleteServiceTest {
     void complete() {
         String userId = "userId";
         String userName = "userName";
-        PmrvUser authUser = PmrvUser.builder().userId(userId).build();
+        AppUser authUser = AppUser.builder().userId(userId).build();
         BigDecimal paymentAmount = BigDecimal.valueOf(545.56);
         PermitIssuanceRequestPayload requestPayload = PermitIssuanceRequestPayload.builder()
                 .payloadType(RequestPayloadType.PERMIT_ISSUANCE_REQUEST_PAYLOAD)

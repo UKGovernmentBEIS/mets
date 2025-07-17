@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { AerMonitoringPlanVersionsComponent } from '@aviation/shared/components/aer/monitoring-plan-versions';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -47,13 +47,13 @@ export default class OpinionStatementChangesFormComponent {
   onSubmit() {
     if (this.changesGroup.invalid) return;
 
-    const dataToSubmit = { ...this.formProvider.emissionsGroup.value, ...this.changesGroup.value };
+    const formValue = this.formProvider.getFormValue();
 
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
-      .saveAerVerify({ opinionStatement: dataToSubmit }, 'in progress')
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
+      .saveAerVerify({ opinionStatement: { ...formValue } }, 'in progress')
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setOpinionStatement(dataToSubmit);
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setOpinionStatement({ ...formValue });
         this.router.navigate(['..', 'site-visit'], { relativeTo: this.route });
       });
   }

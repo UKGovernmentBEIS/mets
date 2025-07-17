@@ -15,8 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.common.MeasuredEmissionsSamplingFrequency;
 import uk.gov.pmrv.api.permit.domain.common.ProcedureForm;
@@ -40,7 +40,6 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ReviewDecision
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.PermitReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceReviewDecision;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.validation.PermitReviewReturnForAmendsValidatorService;
 
 @ExtendWith(MockitoExtension.class)
 class PermitReviewReturnForAmendsValidatorServiceTest {
@@ -85,7 +84,7 @@ class PermitReviewReturnForAmendsValidatorServiceTest {
         BusinessException ex = assertThrows(BusinessException.class, () -> serviceValidator.validate(payload));
 
         // Verify
-        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.INVALID_PERMIT_REVIEW);
+        assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_PERMIT_REVIEW);
     }
 
     private PermitIssuanceReviewDecision buildReviewDecision(ReviewDecisionType type, List<ReviewDecisionRequiredChange> requiredChanges) {

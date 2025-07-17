@@ -14,9 +14,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.permit.domain.dto.PermitEntityDto;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
 import uk.gov.pmrv.api.permit.service.PermitService;
@@ -27,8 +27,6 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.PermitIssuanceCreatePermitDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.domain.PermitTransferBRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.notification.PermitTransferBGrantedGenerateDocumentsService;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.notification.PermitTransferBOfficialNoticeService;
 
 @ExtendWith(MockitoExtension.class)
 class PermitTransferBGrantedGenerateDocumentsServiceTest {

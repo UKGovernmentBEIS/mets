@@ -16,8 +16,14 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationRptAirportsDTO;
 import uk.gov.pmrv.api.aviationreporting.common.enumeration.CountryType;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.aggregatedemissionsdata.AviationAerCorsiaAggregatedEmissionDataDetails;
@@ -46,14 +52,8 @@ import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.AviationAer
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.AviationAerTotalEmissions;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.StandardFuelsTotalEmissions;
 import uk.gov.pmrv.api.aviationreporting.ukets.service.AviationAerUkEtsSubmittedEmissionsCalculationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.math.BigDecimal;
 import java.time.Year;
@@ -98,7 +98,7 @@ class AviationReportingControllerTest {
     private AviationReportingController controller;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -128,7 +128,7 @@ class AviationReportingControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(new ExceptionControllerAdvice())
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .addFilters(new FilterChainProxy(Collections.emptyList()))
                 .build();
 
@@ -160,13 +160,13 @@ class AviationReportingControllerTest {
 
     @Test
     void getTotalEmissionsUkEts_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+                .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post(BASE_CONTROLLER_PATH + "/" + TOTAL_EMISSIONS_PATH)
@@ -206,13 +206,13 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateStandardFuelsTotalEmissions_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+                .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post(BASE_CONTROLLER_PATH + "/" + STANDARD_FUELS_TOTAL_EMISSIONS_PATH)
@@ -264,13 +264,13 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateAerodromePairsTotalEmissions_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+                .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post(BASE_CONTROLLER_PATH + "/" + AERODROME_PAIRS_EMISSIONS_PATH)
@@ -346,13 +346,13 @@ class AviationReportingControllerTest {
 
     @Test
     void getDomesticFlightsEmissionsUkEts_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+                .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post(BASE_CONTROLLER_PATH + "/" + DOMESTIC_FLIGHTS_EMISSIONS_PATH)
@@ -432,13 +432,13 @@ class AviationReportingControllerTest {
 
     @Test
     void getNonDomesticFlightsEmissionsUkEts_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         AviationAerEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createEmissionCalculationDtoObject();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+                .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post(BASE_CONTROLLER_PATH + "/" + NON_DOMESTIC_FLIGHTS_EMISSIONS_PATH)
@@ -451,7 +451,8 @@ class AviationReportingControllerTest {
 
     @Test
     void getTotalEmissionsCorsia() throws Exception {
-        AviationAerCorsiaEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTO();
+        AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO =
+                this.createCorsiaEmissionCalculationDTO();
         AviationAerCorsiaTotalEmissions expectedResponse = AviationAerCorsiaTotalEmissions.builder()
                 .allFlightsNumber(30)
                 .allFlightsEmissions(BigDecimal.valueOf(1243))
@@ -481,13 +482,13 @@ class AviationReportingControllerTest {
 
     @Test
     void getTotalEmissionsCorsia_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
-        AviationAerCorsiaEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTO();
+        AppUser appUser = AppUser.builder().build();
+        AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+                .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post(BASE_CONTROLLER_PATH + "/" + TOTAL_EMISSIONS_CORSIA_PATH)
@@ -500,7 +501,10 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateAerodromePairsTotalEmissionsCorsia() throws Exception {
-        AviationAerCorsiaEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTO();
+        AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO
+                = this.createCorsiaEmissionCalculationDTO();
+
+
         final List<AviationAerCorsiaAerodromePairsTotalEmissions> aerodromePairsTotalEmissions = List.of(AviationAerCorsiaAerodromePairsTotalEmissions.builder()
                         .departureAirport(AviationRptAirportsDTO.builder()
                                 .icao("ICAO1")
@@ -568,13 +572,13 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateAerodromePairsTotalEmissionsCorsia_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
-        AviationAerCorsiaEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTO();
+        AppUser appUser = AppUser.builder().build();
+        AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+                .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post(BASE_CONTROLLER_PATH + "/" + AERODROME_PAIRS_EMISSIONS_CORSIA_PATH)
@@ -587,7 +591,7 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateStandardFuelsTotalEmissionsCorsia() throws Exception {
-        AviationAerCorsiaEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTO();
+        AviationAerCorsiaEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTOWithoutYear();
         final List<AviationAerCorsiaStandardFuelsTotalEmissions> standardFuelsTotalEmissions = List.of(AviationAerCorsiaStandardFuelsTotalEmissions.builder()
                 .fuelType(AviationAerCorsiaFuelType.AVIATION_GASOLINE)
                 .emissionsFactor(AviationAerUkEtsFuelType.AVIATION_GASOLINE.getEmissionFactor())
@@ -612,13 +616,13 @@ class AviationReportingControllerTest {
 
     @Test
     void calculateStandardFuelsTotalEmissionsCorsia_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         AviationAerCorsiaEmissionsCalculationDTO aviationAerCorsiaEmissionsCalculationDTO = this.createCorsiaEmissionCalculationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+                .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post(BASE_CONTROLLER_PATH + "/" + STANDARD_FUELS_TOTAL_EMISSIONS_CORSIA_PATH)
@@ -682,13 +686,13 @@ class AviationReportingControllerTest {
 
     @Test
     void getCorsiaFlightsEmissions_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO aviationAerEmissionsCalculationDTO = this.createInternationalFlightsEmissionsCalculationDTO();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR, RoleType.REGULATOR, RoleType.VERIFIER});
+            .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR, RoleTypeConstants.REGULATOR, RoleTypeConstants.VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post(BASE_CONTROLLER_PATH + "/" + CORSIA_FLIGHTS_EMISSIONS_PATH)
@@ -728,7 +732,55 @@ class AviationReportingControllerTest {
                 .build();
     }
 
-    private AviationAerCorsiaEmissionsCalculationDTO createCorsiaEmissionCalculationDTO() {
+    private AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO createCorsiaEmissionCalculationDTO() {
+        return AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO.builder()
+                .aggregatedEmissionsData(AviationAerCorsiaAggregatedEmissionsData.builder()
+                        .aggregatedEmissionDataDetails(Set.of(AviationAerCorsiaAggregatedEmissionDataDetails.builder()
+                                        .airportFrom(AviationRptAirportsDTO.builder()
+                                                .icao("icaoFrom1")
+                                                .name("nameFrom1")
+                                                .country("countryFrom1")
+                                                .countryType(CountryType.EEA_COUNTRY)
+                                                .state("state")
+                                                .build())
+                                        .airportTo(AviationRptAirportsDTO.builder()
+                                                .icao("icaoTo2")
+                                                .name("nameTo2")
+                                                .country("countryTo2")
+                                                .countryType(CountryType.EEA_COUNTRY)
+                                                .state("state")
+                                                .build())
+                                        .fuelType(AviationAerCorsiaFuelType.AVIATION_GASOLINE)
+                                        .fuelConsumption(BigDecimal.valueOf(150.45))
+                                        .flightsNumber(10)
+                                        .build(),
+                                AviationAerCorsiaAggregatedEmissionDataDetails.builder()
+                                        .airportFrom(AviationRptAirportsDTO.builder()
+                                                .icao("icaoFrom3")
+                                                .name("nameFrom3")
+                                                .country("countryFrom3")
+                                                .countryType(CountryType.EEA_COUNTRY)
+                                                .state("state")
+                                                .build())
+                                        .airportTo(AviationRptAirportsDTO.builder()
+                                                .icao("icaoTo4")
+                                                .name("nameTo4")
+                                                .country("countryTo4")
+                                                .countryType(CountryType.EEA_COUNTRY)
+                                                .state("state")
+                                                .build())
+                                        .fuelType(AviationAerCorsiaFuelType.AVIATION_GASOLINE)
+                                        .fuelConsumption(BigDecimal.valueOf(250.45))
+                                        .flightsNumber(20)
+                                        .build()
+                        ))
+                        .build())
+                .emissionsReductionClaim(BigDecimal.valueOf(200.25))
+                .year(Year.of(2023))
+                .build();
+    }
+
+    private AviationAerCorsiaEmissionsCalculationDTO createCorsiaEmissionCalculationDTOWithoutYear() {
         return AviationAerCorsiaEmissionsCalculationDTO.builder()
                 .aggregatedEmissionsData(AviationAerCorsiaAggregatedEmissionsData.builder()
                         .aggregatedEmissionDataDetails(Set.of(AviationAerCorsiaAggregatedEmissionDataDetails.builder()

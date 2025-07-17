@@ -78,7 +78,6 @@ describe('NotifyOperatorComponent', () => {
         roleCode: 'operator',
         authorityCreationDate: '2021-12-02T12:41:16.752923Z',
         authorityStatus: 'ACTIVE',
-        locked: false,
       },
     ] as UserAuthorityInfoDTO[],
     editable: true,

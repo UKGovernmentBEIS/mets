@@ -17,8 +17,7 @@ describe('DateSubmittedSummaryTemplateComponent', () => {
     template: `
       <app-doal-date-submitted-summary-template
         [dateSubmittedToAuthority]="dateSubmittedToAuthority"
-        [editable]="editable"
-      ></app-doal-date-submitted-summary-template>
+        [editable]="editable"></app-doal-date-submitted-summary-template>
     `,
   })
   class TestComponent {

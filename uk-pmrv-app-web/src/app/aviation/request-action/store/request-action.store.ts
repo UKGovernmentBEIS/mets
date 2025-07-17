@@ -10,6 +10,7 @@ import { Store } from '@core/store';
 import { RequestActionDTO } from 'pmrv-api';
 
 import { EmpActionStoreDelegate } from './delegates';
+import { DoeActionStoreDelegate } from './delegates/doe';
 import { DreActionStoreDelegate } from './delegates/dre';
 import { initialState, RequestActionState } from './request-action.state';
 
@@ -20,6 +21,7 @@ export class RequestActionStore extends Store<RequestActionState> implements Typ
   private _dreDelegate: DreActionStoreDelegate;
   private _aerDelegate: AerActionStoreDelegate | AerCorsiaActionStoreDelegate;
   private _virDelegate: VirActionStoreDelegate;
+  private _doeDelegate: DoeActionStoreDelegate;
 
   constructor() {
     super(initialState);
@@ -50,6 +52,13 @@ export class RequestActionStore extends Store<RequestActionState> implements Typ
     return this._dreDelegate;
   }
 
+  get doeDelegate() {
+    if (!this._doeDelegate) {
+      this._doeDelegate = new DoeActionStoreDelegate(this);
+    }
+    return this._doeDelegate;
+  }
+
   get aerDelegate() {
     if (!this._aerDelegate) {
       this._aerDelegate =
@@ -73,6 +82,7 @@ export class RequestActionStore extends Store<RequestActionState> implements Typ
     this._dreDelegate = null;
     this._aerDelegate = null;
     this._virDelegate = null;
+    this._doeDelegate = null;
   }
 
   setRequestActionItem(requestActionItem: RequestActionDTO) {

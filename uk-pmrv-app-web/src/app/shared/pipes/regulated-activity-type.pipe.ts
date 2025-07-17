@@ -24,6 +24,8 @@ export class RegulatedActivityTypePipe implements PipeTransform {
         return 'Coke production';
       case 'COMBUSTION':
         return 'Combustion';
+      case 'UPSTREAM_GHG_REMOVAL':
+        return 'Upstream GHG Removal';
       case 'FERROUS_METALS_PRODUCTION':
         return 'Ferrous metals production or processing';
       case 'GLASS_MANUFACTURING':
@@ -62,8 +64,11 @@ export class RegulatedActivityTypePipe implements PipeTransform {
         return 'Storage of greenhouse gases under Directive 2009/31/EC';
       case 'TRANSPORT_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE':
         return 'Transport of greenhouse gases under Directive 2009/31/EC';
+      case 'WASTE':
+        return 'Waste';
       case 'excludedRegulatedActivity':
         return 'This emission summary is an excluded activity';
+
       default:
         return '';
     }

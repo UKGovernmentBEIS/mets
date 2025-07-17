@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -36,7 +36,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.NotifyOperatorForDeci
 import uk.gov.pmrv.api.workflow.utils.DateUtils;
 
 @ExtendWith(MockitoExtension.class)
-public class AviationDreUkEtsSubmitNotifyOperatorActionHandlerTest {
+class AviationDreUkEtsSubmitNotifyOperatorActionHandlerTest {
 
     @InjectMocks
     private AviationDreUkEtsSubmitNotifyOperatorActionHandler service;
@@ -54,7 +54,7 @@ public class AviationDreUkEtsSubmitNotifyOperatorActionHandlerTest {
     void process_with_Fee() {
         Long requestTaskId = 1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.AVIATION_DRE_UKETS_SUBMIT_NOTIFY_OPERATOR;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        AppUser appUser = AppUser.builder().userId("user").build();
         NotifyOperatorForDecisionRequestTaskActionPayload payload = NotifyOperatorForDecisionRequestTaskActionPayload.builder()
             .payloadType(RequestTaskActionPayloadType.AVIATION_DRE_UKETS_SUBMIT_NOTIFY_OPERATOR_PAYLOAD)
             .decisionNotification(DecisionNotification.builder()
@@ -95,24 +95,24 @@ public class AviationDreUkEtsSubmitNotifyOperatorActionHandlerTest {
 
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 
-        service.process(requestTaskId, requestTaskActionType,  pmrvUser, payload);
+        service.process(requestTaskId, requestTaskActionType,  appUser, payload);
 
         assertThat(request.getSubmissionDate()).isNotNull();
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-        verify(aviationDreUkEtsApplyService, times(1)).applySubmitNotify(requestTask, payload.getDecisionNotification(), pmrvUser);
+        verify(aviationDreUkEtsApplyService, times(1)).applySubmitNotify(requestTask, payload.getDecisionNotification(), appUser);
         verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
                 BpmnProcessConstants.DRE_SUBMIT_OUTCOME, AviationDreSubmitOutcome.SUBMITTED,
                 BpmnProcessConstants.DRE_IS_PAYMENT_REQUIRED, true,
-                BpmnProcessConstants.PAYMENT_EXPIRATION_DATE, DateUtils.convertLocalDateToDate(dre.getFee().getFeeDetails().getDueDate())));
+                BpmnProcessConstants.PAYMENT_EXPIRATION_DATE, DateUtils.atEndOfDay(dre.getFee().getFeeDetails().getDueDate())));
     }
 
     @Test
     void process_without_Fee() {
         Long requestTaskId = 1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.AVIATION_DRE_UKETS_SUBMIT_NOTIFY_OPERATOR;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        AppUser appUser = AppUser.builder().userId("user").build();
         NotifyOperatorForDecisionRequestTaskActionPayload payload = NotifyOperatorForDecisionRequestTaskActionPayload.builder()
             .payloadType(RequestTaskActionPayloadType.AVIATION_DRE_UKETS_SUBMIT_NOTIFY_OPERATOR_PAYLOAD)
             .decisionNotification(DecisionNotification.builder()
@@ -145,12 +145,12 @@ public class AviationDreUkEtsSubmitNotifyOperatorActionHandlerTest {
 
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 
-        service.process(requestTaskId, requestTaskActionType,  pmrvUser, payload);
+        service.process(requestTaskId, requestTaskActionType,  appUser, payload);
 
         assertThat(request.getSubmissionDate()).isNotNull();
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
-        verify(aviationDreUkEtsApplyService, times(1)).applySubmitNotify(requestTask, payload.getDecisionNotification(), pmrvUser);
+        verify(aviationDreUkEtsApplyService, times(1)).applySubmitNotify(requestTask, payload.getDecisionNotification(), appUser);
         verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
                 BpmnProcessConstants.DRE_SUBMIT_OUTCOME, AviationDreSubmitOutcome.SUBMITTED,

@@ -97,7 +97,7 @@ export class EmissionsComponent implements OnInit, PendingRequest {
     return state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_REVIEW'
       ? 'log-changes'
       : state.requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'
-      ? 'reason-template'
-      : 'answers';
+        ? 'reason-template'
+        : 'answers';
   }
 }

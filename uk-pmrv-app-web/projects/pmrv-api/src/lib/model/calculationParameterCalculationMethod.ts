@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,11 +9,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { CalculationActivityDataCalculationMethod } from './calculationActivityDataCalculationMethod';
+import { CalculationActivityDataAggregationMeteringCalcMethod } from './calculationActivityDataAggregationMeteringCalcMethod';
+import { CalculationActivityDataContinuousMeteringCalcMethod } from './calculationActivityDataContinuousMeteringCalcMethod';
 import { CalculationEmissionCalculationParamValues } from './calculationEmissionCalculationParamValues';
 
 export interface CalculationParameterCalculationMethod {
   type: 'REGIONAL_DATA' | 'NATIONAL_INVENTORY_DATA' | 'MANUAL';
-  calculationActivityDataCalculationMethod: CalculationActivityDataCalculationMethod;
+  calculationActivityDataCalculationMethod:
+    | CalculationActivityDataAggregationMeteringCalcMethod
+    | CalculationActivityDataContinuousMeteringCalcMethod;
   emissionCalculationParamValues?: CalculationEmissionCalculationParamValues;
 }

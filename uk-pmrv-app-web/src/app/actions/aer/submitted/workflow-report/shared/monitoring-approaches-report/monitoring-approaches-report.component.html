@@ -1,0 +1,102 @@
+<ng-container *ngIf="payload$ | async as payload">
+  <ng-container *ngIf="monitoringApproaches$ | async as monitoringApproaches">
+    <ng-container *ngFor="let monitoringApproach of monitoringApproaches">
+      <div [ngSwitch]="monitoringApproach">
+        <div *ngSwitchCase="'FALLBACK'">
+          <h2 class="govuk-heading-m">Fallback approach emissions</h2>
+          <app-fallback-emissions-group
+            [fallbackEmissions]="$any(payload.aer?.monitoringApproachEmissions)?.FALLBACK"
+            [sourceStreams]="getFallbackSourceStreams(payload, payload.aer?.monitoringApproachEmissions?.FALLBACK)"
+            [documentFiles]="
+              aerService.getDownloadUrlFiles($any(payload.aer?.monitoringApproachEmissions)?.FALLBACK?.files)
+            "
+          ></app-fallback-emissions-group>
+          <div class="pg-break"></div>
+        </div>
+
+        <div *ngSwitchCase="'INHERENT_CO2'">
+          <h2 class="govuk-heading-m">Inherent CO2 emissions</h2>
+          <app-inherent-co2-group [inherentInstallations]="getInherentInstallations(payload)"></app-inherent-co2-group>
+          <div class="pg-break"></div>
+        </div>
+
+        <div *ngSwitchCase="'CALCULATION_CO2'">
+          <h2 class="govuk-heading-l">Calculation of CO2 emissions</h2>
+          <app-calculation-emissions-group [data]="payload.aer"></app-calculation-emissions-group>
+
+          <ng-container
+            *ngFor="
+          let sourceStreamEmission of $any(payload.aer.monitoringApproachEmissions)?.[monitoringApproach]
+            ?.sourceStreamEmissions;
+          let i = index
+        "
+          >
+            <div class="pg-break"></div>
+            <h2 class="govuk-heading-l">{{ getCalculationHeading(payload, i, monitoringApproach) }}</h2>
+            <app-calculation-emissions-tier-summary
+              [payload]="payload"
+              [index]="i"
+            ></app-calculation-emissions-tier-summary>
+          </ng-container>
+          <div class="pg-break"></div>
+        </div>
+
+        <div *ngSwitchCase="'CALCULATION_PFC'">
+          <h2 class="govuk-heading-m">Calculation of perfluorocarbons (PFC) emissions</h2>
+          <app-pfc-group [data]="payload.aer"></app-pfc-group>
+
+          <ng-container
+            *ngFor="
+          let sourceStreamEmission of $any(payload.aer.monitoringApproachEmissions)?.[monitoringApproach]
+            ?.sourceStreamEmissions;
+          let i = index
+        "
+          >
+            <div class="pg-break"></div>
+            <h2 class="govuk-heading-m">{{ getCalculationHeading(payload, i, monitoringApproach) }}</h2>
+            <app-pfc-tier-summary [payload]="payload" [index]="i"></app-pfc-tier-summary>
+          </ng-container>
+          <div class="pg-break"></div>
+        </div>
+
+        <div *ngSwitchCase="'MEASUREMENT_CO2'">
+          <h2 class="govuk-heading-m">Measurement of CO2 emissions</h2>
+
+          <ng-container
+            *ngTemplateOutlet="measurementCO2N20; context: { payload: payload, monitoringApproach: monitoringApproach }"
+          ></ng-container>
+        </div>
+
+        <div *ngSwitchCase="'MEASUREMENT_N2O'">
+          <h2 class="govuk-heading-m">Measurement of N2O emissions</h2>
+
+          <ng-container
+            *ngTemplateOutlet="measurementCO2N20; context: { payload: payload, monitoringApproach: monitoringApproach }"
+          ></ng-container>
+        </div>
+
+        <ng-template #measurementCO2N20 let-payload="payload" let-monitoringApproach="monitoringApproach">
+          <app-measurement-group [data]="payload.aer" [taskKey]="monitoringApproach"></app-measurement-group>
+
+          <ng-container
+            *ngFor="
+              let emissionPointEmission of $any(payload.aer.monitoringApproachEmissions)?.[monitoringApproach]
+                ?.emissionPointEmissions;
+              let i = index
+            "
+          >
+            <div class="pg-break"></div>
+            <h2 class="govuk-heading-m">{{ getMeasurementHeading(payload, i, monitoringApproach) }}</h2>
+
+            <app-measurement-tier-summary
+              [payload]="payload"
+              [taskKey]="monitoringApproach"
+              [index]="i"
+            ></app-measurement-tier-summary>
+          </ng-container>
+          <div class="pg-break"></div>
+        </ng-template>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>

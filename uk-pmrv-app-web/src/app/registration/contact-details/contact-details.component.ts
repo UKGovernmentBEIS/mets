@@ -76,7 +76,7 @@ export class ContactDetailsComponent implements OnInit {
       this.router.navigate(
         [
           this.store.getState().isSummarized ||
-          this.store.getState().invitationStatus === 'PENDING_USER_REGISTRATION_NO_PASSWORD'
+          this.store.getState().invitationStatus === 'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD'
             ? '../summary'
             : '../choose-password',
         ],

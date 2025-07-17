@@ -25,15 +25,13 @@ interface TaskPayload extends PermitNotificationFollowUpRequestTaskPayload {
       class="govuk-!-display-block govuk-!-margin-bottom-8"
       [data]="responseData$ | async"
       [summaryListMapper]="summaryListResponseMapper"
-      sectionHeading="Response details"
-    ></app-follow-up-summary>
+      sectionHeading="Response details"></app-follow-up-summary>
     <app-follow-up-summary
       class="govuk-!-display-block govuk-!-margin-bottom-8"
       [data]="data$ | async"
       [summaryListMapper]="summaryListMapper"
       [changeLink]="(isEditable$ | async) ? 'response' : undefined"
-      sectionHeading="Decision details"
-    ></app-follow-up-summary>
+      sectionHeading="Decision details"></app-follow-up-summary>
     <a govukLink routerLink="../">Return to: Follow up response to a notification</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

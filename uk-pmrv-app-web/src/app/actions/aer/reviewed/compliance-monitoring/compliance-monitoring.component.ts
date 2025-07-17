@@ -12,8 +12,9 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Compliance with monitoring and reporting principles" [breadcrumb]="true">
       <app-compliance-monitoring-group
-        [compliance]="(payload$ | async).verificationReport.complianceMonitoringReporting"
-      ></app-compliance-monitoring-group>
+        [compliance]="
+          (payload$ | async).verificationReport.complianceMonitoringReporting
+        "></app-compliance-monitoring-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -25,5 +26,8 @@ export class ComplianceMonitoringComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

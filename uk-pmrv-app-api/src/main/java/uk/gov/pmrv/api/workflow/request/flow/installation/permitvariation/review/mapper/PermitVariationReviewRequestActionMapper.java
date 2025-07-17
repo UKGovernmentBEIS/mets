@@ -1,16 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.mapper;
 
-import java.util.AbstractMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
-
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.DeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.PermitReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
@@ -22,6 +17,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationDeemedWithdrawnDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationGrantDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationRejectDetermination;
+
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface PermitVariationReviewRequestActionMapper {

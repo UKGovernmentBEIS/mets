@@ -30,6 +30,10 @@ export const sourceStreamFormProvider = {
         [GovukValidators.required('Enter a description'), GovukValidators.maxLength(300, 'Enter up to 300 characters')],
       ],
       type: [sourceStream?.type ?? null, GovukValidators.required('Select a type')],
+      otherTypeName: [
+        { value: sourceStream?.otherTypeName ?? null, disabled: sourceStream?.type !== 'OTHER' },
+        [GovukValidators.required('Enter a description'), GovukValidators.maxLength(300, 'Enter up to 300 characters')],
+      ],
     });
   },
 };

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 import { Subject, takeUntil } from 'rxjs';
 
@@ -8,29 +8,47 @@ import { TaskFormProvider } from '@aviation/request-task/task-form.provider';
 import { getRequestTaskAttachmentTypeForRequestTaskType, unparseCsv } from '@aviation/request-task/util';
 import { getLocationOnShoreFormGroup } from '@aviation/shared/components/location-state-form/location-state-form.util';
 import {
-  flightIdentificationRegistrationMarkingsEmptyLineValidator,
-  flightIdentificationRegistrationMarkingsValidator,
+  activityDescriptionValidator,
+  aircraftRegistrationMarkingsValidator,
+  certificateExistValidator,
+  certificateNumberValidator,
+  cityValidator,
+  countryValidator,
+  differentContactLocationExistValidator,
+  flightIdentificationTypeValidator,
+  flightTypesValidator,
+  fullNameValidator,
+  icaoDesignatorsValidator,
+  issuingAuthorityValidator,
+  legalStatusTypeValidator,
+  line1Validator,
+  operatorNameValidator,
+  operatorTypeValidator,
   organisationStructureCreatePartnerFormControl,
   organisationStructureCreatePartnersFormArray,
   organisationStructureDisableDifferentContactLocationControlByDifferentLocation,
   organisationStructureDisableDifferentContactLocationControlByLegalStatusType,
+  partnersValidator,
+  registrationNumberValidator,
+  restrictionsDetailsValidator,
+  restrictionsExistValidator,
+  subsidiaryCompanyExistValidator,
 } from '@aviation/shared/components/operator-details/utils/operator-details-form.util';
 import { EmpOperatorDetailsViewModel } from '@aviation/shared/types';
 import { FileUpload } from '@shared/file-input/file-upload-event';
 import { RequestTaskFileService } from '@shared/services/request-task-file-service/request-task-file.service';
 
-import { GovukValidators } from 'govuk-components';
-
 import {
   ActivitiesDescription,
+  AirOperatingCertificateCorsia,
   EmpCorsiaOperatorDetails,
-  EmpOperatorDetails,
   FlightIdentification,
   IndividualOrganisation,
   LimitedCompanyOrganisation,
   LocationOnShoreStateDTO,
   OrganisationStructure,
   PartnershipOrganisation,
+  SubsidiaryCompanyCorsia,
 } from 'pmrv-api';
 
 export interface CorsiaOperatorDetailsFormModel {
@@ -40,7 +58,7 @@ export interface CorsiaOperatorDetailsFormModel {
   organisationStructure: FormGroup<Record<keyof EmpCorsiaOperatorDetails['organisationStructure'], FormControl>>;
   activitiesDescription: FormGroup<Record<keyof EmpCorsiaOperatorDetails['activitiesDescription'], FormControl>>;
   subsidiaryCompanyExist: FormControl<boolean>;
-  subsidiaryCompanies?: FormGroup<Record<keyof EmpCorsiaOperatorDetails['subsidiaryCompanies'], FormControl>>;
+  subsidiaryCompanies?: FormArray<FormGroup<Record<keyof SubsidiaryCompanyCorsia, FormGroup | FormControl>>>;
 }
 
 @Injectable()
@@ -52,7 +70,10 @@ export class OperatorDetailsCorsiaFormProvider
 
   private destroy$ = new Subject<void>();
 
-  constructor(private store: RequestTaskStore, private requestTaskFileService: RequestTaskFileService) {}
+  constructor(
+    private store: RequestTaskStore,
+    private requestTaskFileService: RequestTaskFileService,
+  ) {}
 
   get form(): FormGroup {
     if (!this._form) {
@@ -61,7 +82,8 @@ export class OperatorDetailsCorsiaFormProvider
 
     this.disableFlightIdentificationFormGroupConditionally();
     this.disableAirOperatingCertificateFormGroupConditionally();
-    this.disableOrganisationStructureFormGroupConditionally(this._form.controls.legalStatusType?.value);
+    this.disableOrganisationStructureFormGroupConditionally(this._form.value.organisationStructure.legalStatusType);
+    this.disableSubsidiaryCompaniesFormGroupConditionally();
 
     return this._form;
   }
@@ -78,118 +100,78 @@ export class OperatorDetailsCorsiaFormProvider
 
       const patchValues = {
         ...formValues,
-        operatorName: formValues.operatorName,
+        operatorName: formValues.operatorName ?? null,
         flightIdentification: {
           ...formValues.flightIdentification,
           aircraftRegistrationMarkings: aircraftRegistrationMarkings ? unparseCsv(aircraftRegistrationMarkings) : null,
         },
         airOperatingCertificate: {
           ...formValues?.airOperatingCertificate,
-          certificateFiles:
-            formValues?.airOperatingCertificate?.certificateFiles?.map((uuid) => ({
-              file: { name: this.store.empCorsiaDelegate.payload.empAttachments[uuid] } as File,
-              uuid,
-            })) ?? [],
+          certificateFiles: this.transformFiles(formValues?.airOperatingCertificate?.certificateFiles),
         },
         organisationStructure: {
           ...formValues?.organisationStructure,
-          evidenceFiles:
-            (formValues?.organisationStructure as LimitedCompanyOrganisation)?.evidenceFiles?.map((uuid) => ({
-              file: { name: this.store.empCorsiaDelegate.payload.empAttachments[uuid] } as File,
-              uuid,
-            })) ?? [],
+          evidenceFiles: this.transformFiles(
+            (formValues?.organisationStructure as LimitedCompanyOrganisation)?.evidenceFiles,
+          ),
         },
         subsidiaryCompanyExist: formValues?.subsidiaryCompanyExist ?? null,
-      };
-      this.form.addControl('subsidiaryCompanyExist', new FormControl(patchValues.subsidiaryCompanyExist ?? null));
+        subsidiaryCompanies: (formValues?.subsidiaryCompanies || []).map((subsidiaryCompany) => {
+          const { flightIdentification, airOperatingCertificate } = subsidiaryCompany;
+          const aircraftRegistrationMarkings = flightIdentification.aircraftRegistrationMarkings || [];
+
+          return {
+            ...subsidiaryCompany,
+            flightIdentification:
+              aircraftRegistrationMarkings.length > 0
+                ? {
+                    ...flightIdentification,
+                    aircraftRegistrationMarkings: unparseCsv(flightIdentification.aircraftRegistrationMarkings),
+                  }
+                : flightIdentification,
+            airOperatingCertificate: {
+              ...airOperatingCertificate,
+              certificateFiles: airOperatingCertificate.certificateExist
+                ? this.transformFiles(airOperatingCertificate?.certificateFiles)
+                : [],
+            },
+          };
+        }),
+      } as unknown as EmpCorsiaOperatorDetails;
+
+      this.initiateSubsidiaryCompaniesForm(patchValues);
+
       this.form.patchValue(patchValues);
-
-      if (formValues?.subsidiaryCompanies) {
-        this.addSubsidiaryCompanyControl(formValues.subsidiaryCompanies);
-        patchValues.subsidiaryCompanies = this.getSubsidiaryFiles(formValues).subsidiaryCompanies;
-        this.form.patchValue(patchValues);
-      }
     }
   }
 
-  getSubsidiaryFiles(operatorDetails) {
-    if (operatorDetails?.subsidiaryCompanies) {
-      for (const item of operatorDetails.subsidiaryCompanies) {
-        if (item.airOperatingCertificate.certificateExist) {
-          if (
-            item.airOperatingCertificate.certificateFiles &&
-            typeof item.airOperatingCertificate.certificateFiles[0] !== 'object'
-          ) {
-            item.airOperatingCertificate.certificateFiles = item.airOperatingCertificate.certificateFiles.map(
-              (uuid) => ({
-                file: { name: this.store.empDelegate.payload.empAttachments[uuid] } as File,
-                uuid,
-              }),
-            );
-          }
-        }
-      }
-    }
-    return operatorDetails;
-  }
-
-  public addSubsidiaryCompanyExistsControl(value): void {
-    this._form.addControl('subsidiaryCompanyExist', new FormControl(value));
-  }
-
-  public removeSubsidiaryCompanyExistsControl(): void {
-    if (this._form.get('subsidiaryCompanyExist')) {
-      this._form.removeControl('subsidiaryCompanyExist');
-    }
-  }
-
-  get subsidiaryCompaniesListForm(): FormGroup {
-    return this.form.get('subsidiaryCompanies') as FormGroup;
-  }
-
-  public addSubsidiaryCompanyControl(values): void {
-    const form = this.fb.array([], Validators.minLength(1));
-
-    for (const value of values) {
-      const control = this.fb.control(value);
-
-      form.push(control);
-    }
-
-    form.patchValue([...values]);
-
-    this._form.addControl('subsidiaryCompanies', form);
-  }
-
-  public removeSubsidiaryCompanyControl(): void {
-    if (this._form.get('subsidiaryCompanies')) this._form.removeControl('subsidiaryCompanies');
+  public transformFiles(
+    files: AirOperatingCertificateCorsia['certificateFiles'] | LimitedCompanyOrganisation['evidenceFiles'],
+  ) {
+    return (files || []).map((uuid) => ({
+      file: { name: this.store.empCorsiaDelegate.payload.empAttachments[uuid] } as File,
+      uuid,
+    }));
   }
 
   public removeSubsidiaryCompanyItem(index: number): void {
-    if (this._form.get('subsidiaryCompanies')) {
-      (this.form.get('subsidiaryCompanies') as FormArray).removeAt(index);
-      this.setFormValue(this.form.value);
+    const subsidiaryComaniesForm = this._form.get('subsidiaryCompanies') as FormArray;
+
+    if (subsidiaryComaniesForm) {
+      subsidiaryComaniesForm.removeAt(index);
+
+      const operatorDetails = this.form.value as EmpCorsiaOperatorDetails;
+
+      if (operatorDetails.subsidiaryCompanies.length === 0) {
+        this._form.get('subsidiaryCompanyExist').patchValue(false);
+      }
+
+      this._form.updateValueAndValidity();
     }
   }
 
-  public addRestrictionDetailsControl() {
-    this._form.addControl(
-      'restrictionsDetails',
-      new FormControl<EmpCorsiaOperatorDetails['airOperatingCertificate']['restrictionsDetails']>('', {
-        validators: [GovukValidators.required('TBD'), GovukValidators.maxLength(500, 'TBD')],
-      }),
-    );
-  }
-
-  public removeRestrictionDetailsControl() {
-    if (this._form.get('restrictionsDetails')) {
-      this._form.addControl(
-        'restrictionsDetails',
-        new FormControl<EmpCorsiaOperatorDetails['airOperatingCertificate']['restrictionsDetails']>('', {
-          validators: [GovukValidators.required('TBD'), GovukValidators.maxLength(500, 'TBD')],
-        }),
-      );
-    }
+  public addSubsidiaryCompany() {
+    (this._form?.controls?.subsidiaryCompanies as FormArray)?.controls.push(this.subsidiaryCompaniesForm());
   }
 
   private disableFlightIdentificationFormGroupConditionally() {
@@ -198,6 +180,7 @@ export class OperatorDetailsCorsiaFormProvider
 
     if (flightIdentification.flightIdentificationType === 'INTERNATIONAL_CIVIL_AVIATION_ORGANISATION') {
       flightIdentificationControl.controls.icaoDesignators.enable();
+
       flightIdentificationControl.controls.aircraftRegistrationMarkings.disable();
     } else {
       flightIdentificationControl.controls.aircraftRegistrationMarkings.enable();
@@ -213,17 +196,26 @@ export class OperatorDetailsCorsiaFormProvider
       airOperatingCertificateControl.controls.certificateNumber.enable();
       airOperatingCertificateControl.controls.issuingAuthority.enable();
       airOperatingCertificateControl.controls.certificateFiles.enable();
+      airOperatingCertificateControl.controls.restrictionsExist.enable();
+
+      if (airOperatingCertificate.restrictionsExist) {
+        airOperatingCertificateControl.controls.restrictionsDetails.enable();
+      } else {
+        airOperatingCertificateControl.controls.restrictionsDetails.disable();
+      }
     } else {
       airOperatingCertificateControl.controls.certificateNumber.disable();
       airOperatingCertificateControl.controls.issuingAuthority.disable();
       airOperatingCertificateControl.controls.certificateFiles.disable();
+      airOperatingCertificateControl.controls.restrictionsDetails.disable();
+      airOperatingCertificateControl.controls.restrictionsExist.disable();
     }
   }
 
   private disableOrganisationStructureFormGroupConditionally(
     legalStatusType: OrganisationStructure['legalStatusType'],
   ) {
-    const { organisationStructure } = this._form.value as EmpOperatorDetails;
+    const { organisationStructure } = this._form.value as EmpCorsiaOperatorDetails;
     const organisationStructureControl = this._form.controls.organisationStructure as FormGroup;
 
     switch (legalStatusType) {
@@ -231,12 +223,17 @@ export class OperatorDetailsCorsiaFormProvider
         organisationStructureControl.controls.registrationNumber.enable();
         organisationStructureControl.controls.evidenceFiles.enable();
         organisationStructureControl.controls.differentContactLocationExist.enable();
-        (organisationStructure as LimitedCompanyOrganisation).differentContactLocationExist
-          ? organisationStructureControl.controls.differentContactLocation.enable()
-          : organisationStructureControl.controls.differentContactLocation.disable();
+
+        if ((organisationStructure as LimitedCompanyOrganisation).differentContactLocationExist) {
+          organisationStructureControl.controls.differentContactLocation.enable();
+        } else {
+          organisationStructureControl.controls.differentContactLocation.disable();
+        }
+
         organisationStructureControl.controls.fullName.disable();
         organisationStructureControl.controls.partnershipName.disable();
         organisationStructureControl.controls.partners.disable();
+
         break;
 
       case 'INDIVIDUAL':
@@ -244,9 +241,11 @@ export class OperatorDetailsCorsiaFormProvider
         organisationStructureControl.controls.evidenceFiles.disable();
         organisationStructureControl.controls.differentContactLocationExist.disable();
         organisationStructureControl.controls.differentContactLocation.disable();
-        organisationStructureControl.controls.fullName.enable();
         organisationStructureControl.controls.partnershipName.disable();
         organisationStructureControl.controls.partners.disable();
+
+        organisationStructureControl.controls.fullName.enable();
+
         break;
 
       case 'PARTNERSHIP':
@@ -255,9 +254,103 @@ export class OperatorDetailsCorsiaFormProvider
         organisationStructureControl.controls.differentContactLocationExist.disable();
         organisationStructureControl.controls.differentContactLocation.disable();
         organisationStructureControl.controls.fullName.disable();
+
         organisationStructureControl.controls.partnershipName.enable();
         organisationStructureControl.controls.partners.enable();
+
         break;
+
+      default:
+        organisationStructureControl.controls.organisationLocation.disable();
+        organisationStructureControl.controls.registrationNumber.disable();
+        organisationStructureControl.controls.evidenceFiles.disable();
+        organisationStructureControl.controls.differentContactLocationExist.disable();
+        organisationStructureControl.controls.differentContactLocation.disable();
+        organisationStructureControl.controls.fullName.disable();
+        organisationStructureControl.controls.partnershipName.disable();
+        organisationStructureControl.controls.partners.disable();
+
+        break;
+    }
+  }
+
+  public initiateSubsidiaryCompaniesForm(operatorDetails?: EmpCorsiaOperatorDetails) {
+    const form = this.form;
+    operatorDetails = operatorDetails || form.value;
+
+    if (operatorDetails?.subsidiaryCompanyExist) {
+      if (operatorDetails?.subsidiaryCompanies?.length === 0) {
+        this.addSubsidiaryCompany();
+        operatorDetails.subsidiaryCompanies.push({} as any);
+      } else {
+        if (
+          operatorDetails?.subsidiaryCompanies?.length !==
+          (form?.controls?.subsidiaryCompanies as FormArray)?.controls.length
+        ) {
+          this.subsidiaryCompaniesCreateInitialForm(operatorDetails?.subsidiaryCompanies).forEach(
+            (subsidiaryCompanyFormGrour) => {
+              (form?.controls?.subsidiaryCompanies as FormArray)?.controls.push(subsidiaryCompanyFormGrour);
+            },
+          );
+        }
+      }
+    }
+  }
+
+  private disableSubsidiaryCompaniesFormGroupConditionally() {
+    const { subsidiaryCompanyExist } = this._form.value as EmpCorsiaOperatorDetails;
+    const subsidiaryCompaniesFormArray = this._form.controls
+      .subsidiaryCompanies as CorsiaOperatorDetailsFormModel['subsidiaryCompanies'];
+
+    if (subsidiaryCompanyExist) {
+      subsidiaryCompaniesFormArray.controls.forEach((subsidiaryCompanyControl) => {
+        this.disableSubsidiaryCompanyAirOperatingCertificateControlsConditionally(
+          subsidiaryCompanyControl.controls.airOperatingCertificate as FormGroup,
+        );
+
+        this.disableSubsidiaryCompanyFlightIdentificationControlsConditionally(
+          subsidiaryCompanyControl.controls.flightIdentification as FormGroup,
+        );
+      });
+
+      subsidiaryCompaniesFormArray.markAsDirty();
+      subsidiaryCompaniesFormArray.updateValueAndValidity();
+    }
+  }
+
+  public disableSubsidiaryCompanyAirOperatingCertificateControlsConditionally(airOperatingCertificate: FormGroup) {
+    if (airOperatingCertificate.controls.certificateExist.value) {
+      airOperatingCertificate.controls.certificateNumber.enable();
+      airOperatingCertificate.controls.issuingAuthority.enable();
+      airOperatingCertificate.controls.certificateFiles.enable();
+      airOperatingCertificate.controls.restrictionsExist.enable();
+
+      if (airOperatingCertificate.controls.restrictionsExist.value) {
+        airOperatingCertificate.controls.restrictionsDetails.enable();
+      } else {
+        airOperatingCertificate.controls.restrictionsDetails.disable();
+      }
+    } else {
+      airOperatingCertificate.controls.certificateNumber.disable();
+      airOperatingCertificate.controls.issuingAuthority.disable();
+      airOperatingCertificate.controls.certificateFiles.disable();
+      airOperatingCertificate.controls.restrictionsExist.disable();
+      airOperatingCertificate.controls.restrictionsDetails.disable();
+    }
+  }
+
+  public disableSubsidiaryCompanyFlightIdentificationControlsConditionally(flightIdentification: FormGroup) {
+    const flightIdentificationType = flightIdentification.controls.flightIdentificationType
+      .value as FlightIdentification['flightIdentificationType'];
+
+    if (flightIdentificationType === 'INTERNATIONAL_CIVIL_AVIATION_ORGANISATION') {
+      flightIdentification.controls.icaoDesignators.enable();
+
+      flightIdentification.controls.aircraftRegistrationMarkings.disable();
+    } else {
+      flightIdentification.controls.icaoDesignators.disable();
+
+      flightIdentification.controls.aircraftRegistrationMarkings.enable();
     }
   }
 
@@ -265,20 +358,13 @@ export class OperatorDetailsCorsiaFormProvider
     return this.fb.group(
       {
         flightIdentificationType: new FormControl<FlightIdentification['flightIdentificationType']>(null, {
-          validators: GovukValidators.required('Select the call sign identifier you use'),
+          validators: flightIdentificationTypeValidator,
         }),
         icaoDesignators: new FormControl<FlightIdentification['icaoDesignators']>(null, {
-          validators: [
-            GovukValidators.required('State which ICAO designators you are using'),
-            GovukValidators.maxLength(100, 'The list of ICAO designators should not be more than 100 characters'),
-          ],
+          validators: icaoDesignatorsValidator,
         }),
         aircraftRegistrationMarkings: new FormControl<string>(null, {
-          validators: [
-            GovukValidators.required('State which aircraft registration markings you are using'),
-            flightIdentificationRegistrationMarkingsValidator(),
-            flightIdentificationRegistrationMarkingsEmptyLineValidator(),
-          ],
+          validators: aircraftRegistrationMarkingsValidator,
         }),
       },
       { updateOn: 'change' },
@@ -291,24 +377,19 @@ export class OperatorDetailsCorsiaFormProvider
         certificateExist: new FormControl<EmpCorsiaOperatorDetails['airOperatingCertificate']['certificateExist']>(
           null,
           {
-            validators: GovukValidators.required(
-              'Select if you have an Air Operating Certificate or equivalent certification',
-            ),
+            validators: certificateExistValidator,
           },
         ),
         certificateNumber: new FormControl<EmpCorsiaOperatorDetails['airOperatingCertificate']['certificateNumber']>(
           null,
           {
-            validators: [
-              GovukValidators.required('Enter a certificate number'),
-              GovukValidators.maxLength(255, 'Certificate number should not be more than 255 characters'),
-            ],
+            validators: certificateNumberValidator,
           },
         ),
         issuingAuthority: new FormControl<EmpCorsiaOperatorDetails['airOperatingCertificate']['issuingAuthority']>(
           null,
           {
-            validators: GovukValidators.required('Select an issuing authority'),
+            validators: issuingAuthorityValidator,
           },
         ),
         certificateFiles: this.requestTaskFileService.buildFormControl(
@@ -328,16 +409,16 @@ export class OperatorDetailsCorsiaFormProvider
   }
 
   private addRestrictionFormControls(form: FormGroup): void {
-    (form as FormGroup).addControl(
+    form.addControl(
       'restrictionsExist',
       new FormControl<keyof EmpCorsiaOperatorDetails['airOperatingCertificate']['restrictionsExist']>(null, {
-        validators: GovukValidators.required('Select yes or no'),
+        validators: restrictionsExistValidator,
       }),
     );
-    (form as FormGroup).addControl(
+    form.addControl(
       'restrictionsDetails',
-      new FormControl<EmpCorsiaOperatorDetails['airOperatingCertificate']['restrictionsDetails']>('', {
-        validators: [GovukValidators.required('TBD'), GovukValidators.maxLength(500, 'TBD')],
+      new FormControl<EmpCorsiaOperatorDetails['airOperatingCertificate']['restrictionsDetails']>(null, {
+        validators: restrictionsDetailsValidator,
       }),
     );
   }
@@ -351,14 +432,11 @@ export class OperatorDetailsCorsiaFormProvider
     const organisationStructureFormGroup = this.fb.group(
       {
         legalStatusType: new FormControl<OrganisationStructure['legalStatusType']>(null, {
-          validators: GovukValidators.required('Select the option which shows the legal status of your organisation'),
+          validators: legalStatusTypeValidator,
         }),
         organisationLocation: getLocationOnShoreFormGroup(),
         registrationNumber: new FormControl<LimitedCompanyOrganisation['registrationNumber']>(null, {
-          validators: [
-            GovukValidators.required('Enter the company registration number'),
-            GovukValidators.maxLength(40, 'Registration number should not be more than 40 characters'),
-          ],
+          validators: registrationNumberValidator,
         }),
         evidenceFiles: this.requestTaskFileService.buildFormControl(
           this.store.requestTaskId,
@@ -371,19 +449,16 @@ export class OperatorDetailsCorsiaFormProvider
         differentContactLocationExist: new FormControl<LimitedCompanyOrganisation['differentContactLocationExist']>(
           null,
           {
-            validators: GovukValidators.required('Say if you would like to enter a different contact address'),
+            validators: differentContactLocationExistValidator,
           },
         ),
         differentContactLocation: getLocationOnShoreFormGroup(),
         fullName: new FormControl<IndividualOrganisation['fullName']>(null, {
-          validators: [
-            GovukValidators.required('Enter full name'),
-            GovukValidators.maxLength(255, 'Full name should not be more than 255 characters'),
-          ],
+          validators: fullNameValidator,
         }),
         partnershipName: new FormControl<PartnershipOrganisation['partnershipName']>(null),
         partners: this.fb.array(organisationStructureCreatePartnersFormArray(partners), {
-          validators: GovukValidators.required('Enter the name of partner'),
+          validators: partnersValidator,
         }),
       },
       { updateOn: 'change' },
@@ -422,16 +497,13 @@ export class OperatorDetailsCorsiaFormProvider
     const form = this.fb.group(
       {
         operatorType: new FormControl<ActivitiesDescription['operatorType']>(null, {
-          validators: GovukValidators.required('Select if you are a commercial or non-commercial operator'),
+          validators: operatorTypeValidator,
         }),
         flightTypes: new FormControl<ActivitiesDescription['flightTypes']>([], {
-          validators: GovukValidators.required('Select if you operate scheduled or non-scheduled flights'),
+          validators: flightTypesValidator,
         }),
         activityDescription: new FormControl<ActivitiesDescription['activityDescription']>(null, {
-          validators: [
-            GovukValidators.required('Describe what kind of activities you carry out'),
-            GovukValidators.maxLength(10000, 'The activities you describe should not be more than 10000 characters'),
-          ],
+          validators: activityDescriptionValidator,
         }),
       },
       { updateOn: 'change' },
@@ -439,77 +511,55 @@ export class OperatorDetailsCorsiaFormProvider
     return form;
   }
 
-  private subsidiaryActivitiesDescriptionCreateInitialForm() {
-    const form = this.fb.group(
-      {
-        flightTypes: new FormControl<ActivitiesDescription['flightTypes']>([], {
-          validators: GovukValidators.required('Select if you operate scheduled or non-scheduled flights'),
-        }),
-        activityDescription: new FormControl<ActivitiesDescription['activityDescription']>(null, {
-          validators: [
-            GovukValidators.required('Describe what kind of activities you carry out'),
-            GovukValidators.maxLength(10000, 'The activities you describe should not be more than 10000 characters'),
-          ],
-        }),
-      },
-      { updateOn: 'change' },
-    ) as unknown as FormGroup<Record<keyof EmpCorsiaOperatorDetails, FormControl>>;
-    return form;
-  }
-
-  public subsidiaryCompaniesForm() {
+  public subsidiaryCompaniesForm(subsidiaryCompany = {} as SubsidiaryCompanyCorsia) {
     return this.fb.group(
       {
-        operatorName: this.fb.control(null, [
-          GovukValidators.required('Enter an aeroplane or aircraft operator name'),
-          GovukValidators.maxLength(255, 'Enter a valid aeroplane or aircraft operator name'),
-        ]),
+        operatorName: this.fb.control(subsidiaryCompany.operatorName || null, operatorNameValidator),
         flightIdentification: this.flightIdentificationCreateInitialForm(),
         airOperatingCertificate: this.airOperatingCertificateCreateInitialForm(),
-        companyRegistrationNumber: new FormControl(null, [
-          GovukValidators.required('Enter the company registration number'),
-          GovukValidators.maxLength(40, 'Registration number should not be more than 40 characters'),
-        ]),
+        companyRegistrationNumber: new FormControl(subsidiaryCompany.companyRegistrationNumber || null, {
+          validators: registrationNumberValidator,
+        }),
         registeredLocation: new FormGroup({
           type: new FormControl<LocationOnShoreStateDTO['type']>('ONSHORE_STATE'),
-          line1: new FormControl(null, {
-            validators: GovukValidators.required('Enter the first line of your address'),
+          line1: new FormControl(subsidiaryCompany.registeredLocation?.line1 || null, {
+            validators: line1Validator,
           }),
-          line2: new FormControl(null),
-          city: new FormControl(null, {
-            validators: GovukValidators.required('Enter your town or city'),
+          line2: new FormControl(subsidiaryCompany.registeredLocation?.line2 || null),
+          city: new FormControl(subsidiaryCompany.registeredLocation?.city || null, {
+            validators: cityValidator,
           }),
-          state: new FormControl(null),
-          postcode: new FormControl(null),
-          country: new FormControl(null, {
-            validators: GovukValidators.required('Enter your country'),
+          state: new FormControl(subsidiaryCompany.registeredLocation?.state || null),
+          postcode: new FormControl(subsidiaryCompany.registeredLocation?.postcode || null),
+          country: new FormControl(subsidiaryCompany.registeredLocation?.country || null, {
+            validators: countryValidator,
           }),
         }),
-        flightTypes: new FormControl([], {
-          validators: GovukValidators.required('Select if you operate scheduled or non-scheduled flights'),
+        flightTypes: new FormControl(subsidiaryCompany.flightTypes || [], {
+          validators: flightTypesValidator,
         }),
-        activityDescription: new FormControl(null, {
-          validators: [
-            GovukValidators.required('Describe what kind of activities you carry out'),
-            GovukValidators.maxLength(10000, 'The activities you describe should not be more than 10000 characters'),
-          ],
+        activityDescription: new FormControl(subsidiaryCompany.activityDescription || null, {
+          validators: activityDescriptionValidator,
         }),
       },
       { updateOn: 'change' },
     );
   }
 
+  private subsidiaryCompaniesCreateInitialForm = (subsidiaryCompanies: SubsidiaryCompanyCorsia[]) => {
+    return (subsidiaryCompanies || [])?.map((subsidiaryCompany) => this.subsidiaryCompaniesForm(subsidiaryCompany));
+  };
+
   private buildForm() {
     this._form = this.fb.group(
       {
-        operatorName: this.fb.control(null, [
-          GovukValidators.required('Enter an aeroplane or aircraft operator name'),
-          GovukValidators.maxLength(255, 'Enter a valid aeroplane or aircraft operator name'),
-        ]),
+        operatorName: this.fb.control(null, operatorNameValidator),
         flightIdentification: this.flightIdentificationCreateInitialForm(),
         airOperatingCertificate: this.airOperatingCertificateCreateInitialForm(),
         organisationStructure: this.organisationStructureCreateInitialForm(),
         activitiesDescription: this.activitiesDescriptionCreateInitialForm(),
+        subsidiaryCompanyExist: this.fb.control(null, subsidiaryCompanyExistValidator),
+        subsidiaryCompanies: this.fb.array([]),
       },
       { updateOn: 'change' },
     );

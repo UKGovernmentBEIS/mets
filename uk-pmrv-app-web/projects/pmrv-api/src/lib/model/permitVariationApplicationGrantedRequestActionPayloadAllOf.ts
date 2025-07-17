@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -20,7 +20,7 @@ import { PermitVariationReviewDecision } from './permitVariationReviewDecision';
 import { RequestActionUserInfo } from './requestActionUserInfo';
 
 export interface PermitVariationApplicationGrantedRequestActionPayloadAllOf {
-  permitType?: 'GHGE' | 'HSE';
+  permitType?: 'GHGE' | 'HSE' | 'WASTE';
   installationOperatorDetails?: InstallationOperatorDetails;
   permit?: Permit;
   permitVariationDetails?: PermitVariationDetails;

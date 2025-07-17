@@ -1,8 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.common.service.permit;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.MonitoringApproachType;
@@ -16,6 +13,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.P
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.PermitReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.validation.PermitReviewDeterminationAndDecisionsValidatorService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.mapper.PermitReviewGroupMonitoringApproachMapper;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

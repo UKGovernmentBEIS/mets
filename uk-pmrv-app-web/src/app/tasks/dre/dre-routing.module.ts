@@ -46,6 +46,11 @@ const routes: Routes = [
         component: SubmitContainerComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'notify-operator',
         data: { pageTitle: 'Notify operator' },
         component: NotifyOperatorComponent,
@@ -164,6 +169,11 @@ const routes: Routes = [
         component: PeerReviewWaitComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'summary',
         data: { pageTitle: 'DRE submit summary', breadcrumb: 'Summary' },
         component: SummaryComponent,
@@ -179,6 +189,11 @@ const routes: Routes = [
         path: '',
         data: { pageTitle: 'Peer review' },
         component: DrePeerReview,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'summary',

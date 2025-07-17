@@ -1,24 +1,25 @@
 package uk.gov.pmrv.api.workflow.request.application.authorization;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.Permission;
+import uk.gov.netz.api.authorization.rules.services.resource.VerifierAuthorityResourceService;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
-import uk.gov.pmrv.api.authorization.core.domain.Permission;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.authorization.rules.services.resource.VerifierAuthorityResourceService;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestTaskRepository;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class VerifierAuthorityResourceAdapterTest {
@@ -38,8 +39,8 @@ class VerifierAuthorityResourceAdapterTest {
     @Test
     void getUserScopedRequestTaskTypesByAccountTypeVerifierAdmin() {
         final String userId = "userId";
-        final PmrvUser user = PmrvUser.builder().userId(userId)
-            .authorities(List.of(PmrvAuthority.builder()
+        final AppUser user = AppUser.builder().userId(userId)
+            .authorities(List.of(AppAuthority.builder()
                 .permissions(List.of(Permission.PERM_VB_ACCESS_ALL_ACCOUNTS)).build()))
             .build();
         final Long vbId = 1L;
@@ -73,8 +74,8 @@ class VerifierAuthorityResourceAdapterTest {
     @Test
     void getUserScopedRequestTaskTypesByAccountTypeVerifier() {
         final String userId = "userId";
-        final PmrvUser user = PmrvUser.builder().userId(userId)
-            .authorities(List.of(PmrvAuthority.builder()
+        final AppUser user = AppUser.builder().userId(userId)
+            .authorities(List.of(AppAuthority.builder()
                 .permissions(List.of()).build()))
             .build();
         final AccountType accountType = AccountType.INSTALLATION;

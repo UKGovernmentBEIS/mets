@@ -13,13 +13,11 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
 @Component({
   selector: 'app-delete',
   templateUrl: './delete.component.html',
-  styles: [
-    `
-      .nowrap {
-        white-space: nowrap;
-      }
-    `,
-  ],
+  styles: `
+    .nowrap {
+      white-space: nowrap;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteComponent implements PendingRequest {

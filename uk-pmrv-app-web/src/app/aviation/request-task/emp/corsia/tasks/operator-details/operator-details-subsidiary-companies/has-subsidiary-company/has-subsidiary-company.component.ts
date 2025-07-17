@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
@@ -21,7 +21,7 @@ import { OperatorDetailsCorsiaFormProvider } from '../../operator-details-form.p
 })
 export class HasSubsidiaryCompanyComponent extends BaseOperatorDetailsComponent {
   form = this.fb.group({
-    subsidiaryCompanyExist: this.formProvider.form.get('subsidiaryCompanyExist'),
+    subsidiaryCompanyExist: this.getform('subsidiaryCompanyExist'),
   });
 
   constructor(
@@ -38,16 +38,18 @@ export class HasSubsidiaryCompanyComponent extends BaseOperatorDetailsComponent 
 
   onSubmit() {
     const subsidiaryCompanyExist = this.form.value?.subsidiaryCompanyExist;
+
+    this.formProvider.initiateSubsidiaryCompaniesForm();
+
     if (subsidiaryCompanyExist) {
-      this.formProvider.addSubsidiaryCompanyExistsControl(true);
       this.submitForm(
         'subsidiaryCompanyExist',
         { subsidiaryCompanyExist },
-        this.formProvider.form.value?.subsidiaryCompanies?.length > 0 ? '../list' : '../add',
+        this.formProvider.form.value?.subsidiaryCompanies?.length > 1 ? '../list' : '../add',
       );
     } else if (subsidiaryCompanyExist === false) {
-      this.formProvider.addSubsidiaryCompanyExistsControl(false);
-      this.submitForm('subsidiaryCompanyExist', { subsidiaryCompanyExist }, '../summary');
+      (this.getform('subsidiaryCompanies') as unknown as FormArray).clear();
+      this.submitForm('subsidiaryCompanyExist', { subsidiaryCompanyExist }, '../../summary');
     }
   }
 }

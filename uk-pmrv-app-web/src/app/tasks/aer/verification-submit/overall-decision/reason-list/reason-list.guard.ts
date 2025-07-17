@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { first, map, Observable } from 'rxjs';
 
@@ -8,8 +8,11 @@ import { AerService } from '@tasks/aer/core/aer.service';
 import { AerApplicationVerificationSubmitRequestTaskPayload, VerifiedWithCommentsOverallAssessment } from 'pmrv-api';
 
 @Injectable({ providedIn: 'root' })
-export class ReasonListGuard implements CanActivate {
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+export class ReasonListGuard {
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return this.aerService.getPayload().pipe(

@@ -28,7 +28,7 @@ export const EMP_METHOD_B_PROCEDURES_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { breadcrumb: 'Method B procedures summary' },
+        data: { breadcrumb: 'Method B procedures' },
         loadComponent: () =>
           import('./method-b-procedures-summary/method-b-procedures-summary.component').then(
             (c) => c.MethodBProceduresSummaryComponent,

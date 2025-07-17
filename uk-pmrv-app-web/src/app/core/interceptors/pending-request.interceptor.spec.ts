@@ -1,7 +1,7 @@
 import { HttpRequest, HttpResponse } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 
-import { mapTo, timer } from 'rxjs';
+import { map, timer } from 'rxjs';
 
 import { PendingRequestService } from '../guards/pending-request.service';
 import { PendingRequestInterceptor } from './pending-request.interceptor';
@@ -26,7 +26,7 @@ describe('PendingRequestInterceptor', () => {
   it('should track non-GET pending requests', () => {
     jest.useFakeTimers();
 
-    const next = { handle: () => timer(1000).pipe(mapTo(new HttpResponse())) };
+    const next = { handle: () => timer(1000).pipe(map(() => new HttpResponse())) };
     interceptor.intercept(new HttpRequest<unknown>('POST', 'http://localhost', {}), next).subscribe();
 
     expect(pendingRequestService.hasPendingRequests()).toBeTruthy();
@@ -37,7 +37,7 @@ describe('PendingRequestInterceptor', () => {
   });
 
   it('should not track GET requests', () => {
-    const next = { handle: () => timer(1000).pipe(mapTo(new HttpResponse())) };
+    const next = { handle: () => timer(1000).pipe(map(() => new HttpResponse())) };
     interceptor.intercept(new HttpRequest<unknown>('GET', 'http://localhost'), next).subscribe();
 
     expect(pendingRequestService.hasPendingRequests()).toBeFalsy();

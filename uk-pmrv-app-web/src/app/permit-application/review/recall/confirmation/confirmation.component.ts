@@ -15,7 +15,7 @@ import { PermitApplicationState } from '../../../store/permit-application.state'
         <p class="govuk-body" *ngIf="isVariation$ | async">
           The request for amends to the permit variation application has been recalled. The operator will be notified.
         </p>
-        <a govukLink routerLink="/dashboard"> Return to dashboard </a>
+        <a govukLink routerLink="/dashboard">Return to dashboard</a>
       </div>
     </div>
   `,

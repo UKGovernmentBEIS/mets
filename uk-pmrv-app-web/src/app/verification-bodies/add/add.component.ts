@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
-import { BehaviorSubject, catchError, EMPTY, first, mapTo, Observable, shareReplay, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY, first, map, Observable, shareReplay, tap, throwError } from 'rxjs';
 
 import { ErrorCodes, isBadRequest } from '@error/business-errors';
 import { BackLinkService } from '@shared/back-link/back-link.service';
@@ -79,7 +79,7 @@ export class AddComponent implements OnInit {
         })
         .pipe(
           first(),
-          mapTo(vbName),
+          map(() => vbName),
           tap(() => this.backLinkService.hide()),
           shareReplay({ bufferSize: 1, refCount: false }),
           catchError((res: unknown) => {

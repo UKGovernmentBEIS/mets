@@ -5,9 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.config.RegistryConfig;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -22,9 +21,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -38,8 +36,6 @@ class WithholdingOfAllowancesOfficialNoticeServiceTest {
     private OfficialNoticeSendService officialNoticeSendService;
     @Mock
     private OfficialNoticeGeneratorService officialNoticeGeneratorService;
-    @Mock
-    private RegistryConfig registryConfig;
 
     @InjectMocks
     private WithholdingOfAllowancesOfficialNoticeService service;
@@ -98,12 +94,13 @@ class WithholdingOfAllowancesOfficialNoticeServiceTest {
     void sendOfficialNotice() {
         Request request = new Request();
         FileInfoDTO officialNotice = new FileInfoDTO();
-        DecisionNotification decisionNotification = new DecisionNotification();
+        DecisionNotification decisionNotification = DecisionNotification.builder().signatory("signatory").build();
 
-        when(registryConfig.getEmail()).thenReturn("registry@example.com");
-
+        when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(List.of("email@email"));
+        
         service.sendOfficialNotice(request, officialNotice, decisionNotification);
-
-        verify(officialNoticeSendService).sendOfficialNotice(eq(List.of(officialNotice)), eq(request), anyList());
+        
+        verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
+        verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialNotice), request, List.of("email@email"));
     }
 }

@@ -21,8 +21,7 @@ describe('WizardStepComponent', () => {
         [formGroup]="formGroup"
         heading="Some form"
         caption="Some caption"
-        (formSubmit)="onSubmit($event)"
-      >
+        (formSubmit)="onSubmit($event)">
         <div govuk-text-input formControlName="date" label="Date"></div>
         <div govuk-text-input formControlName="text" label="Text"></div>
       </app-wizard-step>

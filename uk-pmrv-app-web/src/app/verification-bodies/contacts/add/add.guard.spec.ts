@@ -5,11 +5,11 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { lastValueFrom, throwError } from 'rxjs';
 
 import { HttpStatuses } from '@error/http-status';
+import { BusinessTestingModule, expectBusinessErrorToBe } from '@error/testing/business-error';
+import { ActivatedRouteSnapshotStub, asyncData, RouterStubComponent } from '@testing';
 
 import { VerificationBodiesService } from 'pmrv-api';
 
-import { ActivatedRouteSnapshotStub, asyncData, RouterStubComponent } from '../../../../testing';
-import { BusinessTestingModule, expectBusinessErrorToBe } from '../../../error/testing/business-error';
 import { disabledVerificationBodyError, viewNotFoundVerificationBodyError } from '../../errors/business-error';
 import { AddGuard } from './add.guard';
 
@@ -36,6 +36,7 @@ describe('AddGuard', () => {
       declarations: [RouterStubComponent],
       providers: [{ provide: VerificationBodiesService, useValue: verificationBodiesService }],
     });
+
     guard = TestBed.inject(AddGuard);
   });
 
@@ -45,15 +46,17 @@ describe('AddGuard', () => {
 
   it('should block access if the body is disabled', async () => {
     verificationBodiesService.getVerificationBodyById.mockReturnValue(asyncData({ status: 'DISABLED' }));
+
     const snapshot = new ActivatedRouteSnapshotStub({ verificationBodyId: '1' });
 
-    await expect(lastValueFrom(guard.canActivate(snapshot))).resolves.toBeFalsy();
+    await expect(lastValueFrom(guard.canActivate(snapshot))).rejects.toBeTruthy();
 
     await expectBusinessErrorToBe(disabledVerificationBodyError);
   });
 
   it('should allow access if the body is active or pending', async () => {
     verificationBodiesService.getVerificationBodyById.mockReturnValue(asyncData({ status: 'ACTIVE' }));
+
     const snapshot = new ActivatedRouteSnapshotStub({ verificationBodyId: '1' });
 
     await expect(lastValueFrom(guard.canActivate(snapshot))).resolves.toBeTruthy();

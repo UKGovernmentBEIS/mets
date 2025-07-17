@@ -86,7 +86,7 @@ export class FollowUpReviewDecisionComponent implements OnInit {
   }
 
   getDownloadUrl() {
-    return this.permitNotificationService.createBaseFileDownloadUrl();
+    return this.permitNotificationService.getBaseFileDownloadUrl();
   }
 
   onSubmit(): void {

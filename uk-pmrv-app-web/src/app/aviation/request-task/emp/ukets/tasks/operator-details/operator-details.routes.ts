@@ -26,7 +26,7 @@ export const EMP_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'air-operating-certificate',
-        data: { backlink: '../flight-identification' },
+        data: { pageTitle: 'Air Operating Certificate', backlink: '../flight-identification' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import(
@@ -57,7 +57,7 @@ export const EMP_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'activities-description',
-        data: { backlink: '../organisation-structure' },
+        data: { pageTitle: 'Description of your activities', backlink: '../organisation-structure' },
         canActivate: [canActivateTaskForm],
         loadComponent: () =>
           import('./operator-details-activities-description/operator-details-activities-description.component').then(
@@ -66,7 +66,7 @@ export const EMP_OPERATOR_DETAILS_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Operator details summary' },
+        data: { breadcrumb: 'Operator details' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () =>
           import('./operator-details-summary/operator-details-summary.component').then(

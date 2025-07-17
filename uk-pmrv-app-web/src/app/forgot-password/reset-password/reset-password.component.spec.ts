@@ -9,7 +9,6 @@ import { of, throwError } from 'rxjs';
 import { PageNotFoundComponent } from '@error/page-not-found/page-not-found.component';
 import { SharedModule } from '@shared/shared.module';
 import { BasePage, mockClass, MockType } from '@testing';
-import { IPasswordStrengthMeterService, PasswordStrengthMeterService } from 'angular-password-strength-meter';
 
 import { GovukComponentsModule } from 'govuk-components';
 
@@ -26,7 +25,7 @@ describe('ResetPasswordComponent', () => {
   let page: Page;
   let router: Router;
   let passwordService: jest.Mocked<PasswordService>;
-  let passwordStrengthMeterService: jest.Mocked<IPasswordStrengthMeterService>;
+
   let resetPasswordStore: ResetPasswordStore;
 
   class Page extends BasePage<ResetPasswordComponent> {
@@ -57,7 +56,6 @@ describe('ResetPasswordComponent', () => {
 
   beforeEach(async () => {
     passwordService = mockClass(PasswordService);
-    passwordStrengthMeterService = mockClass(PasswordStrengthMeterService);
 
     await TestBed.configureTestingModule({
       imports: [
@@ -76,7 +74,6 @@ describe('ResetPasswordComponent', () => {
         ResetPasswordStore,
         { provide: ForgotPasswordService, useValue: forgotPasswordService },
         { provide: PasswordService, useValue: passwordService },
-        { provide: IPasswordStrengthMeterService, useValue: passwordStrengthMeterService },
       ],
     }).compileComponents();
   });

@@ -35,11 +35,7 @@
       <ul app-task-item-list>
         <li
           app-task-item
-          [link]="
-            (canViewSectionDetails$ | async)
-              ? './summary'
-              : null
-          "
+          [link]="(canViewSectionDetails$ | async) ? './summary' : null"
           linkText="Provide withholding of allowances details"
           [status]="sectionStatus$ | async"
         ></li>

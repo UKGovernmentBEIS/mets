@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccountCreatedEvent;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountCreationDTO;
@@ -15,12 +16,11 @@ import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus
 import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.aviation.transform.AviationAccountMapper;
 import uk.gov.pmrv.api.account.service.AccountIdentifierService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -67,9 +67,9 @@ class AviationAccountCreationServiceTest {
         LocalDate commencementDate = LocalDate.of(2022, 12, 11);
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.SCOTLAND;
         String emitterId = "EM09098";
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(competentAuthority).build()))
+            .authorities(List.of(AppAuthority.builder().competentAuthority(competentAuthority).build()))
             .build();
 
         AviationAccountCreationDTO accountCreationDTO = AviationAccountCreationDTO.builder()
@@ -93,7 +93,7 @@ class AviationAccountCreationServiceTest {
         when(accountIdentifierService.incrementAndGet()).thenReturn(accountId);
         when(aviationAccountMapper.toAviationAccount(accountCreationDTO, competentAuthority, accountId)).thenReturn(aviationAccount);
 
-        aviationAccountCreationService.createAccount(accountCreationDTO, pmrvUser);
+        aviationAccountCreationService.createAccount(accountCreationDTO, appUser);
 
         verify(aviationAccountQueryService, times(1))
             .isExistingAccountName(accountName, competentAuthority, emissionTradingScheme);
@@ -125,9 +125,9 @@ class AviationAccountCreationServiceTest {
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.of(2022, 12, 11);
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.SCOTLAND;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(competentAuthority).build()))
+            .authorities(List.of(AppAuthority.builder().competentAuthority(competentAuthority).build()))
             .build();
 
         AviationAccountCreationDTO accountCreationDTO = AviationAccountCreationDTO.builder()
@@ -141,9 +141,9 @@ class AviationAccountCreationServiceTest {
         when(aviationAccountQueryService.isExistingAccountName(accountName, competentAuthority, emissionTradingScheme)).thenReturn(true);
 
         BusinessException be = assertThrows(BusinessException.class,
-            () ->aviationAccountCreationService.createAccount(accountCreationDTO, pmrvUser));
+            () ->aviationAccountCreationService.createAccount(accountCreationDTO, appUser));
 
-        assertEquals(ErrorCode.ACCOUNT_ALREADY_EXISTS, be.getErrorCode());
+        assertEquals(MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS, be.getErrorCode());
 
         verify(aviationAccountQueryService, times(1))
             .isExistingAccountName(accountName, competentAuthority, emissionTradingScheme);
@@ -159,9 +159,9 @@ class AviationAccountCreationServiceTest {
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.of(2022, 12, 11);
         CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.SCOTLAND;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("authUserId")
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(competentAuthority).build()))
+            .authorities(List.of(AppAuthority.builder().competentAuthority(competentAuthority).build()))
             .build();
 
         AviationAccountCreationDTO accountCreationDTO = AviationAccountCreationDTO.builder()
@@ -176,9 +176,9 @@ class AviationAccountCreationServiceTest {
         when(aviationAccountQueryService.isExistingCrcoCode(crcoCode, competentAuthority, emissionTradingScheme)).thenReturn(true);
 
         BusinessException be = assertThrows(BusinessException.class,
-            () ->aviationAccountCreationService.createAccount(accountCreationDTO, pmrvUser));
+            () ->aviationAccountCreationService.createAccount(accountCreationDTO, appUser));
 
-        assertEquals(ErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT, be.getErrorCode());
+        assertEquals(MetsErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT, be.getErrorCode());
 
         verify(aviationAccountQueryService, times(1))
             .isExistingAccountName(accountName, competentAuthority, emissionTradingScheme);

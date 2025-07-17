@@ -12,7 +12,9 @@ import { GovukComponentsModule } from 'govuk-components';
   selector: 'app-return-to-link',
   standalone: true,
   imports: [CommonModule, RouterLinkWithHref, GovukComponentsModule],
-  template: `<a govukLink [routerLink]="returnToUrl$ | async"> Return to: {{ returnText$ | async }} </a> `,
+  template: `
+    <a govukLink [routerLink]="returnToUrl$ | async">Return to: {{ returnText$ | async }}</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReturnToLinkComponent {
@@ -101,10 +103,12 @@ export class ReturnToLinkComponent {
           case 'AVIATION_AER_CORSIA_APPLICATION_SUBMIT':
             return 'Emissions report';
           case 'AVIATION_AER_UKETS_APPLICATION_REVIEW':
+          case 'AVIATION_AER_CORSIA_APPLICATION_REVIEW':
             return 'Review emissions report';
           case 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT':
           case 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT':
           case 'AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+          case 'AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT':
             return 'Verify emissions report';
 
           case 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMITTED':
@@ -120,13 +124,19 @@ export class ReturnToLinkComponent {
           case 'AVIATION_AER_CORSIA_APPLICATION_COMPLETED':
             return 'Emissions report reviewed';
           case 'AVIATION_AER_UKETS_APPLICATION_REVIEW_SKIPPED':
+          case 'AVIATION_AER_CORSIA_APPLICATION_REVIEW_SKIPPED':
             return 'Completed without review';
 
           case 'AVIATION_AER_UKETS_WAIT_FOR_AMENDS':
+          case 'AVIATION_AER_CORSIA_WAIT_FOR_AMENDS':
             return 'Emissions report returned to operator';
           case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT':
+          case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT':
             return 'Amend your emissions report';
+          case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SENT_TO_VERIFIER':
+          case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SENT_TO_VERIFIER':
           case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMITTED':
+          case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED':
             return 'Changes submitted';
 
           case 'AVIATION_DRE_UKETS_APPLICATION_SUBMIT':
@@ -190,6 +200,21 @@ export class ReturnToLinkComponent {
             return 'Peer review penalty notice';
           case 'AVIATION_NON_COMPLIANCE_FINAL_DETERMINATION':
             return 'Final determination';
+          case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT':
+            return 'Calculate annual offsetting requirements';
+          case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW':
+            return 'Peer review calculate annual offsetting requirements';
+          case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT':
+            return 'Calculate 3-year period offsetting requirements';
+          case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW':
+            return 'Peer review 3-year period offsetting requirements';
+
+          case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
+            return 'Estimate emissions';
+          case 'AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW':
+            return 'Aviation emissions report estimation sent to peer reviewer';
+          case 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW':
+            return 'Peer review emissions estimation';
 
           default: {
             throw new Error('[ReturnTo component]: Request task/action type is not handled');

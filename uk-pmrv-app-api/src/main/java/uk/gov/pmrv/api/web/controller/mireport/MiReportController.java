@@ -19,24 +19,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.validation.SpELExpression;
+import uk.gov.netz.api.mireport.domain.MiReportParams;
+import uk.gov.netz.api.mireport.domain.MiReportResult;
+import uk.gov.netz.api.mireport.domain.MiReportSearchResult;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.mireport.common.MiReportService;
-import uk.gov.pmrv.api.mireport.common.domain.dto.MiReportParams;
-import uk.gov.pmrv.api.mireport.common.domain.dto.MiReportResult;
-import uk.gov.pmrv.api.mireport.common.domain.dto.MiReportSearchResult;
-import uk.gov.pmrv.api.mireport.common.outstandingrequesttasks.OutstandingRequestTasksReportService;
+import uk.gov.pmrv.api.mireport.aviation.outstandingrequesttasks.AviationOutstandingRequestTasksReportService;
+import uk.gov.pmrv.api.mireport.common.PmrvMiReportService;
+import uk.gov.pmrv.api.mireport.installation.outstandingrequesttasks.InstallationOutstandingRequestTasksReportService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.FORBIDDEN;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.INTERNAL_SERVER_ERROR;
 import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
@@ -48,8 +50,9 @@ import static uk.gov.pmrv.api.web.constants.SwaggerApiInfo.OK;
 @Validated
 public class MiReportController {
 
-    private final MiReportService miReportService;
-    private final OutstandingRequestTasksReportService outstandingRequestTasksReportService;
+    private final PmrvMiReportService pmrvMiReportService;
+    private final AviationOutstandingRequestTasksReportService aviationOutstandingRequestTasksReportService;
+    private final InstallationOutstandingRequestTasksReportService installationOutstandingRequestTasksReportService;
 
     @GetMapping("types")
     @Operation(summary = "Retrieves the mi report types for current user")
@@ -58,11 +61,11 @@ public class MiReportController {
     @AuthorizedRole(roleType = {REGULATOR})
 
     public ResponseEntity<List<MiReportSearchResult>> getCurrentUserMiReports(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("accountType") @Parameter(description = "The account type") AccountType accountType
     ) {
         List<MiReportSearchResult> results =
-            miReportService.findByCompetentAuthorityAndAccountType(pmrvUser.getCompetentAuthority(), accountType);
+            pmrvMiReportService.findByCompetentAuthorityAndAccountType(appUser.getCompetentAuthority(), accountType);
         return ResponseEntity.ok(results);
     }
 
@@ -72,14 +75,13 @@ public class MiReportController {
     @ApiResponse(responseCode = "400", description = SwaggerApiInfo.MI_REPORT_REQUEST_TYPE_BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = {REGULATOR})
-    public ResponseEntity<MiReportResult> generateReport(@Parameter(hidden = true) PmrvUser pmrvUser,
+    public ResponseEntity<MiReportResult> generateReport(@Parameter(hidden = true) AppUser appUser,
                                                          @PathVariable("accountType") @Parameter(description = "The account type") AccountType accountType,
                                                          @RequestBody
                                                          @Parameter(description = "The parameters based on which the report will be generated", required = true)
                                                          @Valid
-                                                         @SpELExpression(expression = "{(#reportType ne 'CUSTOM')}", message = "mireport.type.notSupported")
-                                                                 MiReportParams reportParams) {
-        MiReportResult reportResult = miReportService.generateReport(pmrvUser.getCompetentAuthority(), accountType, reportParams);
+                                                         @SpELExpression(expression = "{(#reportType ne 'CUSTOM')}", message = "mireport.type.notSupported") MiReportParams reportParams) {
+        MiReportResult reportResult = pmrvMiReportService.generateReport(appUser.getCompetentAuthority(), accountType, reportParams);
         return ResponseEntity.ok(reportResult);
     }
 
@@ -89,14 +91,14 @@ public class MiReportController {
     @ApiResponse(responseCode = "400", description = SwaggerApiInfo.MI_REPORT_REQUEST_TYPE_BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = {REGULATOR})
-    public ResponseEntity<MiReportResult> generateCustomReport(@Parameter(hidden = true) PmrvUser pmrvUser,
+    public ResponseEntity<MiReportResult> generateCustomReport(@Parameter(hidden = true) AppUser appUser,
                                                                @PathVariable("accountType") @Parameter(description = "The account type") AccountType accountType,
                                                                @RequestBody
                                                                @Parameter(description = "The parameters based on which the report will be generated", required = true)
                                                                @Valid
                                                                @SpELExpression(expression = "{(#reportType eq 'CUSTOM')}", message = "mireport.type.notSupported")
                                                                        MiReportParams reportParams) {
-        MiReportResult reportResult = miReportService.generateReport(pmrvUser.getCompetentAuthority(), accountType, reportParams);
+        MiReportResult reportResult = pmrvMiReportService.generateReport(appUser.getCompetentAuthority(), accountType, reportParams);
         return ResponseEntity.ok(reportResult);
     }
 
@@ -105,12 +107,19 @@ public class MiReportController {
     @ApiResponse(responseCode = "200", description = OK, content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = RequestTaskType.class))))
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @AuthorizedRole(roleType = {RoleType.REGULATOR})
+    @AuthorizedRole(roleType = {RoleTypeConstants.REGULATOR})
     public ResponseEntity<Set<RequestTaskType>> getRegulatorRequestTaskTypes(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("accountType") @Parameter(description = "The account type") AccountType accountType) {
-        Set<RequestTaskType> requestTaskTypes =
-                outstandingRequestTasksReportService.getRequestTaskTypesByRoleTypeAndAccountType(pmrvUser.getRoleType(), accountType);
+        Set<RequestTaskType> requestTaskTypes = new HashSet<>();
+
+        if (AccountType.INSTALLATION == accountType) {
+            requestTaskTypes =
+                    installationOutstandingRequestTasksReportService.getRequestTaskTypesByRoleTypeAndAccountType(appUser.getRoleType(), accountType);
+        } else if (AccountType.AVIATION == accountType) {
+            requestTaskTypes =
+                    aviationOutstandingRequestTasksReportService.getRequestTaskTypesByRoleTypeAndAccountType(appUser.getRoleType(), accountType);
+        }
         return new ResponseEntity<>(requestTaskTypes, HttpStatus.OK);
     }
 }

@@ -20,8 +20,7 @@ describe('DeterminationReasonSummaryTemplateComponent', () => {
       <app-determination-reason-summary-template
         [dre]="dre"
         [supportingDocumentFiles]="supportingDocumentFiles"
-        [editable]="editable"
-      ></app-determination-reason-summary-template>
+        [editable]="editable"></app-determination-reason-summary-template>
     `,
   })
   class TestComponent {

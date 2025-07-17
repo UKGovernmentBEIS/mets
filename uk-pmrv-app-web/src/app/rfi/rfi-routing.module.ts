@@ -7,6 +7,7 @@ import { FileDownloadComponent } from '@shared/file-download/file-download.compo
 import { PaymentCompletedGuard } from '@shared/guards/payment-completed.guard';
 import { ItemActionTypePipe } from '@shared/pipes/item-action-type.pipe';
 import { ItemNamePipe } from '@shared/pipes/item-name.pipe';
+import { TaskGuard } from '@tasks/task.guard';
 
 import { ConfirmationComponent as RespondConfirmationComponent } from './respond/confirmation/confirmation.component';
 import { ResponsesComponent } from './respond/responses.component';
@@ -75,9 +76,21 @@ const routes: Routes = [
     children: [
       {
         path: 'responses',
-        component: ResponsesComponent,
-        data: { pageTitle: 'Request for information response' },
-        canDeactivate: [PendingRequestGuard],
+        children: [
+          {
+            path: '',
+            component: ResponsesComponent,
+            data: { pageTitle: 'Request for information response' },
+            canDeactivate: [PendingRequestGuard],
+          },
+          {
+            path: 'change-assignee',
+            canActivate: [TaskGuard],
+            canDeactivate: [TaskGuard],
+            loadChildren: () =>
+              import('../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+          },
+        ],
       },
       {
         path: 'respond-confirmation',
@@ -115,6 +128,13 @@ const routes: Routes = [
             path: '',
             data: { pageTitle: 'Request for information' },
             component: WaitComponent,
+          },
+          {
+            path: 'change-assignee',
+            canActivate: [TaskGuard],
+            canDeactivate: [TaskGuard],
+            loadChildren: () =>
+              import('../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
           },
           {
             path: 'rfi',

@@ -6,6 +6,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
@@ -15,8 +16,8 @@ import uk.gov.pmrv.api.account.installation.transform.InstallationAccountMapper;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.service.AccountIdentifierService;
 import uk.gov.pmrv.api.account.service.LegalEntityService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -27,7 +28,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.common.exception.ErrorCode.ACCOUNT_ALREADY_EXISTS;
 
 @ExtendWith(MockitoExtension.class)
 class InstallationAccountCreationServiceTest {
@@ -52,7 +52,7 @@ class InstallationAccountCreationServiceTest {
 
     @Test
     void createAccount() {
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         long identifierId = 2L;
         
         InstallationAccountDTO accountDTO = InstallationAccountDTO.builder()
@@ -79,18 +79,18 @@ class InstallationAccountCreationServiceTest {
                 .build();
 
         when(accountIdentifierService.incrementAndGet()).thenReturn(identifierId);
-        when(legalEntityService.resolveLegalEntity(accountDTO.getLegalEntity(), pmrvUser)).thenReturn(legalEntity);
+        when(legalEntityService.resolveLegalEntity(accountDTO.getLegalEntity(), appUser)).thenReturn(legalEntity);
         when(installationAccountMapper.toInstallationAccount(accountDTO, identifierId)).thenReturn(account);
         when(accountRepository.save(account)).thenReturn(accountSaved);
         when(installationAccountMapper.toInstallationAccountDTO(accountSaved)).thenReturn(accountDTOSaved);
         
         //invoke
-        InstallationAccountDTO result = installationAccountCreationService.createAccount(accountDTO, pmrvUser);
+        InstallationAccountDTO result = installationAccountCreationService.createAccount(accountDTO, appUser);
 
         assertThat(result).isEqualTo(accountDTOSaved);
 
         verify(accountIdentifierService, times(1)).incrementAndGet();
-        verify(legalEntityService, times(1)).resolveLegalEntity(accountDTO.getLegalEntity(), pmrvUser);
+        verify(legalEntityService, times(1)).resolveLegalEntity(accountDTO.getLegalEntity(), appUser);
         verify(installationAccountMapper, times(1)).toInstallationAccount(accountDTO, identifierId);
 
         ArgumentCaptor<InstallationAccount> accountCaptor = ArgumentCaptor.forClass(InstallationAccount.class);
@@ -102,7 +102,7 @@ class InstallationAccountCreationServiceTest {
 
     @Test
     void createAccount_for_migration_with_id() {
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         long identifierId = 2L;
 
         InstallationAccountDTO accountDTO = InstallationAccountDTO.builder()
@@ -129,18 +129,18 @@ class InstallationAccountCreationServiceTest {
                 .legalEntity(LegalEntityDTO.builder().id(1L).name("le").build())
                 .build();
 
-        when(legalEntityService.resolveLegalEntity(accountDTO.getLegalEntity(), pmrvUser)).thenReturn(legalEntity);
+        when(legalEntityService.resolveLegalEntity(accountDTO.getLegalEntity(), appUser)).thenReturn(legalEntity);
         when(installationAccountMapper.toInstallationAccount(accountDTO, identifierId)).thenReturn(account);
         when(accountRepository.save(account)).thenReturn(accountSaved);
         when(installationAccountMapper.toInstallationAccountDTO(accountSaved)).thenReturn(accountDTOSaved);
 
         //invoke
-        InstallationAccountDTO result = installationAccountCreationService.createAccount(accountDTO, pmrvUser);
+        InstallationAccountDTO result = installationAccountCreationService.createAccount(accountDTO, appUser);
 
         assertThat(result).isEqualTo(accountDTOSaved);
 
         verify(accountIdentifierService, never()).incrementAndGet();
-        verify(legalEntityService, times(1)).resolveLegalEntity(accountDTO.getLegalEntity(), pmrvUser);
+        verify(legalEntityService, times(1)).resolveLegalEntity(accountDTO.getLegalEntity(), appUser);
         verify(installationAccountMapper, times(1)).toInstallationAccount(accountDTO, identifierId);
 
         ArgumentCaptor<InstallationAccount> accountCaptor = ArgumentCaptor.forClass(InstallationAccount.class);
@@ -153,20 +153,20 @@ class InstallationAccountCreationServiceTest {
     @Test
     void createAccount_account_not_valid_should_throw_exception() {
         final String accountName = "account";
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         InstallationAccountDTO accountDTO = InstallationAccountDTO.builder()
                 .name(accountName)
                 .legalEntity(LegalEntityDTO.builder().id(1L).build())
                 .build();
 
-        doThrow(new BusinessException((ACCOUNT_ALREADY_EXISTS))).when(installationAccountQueryService)
+        doThrow(new BusinessException((MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS))).when(installationAccountQueryService)
             .validateAccountNameExistence(accountDTO.getName());
 
         //invoke
         BusinessException businessException = assertThrows(BusinessException.class,
-            () -> installationAccountCreationService.createAccount(accountDTO, pmrvUser));
+            () -> installationAccountCreationService.createAccount(accountDTO, appUser));
 
-        assertThat(businessException.getErrorCode()).isEqualTo(ACCOUNT_ALREADY_EXISTS);
+        assertThat(businessException.getErrorCode()).isEqualTo(MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS);
 
         verify(installationAccountQueryService, times(1)).validateAccountNameExistence(accountName);
         verifyNoInteractions(legalEntityService, accountIdentifierService);

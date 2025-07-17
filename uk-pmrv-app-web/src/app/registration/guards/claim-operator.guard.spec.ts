@@ -36,7 +36,7 @@ describe('ClaimOperatorGuard', () => {
   });
 
   it('should resolve the installation name', async () => {
-    const resolvedData = { accountInstallationName: 'My Account', roleCode: 'operator' };
+    const resolvedData = { accountName: 'My Account', roleCode: 'operator' };
     operatorUsersRegistrationService.acceptOperatorInvitation.mockReturnValue(
       asyncData({ invitationStatus: 'ACCEPTED', ...resolvedData }),
     );
@@ -88,7 +88,7 @@ describe('ClaimOperatorGuard', () => {
     const navigateSpy = jest.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
     operatorUsersRegistrationService.acceptOperatorInvitation.mockReturnValue(
       asyncData({
-        invitationStatus: 'PENDING_USER_REGISTRATION',
+        invitationStatus: 'PENDING_TO_REGISTERED_SET_REGISTER_FORM',
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -106,7 +106,8 @@ describe('ClaimOperatorGuard', () => {
       isSummarized: false,
       password: null,
       userRegistrationDTO: user,
-      invitationStatus: 'PENDING_USER_REGISTRATION',
+      invitationStatus: 'PENDING_TO_REGISTERED_SET_REGISTER_FORM',
+      emailVerificationStatus: null,
     });
     expect(navigateSpy).toHaveBeenCalledWith(['/registration/user/contact-details']);
   });
@@ -116,7 +117,7 @@ describe('ClaimOperatorGuard', () => {
     const navigateSpy = jest.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
     operatorUsersRegistrationService.acceptOperatorInvitation.mockReturnValue(
       asyncData({
-        invitationStatus: 'PENDING_USER_ENABLE',
+        invitationStatus: 'ALREADY_REGISTERED_SET_PASSWORD_ONLY',
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -134,7 +135,8 @@ describe('ClaimOperatorGuard', () => {
       isSummarized: false,
       password: null,
       userRegistrationDTO: user,
-      invitationStatus: 'PENDING_USER_ENABLE',
+      invitationStatus: 'ALREADY_REGISTERED_SET_PASSWORD_ONLY',
+      emailVerificationStatus: null,
     });
     expect(navigateSpy).toHaveBeenCalledWith(['/registration/user/choose-password']);
   });

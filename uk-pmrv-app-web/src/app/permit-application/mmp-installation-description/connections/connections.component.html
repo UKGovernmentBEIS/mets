@@ -1,0 +1,45 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true"
+>
+  <app-page-heading caption="Monitoring methodology plan"
+    >Connections to other ETS installations or non-ETS entities</app-page-heading
+  >
+  <p class="govuk-body">
+    Add all technical connections to other Emissions Trading Scheme (ETS) installations or non-ETS entities where
+    measurable heat, waste gases, or CO2 for Carbon Capture and Storage (CCS) activities cross the boundaries of your
+    installation.
+  </p>
+  <p class="govuk-body">
+    If your installation uses heat stemming from nitric acid production, even if it is part of your own installation,
+    you must add this. Do not add other material or energy flows between sub-installations.
+  </p>
+  <p class="govuk-body">
+    The regulator will use this information is to ensure that data provided is consistent, and to avoid double counting
+    of allocation data.
+  </p>
+
+  <app-connection-list-summary-template
+    [connections]="('monitoringMethodologyPlans' | task | async)?.digitizedPlan?.installationDescription?.connections"
+    [isEditable]="store.isEditable$ | async"
+  >
+  </app-connection-list-summary-template>
+
+  <ng-container
+    *ngIf="
+      (store.isEditable$ | async) === true &&
+      ('monitoringMethodologyPlans' | task | async)?.digitizedPlan?.installationDescription?.connections?.length < 10
+    "
+  >
+    <button govukSecondaryButton routerLink="add" type="button">Add an installation or entity</button>
+  </ng-container>
+  <div class="govuk-button-group" *ngIf="(store.isEditable$ | async) === true">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Continue</button>
+  </div>
+
+  <app-list-return-link
+    reviewGroupTitle="Monitoring methodology"
+    reviewGroupUrl="monitoring-methodology-plan"
+  ></app-list-return-link>
+</app-permit-task>

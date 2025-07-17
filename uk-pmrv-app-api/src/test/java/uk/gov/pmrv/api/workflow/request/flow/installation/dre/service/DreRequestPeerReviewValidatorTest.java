@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
@@ -46,11 +46,11 @@ class DreRequestPeerReviewValidatorTest {
     			 .peerReviewer("reviewer")
     			 .build();
     	 
-    	 PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+    	 AppUser appUser = AppUser.builder().userId("user").build();
     	 
-    	 cut.validate(requestTask, taskActionPayload, pmrvUser);
+    	 cut.validate(requestTask, taskActionPayload, appUser);
     	 
-    	 verify(peerReviewerTaskAssignmentValidator, times(1)).validate(RequestTaskType.DRE_APPLICATION_PEER_REVIEW, "reviewer", pmrvUser);
+    	 verify(peerReviewerTaskAssignmentValidator, times(1)).validate(RequestTaskType.DRE_APPLICATION_PEER_REVIEW, "reviewer", appUser);
     	 verify(dreValidatorService, times(1)).validateDre(dre);
     }
     

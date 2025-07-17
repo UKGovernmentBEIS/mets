@@ -28,6 +28,27 @@ class AviationAerRequestQueryServiceTest {
     private RequestRepository requestRepository;
 
     @Test
+    void findAviationAerById_whenAerIsFound_ReturnTheAer() {
+
+        String requestId = "AEM00175-2023";
+
+        Request aerRequest = Request.builder()
+                                .id(requestId)
+                                .type(RequestType.AVIATION_AER_CORSIA)
+
+                                .status(RequestStatus.APPROVED)
+                        .build();
+
+        when(requestRepository.findById(requestId))
+                .thenReturn(Optional.of(aerRequest));
+
+        final Optional<Request> actual = aerRequestQueryService.findAviationAerById(requestId);
+
+        assertThat(actual.isPresent()).isTrue();
+        assertThat(actual.get()).isEqualTo(aerRequest);
+    }
+
+    @Test
     void findEndDateOfApprovedEmpIssuanceByAccountId() {
         Long accountId = 1L;
         LocalDateTime endDate = LocalDateTime.now();
@@ -40,7 +61,7 @@ class AviationAerRequestQueryServiceTest {
                                 .status(RequestStatus.APPROVED)
                         .build()));
 
-        final Optional<LocalDateTime> actual = aerRequestQueryService.findEndDateOfApprovedEmpIssuanceByAccountId(accountId);
+        final Optional<LocalDateTime> actual = aerRequestQueryService.findEndDateOfApprovedEmpIssuanceByAccountId(accountId, RequestType.EMP_ISSUANCE_UKETS);
         assertThat(actual).isPresent();
         assertEquals(endDate, actual.get());
     }
@@ -52,7 +73,7 @@ class AviationAerRequestQueryServiceTest {
         when(requestRepository.findByAccountIdAndTypeAndStatus(accountId, RequestType.EMP_ISSUANCE_UKETS, RequestStatus.APPROVED))
                 .thenReturn(List.of());
 
-        final Optional<LocalDateTime> actual = aerRequestQueryService.findEndDateOfApprovedEmpIssuanceByAccountId(accountId);
+        final Optional<LocalDateTime> actual = aerRequestQueryService.findEndDateOfApprovedEmpIssuanceByAccountId(accountId, RequestType.EMP_ISSUANCE_UKETS);
         assertThat(actual).isEmpty();
     }
 }

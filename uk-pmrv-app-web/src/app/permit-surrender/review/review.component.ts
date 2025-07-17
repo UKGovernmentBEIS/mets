@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { filter, first, map, Observable, of, switchMap, takeUntil, withLatestFrom } from 'rxjs';
+import { combineLatest, filter, first, map, Observable, of, switchMap, takeUntil, withLatestFrom } from 'rxjs';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { hasRequestTaskAllowedActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
@@ -16,6 +16,7 @@ import {
   RequestTaskItemDTO,
 } from 'pmrv-api';
 
+import { getPreviewDocumentsInfoSurrender } from '../shared/utils/previewDocumentsSurrender.util';
 import { PermitSurrenderStore } from '../store/permit-surrender.store';
 import { needsReview } from './core/review-status';
 
@@ -42,7 +43,8 @@ export class ReviewComponent {
     switchMap((state) => this.requestActionsService.getRequestActionsByRequestId(state.requestId)),
     map((res) => this.sortTimeline(res)),
   );
-  requestTaskItem$: Observable<RequestTaskItemDTO> = this.store.pipe(
+
+  requestTaskItem$: Observable<RequestTaskItemDTO> = this.storeFirst$.pipe(
     filter((state) => !!state.requestTaskId),
     map((state) => ({
       requestTask: {
@@ -56,6 +58,33 @@ export class ReviewComponent {
       userAssignCapable: state.userAssignCapable,
       allowedRequestTaskActions: state.allowedRequestTaskActions,
     })),
+  );
+
+  readonly assignee$ = this.storeFirst$.pipe(
+    map((state) => {
+      return state.assignee;
+    }),
+  );
+
+  vmPreviewDocuments$ = combineLatest([
+    this.requestTaskItem$,
+    this.assignee$,
+    this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId')))),
+    this.storeFirst$.pipe(map((state) => state.reviewDetermination)),
+  ]).pipe(
+    map(([requestTaskItem, assignee, taskId, determination]) => {
+      const previewDocuments = getPreviewDocumentsInfoSurrender(requestTaskItem.requestTask.type, determination?.type);
+
+      return {
+        taskId,
+        previewDocuments,
+        decision: {
+          operators: [],
+          externalContacts: [],
+          signatory: assignee.assigneeUserId,
+        },
+      };
+    }),
   );
 
   readonly determinationLink: Observable<any> = this.store.pipe(

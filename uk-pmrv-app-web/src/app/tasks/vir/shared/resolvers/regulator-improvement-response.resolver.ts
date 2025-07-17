@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -10,8 +10,11 @@ import { VirApplicationRespondToRegulatorCommentsRequestTaskPayload } from 'pmrv
 @Injectable({
   providedIn: 'root',
 })
-export class RegulatorImprovementResponseResolver implements Resolve<string> {
-  constructor(private readonly virService: VirService, private readonly router: Router) {}
+export class RegulatorImprovementResponseResolver {
+  constructor(
+    private readonly virService: VirService,
+    private readonly router: Router,
+  ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<string> {
     return (this.virService.payload$ as Observable<VirApplicationRespondToRegulatorCommentsRequestTaskPayload>).pipe(

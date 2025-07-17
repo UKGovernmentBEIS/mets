@@ -26,17 +26,26 @@ export class ActivityLevelListTemplateComponent implements OnInit {
   changeTypeLabelsMap = changeTypeLabelsMap;
 
   ngOnInit(): void {
-    this.dataSorted = this.data.sort((a, b) =>
-      a.year - b.year === 0 ? a.subInstallationName.localeCompare(b.subInstallationName) : a.year - b.year,
-    );
-
-    this.columns = [
+    const commonColumns = [
       { field: 'year', header: 'Year' },
       { field: 'subInstallationName', header: 'Sub-installation' },
       { field: 'changeType', header: 'Change type' },
       { field: 'changedActivityLevel', header: 'Amount' },
-      { field: 'comments', header: 'Comments' },
     ];
+
+    let hasComments = false;
+
+    this.dataSorted = this.data.sort((a, b) =>
+      a.year - b.year === 0 ? a.subInstallationName.localeCompare(b.subInstallationName) : a.year - b.year,
+    );
+
+    this.dataSorted.forEach((el) => {
+      if (el.comments) {
+        hasComments = true;
+      }
+    });
+
+    this.columns = hasComments ? [...commonColumns, { field: 'comments', header: 'Comments' }] : commonColumns;
 
     if (this.historical) {
       this.columns = this.columns.concat({ field: 'creationDate', header: 'Last updated' });

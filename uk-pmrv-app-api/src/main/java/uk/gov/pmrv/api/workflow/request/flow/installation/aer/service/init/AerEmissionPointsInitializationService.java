@@ -1,10 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.init;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.emissionpoints.EmissionPoint;
@@ -14,6 +9,12 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.PermitMonitoringApproa
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementOfCO2MonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.MeasurementOfN2OMonitoringApproach;
 import uk.gov.pmrv.api.reporting.domain.Aer;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AerEmissionPointsInitializationService implements AerSectionInitializationService{

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -11,8 +11,11 @@ import { RequestTaskActionProcessDTO } from 'pmrv-api';
 @Injectable({
   providedIn: 'root',
 })
-export class PeerReviewGuard implements CanActivate {
-  constructor(private readonly store: PermitRevocationStore, private readonly router: Router) {}
+export class PeerReviewGuard {
+  constructor(
+    private readonly store: PermitRevocationStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     const requestTaskActionType: RequestTaskActionProcessDTO['requestTaskActionType'] =

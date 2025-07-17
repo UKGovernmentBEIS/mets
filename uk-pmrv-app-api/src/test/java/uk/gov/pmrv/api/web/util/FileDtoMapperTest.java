@@ -1,15 +1,14 @@
 package uk.gov.pmrv.api.web.util;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.io.IOException;
-
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
+import java.io.IOException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileDtoMapperTest {
 

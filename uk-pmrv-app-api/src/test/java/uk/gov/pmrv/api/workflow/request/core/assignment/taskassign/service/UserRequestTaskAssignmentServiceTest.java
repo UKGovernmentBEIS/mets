@@ -6,11 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.rules.domain.ResourceType;
-import uk.gov.pmrv.api.authorization.rules.services.AuthorizationRulesQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.dto.RequestTaskAssignmentDTO;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.operator.OperatorRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.regulator.RegulatorRequestTaskAssignmentService;
@@ -77,8 +77,8 @@ class UserRequestTaskAssignmentServiceTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         when(authorizationRulesQueryService
                 .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-                .thenReturn(Optional.of(RoleType.OPERATOR));
-        when(operatorRequestTaskAssignmentService.getRoleType()).thenReturn(RoleType.OPERATOR);
+                .thenReturn(Optional.of(RoleTypeConstants.OPERATOR));
+        when(operatorRequestTaskAssignmentService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
 
         userRequestTaskAssignmentService.assignTask(requestTaskAssignmentDTO);
 
@@ -102,9 +102,9 @@ class UserRequestTaskAssignmentServiceTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         when(authorizationRulesQueryService
                 .findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-                .thenReturn(Optional.of(RoleType.REGULATOR));
-        when(operatorRequestTaskAssignmentService.getRoleType()).thenReturn(RoleType.OPERATOR);
-        when(regulatorRequestTaskAssignmentService.getRoleType()).thenReturn(RoleType.REGULATOR);
+                .thenReturn(Optional.of(RoleTypeConstants.REGULATOR));
+        when(operatorRequestTaskAssignmentService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
+        when(regulatorRequestTaskAssignmentService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
 
         userRequestTaskAssignmentService.assignTask(requestTaskAssignmentDTO);
 

@@ -50,7 +50,7 @@ export const EMP_EMISSIONS_REDUCTION_CLAIM_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { breadcrumb: 'Emissions reduction claim summary' },
+        data: { breadcrumb: 'Emissions reduction claim' },
         loadComponent: () =>
           import('./emissions-reduction-claim-summary/emissions-reduction-claim-summary.component').then(
             (c) => c.EmissionsReductionClaimSummaryComponent,

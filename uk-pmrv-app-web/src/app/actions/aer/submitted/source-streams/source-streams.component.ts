@@ -12,8 +12,7 @@ import { AerService } from '../../core/aer.service';
     <app-action-task header="Source streams (fuels and materials)" [breadcrumb]="true">
       <app-source-streams-summary-table
         [bottomBorder]="true"
-        [data]="sourceStreams$ | async"
-      ></app-source-streams-summary-table>
+        [data]="sourceStreams$ | async"></app-source-streams-summary-table>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

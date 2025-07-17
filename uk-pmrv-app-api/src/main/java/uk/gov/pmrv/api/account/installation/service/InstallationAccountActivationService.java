@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityService;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
@@ -12,7 +13,6 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.ApplicationType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.TransferCodeStatus;
 import uk.gov.pmrv.api.account.service.AccountContactUpdateService;
 import uk.gov.pmrv.api.account.service.LegalEntityService;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityService;
 
 import java.time.LocalDateTime;
 

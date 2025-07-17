@@ -17,7 +17,7 @@ import { AviationAerVerifiedSatisfactoryWithCommentsDecision } from 'pmrv-api';
   selector: 'app-reason-item-delete',
   template: `
     <div class="govuk-!-width-two-thirds">
-      <app-page-heading size="l"> Are you sure you want to delete this item? </app-page-heading>
+      <app-page-heading size="l">Are you sure you want to delete this item?</app-page-heading>
       <p class="govuk-body">Any reference to this item will be removed from your application.</p>
       <div class="govuk-button-group">
         <button type="button" appPendingButton (click)="delete()" govukWarnButton>Yes, delete</button>

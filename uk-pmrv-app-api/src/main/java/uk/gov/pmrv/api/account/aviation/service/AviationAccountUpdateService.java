@@ -6,6 +6,8 @@ import org.hibernate.Hibernate;
 import org.hibernate.proxy.HibernateProxy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountUpdateDTO;
 import uk.gov.pmrv.api.account.domain.Location;
@@ -14,10 +16,8 @@ import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.service.validator.AccountStatus;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -32,7 +32,7 @@ public class AviationAccountUpdateService {
 
     @Transactional
     @AccountStatus(expression = "{#status != 'CLOSED'}")
-    public void updateAviationAccount(Long accountId, @Valid AviationAccountUpdateDTO aviationAccountUpdateDTO, PmrvUser user) {
+    public void updateAviationAccount(Long accountId, @Valid AviationAccountUpdateDTO aviationAccountUpdateDTO, AppUser user) {
         AviationAccount account = aviationAccountQueryService.getAccountById(accountId);
         validateAccountNameUniqueness(aviationAccountUpdateDTO.getName(), account.getCompetentAuthority(), account.getEmissionTradingScheme(), account.getId());
         validateCrcoCodeUniqueness(aviationAccountUpdateDTO.getCrcoCode(), account.getCompetentAuthority(), account.getEmissionTradingScheme(), account.getId());
@@ -78,12 +78,6 @@ public class AviationAccountUpdateService {
     }
 
     @Transactional
-    @AccountStatus(expression = "{#status != 'CLOSED'}")
-    public void updateAccountUponAerCompletion(Long accountId, String name, LocationOnShoreStateDTO accountContactLocationDTO) {
-        updateNameAndLocation(accountId, name, accountContactLocationDTO);
-    }
-
-    @Transactional
     @AccountStatus(expression = "{#status == 'LIVE'}")
     public void updateAccountUponEmpVariationApproved(Long accountId, String name, LocationOnShoreStateDTO accountContactLocationDTO) {
         updateNameAndLocation(accountId, name, accountContactLocationDTO);
@@ -100,27 +94,27 @@ public class AviationAccountUpdateService {
 	private void validateAccountNameUniqueness(String name, CompetentAuthorityEnum competentAuthority,
                                                EmissionTradingScheme emissionTradingScheme, Long accountId) {
         if (aviationAccountQueryService.isExistingAccountName(name, competentAuthority, emissionTradingScheme, accountId)) {
-            throw new BusinessException(ErrorCode.ACCOUNT_ALREADY_EXISTS, name, competentAuthority, emissionTradingScheme);
+            throw new BusinessException(MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS, name, competentAuthority, emissionTradingScheme);
         }
     }
 
     private void validateCrcoCodeUniqueness(String crcoCode, CompetentAuthorityEnum competentAuthority,
                                             EmissionTradingScheme emissionTradingScheme, Long accountId) {
         if (aviationAccountQueryService.isExistingCrcoCode(crcoCode, competentAuthority, emissionTradingScheme, accountId)) {
-            throw new BusinessException(ErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT,
+            throw new BusinessException(MetsErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT,
                     crcoCode, competentAuthority, emissionTradingScheme);
         }
     }
 
     private void validateEmissionTradingSchemeRegistryId(AviationAccount account, Integer registryId) {
         if (!EmissionTradingScheme.UK_ETS_AVIATION.equals(account.getEmissionTradingScheme()) && registryId != null) {
-            throw new BusinessException(ErrorCode.REGISTRY_ID_SUBMITTED_ONLY_FOR_UK_ETS_AVIATION_ACCOUNTS,
+            throw new BusinessException(MetsErrorCode.REGISTRY_ID_SUBMITTED_ONLY_FOR_UK_ETS_AVIATION_ACCOUNTS,
                     account.getName(), account.getRegistryId(), account.getCompetentAuthority(), account.getEmissionTradingScheme());
         }
     }
 
     @Transactional
-	public void closeAviationAccount(Long accountId, PmrvUser user, String reason) {
+	public void closeAviationAccount(Long accountId, AppUser user, String reason) {
 		AviationAccount account = aviationAccountQueryService.getAccountById(accountId);
         account.setClosureReason(reason);
         account.setClosingDate(LocalDateTime.now());

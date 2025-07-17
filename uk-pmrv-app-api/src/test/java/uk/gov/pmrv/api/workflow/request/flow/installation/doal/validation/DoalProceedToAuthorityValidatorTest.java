@@ -7,9 +7,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -44,7 +44,7 @@ class DoalProceedToAuthorityValidatorTest {
 
     @Test
     void validateNotify() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final DoalApplicationSubmitRequestTaskPayload taskPayload = DoalApplicationSubmitRequestTaskPayload.builder()
                 .payloadType(RequestTaskPayloadType.DOAL_APPLICATION_SUBMIT_PAYLOAD)
                 .doal(Doal.builder()
@@ -62,21 +62,21 @@ class DoalProceedToAuthorityValidatorTest {
                 .signatory("regulatorUserId")
                 .build();
 
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser))
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser))
                 .thenReturn(true);
 
         // Invoke
-        validator.validateNotify(requestTask, decisionNotification, pmrvUser);
+        validator.validateNotify(requestTask, decisionNotification, appUser);
 
         // Verify
         verify(doalSubmitValidator, times(1)).validate(taskPayload);
         verify(decisionNotificationUsersValidator, times(1))
-                .areUsersValid(requestTask, decisionNotification, pmrvUser);
+                .areUsersValid(requestTask, decisionNotification, appUser);
     }
 
     @Test
     void validateNotify_not_valid_determination_type() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final DoalApplicationSubmitRequestTaskPayload taskPayload = DoalApplicationSubmitRequestTaskPayload.builder()
                 .payloadType(RequestTaskPayloadType.DOAL_APPLICATION_SUBMIT_PAYLOAD)
                 .doal(Doal.builder()
@@ -95,7 +95,7 @@ class DoalProceedToAuthorityValidatorTest {
 
         // Invoke
         final BusinessException businessException = assertThrows(BusinessException.class,
-                () -> validator.validateNotify(requestTask, decisionNotification, pmrvUser));
+                () -> validator.validateNotify(requestTask, decisionNotification, appUser));
 
         // Verify
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
@@ -105,7 +105,7 @@ class DoalProceedToAuthorityValidatorTest {
 
     @Test
     void validateNotify_not_valid_send_notice() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final DoalApplicationSubmitRequestTaskPayload taskPayload = DoalApplicationSubmitRequestTaskPayload.builder()
                 .payloadType(RequestTaskPayloadType.DOAL_APPLICATION_SUBMIT_PAYLOAD)
                 .doal(Doal.builder()
@@ -125,7 +125,7 @@ class DoalProceedToAuthorityValidatorTest {
 
         // Invoke
         final BusinessException businessException = assertThrows(BusinessException.class,
-                () -> validator.validateNotify(requestTask, decisionNotification, pmrvUser));
+                () -> validator.validateNotify(requestTask, decisionNotification, appUser));
 
         // Verify
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
@@ -135,7 +135,7 @@ class DoalProceedToAuthorityValidatorTest {
 
     @Test
     void validateNotify_not_valid_users() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final DoalApplicationSubmitRequestTaskPayload taskPayload = DoalApplicationSubmitRequestTaskPayload.builder()
                 .payloadType(RequestTaskPayloadType.DOAL_APPLICATION_SUBMIT_PAYLOAD)
                 .doal(Doal.builder()
@@ -153,18 +153,18 @@ class DoalProceedToAuthorityValidatorTest {
                 .signatory("regulatorUserId")
                 .build();
 
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser))
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser))
                 .thenReturn(false);
 
         // Invoke
         final BusinessException businessException = assertThrows(BusinessException.class,
-                () -> validator.validateNotify(requestTask, decisionNotification, pmrvUser));
+                () -> validator.validateNotify(requestTask, decisionNotification, appUser));
 
         // Verify
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
         verify(doalSubmitValidator, times(1)).validate(taskPayload);
         verify(decisionNotificationUsersValidator, times(1))
-                .areUsersValid(requestTask, decisionNotification, pmrvUser);
+                .areUsersValid(requestTask, decisionNotification, appUser);
     }
 
     @Test

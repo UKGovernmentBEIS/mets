@@ -3,6 +3,7 @@
     <app-fuel-uplift-summary-template
       [data]="showOriginal ? vm.originalData : vm.data"
       [isEditable]="vm.isEditable"
+      [isCorsia]="isCorsia$ | async"
     ></app-fuel-uplift-summary-template>
   </ng-container>
 </ng-template>

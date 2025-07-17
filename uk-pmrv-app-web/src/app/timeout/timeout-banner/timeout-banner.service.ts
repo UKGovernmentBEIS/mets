@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, EMPTY, filter, pluck, switchMap, tap, timer } from 'rxjs';
+import { BehaviorSubject, EMPTY, filter, map, switchMap, tap, timer } from 'rxjs';
 
+import { AuthService } from '@core/services/auth.service';
 import { KeycloakEventType, KeycloakService } from 'keycloak-angular';
 
 import { environment } from '../../../environments/environment';
-import { AuthService } from '../../core/services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class TimeoutBannerService {
@@ -33,10 +33,13 @@ export class TimeoutBannerService {
   countDownTime$ = new BehaviorSubject<number>(this.calculateCountdownTime());
   private initialRefreshTokenExpOffset = this.refreshTokenExpOffset;
 
-  constructor(private readonly keycloak: KeycloakService, private readonly authService: AuthService) {
+  constructor(
+    private readonly keycloak: KeycloakService,
+    private readonly authService: AuthService,
+  ) {
     this.keycloak.keycloakEvents$
       .pipe(
-        pluck('type'),
+        map((event) => event?.type),
         filter((eventType) =>
           [KeycloakEventType.OnAuthRefreshSuccess, KeycloakEventType.OnAuthLogout].includes(eventType),
         ),
@@ -93,7 +96,7 @@ export class TimeoutBannerService {
 
   private idleLogout() {
     const idleTime = this.refreshTokenParsedExp - this.refreshTokenParsedIat;
-    this.keycloak.logout(location.origin + '/timed-out?idle=' + idleTime);
+    this.authService.logout('timed-out?idle=' + idleTime);
   }
 
   private calculateCountdownTime(): number {

@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration.permit.abbreviations;
 
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.springframework.jdbc.core.RowMapper;
 
 public class EtsAbbreviationRowMapper implements RowMapper<EtsAbbreviation> {
 

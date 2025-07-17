@@ -15,7 +15,7 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.flightaircraftproce
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.flightaircraftprocedures.EmpOperatingStatePairsCorsiaDetails;
 
 @ExtendWith(MockitoExtension.class)
-public class EmpOperatingStatePairsCorsiaTest {
+class EmpOperatingStatePairsCorsiaTest {
 
     private Validator validator;
 

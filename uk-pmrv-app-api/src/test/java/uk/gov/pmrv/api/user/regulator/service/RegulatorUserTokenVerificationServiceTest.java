@@ -1,18 +1,17 @@
 package uk.gov.pmrv.api.user.regulator.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.core.domain.dto.AuthorityInfoDTO;
-import uk.gov.pmrv.api.token.JwtTokenActionEnum;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
+import uk.gov.netz.api.token.JwtTokenAction;
 import uk.gov.pmrv.api.user.core.service.UserInvitationTokenVerificationService;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RegulatorUserTokenVerificationServiceTest {
@@ -26,7 +25,7 @@ class RegulatorUserTokenVerificationServiceTest {
     @Test
     void verifyInvitationToken() {
         String invitationToken = "invitationToken";
-        JwtTokenActionEnum tokenAction = JwtTokenActionEnum.REGULATOR_INVITATION;
+        JwtTokenAction tokenAction = JwtTokenAction.REGULATOR_INVITATION;
         AuthorityInfoDTO authorityInfo = AuthorityInfoDTO.builder()
             .id(1L)
             .userId("user")

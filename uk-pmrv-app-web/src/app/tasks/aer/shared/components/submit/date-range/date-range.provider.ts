@@ -24,7 +24,7 @@ export const dataRangeFormProvider = {
 
     const disabled = !state.isEditable;
 
-    const payload: AerApplicationSubmitRequestTaskPayload = state.requestTaskItem.requestTask.payload;
+    const payload = state.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload;
 
     const sourceStreamEmission = route.snapshot.paramMap.get('index')
       ? (payload.aer.monitoringApproachEmissions[taskKey] as CalculationOfPfcEmissions)?.sourceStreamEmissions[

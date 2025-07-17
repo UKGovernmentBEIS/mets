@@ -1,13 +1,12 @@
 package uk.gov.pmrv.api.common.domain.transform;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class AddressMapperTest {
     

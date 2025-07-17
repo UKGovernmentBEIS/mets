@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.common.reporting.verification.UncorrectedItem;
 import uk.gov.pmrv.api.common.reporting.verification.VerifierComment;
 import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.OperatorImprovementResponse;
@@ -62,7 +62,7 @@ class AviationVirSubmitValidatorTest {
         BusinessException be = assertThrows(BusinessException.class,
             () -> validator.validate(operatorImprovements, verificationData));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_VIR);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_VIR);
         assertThat(be.getData()).containsExactly("A2", "B1");
     }
 
@@ -88,7 +88,7 @@ class AviationVirSubmitValidatorTest {
         BusinessException be = assertThrows(BusinessException.class,
             () -> validator.validate(operatorImprovements, verificationData));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_VIR);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_VIR);
         assertThat(be.getData()).containsExactly("B2");
     }
 }

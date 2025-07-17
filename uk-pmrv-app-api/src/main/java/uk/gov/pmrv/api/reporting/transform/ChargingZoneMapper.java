@@ -1,7 +1,7 @@
 package uk.gov.pmrv.api.reporting.transform;
 
 import org.mapstruct.Mapper;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.reporting.domain.ChargingZone;
 import uk.gov.pmrv.api.reporting.domain.dto.ChargingZoneDTO;
 

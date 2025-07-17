@@ -22,14 +22,12 @@ import { emissionFactorFormProvider } from './emission-factor-form.provider';
         submitText="Continue"
         [caption]="'CALCULATION_PFC' | monitoringApproachDescription"
         heading="Is a tier 2 emission factor being applied to any of your Perfluorocarbon source streams?"
-        [hideSubmit]="(store.isEditable$ | async) === false"
-      >
+        [hideSubmit]="(store.isEditable$ | async) === false">
         <app-boolean-radio-group controlName="exist"></app-boolean-radio-group>
       </app-wizard-step>
       <app-approach-return-link
         [parentTitle]="'CALCULATION_PFC' | monitoringApproachDescription"
-        reviewGroupUrl="pfc"
-      ></app-approach-return-link>
+        reviewGroupUrl="pfc"></app-approach-return-link>
     </app-permit-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

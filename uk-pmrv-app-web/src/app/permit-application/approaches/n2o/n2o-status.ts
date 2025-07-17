@@ -16,11 +16,11 @@ export function N2OStatus(state: PermitApplicationState): TaskItemStatus {
     tiersStatuses.every((status) => status === 'complete')
     ? 'complete'
     : tiersStatuses.some((status) => status === 'needs review')
-    ? 'needs review'
-    : n2oStaticStatuses.some((status) => state.permitSectionsCompleted[status]?.[0]) ||
-      tiersStatuses.some((status) => status === 'in progress' || status === 'complete')
-    ? 'in progress'
-    : 'not started';
+      ? 'needs review'
+      : n2oStaticStatuses.some((status) => state.permitSectionsCompleted[status]?.[0]) ||
+          tiersStatuses.some((status) => status === 'in progress' || status === 'complete')
+        ? 'in progress'
+        : 'not started';
 }
 
 /** Returns the status of emission point category applier tier */
@@ -30,8 +30,8 @@ export function N2OCategoryTierStatus(state: PermitApplicationState, index: numb
     ? n2oCategoryTierStatuses.every((status) => state.permitSectionsCompleted[status]?.[index])
       ? 'complete'
       : n2oCategoryTierStatuses.some((status) => state.permitSectionsCompleted[status]?.[index])
-      ? 'in progress'
-      : 'not started'
+        ? 'in progress'
+        : 'not started'
     : 'needs review';
 }
 
@@ -54,18 +54,18 @@ export function N2OCategoryTierSubtaskStatus(
       return state.permitSectionsCompleted[key]?.[index]
         ? 'complete'
         : N2OCategoryTierSubtaskStatus(state, 'MEASUREMENT_N2O_Category', index) === 'complete'
-        ? 'not started'
-        : 'cannot start yet';
+          ? 'not started'
+          : 'cannot start yet';
     case 'MEASUREMENT_N2O_Measured_Emissions': {
       return !doN2OMeasuredEmissionsExist(state, index)
         ? !areN2OMeasuredEmissionsPrerequisitesMet(state, index)
           ? 'cannot start yet'
           : 'not started'
         : !areN2OMeasuredEmissionsDevicesValid(state, index)
-        ? 'needs review'
-        : !state.permitSectionsCompleted[key]?.[index]
-        ? 'in progress'
-        : 'complete';
+          ? 'needs review'
+          : !state.permitSectionsCompleted[key]?.[index]
+            ? 'in progress'
+            : 'complete';
     }
     default:
       return state.permitSectionsCompleted[key]?.[index] ? 'complete' : 'not started';
@@ -130,8 +130,8 @@ export const n2oStaticStatuses = [
 
 export type N2OStatuses =
   | 'MEASUREMENT_N2O_Category_Tier'
-  | typeof n2oStaticStatuses[number]
-  | typeof n2oCategoryTierStatuses[number];
+  | (typeof n2oStaticStatuses)[number]
+  | (typeof n2oCategoryTierStatuses)[number];
 
 /** Returns true if reference state is valid and all ids used in stream category exist */
 function isN2OCategoryValid(state: PermitApplicationState, index: number): boolean {

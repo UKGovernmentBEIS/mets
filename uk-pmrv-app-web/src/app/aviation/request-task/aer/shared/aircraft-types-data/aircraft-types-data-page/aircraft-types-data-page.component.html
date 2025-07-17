@@ -31,10 +31,9 @@
       Upload a comma-separated values (.csv) file of the aircraft types which you have operated during the scheme year
       on {{ scheme$ | async }} flights. This should include owned and leased-in aircraft.
     </p>
-    <p class="govuk-body">
-      You can upload your own data by using the
-      <a class="govuk-link" href="#" rel="noreferrer noopener">aircraft types data template</a> or if you use simplified
-      reporting, upload the Eurocontrol aggregated aircraft data file.
+    <p class="govuk-body" *ngIf="(scheme$ | async) === 'UK ETS'">
+      You can upload your own data or if you use simplified reporting, upload the Eurocontrol aggregated aircraft data
+      file.
     </p>
   </div>
 

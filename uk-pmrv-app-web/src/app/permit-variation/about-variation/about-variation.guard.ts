@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -8,8 +8,11 @@ import { PermitVariationStore } from '../store/permit-variation.store';
 @Injectable({
   providedIn: 'root',
 })
-export class AboutVariationGuard implements CanActivate {
-  constructor(private readonly router: Router, private readonly store: PermitVariationStore) {}
+export class AboutVariationGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly store: PermitVariationStore,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): true | Observable<true | UrlTree> {
     return (

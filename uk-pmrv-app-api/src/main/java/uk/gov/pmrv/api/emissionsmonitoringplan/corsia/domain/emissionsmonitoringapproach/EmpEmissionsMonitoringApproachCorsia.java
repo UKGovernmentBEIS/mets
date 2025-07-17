@@ -19,13 +19,13 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmpCorsiaSection;
 @Schema(
         discriminatorMapping = {
                 @DiscriminatorMapping(schema = CertMonitoringApproach.class, value = "CERT_MONITORING"),
-                @DiscriminatorMapping(schema = FuelMonitoringApproach.class, value = "FUEL_USE_MONITORING")
+                @DiscriminatorMapping(schema = FuelMonitoringApproachCorsia.class, value = "FUEL_USE_MONITORING")
         },
         discriminatorProperty = "monitoringApproachType")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "monitoringApproachType", visible = true)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = CertMonitoringApproach.class, name = "CERT_MONITORING"),
-        @JsonSubTypes.Type(value = FuelMonitoringApproach.class, name = "FUEL_USE_MONITORING")
+        @JsonSubTypes.Type(value = FuelMonitoringApproachCorsia.class, name = "FUEL_USE_MONITORING")
 })
 
 @Data

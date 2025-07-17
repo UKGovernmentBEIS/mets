@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, pluck } from 'rxjs';
+import { map, Observable } from 'rxjs';
+
+import { BackLinkService } from '@shared/back-link/back-link.service';
 
 import { DocumentTemplateDTO } from 'pmrv-api';
-
-import { BackLinkService } from '../../shared/back-link/back-link.service';
 
 @Component({
   selector: 'app-document-template-overview',
@@ -14,7 +14,7 @@ import { BackLinkService } from '../../shared/back-link/back-link.service';
 })
 export class DocumentTemplateOverviewComponent implements OnInit {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
-  documentTemplate$: Observable<DocumentTemplateDTO> = this.route.data.pipe(pluck('documentTemplate'));
+  documentTemplate$: Observable<DocumentTemplateDTO> = this.route.data.pipe(map((x) => x?.documentTemplate));
 
   constructor(
     private readonly route: ActivatedRoute,

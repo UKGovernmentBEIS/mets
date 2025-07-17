@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,7 +11,8 @@
  */
 import { ActivityLevelChangeInformation } from './activityLevelChangeInformation';
 import { DoalAdditionalDocuments } from './doalAdditionalDocuments';
-import { DoalDetermination } from './doalDetermination';
+import { DoalClosedDetermination } from './doalClosedDetermination';
+import { DoalProceedToAuthorityDetermination } from './doalProceedToAuthorityDetermination';
 import { OperatorActivityLevelReport } from './operatorActivityLevelReport';
 import { VerificationReportOfTheActivityLevelReport } from './verificationReportOfTheActivityLevelReport';
 
@@ -20,5 +21,5 @@ export interface Doal {
   verificationReportOfTheActivityLevelReport: VerificationReportOfTheActivityLevelReport;
   additionalDocuments: DoalAdditionalDocuments;
   activityLevelChangeInformation: ActivityLevelChangeInformation;
-  determination: DoalDetermination;
+  determination: DoalClosedDetermination | DoalProceedToAuthorityDetermination;
 }

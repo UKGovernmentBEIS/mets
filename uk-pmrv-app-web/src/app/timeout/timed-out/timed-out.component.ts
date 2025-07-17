@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { map } from 'rxjs';
 
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'app-timed-out',
@@ -31,9 +32,13 @@ import { AuthService } from '../../core/services/auth.service';
 export class TimedOutComponent {
   idle$ = this.activatedRoute.queryParamMap.pipe(map((queryParamMap) => Number(queryParamMap.get('idle'))));
 
-  constructor(private readonly activatedRoute: ActivatedRoute, private readonly authService: AuthService) {}
+  constructor(
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly authService: AuthService,
+    @Inject(APP_BASE_HREF) private baseHref: string,
+  ) {}
 
   onSignInAgain(): void {
-    this.authService.login({ redirectUri: location.origin });
+    this.authService.login({ redirectUri: this.authService.baseRedirectUri });
   }
 }

@@ -6,13 +6,11 @@
       [aircraftTypes]="showOriginal ? vm.originalAircraftTypesInUse : aircraftTypes"
       [isFUMM]="isFUMM"
     ></app-aircraft-type-table>
+  </ng-container>
+</ng-template>
 
-    <div class="govuk-button-group">
-      <button type="button" *ngIf="vm.editable" govukButton govuksecondarybutton (click)="addAircraftType()">
-        Add an aircraft type
-      </button>
-    </div>
-
+<ng-template #contentTpl2 let-showOriginal>
+  <ng-container *ngIf="vm$ | async as vm">
     <app-emission-factors-summary
       [fuelTypes]="showOriginal ? vm.originalFuelTypes : fuelTypes"
       [editable]="vm.editable"
@@ -20,7 +18,7 @@
 
     <div *ngIf="multipleMethodsExplanation || vm.originalMultipleMethodsExplanation">
       <app-multiple-methods-summary-template
-        [editable]="vm.editable"
+        [editable]="vm.editable && !!multipleMethodsExplanation"
         [multipleMethodsExplanation]="showOriginal ? vm.originalMultipleMethodsExplanation : multipleMethodsExplanation"
       >
       </app-multiple-methods-summary-template>
@@ -40,9 +38,26 @@
     <ng-container slot="current" *ngTemplateOutlet="contentTpl; context: { $implicit: false }"></ng-container>
   </app-highlight-diff>
 
+  <div class="govuk-button-group">
+    <button type="button" *ngIf="vm.editable" govukButton govuksecondarybutton (click)="addAircraftType()">
+      Add an aircraft type
+    </button>
+  </div>
+
+  <app-highlight-diff *ngIf="vm.showDiff">
+    <ng-container slot="previous" *ngTemplateOutlet="contentTpl2; context: { $implicit: true }"></ng-container>
+    <ng-container slot="current" *ngTemplateOutlet="contentTpl2; context: { $implicit: false }"></ng-container>
+  </app-highlight-diff>
+
   <ng-container
     *ngIf="vm.showDiff === false"
     [ngTemplateOutlet]="contentTpl"
+    [ngTemplateOutletContext]="{ $implicit: false }"
+  ></ng-container>
+
+  <ng-container
+    *ngIf="vm.showDiff === false"
+    [ngTemplateOutlet]="contentTpl2"
     [ngTemplateOutletContext]="{ $implicit: false }"
   ></ng-container>
 

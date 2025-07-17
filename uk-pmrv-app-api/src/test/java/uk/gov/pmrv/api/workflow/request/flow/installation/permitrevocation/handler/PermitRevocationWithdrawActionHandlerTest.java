@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
@@ -35,7 +35,7 @@ class PermitRevocationWithdrawActionHandlerTest {
     void process() {
 
         final Long requestTaskId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final PermitRevocationApplicationWithdrawRequestTaskActionPayload taskActionPayload = 
             PermitRevocationApplicationWithdrawRequestTaskActionPayload.builder()
             .reason("the reason")
@@ -50,7 +50,7 @@ class PermitRevocationWithdrawActionHandlerTest {
         handler.process(
             requestTaskId,
             RequestTaskActionType.PERMIT_REVOCATION_WITHDRAW_APPLICATION,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);

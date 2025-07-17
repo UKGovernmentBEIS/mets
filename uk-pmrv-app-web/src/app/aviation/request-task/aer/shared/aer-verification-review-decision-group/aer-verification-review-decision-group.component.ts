@@ -4,12 +4,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, filter, map, Observable, takeUntil } from 'rxjs';
 
+import {
+  AerCorsiaReviewGroup,
+  aerCorsiaReviewGroupMap,
+} from '@aviation/request-task/aer/corsia/shared/aer-review-corsia.types';
+import { CorsiaRequestTypes } from '@aviation/request-task/util';
 import { AerVerificationReviewDecisionGroupSummaryComponent } from '@aviation/shared/components/aer/aer-verification-review-decision-group-summary/aer-verification-review-decision-group-summary.component';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
 
-import { AerVerifyCorsiaTaskKey, AerVerifyTaskKey, requestTaskQuery, RequestTaskStore } from '../../../store';
+import {
+  AerReviewCorsiaTaskKey,
+  AerVerifyCorsiaTaskKey,
+  AerVerifyTaskKey,
+  requestTaskQuery,
+  RequestTaskStore,
+} from '../../../store';
 import { aerQuery } from '../aer.selectors';
 import { AerUkEtsReviewGroup } from '../util/aer.util';
 import { aerVerifyReviewGroupMap } from '../util/aer-verify-tasks.util';
@@ -29,10 +40,13 @@ import { AerVerificationReviewDecisionGroupFormComponent } from './form/aer-veri
   providers: [DestroySubject],
 })
 export class AerVerificationReviewDecisionGroupComponent implements OnInit, OnDestroy {
-  @Input() taskKey: AerVerifyTaskKey | AerVerifyCorsiaTaskKey;
+  @Input() taskKey: AerVerifyTaskKey | AerVerifyCorsiaTaskKey | AerReviewCorsiaTaskKey;
   @Input() addValidator: ValidatorFn;
 
-  allowedReviewEditableActions = ['AVIATION_AER_UKETS_SAVE_REVIEW_GROUP_DECISION'];
+  allowedReviewEditableActions = [
+    'AVIATION_AER_UKETS_SAVE_REVIEW_GROUP_DECISION',
+    'AVIATION_AER_CORSIA_SAVE_REVIEW_GROUP_DECISION',
+  ];
 
   form = this.formProvider.form;
   isEditable$ = this.store.pipe(
@@ -43,10 +57,9 @@ export class AerVerificationReviewDecisionGroupComponent implements OnInit, OnDe
   canEdit$: Observable<boolean>;
   isSummaryDisplayed$ = new BehaviorSubject<boolean>(false);
   decisionData$: Observable<any>;
-  attachments$: Observable<{ [key: string]: string }> = this.store.pipe(aerQuery.selectReviewAttachments);
 
   private internalSet = false;
-  private groupKey: AerUkEtsReviewGroup;
+  private groupKey: AerUkEtsReviewGroup | AerCorsiaReviewGroup;
 
   constructor(
     public store: RequestTaskStore,
@@ -58,7 +71,9 @@ export class AerVerificationReviewDecisionGroupComponent implements OnInit, OnDe
   ) {}
 
   ngOnInit(): void {
-    this.groupKey = aerVerifyReviewGroupMap[this.taskKey];
+    this.groupKey = CorsiaRequestTypes.includes(this.store.getState().requestTaskItem.requestInfo.type)
+      ? aerCorsiaReviewGroupMap[this.taskKey]
+      : aerVerifyReviewGroupMap[this.taskKey];
 
     this.canEdit$ = this.store.pipe(
       aerQuery.selectReviewSectionsCompleted,
@@ -95,14 +110,19 @@ export class AerVerificationReviewDecisionGroupComponent implements OnInit, OnDe
     if (this.form.valid) {
       this.internalSet = true;
       this.store.aerDelegate
-        .saveAerReviewDecision(this.getFormData(), this.taskKey as AerVerifyTaskKey & AerVerifyCorsiaTaskKey)
+        .saveAerReviewDecision(this.getFormData(), this.taskKey as any)
         .pipe(this.pendingRequestService.trackRequest())
         .subscribe({
           next: () => {
             this.internalSet = false;
             this.isOnEditState = false;
 
-            const path = this.router.url.split('/').at(-1) === 'summary' ? '../../../../..' : '../../..';
+            const isCorsia = CorsiaRequestTypes.includes(this.store.getState().requestTaskItem.requestInfo.type);
+            const path = isCorsia
+              ? '../..'
+              : this.router.url.split('/').at(-1) === 'summary'
+                ? '../../../../..'
+                : '../../..';
 
             this.router.navigate([path], { relativeTo: this.route });
           },

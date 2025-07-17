@@ -46,7 +46,6 @@ export class UsersTableDirective implements OnInit {
                 firstName: [userAuthority.firstName],
                 lastName: [userAuthority.lastName],
                 authorityStatus: [userAuthority.authorityStatus],
-                locked: [userAuthority.locked],
                 roleCode: [userAuthority.roleCode],
                 roleName: [userAuthority.roleName],
                 jobTitle: [userAuthority.jobTitle],
@@ -84,8 +83,8 @@ export class UsersTableDirective implements OnInit {
           return !a.value.authorityCreationDate
             ? 1
             : !b.value.authorityCreationDate
-            ? -1
-            : new Date(a.value.authorityCreationDate).valueOf() - new Date(b.value.authorityCreationDate).valueOf();
+              ? -1
+              : new Date(a.value.authorityCreationDate).valueOf() - new Date(b.value.authorityCreationDate).valueOf();
       }
     };
   }

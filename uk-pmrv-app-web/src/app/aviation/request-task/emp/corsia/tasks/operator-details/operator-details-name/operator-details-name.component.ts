@@ -30,9 +30,8 @@ import { OperatorDetailsCorsiaFormProvider } from '../operator-details-form.prov
   providers: [DestroySubject],
 })
 export class OperatorDetailsNameComponent extends BaseOperatorDetailsComponent {
-  control = this.formProvider.form.get('operatorName');
   form = this.fb.group({
-    operatorName: this.control,
+    operatorName: this.getform('operatorName'),
   });
   constructor(
     public router: Router,
@@ -47,6 +46,6 @@ export class OperatorDetailsNameComponent extends BaseOperatorDetailsComponent {
   }
 
   onSubmit() {
-    this.submitForm('operatorName', { operatorName: this.control.value }, 'flight-identification');
+    this.submitForm('operatorName', { operatorName: this.form.controls.operatorName.value }, 'flight-identification');
   }
 }

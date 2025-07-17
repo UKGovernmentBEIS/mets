@@ -1,25 +1,25 @@
 package uk.gov.pmrv.api.workflow.request.core.repository;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Repository;
 
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.jpa.impl.JPAQuery;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.core.domain.QRequest;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsSearchResults;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestSearchCriteria;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
+
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 public class RequestDetailsRepository {
@@ -37,18 +37,20 @@ public class RequestDetailsRepository {
 				: criteria.getRequestTypes().stream()
 						.filter(type -> criteria.getCategory() == type.getCategory())
 						.collect(Collectors.toSet());
+		
+		Set<RequestType> requestTypesFilteredByResourceType = requestTypes.stream()
+				.filter(requestType -> requestType.getResourceType().equals(criteria.getResourceType()))
+				.collect(Collectors.toSet());
 
         BooleanBuilder whereClause = new BooleanBuilder();
         
-        if(criteria.getAccountId() != null) {
-        	whereClause.and(request.accountId.eq(criteria.getAccountId()));
+        if(ResourceType.ACCOUNT.equals(criteria.getResourceType())) {
+        	whereClause.and(request.accountId.eq(Long.valueOf(criteria.getResourceId())));
+        } else if (ResourceType.CA.equals(criteria.getResourceType())) {
+			whereClause.and(request.competentAuthority.eq(CompetentAuthorityEnum.valueOf(criteria.getResourceId())));
         }
         
-        if(criteria.getCompetentAuthority() != null) {
-        	whereClause.and(request.competentAuthority.eq(criteria.getCompetentAuthority()));
-        }
-        
-        whereClause.and(request.type.in(requestTypes));
+        whereClause.and(request.type.in(requestTypesFilteredByResourceType));
         
         if(!criteria.getRequestStatuses().isEmpty()) {
             whereClause.and(request.status.in(criteria.getRequestStatuses()));

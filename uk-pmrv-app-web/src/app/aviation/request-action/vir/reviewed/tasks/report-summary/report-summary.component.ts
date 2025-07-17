@@ -25,13 +25,11 @@ interface ViewModel {
       *ngIf="vm$ | async as vm"
       [header]="vm.header"
       [requestActionType]="vm.requestActionType"
-      [breadcrumb]="true"
-    >
+      [breadcrumb]="true">
       <app-regulator-create-summary
         [regulatorReviewResponse]="vm.regulatorReviewResponse"
         [isEditable]="false"
-        [isReview]="true"
-      ></app-regulator-create-summary>
+        [isReview]="true"></app-regulator-create-summary>
     </app-request-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

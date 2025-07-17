@@ -6,10 +6,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.application.authorization.RegulatorAuthorityResourceAdapter;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
@@ -33,7 +34,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,7 +64,7 @@ class ItemRegulatorServiceTest {
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes =
                 Map.of(ENGLAND, Set.of(INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW));
 
-        PmrvUser pmrvUser = buildRegulatorUser("reg1Id");
+        AppUser appUser = buildRegulatorUser("reg1Id");
         Item expectedItem = mock(Item.class);
         ItemPage expectedItemPage = ItemPage.builder()
                 .items(List.of(expectedItem))
@@ -75,24 +76,24 @@ class ItemRegulatorServiceTest {
 
         // Mock
         when(requestService.findRequestById(requestId)).thenReturn(request);
-        when(regulatorAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(pmrvUser.getUserId(), accountType))
+        when(regulatorAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType))
                 .thenReturn(scopedRequestTaskTypes);
         doReturn(expectedItemPage).when(itemByRequestRegulatorRepository).findItemsByRequestId(scopedRequestTaskTypes, requestId);
-        doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, pmrvUser);
+        doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, appUser);
 
         // Invoke
-        ItemDTOResponse actualItemDTOResponse = itemService.getItemsByRequest(pmrvUser, requestId);
+        ItemDTOResponse actualItemDTOResponse = itemService.getItemsByRequest(appUser, requestId);
 
         // Assert
         assertEquals(expectedItemDTOResponse, actualItemDTOResponse);
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(regulatorAuthorityResourceAdapter, times(1))
-                .getUserScopedRequestTaskTypesByAccountType(pmrvUser.getUserId(), accountType);
+                .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType);
         verify(itemByRequestRegulatorRepository, times(1))
                 .findItemsByRequestId(scopedRequestTaskTypes, requestId);
         verify(itemResponseService, times(1))
-                .toItemDTOResponse(expectedItemPage, accountType, pmrvUser);
+                .toItemDTOResponse(expectedItemPage, accountType, appUser);
     }
 
     @Test
@@ -102,35 +103,35 @@ class ItemRegulatorServiceTest {
         final Request request = Request.builder().id(requestId).accountId(accountId).type(RequestType.PERMIT_ISSUANCE).build();
         final AccountType accountType = AccountType.INSTALLATION;
         Map<CompetentAuthorityEnum, Set<RequestTaskType>> scopedRequestTaskTypes = Map.of();
-        PmrvUser pmrvUser = buildRegulatorUser("reg1Id");
+        AppUser appUser = buildRegulatorUser("reg1Id");
 
         // Mock
         when(requestService.findRequestById(requestId)).thenReturn(request);
-        when(regulatorAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(pmrvUser.getUserId(), accountType))
+        when(regulatorAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType))
                 .thenReturn(scopedRequestTaskTypes);
 
         // Invoke
-        ItemDTOResponse actualItemDTOResponse = itemService.getItemsByRequest(pmrvUser, requestId);
+        ItemDTOResponse actualItemDTOResponse = itemService.getItemsByRequest(appUser, requestId);
 
         // Assert
         assertThat(actualItemDTOResponse).isEqualTo(ItemDTOResponse.emptyItemDTOResponse());
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(regulatorAuthorityResourceAdapter, times(1))
-            .getUserScopedRequestTaskTypesByAccountType(pmrvUser.getUserId(), accountType);
+            .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType);
         verify(itemByRequestRegulatorRepository, never()).findItemsByRequestId(Mockito.anyMap(), Mockito.anyString());
         verify(itemResponseService, never()).toItemDTOResponse(Mockito.any(), Mockito.any(), Mockito.any());
     }
 
     @Test
     void getRoleType() {
-        assertEquals(RoleType.REGULATOR, itemService.getRoleType());
+        assertEquals(RoleTypeConstants.REGULATOR, itemService.getRoleType());
     }
 
-    private PmrvUser buildRegulatorUser(String userId) {
-        return PmrvUser.builder()
+    private AppUser buildRegulatorUser(String userId) {
+        return AppUser.builder()
                 .userId(userId)
-                .roleType(RoleType.REGULATOR)
+                .roleType(RoleTypeConstants.REGULATOR)
                 .build();
     }
 }

@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, pluck, switchMap } from 'rxjs';
+import { first, map, switchMap } from 'rxjs';
 
-import { PendingRequestService } from '../../core/guards/pending-request.service';
+import { PendingRequestService } from '@core/guards/pending-request.service';
+
 import { PERMIT_TASK_FORM } from '../shared/permit-task-form.token';
 import { SectionComponent } from '../shared/section/section.component';
 import { PermitApplicationState } from '../store/permit-application.state';
@@ -19,7 +20,11 @@ import { managementProceduresFormProvider } from './management-procedures-form.p
   providers: [managementProceduresFormProvider],
 })
 export class ManagementProceduresComponent extends SectionComponent {
-  permitTask$ = this.route.data.pipe(pluck<ManagementProceduresDefinitionData, 'permitTask'>('permitTask'));
+  permitTask$ = this.route.data.pipe(
+    map<ManagementProceduresDefinitionData, ManagementProceduresDefinitionData['permitTask']>(
+      (data) => data?.permitTask,
+    ),
+  );
 
   constructor(
     @Inject(PERMIT_TASK_FORM) readonly form: UntypedFormGroup,
@@ -43,6 +48,7 @@ export class ManagementProceduresComponent extends SectionComponent {
             {
               ...this.form.value,
               diagramAttachmentId: file?.uuid,
+              riskAssessmentAttachments: this.form.value?.riskAssessmentAttachments?.map((file) => file.uuid),
             },
             true,
           ),
@@ -56,11 +62,28 @@ export class ManagementProceduresComponent extends SectionComponent {
             permitAttachments: { ...this.store.getState().permitAttachments, [file.uuid]: file.file.name },
           });
         }
+        if (this.form.value.riskAssessmentAttachments) {
+          this.store.setState({
+            ...this.store.getState(),
+            permitAttachments: {
+              ...this.store.getState().permitAttachments,
+              ...this.form.value?.riskAssessmentAttachments?.reduce(
+                (result, item) => ({ ...result, [item.uuid]: item.file.name }),
+                {},
+              ),
+            },
+          });
+        }
+
         this.navigateSubmitSection('summary', 'management-procedures');
       });
   }
 
   getDownloadUrl(uuid: string): string | string[] {
     return ['..', 'file-download', 'attachment', uuid];
+  }
+
+  getDownloadUrlBase() {
+    return this.store.createBaseFileAttachmentDownloadUrl();
   }
 }

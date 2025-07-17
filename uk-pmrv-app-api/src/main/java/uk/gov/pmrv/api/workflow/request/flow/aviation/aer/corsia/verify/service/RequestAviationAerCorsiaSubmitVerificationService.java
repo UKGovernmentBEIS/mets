@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.verify.service
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.aviationreporting.corsia.validation.AviationAerCorsiaVerificationReportValidatorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -11,14 +11,11 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionTyp
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.utils.AviationAerCorsiaReviewUtils;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.verify.domain.AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.verify.mapper.AviationAerCorsiaVerifyMapper;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.domain.RequestAviationAccountInfo;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.RequestAviationAccountQueryService;
-
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +27,7 @@ public class RequestAviationAerCorsiaSubmitVerificationService {
     private final RequestAviationAccountQueryService requestAviationAccountQueryService;
     private final AviationAerCorsiaVerifyMapper aviationAerCorsiaVerifyMapper;
 
-    public void submitVerificationReport(RequestTask requestTask, PmrvUser pmrvUser) {
+    public void submitVerificationReport(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload taskPayload =
             (AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload) requestTask.getPayload();
@@ -42,7 +39,7 @@ public class RequestAviationAerCorsiaSubmitVerificationService {
         updateRequestPayload(request, taskPayload);
 
         // add request action
-        addVerificationSubmittedRequestAction(taskPayload, request, pmrvUser);
+        addVerificationSubmittedRequestAction(taskPayload, request, appUser);
     }
 
     private void updateRequestPayload(Request request, AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload verificationSubmitRequestTaskPayload) {
@@ -53,9 +50,11 @@ public class RequestAviationAerCorsiaSubmitVerificationService {
         If verification has been performed and amends has been requested from the regulator,
         clean up verification data related review groups that are deprecated after verifier amends
          */
-        if(aviationAerCorsiaRequestPayload.getVerificationReport() != null && !aviationAerCorsiaRequestPayload.getReviewGroupDecisions().isEmpty()) {
-            cleanUpDeprecatedVerificationDataReviewGroupDecisionsFromRequestPayload(aviationAerCorsiaRequestPayload, verificationSubmitRequestTaskPayload);
-        }
+		if (aviationAerCorsiaRequestPayload.getVerificationReport() != null
+				&& !aviationAerCorsiaRequestPayload.getReviewGroupDecisions().isEmpty()) {
+			AviationAerCorsiaReviewUtils.cleanUpDeprecatedVerificationDataReviewGroupDecisionsFromRequestPayload(
+					aviationAerCorsiaRequestPayload, verificationSubmitRequestTaskPayload.getAer());
+		}
 
         aviationAerCorsiaRequestPayload.setVerificationReport(verificationSubmitRequestTaskPayload.getVerificationReport());
         aviationAerCorsiaRequestPayload.getVerificationReport().setVerificationBodyId(request.getVerificationBodyId());
@@ -66,7 +65,7 @@ public class RequestAviationAerCorsiaSubmitVerificationService {
     }
 
     private void addVerificationSubmittedRequestAction(AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload verificationSubmitRequestTaskPayload,
-                                                      Request request, PmrvUser pmrvUser) {
+                                                      Request request, AppUser appUser) {
         RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 
         AviationAerCorsiaApplicationSubmittedRequestActionPayload aviationAerCorsiaApplicationSubmittedPayload =
@@ -77,17 +76,8 @@ public class RequestAviationAerCorsiaSubmitVerificationService {
             request,
             aviationAerCorsiaApplicationSubmittedPayload,
             RequestActionType.AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMITTED,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
     }
 
-    private void cleanUpDeprecatedVerificationDataReviewGroupDecisionsFromRequestPayload(AviationAerCorsiaRequestPayload requestPayload,
-                                                                                         AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload verificationSubmitRequestTaskPayload) {
-        Set<AviationAerCorsiaReviewGroup> deprecatedVerificationDataReviewGroups =
-            AviationAerCorsiaReviewUtils.getDeprecatedVerificationDataReviewGroups(requestPayload, verificationSubmitRequestTaskPayload);
-
-        if (!deprecatedVerificationDataReviewGroups.isEmpty()) {
-            requestPayload.getReviewGroupDecisions().keySet().removeAll(deprecatedVerificationDataReviewGroups);
-        }
-    }
 }

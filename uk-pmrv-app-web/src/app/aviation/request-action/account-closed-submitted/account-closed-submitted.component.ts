@@ -41,7 +41,10 @@ export class AccountClosedSubmittedComponent implements OnInit, OnDestroy {
     })),
   );
 
-  constructor(private readonly store: RequestActionStore, private readonly backLinkService: BackLinkService) {}
+  constructor(
+    private readonly store: RequestActionStore,
+    private readonly backLinkService: BackLinkService,
+  ) {}
 
   ngOnInit(): void {
     this.backLinkService.show();

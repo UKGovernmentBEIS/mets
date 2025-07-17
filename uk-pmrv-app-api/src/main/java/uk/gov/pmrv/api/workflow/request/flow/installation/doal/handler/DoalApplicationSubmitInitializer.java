@@ -1,11 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.doal.handler;
 
 import lombok.RequiredArgsConstructor;
-
 import org.mapstruct.factory.Mappers;
-
 import org.springframework.stereotype.Service;
-
 import uk.gov.pmrv.api.allowance.domain.HistoricalActivityLevel;
 import uk.gov.pmrv.api.allowance.domain.PreliminaryAllocation;
 import uk.gov.pmrv.api.allowance.service.AllowanceQueryService;

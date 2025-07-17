@@ -14,13 +14,11 @@ import { AerApplicationReviewRequestTaskPayload, FallbackEmissions } from 'pmrv-
     <app-aer-task-review
       [breadcrumb]="true"
       [notification]="notification"
-      heading="{{ 'FALLBACK' | monitoringApproachEmissionDescription }}"
-    >
+      heading="{{ 'FALLBACK' | monitoringApproachEmissionDescription }}">
       <app-fallback-emissions-group
         [fallbackEmissions]="fallbackEmissions$ | async"
         [sourceStreams]="sourceStreams$ | async"
-        [documentFiles]="documentFiles$ | async"
-      ></app-fallback-emissions-group>
+        [documentFiles]="documentFiles$ | async"></app-fallback-emissions-group>
       <app-aer-review-group-decision (notification)="notification = $event"></app-aer-review-group-decision>
     </app-aer-task-review>
   `,

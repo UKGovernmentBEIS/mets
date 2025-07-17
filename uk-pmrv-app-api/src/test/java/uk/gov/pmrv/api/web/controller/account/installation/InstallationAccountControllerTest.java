@@ -17,25 +17,24 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.account.domain.dto.AccountSearchCriteria;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountSearchResults;
 import uk.gov.pmrv.api.account.installation.domain.dto.AccountSearchResultsInfoDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountQueryService;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.Collections;
 import java.util.List;
@@ -49,9 +48,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.VERIFIER;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.VERIFIER;
 
 @ExtendWith(MockitoExtension.class)
 class InstallationAccountControllerTest {
@@ -69,10 +68,10 @@ class InstallationAccountControllerTest {
 	private InstallationAccountQueryService installationAccountQueryService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -80,7 +79,7 @@ class InstallationAccountControllerTest {
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(installationAccountController);
@@ -95,14 +94,14 @@ class InstallationAccountControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(installationAccountController)
             .addFilters(new FilterChainProxy(Collections.emptyList()))
             .setControllerAdvice(new ExceptionControllerAdvice())
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .build()
         ;
     }
 
 	@Test
 	void getCurrentUserAccounts() throws Exception {
-		final PmrvUser user = PmrvUser.builder().userId("userId").build();
+		final AppUser user = AppUser.builder().userId("userId").build();
 		final AccountSearchCriteria criteria = AccountSearchCriteria.builder()
                     .term("key")
                     .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
@@ -136,7 +135,7 @@ class InstallationAccountControllerTest {
 
     @Test
     void getCurrentUserAccounts_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder().userId("userId").build();
+        final AppUser user = AppUser.builder().userId("userId").build();
         final AccountSearchCriteria criteria = AccountSearchCriteria.builder()
                 .term("key")
                 .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
@@ -144,7 +143,7 @@ class InstallationAccountControllerTest {
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(user, new RoleType[]{OPERATOR, REGULATOR, VERIFIER});
+            .evaluate(user, new String[]{OPERATOR, REGULATOR, VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get(ACCOUNT_CONTROLLER_PATH)

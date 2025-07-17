@@ -1,0 +1,12 @@
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+<div class="govuk-heading-m govuk-!-margin-bottom-6" *ngIf="previewDocuments">
+  <h2 class="govuk-heading-m" id="subsection-title">Document preview</h2>
+  <ul [class]="'govuk-list' + ' ' + linkFontSize">
+    <li *ngFor="let document of previewDocuments">
+      <a class="govuk-link" href="#" *ngIf="(disabled$ | async) === false" (click)="getDocument(document, $event)">
+        {{ document.filename }}
+      </a>
+      <div *ngIf="disabled$ | async">{{ document.filename }}</div>
+    </li>
+  </ul>
+</div>

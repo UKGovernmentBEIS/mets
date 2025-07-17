@@ -1,8 +1,7 @@
 <label [for]="identifier" class="govuk-label" [class.govuk-visually-hidden]="isLabelHidden">
   {{ currentLabel }}
 </label>
-<govuk-error-message *ngIf="control.touched && control.invalid" [errors]="control.errors" [identifier]="identifier">
-</govuk-error-message>
+<govuk-error-message *ngIf="control.touched && control.invalid" [errors]="control.errors" [identifier]="identifier" />
 <input
   (blur)="onBlur()"
   (change)="onChange($event)"

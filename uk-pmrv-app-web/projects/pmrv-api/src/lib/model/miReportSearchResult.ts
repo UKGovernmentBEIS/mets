@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -12,11 +12,5 @@
 
 export interface MiReportSearchResult {
   id?: number;
-  miReportType?:
-    | 'LIST_OF_ACCOUNTS_USERS_CONTACTS'
-    | 'COMPLETED_WORK'
-    | 'REGULATOR_OUTSTANDING_REQUEST_TASKS'
-    | 'LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS'
-    | 'LIST_OF_VERIFICATION_BODY_USERS'
-    | 'CUSTOM';
+  miReportType?: string;
 }

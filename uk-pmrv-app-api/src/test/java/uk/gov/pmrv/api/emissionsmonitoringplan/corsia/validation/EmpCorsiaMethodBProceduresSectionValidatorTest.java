@@ -18,7 +18,7 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.methodb.EmpMethodBP
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachTypeCorsia;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproach;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproachCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsources.AircraftTypeDetailsCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsources.EmpEmissionSourcesCorsia;
 
@@ -34,7 +34,7 @@ class EmpCorsiaMethodBProceduresSectionValidatorTest {
         final EmissionsMonitoringPlanCorsiaContainer empContainer = EmissionsMonitoringPlanCorsiaContainer.builder()
                 .scheme(EmissionTradingScheme.CORSIA)
                 .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
-                        .emissionsMonitoringApproach(FuelMonitoringApproach.builder()
+                        .emissionsMonitoringApproach(FuelMonitoringApproachCorsia.builder()
                                 .monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
                                 .build())
                         .emissionSources(EmpEmissionSourcesCorsia.builder()
@@ -73,7 +73,7 @@ class EmpCorsiaMethodBProceduresSectionValidatorTest {
         final EmissionsMonitoringPlanCorsiaContainer empContainer = EmissionsMonitoringPlanCorsiaContainer.builder()
                 .scheme(EmissionTradingScheme.CORSIA)
                 .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
-                        .emissionsMonitoringApproach(FuelMonitoringApproach.builder()
+                        .emissionsMonitoringApproach(FuelMonitoringApproachCorsia.builder()
                                 .monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
                                 .build())
                         .emissionSources(EmpEmissionSourcesCorsia.builder()
@@ -108,7 +108,7 @@ class EmpCorsiaMethodBProceduresSectionValidatorTest {
         final EmissionsMonitoringPlanCorsiaContainer empContainer = EmissionsMonitoringPlanCorsiaContainer.builder()
                 .scheme(EmissionTradingScheme.CORSIA)
                 .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
-                        .emissionsMonitoringApproach(FuelMonitoringApproach.builder()
+                        .emissionsMonitoringApproach(FuelMonitoringApproachCorsia.builder()
                                 .monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
                                 .build())
                         .emissionSources(EmpEmissionSourcesCorsia.builder()
@@ -146,7 +146,7 @@ class EmpCorsiaMethodBProceduresSectionValidatorTest {
         final EmissionsMonitoringPlanCorsiaContainer empContainer = EmissionsMonitoringPlanCorsiaContainer.builder()
                 .scheme(EmissionTradingScheme.CORSIA)
                 .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
-                        .emissionsMonitoringApproach(FuelMonitoringApproach.builder()
+                        .emissionsMonitoringApproach(FuelMonitoringApproachCorsia.builder()
                                 .monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
                                 .build())
                         .emissionSources(EmpEmissionSourcesCorsia.builder()
@@ -188,7 +188,7 @@ class EmpCorsiaMethodBProceduresSectionValidatorTest {
         final EmissionsMonitoringPlanCorsiaContainer empContainer = EmissionsMonitoringPlanCorsiaContainer.builder()
                 .scheme(EmissionTradingScheme.CORSIA)
                 .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
-                        .emissionsMonitoringApproach(FuelMonitoringApproach.builder()
+                        .emissionsMonitoringApproach(FuelMonitoringApproachCorsia.builder()
                                 .monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.CERT_MONITORING)
                                 .build())
                         .emissionSources(EmpEmissionSourcesCorsia.builder()

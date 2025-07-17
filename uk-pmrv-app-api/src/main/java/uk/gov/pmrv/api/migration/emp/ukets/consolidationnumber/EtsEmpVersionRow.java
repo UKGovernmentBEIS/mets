@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.migration.emp.ukets.consolidationnumber;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -1,18 +1,17 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.submitregulatorled.service.lettertemplate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Component;
-
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.common.domain.EmpUkEtsReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpAcceptedVariationDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.common.domain.EmpVariationUkEtsRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateGenerationContextActionType;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateWorkflowParamsProvider;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @Component
 public class EmpVariationUkEtsRegulatorLedApprovedDocumentTemplateWorkflowParamsProvider
@@ -28,9 +27,9 @@ public class EmpVariationUkEtsRegulatorLedApprovedDocumentTemplateWorkflowParams
 		final TreeMap<EmpUkEtsReviewGroup, EmpAcceptedVariationDecisionDetails> sortedDecisions = new TreeMap<>(
 				payload.getReviewGroupDecisionsRegulatorLed()); // TODO: consider changing the root property in payloads from EnumMap to TreeMap
 		final List<String> reviewGroupsVariationScheduleItems = sortedDecisions
-				.entrySet()
+				.values()
 				.stream()
-				.map(decision -> decision.getValue().getVariationScheduleItems())
+				.map(EmpAcceptedVariationDecisionDetails::getVariationScheduleItems)
 				.flatMap(List::stream)
 				.collect(Collectors.toList());
 		

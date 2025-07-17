@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.reporting.domain.AerContainer;
 import uk.gov.pmrv.api.reporting.domain.AerValidationResult;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.PermitOriginatedData;
@@ -45,7 +45,7 @@ public class AerValidatorService {
         boolean isValid = aerValidationResults.stream().allMatch(AerValidationResult::isValid);
 
         if (!isValid) {
-            throw new BusinessException(ErrorCode.INVALID_AER,
+            throw new BusinessException(MetsErrorCode.INVALID_AER,
                 AerValidatorHelper.extractAerViolations(aerValidationResults));
         }
     }
@@ -59,7 +59,7 @@ public class AerValidatorService {
         boolean isValid = verificationReportValidationResults.stream().allMatch(AerValidationResult::isValid);
 
         if (!isValid) {
-            throw new BusinessException(ErrorCode.INVALID_AER_VERIFICATION_REPORT,
+            throw new BusinessException(MetsErrorCode.INVALID_AER_VERIFICATION_REPORT,
                 AerValidatorHelper.extractAerViolations(verificationReportValidationResults));
         }
     }

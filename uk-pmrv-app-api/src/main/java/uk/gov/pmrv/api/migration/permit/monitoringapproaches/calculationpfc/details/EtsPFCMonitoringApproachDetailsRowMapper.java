@@ -2,8 +2,6 @@ package uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationpfc.det
 
 import org.springframework.jdbc.core.RowMapper;
 
-import uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationpfc.details.EtsPFCMonitoringApproachDetails;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

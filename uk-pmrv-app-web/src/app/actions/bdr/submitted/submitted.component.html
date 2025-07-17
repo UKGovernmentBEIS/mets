@@ -1,0 +1,42 @@
+<ng-container *ngIf="vm() as vm">
+  <ng-container *ngTemplateOutlet="actionContainer"></ng-container>
+
+  <ng-template #actionContainer>
+    <app-base-action-container-component
+      [header]="vm.header"
+      [customContentTemplate]="customContentTemplate"
+      [expectedActionType]="vm.expectedActionType"></app-base-action-container-component>
+  </ng-template>
+
+  <ng-template #customContentTemplate>
+    <ul class="app-task-list">
+      <li app-task-section title="Baseline data report details">
+        <ul app-task-item-list>
+          <li app-task-item link="baseline" linkText="Baseline data report and details"></li>
+        </ul>
+      </li>
+
+      <ng-container *ngIf="vm.hasVerificationReport">
+        <li app-task-section title="Verification opinion statement">
+          <ul app-task-item-list>
+            <li app-task-item link="opinion-statement" linkText="BDR verification opinion statement"></li>
+          </ul>
+        </li>
+
+        <li app-task-section title="Decision">
+          <ul app-task-item-list>
+            <li app-task-item link="overall-decision" linkText="Overall decision"></li>
+          </ul>
+        </li>
+      </ng-container>
+
+      <ng-container *ngIf="hasOutcome()">
+        <li app-task-section title="Outcome of regulator review">
+          <ul app-task-item-list>
+            <li app-task-item link="outcome" linkText="Outcome of regulator review"></li>
+          </ul>
+        </li>
+      </ng-container>
+    </ul>
+  </ng-template>
+</ng-container>

@@ -1,12 +1,11 @@
 package uk.gov.pmrv.api.user.core.transform;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetailsRequest;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserDetailsMapperTest {
 

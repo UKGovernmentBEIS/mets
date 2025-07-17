@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { filter, map, Observable } from 'rxjs';
 
@@ -18,11 +18,14 @@ import { StatusKey } from '../core/aer-task.type';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubmitContainerComponent {
+  readonly daysRemaining$ = this.aerService.daysRemaining$;
+
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
 
   aerTitle$ = this.aerService.requestMetadata$.pipe(
     map((metadata) => (metadata as AerRequestMetadata)?.year + ' emissions report'),
   );
+
   isMeasurementOrN2OApproachesSelected$ = this.aerService.getTask('monitoringApproachEmissions').pipe(
     filter((monitoringApproachEmissions) => !!monitoringApproachEmissions),
     map(
@@ -31,6 +34,7 @@ export class SubmitContainerComponent {
         monitoringApproachEmissions['MEASUREMENT_N2O'] !== undefined,
     ),
   );
+
   monitoringApproaches$ = this.aerService.getTask('monitoringApproachEmissions').pipe(
     filter((monitoringApproachEmissions) => !!monitoringApproachEmissions),
     map(
@@ -49,8 +53,6 @@ export class SubmitContainerComponent {
 
   isTaskTypeAmendsSubmit = this.aerService.requestTaskType === 'AER_APPLICATION_AMENDS_SUBMIT';
 
-  readonly daysRemaining$ = this.aerService.daysRemaining$;
-
   reviewGroupsForAmend$ = this.aerService.reviewGroupsForAmend$;
 
   totalEmissions = getTotalEmissionsKeys();
@@ -58,7 +60,6 @@ export class SubmitContainerComponent {
   constructor(
     readonly aerService: AerService,
     private readonly router: Router,
-    private readonly route: ActivatedRoute,
     readonly store: CommonTasksStore,
   ) {}
 }

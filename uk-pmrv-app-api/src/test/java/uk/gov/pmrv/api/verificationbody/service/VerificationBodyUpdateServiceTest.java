@@ -1,5 +1,32 @@
 package uk.gov.pmrv.api.verificationbody.service;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
+import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityUpdateService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.domain.Address;
+import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
+import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEditDTO;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyUpdateDTO;
+import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyUpdateStatusDTO;
+import uk.gov.pmrv.api.verificationbody.domain.event.VerificationBodyStatusDisabledEvent;
+import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
+import uk.gov.pmrv.api.verificationbody.event.AccreditationEmissionTradingSchemeNotAvailableEvent;
+import uk.gov.pmrv.api.verificationbody.repository.VerificationBodyRepository;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -12,33 +39,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
-import uk.gov.pmrv.api.common.domain.Address;
-import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
-import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEditDTO;
-import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyUpdateDTO;
-import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyUpdateStatusDTO;
-import uk.gov.pmrv.api.verificationbody.domain.event.VerificationBodyStatusDisabledEvent;
-import uk.gov.pmrv.api.verificationbody.domain.event.VerificationBodyStatusEnabledEvent;
-import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
-import uk.gov.pmrv.api.verificationbody.event.AccreditationEmissionTradingSchemeNotAvailableEvent;
-import uk.gov.pmrv.api.verificationbody.repository.VerificationBodyRepository;
-
 @ExtendWith(MockitoExtension.class)
 class VerificationBodyUpdateServiceTest {
     
@@ -50,7 +50,10 @@ class VerificationBodyUpdateServiceTest {
     
     @Mock
     private AccreditationRefNumValidationService accreditationRefNumValidationService;
-    
+
+    @Mock
+    private VerifierAuthorityUpdateService verifierAuthorityUpdateService;
+
     @Mock
     private ApplicationEventPublisher eventPublisher;
 
@@ -132,8 +135,8 @@ class VerificationBodyUpdateServiceTest {
         assertEquals(VerificationBodyStatus.DISABLED, vb2.getStatus());
         verify(verificationBodyRepository, times(1)).findAllByIdIn(Set.of(1L));
         verify(verificationBodyRepository, times(1)).findAllByIdIn(Set.of(2L));
-        verify(eventPublisher, times(1)).publishEvent(new VerificationBodyStatusEnabledEvent(Set.of(1L)));
-        verify(eventPublisher, times(1)).publishEvent(new VerificationBodyStatusDisabledEvent(Set.of(2L)));
+        verify(verifierAuthorityUpdateService, times(1)).updateAuthoritiesOnVbActivation(Set.of(1L));
+        verify(verifierAuthorityUpdateService, times(1)).updateAuthoritiesOnVbDeactivation(Set.of(2L));
 
     }
 
@@ -153,7 +156,7 @@ class VerificationBodyUpdateServiceTest {
         // Assert
         assertEquals(VerificationBodyStatus.ACTIVE, vb1.getStatus());
         verify(verificationBodyRepository, times(1)).findAllByIdIn(Set.of(1L));
-        verify(eventPublisher, times(1)).publishEvent(new VerificationBodyStatusEnabledEvent(Set.of(1L)));
+        verify(verifierAuthorityUpdateService, times(1)).updateAuthoritiesOnVbActivation(Set.of(1L));
         verify(eventPublisher, never()).publishEvent(new VerificationBodyStatusDisabledEvent(anySet()));
     }
 
@@ -173,8 +176,8 @@ class VerificationBodyUpdateServiceTest {
         // Assert
         assertEquals(VerificationBodyStatus.DISABLED, vb2.getStatus());
         verify(verificationBodyRepository, times(1)).findAllByIdIn(Set.of(2L));
-        verify(eventPublisher, never()).publishEvent(new VerificationBodyStatusEnabledEvent(anySet()));
-        verify(eventPublisher, times(1)).publishEvent(new VerificationBodyStatusDisabledEvent(Set.of(2L)));
+        verify(verifierAuthorityUpdateService, never()).updateAuthoritiesOnVbActivation(Set.of(2L));
+        verify(verifierAuthorityUpdateService, times(1)).updateAuthoritiesOnVbDeactivation(Set.of(2L));
     }
 
     @Test
@@ -201,8 +204,13 @@ class VerificationBodyUpdateServiceTest {
         verify(verificationBodyRepository, times(1)).findAllByIdIn(Set.of(1L));
         verify(verificationBodyRepository, times(1)).findAllByIdIn(Set.of(2L));
         verifyNoMoreInteractions(verificationBodyRepository);
-        verify(eventPublisher, times(1)).publishEvent(new VerificationBodyStatusEnabledEvent(Set.of(1L)));
-        verify(eventPublisher, never()).publishEvent(new VerificationBodyStatusDisabledEvent(anySet()));
+        verify(verifierAuthorityUpdateService, times(1)).updateAuthoritiesOnVbActivation(Set.of(1L));
+
+        verify(verifierAuthorityUpdateService, never()).updateAuthoritiesOnVbDeactivation(Set.of(2L));
+        verify(eventPublisher, never()).publishEvent(new VerificationBodyStatusDisabledEvent(Set.of(2L)));
+
+        verify(verifierAuthorityUpdateService, never()).updateAuthoritiesOnVbDeactivation(Set.of(1L));
+        verify(eventPublisher, never()).publishEvent(new VerificationBodyStatusDisabledEvent(Set.of(1L)));
     }
 
     @Test
@@ -229,7 +237,11 @@ class VerificationBodyUpdateServiceTest {
         verify(verificationBodyRepository, times(1)).findAllByIdIn(Set.of(1L));
         verify(verificationBodyRepository, times(1)).findAllByIdIn(Set.of(2L));
         verifyNoMoreInteractions(verificationBodyRepository);
-        verify(eventPublisher, never()).publishEvent(new VerificationBodyStatusEnabledEvent(anySet()));
+
+        verify(verifierAuthorityUpdateService, never()).updateAuthoritiesOnVbActivation(Set.of(1L));
+        verify(eventPublisher, never()).publishEvent(new VerificationBodyStatusDisabledEvent(Set.of(1L)));
+
+        verify(verifierAuthorityUpdateService, never()).updateAuthoritiesOnVbActivation(Set.of(2L));
         verify(eventPublisher, times(1)).publishEvent(new VerificationBodyStatusDisabledEvent(Set.of(2L)));
     }
 

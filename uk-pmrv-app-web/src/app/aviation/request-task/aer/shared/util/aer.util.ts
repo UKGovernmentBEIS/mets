@@ -1,6 +1,9 @@
+import { getAerCorsiaReviewSections } from '@aviation/request-task/aer/corsia/aer-review/util/aer-review-corsia.util';
 import { TaskItem, TaskItemStatus, TaskSection } from '@shared/task-list/task-list.interface';
 
 import {
+  AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload,
+  AviationAerCorsiaApplicationReviewRequestTaskPayload,
   AviationAerCorsiaApplicationSubmitRequestTaskPayload,
   AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload,
   AviationAerUkEts,
@@ -71,7 +74,6 @@ export const aerReviewGroupMap: Partial<Record<AerTaskKey, AerUkEtsReviewGroup>>
   dataGaps: 'DATA_GAPS',
   monitoringApproach: 'MONITORING_APPROACH',
   aviationAerTotalEmissionsConfidentiality: 'TOTAL_EMISSIONS',
-  totalEmissionsCorsia: 'TOTAL_EMISSIONS',
   aggregatedEmissionsData: 'AGGREGATED_EMISSIONS_DATA',
   saf: 'EMISSIONS_REDUCTION_CLAIM',
   confidentiality: 'CONFIDENTIALITY',
@@ -82,7 +84,8 @@ export function getAerSections(
   payload:
     | AviationAerUkEtsApplicationSubmitRequestTaskPayload
     | AviationAerCorsiaApplicationSubmitRequestTaskPayload
-    | AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload,
+    | AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload
+    | AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload,
   isAmendsTask?: boolean,
   isCorsia?: boolean,
 ): TaskSection<any>[] {
@@ -147,9 +150,9 @@ export function getAerReviewSections(payload: AviationAerUkEtsApplicationReviewR
           const link =
             submitStatus === 'complete'
               ? (task.name as AerTaskKey) === 'serviceContactDetails'
-                ? 'aer/review/' + task.link
+                ? `aer/review/${task.link}`
                 : `aer/review/${task.link}/summary`
-              : 'aer/review/' + task.link;
+              : `aer/review/${task.link}`;
 
           const reviewKey = aerReviewGroupMap[task.name as AerTaskKey];
 
@@ -189,7 +192,10 @@ export function getAerReviewSections(payload: AviationAerUkEtsApplicationReviewR
 
 export function getTaskStatusByTaskCompletionState(
   taskName: AerTaskKey,
-  payload: AviationAerUkEtsApplicationSubmitRequestTaskPayload | AviationAerCorsiaApplicationSubmitRequestTaskPayload,
+  payload:
+    | AviationAerUkEtsApplicationSubmitRequestTaskPayload
+    | AviationAerCorsiaApplicationSubmitRequestTaskPayload
+    | AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload,
   isAmendsTask?: boolean,
   isCorsia?: boolean,
 ): TaskItemStatus {
@@ -205,8 +211,8 @@ export function getTaskStatusByTaskCompletionState(
           ? 'complete'
           : 'in progress'
         : !prefilledOperatorDetails
-        ? 'not started'
-        : 'in progress';
+          ? 'not started'
+          : 'in progress';
     case 'aviationAerTotalEmissionsConfidentiality':
       return resolveTotalEmissionsStatus(payload as AviationAerUkEtsApplicationSubmitRequestTaskPayload);
     case 'totalEmissionsCorsia':
@@ -217,19 +223,19 @@ export function getTaskStatusByTaskCompletionState(
           ? completionState[0]
             ? 'complete'
             : isSectionComplete(payload, 'aggregatedEmissionsData')
-            ? 'in progress'
-            : 'cannot start yet'
+              ? 'in progress'
+              : 'cannot start yet'
           : !isSectionComplete(payload, 'aggregatedEmissionsData')
-          ? 'cannot start yet'
-          : 'not started';
+            ? 'cannot start yet'
+            : 'not started';
       } else {
         return completionState != null
           ? completionState[0]
             ? 'complete'
             : 'in progress'
           : !isSectionComplete(payload, 'totalEmissionsCorsia')
-          ? 'cannot start yet'
-          : 'not started';
+            ? 'cannot start yet'
+            : 'not started';
       }
     case 'sendReport': {
       const availableSubTasks = getAvailableSubTasks(getAvailableSections(payload, isAmendsTask, isCorsia));
@@ -241,16 +247,19 @@ export function getTaskStatusByTaskCompletionState(
   }
 }
 
-function getAerReviewTaskStatusByTaskCompletionState(decision: any, completionState: boolean): TaskItemStatus {
+export function getAerReviewTaskStatusByTaskCompletionState(decision: any, completionState: boolean): TaskItemStatus {
   return completionState ? (decision.type === 'ACCEPTED' ? 'accepted' : 'operator to amend') : 'undecided';
 }
 
 export const isAllSectionsApproved = (
-  payload: AviationAerUkEtsApplicationReviewRequestTaskPayload,
+  payload: AviationAerUkEtsApplicationReviewRequestTaskPayload | AviationAerCorsiaApplicationReviewRequestTaskPayload,
   type: RequestTaskDTO['type'],
 ) => {
-  if (type === 'AVIATION_AER_UKETS_APPLICATION_REVIEW') {
-    const sections = getAerReviewSections(payload);
+  if (['AVIATION_AER_UKETS_APPLICATION_REVIEW', 'AVIATION_AER_CORSIA_APPLICATION_REVIEW'].includes(type)) {
+    const sections =
+      type === 'AVIATION_AER_CORSIA_APPLICATION_REVIEW'
+        ? getAerCorsiaReviewSections(payload as AviationAerCorsiaApplicationReviewRequestTaskPayload)
+        : getAerReviewSections(payload as AviationAerUkEtsApplicationReviewRequestTaskPayload);
     const notApprovedSections = sections
       .map((section) => section.tasks)
       .filter((task) => task.some((item) => item.status !== 'accepted' && item.name !== 'decision'));
@@ -260,7 +269,10 @@ export const isAllSectionsApproved = (
 };
 
 function getAvailableSections(
-  payload: AviationAerUkEtsApplicationSubmitRequestTaskPayload | AviationAerCorsiaApplicationSubmitRequestTaskPayload,
+  payload:
+    | AviationAerUkEtsApplicationSubmitRequestTaskPayload
+    | AviationAerCorsiaApplicationSubmitRequestTaskPayload
+    | AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload,
   isAmendsTask?: boolean,
   isCorsia?: boolean,
 ): TaskSection<any>[] {
@@ -332,6 +344,7 @@ function getLinkByTaskAndStatus(
       prefixedLink = `aer/${task.link}`;
       break;
     case 'AVIATION_AER_CORSIA_APPLICATION_SUBMIT_PAYLOAD':
+    case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT_PAYLOAD':
       prefixedLink = `aer-corsia/${task.link}`;
       break;
     case 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD':
@@ -399,8 +412,8 @@ export function resolveTotalEmissionsCorsiaStatus(
     ? totalEmissionsState === undefined || totalEmissionsState === null
       ? 'not started'
       : totalEmissionsState[0]
-      ? 'complete'
-      : 'in progress'
+        ? 'complete'
+        : 'in progress'
     : 'cannot start yet';
 }
 

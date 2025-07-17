@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -30,17 +30,17 @@ public class EmpIssuanceCorsiaReviewRequestPeerReviewActionHandler
     private final EmpIssuanceCorsiaReviewRequestPeerReviewValidatorService requestPeerReviewValidatorService;
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser, PeerReviewRequestTaskActionPayload payload) {
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser, PeerReviewRequestTaskActionPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         String selectedPeerReviewer = payload.getPeerReviewer();
 
-        requestPeerReviewValidatorService.validate(requestTask, selectedPeerReviewer, pmrvUser);
-        requestEmpCorsiaReviewService.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, pmrvUser);
+        requestPeerReviewValidatorService.validate(requestTask, selectedPeerReviewer, appUser);
+        requestEmpCorsiaReviewService.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, appUser);
         requestService.addActionToRequest(
             requestTask.getRequest(),
             null,
             RequestActionType.EMP_ISSUANCE_CORSIA_PEER_REVIEW_REQUESTED,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
 
         workflowService.completeTask(

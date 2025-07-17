@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
@@ -20,12 +20,13 @@ describe('ManagementProceduresUpliftQuantityComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, ReactiveFormsModule, SharedModule],
+      imports: [ReactiveFormsModule, SharedModule],
       providers: [
         { provide: TASK_FORM_PROVIDER, useClass: ManagementProceduresFormProvider },
         { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore },
         { provide: TasksService, useValue: mockClass(TasksService) },
         { provide: PendingRequestService, useValue: mockClass(PendingRequestService) },
+        provideRouter([]),
       ],
     }).compileComponents();
 
@@ -45,7 +46,7 @@ describe('ManagementProceduresUpliftQuantityComponent', () => {
   it(`should display correct details`, () => {
     expect(
       screen.getByText(
-        'Describe the procedure used to ensure regular cross-checks between uplift quantity as provided by invoices, and uplift quantity indicated by on-board measurement. State where you observe deviations and what corrective actions you are taking.',
+        'Describe the procedure used to ensure regular cross-checks between uplift quantity as provided by invoices, and uplift quantity indicated by on-board measurement. State what corrective actions will be taken when deviations are observed.',
       ),
     ).toBeInTheDocument();
   });

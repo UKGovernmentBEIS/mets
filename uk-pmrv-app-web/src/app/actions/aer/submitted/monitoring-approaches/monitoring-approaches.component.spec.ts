@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { BasePage } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { CommonActionsStore } from '../../../store/common-actions.store';
 import { AerModule } from '../../aer.module';
@@ -28,8 +27,8 @@ describe('MonitoringApproachesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
-      providers: [KeycloakService],
+      imports: [AerModule],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
@@ -52,7 +51,7 @@ describe('MonitoringApproachesComponent', () => {
     expect(page.heading).toEqual('Monitoring approaches used during the reporting year');
     expect(page.summaryListValues).toHaveLength(1);
     expect(page.summaryListValues).toEqual([
-      ['Approaches used', 'Calculation of CO2 Measurement of CO2 Fallback approach Inherent CO2 emissions'],
+      ['Approaches used', 'Calculation of CO2  Measurement of CO2  Fallback approach  Inherent CO2 emissions'],
     ]);
   });
 });

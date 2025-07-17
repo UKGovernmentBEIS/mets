@@ -13,5 +13,10 @@ export class BackToTopComponent {
       left: 0,
       behavior: 'smooth',
     });
+
+    const firstElement = document.querySelector('a.govuk-skip-link');
+    if (firstElement) {
+      (firstElement as HTMLElement).focus();
+    }
   }
 }

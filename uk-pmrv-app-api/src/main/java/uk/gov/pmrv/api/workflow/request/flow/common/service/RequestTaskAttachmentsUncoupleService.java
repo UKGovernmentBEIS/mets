@@ -3,8 +3,8 @@ package uk.gov.pmrv.api.workflow.request.flow.common.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.files.attachments.service.FileAttachmentService;
-import uk.gov.pmrv.api.files.common.domain.FileStatus;
+import uk.gov.netz.api.files.attachments.service.FileAttachmentService;
+import uk.gov.netz.api.files.common.domain.FileStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
@@ -74,7 +74,7 @@ public class RequestTaskAttachmentsUncoupleService {
             return;
         }
         final Set<UUID> deletedAttachments = new HashSet<>();
-        requestTask.getPayload().getAttachments().keySet().forEach(attUuid -> {
+        requestTask.getPayload().getAttachmentsToDelete().keySet().forEach(attUuid -> {
             final boolean deleted = fileAttachmentService.deletePendingFileAttachment(attUuid.toString());
             if (deleted) {
                 deletedAttachments.add(attUuid);

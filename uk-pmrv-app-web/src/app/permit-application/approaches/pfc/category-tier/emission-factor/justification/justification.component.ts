@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, Observable, startWith, switchMap, switchMapTo, tap } from 'rxjs';
+import { combineLatest, first, map, Observable, startWith, switchMap, tap } from 'rxjs';
 
 import { PFCSourceStreamCategoryAppliedTier } from 'pmrv-api';
 
@@ -67,7 +67,7 @@ export class JustificationComponent implements PendingRequest {
               data.statusKey,
             ),
           ),
-          switchMapTo(this.store),
+          switchMap(() => this.store),
           first(),
           tap((state) =>
             this.store.setState({

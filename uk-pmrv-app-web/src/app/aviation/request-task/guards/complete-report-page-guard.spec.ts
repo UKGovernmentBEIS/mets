@@ -109,7 +109,7 @@ describe('CompleteReportGuard', () => {
           confidentiality: {
             totalEmissionsPublished: false,
             aggregatedStatePairDataPublished: false,
-          }
+          },
         } as any,
 
         type: 'AVIATION_AER_UKETS_APPLICATION_REVIEW',

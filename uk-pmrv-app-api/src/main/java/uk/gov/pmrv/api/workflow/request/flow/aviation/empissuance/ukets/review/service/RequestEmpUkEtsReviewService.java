@@ -7,7 +7,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -89,19 +89,19 @@ public class RequestEmpUkEtsReviewService {
 
     @Transactional
     public void saveDecisionNotification(RequestTask requestTask, DecisionNotification decisionNotification,
-                                         PmrvUser pmrvUser) {
+                                         AppUser appUser) {
         EmpIssuanceUkEtsApplicationReviewRequestTaskPayload taskPayload =
             (EmpIssuanceUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload();
 
         EmpIssuanceUkEtsRequestPayload empIssuanceRequestPayload =
             (EmpIssuanceUkEtsRequestPayload) requestTask.getRequest().getPayload();
 
-        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, taskPayload, pmrvUser);
+        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, taskPayload, appUser);
         empIssuanceRequestPayload.setDecisionNotification(decisionNotification);
     }
 
     @Transactional
-    public void saveRequestPeerReviewAction(RequestTask requestTask, String selectedPeerReviewer, PmrvUser pmrvUser) {
+    public void saveRequestPeerReviewAction(RequestTask requestTask, String selectedPeerReviewer, AppUser appUser) {
         Request request = requestTask.getRequest();
         EmpIssuanceUkEtsApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
             (EmpIssuanceUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -109,12 +109,12 @@ public class RequestEmpUkEtsReviewService {
         EmpIssuanceUkEtsRequestPayload empIssuanceRequestPayload =
             (EmpIssuanceUkEtsRequestPayload) request.getPayload();
 
-        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, reviewRequestTaskPayload, pmrvUser);
+        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, reviewRequestTaskPayload, appUser);
         empIssuanceRequestPayload.setRegulatorPeerReviewer(selectedPeerReviewer);
     }
     
     @Transactional
-    public void saveRequestReturnForAmends(RequestTask requestTask, PmrvUser pmrvUser) {
+    public void saveRequestReturnForAmends(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         EmpIssuanceUkEtsApplicationReviewRequestTaskPayload taskPayload =
             (EmpIssuanceUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -122,7 +122,7 @@ public class RequestEmpUkEtsReviewService {
         EmpIssuanceUkEtsRequestPayload empIssuanceRequestPayload =
             (EmpIssuanceUkEtsRequestPayload) request.getPayload();
 
-        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, taskPayload, pmrvUser);
+        updateEmpIssuanceRequestPayload(empIssuanceRequestPayload, taskPayload, appUser);
     }
 
     @Transactional
@@ -135,7 +135,7 @@ public class RequestEmpUkEtsReviewService {
 
     @Transactional
     public void submitAmend(EmpIssuanceUkEtsSubmitApplicationAmendRequestTaskActionPayload actionPayload, RequestTask requestTask,
-                            PmrvUser pmrvUser) {
+                            AppUser appUser) {
 
         Request request = requestTask.getRequest();
         EmpIssuanceUkEtsApplicationAmendsSubmitRequestTaskPayload taskPayload =
@@ -159,13 +159,13 @@ public class RequestEmpUkEtsReviewService {
         requestPayload.setEmpSectionsCompleted(actionPayload.getEmpSectionsCompleted());
 
         // Add timeline
-        addAmendsSubmittedRequestAction(request, pmrvUser);
+        addAmendsSubmittedRequestAction(request, appUser);
     }
 
     private void updateEmpIssuanceRequestPayload(EmpIssuanceUkEtsRequestPayload empIssuanceRequestPayload,
                                                  EmpIssuanceUkEtsApplicationReviewRequestTaskPayload reviewRequestTaskPayload,
-                                                 PmrvUser pmrvUser) {
-        empIssuanceRequestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+                                                 AppUser appUser) {
+        empIssuanceRequestPayload.setRegulatorReviewer(appUser.getUserId());
         empIssuanceRequestPayload.setEmissionsMonitoringPlan(reviewRequestTaskPayload.getEmissionsMonitoringPlan());
         empIssuanceRequestPayload.setEmpSectionsCompleted(reviewRequestTaskPayload.getEmpSectionsCompleted());
         empIssuanceRequestPayload.setEmpAttachments(reviewRequestTaskPayload.getEmpAttachments());
@@ -206,7 +206,7 @@ public class RequestEmpUkEtsReviewService {
         }
     }
 
-    private void addAmendsSubmittedRequestAction(Request request, PmrvUser pmrvUser) {
+    private void addAmendsSubmittedRequestAction(Request request, AppUser appUser) {
         EmpIssuanceUkEtsRequestPayload requestPayload = (EmpIssuanceUkEtsRequestPayload) request.getPayload();
         RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 
@@ -217,6 +217,6 @@ public class RequestEmpUkEtsReviewService {
                 request,
                 amendsSubmittedRequestActionPayload,
                 RequestActionType.EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMITTED,
-                pmrvUser.getUserId());
+                appUser.getUserId());
     }
 }

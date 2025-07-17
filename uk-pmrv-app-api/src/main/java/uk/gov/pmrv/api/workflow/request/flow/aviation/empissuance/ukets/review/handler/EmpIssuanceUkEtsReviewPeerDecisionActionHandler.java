@@ -3,7 +3,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -32,7 +32,7 @@ public class EmpIssuanceUkEtsReviewPeerDecisionActionHandler
 
     @Override
     public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType,
-                        PmrvUser pmrvUser, PeerReviewDecisionRequestTaskActionPayload payload) {
+                        AppUser appUser, PeerReviewDecisionRequestTaskActionPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
         PeerReviewDecisionSubmittedRequestActionPayload requestActionPayload =
@@ -48,7 +48,7 @@ public class EmpIssuanceUkEtsReviewPeerDecisionActionHandler
         requestService.addActionToRequest(requestTask.getRequest(),
             requestActionPayload,
             type,
-            pmrvUser.getUserId());
+            appUser.getUserId());
 
         workflowService.completeTask(requestTask.getProcessTaskId());
     }

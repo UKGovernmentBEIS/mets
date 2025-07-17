@@ -1,8 +1,9 @@
 package uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import org.springframework.jdbc.core.RowMapper;
 
 public class EtsCalculationAnalysisMethodRowMapper implements RowMapper<EtsCalculationAnalysisMethod> {
 

@@ -1,5 +1,27 @@
 package uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.dto.UserRoleTypeDTO;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
+import uk.gov.pmrv.api.workflow.request.core.assignment.requestassign.RequestAssignmentService;
+import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.common.EmailNotificationAssignedTaskService;
+import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
+import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationReviewRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.submit.domain.PermitIssuanceApplicationSubmitRequestTaskPayload;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -8,25 +30,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserRoleTypeDTO;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
-import uk.gov.pmrv.api.workflow.request.core.assignment.requestassign.RequestAssignmentService;
-import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.common.EmailNotificationAssignedTaskService;
-import uk.gov.pmrv.api.workflow.request.core.domain.Request;
-import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
-import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 
 @ExtendWith(MockitoExtension.class)
 class RequestTaskAssignmentServiceTest {
@@ -57,6 +60,8 @@ class RequestTaskAssignmentServiceTest {
         RequestTask requestTaskToBeAssigned = RequestTask.builder()
             .request(request)
             .type(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_REVIEW)
+            .payload(PermitIssuanceApplicationReviewRequestTaskPayload.builder().
+                sendEmailNotification(true).build())
             .assignee(null)
             .build();
         RequestTask requestTask1 = RequestTask.builder()
@@ -76,7 +81,7 @@ class RequestTaskAssignmentServiceTest {
             .build();
 
         List<RequestTask> requestTasks = new ArrayList<>(Arrays.asList(requestTaskToBeAssigned, requestTask1, requestTask2, requestTask3));
-        UserRoleTypeDTO userRoleType = UserRoleTypeDTO.builder().userId(userId).roleType(RoleType.REGULATOR).build();
+        UserRoleTypeDTO userRoleType = UserRoleTypeDTO.builder().userId(userId).roleType(RoleTypeConstants.REGULATOR).build();
 
         when(requestTaskAssignmentValidationService.hasUserPermissionsToBeAssignedToTask(requestTaskToBeAssigned, userId))
             .thenReturn(true);
@@ -99,11 +104,41 @@ class RequestTaskAssignmentServiceTest {
     }
 
     @Test
+    void assignToUserEmailSend() throws BusinessCheckedException {
+        String userId = "userId";
+        Request request = Request.builder().build();
+        RequestTask requestTask = RequestTask.builder()
+            .type(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW)
+            .request(request)
+            .payload(PermitIssuanceApplicationSubmitRequestTaskPayload.builder().
+                sendEmailNotification(true).build())
+            .build();
+
+        when(requestTaskAssignmentValidationService.hasUserPermissionsToBeAssignedToTask(requestTask, userId))
+            .thenReturn(true);
+
+        requestTaskAssignmentService.assignToUser(requestTask, userId);
+        verify(emailNotificationAssignedTaskService, times(1)).sendEmailToRecipient(userId);
+
+        requestTask = RequestTask.builder()
+            .type(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW)
+            .request(request)
+            .payload(PermitIssuanceApplicationSubmitRequestTaskPayload.builder().
+                sendEmailNotification(false).build())
+            .build();
+
+        requestTaskAssignmentService.assignToUser(requestTask, userId);
+        verifyNoMoreInteractions(emailNotificationAssignedTaskService);
+    }
+
+    @Test
     void assignToUser_user_peer_review_task() throws BusinessCheckedException {
         String userId = "userId";
         Request request = Request.builder().build();
         RequestTask requestTask = RequestTask.builder()
             .type(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW)
+            .payload(PermitIssuanceApplicationReviewRequestTaskPayload.builder().
+                sendEmailNotification(true).build())
             .request(request)
             .build();
 

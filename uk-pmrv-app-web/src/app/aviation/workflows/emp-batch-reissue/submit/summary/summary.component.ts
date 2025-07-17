@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, first, map, switchMap } from 'rxjs';
+import { BehaviorSubject, combineLatest, first, map, Observable, switchMap, takeUntil, withLatestFrom } from 'rxjs';
 
 import { FiltersModel } from '@aviation/shared/components/emp-batch-reissue/filters.model';
 import { EmpBatchReissueStore } from '@aviation/workflows/emp-batch-reissue/submit/store/emp-batch-reissue.store';
 import { PendingRequestService } from '@core/guards/pending-request.service';
+import { DestroySubject } from '@core/services/destroy-subject.service';
+import { AuthStore, selectUser } from '@core/store';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchBadRequest, ErrorCodes } from '@error/business-errors';
 import {
@@ -13,7 +15,12 @@ import {
   noMatchingEmittersError,
 } from '@shared/components/batch-reissue-submit/errors/business-errors';
 
-import { BatchReissueRequestCreateActionPayload, RegulatorUsersAuthoritiesInfoDTO, RequestsService } from 'pmrv-api';
+import {
+  BatchReissueRequestCreateActionPayload,
+  RegulatorCurrentUserDTO,
+  RegulatorUsersAuthoritiesInfoDTO,
+  RequestsService,
+} from 'pmrv-api';
 
 @Component({
   selector: 'app-summary',
@@ -21,6 +28,11 @@ import { BatchReissueRequestCreateActionPayload, RegulatorUsersAuthoritiesInfoDT
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryComponent {
+  regulatorCurrentUser$: Observable<RegulatorCurrentUserDTO> = this.authStore.pipe(
+    selectUser,
+    takeUntil(this.destroy$),
+  ) as Observable<RegulatorCurrentUserDTO>;
+
   state$ = this.store.state$;
   filters$ = this.state$.pipe(
     map((state) => {
@@ -44,35 +56,41 @@ export class SummaryComponent {
   );
 
   constructor(
+    private readonly authStore: AuthStore,
     private readonly pendingRequest: PendingRequestService,
     private readonly route: ActivatedRoute,
     private readonly store: EmpBatchReissueStore,
     private readonly requestsService: RequestsService,
     private readonly businessErrorService: BusinessErrorService,
+    private readonly destroy$: DestroySubject,
   ) {}
 
   onSubmit(): void {
     this.store
       .pipe(
         first(),
-        switchMap((state) =>
-          this.requestsService.processRequestCreateAction({
-            requestCreateActionType: 'EMP_BATCH_REISSUE',
-            requestCreateActionPayload: {
-              payloadType: 'EMP_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
-              filters: {
-                reportingStatuses: state.reportingStatuses,
-                emissionTradingSchemes: state.emissionTradingSchemes,
-              },
-              signatory: state.signatory,
-            } as BatchReissueRequestCreateActionPayload,
-          }),
+        withLatestFrom(this.regulatorCurrentUser$.pipe(map((user) => user.competentAuthority))),
+        switchMap(([state, competentAuthority]) =>
+          this.requestsService.processRequestCreateAction(
+            {
+              requestCreateActionType: 'EMP_BATCH_REISSUE',
+              requestCreateActionPayload: {
+                payloadType: 'EMP_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD',
+                filters: {
+                  reportingStatuses: state.reportingStatuses,
+                  emissionTradingSchemes: state.emissionTradingSchemes,
+                },
+                signatory: state.signatory,
+              } as BatchReissueRequestCreateActionPayload,
+            },
+            competentAuthority,
+          ),
         ),
         catchBadRequest(ErrorCodes.BATCHREISSUE0001, () =>
-          this.businessErrorService.showError(anotherInProgressError(true)),
+          this.businessErrorService.showError(anotherInProgressError()),
         ),
         catchBadRequest(ErrorCodes.BATCHREISSUE0002, () =>
-          this.businessErrorService.showError(noMatchingEmittersError(true)),
+          this.businessErrorService.showError(noMatchingEmittersError()),
         ),
         this.pendingRequest.trackRequest(),
       )

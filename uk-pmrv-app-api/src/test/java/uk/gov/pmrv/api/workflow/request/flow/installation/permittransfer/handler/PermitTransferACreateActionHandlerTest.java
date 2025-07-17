@@ -12,8 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionPayloadType;
@@ -35,18 +35,17 @@ class PermitTransferACreateActionHandlerTest {
     private StartProcessRequestService startProcessRequestService;
 
     @Test
-    void getType() {
-        assertThat(handler.getType()).isEqualTo(RequestCreateActionType.PERMIT_TRANSFER_A);
+    void getRequestCreateActionType() {
+        assertThat(handler.getRequestCreateActionType()).isEqualTo(RequestCreateActionType.PERMIT_TRANSFER_A);
     }
 
     @Test
     void process() {
 
         final Long accountId = 1L;
-        final RequestCreateActionType type = RequestCreateActionType.PERMIT_TRANSFER_A;
         final RequestCreateActionEmptyPayload payload =
             RequestCreateActionEmptyPayload.builder().payloadType(RequestCreateActionPayloadType.EMPTY_PAYLOAD).build();
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("user").authorities(List.of(PmrvAuthority.builder()
+        final AppUser appUser = AppUser.builder().userId("user").authorities(List.of(AppAuthority.builder()
                 .accountId(accountId).build()))
             .build();
 
@@ -56,13 +55,13 @@ class PermitTransferACreateActionHandlerTest {
             .requestPayload(PermitTransferARequestPayload.builder()
                 .payloadType(RequestPayloadType.PERMIT_TRANSFER_A_REQUEST_PAYLOAD)
                 .permitTransferDetails(PermitTransferDetails.builder().build())
-                .operatorAssignee(pmrvUser.getUserId())
+                .operatorAssignee(appUser.getUserId())
                 .build())
             .build();
 
         when(startProcessRequestService.startProcess(expectedRequestParams)).thenReturn(Request.builder().id("requestId").build());
 
-        final String requestId = handler.process(accountId, type, payload, pmrvUser);
+        final String requestId = handler.process(accountId, payload, appUser);
 
         verify(startProcessRequestService, times(1)).startProcess(expectedRequestParams);
 

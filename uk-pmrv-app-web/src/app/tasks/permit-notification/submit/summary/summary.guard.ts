@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -8,8 +8,11 @@ import { PermitNotificationService } from '../../core/permit-notification.servic
 @Injectable({
   providedIn: 'root',
 })
-export class SummaryGuard implements CanActivate {
-  constructor(private readonly router: Router, private readonly permitNotificationService: PermitNotificationService) {}
+export class SummaryGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly permitNotificationService: PermitNotificationService,
+  ) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,

@@ -10,8 +10,7 @@ import { AerService } from '@tasks/aer/core/aer.service';
   template: `
     <app-emission-source-delete-template
       [emissionSource]="emissionSource$ | async"
-      (delete)="delete()"
-    ></app-emission-source-delete-template>
+      (delete)="delete()"></app-emission-source-delete-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

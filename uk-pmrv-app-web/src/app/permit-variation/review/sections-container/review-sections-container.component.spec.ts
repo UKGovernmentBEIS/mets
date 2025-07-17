@@ -3,10 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { BehaviorSubject } from 'rxjs';
-
-import { BREADCRUMB_ITEMS } from '@core/navigation/breadcrumbs';
-
 import { RequestActionsService, RequestItemsService } from 'pmrv-api';
 
 import { mockClass } from '../../../../testing';
@@ -37,18 +33,16 @@ describe('ReviewSectionsContainerComponent', () => {
 
   const requestActionsService = mockClass(RequestActionsService);
   const requestItemsService = mockClass(RequestItemsService);
-  const breadcrumbs = [
-    { text: 'Dashboard', link: ['/'] },
-    { text: 'Permit variation', link: ['permit-variation/1'] },
-  ];
 
   @Component({
     selector: 'app-review-sections',
-    template: `<div>
-      <div class="status-resolver">
-        {{ 'INSTALLATION_DETAILS' | reviewGroupStatusWrapper: statusResolverPipe | async }}
+    template: `
+      <div>
+        <div class="status-resolver">
+          {{ 'INSTALLATION_DETAILS' | reviewGroupStatusWrapper: statusResolverPipe | async }}
+        </div>
       </div>
-    </div>`,
+    `,
   })
   class MockReviewSectionsComponent {
     @Input()
@@ -75,7 +69,6 @@ describe('ReviewSectionsContainerComponent', () => {
       providers: [
         { provide: RequestItemsService, useValue: requestItemsService },
         { provide: RequestActionsService, useValue: requestActionsService },
-        { provide: BREADCRUMB_ITEMS, useValue: new BehaviorSubject(breadcrumbs) },
       ],
     }).compileComponents();
     router = TestBed.inject(Router);
@@ -352,6 +345,11 @@ describe('ReviewSectionsContainerComponent', () => {
       button.click();
       fixture.detectChanges();
       expect(navigateSpy).toHaveBeenCalledWith(['notify-operator'], { relativeTo: route });
+    });
+
+    it('should not display links for pdf in peer review', () => {
+      const textContent = hostElement.querySelector('app-preview-documents').textContent;
+      expect(textContent).toBe('');
     });
   });
 });

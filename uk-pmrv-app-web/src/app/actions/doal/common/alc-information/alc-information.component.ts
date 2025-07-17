@@ -12,12 +12,10 @@ import { DoalActionService } from '../../core/doal-action.service';
   template: `
     <app-doal-action-task
       header="Provide information about this activity level change"
-      [actionType]="requestActionType$ | async"
-    >
+      [actionType]="requestActionType$ | async">
       <app-doal-alc-information-template
         [data]="activityLevelChangeInformation$ | async"
-        [editable]="false"
-      ></app-doal-alc-information-template>
+        [editable]="false"></app-doal-alc-information-template>
     </app-doal-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

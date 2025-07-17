@@ -1,0 +1,54 @@
+<ng-container *ngIf="vm() as vm">
+  <govuk-table
+    *ngIf="vm.physicalParts?.length > 0"
+    [columns]="vm.physicalPartsColumns"
+    [data]="vm.physicalParts"
+    [class.no-bottom-border]="false">
+    <ng-template let-column="column" let-row="row">
+      @switch (column.field) {
+        @case ('itemName') {
+          {{ row.itemName }}
+        }
+        @case ('subInstallations') {
+          @if (!form?.get('item' + row.itemId)?.errors) {
+            @for (subInstallation of row.subInstallations; track subInstallation) {
+              {{ subInstallation | subInstallationType }}
+              <br />
+            }
+          } @else {
+            <span class="error">{{ form?.get('item' + row.itemId)?.errors?.subInstallationNotExists }}</span>
+          }
+        }
+        @case ('remove') {
+          @if (vm.isEditable) {
+            <a
+              govukLink
+              [routerLink]="[isSummaryPage ? '../../mmp-methods/physical-parts-list/remove' : 'remove', row.itemId]"
+              [state]="{ changing: true }">
+              Remove
+            </a>
+          }
+        }
+        @case ('change') {
+          @if (vm.isEditable) {
+            <a
+              govukLink
+              [routerLink]="[isSummaryPage ? '../../mmp-methods/physical-parts-list' : './', row.itemId]"
+              [state]="{ changing: true }">
+              Change
+            </a>
+          }
+        }
+      }
+    </ng-template>
+  </govuk-table>
+
+  <div class="govuk-button-group" *ngIf="vm.isEditable">
+    <a
+      govukSecondaryButton
+      [routerLink]="[isSummaryPage ? '../../mmp-methods/physical-parts-list' : './', 'add-part']"
+      [state]="{ changing: true }">
+      Add an item
+    </a>
+  </div>
+</ng-container>

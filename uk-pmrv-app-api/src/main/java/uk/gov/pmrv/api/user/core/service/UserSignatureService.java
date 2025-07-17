@@ -1,18 +1,17 @@
 package uk.gov.pmrv.api.user.core.service;
 
-import java.util.UUID;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.token.UserFileTokenService;
-import uk.gov.pmrv.api.token.FileToken;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.token.FileToken;
+import uk.gov.netz.api.token.UserFileTokenService;
 import uk.gov.pmrv.api.user.core.domain.model.UserDetails;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
+
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +22,8 @@ public class UserSignatureService {
     
     @Transactional
     public FileToken generateSignatureFileToken(String userId, UUID signatureUuid) {
-        UserDetails userDetails = userAuthService.getUserDetails(userId).orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
+        UserDetails userDetails = userAuthService.getUserDetails(userId).orElseThrow(() -> new BusinessException(
+            ErrorCode.RESOURCE_NOT_FOUND));
         
         if(userDetails.getSignature() == null) {
             throw new BusinessException(ErrorCode.RESOURCE_NOT_FOUND);

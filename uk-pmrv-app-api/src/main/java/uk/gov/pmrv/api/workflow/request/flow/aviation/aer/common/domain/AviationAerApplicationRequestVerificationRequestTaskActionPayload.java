@@ -25,4 +25,7 @@ public class AviationAerApplicationRequestVerificationRequestTaskActionPayload e
      */
     @Builder.Default
     private Map<String, List<Boolean>> verificationSectionsCompleted = new HashMap<>();
+    
+    @Builder.Default
+    private Map<String, Boolean> reviewSectionsCompleted = new HashMap<>();
 }

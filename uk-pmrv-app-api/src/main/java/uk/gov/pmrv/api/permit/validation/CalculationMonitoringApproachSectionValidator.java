@@ -1,22 +1,20 @@
 package uk.gov.pmrv.api.permit.validation;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import jakarta.validation.Valid;
-
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitValidationResult;
 import uk.gov.pmrv.api.permit.domain.PermitViolation;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.MonitoringApproachType;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.CalculationOfCO2MonitoringApproach;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor

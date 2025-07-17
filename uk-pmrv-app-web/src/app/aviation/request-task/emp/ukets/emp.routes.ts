@@ -13,7 +13,7 @@ import { PaymentCompletedGuard } from '@shared/guards/payment-completed.guard';
 import { RequestTaskStore } from '../../store';
 import { TASK_FORM_PROVIDER } from '../../task-form.provider';
 import { AbbreviationsFormProvider } from '../shared/abbreviations';
-import { additionalDocumentsFormProvider } from '../shared/additional-documents/additional-documents-form.provider';
+import { AdditionalDocumentsFormProvider } from '../shared/additional-documents/additional-documents-form.provider';
 import { BlockHourProceduresFormProvider } from '../shared/block-hour';
 import { BlockProceduresFormProvider } from '../shared/block-procedures';
 import { EmpReviewDecisionGroupFormProvider } from '../shared/emp-review-decision-group/emp-review-decision-group-form.provider';
@@ -76,7 +76,7 @@ export const EMP_CHILD_ROUTES: Routes = [
   },
   {
     path: 'additional-docs',
-    providers: [additionalDocumentsFormProvider],
+    providers: [{ provide: TASK_FORM_PROVIDER, useClass: AdditionalDocumentsFormProvider }],
     loadChildren: () =>
       import('../shared/additional-documents/additional-documents.routes').then(
         (r) => r.EMP_ADDITIONAL_DOCUMENTS_ROUTES,
@@ -185,6 +185,7 @@ export const EMP_REVIEW_CHILD_ROUTES: Routes = [
   },
   {
     path: 'notify-operator',
+    data: { pageTitle: 'Notify Operator of Decision' },
     providers: [PaymentCompletedGuard],
     canActivate: [canActivateEmpNotifyOperator, PaymentCompletedGuard],
     canDeactivate: [PendingRequestGuard],
@@ -220,6 +221,7 @@ export const EMP_ROUTES: Routes = [
           },
           {
             path: 'notify-operator',
+            data: { pageTitle: 'Notify Operator of Decision' },
             canActivate: [canActivateEmpVariationRegLedNotifyOperator],
             canDeactivate: [PendingRequestGuard],
             loadComponent: () =>

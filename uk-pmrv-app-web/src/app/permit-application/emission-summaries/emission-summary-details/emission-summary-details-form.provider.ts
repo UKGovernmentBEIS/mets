@@ -47,9 +47,9 @@ export const emisionSummaryDetailsFormFactory = {
         emissionSummary?.excludedRegulatedActivity
           ? 'excludedRegulatedActivity'
           : emissionSummary?.regulatedActivity &&
-            store.permit.regulatedActivities.some((activity) => activity.id === emissionSummary.regulatedActivity)
-          ? emissionSummary.regulatedActivity
-          : null,
+              store.permit.regulatedActivities.some((activity) => activity.id === emissionSummary.regulatedActivity)
+            ? emissionSummary.regulatedActivity
+            : null,
         GovukValidators.required('Select a related activity'),
       ],
     });

@@ -119,7 +119,7 @@ export abstract class PermitApplicationStore<T extends PermitApplicationState> e
       map((state) =>
         Object.keys(state?.reviewGroupDecisions ?? [])
           .filter((key) => state?.reviewGroupDecisions[key].type === 'OPERATOR_AMENDS_NEEDED')
-          .map((key) => ({ groupKey: key, data: state.reviewGroupDecisions[key] } as GroupKeyAndAmendDecision)),
+          .map((key) => ({ groupKey: key, data: state.reviewGroupDecisions[key] }) as GroupKeyAndAmendDecision),
       ),
     );
   }
@@ -199,12 +199,13 @@ export abstract class PermitApplicationStore<T extends PermitApplicationState> e
     files?: { uuid: string; file: File }[],
   ): Observable<any>;
 
-  postStatus(statusKey: StatusKey, statusValue: boolean | boolean[], taskKey?: TaskKey) {
+  postStatus(statusKey: StatusKey, statusValue: boolean | boolean[], taskKey?: TaskKey, permit?: Permit) {
     return this.pipe(
       first(),
       switchMap((state) =>
         this.postState({
           ...state,
+          permit: { ...state.permit, ...permit },
           permitSectionsCompleted: {
             ...state.permitSectionsCompleted,
             [statusKey]: Array.isArray(statusValue) ? statusValue : [statusValue],
@@ -361,8 +362,8 @@ export abstract class PermitApplicationStore<T extends PermitApplicationState> e
             ...(statusKey
               ? { [statusKey]: Array.isArray(statusValue) ? statusValue : [statusValue] }
               : statusValue !== undefined
-              ? { [taskKey]: Array.isArray(statusValue) ? statusValue : [statusValue] }
-              : null),
+                ? { [taskKey]: Array.isArray(statusValue) ? statusValue : [statusValue] }
+                : null),
           },
           reviewSectionsCompleted: {
             ...state.reviewSectionsCompleted,

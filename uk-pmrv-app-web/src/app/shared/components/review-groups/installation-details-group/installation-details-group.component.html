@@ -16,6 +16,7 @@
   <li app-task-item linkText="NACE codes for the main activities at the installation" [hasContent]="true">
     <app-nace-codes-summary-template
       [naceCodes]="payload.aer.naceCodes"
+      [registrationNumber]="payload.installationOperatorDetails.companyReferenceNumber"
       [noBottomBorder]="true"
     ></app-nace-codes-summary-template>
   </li>

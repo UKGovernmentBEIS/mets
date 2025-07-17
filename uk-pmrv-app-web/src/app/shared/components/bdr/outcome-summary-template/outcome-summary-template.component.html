@@ -1,0 +1,168 @@
+@if (vm) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Is the operator applying for free allocation?</dt>
+      <dd govukSummaryListRowValue>{{ vm.bdr?.isApplicationForFreeAllocation ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="vm.isEditable"></dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Do you agree with the application?</dt>
+      <dd govukSummaryListRowValue>
+        {{
+          vm.outcome?.hasRegulatorSentFreeAllocation
+            ? 'Regulator has sent the free allocation application and explanations to UK ETS authority for assessment'
+            : 'No free allocation application'
+        }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+        <a govukLink [routerLink]="['fa-decision']" [state]="{ changing: true }">
+          Change
+          <span class="govuk-visually-hidden">your decision for the free allcation</span>
+        </a>
+      </dd>
+    </div>
+
+    @if (vm.outcome?.freeAllocationNotesOperator) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Review notes (visible to the operator)</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">{{ vm.outcome?.freeAllocationNotesOperator }}</dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink [routerLink]="['fa-decision']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">your decision for the free allcation</span>
+          </a>
+        </dd>
+      </div>
+    }
+
+    @if (vm.outcome?.freeAllocationNotes) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Review notes (not visible to the operator)</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">{{ vm.outcome?.freeAllocationNotes }}</dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink [routerLink]="['fa-decision']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">your decision for the free allcation</span>
+          </a>
+        </dd>
+      </div>
+    }
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Is the operator applying for HSE?</dt>
+      <dd govukSummaryListRowValue>{{ vm.bdr?.statusApplicationType === 'HSE' ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="vm.isEditable"></dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>What is your opinion on the hospital and small emitter application?</dt>
+      <dd govukSummaryListRowValue>
+        {{
+          vm.outcome?.hasRegulatorSentHSE
+            ? 'Regulator has sent hospital and small emitter application, recommendations and reasoning to UK ETS authority for final assessment'
+            : 'No hospital and small emitter application'
+        }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+        <a govukLink [routerLink]="['use-hse-decision']" [state]="{ changing: true }">
+          Change
+          <span class="govuk-visually-hidden">your decision on the USE/HSE application</span>
+        </a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Is the operator applying for USE?</dt>
+      <dd govukSummaryListRowValue>{{ vm.bdr?.statusApplicationType === 'USE' ? 'Yes' : 'No' }}</dd>
+      <dd govukSummaryListRowActions *ngIf="vm.isEditable"></dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>What is your opinion on the ultra small emitter application?</dt>
+      <dd govukSummaryListRowValue>
+        {{
+          vm.outcome?.hasRegulatorSentUSE
+            ? 'Regulator has sent ultra small emitter application, recommendations and reasoning to UK ETS authority for final assessment'
+            : 'No ultra small emitter application'
+        }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+        <a govukLink [routerLink]="['use-hse-decision']" [state]="{ changing: true }">
+          Change
+          <span class="govuk-visually-hidden">your decision on the USE/HSE application</span>
+        </a>
+      </dd>
+    </div>
+
+    @if (vm.outcome?.useHseNotesOperator) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Review notes (visible to the operator)</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">{{ vm.outcome?.useHseNotesOperator }}</dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink [routerLink]="['use-hse-decision']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">your decision on the USE/HSE application</span>
+          </a>
+        </dd>
+      </div>
+    }
+
+    @if (vm.outcome?.useHseNotes) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Review notes (not visible to the operator)</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">{{ vm.outcome?.useHseNotes }}</dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink [routerLink]="['use-hse-decision']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">your decision on the USE/HSE application</span>
+          </a>
+        </dd>
+      </div>
+    }
+
+    @if (vm?.bdrFile) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Uploaded baseline data report</dt>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files [files]="[vm.bdrFile]"></app-summary-download-files>
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink [routerLink]="['upload-files']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">the baseline data report file</span>
+          </a>
+        </dd>
+      </div>
+    }
+
+    @if (vm?.files.length) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files [files]="vm.files"></app-summary-download-files>
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink [routerLink]="['upload-files']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">the baseline data report file</span>
+          </a>
+        </dd>
+      </div>
+    }
+    @if (vm.outcome?.hasOperatorMetDataSubmissionRequirements) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>
+          Operator has met 27A data submission requirements and this information has been sent to UK ETS authority
+        </dt>
+        <dd govukSummaryListRowValue>Yes</dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink [routerLink]="['27a-question']" [state]="{ changing: true }">
+            Change
+            <span class="govuk-visually-hidden">if the operator has met the 27A data submission requirements</span>
+          </a>
+        </dd>
+      </div>
+    }
+  </dl>
+}

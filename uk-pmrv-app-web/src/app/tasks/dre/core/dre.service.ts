@@ -2,51 +2,20 @@ import { Injectable } from '@angular/core';
 
 import { distinctUntilChanged, first, map, Observable, switchMap, tap } from 'rxjs';
 
-import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
-import { CommonTasksStore } from '@tasks/store/common-tasks.store';
+import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 
-import {
-  Dre,
-  DreApplicationSubmitRequestTaskPayload,
-  RequestMetadata,
-  RequestTaskActionPayload,
-  RequestTaskItemDTO,
-  RequestTaskPayload,
-  TasksService,
-} from 'pmrv-api';
+import { Dre, DreApplicationSubmitRequestTaskPayload, RequestTaskActionPayload } from 'pmrv-api';
 
 @Injectable({ providedIn: 'root' })
-export class DreService {
-  constructor(
-    private readonly store: CommonTasksStore,
-    private readonly tasksService: TasksService,
-    private readonly businessErrorService: BusinessErrorService,
-  ) {}
-
-  get requestTaskItem$(): Observable<RequestTaskItemDTO> {
-    return this.store.requestTaskItem$;
-  }
-
-  get payload$(): Observable<RequestTaskPayload> {
-    return this.store.payload$;
-  }
-
-  get requestMetadata$(): Observable<RequestMetadata> {
-    return this.store.requestMetadata$;
-  }
-
+export class DreService extends TasksHelperService {
   get dre$(): Observable<Dre> {
     return this.payload$.pipe(
       map((payload) => (payload as any)?.dre),
       distinctUntilChanged(),
     );
-  }
-
-  get isEditable$(): Observable<boolean> {
-    return this.store.isEditable$;
   }
 
   get dreAttachments() {
@@ -62,11 +31,6 @@ export class DreService {
         fileName: attachments[id],
       })) ?? []
     );
-  }
-
-  getBaseFileDownloadUrl() {
-    const requestTaskId = this.store.requestTaskId;
-    return `/tasks/${requestTaskId}/file-download/`;
   }
 
   saveDre(dre: Partial<Dre>, sectionCompleted: boolean, attachments?: { [key: string]: string }): Observable<any> {

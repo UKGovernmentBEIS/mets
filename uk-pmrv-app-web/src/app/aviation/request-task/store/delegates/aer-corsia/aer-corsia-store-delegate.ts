@@ -1,6 +1,17 @@
 import { Observable, tap } from 'rxjs';
 
+import {
+  AerCorsiaReviewGroup,
+  aerCorsiaReviewGroupMap,
+} from '@aviation/request-task/aer/corsia/shared/aer-review-corsia.types';
+import {
+  refreshReviewSectionsCompletedUponRequestVerification,
+  refreshReviewSectionsCompletedUponSubmitAmend,
+  refreshVerificationSectionsCompletedUponSubmitAmendToRegulator,
+  refreshVerificationSectionsCompletedUponSubmitToRegulator,
+} from '@aviation/request-task/aer/corsia/tasks/send-report/send-report.utils';
 import { ReportingObligation } from '@aviation/request-task/aer/shared/reporting-obligation/reporting-obligation.interface';
+import { aerVerifyReviewGroupMap } from '@aviation/request-task/aer/shared/util/aer-verify-tasks.util';
 import { getSaveRequestTaskActionTypeForRequestTaskType } from '@aviation/request-task/util';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
@@ -16,16 +27,17 @@ import produce from 'immer';
 import {
   AviationAerAircraftData,
   AviationAerCorsiaAggregatedEmissionsData,
+  AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload,
+  AviationAerCorsiaApplicationSubmitRequestTaskPayload,
   AviationAerCorsiaConfidentiality,
   AviationAerCorsiaDataGaps,
   AviationAerCorsiaEmissionsReductionClaim,
   AviationAerCorsiaMonitoringApproach,
-  AviationAerEmissionsMonitoringApproach,
   AviationAerMonitoringPlanChanges,
   AviationAerTotalEmissionsConfidentiality,
   AviationCorsiaOperatorDetails,
-  AviationOperatorDetails,
   EmpAdditionalDocuments,
+  EmpCorsiaOriginatedData,
   RequestTaskActionProcessDTO,
   RequestTaskDTO,
 } from 'pmrv-api';
@@ -34,10 +46,9 @@ import { RequestTaskStore } from '../../request-task.store';
 import {
   AerCorsia,
   AerCorsiaRequestTaskPayload,
-  AerRequestTaskPayload,
+  AerReviewCorsiaTaskKey,
   AerTask,
   AerTaskKey,
-  AerVerifyCorsiaTaskKey,
   OperatorDetails,
 } from '../../request-task.types';
 import { RequestTaskStoreDelegate } from '../store-delegate';
@@ -66,32 +77,25 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
 
   private sideEffectsHandler = new AerCorsiaStoreSideEffectsHandler(this.store);
 
-  constructor(private store: RequestTaskStore, private readonly businessErrorService: BusinessErrorService) {}
+  constructor(
+    private store: RequestTaskStore,
+    private readonly businessErrorService: BusinessErrorService,
+  ) {}
 
-  get payload(): AerRequestTaskPayload | null {
-    return this.store.getState().requestTaskItem?.requestTask?.payload as AerRequestTaskPayload;
+  get payload(): AerCorsiaRequestTaskPayload | null {
+    return this.store.getState().requestTaskItem?.requestTask?.payload as AerCorsiaRequestTaskPayload;
   }
 
-  get operatorDetails(): AviationOperatorDetails {
-    return (this.store.getState().requestTaskItem?.requestTask?.payload as AerRequestTaskPayload).empOriginatedData
-      ?.operatorDetails;
+  get empOriginatedData(): EmpCorsiaOriginatedData {
+    return (this.store.getState().requestTaskItem?.requestTask?.payload as AerCorsiaRequestTaskPayload)
+      .empOriginatedData;
   }
 
   init() {
-    if (this.payload && !this.payload.aer) {
-      this.store.setPayload(
-        produce(this.payload, (payload) => {
-          payload.aer = { operatorDetails: this.operatorDetails } as any;
-        }),
-      );
-    }
-
     return this;
   }
 
-  setMonitoringApproach(
-    monitoringApproach: AviationAerEmissionsMonitoringApproach | AviationAerCorsiaMonitoringApproach,
-  ) {
+  setMonitoringApproach(monitoringApproach: AviationAerCorsiaMonitoringApproach) {
     const state = this.store.getState();
 
     const newState = produce(state, (draft) => {
@@ -117,7 +121,7 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
   setAviationAerAircraftData(aviationAerAircraftData: AviationAerAircraftData) {
     const state = this.store.getState();
     const newState = produce(state, (draft) => {
-      (draft.requestTaskItem.requestTask.payload as AerRequestTaskPayload).aer.aviationAerAircraftData =
+      (draft.requestTaskItem.requestTask.payload as AerCorsiaRequestTaskPayload).aer.aviationAerAircraftData =
         aviationAerAircraftData;
     });
     this.store.setState(newState);
@@ -127,7 +131,7 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
   setSaf(saf: AviationAerCorsiaEmissionsReductionClaim) {
     const state = this.store.getState();
     const newState = produce(state, (draft) => {
-      (draft.requestTaskItem.requestTask.payload as AerRequestTaskPayload).aer.emissionsReductionClaim = saf;
+      (draft.requestTaskItem.requestTask.payload as AerCorsiaRequestTaskPayload).aer.emissionsReductionClaim = saf;
     });
     this.store.setState(newState);
   }
@@ -142,7 +146,7 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
     const state = this.store.getState();
 
     const newState = produce(state, (draft) => {
-      (draft.requestTaskItem.requestTask.payload as AerRequestTaskPayload).aer.dataGaps = dataGaps;
+      (draft.requestTaskItem.requestTask.payload as AerCorsiaRequestTaskPayload).aer.dataGaps = dataGaps;
     });
 
     this.store.setState(newState);
@@ -152,7 +156,7 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
     const state = this.store.getState();
 
     const newState = produce(state, (draft) => {
-      (draft.requestTaskItem.requestTask.payload as AerRequestTaskPayload).aer.additionalDocuments =
+      (draft.requestTaskItem.requestTask.payload as AerCorsiaRequestTaskPayload).aer.additionalDocuments =
         additionalDocuments;
     });
 
@@ -162,7 +166,7 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
   setMonitoringPlanChanges(monitoringPlanChanges: AviationAerMonitoringPlanChanges) {
     const state = this.store.getState();
     const newState = produce(state, (draft) => {
-      (draft.requestTaskItem.requestTask.payload as AerRequestTaskPayload).aer.aerMonitoringPlanChanges =
+      (draft.requestTaskItem.requestTask.payload as AerCorsiaRequestTaskPayload).aer.aerMonitoringPlanChanges =
         monitoringPlanChanges;
     });
     this.store.setState(newState);
@@ -172,11 +176,11 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
     const state = this.store.getState();
 
     const newState = produce(state, (draft) => {
-      (draft.requestTaskItem.requestTask.payload as AerRequestTaskPayload).reportingRequired =
+      (draft.requestTaskItem.requestTask.payload as AerCorsiaRequestTaskPayload).reportingRequired =
         reportingObligation.reportingRequired;
 
       if (reportingObligation.reportingObligationDetails) {
-        (draft.requestTaskItem.requestTask.payload as AerRequestTaskPayload).reportingObligationDetails =
+        (draft.requestTaskItem.requestTask.payload as AerCorsiaRequestTaskPayload).reportingObligationDetails =
           reportingObligation.reportingObligationDetails;
       }
     });
@@ -187,7 +191,7 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
   setOperatorDetails(operatorDetails: AviationCorsiaOperatorDetails) {
     const state = this.store.getState();
     const newState = produce(state, (draft) => {
-      (draft.requestTaskItem.requestTask.payload as AerRequestTaskPayload).aer.operatorDetails =
+      (draft.requestTaskItem.requestTask.payload as AerCorsiaRequestTaskPayload).aer.operatorDetails =
         operatorDetails as OperatorDetails;
     });
     this.store.setState(newState);
@@ -196,7 +200,7 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
   setEmissionsReductionClaim(emissionsReductionClaim: AviationAerCorsiaEmissionsReductionClaim) {
     const state = this.store.getState();
     const newState = produce(state, (draft) => {
-      (draft.requestTaskItem.requestTask.payload as AerRequestTaskPayload).aer.emissionsReductionClaim =
+      (draft.requestTaskItem.requestTask.payload as AerCorsiaRequestTaskPayload).aer.emissionsReductionClaim =
         emissionsReductionClaim as AviationAerCorsiaEmissionsReductionClaim;
     });
     this.store.setState(newState);
@@ -206,7 +210,7 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
     const state = this.store.getState();
 
     const newState = produce(state, (draft) => {
-      (draft.requestTaskItem.requestTask.payload as AerRequestTaskPayload).aer.confidentiality =
+      (draft.requestTaskItem.requestTask.payload as AerCorsiaRequestTaskPayload).aer.confidentiality =
         confidentiality as AviationAerCorsiaConfidentiality;
     });
 
@@ -217,7 +221,8 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
     const state = this.store.getState();
 
     const newState = produce(state, (draft) => {
-      (draft.requestTaskItem.requestTask.payload as AerRequestTaskPayload).aerSectionsCompleted[task] = completion;
+      (draft.requestTaskItem.requestTask.payload as AerCorsiaRequestTaskPayload).aerSectionsCompleted[task] =
+        completion;
     });
 
     this.store.setState(newState);
@@ -263,14 +268,9 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
     const payloadAfterSideEffects = this.sideEffectsHandler.applySideEffects(aerTask);
 
     const payloadToUpdate = produce(payloadAfterSideEffects, (draft) => {
-      delete draft.aerAttachments;
-      delete draft.reportingYear;
-      delete draft.serviceContactDetails;
-      delete draft.aerMonitoringPlanVersions;
-      delete draft.verificationBodyId;
-      delete draft.verificationPerformed;
-      delete draft.verificationSectionsCompleted;
-      delete draft.empOriginatedData;
+      if (draft.sendEmailNotification) {
+        delete draft.sendEmailNotification;
+      }
 
       if (Object.keys(ROOT_AER_PAYLOAD_TASKS).includes(taskKey)) {
         if (ROOT_AER_PAYLOAD_TASKS[taskKey]) {
@@ -284,18 +284,44 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
             aerTask.reportingObligation as ReportingObligation
           ).reportingObligationDetails;
         } else {
-          draft.aer[taskKey] = aerTask[taskKey];
+          if (draft.aer) {
+            draft.aer[taskKey] = aerTask[taskKey];
+          }
         }
       }
 
-      draft.aerSectionsCompleted[taskKey] = status === 'complete' ? [true] : [false];
+      if (['AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT_PAYLOAD'].includes(draft.payloadType)) {
+        //TODO if taskKey not exists then saving the changesRequest section. Please refactor the whole logic
+        if (!taskKey) {
+          draft.aerSectionsCompleted['changesRequested'] = [true];
+        } else {
+          const aerReviewGroupName = aerCorsiaReviewGroupMap[taskKey];
+          draft.reviewSectionsCompleted[aerReviewGroupName] = false;
+        }
+      }
+
+      //TODO if taskKey not exists then saving the changesRequest section. Please refactor the whole logic
+      if (taskKey) {
+        draft.aerSectionsCompleted[taskKey] = status === 'complete' ? [true] : [false];
+      }
     });
 
-    const reqBody: RequestTaskActionProcessDTO = {
-      requestTaskId: requestTask.id,
-      requestTaskActionType: getSaveRequestTaskActionTypeForRequestTaskType(requestTask.type),
-      requestTaskActionPayload: { ...payloadToUpdate, payloadType: 'AVIATION_AER_CORSIA_SAVE_APPLICATION_PAYLOAD' },
-    };
+    const reqBody = this.constructSaveActionReqBody(
+      requestTask,
+      produce(payloadToUpdate, (draft) => {
+        delete draft.aerAttachments;
+        delete draft.reportingYear;
+        delete draft.serviceContactDetails;
+        delete draft.aerMonitoringPlanVersions;
+        delete draft.verificationBodyId;
+        delete draft.verificationPerformed;
+        delete draft.verificationSectionsCompleted;
+        delete draft.empOriginatedData;
+        delete draft.reviewGroupDecisions;
+        delete draft.reviewAttachments;
+      }),
+      getSaveRequestTaskActionTypeForRequestTaskType(requestTask.type),
+    );
 
     return this.store.tasksService.processRequestTaskAction(reqBody).pipe(
       catchNotFoundRequest(ErrorCode.NOTFOUND1001, () =>
@@ -314,14 +340,10 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
         }
 
         this.store.setPayload({
+          ...requestTask.payload,
           ...updatedPayload,
-          aerAttachments: this.payload.aerAttachments,
-          serviceContactDetails: this.payload.serviceContactDetails,
-          aerMonitoringPlanVersions: this.payload.aerMonitoringPlanVersions,
-          empOriginatedData: this.payload.empOriginatedData,
-          reportingYear: this.payload.reportingYear,
-          verificationBodyId: this.payload.verificationBodyId,
-        } as AerRequestTaskPayload);
+          verificationPerformed: false, //reset
+        } as AerCorsiaRequestTaskPayload);
       }),
     );
   }
@@ -331,24 +353,58 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
     requestTaskActionType: RequestTaskActionProcessDTO['requestTaskActionType'],
   ): RequestTaskActionProcessDTO {
     switch (requestTaskActionType) {
+      case 'AVIATION_AER_CORSIA_SUBMIT_APPLICATION':
+        return {
+          requestTaskActionType: requestTaskActionType,
+          requestTaskId: requestTask.id,
+          requestTaskActionPayload: {
+            payloadType: 'AVIATION_AER_CORSIA_SUBMIT_APPLICATION_PAYLOAD',
+            verificationSectionsCompleted: refreshVerificationSectionsCompletedUponSubmitToRegulator(
+              requestTask.payload as AviationAerCorsiaApplicationSubmitRequestTaskPayload,
+            ),
+          },
+        };
       case 'AVIATION_AER_CORSIA_REQUEST_VERIFICATION':
         return {
           requestTaskActionType: requestTaskActionType,
           requestTaskId: requestTask.id,
           requestTaskActionPayload: {
             payloadType: 'AVIATION_AER_CORSIA_REQUEST_VERIFICATION_PAYLOAD',
+            verificationSectionsCompleted: (requestTask.payload as AviationAerCorsiaApplicationSubmitRequestTaskPayload)
+              .verificationSectionsCompleted,
           },
         };
-
-      case 'AVIATION_AER_CORSIA_SUBMIT_APPLICATION':
+      case 'AVIATION_AER_CORSIA_REQUEST_AMENDS_VERIFICATION': {
+        const requestTaskPayload = requestTask.payload as AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload;
         return {
           requestTaskActionType: requestTaskActionType,
           requestTaskId: requestTask.id,
           requestTaskActionPayload: {
-            payloadType: 'EMPTY_PAYLOAD',
+            payloadType: 'AVIATION_AER_CORSIA_REQUEST_AMENDS_VERIFICATION_PAYLOAD',
+            verificationSectionsCompleted: requestTaskPayload.verificationSectionsCompleted,
+            reviewSectionsCompleted: refreshReviewSectionsCompletedUponRequestVerification(requestTaskPayload),
           },
         };
-
+      }
+      case 'AVIATION_AER_CORSIA_SUBMIT_APPLICATION_AMEND': {
+        const requestTaskPayload = requestTask.payload as AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload;
+        const aerSectionsCompleted = (() => {
+          const { changesRequested, ...rest } = requestTaskPayload.aerSectionsCompleted;
+          return rest;
+        })();
+        return {
+          requestTaskActionType: requestTaskActionType,
+          requestTaskId: requestTask.id,
+          requestTaskActionPayload: {
+            payloadType: 'AVIATION_AER_CORSIA_SUBMIT_APPLICATION_AMEND_PAYLOAD',
+            aerSectionsCompleted,
+            reviewSectionsCompleted: refreshReviewSectionsCompletedUponSubmitAmend(requestTaskPayload),
+            verificationSectionsCompleted: refreshVerificationSectionsCompletedUponSubmitAmendToRegulator(
+              requestTask.payload as AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload,
+            ),
+          },
+        };
+      }
       default:
         return {
           requestTaskActionType: requestTaskActionType,
@@ -377,9 +433,96 @@ export class AerCorsiaStoreDelegate implements RequestTaskStoreDelegate {
     );
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  saveAerReviewDecision(decision: any, taskKey: AerTaskKey | AerVerifyCorsiaTaskKey): Observable<any> {
-    throw new Error('Not yet implemented');
+  private constructSaveActionReqBody(
+    requestTask: RequestTaskDTO,
+    payloadToUpdate: AerCorsiaRequestTaskPayload,
+    requestTaskActionType: RequestTaskActionProcessDTO['requestTaskActionType'],
+    groupKey?: AerCorsiaReviewGroup,
+  ): RequestTaskActionProcessDTO {
+    switch (requestTaskActionType) {
+      case 'AVIATION_AER_CORSIA_SAVE_REVIEW_GROUP_DECISION':
+        return {
+          requestTaskId: requestTask.id,
+          requestTaskActionType: requestTaskActionType,
+          requestTaskActionPayload: {
+            group: groupKey as any,
+            decision: payloadToUpdate.reviewGroupDecisions[groupKey] as any,
+            reviewSectionsCompleted: payloadToUpdate.reviewSectionsCompleted,
+            payloadType: 'AVIATION_AER_CORSIA_SAVE_REVIEW_GROUP_DECISION_PAYLOAD',
+          },
+        };
+      case 'AVIATION_AER_CORSIA_SAVE_APPLICATION':
+        return {
+          requestTaskId: requestTask.id,
+          requestTaskActionType: requestTaskActionType,
+          requestTaskActionPayload: {
+            ...payloadToUpdate,
+            payloadType: 'AVIATION_AER_CORSIA_SAVE_APPLICATION_PAYLOAD',
+          },
+        };
+      case 'AVIATION_AER_CORSIA_SAVE_APPLICATION_AMEND':
+        return {
+          requestTaskId: requestTask.id,
+          requestTaskActionType: requestTaskActionType,
+          requestTaskActionPayload: {
+            ...payloadToUpdate,
+            payloadType: 'AVIATION_AER_CORSIA_SAVE_APPLICATION_AMEND_PAYLOAD',
+          },
+        };
+      default:
+        return {
+          requestTaskId: requestTask.id,
+          requestTaskActionType: requestTaskActionType,
+          requestTaskActionPayload: {
+            ...payloadToUpdate,
+            payloadType: 'AVIATION_AER_CORSIA_SAVE_APPLICATION_PAYLOAD',
+          },
+        };
+    }
+  }
+
+  saveAerReviewDecision(decision: any, taskKey: AerReviewCorsiaTaskKey): Observable<any> {
+    const {
+      requestTaskItem: { requestTask },
+    } = this.store.getState();
+    const groupKey = aerCorsiaReviewGroupMap[taskKey] ?? aerVerifyReviewGroupMap[taskKey];
+    decision = aerCorsiaReviewGroupMap[taskKey]
+      ? { ...decision, reviewDataType: 'AER_DATA' }
+      : { ...decision, reviewDataType: 'VERIFICATION_REPORT_DATA' };
+
+    const payloadToUpdate = produce(this.payload, (draft) => {
+      delete draft.reviewAttachments;
+
+      draft.reviewGroupDecisions = {
+        ...draft.reviewGroupDecisions,
+        [groupKey]: decision,
+      };
+
+      draft.reviewSectionsCompleted[groupKey] = true;
+    });
+
+    const reqBody: RequestTaskActionProcessDTO = this.constructSaveActionReqBody(
+      requestTask,
+      payloadToUpdate,
+      getSaveRequestTaskActionTypeForRequestTaskType(requestTask.type),
+      groupKey,
+    );
+
+    return this.store.tasksService.processRequestTaskAction(reqBody).pipe(
+      catchNotFoundRequest(ErrorCode.NOTFOUND1001, () =>
+        this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
+      ),
+      catchTaskReassignedBadRequest(() =>
+        this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
+      ),
+      tap(() =>
+        this.store.setPayload({
+          ...payloadToUpdate,
+          reviewAttachments: this.payload.reviewAttachments,
+          serviceContactDetails: this.payload.serviceContactDetails,
+        } as AerCorsiaRequestTaskPayload),
+      ),
+    );
   }
 
   get baseFileAttachmentDownloadUrl(): string {

@@ -51,7 +51,7 @@ export const AER_UNCORRECTED_MISSTATEMENTS_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Uncorrected misstatements summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Uncorrected misstatements' },
         loadComponent: () =>
           import('./misstatements-summary/misstatements-summary.component').then(
             (c) => c.MisstatementsSummaryComponent,

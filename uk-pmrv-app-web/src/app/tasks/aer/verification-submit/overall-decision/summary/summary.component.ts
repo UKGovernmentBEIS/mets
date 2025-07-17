@@ -15,8 +15,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
     <app-page-heading>Check your answers</app-page-heading>
     <app-overall-decision-group
       [isEditable]="isEditable$ | async"
-      [overallAssessment]="overallAssessmentInfo$ | async"
-    ></app-overall-decision-group>
+      [overallAssessment]="overallAssessmentInfo$ | async"></app-overall-decision-group>
     <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
       <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
     </div>

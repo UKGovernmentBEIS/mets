@@ -1,25 +1,22 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, filter, map, Observable, takeUntil } from 'rxjs';
+import { combineLatest, filter, map, Observable, takeUntil } from 'rxjs';
 
-import { BREADCRUMB_ITEMS, BreadcrumbItem } from '@core/navigation/breadcrumbs';
+import { permitTypeMap, permitTypeMapLowercase } from '@permit-application/shared/utils/permit';
+import { getPreviewDocumentsInfo } from '@permit-application/shared/utils/previewDocuments.utils';
 
 import { RequestActionsService, RequestItemsService } from 'pmrv-api';
 
 import { DestroySubject } from '../../../core/services/destroy-subject.service';
 import { ReviewGroupDecisionStatus } from '../../../permit-application/review/types/review.permit.type';
-import {
-  ReviewSectionsContainerAbstractComponent,
-} from '../../../permit-application/shared/review-sections/review-sections-container-abstract.component';
+import { ReviewSectionsContainerAbstractComponent } from '../../../permit-application/shared/review-sections/review-sections-container-abstract.component';
 import { BackLinkService } from '../../../shared/back-link/back-link.service';
 import { TaskItemStatus } from '../../../shared/task-list/task-list.interface';
 import { PermitVariationStore } from '../../store/permit-variation.store';
 import { ReviewGroupStatusPermitVariationPipe } from '../review-group-status-permit-variation.pipe';
-import {
-  ReviewGroupStatusPermitVariationRegulatorLedPipe,
-} from '../review-group-status-permit-variation-regulator-led.pipe';
+import { ReviewGroupStatusPermitVariationRegulatorLedPipe } from '../review-group-status-permit-variation-regulator-led.pipe';
 
 @Component({
   selector: 'app-variation-review-sections-container',
@@ -31,31 +28,33 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
   variationDetailsReviewStatus$: Observable<ReviewGroupDecisionStatus | TaskItemStatus> =
     this.store.getVariationDetailsReviewStatus$();
 
+  permitTypeMap = permitTypeMap;
+  permitTypeMapLowercase = permitTypeMapLowercase;
   readonly header$ = this.store.pipe(
     map((state) => {
       if (state.isRequestTask) {
         switch (state.requestTaskType) {
           case 'PERMIT_VARIATION_APPLICATION_REVIEW':
-            return `${state.permitType} permit variation review`;
+            return `${permitTypeMap?.[state.permitType]} permit variation review`;
           case 'PERMIT_VARIATION_WAIT_FOR_AMENDS':
-            return `${state.permitType} permit variation review`;
+            return `${permitTypeMap?.[state.permitType]} permit variation review`;
           case 'PERMIT_VARIATION_WAIT_FOR_REVIEW':
             return 'Make a change to your permit';
           case 'PERMIT_VARIATION_APPLICATION_PEER_REVIEW':
           case 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW':
-            return `${state.permitType} permit variation peer review`;
+            return `${permitTypeMap?.[state.permitType]} permit variation peer review`;
           case 'PERMIT_VARIATION_WAIT_FOR_PEER_REVIEW':
           case 'PERMIT_VARIATION_REGULATOR_LED_WAIT_FOR_PEER_REVIEW':
-            return `${state.permitType} permit variation review`;
+            return `${permitTypeMap?.[state.permitType]} permit variation review`;
           case 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT':
-            return `Make a change to the ${state.permitType} permit`;
+            return `Make a change to the ${permitTypeMapLowercase?.[state.permitType]} permit`;
           default:
-            return state.permitType + ' permit determination';
+            return permitTypeMap?.[state.permitType] + ' permit determination';
         }
       } else {
         return this.store.isVariationRegulatorLedRequest
-          ? `Make a change to the ${state.permitType} permit`
-          : `${state.permitType} permit variation review`;
+          ? `Make a change to the ${permitTypeMapLowercase?.[state.permitType]} permit`
+          : `${permitTypeMap?.[state.permitType]} permit variation review`;
       }
     }),
   );
@@ -78,6 +77,27 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
     ),
   );
 
+  previewDocumentsViewModel$ = combineLatest([
+    this.store,
+    this.requestTaskType$,
+    this.determinationStatus$,
+    this.taskId$,
+  ]).pipe(
+    map(([state, requestTaskType, determinationStatus, taskId]) => {
+      return state.isRequestTask
+        ? {
+            taskId,
+            previewDocuments: getPreviewDocumentsInfo(requestTaskType, determinationStatus, state.permitType),
+            decision: {
+              operators: [],
+              externalContacts: [],
+              signatory: state.assignee.assigneeUserId,
+            },
+          }
+        : null;
+    }),
+  );
+
   constructor(
     protected readonly store: PermitVariationStore,
     protected readonly destroy$: DestroySubject,
@@ -86,29 +106,16 @@ export class ReviewSectionsContainerComponent extends ReviewSectionsContainerAbs
     protected readonly requestItemsService: RequestItemsService,
     protected readonly requestActionsService: RequestActionsService,
     protected readonly backLinkService: BackLinkService,
-    @Inject(BREADCRUMB_ITEMS) private readonly breadcrumbs$: BehaviorSubject<BreadcrumbItem[]>,
     private title: Title,
   ) {
     super(store, router, route, requestItemsService, requestActionsService, destroy$, backLinkService);
   }
 
   ngOnInit(): void {
-    this.resolveLastBreadcrumb();
     this.statusResolverPipe = this.store.isVariationRegulatorLedRequest
       ? new ReviewGroupStatusPermitVariationRegulatorLedPipe(this.store)
       : new ReviewGroupStatusPermitVariationPipe(this.store);
 
     this.header$.pipe(takeUntil(this.destroy$)).subscribe((header) => this.title.setTitle(header));
-  }
-
-  private resolveLastBreadcrumb(): void {
-    const lastBreadcrumb = this.breadcrumbs$.getValue()[this.breadcrumbs$.getValue().length - 1];
-    lastBreadcrumb.link = [...lastBreadcrumb.link, 'review'];
-
-    const breadcrumbs = [
-      ...this.breadcrumbs$.getValue().slice(0, this.breadcrumbs$.getValue().length - 1),
-      lastBreadcrumb,
-    ];
-    this.breadcrumbs$.next(breadcrumbs);
   }
 }

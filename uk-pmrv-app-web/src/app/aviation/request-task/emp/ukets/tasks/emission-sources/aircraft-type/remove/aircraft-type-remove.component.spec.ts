@@ -33,9 +33,11 @@ const mockAircraftType: AircraftTypeDetails = {
 };
 @Component({
   selector: 'app-mock-parent',
-  template: ` <form [formGroup]="form">
-    <app-aircraft-type-remove></app-aircraft-type-remove>
-  </form>`,
+  template: `
+    <form [formGroup]="form">
+      <app-aircraft-type-remove></app-aircraft-type-remove>
+    </form>
+  `,
   standalone: true,
   imports: [ReactiveFormsModule, AircraftTypeRemoveComponent],
   providers: [EmissionSourcesFormProvider, { provide: TYPE_AWARE_STORE, useExisting: RequestTaskStore }],

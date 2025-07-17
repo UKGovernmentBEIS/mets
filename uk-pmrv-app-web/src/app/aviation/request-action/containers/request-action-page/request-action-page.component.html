@@ -1,17 +1,144 @@
-<div class="govuk-grid-row" *ngIf="vm$ | async as vm">
-  <div class="govuk-grid-column-full">
-    <app-request-action-heading
-      [headerText]="vm.header"
-      [timelineCreationDate]="vm.creationDate"
-    ></app-request-action-heading>
+<ng-container *ngIf="vm$ | async as vm">
+  <ng-container *ngIf="hasReport$ | async; else fullwidthLayout">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <ng-container *ngTemplateOutlet="actionContainer"></ng-container>
+      </div>
 
-    <ng-container [ngSwitch]="vm.requestType">
-      <ng-container *ngSwitchCase="'AVIATION_VIR'">
-        <app-vir-action-task-list [virPayload]="vm.payload"></app-vir-action-task-list>
-      </ng-container>
-      <ng-container *ngSwitchDefault>
-        <app-task-list [sections]="vm.sections" [hideSubmit]="true" [hideCancel]="true"></app-task-list>
-      </ng-container>
-    </ng-container>
-  </div>
-</div>
+      <div class="govuk-grid-column-one-third">
+        <ng-container *ngTemplateOutlet="asideContainer"></ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #fullwidthLayout>
+    <ng-container *ngTemplateOutlet="actionContainer"></ng-container>
+  </ng-template>
+
+  <ng-template #actionContainer>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <app-request-action-heading
+          *ngIf="
+            (vm.sections.length !== 0 || vm.requestType === 'AVIATION_VIR') &&
+            vm.requestActionType !== 'AVIATION_VIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS'
+          "
+          [headerText]="vm.header"
+          [timelineCreationDate]="vm.creationDate"></app-request-action-heading>
+
+        <ng-container *ngIf="vm.sections.length === 0">
+          <ng-container [ngSwitch]="vm.requestActionType">
+            <ng-container *ngSwitchCase="'AVIATION_AER_UKETS_APPLICATION_RETURNED_FOR_AMENDS'">
+              <app-return-for-amends></app-return-for-amends>
+            </ng-container>
+            <ng-container *ngSwitchCase="'AVIATION_AER_CORSIA_APPLICATION_RETURNED_FOR_AMENDS'">
+              <app-return-for-amends></app-return-for-amends>
+            </ng-container>
+            <ng-container *ngSwitchCase="'EMP_ISSUANCE_UKETS_APPLICATION_RETURNED_FOR_AMENDS'">
+              <app-emp-return-for-amends></app-emp-return-for-amends>
+            </ng-container>
+            <ng-container *ngSwitchCase="'EMP_ISSUANCE_CORSIA_APPLICATION_RETURNED_FOR_AMENDS'">
+              <app-emp-return-for-amends></app-emp-return-for-amends>
+            </ng-container>
+            <ng-container *ngSwitchCase="'EMP_VARIATION_UKETS_APPLICATION_RETURNED_FOR_AMENDS'">
+              <app-emp-return-for-amends></app-emp-return-for-amends>
+            </ng-container>
+            <ng-container *ngSwitchCase="'EMP_VARIATION_CORSIA_APPLICATION_RETURNED_FOR_AMENDS'">
+              <app-emp-return-for-amends></app-emp-return-for-amends>
+            </ng-container>
+            <ng-container *ngSwitchCase="'AVIATION_DRE_UKETS_APPLICATION_SUBMITTED'">
+              <app-aviation-emissions-updated></app-aviation-emissions-updated>
+            </ng-container>
+            <ng-container *ngSwitchCase="'AVIATION_VIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS'">
+              <app-responded></app-responded>
+            </ng-container>
+            <ng-container *ngSwitchCase="'AVIATION_ACCOUNT_CLOSURE_SUBMITTED'">
+              <app-account-closed-submitted></app-account-closed-submitted>
+            </ng-container>
+            <ng-container *ngSwitchCase="'BATCH_REISSUE_SUBMITTED'">
+              <app-emp-batch-reissue-submitted></app-emp-batch-reissue-submitted>
+            </ng-container>
+            <ng-container *ngSwitchCase="'BATCH_REISSUE_COMPLETED'">
+              <app-emp-batch-reissue-completed></app-emp-batch-reissue-completed>
+            </ng-container>
+            <ng-container *ngSwitchCase="'REISSUE_COMPLETED'">
+              <app-emp-reissue-completed></app-emp-reissue-completed>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_APPLICATION_CLOSED'">
+              <app-closed></app-closed>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_APPLICATION_SUBMITTED'">
+              <app-submitted></app-submitted>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED'">
+              <app-daily-penalty-notice-submitted></app-daily-penalty-notice-submitted>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED'">
+              <app-dpn-peer-review-decision></app-dpn-peer-review-decision>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_REJECTED'">
+              <app-dpn-peer-review-decision></app-dpn-peer-review-decision>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED'">
+              <app-notice-of-intent-submitted></app-notice-of-intent-submitted>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_ACCEPTED'">
+              <app-noi-peer-review-decision></app-noi-peer-review-decision>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_REJECTED'">
+              <app-noi-peer-review-decision></app-noi-peer-review-decision>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED'">
+              <app-civil-penalty-notice-submitted></app-civil-penalty-notice-submitted>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_ACCEPTED'">
+              <app-cpn-peer-review-decision></app-cpn-peer-review-decision>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_REJECTED'">
+              <app-cpn-peer-review-decision></app-cpn-peer-review-decision>
+            </ng-container>
+            <ng-container *ngSwitchCase="'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED'">
+              <app-conclusion></app-conclusion>
+            </ng-container>
+            <ng-container *ngSwitchCase="'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMITTED'">
+              <app-annual-offsetting-requirements-submitted></app-annual-offsetting-requirements-submitted>
+            </ng-container>
+            <ng-container *ngSwitchCase="'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED'">
+              <app-three-year-period-offsetting-requirements-submitted></app-three-year-period-offsetting-requirements-submitted>
+            </ng-container>
+            <ng-container *ngSwitchCase="'AVIATION_AER_CORSIA_VERIFICATION_RETURNED_TO_OPERATOR'">
+              <app-aviation-aer-verifier-returned></app-aviation-aer-verifier-returned>
+            </ng-container>
+            <ng-container *ngSwitchCase="'AVIATION_AER_UKETS_VERIFICATION_RETURNED_TO_OPERATOR'">
+              <app-aviation-aer-verifier-returned></app-aviation-aer-verifier-returned>
+            </ng-container>
+            <ng-container *ngSwitchCase="'AVIATION_DOE_CORSIA_SUBMITTED'">
+              <app-doe-emissions-updated></app-doe-emissions-updated>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="vm.isPeerReview">
+          <app-peer-reviewer-submitted></app-peer-reviewer-submitted>
+        </ng-container>
+
+        <ng-container [ngSwitch]="vm.requestType">
+          <ng-container *ngSwitchCase="'AVIATION_VIR'">
+            <app-vir-action-task-list [virPayload]="vm.payload"></app-vir-action-task-list>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'AVIATION_AER_UKETS'">
+            <app-task-list [sections]="vm.sections" [hideSubmit]="true" [hideCancel]="true"></app-task-list>
+          </ng-container>
+
+          <ng-container *ngSwitchDefault>
+            <app-task-list [sections]="vm.sections" [hideSubmit]="true" [hideCancel]="true"></app-task-list>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #asideContainer>
+    <app-request-action-report [dataComponent]="vm.dataComponent"></app-request-action-report>
+  </ng-template>
+</ng-container>

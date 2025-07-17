@@ -78,6 +78,10 @@ export class CessationComponent {
     ),
   );
 
+  canViewSectionDetails$ = combineLatest([this.storeFirst$, this.confirmSectionStatus$]).pipe(
+    map(([store, sectionStatus]) => store.isEditable || sectionStatus !== 'not started'),
+  );
+
   constructor(
     readonly store: PermitSurrenderStore,
     private readonly requestActionsService: RequestActionsService,

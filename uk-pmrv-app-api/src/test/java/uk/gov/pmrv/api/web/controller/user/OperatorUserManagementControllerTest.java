@@ -15,20 +15,20 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 import uk.gov.pmrv.api.user.operator.service.OperatorUserManagementService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -52,13 +52,13 @@ class OperatorUserManagementControllerTest {
     private OperatorUserManagementController controller;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private OperatorUserManagementService operatorUserManagementService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -71,7 +71,7 @@ class OperatorUserManagementControllerTest {
     @BeforeEach
     void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
@@ -84,7 +84,7 @@ class OperatorUserManagementControllerTest {
         controller = (OperatorUserManagementController) aopProxy.getProxy();
     	objectMapper = new ObjectMapper();
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-				.setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+				.setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
 				.setValidator(validator)
             	.setControllerAdvice(new ExceptionControllerAdvice())
             	.build();
@@ -92,7 +92,7 @@ class OperatorUserManagementControllerTest {
 
 	@Test
 	void getOperatorUserById() throws Exception {
-		PmrvUser user = PmrvUser.builder().userId("authId").build();
+		AppUser user = AppUser.builder().userId("authId").build();
 		String userId = "userId";
 		OperatorUserDTO operatorUserDTO = OperatorUserDTO.builder()
 				.firstName("fn")
@@ -118,14 +118,14 @@ class OperatorUserManagementControllerTest {
 
 	@Test
 	void getOperatorUserById_forbidden() throws Exception {
-		PmrvUser user = PmrvUser.builder().userId("authId").build();
+		AppUser user = AppUser.builder().userId("authId").build();
 		String userId = "userId";
 		Long accountId = 1L;
 
 		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "getOperatorUserById", accountId.toString());
+            .when(appUserAuthorizationService)
+            .authorize(user, "getOperatorUserById", accountId.toString(), null, null);
 
 		mockMvc.perform(
 				MockMvcRequestBuilders.get(BASE_PATH + "/account/" + accountId + "/" + userId)
@@ -137,14 +137,11 @@ class OperatorUserManagementControllerTest {
 
     @Test
 	void updateCurrentOperatorUser() throws Exception {
-		PmrvUser user = PmrvUser.builder().userId("authId").roleType(RoleType.OPERATOR).build();
 		OperatorUserDTO operatorUserDTO = OperatorUserDTO.builder()
 				.firstName("fn")
 				.lastName("ln")
 				.email("email")
 				.build();
-
-		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
 		//invoke
 		mockMvc.perform(
@@ -156,12 +153,12 @@ class OperatorUserManagementControllerTest {
 				.andExpect(jsonPath("$.lastName").value(operatorUserDTO.getLastName()))
 				.andExpect(jsonPath("$.email").value(operatorUserDTO.getEmail()));
 
-		verify(operatorUserManagementService, times(1)).updateOperatorUser(user, operatorUserDTO);
+		verify(operatorUserManagementService, times(1)).updateOperatorUser(operatorUserDTO);
 	}
 
 	@Test
 	void updateCurrentOperatorUser_forbidden() throws Exception {
-		PmrvUser user = PmrvUser.builder().userId("authId").roleType(RoleType.REGULATOR).build();
+		AppUser user = AppUser.builder().userId("authId").roleType(RoleTypeConstants.REGULATOR).build();
 		OperatorUserDTO operatorUserDTO = OperatorUserDTO.builder()
 				.firstName("fn")
 				.lastName("ln")
@@ -171,7 +168,7 @@ class OperatorUserManagementControllerTest {
 		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 		doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(user, new RoleType[] {RoleType.OPERATOR});
+            .evaluate(user, new String[] {RoleTypeConstants.OPERATOR});
 
 		mockMvc.perform(
 				MockMvcRequestBuilders.patch(BASE_PATH + "/operator")
@@ -179,12 +176,12 @@ class OperatorUserManagementControllerTest {
 						.content(objectMapper.writeValueAsString(operatorUserDTO)))
 				.andExpect(status().isForbidden());
 
-		verify(operatorUserManagementService, never()).updateOperatorUser(any(), any());
+		verify(operatorUserManagementService, never()).updateOperatorUser(any());
 	}
 
 	@Test
 	void updateOperatorUserById() throws Exception {
-		PmrvUser user = PmrvUser.builder().userId("authId").build();
+		AppUser user = AppUser.builder().userId("authId").build();
 		String userId = "userId";
 		OperatorUserDTO operatorUserDTO = OperatorUserDTO.builder()
 				.firstName("fn")
@@ -210,7 +207,7 @@ class OperatorUserManagementControllerTest {
 
 	@Test
 	void updateOperatorUserById_forbidden() throws Exception {
-		PmrvUser user = PmrvUser.builder().userId("authId").build();
+		AppUser user = AppUser.builder().userId("authId").build();
 		String userId = "userId";
 		OperatorUserDTO operatorUserDTO = OperatorUserDTO.builder()
 				.firstName("fn")
@@ -221,8 +218,8 @@ class OperatorUserManagementControllerTest {
 
 		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "updateOperatorUserById", accountId.toString());
+            .when(appUserAuthorizationService)
+            .authorize(user, "updateOperatorUserById", accountId.toString(), null, null);
 
 		mockMvc.perform(
 				MockMvcRequestBuilders.patch(BASE_PATH + "/account/" + accountId + "/" + userId)
@@ -236,7 +233,7 @@ class OperatorUserManagementControllerTest {
 	
 	@Test
 	void resetOperator2Fa() throws Exception {
-		PmrvUser user = PmrvUser.builder().userId("authId").build();
+		AppUser user = AppUser.builder().userId("authId").build();
 		String userId = "userId";
 
 		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
@@ -250,14 +247,14 @@ class OperatorUserManagementControllerTest {
 
 	@Test
 	void resetOperator2Fa_forbidden() throws Exception {
-		PmrvUser user = PmrvUser.builder().userId("authId").build();
+		AppUser user = AppUser.builder().userId("authId").build();
 		String userId = "userId";
 		Long accountId = 1L;
 
 		when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "resetOperator2Fa", accountId.toString());
+            .when(appUserAuthorizationService)
+            .authorize(user, "resetOperator2Fa", accountId.toString(), null, null);
 
 		mockMvc.perform(
 				MockMvcRequestBuilders.patch(BASE_PATH + "/account/" + accountId + "/" + userId + "/reset-2fa"))

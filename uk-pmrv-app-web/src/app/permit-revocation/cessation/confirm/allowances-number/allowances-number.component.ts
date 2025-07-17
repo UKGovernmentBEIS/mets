@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -8,6 +8,7 @@ import {
   PERMIT_REVOCATION_CESSATION_TASK_FORM,
   permitRevocationCessationFormProvider,
 } from '@permit-revocation/cessation/confirm/core/factory/cessation-form-provider';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { PendingRequestService } from '../../../../core/guards/pending-request.service';
 import { PendingRequest } from '../../../../core/interfaces/pending-request.interface';
@@ -15,12 +16,12 @@ import { PermitRevocationStore } from '../../../store/permit-revocation-store';
 
 @Component({
   selector: 'app-revocation-cessation-allowances-number',
-  template: `<app-wizard-step
+  template: `
+    <app-wizard-step
       (formSubmit)="onContinue()"
       [formGroup]="form"
       submitText="Continue"
-      [hideSubmit]="(store.isEditable$ | async) === false"
-    >
+      [hideSubmit]="(store.isEditable$ | async) === false">
       <span class="govuk-caption-l">Confirm cessation of regulated activities</span>
 
       <app-page-heading>How many allowances were surrendered by the installation?</app-page-heading>
@@ -30,20 +31,21 @@ import { PermitRevocationStore } from '../../../store/permit-revocation-store';
         inputType="number"
         govuk-text-input
         hint="For example 1000"
-        widthClass="govuk-input--width-10"
-      ></div>
+        widthClass="govuk-input--width-10"></div>
     </app-wizard-step>
-    <a govukLink routerLink="../..">Return to: Cessation</a> `,
+    <a govukLink routerLink="../..">Return to: Cessation</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [permitRevocationCessationFormProvider],
 })
-export class AllowancesNumberComponent implements PendingRequest {
+export class AllowancesNumberComponent implements PendingRequest, OnInit {
   constructor(
     @Inject(PERMIT_REVOCATION_CESSATION_TASK_FORM) readonly form: UntypedFormGroup,
     readonly store: PermitRevocationStore,
     readonly pendingRequest: PendingRequestService,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
 
   onContinue(): void {
@@ -69,5 +71,9 @@ export class AllowancesNumberComponent implements PendingRequest {
         )
         .subscribe(() => navigateToNextStep());
     }
+  }
+
+  ngOnInit(): void {
+    this.breadcrumbService.addToLastBreadcrumbAndShow('cessation');
   }
 }

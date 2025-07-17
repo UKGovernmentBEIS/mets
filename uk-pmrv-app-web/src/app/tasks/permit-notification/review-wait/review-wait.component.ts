@@ -9,7 +9,10 @@ import { BackLinkService } from '@shared/back-link/back-link.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewWaitComponent {
-  constructor(private readonly router: Router, private readonly backService: BackLinkService) {
+  constructor(
+    private readonly router: Router,
+    private readonly backService: BackLinkService,
+  ) {
     if (this.router.getCurrentNavigation()?.extras.state) {
       this.backService.show();
     }

@@ -5,17 +5,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.dto.UserRoleTypeDTO;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.dto.AccountInfoDTO;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserRoleTypeDTO;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
-import uk.gov.pmrv.api.user.core.domain.model.UserInfo;
+import uk.gov.netz.api.userinfoapi.UserInfo;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.Item;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.ItemPage;
@@ -40,7 +40,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.ACCOUNT_USERS_SETUP;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW;
 import static uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE;
@@ -72,9 +72,9 @@ class InstallationItemResponseCreationServiceTest {
     @Test
     void toItemDTOResponse_operator_same_assignee() {
         String userId = "operatorUserId";
-        RoleType userRoleType = RoleType.OPERATOR;
+        String userRoleType = RoleTypeConstants.OPERATOR;
         Long accountId = 1L;
-        PmrvUser operatorUser = buildOperatorUser(userId, "oper1", "oper1", accountId);
+        AppUser operatorUser = buildOperatorUser(userId, "oper1", "oper1", accountId);
         AccountInfoDTO operatorAccountInfo = buildAccountInfo(accountId);
         Item item = buildItem(ACCOUNT_USERS_SETUP, userId, accountId);
 
@@ -120,7 +120,7 @@ class InstallationItemResponseCreationServiceTest {
     @Test
     void toItemDTOResponse_operator_different_assignee() {
         Long accountId = 1L;
-        PmrvUser operatorUser = buildOperatorUser("oper1Id", "oper1", "oper1", accountId);
+        AppUser operatorUser = buildOperatorUser("oper1Id", "oper1", "oper1", accountId);
         AccountInfoDTO operatorAccountInfo = buildAccountInfo(accountId);
         Item item = buildItem(ACCOUNT_USERS_SETUP, "oper2Id", accountId);
         ItemPage itemPage = ItemPage.builder()
@@ -134,7 +134,7 @@ class InstallationItemResponseCreationServiceTest {
                 .firstName("oper2")
                 .lastName("oper2")
                 .build(),
-            RoleType.OPERATOR,
+            RoleTypeConstants.OPERATOR,
             null);
         ItemDTOResponse expectedItemDTOResponse = ItemDTOResponse.builder()
             .items(List.of(expectedItemDTO))
@@ -146,7 +146,7 @@ class InstallationItemResponseCreationServiceTest {
             .thenReturn(List.of(UserInfo.builder().id("oper2Id").firstName("oper2").lastName("oper2").build()));
 
         when(userRoleTypeService.getUserRoleTypeByUserId("oper2Id"))
-            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleType.OPERATOR).build());
+            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleTypeConstants.OPERATOR).build());
 
         when(accountQueryService.getAccountsInfoByIds(List.of(accountId)))
             .thenReturn(List.of(operatorAccountInfo));
@@ -168,7 +168,7 @@ class InstallationItemResponseCreationServiceTest {
     @Test
     void toItemDTOResponse_operator_only_request() {
         Long accountId = 1L;
-        PmrvUser operatorUser = buildOperatorUser("oper1Id", "oper1", "oper1", accountId);
+        AppUser operatorUser = buildOperatorUser("oper1Id", "oper1", "oper1", accountId);
         AccountInfoDTO operatorAccountInfo = buildAccountInfo(accountId);
         Item item = Item.builder()
             .creationDate(LocalDateTime.now())
@@ -218,7 +218,7 @@ class InstallationItemResponseCreationServiceTest {
     @Test
     void toItemDTOResponse_regulator_same_assignee() {
         Long accountId = 1L;
-        PmrvUser regulatorUser = buildRegulatorUser("reg1Id", "reg1", ENGLAND);
+        AppUser regulatorUser = buildRegulatorUser("reg1Id", "reg1", ENGLAND);
         AccountInfoDTO operatorAccountInfo = buildAccountInfo(accountId);
         Item item = buildItem(INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "reg1Id", accountId);
         ItemPage itemPage = ItemPage.builder()
@@ -232,7 +232,7 @@ class InstallationItemResponseCreationServiceTest {
                 .firstName("reg1")
                 .lastName("reg1")
                 .build(),
-            RoleType.REGULATOR,
+            RoleTypeConstants.REGULATOR,
             null);
         ItemDTOResponse expectedItemDTOResponse = ItemDTOResponse.builder()
             .items(List.of(expectedItemDTO))
@@ -244,7 +244,7 @@ class InstallationItemResponseCreationServiceTest {
             .thenReturn(List.of(operatorAccountInfo));
 
         when(userRoleTypeService.getUserRoleTypeByUserId("reg1Id"))
-            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleType.REGULATOR).build());
+            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleTypeConstants.REGULATOR).build());
 
         when(permitQueryService.getPermitIdByAccountId(1L)).thenReturn(Optional.empty());
 
@@ -263,7 +263,7 @@ class InstallationItemResponseCreationServiceTest {
     @Test
     void toItemDTOResponse_regulator_oneItemWithSameAssignee_oneUnassigned() {
         Long accountId = 1L;
-        PmrvUser regulatorUser = buildRegulatorUser("reg1Id", "reg1", ENGLAND);
+        AppUser regulatorUser = buildRegulatorUser("reg1Id", "reg1", ENGLAND);
         AccountInfoDTO operatorAccountInfo = buildAccountInfo(accountId);
         Item item1 = buildItem(INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "reg1Id", accountId);
         Item item2 = buildItem(INSTALLATION_ACCOUNT_OPENING_ARCHIVE, null, accountId);
@@ -276,12 +276,12 @@ class InstallationItemResponseCreationServiceTest {
         ItemDTO expectedItemDTO1 = buildItemDTO(
             item1,
             UserInfoDTO.builder().firstName("reg1").lastName("reg1").build(),
-            RoleType.REGULATOR,
+            RoleTypeConstants.REGULATOR,
             null);
         ItemDTO expectedItemDTO2 = buildItemDTO(
             item2,
             null,
-            RoleType.REGULATOR,
+            RoleTypeConstants.REGULATOR,
             null);
         ItemDTOResponse expectedItemDTOResponse = ItemDTOResponse.builder()
             .items(List.of(expectedItemDTO1, expectedItemDTO2))
@@ -293,7 +293,7 @@ class InstallationItemResponseCreationServiceTest {
             .thenReturn(List.of(operatorAccountInfo));
 
         when(userRoleTypeService.getUserRoleTypeByUserId("reg1Id"))
-            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleType.REGULATOR).build());
+            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleTypeConstants.REGULATOR).build());
 
         when(permitQueryService.getPermitIdByAccountId(1L)).thenReturn(Optional.empty());
 
@@ -312,7 +312,7 @@ class InstallationItemResponseCreationServiceTest {
     @Test
     void toItemDTOResponse_regulator_different_assignee() {
         Long accountId = 1L;
-        PmrvUser regulatorUser = buildRegulatorUser("reg1Id", "reg1", ENGLAND);
+        AppUser regulatorUser = buildRegulatorUser("reg1Id", "reg1", ENGLAND);
         AccountInfoDTO operatorAccountInfo = buildAccountInfo(accountId);
         Item item = buildItem(INSTALLATION_ACCOUNT_OPENING_APPLICATION_REVIEW, "reg2Id", accountId);
         ItemPage itemPage = ItemPage.builder()
@@ -326,7 +326,7 @@ class InstallationItemResponseCreationServiceTest {
                 .firstName("reg2")
                 .lastName("reg2")
                 .build(),
-            RoleType.REGULATOR,
+            RoleTypeConstants.REGULATOR,
             null);
         ItemDTOResponse expectedItemDTOResponse = ItemDTOResponse.builder()
             .items(List.of(expectedItemDTO))
@@ -341,7 +341,7 @@ class InstallationItemResponseCreationServiceTest {
             .thenReturn(List.of(operatorAccountInfo));
 
         when(userRoleTypeService.getUserRoleTypeByUserId("reg2Id"))
-            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleType.REGULATOR).build());
+            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleTypeConstants.REGULATOR).build());
 
         when(permitQueryService.getPermitIdByAccountId(1L)).thenReturn(Optional.empty());
 
@@ -364,7 +364,7 @@ class InstallationItemResponseCreationServiceTest {
         String fn = "fn";
         String ln = "ln";
         Long accountId = 1L;
-        PmrvUser verifierUser = buildVerifierUser(user, fn, ln, vbId);
+        AppUser verifierUser = buildVerifierUser(user, fn, ln, vbId);
         AccountInfoDTO operatorAccountInfo = buildAccountInfo(accountId);
         Item item = buildItem(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_SUBMIT, user, accountId);
         ItemPage itemPage = ItemPage.builder()
@@ -378,7 +378,7 @@ class InstallationItemResponseCreationServiceTest {
                 .firstName(fn)
                 .lastName(ln)
                 .build(),
-            RoleType.VERIFIER,
+            RoleTypeConstants.VERIFIER,
             null);
         ItemDTOResponse expectedItemDTOResponse = ItemDTOResponse.builder()
             .items(List.of(expectedItemDTO))
@@ -390,7 +390,7 @@ class InstallationItemResponseCreationServiceTest {
             .thenReturn(List.of(operatorAccountInfo));
 
         when(userRoleTypeService.getUserRoleTypeByUserId(user))
-            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleType.VERIFIER).build());
+            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleTypeConstants.VERIFIER).build());
 
         when(permitQueryService.getPermitIdByAccountId(1L)).thenReturn(Optional.empty());
 
@@ -416,7 +416,7 @@ class InstallationItemResponseCreationServiceTest {
         String assignee = "assignee";
         String assignee_fn = "assignee_fn";
         String assignee_ln = "assignee_ln";
-        PmrvUser verifierUser = buildVerifierUser(user, user_fn, user_ln, vbId);
+        AppUser verifierUser = buildVerifierUser(user, user_fn, user_ln, vbId);
         AccountInfoDTO operatorAccountInfo = buildAccountInfo(accountId);
         Item item = buildItem(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_SUBMIT, assignee, accountId);
         ItemPage itemPage = ItemPage.builder()
@@ -430,7 +430,7 @@ class InstallationItemResponseCreationServiceTest {
                 .firstName(assignee_fn)
                 .lastName(assignee_ln)
                 .build(),
-            RoleType.VERIFIER,
+            RoleTypeConstants.VERIFIER,
             null);
         ItemDTOResponse expectedItemDTOResponse = ItemDTOResponse.builder()
             .items(List.of(expectedItemDTO))
@@ -445,7 +445,7 @@ class InstallationItemResponseCreationServiceTest {
             .thenReturn(List.of(operatorAccountInfo));
 
         when(userRoleTypeService.getUserRoleTypeByUserId(assignee))
-            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleType.VERIFIER).build());
+            .thenReturn(UserRoleTypeDTO.builder().roleType(RoleTypeConstants.VERIFIER).build());
 
         when(permitQueryService.getPermitIdByAccountId(1L)).thenReturn(Optional.empty());
 
@@ -461,45 +461,45 @@ class InstallationItemResponseCreationServiceTest {
         verify(permitQueryService, times(1)).getPermitIdByAccountId(1L);
     }
 
-    private PmrvUser buildOperatorUser(String userId, String firstName, String lastName, Long accountId) {
+    private AppUser buildOperatorUser(String userId, String firstName, String lastName, Long accountId) {
 
-        PmrvAuthority pmrvAuthority = PmrvAuthority.builder()
+        AppAuthority pmrvAuthority = AppAuthority.builder()
             .accountId(accountId).build();
 
-        return PmrvUser.builder()
+        return AppUser.builder()
             .userId(userId)
             .firstName(firstName)
             .lastName(lastName)
             .authorities(List.of(pmrvAuthority))
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .build();
     }
 
-    private PmrvUser buildRegulatorUser(String userId, String username, CompetentAuthorityEnum ca) {
-        PmrvAuthority pmrvAuthority = PmrvAuthority.builder()
+    private AppUser buildRegulatorUser(String userId, String username, CompetentAuthorityEnum ca) {
+        AppAuthority pmrvAuthority = AppAuthority.builder()
             .competentAuthority(ca)
             .build();
 
-        return PmrvUser.builder()
+        return AppUser.builder()
             .userId(userId)
             .firstName(username)
             .lastName(username)
             .authorities(List.of(pmrvAuthority))
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .build();
     }
 
-    private PmrvUser buildVerifierUser(String userId, String fn, String ln, Long vbId) {
-        PmrvAuthority pmrvAuthority = PmrvAuthority.builder()
+    private AppUser buildVerifierUser(String userId, String fn, String ln, Long vbId) {
+        AppAuthority pmrvAuthority = AppAuthority.builder()
             .verificationBodyId(vbId)
             .build();
 
-        return PmrvUser.builder()
+        return AppUser.builder()
             .userId(userId)
             .firstName(fn)
             .lastName(ln)
             .authorities(List.of(pmrvAuthority))
-            .roleType(RoleType.VERIFIER)
+            .roleType(RoleTypeConstants.VERIFIER)
             .build();
     }
 
@@ -516,7 +516,7 @@ class InstallationItemResponseCreationServiceTest {
             .build();
     }
 
-    private ItemDTO buildItemDTO(Item item, UserInfoDTO taskAssignee, RoleType roleType, String permitReferenceId) {
+    private ItemDTO buildItemDTO(Item item, UserInfoDTO taskAssignee, String roleType, String permitReferenceId) {
         return ItemDTO.builder()
             .creationDate(item.getCreationDate())
             .requestId(item.getRequestId())

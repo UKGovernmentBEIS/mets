@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/cor
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, switchMap, switchMapTo, takeUntil, tap } from 'rxjs';
+import { combineLatest, first, switchMap, takeUntil, tap } from 'rxjs';
+
+import { DestroySubject } from '@core/services/destroy-subject.service';
+import { BackLinkService } from '@shared/back-link/back-link.service';
 
 import { OperatorUsersRegistrationService } from 'pmrv-api';
 
-import { DestroySubject } from '../../core/services/destroy-subject.service';
-import { BackLinkService } from '../../shared/back-link/back-link.service';
 import { PASSWORD_FORM, passwordFormFactory } from '../../shared-user/password/password-form.factory';
 import { UserRegistrationStore } from '../store/user-registration.store';
 
@@ -43,17 +44,15 @@ export class ChoosePasswordComponent implements OnInit {
   submitPassword(): void {
     if (this.form.valid) {
       this.store.setState({ ...this.store.getState(), password: this.form.get('password').value, isSummarized: true });
-      if (this.store.getState().invitationStatus === 'PENDING_USER_ENABLE') {
+      if (this.store.getState().invitationStatus === 'ALREADY_REGISTERED_SET_PASSWORD_ONLY') {
         combineLatest([this.store.select('token'), this.store.select('password')])
           .pipe(
             first(),
             switchMap(([token, password]) =>
-              this.operatorUsersRegistrationService
-                .enableOperatorInvitedUser({
-                  invitationToken: token,
-                  password: password,
-                })
-                .pipe(switchMapTo(this.operatorUsersRegistrationService.acceptOperatorInvitation({ token: token }))),
+              this.operatorUsersRegistrationService.acceptAuthorityAndSetCredentialsToUser({
+                invitationToken: token,
+                password: password,
+              }),
             ),
           )
           .subscribe(() =>

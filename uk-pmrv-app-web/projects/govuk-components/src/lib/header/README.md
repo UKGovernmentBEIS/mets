@@ -25,7 +25,7 @@ in order to apply the required styling.
 The following is an example of a valid header container:
 
 ```html
-<govuk-header title="PMRV" logoSvg="/assets/images/govuk-header-logotype-crown.svg">
+<govuk-header title="PMRV" logoSvg="./assets/images/govuk-header-logotype-crown.svg">
   <govuk-header-actions-list>
     <a class="govuk-header__link">Profile</a>
   </govuk-header-actions-list>

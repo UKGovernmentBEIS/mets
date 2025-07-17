@@ -36,7 +36,10 @@ export class AdditionalDocumentsSharedComponent implements OnInit, PendingReques
 
   isFileUploaded$: Observable<boolean>;
 
-  constructor(readonly pendingRequest: PendingRequestService, private readonly destroy$: DestroySubject) {}
+  constructor(
+    readonly pendingRequest: PendingRequestService,
+    private readonly destroy$: DestroySubject,
+  ) {}
 
   ngOnInit(): void {
     this.isFileUploaded$ = this.form.get('documents').valueChanges.pipe(

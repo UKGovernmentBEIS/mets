@@ -1,16 +1,15 @@
 package uk.gov.pmrv.api.workflow.request.core.service;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.resource.AccountRequestAuthorizationResourceService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.rules.services.resource.AccountRequestAuthorizationResourceService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestCreateActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionPayloadType;
@@ -28,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @Service
 @RequiredArgsConstructor
 public class AvailableRequestService {
@@ -40,13 +40,15 @@ public class AvailableRequestService {
     private final AccountQueryService accountQueryService;
 
     @Transactional
-    public Map<RequestCreateActionType, RequestCreateValidationResult> getAvailableAccountWorkflows(final Long accountId,
-                                                                                                    final PmrvUser pmrvUser) {
+    public Map<RequestCreateActionType, RequestCreateValidationResult> getAvailableAccountWorkflows(final Long accountId, final AppUser appUser) {
 
         AccountType accountType = accountQueryService.getAccountType(accountId);
-        Set<RequestType> availableCreateRequestTypes = RequestType.getAvailableForAccountCreateRequestTypes(accountType,
-                accountQueryService.getAccountEmissionTradingScheme(accountId));
-        Set<RequestCreateActionType> actions = getAvailableCreateActions(accountId, pmrvUser, availableCreateRequestTypes);
+
+        EmissionTradingScheme emissionTradingScheme = accountQueryService.getAccountEmissionTradingScheme(accountId);
+
+        Set<RequestType> availableCreateRequestTypesForAccount = RequestType.getAvailableForAccountCreateRequestTypes(accountType,emissionTradingScheme);
+
+        Set<RequestCreateActionType> actions = getAvailableCreateActions(accountId, appUser, availableCreateRequestTypesForAccount);
 
         return actions.stream()
                 .collect(Collectors.toMap(
@@ -59,7 +61,7 @@ public class AvailableRequestService {
 
     @Transactional
     public Map<RequestCreateActionType, RequestCreateValidationResult> getAvailableAerWorkflows(
-            final String requestId, final PmrvUser pmrvUser) {
+            final String requestId, final AppUser appUser) {
 
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
@@ -70,10 +72,10 @@ public class AvailableRequestService {
                 .build();
 
         AccountType accountType = accountQueryService.getAccountType(request.getAccountId());
-        Set<RequestType> availableCreateRequestTypes = RequestType.getAvailableForReportingCreateRequestTypes(accountType,
+        Set<RequestType> availableCreateRequestTypes = RequestType.getAvailableForAERCreateRequestTypes(accountType,
                 accountQueryService.getAccountEmissionTradingScheme(request.getAccountId()));
                 Set < RequestCreateActionType > actions = this.getAvailableCreateActions(
-                        request.getAccountId(), pmrvUser, availableCreateRequestTypes);
+                        request.getAccountId(), appUser, availableCreateRequestTypes);
 
         return actions.stream()
                 .collect(Collectors.toMap(
@@ -85,10 +87,10 @@ public class AvailableRequestService {
     }
 
     private Set<RequestCreateActionType> getAvailableCreateActions(final Long accountId,
-                                                                   final PmrvUser pmrvUser,
+                                                                   final AppUser appUser,
                                                                    final Set<RequestType> availableCreateRequestTypes) {
         return accountRequestAuthorizationResourceService
-                .findRequestCreateActionsByAccountId(pmrvUser, accountId).stream()
+                .findRequestCreateActionsByAccountId(appUser, accountId).stream()
                 .map(RequestCreateActionType::valueOf)
                 .filter(type -> enabledWorkflowValidator.isWorkflowEnabled(type.getType()))
                 .filter(type -> availableCreateRequestTypes.contains(type.getType()))

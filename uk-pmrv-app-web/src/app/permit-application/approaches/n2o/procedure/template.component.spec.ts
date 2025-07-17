@@ -15,7 +15,9 @@ describe('TemplateComponent', () => {
   let page: Page;
 
   @Component({
-    template: ` <app-template taskKey="monitoringApproaches.MEASUREMENT_N2O.emissionDetermination"></app-template> `,
+    template: `
+      <app-template taskKey="monitoringApproaches.MEASUREMENT_N2O.emissionDetermination"></app-template>
+    `,
   })
   class TestComponent {}
 

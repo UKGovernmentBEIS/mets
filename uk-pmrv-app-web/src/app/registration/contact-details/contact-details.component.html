@@ -3,10 +3,10 @@
     <form (ngSubmit)="submitContactDetails()" [formGroup]="form">
       <govuk-error-summary *ngIf="isSummaryDisplayed" [form]="form"></govuk-error-summary>
       <app-page-heading caption="Create user account" size="xl">Enter your details</app-page-heading>
-      <fieldset govukFieldset id="user-details-fieldset">
-        <legend govukLegend>Your name</legend>
+      <div id="user-details-fieldset">
+        <h2 class="govuk-heading-m">Your name</h2>
         <app-user-input phoneType="full"></app-user-input>
-      </fieldset>
+      </div>
       <button govukButton type="submit">Continue</button>
     </form>
   </div>

@@ -15,8 +15,10 @@ import { sourceStreamFormProvider } from './source-stream-form.provider';
   selector: 'app-source-streams-details',
   template: `
     <app-aer-task>
-      <app-source-streams-details-template (formSubmit)="onSubmit()" [form]="form" [isEditing]="isEditing$ | async">
-      </app-source-streams-details-template>
+      <app-source-streams-details-template
+        (formSubmit)="onSubmit()"
+        [form]="form"
+        [isEditing]="isEditing$ | async"></app-source-streams-details-template>
     </app-aer-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

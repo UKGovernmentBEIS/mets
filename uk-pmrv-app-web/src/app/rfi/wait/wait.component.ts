@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, map, of, pluck, switchMap, withLatestFrom } from 'rxjs';
+import { first, map, of, switchMap, withLatestFrom } from 'rxjs';
 
 import { BackLinkService } from '@shared/back-link/back-link.service';
 import { hasRequestTaskAllowedActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
@@ -36,9 +36,9 @@ export class WaitComponent implements OnInit {
     map((res) => this.sortTimeline(res)),
   );
 
-  readonly daysRemaining$ = this.store.pipe(pluck('daysRemaining'));
-  readonly assignee$ = this.store.pipe(pluck('assignee'));
-  readonly allowedRequestTaskActions$ = this.store.pipe(pluck('allowedRequestTaskActions'));
+  readonly daysRemaining$ = this.store.pipe(map((state) => state?.daysRemaining));
+  readonly assignee$ = this.store.pipe(map((state) => state?.assignee));
+  readonly allowedRequestTaskActions$ = this.store.pipe(map((state) => state?.allowedRequestTaskActions));
 
   hasRelatedActions$ = this.store.pipe(
     map(

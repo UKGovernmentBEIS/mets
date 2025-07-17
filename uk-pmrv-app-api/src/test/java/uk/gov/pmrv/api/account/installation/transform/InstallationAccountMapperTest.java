@@ -24,7 +24,7 @@ import uk.gov.pmrv.api.account.transform.LegalEntityMapper;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
 import uk.gov.pmrv.api.common.domain.Address;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

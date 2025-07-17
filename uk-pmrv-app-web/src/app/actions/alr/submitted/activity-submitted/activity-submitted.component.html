@@ -1,0 +1,9 @@
+<ng-container *ngIf="vm() as vm">
+  <app-action-task header="Activity level report" [breadcrumb]="true">
+    <app-alr-activity-summary-template
+      [isEditable]="false"
+      [data]="vm.alr"
+      [alrFile]="vm.alrFiles"
+      [files]="vm.files"></app-alr-activity-summary-template>
+  </app-action-task>
+</ng-container>

@@ -2,11 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { first, Observable, switchMap, tap } from 'rxjs';
 
-import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
-import { CommonTasksStore } from '@tasks/store/common-tasks.store';
+import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 
 import {
   Doal,
@@ -16,24 +15,12 @@ import {
   DoalRequestMetadata,
   RequestTaskActionEmptyPayload,
   RequestTaskActionPayload,
-  RequestTaskItemDTO,
-  TasksService,
 } from 'pmrv-api';
 
 import { DoalAuthorityTaskSectionKey, DoalTaskSectionKey } from './doal-task.type';
 
 @Injectable({ providedIn: 'root' })
-export class DoalService {
-  constructor(
-    private readonly store: CommonTasksStore,
-    private readonly tasksService: TasksService,
-    private readonly businessErrorService: BusinessErrorService,
-  ) {}
-
-  get requestTaskItem$(): Observable<RequestTaskItemDTO> {
-    return this.store.requestTaskItem$;
-  }
-
+export class DoalService extends TasksHelperService {
   get payload$(): Observable<DoalApplicationSubmitRequestTaskPayload> {
     return this.store.payload$ as Observable<DoalApplicationSubmitRequestTaskPayload>;
   }
@@ -48,10 +35,6 @@ export class DoalService {
 
   get requestMetadata$(): Observable<DoalRequestMetadata> {
     return this.store.requestMetadata$ as Observable<DoalRequestMetadata>;
-  }
-
-  get isEditable$(): Observable<boolean> {
-    return this.store.isEditable$;
   }
 
   get doalAttachments() {
@@ -69,10 +52,6 @@ export class DoalService {
       downloadUrl: this.getBaseFileDownloadUrl() + `${file}`,
       fileName: attachments[file],
     };
-  }
-
-  getBaseFileDownloadUrl() {
-    return `/tasks/${this.store.requestTaskId}/file-download/`;
   }
 
   saveDoal(

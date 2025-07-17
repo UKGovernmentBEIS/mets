@@ -24,7 +24,10 @@ export class EmpVariationReviewDecisionGroupFormComponent implements OnInit {
   uploadedFiles = [];
   isEditable$: Observable<boolean>;
 
-  constructor(readonly store: RequestTaskStore, readonly formProvider: EmpVariationReviewDecisionGroupFormProvider) {}
+  constructor(
+    readonly store: RequestTaskStore,
+    readonly formProvider: EmpVariationReviewDecisionGroupFormProvider,
+  ) {}
 
   ngOnInit(): void {
     this.updateUploadedFiles();

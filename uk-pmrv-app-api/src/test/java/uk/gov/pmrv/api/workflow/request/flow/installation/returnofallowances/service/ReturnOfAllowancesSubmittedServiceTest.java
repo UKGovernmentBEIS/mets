@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -74,6 +74,6 @@ class ReturnOfAllowancesSubmittedServiceTest {
 
         verify(requestService).addActionToRequest(eq(request), eq(expectedPayload),
             eq(RequestActionType.RETURN_OF_ALLOWANCES_APPLICATION_SUBMITTED), any());
-        verify(officialNoticeService).sendOfficialNotice(eq(request), eq(officialNotice), eq(decisionNotification));
+        verify(officialNoticeService).sendOfficialNotice(request, officialNotice, decisionNotification);
     }
 }

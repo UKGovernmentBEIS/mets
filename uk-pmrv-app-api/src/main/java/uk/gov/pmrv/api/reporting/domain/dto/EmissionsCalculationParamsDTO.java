@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.ObjectUtils;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamType;
 import uk.gov.pmrv.api.reporting.domain.ActivityDataMeasurementUnit;
 import uk.gov.pmrv.api.reporting.domain.CarbonContentMeasurementUnit;

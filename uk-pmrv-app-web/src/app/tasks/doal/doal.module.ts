@@ -62,7 +62,6 @@ import { VerificationReportComponent } from './submit/verification-report/verifi
     AlcInformationSummaryComponent,
     ApprovedAllocationsComponent,
     AuthorityResponseContainerComponent,
-    AuthorityResponseContainerComponent,
     AuthorityResponseDeleteComponent,
     AuthorityResponseNotifyOperatorComponent,
     AuthorityResponsePreliminaryAllocationComponent,

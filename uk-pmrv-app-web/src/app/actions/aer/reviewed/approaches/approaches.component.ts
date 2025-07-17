@@ -13,8 +13,7 @@ import { AerService } from '../../core/aer.service';
     <app-action-task
       *ngIf="payload$ | async as payload"
       header="{{ this.groupKey | monitoringApproachEmissionDescription }}"
-      [breadcrumb]="true"
-    >
+      [breadcrumb]="true">
       <div [ngSwitch]="this.groupKey">
         <div *ngSwitchCase="'CALCULATION_CO2'">
           <app-calculation-emissions-group [data]="(payload$ | async).aer"></app-calculation-emissions-group>
@@ -36,5 +35,8 @@ export class ApproachesComponent {
     map(([payload]) => payload.reviewGroupDecisions[this.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

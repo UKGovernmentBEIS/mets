@@ -6,7 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
-import uk.gov.pmrv.api.account.aviation.service.AviationAccountUpdateService;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerSubmitParams;
@@ -14,14 +13,12 @@ import uk.gov.pmrv.api.aviationreporting.common.service.AviationAerService;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEts;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsContainer;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsTotalReportableEmissions;
-import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.AviationAerUkEtsSubmittedEmissions;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationData;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.LimitedCompanyOrganisation;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OrganisationLegalStatusType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.AviationOperatorDetails;
-import uk.gov.pmrv.api.verificationbody.domain.verificationbodydetails.VerificationBodyDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -41,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,16 +53,13 @@ class AviationAerUkEtsCompleteServiceTest {
     private RequestAviationAccountQueryService requestAviationAccountQueryService;
 
     @Mock
-    private RequestVerificationService<AviationAerUkEtsVerificationReport> requestVerificationService;
+    private RequestVerificationService requestVerificationService;
 
     @Mock
     private AviationAerService aviationAerService;
 
     @Mock
     private AviationAerUkEtsMapper aviationAerMapper;
-
-    @Mock
-    private AviationAccountUpdateService aviationAccountUpdateService;
 
     @Test
     void complete_when_reporting_required() {
@@ -114,11 +107,6 @@ class AviationAerUkEtsCompleteServiceTest {
             .serviceContactDetails(ServiceContactDetails.builder().build())
             .build();
 
-        VerificationBodyDetails verificationBodyDetails = VerificationBodyDetails.builder()
-            .name("vbName")
-            .accreditationReferenceNumber("refNum")
-            .build();
-
         AviationAerUkEtsContainer aerContainer = AviationAerUkEtsContainer.builder().reportingRequired(true).aer(aer).build();
 
         AviationAerSubmitParams submitAerParams = AviationAerSubmitParams.builder()
@@ -128,11 +116,9 @@ class AviationAerUkEtsCompleteServiceTest {
         AviationAerUkEtsTotalReportableEmissions reportableEmissions = AviationAerUkEtsTotalReportableEmissions.builder()
                 .reportableEmissions(BigDecimal.valueOf(3456.10))
                 .build();
-        AviationAerUkEtsSubmittedEmissions submittedEmissions = AviationAerUkEtsSubmittedEmissions.builder().build();
 
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(accountInfo);
-        when(requestVerificationService.getVerificationBodyDetails(verificationReport, vbId)).thenReturn(verificationBodyDetails);
         when(aviationAerMapper
             .toAviationAerUkEtsContainer(requestPayload, EmissionTradingScheme.UK_ETS_AVIATION, accountInfo, metadata))
             .thenReturn(aerContainer);
@@ -148,10 +134,9 @@ class AviationAerUkEtsCompleteServiceTest {
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(requestAviationAccountQueryService, times(1)).getAccountInfo(accountId);
-        verify(requestVerificationService, times(1)).getVerificationBodyDetails(verificationReport, vbId);
+        verify(requestVerificationService, times(1)).refreshVerificationReportVBDetails(verificationReport, vbId);
         verify(aviationAerMapper, times(1)).toAviationAerUkEtsContainer(requestPayload, EmissionTradingScheme.UK_ETS_AVIATION, accountInfo, metadata);
         verify(aviationAerService, times(1)).submitAer(submitAerParams);
-        verify(aviationAccountUpdateService, times(1)).updateAccountUponAerCompletion(accountId, operatorName, organisation.getOrganisationLocation());
     }
 
     @Test
@@ -197,8 +182,6 @@ class AviationAerUkEtsCompleteServiceTest {
         verify(requestAviationAccountQueryService, times(1)).getAccountInfo(accountId);
         verify(aviationAerMapper, times(1)).toAviationAerUkEtsContainer(requestPayload, EmissionTradingScheme.UK_ETS_AVIATION, accountInfo, metadata);
         verify(aviationAerService, times(1)).submitAer(submitAerParams);
-
-        verifyNoInteractions(aviationAccountUpdateService);
     }
 
     @Test
@@ -230,17 +213,11 @@ class AviationAerUkEtsCompleteServiceTest {
             .serviceContactDetails(ServiceContactDetails.builder().build())
             .build();
 
-        VerificationBodyDetails verificationBodyDetails = VerificationBodyDetails.builder()
-            .name("vbName")
-            .accreditationReferenceNumber("refNum")
-            .build();
-
         AviationAerUkEtsApplicationCompletedRequestActionPayload requestActionPayload =
             AviationAerUkEtsApplicationCompletedRequestActionPayload.builder().reportingRequired(true).aer(aer).build();
 
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(accountInfo);
-        when(requestVerificationService.getVerificationBodyDetails(verificationReport, vbId)).thenReturn(verificationBodyDetails);
         when(aviationAerMapper
             .toAviationAerUkEtsApplicationCompletedRequestActionPayload(requestPayload, RequestActionPayloadType.AVIATION_AER_UKETS_APPLICATION_COMPLETED_PAYLOAD, accountInfo, metadata))
             .thenReturn(requestActionPayload);

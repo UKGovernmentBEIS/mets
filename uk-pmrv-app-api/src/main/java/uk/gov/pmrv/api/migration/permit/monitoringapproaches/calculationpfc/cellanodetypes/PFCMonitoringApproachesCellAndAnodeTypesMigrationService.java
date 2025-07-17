@@ -1,8 +1,9 @@
 package uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationpfc.cellanodetypes;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
@@ -20,11 +21,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class PFCMonitoringApproachesCellAndAnodeTypesMigrationService implements PermitSectionMigrationService<CalculationOfPFCMonitoringApproach> {
 
     private final JdbcTemplate migrationJdbcTemplate;
+
+    public PFCMonitoringApproachesCellAndAnodeTypesMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+    }
 
     private static final String QUERY_BASE  =
             "with XMLNAMESPACES (\r\n" +

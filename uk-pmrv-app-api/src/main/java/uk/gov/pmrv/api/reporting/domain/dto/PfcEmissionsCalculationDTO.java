@@ -1,13 +1,14 @@
 package uk.gov.pmrv.api.reporting.domain.dto;
 
-import java.math.BigDecimal;
-import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import uk.gov.pmrv.api.reporting.domain.GlobalWarmingPotential;
+
+import java.math.BigDecimal;
+import java.util.Objects;
 
 @Data
 @AllArgsConstructor

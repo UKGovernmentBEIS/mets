@@ -13,8 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.permit.service.PermitService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -88,7 +88,7 @@ class PermitReissueDoReissueServiceTest {
 		
 		BusinessException be = assertThrows(BusinessException.class, () -> cut.doReissue(requestId));
 		
-		assertThat(be.getErrorCode()).isEqualTo(ErrorCode.REISSUE_ACCOUNT_NOT_APPLICABLE);
+		assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.REISSUE_ACCOUNT_NOT_APPLICABLE);
 		
 		verify(requestService, times(1)).findRequestById(requestId);
 		verify(permitReissueAccountValidationService, times(1)).isAccountApplicableToReissue(request);

@@ -14,16 +14,14 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
   template: `
     <app-aer-task-review
       heading="Non-compliances that were not corrected before completing this report"
-      returnToLink="../.."
-    >
+      returnToLink="../..">
       <app-non-compliances-group
         [isEditable]="isEditable$ | async"
         [uncorrectedNonCompliances]="uncorrectedNonCompliances$ | async"
         [showGuardQuestion]="false"
         [headingLarge]="false"
         [showCaption]="false"
-        baseLink=".."
-      ></app-non-compliances-group>
+        baseLink=".."></app-non-compliances-group>
       <div class="govuk-button-group" *ngIf="isEditable$ | async">
         <button appPendingButton govukButton type="button" (click)="onContinue()">Continue</button>
       </div>

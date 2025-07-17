@@ -8,7 +8,7 @@ import { feeFormProvider } from '../submit/fee/fee-form.provider';
   selector: 'app-invalid-data',
   template: `
     <govuk-error-summary [form]="form"></govuk-error-summary>
-    <a govukLink routerLink=".."> Return to Reportable emissions</a>
+    <a govukLink routerLink="..">Return to Reportable emissions</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [feeFormProvider],

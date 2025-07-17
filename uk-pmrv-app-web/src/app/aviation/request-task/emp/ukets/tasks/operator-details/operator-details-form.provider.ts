@@ -54,7 +54,10 @@ export class OperatorDetailsFormProvider
 
   private destroy$ = new Subject<void>();
 
-  constructor(private store: RequestTaskStore, private requestTaskFileService: RequestTaskFileService) {}
+  constructor(
+    private store: RequestTaskStore,
+    private requestTaskFileService: RequestTaskFileService,
+  ) {}
 
   get form(): FormGroup {
     if (!this._form) {

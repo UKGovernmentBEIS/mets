@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,14 +9,27 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { CalculationOfCO2ReportingEmissions } from './calculationOfCO2ReportingEmissions';
+import { CalculationOfPFCReportingEmissions } from './calculationOfPFCReportingEmissions';
 import { DreDeterminationReason } from './dreDeterminationReason';
 import { DreFee } from './dreFee';
-import { DreMonitoringApproachReportingEmissions } from './dreMonitoringApproachReportingEmissions';
+import { FallbackReportingEmissions } from './fallbackReportingEmissions';
+import { InherentCO2ReportingEmissions } from './inherentCO2ReportingEmissions';
+import { MeasurementOfCO2ReportingEmissions } from './measurementOfCO2ReportingEmissions';
+import { MeasurementOfN2OReportingEmissions } from './measurementOfN2OReportingEmissions';
 
 export interface Dre {
   determinationReason: DreDeterminationReason;
   officialNoticeReason: string;
-  monitoringApproachReportingEmissions: { [key: string]: DreMonitoringApproachReportingEmissions };
+  monitoringApproachReportingEmissions: {
+    [key: string]:
+      | CalculationOfCO2ReportingEmissions
+      | CalculationOfPFCReportingEmissions
+      | FallbackReportingEmissions
+      | InherentCO2ReportingEmissions
+      | MeasurementOfCO2ReportingEmissions
+      | MeasurementOfN2OReportingEmissions;
+  };
   informationSources: Array<string>;
   fee: DreFee;
 }

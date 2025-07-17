@@ -71,7 +71,7 @@ describe('MonitoringRolesSummaryComponent', () => {
   });
 
   it('should mention the attachment', () => {
-    expect(page.files.map((dd) => dd.textContent)).toEqual(['some-file.txt']);
+    expect(page.files.map((dd) => dd.textContent)).toEqual([' some-file.txt ']);
   });
 
   it('should display the notification banner', () => {

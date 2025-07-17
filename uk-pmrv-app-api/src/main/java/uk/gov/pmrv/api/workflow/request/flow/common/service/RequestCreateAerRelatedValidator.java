@@ -4,8 +4,8 @@ import java.util.Set;
 
 import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountStatus;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
@@ -17,7 +17,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestCreateVali
 @RequiredArgsConstructor
 public abstract class RequestCreateAerRelatedValidator implements RequestCreateByRequestValidator<ReportRelatedRequestCreateActionPayload> {
 
-    private final RequestCreateValidatorService requestCreateValidatorService;
+    protected final RequestCreateValidatorService requestCreateValidatorService;
     protected final RequestQueryService requestQueryService;
 
     @Override
@@ -25,7 +25,7 @@ public abstract class RequestCreateAerRelatedValidator implements RequestCreateB
     	RequestDetailsDTO requestDetailsDTO = requestQueryService.findRequestDetailsById(payload.getRequestId());
     	
     	if(requestDetailsDTO.getRequestType() != this.getReferableRequestType()) {
-    		throw new BusinessException(ErrorCode.AER_REQUEST_IS_NOT_AER, payload.getRequestId());
+    		throw new BusinessException(MetsErrorCode.AER_REQUEST_IS_NOT_AER, payload.getRequestId());
     	}
     	
     	final RequestCreateValidationResult overallValidationResult = RequestCreateValidationResult.builder().valid(true).build();

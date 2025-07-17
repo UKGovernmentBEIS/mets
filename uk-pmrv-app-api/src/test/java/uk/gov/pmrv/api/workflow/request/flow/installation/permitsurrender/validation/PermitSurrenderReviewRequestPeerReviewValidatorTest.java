@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
@@ -35,7 +35,7 @@ class PermitSurrenderReviewRequestPeerReviewValidatorTest {
     void validate() {
         String peerReviewer = "peerReviewer";
         String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        AppUser appUser = AppUser.builder().userId(userId).build();
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(peerReviewer)
             .build();
@@ -50,10 +50,10 @@ class PermitSurrenderReviewRequestPeerReviewValidatorTest {
             .payload(requestTaskPayload)
             .build();
 
-        permitSurrenderReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, pmrvUser);
+        permitSurrenderReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, appUser);
 
         verify(peerReviewerTaskAssignmentValidator, times(1))
-            .validate(RequestTaskType.PERMIT_SURRENDER_APPLICATION_PEER_REVIEW, peerReviewer, pmrvUser);
+            .validate(RequestTaskType.PERMIT_SURRENDER_APPLICATION_PEER_REVIEW, peerReviewer, appUser);
         verify(permitSurrenderReviewDeterminationHandlerService, times(1))
             .validateReview(requestTaskPayload.getReviewDecision(), requestTaskPayload.getReviewDetermination());
     }

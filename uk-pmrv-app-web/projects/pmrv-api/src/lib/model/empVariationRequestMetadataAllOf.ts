@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -12,5 +12,5 @@
 
 export interface EmpVariationRequestMetadataAllOf {
   empConsolidationNumber?: number;
-  initiatorRoleType?: 'OPERATOR' | 'VERIFIER' | 'REGULATOR';
+  initiatorRoleType?: string;
 }

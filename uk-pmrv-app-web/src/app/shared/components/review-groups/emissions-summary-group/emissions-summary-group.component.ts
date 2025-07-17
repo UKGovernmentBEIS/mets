@@ -44,6 +44,8 @@ import { getPfcSummaries, getPfcSummariesTotals } from './approaches/emissions-s
 export class EmissionsSummaryGroupComponent implements OnInit {
   @Input() data: Aer;
 
+  DECIMAL_DIGITS: number = 0;
+
   sourceStreams: Array<SourceStream>;
 
   calculationsHasTransfer: boolean;

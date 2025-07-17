@@ -24,5 +24,8 @@ export class MeasurementComponent {
     >
   ).pipe(map((payload) => payload.aer));
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

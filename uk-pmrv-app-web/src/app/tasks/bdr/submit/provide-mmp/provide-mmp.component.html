@@ -1,0 +1,33 @@
+<app-bdr-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Are you providing a monitoring methodology plan as part of your application?"
+    caption="Provide the baseline data report and details"
+    [hideSubmit]="(isEditable$ | async) === false"
+    [showBackLink]="true">
+    <p class="govuk-body govuk-caption-m">
+      Installations which do not currently have free allocation status and a Monitoring Methodology Plan (MMP) approved
+      by their regulator must provide one alongside their BDR for their FA application to be complete.
+      <b>
+        However, if your MMP has been previously approved as part of your permit by your regulator and there have been
+        no changes to the production processes, monitoring methodologies or data sources, you do not need to upload
+        this.
+      </b>
+    </p>
+
+    <div formControlName="hasMmp" govuk-radio class="govuk-!-width-three-quarters">
+      <govuk-radio-option [value]="true" label="Yes">
+        <div govukConditionalContent>
+          <app-multiple-file-input
+            [baseDownloadUrl]="getDownloadUrl()"
+            label="Upload the monitoring methodology plan"
+            listTitle="Files added"
+            formControlName="mmpFiles"></app-multiple-file-input>
+        </div>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+  <app-bdr-return-link returnLink="../../"></app-bdr-return-link>
+</app-bdr-task>

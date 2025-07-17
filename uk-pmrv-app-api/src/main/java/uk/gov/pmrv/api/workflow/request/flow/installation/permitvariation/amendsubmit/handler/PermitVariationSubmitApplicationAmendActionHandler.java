@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.amend
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -26,7 +26,7 @@ public class PermitVariationSubmitApplicationAmendActionHandler implements
     private final WorkflowService workflowService;
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser,
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser,
                         PermitVariationApplicationSubmitApplicationAmendRequestTaskActionPayload payload) {
 
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -37,7 +37,7 @@ public class PermitVariationSubmitApplicationAmendActionHandler implements
             requestTask.getRequest(),
             null,
             RequestActionType.PERMIT_VARIATION_APPLICATION_AMENDS_SUBMITTED,
-            pmrvUser.getUserId());
+            appUser.getUserId());
 
         workflowService.completeTask(requestTask.getProcessTaskId());
     }

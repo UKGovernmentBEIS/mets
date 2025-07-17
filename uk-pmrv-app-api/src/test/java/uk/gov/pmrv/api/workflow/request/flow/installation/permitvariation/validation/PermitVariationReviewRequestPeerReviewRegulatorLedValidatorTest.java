@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.abbreviations.Abbreviations;
@@ -47,7 +47,7 @@ public class PermitVariationReviewRequestPeerReviewRegulatorLedValidatorTest {
     void validate() {
     	LocalDate activationDate = LocalDate.now();
         String selectedPeerReviewer = "selectedPeerReviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
             .build();
@@ -68,11 +68,11 @@ public class PermitVariationReviewRequestPeerReviewRegulatorLedValidatorTest {
             .payload(requestTaskPayload)
             .build();
 
-        cut.validate(requestTask, taskActionPayload, pmrvUser);
+        cut.validate(requestTask, taskActionPayload, appUser);
 
         verify(permitReviewDeterminationValidatorService, times(1)).validateDeterminationObject(determination);
         verify(peerReviewerTaskAssignmentValidator, times(1))
-            .validate(RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+            .validate(RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
         verify(permitReviewDeterminationValidatorService, times(1)).validateDeterminationObject(determination);
         verify(permitGrantedValidatorService, times(1)).validatePermit(PermitContainer.builder()
         		.activationDate(activationDate)

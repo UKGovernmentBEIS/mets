@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 
 import { first, map, Observable, of, switchMap, tap, withLatestFrom } from 'rxjs';
 
@@ -10,8 +10,12 @@ import { UsersService } from 'pmrv-api';
 @Injectable({
   providedIn: 'root',
 })
-export class InstallationAuthGuard implements CanActivate {
-  constructor(private store: AuthStore, private router: Router, private usersService: UsersService) {}
+export class InstallationAuthGuard {
+  constructor(
+    private store: AuthStore,
+    private router: Router,
+    private usersService: UsersService,
+  ) {}
 
   canActivate(): Observable<boolean | UrlTree> {
     return this.store.pipe(selectLoginStatus('INSTALLATION')).pipe(

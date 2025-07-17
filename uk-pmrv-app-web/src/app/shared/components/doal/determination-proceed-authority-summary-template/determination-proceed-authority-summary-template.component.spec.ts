@@ -16,8 +16,7 @@ describe('DeterminationProceedAuthoritySummaryTemplateComponent', () => {
     template: `
       <app-doal-determination-proceed-authority-summary-template
         [determination]="determination"
-        [editable]="editable"
-      ></app-doal-determination-proceed-authority-summary-template>
+        [editable]="editable"></app-doal-determination-proceed-authority-summary-template>
     `,
   })
   class TestComponent {

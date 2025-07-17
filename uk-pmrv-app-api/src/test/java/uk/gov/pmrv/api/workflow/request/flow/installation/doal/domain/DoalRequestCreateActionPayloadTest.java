@@ -13,7 +13,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateAct
 import java.time.Year;
 import java.util.Set;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 class DoalRequestCreateActionPayloadTest {
 
@@ -34,7 +35,7 @@ class DoalRequestCreateActionPayloadTest {
                 .build();
         Set<ConstraintViolation<DoalRequestCreateActionPayload>> violations = validator.validate(actionPayload);
 
-        assertThat(violations.size()).isZero();
+        assertThat(violations.isEmpty());
     }
 
     @Test
@@ -45,7 +46,7 @@ class DoalRequestCreateActionPayloadTest {
                 .build();
         Set<ConstraintViolation<DoalRequestCreateActionPayload>> violations = validator.validate(actionPayload);
 
-        assertThat(violations.size()).isEqualTo(1);
+        assertThat(violations).hasSize(1);
     }
 
     @Test
@@ -55,6 +56,6 @@ class DoalRequestCreateActionPayloadTest {
                 .build();
         Set<ConstraintViolation<DoalRequestCreateActionPayload>> violations = validator.validate(actionPayload);
 
-        assertThat(violations.size()).isEqualTo(1);
+        assertThat(violations).hasSize(1);
     }
 }

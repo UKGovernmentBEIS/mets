@@ -6,7 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum RegulatedActivitySection {
-    
+
+    WASTE,
     COMBUSTION,
     REFINING,
     METALS,

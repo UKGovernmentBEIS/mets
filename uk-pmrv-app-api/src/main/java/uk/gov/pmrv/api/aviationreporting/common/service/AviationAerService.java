@@ -3,6 +3,7 @@ package uk.gov.pmrv.api.aviationreporting.common.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerContainer;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerEntity;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerSubmitParams;
@@ -12,8 +13,7 @@ import uk.gov.pmrv.api.aviationreporting.common.repository.AviationAerRepository
 import uk.gov.pmrv.api.aviationreporting.common.util.AviationAerIdentifierGenerator;
 import uk.gov.pmrv.api.aviationreporting.common.validation.AviationAerValidatorService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.time.Year;
 import java.util.List;
@@ -37,7 +37,7 @@ public class AviationAerService {
         AviationAerTotalReportableEmissions reportableEmissions = null;
 
         if(Boolean.TRUE.equals(aerContainer.getReportingRequired())) {
-            reportableEmissions = reportableEmissionsService.updateReportableEmissions(aerContainer, accountId);
+            reportableEmissions = reportableEmissionsService.updateReportableEmissions(aerContainer, accountId, true);
             aerContainer.setReportableEmissions(reportableEmissions);
             aerContainer.setSubmittedEmissions(getEmissionsCalculationService(aerContainer.getScheme()).calculateSubmittedEmissions(aerContainer));
 

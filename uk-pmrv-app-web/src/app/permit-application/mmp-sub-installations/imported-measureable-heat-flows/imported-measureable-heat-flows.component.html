@@ -1,0 +1,52 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    [heading]="'Imported measurable heat flows from non-ETS'"
+    [caption]="productBenchmarkType$ | async | subInstallationType"
+    submitText="Continue">
+    <div class="govuk-!-width-two-thirds">
+      <div class="govuk-body">
+        For the specific purpose of the baseline data collection, this section should cover all data provided in section
+        F.(d) and F.(k).iv in the "baseline data collection" template.
+      </div>
+      <div class="govuk-body">
+        An amount of emissions must be deducted from the preliminary annual allocation from product-benchmark
+        sub-installations, in line with Article 21 of the Free Allocation Regulations (FAR).
+      </div>
+      <div class="govuk-body">
+        This should include any heat from nitric acid, in line with Article 16(5) of the FAR.
+      </div>
+
+      <div
+        formControlName="exist"
+        govuk-radio
+        legend="Are there any measurable heat flows imported from non-ETS installations or entities?"
+        [legendSize]="'medium'">
+        <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+        <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+      </div>
+
+      <ng-container *ngIf="form.get('exist')?.value">
+        <h2 class="govuk-heading-m">Description of methodology applied</h2>
+
+        <p class="govuk-caption-m">
+          Explain how heat is determined to be of non-ETS origin and consumed within the system boundaries of the
+          sub-installation.
+        </p>
+
+        <app-include-answer-details></app-include-answer-details>
+
+        <div formControlName="methodologyAppliedDescription" govuk-textarea [maxLength]="10000" rows="10"></div>
+
+        <app-multiple-file-input
+          [baseDownloadUrl]="getDownloadUrl()"
+          label="Upload supporting files (optional)"
+          formControlName="supportingFiles"
+          listTitle="Uploaded files"></app-multiple-file-input>
+      </ng-container>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+</app-permit-task>

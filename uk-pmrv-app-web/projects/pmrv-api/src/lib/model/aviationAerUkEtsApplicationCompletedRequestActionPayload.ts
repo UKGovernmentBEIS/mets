@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -13,6 +13,7 @@ import { AerReviewDecision } from './aerReviewDecision';
 import { AviationAerMonitoringPlanVersion } from './aviationAerMonitoringPlanVersion';
 import { AviationAerReportingObligationDetails } from './aviationAerReportingObligationDetails';
 import { AviationAerUkEts } from './aviationAerUkEts';
+import { AviationAerUkEtsSubmittedEmissions } from './aviationAerUkEtsSubmittedEmissions';
 import { AviationAerUkEtsVerificationReport } from './aviationAerUkEtsVerificationReport';
 import { RequestActionPayload } from './requestActionPayload';
 import { ServiceContactDetails } from './serviceContactDetails';
@@ -24,9 +25,11 @@ export interface AviationAerUkEtsApplicationCompletedRequestActionPayload extend
   reportingYear?: number;
   serviceContactDetails?: ServiceContactDetails;
   aerMonitoringPlanVersions?: Array<AviationAerMonitoringPlanVersion>;
-  aerAttachments?: { [key: string]: string };
+  verificationPerformed?: boolean;
+  submittedEmissions?: AviationAerUkEtsSubmittedEmissions;
   verificationReport?: AviationAerUkEtsVerificationReport;
+  aerAttachments?: { [key: string]: string };
+  verificationAttachments?: { [key: string]: string };
   reviewGroupDecisions?: { [key: string]: AerReviewDecision };
   reviewAttachments?: { [key: string]: string };
-  verificationAttachments?: { [key: string]: string };
 }

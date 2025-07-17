@@ -12,23 +12,25 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.pmrv.api.user.core.domain.dto.EmailDTO;
-import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserEnableDTO;
+import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserCredentialsDTO;
 import uk.gov.pmrv.api.user.core.domain.dto.TokenDTO;
 import uk.gov.pmrv.api.user.core.domain.enumeration.UserInvitationStatus;
 import uk.gov.pmrv.api.user.operator.domain.OperatorInvitedUserInfoDTO;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserRegistrationDTO;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserRegistrationWithCredentialsDTO;
+import uk.gov.pmrv.api.user.operator.domain.OperatorUserTokenVerificationResult;
+import uk.gov.pmrv.api.user.operator.domain.OperatorUserTokenVerificationStatus;
 import uk.gov.pmrv.api.user.operator.service.OperatorUserAcceptInvitationService;
 import uk.gov.pmrv.api.user.operator.service.OperatorUserActivationService;
 import uk.gov.pmrv.api.user.operator.service.OperatorUserRegistrationService;
 import uk.gov.pmrv.api.user.operator.service.OperatorUserTokenVerificationService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
@@ -45,8 +47,9 @@ class OperatorUserRegistrationControllerTest {
 	private static final String VERIFY_TOKEN_PATH = "/token-verification";
 	private static final String REGISTER_PATH = "/register";
 	private static final String ACCEPT_INVITATION_PATH = "/accept-invitation";
-	private static final String REGISTER_FROM_INVITATION_NO_CREDENTIALS = "/register-from-invitation-no-credentials";
-    private static final String ENABLE_FROM_INVITATION = "/enable-from-invitation";
+	private static final String ENABLE_WITH_CREDENTIALS_FROM_INVITATION = "/accept-authority-and-enable-invited-operator-with-credentials";
+	private static final String ENABLE_NO_CREDENTIALS_FROM_INVITATION = "/accept-authority-and-enable-invited-operator-without-credentials";
+	private static final String ACCEPT_AUTHORITY_AND_SET_CREDENTIALS_TO_USER = "/accept-authority-and-set-credentials-to-user";
 
     private MockMvc mockMvc;
 
@@ -54,7 +57,7 @@ class OperatorUserRegistrationControllerTest {
     private OperatorUserRegistrationController controller;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
     
     @Mock
     private OperatorUserTokenVerificationService operatorUserTokenVerificationService;
@@ -77,7 +80,7 @@ class OperatorUserRegistrationControllerTest {
     public void setUp() {
         mapper = new ObjectMapper();
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .setValidator(validator)
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .build();
@@ -99,23 +102,26 @@ class OperatorUserRegistrationControllerTest {
     void verifyUserRegistrationToken() throws Exception {
     	final String email = "email";
     	final String token = "token";
-        when(operatorUserTokenVerificationService.verifyRegistrationToken(anyString())).thenReturn(email);
+        when(operatorUserTokenVerificationService.verifyRegistrationTokenAndResolveAndValidateUserExistence(anyString())).thenReturn(OperatorUserTokenVerificationResult.builder()
+        		.email(email).status(OperatorUserTokenVerificationStatus.NOT_REGISTERED)
+        		.build());
 
         mockMvc.perform(
         		MockMvcRequestBuilders.post(USER_CONTROLLER_PATH + VERIFY_TOKEN_PATH)
 				            .contentType(MediaType.APPLICATION_JSON)
 				            .content(mapper.writeValueAsString(new TokenDTO(token))))
 	            .andExpect(status().isOk())
-	            .andExpect(jsonPath("$.email").value(email));
+	            .andExpect(jsonPath("$.email").value(email))
+	            .andExpect(jsonPath("$.status").value(OperatorUserTokenVerificationStatus.NOT_REGISTERED.name()));
         
-        verify(operatorUserTokenVerificationService, times(1)).verifyRegistrationToken(token);
+        verify(operatorUserTokenVerificationService, times(1)).verifyRegistrationTokenAndResolveAndValidateUserExistence(token);
     }
 
     @Test
     void verifyUserRegistrationToken_throwBusinessException() throws Exception {
     	final String token = "token";
-        when(operatorUserTokenVerificationService.verifyRegistrationToken(token))
-        	.thenThrow(new BusinessException(ErrorCode.USER_ALREADY_REGISTERED));
+        when(operatorUserTokenVerificationService.verifyRegistrationTokenAndResolveAndValidateUserExistence(token))
+        	.thenThrow(new BusinessException(ErrorCode.USER_ROLE_ALREADY_EXISTS));
 
         mockMvc.perform(
         		MockMvcRequestBuilders.post(USER_CONTROLLER_PATH + VERIFY_TOKEN_PATH)
@@ -123,7 +129,7 @@ class OperatorUserRegistrationControllerTest {
 				            .content(mapper.writeValueAsString(new TokenDTO(token))))
             	.andExpect(status().isBadRequest());
         
-        verify(operatorUserTokenVerificationService, times(1)).verifyRegistrationToken(token);
+        verify(operatorUserTokenVerificationService, times(1)).verifyRegistrationTokenAndResolveAndValidateUserExistence(token);
     }
     
     @Test
@@ -195,32 +201,15 @@ class OperatorUserRegistrationControllerTest {
     }
 
     @Test
-    void acceptInvitation_throw_business_exception() throws Exception {
-    	TokenDTO tokenDTO = new TokenDTO();
-    	tokenDTO.setToken("token");
-
-    	when(operatorUserAcceptInvitationService.acceptInvitation(tokenDTO.getToken()))
-    		.thenThrow(new BusinessException(ErrorCode.AUTHORITY_USER_IS_NOT_OPERATOR));
-
-    	 mockMvc.perform(
-         		MockMvcRequestBuilders.post(USER_CONTROLLER_PATH + ACCEPT_INVITATION_PATH)
- 				            .contentType(MediaType.APPLICATION_JSON)
- 				            .content(mapper.writeValueAsString(tokenDTO)))
-             	.andExpect(status().isBadRequest());
-
-         verify(operatorUserAcceptInvitationService, times(1)).acceptInvitation(tokenDTO.getToken());
-    }
-
-    @Test
-    void registerNewUserFromInvitation() throws Exception {
+    void acceptAuthorityAndEnableInvitedUserWithCredentials() throws Exception {
         OperatorUserRegistrationWithCredentialsDTO user = OperatorUserRegistrationWithCredentialsDTO.builder()
                 .emailToken("token").firstName("fn").lastName("ln").build();
         OperatorUserDTO userDTO = OperatorUserDTO.builder().email("email").firstName("fn").lastName("ln").build();
 
-        when(operatorUserActivationService.activateAndEnableOperatorInvitedUser(user)).thenReturn(userDTO);
+        when(operatorUserActivationService.acceptAuthorityAndEnableInvitedUserWithCredentials(user)).thenReturn(userDTO);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.put(USER_CONTROLLER_PATH + "/register-from-invitation")
+                MockMvcRequestBuilders.put(USER_CONTROLLER_PATH + ENABLE_WITH_CREDENTIALS_FROM_INVITATION)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(user)))
                 .andExpect(status().isOk())
@@ -228,19 +217,19 @@ class OperatorUserRegistrationControllerTest {
                 .andExpect(jsonPath("$.lastName").value("ln"))
                 .andExpect(jsonPath("$.email").value("email"));
 
-        verify(operatorUserActivationService, times(1)).activateAndEnableOperatorInvitedUser(user);
+        verify(operatorUserActivationService, times(1)).acceptAuthorityAndEnableInvitedUserWithCredentials(user);
     }
 
     @Test
-    void registerNewUserFromInvitationWithoutCredentials() throws Exception {
+    void acceptAuthorityAndEnableInvitedUser() throws Exception {
         OperatorUserRegistrationDTO user = OperatorUserRegistrationDTO.builder()
             .emailToken("token").firstName("fn").lastName("ln").build();
         OperatorUserDTO userDTO = OperatorUserDTO.builder().email("email").firstName("fn").lastName("ln").build();
 
-        when(operatorUserActivationService.activateOperatorInvitedUser(user)).thenReturn(userDTO);
+        when(operatorUserActivationService.acceptAuthorityAndEnableInvitedUser(user)).thenReturn(userDTO);
 
         mockMvc.perform(
-            MockMvcRequestBuilders.put(USER_CONTROLLER_PATH + REGISTER_FROM_INVITATION_NO_CREDENTIALS)
+            MockMvcRequestBuilders.put(USER_CONTROLLER_PATH + ENABLE_NO_CREDENTIALS_FROM_INVITATION)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(user)))
             .andExpect(status().isOk())
@@ -248,22 +237,22 @@ class OperatorUserRegistrationControllerTest {
             .andExpect(jsonPath("$.lastName").value("ln"))
             .andExpect(jsonPath("$.email").value("email"));
 
-        verify(operatorUserActivationService, times(1)).activateOperatorInvitedUser(user);
+        verify(operatorUserActivationService, times(1)).acceptAuthorityAndEnableInvitedUser(user);
     }
-
+    
     @Test
-    void enableOperatorInvitedUser() throws Exception {
-        InvitedUserEnableDTO operatorUser = InvitedUserEnableDTO.builder()
+    void acceptAuthorityAndSetCredentialsToUser() throws Exception {
+        InvitedUserCredentialsDTO operatorUser = InvitedUserCredentialsDTO.builder()
             .invitationToken("token")
             .password("password")
             .build();
 
         mockMvc.perform(
-            MockMvcRequestBuilders.put(USER_CONTROLLER_PATH + ENABLE_FROM_INVITATION)
+            MockMvcRequestBuilders.put(USER_CONTROLLER_PATH + ACCEPT_AUTHORITY_AND_SET_CREDENTIALS_TO_USER)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(operatorUser)))
             .andExpect(status().isNoContent());
 
-        verify(operatorUserActivationService, times(1)).enableOperatorInvitedUser(operatorUser);
+        verify(operatorUserActivationService, times(1)).acceptAuthorityAndSetCredentialsToUser(operatorUser);
     }
 }

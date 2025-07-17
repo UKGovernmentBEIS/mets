@@ -19,7 +19,7 @@ interface ViewModel {
 }
 
 @Component({
-  selector: 'app-return-for-amends',
+  selector: 'app-emp-return-for-amends',
   template: `
     <div class="govuk-grid-row" *ngIf="vm$ | async as vm">
       <div class="govuk-grid-column-two-thirds">
@@ -28,8 +28,7 @@ interface ViewModel {
           [creationDate]="vm.creationDate"
           [decisionAmends]="vm.decisionAmends"
           [reviewAttachments]="vm.reviewAttachments"
-          [downloadBaseUrl]="vm.downloadBaseUrl"
-        ></app-return-for-amends-shared>
+          [downloadBaseUrl]="vm.downloadBaseUrl"></app-return-for-amends-shared>
       </div>
     </div>
   `,

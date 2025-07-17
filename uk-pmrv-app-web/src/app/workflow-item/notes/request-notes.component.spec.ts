@@ -62,7 +62,7 @@ describe('RequestNotesComponent', () => {
     expect(page.notesContent).toEqual([
       ['Add a note'],
       [
-        `The note 1file 1Submitter 1, ${govukDatePipe.transform(
+        `The note 1 file 1 Submitter 1, ${govukDatePipe.transform(
           mockRequestNotesResults.requestNotes[0].lastUpdatedOn,
           'datetime',
         )}`,

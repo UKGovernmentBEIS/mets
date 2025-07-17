@@ -16,8 +16,8 @@ import uk.gov.pmrv.api.aviationreporting.corsia.domain.datagaps.AviationAerCorsi
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.emissionsmonitoringapproach.AviationAerCorsiaMonitoringApproach;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.AviationCorsiaOperatorDetails;
 
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -109,7 +110,7 @@ class AviationAerCorsiaValidatorServiceTest {
         BusinessException be = assertThrows(BusinessException.class,
                 () -> aviationAerCorsiaValidatorService.validateAer(aerContainer));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AVIATION_AER);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AVIATION_AER);
     }
 
     @Test
@@ -157,6 +158,36 @@ class AviationAerCorsiaValidatorServiceTest {
     }
 
     @Test
+    void validate_invalid_when_verif_report_missing() {
+        AviationAerCorsia aer = AviationAerCorsia.builder()
+                .operatorDetails(AviationCorsiaOperatorDetails.builder().build())
+                .build();
+        AviationAerCorsiaVerificationReport verificationReport = AviationAerCorsiaVerificationReport.builder().build();
+        AviationAerCorsiaContainer aerContainer = AviationAerCorsiaContainer.builder()
+                .reportingRequired(true)
+                .aer(aer)
+                .verificationReport(null)
+                .build();
+
+        when(operatorDetailsSectionValidator.validate(aerContainer)).thenReturn(AviationAerValidationResult.validAviationAer());
+        when(monitoringApproachSectionValidator.validate(aerContainer)).thenReturn(AviationAerValidationResult.validAviationAer());
+        when(dataGapsSectionValidator.validate(aerContainer)).thenReturn(AviationAerValidationResult.validAviationAer());
+        when(confidentialitySectionValidator.validate(aerContainer)).thenReturn(AviationAerValidationResult.validAviationAer());
+        when(aviationAerCorsiaAircraftDataSectionValidator.validate(aerContainer)).thenReturn(AviationAerValidationResult.validAviationAer());
+
+        BusinessException be = assertThrows(BusinessException.class,
+                () -> aviationAerCorsiaValidatorService.validate(aerContainer));
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AVIATION_AER);
+
+        verify(operatorDetailsSectionValidator, times(1)).validate(aerContainer);
+        verify(monitoringApproachSectionValidator, times(1)).validate(aerContainer);
+        verify(dataGapsSectionValidator, times(1)).validate(aerContainer);
+        verify(confidentialitySectionValidator, times(1)).validate(aerContainer);
+        verify(aviationAerCorsiaAircraftDataSectionValidator, times(1)).validate(aerContainer);
+        verify(corsiaVerificationReportValidatorService, never()).validate(verificationReport, aer);
+    }
+
+    @Test
     void validate_invalid_when_aer_invalid() {
         AviationAerCorsia aer = AviationAerCorsia.builder()
             .operatorDetails(AviationCorsiaOperatorDetails.builder().build())
@@ -181,7 +212,7 @@ class AviationAerCorsiaValidatorServiceTest {
         BusinessException be = assertThrows(BusinessException.class,
             () -> aviationAerCorsiaValidatorService.validate(aerContainer));
 
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_AVIATION_AER);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_AVIATION_AER);
 
         verify(operatorDetailsSectionValidator, times(1)).validate(aerContainer);
         verify(monitoringApproachSectionValidator, times(1)).validate(aerContainer);

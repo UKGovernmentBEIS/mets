@@ -58,7 +58,7 @@ export class UploadDocumentsComponent implements PendingRequest {
   }
 
   getDownloadUrl() {
-    return this.aerService.createBaseFileDownloadUrl();
+    return this.aerService.getBaseFileDownloadUrl();
   }
 
   private getAerAttachments() {

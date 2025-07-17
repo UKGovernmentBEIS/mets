@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.estimatedannualemissions.EstimatedAnnualEmissions;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -76,7 +76,7 @@ class PermitTransferBReviewServiceTest {
         final String selectedPeerReviewer = "selectedPeerReviewer";
         final Long accountId = 1L;
         final String user = "user";
-        final PmrvUser reviewer = PmrvUser.builder().userId(user).build();
+        final AppUser reviewer = AppUser.builder().userId(user).build();
 
         final PermitTransferBRequestPayload requestPayload = PermitTransferBRequestPayload.builder()
             .payloadType(RequestPayloadType.PERMIT_TRANSFER_B_REQUEST_PAYLOAD)
@@ -136,7 +136,7 @@ class PermitTransferBReviewServiceTest {
 
         final Long accountId = 1L;
         final String user = "user";
-        final PmrvUser reviewer = PmrvUser.builder().userId(user).build();
+        final AppUser reviewer = AppUser.builder().userId(user).build();
 
         final PermitTransferBRequestPayload requestPayload = PermitTransferBRequestPayload.builder()
             .payloadType(RequestPayloadType.PERMIT_TRANSFER_B_REQUEST_PAYLOAD)

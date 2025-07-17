@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { map, Observable, tap } from 'rxjs';
 
@@ -8,7 +8,7 @@ import { DocumentTemplateDTO, DocumentTemplatesService } from 'pmrv-api';
 @Injectable({
   providedIn: 'root',
 })
-export class DocumentTemplateGuard implements CanActivate, Resolve<DocumentTemplateDTO> {
+export class DocumentTemplateGuard {
   documentTemplate: DocumentTemplateDTO;
 
   constructor(private readonly documentTemplatesService: DocumentTemplatesService) {}

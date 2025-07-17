@@ -7,7 +7,10 @@ import { ActivatedRoute, Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApproachesTemplateComponent {
-  constructor(private readonly router: Router, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+  ) {}
 
   goToHelpPage(page: string): void {
     window.open(

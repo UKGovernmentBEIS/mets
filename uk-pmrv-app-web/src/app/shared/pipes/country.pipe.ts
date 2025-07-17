@@ -9,7 +9,10 @@ import { CountryService } from '../../core/services/country.service';
 export class CountryPipe implements PipeTransform {
   private latestValue = '';
 
-  constructor(private readonly countryService: CountryService, private readonly changeDetectorRef: ChangeDetectorRef) {}
+  constructor(
+    private readonly countryService: CountryService,
+    private readonly changeDetectorRef: ChangeDetectorRef,
+  ) {}
 
   transform(value: string): string {
     this.countryService

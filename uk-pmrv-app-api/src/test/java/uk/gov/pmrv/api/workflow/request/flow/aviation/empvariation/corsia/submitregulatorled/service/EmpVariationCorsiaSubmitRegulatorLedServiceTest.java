@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -142,11 +142,11 @@ class EmpVariationCorsiaSubmitRegulatorLedServiceTest {
 		DecisionNotification decisionNotification = DecisionNotification.builder()
 			.operators(Set.of("op1"))
 			.build();
-		PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+		AppUser appUser = AppUser.builder().userId("userId").build();
 
-		cut.saveDecisionNotification(requestTask, decisionNotification, pmrvUser);
+		cut.saveDecisionNotification(requestTask, decisionNotification, appUser);
 
-		assertThat(requestPayload.getRegulatorReviewer()).isEqualTo(pmrvUser.getUserId());
+		assertThat(requestPayload.getRegulatorReviewer()).isEqualTo(appUser.getUserId());
 		assertThat(requestPayload.getEmissionsMonitoringPlan()).isEqualTo(taskPayload.getEmissionsMonitoringPlan());
 		assertThat(requestPayload.getEmpVariationDetails()).isEqualTo(taskPayload.getEmpVariationDetails());
 		assertThat(requestPayload.getEmpAttachments()).isEqualTo(taskPayload.getAttachments());

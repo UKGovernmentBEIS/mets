@@ -1,8 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-
-import { KeycloakService } from 'keycloak-angular';
 
 import { TasksService } from 'pmrv-api';
 
@@ -57,9 +54,8 @@ describe('CloseConfirmationComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [CloseConfirmationComponent],
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       providers: [
-        KeycloakService,
         { provide: TasksService, useValue: tasksService },
         { provide: ActivatedRoute, useValue: activatedRoute },
       ],
@@ -85,7 +81,7 @@ describe('CloseConfirmationComponent', () => {
 
     it('should show confirmation message', () => {
       expect(page.confirmationMessage).toBe('Task closed successfully');
-      expect(page.panelBody.textContent.trim()).toEqual('Your reference code is:WA00025-1');
+      expect(page.panelBody.textContent.trim()).toEqual('Your reference code is: WA00025-1');
       expect(page.heading3.textContent.trim()).toEqual('What happens next');
       expect(page.paragraph.textContent.trim()).toEqual("You have marked this task as 'closed'.");
     });

@@ -6,18 +6,20 @@ import org.keycloak.representations.idm.UserRepresentation;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.AuthService;
-import uk.gov.pmrv.api.user.core.service.auth.UserRegistrationService;
+import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.user.verifier.domain.VerifierUserDTO;
 import uk.gov.pmrv.api.user.verifier.domain.VerifierUserInvitationDTO;
 import uk.gov.pmrv.api.user.verifier.transform.VerifierUserMapper;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.user.core.domain.enumeration.AuthenticationStatus.REGISTERED;
 
 @ExtendWith(MockitoExtension.class)
 class VerifierUserAuthServiceTest {
@@ -27,12 +29,26 @@ class VerifierUserAuthServiceTest {
 
     @Mock
     private AuthService authService;
-
+    
     @Mock
-    private UserRegistrationService userRegistrationService;
+    private UserAuthService userAuthService;
 
     @Mock
     private VerifierUserMapper verifierUserMapper;
+    
+    @Test
+    void getUserByEmail() {
+    	String email = "email";
+    	UserInfoDTO user = UserInfoDTO.builder().email(email).build();
+    	
+    	when(userAuthService.getUserByEmail(email)).thenReturn(Optional.of(user));
+    	
+    	Optional<UserInfoDTO> result = service.getUserByEmail(email);
+    	assertThat(result).isNotEmpty();
+    	assertThat(result.get()).isEqualTo(user);
+    	
+    	verify(userAuthService, times(1)).getUserByEmail(email);
+    }
 
     @Test
     void getVerifierUserById() {
@@ -55,24 +71,18 @@ class VerifierUserAuthServiceTest {
 
     @Test
     void updateVerifierUser() {
-        String userId = "userId";
-        UserRepresentation userRepresentation = createUserRepresentation(userId, "email");
-        UserRepresentation userRepresentationUpdated = createUserRepresentation(userId, "email2");
+        UserRepresentation userRepresentationUpdated = createUserRepresentation("userId", "email2");
         VerifierUserDTO verifierUserDTO = createVerifierUserDTO("email");
 
         // Mock
-        when(authService.getUserRepresentationById(userId)).thenReturn(userRepresentation);
-        when(verifierUserMapper.toUserRepresentation(verifierUserDTO, userId, userRepresentation.getUsername(),
-                verifierUserDTO.getEmail(), userRepresentation.getAttributes())).thenReturn(userRepresentationUpdated);
+        when(verifierUserMapper.toUserRepresentation(verifierUserDTO)).thenReturn(userRepresentationUpdated);
 
         // Invoke
-        service.updateVerifierUser(userId, verifierUserDTO);
+        service.updateVerifierUser(verifierUserDTO);
 
         // Assert
-        verify(authService, times(1)).getUserRepresentationById(userId);
-        verify(verifierUserMapper, times(1)).toUserRepresentation(verifierUserDTO, userId,
-                userRepresentation.getUsername(), verifierUserDTO.getEmail(), userRepresentation.getAttributes());
-        verify(authService, times(1)).updateUser(userRepresentationUpdated);
+        verify(verifierUserMapper, times(1)).toUserRepresentation(verifierUserDTO);
+        verify(authService, times(1)).saveUser(userRepresentationUpdated);
     }
 
     @Test
@@ -83,14 +93,14 @@ class VerifierUserAuthServiceTest {
         userRepresentation.setId(userId);
 
         when(verifierUserMapper.toUserRepresentation(verifierUserInvitation)).thenReturn(userRepresentation);
-        when(userRegistrationService.registerInvitedUser(userRepresentation)).thenReturn(userId);
+        when(authService.saveUser(userRepresentation)).thenReturn(userId);
 
         String actualUserId = service.registerInvitedVerifierUser(verifierUserInvitation);
 
         assertThat(actualUserId).isEqualTo(userId);
 
         verify(verifierUserMapper, times(1)).toUserRepresentation(verifierUserInvitation);
-        verify(userRegistrationService, times(1)).registerInvitedUser(userRepresentation);
+        verify(authService, times(1)).saveUser(userRepresentation);
     }
 
     private UserRepresentation createUserRepresentation(String id, String email) {
@@ -107,8 +117,7 @@ class VerifierUserAuthServiceTest {
                 .firstName("firstName")
                 .lastName("lastName")
                 .phoneNumber("2101313131")
-                .status(REGISTERED)
-                .termsVersion((short) 1)
+                .enabled(true)
                 .build();
     }
 }

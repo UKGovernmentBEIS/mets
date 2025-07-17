@@ -1,0 +1,34 @@
+<app-permit-task
+  [breadcrumb]="true"
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+>
+  <app-page-heading caption="Monitoring methodology plan">Check your answers</app-page-heading>
+
+  <app-mmp-installation-description-summary-template> </app-mmp-installation-description-summary-template>
+
+  <h2 class="govuk-heading-m">Connections to other ETS installations or non-ETS entities</h2>
+
+  <app-connection-list-summary-template
+    [connections]="('monitoringMethodologyPlans' | task | async)?.digitizedPlan?.installationDescription?.connections"
+    [isEditable]="store.isEditable$ | async"
+    baseLink="../connections/"
+  >
+  </app-connection-list-summary-template>
+
+  <ng-container
+    *ngIf="
+      (store.isEditable$ | async) === true &&
+      ('monitoringMethodologyPlans' | task | async)?.digitizedPlan?.installationDescription?.connections?.length < 10
+    "
+  >
+    <button govukSecondaryButton routerLink="../connections/add" type="button">Add an installation or entity</button>
+  </ng-container>
+  <div class="govuk-button-group" *ngIf="(hideSubmit$ | async) === false">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+  </div>
+</app-permit-task>
+<app-list-return-link
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+></app-list-return-link>

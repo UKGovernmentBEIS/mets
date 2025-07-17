@@ -8,9 +8,8 @@ describe('AirImprovementDataGroupReviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AirImprovementDataGroupReviewComponent ]
-    })
-    .compileComponents();
+      declarations: [AirImprovementDataGroupReviewComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AirImprovementDataGroupReviewComponent);
     component = fixture.componentInstance;

@@ -1,37 +1,41 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { firstValueFrom, of } from 'rxjs';
 
-import { ActivatedRouteSnapshotStub, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
-
-import { AuthoritiesService, TermsAndConditionsService, TermsDTO, UsersService } from 'pmrv-api';
-
+import { ConfigStore } from '@core/config/config.store';
 import {
   AuthStore,
   initialState,
   selectIsLoggedIn,
-  selectTerms,
   selectUser,
   selectUserProfile,
   selectUserState,
+  selectUserTerms,
   UserState,
-} from '../store/auth';
+} from '@core/store';
+import { ActivatedRouteSnapshotStub, mockClass } from '@testing';
+import { KeycloakService } from 'keycloak-angular';
+
+import { AuthoritiesService, TermsAndConditionsService, TermsDTO, UsersService, UserTermsVersionDTO } from 'pmrv-api';
+
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
   let authStore: AuthStore;
+  let configStore: ConfigStore;
   let activatedRoute: ActivatedRoute;
 
   const keycloakService = mockClass(KeycloakService);
+  keycloakService.logout.mockReturnValue(Promise.resolve());
+
   const user = {
     email: 'test@test.com',
     firstName: 'test',
     lastName: 'test',
-    termsVersion: 1,
   };
   const userState: UserState = {
     domainsLoginStatuses: { INSTALLATION: 'ENABLED' },
@@ -47,10 +51,13 @@ describe('AuthService', () => {
     getCurrentUserState: jest.fn().mockReturnValue(of(userState)),
   };
 
-  const terms: TermsDTO = { url: '/test', version: 1 };
+  const latestTerms: TermsDTO = { url: '/test', version: 1 };
+  const userTerms: UserTermsVersionDTO = { termsVersion: 1 };
   const termsService: Partial<jest.Mocked<TermsAndConditionsService>> = {
-    getLatestTerms: jest.fn().mockReturnValue(of(terms)),
+    getLatestTerms: jest.fn().mockReturnValue(of(latestTerms)),
+    getUserTerms: jest.fn().mockReturnValue(of(userTerms)),
   };
+  const baseHref = '/installation-aviation/';
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -60,10 +67,14 @@ describe('AuthService', () => {
         { provide: UsersService, useValue: usersService },
         { provide: AuthoritiesService, useValue: authoritiesService },
         { provide: TermsAndConditionsService, useValue: termsService },
+        { provide: APP_BASE_HREF, useValue: baseHref },
       ],
     });
 
     authStore = TestBed.inject(AuthStore);
+    configStore = TestBed.inject(ConfigStore);
+    configStore.setState({ features: { terms: true } });
+
     service = TestBed.inject(AuthService);
     activatedRoute = TestBed.inject(ActivatedRoute);
     keycloakService.loadUserProfile.mockResolvedValue({ email: 'test@test.com' });
@@ -100,24 +111,24 @@ describe('AuthService', () => {
 
   it('should update all user info when checkUser is called', async () => {
     await expect(firstValueFrom(authStore.asObservable())).resolves.toEqual(initialState);
-    keycloakService.isLoggedIn.mockResolvedValueOnce(false);
+    keycloakService.isLoggedIn.mockReturnValue(false);
 
     await expect(firstValueFrom(service.checkUser())).resolves.toBeUndefined();
 
     await expect(firstValueFrom(authStore.pipe(selectIsLoggedIn))).resolves.toBeFalsy();
     await expect(firstValueFrom(authStore.pipe(selectUserState))).resolves.toBeNull();
-    await expect(firstValueFrom(authStore.pipe(selectTerms))).resolves.toBeNull();
+    await expect(firstValueFrom(authStore.pipe(selectUserTerms))).resolves.toBeNull();
     await expect(firstValueFrom(authStore.pipe(selectUser))).resolves.toBeNull();
     await expect(firstValueFrom(authStore.pipe(selectUserProfile))).resolves.toBeNull();
 
     authStore.setIsLoggedIn(null);
-    keycloakService.isLoggedIn.mockResolvedValueOnce(true);
+    keycloakService.isLoggedIn.mockReturnValue(true);
 
     await expect(firstValueFrom(service.checkUser())).resolves.toBeUndefined();
 
     await expect(firstValueFrom(authStore.pipe(selectIsLoggedIn))).resolves.toBeTruthy();
     await expect(firstValueFrom(authStore.pipe(selectUserState))).resolves.toEqual(userState);
-    await expect(firstValueFrom(authStore.pipe(selectTerms))).resolves.toEqual(terms);
+    await expect(firstValueFrom(authStore.pipe(selectUserTerms))).resolves.toEqual(userTerms);
     await expect(firstValueFrom(authStore.pipe(selectUser))).resolves.toEqual(user);
     await expect(firstValueFrom(authStore.pipe(selectUserProfile))).resolves.toEqual({ email: 'test@test.com' });
   });
@@ -138,6 +149,14 @@ describe('AuthService', () => {
     await service.login();
 
     expect(keycloakService.login).toHaveBeenCalledTimes(1);
-    expect(keycloakService.login).toHaveBeenCalledWith({ redirectUri: location.origin });
+    expect(keycloakService.login).toHaveBeenCalledWith({ redirectUri: service.baseRedirectUri });
+  });
+
+  it('should not invoke load user terms service when terms feature is disabled', async () => {
+    configStore.setState({ features: { terms: false } });
+    await service.loadUserTerms();
+
+    expect(termsService.getUserTerms).not.toHaveBeenCalled();
+    await expect(firstValueFrom(authStore.pipe(selectUserTerms))).resolves.toBeNull();
   });
 });

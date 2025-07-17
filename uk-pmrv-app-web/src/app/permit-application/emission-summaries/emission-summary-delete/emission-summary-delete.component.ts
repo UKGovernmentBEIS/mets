@@ -9,7 +9,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 @Component({
   selector: 'app-emission-summary-delete',
   template: `
-    <app-page-heading size="xl"> Are you sure you want to delete this emission summary?</app-page-heading>
+    <app-page-heading size="xl">Are you sure you want to delete this emission summary?</app-page-heading>
 
     <p class="govuk-body">Any reference to this item will be removed from your application.</p>
 

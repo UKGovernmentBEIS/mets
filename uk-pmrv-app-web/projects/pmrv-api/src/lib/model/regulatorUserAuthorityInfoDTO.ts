@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -17,5 +17,4 @@ export interface RegulatorUserAuthorityInfoDTO {
   jobTitle?: string;
   authorityCreationDate?: string;
   authorityStatus?: 'PENDING' | 'TEMP_DISABLED_PENDING' | 'ACTIVE' | 'DISABLED' | 'ACCEPTED' | 'TEMP_DISABLED';
-  locked?: boolean;
 }

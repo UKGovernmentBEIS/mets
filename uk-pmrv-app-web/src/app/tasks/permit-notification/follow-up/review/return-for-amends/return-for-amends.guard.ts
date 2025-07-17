@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -11,8 +11,11 @@ import { resolveFollowUpReviewDecisionStatus } from '../../../core/section-statu
 @Injectable({
   providedIn: 'root',
 })
-export class FollowUpReturnForAmendsGuard implements CanActivate {
-  constructor(private readonly store: CommonTasksStore, private readonly router: Router) {}
+export class FollowUpReturnForAmendsGuard {
+  constructor(
+    private readonly store: CommonTasksStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return this.store.pipe(

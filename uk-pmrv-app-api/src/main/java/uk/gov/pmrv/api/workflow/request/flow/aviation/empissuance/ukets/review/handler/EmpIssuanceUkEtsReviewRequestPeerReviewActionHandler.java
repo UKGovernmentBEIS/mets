@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.review.
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -31,17 +31,17 @@ public class EmpIssuanceUkEtsReviewRequestPeerReviewActionHandler
     private final EmpIssuanceUkEtsReviewRequestPeerReviewValidatorService requestPeerReviewValidatorService;
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser, PeerReviewRequestTaskActionPayload payload) {
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser, PeerReviewRequestTaskActionPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         String selectedPeerReviewer = payload.getPeerReviewer();
 
-        requestPeerReviewValidatorService.validate(requestTask, selectedPeerReviewer, pmrvUser);
-        requestEmpUkEtsReviewService.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, pmrvUser);
+        requestPeerReviewValidatorService.validate(requestTask, selectedPeerReviewer, appUser);
+        requestEmpUkEtsReviewService.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, appUser);
         requestService.addActionToRequest(
             requestTask.getRequest(),
             null,
             RequestActionType.EMP_ISSUANCE_UKETS_PEER_REVIEW_REQUESTED,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
 
         workflowService.completeTask(

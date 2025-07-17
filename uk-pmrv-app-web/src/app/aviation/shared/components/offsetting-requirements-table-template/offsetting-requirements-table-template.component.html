@@ -1,0 +1,80 @@
+<ng-container *ngIf="useTableWithInputs; else tableWithoutInputs">
+  <govuk-table [columns]="columns" [data]="data">
+    <ng-template let-column="column" let-index="index" let-row="row">
+      <ng-container formGroupName="yearlyOffsettingData">
+        <ng-container *ngIf="index < 3" [formGroupName]="row.schemeYear" [ngSwitch]="column.field">
+          <ng-container *ngSwitchCase="'calculatedAnnualOffsetting'">
+            <div
+              formControlName="calculatedAnnualOffsetting"
+              govuk-text-input
+              inputType="number"
+              [isLabelHidden]="true"
+              label="Calculated annual offsetting for the year"
+              widthClass="govuk-!-width-one-quarter"></div>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'cefEmissionsReductions'">
+            <div
+              formControlName="cefEmissionsReductions"
+              govuk-text-input
+              inputType="number"
+              [isLabelHidden]="true"
+              label="CEF emissions reductions for the year"
+              widthClass="govuk-!-width-one-quarter"></div>
+          </ng-container>
+
+          <ng-container *ngSwitchDefault>
+            {{ row[column.field] }}
+          </ng-container>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="index === 3" [ngSwitch]="column.field">
+        <ng-container *ngSwitchCase="'calculatedAnnualOffsetting'">
+          <span class="bold-text">{{ totalYearlyOffsettingData.calculatedAnnualOffsetting }}</span>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'cefEmissionsReductions'">
+          <span class="bold-text">{{ totalYearlyOffsettingData.cefEmissionsReductions }}</span>
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+          <span class="bold-text">{{ row[column.field] }}</span>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="index > 3" [ngSwitch]="column.field">
+        <ng-container *ngSwitchCase="'cefEmissionsReductions'">
+          <span class="bold-text">{{ periodOffsettingRequirements.cefEmissionsReductions }}</span>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <span class="bold-text">{{ row[column.field] }}</span>
+        </ng-container>
+      </ng-container>
+    </ng-template>
+  </govuk-table>
+</ng-container>
+
+<ng-template #tableWithoutInputs>
+  <govuk-table [columns]="columns" [data]="data">
+    <ng-template let-column="column" let-index="index" let-row="row">
+      <ng-container *ngIf="index < 3" [ngSwitch]="column.field">
+        <ng-container *ngSwitchCase="'calculatedAnnualOffsetting'">
+          {{ row[column.field] }}
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'cefEmissionsReductions'">
+          {{ row[column.field] }}
+        </ng-container>
+
+        <ng-container *ngSwitchDefault>
+          <span class="bold-text">{{ row[column.field] }}</span>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="index >= 3" [ngSwitch]="column.field">
+        <span class="bold-text">{{ row[column.field] }}</span>
+      </ng-container>
+    </ng-template>
+  </govuk-table>
+</ng-template>

@@ -6,8 +6,10 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsiaContainer;
+import uk.gov.pmrv.api.aviationreporting.corsia.domain.totalemissions.AviationAerCorsiaSubmittedEmissions;
+import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaApplicationReturnedForAmendsRequestActionPayload;
@@ -32,6 +34,10 @@ import java.util.stream.Collectors;
 public interface AviationAerCorsiaReviewMapper {
 
     AviationAerCorsiaContainer toAviationAerCorsiaContainer(AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload taskPayload, EmissionTradingScheme scheme);
+
+    AviationAerCorsiaContainer toAviationAerCorsiaContainer(AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload taskPayload,
+                                                          AviationAerCorsiaVerificationReport verificationReport,
+                                                          EmissionTradingScheme scheme);
 
     @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "verificationReport", source = "requestPayload.verificationReport")
@@ -95,7 +101,10 @@ public interface AviationAerCorsiaReviewMapper {
     @Mapping(target = "aer.operatorDetails.attachmentIds", ignore = true)
     @Mapping(target = "aer.aerSectionAttachmentIds", ignore = true)
     AviationAerCorsiaApplicationSubmittedRequestActionPayload toAviationAerCorsiaApplicationSubmittedRequestActionPayload(
-        AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload taskPayload, RequestAviationAccountInfo accountInfo, RequestActionPayloadType payloadType);
+        AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload taskPayload,
+        RequestAviationAccountInfo accountInfo,
+        AviationAerCorsiaSubmittedEmissions submittedEmissions,
+        RequestActionPayloadType payloadType);
 
     @AfterMapping
     default void setAerAttachments(@MappingTarget AviationAerCorsiaApplicationSubmittedRequestActionPayload requestActionPayload,

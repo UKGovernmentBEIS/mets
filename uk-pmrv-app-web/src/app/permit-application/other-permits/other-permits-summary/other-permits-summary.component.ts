@@ -13,5 +13,8 @@ export class OtherPermitsSummaryComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
   environmentalPermitsAndLicences$ = this.store.getTask('environmentalPermitsAndLicences');
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly router: Router) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly router: Router,
+  ) {}
 }

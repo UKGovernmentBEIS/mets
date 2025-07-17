@@ -8,7 +8,6 @@ import { of, throwError } from 'rxjs';
 
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
-import { IPasswordStrengthMeterService, PasswordStrengthMeterService } from 'angular-password-strength-meter';
 
 import { GovukComponentsModule } from 'govuk-components';
 
@@ -26,7 +25,6 @@ describe('VerifierInvitationComponent', () => {
   let route: ActivatedRoute;
   let verifierUsersRegistrationService: jest.Mocked<VerifierUsersRegistrationService>;
   let passwordService: Partial<jest.Mocked<PasswordService>>;
-  let passwordStrengthMeterService: jest.Mocked<IPasswordStrengthMeterService>;
 
   class Page extends BasePage<VerifierInvitationComponent> {
     get emailValue() {
@@ -49,7 +47,6 @@ describe('VerifierInvitationComponent', () => {
   beforeEach(async () => {
     verifierUsersRegistrationService = mockClass(VerifierUsersRegistrationService);
     passwordService = mockClass(PasswordService);
-    passwordStrengthMeterService = mockClass(PasswordStrengthMeterService);
 
     const activatedRoute = new ActivatedRouteStub(
       undefined,
@@ -65,7 +62,7 @@ describe('VerifierInvitationComponent', () => {
       providers: [
         { provide: VerifierUsersRegistrationService, useValue: verifierUsersRegistrationService },
         { provide: PasswordService, useValue: passwordService },
-        { provide: IPasswordStrengthMeterService, useValue: passwordStrengthMeterService },
+
         { provide: ActivatedRoute, useValue: activatedRoute },
       ],
     }).compileComponents();
@@ -90,7 +87,7 @@ describe('VerifierInvitationComponent', () => {
   });
 
   it('should navigate for link related error', () => {
-    verifierUsersRegistrationService.acceptAndEnableVerifierInvitedUser.mockReturnValue(
+    verifierUsersRegistrationService.acceptAuthorityAndActivateVerifierUserFromInvite.mockReturnValue(
       throwError(() => new HttpErrorResponse({ error: { code: 'EMAIL1001' }, status: 400 })),
     );
     const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
@@ -108,7 +105,7 @@ describe('VerifierInvitationComponent', () => {
       queryParams: { code: 'EMAIL1001' },
     });
 
-    verifierUsersRegistrationService.acceptAndEnableVerifierInvitedUser.mockReturnValue(
+    verifierUsersRegistrationService.acceptAuthorityAndActivateVerifierUserFromInvite.mockReturnValue(
       throwError(() => new HttpErrorResponse({ error: { code: 'TOKEN1001' }, status: 400 })),
     );
 
@@ -129,13 +126,13 @@ describe('VerifierInvitationComponent', () => {
     page.submitButton.click();
     fixture.detectChanges();
 
-    expect(verifierUsersRegistrationService.acceptAndEnableVerifierInvitedUser).not.toHaveBeenCalled();
+    expect(verifierUsersRegistrationService.acceptAuthorityAndActivateVerifierUserFromInvite).not.toHaveBeenCalled();
 
     page.passwordValue = 'test';
     page.submitButton.click();
     fixture.detectChanges();
 
-    expect(verifierUsersRegistrationService.acceptAndEnableVerifierInvitedUser).not.toHaveBeenCalled();
+    expect(verifierUsersRegistrationService.acceptAuthorityAndActivateVerifierUserFromInvite).not.toHaveBeenCalled();
 
     passwordService.blacklisted.mockReturnValue(of(null));
     passwordService.strong.mockReturnValue(null);
@@ -145,8 +142,8 @@ describe('VerifierInvitationComponent', () => {
 
     page.submitButton.click();
     fixture.detectChanges();
-    expect(verifierUsersRegistrationService.acceptAndEnableVerifierInvitedUser).toHaveBeenCalledTimes(1);
-    expect(verifierUsersRegistrationService.acceptAndEnableVerifierInvitedUser).toHaveBeenCalledWith({
+    expect(verifierUsersRegistrationService.acceptAuthorityAndActivateVerifierUserFromInvite).toHaveBeenCalledTimes(1);
+    expect(verifierUsersRegistrationService.acceptAuthorityAndActivateVerifierUserFromInvite).toHaveBeenCalledWith({
       invitationToken: 'token',
       password: 'ThisIsAStrongP@ssw0rd',
     });

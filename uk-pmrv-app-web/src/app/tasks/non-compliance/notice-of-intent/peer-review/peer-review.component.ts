@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, map, Observable } from 'rxjs';
+
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { NonComplianceNoticeOfIntentRequestTaskPayload } from 'pmrv-api';
 
@@ -14,7 +16,7 @@ import { resolveSectionStatus } from '../section.status';
   templateUrl: './peer-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PeerReviewComponent {
+export class PeerReviewComponent implements OnInit {
   readonly allowPeerReviewDecision$: Observable<boolean> = this.store.pipe(
     first(),
     map((state) => {
@@ -34,9 +36,14 @@ export class PeerReviewComponent {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly nonComplianceService: NonComplianceService,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
 
   peerReviewDecision(): void {
     this.router.navigate(['./decision'], { relativeTo: this.route });
+  }
+
+  ngOnInit(): void {
+    this.breadcrumbService.cutLastBreadcrumbWithLinkandShow();
   }
 }

@@ -1,3 +1,5 @@
+import { mmpStatuses } from '@permit-application/monitoring-methodology-plan/mmp-status';
+
 import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload } from 'pmrv-api';
 
 import { findAmendedStatusKeysByReviewGroups } from '../../amend/amend';
@@ -7,6 +9,7 @@ import { amendRequestTaskTypes } from './permit';
 export const getAvailableSections = (state: PermitApplicationState): string[] => {
   return [
     ...getTasks(),
+    ...(state.permit?.monitoringMethodologyPlans?.exist && state?.features?.['digitized-mmp'] ? [...mmpStatuses] : []),
     ...Object.keys(state.permit?.monitoringApproaches ?? {}),
     ...(amendRequestTaskTypes.includes(state.requestTaskType)
       ? findAmendedStatusKeysByReviewGroups(

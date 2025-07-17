@@ -12,8 +12,7 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Verifier details" [breadcrumb]="true">
       <app-verifier-details-group
-        [verificationReport]="(payload$ | async).verificationReport"
-      ></app-verifier-details-group>
+        [verificationReport]="(payload$ | async).verificationReport"></app-verifier-details-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -25,5 +24,8 @@ export class VerifierDetailsComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

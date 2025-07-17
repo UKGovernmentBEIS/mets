@@ -13,6 +13,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.returnofallowances.dom
 public class ReturnOfAllowancesValidator {
 
     public void validate(@NotNull @Valid ReturnOfAllowances returnOfAllowances) {
-
+        //validate returnOfAllowances
     }
 }

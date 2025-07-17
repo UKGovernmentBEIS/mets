@@ -11,7 +11,10 @@ import { DoalTaskSectionKey } from '../../../../core/doal-task.type';
 
 @Injectable({ providedIn: 'root' })
 export class ActivityLevelGuard {
-  constructor(private readonly store: CommonTasksStore, private readonly router: Router) {}
+  constructor(
+    private readonly store: CommonTasksStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(_route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return (

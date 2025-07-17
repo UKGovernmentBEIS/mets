@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -9,10 +9,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { OperatorAirImprovementResponse } from './operatorAirImprovementResponse';
+import { OperatorAirImprovementAlreadyMadeResponse } from './operatorAirImprovementAlreadyMadeResponse';
+import { OperatorAirImprovementNoResponse } from './operatorAirImprovementNoResponse';
+import { OperatorAirImprovementYesResponse } from './operatorAirImprovementYesResponse';
 import { RequestTaskActionPayload } from './requestTaskActionPayload';
 
 export interface AirSaveApplicationRequestTaskActionPayload extends RequestTaskActionPayload {
-  operatorImprovementResponses?: { [key: string]: OperatorAirImprovementResponse };
+  operatorImprovementResponses?: {
+    [key: string]:
+      | OperatorAirImprovementAlreadyMadeResponse
+      | OperatorAirImprovementNoResponse
+      | OperatorAirImprovementYesResponse;
+  };
   airSectionsCompleted?: { [key: string]: boolean };
 }

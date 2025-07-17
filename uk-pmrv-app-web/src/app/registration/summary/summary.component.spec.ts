@@ -20,12 +20,6 @@ const mockUserRegistrationDTO: OperatorUserRegistrationWithCredentialsDTO = {
   lastName: 'Doe',
   emailToken: 'test@email.com',
   password: 'test',
-  address: {
-    line1: 'Line 1',
-    city: 'City',
-    country: 'Country',
-    postcode: 'PostCode',
-  },
   phoneNumber: {
     countryCode: 'UK44',
     number: '123',
@@ -36,12 +30,6 @@ const mockUserOperatorDTO: OperatorUserDTO = {
   firstName: 'John',
   lastName: 'Doe',
   email: 'test@email.com',
-  address: {
-    line1: 'Line 1',
-    city: 'City',
-    country: 'Country',
-    postcode: 'PostCode',
-  },
   phoneNumber: {
     countryCode: 'UK44',
     number: '123',
@@ -103,8 +91,7 @@ describe('SummaryComponent', () => {
     fixture.detectChanges();
 
     const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
-    jest.spyOn(service, 'registerNewUserFromInvitationWithCredentials').mockReturnValue(of(mockUserOperatorDTO));
-    jest.spyOn(service, 'acceptOperatorInvitation').mockReturnValue(of({ invitationStatus: 'ACCEPTED' }));
+    jest.spyOn(service, 'acceptAuthorityAndEnableInvitedUserWithCredentials').mockReturnValue(of(mockUserOperatorDTO));
 
     buttonClick(fixture);
 
@@ -117,14 +104,15 @@ describe('SummaryComponent', () => {
       userRegistrationDTO: mockUserOperatorDTO,
       password: mockUserRegistrationDTO.password,
       token: mockUserRegistrationDTO.emailToken,
-      invitationStatus: 'PENDING_USER_REGISTRATION_NO_PASSWORD',
+      invitationStatus: 'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD',
     });
 
     fixture.detectChanges();
 
     const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
-    jest.spyOn(service, 'registerNewUserFromInvitation').mockReturnValue(of(mockUserOperatorDTO));
-    jest.spyOn(service, 'acceptOperatorInvitation').mockReturnValue(of({ invitationStatus: 'ACCEPTED' }));
+    jest
+      .spyOn(service, 'acceptAuthorityAndEnableInvitedUserWithoutCredentials')
+      .mockReturnValue(of(mockUserOperatorDTO));
 
     buttonClick(fixture);
 

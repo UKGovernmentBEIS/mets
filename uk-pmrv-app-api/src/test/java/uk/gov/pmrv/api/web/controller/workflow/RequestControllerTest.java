@@ -21,47 +21,48 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.support.GenericWebApplicationContext;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.account.domain.dto.HoldingCompanyAddressDTO;
 import uk.gov.pmrv.api.account.domain.dto.HoldingCompanyDTO;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.ApplicationType;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
-import uk.gov.pmrv.api.referencedata.service.CountryValidator;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.referencedata.domain.Country;
-import uk.gov.pmrv.api.referencedata.service.CountryService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.referencedata.domain.Country;
+import uk.gov.netz.api.referencedata.service.CountryService;
+import uk.gov.netz.api.referencedata.service.CountryValidator;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.controller.utils.TestConstrainValidatorFactory;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestCreateActionProcessDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsSearchResults;
-import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestSearchByAccountCriteria;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestSearchCriteria;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestHistoryCategory;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestHistoryCategory;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
-import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCreateActionHandlerMapper;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCreateActionResourceTypeDelegator;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCreateActionResourceTypeHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningSubmitApplicationCreateActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.handler.InstallationAccountOpeningSubmitApplicationCreateActionHandler;
+import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountSubmitter;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestMetadata;
 
 import java.math.BigDecimal;
@@ -90,16 +91,16 @@ class RequestControllerTest {
     private RequestController requestController;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private RequestCreateActionHandlerMapper requestCreateActionHandlerMapper;
-    
-    @Mock
-    private InstallationAccountOpeningSubmitApplicationCreateActionHandler handler;
+    private RequestCreateActionResourceTypeDelegator requestCreateActionResourceTypeDelegator;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private RequestCreateActionResourceTypeHandler handler;
+
+    @Mock
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RequestQueryService requestQueryService;
@@ -115,7 +116,7 @@ class RequestControllerTest {
         mapper.registerModule(new JavaTimeModule());
 
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(requestController);
         aspectJProxyFactory.addAspect(aspect);
@@ -128,7 +129,7 @@ class RequestControllerTest {
         LocalValidatorFactoryBean validatorFactoryBean = mockValidatorFactoryBean();
         
         mockMvc = MockMvcBuilders.standaloneSetup(requestController)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .setValidator(validatorFactoryBean)
                 .build();
@@ -136,13 +137,14 @@ class RequestControllerTest {
 
     @Test
     void processRequestCreateAction() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("id").build();
+        AppUser appUser = AppUser.builder().userId("id").build();
         InstallationAccountOpeningSubmitApplicationCreateActionPayload payload = InstallationAccountOpeningSubmitApplicationCreateActionPayload.builder()
             .payloadType(RequestCreateActionPayloadType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION_PAYLOAD)
             .accountPayload(InstallationAccountPayload.builder()
                     .accountType(AccountType.INSTALLATION)
                     .applicationType(ApplicationType.NEW_PERMIT)
                     .name("name")
+                    .submitter(InstallationAccountSubmitter.builder().name("name").email("test@test.gr").build())
                     .siteName("site name")
                     .competentAuthority(CompetentAuthorityEnum.ENGLAND)
                     .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
@@ -174,8 +176,8 @@ class RequestControllerTest {
                 .build();
 
         when(countryService.getReferenceData()).thenReturn(List.of(Country.builder().code("GR").build()));
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(requestCreateActionHandlerMapper.get(RequestCreateActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION)).thenReturn(handler);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(requestCreateActionResourceTypeDelegator.getResourceTypeHandler(RequestCreateActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION)).thenReturn(handler);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post(BASE_PATH)
@@ -183,20 +185,21 @@ class RequestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(requestCreateActionHandlerMapper, times(1)).get(RequestCreateActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION);
-        verify(handler, times(1)).process(null, RequestCreateActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION, payload, pmrvUser);
+        verify(requestCreateActionResourceTypeDelegator, times(1)).getResourceTypeHandler(RequestCreateActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION);
+        verify(handler, times(1)).process(null, RequestCreateActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION, payload, appUser);
         verify(countryService, times(2)).getReferenceData();
     }
     
     @Test
     void processRequestCreateAction_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("id").build();
+        AppUser appUser = AppUser.builder().userId("id").build();
         InstallationAccountOpeningSubmitApplicationCreateActionPayload payload = InstallationAccountOpeningSubmitApplicationCreateActionPayload.builder()
             .payloadType(RequestCreateActionPayloadType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION_PAYLOAD)
             .accountPayload(InstallationAccountPayload.builder()
                     .accountType(AccountType.INSTALLATION)
                     .applicationType(ApplicationType.NEW_PERMIT)
                     .name("name")
+                    .submitter(InstallationAccountSubmitter.builder().name("name").email("test@test.gr").build())
                     .siteName("site name")
                     .competentAuthority(CompetentAuthorityEnum.ENGLAND)
                     .emissionTradingScheme(EmissionTradingScheme.UK_ETS_INSTALLATIONS)
@@ -218,11 +221,11 @@ class RequestControllerTest {
                 .requestCreateActionPayload(payload)
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(countryService.getReferenceData()).thenReturn(List.of(Country.builder().code("GR").build()));
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(pmrvUser, "processRequestCreateAction", null, RequestCreateActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION.name());
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "processRequestCreateAction", null, null, RequestCreateActionType.INSTALLATION_ACCOUNT_OPENING_SUBMIT_APPLICATION.name());
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post(BASE_PATH)
@@ -232,7 +235,7 @@ class RequestControllerTest {
 
         verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
         verify(countryService, times(2)).getReferenceData();
-        verifyNoInteractions(requestCreateActionHandlerMapper, handler);
+        verifyNoInteractions(requestCreateActionResourceTypeDelegator, handler);
     }
 
     @Test
@@ -261,12 +264,12 @@ class RequestControllerTest {
     @Test
     void getRequestDetailsById_forbidden() throws Exception {
         final String requestId = "1";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("id").build();
+        AppUser appUser = AppUser.builder().userId("id").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(pmrvUser, "getRequestDetailsById", requestId);
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "getRequestDetailsById", requestId, null, null);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(BASE_PATH + "/" + requestId)
@@ -278,17 +281,15 @@ class RequestControllerTest {
     }
 
     @Test
-    void getRequestDetailsByAccountId() throws Exception {
+    void getRequestDetailsByResource() throws Exception {
         Long accountId = 1L;
         final String requestId = "1";
-        RequestSearchByAccountCriteria criteriaByAccount = RequestSearchByAccountCriteria.builder().accountId(accountId)
+        RequestSearchCriteria criteria = RequestSearchCriteria.builder()
+        		.resourceId(String.valueOf(accountId))
+				.resourceType(ResourceType.ACCOUNT)
         		.paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
         		.category(RequestHistoryCategory.PERMIT).build();
         
-        RequestSearchCriteria criteria = RequestSearchCriteria.builder().accountId(accountId)
-        		.paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
-        		.category(RequestHistoryCategory.PERMIT).build();
-
         RequestDetailsDTO workflowResult1 = new RequestDetailsDTO(requestId, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, LocalDateTime.now(), null);
         RequestDetailsDTO workflowResult2 = new RequestDetailsDTO(requestId, RequestType.PERMIT_ISSUANCE, RequestStatus.IN_PROGRESS, LocalDateTime.now(), null);
 
@@ -300,7 +301,7 @@ class RequestControllerTest {
         when(requestQueryService.findRequestDetailsBySearchCriteria(criteria)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders.post(BASE_PATH + "/workflows")
-                .content(mapper.writeValueAsString(criteriaByAccount))
+                .content(mapper.writeValueAsString(criteria))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.total").value(results.getTotal()))
@@ -312,17 +313,20 @@ class RequestControllerTest {
     }
 
     @Test
-    void getRequestDetailsByAccountId_forbidden() throws Exception {
+    void getRequestDetailsByResource_forbidden() throws Exception {
         Long accountId = 1L;
-        PmrvUser user = PmrvUser.builder().userId("user").build();
-        RequestSearchByAccountCriteria criteria = RequestSearchByAccountCriteria.builder().accountId(accountId)
+        AppUser user = AppUser.builder().userId("user").build();
+        
+        RequestSearchCriteria criteria = RequestSearchCriteria.builder()
+        		.resourceId(String.valueOf(accountId))
+				.resourceType(ResourceType.ACCOUNT)
         		.paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
         		.category(RequestHistoryCategory.PERMIT).build();
-
+        
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(user, "getRequestDetailsByAccountId", String.valueOf(accountId));
+                .when(appUserAuthorizationService)
+                .authorize(user, "getRequestDetailsByResource", String.valueOf(accountId), ResourceType.ACCOUNT, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post(BASE_PATH + "/workflows")

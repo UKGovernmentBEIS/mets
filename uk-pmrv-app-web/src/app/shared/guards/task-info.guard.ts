@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate, Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
-import { mapTo, Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 import { RequestTaskItemDTO, TasksService } from 'pmrv-api';
 
@@ -11,7 +11,7 @@ import { taskNotFoundError } from '../errors/request-task-error';
 import { IncorporateHeaderStore } from '../incorporate-header/store/incorporate-header.store';
 
 @Injectable({ providedIn: 'root' })
-export class TaskInfoGuard implements CanActivate, CanDeactivate<any>, Resolve<any> {
+export class TaskInfoGuard {
   private info: RequestTaskItemDTO;
 
   constructor(
@@ -33,7 +33,7 @@ export class TaskInfoGuard implements CanActivate, CanDeactivate<any>, Resolve<a
           accountId: info.requestInfo?.accountId,
         });
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 

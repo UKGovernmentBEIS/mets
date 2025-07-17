@@ -18,11 +18,13 @@ import {
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
 import { DestroySubject } from '@core/services/destroy-subject.service';
-import { AuthStore, selectCurrentDomain, selectUserState } from '@core/store';
+import { AccountType, AuthStore, selectCurrentDomain, selectUserState } from '@core/store';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
 import { templateError } from '@shared/errors/template-error';
+import { DocumentFilenameAndDocumentType } from '@shared/interfaces/previewDocumentFilenameAndDocumentType';
 import { UserFullNamePipe } from '@shared/pipes/user-full-name.pipe';
 
 import { GovukSelectOption } from 'govuk-components';
@@ -43,11 +45,12 @@ import {
   ErrorCodes as BusinessErrorCode,
 } from '../../../error/business-errors';
 import {
-  isAviationTaskActionType,
-  isForAviationDocuments,
+  externalContactsToNotifyHeaderMapper,
   NotifyAccountOperatorUsersInfo,
+  notifyAccountOperatorUsersInfoReduceCallback,
+  returnToTextMapper,
   toAccountOperatorUser,
-  toNotifyAccountOperatorUsersInfo,
+  usersToNotifyHeaderMapper,
 } from './notify-operator';
 import { NOTIFY_OPERATOR_FORM, notifyOperatorFormFactory } from './notify-operator-form.provider';
 
@@ -69,8 +72,9 @@ export class NotifyOperatorComponent implements PendingRequest, OnInit {
   @Input() isRegistryToBeNotified = false;
   @Input() decisionType: string;
   @Input() issueNoticeOfIntent?: boolean;
-  @Input() hasSignature? = true;
-  @Input() serviceContactNotAutomaticallyNotified = false;
+  @Input() hasSignature = true;
+  @Input() serviceContactAutomaticallyNotified = true;
+  @Input() previewDocuments: DocumentFilenameAndDocumentType[];
 
   readonly isTemplateGenerationErrorDisplayed$ = new BehaviorSubject<boolean>(false);
   errorMessage$ = new BehaviorSubject<string>(null);
@@ -78,13 +82,20 @@ export class NotifyOperatorComponent implements PendingRequest, OnInit {
   isSummaryDisplayed = new BehaviorSubject<boolean>(false);
   objectKeys = Object.keys;
 
-  isForAviationDocuments: boolean;
-  isAviation: boolean;
-  accountPrimaryContactUsersInfo$: Observable<NotifyAccountOperatorUsersInfo>;
-  otherOperatorUsersInfo$: Observable<NotifyAccountOperatorUsersInfo>;
-  contacts$: Observable<Array<CaExternalContactDTO>>;
+  accountOperatorUsersAutomaticallyNotified$: Observable<NotifyAccountOperatorUsersInfo>;
+  accountOperatorUsersOther$: Observable<NotifyAccountOperatorUsersInfo>;
+  externalContacts$: Observable<Array<CaExternalContactDTO>>;
   assignees$: Observable<GovukSelectOption<string>[]>;
+
   currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));
+  isAviation$ = this.currentDomain$.pipe(map((currentDomain) => currentDomain === 'AVIATION'));
+  usersToNotify$ = this.currentDomain$.pipe(
+    map((currentDomain) => usersToNotifyHeaderMapper(currentDomain, this.requestTaskActionType)),
+  );
+  externalContactsToNotify$ = this.currentDomain$.pipe(
+    map((currentDomain) => externalContactsToNotifyHeaderMapper(currentDomain, this.requestTaskActionType)),
+  );
+  returnToTextMapper: string;
 
   constructor(
     @Inject(NOTIFY_OPERATOR_FORM) readonly form: UntypedFormGroup,
@@ -97,18 +108,17 @@ export class NotifyOperatorComponent implements PendingRequest, OnInit {
     readonly pendingRequest: PendingRequestService,
     private readonly authStore: AuthStore,
     private readonly destroy$: DestroySubject,
+    private readonly breadcrumbsService: BreadcrumbService,
     private readonly router: Router,
   ) {}
 
   ngOnInit(): void {
-    this.isForAviationDocuments = isForAviationDocuments(this.requestTaskActionType);
-    this.isAviation = isAviationTaskActionType(this.requestTaskActionType) || this.router.url.includes('/aviation/');
-
+    this.returnToTextMapper = returnToTextMapper(this.requestTaskActionType);
     const accountOperatorAuthorities$ = this.operatorAuthoritiesService
       .getAccountOperatorAuthorities(this.accountId)
       .pipe(shareReplay({ bufferSize: 1, refCount: true }));
 
-    const users$ = combineLatest([
+    const accountOperatorActiveUsersWithAuthorities$ = combineLatest([
       accountOperatorAuthorities$.pipe(map((accountOperator) => accountOperator.authorities)),
       accountOperatorAuthorities$.pipe(map((accountOperator) => accountOperator.contactTypes)),
     ]).pipe(
@@ -119,37 +129,37 @@ export class NotifyOperatorComponent implements PendingRequest, OnInit {
       ),
     );
 
-    this.accountPrimaryContactUsersInfo$ = users$.pipe(
+    this.accountOperatorUsersAutomaticallyNotified$ = accountOperatorActiveUsersWithAuthorities$.pipe(
       map((users) =>
         users
           .filter(
             (user) =>
               user.contactTypes.includes('PRIMARY') ||
-              (user.contactTypes.includes('SERVICE') && !this.serviceContactNotAutomaticallyNotified),
+              (user.contactTypes.includes('SERVICE') && this.serviceContactAutomaticallyNotified),
           )
-          .reduce(toNotifyAccountOperatorUsersInfo, {}),
+          .reduce(notifyAccountOperatorUsersInfoReduceCallback, {}),
       ),
     );
 
-    this.otherOperatorUsersInfo$ = users$.pipe(
+    this.accountOperatorUsersOther$ = accountOperatorActiveUsersWithAuthorities$.pipe(
       map((users) =>
         users
           .filter((user) =>
-            this.serviceContactNotAutomaticallyNotified
-              ? !user.contactTypes.includes('PRIMARY')
-              : !user.contactTypes.includes('PRIMARY') && !user.contactTypes.includes('SERVICE'),
+            this.serviceContactAutomaticallyNotified
+              ? !user.contactTypes.includes('PRIMARY') && !user.contactTypes.includes('SERVICE')
+              : !user.contactTypes.includes('PRIMARY'),
           )
-          .reduce(toNotifyAccountOperatorUsersInfo, {}),
+          .reduce(notifyAccountOperatorUsersInfoReduceCallback, {}),
       ),
     );
 
-    this.contacts$ = this.externalContactsService.getCaExternalContacts().pipe(
+    this.externalContacts$ = this.externalContactsService.getCaExternalContacts().pipe(
       map((contacts) => contacts.caExternalContacts),
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
     this.assignees$ = of(this.taskId).pipe(
-      switchMap((id: number) => this.tasksAssignmentService.getCandidateAssigneesByTaskId(id)),
+      switchMap((taskId: number) => this.tasksAssignmentService.getCandidateAssigneesByTaskId(taskId)),
       map((assignees) =>
         assignees.map((assignee) => ({ text: this.fullNamePipe.transform(assignee), value: assignee.id })),
       ),
@@ -163,7 +173,10 @@ export class NotifyOperatorComponent implements PendingRequest, OnInit {
     );
   }
 
-  returnToUrl(requestTaskActionType: string, domain?: string): string {
+  returnToUrl(
+    requestTaskActionType: RequestTaskActionProcessDTO['requestTaskActionType'],
+    domain?: AccountType,
+  ): string {
     switch (domain) {
       case 'INSTALLATION':
         switch (requestTaskActionType) {
@@ -185,16 +198,29 @@ export class NotifyOperatorComponent implements PendingRequest, OnInit {
           case 'NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR':
           case 'NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR':
           case 'AVIATION_VIR_NOTIFY_OPERATOR_FOR_DECISION':
+          case 'AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR':
             return '../../../';
 
           case 'EMP_VARIATION_UKETS_NOTIFY_OPERATOR_FOR_DECISION':
           case 'EMP_VARIATION_CORSIA_NOTIFY_OPERATOR_FOR_DECISION':
             return '../../../../';
 
+          case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_NOTIFY_OPERATOR':
+          case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_NOTIFY_OPERATOR':
+            return '../../';
+
           default:
             return '..';
         }
     }
+  }
+
+  get decisionNotification() {
+    return {
+      operators: this.form.get('users').value,
+      externalContacts: this.form.get('contacts').value,
+      ...(this.hasSignature && { signatory: this.form.get('assignees').value }),
+    };
   }
 
   onSubmit(): void {
@@ -238,6 +264,7 @@ export class NotifyOperatorComponent implements PendingRequest, OnInit {
           ),
         )
         .subscribe(() => {
+          this.breadcrumbsService.showDashboardBreadcrumb(this.router.url);
           this.isFormSubmitted$.next(true);
         });
     } else {
@@ -347,6 +374,29 @@ export class NotifyOperatorComponent implements PendingRequest, OnInit {
         break;
       case 'AVIATION_VIR_NOTIFY_OPERATOR_FOR_DECISION':
         payloadType = 'AVIATION_VIR_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD';
+        break;
+
+      case 'INSTALLATION_AUDIT_SUBMIT_NOTIFY_OPERATOR':
+        payloadType = 'INSTALLATION_AUDIT_SUBMIT_NOTIFY_OPERATOR_PAYLOAD';
+        break;
+      case 'INSTALLATION_ONSITE_INSPECTION_SUBMIT_NOTIFY_OPERATOR':
+        payloadType = 'INSTALLATION_ONSITE_INSPECTION_SUBMIT_NOTIFY_OPERATOR_PAYLOAD';
+        break;
+
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_NOTIFY_OPERATOR':
+        payloadType = 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_NOTIFY_OPERATOR_PAYLOAD';
+        break;
+
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_NOTIFY_OPERATOR':
+        payloadType = 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_NOTIFY_OPERATOR_PAYLOAD';
+        break;
+
+      case 'PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION':
+        payloadType = 'PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD';
+        break;
+
+      case 'AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR':
+        payloadType = 'AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR_PAYLOAD';
         break;
     }
 

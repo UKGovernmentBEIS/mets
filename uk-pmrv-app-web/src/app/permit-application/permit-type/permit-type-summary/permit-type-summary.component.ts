@@ -17,5 +17,8 @@ export class PermitTypeSummaryComponent {
   requestTaskType$ = this.store.pipe(map((state) => state.requestTaskType));
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly router: Router) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly router: Router,
+  ) {}
 }

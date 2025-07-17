@@ -1,9 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.handler;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -11,6 +10,8 @@ import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.NotifyOperatorForDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.RequestPermitSurrenderCessationService;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -22,11 +23,11 @@ public class PermitSurrenderCessationNotifyOperatorActionHandler implements
     private final RequestPermitSurrenderCessationService requestPermitSurrenderCessationService;
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser,
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser,
                         NotifyOperatorForDecisionRequestTaskActionPayload taskActionPayload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
 
-        requestPermitSurrenderCessationService.executeNotifyOperatorActions(requestTask, pmrvUser, taskActionPayload);
+        requestPermitSurrenderCessationService.executeNotifyOperatorActions(requestTask, appUser, taskActionPayload);
 
         workflowService.completeTask(requestTask.getProcessTaskId());
     }

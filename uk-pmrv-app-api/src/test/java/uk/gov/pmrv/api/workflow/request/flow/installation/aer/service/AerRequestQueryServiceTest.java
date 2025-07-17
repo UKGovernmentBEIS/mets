@@ -6,15 +6,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Sort;
-import uk.gov.pmrv.api.common.service.DateService;
+import uk.gov.netz.api.common.utils.DateService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
+import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestMetadata;
 
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -137,5 +139,37 @@ class AerRequestQueryServiceTest {
             Set.of(RequestType.PERMIT_ISSUANCE, RequestType.PERMIT_TRANSFER_B),
             RequestStatus.APPROVED
         );
+    }
+
+    @Test
+    void findAerByAccountIdAndYear() {
+        Long accountId = 1L;
+        Request request = Request
+                .builder()
+                .accountId(accountId)
+                .type(RequestType.AER)
+                .status(RequestStatus.IN_PROGRESS)
+                .metadata(AerRequestMetadata.builder().year(Year.of(2023)).build())
+                .build();
+
+        when(requestRepository.findAllByAccountIdAndTypeInAndMetadataYear(accountId,List.of(RequestType.AER.name()), 2023)).thenReturn(List.of(request));
+
+        Optional<Request> actualRequest = aerRequestQueryService.findAerByAccountIdAndYear(accountId, 2023);
+
+        assertThat(actualRequest).isPresent();
+        assertThat(actualRequest.get()).isEqualTo(request);
+
+    }
+
+    @Test
+    void findAerByAccountIdAndYear_noRequestFound_ReturnEmptyOptional() {
+        Long accountId = 1L;
+
+        when(requestRepository.findAllByAccountIdAndTypeInAndMetadataYear(accountId,List.of(RequestType.AER.name()), 2023)).thenReturn(List.of());
+
+        Optional<Request> actualRequest = aerRequestQueryService.findAerByAccountIdAndYear(accountId, 2023);
+
+        assertThat(actualRequest).isEmpty();
+
     }
 }

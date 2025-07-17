@@ -104,7 +104,7 @@ describe('Corsia Data Gaps', () => {
       expect(screen.getByTestId('secondary-data-sources')).toBeInTheDocument();
       expect(
         screen.getByText(
-          'List the secondary data sources that can be used to determine fuel consumption if the data from your primary source is missing or incorrect.',
+          'List the secondary data sources that can be used for reporting purposes if the data from your primary source is missing or incorrect.',
         ),
       ).toBeInTheDocument();
     });

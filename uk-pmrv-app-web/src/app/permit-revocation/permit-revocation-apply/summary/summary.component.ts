@@ -8,8 +8,8 @@ import { permitRevocationMapper } from '@permit-revocation/constants/permit-revo
 import { summaryList } from '@permit-revocation/core/model/permit-revocation-models';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
 import { GovukDatePipe } from '@shared/pipes/govuk-date.pipe';
+import { isValid, parse } from 'date-fns';
 import { isEmpty, some } from 'lodash';
-import moment from 'moment';
 
 import { PermitRevocation } from 'pmrv-api';
 
@@ -17,7 +17,7 @@ import { PermitRevocation } from 'pmrv-api';
   selector: 'app-summary',
   templateUrl: './summary.component.html',
   providers: [GovukDatePipe],
-  styles: ['.govuk-list-error-key { border-left: 5px solid #d4351c; padding-left: 10px}'],
+  styles: '.govuk-list-error-key { border-left: 5px solid #d4351c; padding-left: 10px}',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryComponent {
@@ -27,11 +27,15 @@ export class SummaryComponent {
   permitRevocation$: Observable<any> = this.store.getPermitRevocation();
   readonly permitRevocationMapper = permitRevocationMapper;
 
-  constructor(readonly store: PermitRevocationStore, readonly route: ActivatedRoute, readonly date: GovukDatePipe) {}
+  constructor(
+    readonly store: PermitRevocationStore,
+    readonly route: ActivatedRoute,
+    readonly date: GovukDatePipe,
+  ) {}
 
   getError(errors: ValidationErrors, errorKey: string, value?: any) {
     return value
-      ? errors && errors[errorKey] && moment(value, 'YYYY-MM-DD', true).isValid()
+      ? errors && errors[errorKey] && isValid(parse(value, 'yyyy-MM-dd', new Date()))
       : errors && errors[errorKey];
   }
 
@@ -41,7 +45,7 @@ export class SummaryComponent {
       case 'boolean':
         return value ? null : 'No';
       case 'string':
-        return moment(value, 'YYYY-MM-DD', true).isValid() ? this.date.transform(value) : value;
+        return isValid(parse(value, 'yyyy-MM-dd', new Date())) ? this.date.transform(value) : value;
       case 'object':
         return this.date.transform(value);
     }

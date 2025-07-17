@@ -1,7 +1,6 @@
 import { FallbackMonitoringApproach } from 'pmrv-api';
 
 import { TaskItemStatus } from '../../../shared/task-list/task-list.interface';
-import { StatusKey } from '../../shared/types/permit-task.type';
 import { PermitApplicationState } from '../../store/permit-application.state';
 
 export function FALLBACKStatus(state: PermitApplicationState): TaskItemStatus {
@@ -15,38 +14,25 @@ export function FALLBACKStatus(state: PermitApplicationState): TaskItemStatus {
     tiersStatuses.every((status) => status === 'complete')
     ? 'complete'
     : tiersStatuses.some((status) => status === 'needs review')
-    ? 'needs review'
-    : fallbackStaticStatuses.some((status) => state.permitSectionsCompleted[status]?.[0]) ||
-      tiersStatuses.some((status) => status === 'in progress' || status === 'complete')
-    ? 'in progress'
-    : 'not started';
+      ? 'needs review'
+      : fallbackStaticStatuses.some((status) => state.permitSectionsCompleted[status]?.[0]) ||
+          tiersStatuses.some((status) => status === 'in progress' || status === 'complete')
+        ? 'in progress'
+        : 'not started';
 }
 
 /** Returns the status of source stream category applier tier */
 export function FALLBACKCategoryTierStatus(state: PermitApplicationState, index: number): TaskItemStatus {
-  return isFallbackCategoryValid(state, index)
-    ? state.permitSectionsCompleted['FALLBACK_Category']?.[index]
-      ? 'complete'
-      : 'not started'
-    : 'needs review';
+  return FALLBACKCategoryTierSubtaskStatus(state, index);
 }
 
 /** Returns the status of source stream category applied tier subtask */
-export function FALLBACKCategoryTierSubtaskStatus(
-  state: PermitApplicationState,
-  key: StatusKey,
-  index: number,
-): TaskItemStatus {
-  switch (key) {
-    case 'FALLBACK_Category':
-      return state.permitSectionsCompleted[key]?.[index]
-        ? isFallbackCategoryValid(state, index)
-          ? 'complete'
-          : 'needs review'
-        : 'not started';
-    default:
-      return state.permitSectionsCompleted[key]?.[index] ? 'complete' : 'not started';
-  }
+export function FALLBACKCategoryTierSubtaskStatus(state: PermitApplicationState, index: number): TaskItemStatus {
+  return state.permitSectionsCompleted?.FALLBACK_Category?.[index]
+    ? isFallbackCategoryValid(state, index)
+      ? 'complete'
+      : 'needs review'
+    : 'not started';
 }
 
 export function areCategoryTierPrerequisitesMet(state: PermitApplicationState): boolean {
@@ -58,7 +44,7 @@ export function areCategoryTierPrerequisitesMet(state: PermitApplicationState): 
 }
 
 export const fallbackStaticStatuses = ['FALLBACK_Description', 'FALLBACK_Uncertainty'] as const;
-export type FallbackStatuses = 'FALLBACK_Category_Tier' | typeof fallbackStaticStatuses[number] | 'FALLBACK_Category';
+export type FallbackStatuses = 'FALLBACK_Category_Tier' | (typeof fallbackStaticStatuses)[number] | 'FALLBACK_Category';
 
 /** Returns true if reference state is valid and all ids used in stream category exist */
 function isFallbackCategoryValid(state: PermitApplicationState, index: number): boolean {

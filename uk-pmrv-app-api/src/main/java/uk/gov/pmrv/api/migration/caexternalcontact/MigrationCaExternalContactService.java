@@ -1,35 +1,44 @@
 package uk.gov.pmrv.api.migration.caexternalcontact;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.pmrv.api.account.domain.dto.CaExternalContactRegistrationDTO;
+import uk.gov.pmrv.api.account.service.CaExternalContactService;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.migration.MigrationBaseService;
+import uk.gov.pmrv.api.migration.MigrationEndpoint;
+import uk.gov.pmrv.api.migration.MigrationHelper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.account.domain.dto.CaExternalContactRegistrationDTO;
-import uk.gov.pmrv.api.account.service.CaExternalContactService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.migration.MigrationBaseService;
-import uk.gov.pmrv.api.migration.MigrationEndpoint;
-import uk.gov.pmrv.api.migration.MigrationHelper;
 
 @Service
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
-@RequiredArgsConstructor
 public class MigrationCaExternalContactService extends MigrationBaseService {
 
     private final JdbcTemplate migrationJdbcTemplate;
     private final CaExternalContactService caExternalContactService;
     private final Validator validator;
+
+    public MigrationCaExternalContactService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                             CaExternalContactService caExternalContactService,
+                                             Validator validator) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.caExternalContactService = caExternalContactService;
+        this.validator = validator;
+    }
 
     private static final String QUERY_BASE =
         "select "
@@ -66,9 +75,9 @@ public class MigrationCaExternalContactService extends MigrationBaseService {
                 continue;
             }
 
-            PmrvUser authUser = new PmrvUser();
-            authUser.setRoleType(RoleType.REGULATOR);
-            authUser.setAuthorities(List.of(PmrvAuthority.builder().competentAuthority(ca).build()));
+            AppUser authUser = new AppUser();
+            authUser.setRoleType(RoleTypeConstants.REGULATOR);
+            authUser.setAuthorities(List.of(AppAuthority.builder().competentAuthority(ca).build()));
 
             CaExternalContactRegistrationDTO externalContactDTO =
                 CaExternalContactRegistrationDTO.builder()

@@ -19,6 +19,10 @@ import { SharedModule } from '@shared/shared.module';
 export class ConflictInterestComponent {
   form = this.formProvider.interestConflictAvoidanceGroup;
 
+  get sixVerificationsConductedCtrl() {
+    return this.form.get('sixVerificationsConducted');
+  }
+
   constructor(
     @Inject(TASK_FORM_PROVIDER) readonly formProvider: VerifierDetailsFormProvider,
     readonly pendingRequest: PendingRequestService,

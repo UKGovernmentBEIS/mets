@@ -5,8 +5,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { firstValueFrom, Observable } from 'rxjs';
 
+import { format, subDays } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import { DreApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
@@ -79,7 +79,7 @@ describe('PeerReviewGuard', () => {
             dre: {
               fee: {
                 feeDetails: {
-                  dueDate: moment().add(-1, 'day').format('YYYY-MM-DD'),
+                  dueDate: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
                 },
               },
             },

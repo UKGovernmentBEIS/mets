@@ -23,7 +23,7 @@ export const AER_CORSIA_DATA_GAPS_ROUTES: Routes = [
       },
       {
         path: 'threshold',
-        data: { backlink: '../' },
+        data: { pageTitle: 'What percentage of these flights had data gaps during the scheme year?', backlink: '../' },
         canActivate: [canActivateAviationAerCorsiaDataGaps, canActivateTaskForm],
         loadComponent: () => import('./threshold-page/threshold-page.component'),
       },
@@ -33,19 +33,19 @@ export const AER_CORSIA_DATA_GAPS_ROUTES: Routes = [
         children: [
           {
             path: '',
-            data: { backlink: '../threshold' },
+            data: { pageTitle: 'List the data gaps', backlink: '../threshold' },
             canActivate: [canActivateDataGapsList],
             loadComponent: () => import('./data-gaps-list/data-gaps-list.component'),
           },
           {
             path: 'add-data-gap-information',
-            data: { backlink: '../../threshold' },
+            data: { pageTitle: 'Add data gap information', backlink: '../../threshold' },
             canActivate: [canActivateDataGapAdd],
             loadComponent: () => import('./data-gaps-information/data-gaps-information-page.component'),
           },
           {
             path: ':index/edit',
-            data: { backlink: '../../' },
+            data: { pageTitle: 'Edit a data gap information', backlink: '../../' },
             canActivate: [canActivateDataGapEdit],
             loadComponent: () => import('./data-gaps-information/data-gaps-information-page.component'),
           },
@@ -53,7 +53,7 @@ export const AER_CORSIA_DATA_GAPS_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Data gaps  summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Data gaps' },
         canActivate: [canActivateAviationAerCorsiaDataGaps, canActivateSummaryPage],
         loadComponent: () => import('./data-gaps-summary/data-gaps-summary.component'),
       },

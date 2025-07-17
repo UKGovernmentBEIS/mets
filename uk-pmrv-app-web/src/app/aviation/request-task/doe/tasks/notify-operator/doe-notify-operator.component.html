@@ -1,0 +1,15 @@
+<div class="govuk-grid-row" *ngIf="vm$ | async as vm">
+  <div class="govuk-grid-column-two-thirds" *ngIf="vm.hasLocation; else contactAddressNotification">
+    <app-notify-operator
+      [taskId]="vm.taskId"
+      [accountId]="vm.accountId"
+      confirmationMessage="Aviation emissions updated"
+      requestTaskActionType="AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR"
+      [referenceCode]="vm.referenceCode"
+      [previewDocuments]="vm.previewDocuments"></app-notify-operator>
+  </div>
+
+  <ng-template #contactAddressNotification>
+    <app-notify-operator-no-contact-address [accountId]="vm.accountId"></app-notify-operator-no-contact-address>
+  </ng-template>
+</div>

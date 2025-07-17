@@ -1,6 +1,6 @@
 import { Observable, tap } from 'rxjs';
 
-import { getSaveRequestTaskActionTypeForRequestTaskType } from "@aviation/request-task/util";
+import { getSaveRequestTaskActionTypeForRequestTaskType } from '@aviation/request-task/util';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
@@ -16,7 +16,10 @@ import { RequestTaskStoreDelegate } from '../store-delegate';
 export class AccountClosureStoreDelegate implements RequestTaskStoreDelegate {
   static INITIAL_STATE: Partial<AccountClosure> = {};
 
-  constructor(private store: RequestTaskStore, private readonly businessErrorService: BusinessErrorService) {}
+  constructor(
+    private store: RequestTaskStore,
+    private readonly businessErrorService: BusinessErrorService,
+  ) {}
 
   get payload(): AccountClosureTaskPayload | null {
     return this.store.getState().requestTaskItem?.requestTask?.payload as AccountClosureTaskPayload;

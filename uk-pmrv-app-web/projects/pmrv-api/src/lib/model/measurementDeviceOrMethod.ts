@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -18,6 +18,7 @@ export interface MeasurementDeviceOrMethod {
     | 'BELLOWS_METER'
     | 'BELT_WEIGHER'
     | 'CORIOLIS_METER'
+    | 'CRANE_WEIGHT'
     | 'ELECTRONIC_VOLUME_CONVERSION_INSTRUMENT'
     | 'GAS_CHROMATOGRAPH'
     | 'LEVEL_GAUGE'

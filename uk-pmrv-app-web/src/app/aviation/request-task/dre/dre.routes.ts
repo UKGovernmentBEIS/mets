@@ -50,6 +50,7 @@ export const DRE_ROUTES: Routes = [
           },
           {
             path: 'notify-operator',
+            data: { pageTitle: 'Notify Operator of Decision' },
             providers: [PaymentCompletedGuard],
             canActivate: [PaymentCompletedGuard],
             canDeactivate: [PendingRequestGuard],

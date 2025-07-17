@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.web.controller.authorization.orchestrator;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.user.core.service.UserLoginDomainService;
 import uk.gov.pmrv.api.web.controller.authorization.orchestrator.dto.UserStateDTO;
 
@@ -13,7 +13,7 @@ public class UserAuthorityQueryOrchestrator {
     private final UserStatusService userStatusService;
     private final UserLoginDomainService userLoginDomainService;
 
-    public UserStateDTO getUserState(PmrvUser user) {
+    public UserStateDTO getUserState(AppUser user) {
         String userId = user.getUserId();
         return UserStateDTO.builder()
             .userId(userId)

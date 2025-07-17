@@ -1,15 +1,16 @@
 package uk.gov.pmrv.api.account.service.validator;
 
-import java.util.Map;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.authorization.AuthorityConstants;
+import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
+import uk.gov.netz.api.authorization.core.service.AuthorityService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.authorization.AuthorityConstants;
-import uk.gov.pmrv.api.authorization.core.domain.dto.AuthorityInfoDTO;
-import uk.gov.pmrv.api.authorization.core.service.AuthorityService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+
+import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class SecondaryContactValidator implements AccountContactTypeUpdateValida
 
             userAccountAuthorityOptional.ifPresent(userAccountAuthority -> {
                 if(AuthorityConstants.EMITTER_CONTACT.equals(userAccountAuthority.getCode())) {
-                    throw new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_SECONDARY_CONTACT_NOT_EMITTER_CONTACT);
+                    throw new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_SECONDARY_CONTACT_NOT_OPERATOR);
                 }
             });
         }

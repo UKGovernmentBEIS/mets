@@ -1,9 +1,7 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.doal.handler;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Component;
-
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskUploadAttachmentActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.service.DoalUploadAttachmentService;

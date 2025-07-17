@@ -8,7 +8,8 @@
     </h2>
 
     <h2 app-summary-header class="govuk-heading-m" *ngIf="isAer">
-      {{ decision.groupKey | i18nSelect: aerHeaderTaskMap }}
+      <ng-container *ngIf="!isCorsia else corsiaReviewDecisions" >{{ decision.groupKey | i18nSelect: aerHeaderTaskMap }}</ng-container>
+      <ng-template #corsiaReviewDecisions>{{ decision.groupKey | i18nSelect: aerReviewCorsiaHeaderTaskMap }}</ng-template>
     </h2>
 
     <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">

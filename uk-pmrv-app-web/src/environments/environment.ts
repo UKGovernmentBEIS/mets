@@ -7,7 +7,6 @@ import { KeycloakConfig, KeycloakInitOptions } from 'keycloak-js';
 
 // Add here your keycloak setup infos
 const keycloakConfig: KeycloakConfig = {
-  url: 'http://localhost:8091/auth',
   realm: 'uk-pmrv',
   clientId: 'uk-pmrv-web-app',
 };

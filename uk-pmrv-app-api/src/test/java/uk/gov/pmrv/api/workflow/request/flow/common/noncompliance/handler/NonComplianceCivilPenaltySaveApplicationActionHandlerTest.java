@@ -10,7 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
@@ -36,13 +36,13 @@ class NonComplianceCivilPenaltySaveApplicationActionHandlerTest {
         final RequestTask requestTask = RequestTask.builder().id(requestTaskId).build();
         final NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload taskActionPayload =
             NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload.builder().build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         handler.process(requestTaskId,
             RequestTaskActionType.NON_COMPLIANCE_CIVIL_PENALTY_SAVE_APPLICATION,
-            pmrvUser,
+            appUser,
             taskActionPayload
         );
 

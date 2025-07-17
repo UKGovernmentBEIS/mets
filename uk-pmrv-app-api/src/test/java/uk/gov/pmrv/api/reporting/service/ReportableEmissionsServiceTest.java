@@ -7,7 +7,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
+import uk.gov.pmrv.api.reporting.domain.InstallationReportableEmissionsUpdatedEvent;
 import uk.gov.pmrv.api.reporting.domain.ReportableEmissionsEntity;
 import uk.gov.pmrv.api.reporting.domain.ReportableEmissionsSaveParams;
 import uk.gov.pmrv.api.reporting.repository.ReportableEmissionsRepository;
@@ -25,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +38,9 @@ class ReportableEmissionsServiceTest {
 
     @Mock
     private ReportableEmissionsRepository reportableEmissionsRepository;
+    
+    @Mock
+    private ApplicationEventPublisher publisher;
 
     @Test
     void getReportableEmissions() {
@@ -64,7 +70,7 @@ class ReportableEmissionsServiceTest {
     }
 
     @Test
-    void saveReportableEmissions() {
+    void saveReportableEmissions_params_not_from_dre_and_entity_not_from_dre() {
         final ReportableEmissionsSaveParams params = ReportableEmissionsSaveParams.builder()
                 .accountId(1L)
                 .year(Year.now())
@@ -89,10 +95,17 @@ class ReportableEmissionsServiceTest {
         assertNotNull(entity);
         assertEquals(100L, entity.getId());
         assertEquals(BigDecimal.valueOf(1000), entity.getReportableEmissions());
+        
+        verify(publisher, times(1)).publishEvent(InstallationReportableEmissionsUpdatedEvent.builder()
+        		.accountId(1L)
+                .year(Year.now())
+                .reportableEmissions(BigDecimal.valueOf(1000))
+                .isFromDre(false)
+        		.build());
     }
 
     @Test
-    void saveReportableEmissions_new_emissions() {
+    void saveReportableEmissions_new_emissions_not_from_dre() {
         final ReportableEmissionsSaveParams params = ReportableEmissionsSaveParams.builder()
                 .accountId(1L)
                 .year(Year.now())
@@ -116,10 +129,17 @@ class ReportableEmissionsServiceTest {
         assertEquals(params.getYear(), savedEntity.getYear());
         assertEquals(BigDecimal.valueOf(1000), savedEntity.getReportableEmissions());
         assertEquals(params.isFromDre(), savedEntity.isFromDre());
+        
+        verify(publisher, times(1)).publishEvent(InstallationReportableEmissionsUpdatedEvent.builder()
+        		.accountId(1L)
+                .year(Year.now())
+                .reportableEmissions(BigDecimal.valueOf(1000))
+                .isFromDre(false)
+        		.build());
     }
 
     @Test
-    void saveReportableEmissions_aer_not_from_dre() {
+    void saveReportableEmissions_params_not_from_dre_and_entity_from_dre() {
         final ReportableEmissionsSaveParams params = ReportableEmissionsSaveParams.builder()
                 .accountId(1L)
                 .year(Year.now())
@@ -142,10 +162,11 @@ class ReportableEmissionsServiceTest {
 
         // Verify
         verify(reportableEmissionsRepository, never()).save(any());
+        verifyNoInteractions(publisher);
     }
 
     @Test
-    void saveReportableEmissions_from_dre() {
+    void saveReportableEmissions_params_from_dre_and_entity_not_from_dre() {
         final ReportableEmissionsSaveParams params = ReportableEmissionsSaveParams.builder()
                 .accountId(1L)
                 .year(Year.now())
@@ -168,12 +189,17 @@ class ReportableEmissionsServiceTest {
         reportableEmissionsService.saveReportableEmissions(params);
 
         // Verify
-        ArgumentCaptor<ReportableEmissionsEntity> emissionsArgumentCaptor = ArgumentCaptor.forClass(ReportableEmissionsEntity.class);
-
         assertNotNull(entity);
         assertEquals(params.getAccountId(), entity.getAccountId());
         assertEquals(params.getYear(), entity.getYear());
         assertEquals(BigDecimal.valueOf(1000), entity.getReportableEmissions());
         assertEquals(params.isFromDre(), entity.isFromDre());
+        
+        verify(publisher, times(1)).publishEvent(InstallationReportableEmissionsUpdatedEvent.builder()
+        		.accountId(1L)
+                .year(Year.now())
+                .reportableEmissions(BigDecimal.valueOf(1000))
+                .isFromDre(true)
+        		.build());
     }
 }

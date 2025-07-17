@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -36,7 +36,7 @@ class PermitVariationAddCancelledRequestActionServiceTest {
 
         when(requestService.findRequestById("1")).thenReturn(request);
 
-        service.add("1", RoleType.OPERATOR);
+        service.add("1", RoleTypeConstants.OPERATOR);
 
         verify(requestService, times(1)).addActionToRequest(request,
             null,

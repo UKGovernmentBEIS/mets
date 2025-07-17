@@ -6,8 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.OperatorImprovementResponse;
+import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.VirVerificationData;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -16,8 +17,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.OperatorImprovementResponse;
-import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.VirVerificationData;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

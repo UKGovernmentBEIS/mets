@@ -11,11 +11,15 @@ import {
 } from '@aviation/request-task/emp/shared/util/emp.util';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
+import { ReviewDeterminationStatus } from '@permit-application/review/types/review.permit.type';
+import { DocumentFilenameAndDocumentType } from '@shared/interfaces/previewDocumentFilenameAndDocumentType';
 import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
 
 import { EmpVariationDetermination, RequestTaskActionProcessDTO, RequestTaskDTO } from 'pmrv-api';
+
+import { getPreviewDocumentsInfoEmp } from '../util/previewDocumentsEmp.util';
 
 interface ViewModel {
   taskId: number;
@@ -25,6 +29,7 @@ interface ViewModel {
   decisionType: string;
   requestTaskActionType: RequestTaskActionProcessDTO['requestTaskActionType'];
   isRegistryToBeNotified: boolean;
+  previewDocuments: DocumentFilenameAndDocumentType[];
 }
 
 @Component({
@@ -42,7 +47,7 @@ interface ViewModel {
           [decisionType]="vm.decisionType"
           [requestTaskActionType]="vm.requestTaskActionType"
           [isRegistryToBeNotified]="vm.isRegistryToBeNotified"
-        ></app-notify-operator>
+          [previewDocuments]="vm.previewDocuments"></app-notify-operator>
       </div>
     </div>
   `,
@@ -53,10 +58,9 @@ export class EmpNotifyOperatorComponent {
     this.route.paramMap,
     this.store.pipe(requestTaskQuery.selectRequestTaskType),
     this.store.pipe(requestTaskQuery.selectRequestInfo),
-    this.store.pipe(requestTaskQuery.selectRelatedActions),
     this.store.pipe(empQuery.selectPayload),
   ]).pipe(
-    map(([paramMap, taskType, requestInfo, relatedActions, payload]) => {
+    map(([paramMap, taskType, requestInfo, payload]) => {
       return {
         taskId: Number(paramMap.get('taskId')),
         accountId: requestInfo.accountId,
@@ -66,14 +70,19 @@ export class EmpNotifyOperatorComponent {
           ? null
           : this.getDeterminationMap(payload.determination?.type),
         requestTaskActionType: notifyOperatorRequestTaskActionTypesMap(taskType),
-        isRegistryToBeNotified:
-          relatedActions.includes('EMP_ISSUANCE_UKETS_NOTIFY_OPERATOR_FOR_DECISION') ||
-          relatedActions.includes('EMP_ISSUANCE_CORSIA_NOTIFY_OPERATOR_FOR_DECISION'),
+        isRegistryToBeNotified: taskType === 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW',
+        previewDocuments: getPreviewDocumentsInfoEmp(
+          notifyOperatorRequestTaskActionTypesMap(taskType),
+          this.getDeterminationMap(payload.determination?.type) as ReviewDeterminationStatus,
+        ),
       };
     }),
   );
 
-  constructor(private readonly route: ActivatedRoute, private store: RequestTaskStore) {}
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly store: RequestTaskStore,
+  ) {}
 
   private getConfirmationMessage(
     taskType: RequestTaskDTO['type'],

@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.migration.emp.corsia.fummethods;
 
 import org.apache.commons.lang3.ObjectUtils;
-
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmpProcedureForm;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.blockonblockoff.EmpBlockOnBlockOffMethodProcedures;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.fueluplift.EmpFuelUpliftMethodProcedures;

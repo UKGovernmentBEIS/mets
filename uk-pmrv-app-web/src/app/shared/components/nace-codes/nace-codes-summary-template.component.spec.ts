@@ -18,8 +18,7 @@ describe('NaceCodesSummaryTemplateComponent', () => {
     template: `
       <app-nace-codes-summary-template
         [naceCodes]="naceCodes"
-        [isEditable]="isEditable"
-      ></app-nace-codes-summary-template>
+        [isEditable]="isEditable"></app-nace-codes-summary-template>
     `,
   })
   class TestComponent {
@@ -55,8 +54,8 @@ describe('NaceCodesSummaryTemplateComponent', () => {
       ),
     ).toEqual([
       [],
-      ['Main activity', '1011 Processing and preserving of meat', 'Delete'],
-      ['Main activity', '1012 Processing and preserving of poultry meat', 'Delete'],
+      ['1011 Processing and preserving of meat', 'Delete'],
+      ['1012 Processing and preserving of poultry meat', 'Delete'],
     ]);
 
     hostComponent.isEditable = false;
@@ -68,8 +67,8 @@ describe('NaceCodesSummaryTemplateComponent', () => {
       ),
     ).toEqual([
       [],
-      ['Main activity', '1011 Processing and preserving of meat', ''],
-      ['Main activity', '1012 Processing and preserving of poultry meat', ''],
+      ['1011 Processing and preserving of meat', ''],
+      ['1012 Processing and preserving of poultry meat', ''],
     ]);
   });
 });

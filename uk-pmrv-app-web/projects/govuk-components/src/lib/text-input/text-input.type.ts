@@ -24,6 +24,7 @@ export type HTMLInputType =
   | 'image'
   | 'month'
   | 'number'
+  | 'big-number'
   | 'password'
   | 'radio'
   | 'range'

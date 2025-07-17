@@ -21,8 +21,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationData;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUncorrectedNonConformities;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.common.reporting.verification.UncorrectedItem;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -173,7 +173,7 @@ class AviationVirCreationServiceTest {
                 virCreationService.createRequestVir(requestId));
 
         // Verify
-        assertThat(businessException.getErrorCode()).isEqualTo(ErrorCode.VIR_CREATION_NOT_ALLOWED);
+        assertThat(businessException.getErrorCode()).isEqualTo(MetsErrorCode.VIR_CREATION_NOT_ALLOWED);
         verify(requestService, times(1)).findRequestById(requestId);
         verify(virCreationValidator, times(1)).validate(virVerificationData, accountId, year);
         verify(virDueDateService, never()).generateDueDate(any());

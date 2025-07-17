@@ -45,5 +45,8 @@ export class InvalidInvitationLinkComponent {
     }),
   );
 
-  constructor(private readonly activatedRoute: ActivatedRoute, private readonly titleService: Title) {}
+  constructor(
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly titleService: Title,
+  ) {}
 }

@@ -15,13 +15,11 @@ import { deleteReturnUrl } from '../../../approaches';
 @Component({
   selector: 'app-category-tier-delete',
   templateUrl: './delete.component.html',
-  styles: [
-    `
-      .nowrap {
-        white-space: nowrap;
-      }
-    `,
-  ],
+  styles: `
+    .nowrap {
+      white-space: nowrap;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteComponent implements PendingRequest {

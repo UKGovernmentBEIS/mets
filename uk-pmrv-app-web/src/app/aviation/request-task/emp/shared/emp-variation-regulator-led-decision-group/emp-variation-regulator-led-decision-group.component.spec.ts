@@ -25,8 +25,7 @@ describe('EmpVariationRegulatorLedDecisionGroupComponent', () => {
   @Component({
     template: `
       <app-emp-variation-regulator-led-decision-group
-        taskKey="abbreviations"
-      ></app-emp-variation-regulator-led-decision-group>
+        taskKey="abbreviations"></app-emp-variation-regulator-led-decision-group>
     `,
   })
   class TestComponent {}

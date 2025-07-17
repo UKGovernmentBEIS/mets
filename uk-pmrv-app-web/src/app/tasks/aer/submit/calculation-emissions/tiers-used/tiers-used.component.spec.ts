@@ -161,12 +161,12 @@ describe('TiersUsedComponent', () => {
                     },
                     parameterMonitoringTiers: [
                       {
-                        tier: 'NO_TIER',
-                        type: 'EMISSION_FACTOR',
-                      },
-                      {
                         tier: 'TIER_3',
                         type: 'ACTIVITY_DATA',
+                      },
+                      {
+                        tier: 'NO_TIER',
+                        type: 'EMISSION_FACTOR',
                       },
                       {
                         tier: 'NO_TIER',

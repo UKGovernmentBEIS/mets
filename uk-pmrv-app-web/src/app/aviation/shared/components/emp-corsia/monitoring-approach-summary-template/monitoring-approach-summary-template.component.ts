@@ -10,14 +10,14 @@ import { SharedModule } from '@shared/shared.module';
 import { GovukComponentsModule } from 'govuk-components';
 
 @Component({
-  selector: 'app-monitoring-approach-summary-template',
+  selector: 'app-monitoring-approach-corsia-summary-template',
   templateUrl: './monitoring-approach-summary-template.component.html',
   standalone: true,
   imports: [SharedModule, GovukComponentsModule, RouterLinkWithHref, NgFor, NgForOf, MonitoringApproachTypeCorsiaPipe],
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MonitoringApproachSummaryTemplateComponent {
+export class MonitoringApproachCorsiaSummaryTemplateComponent {
   @Input() isEditable = false;
   @Input() data: MonitoringApproachCorsiaValues;
   @Input() files: { fileName: string; downloadUrl: string }[] = [];

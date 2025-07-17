@@ -1,14 +1,14 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.common.utils;
 
-import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import lombok.experimental.UtilityClass;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.PermitReviewGroup;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.mapper.PermitReviewGroupMonitoringApproachMapper;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @UtilityClass
 public class PermitReviewUtils {

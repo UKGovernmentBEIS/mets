@@ -31,7 +31,7 @@ import { ManagementProceduresCorsiaFormProvider } from '../management-procedures
 interface ViewModel {
   pageHeader: string;
   isEditable: boolean;
-  data: EmpManagementProceduresCorsia;
+  managementProcedures: EmpManagementProceduresCorsia;
   hideSubmit: boolean;
   dataFlowDiagramFile: {
     fileName: string;
@@ -41,7 +41,7 @@ interface ViewModel {
   showVariationDecision: boolean;
   showVariationRegLedDecision?: boolean;
   showDiff: boolean;
-  originalData: EmpManagementProceduresCorsia;
+  originalManagementProcedures: EmpManagementProceduresCorsia;
   originalDataFlowDiagramFile: {
     fileName: string;
     downloadUrl: string;
@@ -80,7 +80,12 @@ export class ManagementProceduresSummaryComponent {
       return {
         pageHeader: getSummaryHeaderForTaskType(type, 'managementProcedures'),
         isEditable,
-        data: getSubtaskSummaryValues(this.formProvider.form),
+        managementProcedures: {
+          ...getSubtaskSummaryValues(this.formProvider.form),
+          monitoringReportingRoles: this.formProvider.form?.controls?.monitoringReportingRoles?.valid
+            ? this.formProvider.getFormValue().monitoringReportingRoles
+            : null,
+        },
         hideSubmit:
           !isEditable ||
           ['complete', 'cannot start yet'].includes(taskStatus) ||
@@ -100,9 +105,9 @@ export class ManagementProceduresSummaryComponent {
           : [],
         showDecision: showReviewDecisionComponent.includes(type),
         showDiff: !!originalEmpContainer,
-        originalData: {
+        originalManagementProcedures: {
           ...originalManagementProcedures,
-          monitoringReportingRoles: originalManagementProcedures?.monitoringReportingRoles.monitoringReportingRoles,
+          monitoringReportingRoles: originalManagementProcedures?.monitoringReportingRoles,
         } as any,
         originalDataFlowDiagramFile: [
           {

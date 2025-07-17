@@ -92,7 +92,7 @@ describe('Wizard Steps Guard', () => {
   it('should redirect to answers page', async () => {
     store.setState({
       ...mockTaskState,
-      isEditable: false,
+      isEditable: true,
       cessation: {
         determinationOutcome: 'APPROVED',
         annualReportableEmissions: '22',

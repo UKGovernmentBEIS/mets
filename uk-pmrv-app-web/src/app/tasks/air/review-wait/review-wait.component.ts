@@ -8,9 +8,7 @@ import { AirService } from '@tasks/air/shared/services/air.service';
     <app-base-task-container-component
       [header]="title$ | async"
       [customContentTemplate]="customContentTemplate"
-      expectedTaskType="AIR_WAIT_FOR_REVIEW"
-    >
-    </app-base-task-container-component>
+      expectedTaskType="AIR_WAIT_FOR_REVIEW"></app-base-task-container-component>
 
     <ng-template #customContentTemplate>
       <govuk-warning-text>Waiting for the regulator to review your report</govuk-warning-text>

@@ -16,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmpProcedureForm;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviationDefinition;
@@ -27,7 +27,7 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchem
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachTypeCorsia;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproach;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproachCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.EmpCorsiaOperatorDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -333,7 +333,7 @@ class RequestEmpCorsiaReviewServiceTest {
     void saveRequestPeerReviewAction() {
         String selectedPeerReviewer = "peerReviewer";
         String reviewer = "reviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(reviewer).build();
+        AppUser appUser = AppUser.builder().userId(reviewer).build();
         EmpIssuanceCorsiaRequestPayload requestPayload = EmpIssuanceCorsiaRequestPayload.builder()
             .payloadType(RequestPayloadType.EMP_ISSUANCE_CORSIA_REQUEST_PAYLOAD)
             .build();
@@ -378,7 +378,7 @@ class RequestEmpCorsiaReviewServiceTest {
             .request(request)
             .build();
 
-        requestEmpCorsiaReviewService.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, pmrvUser);
+        requestEmpCorsiaReviewService.saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, appUser);
 
         EmpIssuanceCorsiaRequestPayload updatedRequestPayload = (EmpIssuanceCorsiaRequestPayload) request.getPayload();
 
@@ -398,7 +398,7 @@ class RequestEmpCorsiaReviewServiceTest {
     @Test
     void saveRequestReturnForAmends() {
         String reviewer = "reviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(reviewer).build();
+        AppUser appUser = AppUser.builder().userId(reviewer).build();
         EmpIssuanceCorsiaRequestPayload requestPayload = EmpIssuanceCorsiaRequestPayload.builder()
             .payloadType(RequestPayloadType.EMP_ISSUANCE_CORSIA_REQUEST_PAYLOAD)
             .build();
@@ -438,7 +438,7 @@ class RequestEmpCorsiaReviewServiceTest {
             .request(request)
             .build();
 
-        requestEmpCorsiaReviewService.saveRequestReturnForAmends(requestTask, pmrvUser);
+        requestEmpCorsiaReviewService.saveRequestReturnForAmends(requestTask, appUser);
 
         EmpIssuanceCorsiaRequestPayload updatedRequestPayload = (EmpIssuanceCorsiaRequestPayload) request.getPayload();
 
@@ -504,7 +504,7 @@ class RequestEmpCorsiaReviewServiceTest {
     void submitAmend() {
         String operator = "operator";
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId(operator).build();
+        AppUser appUser = AppUser.builder().userId(operator).build();
         EmissionsMonitoringPlanCorsia monitoringPlan = EmissionsMonitoringPlanCorsia.builder()
             .operatorDetails(EmpCorsiaOperatorDetails.builder()
                 .build())
@@ -524,7 +524,7 @@ class RequestEmpCorsiaReviewServiceTest {
                 .accountId(accountId)
                 .payload(EmpIssuanceCorsiaRequestPayload.builder()
                     .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
-                        .emissionsMonitoringApproach(FuelMonitoringApproach.builder().monitoringApproachType(
+                        .emissionsMonitoringApproach(FuelMonitoringApproachCorsia.builder().monitoringApproachType(
                             EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING).build())
                         .methodAProcedures(EmpMethodAProcedures.builder()
                             .fuelConsumptionPerFlight(EmpProcedureForm.builder()
@@ -583,7 +583,7 @@ class RequestEmpCorsiaReviewServiceTest {
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(aviationAccountInfo);
 
         // Invoke
-        requestEmpCorsiaReviewService.submitAmend(actionPayload, requestTask, pmrvUser);
+        requestEmpCorsiaReviewService.submitAmend(actionPayload, requestTask, appUser);
 
         // Verify
         assertThat(requestTask.getRequest().getPayload()).isInstanceOf(EmpIssuanceCorsiaRequestPayload.class);

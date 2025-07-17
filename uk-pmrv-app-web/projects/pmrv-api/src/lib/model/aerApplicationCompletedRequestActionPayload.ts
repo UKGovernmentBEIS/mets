@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,6 +11,7 @@
  */
 import { Aer } from './aer';
 import { AerReviewDecision } from './aerReviewDecision';
+import { AerSkipReviewDecision } from './aerSkipReviewDecision';
 import { AerVerificationReport } from './aerVerificationReport';
 import { InstallationOperatorDetails } from './installationOperatorDetails';
 import { MonitoringPlanVersion } from './monitoringPlanVersion';
@@ -23,10 +24,12 @@ export interface AerApplicationCompletedRequestActionPayload extends RequestActi
   installationOperatorDetails: InstallationOperatorDetails;
   permitOriginatedData?: PermitOriginatedData;
   monitoringPlanVersions?: Array<MonitoringPlanVersion>;
-  aerAttachments?: { [key: string]: string };
-  verifiedAer?: Aer;
+  verificationPerformed?: boolean;
   verificationReport?: AerVerificationReport;
+  aerAttachments?: { [key: string]: string };
+  verificationAttachments?: { [key: string]: string };
+  verifiedAer?: Aer;
   reviewGroupDecisions?: { [key: string]: AerReviewDecision };
   reviewAttachments?: { [key: string]: string };
-  verificationAttachments?: { [key: string]: string };
+  aerSkipReviewDecision?: AerSkipReviewDecision;
 }

@@ -1,9 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.handler;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -15,6 +14,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskAct
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationFollowUpApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationFollowUpSubmitApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +29,7 @@ public class PermitNotificationFollowUpApplicationAmendSubmitActionHandler imple
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final PermitNotificationFollowUpSubmitApplicationAmendRequestTaskActionPayload actionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -52,7 +53,7 @@ public class PermitNotificationFollowUpApplicationAmendSubmitActionHandler imple
             requestTask.getRequest(),
             null,
             RequestActionType.PERMIT_NOTIFICATION_FOLLOW_UP_APPLICATION_AMENDS_SUBMITTED,
-            pmrvUser.getUserId());
+            appUser.getUserId());
             
         // complete task
         workflowService.completeTask(requestTask.getProcessTaskId());

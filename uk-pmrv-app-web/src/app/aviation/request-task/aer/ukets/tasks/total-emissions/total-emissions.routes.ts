@@ -21,7 +21,7 @@ export const AER_TOTAL_EMISSIONS_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { pageTitle: 'Total emissions summary', breadcrumb: true },
+        data: { pageTitle: 'Total emissions', breadcrumb: true },
         loadComponent: () => import('./total-emissions-summary').then((c) => c.TotalEmissionsSummaryComponent),
       },
     ],

@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.core.transform;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionInfoDTO;

@@ -1,0 +1,30 @@
+<app-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Add details to calculate the offsetting requirements"
+  [caption]="caption"
+  submitText="Continue"
+>
+  <h2 class="govuk-heading-m">Review {{ caption }}</h2>
+  <p class="govuk-body">
+    The figures below are those calculated and reported over the compliance period. They can be updated, if required.
+    The emissions figures will be inserted into the notice.
+  </p>
+
+  <app-3year-offsetting-requirements-table-template
+    [useTableWithInputs]="true"
+    [data]="data()"
+    [totalYearlyOffsettingData]="totalYearlyOffsettingData()"
+    [periodOffsettingRequirements]="periodOffsettingRequirements()"
+  ></app-3year-offsetting-requirements-table-template>
+
+  <app-boolean-radio-group
+    controlName="operatorHaveOffsettingRequirements"
+    [isInline]="false"
+    hint="If the sum of the aeroplane operator’s annual offsetting requirements in the 3-year compliance period (excluding any Emissions reductions from the use of CORSIA eligible fuels (CEF)) is less than 3 000 tonnes of CO2, then the aeroplane operator has no offsetting requirement for the compliance period. However, the aeroplane operator may choose to voluntarily offset such emissions"
+    legend="Does the operator have any offsetting requirements for this period?"
+  >
+  </app-boolean-radio-group>
+</app-wizard-step>
+
+<app-return-to-link></app-return-to-link>

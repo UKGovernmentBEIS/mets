@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { first, map, startWith, switchMap } from 'rxjs';
 
 import {
+  CessationNotification,
   NonSignificantChange,
   OtherFactor,
   PermitNotification,
@@ -48,7 +49,7 @@ export class DescriptionComponent implements PendingRequest {
   ) {}
 
   getDownloadUrl() {
-    return this.permitNotificationService.createBaseFileDownloadUrl();
+    return this.permitNotificationService.getBaseFileDownloadUrl();
   }
 
   onContinue(): void {
@@ -99,6 +100,22 @@ export class DescriptionComponent implements PendingRequest {
     switch (type) {
       case 'NON_SIGNIFICANT_CHANGE':
         return { ...notificationFieldValue };
+      case 'CESSATION':
+        return {
+          ...notificationFieldValue,
+          technicalCapabilityDetails: this.notificationField.get('isTemporary').value
+            ? {
+                technicalCapability: this.notificationField.get('technicalCapabilityDetails.technicalCapability').value,
+                details: this.notificationField.get('technicalCapabilityDetails.technicalCapability')?.value
+                  ? this.notificationField
+                      .get('technicalCapabilityDetails')
+                      .get(
+                        `${this.notificationField.get('technicalCapabilityDetails.technicalCapability')?.value}_details`,
+                      ).value
+                  : null,
+              }
+            : null,
+        } as CessationNotification;
       case 'OTHER_FACTOR':
         return {
           ...notificationFieldValue,

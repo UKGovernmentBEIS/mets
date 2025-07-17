@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -9,7 +8,6 @@ import { MisstatementsModule } from '@tasks/aer/verification-submit/misstatement
 import { mockPostBuild, mockStateBuild } from '@tasks/aer/verification-submit/testing/mock-state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { TasksService } from 'pmrv-api';
 
@@ -35,9 +33,8 @@ describe('MisstatementsItemDeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MisstatementsModule, RouterTestingModule],
+      imports: [MisstatementsModule],
       providers: [
-        KeycloakService,
         { provide: TasksService, useValue: tasksService },
         { provide: ActivatedRoute, useValue: route },
       ],
@@ -75,7 +72,7 @@ describe('MisstatementsItemDeleteComponent', () => {
   });
 
   it('should display the item name', () => {
-    expect(page.header.textContent.trim()).toEqual(`Are you sure you want to delete  'A1 Explanation 1'?`);
+    expect(page.header.textContent.trim()).toEqual(`Are you sure you want to delete 'A1 Explanation 1'?`);
   });
 
   it('should delete and navigate to list', () => {

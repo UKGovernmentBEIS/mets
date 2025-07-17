@@ -1,0 +1,31 @@
+<ng-container *ngIf="payload$ | async as payload">
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Verifier details</h2>
+  <app-verifier-details-group [verificationReport]="payload?.verificationReport"></app-verifier-details-group>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Opinion Statement</h2>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <app-opinion-statement-group [payload]="payload"></app-opinion-statement-group>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Compliance with ETS rules</h2>
+  <app-compliance-ets-group
+    [etsComplianceRules]="payload.verificationReport.etsComplianceRules"
+  ></app-compliance-ets-group>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Compliance with monitoring and reporting principles</h2>
+  <app-compliance-monitoring-group
+    [compliance]="payload.verificationReport.complianceMonitoringReporting"
+  ></app-compliance-monitoring-group>
+
+  <ng-container *ngIf="payload.verificationReport?.activityLevelReport as activityLevelReport">
+    <h2 class="govuk-heading-m govuk-!-margin-top-6">Verification report of the activity level report</h2>
+    <app-activity-level-report-group
+      [activityLevelReport]="activityLevelReport"
+      [documentFiles]="activityLevelReportFiles$ | async"
+    ></app-activity-level-report-group>
+  </ng-container>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Overall decision</h2>
+  <app-overall-decision-group
+    [overallAssessment]="payload.verificationReport.overallAssessment"
+  ></app-overall-decision-group>
+</ng-container>

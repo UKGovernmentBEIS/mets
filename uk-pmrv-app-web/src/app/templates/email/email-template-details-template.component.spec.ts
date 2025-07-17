@@ -17,9 +17,9 @@ describe('EmailTemplateDetailsTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    template: `<app-email-template-details-template
-      [emailTemplate]="emailTemplate"
-    ></app-email-template-details-template>`,
+    template: `
+      <app-email-template-details-template [emailTemplate]="emailTemplate"></app-email-template-details-template>
+    `,
   })
   class TestComponent {
     emailTemplate: NotificationTemplateDTO;

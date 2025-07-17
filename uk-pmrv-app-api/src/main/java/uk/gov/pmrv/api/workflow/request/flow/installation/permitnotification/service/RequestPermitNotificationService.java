@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -15,6 +17,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.dom
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationContainer;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationSaveApplicationRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.mapper.PermitNotificationMapper;
 
 @Service
@@ -28,12 +31,29 @@ public class RequestPermitNotificationService {
     @Transactional
     public void applySavePayload(PermitNotificationSaveApplicationRequestTaskActionPayload actionPayload,
                                  RequestTask requestTask) {
-        PermitNotificationApplicationSubmitRequestTaskPayload taskPayload = (PermitNotificationApplicationSubmitRequestTaskPayload) requestTask.getPayload();
 
-        if(taskPayload == null) {
+        PermitNotificationApplicationSubmitRequestTaskPayload taskPayload =
+                (PermitNotificationApplicationSubmitRequestTaskPayload) requestTask.getPayload();
+
+        // Create new payload if it doesn't exist
+        if (taskPayload == null) {
             taskPayload = PermitNotificationApplicationSubmitRequestTaskPayload.builder()
-                    .payloadType(RequestTaskPayloadType.PERMIT_NOTIFICATION_APPLICATION_SUBMIT_PAYLOAD).build();
+                    .payloadType(RequestTaskPayloadType.PERMIT_NOTIFICATION_APPLICATION_SUBMIT_PAYLOAD)
+                    .build();
             requestTask.setPayload(taskPayload);
+        }
+
+        // Block new TEMPORARY_SUSPENSION notifications, but allow existing ones
+        if (actionPayload.getPermitNotification() != null) {
+            boolean isNewTemporarySuspension = PermitNotificationType.TEMPORARY_SUSPENSION.equals(
+                    actionPayload.getPermitNotification().getType());
+
+            boolean isExistingTemporarySuspension = taskPayload.getPermitNotification() != null &&
+                    PermitNotificationType.TEMPORARY_SUSPENSION.equals(taskPayload.getPermitNotification().getType());
+
+            if (isNewTemporarySuspension && !isExistingTemporarySuspension) {
+                throw new BusinessException(MetsErrorCode.INVALID_PERMIT_NOTIFICATION_NOT_SUPPORTED_TEMPORARY_SUSPENSION);
+            }
         }
 
         taskPayload.setPermitNotification(actionPayload.getPermitNotification());
@@ -41,7 +61,7 @@ public class RequestPermitNotificationService {
     }
 
     @Transactional
-    public void applySubmitPayload(RequestTask requestTask, PmrvUser authUser) {
+    public void applySubmitPayload(RequestTask requestTask, AppUser authUser) {
         Request request = requestTask.getRequest();
         PermitNotificationApplicationSubmitRequestTaskPayload
                 taskPayload = (PermitNotificationApplicationSubmitRequestTaskPayload) requestTask.getPayload();

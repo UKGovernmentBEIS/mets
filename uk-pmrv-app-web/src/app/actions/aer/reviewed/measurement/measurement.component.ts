@@ -13,8 +13,7 @@ import { AerService } from '../../core/aer.service';
     <app-action-task
       *ngIf="payload$ | async as payload"
       header="{{ taskKey | monitoringApproachEmissionDescription }}"
-      [breadcrumb]="true"
-    >
+      [breadcrumb]="true">
       <app-measurement-group [data]="(payload$ | async).aer" [taskKey]="taskKey"></app-measurement-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
@@ -28,5 +27,8 @@ export class MeasurementComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

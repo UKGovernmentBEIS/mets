@@ -5,8 +5,13 @@
     <app-page-heading>Assignment and adjustment for flights with zero fuel uplift</app-page-heading>
 
     <p class="govuk-body">
-      Describe the data handling and calculations necessary to meet the adjustment requirement for international flights
-      with zero fuel uplift, and for the following flights.
+      @if (isCorsia()) {
+        Describe the data handling and calculations necessary to meet the adjustment requirement for international
+        flights with zero fuel uplift, and for the following flights.
+      } @else {
+        Describe the data handling and calculations necessary to meet the adjustment requirement for UK ETS flights with
+        zero fuel uplift, and for the following flights.
+      }
     </p>
   </div>
 

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0aq9hxg" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.24.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+  <bpmn:process id="PROCESS_AVIATION_AER_CORSIA_ANNUAL_OFFSETTING" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1xiwoz5</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="Gateway_1xy3pdc" name="What is the submit outcome?">
+      <bpmn:incoming>Flow_1v2bjc3</bpmn:incoming>
+      <bpmn:outgoing>Flow_1n22o1u</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0h0pxkr</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1957364</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Activity_0ady72h" name="Update Workflow status to COMPLETED" camunda:delegateExpression="#{requestUpdateStatusHandler}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="requestStatus">COMPLETED</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_15vbnk2</bpmn:incoming>
+      <bpmn:outgoing>Flow_06z6pf6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1n22o1u" name="Submitted" sourceRef="Gateway_1xy3pdc" targetRef="Activity_1opk2i3">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${aviationAerCorsiaAnnualOffsettingSubmitOutcome=='SUBMITTED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="Activity_0tx49mt" name="Handle Aviation Aer Corsia Annual Offset Cancelled" camunda:delegateExpression="#{aviationAerCorsiaAnnualOffsettingApplicationCancelledHandler}">
+      <bpmn:incoming>Flow_0h0pxkr</bpmn:incoming>
+      <bpmn:outgoing>Flow_0c4al83</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_0f8pqc4" name="Update Workflow status to CANCELLED" camunda:delegateExpression="#{requestUpdateStatusHandler}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="requestStatus">CANCELLED</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0c4al83</bpmn:incoming>
+      <bpmn:outgoing>Flow_1499q3r</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0c4al83" sourceRef="Activity_0tx49mt" targetRef="Activity_0f8pqc4" />
+    <bpmn:sequenceFlow id="Flow_0h0pxkr" name="Cancelled" sourceRef="Gateway_1xy3pdc" targetRef="Activity_0tx49mt">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${aviationAerCorsiaAnnualOffsettingSubmitOutcome=='CANCELLED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:callActivity id="Activity_02nvq0w" name="Peer Review" default="Flow_1ahxbml" calledElement="PROCESS_APPLICATION_PEER_REVIEW">
+      <bpmn:extensionElements>
+        <camunda:in source="requestId" target="requestId" />
+        <camunda:in businessKey="#{businessKey}" />
+        <camunda:in source="requestType" target="requestType" />
+        <camunda:out source="aviationAerCorsiaAnnualOffsettingSubmitOutcome" target="aviationAerCorsiaAnnualOffsettingSubmitOutcome" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1957364</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ahxbml</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_1957364" name="Peer review requested" sourceRef="Gateway_1xy3pdc" targetRef="Activity_02nvq0w">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${aviationAerCorsiaAnnualOffsettingSubmitOutcome=='PEER_REVIEW_REQUIRED'}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_1uays7c">
+      <bpmn:incoming>Flow_1499q3r</bpmn:incoming>
+      <bpmn:incoming>Flow_06z6pf6</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1499q3r" sourceRef="Activity_0f8pqc4" targetRef="Event_1uays7c" />
+    <bpmn:sequenceFlow id="Flow_06z6pf6" sourceRef="Activity_0ady72h" targetRef="Event_1uays7c" />
+    <bpmn:userTask id="AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT" name="Regulator: Click calculate anual offset requirements">
+      <bpmn:incoming>Flow_1xiwoz5</bpmn:incoming>
+      <bpmn:incoming>Flow_1ahxbml</bpmn:incoming>
+      <bpmn:outgoing>Flow_1v2bjc3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1v2bjc3" sourceRef="AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT" targetRef="Gateway_1xy3pdc" />
+    <bpmn:sequenceFlow id="Flow_1ahxbml" sourceRef="Activity_02nvq0w" targetRef="AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT" />
+    <bpmn:sequenceFlow id="Flow_1xiwoz5" sourceRef="StartEvent_1" targetRef="AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT" />
+    <bpmn:serviceTask id="Activity_1opk2i3" name="Generate official notice" camunda:delegateExpression="#{aviationAerCorsiaAnnualOffsettingSubmittedGenerateOfficialNoticeHandler}">
+      <bpmn:incoming>Flow_1n22o1u</bpmn:incoming>
+      <bpmn:outgoing>Flow_1231569</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1231569" sourceRef="Activity_1opk2i3" targetRef="Activity_1xpnecr" />
+    <bpmn:serviceTask id="Activity_1xpnecr" name="Send official notice" camunda:delegateExpression="#{aviationAerCorsiaAnnualOffsettingSubmittedSendOfficialNoticeHandler}">
+      <bpmn:incoming>Flow_1231569</bpmn:incoming>
+      <bpmn:outgoing>Flow_1o9340j</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1o9340j" sourceRef="Activity_1xpnecr" targetRef="Activity_1xna561" />
+    <bpmn:serviceTask id="Activity_1xna561" name="Add submitted request action" camunda:delegateExpression="#{aviationAerCorsiaAnnualOffsettingAddSubmittedRequestActionHandler}">
+      <bpmn:incoming>Flow_1o9340j</bpmn:incoming>
+      <bpmn:outgoing>Flow_15vbnk2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_15vbnk2" sourceRef="Activity_1xna561" targetRef="Activity_0ady72h" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_AVIATION_AER_CORSIA_ANNUAL_OFFSETTING">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1xy3pdc_di" bpmnElement="Gateway_1xy3pdc" isMarkerVisible="true">
+        <dc:Bounds x="685" y="345" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="718" y="306" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0knvp23_di" bpmnElement="Activity_0tx49mt">
+        <dc:Bounds x="890" y="600" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0f8pqc4_di" bpmnElement="Activity_0f8pqc4">
+        <dc:Bounds x="1130" y="600" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_05l7iks" bpmnElement="Activity_02nvq0w">
+        <dc:Bounds x="470" y="600" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1y3j4ns_di" bpmnElement="AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT">
+        <dc:Bounds x="330" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0jgdm3j_di" bpmnElement="Event_1uays7c">
+        <dc:Bounds x="1772" y="472" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_181bb2a" bpmnElement="Activity_0ady72h">
+        <dc:Bounds x="1610" y="330" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kuyj42_di" bpmnElement="Activity_1opk2i3">
+        <dc:Bounds x="1050" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_08ohndp_di" bpmnElement="Activity_1xna561">
+        <dc:Bounds x="1430" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1dvhw57_di" bpmnElement="Activity_1xpnecr">
+        <dc:Bounds x="1240" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1n22o1u_di" bpmnElement="Flow_1n22o1u">
+        <di:waypoint x="735" y="370" />
+        <di:waypoint x="1050" y="370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="806" y="352" width="50" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0c4al83_di" bpmnElement="Flow_0c4al83">
+        <di:waypoint x="990" y="640" />
+        <di:waypoint x="1130" y="640" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0h0pxkr_di" bpmnElement="Flow_0h0pxkr">
+        <di:waypoint x="710" y="395" />
+        <di:waypoint x="710" y="640" />
+        <di:waypoint x="890" y="640" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="719" y="623" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1957364_di" bpmnElement="Flow_1957364">
+        <di:waypoint x="685" y="370" />
+        <di:waypoint x="520" y="370" />
+        <di:waypoint x="520" y="600" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="550" y="386" width="59" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1499q3r_di" bpmnElement="Flow_1499q3r">
+        <di:waypoint x="1230" y="640" />
+        <di:waypoint x="1790" y="640" />
+        <di:waypoint x="1790" y="508" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06z6pf6_di" bpmnElement="Flow_06z6pf6">
+        <di:waypoint x="1710" y="370" />
+        <di:waypoint x="1790" y="370" />
+        <di:waypoint x="1790" y="472" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v2bjc3_di" bpmnElement="Flow_1v2bjc3">
+        <di:waypoint x="440" y="130" />
+        <di:waypoint x="710" y="130" />
+        <di:waypoint x="710" y="345" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ahxbml_di" bpmnElement="Flow_1ahxbml">
+        <di:waypoint x="470" y="640" />
+        <di:waypoint x="380" y="640" />
+        <di:waypoint x="380" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xiwoz5_di" bpmnElement="Flow_1xiwoz5">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="330" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1231569_di" bpmnElement="Flow_1231569">
+        <di:waypoint x="1150" y="370" />
+        <di:waypoint x="1240" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1o9340j_di" bpmnElement="Flow_1o9340j">
+        <di:waypoint x="1340" y="370" />
+        <di:waypoint x="1430" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15vbnk2_di" bpmnElement="Flow_15vbnk2">
+        <di:waypoint x="1530" y="370" />
+        <di:waypoint x="1610" y="370" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

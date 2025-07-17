@@ -1,0 +1,19 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-product-benchmark-form
+    [form]="form"
+    [heading]="'Calculation of historical activity levels for steam cracking'"
+    [caption]="productBenchmarkType$ | async | subInstallationType"
+    [downloadUrl]="getDownloadUrl()"
+    [dataSourcesHeading]="'Data sources for supplemental feed'"
+    [dataSourcesText]="
+      'Add the data sources used for the quantities of the supplemental feed in line with section 4.4 of Annex VII of the FAR. '
+    "
+    [dataSourcesField]="'Hydrogen, ethylene and other HVC'"
+    [dataSourcesType]="'44'"
+    (submitForm)="onSubmit()"
+    (addDataSource)="addDataSource()"
+    (removeDataSource)="removeDataSource($event)"
+  >
+  </app-product-benchmark-form>
+  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+</app-permit-task>

@@ -71,13 +71,13 @@
       </dl>
       <dl govuk-summary-list *ngIf="nonCompliance.civilPenalty">
         <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Is the operator liable for an initial notice?</dt>
+          <dt govukSummaryListRowKey>Is the operator liable for an initial penalty notice?</dt>
           <dd govukSummaryListRowValue class="pre-wrap">
             {{ nonCompliance.dailyPenalty ? 'Yes' : 'No' }}
           </dd>
         </div>
       </dl>
     </ng-container>
-    <a govukLink routerLink="../">Return to: Non compliance</a>
+    <a govukLink [routerLink]="(isAviation$ | async) ? '../../../' : '../'">Return to: Non compliance</a>
   </div>
 </div>

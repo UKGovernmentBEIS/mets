@@ -16,8 +16,14 @@ import { SummaryGuard as CreateSummarySummaryGuard } from './create-summary/summ
 const routes: Routes = [
   {
     path: '',
-    data: { pageTitle: 'Review verifier improvement report' },
-    component: ReviewContainerComponent,
+    children: [
+      { path: '', data: { pageTitle: 'Review verifier improvement report' }, component: ReviewContainerComponent },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+    ],
   },
   {
     path: 'send-report',

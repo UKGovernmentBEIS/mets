@@ -8,6 +8,8 @@ import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsContainer;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.datagaps.AviationAerDataGaps;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.emissionsmonitoringapproach.AviationAerFuelMonitoringApproach;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.saf.AviationAerSaf;
+import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.AviationAerTotalEmissions;
+import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.AviationAerUkEtsSubmittedEmissions;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationData;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
 import uk.gov.pmrv.api.aviationreporting.common.domain.verification.AviationAerVerificationDecisionType;
@@ -202,7 +204,7 @@ class AviationAerUkEtsReviewMapperTest {
     void toAviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload() {
         AviationOperatorDetails operatorDetails = AviationOperatorDetails.builder()
             .operatorName("name")
-            .crcoCode("code")
+            .crcoCode("crcoCode")
             .build();
         AviationAerUkEts aer = AviationAerUkEts.builder()
             .operatorDetails(operatorDetails)
@@ -267,26 +269,19 @@ class AviationAerUkEtsReviewMapperTest {
             .reviewSectionsCompleted(reviewSectionsCompleted)
             .reviewAttachments(reviewAttachments)
             .build();
-        ServiceContactDetails serviceContactDetails = ServiceContactDetails.builder().name("contactName").email("contactEmail").build();
-        String updatedCrcoCode = "updated_code";
-        RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder()
-            .serviceContactDetails(serviceContactDetails)
-            .crcoCode(updatedCrcoCode)
-            .build();
         RequestTaskPayloadType payloadType = RequestTaskPayloadType.AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT_PAYLOAD;
         Year reportingYear = Year.of(2023);
 
         AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload expected = AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload.builder()
             .payloadType(payloadType)
             .reportingYear(reportingYear)
-            .serviceContactDetails(serviceContactDetails)
             .reportingRequired(true)
             .aerSectionsCompleted(aerSectionsCompleted)
             .aerAttachments(aerAttachments)
             .aer(AviationAerUkEts.builder()
                 .operatorDetails(AviationOperatorDetails.builder()
-                    .operatorName("name")
-                    .crcoCode(updatedCrcoCode)
+                		.crcoCode("crcoCode")
+                		.operatorName("name")
                     .build())
                 .monitoringApproach(AviationAerFuelMonitoringApproach.builder().build())
                 .saf(AviationAerSaf.builder().exist(Boolean.FALSE)
@@ -309,7 +304,7 @@ class AviationAerUkEtsReviewMapperTest {
 
         //invoke
         AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload result =
-            reviewMapper.toAviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload(requestPayload, accountInfo, payloadType, reportingYear);
+            reviewMapper.toAviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload(requestPayload, payloadType, reportingYear);
 
         //verify
         assertEquals(expected, result);
@@ -446,6 +441,9 @@ class AviationAerUkEtsReviewMapperTest {
                 .aer(aer)
                 .aerAttachments(aerAttachments)
                 .build();
+        AviationAerUkEtsSubmittedEmissions submittedEmissions = AviationAerUkEtsSubmittedEmissions.builder()
+            .aviationAerTotalEmissions(AviationAerTotalEmissions.builder().totalEmissions(BigDecimal.TEN).build())
+            .build();
 
         AviationAerUkEtsApplicationSubmittedRequestActionPayload expected =
             AviationAerUkEtsApplicationSubmittedRequestActionPayload.builder()
@@ -459,11 +457,12 @@ class AviationAerUkEtsReviewMapperTest {
                     .build())
                 .aerAttachments(aerAttachments)
                 .serviceContactDetails(serviceContactDetails)
+                .submittedEmissions(submittedEmissions)
                 .build();
 
         //invoke
         AviationAerUkEtsApplicationSubmittedRequestActionPayload result =
-            reviewMapper.toAviationAerUkEtsApplicationSubmittedRequestActionPayload(amendsSubmitRequestTaskPayload, accountInfo, payloadType);
+            reviewMapper.toAviationAerUkEtsApplicationSubmittedRequestActionPayload(amendsSubmitRequestTaskPayload, accountInfo, submittedEmissions, payloadType);
 
         //verify
         assertEquals(expected, result);

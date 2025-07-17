@@ -1,10 +1,20 @@
+import { mmpEnergyFlowsStatus } from '@permit-application/mmp-energy-flows/mmp-energy-flows-status';
+import { mmpInstallationDescriptionStatus } from '@permit-application/mmp-installation-description/mmp-installation-description-status';
+import { mmpMethodsStatus } from '@permit-application/mmp-methods/mmp-methods';
+import { mmpProceduresStatus } from '@permit-application/mmp-procedures/mmp-procedures-status';
+import {
+  mmpSubInstallationFallbackApproachStatus,
+  mmpSubInstallationProductBenchmarkStatus,
+  mmpSubInstallationStatus,
+} from '@permit-application/mmp-sub-installations/mmp-sub-installations-status';
+
 import { monitoringApproachesStatus } from '../../approaches/approach-status';
 import {
+  categoryTierStatus as CalculationCategoryTierStatus,
+  categoryTierSubtaskStatus as CalculationCategoryTierSubtaskStatus,
   planStatus as CalculationPlanStatus,
   status as CalculationStatus,
 } from '../../approaches/calculation/calculation-status';
-import { categoryTierStatus as CalculationCategoryTierStatus } from '../../approaches/calculation/calculation-status';
-import { categoryTierSubtaskStatus as CalculationCategoryTierSubtaskStatus } from '../../approaches/calculation/calculation-status';
 import {
   FALLBACKCategoryTierStatus,
   FALLBACKCategoryTierSubtaskStatus,
@@ -46,8 +56,8 @@ export function resolvePermitSectionStatus(state: PermitApplicationState, key: S
         return state.permitSectionsCompleted[key]?.[0]
           ? 'complete'
           : state.permit[key]?.length > 0
-          ? 'in progress'
-          : 'not started';
+            ? 'in progress'
+            : 'not started';
       case 'emissionSummaries':
         return emissionSummariesStatus(state);
       case 'monitoringApproaches':
@@ -72,9 +82,9 @@ export function resolvePermitSectionStatus(state: PermitApplicationState, key: S
       case 'FALLBACK_Category_Tier':
         return FALLBACKCategoryTierStatus(state, index);
       case 'FALLBACK_Category':
-        return FALLBACKCategoryTierSubtaskStatus(state, key, index);
+        return FALLBACKCategoryTierSubtaskStatus(state, index);
       case 'INHERENT_CO2':
-        return INHERENT_CO2Status(state, key);
+        return INHERENT_CO2Status(state);
       case 'MEASUREMENT_CO2':
         return MEASUREMENTStatus(state);
       case 'MEASUREMENT_CO2_Category_Tier':
@@ -82,6 +92,7 @@ export function resolvePermitSectionStatus(state: PermitApplicationState, key: S
       case 'MEASUREMENT_CO2_Category':
       case 'MEASUREMENT_CO2_Measured_Emissions':
       case 'MEASUREMENT_CO2_Applied_Standard':
+      case 'MEASUREMENT_CO2_Biomass_Fraction':
         return MEASUREMENTCategoryTierSubtaskStatus(state, key, index);
       case 'MEASUREMENT_N2O':
         return N2OStatus(state);
@@ -107,6 +118,20 @@ export function resolvePermitSectionStatus(state: PermitApplicationState, key: S
         return TRANSFERRED_CO2_PipelineStatus(state);
       case 'uncertaintyAnalysis':
         return uncertaintyAnalysisStatus(state);
+      case 'mmpInstallationDescription':
+        return mmpInstallationDescriptionStatus(state);
+      case 'MMP_SUB_INSTALLATION':
+        return mmpSubInstallationStatus(state);
+      case 'MMP_SUB_INSTALLATION_Product_Benchmark':
+        return mmpSubInstallationProductBenchmarkStatus(state, index);
+      case 'MMP_SUB_INSTALLATION_Fallback_Approach':
+        return mmpSubInstallationFallbackApproachStatus(state, index);
+      case 'mmpMethods':
+        return mmpMethodsStatus(state);
+      case 'mmpProcedures':
+        return mmpProceduresStatus(state);
+      case 'mmpEnergyFlows':
+        return mmpEnergyFlowsStatus(state);
       default:
         return state.permitSectionsCompleted[key]?.[0] ? 'complete' : 'not started';
     }

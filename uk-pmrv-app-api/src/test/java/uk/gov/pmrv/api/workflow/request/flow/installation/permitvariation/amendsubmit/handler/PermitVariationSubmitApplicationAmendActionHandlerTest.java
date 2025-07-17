@@ -14,7 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -62,12 +62,12 @@ class PermitVariationSubmitApplicationAmendActionHandlerTest {
             .request(Request.builder().build())
             .processTaskId(processTaskId)
             .build();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        AppUser appUser = AppUser.builder().userId("user").build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         submitApplicationAmendActionHandler
-            .process(requestTask.getId(), RequestTaskActionType.PERMIT_VARIATION_SUBMIT_APPLICATION_AMEND, pmrvUser, submitAmendRequestTaskActionPayload);
+            .process(requestTask.getId(), RequestTaskActionType.PERMIT_VARIATION_SUBMIT_APPLICATION_AMEND, appUser, submitAmendRequestTaskActionPayload);
 
         //verify
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
@@ -77,7 +77,7 @@ class PermitVariationSubmitApplicationAmendActionHandlerTest {
             requestTask.getRequest(),
             null,
             RequestActionType.PERMIT_VARIATION_APPLICATION_AMENDS_SUBMITTED,
-            pmrvUser.getUserId());
+            appUser.getUserId());
         verify(workflowService, times(1)).completeTask(processTaskId);
     }
 

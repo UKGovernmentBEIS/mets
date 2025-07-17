@@ -1,7 +1,7 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.validation;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.review.ChangesRequiredDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.aer.domain.AerDataReviewDecision;

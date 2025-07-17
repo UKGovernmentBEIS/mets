@@ -21,8 +21,7 @@ import { OperatorImprovementResponse, VirApplicationSubmitRequestTaskPayload } f
         [formGroup]="form"
         [verificationDataItem]="verificationDataItem"
         [isEditable]="isEditable$ | async"
-        (formSubmit)="onSubmit()"
-      ></app-reference-item-form>
+        (formSubmit)="onSubmit()"></app-reference-item-form>
     </app-vir-task>
   `,
   providers: [recommendationResponseFormProvider],

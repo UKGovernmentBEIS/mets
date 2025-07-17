@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.2.0/changelog_authorization_rules.xml"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_CREATE_TEMP_MMP_FILES_SEQUENCE" author="dridakisc@unisystems.gr">
+        <createSequence sequenceName="mmp_files_migration_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS mmp_files_migration_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_CREATE_TEMP_MMP_FILES_TABLE" author="dridakisc@unisystems.gr">
+        <createTable tableName="mmp_files_migration" remarks="Holds mmp files to be digitized">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="mmp_files_migration_pk" nullable="false"/>
+            </column>
+            <column name="account_id" type="bigint" remarks="account id">
+                <constraints nullable="false" />
+            </column>
+            <column name="permit_id" type="varchar(20)"
+                    remarks="The id of the permit that holds the MMP to be digitized">
+            </column>
+            <column name="file_uuid" type="varchar(255)" remarks="The file uuid">
+            </column>
+            <column name="file_name" type="varchar(255)" remarks="The file name">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_type" type="varchar(255)" remarks="The file type">
+                <constraints nullable="false" />
+            </column>
+            <column name="file_content" type="bytea" remarks="The attachment binary content">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS mmp_files_migration;
+            </sql>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

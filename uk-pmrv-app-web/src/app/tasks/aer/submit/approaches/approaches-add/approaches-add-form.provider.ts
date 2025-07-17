@@ -19,7 +19,7 @@ export const approachesAddFormProvider = {
     const value = [];
     const state = store.getValue();
 
-    const payload: AerApplicationSubmitRequestTaskPayload = state.requestTaskItem.requestTask.payload;
+    const payload = state.requestTaskItem.requestTask.payload as AerApplicationSubmitRequestTaskPayload;
 
     if (payload?.aer?.monitoringApproachEmissions) {
       Object.keys(payload?.aer?.monitoringApproachEmissions).forEach((key) => {

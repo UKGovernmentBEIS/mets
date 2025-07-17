@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentService;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.documents.service.FileDocumentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueRequestMetadata;
@@ -87,7 +88,7 @@ class EmpBatchReissueGenerateReportServiceTest {
     	scanner.close();
     	
     	assertThat(lines).containsExactlyInAnyOrder("Plan ID,Operator name,Date issued,Status",
-    			"empId1,accountName1,12-May-2023,Pass",
+    			"empId1,accountName1," + issueDate1.format(DateTimeFormatter.ofPattern("dd-MMM-yyyy")) + ",Pass",
     			"empId2,accountName2,N/A,Fail"
     			);
 	}

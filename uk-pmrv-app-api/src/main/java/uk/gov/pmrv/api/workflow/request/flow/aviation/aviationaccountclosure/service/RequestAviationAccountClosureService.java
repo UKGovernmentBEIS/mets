@@ -5,7 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountUpdateService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -37,7 +37,7 @@ public class RequestAviationAccountClosureService {
 	}
 
 	@Transactional
-	public void applySubmitAction(RequestTask requestTask, PmrvUser pmrvUser) {
+	public void applySubmitAction(RequestTask requestTask, AppUser appUser) {
 		Request request = requestTask.getRequest();
 		Long accountId = request.getAccountId();
         AviationAccountClosureSubmitRequestTaskPayload taskPayload =
@@ -51,14 +51,14 @@ public class RequestAviationAccountClosureService {
         requestPayload.setAviationAccountClosure(taskPayload.getAviationAccountClosure());
 
         // add action
-        addRequestAction(pmrvUser, request, taskPayload);	
+        addRequestAction(appUser, request, taskPayload);
         
         // update account status to CLOSED
         aviationAccountUpdateService.closeAviationAccount(
-        		accountId, pmrvUser, taskPayload.getAviationAccountClosure().getReason());
+        		accountId, appUser, taskPayload.getAviationAccountClosure().getReason());
 	}
 
-	private void addRequestAction(PmrvUser pmrvUser, Request request,
+	private void addRequestAction(AppUser appUser, Request request,
 			AviationAccountClosureSubmitRequestTaskPayload taskPayload) {
 		AviationAccountClosureSubmittedRequestActionPayload actionPayload = 
         		AviationAccountClosureSubmittedRequestActionPayload
@@ -71,7 +71,7 @@ public class RequestAviationAccountClosureService {
             request,
             actionPayload,
             RequestActionType.AVIATION_ACCOUNT_CLOSURE_SUBMITTED,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
 	}
     

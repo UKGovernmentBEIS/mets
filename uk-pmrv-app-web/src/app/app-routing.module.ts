@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 
-import { isFeatureEnabled } from '@core/features/feature.guard';
+import { isFeatureEnabled } from '@core/config/feature.guard';
 import { AviationAuthGuard } from '@core/guards/aviation-auth.guard';
 import { InstallationAuthGuard } from '@core/guards/installation-auth.guard';
 import { LoggedInGuard } from '@core/guards/logged-in.guard';
@@ -16,7 +16,6 @@ import { InstallationAccountApplicationGuard } from './installation-account-appl
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LandingPageGuard } from './landing-page/landing-page.guard';
 import { LegislationComponent } from './legislation/legislation.component';
-import { PrivacyNoticeComponent } from './privacy-notice/privacy-notice.component';
 import { RoleTypeGuard } from './shared/guards/role-type.guard';
 import { TermsAndConditionsComponent } from './terms-and-conditions/terms-and-conditions.component';
 import { TimedOutComponent } from './timeout/timed-out/timed-out.component';
@@ -43,11 +42,6 @@ const routes: Routes = [
         path: 'about',
         data: { pageTitle: 'About', breadcrumb: true },
         component: VersionComponent,
-      },
-      {
-        path: 'privacy-notice',
-        data: { pageTitle: 'Privacy notice', breadcrumb: true },
-        component: PrivacyNoticeComponent,
       },
       {
         path: 'accessibility',

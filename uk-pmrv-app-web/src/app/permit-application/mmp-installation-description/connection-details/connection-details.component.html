@@ -1,0 +1,80 @@
+<app-permit-task
+  [breadcrumb]="
+    (requestTaskType$ | async)
+      ? [
+          {
+            text: 'Monitoring methodology',
+            link: ['monitoring-methodology-plan'],
+          },
+        ]
+      : [
+          {
+            text: 'Connections to other ETS installations or non-ETS entities',
+            link: ['mmp-installation-description', 'connections'],
+          },
+        ]
+  ">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    [heading]="
+      (isEditing$ | async)
+        ? 'Edit a connection to an installation or entity'
+        : 'Add a connection to an installation or entity'
+    "
+    caption="Monitoring methodology plan"
+    submitText="Continue">
+    <h2 class="govuk-heading-s">Installation or entity name</h2>
+    <div
+      formControlName="installationOrEntityName"
+      govuk-text-input
+      label="Please insert text for installation or entity name"
+      [isLabelHidden]="true"></div>
+
+    <div formControlName="entityType" govuk-radio legend="Type of entity">
+      <govuk-radio-option
+        *ngFor="let option of entityTypeOptions"
+        [label]="option | entityType"
+        [value]="option"></govuk-radio-option>
+    </div>
+    <div formControlName="connectionType" govuk-radio legend="Type of connection">
+      <govuk-radio-option
+        *ngFor="let option of connectionTypeOptions"
+        [label]="option | connectionType"
+        [value]="option"></govuk-radio-option>
+    </div>
+    <div formControlName="flowDirection" govuk-radio legend="Flow direction">
+      <govuk-radio-option
+        *ngFor="let option of flowDirectionOptions"
+        [label]="option | flowDirectionType"
+        [value]="option"></govuk-radio-option>
+    </div>
+
+    <h2 class="govuk-heading-s">Installation ID used in the registry</h2>
+    <div
+      formControlName="installationId"
+      govuk-text-input
+      label="Enter the installation ID used in the registry"
+      [isLabelHidden]="true"
+      hint="The installation ID is mandatory if the connected installation is covered by the ETS."></div>
+
+    <h2 class="govuk-heading-s">Name of contact person</h2>
+    <div
+      formControlName="contactPersonName"
+      govuk-text-input
+      label="Enter the name of contact person"
+      [isLabelHidden]="true"></div>
+
+    <h2 class="govuk-heading-s">Email address</h2>
+    <div formControlName="emailAddress" govuk-text-input label="Enter the email address" [isLabelHidden]="true"></div>
+
+    <h2 class="govuk-heading-s">Phone number</h2>
+    <div
+      formControlName="phoneNumber"
+      govuk-text-input
+      inputType="tel"
+      label="Enter the email address"
+      [isLabelHidden]="true"></div>
+  </app-wizard-step>
+  <a govukLink [routerLink]="'../'">Return to: Connections</a>
+</app-permit-task>

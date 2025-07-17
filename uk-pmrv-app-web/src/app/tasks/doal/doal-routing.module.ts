@@ -125,6 +125,11 @@ const routes: Routes = [
         component: SubmitContainerComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'operator-report',
         data: { sectionKey: 'operatorActivityLevelReport' },
         children: [
@@ -464,8 +469,8 @@ const routes: Routes = [
       },
       {
         path: 'cancel',
-        loadChildren: () => import('@cancel-task/cancel-task.module').then(m => m.CancelTaskModule),
-      }
+        loadChildren: () => import('@cancel-task/cancel-task.module').then((m) => m.CancelTaskModule),
+      },
     ],
   },
   {
@@ -475,6 +480,11 @@ const routes: Routes = [
         path: '',
         data: { pageTitle: 'Provide UK ETS authority response for activity Level Change' },
         component: AuthorityResponseContainerComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'date-submitted',
@@ -601,6 +611,11 @@ const routes: Routes = [
         data: { pageTitle: 'Peer review' },
         component: PeerReviewComponent,
       },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
       ...sharedPeerReviewRoutes,
       {
         path: 'decision',
@@ -634,6 +649,11 @@ const routes: Routes = [
         path: '',
         data: { pageTitle: 'Wait peer review' },
         component: PeerReviewWaitComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       ...sharedPeerReviewRoutes,
     ],

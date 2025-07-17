@@ -13,16 +13,14 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import uk.gov.netz.api.common.config.YearAttributeConverter;
 import uk.gov.pmrv.api.allowance.domain.enums.SubInstallationName;
-import uk.gov.pmrv.api.common.domain.converter.YearAttributeConverter;
 
 import java.time.Year;
 

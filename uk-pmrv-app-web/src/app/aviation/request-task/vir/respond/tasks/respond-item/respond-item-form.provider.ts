@@ -50,7 +50,7 @@ export class RespondItemFormProvider
           ? (new Date(formValue.dateCompleted) as any)
           : null
         : null,
-      reason: !formValue?.improvementCompleted ? formValue?.reason ?? null : null,
+      reason: !formValue?.improvementCompleted ? (formValue?.reason ?? null) : null,
     });
   }
 

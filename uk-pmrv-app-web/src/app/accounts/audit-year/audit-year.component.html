@@ -1,0 +1,14 @@
+<app-page-heading>Which year does the audit relate to?</app-page-heading>
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+  <govuk-error-summary *ngIf="isErrorSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <div formControlName="year" govuk-radio>
+        <govuk-radio-option *ngFor="let year of years" [value]="year" [label]="year"></govuk-radio-option>
+      </div>
+    </div>
+  </div>
+  <button appPendingButton govukButton type="submit">Continue</button>
+</form>
+<a govukLink [routerLink]="['/dashboard']">Return to your tasks</a>

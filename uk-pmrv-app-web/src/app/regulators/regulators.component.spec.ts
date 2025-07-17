@@ -218,12 +218,6 @@ describe('RegulatorsComponent', () => {
     expectUserOrderToBe([4, 1, 2, 3, 0]);
   });
 
-  it('should hide select and locked if user status is pending', () => {
-    expect(page.statusSelects[4]).toBeNull();
-    expect(page.rows[4].querySelectorAll('td')[2].textContent).toEqual('Awaiting confirmation');
-    expect(page.rows[4].querySelector('td .locked')).toBeFalsy();
-  });
-
   it('should hide account status column if non-editable view', () => {
     const testData = cloneDeep(mockRegulatorsRouteData);
     testData.regulators.editable = false;

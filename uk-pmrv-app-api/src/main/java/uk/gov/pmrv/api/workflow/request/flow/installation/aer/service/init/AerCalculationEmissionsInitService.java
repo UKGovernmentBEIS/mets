@@ -1,9 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.init;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.MonitoringApproachType;
@@ -21,6 +17,11 @@ import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.calculatio
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.calculation.CalculationSourceStreamEmission;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.common.BiomassPercentages;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.common.DurationRange;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AerCalculationEmissionsInitService implements AerMonitoringApproachTypeEmissionsInitService {

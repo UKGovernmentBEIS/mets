@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 import { CessationModule } from '@permit-revocation/cessation/cessation.module';
 import { PermitRevocationModule } from '@permit-revocation/permit-revocation.module';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
-import moment from 'moment';
+import { addDays, format, startOfDay, subDays } from 'date-fns';
 
 import { TasksService } from 'pmrv-api';
 
@@ -171,7 +171,7 @@ describe('Stop Date Component', () => {
   });
 
   it('should validate form with an error message for maximum date limit', () => {
-    const today = moment().add(1, 'd').set({ hour: 0, minute: 0, second: 0, millisecond: 0 }).format('YYYY-MM-DD');
+    const today = format(startOfDay(addDays(new Date(), 1)), 'yyyy-MM-dd');
     const date = today.split('-');
     const year = date[0];
     const month = date[1];
@@ -193,7 +193,8 @@ describe('Stop Date Component', () => {
 
   it('Should submit form and navigate to the next step', () => {
     const navigateSpy = jest.spyOn(router, 'navigate');
-    const today = moment().subtract(1, 'd').format('YYYY-MM-DD');
+    const today = format(subDays(new Date(), 1), 'yyyy-MM-dd');
+
     const date = today.split('-');
     const year = date[0];
     const month = date[1];

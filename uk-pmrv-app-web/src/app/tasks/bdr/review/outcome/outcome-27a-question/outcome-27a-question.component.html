@@ -1,0 +1,17 @@
+<app-bdr-task-review
+  [breadcrumb]="true"
+  returnToLink="../.."
+  heading="Has the operator met the 27A data submission requirements?"
+  caption="Outcome of regulator review">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()">
+    <div
+      formControlName="hasOperatorMetDataSubmissionRequirements"
+      govuk-checkboxes
+      size="small"
+      class="govuk-!-width-two-thirds">
+      <govuk-checkbox
+        [value]="true"
+        label="Operator has met 27A data submission requirements and this information has been sent to UK ETS authority"></govuk-checkbox>
+    </div>
+  </app-wizard-step>
+</app-bdr-task-review>

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -49,7 +49,7 @@ public class EmpVariationCorsiaAmendService {
     
     @Transactional
     public void submitAmend(EmpVariationCorsiaSubmitApplicationAmendRequestTaskActionPayload actionPayload, RequestTask requestTask,
-                            PmrvUser pmrvUser) {
+                            AppUser appUser) {
 
         Request request = requestTask.getRequest();
         EmpVariationCorsiaApplicationAmendsSubmitRequestTaskPayload taskPayload =
@@ -75,7 +75,7 @@ public class EmpVariationCorsiaAmendService {
         requestPayload.setEmpVariationDetailsReviewCompleted(taskPayload.getEmpVariationDetailsReviewCompleted());
         
         // Add timeline
-        addAmendsSubmittedRequestAction(request, pmrvUser);
+        addAmendsSubmittedRequestAction(request, appUser);
     }
 
     private void removeDeprecatedReviewGroupDecisionsFromVariationRequestPayload(EmpVariationCorsiaRequestPayload requestPayload,
@@ -88,7 +88,7 @@ public class EmpVariationCorsiaAmendService {
         }
     }
     
-    private void addAmendsSubmittedRequestAction(Request request, PmrvUser pmrvUser) {
+    private void addAmendsSubmittedRequestAction(Request request, AppUser appUser) {
         EmpVariationCorsiaRequestPayload requestPayload = (EmpVariationCorsiaRequestPayload) request.getPayload();
         RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(request.getAccountId());
 
@@ -99,6 +99,6 @@ public class EmpVariationCorsiaAmendService {
                 request,
                 amendsSubmittedRequestActionPayload,
                 RequestActionType.EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMITTED,
-                pmrvUser.getUserId());
+                appUser.getUserId());
     }
 }

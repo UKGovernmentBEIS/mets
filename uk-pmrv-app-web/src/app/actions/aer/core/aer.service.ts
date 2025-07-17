@@ -3,10 +3,12 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
 import {
+  AerApplicationAmendsSubmittedRequestActionPayload,
   AerApplicationCompletedRequestActionPayload,
   AerApplicationReturnedForAmendsRequestActionPayload,
   AerApplicationSubmittedRequestActionPayload,
   AerApplicationVerificationSubmittedRequestActionPayload,
+  RequestActionDTO,
 } from 'pmrv-api';
 
 import { CommonActionsStore } from '../../store/common-actions.store';
@@ -15,7 +17,7 @@ import { CommonActionsStore } from '../../store/common-actions.store';
 export class AerService {
   constructor(private readonly store: CommonActionsStore) {}
 
-  get requestAction$(): Observable<any> {
+  get requestAction$(): Observable<RequestActionDTO> {
     return this.store.requestAction$;
   }
 
@@ -43,10 +45,12 @@ export class AerService {
       case 'AER_APPLICATION_COMPLETED_PAYLOAD':
       case 'AER_APPLICATION_SUBMITTED_PAYLOAD':
       case 'AER_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD':
+      case 'AER_APPLICATION_AMENDS_SUBMITTED_PAYLOAD':
         return (<
           | AerApplicationSubmittedRequestActionPayload
           | AerApplicationCompletedRequestActionPayload
           | AerApplicationVerificationSubmittedRequestActionPayload
+          | AerApplicationAmendsSubmittedRequestActionPayload
         >payload).aerAttachments;
       case 'AER_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD':
         return (<AerApplicationReturnedForAmendsRequestActionPayload>payload).reviewAttachments;

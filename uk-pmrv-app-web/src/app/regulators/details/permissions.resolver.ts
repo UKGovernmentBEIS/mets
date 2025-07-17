@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { first, Observable, switchMap } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { AuthorityManagePermissionDTO, RegulatorAuthoritiesService } from 'pmrv-
 import { viewNotFoundRegulatorError } from '../errors/business-error';
 
 @Injectable({ providedIn: 'root' })
-export class PermissionsResolver implements Resolve<AuthorityManagePermissionDTO> {
+export class PermissionsResolver {
   constructor(
     private readonly regulatorAuthoritiesService: RegulatorAuthoritiesService,
     private readonly authStore: AuthStore,

@@ -40,10 +40,10 @@ export class FileDownloadComponent implements AfterViewChecked {
       return params.has('taskId')
         ? this.requestTaskDownloadInfo(params)
         : params.has('actionId')
-        ? this.requestActionDownloadInfo(params)
-        : params.has('empId')
-        ? this.empsDownloadInfo(params)
-        : this.permitDownloadInfo(params);
+          ? this.requestActionDownloadInfo(params)
+          : params.has('empId')
+            ? this.empsDownloadInfo(params)
+            : this.permitDownloadInfo(params);
     }),
     switchMap(({ request, fileType }) => {
       return combineLatest([

@@ -5,13 +5,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.core.domain.dto.AuthorityInfoDTO;
-import uk.gov.pmrv.api.authorization.core.service.AuthorityService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.token.JwtTokenService;
-import uk.gov.pmrv.api.token.JwtTokenActionEnum;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.domain.dto.AuthorityInfoDTO;
+import uk.gov.netz.api.authorization.core.service.AuthorityService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.token.JwtTokenAction;
+import uk.gov.netz.api.token.JwtTokenService;
 
 import java.util.Optional;
 
@@ -36,7 +36,7 @@ class UserInvitationTokenVerificationServiceTest {
     @Test
     void verifyInvitationTokenForPendingAuthority() {
         String invitationToken = "invitationToken";
-        JwtTokenActionEnum jwtTokenAction = JwtTokenActionEnum.OPERATOR_INVITATION;
+        JwtTokenAction jwtTokenAction = JwtTokenAction.OPERATOR_INVITATION;
         String authorityUuid = "authorityUuid";
         AuthorityInfoDTO authorityInfo = AuthorityInfoDTO.builder()
             .id(1L)
@@ -59,7 +59,7 @@ class UserInvitationTokenVerificationServiceTest {
     @Test
     void verifyInvitationTokenForPendingAuthority_authority_not_found() {
         String invitationToken = "invitationToken";
-        JwtTokenActionEnum jwtTokenAction = JwtTokenActionEnum.OPERATOR_INVITATION;
+        JwtTokenAction jwtTokenAction = JwtTokenAction.OPERATOR_INVITATION;
         String authorityUuid = "authorityUuid";
 
 

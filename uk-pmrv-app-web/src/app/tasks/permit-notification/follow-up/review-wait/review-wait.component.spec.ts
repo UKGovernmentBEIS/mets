@@ -1,10 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
-
-import { KeycloakService } from 'keycloak-angular';
 
 import { ActivatedRouteStub, BasePage } from '../../../../../testing';
 import { SharedModule } from '../../../../shared/shared.module';
@@ -32,8 +29,8 @@ describe('ReviewWaitComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FollowUpReviewWaitComponent],
-      providers: [KeycloakService, { provide: ActivatedRoute, useValue: route }],
-      imports: [SharedModule, RouterTestingModule, TaskSharedModule],
+      providers: [{ provide: ActivatedRoute, useValue: route }],
+      imports: [SharedModule, TaskSharedModule],
     }).compileComponents();
   });
 
@@ -63,6 +60,6 @@ describe('ReviewWaitComponent', () => {
 
   it('should render the review content', () => {
     expect(page.heading).toEqual('Follow up response submitted');
-    expect(page.content).toEqual('!Warning Waiting for the regulator to make a determination');
+    expect(page.content).toEqual('!WarningWaiting for the regulator to make a determination');
   });
 });

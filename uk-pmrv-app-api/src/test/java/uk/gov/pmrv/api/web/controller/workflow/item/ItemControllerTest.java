@@ -12,16 +12,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemOperatorService;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemRegulatorService;
@@ -48,10 +48,10 @@ class ItemControllerTest {
     private ItemRegulatorService itemRegulatorService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     private MockMvc mockMvc;
     private static final String BASE_PATH = "/v1.0/items";
@@ -62,7 +62,7 @@ class ItemControllerTest {
         ItemController itemController = new ItemController(services);
 
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(itemController);
         aspectJProxyFactory.addAspect(aspect);
@@ -73,7 +73,7 @@ class ItemControllerTest {
         itemController = (ItemController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(itemController)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .build();
     }
@@ -81,12 +81,12 @@ class ItemControllerTest {
     @Test
     void getItemsByRequest_operator() throws Exception {
         final String requestId = "1";
-        PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.OPERATOR).build();
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.OPERATOR).build();
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().totalItems(1L).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(itemOperatorService.getItemsByRequest(pmrvUser, requestId)).thenReturn(itemDTOResponse);
-        when(itemOperatorService.getRoleType()).thenReturn(RoleType.OPERATOR);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(itemOperatorService.getItemsByRequest(appUser, requestId)).thenReturn(itemDTOResponse);
+        when(itemOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(BASE_PATH + "/" + requestId)
@@ -94,7 +94,7 @@ class ItemControllerTest {
                 .andExpect(status().isOk());
 
         verify(itemOperatorService, times(1))
-                .getItemsByRequest(pmrvUser, requestId);
+                .getItemsByRequest(appUser, requestId);
         verify(itemRegulatorService, never())
                 .getItemsByRequest(any(), anyString());
     }
@@ -102,13 +102,13 @@ class ItemControllerTest {
     @Test
     void getItemsByRequest_regulator() throws Exception {
         final String requestId = "1";
-        PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().totalItems(1L).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(itemRegulatorService.getItemsByRequest(pmrvUser, requestId)).thenReturn(itemDTOResponse);
-        when(itemOperatorService.getRoleType()).thenReturn(RoleType.OPERATOR);
-        when(itemRegulatorService.getRoleType()).thenReturn(RoleType.REGULATOR);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(itemRegulatorService.getItemsByRequest(appUser, requestId)).thenReturn(itemDTOResponse);
+        when(itemOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
+        when(itemRegulatorService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(BASE_PATH + "/" + requestId)
@@ -116,7 +116,7 @@ class ItemControllerTest {
                 .andExpect(status().isOk());
 
         verify(itemRegulatorService, times(1))
-                .getItemsByRequest(pmrvUser, requestId);
+                .getItemsByRequest(appUser, requestId);
         verify(itemOperatorService, never())
                 .getItemsByRequest(any(), anyString());
     }
@@ -124,12 +124,12 @@ class ItemControllerTest {
     @Test
     void getItemsByRequest_forbidden() throws Exception {
         final String requestId = "1";
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(pmrvUser, "getItemsByRequest", String.valueOf(requestId));
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "getItemsByRequest", requestId, null, null);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(BASE_PATH + "/" + requestId)

@@ -1,15 +1,20 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { UntypedFormGroup } from '@angular/forms';
 
 import { BehaviorSubject, first, takeUntil, tap } from 'rxjs';
 
 import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
+import { GovukValidators } from 'govuk-components';
+
+import { CessationNotification, PermitNotificationReviewDecision } from 'pmrv-api';
+
 import { PendingRequestService } from '../../../../core/guards/pending-request.service';
 import { DestroySubject } from '../../../../core/services/destroy-subject.service';
 import { CommonTasksStore } from '../../../store/common-tasks.store';
 import { PermitNotificationService } from '../../core/permit-notification.service';
-import { decisionFormProvider, REVIEW_FORM } from './decision-form.provider';
+import { decisionFormProvider, futureDateValidator, REVIEW_FORM } from './decision-form.provider';
 
 @Component({
   selector: 'app-decision',
@@ -24,6 +29,10 @@ export class DecisionComponent implements OnInit {
   showNotificationBanner$ = new BehaviorSubject<boolean>(false);
 
   reviewDecision$ = this.permitNotificationService.reviewDecision$;
+  readonly reviewDecision: Signal<PermitNotificationReviewDecision> = toSignal(this.reviewDecision$);
+  readonly permitNotification: Signal<CessationNotification> = toSignal(
+    this.permitNotificationService.permitNotification$,
+  );
 
   returnTo: { text: string; link: string };
 
@@ -57,22 +66,34 @@ export class DecisionComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.valid) {
-      const followUpResponseRequired = this.form.get('followUpResponseRequired').value;
+      const followUpResponseRequired = this.form.get('followUpResponseRequired')?.value;
 
       const payload = {
-        type: this.form.get('type').value ? 'ACCEPTED' : 'REJECTED',
+        type:
+          this.permitNotification().type === 'CESSATION'
+            ? this.form.get('type').value
+            : this.form.get('type').value
+              ? 'ACCEPTED'
+              : 'REJECTED',
         details: {
           officialNotice: this.form.get('officialNotice').value,
           notes: this.form.get('notes').value,
           ...(this.form.get('type').value
             ? {
-                followUp: {
-                  followUpResponseRequired,
-                  ...(followUpResponseRequired ? { followUpRequest: this.form.get('followUpRequest').value } : null),
-                  ...(followUpResponseRequired
-                    ? { followUpResponseExpirationDate: this.form.get('followUpResponseExpirationDate').value }
-                    : null),
-                },
+                followUp:
+                  followUpResponseRequired && this.form.get('type').value !== 'NOT_CESSATION'
+                    ? {
+                        followUpResponseRequired,
+                        ...(followUpResponseRequired
+                          ? { followUpRequest: this.form.get('followUpRequest').value }
+                          : null),
+                        ...(followUpResponseRequired
+                          ? { followUpResponseExpirationDate: this.form.get('followUpResponseExpirationDate').value }
+                          : null),
+                      }
+                    : {
+                        followUpResponseRequired: false,
+                      },
               }
             : {}),
         },
@@ -129,9 +150,25 @@ export class DecisionComponent implements OnInit {
       .get('type')
       .valueChanges.pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        if (this.form.get('followUpResponseRequired')) {
+        if (
+          this.form.get('followUpResponseRequired')?.value ||
+          // @ts-expect-error on the type of the object
+          this.reviewDecision()?.details?.followUp?.followUpResponseRequired
+        ) {
           this.form.get('followUpRequest').enable();
           this.form.get('followUpResponseExpirationDate').enable();
+          this.form
+            .get('followUpRequest')
+            .setValidators([
+              GovukValidators.required('Enter details'),
+              GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
+            ]);
+          this.form.get('followUpRequest').updateValueAndValidity();
+          this.form.get('followUpResponseExpirationDate')?.clearValidators();
+          this.form
+            .get('followUpResponseExpirationDate')
+            ?.setValidators([futureDateValidator(), GovukValidators.required('Enter a date')]);
+          this.form.get('followUpResponseExpirationDate').updateValueAndValidity();
         }
       });
   }

@@ -25,8 +25,7 @@ describe('AerVerificationReviewDecisionGroupComponent', () => {
   @Component({
     template: `
       <app-aviation-aer-verification-review-decision-group
-        taskKey="uncorrectedMisstatements"
-      ></app-aviation-aer-verification-review-decision-group>
+        taskKey="uncorrectedMisstatements"></app-aviation-aer-verification-review-decision-group>
     `,
   })
   class TestComponent {}
@@ -43,6 +42,7 @@ describe('AerVerificationReviewDecisionGroupComponent', () => {
     store = TestBed.inject(RequestTaskStore);
     store.setState({
       requestTaskItem: {
+        requestInfo: { type: 'AVIATION_AER_UKETS' },
         requestTask: {
           id: 19,
           type: 'AVIATION_AER_UKETS_APPLICATION_REVIEW',

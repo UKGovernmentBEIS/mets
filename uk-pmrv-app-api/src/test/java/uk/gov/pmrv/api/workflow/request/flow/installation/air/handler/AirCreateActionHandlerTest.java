@@ -13,11 +13,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.service.DateService;
+import uk.gov.netz.api.common.utils.DateService;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.service.PermitQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
@@ -60,8 +60,7 @@ class AirCreateActionHandlerTest {
         final List<AirImprovement> airImprovements = List.of(
             AirImprovementCalculationCO2.builder().sourceStreamReference("ref 1").build(),
             AirImprovementFallback.builder().sourceStreamReference("ref 2").build());
-        final RequestCreateActionType type = RequestCreateActionType.AIR;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        final AppUser appUser = AppUser.builder().userId("user").build();
         final RequestCreateActionEmptyPayload payload = RequestCreateActionEmptyPayload.builder().build();
         final RequestParams requestParams = RequestParams.builder()
             .type(RequestType.AIR)
@@ -82,7 +81,7 @@ class AirCreateActionHandlerTest {
         when(startProcessRequestService.startProcess(requestParams)).thenReturn(Request.builder().id("reqId").build());
         when(dateService.getYear()).thenReturn(Year.of(2022));
 
-        final String result = cut.process(accountId, type, payload, pmrvUser);
+        final String result = cut.process(accountId, payload, appUser);
 
         assertThat(result).isEqualTo("reqId");
 
@@ -90,7 +89,7 @@ class AirCreateActionHandlerTest {
     }
 
     @Test
-    void getType() {
-        assertThat(cut.getType()).isEqualTo(RequestCreateActionType.AIR);
+    void getRequestCreateActionType() {
+        assertThat(cut.getRequestCreateActionType()).isEqualTo(RequestCreateActionType.AIR);
     }
 }

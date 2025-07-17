@@ -1,0 +1,47 @@
+<app-bdr-task-review
+  [breadcrumb]="true"
+  returnToLink="../.."
+  heading="What is your decision for the free allocation?"
+  caption="Outcome of regulator review  ">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()">
+    <div class="govuk-!-width-two-thirds">
+      <dl class="govuk-summary-list">
+        <div class="govuk-summary-list__row">
+          <dt class="govuk-summary-list__key govuk-!-width-two-thirds">
+            Is the operator applying for free allocation?
+          </dt>
+          <dd class="govuk-summary-list__value">
+            {{ isFAApplied ? 'Yes' : 'No' }}
+          </dd>
+        </div>
+      </dl>
+
+      <div
+        formControlName="hasRegulatorSentFreeAllocation"
+        govuk-radio
+        legend="What is your opinion on the free allocation application?"
+        legendSize="medium">
+        <govuk-radio-option
+          [value]="true"
+          label="Regulator has sent the free allocation application and explanations to UK ETS authority for assessment"></govuk-radio-option>
+        <govuk-radio-option [value]="false" label="No free allocation application"></govuk-radio-option>
+      </div>
+
+      <h2 class="govuk-heading-m govuk-!-margin-0">Review notes (optional)</h2>
+      <div
+        formControlName="freeAllocationNotesOperator"
+        govuk-textarea
+        [maxLength]="10000"
+        rows="5"
+        label="This can be viewed by the operator"></div>
+
+      <h2 class="govuk-heading-m govuk-!-margin-0">Review notes (optional)</h2>
+      <div
+        formControlName="freeAllocationNotes"
+        govuk-textarea
+        [maxLength]="10000"
+        rows="5"
+        label="This cannot be viewed by the operator"></div>
+    </div>
+  </app-wizard-step>
+</app-bdr-task-review>

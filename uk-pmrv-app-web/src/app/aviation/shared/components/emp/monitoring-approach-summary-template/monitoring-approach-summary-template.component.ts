@@ -2,6 +2,7 @@ import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Params, RouterLink, RouterLinkWithHref } from '@angular/router';
 
+import { SimplifiedMonitoringApproach } from '@aviation/request-task/emp/ukets/tasks/monitoring-approach/monitoring-approach-types.interface';
 import { MonitoringApproachTypePipe } from '@aviation/shared/pipes/monitoring-approach-type.pipe';
 import { SharedModule } from '@shared/shared.module';
 
@@ -10,7 +11,6 @@ import { GovukComponentsModule } from 'govuk-components';
 import { EmpEmissionsMonitoringApproach } from 'pmrv-api';
 
 import { ProcedureFormSummaryComponent } from '../../procedure-form-summary';
-import { SimplifiedMonitoringApproach } from './monitoring-approach-types.interface';
 
 type EmissionsMonitoringApproachFormValues = {
   monitoringApproachType: EmpEmissionsMonitoringApproach['monitoringApproachType'];

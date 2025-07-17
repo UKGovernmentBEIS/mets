@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
@@ -39,7 +39,7 @@ class DoalSaveAuthorityResponseActionHandlerTest {
                 DoalSaveAuthorityResponseTaskActionPayload.builder()
                         .payloadType(RequestTaskActionPayloadType.DOAL_SAVE_AUTHORITY_RESPONSE_PAYLOAD)
                         .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final String processTaskId = "processTaskId";
         final Request request = Request.builder().id("1").build();
         final RequestTask requestTask = RequestTask.builder().id(1L).request(request).processTaskId(processTaskId).build();
@@ -47,7 +47,7 @@ class DoalSaveAuthorityResponseActionHandlerTest {
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(requestTask.getId(), RequestTaskActionType.DOAL_SAVE_APPLICATION, pmrvUser,
+        handler.process(requestTask.getId(), RequestTaskActionType.DOAL_SAVE_APPLICATION, appUser,
                 taskActionPayload);
 
         // Verify

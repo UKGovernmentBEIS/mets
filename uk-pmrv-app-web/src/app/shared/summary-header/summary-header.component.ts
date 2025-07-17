@@ -12,18 +12,15 @@ import { Params } from '@angular/router';
       [queryParams]="queryParams"
       (click)="changeClick.emit($event)"
       govukLink
-      class="govuk-!-font-size-19 govuk-!-font-weight-regular float-right"
-    >
+      class="govuk-!-font-size-19 govuk-!-font-weight-regular float-right">
       Change
     </a>
   `,
-  styles: [
-    `
-      .float-right {
-        float: right;
-      }
-    `,
-  ],
+  styles: `
+    .float-right {
+      float: right;
+    }
+  `,
 })
 export class SummaryHeaderComponent {
   @Input() changeRoute: string | any[];

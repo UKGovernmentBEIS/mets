@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountUpdateDTO;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
@@ -12,14 +13,13 @@ import uk.gov.pmrv.api.account.domain.LocationOnShoreState;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.common.domain.AddressState;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDate;
 
@@ -59,7 +59,7 @@ class AviationAccountUpdateServiceTest {
         Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
                 sopId, registryId, crcoCode, commencementDate);
@@ -95,7 +95,7 @@ class AviationAccountUpdateServiceTest {
         when(aviationAccountQueryService.isExistingCrcoCode(newCrcoCode, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(false);
         when(locationMapper.toLocation(locationDTO)).thenReturn(location);
 
-        aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, pmrvUser);
+        aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, appUser);
 
         assertThat(account.getName()).isEqualTo(newAccountName);
         assertThat(account.getCrcoCode()).isEqualTo(newCrcoCode);
@@ -120,7 +120,7 @@ class AviationAccountUpdateServiceTest {
         Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
                 sopId, registryId, crcoCode, commencementDate);
@@ -165,7 +165,7 @@ class AviationAccountUpdateServiceTest {
         when(aviationAccountQueryService.isExistingCrcoCode(newCrcoCode, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(false);
         when(locationMapper.toLocation(locationDTO)).thenReturn(location);
 
-        aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, pmrvUser);
+        aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, appUser);
 
         assertThat(account.getName()).isEqualTo(newAccountName);
         assertThat(account.getCrcoCode()).isEqualTo(newCrcoCode);
@@ -190,7 +190,7 @@ class AviationAccountUpdateServiceTest {
         Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
                 sopId, registryId, crcoCode, commencementDate);
@@ -209,12 +209,12 @@ class AviationAccountUpdateServiceTest {
 
 
         BusinessException businessException = assertThrows(BusinessException.class,
-                () -> aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, pmrvUser));
+                () -> aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, appUser));
 
         verify(aviationAccountQueryService, times(1)).getAccountById(accountId);
         verify(aviationAccountQueryService, times(1)).isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId);
         verify(aviationAccountQueryService, times(0)).isExistingCrcoCode(newCrcoCode, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId);
-        assertEquals(ErrorCode.ACCOUNT_ALREADY_EXISTS, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS, businessException.getErrorCode());
         verify(locationMapper, never()).toLocation(any());
     }
 
@@ -229,7 +229,7 @@ class AviationAccountUpdateServiceTest {
         Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
                 sopId, registryId, crcoCode, commencementDate);
@@ -248,12 +248,12 @@ class AviationAccountUpdateServiceTest {
         when(aviationAccountQueryService.isExistingCrcoCode(newCrcoCode, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(true);
 
         BusinessException businessException = assertThrows(BusinessException.class,
-                () -> aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, pmrvUser));
+                () -> aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, appUser));
 
         verify(aviationAccountQueryService, times(1)).getAccountById(accountId);
         verify(aviationAccountQueryService, times(1)).isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId);
         verify(aviationAccountQueryService, times(1)).isExistingCrcoCode(newCrcoCode, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId);
-        assertEquals(ErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.CRCO_CODE_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT, businessException.getErrorCode());
         verify(locationMapper, never()).toLocation(any());
     }
 
@@ -268,7 +268,7 @@ class AviationAccountUpdateServiceTest {
         Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
                 sopId, registryId, crcoCode, commencementDate);
@@ -287,12 +287,12 @@ class AviationAccountUpdateServiceTest {
         when(aviationAccountQueryService.isExistingCrcoCode(newCrcoCode, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(false);
 
         BusinessException businessException = assertThrows(BusinessException.class,
-                () -> aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, pmrvUser));
+                () -> aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, appUser));
 
         verify(aviationAccountQueryService, times(1)).getAccountById(accountId);
         verify(aviationAccountQueryService, times(1)).isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId);
         verify(aviationAccountQueryService, times(1)).isExistingCrcoCode(newCrcoCode, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId);
-        assertEquals(ErrorCode.REGISTRY_ID_SUBMITTED_ONLY_FOR_UK_ETS_AVIATION_ACCOUNTS, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.REGISTRY_ID_SUBMITTED_ONLY_FOR_UK_ETS_AVIATION_ACCOUNTS, businessException.getErrorCode());
         verify(locationMapper, never()).toLocation(any());
     }
     
@@ -307,7 +307,7 @@ class AviationAccountUpdateServiceTest {
         Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
         AviationAccount account = createAccount(accountId, accountName, emitterId, emissionTradingScheme,
                 sopId, registryId, crcoCode, commencementDate);
@@ -325,7 +325,7 @@ class AviationAccountUpdateServiceTest {
         when(aviationAccountQueryService.isExistingAccountName(newAccountName, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(false);
         when(aviationAccountQueryService.isExistingCrcoCode(newCrcoCode, CompetentAuthorityEnum.ENGLAND, emissionTradingScheme, accountId)).thenReturn(false);
 
-        aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, pmrvUser);
+        aviationAccountUpdateService.updateAviationAccount(accountId, accountUpdateDTO, appUser);
 
         assertThat(account.getName()).isEqualTo(newAccountName);
         assertThat(account.getCrcoCode()).isEqualTo(newCrcoCode);
@@ -349,9 +349,9 @@ class AviationAccountUpdateServiceTest {
         Integer registryId = 1;
         String crcoCode = "crcoCode";
         LocalDate commencementDate = LocalDate.now();
-        PmrvUser user = PmrvUser
+        AppUser user = AppUser
                 .builder()
-                .roleType(RoleType.REGULATOR)
+                .roleType(RoleTypeConstants.REGULATOR)
                 .userId("userId")
                 .firstName("First")
                 .lastName("Last")
@@ -426,7 +426,7 @@ class AviationAccountUpdateServiceTest {
         BusinessException businessException = assertThrows(BusinessException.class,
             () -> aviationAccountUpdateService.updateAccountUponEmpApproved(accountId, newAccountName, accountContactLocationDTO));
 
-        assertEquals(ErrorCode.ACCOUNT_ALREADY_EXISTS, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS, businessException.getErrorCode());
 
         verify(aviationAccountQueryService, times(1)).getAccountById(accountId);
         verify(aviationAccountQueryService, times(1))
@@ -485,7 +485,7 @@ class AviationAccountUpdateServiceTest {
         BusinessException businessException = assertThrows(BusinessException.class,
                 () -> aviationAccountUpdateService.updateAccountUponEmpVariationApproved(accountId, newAccountName, accountContactLocationDTO));
 
-        assertEquals(ErrorCode.ACCOUNT_ALREADY_EXISTS, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS, businessException.getErrorCode());
 
         verify(aviationAccountQueryService, times(1)).getAccountById(accountId);
         verify(aviationAccountQueryService, times(1))

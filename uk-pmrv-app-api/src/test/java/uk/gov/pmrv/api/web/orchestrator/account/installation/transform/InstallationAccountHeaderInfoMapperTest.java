@@ -8,7 +8,7 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDT
 import uk.gov.pmrv.api.account.installation.domain.enumeration.EmitterType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.web.orchestrator.account.installation.transform.InstallationAccountHeaderInfoMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,6 +32,7 @@ class InstallationAccountHeaderInfoMapperTest {
         InstallationAccountHeaderInfoDTO result = mapper.toAccountHeaderInfoDTO(accountDTO);
 
         assertThat(result).isEqualTo(InstallationAccountHeaderInfoDTO.builder()
+            .id(accountDTO.getId())
             .name("name")
             .status(InstallationAccountStatus.DEEMED_WITHDRAWN)
             .emitterType(EmitterType.HSE)

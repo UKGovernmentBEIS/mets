@@ -5,16 +5,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserAuthoritiesDTO;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserAuthorityDTO;
-import uk.gov.pmrv.api.authorization.regulator.service.RegulatorAuthorityQueryService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.domain.dto.UserAuthoritiesDTO;
+import uk.gov.netz.api.authorization.core.domain.dto.UserAuthorityDTO;
+import uk.gov.netz.api.authorization.regulator.service.RegulatorAuthorityQueryService;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserInfoDTO;
 import uk.gov.pmrv.api.user.regulator.service.RegulatorUserInfoService;
-import uk.gov.pmrv.api.web.orchestrator.authorization.service.RegulatorUserAuthorityQueryOrchestrator;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.RegulatorUserAuthorityInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.authorization.dto.RegulatorUsersAuthoritiesInfoDTO;
 
@@ -26,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus.ACTIVE;
+import static uk.gov.netz.api.authorization.core.domain.AuthorityStatus.ACTIVE;
 
 @ExtendWith(MockitoExtension.class)
 class RegulatorUserAuthorityQueryOrchestratorTest {
@@ -44,9 +43,9 @@ class RegulatorUserAuthorityQueryOrchestratorTest {
     void getCaRegulators() {
         String userId = "userId";
         AuthorityStatus status = ACTIVE;
-        PmrvUser authUser = PmrvUser.builder()
+        AppUser authUser = AppUser.builder()
                 .userId("authUserId")
-                .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+                .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
                 .build();
         UserAuthorityDTO userAuthority = UserAuthorityDTO.builder()
                 .userId(userId)
@@ -59,7 +58,7 @@ class RegulatorUserAuthorityQueryOrchestratorTest {
         RegulatorUserInfoDTO userInfo = RegulatorUserInfoDTO.builder().id(userId).enabled(true).build();
 
         RegulatorUserAuthorityInfoDTO expectedUserAuthInfo =
-                RegulatorUserAuthorityInfoDTO.builder().userId(userId).authorityStatus(status).locked(false).build();
+                RegulatorUserAuthorityInfoDTO.builder().userId(userId).authorityStatus(status).build();
 
         when(regulatorAuthorityQueryService.getCaAuthorities(authUser)).thenReturn(userAuthorities);
         when(regulatorUserInfoService.getRegulatorUsersInfo(authUser, List.of(userId))).thenReturn(List.of(userInfo));

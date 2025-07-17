@@ -31,8 +31,7 @@ interface ViewModel {
       [formGroup]="vm.form"
       submitText="Continue"
       [heading]="vm.heading"
-      [hideSubmit]="vm.isEditable === false"
-    >
+      [hideSubmit]="vm.isEditable === false">
       <div formControlName="uploadEvidence" govuk-radio>
         <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
         <govuk-radio-option [value]="false" label="No"></govuk-radio-option>

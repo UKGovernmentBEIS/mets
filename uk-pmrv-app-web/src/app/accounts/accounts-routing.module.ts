@@ -26,6 +26,7 @@ import { LegalEntityDetailsComponent } from '@shared/legal-entity-details';
 import { InstallationAccountApplicationGuard } from '../installation-account-application/installation-account-application.guard';
 import { AccountComponent } from './account.component';
 import { AccountGuard } from './account.guard';
+import { AuditYearComponent } from './audit-year/audit-year.component';
 import { AddressComponent } from './edit/address/address.component';
 import { FaStatusComponent } from './edit/fa-status/fa-status.component';
 import { NameComponent } from './edit/name/name.component';
@@ -34,6 +35,8 @@ import { SiteNameComponent } from './edit/site-name/site-name.component';
 import { SopIdComponent } from './edit/sop-id/sop-id.component';
 import { TriggerAirComponent } from './trigger-air/trigger-air.component';
 import { TriggerDoalComponent } from './trigger-doal/trigger-doal.component';
+import { AerMarkAsNotRequiredComponent } from './workflows/aer-mark-as-not-required/aer-mark-as-not-required.component';
+import { MarkAsNotRequiredGuard } from './workflows/aer-mark-as-not-required/mark-as-not-required-guard.service';
 import { AerReinitializeComponent } from './workflows/aer-reinitialize/aer-reinitialize.component';
 import { WorkflowGuard } from './workflows/workflow.guard';
 
@@ -242,6 +245,16 @@ const routes: Routes = [
                 canDeactivate: [PendingRequestGuard],
               },
               {
+                path: 'aer-mark-as-not-required',
+                data: {
+                  pageTitle: 'Return the annual emissions report to the operator',
+                  breadcrumb: 'Mark work flow as not required',
+                },
+                component: AerMarkAsNotRequiredComponent,
+                canActivate: [MarkAsNotRequiredGuard],
+                canDeactivate: [PendingRequestGuard],
+              },
+              {
                 path: 'payment',
                 loadChildren: () => import('../payment/payment.module').then((m) => m.PaymentModule),
               },
@@ -340,6 +353,12 @@ const routes: Routes = [
         path: 'trigger-doal',
         data: { pageTitle: 'Start a determination of activity level change', breadcrumb: true },
         component: TriggerDoalComponent,
+        canDeactivate: [PendingRequestGuard],
+      },
+      {
+        path: 'audit-year',
+        data: { pageTitle: 'Which year does the audit relate to?', breadcrumb: true },
+        component: AuditYearComponent,
         canDeactivate: [PendingRequestGuard],
       },
     ],

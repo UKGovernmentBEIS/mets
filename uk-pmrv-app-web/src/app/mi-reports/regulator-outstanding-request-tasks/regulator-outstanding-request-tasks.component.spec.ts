@@ -164,7 +164,6 @@ const regulators: RegulatorUsersAuthoritiesInfoDTO = {
       jobTitle: 'Doctor',
       authorityCreationDate: '2021-08-31T17:35:42.747079Z',
       authorityStatus: 'ACTIVE',
-      locked: false,
     },
     {
       userId: 'db6ba6b4-d216-4604-9f3f-391141cc8561',
@@ -173,7 +172,6 @@ const regulators: RegulatorUsersAuthoritiesInfoDTO = {
       jobTitle: 'Delectus sit quibu',
       authorityCreationDate: '2022-09-07T12:20:18.014896Z',
       authorityStatus: 'PENDING',
-      locked: true,
     },
   ],
   editable: true,

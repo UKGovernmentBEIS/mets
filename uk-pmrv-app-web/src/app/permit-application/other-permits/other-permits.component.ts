@@ -1,6 +1,8 @@
 import {
+  AfterContentChecked,
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
@@ -29,7 +31,10 @@ import { createAnotherPermit, otherPermitsFormProvider } from './other-permits-f
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [otherPermitsFormProvider, DestroySubject],
 })
-export class OtherPermitsComponent extends SectionComponent implements AfterViewInit, PendingRequest {
+export class OtherPermitsComponent
+  extends SectionComponent
+  implements AfterViewInit, PendingRequest, AfterContentChecked
+{
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;
   @ViewChildren('removeButton') removeButtons: QueryList<ElementRef<HTMLButtonElement>>;
@@ -43,6 +48,7 @@ export class OtherPermitsComponent extends SectionComponent implements AfterView
     readonly router: Router,
     readonly route: ActivatedRoute,
     private readonly destroy$: DestroySubject,
+    private cd: ChangeDetectorRef,
   ) {
     super(store, router, route);
   }
@@ -62,6 +68,9 @@ export class OtherPermitsComponent extends SectionComponent implements AfterView
       .subscribe(() => this.navigateSubmitSection('summary', 'details'));
   }
 
+  ngAfterContentChecked(): void {
+    this.cd.detectChanges();
+  }
   ngAfterViewInit(): void {
     this.removeButtons.changes.pipe(takeUntil(this.destroy$)).subscribe((buttons) => {
       if (buttons.length > this.permitsLength) {

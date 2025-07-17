@@ -3,14 +3,13 @@ import { RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
-import { aerQuery } from "@aviation/request-task/aer/shared/aer.selectors";
+import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
 import { aerHeaderTaskMap } from '@aviation/request-task/aer/shared/util/aer.util';
-import { requestTaskQuery, RequestTaskStore } from "@aviation/request-task/store";
+import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { SharedModule } from '@shared/shared.module';
 
 import { ServiceContactDetails } from 'pmrv-api';
-
 
 interface ViewModel {
   accountId: number;

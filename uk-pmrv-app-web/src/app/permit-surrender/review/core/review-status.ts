@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { addDays, isAfter, startOfDay } from 'date-fns';
 
 import { PermitSurrenderReviewDecision } from 'pmrv-api';
 
@@ -27,13 +27,15 @@ export function resolveDeterminationStatus(state: PermitSurrenderState): Determi
       return needsReview(state) ? 'needs review' : 'undecided';
   }
 }
-export const needsReview = (state: PermitSurrenderState): boolean => {
-  const noticeDate = (state.reviewDetermination as any)?.noticeDate;
+
+export const needsReview = (state) => {
+  const noticeDate = state.reviewDetermination?.noticeDate;
   if (!noticeDate) {
     return false;
   }
-  const after28Days = moment().add(28, 'd').set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-  return !moment(new Date(noticeDate)).isAfter(after28Days);
+  const after28Days = startOfDay(addDays(new Date(), 28));
+
+  return !isAfter(noticeDate, after28Days);
 };
 
 export function resolveDeterminationCompletedUponDecision(

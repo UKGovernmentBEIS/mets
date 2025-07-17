@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.2.0/changelog_aviation_rpt_corsia_sector_growth.xml"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+    <changeSet id="0_2_0_create_table_changelog_aviation_rpt_corsia_sector_growth_seq" author="kourisp@unisystems.eu">
+        <createSequence
+                sequenceName="aviation_rpt_corsia_sector_growth_id_seq"
+                startValue="1"
+                incrementBy="1" />
+        <rollback>
+            <dropSequence sequenceName="aviation_rpt_corsia_sector_growth_id_seq"/>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_create_table_changelog_aviation_rpt_corsia_sector_growth" author="kourisp@unisystems.eu">
+        <createTable tableName="aviation_rpt_corsia_sector_growth">
+            <column name="id" type="INTEGER" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="year" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sector_growth" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <dropTable tableName="aviation_rpt_corsia_sector_growth"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_revert_create_table_changelog_aviation_rpt_corsia_sector_growth_seq" author="DridakisC@unisystems.gr">
+        <dropSequence sequenceName="aviation_rpt_corsia_sector_growth_id_seq"/>
+        <rollback>
+            <createSequence
+                    sequenceName="aviation_rpt_corsia_sector_growth_id_seq"
+                    startValue="1"
+                    incrementBy="1" />
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_revert_create_table_changelog_aviation_rpt_corsia_sector_growth" author="DridakisC@unisystems.gr">
+        <dropTable tableName="aviation_rpt_corsia_sector_growth"/>
+        <rollback>
+            <createTable tableName="aviation_rpt_corsia_sector_growth">
+                <column name="id" type="INTEGER" autoIncrement="true">
+                    <constraints primaryKey="true" nullable="false"/>
+                </column>
+                <column name="year" type="INTEGER">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="sector_growth" type="DECIMAL(10,2)">
+                    <constraints nullable="false"/>
+                </column>
+            </createTable>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

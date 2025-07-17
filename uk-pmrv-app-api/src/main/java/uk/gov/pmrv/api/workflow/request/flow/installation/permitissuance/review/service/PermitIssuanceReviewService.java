@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.validation.PermitValidatorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -85,7 +85,7 @@ public class PermitIssuanceReviewService {
     @Transactional
     public void savePermitDecisionNotification(final RequestTask requestTask,
         final DecisionNotification permitDecisionNotification,
-        final PmrvUser pmrvUser) {
+        final AppUser appUser) {
 
         final Request request = requestTask.getRequest();
         final PermitIssuanceApplicationReviewRequestTaskPayload taskPayload =
@@ -94,12 +94,12 @@ public class PermitIssuanceReviewService {
         final PermitIssuanceRequestPayload permitIssuanceRequestPayload =
             (PermitIssuanceRequestPayload) request.getPayload();
 
-        updatePermitIssuanceRequestPayload(permitIssuanceRequestPayload, taskPayload, pmrvUser);
+        updatePermitIssuanceRequestPayload(permitIssuanceRequestPayload, taskPayload, appUser);
         permitIssuanceRequestPayload.setDecisionNotification(permitDecisionNotification);
     }
 
     @Transactional
-    public void saveRequestReturnForAmends(RequestTask requestTask, PmrvUser pmrvUser) {
+    public void saveRequestReturnForAmends(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         PermitIssuanceApplicationReviewRequestTaskPayload taskPayload =
             (PermitIssuanceApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -107,11 +107,11 @@ public class PermitIssuanceReviewService {
         PermitIssuanceRequestPayload permitIssuanceRequestPayload =
             (PermitIssuanceRequestPayload) request.getPayload();
 
-        updatePermitIssuanceRequestPayload(permitIssuanceRequestPayload, taskPayload, pmrvUser);
+        updatePermitIssuanceRequestPayload(permitIssuanceRequestPayload, taskPayload, appUser);
     }
 
     @Transactional
-    public void saveRequestPeerReviewAction(RequestTask requestTask, String selectedPeerReview, PmrvUser pmrvUser) {
+    public void saveRequestPeerReviewAction(RequestTask requestTask, String selectedPeerReview, AppUser appUser) {
         Request request = requestTask.getRequest();
         PermitIssuanceApplicationReviewRequestTaskPayload taskPayload =
             (PermitIssuanceApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -119,7 +119,7 @@ public class PermitIssuanceReviewService {
         PermitIssuanceRequestPayload permitIssuanceRequestPayload =
             (PermitIssuanceRequestPayload) request.getPayload();
 
-        updatePermitIssuanceRequestPayload(permitIssuanceRequestPayload, taskPayload, pmrvUser);
+        updatePermitIssuanceRequestPayload(permitIssuanceRequestPayload, taskPayload, appUser);
         permitIssuanceRequestPayload.setRegulatorPeerReviewer(selectedPeerReview);
     }
 
@@ -160,8 +160,8 @@ public class PermitIssuanceReviewService {
     }
 
     private void updatePermitIssuanceRequestPayload(PermitIssuanceRequestPayload permitIssuanceRequestPayload,
-        PermitIssuanceApplicationReviewRequestTaskPayload reviewRequestTaskPayload, PmrvUser pmrvUser) {
-        permitIssuanceRequestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+        PermitIssuanceApplicationReviewRequestTaskPayload reviewRequestTaskPayload, AppUser appUser) {
+        permitIssuanceRequestPayload.setRegulatorReviewer(appUser.getUserId());
         permitIssuanceRequestPayload.setPermitType(reviewRequestTaskPayload.getPermitType());
         permitIssuanceRequestPayload.setPermit(reviewRequestTaskPayload.getPermit());
         permitIssuanceRequestPayload.setPermitSectionsCompleted(reviewRequestTaskPayload.getPermitSectionsCompleted());

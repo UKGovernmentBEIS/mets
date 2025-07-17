@@ -29,7 +29,7 @@ export const AER_CORSIA_EMISSIONS_REDUCTION_CLAIM_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Verify the emissions reduction claim summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Verify the emissions reduction claim' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./summary/summary.component').then((c) => c.SummaryComponent),
       },

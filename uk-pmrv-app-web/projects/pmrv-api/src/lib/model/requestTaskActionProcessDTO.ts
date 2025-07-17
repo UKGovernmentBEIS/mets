@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -10,30 +10,53 @@
  * Do not edit the class manually.
  */
 import { AerApplicationRequestVerificationRequestTaskActionPayload } from './aerApplicationRequestVerificationRequestTaskActionPayload';
+import { AerApplicationSkipReviewRequestTaskActionPayload } from './aerApplicationSkipReviewRequestTaskActionPayload';
 import { AerSaveApplicationAmendRequestTaskActionPayload } from './aerSaveApplicationAmendRequestTaskActionPayload';
 import { AerSaveApplicationRequestTaskActionPayload } from './aerSaveApplicationRequestTaskActionPayload';
 import { AerSaveApplicationVerificationRequestTaskActionPayload } from './aerSaveApplicationVerificationRequestTaskActionPayload';
 import { AerSaveReviewGroupDecisionRequestTaskActionPayload } from './aerSaveReviewGroupDecisionRequestTaskActionPayload';
 import { AerSubmitApplicationAmendRequestTaskActionPayload } from './aerSubmitApplicationAmendRequestTaskActionPayload';
+import { AerVerificationReturnToOperatorRequestTaskActionPayload } from './aerVerificationReturnToOperatorRequestTaskActionPayload';
 import { AirSaveApplicationRequestTaskActionPayload } from './airSaveApplicationRequestTaskActionPayload';
 import { AirSaveRespondToRegulatorCommentsRequestTaskActionPayload } from './airSaveRespondToRegulatorCommentsRequestTaskActionPayload';
 import { AirSaveReviewRequestTaskActionPayload } from './airSaveReviewRequestTaskActionPayload';
 import { AirSubmitRespondToRegulatorCommentsRequestTaskActionPayload } from './airSubmitRespondToRegulatorCommentsRequestTaskActionPayload';
+import { ALRApplicationSaveRequestTaskActionPayload } from './aLRApplicationSaveRequestTaskActionPayload';
+import { ALRApplicationSubmitToVerifierRequestTaskActionPayload } from './aLRApplicationSubmitToVerifierRequestTaskActionPayload';
+import { ALRApplicationVerificationReturnToOperatorRequestTaskActionPayload } from './aLRApplicationVerificationReturnToOperatorRequestTaskActionPayload';
+import { ALRApplicationVerificationSaveRequestTaskActionPayload } from './aLRApplicationVerificationSaveRequestTaskActionPayload';
 import { AviationAccountClosureSaveRequestTaskActionPayload } from './aviationAccountClosureSaveRequestTaskActionPayload';
 import { AviationAerApplicationRequestVerificationRequestTaskActionPayload } from './aviationAerApplicationRequestVerificationRequestTaskActionPayload';
+import { AviationAerCorsia3YearPeriodOffsettingSaveRequestTaskActionPayload } from './aviationAerCorsia3YearPeriodOffsettingSaveRequestTaskActionPayload';
+import { AviationAerCorsiaAnnualOffsettingSaveRequestTaskActionPayload } from './aviationAerCorsiaAnnualOffsettingSaveRequestTaskActionPayload';
+import { AviationAerCorsiaSaveApplicationAmendRequestTaskActionPayload } from './aviationAerCorsiaSaveApplicationAmendRequestTaskActionPayload';
 import { AviationAerCorsiaSaveApplicationRequestTaskActionPayload } from './aviationAerCorsiaSaveApplicationRequestTaskActionPayload';
 import { AviationAerCorsiaSaveApplicationVerificationRequestTaskActionPayload } from './aviationAerCorsiaSaveApplicationVerificationRequestTaskActionPayload';
 import { AviationAerCorsiaSaveReviewGroupDecisionRequestTaskActionPayload } from './aviationAerCorsiaSaveReviewGroupDecisionRequestTaskActionPayload';
+import { AviationAerCorsiaSubmitApplicationRequestTaskActionPayload } from './aviationAerCorsiaSubmitApplicationRequestTaskActionPayload';
+import { AviationAerCorsiaVerificationReturnToOperatorRequestTaskActionPayload } from './aviationAerCorsiaVerificationReturnToOperatorRequestTaskActionPayload';
 import { AviationAerSubmitApplicationAmendRequestTaskActionPayload } from './aviationAerSubmitApplicationAmendRequestTaskActionPayload';
 import { AviationAerUkEtsSaveApplicationAmendRequestTaskActionPayload } from './aviationAerUkEtsSaveApplicationAmendRequestTaskActionPayload';
 import { AviationAerUkEtsSaveApplicationRequestTaskActionPayload } from './aviationAerUkEtsSaveApplicationRequestTaskActionPayload';
 import { AviationAerUkEtsSaveApplicationVerificationRequestTaskActionPayload } from './aviationAerUkEtsSaveApplicationVerificationRequestTaskActionPayload';
 import { AviationAerUkEtsSaveReviewGroupDecisionRequestTaskActionPayload } from './aviationAerUkEtsSaveReviewGroupDecisionRequestTaskActionPayload';
+import { AviationAerUkEtsSubmitApplicationRequestTaskActionPayload } from './aviationAerUkEtsSubmitApplicationRequestTaskActionPayload';
+import { AviationAerUkEtsVerificationReturnToOperatorRequestTaskActionPayload } from './aviationAerUkEtsVerificationReturnToOperatorRequestTaskActionPayload';
+import { AviationDoECorsiaSubmitSaveRequestTaskActionPayload } from './aviationDoECorsiaSubmitSaveRequestTaskActionPayload';
 import { AviationDreUkEtsSaveApplicationRequestTaskActionPayload } from './aviationDreUkEtsSaveApplicationRequestTaskActionPayload';
 import { AviationVirSaveApplicationRequestTaskActionPayload } from './aviationVirSaveApplicationRequestTaskActionPayload';
 import { AviationVirSaveRespondToRegulatorCommentsRequestTaskActionPayload } from './aviationVirSaveRespondToRegulatorCommentsRequestTaskActionPayload';
 import { AviationVirSaveReviewRequestTaskActionPayload } from './aviationVirSaveReviewRequestTaskActionPayload';
 import { AviationVirSubmitRespondToRegulatorCommentsRequestTaskActionPayload } from './aviationVirSubmitRespondToRegulatorCommentsRequestTaskActionPayload';
+import { BDRApplicationAmendsSaveRequestTaskActionPayload } from './bDRApplicationAmendsSaveRequestTaskActionPayload';
+import { BDRApplicationAmendsSubmitRequestTaskActionPayload } from './bDRApplicationAmendsSubmitRequestTaskActionPayload';
+import { BDRApplicationAmendsSubmitToVerifierRequestTaskActionPayload } from './bDRApplicationAmendsSubmitToVerifierRequestTaskActionPayload';
+import { BDRApplicationRegulatorReviewSaveTaskActionPayload } from './bDRApplicationRegulatorReviewSaveTaskActionPayload';
+import { BDRApplicationSaveRequestTaskActionPayload } from './bDRApplicationSaveRequestTaskActionPayload';
+import { BDRApplicationSubmitToVerifierRequestTaskActionPayload } from './bDRApplicationSubmitToVerifierRequestTaskActionPayload';
+import { BDRApplicationVerificationReturnToOperatorRequestTaskActionPayload } from './bDRApplicationVerificationReturnToOperatorRequestTaskActionPayload';
+import { BDRApplicationVerificationSaveRequestTaskActionPayload } from './bDRApplicationVerificationSaveRequestTaskActionPayload';
+import { BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload } from './bDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload';
 import { DoalSaveApplicationRequestTaskActionPayload } from './doalSaveApplicationRequestTaskActionPayload';
 import { DoalSaveAuthorityResponseTaskActionPayload } from './doalSaveAuthorityResponseTaskActionPayload';
 import { DreSaveApplicationRequestTaskActionPayload } from './dreSaveApplicationRequestTaskActionPayload';
@@ -71,6 +94,9 @@ import { EmpVariationUkEtsSaveReviewGroupDecisionRequestTaskActionPayload } from
 import { EmpVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload } from './empVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload';
 import { InstallationAccountOpeningAmendApplicationRequestTaskActionPayload } from './installationAccountOpeningAmendApplicationRequestTaskActionPayload';
 import { InstallationAccountOpeningSubmitDecisionRequestTaskActionPayload } from './installationAccountOpeningSubmitDecisionRequestTaskActionPayload';
+import { InstallationAuditApplicationSaveRequestTaskActionPayload } from './installationAuditApplicationSaveRequestTaskActionPayload';
+import { InstallationInspectionOperatorRespondSaveRequestTaskActionPayload } from './installationInspectionOperatorRespondSaveRequestTaskActionPayload';
+import { InstallationOnsiteInspectionApplicationSaveRequestTaskActionPayload } from './installationOnsiteInspectionApplicationSaveRequestTaskActionPayload';
 import { NerSaveApplicationAmendRequestTaskActionPayload } from './nerSaveApplicationAmendRequestTaskActionPayload';
 import { NerSaveApplicationRequestTaskActionPayload } from './nerSaveApplicationRequestTaskActionPayload';
 import { NerSaveApplicationReviewRequestTaskActionPayload } from './nerSaveApplicationReviewRequestTaskActionPayload';
@@ -90,6 +116,7 @@ import { PaymentCancelRequestTaskActionPayload } from './paymentCancelRequestTas
 import { PaymentMarkAsReceivedRequestTaskActionPayload } from './paymentMarkAsReceivedRequestTaskActionPayload';
 import { PeerReviewDecisionRequestTaskActionPayload } from './peerReviewDecisionRequestTaskActionPayload';
 import { PeerReviewRequestTaskActionPayload } from './peerReviewRequestTaskActionPayload';
+import { PermanentCessationSaveApplicationRequestTaskActionPayload } from './permanentCessationSaveApplicationRequestTaskActionPayload';
 import { PermitIssuanceNotifyOperatorForDecisionRequestTaskActionPayload } from './permitIssuanceNotifyOperatorForDecisionRequestTaskActionPayload';
 import { PermitIssuanceSaveApplicationAmendRequestTaskActionPayload } from './permitIssuanceSaveApplicationAmendRequestTaskActionPayload';
 import { PermitIssuanceSaveApplicationRequestTaskActionPayload } from './permitIssuanceSaveApplicationRequestTaskActionPayload';
@@ -295,6 +322,7 @@ export interface RequestTaskActionProcessDTO {
     | 'AER_SAVE_APPLICATION_VERIFICATION'
     | 'AER_SAVE_REVIEW_GROUP_DECISION'
     | 'AER_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT'
+    | 'AER_SKIP_REVIEW'
     | 'AER_COMPLETE_REVIEW'
     | 'AER_SUBMIT_APPLICATION_VERIFICATION'
     | 'AER_REVIEW_RETURN_FOR_AMENDS'
@@ -302,6 +330,7 @@ export interface RequestTaskActionProcessDTO {
     | 'AER_SUBMIT_APPLICATION_AMEND'
     | 'AER_REQUEST_AMENDS_VERIFICATION'
     | 'AER_VERIFICATION_UPLOAD_ATTACHMENT'
+    | 'AER_VERIFICATION_RETURN_TO_OPERATOR'
     | 'DRE_SAVE_APPLICATION'
     | 'DRE_APPLY_UPLOAD_ATTACHMENT'
     | 'DRE_SUBMIT_NOTIFY_OPERATOR'
@@ -323,6 +352,57 @@ export interface RequestTaskActionProcessDTO {
     | 'AIR_NOTIFY_OPERATOR_FOR_DECISION'
     | 'AIR_SAVE_RESPOND_TO_REGULATOR_COMMENTS'
     | 'AIR_SUBMIT_RESPOND_TO_REGULATOR_COMMENTS'
+    | 'INSTALLATION_AUDIT_SAVE_APPLICATION'
+    | 'INSTALLATION_AUDIT_UPLOAD_ATTACHMENT'
+    | 'INSTALLATION_AUDIT_CANCEL_APPLICATION'
+    | 'INSTALLATION_AUDIT_REQUEST_PEER_REVIEW'
+    | 'INSTALLATION_AUDIT_SUBMIT_PEER_REVIEW_DECISION'
+    | 'INSTALLATION_AUDIT_SUBMIT_NOTIFY_OPERATOR'
+    | 'INSTALLATION_AUDIT_OPERATOR_RESPOND_SAVE'
+    | 'INSTALLATION_AUDIT_OPERATOR_RESPOND_SUBMIT'
+    | 'INSTALLATION_AUDIT_OPERATOR_RESPOND_UPLOAD_ATTACHMENT'
+    | 'INSTALLATION_ONSITE_INSPECTION_SAVE_APPLICATION'
+    | 'INSTALLATION_ONSITE_INSPECTION_UPLOAD_ATTACHMENT'
+    | 'INSTALLATION_ONSITE_INSPECTION_CANCEL_APPLICATION'
+    | 'INSTALLATION_ONSITE_INSPECTION_REQUEST_PEER_REVIEW'
+    | 'INSTALLATION_ONSITE_INSPECTION_SUBMIT_PEER_REVIEW_DECISION'
+    | 'INSTALLATION_ONSITE_INSPECTION_SUBMIT_NOTIFY_OPERATOR'
+    | 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SAVE'
+    | 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SUBMIT'
+    | 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_UPLOAD_ATTACHMENT'
+    | 'BDR_SAVE_APPLICATION'
+    | 'BDR_UPLOAD_ATTACHMENT'
+    | 'BDR_SUBMIT_TO_VERIFIER'
+    | 'BDR_RECALL_FROM_VERIFICATION'
+    | 'BDR_SUBMIT_TO_REGULATOR'
+    | 'BDR_SAVE_APPLICATION_VERIFICATION'
+    | 'BDR_VERIFICATION_UPLOAD_ATTACHMENT'
+    | 'BDR_VERIFICATION_RETURN_TO_OPERATOR'
+    | 'BDR_SUBMIT_VERIFICATION'
+    | 'BDR_SAVE_REGULATOR_REVIEW_GROUP_DECISION'
+    | 'BDR_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT'
+    | 'BDR_REGULATOR_REVIEW_RETURN_FOR_AMENDS'
+    | 'BDR_APPLICATION_AMENDS_SAVE'
+    | 'BDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR'
+    | 'BDR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER'
+    | 'BDR_REGULATOR_REVIEW_SAVE'
+    | 'BDR_REGULATOR_REVIEW_SUBMIT'
+    | 'BDR_REQUEST_PEER_REVIEW'
+    | 'BDR_SUBMIT_PEER_REVIEW_DECISION'
+    | 'PERMANENT_CESSATION_CANCEL_APPLICATION'
+    | 'PERMANENT_CESSATION_SAVE_APPLICATION'
+    | 'PERMANENT_CESSATION_UPLOAD'
+    | 'PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION'
+    | 'PERMANENT_CESSATION_REQUEST_PEER_REVIEW'
+    | 'PERMANENT_CESSATION_SUBMIT_PEER_REVIEW_DECISION'
+    | 'ALR_SAVE_APPLICATION'
+    | 'ALR_UPLOAD_ATTACHMENT'
+    | 'ALR_SUBMIT_TO_VERIFIER'
+    | 'ALR_RECALL_FROM_VERIFICATION'
+    | 'ALR_SAVE_APPLICATION_VERIFICATION'
+    | 'ALR_VERIFICATION_UPLOAD_ATTACHMENT'
+    | 'ALR_VERIFICATION_RETURN_TO_OPERATOR'
+    | 'ALR_SUBMIT_VERIFICATION'
     | 'EMP_ISSUANCE_UKETS_SAVE_APPLICATION'
     | 'EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION'
     | 'EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT'
@@ -371,6 +451,7 @@ export interface RequestTaskActionProcessDTO {
     | 'AVIATION_AER_UKETS_REVIEW_RETURN_FOR_AMENDS'
     | 'AVIATION_AER_UKETS_SAVE_APPLICATION_AMEND'
     | 'AVIATION_AER_UKETS_REQUEST_AMENDS_VERIFICATION'
+    | 'AVIATION_AER_UKETS_VERIFICATION_RETURN_TO_OPERATOR'
     | 'AVIATION_AER_UPLOAD_SECTION_ATTACHMENT'
     | 'AVIATION_AER_RECALL_FROM_VERIFICATION'
     | 'AVIATION_ACCOUNT_CLOSURE_SUBMIT_APPLICATION'
@@ -382,6 +463,12 @@ export interface RequestTaskActionProcessDTO {
     | 'AVIATION_DRE_UKETS_SUBMIT_PEER_REVIEW_DECISION'
     | 'AVIATION_DRE_UPLOAD_ATTACHMENT'
     | 'AVIATION_DRE_CANCEL_APPLICATION'
+    | 'AVIATION_DOE_CORSIA_SUBMIT_SAVE'
+    | 'AVIATION_DOE_CORSIA_SUBMIT_CANCEL'
+    | 'AVIATION_DOE_CORSIA_UPLOAD_ATTACHMENT'
+    | 'AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR'
+    | 'AVIATION_DOE_CORSIA_REQUEST_PEER_REVIEW'
+    | 'AVIATION_DOE_CORSIA_SUBMIT_PEER_REVIEW_DECISION'
     | 'AVIATION_VIR_UPLOAD_ATTACHMENT'
     | 'AVIATION_VIR_SAVE_APPLICATION'
     | 'AVIATION_VIR_SUBMIT_APPLICATION'
@@ -457,33 +544,72 @@ export interface RequestTaskActionProcessDTO {
     | 'AVIATION_AER_CORSIA_SUBMIT_APPLICATION'
     | 'AVIATION_AER_CORSIA_SAVE_REVIEW_GROUP_DECISION'
     | 'AVIATION_AER_CORSIA_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT'
-    | 'AVIATION_AER_CORSIA_COMPLETE_REVIEW';
+    | 'AVIATION_AER_CORSIA_SKIP_REVIEW'
+    | 'AVIATION_AER_CORSIA_COMPLETE_REVIEW'
+    | 'AVIATION_AER_CORSIA_REVIEW_RETURN_FOR_AMENDS'
+    | 'AVIATION_AER_CORSIA_SAVE_APPLICATION_AMEND'
+    | 'AVIATION_AER_CORSIA_REQUEST_AMENDS_VERIFICATION'
+    | 'AVIATION_AER_CORSIA_SUBMIT_APPLICATION_AMEND'
+    | 'AVIATION_AER_CORSIA_VERIFICATION_RETURN_TO_OPERATOR'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_PEER_REVIEW_DECISION'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SAVE_APPLICATION'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_CANCEL_APPLICATION'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_REQUEST_PEER_REVIEW'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_NOTIFY_OPERATOR'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_PEER_REVIEW_DECISION'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_CANCEL_APPLICATION'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SAVE_APPLICATION'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_REQUEST_PEER_REVIEW'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_NOTIFY_OPERATOR';
   requestTaskActionPayload:
+    | ALRApplicationSaveRequestTaskActionPayload
+    | ALRApplicationSubmitToVerifierRequestTaskActionPayload
+    | ALRApplicationVerificationReturnToOperatorRequestTaskActionPayload
+    | ALRApplicationVerificationSaveRequestTaskActionPayload
     | AerApplicationRequestVerificationRequestTaskActionPayload
+    | AerApplicationSkipReviewRequestTaskActionPayload
     | AerSaveApplicationAmendRequestTaskActionPayload
     | AerSaveApplicationRequestTaskActionPayload
     | AerSaveApplicationVerificationRequestTaskActionPayload
     | AerSaveReviewGroupDecisionRequestTaskActionPayload
     | AerSubmitApplicationAmendRequestTaskActionPayload
+    | AerVerificationReturnToOperatorRequestTaskActionPayload
     | AirSaveApplicationRequestTaskActionPayload
     | AirSaveRespondToRegulatorCommentsRequestTaskActionPayload
     | AirSaveReviewRequestTaskActionPayload
     | AirSubmitRespondToRegulatorCommentsRequestTaskActionPayload
     | AviationAccountClosureSaveRequestTaskActionPayload
     | AviationAerApplicationRequestVerificationRequestTaskActionPayload
+    | AviationAerCorsia3YearPeriodOffsettingSaveRequestTaskActionPayload
+    | AviationAerCorsiaAnnualOffsettingSaveRequestTaskActionPayload
+    | AviationAerCorsiaSaveApplicationAmendRequestTaskActionPayload
     | AviationAerCorsiaSaveApplicationRequestTaskActionPayload
     | AviationAerCorsiaSaveApplicationVerificationRequestTaskActionPayload
     | AviationAerCorsiaSaveReviewGroupDecisionRequestTaskActionPayload
+    | AviationAerCorsiaSubmitApplicationRequestTaskActionPayload
+    | AviationAerCorsiaVerificationReturnToOperatorRequestTaskActionPayload
     | AviationAerSubmitApplicationAmendRequestTaskActionPayload
     | AviationAerUkEtsSaveApplicationAmendRequestTaskActionPayload
     | AviationAerUkEtsSaveApplicationRequestTaskActionPayload
     | AviationAerUkEtsSaveApplicationVerificationRequestTaskActionPayload
     | AviationAerUkEtsSaveReviewGroupDecisionRequestTaskActionPayload
+    | AviationAerUkEtsSubmitApplicationRequestTaskActionPayload
+    | AviationAerUkEtsVerificationReturnToOperatorRequestTaskActionPayload
+    | AviationDoECorsiaSubmitSaveRequestTaskActionPayload
     | AviationDreUkEtsSaveApplicationRequestTaskActionPayload
     | AviationVirSaveApplicationRequestTaskActionPayload
     | AviationVirSaveRespondToRegulatorCommentsRequestTaskActionPayload
     | AviationVirSaveReviewRequestTaskActionPayload
     | AviationVirSubmitRespondToRegulatorCommentsRequestTaskActionPayload
+    | BDRApplicationAmendsSaveRequestTaskActionPayload
+    | BDRApplicationAmendsSubmitRequestTaskActionPayload
+    | BDRApplicationAmendsSubmitToVerifierRequestTaskActionPayload
+    | BDRApplicationRegulatorReviewSaveTaskActionPayload
+    | BDRApplicationSaveRequestTaskActionPayload
+    | BDRApplicationSubmitToVerifierRequestTaskActionPayload
+    | BDRApplicationVerificationReturnToOperatorRequestTaskActionPayload
+    | BDRApplicationVerificationSaveRequestTaskActionPayload
+    | BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload
     | DoalSaveApplicationRequestTaskActionPayload
     | DoalSaveAuthorityResponseTaskActionPayload
     | DreSaveApplicationRequestTaskActionPayload
@@ -521,6 +647,9 @@ export interface RequestTaskActionProcessDTO {
     | EmpVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload
     | InstallationAccountOpeningAmendApplicationRequestTaskActionPayload
     | InstallationAccountOpeningSubmitDecisionRequestTaskActionPayload
+    | InstallationAuditApplicationSaveRequestTaskActionPayload
+    | InstallationInspectionOperatorRespondSaveRequestTaskActionPayload
+    | InstallationOnsiteInspectionApplicationSaveRequestTaskActionPayload
     | NerSaveApplicationAmendRequestTaskActionPayload
     | NerSaveApplicationRequestTaskActionPayload
     | NerSaveApplicationReviewRequestTaskActionPayload
@@ -540,6 +669,7 @@ export interface RequestTaskActionProcessDTO {
     | PaymentMarkAsReceivedRequestTaskActionPayload
     | PeerReviewDecisionRequestTaskActionPayload
     | PeerReviewRequestTaskActionPayload
+    | PermanentCessationSaveApplicationRequestTaskActionPayload
     | PermitIssuanceNotifyOperatorForDecisionRequestTaskActionPayload
     | PermitIssuanceSaveApplicationAmendRequestTaskActionPayload
     | PermitIssuanceSaveApplicationRequestTaskActionPayload

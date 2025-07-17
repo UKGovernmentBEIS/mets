@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
-import { first, map, Observable } from 'rxjs';
+import { combineLatest, first, map, Observable } from 'rxjs';
 
-import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload } from 'pmrv-api';
+import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload, UIConfigurationService } from 'pmrv-api';
 
 import { findAmendedGroupsByReviewGroups } from '../../amend/amend';
 import { PermitApplicationState } from '../../store/permit-application.state';
@@ -38,5 +37,23 @@ export class SectionsComponent {
     ),
   );
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, readonly route: ActivatedRoute) {}
+  showMMPTasks$ = combineLatest([this.store, this.uiConfigurationService.getUIConfiguration()]).pipe(
+    map(([state, uiConfiguration]) => {
+      const digitizedMMP = uiConfiguration.features?.['digitized-mmp'];
+      return (
+        state.permit?.monitoringMethodologyPlans?.exist &&
+        digitizedMMP &&
+        !!state?.permitSectionsCompleted?.monitoringMethodologyPlans?.[0]
+      );
+    }),
+  );
+
+  isTask$: Observable<boolean> = this.store.pipe(map((state) => state.isRequestTask));
+
+  digitizedPlans$ = this.store.pipe(map((state) => state.permit?.monitoringMethodologyPlans?.digitizedPlan));
+
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    readonly uiConfigurationService: UIConfigurationService,
+  ) {}
 }

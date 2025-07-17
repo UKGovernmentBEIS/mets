@@ -1,10 +1,9 @@
 package uk.gov.pmrv.api.account.domain.dto.validation;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.ObjectUtils;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.ObjectUtils;
 
 /**
  * The grid reference validation.

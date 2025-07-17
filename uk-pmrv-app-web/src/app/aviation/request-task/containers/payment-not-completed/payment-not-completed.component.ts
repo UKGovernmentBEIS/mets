@@ -7,7 +7,9 @@ import { SharedModule } from '@shared/shared.module';
   selector: 'app-emp-payment-not-completed',
   standalone: true,
   imports: [SharedModule],
-  template: `<app-payment-not-completed></app-payment-not-completed>`,
+  template: `
+    <app-payment-not-completed></app-payment-not-completed>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentNotCompletedComponent implements OnInit, OnDestroy {

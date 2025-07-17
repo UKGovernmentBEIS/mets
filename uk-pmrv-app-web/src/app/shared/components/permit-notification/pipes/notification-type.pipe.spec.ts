@@ -17,6 +17,7 @@ describe('NotificationTypePipe', () => {
     );
     expect(pipe.transform('TEMPORARY_CHANGE')).toEqual('Temporary change to the permitted installation');
     expect(pipe.transform('TEMPORARY_SUSPENSION')).toEqual('Temporary suspension of a regulated activity');
+    expect(pipe.transform('CESSATION')).toEqual('Cessation of all regulated activities (temporary or permanent)');
     expect(pipe.transform('NON_SIGNIFICANT_CHANGE')).toEqual('Non-significant change');
     expect(pipe.transform('OTHER_FACTOR')).toEqual('Some other factor');
     expect(pipe.transform(undefined)).toEqual('');

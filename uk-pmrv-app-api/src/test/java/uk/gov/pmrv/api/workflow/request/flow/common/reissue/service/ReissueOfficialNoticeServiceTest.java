@@ -1,32 +1,20 @@
 package uk.gov.pmrv.api.workflow.request.flow.common.reissue.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityDTO;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.CompetentAuthorityTemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestMetadata;
@@ -36,6 +24,17 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateOfficialNoticeParamsProvider;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ReissueOfficialNoticeServiceTest {
@@ -94,7 +93,7 @@ class ReissueOfficialNoticeServiceTest {
 				.thenReturn(templateParams);
 		
 		when(accountQueryService.getAccountEmissionTradingScheme(accountId)).thenReturn(EmissionTradingScheme.UK_ETS_AVIATION);
-		when(documentFileGeneratorService.generateFileDocumentAsync(DocumentTemplateType.EMP_REISSUE_UKETS, templateParams, "Batch_variation_notice_UK_ETS.pdf")).thenReturn(CompletableFuture.completedFuture(fileInfoDTO));
+		when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(DocumentTemplateType.EMP_REISSUE_UKETS, templateParams, "Batch_variation_notice_UK_ETS.pdf")).thenReturn(CompletableFuture.completedFuture(fileInfoDTO));
 		
 		CompletableFuture<FileInfoDTO> resultFuture = cut.generateOfficialNotice(request);
 		FileInfoDTO result = resultFuture.get();
@@ -106,7 +105,7 @@ class ReissueOfficialNoticeServiceTest {
 		verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(paramsSourceData);
 
 		verify(accountQueryService, times(1)).getAccountEmissionTradingScheme(accountId);
-		verify(documentFileGeneratorService, times(1)).generateFileDocumentAsync(DocumentTemplateType.EMP_REISSUE_UKETS, templateParams, "Batch_variation_notice_UK_ETS.pdf");
+		verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(DocumentTemplateType.EMP_REISSUE_UKETS, templateParams, "Batch_variation_notice_UK_ETS.pdf");
 	}
 	
 	@Test

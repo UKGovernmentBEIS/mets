@@ -1,18 +1,16 @@
 package uk.gov.pmrv.api.workflow.request.application.userdeleted;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import uk.gov.pmrv.api.authorization.verifier.event.VerifierAuthorityDeletionEvent;
+import uk.gov.netz.api.authorization.verifier.event.VerifierAuthorityDeletionEvent;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.verifier.VerifierRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.service.SystemMessageNotificationRequestService;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class VerifierAuthorityDeletionEventListenerTest {

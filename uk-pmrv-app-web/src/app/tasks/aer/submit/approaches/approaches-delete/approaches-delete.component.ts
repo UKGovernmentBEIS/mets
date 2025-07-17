@@ -11,8 +11,9 @@ import { Aer, AerApplicationSubmitRequestTaskPayload, AerMonitoringApproachEmiss
 @Component({
   selector: 'app-approaches-delete',
   template: `
-    <app-approaches-delete-template (delete)="delete()" [monitoringApproach]="monitoringApproach$ | async">
-    </app-approaches-delete-template>
+    <app-approaches-delete-template
+      (delete)="delete()"
+      [monitoringApproach]="monitoringApproach$ | async"></app-approaches-delete-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

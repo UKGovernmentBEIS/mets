@@ -5,9 +5,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -71,7 +71,7 @@ class PermitVariationReviewReturnForAmendsHandlerTest {
         long taskId = 1L;
         RequestTaskActionEmptyPayload emptyPayload = RequestTaskActionEmptyPayload.builder().payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD).build();
         String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        AppUser appUser = AppUser.builder().userId(userId).build();
 
         String processTaskId = "processTaskId";
 
@@ -117,12 +117,12 @@ class PermitVariationReviewReturnForAmendsHandlerTest {
         when(requestTaskService.findTaskById(taskId)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(taskId, RequestTaskActionType.PERMIT_VARIATION_REVIEW_RETURN_FOR_AMENDS, pmrvUser, emptyPayload);
+        handler.process(taskId, RequestTaskActionType.PERMIT_VARIATION_REVIEW_RETURN_FOR_AMENDS, appUser, emptyPayload);
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(taskId);
         verify(permitReviewReturnForAmendsValidator, times(1)).validate(payload);
-        verify(permitVariationReviewService, times(1)).saveRequestReturnForAmends(requestTask, pmrvUser);
+        verify(permitVariationReviewService, times(1)).saveRequestReturnForAmends(requestTask, appUser);
         verify(requestService, times(1))
             .addActionToRequest(newRequest, actionPayload, RequestActionType.PERMIT_VARIATION_APPLICATION_RETURNED_FOR_AMENDS, userId);
         verify(workflowService, times(1))
@@ -134,7 +134,7 @@ class PermitVariationReviewReturnForAmendsHandlerTest {
         long taskId = 1L;
         RequestTaskActionEmptyPayload emptyPayload = RequestTaskActionEmptyPayload.builder().payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD).build();
         String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        AppUser appUser = AppUser.builder().userId(userId).build();
 
         String processTaskId = "processTaskId";
 
@@ -152,15 +152,15 @@ class PermitVariationReviewReturnForAmendsHandlerTest {
             .build();
 
         when(requestTaskService.findTaskById(taskId)).thenReturn(requestTask);
-        doThrow(new BusinessException((ErrorCode.INVALID_PERMIT_REVIEW))).when(permitReviewReturnForAmendsValidator)
+        doThrow(new BusinessException((MetsErrorCode.INVALID_PERMIT_REVIEW))).when(permitReviewReturnForAmendsValidator)
             .validate(payload);
 
         // Invoke
         BusinessException businessException = assertThrows(BusinessException.class,
-            () -> handler.process(taskId, RequestTaskActionType.PERMIT_VARIATION_REVIEW_RETURN_FOR_AMENDS, pmrvUser, emptyPayload));
+            () -> handler.process(taskId, RequestTaskActionType.PERMIT_VARIATION_REVIEW_RETURN_FOR_AMENDS, appUser, emptyPayload));
 
         // Verify
-        assertEquals(ErrorCode.INVALID_PERMIT_REVIEW, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_PERMIT_REVIEW, businessException.getErrorCode());
         verify(requestTaskService, times(1)).findTaskById(taskId);
         verify(permitReviewReturnForAmendsValidator, times(1)).validate(payload);
         verify(permitVariationReviewService, never()).saveRequestReturnForAmends(any(), any());

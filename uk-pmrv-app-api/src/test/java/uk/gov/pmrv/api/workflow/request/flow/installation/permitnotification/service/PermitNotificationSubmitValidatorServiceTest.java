@@ -16,13 +16,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.NonSignificantChange;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.NonSignificantChangeRelatedChangeType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationContainer;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service.PermitNotificationAttachmentsValidator;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service.PermitNotificationSubmitValidatorService;
 
 @ExtendWith(MockitoExtension.class)
 class PermitNotificationSubmitValidatorServiceTest {
@@ -90,7 +88,7 @@ class PermitNotificationSubmitValidatorServiceTest {
                 () -> service.validatePermitNotification(permitNotificationContainer));
 
         // Verify
-        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.INVALID_PERMIT_NOTIFICATION);
+        assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_PERMIT_NOTIFICATION);
         assertThat(ex.getData()).isEqualTo(new Object[] {"Attachment not found"});
 
         verify(permitNotificationAttachmentsValidator, times(1))
@@ -124,7 +122,7 @@ class PermitNotificationSubmitValidatorServiceTest {
                 () -> service.validatePermitNotification(permitNotificationContainer));
 
         // Verify
-        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.INVALID_PERMIT_NOTIFICATION);
+        assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_PERMIT_NOTIFICATION);
         assertThat(ex.getData()).isEqualTo(new Object[] {"Attachment is not referenced in permit notification"});
 
         verify(permitNotificationAttachmentsValidator, times(1))

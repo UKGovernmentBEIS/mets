@@ -1,36 +1,36 @@
 package uk.gov.pmrv.api.mireport.aviation.executedactions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.mireport.MiReportType;
+import uk.gov.netz.api.mireport.executedactions.ExecutedRequestAction;
+import uk.gov.netz.api.mireport.executedactions.ExecutedRequestActionsMiReportParams;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityStatus;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.common.domain.Address;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmissionsMonitoringPlanEntity;
-import uk.gov.pmrv.api.mireport.common.MiReportType;
-import uk.gov.pmrv.api.mireport.common.executedActions.ExecutedRequestAction;
-import uk.gov.pmrv.api.mireport.common.executedActions.ExecutedRequestActionsMiReportParams;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -55,7 +55,7 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
     @Test
     void findExecutedRequestActions_results_when_only_mandatory_parameters_applied(){
         LegalEntity legalEntity = createLegalEntity("legalEntityName");
-        Account acc1 = createAccount(1L,"account", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
+        AviationAccount acc1 = createAccount(1L,"account", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
         Request acc1Request = createRequest(acc1, "NEW1", RequestType.EMP_ISSUANCE_UKETS, RequestStatus.COMPLETED);
         createRequestAction(acc1Request,
             RequestActionType.PAYMENT_MARKED_AS_PAID,
@@ -67,7 +67,7 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
             "regulator");
         EmissionsMonitoringPlanEntity acc1Emp = createEmp(1L, "UK-W-AV-000001");
 
-        Account acc2 = createAccount(2L,"account2", AviationAccountStatus.LIVE, CompetentAuthorityEnum.ENGLAND, legalEntity);
+        AviationAccount acc2 = createAccount(2L,"account2", AviationAccountStatus.LIVE, CompetentAuthorityEnum.ENGLAND, legalEntity);
         Request acc2Request = createRequest(acc2, "NEW2", RequestType.EMP_ISSUANCE_UKETS, RequestStatus.IN_PROGRESS);
         createRequestAction(acc2Request,
             RequestActionType.PAYMENT_MARKED_AS_PAID,
@@ -83,48 +83,50 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
             .fromDate(LocalDate.of(2022,1,6))
             .build();
 
-        List<ExecutedRequestAction> actions = repository.findExecutedRequestActions(entityManager, reportParams);
+        List<AviationExecutedRequestAction> actions = repository.findExecutedRequestActions(entityManager, reportParams);
 
         assertThat(actions).isNotEmpty();
         assertThat(actions).hasSize(2);
 
-        ExecutedRequestAction executedRequestAction = actions.get(0);
-        assertEquals(acc1.getEmitterId(), executedRequestAction.getEmitterId());
+        AviationExecutedRequestAction executedRequestAction = actions.get(0);
+        assertEquals(acc1.getEmitterId(), executedRequestAction.getAccountId());
         assertEquals(acc1.getAccountType(), executedRequestAction.getAccountType());
         assertEquals(acc1.getStatus().getName(), executedRequestAction.getAccountStatus());
         assertEquals(acc1.getName(), executedRequestAction.getAccountName());
         assertEquals(acc1.getName(), executedRequestAction.getAccountName());
         assertEquals(legalEntity.getName(), executedRequestAction.getLegalEntityName());
         assertEquals(acc1Request.getId(), executedRequestAction.getRequestId());
-        assertEquals(acc1Request.getType(), executedRequestAction.getRequestType());
-        assertEquals(acc1Request.getStatus(), executedRequestAction.getRequestStatus());
-        assertEquals(acc1RequestAction.getType(), executedRequestAction.getRequestActionType());
+        assertEquals(acc1Request.getType().name(), executedRequestAction.getRequestType());
+        assertEquals(acc1Request.getStatus().name(), executedRequestAction.getRequestStatus());
+        assertEquals(acc1RequestAction.getType().name(), executedRequestAction.getRequestActionType());
         assertEquals(acc1RequestAction.getSubmitter(), executedRequestAction.getRequestActionSubmitter());
         assertEquals(acc1RequestAction.getCreationDate().truncatedTo(ChronoUnit.MILLIS),
             executedRequestAction.getRequestActionCompletionDate().truncatedTo(ChronoUnit.MILLIS));
         assertEquals(acc1Emp.getId(), executedRequestAction.getPermitId());
+        assertEquals(acc1.getCrcoCode(), executedRequestAction.getCrcoCode());
 
         executedRequestAction = actions.get(1);
-        assertEquals(acc2.getEmitterId(), executedRequestAction.getEmitterId());
+        assertEquals(acc2.getEmitterId(), executedRequestAction.getAccountId());
         assertEquals(acc2.getAccountType(), executedRequestAction.getAccountType());
         assertEquals(acc2.getStatus().getName(), executedRequestAction.getAccountStatus());
         assertEquals(acc2.getName(), executedRequestAction.getAccountName());
         assertEquals(acc2.getName(), executedRequestAction.getAccountName());
         assertEquals(legalEntity.getName(), executedRequestAction.getLegalEntityName());
         assertEquals(acc2Request.getId(), executedRequestAction.getRequestId());
-        assertEquals(acc2Request.getType(), executedRequestAction.getRequestType());
-        assertEquals(acc2Request.getStatus(), executedRequestAction.getRequestStatus());
-        assertEquals(acc2RequestAction.getType(), executedRequestAction.getRequestActionType());
+        assertEquals(acc2Request.getType().name(), executedRequestAction.getRequestType());
+        assertEquals(acc2Request.getStatus().name(), executedRequestAction.getRequestStatus());
+        assertEquals(acc2RequestAction.getType().name(), executedRequestAction.getRequestActionType());
         assertEquals(acc2RequestAction.getSubmitter(), executedRequestAction.getRequestActionSubmitter());
         assertEquals(acc2RequestAction.getCreationDate().truncatedTo(ChronoUnit.MILLIS),
             executedRequestAction.getRequestActionCompletionDate().truncatedTo(ChronoUnit.MILLIS));
         assertNull(executedRequestAction.getPermitId());
+        assertEquals(acc2.getCrcoCode(), executedRequestAction.getCrcoCode());
     }
 
     @Test
     void findExecutedRequestActions_results_when_all_parameters_applied(){
         LegalEntity legalEntity = createLegalEntity("legalEntityName");
-        Account acc1 = createAccount(1L,"account", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
+        AviationAccount acc1 = createAccount(1L,"account", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
         Request acc1Request = createRequest(acc1, "NEW1", RequestType.EMP_ISSUANCE_UKETS, RequestStatus.COMPLETED);
         createRequestAction(acc1Request,
             RequestActionType.PAYMENT_MARKED_AS_RECEIVED,
@@ -135,7 +137,7 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
             LocalDateTime.of(2022, 1, 6, 15, 45 ),
             "regulator");
 
-        Account acc2 = createAccount(2L,"account2", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
+        AviationAccount acc2 = createAccount(2L,"account2", AviationAccountStatus.LIVE, CompetentAuthorityEnum.WALES, legalEntity);
         Request acc2Request = createRequest(acc2, "NEW2", RequestType.EMP_ISSUANCE_UKETS, RequestStatus.IN_PROGRESS);
         createRequestAction(acc2Request,
             RequestActionType.PAYMENT_MARKED_AS_RECEIVED,
@@ -148,11 +150,15 @@ class AviationExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
             .toDate(LocalDate.of(2022,1,10))
             .build();
 
-        List<ExecutedRequestAction> actions = repository.findExecutedRequestActions(entityManager, reportParams);
+        List<AviationExecutedRequestAction> actions = repository.findExecutedRequestActions(entityManager, reportParams);
+        final List<AviationExecutedRequestAction> aviationExecutedRequestActions = actions.stream()
+                .map(AviationExecutedRequestAction.class::cast)
+                .toList();
 
         assertThat(actions).isNotEmpty();
         assertThat(actions).hasSize(2);
-        assertThat(actions).extracting(ExecutedRequestAction::getEmitterId).containsOnly(acc1.getEmitterId());
+        assertThat(actions).extracting(ExecutedRequestAction::getAccountId).containsOnly(acc1.getEmitterId());
+        assertThat(aviationExecutedRequestActions).extracting(AviationExecutedRequestAction::getCrcoCode).containsOnly(acc1.getCrcoCode());
     }
 
     private LegalEntity createLegalEntity(String name) {

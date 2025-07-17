@@ -7,7 +7,7 @@ import liquibase.exception.CustomChangeException;
 import liquibase.exception.DatabaseException;
 import lombok.Getter;
 import lombok.Setter;
-import uk.gov.pmrv.api.common.domain.dto.ResourceFile;
+import uk.gov.netz.api.common.domain.ResourceFile;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 
 import java.sql.PreparedStatement;
@@ -42,7 +42,7 @@ public class UpdateDocumentTemplateFileTaskChange extends DocumentTemplateFileUp
     @Override
     public void execute(Database database) throws CustomChangeException {
         // The context classloader does not include the jar file that contain the resources files,
-        // so the code in ResourceFileUtil class trying to find resource using Thread.currentThread() will not work.
+        // so the code in ResourceFileUtils class trying to find resource using Thread.currentThread() will not work.
         // Solution: set the current class' classloader as the thread's classloader
         Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
         

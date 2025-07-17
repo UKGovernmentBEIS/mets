@@ -1,11 +1,11 @@
 package uk.gov.pmrv.api.migration.emp.ukets.latesubmission;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
-import org.springframework.jdbc.core.RowMapper;
 
 public class EtsEmpApplicationTimeframeInfoRowMapper implements RowMapper<EtsEmpApplicationTimeframeInfo>{
 

@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, Observable, startWith, switchMap, switchMapTo, tap } from 'rxjs';
+import { combineLatest, first, map, Observable, startWith, switchMap, tap } from 'rxjs';
 
-import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
-import { PendingRequest } from '../../../../../core/interfaces/pending-request.interface';
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { PendingRequest } from '@core/interfaces/pending-request.interface';
+
 import { PERMIT_TASK_FORM } from '../../../../shared/permit-task-form.token';
 import { PermitApplicationState } from '../../../../store/permit-application.state';
 import { PermitApplicationStore } from '../../../../store/permit-application.store';
@@ -56,7 +57,7 @@ export class OneThirdComponent implements PendingRequest {
               this.statusKey,
             ),
           ),
-          switchMapTo(this.store),
+          switchMap(() => this.store),
           first(),
           tap((state) =>
             this.store.setState({

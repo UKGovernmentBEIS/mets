@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { BehaviorSubject, combineLatest, map, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { AerCorsiaStoreDelegate } from '@aviation/request-task/store/delegates/aer-corsia/aer-corsia-store-delegate';
@@ -50,11 +50,19 @@ export class SendReportRegulatorComponent {
   );
 
   onSubmit() {
-    return (this.store.aerDelegate as AerCorsiaStoreDelegate)
-      .submitAer('AVIATION_AER_CORSIA_SUBMIT_APPLICATION')
-      .pipe(this.pendingRequestService.trackRequest())
-      .subscribe(() => {
-        this.isSubmitted$.next(true);
-      });
+    return this.store
+      .pipe(requestTaskQuery.selectRequestTaskType)
+      .pipe(
+        first(),
+        switchMap((requestTaskType) => {
+          const actionType =
+            requestTaskType === 'AVIATION_AER_CORSIA_APPLICATION_SUBMIT'
+              ? 'AVIATION_AER_CORSIA_SUBMIT_APPLICATION'
+              : 'AVIATION_AER_CORSIA_SUBMIT_APPLICATION_AMEND';
+          return (this.store.aerDelegate as AerCorsiaStoreDelegate).submitAer(actionType);
+        }),
+        this.pendingRequestService.trackRequest(),
+      )
+      .subscribe(() => this.isSubmitted$.next(true));
   }
 }

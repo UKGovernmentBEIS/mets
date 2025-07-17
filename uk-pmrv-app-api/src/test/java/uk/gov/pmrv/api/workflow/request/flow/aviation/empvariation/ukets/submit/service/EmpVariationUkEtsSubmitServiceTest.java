@@ -16,7 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.abbreviations.EmpAbbreviations;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.validation.EmpTradingSchemeValidatorService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEts;
@@ -94,7 +94,7 @@ class EmpVariationUkEtsSubmitServiceTest {
     
     @Test
     void submitEmpVariation() {
-    	PmrvUser authUser = PmrvUser.builder().userId("user1").build();
+    	AppUser authUser = AppUser.builder().userId("user1").build();
     	UUID att1UUID = UUID.randomUUID();
     	Request request = Request.builder()
     			.accountId(1L)

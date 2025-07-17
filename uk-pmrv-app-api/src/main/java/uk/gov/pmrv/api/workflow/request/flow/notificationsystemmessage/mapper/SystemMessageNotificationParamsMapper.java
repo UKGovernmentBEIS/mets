@@ -4,8 +4,8 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.notification.template.domain.NotificationContent;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
@@ -17,11 +17,11 @@ import uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.domain.Sy
 public interface SystemMessageNotificationParamsMapper {
 
     @Mapping(target = "type", expression = "java(uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType.SYSTEM_MESSAGE_NOTIFICATION)")
-    RequestParams toRequestParams(SystemMessageNotificationRequestParams systemMessageNotificationRequestParams, RoleType recipientRoleType);
+    RequestParams toRequestParams(SystemMessageNotificationRequestParams systemMessageNotificationRequestParams, String recipientRoleType);
 
     @AfterMapping
     default void populatePayloadToRequestParams(SystemMessageNotificationRequestParams systemMessageNotificationRequestParams,
-                                                RoleType recipientRoleType, @MappingTarget RequestParams requestParams) {
+                                                String recipientRoleType, @MappingTarget RequestParams requestParams) {
         NotificationContent requestNotificationContent = systemMessageNotificationRequestParams.getNotificationContent();
         SystemMessageNotificationRequestPayload requestPayload = SystemMessageNotificationRequestPayload.builder()
             .payloadType(RequestPayloadType.SYSTEM_MESSAGE_NOTIFICATION_REQUEST_PAYLOAD)
@@ -33,13 +33,13 @@ public interface SystemMessageNotificationParamsMapper {
             .build();
 
         switch (recipientRoleType) {
-            case OPERATOR:
+            case RoleTypeConstants.OPERATOR:
                 requestPayload.setOperatorAssignee(systemMessageNotificationRequestParams.getNotificationMessageRecipient());
                 break;
-            case REGULATOR:
+            case RoleTypeConstants.REGULATOR:
                 requestPayload.setRegulatorAssignee(systemMessageNotificationRequestParams.getNotificationMessageRecipient());
                 break;
-            case VERIFIER:
+            case RoleTypeConstants.VERIFIER:
                 requestPayload.setVerifierAssignee(systemMessageNotificationRequestParams.getNotificationMessageRecipient());
                 break;
             default:

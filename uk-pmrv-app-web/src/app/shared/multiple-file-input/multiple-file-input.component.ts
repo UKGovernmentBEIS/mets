@@ -35,7 +35,7 @@ import { FileUpload, FileUploadEvent } from '../file-input/file-upload-event';
 @Component({
   selector: 'app-multiple-file-input[baseDownloadUrl]',
   templateUrl: './multiple-file-input.component.html',
-  styleUrls: ['./multiple-file-input.component.scss'],
+  styleUrl: './multiple-file-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultipleFileInputComponent implements ControlValueAccessor, OnInit {
@@ -193,6 +193,6 @@ export class MultipleFileInputComponent implements ControlValueAccessor, OnInit 
 
     return rowErrors.length === 0
       ? null
-      : rowErrors.reduce((acc, [key, value]) => ({ ...(acc ? acc : {}), [key]: value } as any), null);
+      : rowErrors.reduce((acc, [key, value]) => ({ ...(acc ? acc : {}), [key]: value }) as any, null);
   }
 }

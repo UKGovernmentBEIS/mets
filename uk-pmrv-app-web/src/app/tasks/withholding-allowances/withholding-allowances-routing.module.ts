@@ -38,6 +38,11 @@ const routes: Routes = [
         component: SubmitComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'notify-operator',
         data: { pageTitle: 'Notify operator' },
         component: NotifyOperatorComponent,
@@ -74,6 +79,11 @@ const routes: Routes = [
         component: PeerReviewWaitComponent,
       },
       {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+      {
         path: 'summary',
         data: { pageTitle: 'Provide withholding of allowances details', breadcrumb: true },
         component: SummaryDetailsComponent,
@@ -89,6 +99,11 @@ const routes: Routes = [
         path: '',
         data: { pageTitle: 'Peer review' },
         component: PeerReviewSubmitComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'summary',
@@ -130,6 +145,11 @@ const routes: Routes = [
         path: '',
         data: { pageTitle: 'Withdraw withholding of allowances notice' },
         component: WithdrawComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'reason',

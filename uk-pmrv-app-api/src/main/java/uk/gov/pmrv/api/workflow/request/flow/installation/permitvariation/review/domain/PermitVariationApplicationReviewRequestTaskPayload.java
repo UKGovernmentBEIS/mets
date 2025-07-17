@@ -1,14 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain;
 
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,6 +15,16 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.review.PermitVariationReviewDecision;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submit.domain.PermitVariationApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RequestTaskPayloadRfiAttachable;
+
+import java.util.Collection;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -61,7 +62,7 @@ public class PermitVariationApplicationReviewRequestTaskPayload extends PermitVa
     public Set<UUID> getReferencedAttachmentIds() {
     	final Set<UUID> reviewGroupsReviewAttachmentsUuids = getReviewGroupDecisions().values().stream()
     			.filter(permitVariationReviewDecision -> permitVariationReviewDecision.getType() == ReviewDecisionType.OPERATOR_AMENDS_NEEDED)
-                .map(permitVariationReviewDecision -> permitVariationReviewDecision.getDetails())
+                .map(PermitVariationReviewDecision::getDetails)
                 .flatMap(details -> ((ChangesRequiredDecisionDetails)details).getRequiredChanges().stream())
                 .flatMap(change -> change.getFiles().stream())
                 .collect(Collectors.toSet());

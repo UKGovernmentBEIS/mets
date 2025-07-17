@@ -4,7 +4,7 @@ import { CanActivateFn, CanDeactivateFn } from '@angular/router';
 import { combineLatest, map, take } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerStoreDelegate } from '@aviation/request-task/store/delegates';
+import { AerUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { AerCorsiaStoreDelegate } from '@aviation/request-task/store/delegates/aer-corsia/aer-corsia-store-delegate';
 
 import { TASK_FORM_PROVIDER } from '../../../task-form.provider';
@@ -20,7 +20,7 @@ export const canActivateMonitoringPlanChanges: CanActivateFn = () => {
     map(([aer, isCorsia]) => {
       const initialState = isCorsia
         ? AerCorsiaStoreDelegate.INITIAL_STATE.aerMonitoringPlanChanges
-        : AerStoreDelegate.INITIAL_STATE.aerMonitoringPlanChanges;
+        : AerUkEtsStoreDelegate.INITIAL_STATE.aerMonitoringPlanChanges;
 
       if (!aer) {
         store.setPayload({

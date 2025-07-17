@@ -2,7 +2,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { map, Observable } from 'rxjs';
 
-import { AerApplicationCompletedRequestActionPayload, AerApplicationSubmittedRequestActionPayload } from 'pmrv-api';
+import {
+  AerApplicationCompletedRequestActionPayload,
+  AerApplicationSubmittedRequestActionPayload,
+  AerApplicationVerificationSubmittedRequestActionPayload,
+} from 'pmrv-api';
 
 import { AerService } from '../../core/aer.service';
 
@@ -18,7 +22,9 @@ import { AerService } from '../../core/aer.service';
 export class EmissionsSummaryComponent {
   aerPayload$ = (
     this.aerService.getPayload() as Observable<
-      AerApplicationSubmittedRequestActionPayload | AerApplicationCompletedRequestActionPayload
+      | AerApplicationSubmittedRequestActionPayload
+      | AerApplicationCompletedRequestActionPayload
+      | AerApplicationVerificationSubmittedRequestActionPayload
     >
   ).pipe(map((payload) => payload.aer));
 

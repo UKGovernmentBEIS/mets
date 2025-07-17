@@ -1,15 +1,12 @@
 package uk.gov.pmrv.api.permit.domain.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
-
-import jakarta.validation.Valid;
+import uk.gov.netz.api.common.validation.SpELExpression;
 
 @Data
 @Builder

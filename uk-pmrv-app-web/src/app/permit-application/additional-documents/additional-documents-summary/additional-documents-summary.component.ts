@@ -23,5 +23,8 @@ export class AdditionalDocumentsSummaryComponent {
 
   hasAttachments$: Observable<boolean> = this.store.getTask('additionalDocuments').pipe(map((item) => !!item?.exist));
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly router: Router) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly router: Router,
+  ) {}
 }

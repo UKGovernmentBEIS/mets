@@ -16,5 +16,8 @@ export class SubmitContainerComponent {
   readonly daysRemaining$ = this.airService.daysRemaining$;
   readonly originalOrder = originalOrder;
 
-  constructor(private readonly airService: AirService, private readonly router: Router) {}
+  constructor(
+    private readonly airService: AirService,
+    private readonly router: Router,
+  ) {}
 }

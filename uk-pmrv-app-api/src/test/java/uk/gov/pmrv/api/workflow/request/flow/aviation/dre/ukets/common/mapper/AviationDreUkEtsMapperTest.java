@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.mapper;
 
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AviationDreUkEtsMapperTest {
+class AviationDreUkEtsMapperTest {
 
     private final AviationDreUkEtsMapper mapper = Mappers.getMapper(AviationDreUkEtsMapper.class);
 

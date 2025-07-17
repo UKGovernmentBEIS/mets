@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0xnbuyk" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+  <bpmn:process id="PROCESS_ALR_INITIATE" name="Activity level reports initiate" isExecutable="true" camunda:historyTimeToLive="180">
+    <bpmn:startEvent id="ALR_INITIATE_TIMER">
+      <bpmn:outgoing>Flow_0cx34hw</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1dp92a7">
+        <bpmn:timeCycle xsi:type="bpmn:tFormalExpression">R/2026-01-01T00:00:00/P1Y</bpmn:timeCycle>
+      </bpmn:timerEventDefinition>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_0115drj" name="Collect accounts for ALR" camunda:delegateExpression="#{collectInstallationAccountsForALRHandler}">
+      <bpmn:extensionElements>
+        <camunda:properties>
+          <camunda:property />
+        </camunda:properties>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0cx34hw</bpmn:incoming>
+      <bpmn:outgoing>Flow_169zlw3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0cx34hw" sourceRef="ALR_INITIATE_TIMER" targetRef="Activity_0115drj" />
+    <bpmn:serviceTask id="INITIATE_ALR" name="initiate ALR" camunda:delegateExpression="#{initiateALRHandler}">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="accountIds">
+            <camunda:list />
+          </camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_169zlw3</bpmn:incoming>
+      <bpmn:multiInstanceLoopCharacteristics camunda:asyncBefore="true" camunda:collection="accounts" camunda:elementVariable="accountId" />
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_169zlw3" sourceRef="Activity_0115drj" targetRef="INITIATE_ALR" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_ALR_INITIATE">
+      <bpmndi:BPMNShape id="Event_1rwwzuu_di" bpmnElement="ALR_INITIATE_TIMER">
+        <dc:Bounds x="152" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0115drj_di" bpmnElement="Activity_0115drj">
+        <dc:Bounds x="300" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05ffvzt_di" bpmnElement="INITIATE_ALR">
+        <dc:Bounds x="520" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0cx34hw_di" bpmnElement="Flow_0cx34hw">
+        <di:waypoint x="188" y="120" />
+        <di:waypoint x="300" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_169zlw3_di" bpmnElement="Flow_169zlw3">
+        <di:waypoint x="400" y="120" />
+        <di:waypoint x="520" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -22,5 +22,8 @@ export class AboutVariationComponent {
     map(([isEditable, aboutVariationStatus]) => isEditable || aboutVariationStatus !== 'not started'),
   );
 
-  constructor(private readonly router: Router, private readonly store: PermitVariationStore) {}
+  constructor(
+    private readonly router: Router,
+    private readonly store: PermitVariationStore,
+  ) {}
 }

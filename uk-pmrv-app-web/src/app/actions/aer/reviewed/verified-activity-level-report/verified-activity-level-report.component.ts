@@ -13,8 +13,7 @@ import { AerService } from '../../core/aer.service';
     <app-action-task header="Verification report of the activity level report" [breadcrumb]="true">
       <app-activity-level-report-group
         [activityLevelReport]="activityLevelReport$ | async"
-        [documentFiles]="documentFiles$ | async"
-      ></app-activity-level-report-group>
+        [documentFiles]="documentFiles$ | async"></app-activity-level-report-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -31,5 +30,8 @@ export class VerifiedActivityLevelReportComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

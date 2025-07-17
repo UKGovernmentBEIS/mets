@@ -1,12 +1,11 @@
 package uk.gov.pmrv.api.account.domain.dto.validation;
 
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.util.ObjectUtils;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
-import static uk.gov.pmrv.api.common.domain.dto.validation.ValidationUtils.addConstraintViolation;
+import static uk.gov.netz.api.common.validation.ValidationUtils.addConstraintViolation;
 
 /**
  * The legal entity validator.

@@ -18,7 +18,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.common.domain.RequestAviat
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.submit.domain.EmpVariationCorsiaApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.corsia.submit.domain.EmpVariationCorsiaApplicationSubmittedRequestActionPayload;
 
-public class EmpVariationCorsiaSubmitMapperTest {
+class EmpVariationCorsiaSubmitMapperTest {
 
 	private final EmpVariationCorsiaSubmitMapper mapper = Mappers.getMapper(EmpVariationCorsiaSubmitMapper.class);
 

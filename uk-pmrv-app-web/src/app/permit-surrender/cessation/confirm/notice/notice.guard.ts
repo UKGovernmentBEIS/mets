@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -9,8 +9,11 @@ import { areNoticePreviousStepsValid, initialStep, isWizardComplete } from '../w
 @Injectable({
   providedIn: 'root',
 })
-export class NoticeGuard implements CanActivate {
-  constructor(private readonly store: PermitSurrenderStore, private readonly router: Router) {}
+export class NoticeGuard {
+  constructor(
+    private readonly store: PermitSurrenderStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return (

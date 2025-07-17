@@ -14,6 +14,8 @@ public enum DocumentTemplateType {
     /** INPermitApplication_L014 */
     PERMIT_ISSUANCE_HSE_ACCEPTED,
 
+    PERMIT_ISSUANCE_WASTE_ACCEPTED,
+
     /** INPermitApplication_L015 */
     PERMIT_ISSUANCE_REJECTED,
 
@@ -74,6 +76,11 @@ public enum DocumentTemplateType {
     /** INPermitApplication_Permit */
     PERMIT,
 
+    /**   IN Permanent Cessation - Template - EA.docx */
+    PERMANENT_CESSATION,
+    PERMANENT_CESSATION_APPLICATION_SUBMIT,
+    PERMANENT_CESSATION_APPLICATION_PEER_REVIEW,
+
     /** DOAL Preliminary Allocation Letter Final v01.doc */
     DOAL_SUBMITTED,
     /** Notice of DOAL Approval of Allocation (with corrections) Article 34H & 6a Final v01.doc */
@@ -82,6 +89,7 @@ public enum DocumentTemplateType {
     DOAL_REJECTED,
     
     DRE_SUBMITTED,
+
 
     /** INP3ImprovementReport_VerifierImprovements_#L003 */
     VIR_REVIEWED,
@@ -95,7 +103,12 @@ public enum DocumentTemplateType {
 
     RETURN_OF_ALLOWANCES,
 
+    INSTALLATION_ONSITE_INSPECTION_SUBMITTED,
+    INSTALLATION_AUDIT_SUBMITTED,
+
     AVIATION_DRE_SUBMITTED,
+
+    AVIATION_DOE_SUBMITTED,
 
     AVIATION_VIR_REVIEWED,
 
@@ -143,4 +156,7 @@ public enum DocumentTemplateType {
 
     /** CORSIA_EMP Variation Withdrawn_Notice_METS */
     EMP_VARIATION_CORSIA_DEEMED_WITHDRAWN,
+
+    AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMITTED,
+    AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED
 }

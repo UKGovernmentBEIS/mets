@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { map, tap } from 'rxjs';
 
@@ -15,7 +15,7 @@ import { PermitRevocationStore } from './store/permit-revocation-store';
 @Injectable({
   providedIn: 'root',
 })
-export class PermitRevocationTaskGuard implements CanActivate, CanDeactivate<any> {
+export class PermitRevocationTaskGuard {
   constructor(
     private store: PermitRevocationStore,
     private readonly incorporateHeaderStore: IncorporateHeaderStore,

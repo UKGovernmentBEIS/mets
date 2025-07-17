@@ -42,10 +42,7 @@ export const AER_CORSIA_MONITORING_APPROACH_ROUTES: Routes = [
       },
       {
         path: 'fuel-allocation-block-hour',
-        data: {
-          pageTitle: 'Fuel allocation block hour',
-          backlink: '../fuel-usage',
-        },
+        data: { pageTitle: 'Fuel allocation block hour', backlink: '../fuel-usage' },
         canActivate: [canActivateTaskForm, canActivateFuelAllocationBlockHour],
         loadComponent: () =>
           import('./monitoring-approach-fuel-allocation-block-hour').then(
@@ -54,7 +51,7 @@ export const AER_CORSIA_MONITORING_APPROACH_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Monitoring approach summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Monitoring approach' },
         canActivate: [canActivateRequestTask, canActivateSummaryPage],
         loadComponent: () => import('./monitoring-approach-summary').then((c) => c.MonitoringApproachSummaryComponent),
       },

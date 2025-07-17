@@ -1,0 +1,44 @@
+<app-bdr-task [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    heading="Free allocation and emitter status"
+    caption="Provide the baseline data report and details"
+    [hideSubmit]="(isEditable$ | async) === false"
+    [showBackLink]="true">
+    <p class="govuk-body">Select whether you are applying for:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>free allocation</li>
+      <li>hospital and small emitter (HSE) status</li>
+      <li>ultra small emitter (USE) status</li>
+    </ul>
+
+    <div
+      formControlName="isApplicationForFreeAllocation"
+      govuk-radio
+      legend="Are you applying for free allocation?"
+      [legendSize]="'medium'"
+      class="govuk-!-width-three-quarters">
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
+    </div>
+
+    <div
+      formControlName="statusApplicationType"
+      govuk-radio
+      legend="Are you applying for HSE or USE status?"
+      [legendSize]="'medium'"
+      class="govuk-!-width-three-quarters">
+      <govuk-radio-option [value]="'NONE'" label="No"></govuk-radio-option>
+      <govuk-radio-option [value]="'HSE'" label="Yes, I am applying for HSE status"></govuk-radio-option>
+      <govuk-radio-option [value]="'USE'" label="Yes, I am applying for USE status"></govuk-radio-option>
+    </div>
+
+    <div formControlName="infoIsCorrectChecked" govuk-checkboxes class="govuk-!-width-three-quarters">
+      <govuk-checkbox
+        label="I confirm that the information provided in this submission is correct to the best of my knowledge."
+        [value]="true"></govuk-checkbox>
+    </div>
+  </app-wizard-step>
+  <app-bdr-return-link returnLink="../../"></app-bdr-return-link>
+</app-bdr-task>

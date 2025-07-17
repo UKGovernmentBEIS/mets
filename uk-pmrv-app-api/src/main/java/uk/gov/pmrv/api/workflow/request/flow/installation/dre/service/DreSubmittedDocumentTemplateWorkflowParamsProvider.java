@@ -1,15 +1,14 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.dre.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.stereotype.Component;
-
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateGenerationContextActionType;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateWorkflowParamsProvider;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.Dre;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreDeterminationReasonType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestPayload;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 class DreSubmittedDocumentTemplateWorkflowParamsProvider implements DocumentTemplateWorkflowParamsProvider<DreRequestPayload> {

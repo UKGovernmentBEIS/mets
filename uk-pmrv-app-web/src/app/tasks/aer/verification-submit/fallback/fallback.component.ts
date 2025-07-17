@@ -11,12 +11,11 @@ import { AerApplicationSubmitRequestTaskPayload, FallbackEmissions } from 'pmrv-
 @Component({
   selector: 'app-fallback',
   template: `
-    <app-page-heading>{{ 'FALLBACK' | monitoringApproachEmissionDescription }} </app-page-heading>
+    <app-page-heading>{{ 'FALLBACK' | monitoringApproachEmissionDescription }}</app-page-heading>
     <app-fallback-emissions-group
       [fallbackEmissions]="fallbackEmissions$ | async"
       [sourceStreams]="sourceStreams$ | async"
-      [documentFiles]="documentFiles$ | async"
-    ></app-fallback-emissions-group>
+      [documentFiles]="documentFiles$ | async"></app-fallback-emissions-group>
     <app-return-link></app-return-link>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

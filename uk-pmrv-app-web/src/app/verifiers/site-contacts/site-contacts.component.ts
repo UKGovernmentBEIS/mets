@@ -13,8 +13,12 @@ import { BehaviorSubject, ReplaySubject } from 'rxjs';
 
 import { GovukSelectOption, GovukTableColumn } from 'govuk-components';
 
-import { AccountContactVbInfoResponse, UserAuthorityInfoDTO } from 'pmrv-api';
-import { AccountContactDTO, AccountContactVbInfoDTO } from 'pmrv-api';
+import {
+  AccountContactDTO,
+  AccountContactVbInfoDTO,
+  AccountContactVbInfoResponse,
+  UserAuthorityInfoDTO,
+} from 'pmrv-api';
 
 import { UserFullNamePipe } from '../../shared/pipes/user-full-name.pipe';
 
@@ -34,6 +38,7 @@ export class SiteContactsComponent implements OnChanges {
   @Input() contacts: AccountContactVbInfoResponse;
   @Output() readonly siteContactChange = new EventEmitter<AccountContactDTO[]>();
   @Output() readonly pageChange = new EventEmitter<number>();
+  // eslint-disable-next-line @angular-eslint/no-output-native
   @Output() readonly cancel = new EventEmitter<void>();
 
   assigneeOptions: GovukSelectOption<string>[];
@@ -48,7 +53,10 @@ export class SiteContactsComponent implements OnChanges {
     { field: 'user', header: 'Assigned to' },
   ];
 
-  constructor(private readonly fb: UntypedFormBuilder, private readonly fullNamePipe: UserFullNamePipe) {}
+  constructor(
+    private readonly fb: UntypedFormBuilder,
+    private readonly fullNamePipe: UserFullNamePipe,
+  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.contacts || changes.verifiers) {

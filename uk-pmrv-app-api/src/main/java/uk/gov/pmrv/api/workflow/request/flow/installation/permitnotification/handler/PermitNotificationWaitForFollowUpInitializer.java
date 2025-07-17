@@ -1,7 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.handler;
 
-import java.time.LocalDate;
-import java.util.Set;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
@@ -12,6 +10,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.dom
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationAcceptedDecisionDetails;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationWaitForFollowUpRequestTaskPayload;
+
+import java.time.LocalDate;
+import java.util.Set;
 
 @Service
 public class PermitNotificationWaitForFollowUpInitializer implements InitializeRequestTaskHandler {

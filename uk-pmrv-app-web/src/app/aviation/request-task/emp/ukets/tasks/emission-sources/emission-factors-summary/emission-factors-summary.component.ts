@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 import { EmissionFactorsSummaryTemplateComponent } from '@aviation/shared/components/emp/emission-sources/emission-factors-summary-template/emission-factors-summary-template.component';
 import { SharedModule } from '@shared/shared.module';
 
-
 @Component({
   selector: 'app-emission-factors-summary',
   template: `
@@ -13,8 +12,7 @@ import { SharedModule } from '@shared/shared.module';
       <app-emission-factors-summary-template
         [fuelTypes]="fuelTypes"
         [isEditable]="editable"
-        [changeUrlQueryParams]="{ change: true }"
-      ></app-emission-factors-summary-template>
+        [changeUrlQueryParams]="{ change: true }"></app-emission-factors-summary-template>
     </div>
   `,
   standalone: true,

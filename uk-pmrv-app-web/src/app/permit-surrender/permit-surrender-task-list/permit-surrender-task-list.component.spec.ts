@@ -128,13 +128,14 @@ describe('PermitSurrenderTaskListComponent', () => {
 
   it('should display related action links', () => {
     expect(page.relatedActionsLinks.map((el) => [el.href, el.textContent])).toEqual([
-      ['http://localhost/tasks/237/change-assignee', 'Reassign task']
+      ['http://localhost/tasks/237/change-assignee', 'Reassign task'],
     ]);
   });
 
   it('should show heading info', () => {
     expect(page.headingInfo.map((el) => el.textContent.trim())).toEqual([
-      'Assigned to: John Doe', 'Days Remaining: 58'
+      'Assigned to: John Doe',
+      'Days Remaining: 58',
     ]);
   });
 });

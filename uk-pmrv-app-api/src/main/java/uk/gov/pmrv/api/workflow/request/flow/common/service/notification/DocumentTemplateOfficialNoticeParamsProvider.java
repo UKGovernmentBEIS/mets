@@ -2,10 +2,10 @@ package uk.gov.pmrv.api.workflow.request.flow.common.service.notification;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class DocumentTemplateOfficialNoticeParamsProvider {
         
 		final DocumentTemplateCommonParamsProvider documentTemplateCommonParamsProvider = documentTemplateCommonParamsProviders.stream()
 				.filter(provider -> provider.getAccountType() == request.getType().getAccountType()).findFirst()
-				.orElseThrow(() -> new BusinessException(ErrorCode.DOCUMENT_TEMPLATE_COMMON_PARAMS_PROVIDER_NOT_FOUND));
+				.orElseThrow(() -> new BusinessException(MetsErrorCode.DOCUMENT_TEMPLATE_COMMON_PARAMS_PROVIDER_NOT_FOUND));
         
         final TemplateParams templateParams = documentTemplateCommonParamsProvider.constructCommonTemplateParams(request, signatory);
         

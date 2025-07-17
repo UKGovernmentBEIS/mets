@@ -129,6 +129,14 @@ export const AER_CORSIA_ROUTES: Routes = [
         loadChildren: () =>
           import('./tasks/confidentiality/confidentiality.routes').then((r) => r.AER_CORSIA_CONFIDENTIALITY_ROUTES),
       },
+      {
+        path: 'changes-requested',
+        data: { pageTitle: 'Changes requested by the regulator', breadcrumb: true },
+        loadComponent: () =>
+          import('@aviation/shared/components/aer-changes-requested/aer-changes-requested.component').then(
+            (c) => c.AerChangesRequestedComponent,
+          ),
+      },
     ],
   },
 ];

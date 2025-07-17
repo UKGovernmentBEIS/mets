@@ -1,0 +1,1061 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.2.0/changelog_user_authority.xml"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_add_PERM_INSTALLATION_AUDIT_APPLICATION_SUBMIT_VIEW_TASK_to_regulator_roles" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_AUDIT_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_role
+            where code in ('regulator_admin_team', 'regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+        </sql>
+
+        <rollback>
+            <sql>
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('regulator_admin_team', 'regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+                and rp.permission = 'PERM_INSTALLATION_AUDIT_APPLICATION_SUBMIT_VIEW_TASK'
+                ;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_add_PERM_INSTALLATION_AUDIT_APPLICATION_SUBMIT_EXECUTE_TASK_to_regulator_roles" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_AUDIT_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+        </sql>
+
+        <rollback>
+            <sql>
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+                and rp.permission = 'PERM_INSTALLATION_AUDIT_APPLICATION_SUBMIT_EXECUTE_TASK';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_populate_installation_audit_application_submit_permissions" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_AUDIT_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_AUDIT_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_authority_permission
+                where authority_id in (select au.id
+                    from au_authority au
+                    where au.competent_authority IS NOT NULL)
+                    and permission = 'PERM_INSTALLATION_AUDIT_APPLICATION_SUBMIT_VIEW_TASK';
+
+                delete from au_authority_permission
+                where authority_id in (select au.id
+                    from au_authority au
+                    where au.competent_authority IS NOT NULL)
+                    and permission = 'PERM_INSTALLATION_AUDIT_APPLICATION_SUBMIT_EXECUTE_TASK';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_add_PERM_INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT_VIEW_TASK_to_regulator_roles" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_role
+            where code in ('regulator_admin_team', 'regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+        </sql>
+
+        <rollback>
+            <sql>
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('regulator_admin_team', 'regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+                and rp.permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT_VIEW_TASK'
+                ;
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_add_PERM_INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT_EXECUTE_TASK_to_regulator_roles" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+        </sql>
+
+        <rollback>
+            <sql>
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+                and rp.permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT_EXECUTE_TASK';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_populate_installation_onsite_inspection_application_submit_permissions" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_authority_permission
+                where authority_id in (select au.id
+                 from au_authority au
+                 where au.competent_authority IS NOT NULL)
+                 and permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT_VIEW_TASK';
+
+                delete from au_authority_permission
+                where authority_id in (select au.id
+                 from au_authority au
+                 where au.competent_authority IS NOT NULL)
+                 and permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT_EXECUTE_TASK';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_audit_peer_review_user_authorities" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_AUDIT_PEER_REVIEW_VIEW_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_AUDIT_PEER_REVIEW_VIEW_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_AUDIT_PEER_REVIEW_EXECUTE_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_AUDIT_PEER_REVIEW_EXECUTE_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+                and rp.permission = 'PERM_INSTALLATION_AUDIT_PEER_REVIEW_VIEW_TASK';
+
+                delete from au_authority_permission
+                where authority_id in (select au.id
+                from au_authority au
+                where au.competent_authority IS NOT NULL)
+                and permission = 'PERM_INSTALLATION_AUDIT_PEER_REVIEW_VIEW_TASK';
+
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+                and rp.permission = 'PERM_INSTALLATION_AUDIT_PEER_REVIEW_EXECUTE_TASK';
+
+                delete from au_authority_permission
+                where authority_id in (select au.id
+                from au_authority au
+                where au.competent_authority IS NOT NULL)
+                and permission = 'PERM_INSTALLATION_AUDIT_PEER_REVIEW_EXECUTE_TASK';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_onsite_inspection_peer_review_user_authorities" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_ONSITE_INSPECTION_PEER_REVIEW_VIEW_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_ONSITE_INSPECTION_PEER_REVIEW_VIEW_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_ONSITE_INSPECTION_PEER_REVIEW_EXECUTE_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_ONSITE_INSPECTION_PEER_REVIEW_EXECUTE_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+                and rp.permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_PEER_REVIEW_VIEW_TASK';
+
+                delete from au_authority_permission
+                where authority_id in (select au.id
+                from au_authority au
+                where au.competent_authority IS NOT NULL)
+                and permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_PEER_REVIEW_VIEW_TASK';
+
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+                and rp.permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_PEER_REVIEW_EXECUTE_TASK';
+
+                delete from au_authority_permission
+                where authority_id in (select au.id
+                from au_authority au
+                where au.competent_authority IS NOT NULL)
+                and permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_PEER_REVIEW_EXECUTE_TASK';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_remove_permissions_from_emitter_role_type" author="P35066">
+        <sql>
+        	delete
+            from au_authority_permission ap
+            using au_authority a
+            where a.id = ap.authority_id
+            and a.code = 'emitter_contact';
+
+        	delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code = 'emitter_contact';
+        </sql>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_installation_onsite_inspection_operator_respond_user_authorities" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator');
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator')
+            and rp.permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator'))
+            and permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK';
+
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator')
+            and rp.permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator'))
+            and permission = 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_audit_operator_respond_user_authorities" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator');
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator')
+            and rp.permission = 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator'))
+            and permission = 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK';
+
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator')
+            and rp.permission = 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator'))
+            and permission = 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_aer_corsia_3year_period_offsetting_peer_review_role_permissions" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_VIEW_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert  into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_EXECUTE_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_VIEW_TASK';
+
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_bdr_user_authorities_1" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_BDR_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_BDR_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_BDR_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_BDR_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator');
+        </sql>
+        <rollback>
+              delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator')
+            and rp.permission = 'PERM_BDR_APPLICATION_SUBMIT_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator'))
+            and permission = 'PERM_BDR_APPLICATION_SUBMIT_VIEW_TASK';
+
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator')
+            and rp.permission = 'PERM_BDR_APPLICATION_SUBMIT_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator'))
+            and permission = 'PERM_BDR_APPLICATION_SUBMIT_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_bdr_submit_to_verifier_user_authorities_1" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_BDR_APPLICATION_VERIFICATION_SUBMIT_VIEW_TASK'
+            from au_role
+            where code in('verifier', 'verifier_admin');
+
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, rp.permission
+            from au_authority au
+                 join au_role r on au.code = r.code
+                 join au_role_permission rp on r.id = rp.role_id
+            where r.code in('verifier', 'verifier_admin')
+            and rp.permission = 'PERM_BDR_APPLICATION_VERIFICATION_SUBMIT_VIEW_TASK';
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('verifier', 'verifier_admin')
+            and rp.permission = 'PERM_BDR_APPLICATION_VERIFICATION_SUBMIT_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('verifier', 'verifier_admin'))
+            and permission = 'PERM_BDR_APPLICATION_VERIFICATION_SUBMIT_VIEW_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_bdr_application_regulator_review_submit_view_user_authorities_1" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.competent_authority IS NOT NULL)
+            and permission = 'PERM_BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_bdr_submit_to_verifier_user_authorities_2" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_BDR_APPLICATION_VERIFICATION_SUBMIT_EXECUTE_TASK'
+            from au_role
+            where code in('verifier', 'verifier_admin');
+
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, rp.permission
+            from au_authority au
+                 join au_role r on au.code = r.code
+                 join au_role_permission rp on r.id = rp.role_id
+            where r.code in('verifier', 'verifier_admin')
+            and rp.permission = 'PERM_BDR_APPLICATION_VERIFICATION_SUBMIT_EXECUTE_TASK';
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('verifier', 'verifier_admin')
+            and rp.permission = 'PERM_BDR_APPLICATION_VERIFICATION_SUBMIT_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('verifier', 'verifier_admin'))
+            and permission = 'PERM_BDR_APPLICATION_VERIFICATION_SUBMIT_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_bdr_application_regulator_review_submit_execute_user_authorities_1" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.competent_authority IS NOT NULL)
+            and permission = 'PERM_BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_bdr_amends_submit_user_authorities_1" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_VIEW_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_VIEW_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_EXECUTE_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_EXECUTE_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator');
+        </sql>
+        <rollback>
+              delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator')
+            and rp.permission = 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator'))
+            and permission = 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_VIEW_TASK';
+
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator')
+            and rp.permission = 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator'))
+            and permission = 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_bdr_application_peer_review_user_authorities_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_BDR_APPLICATION_PEER_REVIEW_VIEW_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_BDR_APPLICATION_PEER_REVIEW_VIEW_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_BDR_APPLICATION_PEER_REVIEW_EXECUTE_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_BDR_APPLICATION_PEER_REVIEW_EXECUTE_TASK'
+            from au_authority au
+            where au.competent_authority IS NOT NULL;
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_BDR_APPLICATION_PEER_REVIEW_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.competent_authority IS NOT NULL)
+            and permission = 'PERM_BDR_APPLICATION_PEER_REVIEW_VIEW_TASK';
+
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_BDR_APPLICATION_PEER_REVIEW_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.competent_authority IS NOT NULL)
+            and permission = 'PERM_BDR_APPLICATION_PEER_REVIEW_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_permanent_cessation_user_authorities_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_PERMANENT_CESSATION_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_PERMANENT_CESSATION_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_authority au
+            where au.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_PERMANENT_CESSATION_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_PERMANENT_CESSATION_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_authority au
+            where au.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_PERMANENT_CESSATION_APPLICATION_SUBMIT_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user'))
+            and permission = 'PERM_PERMANENT_CESSATION_APPLICATION_SUBMIT_VIEW_TASK';
+
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_PERMANENT_CESSATION_APPLICATION_SUBMIT_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user'))
+            and permission = 'PERM_PERMANENT_CESSATION_APPLICATION_SUBMIT_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_permanent_cessation_peer_review_user_authorities" author="kourisp@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_PERMANENT_CESSATION_PEER_REVIEW_VIEW_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_PERMANENT_CESSATION_PEER_REVIEW_VIEW_TASK'
+            from au_authority au
+            where au.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_PERMANENT_CESSATION_PEER_REVIEW_EXECUTE_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_PERMANENT_CESSATION_PEER_REVIEW_EXECUTE_TASK'
+            from au_authority au
+            where au.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_PERMANENT_CESSATION_PEER_REVIEW_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user'))
+            and permission = 'PERM_PERMANENT_CESSATION_PEER_REVIEW_VIEW_TASK';
+
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_PERMANENT_CESSATION_PEER_REVIEW_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user'))
+            and permission = 'PERM_PERMANENT_CESSATION_PEER_REVIEW_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_bdr_consultant_submit_amends_submit_user_authorities" author="dridakisc@unisystems.gr">
+        <sql>
+            INSERT INTO au_authority_permission (id, authority_id, "permission")
+            SELECT
+                NEXTVAL('au_authority_permission_seq'),
+                au_auth.id,
+                perms.permission
+            FROM
+                    (SELECT id FROM au_authority WHERE code = 'consultant_agent') AS au_auth
+                        CROSS JOIN
+                UNNEST(ARRAY['PERM_BDR_APPLICATION_SUBMIT_VIEW_TASK', 'PERM_BDR_APPLICATION_SUBMIT_EXECUTE_TASK', 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_VIEW_TASK', 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_EXECUTE_TASK']) as perms(permission)
+                    ON CONFLICT (authority_id, "permission") DO NOTHING;
+
+
+            INSERT INTO au_role_permission (id, role_id, permission)
+            SELECT
+                NEXTVAL('au_role_permission_seq'),
+                au_rol.id,
+                perms.permission
+            FROM
+                    (select id from au_role where code='consultant_agent') AS au_rol
+                        CROSS JOIN
+                UNNEST(ARRAY['PERM_BDR_APPLICATION_SUBMIT_VIEW_TASK', 'PERM_BDR_APPLICATION_SUBMIT_EXECUTE_TASK', 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_VIEW_TASK', 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_EXECUTE_TASK']) as perms(permission)
+                    ON CONFLICT (role_id, "permission") DO NOTHING;
+        </sql>
+        <rollback>
+            delete from au_authority_permission
+            where authority_id in (select id from au_authority where code='consultant_agent')
+            and "permission" in ('PERM_BDR_APPLICATION_SUBMIT_VIEW_TASK', 'PERM_BDR_APPLICATION_SUBMIT_EXECUTE_TASK', 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_VIEW_TASK', 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_EXECUTE_TASK');
+
+            delete from au_role_permission
+            where role_id in (select id from au_role where code='consultant_agent')
+            and "permission" in ('PERM_BDR_APPLICATION_SUBMIT_VIEW_TASK', 'PERM_BDR_APPLICATION_SUBMIT_EXECUTE_TASK', 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_VIEW_TASK', 'PERM_BDR_APPLICATION_AMENDS_SUBMIT_EXECUTE_TASK');
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_inspections_respond_to_followup_actions_user_authorities" author="dridakisc@unisystems.gr">
+        <sql>
+            INSERT INTO au_authority_permission (id, authority_id, "permission")
+            SELECT
+                NEXTVAL('au_authority_permission_seq'),
+                au_auth.id,
+                perms.permission
+            FROM
+                    (SELECT id FROM au_authority WHERE code = 'consultant_agent') AS au_auth
+                        CROSS JOIN
+                UNNEST(ARRAY['PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK', 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK', 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK', 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK']) as perms(permission)
+                    ON CONFLICT (authority_id, "permission") DO NOTHING;
+
+
+            INSERT INTO au_role_permission (id, role_id, permission)
+            SELECT
+                NEXTVAL('au_role_permission_seq'),
+                au_rol.id,
+                perms.permission
+            FROM
+                    (select id from au_role where code='consultant_agent') AS au_rol
+                        CROSS JOIN
+                UNNEST(ARRAY['PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK', 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK', 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK', 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK']) as perms(permission)
+                    ON CONFLICT (role_id, "permission") DO NOTHING;
+        </sql>
+        <rollback>
+            delete from au_authority_permission
+            where authority_id in (select id from au_authority where code='consultant_agent')
+            and "permission" in ('PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK', 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK', 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK', 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK');
+
+            delete from au_role_permission
+            where role_id in (select id from au_role where code='consultant_agent')
+            and "permission" in ('PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK', 'PERM_INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK', 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_VIEW_TASK', 'PERM_INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_EXECUTE_TASK');
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_doe_corsia_user_authorities_1" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_AVIATION_DOE_CORSIA_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_AVIATION_DOE_CORSIA_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_AVIATION_DOE_CORSIA_APPLICATION_SUBMIT_EXECUTE_TASK';
+
+
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+            and rp.permission = 'PERM_AVIATION_DOE_CORSIA_APPLICATION_SUBMIT_VIEW_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_doe_corsia_make_payment_add_permissions_to_operators_1" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_AVIATION_DOE_CORSIA_MAKE_PAYMENT_VIEW_TASK'
+            from au_role
+            where code in('operator', 'operator_admin', 'consultant_agent');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_AVIATION_DOE_CORSIA_MAKE_PAYMENT_EXECUTE_TASK'
+            from au_role
+            where code in('operator', 'operator_admin', 'consultant_agent');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, rp.permission
+            from au_authority au
+                     join au_role r on au.code = r.code
+                     join au_role_permission rp on r.id = rp.role_id
+            where r.code in ('operator', 'operator_admin', 'consultant_agent')
+            and rp.permission = 'PERM_AVIATION_DOE_CORSIA_MAKE_PAYMENT_VIEW_TASK';
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, rp.permission
+            from au_authority au
+                     join au_role r on au.code = r.code
+                     join au_role_permission rp on r.id = rp.role_id
+            where r.code in ('operator', 'operator_admin', 'consultant_agent')
+              and rp.permission = 'PERM_AVIATION_DOE_CORSIA_MAKE_PAYMENT_EXECUTE_TASK';
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_authority_permission ap
+                using
+                au_authority au,
+                au_role r
+                where ap.authority_id = au.id
+                and au.code = r.code
+                and r.code in ('operator', 'operator_admin', 'consultant_agent')
+                and ap.permission = 'PERM_AVIATION_DOE_CORSIA_MAKE_PAYMENT_EXECUTE_TASK';
+
+                delete from au_authority_permission ap
+                using
+                au_authority au,
+                au_role r
+                where ap.authority_id = au.id
+                and au.code = r.code
+                and r.code in ('operator', 'operator_admin', 'consultant_agent')
+                and ap.permission = 'PERM_AVIATION_DOE_CORSIA_MAKE_PAYMENT_VIEW_TASK';
+
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('operator', 'operator_admin', 'consultant_agent')
+                and rp.permission = 'PERM_AVIATION_DOE_CORSIA_MAKE_PAYMENT_EXECUTE_TASK';
+
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('operator', 'operator_admin', 'consultant_agent')
+                and rp.permission = 'PERM_AVIATION_DOE_CORSIA_MAKE_PAYMENT_VIEW_TASK';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_alr_user_authorities_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_ALR_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator', 'consultant_agent');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_ALR_APPLICATION_SUBMIT_VIEW_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator', 'consultant_agent');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_ALR_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_role
+            where code in ('operator_admin', 'operator', 'consultant_agent');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, 'PERM_ALR_APPLICATION_SUBMIT_EXECUTE_TASK'
+            from au_authority au
+            where au.code in ('operator_admin', 'operator', 'consultant_agent');
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator')
+            and rp.permission = 'PERM_ALR_APPLICATION_SUBMIT_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator', 'consultant_agent'))
+            and permission = 'PERM_ALR_APPLICATION_SUBMIT_VIEW_TASK';
+
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('operator_admin', 'operator', 'consultant_agent')
+            and rp.permission = 'PERM_ALR_APPLICATION_SUBMIT_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('operator_admin', 'operator', 'consultant_agent'))
+            and permission = 'PERM_ALR_APPLICATION_SUBMIT_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_doe_corsia_peer_review_add_permissions_to_operators_1" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_AVIATION_DOE_CORSIA_PEER_REVIEW_VIEW_TASK'
+            from au_role
+            where code in ('regulator_admin_team', 'regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_AVIATION_DOE_CORSIA_PEER_REVIEW_EXECUTE_TASK'
+            from au_role
+            where code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user');
+        </sql>
+        <rollback>
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+                and rp.permission = 'PERM_AVIATION_DOE_CORSIA_PEER_REVIEW_EXECUTE_TASK';
+
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('regulator_admin_team', 'regulator_technical_officer', 'regulator_team_leader', 'ca_super_user', 'pmrv_super_user')
+                and rp.permission = 'PERM_AVIATION_DOE_CORSIA_PEER_REVIEW_VIEW_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_alr_submit_to_verifier_user_authorities_1" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_ALR_APPLICATION_VERIFICATION_SUBMIT_VIEW_TASK'
+            from au_role
+            where code in('verifier', 'verifier_admin');
+
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, rp.permission
+            from au_authority au
+                     join au_role r on au.code = r.code
+                     join au_role_permission rp on r.id = rp.role_id
+            where r.code in('verifier', 'verifier_admin')
+              and rp.permission = 'PERM_ALR_APPLICATION_VERIFICATION_SUBMIT_VIEW_TASK';
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('verifier', 'verifier_admin')
+            and rp.permission = 'PERM_ALR_APPLICATION_VERIFICATION_SUBMIT_VIEW_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('verifier', 'verifier_admin'))
+            and permission = 'PERM_ALR_APPLICATION_VERIFICATION_SUBMIT_VIEW_TASK';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_alr_submit_to_verifier_user_authorities_2" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_ALR_APPLICATION_VERIFICATION_SUBMIT_EXECUTE_TASK'
+            from au_role
+            where code in('verifier', 'verifier_admin');
+
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, rp.permission
+            from au_authority au
+                     join au_role r on au.code = r.code
+                     join au_role_permission rp on r.id = rp.role_id
+            where r.code in('verifier', 'verifier_admin')
+              and rp.permission = 'PERM_ALR_APPLICATION_VERIFICATION_SUBMIT_EXECUTE_TASK';
+        </sql>
+        <rollback>
+            delete
+            from au_role_permission rp
+            using au_role r
+            where r.id = rp.role_id
+            and r.code in ('verifier', 'verifier_admin')
+            and rp.permission = 'PERM_ALR_APPLICATION_VERIFICATION_SUBMIT_EXECUTE_TASK';
+
+            delete from au_authority_permission
+            where authority_id in (select au.id
+            from au_authority au
+            where au.code in ('verifier', 'verifier_admin'))
+            and permission = 'PERM_ALR_APPLICATION_VERIFICATION_SUBMIT_EXECUTE_TASK';
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

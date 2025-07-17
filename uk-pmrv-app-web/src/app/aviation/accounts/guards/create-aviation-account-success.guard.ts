@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, UrlTree } from '@angular/router';
+import { Router, UrlTree } from '@angular/router';
 
 import { combineLatest, map, Observable, take } from 'rxjs';
 
 import { AviationAccountsStore, selectIsInitiallySubmitted, selectIsSubmitted, selectNewAccount } from '../store';
 
 @Injectable()
-export class CreateAviationAccountSuccessGuard implements CanActivate {
-  constructor(private readonly store: AviationAccountsStore, private readonly router: Router) {}
+export class CreateAviationAccountSuccessGuard {
+  constructor(
+    private readonly store: AviationAccountsStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(): Observable<boolean | UrlTree> {
     return combineLatest([

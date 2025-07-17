@@ -19,31 +19,30 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
-
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.notification.template.domain.dto.DocumentTemplateDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.DocumentTemplateSearchCriteria;
 import uk.gov.pmrv.api.notification.template.domain.dto.TemplateInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.TemplateSearchResults;
 import uk.gov.pmrv.api.notification.template.service.DocumentTemplateQueryService;
 import uk.gov.pmrv.api.notification.template.service.DocumentTemplateUpdateService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -56,8 +55,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 
 @ExtendWith(MockitoExtension.class)
 class DocumentTemplateControllerTest {
@@ -74,20 +73,20 @@ class DocumentTemplateControllerTest {
     private DocumentTemplateUpdateService documentTemplateUpdateService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
         AuthorizedRoleAspect
             authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
-        AuthorizedAspect authorizedAspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect authorizedAspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(documentTemplateController);
         aspectJProxyFactory.addAspect(authorizedRoleAspect);
@@ -104,7 +103,7 @@ class DocumentTemplateControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(documentTemplateController)
             .addFilters(new FilterChainProxy(Collections.emptyList()))
             .setControllerAdvice(new ExceptionControllerAdvice())
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .setConversionService(conversionService)
             .build();
     }
@@ -113,10 +112,10 @@ class DocumentTemplateControllerTest {
     void getCurrentUserDocumentTemplates() throws Exception {
         AccountType accountType = AccountType.AVIATION;
         CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
-        PmrvAuthority pmrvAuthority = PmrvAuthority.builder().competentAuthority(ca).build();
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppAuthority pmrvAuthority = AppAuthority.builder().competentAuthority(ca).build();
+        AppUser appUser = AppUser.builder()
             .userId("userId")
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .authorities(List.of(pmrvAuthority))
             .build();
         DocumentTemplateSearchCriteria searchCriteria = DocumentTemplateSearchCriteria.builder()
@@ -135,7 +134,7 @@ class DocumentTemplateControllerTest {
             .total(2L)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(documentTemplateQueryService.getDocumentTemplatesBySearchCriteria(searchCriteria)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -155,7 +154,7 @@ class DocumentTemplateControllerTest {
 
     @Test
     void getCurrentUserDocumentTemplates_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("userId")
             .roleType(OPERATOR)
             .build();
@@ -164,10 +163,10 @@ class DocumentTemplateControllerTest {
             .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{REGULATOR});
+            .evaluate(appUser, new String[]{REGULATOR});
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/v1.0/aviation/document-templates")
@@ -205,15 +204,15 @@ class DocumentTemplateControllerTest {
     @Test
     void getDocumentTemplateById_forbidden() throws Exception {
         long documentTemplateId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("userId")
             .roleType(OPERATOR)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "getDocumentTemplateById", Long.toString(documentTemplateId));
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "getDocumentTemplateById", Long.toString(documentTemplateId), null, null);
 
         mockMvc.perform(MockMvcRequestBuilders
             .get("/v1.0/document-templates/" + documentTemplateId)
@@ -227,7 +226,7 @@ class DocumentTemplateControllerTest {
     void updateDocumentTemplate() throws Exception {
         Long documentTemplateId = 1L;
         String userId = "userId";
-        PmrvUser authUser = PmrvUser.builder().userId(userId).roleType(RoleType.REGULATOR).build();
+        AppUser authUser = AppUser.builder().userId(userId).roleType(RoleTypeConstants.REGULATOR).build();
         String originalFilename = "filename.txt";
         String contentType = "text/plain";
         byte[] fileContent = "content".getBytes();
@@ -252,15 +251,15 @@ class DocumentTemplateControllerTest {
     void updateDocumentTemplate_forbidden() throws Exception {
         Long documentTemplateId = 1L;
         String userId = "userId";
-        PmrvUser authUser = PmrvUser.builder().userId(userId).roleType(RoleType.REGULATOR).build();
+        AppUser authUser = AppUser.builder().userId(userId).roleType(RoleTypeConstants.REGULATOR).build();
         String originalFilename = "filename.txt";
         String contentType = "text/plain";
         byte[] fileContent = "content".getBytes();
         MockMultipartFile file = new MockMultipartFile("file", originalFilename, contentType, fileContent);
         
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
-        doThrow(new BusinessException(ErrorCode.FORBIDDEN)).when(pmrvUserAuthorizationService).authorize(authUser,
-                "updateDocumentTemplate", Long.toString(documentTemplateId));
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN)).when(appUserAuthorizationService).authorize(authUser,
+                "updateDocumentTemplate", Long.toString(documentTemplateId), null, null);
         
         mockMvc.perform(MockMvcRequestBuilders.multipart("/v1.0/document-templates/" + documentTemplateId)
                 .file(file)).andExpect(status().isForbidden());
@@ -272,7 +271,7 @@ class DocumentTemplateControllerTest {
     @Test
     @DisplayName("Should throw BAD REQUEST (400) when no attachment is provided")
     void updateDocumentTemplate_noDocumentTemplateFileProvided() throws Exception {
-        PmrvUser authUser = PmrvUser.builder().userId("userId").roleType(RoleType.REGULATOR).build();
+        AppUser authUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.REGULATOR).build();
         long documentTemplateId = 1L;
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);

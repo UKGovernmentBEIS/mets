@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,9 +11,11 @@
  */
 import { AviationAerAircraftData } from './aviationAerAircraftData';
 import { AviationAerDataGaps } from './aviationAerDataGaps';
-import { AviationAerEmissionsMonitoringApproach } from './aviationAerEmissionsMonitoringApproach';
+import { AviationAerFuelMonitoringApproach } from './aviationAerFuelMonitoringApproach';
 import { AviationAerMonitoringPlanChanges } from './aviationAerMonitoringPlanChanges';
 import { AviationAerSaf } from './aviationAerSaf';
+import { AviationAerSmallEmittersMonitoringApproach } from './aviationAerSmallEmittersMonitoringApproach';
+import { AviationAerSupportFacilityMonitoringApproach } from './aviationAerSupportFacilityMonitoringApproach';
 import { AviationAerTotalEmissionsConfidentiality } from './aviationAerTotalEmissionsConfidentiality';
 import { AviationAerUkEtsAggregatedEmissionsData } from './aviationAerUkEtsAggregatedEmissionsData';
 import { AviationOperatorDetails } from './aviationOperatorDetails';
@@ -23,7 +25,10 @@ export interface AviationAerUkEts {
   additionalDocuments: EmpAdditionalDocuments;
   operatorDetails: AviationOperatorDetails;
   aerMonitoringPlanChanges: AviationAerMonitoringPlanChanges;
-  monitoringApproach: AviationAerEmissionsMonitoringApproach;
+  monitoringApproach:
+    | AviationAerFuelMonitoringApproach
+    | AviationAerSmallEmittersMonitoringApproach
+    | AviationAerSupportFacilityMonitoringApproach;
   aggregatedEmissionsData: AviationAerUkEtsAggregatedEmissionsData;
   dataGaps?: AviationAerDataGaps;
   saf: AviationAerSaf;

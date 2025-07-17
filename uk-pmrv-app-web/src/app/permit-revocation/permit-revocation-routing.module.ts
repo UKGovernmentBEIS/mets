@@ -178,7 +178,7 @@ const taskRoutes: Routes = [
         data: {
           pageTitle: 'Do you need to charge the operator a fee?',
           keys: ['feeCharged', 'feeDate', 'feeDetails'],
-          backlink: 'surrender-allowances',
+          backlink: '../surrender-allowances',
         },
         canActivate: [WizardStepsGuard],
         canDeactivate: [PendingRequestGuard],
@@ -238,6 +238,12 @@ const taskRoutes: Routes = [
         path: '',
         data: { pageTitle: 'Withdraw permit revocation' },
         component: WaitForAppealTasklistComponent,
+      },
+      {
+        path: 'change-assignee',
+        canActivate: [TaskGuard],
+        loadChildren: () =>
+          import('../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'reason',

@@ -20,21 +20,6 @@ describe('DecisionComponent', () => {
   let store: CommonTasksStore;
   let page: Page;
 
-  const mockReviewDecision = {
-    type: 'ACCEPTED',
-    details: {
-      officialNotice: 'officialNotice',
-      notes: 'some notes',
-      followUp: {
-        followUpResponseRequired: false,
-      },
-    },
-  };
-
-  const tasksService: MockType<TasksService> = {
-    processRequestTaskAction: jest.fn().mockReturnValue(of(null)),
-  };
-
   class Page extends BasePage<DecisionComponent> {
     get errorSummary() {
       return this.query<HTMLDivElement>('.govuk-error-summary');
@@ -78,94 +63,223 @@ describe('DecisionComponent', () => {
     }
   }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      providers: [KeycloakService, { provide: TasksService, useValue: tasksService }],
-      imports: [RouterTestingModule, PermitNotificationModule, SharedModule, TaskSharedModule],
-    }).compileComponents();
-  });
-
-  beforeEach(() => {
-    store = TestBed.inject(CommonTasksStore);
-    store.setState({
-      ...store.getState(),
-      storeInitialized: true,
-      isEditable: true,
-      requestTaskItem: {
-        requestTask: {
-          id: 1,
-          type: 'PERMIT_NOTIFICATION_APPLICATION_REVIEW',
-          payload: {
-            payloadType: 'PERMIT_NOTIFICATION_APPLICATION_REVIEW_PAYLOAD',
-            permitNotification: {
-              type: 'OTHER_FACTOR',
-              description: 'sdfsd',
-              reportingType: 'RENOUNCE_FREE_ALLOCATIONS',
-            } as OtherFactor,
-            reviewDecision: mockReviewDecision,
-          } as PermitNotificationApplicationReviewRequestTaskPayload,
+  describe('for the old notification types decisions', () => {
+    const mockReviewDecision = {
+      type: 'ACCEPTED',
+      details: {
+        officialNotice: 'officialNotice',
+        notes: 'some notes',
+        followUp: {
+          followUpResponseRequired: false,
         },
       },
+    };
+
+    const tasksService: MockType<TasksService> = {
+      processRequestTaskAction: jest.fn().mockReturnValue(of(null)),
+    };
+
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        providers: [KeycloakService, { provide: TasksService, useValue: tasksService }],
+        imports: [RouterTestingModule, PermitNotificationModule, SharedModule, TaskSharedModule],
+      }).compileComponents();
     });
 
-    fixture = TestBed.createComponent(DecisionComponent);
-    component = fixture.componentInstance;
-    page = new Page(fixture);
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should show summary details', () => {
-    expect(page.summaryDetails).toBeTruthy();
-  });
-
-  it('should show decision summary when form is submitted', () => {
-    expect(page.decisionSummary).toEqual([
-      ['Decision status', 'Accepted'],
-      ['Official Notice text', 'officialNotice'],
-      ['Is an operator follow up required', 'No'],
-      ['Notes', 'some notes'],
-    ]);
-  });
-
-  it('should update and submit form decision', () => {
-    let officialNotice = '';
-
-    page.changeLink.click();
-    fixture.detectChanges();
-
-    expect(page.acceptDecisionOption.checked).toBe(true);
-    expect(page.rejectDecisionOption.checked).toBe(false);
-    expect(page.officialNotice).toEqual('officialNotice');
-
-    page.officialNotice = officialNotice;
-    page.submitButton.click();
-    fixture.detectChanges();
-
-    expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(0);
-    expect(page.errorSummary).toBeTruthy();
-
-    officialNotice = 'new officialNotice';
-
-    page.officialNotice = officialNotice;
-    page.submitButton.click();
-    fixture.detectChanges();
-
-    expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
-    expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith({
-      requestTaskActionType: 'PERMIT_NOTIFICATION_SAVE_REVIEW_GROUP_DECISION',
-      requestTaskId: 1,
-      requestTaskActionPayload: {
-        payloadType: 'PERMIT_NOTIFICATION_SAVE_REVIEW_GROUP_DECISION_PAYLOAD',
-        reviewDecision: {
-          ...mockReviewDecision,
-          details: { ...mockReviewDecision.details, officialNotice: officialNotice },
+    beforeEach(() => {
+      store = TestBed.inject(CommonTasksStore);
+      store.setState({
+        ...store.getState(),
+        storeInitialized: true,
+        isEditable: true,
+        requestTaskItem: {
+          requestTask: {
+            id: 1,
+            type: 'PERMIT_NOTIFICATION_APPLICATION_REVIEW',
+            payload: {
+              payloadType: 'PERMIT_NOTIFICATION_APPLICATION_REVIEW_PAYLOAD',
+              permitNotification: {
+                type: 'OTHER_FACTOR',
+                description: 'sdfsd',
+                reportingType: 'RENOUNCE_FREE_ALLOCATIONS',
+              } as OtherFactor,
+              reviewDecision: mockReviewDecision,
+            } as PermitNotificationApplicationReviewRequestTaskPayload,
+          },
         },
-        reviewDeterminationCompleted: true,
+      });
+
+      fixture = TestBed.createComponent(DecisionComponent);
+      component = fixture.componentInstance;
+      page = new Page(fixture);
+      fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should show summary details', () => {
+      expect(page.summaryDetails).toBeTruthy();
+    });
+
+    it('should show decision summary when form is submitted', () => {
+      expect(page.decisionSummary).toEqual([
+        ['Decision status', 'Accepted'],
+        ['Official Notice text', 'officialNotice'],
+        ['Is an operator follow up required', 'No'],
+        ['Notes', 'some notes'],
+      ]);
+    });
+
+    it('should update and submit form decision', () => {
+      let officialNotice = '';
+
+      page.changeLink.click();
+      fixture.detectChanges();
+
+      expect(page.acceptDecisionOption.checked).toBe(true);
+      expect(page.rejectDecisionOption.checked).toBe(false);
+      expect(page.officialNotice).toEqual('officialNotice');
+
+      page.officialNotice = officialNotice;
+      page.submitButton.click();
+      fixture.detectChanges();
+
+      expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(0);
+      expect(page.errorSummary).toBeTruthy();
+
+      officialNotice = 'new officialNotice';
+
+      page.officialNotice = officialNotice;
+      page.submitButton.click();
+      fixture.detectChanges();
+
+      expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
+      expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith({
+        requestTaskActionType: 'PERMIT_NOTIFICATION_SAVE_REVIEW_GROUP_DECISION',
+        requestTaskId: 1,
+        requestTaskActionPayload: {
+          payloadType: 'PERMIT_NOTIFICATION_SAVE_REVIEW_GROUP_DECISION_PAYLOAD',
+          reviewDecision: {
+            ...mockReviewDecision,
+            details: { ...mockReviewDecision.details, officialNotice: officialNotice },
+          },
+          reviewDeterminationCompleted: true,
+        },
+      });
+    });
+  });
+
+  describe('for the new enchanced and permanent cessation decisions', () => {
+    const mockReviewDecision = {
+      type: 'PERMANENT_CESSATION',
+      details: {
+        officialNotice: 'officialNotice',
+        notes: 'some notes',
+        followUp: {
+          followUpResponseRequired: false,
+        },
       },
+    };
+
+    const tasksService: MockType<TasksService> = {
+      processRequestTaskAction: jest.fn().mockReturnValue(of(null)),
+    };
+
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        providers: [KeycloakService, { provide: TasksService, useValue: tasksService }],
+        imports: [RouterTestingModule, PermitNotificationModule, SharedModule, TaskSharedModule],
+      }).compileComponents();
+    });
+
+    beforeEach(() => {
+      store = TestBed.inject(CommonTasksStore);
+      store.setState({
+        ...store.getState(),
+        storeInitialized: true,
+        isEditable: true,
+        requestTaskItem: {
+          requestTask: {
+            id: 1,
+            type: 'PERMIT_NOTIFICATION_APPLICATION_REVIEW',
+            payload: {
+              payloadType: 'PERMIT_NOTIFICATION_APPLICATION_REVIEW_PAYLOAD',
+              permitNotification: {
+                type: 'CESSATION',
+                description: 'sdfsd',
+                reportingType: 'RENOUNCE_FREE_ALLOCATIONS',
+              } as OtherFactor,
+              reviewDecision: mockReviewDecision,
+            } as PermitNotificationApplicationReviewRequestTaskPayload,
+          },
+        },
+      });
+
+      fixture = TestBed.createComponent(DecisionComponent);
+      component = fixture.componentInstance;
+      page = new Page(fixture);
+      fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should show summary details', () => {
+      expect(page.summaryDetails).toBeTruthy();
+    });
+
+    it('should show decision summary when form is submitted', () => {
+      expect(page.decisionSummary).toEqual([
+        ['Decision status', 'Permanent cessation'],
+        ['Official Notice text', 'officialNotice'],
+        ['Is an operator follow up required', 'No'],
+        ['Notes', 'some notes'],
+      ]);
+    });
+
+    it('should update and submit form decision', () => {
+      let officialNotice = '';
+
+      page.changeLink.click();
+      fixture.detectChanges();
+
+      page.acceptDecisionOption.click();
+      fixture.detectChanges();
+
+      expect(page.acceptDecisionOption.checked).toBe(true);
+      expect(page.rejectDecisionOption.checked).toBe(false);
+
+      expect(page.officialNotice).toEqual('officialNotice');
+
+      page.officialNotice = '';
+      page.submitButton.click();
+      fixture.detectChanges();
+
+      expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(0);
+      expect(page.errorSummary).toBeTruthy();
+
+      officialNotice = 'new officialNotice';
+
+      page.officialNotice = officialNotice;
+      page.submitButton.click();
+      fixture.detectChanges();
+
+      expect(tasksService.processRequestTaskAction).toHaveBeenCalledTimes(1);
+      expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith({
+        requestTaskActionType: 'PERMIT_NOTIFICATION_SAVE_REVIEW_GROUP_DECISION',
+        requestTaskId: 1,
+        requestTaskActionPayload: {
+          payloadType: 'PERMIT_NOTIFICATION_SAVE_REVIEW_GROUP_DECISION_PAYLOAD',
+          reviewDecision: {
+            ...mockReviewDecision,
+            details: { ...mockReviewDecision.details, officialNotice: officialNotice },
+          },
+          reviewDeterminationCompleted: true,
+        },
+      });
     });
   });
 });

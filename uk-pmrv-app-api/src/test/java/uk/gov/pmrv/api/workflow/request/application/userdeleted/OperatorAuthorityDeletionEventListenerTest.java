@@ -8,7 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
+import uk.gov.netz.api.authorization.operator.event.OperatorAuthorityDeletionEvent;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.operator.OperatorRequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.flow.notificationsystemmessage.service.SystemMessageNotificationRequestService;
 
@@ -28,7 +29,7 @@ class OperatorAuthorityDeletionEventListenerTest {
     void onOperatorUserDeletionEvent() throws BusinessCheckedException {
         String userId = "userId";
         Long accountId = 1L;
-        uk.gov.pmrv.api.authorization.operator.event.OperatorAuthorityDeletionEvent deletionEvent = uk.gov.pmrv.api.authorization.operator.event.OperatorAuthorityDeletionEvent.builder()
+        OperatorAuthorityDeletionEvent deletionEvent = OperatorAuthorityDeletionEvent.builder()
             .accountId(accountId)
             .userId(userId)
             .build();

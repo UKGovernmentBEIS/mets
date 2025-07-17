@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule } from '@angular/router';
 
-import { CompletedComponent } from './completed/completed.component';
+import { NotificationCessationCompletedActionComponent } from './cessation-completed/cessation-completed.component';
+import { NotificationCompletedActionComponent } from './completed/completed.component';
 import { FollowUpResponseComponent } from './follow-up-response/follow-up-response.component';
 import { FollowUpReturnForAmendsComponent } from './follow-up-return-for-amends/follow-up-return-for-amends.component';
 import { PeerReviewDecisionComponent } from './peer-review-decision/peer-review-decision.component';
@@ -42,8 +43,13 @@ const routes: Route[] = [
       },
       {
         path: 'completed',
-        component: CompletedComponent,
+        component: NotificationCompletedActionComponent,
         data: { pageTitle: 'Notification completed' },
+      },
+      {
+        path: 'cessation-completed',
+        component: NotificationCessationCompletedActionComponent,
+        data: { pageTitle: 'Regulator review completed' },
       },
     ],
   },

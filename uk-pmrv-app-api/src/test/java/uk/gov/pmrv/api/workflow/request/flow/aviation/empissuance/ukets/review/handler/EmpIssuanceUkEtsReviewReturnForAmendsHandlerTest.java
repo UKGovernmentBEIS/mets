@@ -20,9 +20,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -73,7 +73,7 @@ class EmpIssuanceUkEtsReviewReturnForAmendsHandlerTest {
         long taskId = 1L;
         RequestTaskActionEmptyPayload emptyPayload = RequestTaskActionEmptyPayload.builder().payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD).build();
         String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        AppUser appUser = AppUser.builder().userId(userId).build();
 
         String processTaskId = "processTaskId";
 
@@ -119,12 +119,12 @@ class EmpIssuanceUkEtsReviewReturnForAmendsHandlerTest {
         when(requestTaskService.findTaskById(taskId)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(taskId, RequestTaskActionType.EMP_ISSUANCE_UKETS_REVIEW_RETURN_FOR_AMENDS, pmrvUser, emptyPayload);
+        handler.process(taskId, RequestTaskActionType.EMP_ISSUANCE_UKETS_REVIEW_RETURN_FOR_AMENDS, appUser, emptyPayload);
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(taskId);
         verify(validatorService, times(1)).validate(payload);
-        verify(service, times(1)).saveRequestReturnForAmends(requestTask, pmrvUser);
+        verify(service, times(1)).saveRequestReturnForAmends(requestTask, appUser);
         verify(requestService, times(1))
             .addActionToRequest(newRequest, actionPayload, RequestActionType.EMP_ISSUANCE_UKETS_APPLICATION_RETURNED_FOR_AMENDS, userId);
         verify(workflowService, times(1))
@@ -136,7 +136,7 @@ class EmpIssuanceUkEtsReviewReturnForAmendsHandlerTest {
         long taskId = 1L;
         RequestTaskActionEmptyPayload emptyPayload = RequestTaskActionEmptyPayload.builder().payloadType(RequestTaskActionPayloadType.EMPTY_PAYLOAD).build();
         String userId = "userId";
-        PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        AppUser appUser = AppUser.builder().userId(userId).build();
 
         String processTaskId = "processTaskId";
 
@@ -157,15 +157,15 @@ class EmpIssuanceUkEtsReviewReturnForAmendsHandlerTest {
             .build();
 
         when(requestTaskService.findTaskById(taskId)).thenReturn(requestTask);
-        doThrow(new BusinessException((ErrorCode.INVALID_EMP_REVIEW))).when(validatorService)
+        doThrow(new BusinessException((MetsErrorCode.INVALID_EMP_REVIEW))).when(validatorService)
             .validate(payload);
 
         // Invoke
         BusinessException businessException = assertThrows(BusinessException.class,
-            () -> handler.process(taskId, RequestTaskActionType.EMP_ISSUANCE_UKETS_REVIEW_RETURN_FOR_AMENDS, pmrvUser, emptyPayload));
+            () -> handler.process(taskId, RequestTaskActionType.EMP_ISSUANCE_UKETS_REVIEW_RETURN_FOR_AMENDS, appUser, emptyPayload));
 
         // Verify
-        assertEquals(ErrorCode.INVALID_EMP_REVIEW, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_EMP_REVIEW, businessException.getErrorCode());
         verify(requestTaskService, times(1)).findTaskById(taskId);
         verify(validatorService, times(1)).validate(payload);
         verify(service, never()).saveRequestReturnForAmends(any(), any());

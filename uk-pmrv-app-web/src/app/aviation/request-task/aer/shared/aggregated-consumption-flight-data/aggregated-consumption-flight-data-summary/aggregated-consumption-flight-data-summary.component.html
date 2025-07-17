@@ -13,6 +13,7 @@
     <app-flight-data-table
       [headingText]="'File uploaded'"
       [emissionDataDetails]="vm.data.aggregatedEmissionDataDetails"
+      [isCorsia]="vm.isCorsia"
     ></app-flight-data-table>
     <div class="govuk-button-group">
       <button (click)="onSubmit()" appPendingButton govukButton type="button" *ngIf="!vm.hideSubmit">

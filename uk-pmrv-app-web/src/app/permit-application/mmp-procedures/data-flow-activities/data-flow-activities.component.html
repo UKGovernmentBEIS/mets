@@ -1,0 +1,29 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true"
+>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    caption="Monitoring Methodology Plan"
+    heading="Data flow activities"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <div class="govuk-!-width-two-thirds">
+      <p class="govuk-body">
+        Provide a reference to the written procedure of the data flow activities in line with article 11(2), including
+        diagrams where appropriate for clarification.
+      </p>
+
+      <app-mmp-procedure-form></app-mmp-procedure-form>
+    </div>
+  </app-wizard-step>
+
+  <app-list-return-link
+    reviewGroupTitle="Monitoring methodology"
+    reviewGroupUrl="monitoring-methodology-plan"
+    [innerRoute]="true"
+  ></app-list-return-link>
+</app-permit-task>

@@ -20,14 +20,15 @@ import { emissionPointFormProvider } from './emission-point-details-form.provide
           ? [
               {
                 text: 'Fuels and equipment inventory',
-                link: ['fuels']
-              }
+                link: ['fuels'],
+              },
             ]
           : [{ text: 'Emission points', link: ['emission-points'] }]
-      "
-    >
-      <app-emission-point-details-template (formSubmit)="onSubmit()" [form]="form" [isEditing]="isEditing$ | async">
-      </app-emission-point-details-template>
+      ">
+      <app-emission-point-details-template
+        (formSubmit)="onSubmit()"
+        [form]="form"
+        [isEditing]="isEditing$ | async"></app-emission-point-details-template>
     </app-permit-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

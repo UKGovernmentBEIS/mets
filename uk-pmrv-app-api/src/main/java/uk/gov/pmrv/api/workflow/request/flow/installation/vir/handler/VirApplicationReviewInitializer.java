@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.vir.handler;
 
 import org.springframework.stereotype.Service;
-
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;

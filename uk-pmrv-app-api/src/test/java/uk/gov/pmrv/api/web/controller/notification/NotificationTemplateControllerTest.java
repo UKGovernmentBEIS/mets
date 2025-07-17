@@ -16,18 +16,21 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.notification.template.domain.dto.NotificationTemplateDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.NotificationTemplateSearchCriteria;
 import uk.gov.pmrv.api.notification.template.domain.dto.NotificationTemplateUpdateDTO;
@@ -35,12 +38,8 @@ import uk.gov.pmrv.api.notification.template.domain.dto.TemplateInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.TemplateSearchResults;
 import uk.gov.pmrv.api.notification.template.service.NotificationTemplateQueryService;
 import uk.gov.pmrv.api.notification.template.service.NotificationTemplateUpdateService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -53,8 +52,8 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 
 @ExtendWith(MockitoExtension.class)
 class NotificationTemplateControllerTest {
@@ -71,13 +70,13 @@ class NotificationTemplateControllerTest {
     private NotificationTemplateUpdateService notificationTemplateUpdateService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     private ObjectMapper objectMapper;
 
@@ -86,7 +85,7 @@ class NotificationTemplateControllerTest {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
         AuthorizedRoleAspect
             authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(notificationTemplateController);
         aspectJProxyFactory.addAspect(authorizedRoleAspect);
@@ -103,7 +102,7 @@ class NotificationTemplateControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(notificationTemplateController)
             .addFilters(new FilterChainProxy(Collections.emptyList()))
             .setControllerAdvice(new ExceptionControllerAdvice())
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .setConversionService(conversionService)
             .build();
         objectMapper = new ObjectMapper();
@@ -113,17 +112,17 @@ class NotificationTemplateControllerTest {
     void getCurrentUserNotificationTemplates() throws Exception {
         AccountType accountType = AccountType.INSTALLATION;
         CompetentAuthorityEnum ca = CompetentAuthorityEnum.ENGLAND;
-        PmrvAuthority pmrvAuthority = PmrvAuthority.builder().competentAuthority(ca).build();
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppAuthority pmrvAuthority = AppAuthority.builder().competentAuthority(ca).build();
+        AppUser appUser = AppUser.builder()
             .userId("userId")
-            .roleType(RoleType.REGULATOR)
+            .roleType(RoleTypeConstants.REGULATOR)
             .authorities(List.of(pmrvAuthority))
             .build();
         NotificationTemplateSearchCriteria searchCriteria = NotificationTemplateSearchCriteria.builder()
             .competentAuthority(ca)
             .accountType(accountType)
             .term("term")
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
             .build();
 
@@ -136,13 +135,13 @@ class NotificationTemplateControllerTest {
             .total(2L)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(notificationTemplateQueryService.getNotificationTemplatesBySearchCriteria(searchCriteria)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/v1.0/installation/notification-templates")
                 .param("term", searchCriteria.getTerm())
-                .param("role", searchCriteria.getRoleType().name())
+                .param("role", searchCriteria.getRoleType())
                 .param("page", String.valueOf(searchCriteria.getPaging().getPageNumber()))
                 .param("size", String.valueOf(searchCriteria.getPaging().getPageSize()))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -159,7 +158,7 @@ class NotificationTemplateControllerTest {
     @Test
     void getCurrentUserNotificationTemplates_forbidden() throws Exception {
         AccountType accountType = AccountType.INSTALLATION;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("userId")
             .roleType(OPERATOR)
             .build();
@@ -167,19 +166,19 @@ class NotificationTemplateControllerTest {
             .competentAuthority(CompetentAuthorityEnum.WALES)
             .accountType(accountType)
             .term("term")
-            .roleType(RoleType.OPERATOR)
+            .roleType(RoleTypeConstants.OPERATOR)
             .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{REGULATOR});
+            .evaluate(appUser, new String[]{REGULATOR});
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/v1.0/installation/notification-templates")
                 .param("term", searchCriteria.getTerm())
-                .param("role", searchCriteria.getRoleType().name())
+                .param("role", searchCriteria.getRoleType())
                 .param("page", String.valueOf(searchCriteria.getPaging().getPageNumber()))
                 .param("size", String.valueOf(searchCriteria.getPaging().getPageSize()))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -213,15 +212,15 @@ class NotificationTemplateControllerTest {
     @Test
     void getNotificationTemplateById_forbidden() throws Exception {
         long notificationTemplateId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("userId")
             .roleType(OPERATOR)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "getNotificationTemplateById", Long.toString(notificationTemplateId));
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "getNotificationTemplateById", Long.toString(notificationTemplateId), null, null);
 
         mockMvc.perform(MockMvcRequestBuilders
             .get("/v1.0/notification-templates/" + notificationTemplateId)
@@ -253,7 +252,7 @@ class NotificationTemplateControllerTest {
     @Test
     void updateNotificationTemplate_forbidden() throws Exception {
         long notificationTemplateId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder()
+        AppUser appUser = AppUser.builder()
             .userId("userId")
             .roleType(OPERATOR)
             .build();
@@ -262,10 +261,10 @@ class NotificationTemplateControllerTest {
             .text("text")
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "updateNotificationTemplate", "1");
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "updateNotificationTemplate", "1", null, null);
 
         mockMvc.perform(
             MockMvcRequestBuilders

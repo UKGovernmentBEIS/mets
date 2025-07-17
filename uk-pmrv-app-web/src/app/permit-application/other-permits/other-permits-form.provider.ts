@@ -1,10 +1,11 @@
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
+import { atLeastOneRequiredValidator } from '@shared-user/utils/validators';
+
 import { GovukValidators } from 'govuk-components';
 
 import { EnvPermitOrLicence } from 'pmrv-api';
 
-import { atLeastOneRequiredValidator } from '../../shared-user/utils/validators';
 import { PERMIT_TASK_FORM } from '../shared/permit-task-form.token';
 import { PermitApplicationState } from '../store/permit-application.state';
 import { PermitApplicationStore } from '../store/permit-application.store';

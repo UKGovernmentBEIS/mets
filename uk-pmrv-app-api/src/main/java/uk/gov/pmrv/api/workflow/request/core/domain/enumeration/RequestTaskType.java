@@ -95,7 +95,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_ISSUANCE_WAIT_FOR_AMENDS(true, RequestType.PERMIT_ISSUANCE, RequestExpirationType.APPLICATION_REVIEW){
+    PERMIT_ISSUANCE_WAIT_FOR_AMENDS(true, RequestType.PERMIT_ISSUANCE, RequestExpirationType.APPLICATION_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -107,7 +107,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT(true, RequestType.PERMIT_ISSUANCE){
+    PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT(true, RequestType.PERMIT_ISSUANCE) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -117,7 +117,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_ISSUANCE, RequestExpirationType.APPLICATION_REVIEW) {
+    PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_ISSUANCE, RequestExpirationType.APPLICATION_REVIEW, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -169,21 +169,21 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_ISSUANCE_MAKE_PAYMENT(false, RequestType.PERMIT_ISSUANCE) {
+    PERMIT_ISSUANCE_MAKE_PAYMENT(true, RequestType.PERMIT_ISSUANCE, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    PERMIT_ISSUANCE_TRACK_PAYMENT(false, RequestType.PERMIT_ISSUANCE) {
+    PERMIT_ISSUANCE_TRACK_PAYMENT(true, RequestType.PERMIT_ISSUANCE, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    PERMIT_ISSUANCE_CONFIRM_PAYMENT(false, RequestType.PERMIT_ISSUANCE) {
+    PERMIT_ISSUANCE_CONFIRM_PAYMENT(true, RequestType.PERMIT_ISSUANCE, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
@@ -226,7 +226,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_SURRENDER_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_SURRENDER, RequestExpirationType.APPLICATION_REVIEW) {
+    PERMIT_SURRENDER_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_SURRENDER, RequestExpirationType.APPLICATION_REVIEW, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -288,21 +288,21 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_SURRENDER_MAKE_PAYMENT(false, RequestType.PERMIT_SURRENDER) {
+    PERMIT_SURRENDER_MAKE_PAYMENT(true, RequestType.PERMIT_SURRENDER, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    PERMIT_SURRENDER_TRACK_PAYMENT(false, RequestType.PERMIT_SURRENDER) {
+    PERMIT_SURRENDER_TRACK_PAYMENT(true, RequestType.PERMIT_SURRENDER, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    PERMIT_SURRENDER_CONFIRM_PAYMENT(false, RequestType.PERMIT_SURRENDER) {
+    PERMIT_SURRENDER_CONFIRM_PAYMENT(true, RequestType.PERMIT_SURRENDER, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
@@ -322,7 +322,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_REVOCATION_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_REVOCATION) {
+    PERMIT_REVOCATION_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_REVOCATION, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(RequestTaskActionType.PERMIT_REVOCATION_SUBMIT_PEER_REVIEW_DECISION);
@@ -336,7 +336,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_REVOCATION_WAIT_FOR_APPEAL(true, RequestType.PERMIT_REVOCATION){
+    PERMIT_REVOCATION_WAIT_FOR_APPEAL(true, RequestType.PERMIT_REVOCATION) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(RequestTaskActionType.PERMIT_REVOCATION_WITHDRAW_APPLICATION,
@@ -362,14 +362,14 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_REVOCATION_TRACK_PAYMENT(true, RequestType.PERMIT_REVOCATION) {
+    PERMIT_REVOCATION_TRACK_PAYMENT(true, RequestType.PERMIT_REVOCATION, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    PERMIT_REVOCATION_CONFIRM_PAYMENT(true, RequestType.PERMIT_REVOCATION) {
+    PERMIT_REVOCATION_CONFIRM_PAYMENT(true, RequestType.PERMIT_REVOCATION, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
@@ -411,7 +411,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_NOTIFICATION_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_NOTIFICATION, RequestExpirationType.APPLICATION_REVIEW) {
+    PERMIT_NOTIFICATION_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_NOTIFICATION, RequestExpirationType.APPLICATION_REVIEW, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(RequestTaskActionType.PERMIT_NOTIFICATION_REVIEW_SUBMIT_PEER_REVIEW_DECISION);
@@ -505,7 +505,7 @@ public enum RequestTaskType {
     /**
      * PERMIT_VARIATION_REGUALTOR_LED
      */
-    PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT(true, RequestType.PERMIT_VARIATION){
+    PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT(true, RequestType.PERMIT_VARIATION) {
     	@Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
     		return List.of(
@@ -521,7 +521,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_VARIATION) {
+    PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_VARIATION, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -539,21 +539,21 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_VARIATION_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.PERMIT_VARIATION) {
+    PERMIT_VARIATION_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.PERMIT_VARIATION, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    PERMIT_VARIATION_REGULATOR_LED_TRACK_PAYMENT(true, RequestType.PERMIT_VARIATION) {
+    PERMIT_VARIATION_REGULATOR_LED_TRACK_PAYMENT(true, RequestType.PERMIT_VARIATION, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    PERMIT_VARIATION_REGULATOR_LED_CONFIRM_PAYMENT(true, RequestType.PERMIT_VARIATION) {
+    PERMIT_VARIATION_REGULATOR_LED_CONFIRM_PAYMENT(true, RequestType.PERMIT_VARIATION, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
@@ -594,7 +594,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_VARIATION_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_VARIATION, RequestExpirationType.APPLICATION_REVIEW) {
+    PERMIT_VARIATION_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_VARIATION, RequestExpirationType.APPLICATION_REVIEW, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -653,28 +653,28 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_VARIATION_MAKE_PAYMENT(false, RequestType.PERMIT_VARIATION) {
+    PERMIT_VARIATION_MAKE_PAYMENT(true, RequestType.PERMIT_VARIATION, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    PERMIT_VARIATION_TRACK_PAYMENT(false, RequestType.PERMIT_VARIATION) {
+    PERMIT_VARIATION_TRACK_PAYMENT(true, RequestType.PERMIT_VARIATION, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    PERMIT_VARIATION_CONFIRM_PAYMENT(false, RequestType.PERMIT_VARIATION) {
+    PERMIT_VARIATION_CONFIRM_PAYMENT(true, RequestType.PERMIT_VARIATION, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT(true, RequestType.PERMIT_VARIATION){
+    PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT(true, RequestType.PERMIT_VARIATION) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -684,7 +684,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_VARIATION_WAIT_FOR_AMENDS(true, RequestType.PERMIT_VARIATION, RequestExpirationType.APPLICATION_REVIEW){
+    PERMIT_VARIATION_WAIT_FOR_AMENDS(true, RequestType.PERMIT_VARIATION, RequestExpirationType.APPLICATION_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -718,21 +718,21 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_TRANSFER_A_MAKE_PAYMENT(false, RequestType.PERMIT_TRANSFER_A) {
+    PERMIT_TRANSFER_A_MAKE_PAYMENT(true, RequestType.PERMIT_TRANSFER_A, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    PERMIT_TRANSFER_A_TRACK_PAYMENT(true, RequestType.PERMIT_TRANSFER_A) {
+    PERMIT_TRANSFER_A_TRACK_PAYMENT(true, RequestType.PERMIT_TRANSFER_A, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    PERMIT_TRANSFER_A_CONFIRM_PAYMENT(true, RequestType.PERMIT_TRANSFER_A) {
+    PERMIT_TRANSFER_A_CONFIRM_PAYMENT(true, RequestType.PERMIT_TRANSFER_A, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
@@ -781,7 +781,7 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_TRANSFER_B, RequestExpirationType.APPLICATION_REVIEW) {
+    PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW(true, RequestType.PERMIT_TRANSFER_B, RequestExpirationType.APPLICATION_REVIEW, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -799,21 +799,21 @@ public enum RequestTaskType {
         }
     },
 
-    PERMIT_TRANSFER_B_MAKE_PAYMENT(false, RequestType.PERMIT_TRANSFER_B) {
+    PERMIT_TRANSFER_B_MAKE_PAYMENT(true, RequestType.PERMIT_TRANSFER_B, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    PERMIT_TRANSFER_B_TRACK_PAYMENT(false, RequestType.PERMIT_TRANSFER_B) {
+    PERMIT_TRANSFER_B_TRACK_PAYMENT(true, RequestType.PERMIT_TRANSFER_B, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    PERMIT_TRANSFER_B_CONFIRM_PAYMENT(false, RequestType.PERMIT_TRANSFER_B) {
+    PERMIT_TRANSFER_B_CONFIRM_PAYMENT(true, RequestType.PERMIT_TRANSFER_B, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
@@ -905,7 +905,7 @@ public enum RequestTaskType {
         }
     },
 
-    NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW(true, RequestType.NON_COMPLIANCE) {
+    NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW(true, RequestType.NON_COMPLIANCE, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -939,7 +939,7 @@ public enum RequestTaskType {
         }
     },
 
-    NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW(true, RequestType.NON_COMPLIANCE) {
+    NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW(true, RequestType.NON_COMPLIANCE, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -973,7 +973,7 @@ public enum RequestTaskType {
         }
     },
 
-    NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW(true, RequestType.NON_COMPLIANCE) {
+    NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW(true, RequestType.NON_COMPLIANCE, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1044,7 +1044,7 @@ public enum RequestTaskType {
         }
     },
 
-    NER_APPLICATION_PEER_REVIEW(true, RequestType.NER, RequestExpirationType.APPLICATION_REVIEW) {
+    NER_APPLICATION_PEER_REVIEW(true, RequestType.NER, RequestExpirationType.APPLICATION_REVIEW, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1078,27 +1078,27 @@ public enum RequestTaskType {
         }
     },
 
-    NER_MAKE_PAYMENT(false, RequestType.NER) {
+    NER_MAKE_PAYMENT(true, RequestType.NER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    NER_TRACK_PAYMENT(false, RequestType.NER) {
+    NER_TRACK_PAYMENT(true, RequestType.NER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    NER_CONFIRM_PAYMENT(false, RequestType.NER) {
+    NER_CONFIRM_PAYMENT(true, RequestType.NER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
-    
+
     NER_AUTHORITY_RESPONSE(true, RequestType.NER, RequestExpirationType.APPLICATION_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
@@ -1128,7 +1128,7 @@ public enum RequestTaskType {
         }
     },
 
-    DOAL_APPLICATION_PEER_REVIEW(true, RequestType.DOAL) {
+    DOAL_APPLICATION_PEER_REVIEW(true, RequestType.DOAL, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1179,7 +1179,8 @@ public enum RequestTaskType {
                     RequestTaskActionType.AER_SAVE_REVIEW_GROUP_DECISION,
                     RequestTaskActionType.AER_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT,
                     RequestTaskActionType.AER_COMPLETE_REVIEW,
-                    RequestTaskActionType.AER_REVIEW_RETURN_FOR_AMENDS
+                    RequestTaskActionType.AER_REVIEW_RETURN_FOR_AMENDS,
+                    RequestTaskActionType.AER_SKIP_REVIEW
             );
         }
     },
@@ -1191,7 +1192,7 @@ public enum RequestTaskType {
         }
     },
 
-    AER_APPLICATION_AMENDS_SUBMIT(true, RequestType.AER){
+    AER_APPLICATION_AMENDS_SUBMIT(true, RequestType.AER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1202,32 +1203,33 @@ public enum RequestTaskType {
         }
     },
 
-    AER_WAIT_FOR_AMENDS(true, RequestType.AER){
+    AER_WAIT_FOR_AMENDS(true, RequestType.AER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of();
         }
     },
 
-    AER_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AER){
+    AER_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
                     RequestTaskActionType.AER_SAVE_APPLICATION_VERIFICATION,
                     RequestTaskActionType.AER_SUBMIT_APPLICATION_VERIFICATION,
-                    RequestTaskActionType.AER_VERIFICATION_UPLOAD_ATTACHMENT
+                    RequestTaskActionType.AER_VERIFICATION_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.AER_VERIFICATION_RETURN_TO_OPERATOR
             );
         }
     },
 
-    AER_WAIT_FOR_VERIFICATION(true, RequestType.AER, RequestExpirationType.AER){
+    AER_WAIT_FOR_VERIFICATION(true, RequestType.AER, RequestExpirationType.AER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(RequestTaskActionType.AER_RECALL_FROM_VERIFICATION);
         }
     },
 
-    AER_AMEND_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AER){
+    AER_AMEND_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1238,7 +1240,7 @@ public enum RequestTaskType {
         }
     },
 
-    AER_AMEND_WAIT_FOR_VERIFICATION(true, RequestType.AER){
+    AER_AMEND_WAIT_FOR_VERIFICATION(true, RequestType.AER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(RequestTaskActionType.AER_RECALL_FROM_VERIFICATION);
@@ -1387,7 +1389,7 @@ public enum RequestTaskType {
 		}
     },
 
-    DRE_APPLICATION_PEER_REVIEW(true, RequestType.DRE) {
+    DRE_APPLICATION_PEER_REVIEW(true, RequestType.DRE, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1410,14 +1412,14 @@ public enum RequestTaskType {
         }
     },
 
-    DRE_TRACK_PAYMENT(true, RequestType.DRE) {
+    DRE_TRACK_PAYMENT(true, RequestType.DRE, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    DRE_CONFIRM_PAYMENT(true, RequestType.DRE) {
+    DRE_CONFIRM_PAYMENT(true, RequestType.DRE, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
@@ -1446,7 +1448,7 @@ public enum RequestTaskType {
         }
     },
 
-    WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEW(true, RequestType.WITHHOLDING_OF_ALLOWANCES) {
+    WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEW(true, RequestType.WITHHOLDING_OF_ALLOWANCES, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(RequestTaskActionType.WITHHOLDING_OF_ALLOWANCES_SUBMIT_PEER_REVIEW_DECISION);
@@ -1480,7 +1482,7 @@ public enum RequestTaskType {
         }
     },
 
-    RETURN_OF_ALLOWANCES_APPLICATION_PEER_REVIEW(true, RequestType.RETURN_OF_ALLOWANCES) {
+    RETURN_OF_ALLOWANCES_APPLICATION_PEER_REVIEW(true, RequestType.RETURN_OF_ALLOWANCES, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(RequestTaskActionType.RETURN_OF_ALLOWANCES_SUBMIT_PEER_REVIEW_DECISION);
@@ -1503,8 +1505,256 @@ public enum RequestTaskType {
             );
         }
     },
+    INSTALLATION_AUDIT_APPLICATION_SUBMIT(true, RequestType.INSTALLATION_AUDIT) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.INSTALLATION_AUDIT_SAVE_APPLICATION,
+                    RequestTaskActionType.INSTALLATION_AUDIT_CANCEL_APPLICATION,
+                    RequestTaskActionType.INSTALLATION_AUDIT_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.INSTALLATION_AUDIT_REQUEST_PEER_REVIEW,
+                    RequestTaskActionType.INSTALLATION_AUDIT_SUBMIT_NOTIFY_OPERATOR
+            );
+        }
+    },
+    /**
+     * INSTALLATION_ONSITE_INSPECTION
+     */
+    INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT(true, RequestType.INSTALLATION_ONSITE_INSPECTION) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.INSTALLATION_ONSITE_INSPECTION_SAVE_APPLICATION,
+                    RequestTaskActionType.INSTALLATION_ONSITE_INSPECTION_CANCEL_APPLICATION,
+                    RequestTaskActionType.INSTALLATION_ONSITE_INSPECTION_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.INSTALLATION_ONSITE_INSPECTION_REQUEST_PEER_REVIEW,
+                    RequestTaskActionType.INSTALLATION_ONSITE_INSPECTION_SUBMIT_NOTIFY_OPERATOR
+            );
+        }
+    },
+
+    INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW(true, RequestType.INSTALLATION_AUDIT, SupportingTaskType.PEER_REVIEW) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.INSTALLATION_AUDIT_SUBMIT_PEER_REVIEW_DECISION
+            );
+        }
+    },
+    INSTALLATION_AUDIT_WAIT_FOR_PEER_REVIEW(true, RequestType.INSTALLATION_AUDIT) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+    INSTALLATION_AUDIT_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS(true, RequestType.INSTALLATION_AUDIT, RequestExpirationType.INSTALLATION_AUDIT) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                RequestTaskActionType.INSTALLATION_AUDIT_OPERATOR_RESPOND_UPLOAD_ATTACHMENT,
+                RequestTaskActionType.INSTALLATION_AUDIT_OPERATOR_RESPOND_SAVE,
+                RequestTaskActionType.INSTALLATION_AUDIT_OPERATOR_RESPOND_SUBMIT
+            );
+        }
+    },
+
+    INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW(true, RequestType.INSTALLATION_ONSITE_INSPECTION, SupportingTaskType.PEER_REVIEW) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.INSTALLATION_ONSITE_INSPECTION_SUBMIT_PEER_REVIEW_DECISION
+            );
+        }
+    },
+    INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW(true, RequestType.INSTALLATION_ONSITE_INSPECTION) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS(true, RequestType.INSTALLATION_ONSITE_INSPECTION, RequestExpirationType.INSTALLATION_ONSITE_INSPECTION) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                RequestTaskActionType.INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_UPLOAD_ATTACHMENT,
+                RequestTaskActionType.INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SAVE,
+                RequestTaskActionType.INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SUBMIT
+            );
+        }
+    },
+    /**
+     * BDR
+     */
+    BDR_APPLICATION_SUBMIT(true, RequestType.BDR, RequestExpirationType.BDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDR_SAVE_APPLICATION,
+                    RequestTaskActionType.BDR_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.BDR_SUBMIT_TO_VERIFIER,
+                    RequestTaskActionType.BDR_SUBMIT_TO_REGULATOR
+            );
+        }
+    },
+    BDR_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.BDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDR_SAVE_APPLICATION_VERIFICATION,
+                    RequestTaskActionType.BDR_VERIFICATION_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.BDR_VERIFICATION_RETURN_TO_OPERATOR,
+                    RequestTaskActionType.BDR_VERIFICATION_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.BDR_SUBMIT_VERIFICATION
+            );
+        }
+    },
+    BDR_WAIT_FOR_VERIFICATION(true, RequestType.BDR, RequestExpirationType.BDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+          return List.of(
+                RequestTaskActionType.BDR_RECALL_FROM_VERIFICATION
+            );
+        }
+    },
+    BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT(true, RequestType.BDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDR_SAVE_REGULATOR_REVIEW_GROUP_DECISION,
+                    RequestTaskActionType.BDR_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT,
+                    RequestTaskActionType.BDR_REGULATOR_REVIEW_RETURN_FOR_AMENDS,
+                    RequestTaskActionType.BDR_REGULATOR_REVIEW_SAVE,
+                    RequestTaskActionType.BDR_REGULATOR_REVIEW_SUBMIT,
+                    RequestTaskActionType.BDR_REQUEST_PEER_REVIEW
+            );
+        }
+    },
+
+    BDR_WAIT_FOR_REGULATOR_REVIEW(true, RequestType.BDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
 
 
+    BDR_APPLICATION_AMENDS_SUBMIT(true, RequestType.BDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDR_APPLICATION_AMENDS_SAVE,
+                    RequestTaskActionType.BDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR,
+                    RequestTaskActionType.BDR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER,
+                    RequestTaskActionType.BDR_UPLOAD_ATTACHMENT
+            );
+        }
+    },
+
+    BDR_WAIT_FOR_AMENDS(true, RequestType.BDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    BDR_AMEND_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.BDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDR_SAVE_APPLICATION_VERIFICATION,
+                    RequestTaskActionType.BDR_SUBMIT_VERIFICATION,
+                    RequestTaskActionType.BDR_VERIFICATION_UPLOAD_ATTACHMENT
+            );
+        }
+    },
+
+    BDR_AMEND_WAIT_FOR_VERIFICATION(true, RequestType.BDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(RequestTaskActionType.BDR_RECALL_FROM_VERIFICATION);
+        }
+    },
+
+    BDR_APPLICATION_PEER_REVIEW(true, RequestType.BDR, SupportingTaskType.PEER_REVIEW) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.BDR_SUBMIT_PEER_REVIEW_DECISION
+            );
+        }
+    },
+    BDR_WAIT_FOR_PEER_REVIEW(true, RequestType.BDR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    /**
+     * PERMANENT CESSATION
+     */
+    PERMANENT_CESSATION_APPLICATION_SUBMIT(true, RequestType.PERMANENT_CESSATION) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.PERMANENT_CESSATION_CANCEL_APPLICATION,
+                    RequestTaskActionType.PERMANENT_CESSATION_SAVE_APPLICATION,
+                    RequestTaskActionType.PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION,
+                    RequestTaskActionType.PERMANENT_CESSATION_UPLOAD,
+                    RequestTaskActionType.PERMANENT_CESSATION_REQUEST_PEER_REVIEW
+            );
+        }
+    },
+
+    PERMANENT_CESSATION_APPLICATION_PEER_REVIEW(true, RequestType.PERMANENT_CESSATION, SupportingTaskType.PEER_REVIEW) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType. PERMANENT_CESSATION_SUBMIT_PEER_REVIEW_DECISION
+            );
+        }
+    },
+    PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW(true, RequestType.PERMANENT_CESSATION) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+    /**
+     * ALR
+     */
+    ALR_APPLICATION_SUBMIT(true, RequestType.ALR, RequestExpirationType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.ALR_SAVE_APPLICATION,
+                    RequestTaskActionType.ALR_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.ALR_SUBMIT_TO_VERIFIER
+            );
+        }
+    },
+
+   ALR_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                RequestTaskActionType.ALR_SAVE_APPLICATION_VERIFICATION,
+                RequestTaskActionType.ALR_VERIFICATION_UPLOAD_ATTACHMENT,
+                RequestTaskActionType.ALR_VERIFICATION_RETURN_TO_OPERATOR,
+                RequestTaskActionType.ALR_SUBMIT_VERIFICATION
+            );
+        }
+    },
+
+    ALR_WAIT_FOR_VERIFICATION(true, RequestType.ALR, RequestExpirationType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.ALR_RECALL_FROM_VERIFICATION
+            );
+        }
+    },
 
     /*
      **************************************************** AVIATION ****************************************************
@@ -1553,7 +1803,7 @@ public enum RequestTaskType {
         }
     },
 
-    AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW(true, RequestType.AVIATION_NON_COMPLIANCE) {
+    AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW(true, RequestType.AVIATION_NON_COMPLIANCE, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1587,7 +1837,7 @@ public enum RequestTaskType {
         }
     },
 
-    AVIATION_NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW(true, RequestType.AVIATION_NON_COMPLIANCE) {
+    AVIATION_NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW(true, RequestType.AVIATION_NON_COMPLIANCE, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1621,7 +1871,7 @@ public enum RequestTaskType {
         }
     },
 
-    AVIATION_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW(true, RequestType.AVIATION_NON_COMPLIANCE) {
+    AVIATION_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW(true, RequestType.AVIATION_NON_COMPLIANCE, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1760,21 +2010,21 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_ISSUANCE_UKETS_MAKE_PAYMENT(false, RequestType.EMP_ISSUANCE_UKETS) {
+    EMP_ISSUANCE_UKETS_MAKE_PAYMENT(true, RequestType.EMP_ISSUANCE_UKETS, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    EMP_ISSUANCE_UKETS_TRACK_PAYMENT(false, RequestType.EMP_ISSUANCE_UKETS) {
+    EMP_ISSUANCE_UKETS_TRACK_PAYMENT(true, RequestType.EMP_ISSUANCE_UKETS, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    EMP_ISSUANCE_UKETS_CONFIRM_PAYMENT(false, RequestType.EMP_ISSUANCE_UKETS) {
+    EMP_ISSUANCE_UKETS_CONFIRM_PAYMENT(true, RequestType.EMP_ISSUANCE_UKETS, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
@@ -1816,7 +2066,7 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_ISSUANCE_UKETS_WAIT_FOR_AMENDS(true, RequestType.EMP_ISSUANCE_UKETS, RequestExpirationType.APPLICATION_REVIEW){
+    EMP_ISSUANCE_UKETS_WAIT_FOR_AMENDS(true, RequestType.EMP_ISSUANCE_UKETS, RequestExpirationType.APPLICATION_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1827,7 +2077,7 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMIT(true, RequestType.EMP_ISSUANCE_UKETS){
+    EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMIT(true, RequestType.EMP_ISSUANCE_UKETS) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1837,7 +2087,7 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW(true, RequestType.EMP_ISSUANCE_UKETS, RequestExpirationType.APPLICATION_REVIEW) {
+    EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW(true, RequestType.EMP_ISSUANCE_UKETS, RequestExpirationType.APPLICATION_REVIEW, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1852,7 +2102,7 @@ public enum RequestTaskType {
             return List.of(RequestTaskActionType.RDE_SUBMIT);
         }
     },
-    
+
     /**
      * EMP_VARIATION_UKETS_REGULATOR_LED
      */
@@ -1869,28 +2119,28 @@ public enum RequestTaskType {
     				);
         }
     },
-    
-    EMP_VARIATION_UKETS_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.EMP_VARIATION_UKETS) {
+
+    EMP_VARIATION_UKETS_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.EMP_VARIATION_UKETS, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    EMP_VARIATION_UKETS_REGULATOR_LED_TRACK_PAYMENT(true, RequestType.EMP_VARIATION_UKETS) {
+    EMP_VARIATION_UKETS_REGULATOR_LED_TRACK_PAYMENT(true, RequestType.EMP_VARIATION_UKETS, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    EMP_VARIATION_UKETS_REGULATOR_LED_CONFIRM_PAYMENT(true, RequestType.EMP_VARIATION_UKETS) {
+    EMP_VARIATION_UKETS_REGULATOR_LED_CONFIRM_PAYMENT(true, RequestType.EMP_VARIATION_UKETS, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
-    EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_PEER_REVIEW(true, RequestType.EMP_VARIATION_UKETS) {
+    EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_PEER_REVIEW(true, RequestType.EMP_VARIATION_UKETS, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1921,14 +2171,14 @@ public enum RequestTaskType {
                     RequestTaskActionType.EMP_VARIATION_CANCEL_APPLICATION);
         }
     },
-    
+
     EMP_VARIATION_UKETS_WAIT_FOR_REVIEW(true, RequestType.EMP_VARIATION_UKETS) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of();
         }
     },
-    
+
     EMP_VARIATION_UKETS_APPLICATION_REVIEW(true, RequestType.EMP_VARIATION_UKETS, RequestExpirationType.APPLICATION_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
@@ -1948,8 +2198,8 @@ public enum RequestTaskType {
             		);
         }
     },
-    
-    EMP_VARIATION_UKETS_RFI_RESPONSE_SUBMIT(false, RequestType.EMP_VARIATION_UKETS, RequestExpirationType.RFI) {
+
+    EMP_VARIATION_UKETS_RFI_RESPONSE_SUBMIT(true, RequestType.EMP_VARIATION_UKETS, RequestExpirationType.RFI) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -1983,29 +2233,29 @@ public enum RequestTaskType {
                 RequestTaskActionType.RDE_UPLOAD_ATTACHMENT);
         }
     },
-    
-    EMP_VARIATION_UKETS_MAKE_PAYMENT(false, RequestType.EMP_VARIATION_UKETS) {
+
+    EMP_VARIATION_UKETS_MAKE_PAYMENT(true, RequestType.EMP_VARIATION_UKETS, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    EMP_VARIATION_UKETS_TRACK_PAYMENT(false, RequestType.EMP_VARIATION_UKETS) {
+    EMP_VARIATION_UKETS_TRACK_PAYMENT(true, RequestType.EMP_VARIATION_UKETS, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    EMP_VARIATION_UKETS_CONFIRM_PAYMENT(false, RequestType.EMP_VARIATION_UKETS) {
+    EMP_VARIATION_UKETS_CONFIRM_PAYMENT(true, RequestType.EMP_VARIATION_UKETS, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
-    
-    EMP_VARIATION_UKETS_APPLICATION_PEER_REVIEW(true, RequestType.EMP_VARIATION_UKETS, RequestExpirationType.APPLICATION_REVIEW) {
+
+    EMP_VARIATION_UKETS_APPLICATION_PEER_REVIEW(true, RequestType.EMP_VARIATION_UKETS, RequestExpirationType.APPLICATION_REVIEW, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
         	return List.of(
@@ -2020,8 +2270,8 @@ public enum RequestTaskType {
             return List.of();
         }
     },
-    
-    EMP_VARIATION_UKETS_WAIT_FOR_AMENDS(true, RequestType.EMP_VARIATION_UKETS, RequestExpirationType.APPLICATION_REVIEW){
+
+    EMP_VARIATION_UKETS_WAIT_FOR_AMENDS(true, RequestType.EMP_VARIATION_UKETS, RequestExpirationType.APPLICATION_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2032,7 +2282,7 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMIT(true, RequestType.EMP_VARIATION_UKETS){
+    EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMIT(true, RequestType.EMP_VARIATION_UKETS) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2077,24 +2327,25 @@ public enum RequestTaskType {
         }
     },
 
-    AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AVIATION_AER_UKETS){
+    AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AVIATION_AER_UKETS) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
                 RequestTaskActionType.AVIATION_AER_UKETS_SAVE_APPLICATION_VERIFICATION,
-                RequestTaskActionType.AVIATION_AER_UKETS_SUBMIT_APPLICATION_VERIFICATION
+                RequestTaskActionType.AVIATION_AER_UKETS_SUBMIT_APPLICATION_VERIFICATION,
+                RequestTaskActionType.AVIATION_AER_UKETS_VERIFICATION_RETURN_TO_OPERATOR
             );
         }
     },
 
-    AVIATION_AER_UKETS_WAIT_FOR_VERIFICATION(true, RequestType.AVIATION_AER_UKETS, RequestExpirationType.AVIATION_AER){
+    AVIATION_AER_UKETS_WAIT_FOR_VERIFICATION(true, RequestType.AVIATION_AER_UKETS, RequestExpirationType.AVIATION_AER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(RequestTaskActionType.AVIATION_AER_RECALL_FROM_VERIFICATION);
         }
     },
 
-    AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT(true, RequestType.AVIATION_AER_UKETS){
+    AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT(true, RequestType.AVIATION_AER_UKETS) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2106,14 +2357,14 @@ public enum RequestTaskType {
         }
     },
 
-    AVIATION_AER_UKETS_WAIT_FOR_AMENDS(true, RequestType.AVIATION_AER_UKETS){
+    AVIATION_AER_UKETS_WAIT_FOR_AMENDS(true, RequestType.AVIATION_AER_UKETS) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of();
         }
     },
 
-    AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AVIATION_AER_UKETS){
+    AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AVIATION_AER_UKETS) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2123,7 +2374,7 @@ public enum RequestTaskType {
         }
     },
 
-    AVIATION_AER_UKETS_AMEND_WAIT_FOR_VERIFICATION(true, RequestType.AVIATION_AER_UKETS){
+    AVIATION_AER_UKETS_AMEND_WAIT_FOR_VERIFICATION(true, RequestType.AVIATION_AER_UKETS) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(RequestTaskActionType.AVIATION_AER_RECALL_FROM_VERIFICATION);
@@ -2133,7 +2384,7 @@ public enum RequestTaskType {
     /**
      * AVIATION_DRE_UKETS
      */
-    AVIATION_DRE_UKETS_APPLICATION_SUBMIT(true, RequestType.AVIATION_DRE_UKETS){
+    AVIATION_DRE_UKETS_APPLICATION_SUBMIT(true, RequestType.AVIATION_DRE_UKETS) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2153,21 +2404,21 @@ public enum RequestTaskType {
         }
     },
 
-    AVIATION_DRE_UKETS_TRACK_PAYMENT(true, RequestType.AVIATION_DRE_UKETS) {
+    AVIATION_DRE_UKETS_TRACK_PAYMENT(true, RequestType.AVIATION_DRE_UKETS, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    AVIATION_DRE_UKETS_CONFIRM_PAYMENT(true, RequestType.AVIATION_DRE_UKETS) {
+    AVIATION_DRE_UKETS_CONFIRM_PAYMENT(true, RequestType.AVIATION_DRE_UKETS, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW(true, RequestType.AVIATION_DRE_UKETS) {
+    AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW(true, RequestType.AVIATION_DRE_UKETS, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2182,7 +2433,60 @@ public enum RequestTaskType {
             return List.of();
         }
     },
-    
+
+    /**
+     * AVIATION_DOE_CORSIA
+     */
+    AVIATION_DOE_CORSIA_APPLICATION_SUBMIT(true, RequestType.AVIATION_DOE_CORSIA) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.AVIATION_DOE_CORSIA_SUBMIT_SAVE,
+                    RequestTaskActionType.AVIATION_DOE_CORSIA_SUBMIT_CANCEL,
+                    RequestTaskActionType.AVIATION_DOE_CORSIA_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR,
+                    RequestTaskActionType.AVIATION_DOE_CORSIA_REQUEST_PEER_REVIEW
+            );
+        }
+    },
+    AVIATION_DOE_CORSIA_MAKE_PAYMENT(true, RequestType.AVIATION_DOE_CORSIA, RequestExpirationType.PAYMENT) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return RequestTaskActionType.getMakePaymentAllowedTypes();
+        }
+    },
+
+    AVIATION_DOE_CORSIA_TRACK_PAYMENT(true, RequestType.AVIATION_DOE_CORSIA, SupportingTaskType.DEFAULT) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
+        }
+    },
+
+    AVIATION_DOE_CORSIA_CONFIRM_PAYMENT(true, RequestType.AVIATION_DOE_CORSIA, SupportingTaskType.DEFAULT) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
+        }
+    },
+
+    AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW(true, RequestType.AVIATION_DOE_CORSIA, SupportingTaskType.PEER_REVIEW) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                RequestTaskActionType.AVIATION_DOE_CORSIA_SUBMIT_PEER_REVIEW_DECISION
+            );
+        }
+    },
+
+    AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW(true, RequestType.AVIATION_DOE_CORSIA) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+
     /*
      ************************************************* AVIATION CORSIA *************************************************
      */
@@ -2201,7 +2505,7 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_ISSUANCE_CORSIA_WAIT_FOR_REVIEW(true, RequestType.EMP_ISSUANCE_CORSIA, RequestExpirationType.APPLICATION_REVIEW) {
+    EMP_ISSUANCE_CORSIA_WAIT_FOR_REVIEW(true, RequestType.EMP_ISSUANCE_CORSIA) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of();
@@ -2262,28 +2566,28 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_ISSUANCE_CORSIA_MAKE_PAYMENT(false, RequestType.EMP_ISSUANCE_CORSIA) {
+    EMP_ISSUANCE_CORSIA_MAKE_PAYMENT(true, RequestType.EMP_ISSUANCE_CORSIA, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    EMP_ISSUANCE_CORSIA_TRACK_PAYMENT(false, RequestType.EMP_ISSUANCE_CORSIA) {
+    EMP_ISSUANCE_CORSIA_TRACK_PAYMENT(true, RequestType.EMP_ISSUANCE_CORSIA, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    EMP_ISSUANCE_CORSIA_CONFIRM_PAYMENT(false, RequestType.EMP_ISSUANCE_CORSIA) {
+    EMP_ISSUANCE_CORSIA_CONFIRM_PAYMENT(true, RequestType.EMP_ISSUANCE_CORSIA, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW(true, RequestType.EMP_ISSUANCE_CORSIA, RequestExpirationType.APPLICATION_REVIEW) {
+    EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW(true, RequestType.EMP_ISSUANCE_CORSIA, RequestExpirationType.APPLICATION_REVIEW, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2299,7 +2603,7 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_ISSUANCE_CORSIA_WAIT_FOR_AMENDS(true, RequestType.EMP_ISSUANCE_CORSIA, RequestExpirationType.APPLICATION_REVIEW){
+    EMP_ISSUANCE_CORSIA_WAIT_FOR_AMENDS(true, RequestType.EMP_ISSUANCE_CORSIA, RequestExpirationType.APPLICATION_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2310,7 +2614,7 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_ISSUANCE_CORSIA_APPLICATION_AMENDS_SUBMIT(true, RequestType.EMP_ISSUANCE_CORSIA){
+    EMP_ISSUANCE_CORSIA_APPLICATION_AMENDS_SUBMIT(true, RequestType.EMP_ISSUANCE_CORSIA) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2319,7 +2623,7 @@ public enum RequestTaskType {
                 RequestTaskActionType.EMP_ISSUANCE_CORSIA_UPLOAD_SECTION_ATTACHMENT);
         }
     },
-    
+
     /**
      * EMP_VARIATION_CORSIA_OPERATOR_LED
      */
@@ -2333,14 +2637,14 @@ public enum RequestTaskType {
                     RequestTaskActionType.EMP_VARIATION_CANCEL_APPLICATION);
         }
     },
-    
-    EMP_VARIATION_CORSIA_WAIT_FOR_REVIEW(true, RequestType.EMP_VARIATION_CORSIA, RequestExpirationType.APPLICATION_REVIEW) {
+
+    EMP_VARIATION_CORSIA_WAIT_FOR_REVIEW(true, RequestType.EMP_VARIATION_CORSIA) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of();
         }
     },
-    
+
     EMP_VARIATION_CORSIA_APPLICATION_REVIEW(true, RequestType.EMP_VARIATION_CORSIA, RequestExpirationType.APPLICATION_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
@@ -2360,7 +2664,7 @@ public enum RequestTaskType {
                     );
         }
     },
-    
+
     EMP_VARIATION_CORSIA_RFI_RESPONSE_SUBMIT(false, RequestType.EMP_VARIATION_CORSIA, RequestExpirationType.RFI) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
@@ -2396,8 +2700,8 @@ public enum RequestTaskType {
                 );
         }
     },
-    
-    EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEW(true, RequestType.EMP_VARIATION_CORSIA, RequestExpirationType.APPLICATION_REVIEW) {
+
+    EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEW(true, RequestType.EMP_VARIATION_CORSIA, RequestExpirationType.APPLICATION_REVIEW, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2413,7 +2717,7 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_VARIATION_CORSIA_WAIT_FOR_AMENDS(true, RequestType.EMP_VARIATION_CORSIA, RequestExpirationType.APPLICATION_REVIEW){
+    EMP_VARIATION_CORSIA_WAIT_FOR_AMENDS(true, RequestType.EMP_VARIATION_CORSIA, RequestExpirationType.APPLICATION_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2424,7 +2728,7 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMIT(true, RequestType.EMP_VARIATION_CORSIA, RequestExpirationType.APPLICATION_REVIEW){
+    EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMIT(true, RequestType.EMP_VARIATION_CORSIA) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2434,21 +2738,21 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_VARIATION_CORSIA_MAKE_PAYMENT(false, RequestType.EMP_VARIATION_CORSIA) {
+    EMP_VARIATION_CORSIA_MAKE_PAYMENT(true, RequestType.EMP_VARIATION_CORSIA, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    EMP_VARIATION_CORSIA_TRACK_PAYMENT(false, RequestType.EMP_VARIATION_CORSIA) {
+    EMP_VARIATION_CORSIA_TRACK_PAYMENT(true, RequestType.EMP_VARIATION_CORSIA, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    EMP_VARIATION_CORSIA_CONFIRM_PAYMENT(false, RequestType.EMP_VARIATION_CORSIA) {
+    EMP_VARIATION_CORSIA_CONFIRM_PAYMENT(true, RequestType.EMP_VARIATION_CORSIA, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
@@ -2471,8 +2775,8 @@ public enum RequestTaskType {
             );
         }
     },
-    
-    EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW(true, RequestType.EMP_VARIATION_CORSIA) {
+
+    EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW(true, RequestType.EMP_VARIATION_CORSIA, SupportingTaskType.PEER_REVIEW) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2490,21 +2794,21 @@ public enum RequestTaskType {
         }
     },
 
-    EMP_VARIATION_CORSIA_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.EMP_VARIATION_CORSIA) {
+    EMP_VARIATION_CORSIA_REGULATOR_LED_MAKE_PAYMENT(true, RequestType.EMP_VARIATION_CORSIA, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getMakePaymentAllowedTypes();
         }
     },
 
-    EMP_VARIATION_CORSIA_REGULATOR_LED_TRACK_PAYMENT(true, RequestType.EMP_VARIATION_CORSIA) {
+    EMP_VARIATION_CORSIA_REGULATOR_LED_TRACK_PAYMENT(true, RequestType.EMP_VARIATION_CORSIA, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
         }
     },
 
-    EMP_VARIATION_CORSIA_REGULATOR_LED_CONFIRM_PAYMENT(true, RequestType.EMP_VARIATION_CORSIA) {
+    EMP_VARIATION_CORSIA_REGULATOR_LED_CONFIRM_PAYMENT(true, RequestType.EMP_VARIATION_CORSIA, SupportingTaskType.DEFAULT) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
@@ -2526,17 +2830,75 @@ public enum RequestTaskType {
         }
     },
 
-    AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AVIATION_AER_CORSIA){
+    AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT(true, RequestType.AVIATION_AER_CORSIA, RequestExpirationType.AVIATION_AER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
-                    RequestTaskActionType.AVIATION_AER_CORSIA_SAVE_APPLICATION_VERIFICATION,
-                    RequestTaskActionType.AVIATION_AER_CORSIA_SUBMIT_APPLICATION_VERIFICATION
+                    RequestTaskActionType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SAVE_APPLICATION,
+                    RequestTaskActionType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_CANCEL_APPLICATION,
+                    RequestTaskActionType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_REQUEST_PEER_REVIEW,
+                    RequestTaskActionType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_NOTIFY_OPERATOR
             );
         }
     },
 
-    AVIATION_AER_CORSIA_WAIT_FOR_VERIFICATION(true, RequestType.AVIATION_AER_CORSIA, RequestExpirationType.AVIATION_AER){
+
+    AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW(true, RequestType.AVIATION_AER_CORSIA, SupportingTaskType.PEER_REVIEW) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_PEER_REVIEW_DECISION
+            );
+        }
+    },
+
+    AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW(true, RequestType.AVIATION_AER_CORSIA, RequestExpirationType.AVIATION_AER) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT(true, RequestType.AVIATION_AER_CORSIA, RequestExpirationType.AVIATION_AER) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SAVE_APPLICATION,
+                    RequestTaskActionType.AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_CANCEL_APPLICATION,
+                    RequestTaskActionType.AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_REQUEST_PEER_REVIEW,
+                    RequestTaskActionType.AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_NOTIFY_OPERATOR);
+        }
+    },
+
+    AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW(true, RequestType.AVIATION_AER_CORSIA, SupportingTaskType.PEER_REVIEW) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_PEER_REVIEW_DECISION
+            );
+        }
+    },
+
+    AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW(true, RequestType.AVIATION_AER_CORSIA, RequestExpirationType.AVIATION_AER) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+
+    AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AVIATION_AER_CORSIA) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.AVIATION_AER_CORSIA_SAVE_APPLICATION_VERIFICATION,
+                    RequestTaskActionType.AVIATION_AER_CORSIA_SUBMIT_APPLICATION_VERIFICATION,
+                    RequestTaskActionType.AVIATION_AER_CORSIA_VERIFICATION_RETURN_TO_OPERATOR
+            );
+        }
+    },
+
+    AVIATION_AER_CORSIA_WAIT_FOR_VERIFICATION(true, RequestType.AVIATION_AER_CORSIA, RequestExpirationType.AVIATION_AER) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(RequestTaskActionType.AVIATION_AER_RECALL_FROM_VERIFICATION);
@@ -2563,25 +2925,26 @@ public enum RequestTaskType {
         }
     },
 
-    AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT(true, RequestType.AVIATION_AER_CORSIA){
+    AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT(true, RequestType.AVIATION_AER_CORSIA) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
                     RequestTaskActionType.AVIATION_AER_CORSIA_SAVE_APPLICATION_AMEND,
                     RequestTaskActionType.AVIATION_AER_UPLOAD_SECTION_ATTACHMENT,
-                    RequestTaskActionType.AVIATION_AER_CORSIA_REQUEST_AMENDS_VERIFICATION
+                    RequestTaskActionType.AVIATION_AER_CORSIA_REQUEST_AMENDS_VERIFICATION,
+                    RequestTaskActionType.AVIATION_AER_CORSIA_SUBMIT_APPLICATION_AMEND
             );
         }
     },
 
-    AVIATION_AER_CORSIA_WAIT_FOR_AMENDS(true, RequestType.AVIATION_AER_CORSIA){
+    AVIATION_AER_CORSIA_WAIT_FOR_AMENDS(true, RequestType.AVIATION_AER_CORSIA) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of();
         }
     },
 
-    AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AVIATION_AER_CORSIA){
+    AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.AVIATION_AER_CORSIA) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(
@@ -2591,7 +2954,7 @@ public enum RequestTaskType {
         }
     },
 
-    AVIATION_AER_CORSIA_AMEND_WAIT_FOR_VERIFICATION(true, RequestType.AVIATION_AER_CORSIA){
+    AVIATION_AER_CORSIA_AMEND_WAIT_FOR_VERIFICATION(true, RequestType.AVIATION_AER_CORSIA) {
         @Override
         public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
             return List.of(RequestTaskActionType.AVIATION_AER_RECALL_FROM_VERIFICATION);
@@ -2630,15 +2993,28 @@ public enum RequestTaskType {
     private final boolean assignable;
 	private final RequestType requestType;
     private final RequestExpirationType expirationKey;
+    private final SupportingTaskType supporting;
+
+    private RequestTaskType(boolean assignable, RequestType requestType, SupportingTaskType supporting) {
+    	this(assignable, requestType, null, supporting);
+    }
 
     private RequestTaskType(boolean assignable, RequestType requestType) {
-    	this(assignable, requestType, null);
+    	this(assignable, requestType, null, null);
     }
 
     private RequestTaskType(boolean assignable, RequestType requestType, RequestExpirationType expirationKey) {
+        this.assignable = assignable;
+        this.requestType = requestType;
+        this.expirationKey = expirationKey;
+        this.supporting = null;
+    }
+
+    private RequestTaskType(boolean assignable, RequestType requestType, RequestExpirationType expirationKey, SupportingTaskType supporting) {
     	this.assignable = assignable;
     	this.requestType = requestType;
     	this.expirationKey = expirationKey;
+        this.supporting = supporting;
     }
 
     public abstract List<RequestTaskActionType> getAllowedRequestTaskActionTypes();
@@ -2658,36 +3034,6 @@ public enum RequestTaskType {
             ACCOUNT_USERS_SETUP,
             VERIFIER_NO_LONGER_AVAILABLE,
                 NEW_VERIFICATION_BODY_EMITTER
-        );
-    }
-
-    public static Set<RequestTaskType> getPeerReviewTypes() {
-        return Set.of(
-        		PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW,
-        		PERMIT_SURRENDER_APPLICATION_PEER_REVIEW,
-        		PERMIT_REVOCATION_APPLICATION_PEER_REVIEW,
-        		PERMIT_NOTIFICATION_APPLICATION_PEER_REVIEW,
-        		PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW,
-        		PERMIT_VARIATION_APPLICATION_PEER_REVIEW,
-                PERMIT_TRANSFER_B_APPLICATION_PEER_REVIEW,
-                NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW,
-                DRE_APPLICATION_PEER_REVIEW,
-                NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW,
-                NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW,
-                NER_APPLICATION_PEER_REVIEW,
-                DOAL_APPLICATION_PEER_REVIEW,
-                WITHHOLDING_OF_ALLOWANCES_APPLICATION_PEER_REVIEW,
-                RETURN_OF_ALLOWANCES_APPLICATION_PEER_REVIEW,
-                EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW,
-                AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW,
-                EMP_VARIATION_UKETS_APPLICATION_PEER_REVIEW,
-                EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_PEER_REVIEW,
-                AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW,
-                AVIATION_NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW,
-                AVIATION_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW,
-                EMP_ISSUANCE_CORSIA_APPLICATION_PEER_REVIEW,
-                EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW,
-                EMP_VARIATION_CORSIA_APPLICATION_PEER_REVIEW
         );
     }
 
@@ -2748,5 +3094,13 @@ public enum RequestTaskType {
         return Stream.of(RequestTaskType.values())
                 .filter(requestTaskType -> requestTaskType.toString().endsWith(APPLICATION_VERIFICATION_SUBMIT.name()))
                 .collect(Collectors.toSet());
+    }
+
+    public boolean isPeerReview() {
+        return supporting == SupportingTaskType.PEER_REVIEW;
+    }
+
+    public boolean isSupporting() {
+        return supporting != null;
     }
 }

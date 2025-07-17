@@ -1,21 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.core.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.timeout;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,19 +8,32 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.note.NotePayload;
-import uk.gov.pmrv.api.common.note.NoteRequest;
-import uk.gov.pmrv.api.common.service.DateService;
-import uk.gov.pmrv.api.files.notes.service.FileNoteService;
-import uk.gov.pmrv.api.files.notes.service.FileNoteTokenService;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.note.NotePayload;
+import uk.gov.netz.api.common.note.NoteRequest;
+import uk.gov.netz.api.common.utils.DateService;
+import uk.gov.netz.api.files.notes.service.FileNoteService;
+import uk.gov.netz.api.files.notes.service.FileNoteTokenService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestNote;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestNoteDto;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestNoteRequest;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestNoteResponse;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestNoteRepository;
 import uk.gov.pmrv.api.workflow.request.core.transform.RequestNoteMapper;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.timeout;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RequestNoteServiceTest {
@@ -120,7 +117,7 @@ class RequestNoteServiceTest {
     @Test
     void createNote_whenFilesExist_thenOK() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").firstName("John").lastName("Jones").build();
+        final AppUser appUser = AppUser.builder().userId("userId").firstName("John").lastName("Jones").build();
         final UUID file = UUID.randomUUID();
         final Set<UUID> files = Set.of(file);
         final RequestNoteRequest requestNoteRequest = RequestNoteRequest.builder()
@@ -133,7 +130,7 @@ class RequestNoteServiceTest {
         when(fileNoteService.getFileNames(files)).thenReturn(Map.of(file, "file name"));
         when(dateService.getLocalDateTime()).thenReturn(dateTime);
 
-        requestNoteService.createNote(pmrvUser, requestNoteRequest);
+        requestNoteService.createNote(appUser, requestNoteRequest);
 
         final RequestNote requestNote = RequestNote.builder()
             .requestId("reqId")
@@ -149,63 +146,44 @@ class RequestNoteServiceTest {
     }
 
     @Test
-    void createNote_whenFilesDoNotExist_thenException() {
+    void updateNote() {
+        final AppUser appUser = AppUser.builder().userId("new id").firstName("New").lastName("Reg").build();
+        
+        final long noteId = 2L;
+        
+        final UUID oldFile = UUID.randomUUID();
+        final Set<UUID> oldFiles = Set.of(oldFile);
+        final Map<UUID, String> oldFileNames = Map.of(oldFile, "old file name");
+        final RequestNote requestNote = RequestNote.builder()
+                .id(noteId)
+                .requestId("reqId")
+                .payload(NotePayload.builder().note("the old note").files(oldFileNames).build())
+                .submitterId("old id")
+                .submitter("Old Reg")
+                .build();
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").firstName("John").lastName("Jones").build();
-        final UUID file = UUID.randomUUID();
-        final Set<UUID> files = Set.of(file);
-        final RequestNoteRequest requestNoteRequest = RequestNoteRequest.builder()
-            .requestId("reqId")
-            .note("the note")
-            .files(files)
-            .build();
-
-        when(fileNoteService.getFileNames(files)).thenReturn(Map.of());
-
-        assertThrows(BusinessException.class, () -> requestNoteService.createNote(pmrvUser, requestNoteRequest));
-
-        verify(fileNoteService, times(1)).getFileNames(files);
-        verify(fileNoteService, never()).submitFiles(files);
-        verify(requestNoteRepository, never()).save(any());
-    }
-
-    @Test
-    void updateNote_whenFilesExist_thenOK() {
-
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("new id").firstName("New").lastName("Reg").build();
-        final UUID file = UUID.randomUUID();
-        final Set<UUID> oldFiles = Set.of(file);
+        
         final UUID newFile = UUID.randomUUID();
-        final Set<UUID> newFiles = Set.of(newFile);
+        final UUID newFileMissingFromDB = UUID.randomUUID();
+        final Set<UUID> newFiles = Set.of(newFile, newFileMissingFromDB);
+        final Map<UUID, String> newFileNameFetched = Map.of(newFile, "new file name");
 
         final NoteRequest noteRequest = NoteRequest.builder()
             .note("the new note")
             .files(newFiles)
             .build();
 
-        final long noteId = 2L;
-
-        final Map<UUID, String> oldFileName = Map.of(file, "old file name");
-        final Map<UUID, String> newFileName = Map.of(file, "new file name");
-
-        final RequestNote requestNote = RequestNote.builder()
-            .id(noteId)
-            .requestId("reqId")
-            .payload(NotePayload.builder().note("the old note").files(oldFileName).build())
-            .submitterId("old id")
-            .submitter("Old Reg")
-            .build();
-
-        when(fileNoteService.getFileNames(newFiles)).thenReturn(newFileName);
+        when(fileNoteService.getFileNames(newFiles)).thenReturn(newFileNameFetched);
         when(requestNoteRepository.findById(noteId)).thenReturn(Optional.of(requestNote));
 
-        requestNoteService.updateNote(noteId, noteRequest, pmrvUser);
+        requestNoteService.updateNote(noteId, noteRequest, appUser);
 
         verify(fileNoteService, times(1)).getFileNames(newFiles);
         verify(fileNoteService, times(1)).deleteFiles(oldFiles);
+        verify(fileNoteService, times(1)).submitFiles(newFiles);
 
         assertEquals("the new note", requestNote.getPayload().getNote());
-        assertEquals(requestNote.getPayload().getFiles(), newFileName);
+        assertEquals(requestNote.getPayload().getFiles(), newFileNameFetched);
         assertEquals("new id", requestNote.getSubmitterId());
         assertEquals("New Reg", requestNote.getSubmitter());
     }

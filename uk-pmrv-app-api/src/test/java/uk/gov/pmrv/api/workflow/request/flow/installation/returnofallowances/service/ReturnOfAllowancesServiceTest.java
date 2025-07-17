@@ -92,7 +92,7 @@ class ReturnOfAllowancesServiceTest {
 
         assertEquals(requestPayload.getReturnOfAllowancesSectionsCompleted(), taskPayload.getSectionsCompleted());
         assertEquals(requestPayload.getReturnOfAllowances(), taskPayload.getReturnOfAllowances());
-        assertEquals(requestPayload.getRegulatorPeerReviewer(), "selectedPeerReviewer");
-        assertEquals(requestPayload.getRegulatorReviewer(), "regulatorReviewer");
+        assertEquals("selectedPeerReviewer", requestPayload.getRegulatorPeerReviewer());
+        assertEquals("regulatorReviewer", requestPayload.getRegulatorReviewer());
     }
 }

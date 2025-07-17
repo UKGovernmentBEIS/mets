@@ -16,8 +16,7 @@ describe('SummaryDetailsComponent', () => {
       <app-revocation-cessation-summary-details
         [cessation]="cessation$ | async"
         [allowancesSurrenderRequired]="allowancesSurrenderRequired$ | async"
-        [isEditable]="isEditable$ | async"
-      ></app-revocation-cessation-summary-details>
+        [isEditable]="isEditable$ | async"></app-revocation-cessation-summary-details>
     `,
   })
   class TestComponent {

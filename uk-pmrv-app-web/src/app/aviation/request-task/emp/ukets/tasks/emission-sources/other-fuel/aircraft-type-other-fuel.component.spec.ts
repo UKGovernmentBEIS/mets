@@ -31,7 +31,9 @@ const mockAircraftType: AircraftTypeDetails = {
 };
 @Component({
   selector: 'app-mock-parent',
-  template: ` <app--aircraft-type-other-fuel></app--aircraft-type-other-fuel>`,
+  template: `
+    <app--aircraft-type-other-fuel></app--aircraft-type-other-fuel>
+  `,
   standalone: true,
   imports: [ReactiveFormsModule, AircraftTypeOtherFuelComponent],
   providers: [EmissionSourcesFormProvider],

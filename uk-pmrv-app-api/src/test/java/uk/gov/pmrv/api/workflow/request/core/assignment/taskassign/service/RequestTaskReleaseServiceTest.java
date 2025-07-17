@@ -6,11 +6,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.rules.domain.ResourceType;
-import uk.gov.pmrv.api.authorization.rules.services.AuthorizationRulesQueryService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.AuthorizationRulesQueryService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.assignment.requestassign.RequestReleaseService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -52,10 +52,10 @@ class RequestTaskReleaseServiceTest {
     private AuthorizationRulesQueryService authorizationRulesQueryService;
 
     @Test
-    void releaseTaskById() {
+    void releaseTaskByIdButNotPaymentAssignee() {
         Long requestTaskId = 1L;
         Request request = Request.builder().id("1").build();
-        RoleType roleType = RoleType.REGULATOR;
+        String roleType = RoleTypeConstants.REGULATOR;
 
         RequestTask requestTask = RequestTask.builder().id(requestTaskId).request(request)
                 .type(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_REVIEW).assignee("assignee").build();
@@ -68,7 +68,7 @@ class RequestTaskReleaseServiceTest {
         // Mock
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-                .thenReturn(Optional.of(RoleType.REGULATOR));
+                .thenReturn(Optional.of(RoleTypeConstants.REGULATOR));
         when(requestTaskService.findTasksByRequestIdAndRoleType(request.getId(), roleType))
                 .thenReturn(requestTasks);
 
@@ -88,7 +88,7 @@ class RequestTaskReleaseServiceTest {
 
         assertNull(requestTask.getAssignee());
         assertNotNull(requestTask1.getAssignee());
-        assertNull(requestTask2.getAssignee());
+        assertNotNull(requestTask2.getAssignee());
     }
     
     @Test
@@ -97,11 +97,11 @@ class RequestTaskReleaseServiceTest {
         Request request = Request.builder().id("1").build();
         RequestTask requestTask = RequestTask.builder().id(requestTaskId).request(request)
                 .type(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_SUBMIT).assignee("assignee").build();
-        RoleType roleType = RoleType.OPERATOR;
+        String roleType = RoleTypeConstants.OPERATOR;
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-                .thenReturn(Optional.of(RoleType.OPERATOR));
+                .thenReturn(Optional.of(RoleTypeConstants.OPERATOR));
         doThrow(new BusinessException(ErrorCode.ASSIGNMENT_NOT_ALLOWED))
                 .when(requestTaskAssignmentValidationService).validateTaskReleaseCapability(requestTask, roleType);
 
@@ -145,7 +145,7 @@ class RequestTaskReleaseServiceTest {
     void releaseTaskByIdPeerReview () {
         Long requestTaskId = 1L;
         Request request = Request.builder().id("1").build();
-        RoleType roleType = RoleType.REGULATOR;
+        String roleType = RoleTypeConstants.REGULATOR;
 
         RequestTask requestTask = RequestTask.builder().id(requestTaskId).request(request)
                 .type(RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW).assignee("assignee").build();
@@ -157,7 +157,7 @@ class RequestTaskReleaseServiceTest {
         // Mock
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         when(authorizationRulesQueryService.findRoleTypeByResourceTypeAndSubType(ResourceType.REQUEST_TASK, requestTask.getType().name()))
-                .thenReturn(Optional.of(RoleType.REGULATOR));
+                .thenReturn(Optional.of(RoleTypeConstants.REGULATOR));
 
         // Invoke
         requestTaskReleaseService.releaseTaskById(requestTaskId);

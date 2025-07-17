@@ -36,8 +36,7 @@ describe('SummaryOfConditionsGroupComponent', () => {
     template: `
       <app-summary-of-conditions-group
         [isEditable]="isEditable"
-        [summaryOfConditionsInfo]="summaryOfConditionsInfo"
-      ></app-summary-of-conditions-group>
+        [summaryOfConditionsInfo]="summaryOfConditionsInfo"></app-summary-of-conditions-group>
     `,
   })
   class TestComponent {

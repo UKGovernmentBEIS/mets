@@ -1,0 +1,42 @@
+package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
+import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+public class PermitNotificationApplicationReviewCompletedDecisionRequestActionPayload
+        extends PermitNotificationApplicationReviewSubmittedDecisionRequestActionPayload {
+
+    @Valid
+    @NotNull
+    private PermitNotification permitNotification;
+
+    @Builder.Default
+    private Map<UUID, String> permitNotificationAttachments = new HashMap<>();
+
+    @Override
+    public Map<UUID, String> getAttachments() {
+        return this.getPermitNotificationAttachments();
+    }
+}

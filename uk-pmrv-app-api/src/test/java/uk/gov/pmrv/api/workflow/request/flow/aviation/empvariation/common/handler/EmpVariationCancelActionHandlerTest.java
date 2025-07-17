@@ -14,8 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -40,7 +40,7 @@ class EmpVariationCancelActionHandlerTest {
     @Test
     void process() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").roleType(RoleType.OPERATOR).build();
+        final AppUser appUser = AppUser.builder().userId("userId").roleType(RoleTypeConstants.OPERATOR).build();
         final String processTaskId = "processTaskId";
         final Request request = Request.builder()
             .id("requestId")
@@ -56,14 +56,14 @@ class EmpVariationCancelActionHandlerTest {
         //invoke
         handler.process(requestTask.getId(),
             RequestTaskActionType.EMP_VARIATION_CANCEL_APPLICATION,
-            pmrvUser,
+            appUser,
             RequestTaskActionEmptyPayload.builder().build());
 
         verify(requestTaskService, times(1)).findTaskById(requestTask.getId());
 
         verify(workflowService, times(1)).completeTask(processTaskId,
             Map.of(BpmnProcessConstants.EMP_VARIATION_SUBMIT_OUTCOME, EmpVariationSubmitOutcome.CANCELLED,
-                   BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, RoleType.OPERATOR));
+                   BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, RoleTypeConstants.OPERATOR));
     }
     
     @Test

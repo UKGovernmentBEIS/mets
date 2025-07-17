@@ -12,8 +12,9 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Uncorrected non-conformities" [breadcrumb]="true">
       <app-non-conformities-group
-        [uncorrectedNonConformities]="(payload$ | async).verificationReport.uncorrectedNonConformities"
-      ></app-non-conformities-group>
+        [uncorrectedNonConformities]="
+          (payload$ | async).verificationReport.uncorrectedNonConformities
+        "></app-non-conformities-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -24,5 +25,8 @@ export class NonConformitiesComponent {
   decisionData$ = combineLatest([this.payload$, this.route.data]).pipe(
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

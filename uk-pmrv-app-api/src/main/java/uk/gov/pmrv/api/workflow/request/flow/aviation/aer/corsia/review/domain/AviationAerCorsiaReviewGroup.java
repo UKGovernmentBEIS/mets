@@ -54,7 +54,9 @@ public enum AviationAerCorsiaReviewGroup {
                 INDEPENDENT_REVIEW
             )
         );
-        if (aer.getEmissionsReductionClaim().getExist()) {
+        if (aer != null && 
+        		aer.getEmissionsReductionClaim() != null &&
+                Boolean.TRUE.equals(aer.getEmissionsReductionClaim().getExist())) {
             reviewGroups.add(ELIGIBLE_FUELS_REDUCTION_CLAIM);
         }
         return reviewGroups;

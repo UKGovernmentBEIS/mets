@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
-import { takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, takeUntil, tap } from 'rxjs';
 
 import { OperatorDetailsCorsiaFormProvider } from '@aviation/request-task/emp/corsia/tasks/operator-details';
 import { OperatorDetailsQuery } from '@aviation/request-task/emp/corsia/tasks/operator-details/store/operator-details.selectors';
@@ -20,6 +20,7 @@ import { SharedModule } from '@shared/shared.module';
 import { AviationCorsiaOperatorDetails, EmpCorsiaOperatorDetails, EmpOperatorDetails } from 'pmrv-api';
 
 import { OperatorDetailsSubsidiaryListComponent } from '../operator-details-subsidiary-list/operator-details-subsidiary-list.component';
+import { transformFiles } from '../utils/operator-details-summary.util';
 
 @Component({
   selector: 'app-operator-details-summary-template',
@@ -35,7 +36,7 @@ import { OperatorDetailsSubsidiaryListComponent } from '../operator-details-subs
     OperatorDetailsSubsidiaryListComponent,
   ],
 })
-export class OperatorDetailsSummaryTemplateComponent {
+export class OperatorDetailsSummaryTemplateComponent implements OnInit {
   @Input() isEditable = false;
   @Input() data: EmpOperatorDetails | EmpCorsiaOperatorDetails | AviationCorsiaOperatorDetails;
 
@@ -49,6 +50,7 @@ export class OperatorDetailsSummaryTemplateComponent {
     organisationStructure: 'evidenceFiles',
   };
   subsidiaryCompaniesNameControl = 'subsidiaryCompanies';
+  subsidiaryCompanies$ = new BehaviorSubject<EmpCorsiaOperatorDetails['subsidiaryCompanies']>([]);
 
   constructor(
     @Inject(TASK_FORM_PROVIDER) protected readonly formDetailsProvider: OperatorDetailsCorsiaFormProvider,
@@ -58,6 +60,10 @@ export class OperatorDetailsSummaryTemplateComponent {
     protected readonly store: RequestTaskStore,
     protected readonly destroy$: DestroySubject,
   ) {}
+
+  ngOnInit(): void {
+    this.subsidiaryCompanies$.next((this.data as EmpCorsiaOperatorDetails).subsidiaryCompanies);
+  }
 
   getOperatorDetails() {
     this.store
@@ -75,14 +81,24 @@ export class OperatorDetailsSummaryTemplateComponent {
 
   handleSubsidiaryList(index: number) {
     this.formDetailsProvider.removeSubsidiaryCompanyItem(index);
+    this.getOperatorDetails();
 
-    const currentForm = this.formDetailsProvider.form.controls[this.subsidiaryCompaniesNameControl];
+    const form = this.formDetailsProvider.form;
+    const currentForm = form.controls[this.subsidiaryCompaniesNameControl];
+
     const operatorDetails = {
       ...this.operatorDetails,
-      ...{ subsidiaryCompanies: this.formDetailsProvider.form.value.subsidiaryCompanies },
-    };
+      ...{
+        subsidiaryCompanies: this.operatorDetails.subsidiaryCompanies.filter((_, i) => i !== index),
+        subsidiaryCompanyExist: form.value.subsidiaryCompanyExist,
+      },
+    } as EmpCorsiaOperatorDetails;
 
-    if (this.subsidiaryCompaniesNameControl ? currentForm.valid : this.formDetailsProvider.form?.valid) {
+    if (
+      this.subsidiaryCompaniesNameControl && operatorDetails.subsidiaryCompanies?.length > 0
+        ? currentForm.valid
+        : form?.valid
+    ) {
       (this.store.empDelegate as EmpCorsiaStoreDelegate)
         .saveEmp({ operatorDetails }, 'in progress')
         .pipe(
@@ -95,9 +111,22 @@ export class OperatorDetailsSummaryTemplateComponent {
           }),
         )
         .subscribe(() => {
-          this.router.navigate(['../summary'], {
-            relativeTo: this.route,
-          });
+          const subsidiaryCompanies = form.value.subsidiaryCompanies as EmpCorsiaOperatorDetails['subsidiaryCompanies'];
+
+          this.subsidiaryCompanies$.next(
+            subsidiaryCompanies.map((subsidiaryCompany) => ({
+              ...subsidiaryCompany,
+              airOperatingCertificate: {
+                ...subsidiaryCompany.airOperatingCertificate,
+                certificateFiles: subsidiaryCompany.airOperatingCertificate.certificateExist
+                  ? (transformFiles(
+                      subsidiaryCompany.airOperatingCertificate?.certificateFiles,
+                      `${this.store.empDelegate.baseFileAttachmentDownloadUrl}/`,
+                    ) as any)
+                  : [],
+              },
+            })),
+          );
         });
     }
   }

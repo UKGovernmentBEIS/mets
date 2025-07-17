@@ -3,7 +3,7 @@ package uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 
 import jakarta.validation.constraints.NotNull;
 

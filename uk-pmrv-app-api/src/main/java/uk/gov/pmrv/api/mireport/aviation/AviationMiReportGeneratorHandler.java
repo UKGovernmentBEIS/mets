@@ -1,14 +1,7 @@
 package uk.gov.pmrv.api.mireport.aviation;
 
-import uk.gov.pmrv.api.mireport.common.MiReportType;
-import uk.gov.pmrv.api.mireport.common.domain.dto.MiReportParams;
-import uk.gov.pmrv.api.mireport.common.domain.dto.MiReportResult;
+import uk.gov.netz.api.mireport.MiReportGeneratorHandler;
+import uk.gov.netz.api.mireport.domain.MiReportParams;
 
-import jakarta.persistence.EntityManager;
-
-public interface AviationMiReportGeneratorHandler<T extends MiReportParams> {
-
-    MiReportResult generateMiReport(EntityManager entityManager, T reportParams);
-
-    MiReportType getReportType();
+public interface AviationMiReportGeneratorHandler<T extends MiReportParams> extends MiReportGeneratorHandler<T> {
 }

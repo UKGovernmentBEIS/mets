@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -10,8 +10,11 @@ import { NonComplianceApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 import { isDetailsOfBreachStepCompleted, isWizardCompleted } from '../non-compliance.wizard';
 
 @Injectable({ providedIn: 'root' })
-export class ChooseWorkflowGuard implements CanActivate {
-  constructor(private readonly store: CommonTasksStore, private readonly router: Router) {}
+export class ChooseWorkflowGuard {
+  constructor(
+    private readonly store: CommonTasksStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> {
     return (

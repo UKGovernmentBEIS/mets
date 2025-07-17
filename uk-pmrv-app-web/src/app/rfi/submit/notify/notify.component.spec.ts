@@ -51,7 +51,6 @@ describe('NotifyComponent', () => {
         roleCode: 'operator',
         authorityCreationDate: '2021-12-02T12:41:16.752923Z',
         authorityStatus: 'ACTIVE',
-        locked: false,
       },
       {
         userId: 'd83706ba-42d4-4909-b54f-e8607a56cdfd',
@@ -61,7 +60,6 @@ describe('NotifyComponent', () => {
         roleCode: 'operator',
         authorityCreationDate: '2021-12-02T12:41:16.752923Z',
         authorityStatus: 'ACTIVE',
-        locked: false,
       },
       {
         userId: 'a9f0621d-3097-46f5-b26b-7aeceb8ab146',
@@ -71,7 +69,6 @@ describe('NotifyComponent', () => {
         roleCode: 'emitter_contact',
         authorityCreationDate: '2021-12-02T12:52:09.505285Z',
         authorityStatus: 'ACTIVE',
-        locked: true,
       },
     ] as UserAuthorityInfoDTO[],
     editable: true,

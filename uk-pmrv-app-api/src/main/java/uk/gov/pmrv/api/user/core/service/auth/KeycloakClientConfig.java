@@ -6,7 +6,7 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import uk.gov.pmrv.api.common.config.KeycloakProperties;
+import uk.gov.pmrv.api.user.core.config.KeycloakProperties;
 
 @Configuration
 @RequiredArgsConstructor

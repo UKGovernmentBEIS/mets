@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -8,7 +8,7 @@ import { PermitApplicationState } from '../store/permit-application.state';
 import { PermitApplicationStore } from '../store/permit-application.store';
 
 @Injectable()
-export class AmendGuard implements CanActivate {
+export class AmendGuard {
   constructor(
     private readonly store: PermitApplicationStore<PermitApplicationState>,
     private readonly router: Router,

@@ -1,0 +1,315 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    [heading]="'Waste gas balance'"
+    [caption]="(productBenchmarkType$ | async | subInstallationType) + ': benchmark improvement rate'"
+    submitText="Continue">
+    <div class="govuk-!-width-two-thirds">
+      <div class="govuk-body">
+        For the specific purpose of the baseline data collection, this section should cover all data provided in section
+        F.(I) in the "baseline data collection" template.
+      </div>
+      <div class="govuk-body">
+        The attributable emissions will take into account any import or export of waste gases, in line with section
+        10.1.5 of Annex VII of the FAR.
+      </div>
+
+      <div
+        govuk-checkboxes
+        legend="Are there any waste gas activities at this sub-installation?"
+        legendSize="medium"
+        hint="Select all that apply."
+        formControlName="wasteGasActivities">
+        <govuk-checkbox [value]="'WASTE_GAS_PRODUCED'" label="Waste gas produced"></govuk-checkbox>
+        <govuk-checkbox
+          [value]="'WASTE_GAS_CONSUMED'"
+          label="Waste gas consumed, including safety flaring"></govuk-checkbox>
+        <govuk-checkbox
+          [value]="'WASTE_GAS_FLARED'"
+          label="Waste gas flared, not including safety flaring"></govuk-checkbox>
+        <govuk-checkbox [value]="'WASTE_GAS_IMPORTED'" label="Waste gas imported"></govuk-checkbox>
+        <govuk-checkbox [value]="'WASTE_GAS_EXPORTED'" label="Waste gas exported"></govuk-checkbox>
+        <govuk-checkbox
+          [value]="'NO_WASTE_GAS_ACTIVITIES'"
+          label="No, there are no waste gas activities at this sub-installation"
+          divider="or"></govuk-checkbox>
+      </div>
+    </div>
+
+    @if (
+      form.get('wasteGasActivities').value !== null &&
+      form.get('wasteGasActivities').value?.length > 0 &&
+      !form.get('wasteGasActivities').value?.includes('NO_WASTE_GAS_ACTIVITIES')
+    ) {
+      <h2 class="govuk-heading-m">Data sources for waste gas amounts</h2>
+
+      <p class="govuk-caption-m">
+        Add the data sources used for the quantification of the waste gas amounts in line with section 4.4 of Annex VII
+        of the FAR and the method used to determine the energy content and emission factor in line with section 4.6 of
+        Annex VII of the FAR.
+      </p>
+
+      <div formArrayName="dataSources">
+        <fieldset
+          *ngFor="let dataSource of dataSourcesFormArray?.controls; index as i"
+          [formGroupName]="i"
+          govukFieldset
+          id="dataSource-def-{{ i }}">
+          <legend govukLegend>Data source {{ i + 1 }}</legend>
+          <button
+            (click)="dataSourcesFormArray.removeAt(i)"
+            *ngIf="dataSourcesFormArray.length > 1"
+            appAddAnother
+            govukSecondaryButton
+            type="button"
+            #removeButton>
+            Remove
+          </button>
+
+          <div
+            [ngClass]="{
+              'govuk-form-group--error':
+                dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async,
+            }">
+            <div
+              *ngIf="
+                dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async
+              "
+              [ngClass]="{
+                'govuk-error-message':
+                  dataSource?.errors?.atLeastOneRequired && this.wizardStepComponent.isSummaryDisplayedSubject | async,
+              }">
+              {{ dataSource?.errors?.atLeastOneRequired }}
+            </div>
+
+            <div [id]="'l.dataSources.' + i">
+              @if (
+                form.get('wasteGasActivities').value !== null &&
+                form.get('wasteGasActivities').value?.length > 0 &&
+                form.get('wasteGasActivities').value?.includes('WASTE_GAS_PRODUCED')
+              ) {
+                <ng-container formGroupName="WASTE_GAS_PRODUCED">
+                  <div class="govuk-body">Waste gases produced</div>
+                  <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource44Type of dataSource44Types" [value]="dataSource44Type">
+                      {{ dataSource44Type | productBenchmark44DataSource }}
+                    </option>
+                  </div>
+
+                  <div class="govuk-body">Energy content of waste gases produced</div>
+                  <div formControlName="energyContent" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
+                      {{ dataSource46Type | productBenchmark46DataSource }}
+                    </option>
+                  </div>
+
+                  <div class="govuk-body">Emission factor of waste gases produced</div>
+                  <div formControlName="emissionFactor" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
+                      {{ dataSource46Type | productBenchmark46DataSource }}
+                    </option>
+                  </div>
+                </ng-container>
+              }
+
+              @if (
+                form.get('wasteGasActivities').value !== null &&
+                form.get('wasteGasActivities').value?.length > 0 &&
+                form.get('wasteGasActivities').value?.includes('WASTE_GAS_CONSUMED')
+              ) {
+                <ng-container formGroupName="WASTE_GAS_CONSUMED">
+                  <div class="govuk-body">Waste gases consumed, including safety flaring</div>
+                  <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource44Type of dataSource44Types" [value]="dataSource44Type">
+                      {{ dataSource44Type | productBenchmark44DataSource }}
+                    </option>
+                  </div>
+
+                  <div class="govuk-body">Energy content of waste gases consumed</div>
+                  <div formControlName="energyContent" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
+                      {{ dataSource46Type | productBenchmark46DataSource }}
+                    </option>
+                  </div>
+
+                  <div class="govuk-body">Emission factor of waste gases consumed</div>
+                  <div formControlName="emissionFactor" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
+                      {{ dataSource46Type | productBenchmark46DataSource }}
+                    </option>
+                  </div>
+                </ng-container>
+              }
+
+              @if (
+                form.get('wasteGasActivities').value !== null &&
+                form.get('wasteGasActivities').value?.length > 0 &&
+                form.get('wasteGasActivities').value?.includes('WASTE_GAS_FLARED')
+              ) {
+                <ng-container formGroupName="WASTE_GAS_FLARED">
+                  <div class="govuk-body">Waste gases flared, not including safety flaring</div>
+                  <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource44Type of dataSource44Types" [value]="dataSource44Type">
+                      {{ dataSource44Type | productBenchmark44DataSource }}
+                    </option>
+                  </div>
+
+                  <div class="govuk-body">Energy content of waste gases flared</div>
+                  <div formControlName="energyContent" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
+                      {{ dataSource46Type | productBenchmark46DataSource }}
+                    </option>
+                  </div>
+
+                  <div class="govuk-body">Emission factor of waste gases flared</div>
+                  <div formControlName="emissionFactor" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
+                      {{ dataSource46Type | productBenchmark46DataSource }}
+                    </option>
+                  </div>
+                </ng-container>
+              }
+
+              @if (
+                form.get('wasteGasActivities').value !== null &&
+                form.get('wasteGasActivities').value?.length > 0 &&
+                form.get('wasteGasActivities').value?.includes('WASTE_GAS_IMPORTED')
+              ) {
+                <ng-container formGroupName="WASTE_GAS_IMPORTED">
+                  <div class="govuk-body">Waste gases imported</div>
+                  <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource44Type of dataSource44Types" [value]="dataSource44Type">
+                      {{ dataSource44Type | productBenchmark44DataSource }}
+                    </option>
+                  </div>
+
+                  <div class="govuk-body">Energy content of waste gases imported</div>
+                  <div formControlName="energyContent" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
+                      {{ dataSource46Type | productBenchmark46DataSource }}
+                    </option>
+                  </div>
+
+                  <div class="govuk-body">Emission factor of waste gases imported</div>
+                  <div formControlName="emissionFactor" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
+                      {{ dataSource46Type | productBenchmark46DataSource }}
+                    </option>
+                  </div>
+                </ng-container>
+              }
+
+              @if (
+                form.get('wasteGasActivities').value !== null &&
+                form.get('wasteGasActivities').value?.length > 0 &&
+                form.get('wasteGasActivities').value?.includes('WASTE_GAS_EXPORTED')
+              ) {
+                <ng-container formGroupName="WASTE_GAS_EXPORTED">
+                  <div class="govuk-body">Waste gases exported</div>
+                  <div formControlName="entity" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource44Type of dataSource44Types" [value]="dataSource44Type">
+                      {{ dataSource44Type | productBenchmark44DataSource }}
+                    </option>
+                  </div>
+
+                  <div class="govuk-body">Energy content of waste gases exported</div>
+                  <div formControlName="energyContent" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
+                      {{ dataSource46Type | productBenchmark46DataSource }}
+                    </option>
+                  </div>
+
+                  <div class="govuk-body">Emission factor of waste gases exported</div>
+                  <div formControlName="emissionFactor" govuk-select widthClass="govuk-!-width-full">
+                    <option [value]="''">Select an option if relevant</option>
+                    <option *ngFor="let dataSource46Type of dataSource46Types" [value]="dataSource46Type">
+                      {{ dataSource46Type | productBenchmark46DataSource }}
+                    </option>
+                  </div>
+                </ng-container>
+              }
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
+      <button
+        (click)="addDataSource()"
+        govukSecondaryButton
+        type="button"
+        *ngIf="dataSourcesFormArray?.controls.length < 6">
+        Add another data source
+      </button>
+
+      <h2 class="govuk-heading-m">Description of methodology applied for each data source</h2>
+      <p class="govuk-caption-m">
+        This should include information for all types of waste gases identified. If flaring is relevant in your
+        installation, explain how it was classified into safety flaring and other flaring.
+      </p>
+      <app-include-answer-details></app-include-answer-details>
+      <div
+        formControlName="dataSourcesMethodologyAppliedDescription"
+        govuk-textarea
+        [maxLength]="10000"
+        rows="10"></div>
+
+      <div formGroupName="hierarchicalOrder">
+        <div
+          formControlName="followed"
+          govuk-radio
+          legend="Has the hierarchical order been followed?"
+          hint="Select yes if the data source with the highest rank within the hierarchy has been used, as set out in section 4 of Annex VII of the FAR."
+          [legendSize]="'medium'">
+          <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+          <govuk-radio-option [value]="false" label="No">
+            <ng-container govukConditionalContent>
+              <div
+                formControlName="notFollowingHierarchicalOrderReason"
+                govuk-radio
+                legend="Reason for not following the hierarchy">
+                <govuk-radio-option
+                  [value]="'OTHER_DATA_SOURCES_LEAD_TO_LOWER_UNCERTAINTY'"
+                  label="Other data sources lead to lower uncertainty according to the simplified uncertainty assessment in line with Article 7(2) of the FAR"></govuk-radio-option>
+                <govuk-radio-option
+                  [value]="'USE_OF_BETTER_DATA_SOURCES_TECHNICALLY_INFEASIBLE'"
+                  label="Use of better data sources is technically infeasible"></govuk-radio-option>
+                <govuk-radio-option
+                  [value]="'USE_OF_BETTER_DATA_SOURCES_UNREASONABLE_COSTS'"
+                  label="Use of better data sources would incur unreasonable costs"></govuk-radio-option>
+              </div>
+              <div
+                formControlName="notFollowingHierarchicalOrderDescription"
+                label="Provide more details on any deviation from the hierarchy"
+                govuk-textarea
+                [maxLength]="10000"
+                rows="10"></div>
+            </ng-container>
+          </govuk-radio-option>
+        </div>
+      </div>
+
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload supporting files (optional)"
+        formControlName="supportingFiles"
+        listTitle="Uploaded files"></app-multiple-file-input>
+    }
+  </app-wizard-step>
+
+  <a govukLink [routerLink]="'../../'">Return to: Sub-installations</a>
+</app-permit-task>

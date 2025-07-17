@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -39,7 +38,7 @@ describe('DeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, CalculationModule, RouterTestingModule],
+      imports: [SharedModule, CalculationModule],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         { provide: TasksService, useValue: tasksService },
@@ -71,7 +70,7 @@ describe('DeleteComponent', () => {
 
     expect(page.heading).toBeTruthy();
     expect(page.heading.textContent.trim()).toEqual(
-      'Are you sure you want to delete  ‘13123124 White Spirit & SBP: Major’?',
+      'Are you sure you want to delete ‘13123124 White Spirit & SBP: Major’?',
     );
 
     page.submitButton.click();

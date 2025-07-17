@@ -3,8 +3,8 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.review
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationReviewDecisionType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.review.domain.EmpVariationUkEtsApplicationReviewRequestTaskPayload;
 
@@ -20,7 +20,7 @@ public class EmpVariationUkEtsReviewReturnForAmendsValidatorService {
             || (taskPayload.getEmpVariationDetailsReviewDecision() != null 
             	&& taskPayload.getEmpVariationDetailsReviewDecision().getType() == EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED);
         if (!amendExists) {
-            throw new BusinessException(ErrorCode.INVALID_EMP_VARIATION_REVIEW);
+            throw new BusinessException(MetsErrorCode.INVALID_EMP_VARIATION_REVIEW);
         }
     }
 }

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -45,7 +45,7 @@ class AerRequestAmendsVerificationActionHandlerTest {
         Long requestTaskId = 1L;
         String requestId = "1";
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.AER_REQUEST_AMENDS_VERIFICATION;
-        PmrvUser pmrvUser = new PmrvUser();
+        AppUser appUser = new AppUser();
         AerApplicationRequestVerificationRequestTaskActionPayload payload =
                 new AerApplicationRequestVerificationRequestTaskActionPayload();
         RequestTask requestTask = RequestTask.builder()
@@ -54,9 +54,9 @@ class AerRequestAmendsVerificationActionHandlerTest {
                 .build();
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        actionHandler.process(requestTaskId, requestTaskActionType, pmrvUser, payload);
+        actionHandler.process(requestTaskId, requestTaskActionType, appUser, payload);
 
-        verify(requestAerSubmitService).sendAmendsToVerifier(eq(payload), eq(requestTask), eq(pmrvUser));
+        verify(requestAerSubmitService).sendAmendsToVerifier(eq(payload), eq(requestTask), eq(appUser));
         verify(workflowService).completeTask(
                 eq(requestTask.getProcessTaskId()),
                 eq(Map.of(

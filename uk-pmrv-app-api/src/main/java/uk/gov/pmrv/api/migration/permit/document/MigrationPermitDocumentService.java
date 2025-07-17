@@ -2,20 +2,15 @@ package uk.gov.pmrv.api.migration.permit.document;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.utils.ExceptionUtils;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentService;
+import uk.gov.netz.api.common.utils.ExceptionUtils;
+import uk.gov.netz.api.files.documents.service.FileDocumentService;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.ftp.FtpFileDTOResult;
@@ -24,10 +19,16 @@ import uk.gov.pmrv.api.migration.ftp.FtpProperties;
 import uk.gov.pmrv.api.permit.domain.PermitEntity;
 import uk.gov.pmrv.api.permit.repository.PermitRepository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 @Service
 @Log4j2
-@RequiredArgsConstructor
 public class MigrationPermitDocumentService extends MigrationBaseService {
 
     private final JdbcTemplate migrationJdbcTemplate;
@@ -36,7 +37,20 @@ public class MigrationPermitDocumentService extends MigrationBaseService {
     private final FtpFileService ftpFileService;
     private final FileDocumentService fileDocumentService;
     private final FtpProperties ftpProperties;
-    
+
+    public MigrationPermitDocumentService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                          Validator validator,
+                                          PermitRepository permitRepository,
+                                          FtpFileService ftpFileService,
+                                          FileDocumentService fileDocumentService,
+                                          FtpProperties ftpProperties) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.validator = validator;
+        this.permitRepository = permitRepository;
+        this.ftpFileService = ftpFileService;
+        this.fileDocumentService = fileDocumentService;
+        this.ftpProperties = ftpProperties;
+    }
 
     private static final String QUERY_BASE = """
         with XMLNAMESPACES ('urn:www-toplev-com:officeformsofd' AS fd),

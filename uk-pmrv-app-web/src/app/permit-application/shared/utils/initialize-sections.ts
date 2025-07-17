@@ -1,3 +1,6 @@
+import { isProductBenchmark } from '@permit-application/mmp-sub-installations/mmp-sub-installations-status';
+import { mmpStatuses } from '@permit-application/monitoring-methodology-plan/mmp-status';
+
 import { Permit } from 'pmrv-api';
 
 import {
@@ -18,7 +21,7 @@ export const initializeReviewSectionsCompleted = (permit: Permit) => {
   return reviewSectionsCompleted;
 };
 
-export const initializePermitSectionsCompleted = (permit: Permit): { [x: string]: boolean[] } => {
+export const initializePermitSectionsCompleted = (permit: Permit, features?: any): { [x: string]: boolean[] } => {
   let sectionsCompleted: { [x: string]: boolean[] } = Object.assign({});
   let subSectionsCompleted: { [x: string]: boolean[] } = Object.assign({});
   for (const [key, value] of Object.entries(permit)) {
@@ -41,6 +44,28 @@ export const initializePermitSectionsCompleted = (permit: Permit): { [x: string]
             ),
           };
         }
+      }
+
+      if (
+        key === 'monitoringMethodologyPlans' &&
+        permit?.monitoringMethodologyPlans?.exist &&
+        features?.['digitized-mmp']
+      ) {
+        mmpStatuses.forEach((str) => {
+          permit?.monitoringMethodologyPlans?.digitizedPlan
+            ? (sectionsCompleted[str] = [true])
+            : (sectionsCompleted[str] = [false]);
+        });
+        sectionsCompleted['MMP_SUB_INSTALLATION_Product_Benchmark'] = [];
+        sectionsCompleted['MMP_SUB_INSTALLATION_Fallback_Approach'] = [];
+
+        permit?.monitoringMethodologyPlans?.digitizedPlan?.subInstallations?.forEach((subInstallation) => {
+          if (isProductBenchmark(subInstallation?.subInstallationType)) {
+            sectionsCompleted['MMP_SUB_INSTALLATION_Product_Benchmark'].push(true);
+          } else {
+            sectionsCompleted['MMP_SUB_INSTALLATION_Fallback_Approach'].push(true);
+          }
+        });
       }
 
       sectionsCompleted = {

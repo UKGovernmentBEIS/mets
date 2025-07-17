@@ -1,12 +1,10 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.handler;
 
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -25,6 +23,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.validation.PermitReviewReturnForAmendsValidatorService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permittransfer.service.PermitTransferBReviewService;
 
+import java.util.List;
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class PermitTransferBReviewReturnForAmendsHandler implements RequestTaskActionHandler<RequestTaskActionEmptyPayload> {
@@ -40,7 +41,7 @@ public class PermitTransferBReviewReturnForAmendsHandler implements RequestTaskA
     @Transactional
     public void process(final Long requestTaskId, 
                         final RequestTaskActionType requestTaskActionType, 
-                        final PmrvUser pmrvUser, 
+                        final AppUser appUser,
                         final RequestTaskActionEmptyPayload payload) {
         
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -49,12 +50,12 @@ public class PermitTransferBReviewReturnForAmendsHandler implements RequestTaskA
         permitReviewReturnForAmendsValidatorService.validate((PermitIssuanceApplicationReviewRequestTaskPayload) requestTask.getPayload());
 
         // Update request payload
-        permitTransferBReviewService.updatePermitTransferBRequestPayload(requestTask, pmrvUser);
+        permitTransferBReviewService.updatePermitTransferBRequestPayload(requestTask, appUser);
 
         // Add request action
         this.createRequestAction(
             requestTask.getRequest(), 
-            pmrvUser, 
+            appUser,
             (PermitIssuanceApplicationReviewRequestTaskPayload) requestTask.getPayload()
         );
 
@@ -71,7 +72,7 @@ public class PermitTransferBReviewReturnForAmendsHandler implements RequestTaskA
     }
 
     private void createRequestAction(final Request request, 
-                                     final PmrvUser pmrvUser, 
+                                     final AppUser appUser,
                                      final PermitIssuanceApplicationReviewRequestTaskPayload taskPayload) {
         
         final PermitIssuanceApplicationReturnedForAmendsRequestActionPayload requestActionPayload = permitReviewMapper
@@ -84,7 +85,7 @@ public class PermitTransferBReviewReturnForAmendsHandler implements RequestTaskA
             request, 
             requestActionPayload, 
             RequestActionType.PERMIT_TRANSFER_B_APPLICATION_RETURNED_FOR_AMENDS,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
     }
 }

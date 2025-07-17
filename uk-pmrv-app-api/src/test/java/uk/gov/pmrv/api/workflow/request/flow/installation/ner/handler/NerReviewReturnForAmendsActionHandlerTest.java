@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -52,7 +52,7 @@ class NerReviewReturnForAmendsActionHandlerTest {
     @Test
     void process() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final String processTaskId = "processTaskId";
         final NerApplicationReviewRequestTaskPayload taskPayload = NerApplicationReviewRequestTaskPayload.builder().build();
         final Request request = Request.builder().build();
@@ -72,17 +72,17 @@ class NerReviewReturnForAmendsActionHandlerTest {
         //invoke
         handler.process(requestTask.getId(),
             RequestTaskActionType.NER_REVIEW_RETURN_FOR_AMENDS,
-            pmrvUser,
+            appUser,
             RequestTaskActionEmptyPayload.builder().build());
 
         verify(requestTaskService, times(1)).findTaskById(requestTask.getId());
         verify(amendsValidator, times(1)).validate(taskPayload);
-        verify(applyReviewService, times(1)).updateRequestPayload(requestTask, pmrvUser);
+        verify(applyReviewService, times(1)).updateRequestPayload(requestTask, appUser);
         verify(requestService, times(1)).addActionToRequest(
             request,
             actionPayload,
             RequestActionType.NER_APPLICATION_RETURNED_FOR_AMENDS,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
         verify(workflowService, times(1)).completeTask(processTaskId,
             Map.of(BpmnProcessConstants.REVIEW_OUTCOME, ReviewOutcome.AMENDS_NEEDED.name()));

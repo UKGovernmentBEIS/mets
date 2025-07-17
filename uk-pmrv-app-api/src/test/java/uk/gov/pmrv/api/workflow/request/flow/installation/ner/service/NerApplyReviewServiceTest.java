@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.additionaldocuments.AdditionalDocuments;
 import uk.gov.pmrv.api.permit.domain.confidentialitystatement.ConfidentialityStatement;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -179,7 +179,7 @@ class NerApplyReviewServiceTest {
     @Test
     void saveRequestPeerReviewAction() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final String selectedPeerReview = "selectedPeerReview";
         final NerRequestPayload requestPayload = NerRequestPayload.builder().build();
         final Request request = Request.builder().payload(requestPayload).build();
@@ -198,7 +198,7 @@ class NerApplyReviewServiceTest {
             .build();
         final RequestTask requestTask = RequestTask.builder().payload(taskPayload).request(request).build();
 
-        service.saveRequestPeerReviewAction(requestTask, selectedPeerReview, pmrvUser);
+        service.saveRequestPeerReviewAction(requestTask, selectedPeerReview, appUser);
 
         Assertions.assertEquals(requestPayload.getNerOperatorDocuments(), taskPayload.getNerOperatorDocuments());
         Assertions.assertEquals(requestPayload.getConfidentialityStatement(), taskPayload.getConfidentialityStatement());
@@ -209,14 +209,14 @@ class NerApplyReviewServiceTest {
         Assertions.assertEquals(requestPayload.getReviewAttachments(), taskPayload.getReviewAttachments());
         Assertions.assertEquals(requestPayload.getNerSectionsCompleted(), taskPayload.getNerSectionsCompleted());
         Assertions.assertEquals(requestPayload.getReviewSectionsCompleted(), taskPayload.getReviewSectionsCompleted());
-        Assertions.assertEquals(requestPayload.getRegulatorReviewer(), pmrvUser.getUserId());
+        Assertions.assertEquals(requestPayload.getRegulatorReviewer(), appUser.getUserId());
         Assertions.assertEquals(requestPayload.getRegulatorPeerReviewer(), selectedPeerReview);
     }
 
     @Test
     void saveRequestReturnForAmends() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final NerRequestPayload requestPayload = NerRequestPayload.builder().build();
         final Request request = Request.builder().payload(requestPayload).build();
         final NerApplicationReviewRequestTaskPayload taskPayload = NerApplicationReviewRequestTaskPayload.builder()
@@ -234,7 +234,7 @@ class NerApplyReviewServiceTest {
             .build();
         final RequestTask requestTask = RequestTask.builder().payload(taskPayload).request(request).build();
 
-        service.updateRequestPayload(requestTask, pmrvUser);
+        service.updateRequestPayload(requestTask, appUser);
 
         Assertions.assertEquals(requestPayload.getNerOperatorDocuments(), taskPayload.getNerOperatorDocuments());
         Assertions.assertEquals(requestPayload.getConfidentialityStatement(), taskPayload.getConfidentialityStatement());
@@ -245,7 +245,7 @@ class NerApplyReviewServiceTest {
         Assertions.assertEquals(requestPayload.getReviewAttachments(), taskPayload.getReviewAttachments());
         Assertions.assertEquals(requestPayload.getNerSectionsCompleted(), taskPayload.getNerSectionsCompleted());
         Assertions.assertEquals(requestPayload.getReviewSectionsCompleted(), taskPayload.getReviewSectionsCompleted());
-        Assertions.assertEquals(requestPayload.getRegulatorReviewer(), pmrvUser.getUserId());
+        Assertions.assertEquals(requestPayload.getRegulatorReviewer(), appUser.getUserId());
     }
 
     @Test
@@ -332,9 +332,9 @@ class NerApplyReviewServiceTest {
             .payload(taskPayload)
             .request(request)
             .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         
-        service.saveDecisionNotification(requestTask, decisionNotification, pmrvUser);
+        service.saveDecisionNotification(requestTask, decisionNotification, appUser);
 
         Assertions.assertEquals(requestPayload.getNerOperatorDocuments(), taskPayload.getNerOperatorDocuments());
         Assertions.assertEquals(requestPayload.getConfidentialityStatement(), taskPayload.getConfidentialityStatement());
@@ -345,14 +345,14 @@ class NerApplyReviewServiceTest {
         Assertions.assertEquals(requestPayload.getReviewAttachments(), taskPayload.getReviewAttachments());
         Assertions.assertEquals(requestPayload.getNerSectionsCompleted(), taskPayload.getNerSectionsCompleted());
         Assertions.assertEquals(requestPayload.getReviewSectionsCompleted(), taskPayload.getReviewSectionsCompleted());
-        Assertions.assertEquals(requestPayload.getRegulatorReviewer(), pmrvUser.getUserId());
+        Assertions.assertEquals(requestPayload.getRegulatorReviewer(), appUser.getUserId());
         Assertions.assertEquals(requestPayload.getDecisionNotification(), decisionNotification);
     }
 
     @Test
     void completeReview() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final NerRequestPayload requestPayload = NerRequestPayload.builder().build();
         final Request request = Request.builder().payload(requestPayload).build();
         final NerApplicationReviewRequestTaskPayload taskPayload = NerApplicationReviewRequestTaskPayload.builder()
@@ -370,7 +370,7 @@ class NerApplyReviewServiceTest {
             .build();
         final RequestTask requestTask = RequestTask.builder().payload(taskPayload).request(request).build();
 
-        service.updateRequestPayload(requestTask, pmrvUser);
+        service.updateRequestPayload(requestTask, appUser);
 
         Assertions.assertEquals(requestPayload.getNerOperatorDocuments(), taskPayload.getNerOperatorDocuments());
         Assertions.assertEquals(requestPayload.getConfidentialityStatement(), taskPayload.getConfidentialityStatement());
@@ -381,6 +381,6 @@ class NerApplyReviewServiceTest {
         Assertions.assertEquals(requestPayload.getReviewAttachments(), taskPayload.getReviewAttachments());
         Assertions.assertEquals(requestPayload.getNerSectionsCompleted(), taskPayload.getNerSectionsCompleted());
         Assertions.assertEquals(requestPayload.getReviewSectionsCompleted(), taskPayload.getReviewSectionsCompleted());
-        Assertions.assertEquals(requestPayload.getRegulatorReviewer(), pmrvUser.getUserId());
+        Assertions.assertEquals(requestPayload.getRegulatorReviewer(), appUser.getUserId());
     }
 }

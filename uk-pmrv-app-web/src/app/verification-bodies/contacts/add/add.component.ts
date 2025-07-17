@@ -90,7 +90,7 @@ export class AddComponent implements OnInit {
               this.form.value,
             ),
           ),
-          catchBadRequest(ErrorCodes.USER1001, () => {
+          catchBadRequest([ErrorCodes.USER1001, ErrorCodes.AUTHORITY1005, ErrorCodes.AUTHORITY1015], () => {
             this.form.get('email').setErrors({ unique: 'This user email already exists in the service' });
 
             return EMPTY;

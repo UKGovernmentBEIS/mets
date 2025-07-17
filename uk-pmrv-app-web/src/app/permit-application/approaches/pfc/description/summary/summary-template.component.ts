@@ -9,8 +9,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
       "
       govuk-summary-list
       [hasBorders]="false"
-      [class.summary-list--edge-border]="hasBottomBorder"
-    >
+      [class.summary-list--edge-border]="hasBottomBorder">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Approach description</dt>
         <dd class="pre-wrap" govukSummaryListRowValue>{{ approachDescription }}</dd>

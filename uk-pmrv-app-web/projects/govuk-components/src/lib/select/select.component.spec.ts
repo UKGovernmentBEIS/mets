@@ -12,10 +12,9 @@ describe('SelectComponent', () => {
         govuk-select
         [options]="[
           { text: 'First', value: 1 },
-          { text: 'Second', value: 2 }
+          { text: 'Second', value: 2 },
         ]"
-        [formControl]="control"
-      >
+        [formControl]="control">
         <option [ngValue]="3">Third</option>
       </div>
     `,

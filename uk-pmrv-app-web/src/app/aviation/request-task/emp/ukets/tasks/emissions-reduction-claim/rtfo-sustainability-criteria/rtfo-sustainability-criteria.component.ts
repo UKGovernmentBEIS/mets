@@ -20,11 +20,11 @@ import { EmissionsReductionClaimFormProvider } from '../emissions-reduction-clai
   providers: [DestroySubject],
 })
 export class RtfoSustainabilityCriteriaComponent implements OnInit, OnDestroy {
-  private backLinkService = inject(BackLinkService);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private pendingRequestService = inject(PendingRequestService);
-  private store = inject(RequestTaskStore);
+  private readonly backLinkService = inject(BackLinkService);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly pendingRequestService = inject(PendingRequestService);
+  private readonly store = inject(RequestTaskStore);
 
   formProvider = inject<EmissionsReductionClaimFormProvider>(TASK_FORM_PROVIDER);
   form = this.formProvider.rtfoSustainabilityCriteriaCtrl;

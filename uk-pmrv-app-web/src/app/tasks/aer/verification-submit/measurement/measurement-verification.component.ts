@@ -10,7 +10,7 @@ import { AerService } from '../../core/aer.service';
 @Component({
   selector: 'app-measurement-verification',
   template: `
-    <app-page-heading>{{ taskKey | monitoringApproachEmissionDescription }} </app-page-heading>
+    <app-page-heading>{{ taskKey | monitoringApproachEmissionDescription }}</app-page-heading>
     <app-measurement-group [data]="aerData$ | async" [taskKey]="taskKey"></app-measurement-group>
     <app-return-link></app-return-link>
   `,
@@ -22,5 +22,8 @@ export class MeasurementVerificationComponent {
     map((payload) => payload?.aer),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

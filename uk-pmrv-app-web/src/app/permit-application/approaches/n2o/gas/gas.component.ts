@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, switchMap, switchMapTo } from 'rxjs';
+import { first, switchMap } from 'rxjs';
 
-import { PendingRequestService } from '../../../../core/guards/pending-request.service';
+import { PendingRequestService } from '@core/guards/pending-request.service';
+
 import { PERMIT_TASK_FORM } from '../../../shared/permit-task-form.token';
 import { reviewRequestTaskTypes } from '../../../shared/utils/permit';
 import { PermitApplicationState } from '../../../store/permit-application.state';
@@ -32,7 +33,7 @@ export class GasComponent {
         first(),
         switchMap((data) => this.store.postTask(data.taskKey, this.form.value, true, data.statusKey)),
         this.pendingRequest.trackRequest(),
-        switchMapTo(this.store),
+        switchMap(() => this.store),
         first(),
       )
       .subscribe((state) =>

@@ -1,6 +1,8 @@
 import {
+  AfterContentChecked,
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Inject,
@@ -28,7 +30,7 @@ import { createAnotherRole, monitoringRolesFormProvider } from './monitoring-rol
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject, monitoringRolesFormProvider],
 })
-export class MonitoringRolesComponent extends SectionComponent implements AfterViewInit {
+export class MonitoringRolesComponent extends SectionComponent implements AfterViewInit, AfterContentChecked {
   @ViewChild(WizardStepComponent, { read: ElementRef, static: true }) wizardStep: ElementRef<HTMLElement>;
   @ViewChild(WizardStepComponent) wizardStepComponent: WizardStepComponent;
   @ViewChildren('removeButton') removeButtons: QueryList<ElementRef<HTMLButtonElement>>;
@@ -47,6 +49,7 @@ export class MonitoringRolesComponent extends SectionComponent implements AfterV
     readonly route: ActivatedRoute,
     private readonly pendingRequest: PendingRequestService,
     private readonly destroy$: DestroySubject,
+    private cd: ChangeDetectorRef,
   ) {
     super(store, router, route);
   }
@@ -59,6 +62,9 @@ export class MonitoringRolesComponent extends SectionComponent implements AfterV
     return this.form.get('monitoringRoles') as UntypedFormArray;
   }
 
+  ngAfterContentChecked(): void {
+    this.cd.detectChanges();
+  }
   ngAfterViewInit(): void {
     this.removeButtons.changes.pipe(takeUntil(this.destroy$)).subscribe((buttons) => {
       if (buttons.length > this.rolesLength) {

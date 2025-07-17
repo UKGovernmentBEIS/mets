@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { map } from 'rxjs';
+
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { PaymentStore } from '../../store/payment.store';
 
@@ -13,8 +15,17 @@ import { PaymentStore } from '../../store/payment.store';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class NotSuccessComponent {
+export class NotSuccessComponent implements OnInit {
   message$ = this.route.queryParams.pipe(map((params) => params?.message));
 
-  constructor(readonly store: PaymentStore, private readonly route: ActivatedRoute) {}
+  constructor(
+    readonly store: PaymentStore,
+    private readonly route: ActivatedRoute,
+    private readonly breadcrumbService: BreadcrumbService,
+    private readonly router: Router,
+  ) {}
+
+  ngOnInit(): void {
+    this.breadcrumbService.showDashboardBreadcrumb(this.router.url);
+  }
 }

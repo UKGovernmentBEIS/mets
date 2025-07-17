@@ -5,7 +5,9 @@ import { PendingRequestGuard } from '@core/guards/pending-request.guard';
 import { DeterminationComponent } from '@permit-application/review/determination/determination.component';
 import { DeterminationGuard } from '@permit-application/review/determination/determination.guard';
 import { PermitTransferStore } from '@permit-transfer/store/permit-transfer.store';
+import { ItemActionTypePipe } from '@shared/pipes/item-action-type.pipe';
 import { TaskTypeToBreadcrumbPipe } from '@shared/pipes/task-type-to-breadcrumb.pipe';
+import { TaskGuard } from '@tasks/task.guard';
 
 import { TransferDetailsGuard } from './core/transfer-details.guard';
 import { PermitTransferActionGuard } from './permit-transfer-action.guard';
@@ -21,39 +23,23 @@ import { TransferDetailsComponent } from './transfer-details/transfer-details.co
 const routes: Routes = [
   {
     path: ':taskId',
-    data: { breadcrumb: { resolveText: ({ type }) => new TaskTypeToBreadcrumbPipe().transform(type), skipLink: true} },
-    resolve: { type: () => inject(PermitTransferStore).getState().requestTaskType },
     canActivate: [PermitTransferTaskGuard],
     canDeactivate: [PermitTransferTaskGuard],
     children: [
       {
-        path: '',
-        component: SectionsContainerComponent,
-      },
-      {
-        path: 'transfer-details',
-        children: [
-          {
-            path: '',
-            data: { pageTitle: 'Transfer details' },
-            component: TransferDetailsComponent,
-            canActivate: [TransferDetailsGuard],
-            canDeactivate: [PendingRequestGuard],
-          },
-          {
-            path: 'summary',
-            component: TransferDetailsConfirmationSummaryComponent,
-            data: { pageTitle: 'Transfer details confirm your answers', breadcrumb: 'Transfer details' },
-            canActivate: [TransferDetailsGuard],
-          },
-        ],
-      },
-      {
         path: 'review',
+        data: { breadcrumb: 'Review permit transfer' },
         children: [
           {
             path: '',
             component: ReviewSectionsContainerComponent,
+          },
+          {
+            path: 'change-assignee',
+            canActivate: [TaskGuard],
+            canDeactivate: [TaskGuard],
+            loadChildren: () =>
+              import('../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
           },
           {
             path: 'transfer-details',
@@ -71,17 +57,55 @@ const routes: Routes = [
       },
       {
         path: '',
-        loadChildren: () =>
-          import('../permit-application/permit-application.module').then((m) => m.PermitApplicationModule),
-      },
-      {
-        path: 'summary',
-        component: PermitTransferSummaryComponent,
+        data: { breadcrumb: { resolveText: ({ type }) => new TaskTypeToBreadcrumbPipe().transform(type) } },
+        resolve: { type: () => inject(PermitTransferStore).getState().requestTaskType },
+        children: [
+          {
+            path: '',
+            component: SectionsContainerComponent,
+          },
+          {
+            path: 'change-assignee',
+            canActivate: [TaskGuard],
+            canDeactivate: [TaskGuard],
+            loadChildren: () =>
+              import('../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+          },
+          {
+            path: 'transfer-details',
+            children: [
+              {
+                path: '',
+                data: { pageTitle: 'Transfer details' },
+                component: TransferDetailsComponent,
+                canActivate: [TransferDetailsGuard],
+                canDeactivate: [PendingRequestGuard],
+              },
+              {
+                path: 'summary',
+                component: TransferDetailsConfirmationSummaryComponent,
+                data: { pageTitle: 'Transfer details confirm your answers', breadcrumb: 'Transfer details' },
+                canActivate: [TransferDetailsGuard],
+              },
+            ],
+          },
+          {
+            path: '',
+            loadChildren: () =>
+              import('../permit-application/permit-application.module').then((m) => m.PermitApplicationModule),
+          },
+          {
+            path: 'summary',
+            component: PermitTransferSummaryComponent,
+          },
+        ],
       },
     ],
   },
   {
     path: 'action/:actionId',
+    data: { breadcrumb: { resolveText: ({ type }) => new ItemActionTypePipe().transform(type) } },
+    resolve: { type: () => inject(PermitTransferStore).getState().requestActionType },
     children: [
       {
         path: '',

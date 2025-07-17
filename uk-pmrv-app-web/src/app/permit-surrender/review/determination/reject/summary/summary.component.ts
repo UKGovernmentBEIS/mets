@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { Observable, pluck } from 'rxjs';
+import { map, Observable } from 'rxjs';
+
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { PendingRequest } from '@core/interfaces/pending-request.interface';
 
 import { PermitSurrenderReviewDeterminationReject } from 'pmrv-api';
 
-import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
-import { PendingRequest } from '../../../../../core/interfaces/pending-request.interface';
 import { PermitSurrenderStore } from '../../../../store/permit-surrender.store';
 
 @Component({
@@ -18,9 +19,9 @@ export class SummaryComponent implements PendingRequest {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
 
   rejectDetermination$ = this.store.pipe(
-    pluck('reviewDetermination'),
+    map((state) => state?.reviewDetermination),
   ) as Observable<PermitSurrenderReviewDeterminationReject>;
-  isEditable$ = this.store.pipe(pluck('isEditable'));
+  isEditable$ = this.store.pipe(map((state) => state?.isEditable));
 
   constructor(
     readonly pendingRequest: PendingRequestService,

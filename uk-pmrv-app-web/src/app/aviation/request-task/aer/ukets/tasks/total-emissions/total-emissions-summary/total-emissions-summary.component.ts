@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, RouterLink, RouterLinkWithHref } from '@angular
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
+import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { TotalEmissionsSchemeYearHeaderComponent } from '@aviation/request-task/aer/ukets/tasks/total-emissions/shared/total-emissions-scheme-year-header';
 import { TotalEmissionsStandardFuelsTableComponent } from '@aviation/request-task/aer/ukets/tasks/total-emissions/table/total-emissions-standard-fuels-table';
 import { TotalEmissionsFormProvider } from '@aviation/request-task/aer/ukets/tasks/total-emissions/total-emissions-form.provider';
@@ -20,8 +21,6 @@ import { SharedModule } from '@shared/shared.module';
 import { GovukComponentsModule } from 'govuk-components';
 
 import { AviationAerTotalEmissionsConfidentiality } from 'pmrv-api';
-
-import { AerReviewDecisionGroupComponent } from '../../../aer-review-decision-group/aer-review-decision-group.component';
 
 interface ViewModel {
   data: AviationAerTotalEmissionsConfidentiality;
@@ -43,7 +42,6 @@ interface ViewModel {
     ReturnToLinkComponent,
     RouterLink,
     TotalEmissionsStandardFuelsTableComponent,
-    TotalEmissionsSchemeYearHeaderComponent,
     TotalEmissionsSchemeYearHeaderComponent,
     TotalEmissionsSummaryTemplateComponent,
     AerReviewDecisionGroupComponent,
@@ -73,12 +71,12 @@ export class TotalEmissionsSummaryComponent {
   );
 
   constructor(
-    @Inject(TASK_FORM_PROVIDER) private formProvider: TotalEmissionsFormProvider,
-    private store: RequestTaskStore,
-    private backLinkService: BackLinkService,
-    private pendingRequestService: PendingRequestService,
-    private router: Router,
-    private route: ActivatedRoute,
+    @Inject(TASK_FORM_PROVIDER) private readonly formProvider: TotalEmissionsFormProvider,
+    private readonly store: RequestTaskStore,
+    private readonly backLinkService: BackLinkService,
+    private readonly pendingRequestService: PendingRequestService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
   ) {}
 
   onSubmit() {

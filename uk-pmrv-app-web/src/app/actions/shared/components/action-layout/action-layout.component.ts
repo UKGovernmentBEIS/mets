@@ -17,7 +17,10 @@ export class ActionLayoutComponent implements OnInit {
 
   navigationState = { returnUrl: this.router.url };
 
-  constructor(private readonly backService: BackLinkService, private readonly router: Router) {}
+  constructor(
+    private readonly backService: BackLinkService,
+    private readonly router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.backService.show();

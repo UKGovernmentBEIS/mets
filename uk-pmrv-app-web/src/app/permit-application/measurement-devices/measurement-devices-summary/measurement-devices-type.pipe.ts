@@ -14,6 +14,8 @@ export class MeasurementDevicesTypePipe implements PipeTransform {
         return 'Belt weigher';
       case 'CORIOLIS_METER':
         return 'Coriolis meter';
+      case 'CRANE_WEIGHT':
+        return 'Crane weight';
       case 'ELECTRONIC_VOLUME_CONVERSION_INSTRUMENT':
         return 'Electronic volume conversion instrument (EVCI)';
       case 'GAS_CHROMATOGRAPH':

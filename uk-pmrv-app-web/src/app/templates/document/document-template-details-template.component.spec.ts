@@ -14,9 +14,10 @@ describe('DocumentTemplateDetailsTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    template: `<app-document-template-details-template
-      [documentTemplate]="documentTemplate"
-    ></app-document-template-details-template>`,
+    template: `
+      <app-document-template-details-template
+        [documentTemplate]="documentTemplate"></app-document-template-details-template>
+    `,
   })
   class TestComponent {
     documentTemplate = mockedDocumentTemplate;

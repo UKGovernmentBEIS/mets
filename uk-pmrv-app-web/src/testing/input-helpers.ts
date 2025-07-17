@@ -22,8 +22,8 @@ export function changeInputValue(fixture: ComponentFixture<any>, selector: strin
       element.attributes.type === 'radio'
         ? element.nativeElement
         : element.attributes.type === 'file'
-        ? { ...element.nativeElement, files: Array.isArray(value) ? value : [value] }
-        : { ...element.nativeElement, value },
+          ? { ...element.nativeElement, files: Array.isArray(value) ? value : [value] }
+          : { ...element.nativeElement, value },
   };
 
   element.triggerEventHandler(hasInputEvent ? 'change' : 'input', event);
@@ -44,19 +44,18 @@ export function getInputValue(
     selector = selector.id ? `[id="${selector.id}"]` : `[name="${selector.name}"]`;
   }
 
-  const element = fixture.debugElement.query(By.css(selector))
+  const element = fixture.debugElement.query(By.css(selector));
   const targetProps = element.nativeElement;
 
   if (targetProps instanceof HTMLSelectElement) {
-    return element.context.ngControl.value
+    return element.context.ngControl.value;
   } else {
     return targetProps.type === 'checkbox'
       ? targetProps.checked
-      : (targetProps.value || getElement<InputElement>(fixture, selector).value);
+      : targetProps.value || getElement<InputElement>(fixture, selector).value;
   }
 }
 
 export function getElement<T extends HTMLElement>(fixture: ComponentFixture<any>, selector: string): T {
   return (fixture.nativeElement as HTMLElement).querySelector<T>(selector);
 }
-

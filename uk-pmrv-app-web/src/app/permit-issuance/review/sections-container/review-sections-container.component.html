@@ -97,6 +97,19 @@
       [isAssignable$]="store.isAssignableAndCapable$"
       [taskId$]="taskId$"
       [allowedActions$]="store.select('allowedRequestTaskActions')"
+      [requestInfo$]="store"
     ></app-related-actions>
   </div>
+
+  @if (previewDocuments$ | async) {
+    <div class="govuk-grid-column-one-third">
+      <app-preview-documents
+        [taskId]="taskId$ | async"
+        [previewDocuments]="previewDocuments$ | async"
+        [decisionNotification]="decisionNotification$ | async"
+        linkFontSize="govuk-!-font-size-16"
+      >
+      </app-preview-documents>
+    </div>
+  }
 </div>

@@ -12,7 +12,7 @@ import {
   Optional,
   QueryList,
 } from '@angular/core';
-import { ControlValueAccessor, FormGroupDirective, NgControl, NgForm,UntypedFormControl } from '@angular/forms';
+import { ControlValueAccessor, FormGroupDirective, NgControl, NgForm, UntypedFormControl } from '@angular/forms';
 
 import { BehaviorSubject, Subject } from 'rxjs';
 import { filter, skip, startWith, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
@@ -32,7 +32,7 @@ import { MultiSelectItemComponent } from './multi-select-item/multi-select-item.
 @Component({
   selector: 'div[app-multi-select]',
   templateUrl: './multi-select.component.html',
-  styleUrls: ['./multi-select.component.scss'],
+  styleUrl: './multi-select.component.scss',
   providers: [DestroySubject],
 })
 export class MultiSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit {

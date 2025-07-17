@@ -4,15 +4,14 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountCreationDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.service.AccountEmitterIdGenerator;
 import uk.gov.pmrv.api.account.transform.LocationMapper;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 @Mapper(
         componentModel = "spring",

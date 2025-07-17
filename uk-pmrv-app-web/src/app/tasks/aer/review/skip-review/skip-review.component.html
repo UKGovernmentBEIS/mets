@@ -1,0 +1,40 @@
+<div *ngIf="(isSkipSubmitted$ | async) === false; else confirmationTemplate">
+  <app-page-heading size="xl"> Skip the review and complete the report</app-page-heading>
+  <p class="govuk-body">
+    The report workflow will be marked as completed and any regulator review progress will be discarded.
+  </p>
+
+  <form [formGroup]="form" (submit)="confirm()">
+    <h2 class="govuk-heading-m">Why are you skipping the review?</h2>
+    <div formControlName="type" govuk-radio>
+      <govuk-radio-option value="NOT_REQUIRED" label="Review not required"></govuk-radio-option>
+      <govuk-radio-option value="OTHER" label="Another reason">
+        <div govukConditionalContent>
+          <div
+            govuk-textarea
+            [maxLength]="10000"
+            formControlName="reason"
+            label="Explain why the report does not need to be reviewed"
+          ></div>
+        </div>
+      </govuk-radio-option>
+    </div>
+    <div class="govuk-button-group">
+      <button type="submit" appPendingButton govukButton>Confirm and complete</button>
+    </div>
+  </form>
+</div>
+
+<ng-template #confirmationTemplate>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="Emissions report completed">
+        <p>
+          <strong>Your reference code is:</strong><br />
+          {{ (requestInfo$ | async).id }}
+        </p>
+      </govuk-panel>
+    </div>
+  </div>
+  <a govukLink routerLink="/dashboard"> Return to dashboard </a>
+</ng-template>

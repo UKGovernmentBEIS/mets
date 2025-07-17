@@ -21,8 +21,7 @@ describe('AbbreviationsTemplateComponent', () => {
         (formSubmit)="onSubmit($event)"
         [form]="formGroup"
         [isEditable]="isEditable"
-        caption="Additional information"
-      ></app-abbreviations-template>
+        caption="Additional information"></app-abbreviations-template>
     `,
   })
   class TestComponent {

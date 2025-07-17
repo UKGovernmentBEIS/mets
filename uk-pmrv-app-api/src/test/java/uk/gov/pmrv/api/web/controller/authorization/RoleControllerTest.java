@@ -16,22 +16,21 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-import uk.gov.pmrv.api.authorization.core.domain.dto.RoleDTO;
-import uk.gov.pmrv.api.authorization.core.service.RoleService;
-import uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionGroup;
-import uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionLevel;
-import uk.gov.pmrv.api.authorization.regulator.domain.RegulatorRolePermissionsDTO;
-import uk.gov.pmrv.api.authorization.regulator.service.RegulatorRoleService;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.dto.RoleDTO;
+import uk.gov.netz.api.authorization.core.service.RoleService;
+import uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel;
+import uk.gov.netz.api.authorization.regulator.domain.RegulatorRolePermissionsDTO;
+import uk.gov.netz.api.authorization.regulator.service.RegulatorRoleService;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.List;
 import java.util.Map;
@@ -40,8 +39,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionGroup.MANAGE_USERS_AND_CONTACTS;
-import static uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionLevel.NONE;
+import static uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionGroup.MANAGE_USERS_AND_CONTACTS;
 
 @ExtendWith(MockitoExtension.class)
 class RoleControllerTest {
@@ -63,10 +61,10 @@ class RoleControllerTest {
     private Validator validator;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RegulatorRoleService regulatorRoleService;
@@ -75,7 +73,7 @@ class RoleControllerTest {
     void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver =
             new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect authorizedAspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect authorizedAspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(roleController);
         aspectJProxyFactory.addAspect(authorizedAspect);
@@ -87,14 +85,14 @@ class RoleControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(roleController)
             .setControllerAdvice(new ExceptionControllerAdvice())
             .setValidator(validator)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .build();
     }
 
     @Test
     void getOperatorRoleCodes() throws Exception {
         final long accountId = 1L;
-        PmrvUser user = PmrvUser.builder().userId("authId").roleType(RoleType.OPERATOR).build();
+        AppUser user = AppUser.builder().userId("authId").roleType(RoleTypeConstants.OPERATOR).build();
         List<RoleDTO> roles = List.of(buildRole("code1"), buildRole("code2"));
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
@@ -112,12 +110,12 @@ class RoleControllerTest {
     @Test
     void getOperatorRoleCodesForbidden() throws Exception {
         final long accountId = 1L;
-        PmrvUser user = PmrvUser.builder().userId("authId").roleType(RoleType.OPERATOR).build();
+        AppUser user = AppUser.builder().userId("authId").roleType(RoleTypeConstants.OPERATOR).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(user, "getOperatorRoleCodes", String.valueOf(accountId));
+            .when(appUserAuthorizationService)
+            .authorize(user, "getOperatorRoleCodes", String.valueOf(accountId), null, null);
 
         // Invokeact_ru_event_subscr
         mockMvc.perform(MockMvcRequestBuilders
@@ -128,10 +126,10 @@ class RoleControllerTest {
 
     @Test
     void getRegulatorRolesForbidden() throws Exception {
-        PmrvUser user = PmrvUser.builder().userId("authId").roleType(RoleType.OPERATOR).build();
+        AppUser user = AppUser.builder().userId("authId").roleType(RoleTypeConstants.OPERATOR).build();
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(user, "getRegulatorRoles");
 
         // Invoke
@@ -144,7 +142,7 @@ class RoleControllerTest {
     @Test
     void getRegulatorRoles() throws Exception {
         RegulatorRolePermissionsDTO regulatorRolePermissionsDTO =
-            buildRolePermissionsDTO("code1", Map.of(MANAGE_USERS_AND_CONTACTS, NONE));
+            buildRolePermissionsDTO("code1", Map.of(MANAGE_USERS_AND_CONTACTS, RegulatorPermissionLevel.NONE));
 
         when(regulatorRoleService.getRegulatorRoles()).thenReturn(List.of(regulatorRolePermissionsDTO));
 
@@ -154,8 +152,8 @@ class RoleControllerTest {
             .contentType(MediaType.APPLICATION_JSON))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(jsonPath("$[0].code").value(regulatorRolePermissionsDTO.getCode()))
-            .andExpect(jsonPath("$[0].rolePermissions", Matchers.hasKey(MANAGE_USERS_AND_CONTACTS.name())))
-            .andExpect(jsonPath("$[0].rolePermissions", Matchers.hasValue(NONE.name())));
+            .andExpect(jsonPath("$[0].rolePermissions", Matchers.hasKey(MANAGE_USERS_AND_CONTACTS)))
+            .andExpect(jsonPath("$[0].rolePermissions", Matchers.hasValue(RegulatorPermissionLevel.NONE.name())));
     }
 
     @Test
@@ -174,11 +172,11 @@ class RoleControllerTest {
 
     @Test
     void getVerifierRoleCodes_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().userId("authId").roleType(RoleType.VERIFIER).build();
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        AppUser appUser = AppUser.builder().userId("authId").roleType(RoleTypeConstants.VERIFIER).build();
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "getVerifierRoleCodes");
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "getVerifierRoleCodes");
 
         // Invoke
         mockMvc.perform(MockMvcRequestBuilders
@@ -188,7 +186,7 @@ class RoleControllerTest {
     }
 
     private RegulatorRolePermissionsDTO buildRolePermissionsDTO(String code,
-                                                                Map<RegulatorPermissionGroup, RegulatorPermissionLevel> rolePermissions) {
+                                                                Map<String, RegulatorPermissionLevel> rolePermissions) {
 
         return RegulatorRolePermissionsDTO.builder()
             .code(code)

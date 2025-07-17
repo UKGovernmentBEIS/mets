@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -164,9 +164,7 @@ export class InstallationAccountUpdateService {
     }
 
     return this.httpClient.put<any>(
-      `${this.configuration.basePath}/v1.0/installation/accounts/${encodeURIComponent(
-        String(id),
-      )}/free-allocation-status`,
+      `${this.configuration.basePath}/v1.0/installation/accounts/${encodeURIComponent(String(id))}/free-allocation-status`,
       accountUpdateFaStatusDTO,
       {
         responseType: <any>responseType_,

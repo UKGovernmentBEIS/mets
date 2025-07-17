@@ -12,12 +12,13 @@ export const AER_AIRCRAFT_TYPES_DATA_ROUTES: Routes = [
     children: [
       {
         path: '',
+        data: { pageTitle: 'Aircraft types data' },
         canActivate: [canActivateTaskForm],
         loadComponent: () => import('./aircraft-types-data-page').then((c) => c.AircraftTypesDataPageComponent),
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Aircraft types data' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Aircraft types data' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./aircraft-types-data-summary').then((c) => c.AircraftTypesDataSummaryComponent),
       },

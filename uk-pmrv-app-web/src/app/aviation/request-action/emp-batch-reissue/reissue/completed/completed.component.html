@@ -29,14 +29,28 @@
         <dt govukSummaryListRowKey>Documents</dt>
         <dd govukSummaryListRowValue>
           <a
-            [routerLink]="['/actions', vm.requestActionId, 'file-download', 'document', vm.payload.officialNotice.uuid]"
+            [routerLink]="[
+              '/aviation',
+              'actions',
+              vm.requestActionId,
+              'file-download',
+              'document',
+              vm.payload.officialNotice.uuid
+            ]"
             govukLink
             target="_blank"
             >{{ vm.payload.officialNotice.name }}</a
           >
           <br />
           <a
-            [routerLink]="['/actions', vm.requestActionId, 'file-download', 'document', vm.payload.document.uuid]"
+            [routerLink]="[
+              '/aviation',
+              'actions',
+              vm.requestActionId,
+              'file-download',
+              'document',
+              vm.payload.document.uuid
+            ]"
             govukLink
             target="_blank"
             >{{ vm.payload.document.name }}</a

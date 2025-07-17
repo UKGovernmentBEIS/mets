@@ -1,25 +1,26 @@
 package uk.gov.pmrv.api.permit.service;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.documents.service.FileDocumentTokenService;
+import uk.gov.pmrv.api.permit.domain.Permit;
+import uk.gov.pmrv.api.permit.domain.PermitContainer;
+import uk.gov.pmrv.api.permit.domain.dto.PermitEntityDto;
+import uk.gov.netz.api.token.FileToken;
+
+import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
-
-import java.util.UUID;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentTokenService;
-import uk.gov.pmrv.api.permit.domain.Permit;
-import uk.gov.pmrv.api.permit.domain.PermitContainer;
-import uk.gov.pmrv.api.permit.domain.dto.PermitEntityDto;
-import uk.gov.pmrv.api.token.FileToken;
 
 @ExtendWith(MockitoExtension.class)
 class PermitDocumentServiceTest {

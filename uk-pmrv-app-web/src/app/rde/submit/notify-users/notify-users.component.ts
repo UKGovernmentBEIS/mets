@@ -6,8 +6,8 @@ import { combineLatest, first, map, Observable, shareReplay, switchMap, tap, wit
 
 import {
   NotifyAccountOperatorUsersInfo,
+  notifyAccountOperatorUsersInfoReduceCallback,
   toAccountOperatorUser,
-  toNotifyAccountOperatorUsersInfo,
 } from '@shared/components/notify-operator/notify-operator';
 import { UserFullNamePipe } from '@shared/pipes/user-full-name.pipe';
 
@@ -45,6 +45,7 @@ export class NotifyUsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // TODO dupe code with src\app\shared\components\notify-operator\notify-operator.component.ts. Consider creating abstract component to put all the common code
     const accountOperatorAuthorities$ = this.store.pipe(
       first(),
       map((state) => state.accountId),
@@ -66,7 +67,7 @@ export class NotifyUsersComponent implements OnInit {
       map((users) =>
         users
           .filter((user) => user.contactTypes.includes('PRIMARY') || user.contactTypes.includes('SERVICE'))
-          .reduce(toNotifyAccountOperatorUsersInfo, {}),
+          .reduce(notifyAccountOperatorUsersInfoReduceCallback, {}),
       ),
     );
 
@@ -74,7 +75,7 @@ export class NotifyUsersComponent implements OnInit {
       map((users) =>
         users
           .filter((user) => !user.contactTypes.includes('PRIMARY') && !user.contactTypes.includes('SERVICE'))
-          .reduce(toNotifyAccountOperatorUsersInfo, {}),
+          .reduce(notifyAccountOperatorUsersInfoReduceCallback, {}),
       ),
     );
 

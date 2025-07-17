@@ -2,25 +2,25 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.noncompliance.service
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.files.attachments.service.FileAttachmentService;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityDTO;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
-import uk.gov.pmrv.api.files.attachments.service.FileAttachmentService;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceDecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.service.NonComplianceSendOfficialNoticeService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.InstallationAccountCompetentAuthorityDTOByRequestResolver;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
 
 import java.util.ArrayList;
@@ -34,9 +34,9 @@ public class InstallationNonComplianceSendOfficialNoticeService implements NonCo
 
     private final RequestAccountContactQueryService requestAccountContactQueryService;
     private final DecisionNotificationUsersService decisionNotificationUsersService;
-    private final NotificationEmailService notificationEmailService;
+    private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
     private final FileAttachmentService fileAttachmentService;
-    private final CompetentAuthorityService competentAuthorityService;
+    private final InstallationAccountCompetentAuthorityDTOByRequestResolver caResolver;
 
     public void sendOfficialNotice(final UUID officialNotice,
                                    final Request request,
@@ -59,9 +59,7 @@ public class InstallationNonComplianceSendOfficialNoticeService implements NonCo
             .build();
         final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(genericDecisionNotification);
 
-        final CompetentAuthorityDTO competentAuthority =
-            competentAuthorityService.getCompetentAuthority(request.getCompetentAuthority(), request.getType().getAccountType());
-
+        final CompetentAuthorityDTO competentAuthority = caResolver.resolveCA(request);
         //remove from 'cc' if is included in the 'to' recipient
         List<String> ccRecipientsEmailsFinal = new ArrayList<>(ccRecipientsEmails);
         ccRecipientsEmailsFinal.removeIf(toRecipient::contains);
@@ -70,17 +68,17 @@ public class InstallationNonComplianceSendOfficialNoticeService implements NonCo
 
         //notify 
         notificationEmailService.notifyRecipients(
-            EmailData.builder()
-                .notificationTemplateData(EmailNotificationTemplateData.builder()
-                    .templateName(NotificationTemplateName.GENERIC_EMAIL)
+            EmailData.<PmrvEmailNotificationTemplateData>builder()
+                .notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
+                    .templateName(PmrvNotificationTemplateName.GENERIC_EMAIL.getName())
                     .competentAuthority(request.getCompetentAuthority())
                     .accountType(request.getType().getAccountType())
                     .templateParams(Map.of(
-                        EmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT,
+                    		PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT,
                         accountPrimaryContact.getFullName(),
-                        EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME,
+                        PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME,
                         competentAuthority.getName(),
-                        EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL,
+                        PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL,
                         competentAuthority.getEmail()))
                     .build())
                 .attachments(Map.of(

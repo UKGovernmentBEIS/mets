@@ -2,7 +2,6 @@ package uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationpfc.det
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
-import uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationpfc.details.EtsPFCMonitoringApproachDetails;
 import uk.gov.pmrv.api.permit.domain.common.ProcedureForm;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationpfc.PFCTier2EmissionFactor;
 

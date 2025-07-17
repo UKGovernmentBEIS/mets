@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { ApproachesUsedSummaryTemplateComponent } from '@shared/components/approaches/aer/approaches-used/approaches-used-summary-template.component';
 import { SharedModule } from '@shared/shared.module';
@@ -16,8 +15,7 @@ describe('ApproachesUsedSummaryTemplateComponent', () => {
   @Component({
     template: `
       <app-approaches-used-summary-template
-        [monitoringApproaches]="monitoringApproaches"
-      ></app-approaches-used-summary-template>
+        [monitoringApproaches]="monitoringApproaches"></app-approaches-used-summary-template>
     `,
   })
   class TestComponent {
@@ -33,7 +31,7 @@ describe('ApproachesUsedSummaryTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       declarations: [TestComponent],
     }).compileComponents();
   });
@@ -59,7 +57,7 @@ describe('ApproachesUsedSummaryTemplateComponent', () => {
       [
         'Approaches used',
         [
-          `Calculation of CO2 Measurement of CO2 Measurement of nitrous oxide (N2O) Calculation of perfluorocarbons (PFC) Inherent CO2 emissions Procedures for transferred CO2 or N2O`,
+          `Calculation of CO2  Measurement of CO2  Measurement of nitrous oxide (N2O)  Calculation of perfluorocarbons (PFC)  Inherent CO2 emissions  Procedures for transferred CO2 or N2O`,
         ],
       ],
     ]);

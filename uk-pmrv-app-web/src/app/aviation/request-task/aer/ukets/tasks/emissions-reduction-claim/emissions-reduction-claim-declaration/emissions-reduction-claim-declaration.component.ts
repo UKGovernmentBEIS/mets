@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { BackLinkService } from '@shared/back-link/back-link.service';
 import { SharedModule } from '@shared/shared.module';
 import { cloneDeep } from 'lodash-es';
 
-import { aerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
+import { AerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
 
 @Component({
   selector: 'app-emissions-reduction-claim-declaration',
@@ -19,7 +19,7 @@ import { aerEmissionsReductionClaimFormProvider } from '../emissions-reduction-c
   templateUrl: './emissions-reduction-claim-declaration.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EmissionsReductionClaimDeclarationComponent implements OnInit, OnDestroy {
+export class EmissionsReductionClaimDeclarationComponent {
   form = new FormGroup({
     noDoubleCountingDeclarationFile: this.formProvider.declarationFileCtlr,
   });
@@ -32,19 +32,11 @@ export class EmissionsReductionClaimDeclarationComponent implements OnInit, OnDe
     private route: ActivatedRoute,
     private backLinkService: BackLinkService,
     private pendingRequestService: PendingRequestService,
-    @Inject(TASK_FORM_PROVIDER) protected readonly formProvider: aerEmissionsReductionClaimFormProvider,
+    @Inject(TASK_FORM_PROVIDER) protected readonly formProvider: AerEmissionsReductionClaimFormProvider,
   ) {}
 
-  ngOnInit(): void {
-    this.backLinkService.show();
-  }
-
-  ngOnDestroy(): void {
-    this.backLinkService.hide();
-  }
-
   getDownloadUrl(uuid: string): string | string[] {
-    return ['../../../..', 'file-download', 'attachment', uuid];
+    return ['../../..', 'file-download', 'attachment', uuid];
   }
 
   onSubmit() {

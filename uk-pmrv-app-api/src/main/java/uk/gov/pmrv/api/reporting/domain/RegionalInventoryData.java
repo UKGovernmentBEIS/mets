@@ -19,7 +19,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.common.domain.converter.YearAttributeConverter;
+import uk.gov.netz.api.common.config.YearAttributeConverter;
 
 import java.math.BigDecimal;
 import java.time.Year;

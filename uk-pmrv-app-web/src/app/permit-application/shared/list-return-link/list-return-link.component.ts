@@ -14,6 +14,8 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 export class ListReturnLinkComponent {
   @Input() reviewGroupUrl: string;
   @Input() reviewGroupTitle: string;
+  @Input() innerRoute = false;
+  @Input() doubleInner: boolean;
 
   title: string;
 
@@ -23,8 +25,15 @@ export class ListReturnLinkComponent {
         (segment) =>
           segment.path.includes('summary') ||
           ((this.reviewGroupUrl === 'monitoring-methodology-plan' || this.reviewGroupUrl === 'uncertainty-analysis') &&
-            (segment.path.includes('answers') || segment.path.includes('upload-file'))),
+            (segment.path.includes('answers') ||
+              segment.path.includes('upload-file') ||
+              segment.path.includes('connections'))),
       );
+      let innerRoutePath = this.innerRoute ? '../' : this.doubleInner === false ? '../' : '';
+
+      if (this.doubleInner === true) {
+        innerRoutePath = this.innerRoute ? '../../' : '../';
+      }
 
       if (
         [
@@ -48,13 +57,14 @@ export class ListReturnLinkComponent {
         )
       ) {
         this.title = state.userViewRole === 'REGULATOR' ? this.reviewGroupTitle : this.store.getApplyForHeader();
+
         return state.userViewRole === 'REGULATOR'
           ? isIncludedInUrl
-            ? `../../review/${this.reviewGroupUrl}`
-            : `../review/${this.reviewGroupUrl}`
+            ? `${innerRoutePath}../../review/${this.reviewGroupUrl}`
+            : `${innerRoutePath}../review/${this.reviewGroupUrl}`
           : isIncludedInUrl
-          ? '../..'
-          : '..';
+            ? `${innerRoutePath}../..`
+            : `${innerRoutePath}..`;
       }
 
       if (['PERMIT_VARIATION_APPLICATION_SUBMIT'].some((type) => type === state.requestTaskType)) {
@@ -64,7 +74,7 @@ export class ListReturnLinkComponent {
 
       //default
       this.title = this.store.getApplyForHeader();
-      return isIncludedInUrl ? '../..' : '..';
+      return isIncludedInUrl ? `${innerRoutePath}../..` : `${innerRoutePath}..`;
     }),
   );
 

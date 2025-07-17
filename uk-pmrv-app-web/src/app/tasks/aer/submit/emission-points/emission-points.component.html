@@ -8,20 +8,10 @@
         check the data is correct for the reporting year.
       </p>
 
-      <govuk-table [columns]="columns" [data]="'emissionPoints' | task | async" [class.no-bottom-border]="false">
-        <ng-template let-column="column" let-row="row">
-          <ng-container [ngSwitch]="column.field">
-            <ng-container *ngSwitchCase="'reference'">{{ row.reference }}</ng-container>
-            <ng-container *ngSwitchCase="'description'">{{ row.description }} </ng-container>
-            <ng-container *ngIf="(aerService.isEditable$ | async) === true">
-              <ng-container *ngSwitchCase="'change'"><a [routerLink]="row.id" govukLink>Change</a></ng-container>
-              <ng-container *ngSwitchCase="'delete'"
-                ><a [routerLink]="['delete', row.id]" govukLink>Delete</a></ng-container
-              >
-            </ng-container>
-          </ng-container>
-        </ng-template>
-      </govuk-table>
+      <app-emission-points-table
+        [data]="'emissionPoints' | task | async"
+        [isEditable]="aerService.isEditable$ | async"
+      ></app-emission-points-table>
 
       <ng-container *ngIf="(aerService.isEditable$ | async) === true">
         <button govukSecondaryButton="add" routerLink="add" type="button">Add another emission point</button>

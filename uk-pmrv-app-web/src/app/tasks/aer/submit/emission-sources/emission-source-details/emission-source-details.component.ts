@@ -14,8 +14,10 @@ import { emissionSourcesAddFormFactory } from './emission-source-details-form.pr
   selector: 'app-emission-source-details',
   template: `
     <app-aer-task>
-      <app-emission-source-details-template (formSubmit)="onSubmit()" [form]="form" [isEditing]="isEditing$ | async">
-      </app-emission-source-details-template>
+      <app-emission-source-details-template
+        (formSubmit)="onSubmit()"
+        [form]="form"
+        [isEditing]="isEditing$ | async"></app-emission-source-details-template>
     </app-aer-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

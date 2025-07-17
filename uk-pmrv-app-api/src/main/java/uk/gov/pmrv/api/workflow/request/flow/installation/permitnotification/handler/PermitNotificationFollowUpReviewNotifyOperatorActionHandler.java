@@ -1,10 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.handler;
 
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -20,6 +18,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.dom
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service.PermitNotificationValidatorService;
 
+import java.util.List;
+import java.util.Map;
+
 @Component
 @RequiredArgsConstructor
 public class PermitNotificationFollowUpReviewNotifyOperatorActionHandler
@@ -32,7 +33,7 @@ public class PermitNotificationFollowUpReviewNotifyOperatorActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final NotifyOperatorForDecisionRequestTaskActionPayload actionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -44,7 +45,7 @@ public class PermitNotificationFollowUpReviewNotifyOperatorActionHandler
 
         // validate
         permitNotificationValidatorService.validateNotificationFollowUpReviewDecision(reviewDecision);
-        permitNotificationValidatorService.validateNotifyUsers(requestTask, decisionNotification, pmrvUser);
+        permitNotificationValidatorService.validateNotifyUsers(requestTask, decisionNotification, appUser);
 
         // update request payload
         final Request request = requestTask.getRequest();
@@ -55,7 +56,9 @@ public class PermitNotificationFollowUpReviewNotifyOperatorActionHandler
 
         // complete task
         workflowService.completeTask(requestTask.getProcessTaskId(),
-            Map.of(BpmnProcessConstants.REVIEW_OUTCOME, ReviewOutcome.NOTIFY_OPERATOR));
+            Map.of(BpmnProcessConstants.REVIEW_OUTCOME, ReviewOutcome.NOTIFY_OPERATOR,
+                    BpmnProcessConstants.REVIEW_DECISION_TYPE_OUTCOME, requestPayload.getReviewDecision().getType()
+                    ));
     }
 
     @Override

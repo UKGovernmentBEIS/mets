@@ -16,7 +16,7 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoring
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachTypeCorsia;
 
 @ExtendWith(MockitoExtension.class)
-public class CertMonitoringApproachTest {
+class CertMonitoringApproachTest {
 
     private Validator validator;
 

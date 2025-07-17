@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -16,12 +16,11 @@ import { Observable } from 'rxjs';
 
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
-import { ApplicationUserDTO } from '../model/applicationUserDTO';
 import { FileToken } from '../model/fileToken';
 import { OperatorUserDTO } from '../model/operatorUserDTO';
 import { RegisterUserLoginDomainDTO } from '../model/registerUserLoginDomainDTO';
-import { RegulatorUserDTO } from '../model/regulatorUserDTO';
-import { UpdateTermsDTO } from '../model/updateTermsDTO';
+import { RegulatorCurrentUserDTO } from '../model/regulatorCurrentUserDTO';
+import { UserDTO } from '../model/userDTO';
 import { UserFeedbackDto } from '../model/userFeedbackDto';
 import { VerifierUserDTO } from '../model/verifierUserDTO';
 import { BASE_PATH } from '../variables';
@@ -86,84 +85,6 @@ export class UsersService {
       throw Error('key may not be null if value is not object or array');
     }
     return httpParams;
-  }
-
-  /**
-   * Updates accepted terms and conditions of the logged in user
-   * @param updateTermsDTO
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public editUserTerms(updateTermsDTO: UpdateTermsDTO): Observable<UpdateTermsDTO>;
-  public editUserTerms(
-    updateTermsDTO: UpdateTermsDTO,
-    observe: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpResponse<UpdateTermsDTO>>;
-  public editUserTerms(
-    updateTermsDTO: UpdateTermsDTO,
-    observe: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpEvent<UpdateTermsDTO>>;
-  public editUserTerms(
-    updateTermsDTO: UpdateTermsDTO,
-    observe: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<UpdateTermsDTO>;
-  public editUserTerms(
-    updateTermsDTO: UpdateTermsDTO,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<any> {
-    if (updateTermsDTO === null || updateTermsDTO === undefined) {
-      throw new Error('Required parameter updateTermsDTO was null or undefined when calling editUserTerms.');
-    }
-
-    let headers = this.defaultHeaders;
-
-    // authentication (bearerAuth) required
-    const credential = this.configuration.lookupCredential('bearerAuth');
-    if (credential) {
-      headers = headers.set('Authorization', 'Bearer ' + credential);
-    }
-
-    let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (httpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (httpHeaderAcceptSelected !== undefined) {
-      headers = headers.set('Accept', httpHeaderAcceptSelected);
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = ['application/json'];
-    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      headers = headers.set('Content-Type', httpContentTypeSelected);
-    }
-
-    let responseType_: 'text' | 'json' = 'json';
-    if (httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
-      responseType_ = 'text';
-    }
-
-    return this.httpClient.patch<UpdateTermsDTO>(
-      `${this.configuration.basePath}/v1.0/users/terms-and-conditions`,
-      updateTermsDTO,
-      {
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: headers,
-        observe: observe,
-        reportProgress: reportProgress,
-      },
-    );
   }
 
   /**
@@ -246,22 +167,22 @@ export class UsersService {
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getCurrentUser(): Observable<ApplicationUserDTO | OperatorUserDTO | RegulatorUserDTO | VerifierUserDTO>;
+  public getCurrentUser(): Observable<UserDTO | OperatorUserDTO | RegulatorCurrentUserDTO | VerifierUserDTO>;
   public getCurrentUser(
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpResponse<ApplicationUserDTO | OperatorUserDTO | RegulatorUserDTO | VerifierUserDTO>>;
+  ): Observable<HttpResponse<UserDTO | OperatorUserDTO | RegulatorCurrentUserDTO | VerifierUserDTO>>;
   public getCurrentUser(
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<HttpEvent<ApplicationUserDTO | OperatorUserDTO | RegulatorUserDTO | VerifierUserDTO>>;
+  ): Observable<HttpEvent<UserDTO | OperatorUserDTO | RegulatorCurrentUserDTO | VerifierUserDTO>>;
   public getCurrentUser(
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
-  ): Observable<ApplicationUserDTO | OperatorUserDTO | RegulatorUserDTO | VerifierUserDTO>;
+  ): Observable<UserDTO | OperatorUserDTO | RegulatorCurrentUserDTO | VerifierUserDTO>;
   public getCurrentUser(
     observe: any = 'body',
     reportProgress: boolean = false,
@@ -290,8 +211,8 @@ export class UsersService {
       responseType_ = 'text';
     }
 
-    return this.httpClient.get<ApplicationUserDTO | OperatorUserDTO | RegulatorUserDTO | VerifierUserDTO>(
-      `${this.configuration.basePath}/v1.0/users`,
+    return this.httpClient.get<UserDTO | OperatorUserDTO | RegulatorCurrentUserDTO | VerifierUserDTO>(
+      `${this.configuration.basePath}/v1.0/users/current`,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

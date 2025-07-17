@@ -5,13 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.account.domain.dto.AccountDTO;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
@@ -59,10 +60,11 @@ class InstallationAccountPayloadMapperTest {
         final EmissionTradingScheme ets = EmissionTradingScheme.EU_ETS_INSTALLATIONS;
         final String leName = "le";
         final String requestAssigneeUser = "requestAssignee";
+        final AppUser appUser = AppUser.builder().userId(requestAssigneeUser).firstName("firstName").lastName("lastName").email("email").build();
         InstallationAccountPayload accountPayload = createAccountPayload(accountName, competentAuthority, ets, leName);
 
         InstallationAccountOpeningRequestPayload requestPayload =
-            mapper.toInstallationAccountOpeningRequestPayload(accountPayload, requestAssigneeUser);
+            mapper.toInstallationAccountOpeningRequestPayload(accountPayload, appUser);
 
         assertThat(requestPayload.getPayloadType()).isEqualTo(RequestPayloadType.INSTALLATION_ACCOUNT_OPENING_REQUEST_PAYLOAD);
         assertThat((requestPayload.getOperatorAssignee())).isEqualTo(requestAssigneeUser);
@@ -73,6 +75,8 @@ class InstallationAccountPayloadMapperTest {
         assertThat(retrievedAccountPayload.getCompetentAuthority()).isEqualTo(competentAuthority);
         assertThat(retrievedAccountPayload.getEmissionTradingScheme()).isEqualTo(ets);
         assertThat(retrievedAccountPayload.getLegalEntity().getName()).isEqualTo(leName);
+        assertThat(retrievedAccountPayload.getSubmitter().getEmail()).isEqualTo(appUser.getEmail());
+        assertThat(retrievedAccountPayload.getSubmitter().getName()).isEqualTo(appUser.getFullName());
     }
 
     @Test
@@ -81,9 +85,10 @@ class InstallationAccountPayloadMapperTest {
         final CompetentAuthorityEnum competentAuthority = CompetentAuthorityEnum.SCOTLAND;
         final EmissionTradingScheme ets = EmissionTradingScheme.UK_ETS_INSTALLATIONS;
         final String leName = "le1";
+        final AppUser appUser = AppUser.builder().firstName("firstName").lastName("lastName").email("email").build();
         InstallationAccountPayload accountPayload = createAccountPayload(accountName, competentAuthority, ets, leName);
 
-        InstallationAccountOpeningApplicationSubmittedRequestActionPayload accountSubmittedPayload = mapper.toInstallationAccountOpeningApplicationSubmittedRequestActionPayload(accountPayload);
+        InstallationAccountOpeningApplicationSubmittedRequestActionPayload accountSubmittedPayload = mapper.toInstallationAccountOpeningApplicationSubmittedRequestActionPayload(accountPayload, appUser);
 
         assertThat(accountSubmittedPayload.getPayloadType()).isEqualTo(RequestActionPayloadType.INSTALLATION_ACCOUNT_OPENING_APPLICATION_SUBMITTED_PAYLOAD);
 
@@ -93,6 +98,8 @@ class InstallationAccountPayloadMapperTest {
         assertThat(retrievedAccountPayload.getCompetentAuthority()).isEqualTo(competentAuthority);
         assertThat(retrievedAccountPayload.getEmissionTradingScheme()).isEqualTo(ets);
         assertThat(retrievedAccountPayload.getLegalEntity().getName()).isEqualTo(leName);
+        assertThat(retrievedAccountPayload.getSubmitter().getEmail()).isEqualTo(appUser.getEmail());
+        assertThat(retrievedAccountPayload.getSubmitter().getName()).isEqualTo(appUser.getFullName());
     }
 
     @Test

@@ -16,7 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.domain.abbreviations.Abbreviations;
@@ -180,7 +180,7 @@ class PermitVariationReviewServiceTest {
     void savePermitVariationDecisionNotification() {
     	UUID attachment1 = UUID.randomUUID();
     	UUID attachment2 = UUID.randomUUID();
-    	PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+    	AppUser appUser = AppUser.builder().userId("userId").build();
     	DecisionNotification decisionNotification = DecisionNotification.builder()
     			.signatory("sign")
     			.operators(Set.of("oper"))
@@ -220,11 +220,11 @@ class PermitVariationReviewServiceTest {
     			.payload(requestTaskPayload)
     			.build();
     	
-    	cut.savePermitVariationDecisionNotification(requestTask, decisionNotification, pmrvUser);
+    	cut.savePermitVariationDecisionNotification(requestTask, decisionNotification, appUser);
     	
     	assertThat(requestPayload).isEqualTo(PermitVariationRequestPayload.builder()
     			.decisionNotification(decisionNotification)
-    			.regulatorReviewer(pmrvUser.getUserId())
+    			.regulatorReviewer(appUser.getUserId())
     			.permitType(requestTaskPayload.getPermitType())
     			.permit(requestTaskPayload.getPermit())
     			.permitVariationDetails(requestTaskPayload.getPermitVariationDetails())
@@ -245,7 +245,7 @@ class PermitVariationReviewServiceTest {
 
         final UUID attachment1 = UUID.randomUUID();
         final UUID attachment2 = UUID.randomUUID();
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final PermitVariationRequestPayload requestPayload = PermitVariationRequestPayload.builder().build();
         final Request request = Request.builder()
             .payload(requestPayload)
@@ -285,11 +285,11 @@ class PermitVariationReviewServiceTest {
 
         final String peerReviewer = "peerReviewer";
 
-        cut.saveRequestPeerReviewAction(requestTask, peerReviewer, pmrvUser.getUserId());
+        cut.saveRequestPeerReviewAction(requestTask, peerReviewer, appUser.getUserId());
 
         assertThat(requestPayload).isEqualTo(PermitVariationRequestPayload.builder()
             .regulatorPeerReviewer(peerReviewer)
-            .regulatorReviewer(pmrvUser.getUserId())
+            .regulatorReviewer(appUser.getUserId())
             .permitType(requestTaskPayload.getPermitType())
             .permit(requestTaskPayload.getPermit())
             .permitVariationDetails(requestTaskPayload.getPermitVariationDetails())

@@ -2,6 +2,7 @@
   <app-page-heading>{{ vm.heading }}</app-page-heading>
 
   <app-time-allocation-corsia-template
+    *ngIf="vm.timeAllocationScope"
     [data]="vm.timeAllocationScope"
     [isEditable]="vm.isEditable"
     [queryParams]="{ change: true }"

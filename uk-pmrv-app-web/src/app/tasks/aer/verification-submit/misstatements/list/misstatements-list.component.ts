@@ -20,8 +20,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
         [showGuardQuestion]="false"
         [headingLarge]="false"
         [showCaption]="false"
-        baseChangeLink=".."
-      >
+        baseChangeLink="..">
         <div class="govuk-button-group" *ngIf="isEditable$ | async">
           <button appPendingButton govukButton type="button" (click)="onContinue()">Continue</button>
         </div>

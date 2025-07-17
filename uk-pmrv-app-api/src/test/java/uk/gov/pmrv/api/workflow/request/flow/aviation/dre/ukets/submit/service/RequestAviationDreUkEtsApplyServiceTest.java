@@ -1,21 +1,18 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.submit.service;
 
-import java.util.Map;
-import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.account.domain.dto.LocationDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
@@ -30,10 +27,12 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.domain.Av
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.common.service.AviationDreUkEtsValidatorService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.submit.domain.AviationDreUkEtsApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.submit.domain.AviationDreUkEtsSaveApplicationRequestTaskActionPayload;
-
-import java.math.BigDecimal;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.validation.DecisionNotificationUsersValidator;
+
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -58,7 +57,6 @@ class RequestAviationDreUkEtsApplyServiceTest {
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.initMocks(this);
         service = new RequestAviationDreUkEtsApplyService(aviationDreUkEtsValidatorService,
             decisionNotificationUsersValidator, aviationAccountQueryService);
     }
@@ -141,7 +139,7 @@ class RequestAviationDreUkEtsApplyServiceTest {
             .signatory("signatory")
             .build();
 
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        AppUser appUser = AppUser.builder().userId("user").build();
 
         AviationAccountInfoDTO aviationAccountDTO = AviationAccountInfoDTO.builder()
             .location(LocationDTO.builder()
@@ -151,14 +149,14 @@ class RequestAviationDreUkEtsApplyServiceTest {
             .build();
 
         doNothing().when(aviationDreUkEtsValidatorService).validateAviationDre(any(AviationDre.class));
-        when(decisionNotificationUsersValidator.areUsersValid(any(RequestTask.class), any(DecisionNotification.class), any(PmrvUser.class))).thenReturn(true);
+        when(decisionNotificationUsersValidator.areUsersValid(any(RequestTask.class), any(DecisionNotification.class), any(AppUser.class))).thenReturn(true);
         when(aviationAccountQueryService.getAviationAccountInfoDTOById(1L)).thenReturn(aviationAccountDTO);
 
         // Invoke
-        service.applySubmitNotify(requestTask, decisionNotification, pmrvUser);
+        service.applySubmitNotify(requestTask, decisionNotification, appUser);
 
         assertThat(aviationDreRequestPayload.getDre()).isEqualTo(dre);
-        assertThat(aviationDreRequestPayload.getSectionCompleted()).isEqualTo(true);
+        assertThat(aviationDreRequestPayload.getSectionCompleted()).isTrue();
         assertThat(aviationDreRequestPayload.getDreAttachments()).containsExactlyEntriesOf(Map.of(att1, "atta1.pdf"));
     }
 
@@ -196,18 +194,18 @@ class RequestAviationDreUkEtsApplyServiceTest {
             .signatory("signatory")
             .build();
 
-        PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        AppUser appUser = AppUser.builder().userId("user").build();
 
         AviationAccountInfoDTO aviationAccountDTO = AviationAccountInfoDTO.builder()
             .accountType(AccountType.AVIATION)
             .build();
 
         doNothing().when(aviationDreUkEtsValidatorService).validateAviationDre(any(AviationDre.class));
-        when(decisionNotificationUsersValidator.areUsersValid(any(RequestTask.class), any(DecisionNotification.class), any(PmrvUser.class))).thenReturn(true);
+        when(decisionNotificationUsersValidator.areUsersValid(any(RequestTask.class), any(DecisionNotification.class), any(AppUser.class))).thenReturn(true);
         when(aviationAccountQueryService.getAviationAccountInfoDTOById(1L)).thenReturn(aviationAccountDTO);
 
         assertThrows(
-            BusinessException.class, () -> service.applySubmitNotify(requestTask, decisionNotification, pmrvUser));
+            BusinessException.class, () -> service.applySubmitNotify(requestTask, decisionNotification, appUser));
     }
 
     @Test
@@ -245,7 +243,7 @@ class RequestAviationDreUkEtsApplyServiceTest {
 
         assertThat(aviationDreRequestPayload.getRegulatorPeerReviewer()).isEqualTo(peerReviewer);
         assertThat(aviationDreRequestPayload.getDre()).isEqualTo(dre);
-        assertThat(aviationDreRequestPayload.getSectionCompleted()).isEqualTo(false);
+        assertThat(aviationDreRequestPayload.getSectionCompleted()).isFalse();
         assertThat(aviationDreRequestPayload.getDreAttachments()).containsExactlyEntriesOf(Map.of(att1, "atta1.pdf"));
         assertThat(aviationDreRequestPayload.getPaymentAmount()).isNull();
     }

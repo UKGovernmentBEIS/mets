@@ -13,6 +13,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.withholdingofallowance
 public class WithholdingOfAllowancesWithdrawalValidator {
 
     public void validate(@NotNull @Valid WithholdingWithdrawal withholdingWithdrawal) {
-
+        //validates withholdingWithdrawal
     }
 }

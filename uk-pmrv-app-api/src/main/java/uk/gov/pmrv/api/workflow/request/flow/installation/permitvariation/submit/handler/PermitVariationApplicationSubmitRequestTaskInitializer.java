@@ -1,10 +1,7 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submit.handler;
 
-import java.util.Set;
-
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
@@ -15,6 +12,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPaylo
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submit.domain.PermitVariationApplicationSubmitRequestTaskPayload;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor

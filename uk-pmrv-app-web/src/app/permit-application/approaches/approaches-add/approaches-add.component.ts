@@ -20,13 +20,13 @@ import { approachesAddFormProvider } from './approaches-add-form.provider';
       <app-approaches-add-template
         (formSubmit)="onSubmit()"
         [monitoringApproaches]="monitoringApproaches$ | async"
-        [form]="form"
-      >
+        [form]="form">
         <ng-container heading>
           <p class="govuk-body">Select the monitoring approaches relevant to your installation.</p>
           <p class="govuk-body">
             Get help with
-            <a govukLink routerLink="../help-with-monitoring-approaches" target="_blank">monitoring approaches</a>.
+            <a govukLink routerLink="../help-with-monitoring-approaches" target="_blank">monitoring approaches</a>
+            .
           </p>
         </ng-container>
         <ng-container returnTo>
@@ -178,7 +178,7 @@ export class ApproachesAddComponent {
       monitorApproach === 'CALCULATION_CO2' ? 'sourceStreamCategoryAppliedTiers' : 'emissionPointCategoryAppliedTiers';
 
     const res = categoryAppliedTiers?.reduce((acc, categoryAppliedTier) => {
-      const { transfer, ...rest } = categoryAppliedTier?.[categoryKey];
+      const { transfer, ...rest } = categoryAppliedTier?.[categoryKey] || {};
       const updatedCategoryAppliedTiers = {
         ...categoryAppliedTier,
         [categoryKey]: {

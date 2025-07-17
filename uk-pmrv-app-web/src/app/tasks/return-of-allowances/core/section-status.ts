@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { format } from 'date-fns';
 
 import {
   ReturnOfAllowancesApplicationSubmitRequestTaskPayload,
@@ -11,18 +11,23 @@ export function resolveSectionStatus(payload: ReturnOfAllowancesApplicationSubmi
   return !isDateToBeReturnedValid(payload)
     ? 'needs review'
     : payload?.sectionsCompleted['PROVIDE_DETAILS']
-    ? 'complete'
-    : !payload?.returnOfAllowances?.numberOfAllowancesToBeReturned
-    ? 'not started'
-    : 'in progress';
+      ? 'complete'
+      : !payload?.returnOfAllowances?.numberOfAllowancesToBeReturned
+        ? 'not started'
+        : 'in progress';
 }
 
 export type StatusKey = 'PROVIDE_DETAILS' | 'PROVIDE_RETURNED_DETAILS';
 
 export function isDateToBeReturnedValid(payload: ReturnOfAllowancesApplicationSubmitRequestTaskPayload): boolean {
-  const dateToBeReturned = moment(payload?.returnOfAllowances?.dateToBeReturned).format('YYYY-MM-DD');
+  const dateToBeReturned = format(
+    payload?.returnOfAllowances?.dateToBeReturned
+      ? new Date(payload?.returnOfAllowances?.dateToBeReturned)
+      : new Date(),
+    'yyyy-MM-dd',
+  );
 
-  const currentDate = moment().format('YYYY-MM-DD');
+  const currentDate = format(new Date(), 'yyyy-MM-dd');
 
   return dateToBeReturned >= currentDate;
 }
@@ -33,6 +38,6 @@ export function resolveReturnedSectionStatus(
   return payload?.sectionsCompleted['PROVIDE_RETURNED_DETAILS']
     ? 'complete'
     : payload?.returnOfAllowancesReturned?.isAllowancesReturned === undefined
-    ? 'not started'
-    : 'in progress';
+      ? 'not started'
+      : 'in progress';
 }

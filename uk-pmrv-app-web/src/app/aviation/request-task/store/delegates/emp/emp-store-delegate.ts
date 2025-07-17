@@ -27,7 +27,10 @@ import {
 } from 'pmrv-api';
 
 export abstract class EmpStoreDelegate implements RequestTaskStoreDelegate {
-  constructor(protected store: RequestTaskStore, protected readonly businessErrorService: BusinessErrorService) {}
+  constructor(
+    protected store: RequestTaskStore,
+    protected readonly businessErrorService: BusinessErrorService,
+  ) {}
 
   abstract init(): this;
 

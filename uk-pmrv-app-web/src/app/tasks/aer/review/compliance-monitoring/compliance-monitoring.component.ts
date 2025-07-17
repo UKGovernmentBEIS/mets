@@ -13,12 +13,10 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
     <app-aer-task-review
       [breadcrumb]="true"
       [notification]="notification"
-      heading="Compliance with monitoring and reporting principles"
-    >
+      heading="Compliance with monitoring and reporting principles">
       <app-compliance-monitoring-group [compliance]="compliance$ | async"></app-compliance-monitoring-group>
       <app-verification-review-group-decision
-        (notification)="notification = $event"
-      ></app-verification-review-group-decision>
+        (notification)="notification = $event"></app-verification-review-group-decision>
     </app-aer-task-review>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,5 +27,8 @@ export class ComplianceMonitoringComponent {
     map((payload) => payload.verificationReport.complianceMonitoringReporting),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

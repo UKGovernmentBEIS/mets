@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import MonitoringApproachComponent from '@aviation/request-action/aer/ukets/tasks/monitoring-approach/monitoring-approach.component';
 import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
-import { AerRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
+import { AerUkEtsRequestActionPayload, RequestActionStore } from '@aviation/request-action/store';
 import { TYPE_AWARE_STORE } from '@aviation/type-aware.store';
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage } from '@testing';
@@ -50,7 +50,7 @@ describe('MonitoringApproachComponent', () => {
               fullScopeTotalEmissions: '1',
             } as AviationAerEmissionsMonitoringApproach,
           },
-        } as AerRequestActionPayload,
+        } as AerUkEtsRequestActionPayload,
       },
       regulatorViewer: false,
     });

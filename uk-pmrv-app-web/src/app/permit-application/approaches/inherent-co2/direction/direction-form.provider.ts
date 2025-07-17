@@ -24,7 +24,7 @@ export const directionFormProvider = {
       ?.inherentReceivingTransferringInstallations;
 
     const inherentCO2Direction = installations
-      ? installations[Number(route.snapshot.paramMap.get('index'))]?.inherentCO2Direction ?? null
+      ? (installations[Number(route.snapshot.paramMap.get('index'))]?.inherentCO2Direction ?? null)
       : null;
 
     return fb.group({

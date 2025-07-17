@@ -58354,4 +58354,532 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_1_0_add_rules_for_request_action_sub_type_AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED" author="P70383">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'),
+                    'REQUEST_ACTION' ,
+                    'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED',
+                    'requestActionViewHandler',
+                    'REGULATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'),
+                    'REQUEST_ACTION' ,
+                    'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED',
+                    'requestActionViewHandler',
+                    'OPERATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'),
+                    'REQUEST_ACTION' ,
+                    'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED',
+                    'requestActionAccountBasedViewHandler',
+                    'VERIFIER');
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED'
+                and handler = 'requestActionAccountBasedViewHandler'
+                and role_type = 'VERIFIER'
+                and scope is null;
+
+            delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED'
+                and handler = 'requestActionViewHandler'
+                and role_type in ('REGULATOR', 'OPERATOR')
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_associate_services_with_rules_for_request_action_type_AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED" author="P70383">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type in ('REGULATOR', 'OPERATOR')
+              and r.scope is null;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.role_type = 'VERIFIER'
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope is null;
+
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMITTED'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type in ('REGULATOR', 'OPERATOR')
+                and r.scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_getDocumentPreview_au_service" author="P70605">
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'getDocumentPreview');
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service where name = 'getDocumentPreview';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_permit_variation" author="P70605">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'PERMIT_VARIATION_APPLICATION_REVIEW'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'PERMIT_VARIATION_APPLICATION_REVIEW'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_permit_variation_reg_led" author="P70605">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+   
+    <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_permit_issuance" author="P70605">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'PERMIT_ISSUANCE_APPLICATION_REVIEW'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'PERMIT_ISSUANCE_APPLICATION_REVIEW'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_emp_ukets_issuance" author="P70605">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+
+        <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_permit_notification" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'PERMIT_NOTIFICATION_APPLICATION_REVIEW'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'PERMIT_NOTIFICATION_APPLICATION_REVIEW'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_emp_ukets_variation_reg_led" author="P70605">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_emp_ukets_variation" author="P70605">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'EMP_VARIATION_UKETS_APPLICATION_REVIEW'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'EMP_VARIATION_UKETS_APPLICATION_REVIEW'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_emp_corsia_issuance" author="P70605">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_remove_unneeded_rule_for_generateGetAccountFileNoteToken" author="P70453">
+        <sql>
+            delete from au_service_rule where service_id = (select id from au_service where name='generateGetAccountFileNoteToken')
+            and rule_id=(select id from au_rule where role_type='REGULATOR' and resource_type='ACCOUNT' and resource_sub_type is null and scope is not null)
+        </sql>
+        <rollback>
+            <sql>
+            insert into au_service_rule(service_id, rule_id) select (select id from au_service where name='generateGetAccountFileNoteToken'),
+            (select id from au_rule where role_type='REGULATOR' and resource_type='ACCOUNT' and resource_sub_type is null and scope is not null);
+            </sql>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_doal_application_submit" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'DOAL_APPLICATION_SUBMIT'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'DOAL_APPLICATION_SUBMIT'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+        <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_doal_authority_response" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'DOAL_AUTHORITY_RESPONSE'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'DOAL_AUTHORITY_RESPONSE'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_emp_corsia_variation_reg_led" author="P70605">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_emp_corsia_variation" author="P70605">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+            <changeSet id="0_1_0_create_au_service_rule_getDocumentPreview_aviation_dre_ukets_application_submit" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getDocumentPreview'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'AVIATION_DRE_UKETS_APPLICATION_SUBMIT'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'AVIATION_DRE_UKETS_APPLICATION_SUBMIT'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

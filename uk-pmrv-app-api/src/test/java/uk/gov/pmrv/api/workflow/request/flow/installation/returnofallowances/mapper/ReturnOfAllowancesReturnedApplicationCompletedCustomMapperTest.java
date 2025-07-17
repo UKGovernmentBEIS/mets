@@ -1,8 +1,9 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.returnofallowances.mapper;
 
 import org.junit.jupiter.api.Test;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestActionDTO;
@@ -59,8 +60,8 @@ class ReturnOfAllowancesReturnedApplicationCompletedCustomMapperTest {
 
     @Test
     void getUserRoleTypes() {
-        Set<RoleType> result = mapper.getUserRoleTypes();
-        assertEquals(Set.of(RoleType.OPERATOR, RoleType.VERIFIER), result);
+        Set<String> result = mapper.getUserRoleTypes();
+        assertEquals(Set.of(RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER), result);
     }
 
 }

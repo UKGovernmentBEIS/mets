@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { format, subDays } from 'date-fns';
 import { KeycloakService } from 'keycloak-angular';
-import moment from 'moment';
 
 import { RequestTaskPayload, ReturnOfAllowancesApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
@@ -155,7 +155,7 @@ describe('SubmitContainerComponent', () => {
                   mockCompletedReturnOfAllowancesApplicationSubmitRequestTaskItem.requestTask
                     .payload as ReturnOfAllowancesApplicationSubmitRequestTaskPayload
                 ).returnOfAllowances,
-                dateToBeReturned: moment().add(-1, 'day').format('YYYY-MM-DD'),
+                dateToBeReturned: format(subDays(new Date(), 1), 'yyyy-MM-dd'),
               },
             } as ReturnOfAllowancesApplicationSubmitRequestTaskPayload,
           },

@@ -1,12 +1,13 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { ActivatedRouteSnapshotStub } from '@testing';
 import { KeycloakService } from 'keycloak-angular';
 
 import { GovukComponentsModule } from 'govuk-components';
 
-import { ActivatedRouteSnapshotStub } from '../../../testing';
 import { InvalidEmailLinkComponent } from './invalid-email-link.component';
 
 describe('InvalidEmailLinkComponent', () => {
@@ -19,7 +20,7 @@ describe('InvalidEmailLinkComponent', () => {
     await TestBed.configureTestingModule({
       imports: [GovukComponentsModule, RouterTestingModule],
       declarations: [InvalidEmailLinkComponent],
-      providers: [KeycloakService],
+      providers: [KeycloakService, { provide: APP_BASE_HREF, useValue: '/installation-aviation/' }],
     }).compileComponents();
   });
 
@@ -52,9 +53,7 @@ describe('InvalidEmailLinkComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
 
-    expect(fixture.nativeElement.querySelectorAll('li')[0].textContent).toContain(
-      'The email address has already been registered',
-    );
+    expect(fixture.nativeElement.querySelectorAll('li')[0].textContent).toContain('A sign in cannot be created');
   });
 
   it('should contain token error', () => {

@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -200,9 +200,7 @@ export class AuthoritiesService {
     }
 
     return this.httpClient.get<Array<RoleDTO>>(
-      `${this.configuration.basePath}/v1.0/authorities/account/${encodeURIComponent(
-        String(accountId),
-      )}/operator-role-codes`,
+      `${this.configuration.basePath}/v1.0/authorities/account/${encodeURIComponent(String(accountId))}/operator-role-codes`,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

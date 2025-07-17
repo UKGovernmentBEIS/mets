@@ -6,11 +6,11 @@ import { distinctUntilKeyChanged, Observable, switchMap, takeUntil } from 'rxjs'
 
 import { AuthService } from '@core/services/auth.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
-import { AuthStore, selectTerms } from '@core/store/auth';
+import { LatestTermsStore } from '@core/store/latest-terms/latest-terms.store';
 
 import { GovukValidators } from 'govuk-components';
 
-import { TermsDTO, UsersService } from 'pmrv-api';
+import { TermsAndConditionsService, TermsDTO } from 'pmrv-api';
 
 @Component({
   selector: 'app-terms-and-conditions',
@@ -19,7 +19,7 @@ import { TermsDTO, UsersService } from 'pmrv-api';
   providers: [DestroySubject],
 })
 export class TermsAndConditionsComponent {
-  terms$: Observable<TermsDTO> = this.authStore.pipe(selectTerms, distinctUntilKeyChanged('version'));
+  latestTerms$: Observable<TermsDTO> = this.latestTermsStore.pipe(distinctUntilKeyChanged('version'));
 
   form: UntypedFormGroup = this.fb.group({
     terms: [null, GovukValidators.required('You should accept terms and conditions to proceed')],
@@ -27,21 +27,21 @@ export class TermsAndConditionsComponent {
 
   constructor(
     private readonly router: Router,
-    private readonly usersService: UsersService,
+    private readonly termsAndConditionsService: TermsAndConditionsService,
     private readonly authService: AuthService,
-    private readonly authStore: AuthStore,
+    private readonly latestTermsStore: LatestTermsStore,
     private readonly fb: UntypedFormBuilder,
     private readonly destroy$: DestroySubject,
   ) {}
 
   submitTerms(): void {
     if (this.form.valid) {
-      this.terms$
+      this.latestTerms$
         .pipe(
           switchMap((terms) => {
-            return this.usersService.editUserTerms({ version: terms.version });
+            return this.termsAndConditionsService.editUserTerms({ version: terms.version });
           }),
-          switchMap(() => this.authService.loadUser()),
+          switchMap(() => this.authService.loadUserTerms()),
           takeUntil(this.destroy$),
         )
         .subscribe(() => this.router.navigate(['']));

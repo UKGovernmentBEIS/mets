@@ -60,7 +60,9 @@ describe('SectionsContainerComponent', () => {
 
   @Component({
     selector: 'app-sections',
-    template: `permit sections`,
+    template: `
+      permit sections
+    `,
   })
   class MockPermitSectionsComponent {}
 

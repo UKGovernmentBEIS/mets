@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestPayload;
@@ -58,7 +58,7 @@ public class ReissueOfficialNoticeService {
 						.build());
         
         final EmissionTradingScheme scheme = accountQueryService.getAccountEmissionTradingScheme(request.getAccountId());
-		return documentFileGeneratorService.generateFileDocumentAsync(schemeToDocumentTemplateTypeMapper.map(scheme),
+		return documentFileGeneratorService.generateAndSaveFileDocumentAsync(schemeToDocumentTemplateTypeMapper.map(scheme),
 				templateParams, schemeToOfficialNoticeFileNameMapper.map(scheme));
     }
 	

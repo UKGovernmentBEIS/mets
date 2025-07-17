@@ -3,7 +3,6 @@ import { CanActivateFn, CanDeactivateFn } from '@angular/router';
 
 import { map, take, tap } from 'rxjs';
 
-import { EmissionsMonitoringApproach } from '@aviation/shared/components/emp/monitoring-approach-summary-template/monitoring-approach-types.interface';
 import produce from 'immer';
 
 import { EmissionsMonitoringPlanUkEts } from 'pmrv-api';
@@ -13,6 +12,7 @@ import { EmpUkEtsStoreDelegate } from '../../../../store/delegates';
 import { TASK_FORM_PROVIDER } from '../../../../task-form.provider';
 import { empQuery } from '../../../shared/emp.selectors';
 import { MonitoringApproachFormProvider } from './monitoring-approach-form.provider';
+import { EmissionsMonitoringApproach } from './monitoring-approach-types.interface';
 import { monitoringApproachQuery } from './store/monitoring-approach.selectors';
 
 export const canActivateMonitoringApproach: CanActivateFn = () => {

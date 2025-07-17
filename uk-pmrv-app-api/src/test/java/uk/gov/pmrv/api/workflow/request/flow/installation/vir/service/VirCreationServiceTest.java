@@ -6,8 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationCategory;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.common.reporting.verification.UncorrectedItem;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.PermitOriginatedData;
@@ -177,7 +177,7 @@ class VirCreationServiceTest {
                 virCreationService.createRequestVir(requestId));
 
         // Verify
-        assertThat(businessException.getErrorCode()).isEqualTo(ErrorCode.VIR_CREATION_NOT_ALLOWED);
+        assertThat(businessException.getErrorCode()).isEqualTo(MetsErrorCode.VIR_CREATION_NOT_ALLOWED);
         verify(requestService, times(1)).findRequestById(requestId);
         verify(virCreationValidatorService, times(1))
                 .validate(virVerificationData, accountId, year, PermitType.GHGE);

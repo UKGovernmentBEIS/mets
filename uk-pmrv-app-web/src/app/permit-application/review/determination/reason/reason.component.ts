@@ -23,8 +23,7 @@ import { reasonFormProvider } from './reason-form.provider';
         (formSubmit)="onContinue()"
         [formGroup]="form"
         submitText="Continue"
-        [hideSubmit]="(store.isEditable$ | async) === false"
-      >
+        [hideSubmit]="(store.isEditable$ | async) === false">
         <span class="govuk-caption-l">{{ determination$ | async }}</span>
 
         <app-page-heading>{{ header$ | async }}</app-page-heading>
@@ -48,8 +47,8 @@ export class ReasonComponent implements PendingRequest, OnInit {
       !this.store.isDeterminationTypeApplicable() || state.determination?.type === 'GRANTED'
         ? 'Provide a reason to support your decision'
         : state.determination?.type === 'REJECTED'
-        ? 'Provide a reason to support the rejection decision'
-        : 'Provide a reason for the application withdrawal',
+          ? 'Provide a reason to support the rejection decision'
+          : 'Provide a reason for the application withdrawal',
     ),
   );
 
@@ -118,7 +117,7 @@ export class ReasonComponent implements PendingRequest, OnInit {
     return !this.store.isDeterminationTypeApplicable() || state?.determination?.type === 'GRANTED'
       ? 'activation-date'
       : state?.determination?.type === 'REJECTED'
-      ? 'official-notice'
-      : 'answers';
+        ? 'official-notice'
+        : 'answers';
   }
 }

@@ -34,25 +34,22 @@ interface ViewModel {
 
         <app-aircraft-types-data-table
           [headingText]="'File uploaded'"
-          [aviationAerAircraftDataDetails]="vm.data.aviationAerAircraftDataDetails"
-        ></app-aircraft-types-data-table>
+          [aviationAerAircraftDataDetails]="vm.data.aviationAerAircraftDataDetails"></app-aircraft-types-data-table>
       </ng-container>
     </ng-container>
 
     <app-return-to-link></app-return-to-link>
   `,
-  styles: [
-    `
-      .header-container {
-        display: flex;
-        align-items: center;
-      }
+  styles: `
+    .header-container {
+      display: flex;
+      align-items: center;
+    }
 
-      .change-link {
-        margin-left: auto;
-      }
-    `,
-  ],
+    .change-link {
+      margin-left: auto;
+    }
+  `,
   imports: [
     SharedModule,
     GovukComponentsModule,

@@ -3,8 +3,6 @@ package uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -13,9 +11,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.HighestRequiredTier;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.MeteringUncertainty;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 @SuperBuilder

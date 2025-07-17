@@ -3,9 +3,9 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.review
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.ukets.review.domain.EmpVariationUkEtsApplicationReviewRequestTaskPayload;
@@ -22,7 +22,7 @@ public class EmpVariationUkEtsReviewNotifyOperatorValidatorService {
 
     public void validate(RequestTask requestTask,
                          NotifyOperatorForDecisionRequestTaskActionPayload taskActionPayload,
-                         PmrvUser pmrvUser) {
+                         AppUser appUser) {
         EmpVariationUkEtsApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
             (EmpVariationUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload();
         EmpVariationDetermination determination = reviewRequestTaskPayload.getDetermination();
@@ -32,7 +32,7 @@ public class EmpVariationUkEtsReviewNotifyOperatorValidatorService {
         DecisionNotification decisionNotification = taskActionPayload.getDecisionNotification();
 
         if (!reviewDeterminationValidatorService.isValid(reviewRequestTaskPayload, determination.getType()) ||
-            !decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, pmrvUser)) {
+            !decisionNotificationUsersValidator.areUsersValid(requestTask, decisionNotification, appUser)) {
             throw new BusinessException(ErrorCode.FORM_VALIDATION);
         }
     }

@@ -4,12 +4,12 @@ package uk.gov.pmrv.api.workflow.request.flow.rfi.handler;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
-import uk.gov.pmrv.api.user.core.domain.model.UserInfo;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfo;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -57,7 +57,7 @@ public class RfiSubmitActionHandler implements RequestTaskActionHandler<RfiSubmi
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final RfiSubmitRequestTaskActionPayload actionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -66,7 +66,7 @@ public class RfiSubmitActionHandler implements RequestTaskActionHandler<RfiSubmi
         final RfiSubmitPayload rfiSubmitPayload = actionPayload.getRfiSubmitPayload();
 
         // validate
-        validator.validate(requestTask, rfiSubmitPayload, pmrvUser);
+        validator.validate(requestTask, rfiSubmitPayload, appUser);
 
         // get users' information
         final Map<String, RequestActionUserInfo> usersInfo = 
@@ -102,7 +102,7 @@ public class RfiSubmitActionHandler implements RequestTaskActionHandler<RfiSubmi
         requestService.addActionToRequest(request,
             timelinePayload,
             RequestActionType.RFI_SUBMITTED,
-            pmrvUser.getUserId());
+            appUser.getUserId());
 
         // clear rfi attachments in task payload
         taskPayload.getRfiAttachments().clear();

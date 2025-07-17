@@ -3,9 +3,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload } from 'pmrv-api';
+import { of } from 'rxjs';
 
-import { ActivatedRouteStub, BasePage } from '../../../../testing';
+import { AuthService } from '@core/services/auth.service';
+import { DestroySubject } from '@core/services/destroy-subject.service';
+import { AuthStore } from '@core/store';
+
+import { CompanyInformationService, PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload } from 'pmrv-api';
+
+import { ActivatedRouteStub, BasePage, mockClass } from '../../../../testing';
 import { PermitIssuanceStore } from '../../../permit-issuance/store/permit-issuance.store';
 import { SharedModule } from '../../../shared/shared.module';
 import { SharedPermitModule } from '../../shared/shared-permit.module';
@@ -19,6 +25,9 @@ describe('DetailsComponent', () => {
   let fixture: ComponentFixture<DetailsComponent>;
   let page: Page;
   let store: PermitApplicationStore<PermitApplicationState>;
+  let authStore: AuthStore;
+  let authService: Partial<jest.Mocked<AuthService>>;
+  const companyInformationService = mockClass(CompanyInformationService);
   const route = new ActivatedRouteStub(
     {},
     {},
@@ -29,11 +38,13 @@ describe('DetailsComponent', () => {
 
   @Component({
     selector: 'app-review-group-decision-container',
-    template: `<div>
-      Review group decision component.
-      <div>Key:{{ groupKey }}</div>
-      <div>Can edit:{{ canEdit }}</div>
-    </div>`,
+    template: `
+      <div>
+        Review group decision component.
+        <div>Key:{{ groupKey }}</div>
+        <div>Can edit:{{ canEdit }}</div>
+      </div>
+    `,
   })
   class MockDecisionComponent {
     @Input() groupKey: PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload['group'];
@@ -64,9 +75,29 @@ describe('DetailsComponent', () => {
           provide: PermitApplicationStore,
           useExisting: PermitIssuanceStore,
         },
+        { provide: AuthService, useValue: authService },
+        { provide: CompanyInformationService, useValue: companyInformationService },
+        DestroySubject,
       ],
       declarations: [DetailsComponent, MockDecisionComponent],
     }).compileComponents();
+
+    authStore = TestBed.inject(AuthStore);
+    authStore.setUserState({ roleType: 'REGULATOR' });
+
+    companyInformationService.getCompanyProfileByRegistrationNumber.mockReturnValue(
+      of({
+        name: 'COMPANY 91634248 LIMITED',
+        registrationNumber: '91634248',
+        address: {
+          line1: 'Companies House',
+          line2: 'Crownway',
+          city: 'Cardiff',
+          country: 'United Kingdom',
+          postcode: 'CF14 3UZ',
+        },
+      }),
+    );
   });
 
   describe('without review group decision', () => {

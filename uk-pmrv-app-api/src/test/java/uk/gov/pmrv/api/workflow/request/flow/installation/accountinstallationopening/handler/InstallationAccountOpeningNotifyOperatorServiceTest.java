@@ -14,15 +14,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.notification.mail.config.property.NotificationProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.user.application.UserService;
-import uk.gov.pmrv.api.user.core.domain.dto.ApplicationUserDTO;
+import uk.gov.netz.api.common.config.WebAppProperties;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.notificationapi.mail.config.property.NotificationProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.pmrv.api.user.application.UserServiceDelegator;
+import uk.gov.pmrv.api.user.core.domain.dto.UserDTO;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.Decision;
@@ -38,16 +39,16 @@ class InstallationAccountOpeningNotifyOperatorServiceTest {
 	private InstallationAccountOpeningNotifyOperatorService installationAccountOpeningNotifyOperatorService;
 	
 	@Mock
-	private NotificationEmailService notificationEmailService;
+	private NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
 	
 	@Mock
-	private UserService userService;
+	private UserServiceDelegator userServiceDelegator;
 	
 	@Mock
 	private RequestService requestService;
 
 	@Mock
-	private AppProperties appProperties;
+	private WebAppProperties webAppProperties;
 
 	@Mock
 	private NotificationProperties notificationProperties;
@@ -74,13 +75,12 @@ class InstallationAccountOpeningNotifyOperatorServiceTest {
                 .operatorAssignee(user)
                 .build())
             .build();
-		final ApplicationUserDTO userDTO = OperatorUserDTO.builder().email(email).firstName(firstName).lastName(lastName).build();
-		final AppProperties.Web web = new AppProperties.Web();
-		web.setUrl("some-url");
+		final UserDTO userDTO = OperatorUserDTO.builder().email(email).firstName(firstName).lastName(lastName).build();
+		String url = "some-url";
 		
 		when(requestService.findRequestById(requestId)).thenReturn(request);
-		when(userService.getUserById(user)).thenReturn(userDTO);
-		when(appProperties.getWeb()).thenReturn(web);
+		when(userServiceDelegator.getUserById(user)).thenReturn(userDTO);
+		when(webAppProperties.getUrl()).thenReturn(url);
 
 		NotificationProperties.Email notificationEmail = mock(NotificationProperties.Email.class);
 		when(notificationProperties.getEmail()).thenReturn(notificationEmail);
@@ -91,19 +91,19 @@ class InstallationAccountOpeningNotifyOperatorServiceTest {
 		
 		//verify
 		verify(requestService, times(1)).findRequestById(requestId);
-		verify(userService, times(1)).getUserById(user);
-		verify(appProperties, times(1)).getWeb();
+		verify(userServiceDelegator, times(1)).getUserById(user);
+		verify(webAppProperties, times(1)).getUrl();
 		
-		final ArgumentCaptor<EmailData> recipientEmailCaptor = ArgumentCaptor.forClass(EmailData.class);
+		final ArgumentCaptor<EmailData<EmailNotificationTemplateData>> recipientEmailCaptor = ArgumentCaptor.forClass(EmailData.class);
 		verify(notificationEmailService, times(1)).notifyRecipient(recipientEmailCaptor.capture(), Mockito.eq(email));
 		//assert email argument
-		EmailData emailData = recipientEmailCaptor.getValue();
-		assertThat(emailData.getNotificationTemplateData().getTemplateName()).isEqualTo(NotificationTemplateName.ACCOUNT_APPLICATION_ACCEPTED);
+		EmailData<EmailNotificationTemplateData> emailData = recipientEmailCaptor.getValue();
+		assertThat(emailData.getNotificationTemplateData().getTemplateName()).isEqualTo(PmrvNotificationTemplateName.ACCOUNT_APPLICATION_ACCEPTED.getName());
 		assertThat(emailData.getNotificationTemplateData().getTemplateParams())
 					.containsExactlyInAnyOrderEntriesOf(
 							Map.of(
-									EmailNotificationTemplateConstants.HOME_URL, web.getUrl(),
-									EmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink
+									PmrvEmailNotificationTemplateConstants.HOME_URL, url,
+									PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink
 									));
 	}
 	
@@ -130,13 +130,12 @@ class InstallationAccountOpeningNotifyOperatorServiceTest {
                 .operatorAssignee(user)
                 .build())
             .build();
-		final ApplicationUserDTO userDTO = OperatorUserDTO.builder().email(email).firstName(firstName).lastName(lastName).build();
-		final AppProperties.Web web = new AppProperties.Web();
-		web.setUrl("some-url");
+		final UserDTO userDTO = OperatorUserDTO.builder().email(email).firstName(firstName).lastName(lastName).build();
+		String url = "some-url";
 		
 		when(requestService.findRequestById(requestId)).thenReturn(request);
-		when(userService.getUserById(user)).thenReturn(userDTO);
-		when(appProperties.getWeb()).thenReturn(web);
+		when(userServiceDelegator.getUserById(user)).thenReturn(userDTO);
+		when(webAppProperties.getUrl()).thenReturn(url);
 
 		NotificationProperties.Email notificationEmail = mock(NotificationProperties.Email.class);
 		when(notificationProperties.getEmail()).thenReturn(notificationEmail);
@@ -147,20 +146,20 @@ class InstallationAccountOpeningNotifyOperatorServiceTest {
 		
 		//verify
 		verify(requestService, times(1)).findRequestById(requestId);
-		verify(userService, times(1)).getUserById(user);
-		verify(appProperties, times(1)).getWeb();
+		verify(userServiceDelegator, times(1)).getUserById(user);
+		verify(webAppProperties, times(1)).getUrl();
 		
-		final ArgumentCaptor<EmailData> recipientEmailCaptor = ArgumentCaptor.forClass(EmailData.class);
+		final ArgumentCaptor<EmailData<EmailNotificationTemplateData>> recipientEmailCaptor = ArgumentCaptor.forClass(EmailData.class);
 		verify(notificationEmailService, times(1)).notifyRecipient(recipientEmailCaptor.capture(), Mockito.eq(email));
 		//assert email argument
-		EmailData emailData = recipientEmailCaptor.getValue();
-		assertThat(emailData.getNotificationTemplateData().getTemplateName()).isEqualTo(NotificationTemplateName.ACCOUNT_APPLICATION_REJECTED);
+		EmailData<EmailNotificationTemplateData> emailData = recipientEmailCaptor.getValue();
+		assertThat(emailData.getNotificationTemplateData().getTemplateName()).isEqualTo(PmrvNotificationTemplateName.ACCOUNT_APPLICATION_REJECTED.getName());
 		assertThat(emailData.getNotificationTemplateData().getTemplateParams())
 					.containsExactlyInAnyOrderEntriesOf(
 							Map.of(
-									EmailNotificationTemplateConstants.ACCOUNT_APPLICATION_REJECTED_REASON, rejectionReason,
-									EmailNotificationTemplateConstants.HOME_URL, web.getUrl(),
-									EmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink
+									PmrvEmailNotificationTemplateConstants.ACCOUNT_APPLICATION_REJECTED_REASON, rejectionReason,
+									PmrvEmailNotificationTemplateConstants.HOME_URL, url,
+									PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, contactUsLink
 									));
 	}
 	

@@ -1,0 +1,36 @@
+<ng-container *ngIf="isSendReportAvailable(); else notAvailable">
+  <app-bdr-task [breadcrumb]="true">
+    <app-wizard-step
+      (formSubmit)="onContinue()"
+      [formGroup]="form"
+      heading="Submit your report"
+      [hideSubmit]="isEditable() === false"
+      [showBackLink]="true">
+      <p class="govuk-body">
+        You can either send the BDR to verifier for verification opinion or send it directly to
+        {{ bdrService.competentAuthority$ | async | competentAuthority }}.
+      </p>
+
+      <div
+        formControlName="needsVerification"
+        govuk-radio
+        legend="Do you want to send this report to a verifier?"
+        [legendSize]="'medium'"
+        class="govuk-!-width-three-quarters">
+        <govuk-radio-option [value]="true" label="Yes, send the report to a verifier"></govuk-radio-option>
+        <govuk-radio-option
+          [value]="false"
+          label="No, send the report to a regulator without verification"></govuk-radio-option>
+      </div>
+    </app-wizard-step>
+    <app-bdr-return-link returnLink="../" title="Complete baseline data report"></app-bdr-return-link>
+  </app-bdr-task>
+</ng-container>
+
+<ng-template #notAvailable>
+  <app-bdr-task [breadcrumb]="true">
+    <app-page-heading>Submit your report</app-page-heading>
+    <p class="govuk-body">You must complete all tasks before submitting your report.</p>
+    <app-bdr-return-link returnLink="../"></app-bdr-return-link>
+  </app-bdr-task>
+</ng-template>

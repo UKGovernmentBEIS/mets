@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -7,6 +7,7 @@ import { first, map, Observable, startWith } from 'rxjs';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PermitRevocationState } from '@permit-revocation/store/permit-revocation.state';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 
 import { PERMIT_REVOCATION_WITHDRAW_FORM, withdrawFormProvider } from './wait-for-appeal-form.provider';
 
@@ -16,7 +17,7 @@ import { PERMIT_REVOCATION_WITHDRAW_FORM, withdrawFormProvider } from './wait-fo
   providers: [withdrawFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WaitForAppealReasonComponent {
+export class WaitForAppealReasonComponent implements OnInit {
   readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
   readonly isFileUploaded$: Observable<boolean> = this.form.get('files').valueChanges.pipe(
     startWith(this.form.get('files').value),
@@ -33,6 +34,7 @@ export class WaitForAppealReasonComponent {
     @Inject(PERMIT_REVOCATION_WITHDRAW_FORM) readonly form: UntypedFormGroup,
     private readonly router: Router,
     private readonly pendingRequest: PendingRequestService,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
 
   onSubmit() {
@@ -58,5 +60,9 @@ export class WaitForAppealReasonComponent {
           this.router.navigate(['..', 'summary'], { relativeTo: this.route, state: { notification: true } }),
         );
     }
+  }
+
+  ngOnInit(): void {
+    this.breadcrumbService.addToLastBreadcrumbAndShow('wait-for-appeal');
   }
 }

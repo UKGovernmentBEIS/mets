@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
@@ -59,7 +59,7 @@ public class AviationVirCreationService {
                 aerRequestMetadata.getYear()
             );
         if(!validationResult.isValid()) {
-            throw new BusinessException(ErrorCode.VIR_CREATION_NOT_ALLOWED, validationResult);
+            throw new BusinessException(MetsErrorCode.VIR_CREATION_NOT_ALLOWED, validationResult);
         }
 
         // Add Expiration Date

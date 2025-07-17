@@ -1,5 +1,22 @@
 package uk.gov.pmrv.api.migration.permit.managementprocedures;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Service;
+import uk.gov.pmrv.api.account.domain.Account;
+import uk.gov.pmrv.api.migration.MigrationEndpoint;
+import uk.gov.pmrv.api.migration.permit.PermitMigrationContainer;
+import uk.gov.pmrv.api.migration.permit.PermitSectionMigrationService;
+import uk.gov.pmrv.api.permit.domain.managementprocedures.AssessAndControlRisk;
+import uk.gov.pmrv.api.permit.domain.managementprocedures.ManagementProceduresDefinition;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import static uk.gov.pmrv.api.migration.permit.MigrationPermitHelper.constructEtsSectionQuery;
 import static uk.gov.pmrv.api.migration.permit.managementprocedures.ManagementProceduresDefinitionType.ASSESS_AND_CONTROL_RISKS;
 import static uk.gov.pmrv.api.migration.permit.managementprocedures.ManagementProceduresDefinitionType.ASSIGNMENT_OF_RESPONSIBILITIES;
@@ -11,26 +28,15 @@ import static uk.gov.pmrv.api.migration.permit.managementprocedures.ManagementPr
 import static uk.gov.pmrv.api.migration.permit.managementprocedures.ManagementProceduresDefinitionType.RECORD_KEEPING_AND_DOCUMENTATION;
 import static uk.gov.pmrv.api.migration.permit.managementprocedures.ManagementProceduresDefinitionType.REVIEW_AND_VALIDATION_OF_DATA;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.account.domain.Account;
-import uk.gov.pmrv.api.migration.MigrationEndpoint;
-import uk.gov.pmrv.api.migration.permit.PermitMigrationContainer;
-import uk.gov.pmrv.api.migration.permit.PermitSectionMigrationService;
-import uk.gov.pmrv.api.permit.domain.managementprocedures.ManagementProceduresDefinition;
-
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class ManagementProceduresDefinitionMigrationService implements PermitSectionMigrationService<ManagementProceduresDefinition> {
 
     private final JdbcTemplate migrationJdbcTemplate;
+
+    public ManagementProceduresDefinitionMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+    }
 
     private static final Map<ManagementProceduresDefinitionType, String> managementProceduresDefinitionTypeToQueryMap =
         Map.of(ASSESS_AND_CONTROL_RISKS, "Man_assess_and_control_risks",
@@ -94,13 +100,28 @@ public class ManagementProceduresDefinitionMigrationService implements PermitSec
     }
 
     public Map<String, ManagementProceduresDefinition> queryEtsSection(List<String> accountIds, ManagementProceduresDefinitionType type) {
-        String resolvedQuery = String.format(QUERY_BASE, managementProceduresDefinitionTypeToQueryMap.get(type));
-        String finalQuery = constructEtsSectionQuery(resolvedQuery, accountIds);
-        List<EtsManagementProceduresDefinition> etsManagementProceduresDefinitionList = executeQuery(finalQuery, accountIds);
+        List<EtsManagementProceduresDefinition>
+            etsManagementProceduresDefinitionList = getEtsManagementProceduresDefinitions(accountIds, type);
 
         return etsManagementProceduresDefinitionList.stream()
             .collect(Collectors.toMap(EtsManagementProceduresDefinition::getEmitterId,
                 ManagementProceduresMapper::toManagementProceduresProcessDefinition));
+    }
+
+    public Map<String, AssessAndControlRisk> queryEtsSectionForAssessAndControlRisk(List<String> accountIds, ManagementProceduresDefinitionType type) {
+        List<EtsManagementProceduresDefinition>
+            etsManagementProceduresDefinitionList = getEtsManagementProceduresDefinitions(accountIds, type);
+
+        return etsManagementProceduresDefinitionList.stream()
+            .collect(Collectors.toMap(EtsManagementProceduresDefinition::getEmitterId,
+                ManagementProceduresMapper::toAssessAndControlRisk));
+    }
+
+    private List<EtsManagementProceduresDefinition> getEtsManagementProceduresDefinitions(
+        List<String> accountIds, ManagementProceduresDefinitionType type) {
+        String resolvedQuery = String.format(QUERY_BASE, managementProceduresDefinitionTypeToQueryMap.get(type));
+        String finalQuery = constructEtsSectionQuery(resolvedQuery, accountIds);
+        return executeQuery(finalQuery, accountIds);
     }
 
     private List<EtsManagementProceduresDefinition> executeQuery(String query, List<String> accountIds) {
@@ -115,9 +136,9 @@ public class ManagementProceduresDefinitionMigrationService implements PermitSec
     }
     
     private void populateAssessAndControlRisks(Map<String, Account> accountsToMigratePermit, Map<Long, PermitMigrationContainer> permits) {
-        Map<String, ManagementProceduresDefinition> sections = 
-                queryEtsSection(new ArrayList<>(accountsToMigratePermit.keySet()), ManagementProceduresDefinitionType.ASSESS_AND_CONTROL_RISKS);
-        
+        Map<String, AssessAndControlRisk> sections =
+            queryEtsSectionForAssessAndControlRisk(new ArrayList<>(accountsToMigratePermit.keySet()), ManagementProceduresDefinitionType.ASSESS_AND_CONTROL_RISKS);
+
         sections
             .forEach((etsAccId, section) ->
                 permits.get(accountsToMigratePermit.get(etsAccId).getId())

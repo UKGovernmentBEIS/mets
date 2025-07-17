@@ -17,12 +17,16 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEditDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyInfoDTO;
@@ -33,14 +37,10 @@ import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyDeletionService;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyQueryService;
 import uk.gov.pmrv.api.verificationbody.service.VerificationBodyUpdateService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.pmrv.api.web.orchestrator.verificationbody.service.VerificationBodyAndUserOrchestrator;
 import uk.gov.pmrv.api.web.orchestrator.verificationbody.dto.VerificationBodyCreationDTO;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.List;
 
@@ -75,10 +75,10 @@ class VerificationBodyControllerTest {
     private VerificationBodyDeletionService verificationBodyDeletionService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent appSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -91,8 +91,8 @@ class VerificationBodyControllerTest {
 
     @BeforeEach
     public void setUp() {
-        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(appSecurityComponent);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
@@ -105,7 +105,7 @@ class VerificationBodyControllerTest {
         controller = (VerificationBodyController) aopProxy.getProxy();
         objectMapper = new ObjectMapper();
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .setValidator(validator)
             .build();
@@ -113,7 +113,7 @@ class VerificationBodyControllerTest {
 
     @Test
     void getVerificationBodies() throws Exception {
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
 
         VerificationBodyInfoResponseDTO verificationBodyInfoResponse = VerificationBodyInfoResponseDTO.builder()
                 .verificationBodies(List.of(VerificationBodyInfoDTO.builder().id(1L).name("name").status(VerificationBodyStatus.ACTIVE).build(),
@@ -121,7 +121,7 @@ class VerificationBodyControllerTest {
                 .editable(true)
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(verificationBodyQueryService.getVerificationBodies(user)).thenReturn(verificationBodyInfoResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH)
@@ -137,12 +137,12 @@ class VerificationBodyControllerTest {
 
     @Test
     void getVerificationBodies_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.OPERATOR).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.OPERATOR).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(user, new RoleType[] {RoleType.REGULATOR});
+                .evaluate(user, new String[] {RoleTypeConstants.REGULATOR});
 
         mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -170,11 +170,11 @@ class VerificationBodyControllerTest {
     @Test
     void getVerificationBodyById_forbidden() throws Exception {
         Long verificationBodyId = 1L;
-        PmrvUser authUser = PmrvUser.builder().userId("user").build();
+        AppUser authUser = AppUser.builder().userId("user").build();
         
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(authUser, "getVerificationBodyById");
 
 
@@ -200,11 +200,11 @@ class VerificationBodyControllerTest {
     @Test
     void deleteVerificationBodyById_forbidden() throws Exception {
         long verificationBodyId = 1L;
-        PmrvUser authUser = PmrvUser.builder().userId("user").build();
+        AppUser authUser = AppUser.builder().userId("user").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
+                .when(appUserAuthorizationService)
                 .authorize(authUser, "deleteVerificationBodyById");
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -217,7 +217,7 @@ class VerificationBodyControllerTest {
     @Test
     void createVerificationBody() throws Exception {
         String vbName = "vbName";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("authUserId").build();
+        AppUser appUser = AppUser.builder().userId("authUserId").build();
         VerificationBodyCreationDTO verificationBodyCreationDTO = VerificationBodyCreationDTO.builder()
             .verificationBody(VerificationBodyEditDTO.builder().name(vbName).build())
             .build();
@@ -228,8 +228,8 @@ class VerificationBodyControllerTest {
             .status(VerificationBodyStatus.PENDING)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(verificationBodyAndUserOrchestrator.createVerificationBody(pmrvUser, verificationBodyCreationDTO))
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(verificationBodyAndUserOrchestrator.createVerificationBody(appUser, verificationBodyCreationDTO))
             .thenReturn(verificationBodyInfoDTO);
 
         MvcResult mvcResult = mockMvc.perform(
@@ -244,23 +244,23 @@ class VerificationBodyControllerTest {
 
         assertEquals(verificationBodyInfoDTO, expectedResult);
 
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(verificationBodyAndUserOrchestrator, times(1))
-            .createVerificationBody(pmrvUser, verificationBodyCreationDTO);
+            .createVerificationBody(appUser, verificationBodyCreationDTO);
     }
 
     @Test
     void createVerificationBody_forbidden() throws Exception {
         String vbName = "vbName";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("authUserId").build();
+        AppUser appUser = AppUser.builder().userId("authUserId").build();
         VerificationBodyCreationDTO verificationBodyCreationDTO = VerificationBodyCreationDTO.builder()
             .verificationBody(VerificationBodyEditDTO.builder().name(vbName).build())
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "createVerificationBody");
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "createVerificationBody");
 
 
         mockMvc.perform(
@@ -270,7 +270,7 @@ class VerificationBodyControllerTest {
             .andExpect(status().isForbidden());
 
         // Verify
-        verify(pmrvSecurityComponent, times(1)).getAuthenticatedUser();
+        verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(verificationBodyAndUserOrchestrator, never()).createVerificationBody(any(), any());
     }
     
@@ -294,16 +294,16 @@ class VerificationBodyControllerTest {
     
     @Test
     void updateVerificationBody_forbidden() throws Exception {
-        PmrvUser authUser = PmrvUser.builder().userId("user").build();
+        AppUser authUser = AppUser.builder().userId("user").build();
         Long verificationBodyid = 1L;
         VerificationBodyUpdateDTO verificationBodyUpdateDTO = VerificationBodyUpdateDTO.builder()
                 .id(verificationBodyid)
                 .verificationBody(VerificationBodyEditDTO.builder().name("name").build())
                 .build();
         
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
+            .when(appUserAuthorizationService)
             .authorize(authUser, "updateVerificationBody");
         
         mockMvc.perform(
@@ -333,13 +333,13 @@ class VerificationBodyControllerTest {
 
     @Test
     void updateVerificationBodiesStatus_forbidden() throws Exception {
-        PmrvUser authUser = PmrvUser.builder().userId("user").build();
+        AppUser authUser = AppUser.builder().userId("user").build();
         VerificationBodyUpdateStatusDTO verificationBodyUpdateStatusDTO = VerificationBodyUpdateStatusDTO.builder()
                 .id(1L).status(VerificationBodyStatus.ACTIVE).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
+                .when(appUserAuthorizationService)
                 .authorize(authUser, "updateVerificationBodiesStatus");
 
         mockMvc.perform(MockMvcRequestBuilders

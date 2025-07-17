@@ -12,9 +12,7 @@ import { BackLinkService } from '@shared/back-link/back-link.service';
   template: `
     <app-request-action-heading
       [headerText]="(route.data | async)?.pageTitle"
-      [timelineCreationDate]="(store | async)?.requestActionCreationDate"
-    >
-    </app-request-action-heading>
+      [timelineCreationDate]="(store | async)?.requestActionCreationDate"></app-request-action-heading>
     <app-summary sectionHeading="Details"></app-summary>
     <app-official-notice-recipients [noticeRecipientsData]="noticeRecipients$ | async"></app-official-notice-recipients>
   `,

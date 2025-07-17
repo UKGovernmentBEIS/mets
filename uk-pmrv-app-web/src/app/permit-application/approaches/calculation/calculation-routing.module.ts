@@ -104,7 +104,7 @@ function getSubtaskChildrenRoutes(pageTitle: string, includeOneThirdRoute: boole
       children: [
         {
           path: '',
-          data: { pageTitle: `${pageTitle} - Analysis method`, backlink: '../analysis-method-used' },
+          data: { pageTitle: `${pageTitle} - Analysis method`, backlink: '../../analysis-method-used' },
           component: AnalysisMethodComponent,
           canActivate: [WizardStepGuard],
         },

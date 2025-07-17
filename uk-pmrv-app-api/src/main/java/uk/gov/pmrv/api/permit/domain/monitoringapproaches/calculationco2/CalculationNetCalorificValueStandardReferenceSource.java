@@ -1,14 +1,12 @@
 package uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
-
-import jakarta.validation.constraints.NotNull;
+import uk.gov.netz.api.common.validation.SpELExpression;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

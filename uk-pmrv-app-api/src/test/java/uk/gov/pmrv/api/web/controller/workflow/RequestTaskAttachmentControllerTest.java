@@ -1,16 +1,6 @@
 package uk.gov.pmrv.api.web.controller.workflow;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,22 +17,33 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileUuidDTO;
-import uk.gov.pmrv.api.token.FileToken;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileUuidDTO;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.token.FileToken;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 import uk.gov.pmrv.api.workflow.request.application.attachment.task.RequestTaskAttachmentActionProcessDTO;
 import uk.gov.pmrv.api.workflow.request.application.attachment.task.RequestTaskAttachmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestTaskAttachmentUploadService;
+
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class RequestTaskAttachmentControllerTest {
@@ -55,10 +56,10 @@ class RequestTaskAttachmentControllerTest {
     private RequestTaskAttachmentController requestTaskAttachmentController;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RequestTaskAttachmentUploadService requestTaskAttachmentUploadService;
@@ -73,7 +74,7 @@ class RequestTaskAttachmentControllerTest {
         mapper = new ObjectMapper();
 
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(requestTaskAttachmentController);
         aspectJProxyFactory.addAspect(aspect);
@@ -84,14 +85,14 @@ class RequestTaskAttachmentControllerTest {
         requestTaskAttachmentController = (RequestTaskAttachmentController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(requestTaskAttachmentController)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
             .build();
     }
 
     @Test
     void uploadRequestTaskAttachment() throws Exception {
-        PmrvUser authUser = PmrvUser.builder().userId("id").build();
+        AppUser authUser = AppUser.builder().userId("id").build();
         Long requestTaskId = 1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_ISSUANCE_UPLOAD_SECTION_ATTACHMENT;
         String attachmentName = "attachment";
@@ -133,7 +134,7 @@ class RequestTaskAttachmentControllerTest {
 
     @Test
     void uploadRequestTaskAttachment_forbidden() throws Exception {
-        PmrvUser authUser = PmrvUser.builder().userId("id").build();
+        AppUser authUser = AppUser.builder().userId("id").build();
         Long requestTaskId = 1L;
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_ISSUANCE_UPLOAD_SECTION_ATTACHMENT;
         RequestTaskAttachmentActionProcessDTO requestTaskAttachmentActionProcessDTO = RequestTaskAttachmentActionProcessDTO.builder()
@@ -147,8 +148,8 @@ class RequestTaskAttachmentControllerTest {
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(authUser, "uploadRequestTaskAttachment", String.valueOf(requestTaskId));
+            .when(appUserAuthorizationService)
+            .authorize(authUser, "uploadRequestTaskAttachment", String.valueOf(requestTaskId), null, null);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.multipart(BASE_PATH + "/upload")
@@ -183,12 +184,12 @@ class RequestTaskAttachmentControllerTest {
     void generateRequestTaskGetFileAttachmentToken_forbidden() throws Exception {
         Long requestTaskId = 1L;
         UUID attachmentUuid = UUID.randomUUID();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "generateRequestTaskGetFileAttachmentToken", String.valueOf(requestTaskId));
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "generateRequestTaskGetFileAttachmentToken", String.valueOf(requestTaskId), null, null);
 
         mockMvc.perform(MockMvcRequestBuilders
             .get(BASE_PATH + "/" + requestTaskId)
@@ -201,7 +202,7 @@ class RequestTaskAttachmentControllerTest {
     @Test
     @DisplayName("Should throw BAD REQUEST (400) when no attachment is provided")
     void uploadRequestTaskNoAttachment() throws Exception {
-        PmrvUser authUser = PmrvUser.builder().userId("id").build();
+        AppUser authUser = AppUser.builder().userId("id").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
 

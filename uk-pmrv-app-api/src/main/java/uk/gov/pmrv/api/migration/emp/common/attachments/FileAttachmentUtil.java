@@ -1,17 +1,16 @@
 package uk.gov.pmrv.api.migration.emp.common.attachments;
 
-import java.io.IOException;
-import java.util.UUID;
-
-import org.apache.tika.io.FilenameUtils;
-import org.springframework.core.io.ClassPathResource;
-
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
-import uk.gov.pmrv.api.common.utils.MimeTypeUtils;
-import uk.gov.pmrv.api.files.attachments.domain.FileAttachment;
-import uk.gov.pmrv.api.files.common.domain.FileStatus;
+import org.apache.tika.io.FilenameUtils;
+import org.springframework.core.io.ClassPathResource;
+import uk.gov.netz.api.files.attachments.domain.FileAttachment;
+import uk.gov.netz.api.files.common.domain.FileStatus;
+import uk.gov.netz.api.files.common.utils.MimeTypeUtils;
 import uk.gov.pmrv.api.migration.MigrationConstants;
+
+import java.io.IOException;
+import java.util.UUID;
 
 @Log4j2
 @UtilityClass

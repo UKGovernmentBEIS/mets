@@ -3,19 +3,12 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.service
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.account.aviation.service.AviationAccountUpdateService;
-import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerSubmitParams;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerTotalReportableEmissions;
 import uk.gov.pmrv.api.aviationreporting.common.service.AviationAerService;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsiaContainer;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsiaTotalReportableEmissions;
-import uk.gov.pmrv.api.aviationreporting.corsia.domain.verification.AviationAerCorsiaVerificationReport;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.LimitedCompanyOrganisation;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OrganisationLegalStatusType;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OrganisationStructure;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.AviationCorsiaOperatorDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -36,10 +29,9 @@ public class AviationAerCorsiaCompleteService {
 
     private final RequestService requestService;
     private final RequestAviationAccountQueryService requestAviationAccountQueryService;
-    private final RequestVerificationService<AviationAerCorsiaVerificationReport> requestVerificationService;
+    private final RequestVerificationService requestVerificationService;
     private final AviationAerService aviationAerService;
     private final AviationAerCorsiaMapper aviationAerMapper;
-    private final AviationAccountUpdateService aviationAccountUpdateService;
 
     @Transactional
     public void complete(String requestId) {
@@ -49,13 +41,10 @@ public class AviationAerCorsiaCompleteService {
         Long accountId = request.getAccountId();
 
         RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(accountId);
-
-        //update verification body details if verification is performed
-        AviationAerCorsiaVerificationReport verificationReport = aerRequestPayload.getVerificationReport();
-        Optional.ofNullable(verificationReport).ifPresent(report ->
-            verificationReport.setVerificationBodyDetails(requestVerificationService
-                .getVerificationBodyDetails(verificationReport, request.getVerificationBodyId()))
-        );
+        
+        // refresh Verification Body details
+ 		requestVerificationService.refreshVerificationReportVBDetails(aerRequestPayload.getVerificationReport(),
+ 				request.getVerificationBodyId());
 
         AviationAerCorsiaContainer aerContainer =
             aviationAerMapper.toAviationAerCorsiaContainer(aerRequestPayload, EmissionTradingScheme.CORSIA, accountInfo, aerMetadata);
@@ -76,13 +65,6 @@ public class AviationAerCorsiaCompleteService {
             aerMetadata.setTotalEmissionsOffsettingFlights(corsiaEmissions.getReportableOffsetEmissions());
             aerMetadata.setTotalEmissionsClaimedReductions(corsiaEmissions.getReportableReductionClaimEmissions());
         });
-
-        //update account upon AER workflow completion
-        if(Boolean.TRUE.equals(aerContainer.getReportingRequired())) {
-            AviationCorsiaOperatorDetails operatorDetails = aerContainer.getAer().getOperatorDetails();
-            aviationAccountUpdateService.updateAccountUponAerCompletion(accountId,
-                operatorDetails.getOperatorName(), getContactLocationFromAER(operatorDetails));
-        }
     }
 
     public void addRequestAction(String requestId, boolean skipped) {
@@ -92,13 +74,10 @@ public class AviationAerCorsiaCompleteService {
         Long accountId = request.getAccountId();
 
         RequestAviationAccountInfo accountInfo = requestAviationAccountQueryService.getAccountInfo(accountId);
-
-        //update verification body details if verification is performed
-        AviationAerCorsiaVerificationReport verificationReport = aerRequestPayload.getVerificationReport();
-        Optional.ofNullable(verificationReport).ifPresent(report ->
-            verificationReport.setVerificationBodyDetails(requestVerificationService
-                .getVerificationBodyDetails(verificationReport, request.getVerificationBodyId()))
-        );
+        
+        // refresh Verification Body details
+ 		requestVerificationService.refreshVerificationReportVBDetails(aerRequestPayload.getVerificationReport(),
+ 				request.getVerificationBodyId());
 
         AviationAerCorsiaApplicationCompletedRequestActionPayload requestActionPayload =
             aviationAerMapper.toAviationAerCorsiaApplicationCompletedRequestActionPayload(
@@ -112,20 +91,5 @@ public class AviationAerCorsiaCompleteService {
             requestActionPayload,
             actionType,
             aerRequestPayload.getRegulatorReviewer());
-    }
-
-    private LocationOnShoreStateDTO getContactLocationFromAER(AviationCorsiaOperatorDetails operatorDetails) {
-        OrganisationStructure organisationStructure = operatorDetails.getOrganisationStructure();
-
-        if (OrganisationLegalStatusType.LIMITED_COMPANY.equals(organisationStructure.getLegalStatusType())) {
-
-            LimitedCompanyOrganisation limitedCompanyOrganisation = (LimitedCompanyOrganisation) organisationStructure;
-
-            if (Boolean.TRUE.equals(limitedCompanyOrganisation.getDifferentContactLocationExist())) {
-                return limitedCompanyOrganisation.getDifferentContactLocation();
-            }
-        }
-
-        return organisationStructure.getOrganisationLocation();
     }
 }

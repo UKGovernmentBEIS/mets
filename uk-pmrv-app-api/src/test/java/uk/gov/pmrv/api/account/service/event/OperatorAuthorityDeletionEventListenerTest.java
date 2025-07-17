@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.operator.event.OperatorAuthorityDeletionEvent;
 import uk.gov.pmrv.api.account.service.AccountContactDeletionService;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,7 +24,7 @@ class OperatorAuthorityDeletionEventListenerTest {
     void onOperatorUserDeletionEventListener() {
         String userId = "userId";
         Long accountId = 1L;
-        uk.gov.pmrv.api.authorization.operator.event.OperatorAuthorityDeletionEvent event = uk.gov.pmrv.api.authorization.operator.event.OperatorAuthorityDeletionEvent.builder()
+        OperatorAuthorityDeletionEvent event = OperatorAuthorityDeletionEvent.builder()
             .accountId(accountId)
             .userId(userId)
             .build();

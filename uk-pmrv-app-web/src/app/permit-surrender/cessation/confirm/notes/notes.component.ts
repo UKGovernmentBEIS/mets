@@ -16,12 +16,12 @@ import { notesFormProvider } from './notes-form.provider';
 
 @Component({
   selector: 'app-notes',
-  template: `<app-wizard-step
+  template: `
+    <app-wizard-step
       (formSubmit)="onContinue()"
       [formGroup]="form"
       submitText="Continue"
-      [hideSubmit]="(store.isEditable$ | async) === false"
-    >
+      [hideSubmit]="(store.isEditable$ | async) === false">
       <span class="govuk-caption-l">Confirm cessation of regulated activities</span>
 
       <app-page-heading>Notes about the cessation</app-page-heading>
@@ -30,10 +30,10 @@ import { notesFormProvider } from './notes-form.provider';
         formControlName="notes"
         govuk-textarea
         [maxLength]="10000"
-        hint="This cannot be viewed by the operator"
-      ></div>
+        hint="This cannot be viewed by the operator"></div>
     </app-wizard-step>
-    <a govukLink routerLink="../..">Return to: Cessation</a> `,
+    <a govukLink routerLink="../..">Return to: Cessation</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [notesFormProvider],
 })

@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -12,12 +12,17 @@
 import { Abbreviations } from './abbreviations';
 import { ActivityLevelReport } from './activityLevelReport';
 import { AdditionalDocuments } from './additionalDocuments';
-import { AerMonitoringApproachEmissions } from './aerMonitoringApproachEmissions';
 import { AerMonitoringPlanDeviation } from './aerMonitoringPlanDeviation';
 import { AerRegulatedActivity } from './aerRegulatedActivity';
+import { CalculationOfCO2Emissions } from './calculationOfCO2Emissions';
+import { CalculationOfPfcEmissions } from './calculationOfPfcEmissions';
 import { ConfidentialityStatement } from './confidentialityStatement';
 import { EmissionPoint } from './emissionPoint';
 import { EmissionSource } from './emissionSource';
+import { FallbackEmissions } from './fallbackEmissions';
+import { InherentCO2Emissions } from './inherentCO2Emissions';
+import { MeasurementOfCO2Emissions } from './measurementOfCO2Emissions';
+import { MeasurementOfN2OEmissions } from './measurementOfN2OEmissions';
 import { NaceCodes } from './naceCodes';
 import { PollutantRegisterActivities } from './pollutantRegisterActivities';
 import { SourceStream } from './sourceStream';
@@ -31,7 +36,15 @@ export interface Aer {
   sourceStreams: Array<SourceStream>;
   emissionSources: Array<EmissionSource>;
   emissionPoints: Array<EmissionPoint>;
-  monitoringApproachEmissions: { [key: string]: AerMonitoringApproachEmissions };
+  monitoringApproachEmissions: {
+    [key: string]:
+      | CalculationOfCO2Emissions
+      | CalculationOfPfcEmissions
+      | FallbackEmissions
+      | InherentCO2Emissions
+      | MeasurementOfCO2Emissions
+      | MeasurementOfN2OEmissions;
+  };
   regulatedActivities: Array<AerRegulatedActivity>;
   aerMonitoringPlanDeviation: AerMonitoringPlanDeviation;
   activityLevelReport?: ActivityLevelReport;

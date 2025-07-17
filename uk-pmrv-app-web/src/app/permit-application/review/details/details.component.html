@@ -3,13 +3,22 @@
   let-instOpDetails
   let-envPermLic="environmentalPermitsAndLicences"
   let-showOriginal="showOriginal"
+  let-companiesHouse="companiesHouse"
 >
   <ul app-task-item-list>
     <li app-task-item linkText="Installation and operator details" status="complete" [hasContent]="true">
       <app-installation-details-summary
         [installationOperatorDetails]="instOpDetails"
-        [hideSubheadings]="true"
+        [hideSubheadings]="
+          companiesHouse && (userRoleType$ | async) === 'REGULATOR' && instOpDetails.companyReferenceNumber
+            ? false
+            : true
+        "
         cssClass="govuk-!-margin-bottom-0 govuk-summary-list--no-border"
+        [companiesHouse]="companiesHouse"
+        [roleType]="userRoleType$ | async"
+        [companiesHouseErrorMessage]="errorMessage$ | async"
+        style="display: inline-block"
       ></app-installation-details-summary>
     </li>
     <li
@@ -69,40 +78,44 @@
 </ng-template>
 
 <app-permit-task-review [breadcrumb]="true" [notification]="notification" heading="Installation details">
-  <app-highlight-diff *ngIf="showDiff$ | async">
+  <ng-container *ngIf="companiesHouse$ | async as compHouse">
+    <app-highlight-diff *ngIf="showDiff$ | async">
+      <ng-container
+        slot="current"
+        *ngTemplateOutlet="
+          contentTpl;
+          context: {
+            $implicit: installationOperatorDetails$ | async,
+            environmentalPermitsAndLicences: environmentalPermitsAndLicences$ | async,
+            showOriginal: false,
+            companiesHouse: compHouse,
+          }
+        "
+      ></ng-container>
+      <ng-container
+        slot="previous"
+        *ngTemplateOutlet="
+          contentTpl;
+          context: {
+            $implicit: originalInstallationOperatorDetails$ | async,
+            environmentalPermitsAndLicences: origEnvironmentalPermitsAndLicences$ | async,
+            showOriginal: true,
+            companiesHouse: compHouse,
+          }
+        "
+      ></ng-container>
+    </app-highlight-diff>
     <ng-container
-      slot="current"
-      *ngTemplateOutlet="
-        contentTpl;
-        context: {
-          $implicit: installationOperatorDetails$ | async,
-          environmentalPermitsAndLicences: environmentalPermitsAndLicences$ | async,
-          showOriginal: false
-        }
-      "
+      *ngIf="(showDiff$ | async) === false"
+      [ngTemplateOutlet]="contentTpl"
+      [ngTemplateOutletContext]="{
+        $implicit: installationOperatorDetails$ | async,
+        environmentalPermitsAndLicences: environmentalPermitsAndLicences$ | async,
+        showOriginal: false,
+        companiesHouse: compHouse,
+      }"
     ></ng-container>
-    <ng-container
-      slot="previous"
-      *ngTemplateOutlet="
-        contentTpl;
-        context: {
-          $implicit: originalInstallationOperatorDetails$ | async,
-          environmentalPermitsAndLicences: origEnvironmentalPermitsAndLicences$ | async,
-          showOriginal: true
-        }
-      "
-    ></ng-container>
-  </app-highlight-diff>
-  <ng-container
-    *ngIf="(showDiff$ | async) === false"
-    [ngTemplateOutlet]="contentTpl"
-    [ngTemplateOutletContext]="{
-      $implicit: installationOperatorDetails$ | async,
-      environmentalPermitsAndLicences: environmentalPermitsAndLicences$ | async,
-      showOriginal: false
-    }"
-  ></ng-container>
-
+  </ng-container>
   <app-review-group-decision-container
     [groupKey]="groupKey$ | async"
     (notification)="notification = $event"

@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of, throwError } from 'rxjs';
 
@@ -40,8 +39,7 @@ describe('NotifyOperatorComponent', () => {
         requestTaskActionType="PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION"
         [pendingRfi]="false"
         [pendingRde]="true"
-        [confirmationMessage]="'Surrender completed'"
-      ></app-notify-operator>
+        [confirmationMessage]="'Surrender completed'"></app-notify-operator>
     `,
   })
   class TestComponent {}
@@ -99,7 +97,6 @@ describe('NotifyOperatorComponent', () => {
         roleCode: 'operator',
         authorityCreationDate: '2021-12-02T12:41:16.752923Z',
         authorityStatus: 'ACTIVE',
-        locked: false,
       },
       {
         userId: 'a9f0621d-3097-46f5-b26b-7aeceb8ab146',
@@ -109,7 +106,6 @@ describe('NotifyOperatorComponent', () => {
         roleCode: 'emitter_contact',
         authorityCreationDate: '2021-12-02T12:52:09.505285Z',
         authorityStatus: 'ACTIVE',
-        locked: true,
       },
     ] as UserAuthorityInfoDTO[],
     editable: true,
@@ -134,7 +130,7 @@ describe('NotifyOperatorComponent', () => {
     route = new ActivatedRouteStub({ taskId: '237', index: '0' });
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, SharedModule],
+      imports: [SharedModule],
       declarations: [TestComponent],
       providers: [
         { provide: TasksAssignmentService, useValue: tasksAssignmentService },

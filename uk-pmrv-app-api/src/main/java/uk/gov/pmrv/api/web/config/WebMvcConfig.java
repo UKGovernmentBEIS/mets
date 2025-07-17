@@ -12,12 +12,12 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
-    private final PmrvUserArgumentResolver pmrvUserArgumentResolver;
+    private final AppUserArgumentResolver appUserArgumentResolver;
     private final StringToAccountTypeEnumConverter stringToAccountTypeEnumConverter;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        argumentResolvers.add(pmrvUserArgumentResolver);
+        argumentResolvers.add(appUserArgumentResolver);
     }
 
     @Override

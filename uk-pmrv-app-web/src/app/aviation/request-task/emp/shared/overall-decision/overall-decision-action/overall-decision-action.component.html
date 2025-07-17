@@ -45,7 +45,7 @@
   <ng-container
     *ngIf="
       (isApprovedDisplayed$ | async) === false ||
-      (requestType === 'EMP_VARIATION_UKETS_APPLICATION_REVIEW' && (isRejectDisplayed$ | async) === false) ||
+      (showUnavailabeActionsTypes.includes(requestType) && (isRejectDisplayed$ | async) === false) ||
       (isEditable$ | async) === false
     "
   >
@@ -59,9 +59,7 @@
       <div class="govuk-hint">All sections must have a decision of ‘accepted’.</div>
     </ng-container>
 
-    <ng-container
-      *ngIf="requestType === 'EMP_VARIATION_UKETS_APPLICATION_REVIEW' && (isRejectDisplayed$ | async) === false"
-    >
+    <ng-container *ngIf="showUnavailabeActionsTypes.includes(requestType) && (isRejectDisplayed$ | async) === false">
       <p class="govuk-body">
         <strong>Reject</strong>
       </p>

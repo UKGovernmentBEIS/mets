@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.referencedata.domain.dto.ReferenceDataDTO;
-import uk.gov.pmrv.api.referencedata.domain.enumeration.ReferenceDataType;
-import uk.gov.pmrv.api.referencedata.service.ReferenceDataService;
-import uk.gov.pmrv.api.referencedata.service.ReferenceDataTypeServiceEnum;
+import uk.gov.netz.api.referencedata.domain.dto.ReferenceDataDTO;
+import uk.gov.netz.api.referencedata.domain.enumeration.ReferenceDataType;
+import uk.gov.netz.api.referencedata.service.ReferenceDataService;
+import uk.gov.netz.api.referencedata.service.ReferenceDataTypeServiceEnum;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
 
 import java.util.EnumMap;

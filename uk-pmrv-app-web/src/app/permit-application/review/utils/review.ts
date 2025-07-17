@@ -1,3 +1,5 @@
+import { mmpStatuses } from '@permit-application/monitoring-methodology-plan/mmp-status';
+
 import { PermitIssuanceSaveReviewGroupDecisionRequestTaskActionPayload } from 'pmrv-api';
 
 import { TaskItemStatus } from '../../../shared/task-list/task-list.interface';
@@ -28,6 +30,9 @@ export function applicableReviewGroupTasks(state: PermitApplicationState) {
       ? { TRANSFERRED_CO2_N2O: reviewGroupsTasks.TRANSFERRED_CO2_N2O }
       : {}),
     MANAGEMENT_PROCEDURES: reviewGroupsTasks.MANAGEMENT_PROCEDURES,
+    ...(state.permit?.monitoringMethodologyPlans?.exist && state?.features?.['digitized-mmp']
+      ? { MONITORING_METHODOLOGY_PLAN: [...reviewGroupsTasks.MONITORING_METHODOLOGY_PLAN, ...mmpStatuses] }
+      : {}),
   };
 }
 
@@ -57,14 +62,15 @@ export function resolveReviewGroupStatus(
       return tasksStatuses.includes('needs review')
         ? 'needs review'
         : tasksStatuses.includes('in progress')
-        ? 'undecided'
-        : state.reviewSectionsCompleted?.[key] && state.reviewGroupDecisions?.[key]?.type === 'ACCEPTED'
-        ? 'accepted'
-        : state.reviewSectionsCompleted?.[key] && state.reviewGroupDecisions?.[key]?.type === 'REJECTED'
-        ? 'rejected'
-        : state.reviewSectionsCompleted?.[key] && state.reviewGroupDecisions?.[key]?.type === 'OPERATOR_AMENDS_NEEDED'
-        ? 'operator to amend'
-        : 'undecided'; //fallback
+          ? 'undecided'
+          : state.reviewSectionsCompleted?.[key] && state.reviewGroupDecisions?.[key]?.type === 'ACCEPTED'
+            ? 'accepted'
+            : state.reviewSectionsCompleted?.[key] && state.reviewGroupDecisions?.[key]?.type === 'REJECTED'
+              ? 'rejected'
+              : state.reviewSectionsCompleted?.[key] &&
+                  state.reviewGroupDecisions?.[key]?.type === 'OPERATOR_AMENDS_NEEDED'
+                ? 'operator to amend'
+                : 'undecided'; //fallback
     }
   }
 }

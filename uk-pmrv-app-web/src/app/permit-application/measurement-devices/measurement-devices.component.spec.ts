@@ -4,6 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
+import { MeasurementDevicesTableComponent } from '@permit-application/shared/measurement-devices-table/measurement-devices-table.component';
+
 import { TasksService } from 'pmrv-api';
 
 import { BasePage, mockClass } from '../../../testing';
@@ -44,11 +46,11 @@ describe('MeasurementDevicesComponent', () => {
       );
     }
     get measurementDevices() {
-      return this.queryAll<HTMLDListElement>('dl');
+      return this.queryAll<HTMLDListElement>('tr');
     }
     get measurementDevicesTextContents() {
       return this.measurementDevices.map((measurementDevice) =>
-        Array.from(measurementDevice.querySelectorAll('dd')).map((dd) => dd.textContent.trim()),
+        Array.from(measurementDevice.querySelectorAll('td')).map((dd) => dd.textContent.trim()),
       );
     }
   }
@@ -56,7 +58,7 @@ describe('MeasurementDevicesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MeasurementDevicesComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [RouterTestingModule, SharedModule, SharedPermitModule, MeasurementDevicesTableComponent],
       providers: [
         { provide: TasksService, useValue: tasksService },
         {
@@ -109,13 +111,14 @@ describe('MeasurementDevicesComponent', () => {
       expect(page.submitButton).toBeTruthy();
       expect(page.addMeasurementDeviceBtn).toBeFalsy();
       expect(page.addAnotherMeasurementDeviceBtn).toBeTruthy();
-      expect(page.measurementDevices.length).toEqual(2);
+      expect(page.measurementDevices.length).toEqual(3);
     });
 
     it('should display the measurement devices', () => {
       expect(page.measurementDevicesTextContents).toEqual([
-        ['ref1', 'Change | Delete', 'Ultrasonic meter', '3', 'litres', '± 2.0 %', 'north terminal'],
-        ['ref2', 'Change | Delete', 'Ultrasonic meter', '3', 'litres', 'None', 'north terminal'],
+        [],
+        ['ref1', 'Ultrasonic meter', '3', 'litres', '± 2.0 %', 'north terminal', 'Change', 'Delete'],
+        ['ref2', 'Ultrasonic meter', '3', 'litres', 'None', 'north terminal', 'Change', 'Delete'],
       ]);
     });
 

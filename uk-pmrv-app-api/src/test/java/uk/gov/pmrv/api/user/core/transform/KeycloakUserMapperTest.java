@@ -1,12 +1,11 @@
 package uk.gov.pmrv.api.user.core.transform;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-
-import uk.gov.pmrv.api.user.core.domain.model.UserInfo;
+import uk.gov.netz.api.userinfoapi.UserInfo;
 import uk.gov.pmrv.api.user.core.domain.model.keycloak.KeycloakUserInfo;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class KeycloakUserMapperTest {
 

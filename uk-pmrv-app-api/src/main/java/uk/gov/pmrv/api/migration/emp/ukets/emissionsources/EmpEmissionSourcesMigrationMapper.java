@@ -1,20 +1,19 @@
 package uk.gov.pmrv.api.migration.emp.ukets.emissionsources;
 
+import org.apache.commons.lang3.ObjectUtils;
+import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmpProcedureForm;
+import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.emissionsources.AircraftTypeInfo;
+import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.emissionsources.FuelConsumptionMeasuringMethod;
+import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.enumeration.FuelType;
+import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsources.AircraftTypeDetails;
+import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsources.EmpEmissionSources;
+import uk.gov.pmrv.api.migration.emp.ukets.emissionsources.aircrafttypedetails.EtsAircraftTypeDetails;
+import uk.gov.pmrv.api.migration.emp.ukets.emissionsources.emissionsourcesdetails.EtsEmpEmissionSources;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import org.apache.commons.lang3.ObjectUtils;
-
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.EmpProcedureForm;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.enumeration.FuelType;
-import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsources.AircraftTypeDetails;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.emissionsources.AircraftTypeInfo;
-import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsources.EmpEmissionSources;
-import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.emissionsources.FuelConsumptionMeasuringMethod;
-import uk.gov.pmrv.api.migration.emp.ukets.emissionsources.aircrafttypedetails.EtsAircraftTypeDetails;
-import uk.gov.pmrv.api.migration.emp.ukets.emissionsources.emissionsourcesdetails.EtsEmpEmissionSources;
 
 public class EmpEmissionSourcesMigrationMapper {
 

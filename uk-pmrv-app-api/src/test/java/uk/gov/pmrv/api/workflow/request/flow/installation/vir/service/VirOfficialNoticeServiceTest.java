@@ -8,11 +8,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -98,7 +98,7 @@ class VirOfficialNoticeServiceTest {
                 .thenReturn(ccRecipientsEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(paramsSourceData))
                 .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(DocumentTemplateType.VIR_REVIEWED,
+        when(documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.VIR_REVIEWED,
                 templateParams, "recommended_improvements.pdf")).thenReturn(officialNotice);
 
         // Invoke
@@ -115,7 +115,7 @@ class VirOfficialNoticeServiceTest {
         verify(documentTemplateOfficialNoticeParamsProvider, times(1))
                 .constructTemplateParams(paramsSourceData);
         verify(documentFileGeneratorService, times(1))
-                .generateFileDocument(DocumentTemplateType.VIR_REVIEWED, templateParams, "recommended_improvements.pdf");
+                .generateAndSaveFileDocument(DocumentTemplateType.VIR_REVIEWED, templateParams, "recommended_improvements.pdf");
     }
 
     @Test

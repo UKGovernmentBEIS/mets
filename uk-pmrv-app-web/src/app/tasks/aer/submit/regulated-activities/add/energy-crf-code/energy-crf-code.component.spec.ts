@@ -121,7 +121,7 @@ describe('EnergyCrfCodeComponent', () => {
           capacityUnit: 'KVA',
           hasEnergyCrf: true,
           hasIndustrialCrf: true,
-          energyCrf: '_1_A_2_D_PULP_PAPER_AND_PRINT',
+          energyCrf: '_1_A_2_GVIII_STATIONARY_COMBUSTION_IN_MANUFACTURING_AND_CONSTRUCTION_OTHER',
           industrialCrf: '_2_A_4_OTHER_PROCESS_USES_OF_CARBONATES',
         },
       ];
@@ -129,7 +129,7 @@ describe('EnergyCrfCodeComponent', () => {
       const postTaskSaveSpy = jest.spyOn(aerService, 'postTaskSave');
 
       page.energyCrfCategory = '_1_A_2';
-      page.energyCrf = '_1_A_2_D_PULP_PAPER_AND_PRINT';
+      page.energyCrf = '_1_A_2_GVIII_STATIONARY_COMBUSTION_IN_MANUFACTURING_AND_CONSTRUCTION_OTHER';
       page.submitButton.click();
       fixture.detectChanges();
 

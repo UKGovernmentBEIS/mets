@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitType;
@@ -109,7 +109,7 @@ class RequestPermitApplyServiceTest {
         RequestTask requestTask = RequestTask.builder().request(request).payload(
             permitIssuanceApplicationSubmitRequestTaskPayload).build();
 
-        PmrvUser authUser = PmrvUser.builder().userId("user").build();
+        AppUser authUser = AppUser.builder().userId("user").build();
 
         PermitContainer permitContainer = PermitContainer.builder()
             .installationOperatorDetails(permitIssuanceApplicationSubmitRequestTaskPayload.getInstallationOperatorDetails())

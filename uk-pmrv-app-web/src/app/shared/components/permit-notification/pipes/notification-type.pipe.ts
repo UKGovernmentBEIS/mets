@@ -12,6 +12,8 @@ export class NotificationTypePipe implements PipeTransform {
         return 'Temporary change to the permitted installation';
       case 'TEMPORARY_SUSPENSION':
         return 'Temporary suspension of a regulated activity';
+      case 'CESSATION':
+        return 'Cessation of all regulated activities (temporary or permanent)';
       case 'NON_SIGNIFICANT_CHANGE':
         return 'Non-significant change';
       case 'OTHER_FACTOR':

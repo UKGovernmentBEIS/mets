@@ -4,16 +4,16 @@ import lombok.AllArgsConstructor;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.ApplicationType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.TransferCodeStatus;
 import uk.gov.pmrv.api.account.installation.repository.InstallationAccountRepository;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.MigrationHelper;
 
@@ -30,7 +30,7 @@ class MigrationInstallationAccountCreationService {
 
     @Transactional
     public Long createAccount(InstallationAccountDTO accountDTO, Emitter emitter) throws Exception {
-        PmrvUser authUser = buildAuthUser(accountDTO.getCompetentAuthority());
+        AppUser authUser = buildAuthUser(accountDTO.getCompetentAuthority());
 
         InstallationAccountDTO createdAccountDTO = installationAccountCreationService.createAccount(accountDTO, authUser);
         
@@ -58,11 +58,11 @@ class MigrationInstallationAccountCreationService {
         }
     }
 
-    private PmrvUser buildAuthUser(CompetentAuthorityEnum ca) {
-        PmrvUser authUser = new PmrvUser();
-        authUser.setRoleType(RoleType.REGULATOR);
+    private AppUser buildAuthUser(CompetentAuthorityEnum ca) {
+        AppUser authUser = new AppUser();
+        authUser.setRoleType(RoleTypeConstants.REGULATOR);
         authUser.setAuthorities(
-            List.of(PmrvAuthority.builder().competentAuthority(ca).build()));
+            List.of(AppAuthority.builder().competentAuthority(ca).build()));
         return authUser;
     }
 

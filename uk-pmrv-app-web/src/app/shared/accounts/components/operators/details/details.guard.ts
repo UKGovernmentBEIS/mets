@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Resolve, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, UrlTree } from '@angular/router';
 
 import { first, map, Observable, switchMap, tap } from 'rxjs';
 
@@ -7,13 +7,13 @@ import { AuthStore, selectUserState } from '@core/store/auth';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchBadRequest, ErrorCodes } from '@error/business-errors';
 
-import { ApplicationUserDTO, OperatorUserDTO, OperatorUsersService, UsersService } from 'pmrv-api';
+import { OperatorUserDTO, OperatorUsersService, UserDTO, UsersService } from 'pmrv-api';
 
 import { viewNotFoundOperatorError } from '../errors/business-error';
 
 @Injectable({ providedIn: 'root' })
-export class DetailsGuard implements CanActivate, Resolve<OperatorUserDTO | ApplicationUserDTO> {
-  private userData: OperatorUserDTO | ApplicationUserDTO;
+export class DetailsGuard {
+  private userData: OperatorUserDTO | UserDTO;
 
   constructor(
     private readonly operatorService: OperatorUsersService,
@@ -47,7 +47,7 @@ export class DetailsGuard implements CanActivate, Resolve<OperatorUserDTO | Appl
     );
   }
 
-  resolve(): OperatorUserDTO | ApplicationUserDTO {
+  resolve(): OperatorUserDTO | UserDTO {
     return this.userData;
   }
 }

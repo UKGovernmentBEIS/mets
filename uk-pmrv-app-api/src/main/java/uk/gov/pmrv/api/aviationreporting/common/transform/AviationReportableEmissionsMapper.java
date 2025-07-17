@@ -8,7 +8,7 @@ import uk.gov.pmrv.api.aviationreporting.common.domain.AviationReportableEmissio
 import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationReportableEmissionsDTO;
 import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsiaTotalReportableEmissions;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsTotalReportableEmissions;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface AviationReportableEmissionsMapper {

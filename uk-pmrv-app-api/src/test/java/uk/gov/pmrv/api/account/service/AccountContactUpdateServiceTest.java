@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
@@ -19,10 +20,9 @@ import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.service.validator.AccountContactTypeUpdateValidator;
 import uk.gov.pmrv.api.account.service.validator.FinancialContactValidator;
 import uk.gov.pmrv.api.account.service.validator.PrimaryContactValidator;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.core.service.AuthorityService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.service.AuthorityService;
+import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -149,11 +149,13 @@ class AccountContactUpdateServiceTest {
     }
 
     @Test
-    void updateAccountContacts_no_current_contacts_exist() {
+    void updateAccountContacts_no_current_operator_contacts_exist() {
         Long accountId = 1L;
 
         Account account = Mockito.mock(Account.class);
-        when(account.getContacts()).thenReturn(new EnumMap<>(AccountContactType.class));
+        Map<AccountContactType, String> currentContactTypes = new EnumMap<>(AccountContactType.class);
+        currentContactTypes.put(AccountContactType.CA_SITE, "caSite");
+        when(account.getContacts()).thenReturn(currentContactTypes);
 
         Map<AccountContactType, String> updatedContactTypes =
             new EnumMap<>(AccountContactType.class);
@@ -180,6 +182,7 @@ class AccountContactUpdateServiceTest {
             Optional.of(account));
         when(authorityService.findStatusByUsersAndAccountId(finalUsers, accountId)).thenReturn(operatorStatuses);
         when(accountContactQueryService.getServiceContactDetails(accountId)).thenReturn(Optional.of(serviceContactDetails));
+        when(authorityService.findStatusByUsers(List.of("caSite"))).thenReturn(Map.of("caSite", AuthorityStatus.ACTIVE));
 
         //invoke
         service.updateAccountContacts(updatedContactTypes, accountId);
@@ -189,6 +192,7 @@ class AccountContactUpdateServiceTest {
         expectedContactTypes.put(AccountContactType.PRIMARY, "primaryNew");
         expectedContactTypes.put(AccountContactType.FINANCIAL, "financialNew");
         expectedContactTypes.put(AccountContactType.SERVICE, "primaryNew");
+        expectedContactTypes.put(AccountContactType.CA_SITE, "caSite");
 
         verify(authorityService, times(2)).existsByUserIdAndAccountId("primaryNew", accountId);
         verify(authorityService, times(1)).existsByUserIdAndAccountId("financialNew", accountId);

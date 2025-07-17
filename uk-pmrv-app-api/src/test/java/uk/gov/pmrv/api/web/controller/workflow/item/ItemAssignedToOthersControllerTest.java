@@ -13,22 +13,21 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemAssignedToOthersOperatorService;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemAssignedToOthersRegulatorService;
@@ -43,9 +42,9 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.VERIFIER;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.VERIFIER;
 
 @ExtendWith(MockitoExtension.class)
 class ItemAssignedToOthersControllerTest {
@@ -62,10 +61,10 @@ class ItemAssignedToOthersControllerTest {
     private ItemAssignedToOthersRegulatorService itemAssignedToOthersRegulatorService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -76,7 +75,7 @@ class ItemAssignedToOthersControllerTest {
         ItemAssignedToOthersController itemController = new ItemAssignedToOthersController(services);
 
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(itemController);
@@ -92,7 +91,7 @@ class ItemAssignedToOthersControllerTest {
         conversionService.addConverter(new StringToAccountTypeEnumConverter());
 
         mockMvc = MockMvcBuilders.standaloneSetup(itemController)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .setConversionService(conversionService)
             .build();
@@ -101,13 +100,13 @@ class ItemAssignedToOthersControllerTest {
     @Test
     void getItemsAssignedToOthers_operator() throws Exception {
         final AccountType accountType = AccountType.INSTALLATION;
-        PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.OPERATOR).build();
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.OPERATOR).build();
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().totalItems(1L).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(itemAssignedToOthersOperatorService.getItemsAssignedToOthers(pmrvUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(itemAssignedToOthersOperatorService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
                 .thenReturn(itemDTOResponse);
-        when(itemAssignedToOthersOperatorService.getRoleType()).thenReturn(RoleType.OPERATOR);
+        when(itemAssignedToOthersOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
 
         mockMvc.perform(MockMvcRequestBuilders
             .get(BASE_PATH + "/" + ASSIGNED_TO_OTHERS_PATH + "?page=0&size=10")
@@ -115,7 +114,7 @@ class ItemAssignedToOthersControllerTest {
             .andExpect(status().isOk());
 
         verify(itemAssignedToOthersOperatorService, times(1))
-                .getItemsAssignedToOthers(pmrvUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+                .getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
         verify(itemAssignedToOthersRegulatorService, never())
                 .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class));
     }
@@ -123,14 +122,14 @@ class ItemAssignedToOthersControllerTest {
     @Test
     void getItemsAssignedToOthers_regulator() throws Exception {
         final AccountType accountType = AccountType.INSTALLATION;
-        PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().totalItems(1L).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(itemAssignedToOthersRegulatorService.getItemsAssignedToOthers(pmrvUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(itemAssignedToOthersRegulatorService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
                 .thenReturn(itemDTOResponse);
-        when(itemAssignedToOthersOperatorService.getRoleType()).thenReturn(RoleType.OPERATOR);
-        when(itemAssignedToOthersRegulatorService.getRoleType()).thenReturn(RoleType.REGULATOR);
+        when(itemAssignedToOthersOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
+        when(itemAssignedToOthersRegulatorService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(BASE_PATH + "/" + ASSIGNED_TO_OTHERS_PATH + "?page=0&size=10")
@@ -140,17 +139,17 @@ class ItemAssignedToOthersControllerTest {
         verify(itemAssignedToOthersOperatorService, never())
                 .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class));
         verify(itemAssignedToOthersRegulatorService, times(1))
-                .getItemsAssignedToOthers(pmrvUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+                .getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
     }
 
     @Test
     void getItemsAssignedToOthers_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{OPERATOR, REGULATOR, VERIFIER});
+            .evaluate(appUser, new String[]{OPERATOR, REGULATOR, VERIFIER});
 
         mockMvc.perform(MockMvcRequestBuilders
             .get(BASE_PATH + "/" + ASSIGNED_TO_OTHERS_PATH + "?page=0&size=10")

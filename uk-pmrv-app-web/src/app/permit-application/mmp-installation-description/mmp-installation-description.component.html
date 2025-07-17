@@ -1,0 +1,38 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    caption="Monitoring Methodology Plan"
+    heading="Describe the installation and its main processes"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false">
+    <p class="govuk-body">
+      Include a description of the installation, its sub-installations and production processes with an overview of its
+      monitoring methodologies and data sources.
+    </p>
+    <p class="govuk-body">
+      This description shall be modified if there is a change due to removal, addition, improvement or change in
+      activities, fuels, materials, measuring instruments, sampling, analysis or data sources changing the monitoring of
+      activity level. Significant change includes new sub-installations, a change in monitoring method, to rectify a
+      non-conformity.
+    </p>
+    <p class="govuk-body">
+      Detailed descriptions of monitoring methodologies and data sources are covered in other sections.
+    </p>
+
+    <div
+      formControlName="description"
+      govuk-textarea
+      [maxLength]="10000"
+      rows="10"
+      label="Please insert text for the installation and its main processes"
+      [isLabelHidden]="true"></div>
+  </app-wizard-step>
+
+  <app-list-return-link
+    reviewGroupTitle="Monitoring methodology"
+    reviewGroupUrl="monitoring-methodology-plan"></app-list-return-link>
+</app-permit-task>

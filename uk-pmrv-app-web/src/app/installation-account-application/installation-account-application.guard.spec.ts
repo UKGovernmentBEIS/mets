@@ -4,8 +4,10 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { lastValueFrom, of } from 'rxjs';
 
+import { ConfigStore } from '@core/config/config.store';
 import { AuthService } from '@core/services/auth.service';
 import { AuthStore, LoginStatus, UserState } from '@core/store/auth';
+import { LatestTermsStore } from '@core/store/latest-terms/latest-terms.store';
 import { MockType } from '@testing';
 
 import { InstallationAccountApplicationGuard } from './installation-account-application.guard';
@@ -14,6 +16,8 @@ describe('InstallationAccountApplicationGuard', () => {
   let guard: InstallationAccountApplicationGuard;
   let router: Router;
   let authStore: AuthStore;
+  let latestTermsStore: LatestTermsStore;
+  let configStore: ConfigStore;
 
   const authService: MockType<AuthService> = {
     checkUser: jest.fn(() => of(undefined)),
@@ -32,8 +36,15 @@ describe('InstallationAccountApplicationGuard', () => {
     authStore = TestBed.inject(AuthStore);
     authStore.setIsLoggedIn(true);
     authStore.setUserState({ domainsLoginStatuses: { INSTALLATION: 'DISABLED' } });
-    authStore.setTerms({ version: 1, url: 'asd' });
-    authStore.setUser({ email: 'asd@asd.com', firstName: 'Darth', lastName: 'Vader', termsVersion: 1 });
+    authStore.setUser({ email: 'asd@asd.com', firstName: 'Darth', lastName: 'Vader' });
+    authStore.setUserTerms({ termsVersion: 1 });
+
+    latestTermsStore = TestBed.inject(LatestTermsStore);
+    latestTermsStore.setLatestTerms({ version: 1, url: 'asd' });
+
+    configStore = TestBed.inject(ConfigStore);
+    configStore.setState({ features: { terms: true } });
+
     guard = TestBed.inject(InstallationAccountApplicationGuard);
     router = TestBed.inject(Router);
   });
@@ -43,10 +54,10 @@ describe('InstallationAccountApplicationGuard', () => {
   });
 
   it("should redirect to terms if user is logged in and terms don't match", async () => {
-    authStore.setTerms({ version: 2, url: 'asd' });
+    latestTermsStore.setLatestTerms({ version: 2, url: 'asd' });
     await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(router.parseUrl('terms'));
 
-    authStore.setUser({ email: 'asd@asd.com', firstName: 'Darth', lastName: 'Vader', termsVersion: 2 });
+    authStore.setUserTerms({ termsVersion: 2 });
     await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(router.parseUrl(''));
   });
 
@@ -59,6 +70,14 @@ describe('InstallationAccountApplicationGuard', () => {
     authStore.setIsLoggedIn(true);
     setUser('REGULATOR', 'DISABLED');
     await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(router.parseUrl(''));
+  });
+
+  it('should allow logged in operator when terms feature is disabled', async () => {
+    authStore.setIsLoggedIn(true);
+    setUser('OPERATOR');
+    configStore.setState({ features: { terms: false } });
+
+    await expect(lastValueFrom(guard.canActivate())).resolves.toBeTruthy();
   });
 
   it('should allow disabled operator or operator with no authority', async () => {

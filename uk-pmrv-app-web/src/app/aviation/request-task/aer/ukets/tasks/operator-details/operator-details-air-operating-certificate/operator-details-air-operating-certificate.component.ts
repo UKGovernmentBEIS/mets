@@ -60,6 +60,7 @@ export class OperatorDetailsAirOperatingCertificateComponent extends BaseOperato
         certificateFiles: this.form.value.certificateFiles?.map((doc: FileUpload) => doc.uuid),
       },
     };
+
     this.submitForm('airOperatingCertificate', operatorDetails, 'operating-license');
   }
 }

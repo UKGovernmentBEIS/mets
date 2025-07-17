@@ -4,14 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, first, map, Observable, switchMap, takeUntil } from 'rxjs';
 
+import { PendingRequestService } from '@core/guards/pending-request.service';
+import { DestroySubject } from '@core/services/destroy-subject.service';
+
 import { AerApplicationSubmitRequestTaskPayload, CalculationOfPfcEmissions, PfcSourceStreamEmission } from 'pmrv-api';
 
-import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
-import { DestroySubject } from '../../../../../core/services/destroy-subject.service';
 import { AerService } from '../../../core/aer.service';
 import { getCompletionStatus } from '../../../shared/components/submit/emissions-status';
 import { AER_PFC_FORM, buildTaskData } from '../pfc';
-import { tiersUsedFormProvider } from './tiers-used-forn.provider';
+import { tiersUsedFormProvider } from './tiers-used-form.provider';
 
 @Component({
   selector: 'app-tiers-used',
@@ -26,9 +27,8 @@ export class TiersUsedComponent {
 
   sourceStreamEmission$: Observable<PfcSourceStreamEmission> = combineLatest([this.payload$, this.index$]).pipe(
     map(([payload, index]) => {
-      const res = (payload.aer.monitoringApproachEmissions.CALCULATION_PFC as CalculationOfPfcEmissions)
+      return (payload.aer.monitoringApproachEmissions.CALCULATION_PFC as CalculationOfPfcEmissions)
         ?.sourceStreamEmissions?.[index];
-      return res;
     }),
   );
 
@@ -98,13 +98,11 @@ export class TiersUsedComponent {
         : item,
     );
 
-    const data = buildTaskData(payload, sourceStreamEmissions);
-
-    return data;
+    return buildTaskData(payload, sourceStreamEmissions);
   }
 
   private navigateNext() {
-    combineLatest(this.sourceStreamEmission$, this.permitParamMonitoringTier$)
+    combineLatest([this.sourceStreamEmission$, this.permitParamMonitoringTier$])
       .pipe(takeUntil(this.destroy$))
       .subscribe(([sourceStreamEmission, permitParamMonitoringTier]) => {
         let nextStep = '';

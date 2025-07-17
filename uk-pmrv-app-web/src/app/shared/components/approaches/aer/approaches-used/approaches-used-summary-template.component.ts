@@ -12,7 +12,8 @@ import { AerMonitoringApproachEmissions, PermitMonitoringApproachSection } from 
         <dt govukSummaryListRowKey>Approaches used</dt>
         <dd govukSummaryListRowValue>
           <span *ngFor="let monitoringApproach of approaches">
-            {{ monitoringApproach | monitoringApproachDescription }}<br/>
+            {{ monitoringApproach | monitoringApproachDescription }}
+            <br />
           </span>
         </dd>
       </div>

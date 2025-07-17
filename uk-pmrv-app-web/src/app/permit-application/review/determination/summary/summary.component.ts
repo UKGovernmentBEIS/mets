@@ -15,14 +15,12 @@ import { PermitApplicationStore } from '../../../store/permit-application.store'
       <ng-container *ngIf="isVariation$ | async; else issuanceSummary">
         <app-permit-variation-determination-summary-details
           [changePerStage]="true"
-          cssClass="summary-list--edge-border"
-        ></app-permit-variation-determination-summary-details>
+          cssClass="summary-list--edge-border"></app-permit-variation-determination-summary-details>
       </ng-container>
       <ng-template #issuanceSummary>
         <app-permit-application-determination-summary-details
           [changePerStage]="true"
-          cssClass="summary-list--edge-border"
-        ></app-permit-application-determination-summary-details>
+          cssClass="summary-list--edge-border"></app-permit-application-determination-summary-details>
       </ng-template>
 
       <a govukLink routerLink="../..">Return to: {{ determinationHeader }}</a>

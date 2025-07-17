@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -9,8 +9,11 @@ import { PermitRevocationStore } from '@permit-revocation/store/permit-revocatio
 import { Wizard } from '../factory';
 
 @Injectable({ providedIn: 'root' })
-export class WizardStepsGuard implements CanActivate {
-  constructor(private readonly store: PermitRevocationStore, private readonly router: Router) {}
+export class WizardStepsGuard {
+  constructor(
+    private readonly store: PermitRevocationStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     const key = route.data?.keys[0];
@@ -29,6 +32,8 @@ export class WizardStepsGuard implements CanActivate {
           }
 
           return (
+            (!store.isEditable &&
+              this.router.parseUrl(`/permit-revocation/${route.params['taskId']}/cessation/confirm/summary`)) ||
             (sectionStatusCompleted &&
               this.router.parseUrl(`/permit-revocation/${route.params['taskId']}/cessation/confirm/summary`)) ||
             (Wizard.completed(store.cessation) &&

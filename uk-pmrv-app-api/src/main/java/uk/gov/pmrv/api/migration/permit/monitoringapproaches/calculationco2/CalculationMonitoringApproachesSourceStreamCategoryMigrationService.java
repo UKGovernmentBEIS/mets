@@ -1,25 +1,10 @@
 package uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2;
 
-import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.BF;
-import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.CC;
-import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.CF;
-import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.EF;
-import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.NCV;
-import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.OxF;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import uk.gov.pmrv.api.account.domain.Account;
@@ -61,13 +46,33 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.HighestRequired
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.NoHighestRequiredTierJustification;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStream;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.BF;
+import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.CC;
+import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.CF;
+import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.EF;
+import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.NCV;
+import static uk.gov.pmrv.api.migration.permit.monitoringapproaches.calculationco2.CalculationParameter.OxF;
+
 @Log4j2
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class CalculationMonitoringApproachesSourceStreamCategoryMigrationService implements PermitSectionMigrationService<CalculationOfCO2MonitoringApproach> {
 
     private final JdbcTemplate migrationJdbcTemplate;
+
+    public CalculationMonitoringApproachesSourceStreamCategoryMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+    }
 
     private static final String SOURCE_STREAM_CATEGORY_QUERY =
             "select \r\n" +

@@ -4,7 +4,9 @@ import { ActivatedRouteSnapshot, createUrlTreeFromSnapshot, Params } from '@angu
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'govuk-back-link',
-  template: ` <a [routerLink]="routerLink" [queryParams]="queryParams" class="govuk-back-link"> Back </a> `,
+  template: `
+    <a [routerLink]="routerLink" [queryParams]="queryParams" class="govuk-back-link">Back</a>
+  `,
 })
 export class BackLinkComponent implements OnChanges {
   @Input() link: string;

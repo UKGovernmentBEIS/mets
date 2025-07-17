@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, pluck } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 import { PermitSurrenderReviewDeterminationDeemWithdraw } from 'pmrv-api';
 
@@ -14,7 +14,7 @@ import { PermitSurrenderStore } from '../../../../store/permit-surrender.store';
 })
 export class SummaryDetailsComponent {
   @Input() deemWithdrawDetermination$: Observable<PermitSurrenderReviewDeterminationDeemWithdraw>;
-  isEditable$ = this.store.pipe(pluck('isEditable'));
+  isEditable$ = this.store.pipe(map((state) => state?.isEditable));
   constructor(
     private readonly store: PermitSurrenderStore,
     private readonly router: Router,

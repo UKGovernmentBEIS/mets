@@ -1,5 +1,7 @@
 package uk.gov.pmrv.api.migration.ftp;
 
+import java.util.List;
+
 interface FtpClient extends AutoCloseable {
     
     /**
@@ -19,4 +21,6 @@ interface FtpClient extends AutoCloseable {
     byte[] fetchFileBatch(String file) throws FtpException;
     
     void healthCheck();
+
+    List<String> getFilePaths(String directory) throws FtpException;
 }

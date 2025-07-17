@@ -8,7 +8,9 @@ describe('WarningTextComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    template: ` <govuk-warning-text [assistiveText]="text">Test warning</govuk-warning-text> `,
+    template: `
+      <govuk-warning-text [assistiveText]="text">Test warning</govuk-warning-text>
+    `,
   })
   class TestComponent {
     text = 'Warn';

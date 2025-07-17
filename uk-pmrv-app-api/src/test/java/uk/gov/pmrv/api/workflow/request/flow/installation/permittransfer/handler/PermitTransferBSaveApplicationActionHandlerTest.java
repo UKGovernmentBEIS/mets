@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
@@ -37,7 +37,7 @@ class PermitTransferBSaveApplicationActionHandlerTest {
             PermitTransferBSaveApplicationRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.PERMIT_TRANSFER_B_SAVE_APPLICATION_PAYLOAD)
                 .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final String processTaskId = "processTaskId";
         final Request request = Request.builder().id("1").build();
         final RequestTask requestTask =
@@ -47,7 +47,7 @@ class PermitTransferBSaveApplicationActionHandlerTest {
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.PERMIT_TRANSFER_B_SAVE_APPLICATION,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(applyService, times(1)).applySaveAction(requestTask, taskActionPayload);

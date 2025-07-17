@@ -1,9 +1,9 @@
 package uk.gov.pmrv.api.migration.emp.ukets.fummethods;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.springframework.jdbc.core.RowMapper;
 
 public class EtsFuelUseMonitoringMethodsRowMapper implements RowMapper<EtsFuelUseMonitoringMethods> {
 

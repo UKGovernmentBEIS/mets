@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.aviationreporting.common.repository;
 
+import static org.assertj.core.api.Assertions.anyOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationRptAirportsEntity;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationRptCountriesEntity;
 import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationRptAirportsDTO;
@@ -69,7 +70,7 @@ class AviationRptAirportsRepositoryIT extends AbstractContainerBaseTest {
 
         flushAndClear();
 
-        List<String> actual = repository.findChapter3Icaos(Set.of("EGLL", "LEPA", "LGAT", "LOXA", "EBCV"));
+        List<String> actual = repository.findChapter3Icaos(Set.of("EGLL", "LEPA", "LGAT", "LOXA", "EBCV"), Year.of(2022));
 
         assertThat(actual).hasSize(2);
         assertThat(actual).containsOnly("EGLL", "LOXA");

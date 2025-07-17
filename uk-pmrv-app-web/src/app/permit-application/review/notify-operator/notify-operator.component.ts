@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { BehaviorSubject, first, map, Subject, switchMap, take, tap, withLatestFrom } from 'rxjs';
+import { BehaviorSubject, combineLatest, first, map, Subject, switchMap, take, tap, withLatestFrom } from 'rxjs';
 
 import { BREADCRUMB_ITEMS, BreadcrumbItem } from '@core/navigation/breadcrumbs';
 import { PermitRequestTypePipe } from '@permit-application/shared/pipes/permit-request-type.pipe';
+import { permitTypeMap } from '@permit-application/shared/utils/permit';
+import { getPreviewDocumentsInfo } from '@permit-application/shared/utils/previewDocuments.utils';
 
 import { RequestItemsService } from 'pmrv-api';
 
@@ -14,18 +16,21 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 
 @Component({
   selector: 'app-permit-issuance-notify-operator',
-  template: `<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <app-notify-operator
-        [taskId]="taskId$ | async"
-        [accountId]="accountId$ | async"
-        [requestTaskActionType]="requestTaskActionType$ | async"
-        [pendingRfi]="pendingRfi$ | async"
-        [pendingRde]="pendingRde$ | async"
-        [confirmationMessage]="confirmationMessage$ | async"
-      ></app-notify-operator>
+  template: `
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <app-notify-operator
+          [taskId]="taskId$ | async"
+          [accountId]="accountId$ | async"
+          [requestTaskActionType]="requestTaskActionType$ | async"
+          [isRegistryToBeNotified]="isRegistryToBeNotified$ | async"
+          [pendingRfi]="pendingRfi$ | async"
+          [pendingRde]="pendingRde$ | async"
+          [confirmationMessage]="confirmationMessage$ | async"
+          [previewDocuments]="previewDocuments$ | async"></app-notify-operator>
+      </div>
     </div>
-  </div> `,
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [PermitRequestTypePipe],
 })
@@ -45,6 +50,38 @@ export class NotifyOperatorComponent implements OnInit {
       }
     }),
   );
+  permitTypeMap = permitTypeMap;
+  isRegistryToBeNotified$ = this.requestTaskType$.pipe(
+    map((requestTaskType) => requestTaskType === 'PERMIT_ISSUANCE_APPLICATION_REVIEW'),
+  );
+
+  readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
+  readonly accountId$ = this.store.pipe(map((state) => state.accountId));
+  readonly determinationStatus$ = this.store.getDeterminationStatus$();
+  readonly permitType$ = this.store.pipe(
+    map((state) => {
+      return state.permitType;
+    }),
+  );
+
+  readonly confirmationMessage$ = this.store.pipe(
+    map((state) => {
+      const permitType = this.permitRequestTypePipe.transform(this.store.getValue().requestType);
+      return `${permitTypeMap?.[state.permitType]} ${permitType}
+        `;
+    }),
+    withLatestFrom(this.determinationStatus$),
+    map(([confirm, determinationStatus]) => `${confirm} ${determinationStatus}`),
+  );
+
+  previewDocuments$ = combineLatest([this.requestTaskActionType$, this.determinationStatus$, this.permitType$]).pipe(
+    map(([requestTaskActionType, determinationStatus, permitType]) => {
+      return getPreviewDocumentsInfo(requestTaskActionType, determinationStatus, permitType);
+    }),
+  );
+
+  pendingRfi$: Subject<boolean> = new Subject<boolean>();
+  pendingRde$: Subject<boolean> = new Subject<boolean>();
 
   constructor(
     private readonly store: PermitApplicationStore<PermitApplicationState>,
@@ -54,22 +91,6 @@ export class NotifyOperatorComponent implements OnInit {
     private readonly requestItemsService: RequestItemsService,
     private readonly permitRequestTypePipe: PermitRequestTypePipe,
   ) {}
-
-  readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
-  readonly accountId$ = this.store.pipe(map((state) => state.accountId));
-  readonly determinationStatus$ = this.store.getDeterminationStatus$();
-  readonly confirmationMessage$ = this.store.pipe(
-    map((state) => {
-      const permitType = this.permitRequestTypePipe.transform(this.store.getValue().requestType);
-      return `${state.permitType} ${permitType}
-        `;
-    }),
-    withLatestFrom(this.determinationStatus$),
-    map(([confirm, determinationStatus]) => `${confirm} ${determinationStatus}`),
-  );
-
-  pendingRfi$: Subject<boolean> = new Subject<boolean>();
-  pendingRde$: Subject<boolean> = new Subject<boolean>();
 
   ngOnInit(): void {
     this.requestTaskType$

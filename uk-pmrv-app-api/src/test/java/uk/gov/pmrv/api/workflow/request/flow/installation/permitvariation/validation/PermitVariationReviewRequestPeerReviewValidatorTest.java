@@ -20,9 +20,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.permit.validation.PermitGrantedValidatorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -56,7 +56,7 @@ class PermitVariationReviewRequestPeerReviewValidatorTest {
     @Test
     void validate_determination_granted() {
         String selectedPeerReviewer = "selectedPeerReviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
             .build();
@@ -75,14 +75,14 @@ class PermitVariationReviewRequestPeerReviewValidatorTest {
             .payload(requestTaskPayload)
             .build();
 
-        doNothing().when(peerReviewerTaskAssignmentValidator).validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+        doNothing().when(peerReviewerTaskAssignmentValidator).validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
         when(permitReviewDeterminationValidatorService.isDeterminationAndDecisionsValid(determination, requestTaskPayload, RequestType.PERMIT_VARIATION)).thenReturn(true);
 
-        permitReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, pmrvUser);
+        permitReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, appUser);
 
         verify(permitReviewDeterminationValidatorService, times(1)).validateDeterminationObject(determination);
         verify(peerReviewerTaskAssignmentValidator, times(1))
-            .validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+            .validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
         verify(permitReviewDeterminationValidatorService, times(1)).isDeterminationAndDecisionsValid(determination, requestTaskPayload, RequestType.PERMIT_VARIATION);
         verify(permitGrantedValidatorService, times(1)).validatePermit(any());
     }
@@ -90,7 +90,7 @@ class PermitVariationReviewRequestPeerReviewValidatorTest {
     @Test
     void validate_determination_deem_withdrawn() {
         String selectedPeerReviewer = "selectedPeerReviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
             .build();
@@ -108,21 +108,21 @@ class PermitVariationReviewRequestPeerReviewValidatorTest {
             .payload(requestTaskPayload)
             .build();
 
-        doNothing().when(peerReviewerTaskAssignmentValidator).validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+        doNothing().when(peerReviewerTaskAssignmentValidator).validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
         when(permitReviewDeterminationValidatorService.isDeterminationAndDecisionsValid(determination, requestTaskPayload, RequestType.PERMIT_VARIATION)).thenReturn(true);
 
-        permitReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, pmrvUser);
+        permitReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, appUser);
 
         verify(permitReviewDeterminationValidatorService, times(1)).validateDeterminationObject(determination);
         verify(peerReviewerTaskAssignmentValidator, times(1))
-            .validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+            .validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
         verify(permitReviewDeterminationValidatorService, times(1)).isDeterminationAndDecisionsValid(determination, requestTaskPayload, RequestType.PERMIT_VARIATION);
     }
 
     @Test
     void validate_determination_rejected() {
         String selectedPeerReviewer = "selectedPeerReviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
             .build();
@@ -140,14 +140,14 @@ class PermitVariationReviewRequestPeerReviewValidatorTest {
             .payload(requestTaskPayload)
             .build();
 
-        doNothing().when(peerReviewerTaskAssignmentValidator).validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+        doNothing().when(peerReviewerTaskAssignmentValidator).validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
         when(permitReviewDeterminationValidatorService.isDeterminationAndDecisionsValid(determination, requestTaskPayload, RequestType.PERMIT_VARIATION)).thenReturn(true);
 
-        permitReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, pmrvUser);
+        permitReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, appUser);
 
         verify(permitReviewDeterminationValidatorService, times(1)).validateDeterminationObject(determination);
         verify(peerReviewerTaskAssignmentValidator, times(1))
-            .validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+            .validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
         verify(permitReviewDeterminationValidatorService, times(1)).isDeterminationAndDecisionsValid(determination, requestTaskPayload, RequestType.PERMIT_VARIATION);
         verifyNoInteractions(permitGrantedValidatorService);
     }
@@ -155,7 +155,7 @@ class PermitVariationReviewRequestPeerReviewValidatorTest {
     @Test
     void validate_invalid_peer_reviewer() {
         String selectedPeerReviewer = "selectedPeerReviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
             .build();
@@ -175,21 +175,21 @@ class PermitVariationReviewRequestPeerReviewValidatorTest {
 
 
         doThrow(new BusinessException(ErrorCode.ASSIGNMENT_NOT_ALLOWED))
-            .when(peerReviewerTaskAssignmentValidator).validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+            .when(peerReviewerTaskAssignmentValidator).validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
 
         BusinessException businessException = assertThrows(BusinessException.class,
-            () -> permitReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, pmrvUser));
+            () -> permitReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, appUser));
 
         assertEquals(ErrorCode.ASSIGNMENT_NOT_ALLOWED, businessException.getErrorCode());
         verifyNoInteractions(permitReviewDeterminationValidatorService);
         verify(peerReviewerTaskAssignmentValidator, times(1))
-            .validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+            .validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
     }
 
     @Test
     void validate_invalid_determination() {
         String selectedPeerReviewer = "selectedPeerReviewer";
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
             .build();
@@ -207,17 +207,17 @@ class PermitVariationReviewRequestPeerReviewValidatorTest {
             .payload(requestTaskPayload)
             .build();
 
-        doNothing().when(peerReviewerTaskAssignmentValidator).validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+        doNothing().when(peerReviewerTaskAssignmentValidator).validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
         when(permitReviewDeterminationValidatorService.isDeterminationAndDecisionsValid(determination, requestTaskPayload, RequestType.PERMIT_VARIATION)).thenReturn(false);
 
         BusinessException businessException = assertThrows(BusinessException.class,
-            () -> permitReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, pmrvUser));
+            () -> permitReviewRequestPeerReviewValidator.validate(requestTask, taskActionPayload, appUser));
 
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
 
         verify(permitReviewDeterminationValidatorService, times(1)).validateDeterminationObject(determination);
         verify(peerReviewerTaskAssignmentValidator, times(1))
-            .validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, pmrvUser);
+            .validate(PERMIT_VARIATION_APPLICATION_PEER_REVIEW, selectedPeerReviewer, appUser);
         verify(permitReviewDeterminationValidatorService, times(1)).isDeterminationAndDecisionsValid(determination, requestTaskPayload, RequestType.PERMIT_VARIATION);
     }
 }

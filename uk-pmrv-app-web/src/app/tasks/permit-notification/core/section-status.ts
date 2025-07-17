@@ -1,5 +1,5 @@
 import { TaskItemStatus } from '@shared/task-list/task-list.interface';
-import moment from 'moment';
+import { isAfter } from 'date-fns';
 
 import {
   PermitNotificationApplicationSubmitRequestTaskPayload,
@@ -20,7 +20,7 @@ export type StatusKey =
 
 export type ReviewSectionKey = 'DETAILS_CHANGE' | 'FOLLOW_UP';
 
-export type DecisionStatus = 'undecided' | 'accepted' | 'rejected' | 'needs review';
+export type DecisionStatus = 'undecided' | 'accepted' | 'rejected' | 'needs review' | 'complete';
 
 export type FollowUpDecisionStatus = 'undecided' | 'accepted' | 'operator to amend' | 'needs review';
 
@@ -30,8 +30,8 @@ export function resolveDetailsChangeStatus(
   return state?.sectionsCompleted['DETAILS_CHANGE']
     ? 'complete'
     : state?.permitNotification
-    ? 'in progress'
-    : 'not started';
+      ? 'in progress'
+      : 'not started';
 }
 
 export function resolveSubmitStatus(state: PermitNotificationApplicationSubmitRequestTaskPayload): TaskItemStatus {
@@ -43,7 +43,7 @@ export function isWizardComplete(state: PermitNotificationApplicationSubmitReque
 }
 
 export function isReviewDecisionTakenValid(reviewDecision: PermitNotificationReviewDecision): boolean {
-  const validDecisionTakenStatuses: DecisionStatus[] = ['accepted', 'rejected'];
+  const validDecisionTakenStatuses: DecisionStatus[] = ['accepted', 'rejected', 'complete'];
   return validDecisionTakenStatuses.includes(resolveReviewDecisionStatus(reviewDecision));
 }
 
@@ -51,8 +51,12 @@ export function resolveReviewDecisionStatus(reviewDecision: PermitNotificationRe
   return !reviewDecision
     ? 'undecided'
     : reviewDecision.type === 'ACCEPTED'
-    ? resolveReviewDecisionAcceptedStatus(reviewDecision)
-    : 'rejected';
+      ? resolveReviewDecisionAcceptedStatus(reviewDecision)
+      : ['PERMANENT_CESSATION', 'TEMPORARY_CESSATION', 'CESSATION_TREATED_AS_PERMANENT', 'NOT_CESSATION'].includes(
+            reviewDecision.type,
+          )
+        ? 'complete'
+        : 'rejected';
 }
 
 export function resolveFollowUpStatus(state: PermitNotificationFollowUpRequestTaskPayload): TaskItemStatus {
@@ -69,8 +73,8 @@ export function resolveFollowUpReviewDecisionStatus(
   return !payload.reviewDecision?.type || payload.reviewSectionsCompleted?.RESPONSE === false
     ? 'undecided'
     : payload.reviewDecision.type === 'ACCEPTED'
-    ? 'accepted'
-    : resolveFollowUpReviewDecisionOperatorToAmendStatus(payload);
+      ? 'accepted'
+      : resolveFollowUpReviewDecisionOperatorToAmendStatus(payload);
 }
 
 export function isFollowUpReviewDecisionTakenValid(
@@ -99,14 +103,14 @@ function resolveReviewDecisionAcceptedStatus(reviewDecision: PermitNotificationR
   const followUpResponseExpirationDate = reviewDecisionDetails?.followUp?.followUpResponseExpirationDate;
   return !followUpResponseExpirationDate
     ? 'accepted'
-    : moment().isAfter(followUpResponseExpirationDate)
-    ? 'needs review'
-    : 'accepted';
+    : isAfter(new Date(), new Date(followUpResponseExpirationDate))
+      ? 'needs review'
+      : 'accepted';
 }
 
 function resolveFollowUpReviewDecisionOperatorToAmendStatus(
   taskPayload: PermitNotificationFollowUpApplicationReviewRequestTaskPayload,
 ): FollowUpDecisionStatus {
   const followUpResponseNewExpirationDate = (taskPayload?.reviewDecision?.details as any)?.dueDate;
-  return moment().isAfter(followUpResponseNewExpirationDate) ? 'needs review' : 'operator to amend';
+  return isAfter(new Date(), new Date(followUpResponseNewExpirationDate)) ? 'needs review' : 'operator to amend';
 }

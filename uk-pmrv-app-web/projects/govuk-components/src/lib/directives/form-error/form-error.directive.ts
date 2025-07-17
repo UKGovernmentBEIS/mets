@@ -1,6 +1,5 @@
 import {
   ChangeDetectorRef,
-  ComponentFactoryResolver,
   ComponentRef,
   Directive,
   DoCheck,
@@ -34,7 +33,6 @@ export class FormErrorDirective implements OnDestroy, OnInit, DoCheck {
     @Self() private readonly formControl: NgControl,
     private readonly elementRef: ElementRef,
     private readonly viewContainer: ViewContainerRef,
-    private readonly componentFactoryResolver: ComponentFactoryResolver,
     private readonly renderer: Renderer2,
     private readonly changeDetectorRef: ChangeDetectorRef,
     @Optional() private readonly container: ControlContainer,
@@ -60,7 +58,7 @@ export class FormErrorDirective implements OnDestroy, OnInit, DoCheck {
     combineLatest([
       this.formControl.statusChanges.pipe(startWith(this.formControl.status)),
       this.formControl.control.updateOn === 'submit'
-        ? this.form?.ngSubmit.pipe(tap(() => (this.isSubmitted = status !== 'DISABLED')))
+        ? this.form?.ngSubmit.pipe(tap(() => (this.isSubmitted = this.formControl.status !== 'DISABLED')))
         : this.touch$,
     ])
       .pipe(takeUntil(this.destroy$))
@@ -79,8 +77,7 @@ export class FormErrorDirective implements OnDestroy, OnInit, DoCheck {
   }
 
   private attachErrorComponent() {
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ErrorMessageComponent);
-    this.errorComponent = this.viewContainer.createComponent(componentFactory, 0);
+    this.errorComponent = this.viewContainer.createComponent(ErrorMessageComponent);
     this.errorComponent.instance.identifier = this.id;
 
     const htmlElement: HTMLElement = (this.errorComponent.hostView as EmbeddedViewRef<ErrorMessageComponent>)

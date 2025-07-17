@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -51,16 +51,16 @@ class VirSubmitActionHandlerTest {
                 .processTaskId(processId)
                 .request(Request.builder().build())
                 .build();
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
 
         // Invoke
-        handler.process(requestTask.getId(), RequestTaskActionType.VIR_SUBMIT_APPLICATION, pmrvUser, payload);
+        handler.process(requestTask.getId(), RequestTaskActionType.VIR_SUBMIT_APPLICATION, appUser, payload);
 
         // Verify
         verify(requestTaskService, times(1)).findTaskById(1L);
-        verify(requestVirApplyService, times(1)).applySubmitAction(requestTask, pmrvUser);
+        verify(requestVirApplyService, times(1)).applySubmitAction(requestTask, appUser);
         verify(workflowService, times(1)).completeTask(processId);
     }
 

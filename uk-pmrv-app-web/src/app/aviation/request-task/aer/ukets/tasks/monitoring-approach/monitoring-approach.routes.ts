@@ -36,6 +36,7 @@ export const AER_MONITORING_APPROACH_ROUTES: Routes = [
       },
       {
         path: 'summary',
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Monitoring approach' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./monitoring-approach-summary').then((c) => c.MonitoringApproachSummaryComponent),
       },

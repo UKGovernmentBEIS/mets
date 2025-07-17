@@ -1,9 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.dre.service;
 
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import org.springframework.stereotype.Service;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
@@ -18,12 +17,12 @@ public class DreRequestPeerReviewValidator {
 	private final PeerReviewerTaskAssignmentValidator peerReviewerTaskAssignmentValidator;
 
 	public void validate(final RequestTask requestTask, final PeerReviewRequestTaskActionPayload taskActionPayload,
-			final PmrvUser pmrvUser) {
+			final AppUser appUser) {
 		final DreApplicationSubmitRequestTaskPayload taskPayload = (DreApplicationSubmitRequestTaskPayload) requestTask
 				.getPayload();
 		
 		peerReviewerTaskAssignmentValidator.validate(RequestTaskType.DRE_APPLICATION_PEER_REVIEW,
-				taskActionPayload.getPeerReviewer(), pmrvUser);
+				taskActionPayload.getPeerReviewer(), appUser);
 		
 		dreValidatorService.validateDre(taskPayload.getDre());
 	}

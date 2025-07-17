@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
@@ -42,7 +42,7 @@ public class AviationVirReviewService {
     @Transactional
     public void submitReview(final RequestTask requestTask,
                              final DecisionNotification notifyOperatorDecision,
-                             final PmrvUser pmrvUser) {
+                             final AppUser appUser) {
 
         final Request request = requestTask.getRequest();
         final AviationVirRequestPayload virRequestPayload = (AviationVirRequestPayload) request.getPayload();
@@ -53,7 +53,7 @@ public class AviationVirReviewService {
         virRequestPayload.setReviewSectionsCompleted(taskPayload.getReviewSectionsCompleted());
         virRequestPayload.setRegulatorReviewResponse(taskPayload.getRegulatorReviewResponse());
         virRequestPayload.setDecisionNotification(notifyOperatorDecision);
-        virRequestPayload.setRegulatorReviewer(pmrvUser.getUserId());
+        virRequestPayload.setRegulatorReviewer(appUser.getUserId());
     }
 
     @Transactional

@@ -1,8 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.air.handler;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -14,6 +11,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.RegulatorAirImprovementResponse;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.mapper.AirMapper;
+
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AirApplicationRespondToRegulatorCommentsInitializer implements InitializeRequestTaskHandler {

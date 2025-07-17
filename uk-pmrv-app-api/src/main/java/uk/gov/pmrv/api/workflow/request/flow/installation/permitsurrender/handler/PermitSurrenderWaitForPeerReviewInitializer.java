@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.handler;
 
-import java.util.Set;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -10,6 +9,8 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain.PermitSurrenderRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.mapper.PermitSurrenderMapper;
+
+import java.util.Set;
 
 @Service
 public class PermitSurrenderWaitForPeerReviewInitializer implements InitializeRequestTaskHandler {

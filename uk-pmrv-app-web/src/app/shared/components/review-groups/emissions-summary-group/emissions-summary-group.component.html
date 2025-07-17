@@ -5,7 +5,7 @@
         {{ row.approaches }}
       </ng-container>
       <ng-container *ngSwitchCase="'totalReportableEmissions'">
-        {{ row.totalReportableEmissions | bigNumber }}
+        {{ row.totalReportableEmissions | bigNumber: (row.approaches !== 'Total')? 5 : DECIMAL_DIGITS}}
 
         <ng-container *ngIf="row.approaches !== 'Total'"> t </ng-container>
         <ng-container *ngIf="row.approaches === 'Total'"> tCO2e </ng-container>
@@ -13,11 +13,12 @@
         <ng-container
           *ngIf="row.totalNonSustainableBiomassEmissions && row.totalNonSustainableBiomassEmissions !== '0'"
         >
-          (includes {{ row.totalNonSustainableBiomassEmissions | bigNumber }} t non-sustainable biomass)
+          (includes {{ row.totalNonSustainableBiomassEmissions | bigNumber: (row.approaches !== 'Total')? 5 : DECIMAL_DIGITS }}
+          t non-sustainable biomass)
         </ng-container>
       </ng-container>
       <ng-container *ngSwitchCase="'totalBiomassEmissions'">
-        {{ row.totalBiomassEmissions | bigNumber }}
+        {{ row.totalBiomassEmissions | bigNumber: (row.approaches !== 'Total')? 5 : DECIMAL_DIGITS }}
 
         <ng-container *ngIf="row.approaches !== 'Total'"> t </ng-container>
         <ng-container *ngIf="row.approaches === 'Total'"> tCO2e </ng-container>

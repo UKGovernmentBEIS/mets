@@ -52,7 +52,7 @@ export class PermitTaskComponent implements OnInit {
       )
       .subscribe();
 
-    if (Array.isArray(this.breadcrumb)) {
+    if (this.breadcrumb) {
       combineLatest([this.route.paramMap, this.store])
         .pipe(takeUntil(this.destroy$))
         .subscribe(([paramMap, state]) => {
@@ -76,6 +76,9 @@ export class PermitTaskComponent implements OnInit {
               case 'PERMIT_ISSUANCE_WAIT_FOR_PEER_REVIEW':
               case 'PERMIT_ISSUANCE_WAIT_FOR_AMENDS':
               case 'PERMIT_VARIATION_APPLICATION_REVIEW':
+              case 'PERMIT_VARIATION_APPLICATION_PEER_REVIEW':
+              case 'PERMIT_VARIATION_WAIT_FOR_PEER_REVIEW':
+              case 'PERMIT_VARIATION_WAIT_FOR_AMENDS':
               case 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT':
               case 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW':
               case 'PERMIT_VARIATION_REGULATOR_LED_WAIT_FOR_PEER_REVIEW':
@@ -169,9 +172,9 @@ export class PermitTaskComponent implements OnInit {
                       link: [
                         ...(index === 1
                           ? result[0].link.slice(0, 2)
-                          : result[index - 1]?.link ?? taskUrlApproach
-                          ? permitApplicationTaskLink
-                          : firstBreadcrumb.link),
+                          : (result[index - 1]?.link ?? taskUrlApproach)
+                            ? permitApplicationTaskLink
+                            : firstBreadcrumb.link),
                         ...item.link,
                       ],
                     },

@@ -1,15 +1,6 @@
 package uk.gov.pmrv.api.migration.emp.corsia.operatordetails;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import org.apache.commons.lang3.ObjectUtils;
-
 import uk.gov.pmrv.api.account.aviation.domain.dto.ServiceContactDetails;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
@@ -34,6 +25,14 @@ import uk.gov.pmrv.api.migration.aviationaccount.common.AviationAccountCountries
 import uk.gov.pmrv.api.migration.emp.corsia.operatordetails.subsidiarycompanies.EtsEmpOperatorDetailsSubsidiaryCompaniesCorsia;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachment;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 public class EmpOperatorDetailsCorsiaMigrationMapper {
 	
 	private static final String N_A = "N/A";
@@ -50,14 +49,14 @@ public class EmpOperatorDetailsCorsiaMigrationMapper {
         return operatorDetailsFlightIdentificationMap;
     }
     
-    public static Set<SubsidiaryCompanyCorsia> toSubsidiaryCompanies(
+    public static List<SubsidiaryCompanyCorsia> toSubsidiaryCompanies(
     		List<EtsEmpOperatorDetailsSubsidiaryCompaniesCorsia> corsiaSubsidiaryCompanies) {
 
-    	Set<SubsidiaryCompanyCorsia> subsidiaryCompanies = new HashSet<>();
+    	List<SubsidiaryCompanyCorsia> subsidiaryCompanies = new ArrayList<>();
 		
     	corsiaSubsidiaryCompanies.forEach(entry -> subsidiaryCompanies.add(
     			SubsidiaryCompanyCorsia.builder()
-    			.operatorName(entry.getOperatorName())
+    			.operatorName(entry.getSubsidiaryAeroplaneOperatorName())
     			.flightIdentification(FlightIdentification.builder()
                         .flightIdentificationType("Option 1".equalsIgnoreCase(entry.getAircraftIdentification()) 
                         		? FlightIdentificationType.INTERNATIONAL_CIVIL_AVIATION_ORGANISATION 

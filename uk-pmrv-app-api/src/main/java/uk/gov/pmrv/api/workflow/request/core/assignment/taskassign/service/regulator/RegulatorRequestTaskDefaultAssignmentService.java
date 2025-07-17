@@ -5,16 +5,15 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessCheckedException;
 import uk.gov.pmrv.api.account.service.AccountCaSiteContactService;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.common.exception.BusinessCheckedException;
 import uk.gov.pmrv.api.workflow.request.core.assignment.requestassign.RequestReleaseService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.UserRoleRequestTaskDefaultAssignmentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
-import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 @Log4j2
 @Service
@@ -27,34 +26,34 @@ public class RegulatorRequestTaskDefaultAssignmentService implements UserRoleReq
     private final RequestReleaseService requestReleaseService;
 
     @Override
-    public RoleType getRoleType() {
-        return RoleType.REGULATOR;
+    public String getRoleType() {
+        return RoleTypeConstants.REGULATOR;
     }
 
     @Transactional
     public void assignDefaultAssigneeToTask(RequestTask requestTask) {
-        boolean isPeerReviewTask = RequestTaskType.getPeerReviewTypes().contains(requestTask.getType());
+        boolean isPeerReview = requestTask.getType().isPeerReview();
         RequestPayload requestPayload = requestTask.getRequest().getPayload();
-        String candidateAssignee = isPeerReviewTask ? requestPayload.getRegulatorPeerReviewer() : requestPayload.getRegulatorAssignee();
+        String candidateAssignee = isPeerReview ? requestPayload.getRegulatorPeerReviewer() : requestPayload.getRegulatorAssignee();
 
         if(!ObjectUtils.isEmpty(candidateAssignee) && userRoleTypeService.isUserRegulator(candidateAssignee)) {
             try {
                 requestTaskAssignmentService.assignToUser(requestTask, candidateAssignee);
             } catch (BusinessCheckedException e) {
-                assignTaskToCASiteContactOrReleaseRequest(requestTask, isPeerReviewTask);
+                assignTaskToCASiteContactOrReleaseRequest(requestTask, isPeerReview);
             }
         } else {
-            assignTaskToCASiteContactOrReleaseRequest(requestTask, isPeerReviewTask);
+            assignTaskToCASiteContactOrReleaseRequest(requestTask, isPeerReview);
         }
     }
 
-    private void assignTaskToCASiteContactOrReleaseRequest(RequestTask requestTask, boolean isPeerReviewTask) {
+    private void assignTaskToCASiteContactOrReleaseRequest(RequestTask requestTask, boolean isPeerReview) {
         accountCaSiteContactService
             .findCASiteContactByAccount(requestTask.getRequest().getAccountId())
             .ifPresentOrElse(
                 caSiteContactUser -> {
                     try {
-                        if(isPeerReviewTask) {
+                        if(isPeerReview) {
                             String firstReviewer = requestTask.getRequest().getPayload().getRegulatorReviewer();
                             if (!caSiteContactUser.equals(firstReviewer)) {
                                 requestTaskAssignmentService.assignToUser(requestTask, caSiteContactUser);

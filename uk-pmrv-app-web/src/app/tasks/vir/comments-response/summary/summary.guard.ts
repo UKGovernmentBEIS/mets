@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
@@ -11,8 +11,11 @@ import { VirApplicationRespondToRegulatorCommentsRequestTaskPayload } from 'pmrv
 @Injectable({
   providedIn: 'root',
 })
-export class SummaryGuard implements CanActivate {
-  constructor(private readonly router: Router, private readonly virService: VirService) {}
+export class SummaryGuard {
+  constructor(
+    private readonly router: Router,
+    private readonly virService: VirService,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return combineLatest([

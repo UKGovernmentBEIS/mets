@@ -8,8 +8,8 @@ import uk.gov.pmrv.api.account.domain.dto.LocationDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreDTO;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.common.domain.dto.AddressDTO;
-import uk.gov.pmrv.api.referencedata.domain.Country;
-import uk.gov.pmrv.api.referencedata.service.CountryService;
+import uk.gov.netz.api.referencedata.domain.Country;
+import uk.gov.netz.api.referencedata.service.CountryService;
 
 @Service
 @RequiredArgsConstructor
@@ -32,23 +32,23 @@ public class DocumentTemplateLocationInfoResolver {
     
     public String constructAddressInfo(AddressDTO address) {
         String countryName = countryService.getReferenceData().stream()
-                .filter((country) -> address.getCountry().equals(country.getCode()))
+                .filter(country -> address.getCountry().equals(country.getCode()))
                 .map(Country::getName)
                 .findFirst().orElse("");
         StringBuilder addressBuilder = new StringBuilder();
         addressBuilder.append(address.getLine1());
         if(StringUtils.hasLength(address.getLine2())) {
-            addressBuilder.append("\n" + address.getLine2());
+            addressBuilder.append("\n").append(address.getLine2());
         }
-        addressBuilder.append("\n" + address.getCity());
-        addressBuilder.append("\n" + address.getPostcode());
-        addressBuilder.append("\n" + countryName);
+        addressBuilder.append("\n").append(address.getCity());
+        addressBuilder.append("\n").append(address.getPostcode());
+        addressBuilder.append("\n").append(countryName);
         return addressBuilder.toString();
     }
 
     private String constructOnShoreStateLocationInfo(LocationOnShoreStateDTO location) {
         String countryName = countryService.getReferenceData().stream()
-            .filter((country) -> location.getCountry().equals(country.getCode()))
+            .filter(country -> location.getCountry().equals(country.getCode()))
             .map(Country::getName)
             .findFirst().orElse("");
 

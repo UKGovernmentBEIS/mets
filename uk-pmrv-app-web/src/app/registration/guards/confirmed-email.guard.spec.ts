@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { catchError, lastValueFrom, Observable, of } from 'rxjs';
 
-import { OperatorUsersRegistrationService } from 'pmrv-api';
+import { OperatorUsersRegistrationService, OperatorUserTokenVerificationResult } from 'pmrv-api';
 
 import { ActivatedRouteSnapshotStub, CountryServiceStub } from '../../../testing';
 import { CountryService } from '../../core/services/country.service';
@@ -57,13 +57,23 @@ describe('ConfirmedEmailGuard', () => {
     expect(router.navigateByUrl).not.toHaveBeenCalled();
   });
 
-  it('should update the state with the token and email', async () => {
-    const email = 'test@test.gr';
-    jest.spyOn(service, 'verifyUserRegistrationToken').mockImplementation(() => of({ email }));
+  it('should update the state with the token and email and verificationStatus', async () => {
+    const operatorUserTokenVerificationResult: OperatorUserTokenVerificationResult = {
+      email: 'test@test.gr',
+      status: 'NOT_REGISTERED',
+    };
+    jest
+      .spyOn(service, 'verifyUserRegistrationToken')
+      .mockImplementation(() => of(operatorUserTokenVerificationResult));
     await lastValueFrom(
       guard.canActivate(new ActivatedRouteSnapshotStub(null, { token: '123' })) as Observable<boolean>,
     );
-    expect(store.getState()).toMatchObject({ token: '123', email, isInvited: false });
+    expect(store.getState()).toMatchObject({
+      token: '123',
+      email: operatorUserTokenVerificationResult.email,
+      emailVerificationStatus: operatorUserTokenVerificationResult.status,
+      isInvited: false,
+    });
   });
 
   it('should redirect bad request', fakeAsync(() => {

@@ -4,16 +4,22 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { lastValueFrom, of } from 'rxjs';
 
+import { ConfigStore } from '@core/config/config.store';
 import { AuthService } from '@core/services/auth.service';
 import { AuthStore } from '@core/store/auth';
+import { LatestTermsStore } from '@core/store/latest-terms/latest-terms.store';
 import { MockType } from '@testing';
+import { features } from 'process';
 
+import { environment } from '../../environments/environment';
 import { LandingPageGuard } from './landing-page.guard';
 
 describe('LandingPageGuard', () => {
   let guard: LandingPageGuard;
   let router: Router;
   let authStore: AuthStore;
+  let latestTermsStore: LatestTermsStore;
+  let configStore: ConfigStore;
 
   const authService: MockType<AuthService> = {
     checkUser: jest.fn(() => of(undefined)),
@@ -27,9 +33,16 @@ describe('LandingPageGuard', () => {
 
     authStore = TestBed.inject(AuthStore);
     authStore.setIsLoggedIn(true);
-    authStore.setUserState({ domainsLoginStatuses: { INSTALLATION: 'ENABLED' } });
-    authStore.setTerms({ version: 1, url: 'asd' });
-    authStore.setUser({ email: 'asd@asd.com', firstName: 'Darth', lastName: 'Vader', termsVersion: 1 });
+    authStore.setUserState({ domainsLoginStatuses: { INSTALLATION: 'ENABLED' }, roleType: 'OPERATOR' });
+    authStore.setUser({ email: 'asd@asd.com', firstName: 'Darth', lastName: 'Vader' });
+    authStore.setUserTerms({ termsVersion: 1 });
+
+    latestTermsStore = TestBed.inject(LatestTermsStore);
+    latestTermsStore.setLatestTerms({ version: 1, url: 'asd' });
+
+    configStore = TestBed.inject(ConfigStore);
+    configStore.setState({ features: { terms: true } });
+
     guard = TestBed.inject(LandingPageGuard);
     router = TestBed.inject(Router);
   });
@@ -38,12 +51,34 @@ describe('LandingPageGuard', () => {
     expect(guard).toBeTruthy();
   });
 
-  it('should allow if user is not logged in', () => {
+  it('should allow if user is not logged in and not in prod mode', () => {
     authStore.setIsLoggedIn(false);
+    environment.production = false;
     return expect(lastValueFrom(guard.canActivate())).resolves.toEqual(true);
   });
 
-  it('should allow if user is logged in and terms match and status is not ENABLED', () => {
+  it('should allow if user is not logged in and in prod mode and gateway not enabled', () => {
+    authStore.setIsLoggedIn(false);
+    environment.production = true;
+    configStore.setState({ ...configStore.getState(), features: { ...features, serviceGatewayEnabled: false } });
+    return expect(lastValueFrom(guard.canActivate())).resolves.toEqual(true);
+  });
+
+  it('should redirect to origin url when not logged in and in prod mode and gateway enabled', () => {
+    authStore.setIsLoggedIn(false);
+    environment.production = true;
+    configStore.setState({ ...configStore.getState(), features: { ...features, serviceGatewayEnabled: true } });
+    const result = guard.canActivate();
+    expect(lastValueFrom(result)).resolves.toEqual(false);
+    expect(window.location.href).toBe(location.origin + '/');
+  });
+
+  it('should allow if user has no role type', () => {
+    authStore.setUserState({ roleType: null });
+    return expect(lastValueFrom(guard.canActivate())).resolves.toEqual(true);
+  });
+
+  it('should allow if user is logged in and terms match and status is DISABLED', () => {
     authStore.setUserState({ domainsLoginStatuses: { INSTALLATION: 'DISABLED' } });
     return expect(lastValueFrom(guard.canActivate())).resolves.toEqual(true);
   });
@@ -57,15 +92,15 @@ describe('LandingPageGuard', () => {
   it('should redirect to dashboard if user is logged in and enabled and terms match', async () => {
     await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(router.parseUrl('dashboard'));
 
-    authStore.setTerms({ version: 2, url: 'asd' });
+    latestTermsStore.setLatestTerms({ version: 2, url: 'asd' });
     await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(router.parseUrl('terms'));
   });
 
   it('should allow if user is logged in and adding another installation', async () => {
     authStore.setIsLoggedIn(true);
     authStore.setUserState({ lastLoginDomain: 'INSTALLATION', domainsLoginStatuses: { INSTALLATION: 'ENABLED' } });
-    authStore.setTerms({ version: 1, url: 'asd' });
-    authStore.setUser({ email: 'asd@asd.com', firstName: 'Darth', lastName: 'Vader', termsVersion: 1 });
+    authStore.setUserTerms({ termsVersion: 1 });
+    latestTermsStore.setLatestTerms({ version: 1, url: 'asd' });
 
     jest
       .spyOn(router, 'getCurrentNavigation')
@@ -79,8 +114,8 @@ describe('LandingPageGuard', () => {
       lastLoginDomain: 'INSTALLATION',
       domainsLoginStatuses: { INSTALLATION: 'ENABLED', AVIATION: 'ACCEPTED' },
     });
-    authStore.setTerms({ version: 1, url: 'asd' });
-    authStore.setUser({ email: 'asd@asd.com', firstName: 'Darth', lastName: 'Vader', termsVersion: 1 });
+    authStore.setUserTerms({ termsVersion: 1 });
+    latestTermsStore.setLatestTerms({ version: 1, url: 'asd' });
 
     jest
       .spyOn(router, 'getCurrentNavigation')
@@ -184,5 +219,10 @@ describe('LandingPageGuard', () => {
     });
 
     await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(true);
+  });
+
+  it('should not redirect to terms if terms feature is disabled', async () => {
+    configStore.setState({ features: { terms: false } });
+    await expect(lastValueFrom(guard.canActivate())).resolves.toEqual(router.parseUrl('dashboard'));
   });
 });

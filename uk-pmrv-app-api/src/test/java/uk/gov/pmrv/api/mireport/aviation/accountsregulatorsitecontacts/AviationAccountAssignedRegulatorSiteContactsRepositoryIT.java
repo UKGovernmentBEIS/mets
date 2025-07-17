@@ -1,30 +1,29 @@
 package uk.gov.pmrv.api.mireport.aviation.accountsregulatorsitecontacts;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.authorization.core.domain.Authority;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountStatus;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityStatus;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
-import uk.gov.pmrv.api.authorization.core.domain.Authority;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.pmrv.api.common.domain.Address;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.mireport.common.accountsregulatorsitecontacts.AccountAssignedRegulatorSiteContact;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -85,14 +84,14 @@ class AviationAccountAssignedRegulatorSiteContactsRepositoryIT extends AbstractC
 
         flushAndClear();
 
-        List<AccountAssignedRegulatorSiteContact> expectedAccountAssignedRegulatorSiteContacts = List.of(
+        List<AviationAccountAssignedRegulatorSiteContact> expectedAccountAssignedRegulatorSiteContacts = List.of(
             createAccountAssignedRegulatorSiteContact(account4,  user1Authority.getStatus()),
             createAccountAssignedRegulatorSiteContact(account1,  user1Authority.getStatus()),
             createAccountAssignedRegulatorSiteContact(account2,  null),
             createAccountAssignedRegulatorSiteContact(account3,  null)
         );
 
-        List<AccountAssignedRegulatorSiteContact> accountAssignedRegulatorSiteContacts =
+        List<AviationAccountAssignedRegulatorSiteContact> accountAssignedRegulatorSiteContacts =
             repository.findAccountAssignedRegulatorSiteContacts(entityManager);
 
         assertEquals(4, accountAssignedRegulatorSiteContacts.size());
@@ -116,11 +115,11 @@ class AviationAccountAssignedRegulatorSiteContactsRepositoryIT extends AbstractC
             .build();
     }
 
-    private AccountAssignedRegulatorSiteContact createAccountAssignedRegulatorSiteContact(AviationAccount account, AuthorityStatus authorityStatus) {
+    private AviationAccountAssignedRegulatorSiteContact createAccountAssignedRegulatorSiteContact(AviationAccount account, AuthorityStatus authorityStatus) {
         Map<AccountContactType, String> contacts = account.getContacts();
         LegalEntity legalEntity = account.getLegalEntity();
 
-        return AccountAssignedRegulatorSiteContact.builder()
+        return AviationAccountAssignedRegulatorSiteContact.builder()
             .accountId(account.getEmitterId())
             .accountName(account.getName())
             .accountType(AccountType.AVIATION.name())
@@ -128,6 +127,7 @@ class AviationAccountAssignedRegulatorSiteContactsRepositoryIT extends AbstractC
             .legalEntityName(legalEntity != null ? legalEntity.getName() : null)
             .authorityStatus(authorityStatus != null ? authorityStatus.name() : null)
             .userId(!contacts.isEmpty() ? contacts.get(AccountContactType.CA_SITE) : null )
+            .crcoCode(account.getCrcoCode())
             .build();
     }
 

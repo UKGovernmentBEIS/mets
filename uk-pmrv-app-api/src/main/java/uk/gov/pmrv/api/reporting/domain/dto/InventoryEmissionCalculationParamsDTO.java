@@ -1,16 +1,16 @@
 package uk.gov.pmrv.api.reporting.domain.dto;
 
+import jakarta.validation.constraints.Digits;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.apache.commons.lang3.ObjectUtils;
-import uk.gov.pmrv.api.common.domain.dto.validation.SpELExpression;
+import uk.gov.netz.api.common.validation.SpELExpression;
 import uk.gov.pmrv.api.reporting.domain.EmissionFactorMeasurementUnit;
 import uk.gov.pmrv.api.reporting.domain.NCVMeasurementUnit;
 
-import jakarta.validation.constraints.Digits;
 import java.math.BigDecimal;
 import java.util.Objects;
 

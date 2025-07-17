@@ -1,11 +1,5 @@
 package uk.gov.pmrv.api.emissionsmonitoringplan.corsia.validation;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,12 +10,19 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.emissionsources.Fue
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsiaContainer;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachTypeCorsia;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproach;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproachCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsources.AircraftTypeDetailsCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsources.EmpEmissionSourcesCorsia;
 
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @ExtendWith(MockitoExtension.class)
-public class EmpCorsiaEmissionSourcesSectionValidatorTest {
+class EmpCorsiaEmissionSourcesSectionValidatorTest {
 
     @InjectMocks
     private EmpCorsiaEmissionSourcesSectionValidator validator;
@@ -32,7 +33,7 @@ public class EmpCorsiaEmissionSourcesSectionValidatorTest {
         final EmissionsMonitoringPlanCorsiaContainer empContainer = EmissionsMonitoringPlanCorsiaContainer.builder()
             .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
                 .emissionsMonitoringApproach(
-                    FuelMonitoringApproach.builder().monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
+                    FuelMonitoringApproachCorsia.builder().monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
                         .build())
                 .emissionSources(EmpEmissionSourcesCorsia.builder()
                     .aircraftTypes(Set.of(
@@ -53,7 +54,7 @@ public class EmpCorsiaEmissionSourcesSectionValidatorTest {
         final EmissionsMonitoringPlanCorsiaContainer empContainer = EmissionsMonitoringPlanCorsiaContainer.builder()
             .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
                 .emissionsMonitoringApproach(
-                    FuelMonitoringApproach.builder().monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
+                    FuelMonitoringApproachCorsia.builder().monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
                         .build())
                 .emissionSources(EmpEmissionSourcesCorsia.builder()
                     .aircraftTypes(Set.of(
@@ -75,7 +76,7 @@ public class EmpCorsiaEmissionSourcesSectionValidatorTest {
         final EmissionsMonitoringPlanCorsiaContainer empContainer = EmissionsMonitoringPlanCorsiaContainer.builder()
             .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
                 .emissionsMonitoringApproach(
-                    FuelMonitoringApproach.builder().monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
+                    FuelMonitoringApproachCorsia.builder().monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
                         .build())
                 .emissionSources(EmpEmissionSourcesCorsia.builder()
                     .aircraftTypes(Set.of(
@@ -97,7 +98,7 @@ public class EmpCorsiaEmissionSourcesSectionValidatorTest {
         final EmissionsMonitoringPlanCorsiaContainer empContainer = EmissionsMonitoringPlanCorsiaContainer.builder()
             .emissionsMonitoringPlan(EmissionsMonitoringPlanCorsia.builder()
                 .emissionsMonitoringApproach(
-                    FuelMonitoringApproach.builder().monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.CERT_MONITORING)
+                    FuelMonitoringApproachCorsia.builder().monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.CERT_MONITORING)
                         .build())
                 .emissionSources(EmpEmissionSourcesCorsia.builder()
                     .aircraftTypes(Set.of(

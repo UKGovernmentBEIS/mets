@@ -1,9 +1,5 @@
 package uk.gov.pmrv.api.migration.emp.corsia.operatordetails;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +9,10 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmpCorsiaSection;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.flightaircraftprocedures.EmpFlightAndAircraftProceduresCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.operatordetails.EmpCorsiaOperatorDetails;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachment;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -28,5 +28,6 @@ public class EmpOperatorDetailsFlightIdentificationCorsia implements EmpCorsiaSe
     
     private int empVersion;
 
+    @Builder.Default
     private Map<String, List<EtsFileAttachment>> attachments = new HashMap<>();
 }

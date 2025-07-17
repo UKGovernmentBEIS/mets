@@ -14,6 +14,7 @@ export class GasPipe implements PipeTransform {
       case 'CERAMICS_MANUFACTURING':
       case 'COKE_PRODUCTION':
       case 'COMBUSTION':
+      case 'UPSTREAM_GHG_REMOVAL':
       case 'FERROUS_METALS_PRODUCTION':
       case 'GLASS_MANUFACTURING':
       case 'GYPSUM_OR_PLASTERBOARD_PRODUCTION':
@@ -30,6 +31,7 @@ export class GasPipe implements PipeTransform {
       case 'STORAGE_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE':
       case 'TRANSPORT_OF_GREENHOUSE_GASES_UNDER_DIRECTIVE':
       case 'SECONDARY_ALUMINIUM_PRODUCTION':
+      case 'WASTE':
         return 'Carbon dioxide';
       case 'NITRIC_ACID_PRODUCTION':
       case 'ADIPIC_ACID_PRODUCTION':

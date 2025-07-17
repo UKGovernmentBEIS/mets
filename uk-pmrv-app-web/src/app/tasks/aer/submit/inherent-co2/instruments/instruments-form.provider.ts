@@ -23,7 +23,7 @@ export const instrumentsFormProvider = {
     );
 
     const measurementInstrumentOwnerTypes = installations
-      ? installations[Number(route.snapshot.paramMap.get('index'))]?.measurementInstrumentOwnerTypes ?? null
+      ? (installations[Number(route.snapshot.paramMap.get('index'))]?.measurementInstrumentOwnerTypes ?? null)
       : null;
 
     return fb.group({

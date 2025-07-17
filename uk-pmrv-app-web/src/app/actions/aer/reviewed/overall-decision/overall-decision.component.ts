@@ -12,8 +12,7 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Overall decision" [breadcrumb]="true">
       <app-overall-decision-group
-        [overallAssessment]="(payload$ | async).verificationReport.overallAssessment"
-      ></app-overall-decision-group>
+        [overallAssessment]="(payload$ | async).verificationReport.overallAssessment"></app-overall-decision-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -25,5 +24,8 @@ export class OverallDecisionComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

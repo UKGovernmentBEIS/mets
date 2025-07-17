@@ -1,19 +1,18 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.service;
 
-import java.time.LocalDateTime;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.permit.service.PermitService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.service.ReissueAddCompletedRequestActionService;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.service.ReissueOfficialNoticeService;
+
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +33,7 @@ public class PermitReissueDoReissueService {
 
 		boolean isAccountApplicable = permitReissueAccountValidationService.isAccountApplicableToReissue(request);
 		if(!isAccountApplicable) {
-			throw new BusinessException(ErrorCode.REISSUE_ACCOUNT_NOT_APPLICABLE, accountId);
+			throw new BusinessException(MetsErrorCode.REISSUE_ACCOUNT_NOT_APPLICABLE, accountId);
 		}
 		
 		request.setSubmissionDate(LocalDateTime.now());

@@ -10,7 +10,7 @@
 	
 	<!-- application changelogs -->
     <include file="changelog_camunda_schema.xml" relativeToChangelogFile="true" />
-    <include file="changelog_table_terms.xml" relativeToChangelogFile="true" />
+    <include file="db/migration/changelogs/terms.xml" />
     <include file="changelog_competent_authority.xml" relativeToChangelogFile="true" />
     <include file="changelog_location.xml" relativeToChangelogFile="true" />
     <include file="changelog_holding_company_entity.xml" relativeToChangelogFile="true" />
@@ -18,8 +18,12 @@
     <include file="changelog_account.xml" relativeToChangelogFile="true" />
     <include file="changelog_user_authority.xml" relativeToChangelogFile="true" />
     <include file="changelog_request_model.xml" relativeToChangelogFile="true" />
-    <include file="changelog_ref_country.xml" relativeToChangelogFile="true" />
-    <include file="changelog_file_attachment.xml" relativeToChangelogFile="true" />
+    
+    <include file="db/migration/changelogs/file_attachment_ddl.xml" />
+    <include file="db/migration/changelogs/file_document_ddl.xml" />
+    <include file="db/migration/changelogs/file_document_template_ddl.xml" />
+    <include file="db/migration/changelogs/file_note_ddl.xml" />
+    
     <include file="changelog_notification_template.xml" relativeToChangelogFile="true" />
     <include file="changelog_notification_system_message.xml" relativeToChangelogFile="true" />
     <include file="changelog_notification_alert.xml" relativeToChangelogFile="true" />

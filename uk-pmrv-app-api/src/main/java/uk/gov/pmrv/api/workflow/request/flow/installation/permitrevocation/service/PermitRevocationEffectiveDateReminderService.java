@@ -1,9 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service;
 
-import org.springframework.stereotype.Service;
-
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import org.springframework.stereotype.Service;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;

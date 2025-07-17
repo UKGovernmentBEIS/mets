@@ -54,7 +54,7 @@ export const emissionsFormProvider = {
         [GovukValidators.required('Enter details'), GovukValidators.maxLength(50, 'Enter up to 50 characters')],
       ],
       tier: [
-        { value: measuredEmissions?.tier, disabled: !state.isEditable } ?? null,
+        { value: measuredEmissions?.tier, disabled: !state.isEditable },
         GovukValidators.required('Select a tier'),
       ],
       isHighestRequiredTierT2: [

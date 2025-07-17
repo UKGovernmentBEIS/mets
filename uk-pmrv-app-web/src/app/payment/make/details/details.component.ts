@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, filter, map, of, pluck, switchMap, withLatestFrom } from 'rxjs';
+import { combineLatest, filter, map, Observable, of, switchMap, takeUntil, withLatestFrom } from 'rxjs';
 
+import { DestroySubject } from '@core/services/destroy-subject.service';
+import { AuthStore, selectCurrentDomain } from '@core/store';
 import { hasRequestTaskAllowedActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
 
 import {
@@ -23,41 +25,8 @@ import { PaymentStore } from '../../store/payment.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsComponent {
-  isAssignableAndCapableToAssign$ = this.store.pipe(
-    filter((state) => !!state.requestTaskItem),
-    map((state) => state.requestTaskItem.requestTask.assignable && state.requestTaskItem.userAssignCapable),
-  );
+  readonly requestTaskItem$ = this.store.pipe(map((state) => state?.requestTaskItem));
 
-  allowedRequestTaskActions$ = this.store.pipe(
-    filter((state) => !!state.requestTaskItem),
-    map((state) => state.requestTaskItem.allowedRequestTaskActions),
-  );
-  hasRelatedActions$ = combineLatest([this.isAssignableAndCapableToAssign$, this.allowedRequestTaskActions$]).pipe(
-    map(
-      ([isAssignableAndCapableToAssign, allowedRequestTaskActions]) =>
-        isAssignableAndCapableToAssign || hasRequestTaskAllowedActions(allowedRequestTaskActions),
-    ),
-  );
-  taskId$ = this.store.pipe(
-    filter((state) => !!state.requestTaskItem),
-    map((state) => state.requestTaskItem.requestTask.id),
-  );
-
-  requestType$ = this.store.pipe(map((state) => state.requestType));
-
-  competentAuthority$ = this.store.pipe(map((state) => state.competentAuthority));
-
-  readonly paymentDetails$ = this.store.pipe(
-    filter((state) => !!state.requestTaskId),
-    map((state) => state.paymentDetails as PaymentMakeRequestTaskPayload),
-  );
-
-  requestTaskType$ = this.store.pipe(
-    filter((state) => !!state.requestTaskItem),
-    map((state) => state.requestTaskItem.requestTask.type),
-  );
-
-  readonly requestTaskItem$ = this.store.pipe(pluck('requestTaskItem'));
   readonly relatedTasks$ = this.store.pipe(
     switchMap((state) =>
       state.requestId
@@ -82,16 +51,60 @@ export class DetailsComponent {
 
   readonly paymentHintInfo = paymentHintInfo;
 
+  readonly paymentDetails$ = this.store.pipe(
+    filter((state) => !!state.requestTaskId),
+    map((state) => state.paymentDetails as PaymentMakeRequestTaskPayload),
+  );
+
+  isAssignableAndCapableToAssign$ = this.store.pipe(
+    filter((state) => !!state.requestTaskItem),
+    map((state) => state.requestTaskItem.requestTask.assignable && state.requestTaskItem.userAssignCapable),
+  );
+
+  allowedRequestTaskActions$ = this.store.pipe(
+    filter((state) => !!state.requestTaskItem),
+    map((state) => state.requestTaskItem.allowedRequestTaskActions),
+  );
+
+  hasRelatedActions$ = combineLatest([this.isAssignableAndCapableToAssign$, this.allowedRequestTaskActions$]).pipe(
+    map(
+      ([isAssignableAndCapableToAssign, allowedRequestTaskActions]) =>
+        isAssignableAndCapableToAssign || hasRequestTaskAllowedActions(allowedRequestTaskActions),
+    ),
+  );
+
+  taskId$ = this.store.pipe(
+    filter((state) => !!state.requestTaskItem),
+    map((state) => state.requestTaskItem.requestTask.id),
+  );
+
+  requestType$ = this.store.pipe(map((state) => state.requestType));
+
+  competentAuthority$ = this.store.pipe(map((state) => state.competentAuthority));
+
+  requestTaskType$ = this.store.pipe(
+    filter((state) => !!state.requestTaskItem),
+    map((state) => state.requestTaskItem.requestTask.type),
+  );
+
+  isAviation$: Observable<boolean> = this.authStore.pipe(
+    selectCurrentDomain,
+    takeUntil(this.destroy$),
+    map((v) => v === 'AVIATION'),
+  );
+
   constructor(
     readonly store: PaymentStore,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly requestItemsService: RequestItemsService,
     private readonly requestActionsService: RequestActionsService,
+    public readonly authStore: AuthStore,
+    private readonly destroy$: DestroySubject,
   ) {}
 
   makePayment(): void {
-    this.router.navigate(['../options'], { relativeTo: this.route });
+    this.router.navigate(['options'], { relativeTo: this.route });
   }
 
   private sortTimeline(res: RequestActionInfoDTO[]): RequestActionInfoDTO[] {

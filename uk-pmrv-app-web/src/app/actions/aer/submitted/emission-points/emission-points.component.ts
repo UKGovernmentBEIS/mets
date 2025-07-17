@@ -2,15 +2,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { map, Observable } from 'rxjs';
 
-import { GovukTableColumn } from 'govuk-components';
-
-import {
-  AerApplicationCompletedRequestActionPayload,
-  AerApplicationSubmittedRequestActionPayload,
-  EmissionPoint,
-} from 'pmrv-api';
+import { AerApplicationCompletedRequestActionPayload, AerApplicationSubmittedRequestActionPayload } from 'pmrv-api';
 
 import { AerService } from '../../core/aer.service';
+import { pointsColumns } from './emission-points';
 
 @Component({
   selector: 'app-emission-points',
@@ -22,10 +17,7 @@ import { AerService } from '../../core/aer.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionPointsComponent {
-  pointsColumns: GovukTableColumn<EmissionPoint>[] = [
-    { field: 'reference', header: 'Reference', widthClass: 'govuk-!-width-one-half' },
-    { field: 'description', header: 'Description', widthClass: 'govuk-!-width-one-half' },
-  ];
+  pointsColumns = pointsColumns;
   emissionPoints$ = (
     this.aerService.getPayload() as Observable<
       AerApplicationSubmittedRequestActionPayload | AerApplicationCompletedRequestActionPayload

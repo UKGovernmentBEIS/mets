@@ -7,15 +7,12 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service.CalculatePermitNotificationReviewExpirationDateService;
+import uk.gov.pmrv.api.workflow.utils.DateUtils;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Optional;
 
-import static java.time.temporal.ChronoUnit.DAYS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,11 +23,8 @@ class CalculatePermitNotificationReviewExpirationDateServiceTest {
 
     @Test
     void expirationDate() {
-        final Date expected = Date.from(LocalDate.now()
-                .plus(14, DAYS).
-                atTime(LocalTime.MIN)
-                .atZone(ZoneId.systemDefault())
-                .toInstant());
+        final Date expected = DateUtils.atEndOfDay(LocalDate.now()
+                .plusDays(14));
 
         // Invoke
         Optional<Date> actual = service.expirationDate();

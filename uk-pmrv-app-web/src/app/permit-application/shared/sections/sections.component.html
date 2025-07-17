@@ -281,9 +281,85 @@
       <li
         app-task-item
         [link]="'./monitoring-methodology-plan/summary'"
-        linkText="Monitoring Methodology Plan"
+        linkText="Provide a monitoring methodology plan"
         [status]="'monitoringMethodologyPlans' | taskStatus | async"
       ></li>
+      @if (isTask$ | async) {
+        @if (showMMPTasks$ | async) {
+          <li
+            app-task-item
+            [link]="'mmp-installation-description/summary'"
+            linkText="Installation description"
+            [status]="'mmpInstallationDescription' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            [link]="'mmp-sub-installations'"
+            linkText="Sub-installations"
+            [status]="'MMP_SUB_INSTALLATION' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            [link]="'mmp-methods/summary'"
+            linkText="Methods at installation level"
+            [status]="'mmpMethods' | taskStatus | async"
+          ></li>
+
+          <li
+            app-task-item
+            [link]="'mmp-procedures/summary'"
+            linkText="Procedures"
+            [status]="'mmpProcedures' | taskStatus | async"
+          ></li>
+          <li
+            app-task-item
+            [link]="'mmp-energy-flows/summary'"
+            linkText="Energy flows"
+            [status]="'mmpEnergyFlows' | taskStatus | async"
+          ></li>
+        }
+      } @else {
+        @if ((digitizedPlans$ | async)?.installationDescription) {
+          <li
+            app-task-item
+            [link]="'mmp-installation-description/summary'"
+            linkText="Installation description"
+            [status]="'mmpInstallationDescription' | taskStatus | async"
+          ></li>
+        }
+        @if ((digitizedPlans$ | async)?.subInstallations) {
+          <li
+            app-task-item
+            [link]="'mmp-sub-installations'"
+            linkText="Sub-installations"
+            [status]="'MMP_SUB_INSTALLATION' | taskStatus | async"
+          ></li>
+        }
+        @if ((digitizedPlans$ | async)?.methodTask) {
+          <li
+            app-task-item
+            [link]="'mmp-methods/summary'"
+            linkText="Methods at installation level"
+            [status]="'mmpMethods' | taskStatus | async"
+          ></li>
+        }
+        @if ((digitizedPlans$ | async)?.procedures) {
+          <li
+            app-task-item
+            [link]="'mmp-procedures/summary'"
+            linkText="Procedures"
+            [status]="'mmpProcedures' | taskStatus | async"
+          ></li>
+        }
+        @if ((digitizedPlans$ | async)?.energyFlows) {
+          <li
+            app-task-item
+            [link]="'mmp-energy-flows/summary'"
+            linkText="Energy flows"
+            [status]="'mmpEnergyFlows' | taskStatus | async"
+          ></li>
+        }
+      }
     </ul>
   </li>
   <li app-task-section title="Additional information">

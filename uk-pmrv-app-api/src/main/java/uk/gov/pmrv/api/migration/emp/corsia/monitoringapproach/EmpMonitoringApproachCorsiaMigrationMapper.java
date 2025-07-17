@@ -1,13 +1,13 @@
 package uk.gov.pmrv.api.migration.emp.corsia.monitoringapproach;
 
-import java.util.UUID;
-
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.CertEmissionsType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.CertMonitoringApproach;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.EmissionsMonitoringApproachTypeCorsia;
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproach;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.emissionsmonitoringapproach.FuelMonitoringApproachCorsia;
 import uk.gov.pmrv.api.migration.MigrationConstants;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachment;
+
+import java.util.UUID;
 
 public class EmpMonitoringApproachCorsiaMigrationMapper {
 
@@ -22,7 +22,7 @@ public class EmpMonitoringApproachCorsiaMigrationMapper {
     private static EmpMigrationMonitoringApproachCorsia createFuelMonitoringApproach() {
 
         return EmpMigrationMonitoringApproachCorsia.builder()
-                .monitoringApproach(FuelMonitoringApproach.builder()
+                .monitoringApproach(FuelMonitoringApproachCorsia.builder()
                         .monitoringApproachType(EmissionsMonitoringApproachTypeCorsia.FUEL_USE_MONITORING)
                         .build())
                 .build();

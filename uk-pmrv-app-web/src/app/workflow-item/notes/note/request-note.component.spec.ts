@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { SharedModule } from '@shared/shared.module';
-import { ActivatedRouteStub, asyncData, BasePage, MockType } from '@testing';
+import { ActivatedRouteStub, asyncData, BasePage, MockType, RouterStubComponent } from '@testing';
 
 import { RequestNotesService } from 'pmrv-api';
 
@@ -77,7 +77,10 @@ describe('RequestNoteComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RequestNoteComponent],
-      imports: [RouterTestingModule, SharedModule],
+      imports: [
+        RouterTestingModule.withRoutes([{ path: 'workflows/:workflowId/:requestId', component: RouterStubComponent }]),
+        SharedModule,
+      ],
       providers: [
         DestroySubject,
         { provide: RequestNotesService, useValue: requestNotesService },

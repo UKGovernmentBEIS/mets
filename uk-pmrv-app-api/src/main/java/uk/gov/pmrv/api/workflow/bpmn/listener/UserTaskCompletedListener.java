@@ -1,10 +1,9 @@
 package uk.gov.pmrv.api.workflow.bpmn.listener;
 
+import lombok.RequiredArgsConstructor;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.workflow.request.application.taskcompleted.RequestTaskCompleteService;
 
 /**

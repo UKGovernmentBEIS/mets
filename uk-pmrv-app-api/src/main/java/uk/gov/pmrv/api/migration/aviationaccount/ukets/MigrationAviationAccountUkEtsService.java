@@ -1,14 +1,10 @@
 package uk.gov.pmrv.api.migration.aviationaccount.ukets;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
@@ -17,15 +13,24 @@ import uk.gov.pmrv.api.migration.aviationaccount.common.AviationEmitter;
 import uk.gov.pmrv.api.migration.aviationaccount.common.AviationEmitterMapper;
 import uk.gov.pmrv.api.migration.aviationaccount.common.MigrationAviationAccountService;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 @Service
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
-@RequiredArgsConstructor
 public class MigrationAviationAccountUkEtsService extends MigrationBaseService {
 
 	private final JdbcTemplate migrationJdbcTemplate;
 	private final MigrationAviationAccountService migrationAviationAccountService;
 
-    private static final String QUERY_BASE  = """
+	public MigrationAviationAccountUkEtsService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+												MigrationAviationAccountService migrationAviationAccountService) {
+		this.migrationJdbcTemplate = migrationJdbcTemplate;
+		this.migrationAviationAccountService = migrationAviationAccountService;
+	}
+
+	private static final String QUERY_BASE  = """
         with XMLNAMESPACES (
 		    'urn:www-toplev-com:officeformsofd' AS fd, 'http://www.w3.org/2001/XMLSchema' as xsd
 		), scopes as (

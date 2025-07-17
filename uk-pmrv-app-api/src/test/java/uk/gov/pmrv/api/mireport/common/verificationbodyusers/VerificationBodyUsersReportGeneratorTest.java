@@ -1,22 +1,16 @@
 package uk.gov.pmrv.api.mireport.common.verificationbodyusers;
 
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.mireport.domain.EmptyMiReportParams;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.mireport.common.MiReportType;
-import uk.gov.pmrv.api.mireport.common.domain.dto.EmptyMiReportParams;
-import uk.gov.pmrv.api.mireport.common.verificationbodyusers.VerificationBodyUser;
-import uk.gov.pmrv.api.mireport.common.verificationbodyusers.VerificationBodyUsersMiReportResult;
-import uk.gov.pmrv.api.mireport.common.verificationbodyusers.VerificationBodyUsersReportGeneratorHandlerHandler;
-import uk.gov.pmrv.api.mireport.common.verificationbodyusers.VerificationBodyUsersRepository;
-import uk.gov.pmrv.api.mireport.common.verificationbodyusers.VerifierUserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +37,7 @@ class VerificationBodyUsersReportGeneratorTest {
 
     @Test
     void getReportType() {
-        assertEquals(MiReportType.LIST_OF_VERIFICATION_BODY_USERS, generator.getReportType());
+        assertEquals("LIST_OF_VERIFICATION_BODY_USERS", generator.getReportType());
     }
 
     @Test
@@ -63,7 +57,7 @@ class VerificationBodyUsersReportGeneratorTest {
                 (VerificationBodyUsersMiReportResult) generator.generateMiReport(entityManager, reportParams);
 
         assertNotNull(miReportResult);
-        assertEquals(MiReportType.LIST_OF_VERIFICATION_BODY_USERS, miReportResult.getReportType());
+        assertEquals("LIST_OF_VERIFICATION_BODY_USERS", miReportResult.getReportType());
         assertEquals(1, miReportResult.getResults().size());
         VerificationBodyUser verificationBodyUser = miReportResult.getResults().get(0);
         assertEquals(userId, verificationBodyUser.getUserId());

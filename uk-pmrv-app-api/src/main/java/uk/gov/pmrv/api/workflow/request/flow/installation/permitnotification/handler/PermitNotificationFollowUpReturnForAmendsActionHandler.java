@@ -1,17 +1,9 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.handler;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -31,6 +23,13 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.dom
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service.PermitNotificationValidatorService;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class PermitNotificationFollowUpReturnForAmendsActionHandler implements RequestTaskActionHandler<RequestTaskActionEmptyPayload> {
@@ -44,7 +43,7 @@ public class PermitNotificationFollowUpReturnForAmendsActionHandler implements R
     @Transactional
     public void process(final Long requestTaskId,
         final RequestTaskActionType requestTaskActionType,
-        final PmrvUser pmrvUser,
+        final AppUser appUser,
         final RequestTaskActionEmptyPayload payload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -60,7 +59,7 @@ public class PermitNotificationFollowUpReturnForAmendsActionHandler implements R
         requestPayload.setFollowUpReviewSectionsCompleted(taskPayload.getReviewSectionsCompleted());
 
         // create timeline action
-        this.createRequestAction(requestTask.getRequest(), pmrvUser, taskPayload);
+        this.createRequestAction(requestTask.getRequest(), appUser, taskPayload);
 
         final Map<String, Object> variables = new HashMap<>();
         variables.put(BpmnProcessConstants.REVIEW_OUTCOME, ReviewOutcome.AMENDS_NEEDED);
@@ -68,7 +67,7 @@ public class PermitNotificationFollowUpReturnForAmendsActionHandler implements R
     }
 
     private void createRequestAction(final Request request,
-        final PmrvUser pmrvUser,
+        final AppUser appUser,
         final PermitNotificationFollowUpApplicationReviewRequestTaskPayload taskPayload) {
 
         final PermitNotificationFollowupRequiredChangesDecisionDetails reviewDecisionDetails =
@@ -93,7 +92,7 @@ public class PermitNotificationFollowUpReturnForAmendsActionHandler implements R
         requestService.addActionToRequest(request,
             actionPayload,
             RequestActionType.PERMIT_NOTIFICATION_FOLLOW_UP_RETURNED_FOR_AMENDS,
-            pmrvUser.getUserId());
+            appUser.getUserId());
     }
 
     @Override

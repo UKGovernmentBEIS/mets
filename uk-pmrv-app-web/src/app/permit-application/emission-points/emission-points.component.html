@@ -11,18 +11,10 @@
         You have added {{ emissionPoints.length }} emission {{ emissionPoints.length > 1 ? 'points' : 'point' }}
       </h2>
 
-      <ng-container *ngFor="let emissionPoint of emissionPoints">
-        <dl appGroupedSummaryList govuk-summary-list>
-          <div govukSummaryListRow>
-            <dt govukSummaryListRowKey>Emission point</dt>
-            <dd govukSummaryListRowValue>{{ emissionPoint.reference }} {{ emissionPoint.description }}</dd>
-            <dd govukSummaryListRowActions *ngIf="(store.isEditable$ | async) === true">
-              <a [routerLink]="emissionPoint.id" govukLink>Change</a> |
-              <a [routerLink]="['delete', emissionPoint.id]" govukLink>Delete</a>
-            </dd>
-          </div>
-        </dl>
-      </ng-container>
+      <app-emission-points-table
+        [data]="'emissionPoints' | task | async"
+        [isEditable]="store.isEditable$ | async"
+      ></app-emission-points-table>
 
       <ng-container *ngIf="(store.isEditable$ | async) === true">
         <button govukSecondaryButton routerLink="add" type="button">Add another emission point</button>

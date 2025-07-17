@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, map, mergeMap, Observable, of } from 'rxjs';
 
-import { empQuery } from '@aviation/request-task/emp/shared/emp.selectors';
 import { empCorsiaQuery } from '@aviation/request-task/emp/shared/emp-corsia.selectors';
 import { EmpReviewDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-review-decision-group/emp-review-decision-group.component';
 import { EmpVariationRegulatorLedDecisionGroupComponent } from '@aviation/request-task/emp/shared/emp-variation-regulator-led-decision-group/emp-variation-regulator-led-decision-group.component';
@@ -19,20 +18,29 @@ import {
   showVariationRegLedDecisionComponent,
   showVariationReviewDecisionComponent,
 } from '@aviation/request-task/util';
-import { MonitoringApproachSummaryTemplateComponent } from '@aviation/shared/components/emp-corsia/monitoring-approach-summary-template/monitoring-approach-summary-template.component';
+import { MonitoringApproachCorsiaSummaryTemplateComponent } from '@aviation/shared/components/emp-corsia/monitoring-approach-summary-template/monitoring-approach-summary-template.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
 
-import { ManagementProceduresCorsiaFormProvider } from '../../management-procedures/management-procedures-form.provider';
-import { MonitoringApproachCorsiaValues } from '../monitoring-approach-form.provider';
+import { CertMonitoringApproach } from 'pmrv-api';
+
+import {
+  MonitoringApproachCorsiaFormProvider,
+  MonitoringApproachCorsiaValues,
+} from '../monitoring-approach-form.provider';
 
 interface ViewModel {
   pageHeader: string;
   isEditable: boolean;
   data: MonitoringApproachCorsiaValues;
+  originalData: MonitoringApproachCorsiaValues;
   hideSubmit: boolean;
   dataFlowDiagramFile: {
+    fileName: string;
+    downloadUrl: string;
+  }[];
+  originalDataFlowDiagramFile: {
     fileName: string;
     downloadUrl: string;
   }[];
@@ -49,7 +57,7 @@ interface ViewModel {
   imports: [
     SharedModule,
     ReturnToLinkComponent,
-    MonitoringApproachSummaryTemplateComponent,
+    MonitoringApproachCorsiaSummaryTemplateComponent,
     NgFor,
     NgForOf,
     EmpVariationReviewDecisionGroupComponent,
@@ -65,7 +73,7 @@ export class MonitoringSummaryComponent {
     this.store.pipe(requestTaskQuery.selectRequestTaskType),
     this.store.pipe(requestTaskQuery.selectIsEditable),
     this.store.pipe(empCorsiaQuery.selectStatusForTask('emissionsMonitoringApproach')),
-    this.store.pipe(empQuery.selectOriginalEmpContainer),
+    this.store.pipe(empCorsiaQuery.selectOriginalEmpContainer),
   ]).pipe(
     map(([type, isEditable, taskStatus, originalEmpContainer]) => {
       return {
@@ -77,22 +85,45 @@ export class MonitoringSummaryComponent {
           ['complete', 'cannot start yet'].includes(taskStatus) ||
           variationSubmitRegulatorLedRequestTaskTypes.includes(type),
         dataFlowDiagramFile:
-          (this.formProvider.getFormValue() as any)?.supportingEvidenceFiles?.map((doc) => {
+          this.formProvider.simplifiedApproachForm?.getRawValue()?.supportingEvidenceFiles?.map((doc) => {
             return {
-              fileName: this.store.empCorsiaDelegate.payload.empAttachments[doc],
-              downloadUrl: `${this.store.empCorsiaDelegate.baseFileAttachmentDownloadUrl}/${doc}`,
+              fileName: doc.file.name,
+              downloadUrl: `${this.store.empCorsiaDelegate.baseFileAttachmentDownloadUrl}/${doc.uuid}`,
             };
           }) ?? [],
         showDecision: showReviewDecisionComponent.includes(type),
         showDiff: !!originalEmpContainer,
         showVariationDecision: showVariationReviewDecisionComponent.includes(type),
         showVariationRegLedDecision: showVariationRegLedDecisionComponent.includes(type),
+        originalData: {
+          emissionsMonitoringApproach: {
+            monitoringApproachType:
+              originalEmpContainer?.emissionsMonitoringPlan.emissionsMonitoringApproach.monitoringApproachType,
+            certEmissionsType: (originalEmpContainer?.emissionsMonitoringPlan.emissionsMonitoringApproach as any)
+              ?.certEmissionsType,
+          },
+          simplifiedApproach: {
+            explanation: (originalEmpContainer?.emissionsMonitoringPlan.emissionsMonitoringApproach as any)
+              ?.explanation,
+            supportingEvidenceFiles: (originalEmpContainer?.emissionsMonitoringPlan.emissionsMonitoringApproach as any)
+              ?.supportingEvidenceFiles,
+          },
+        },
+        originalDataFlowDiagramFile:
+          (
+            originalEmpContainer?.emissionsMonitoringPlan.emissionsMonitoringApproach as CertMonitoringApproach
+          )?.supportingEvidenceFiles?.map((doc) => {
+            return {
+              fileName: this.store.empCorsiaDelegate.payload.empAttachments[doc],
+              downloadUrl: `${this.store.empCorsiaDelegate.baseFileAttachmentDownloadUrl}/${doc}`,
+            };
+          }) ?? [],
       };
     }),
   );
 
   constructor(
-    @Inject(TASK_FORM_PROVIDER) private formProvider: ManagementProceduresCorsiaFormProvider,
+    @Inject(TASK_FORM_PROVIDER) private formProvider: MonitoringApproachCorsiaFormProvider,
     private store: RequestTaskStore,
     private pendingRequestService: PendingRequestService,
     private router: Router,

@@ -8,7 +8,7 @@
           <ng-template let-column="column" let-row="row" let-index="index">
             <ng-container [ngSwitch]="column.field">
               <ng-container *ngSwitchCase="'category'">
-                <a govukLink [routerLink]="['../../nitrous-oxide/category-tier', index]">
+                <ng-container *ngIf="showOriginal; else currentCategory">
                   <ng-container
                     *ngIf="
                       row?.emissionPointCategory?.emissionPoint
@@ -16,13 +16,25 @@
                         | async as emissionPoint;
                       else noEmissionPoint
                     "
+                    >{{ emissionPoint | tierEmissionPointName: row.emissionPointCategory }}</ng-container
                   >
-                    {{ row | emissionPointCategoryName | async }}
-                  </ng-container>
-                  <ng-template #noEmissionPoint>
-                    UNDEFINED: {{ row?.emissionPointCategory?.categoryType | categoryTypeName }}
-                  </ng-template>
-                </a>
+                </ng-container>
+                <ng-template #currentCategory>
+                  <a govukLink [routerLink]="['../../nitrous-oxide/category-tier', index]">
+                    <ng-container
+                      *ngIf="
+                        row?.emissionPointCategory?.emissionPoint
+                          | findEmissionPoint: !showOriginal
+                          | async as emissionPoint;
+                        else noEmissionPoint
+                      "
+                      >{{ emissionPoint | tierEmissionPointName: row.emissionPointCategory }}</ng-container
+                    >
+                  </a>
+                </ng-template>
+                <ng-template #noEmissionPoint>
+                  UNDEFINED: {{ row?.emissionPointCategory?.categoryType | categoryTypeName }}
+                </ng-template>
               </ng-container>
               <ng-container *ngSwitchCase="'emissions'">
                 {{ row?.emissionPointCategory?.annualEmittedCO2Tonnes | number }} t
@@ -31,12 +43,19 @@
                 {{ row?.measuredEmissions?.tier | appliedTier }}
               </ng-container>
               <ng-container *ngSwitchCase="'status'">
-                <govuk-tag
-                  [color]="'MEASUREMENT_N2O_Category_Tier' | taskStatus: index | async | tagColor"
-                  class="app-task-list__tag"
-                >
-                  {{ 'MEASUREMENT_N2O_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
-                </govuk-tag>
+                <ng-container *ngIf="!showOriginal; else originalStatus">
+                  <govuk-tag
+                    [color]="'MEASUREMENT_N2O_Category_Tier' | taskStatus: index | async | tagColor"
+                    class="app-task-list__tag"
+                  >
+                    {{ 'MEASUREMENT_N2O_Category_Tier' | taskStatus: index | async | i18nSelect: statusMap }}
+                  </govuk-tag>
+                </ng-container>
+                <ng-template #originalStatus>
+                  <govuk-tag [color]="'complete' | tagColor" class="app-task-list__tag">
+                    {{ 'complete' | i18nSelect: statusMap }}
+                  </govuk-tag>
+                </ng-template>
               </ng-container>
             </ng-container>
           </ng-template>

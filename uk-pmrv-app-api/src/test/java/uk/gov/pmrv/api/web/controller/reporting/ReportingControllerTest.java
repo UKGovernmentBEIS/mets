@@ -15,11 +15,14 @@ import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationpfc.PFCCalculationMethod;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamType;
 import uk.gov.pmrv.api.reporting.domain.ActivityDataMeasurementUnit;
@@ -35,11 +38,8 @@ import uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.calculati
 import uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.measurement.co2.MeasurementCO2EmissionsCalculationService;
 import uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.measurement.n2o.MeasurementN2OEmissionsCalculationService;
 import uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.pfc.PfcEmissionsCalculationService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -73,7 +73,7 @@ class ReportingControllerTest {
     private PfcEmissionsCalculationService pfcEmissionsCalculationService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -96,7 +96,7 @@ class ReportingControllerTest {
 
         mockMvc = MockMvcBuilders.standaloneSetup(reportingController)
             .setControllerAdvice(new ExceptionControllerAdvice())
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .addFilters(new FilterChainProxy(Collections.emptyList()))
             .build();
 
@@ -249,17 +249,17 @@ class ReportingControllerTest {
 
     @Test
     void calculateEmissions_forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         EmissionsCalculationParamsDTO calculationParams = EmissionsCalculationParamsDTO.builder()
             .sourceStreamType(SourceStreamType.COKE_MASS_BALANCE)
             .activityData(BigDecimal.ONE)
             .activityDataMeasurementUnit(ActivityDataMeasurementUnit.TONNES)
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR});
+            .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR});
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post(REPORTING_BASE_CONTROLLER_PATH + "/calculation/calculate-emissions")
@@ -272,7 +272,7 @@ class ReportingControllerTest {
 
     @Test
     void calculateMeasurementCO2Emissions_Forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         MeasurementEmissionsCalculationParamsDTO measurementCO2EmissionsCalculationParamsDTO =
             MeasurementEmissionsCalculationParamsDTO.builder()
                 .annualHourlyAverageGHGConcentration(BigDecimal.ONE)
@@ -282,10 +282,10 @@ class ReportingControllerTest {
                 .annualHourlyAverageFlueGasFlow(BigDecimal.ONE)
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR});
+            .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR});
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post(REPORTING_BASE_CONTROLLER_PATH + "/measurement/co2/calculate-emissions")
@@ -298,7 +298,7 @@ class ReportingControllerTest {
 
     @Test
     void calculateMeasurementN2OEmissions_Forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         MeasurementEmissionsCalculationParamsDTO measurementN2OEmissionsCalculationParamsDTO =
             MeasurementEmissionsCalculationParamsDTO.builder()
                 .annualHourlyAverageGHGConcentration(BigDecimal.ONE)
@@ -308,10 +308,10 @@ class ReportingControllerTest {
                 .annualHourlyAverageFlueGasFlow(BigDecimal.ONE)
                 .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR});
+            .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR});
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post(REPORTING_BASE_CONTROLLER_PATH + "/measurement/n2o/calculate-emissions")
@@ -324,7 +324,7 @@ class ReportingControllerTest {
 
     @Test
     void calculatePfcEmissions_Forbidden() throws Exception {
-        PmrvUser pmrvUser = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         PfcEmissionsCalculationParamsDTO pfcEmissionsCalculationParamsDTO = PfcEmissionsCalculationParamsDTO.builder()
             .calculationMethod(PFCCalculationMethod.SLOPE)
             .totalPrimaryAluminium(BigDecimal.ONE)
@@ -338,10 +338,10 @@ class ReportingControllerTest {
                 .build())
             .build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{RoleType.OPERATOR});
+            .evaluate(appUser, new String[]{RoleTypeConstants.OPERATOR});
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post(REPORTING_BASE_CONTROLLER_PATH + "/calculation/pfc/calculate-emissions")

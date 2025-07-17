@@ -1,8 +1,8 @@
 package uk.gov.pmrv.api.account.service.validator;
 
-import java.util.Map;
-
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
+
+import java.util.Map;
 
 public interface AccountContactTypeUpdateValidator {
     

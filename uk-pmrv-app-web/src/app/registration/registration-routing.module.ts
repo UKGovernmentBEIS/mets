@@ -49,8 +49,8 @@ const routes: Routes = [
       {
         path: '',
         canActivate: [ClaimOperatorGuard],
-        resolve: { installation: ClaimOperatorGuard },
-        data: { pageTitle: 'You have been added as a user to this installation account' },
+        resolve: { operatorInvitationResultData: ClaimOperatorGuard },
+        data: { pageTitle: 'You have been added as a user to this account' },
         component: InvitationComponent,
         pathMatch: 'full',
       },

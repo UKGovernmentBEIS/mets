@@ -7,6 +7,6 @@ export function resolveStatusBySectionsCompleted(
   return doalSectionsCompleted[section] === true
     ? 'complete'
     : doalSectionsCompleted[section] === false
-    ? 'in progress'
-    : 'not started';
+      ? 'in progress'
+      : 'not started';
 }

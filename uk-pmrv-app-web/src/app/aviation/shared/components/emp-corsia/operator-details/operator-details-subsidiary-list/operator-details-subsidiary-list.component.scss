@@ -12,3 +12,20 @@
     cursor: pointer;
   }
 }
+
+::ng-deep .govuk-summary-list__row {
+  display: flex !important;
+  width: 100%;
+  border-bottom: 1px solid #b1b4b6;
+}
+
+::ng-deep .govuk-summary-list__key,
+::ng-deep .govuk-summary-list__value,
+::ng-deep .govuk-summary-list__actions {
+  flex-grow: 1;
+  border-bottom: none;
+  margin: 0;
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+}

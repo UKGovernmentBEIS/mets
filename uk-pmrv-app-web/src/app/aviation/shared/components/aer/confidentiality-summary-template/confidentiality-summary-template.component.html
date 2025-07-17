@@ -17,7 +17,7 @@
         Emission data you are requesting should not be published and reasons why disclosure of this data would harm your
         commercial interests
       </dt>
-      <dd govukSummaryListRowValue>{{ confidentialityData?.totalEmissionsExplanation }}</dd>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ confidentialityData?.totalEmissionsExplanation }}</dd>
 
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>
@@ -55,7 +55,7 @@
         State pair data you are requesting should not be published and reasons why disclosure of this data would harm
         your commercial interests
       </dt>
-      <dd govukSummaryListRowValue>{{ confidentialityData?.aggregatedStatePairDataExplanation }}</dd>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ confidentialityData?.aggregatedStatePairDataExplanation }}</dd>
 
       <dd govukSummaryListRowActions *ngIf="isEditable">
         <a govukLink [routerLink]="'../'" [queryParams]="queryParams">Change</a>

@@ -7,9 +7,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerVerificationData;
 import uk.gov.pmrv.api.aviationreporting.ukets.EmpUkEtsOriginatedData;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEts;
+import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.AviationAerUkEtsSubmittedEmissions;
+import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationData;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayloadVerifiable;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerRequestPayload;
@@ -44,10 +45,12 @@ public class AviationAerUkEtsRequestPayload extends AviationAerRequestPayload
     private Map<AviationAerUkEtsReviewGroup, AerReviewDecision> reviewGroupDecisions = new EnumMap<>(AviationAerUkEtsReviewGroup.class);
 
     private EmpUkEtsOriginatedData empOriginatedData;
-    
+
+    private AviationAerUkEtsSubmittedEmissions submittedEmissions;
+
     @Override
     @JsonIgnore
-    public AviationAerVerificationData getVerificationData() {
+    public AviationAerUkEtsVerificationData getVerificationData() {
         return verificationReport == null ? null : verificationReport.getVerificationData();
     }
 }

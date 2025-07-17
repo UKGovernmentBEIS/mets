@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { EmissionPointsTableComponent } from '@shared/components/emission-points/emission-points-table/emission-points-table.component';
+
 import { BasePage } from '../../../../testing';
 import { PermitIssuanceStore } from '../../../permit-issuance/store/permit-issuance.store';
 import { SharedModule } from '../../../shared/shared.module';
@@ -18,8 +20,8 @@ describe('EmissionPointsSummaryComponent', () => {
 
   class Page extends BasePage<EmissionPointsSummaryComponent> {
     get emissionPoints() {
-      return this.queryAll<HTMLDListElement>('dl').map((emissionPoint) =>
-        Array.from(emissionPoint.querySelectorAll('dd')).map((dd) => dd.textContent.trim()),
+      return this.queryAll<HTMLDListElement>('tr').map((naceCode) =>
+        Array.from(naceCode.querySelectorAll('td')).map((dd) => dd.textContent.trim()),
       );
     }
   }
@@ -27,7 +29,7 @@ describe('EmissionPointsSummaryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [EmissionPointsSummaryComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [RouterTestingModule, SharedModule, SharedPermitModule, EmissionPointsTableComponent],
       providers: [
         {
           provide: PermitApplicationStore,
@@ -51,6 +53,10 @@ describe('EmissionPointsSummaryComponent', () => {
   });
 
   it('should display the list of data', () => {
-    expect(page.emissionPoints).toEqual([['The big Ref Emission point 1'], ['Yet another reference Point taken!']]);
+    expect(page.emissionPoints).toEqual([
+      [],
+      ['The big Ref', 'Emission point 1', '', ''],
+      ['Yet another reference', 'Point taken!', '', ''],
+    ]);
   });
 });

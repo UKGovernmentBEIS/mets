@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -31,14 +31,14 @@ public class AviationDreUkEtsRequestPeerReviewActionHandler implements RequestTa
     private final PeerReviewerTaskAssignmentValidator peerReviewerTaskAssignmentValidator;
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser,
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser,
                         PeerReviewRequestTaskActionPayload taskActionPayload) {
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         final Request request = requestTask.getRequest();
-        final String userId = pmrvUser.getUserId();
+        final String userId = appUser.getUserId();
         final String peerReviewer = taskActionPayload.getPeerReviewer();
 
-        peerReviewerTaskAssignmentValidator.validate(RequestTaskType.AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW, peerReviewer, pmrvUser);
+        peerReviewerTaskAssignmentValidator.validate(RequestTaskType.AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW, peerReviewer, appUser);
 
         aviationDreApplyService.requestPeerReview(requestTask, peerReviewer);
         requestService.addActionToRequest(request, null, RequestActionType.AVIATION_DRE_UKETS_PEER_REVIEW_REQUESTED, userId);

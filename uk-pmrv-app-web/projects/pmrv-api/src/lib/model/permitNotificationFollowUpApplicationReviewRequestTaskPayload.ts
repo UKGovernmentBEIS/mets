@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -22,6 +22,7 @@ export interface PermitNotificationFollowUpApplicationReviewRequestTaskPayload e
     | 'TEMPORARY_FACTOR'
     | 'TEMPORARY_CHANGE'
     | 'TEMPORARY_SUSPENSION'
+    | 'CESSATION'
     | 'NON_SIGNIFICANT_CHANGE'
     | 'OTHER_FACTOR';
   submissionDate: string;

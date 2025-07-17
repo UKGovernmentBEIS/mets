@@ -8,17 +8,16 @@
       <govuk-error-summary *ngIf="vm.isSummaryDisplayed" [form]="searchForm"></govuk-error-summary>
 
       <app-page-heading size="xl">Accounts</app-page-heading>
-      <span class="govuk-hint">Enter ID, name or code</span>
 
       <div class="govuk-grid-row">
         <form (ngSubmit)="onSearch()" [formGroup]="searchForm" id="search-form">
           <div class="govuk-grid-column-full">
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-three-quarters">
-                <div formControlName="term" govuk-text-input></div>
+                <div formControlName="term" govuk-text-input label="Enter ID, name or code"></div>
               </div>
               <div class="govuk-grid-column-one-quarter">
-                <button appPendingButton govukButton type="submit">Search</button>
+                <button appPendingButton govukButton type="submit" class="govuk-!-margin-top-6">Search</button>
               </div>
             </div>
           </div>
@@ -26,14 +25,12 @@
             <ng-container *ngIf="vm.accounts?.length; else noResults">
               <app-accounts-list
                 [accounts]="vm.accounts"
-                (selectAccount)="navigateToAccount($event.id)"
-              ></app-accounts-list>
+                (selectAccount)="navigateToAccount($event.id)"></app-accounts-list>
               <app-pagination
                 *ngIf="vm.total > vm.pageSize"
                 [count]="vm.total"
                 (currentPageChange)="onPageChange($event)"
-                [pageSize]="vm.pageSize"
-              ></app-pagination>
+                [pageSize]="vm.pageSize"></app-pagination>
             </ng-container>
             <ng-template #noResults>
               <div class="govuk-grid-row">

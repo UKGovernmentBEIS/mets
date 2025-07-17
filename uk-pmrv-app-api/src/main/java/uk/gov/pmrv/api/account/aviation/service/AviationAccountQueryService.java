@@ -1,13 +1,12 @@
 package uk.gov.pmrv.api.account.aviation.service;
 
-import static uk.gov.pmrv.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.AviationAccount;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountDTO;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountIdAndNameDTO;
@@ -19,11 +18,14 @@ import uk.gov.pmrv.api.account.aviation.repository.AviationAccountRepository;
 import uk.gov.pmrv.api.account.aviation.transform.AviationAccountMapper;
 import uk.gov.pmrv.api.account.domain.dto.AccountSearchCriteria;
 import uk.gov.pmrv.api.account.service.VerifierAccountAccessByAccountTypeService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -64,16 +66,16 @@ public class AviationAccountQueryService {
                 .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
     }
 
-    public AviationAccountSearchResults getAviationAccountsByUserAndSearchCriteria(PmrvUser user,
+    public AviationAccountSearchResults getAviationAccountsByUserAndSearchCriteria(AppUser user,
                                                                                    AccountSearchCriteria searchCriteria) {
         switch (user.getRoleType()) {
-            case OPERATOR -> {
+            case RoleTypeConstants.OPERATOR -> {
                 return aviationAccountRepository.findByAccountIds(List.copyOf(user.getAccounts()), searchCriteria);
             }
-            case REGULATOR -> {
+            case RoleTypeConstants.REGULATOR -> {
                 return aviationAccountRepository.findByCompAuth(user.getCompetentAuthority(), searchCriteria);
             }
-            case VERIFIER -> {
+            case RoleTypeConstants.VERIFIER -> {
                 final Set<Long> accounts = verifierAccountAccessService.findAuthorizedAccountIds(user, AccountType.AVIATION);
                 return accounts.isEmpty() ?
                     AviationAccountSearchResults.builder().total(0L).accounts(List.of()).build() :
@@ -96,14 +98,15 @@ public class AviationAccountQueryService {
     }
 
     @Transactional
-    public AviationAccountDTO getAviationAccountDTOByIdAndUser(Long accountId, PmrvUser user) {
+    public AviationAccountDTO getAviationAccountDTOByIdAndUser(Long accountId, AppUser user) {
         AviationAccount aviationAccount = getAviationAccountById(accountId);
 
         return switch (user.getRoleType()) {
-            case REGULATOR ->
+            case RoleTypeConstants.REGULATOR ->
                     aviationAccountMapper.toAviationAccountDTO(aviationAccount);
-            case OPERATOR, VERIFIER ->
+            case RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER ->
                     aviationAccountMapper.toAviationAccountDTOIgnoreReportingStatusReason(aviationAccount);
+		default -> throw new IllegalArgumentException("Unexpected value: " + user.getRoleType());
         };
     }
 

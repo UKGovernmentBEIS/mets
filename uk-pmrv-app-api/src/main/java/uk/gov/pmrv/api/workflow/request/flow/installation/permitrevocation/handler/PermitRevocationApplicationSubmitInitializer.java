@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.handler;
 
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -11,6 +10,8 @@ import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandle
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.mapper.PermitRevocationMapper;
 import uk.gov.pmrv.api.workflow.request.flow.payment.service.PaymentDetermineAmountServiceFacade;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor

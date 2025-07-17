@@ -17,17 +17,15 @@ import { OpinionStatement, VirtualSiteVisit } from 'pmrv-api';
   selector: 'app-virtual-visit',
   templateUrl: './virtual-visit.component.html',
   providers: [virtualVisitFormProvider],
-  styles: [
-    `
-      .container {
-        position: relative;
-      }
+  styles: `
+    .container {
+      position: relative;
+    }
 
-      .float-right {
-        float: right;
-      }
-    `,
-  ],
+    .float-right {
+      float: right;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VirtualVisitComponent implements PendingRequest {

@@ -30,7 +30,7 @@ export const EMP_EMISSION_SOURCES_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { breadcrumb: 'Emission sources summary' },
+        data: { breadcrumb: 'Emission sources' },
         loadComponent: () =>
           import('./emission-sources-summary/emission-sources-summary.component').then(
             (c) => c.EmissionSourcesSummaryComponent,

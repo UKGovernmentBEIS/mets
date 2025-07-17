@@ -9,15 +9,22 @@ import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerApplicationRequestVerificationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerSubmitApplicationAmendRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.common.domain.AviationAerCorsiaAnnualOffsettingSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaSaveApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaSaveReviewGroupDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.domain.AviationAerCorsiaSaveApplicationRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.domain.AviationAerCorsiaSubmitApplicationRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.threeyearperiodoffsetting.common.domain.AviationAerCorsia3YearPeriodOffsettingSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.verify.domain.AviationAerCorsiaSaveApplicationVerificationRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.verify.domain.AviationAerCorsiaVerificationReturnToOperatorRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.domain.AviationAerUkEtsSaveApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.domain.AviationAerUkEtsSaveReviewGroupDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.submit.domain.AviationAerUkEtsSaveApplicationRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.submit.domain.AviationAerUkEtsSubmitApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.verify.domain.AviationAerUkEtsSaveApplicationVerificationRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.verify.domain.AviationAerUkEtsVerificationReturnToOperatorRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aviationaccountclosure.domain.AviationAccountClosureSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.doe.corsia.domain.AviationDoECorsiaSubmitSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.submit.domain.AviationDreUkEtsSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.review.domain.EmpIssuanceCorsiaNotifyOperatorForDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.review.domain.EmpIssuanceCorsiaSaveApplicationAmendRequestTaskActionPayload;
@@ -69,19 +76,37 @@ import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComp
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningAmendApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.accountinstallationopening.domain.InstallationAccountOpeningSubmitDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationRequestVerificationRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicationSkipReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerSaveApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerSaveApplicationVerificationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerSaveReviewGroupDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerSubmitApplicationAmendRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerVerificationReturnToOperatorRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirSaveRespondToRegulatorCommentsRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirSaveReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirSubmitRespondToRegulatorCommentsRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationSubmitToVerifierRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationVerificationReturnToOperatorRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationVerificationSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationAmendsSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationAmendsSubmitRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationAmendsSubmitToVerifierRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationRegulatorReviewSaveTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationSubmitToVerifierRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationReturnToOperatorRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitSaveCessationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalSaveAuthorityResponseTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreSaveApplicationRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.audit.domain.InstallationAuditApplicationSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionOperatorRespondSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.onsiteinspection.domain.InstallationOnsiteInspectionApplicationSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveApplicationReviewRequestTaskActionPayload;
@@ -89,6 +114,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveAuth
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveReviewDeterminationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSaveReviewGroupDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerSubmitApplicationAmendRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permanentcessation.domain.PermanentCessationSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceNotifyOperatorForDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceSaveApplicationAmendRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceSaveApplicationReviewRequestTaskActionPayload;
@@ -255,6 +281,9 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
     @JsonSubTypes.Type(value = RequestTaskActionEmptyPayload.class, name = "AER_COMPLETE_REVIEW"),
     @JsonSubTypes.Type(value = AerSaveApplicationAmendRequestTaskActionPayload.class, name = "AER_SAVE_APPLICATION_AMEND_PAYLOAD"),
     @JsonSubTypes.Type(value = AerSubmitApplicationAmendRequestTaskActionPayload.class, name = "AER_SUBMIT_APPLICATION_AMEND_PAYLOAD"),
+    @JsonSubTypes.Type(value = AerApplicationSkipReviewRequestTaskActionPayload.class, name = "AER_SKIP_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = AerVerificationReturnToOperatorRequestTaskActionPayload.class, name = "AER_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD"),
+
 
     @JsonSubTypes.Type(value = DreSaveApplicationRequestTaskActionPayload.class, name = "DRE_SAVE_APPLICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "DRE_SUBMIT_NOTIFY_OPERATOR_PAYLOAD"),
@@ -299,6 +328,42 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
     @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "RETURN_OF_ALLOWANCES_REQUEST_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "RETURN_OF_ALLOWANCES_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
 
+    @JsonSubTypes.Type(value = InstallationAuditApplicationSaveRequestTaskActionPayload.class, name = "INSTALLATION_AUDIT_APPLICATION_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "INSTALLATION_AUDIT_SUBMIT_NOTIFY_OPERATOR_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "INSTALLATION_AUDIT_REQUEST_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "INSTALLATION_AUDIT_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = InstallationInspectionOperatorRespondSaveRequestTaskActionPayload.class, name = "INSTALLATION_AUDIT_OPERATOR_RESPOND_SAVE_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = InstallationOnsiteInspectionApplicationSaveRequestTaskActionPayload.class, name = "INSTALLATION_ONSITE_INSPECTION_APPLICATION_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "INSTALLATION_ONSITE_INSPECTION_SUBMIT_NOTIFY_OPERATOR_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "INSTALLATION_ONSITE_INSPECTION_REQUEST_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "INSTALLATION_ONSITE_INSPECTION_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = InstallationInspectionOperatorRespondSaveRequestTaskActionPayload.class, name = "INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SAVE_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = BDRApplicationSaveRequestTaskActionPayload.class, name = "BDR_APPLICATION_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationSubmitToVerifierRequestTaskActionPayload.class, name = "BDR_SUBMIT_TO_VERIFIER_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationVerificationSaveRequestTaskActionPayload.class, name = "BDR_APPLICATION_SAVE_VERIFICATION_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationVerificationReturnToOperatorRequestTaskActionPayload.class, name = "BDR_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload.class, name = "BDR_SAVE_REGULATOR_REVIEW_GROUP_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationAmendsSaveRequestTaskActionPayload.class, name = "BDR_APPLICATION_AMENDS_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationAmendsSubmitToVerifierRequestTaskActionPayload.class, name = "BDR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationAmendsSubmitRequestTaskActionPayload.class, name = "BDR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationRegulatorReviewSaveTaskActionPayload.class, name = "BDR_REGULATOR_REVIEW_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "BDR_REQUEST_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "BDR_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = PermanentCessationSaveApplicationRequestTaskActionPayload.class, name = "PERMANENT_CESSATION_SAVE_APPLICATION_PAYLOAD"),
+    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "PERMANENT_CESSATION_REQUEST_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "PERMANENT_CESSATION_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = ALRApplicationSaveRequestTaskActionPayload.class, name = "ALR_APPLICATION_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationSubmitToVerifierRequestTaskActionPayload.class, name = "ALR_SUBMIT_TO_VERIFIER_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationVerificationReturnToOperatorRequestTaskActionPayload.class, name = "ALR_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationVerificationSaveRequestTaskActionPayload.class, name = "ALR_APPLICATION_SAVE_VERIFICATION_PAYLOAD"),
+
+
+
     @JsonSubTypes.Type(value = RequestTaskActionEmptyPayload.class, name = "EMPTY_PAYLOAD"),
 
     @JsonSubTypes.Type(value = EmpIssuanceUkEtsSaveApplicationRequestTaskActionPayload.class, name = "EMP_ISSUANCE_UKETS_SAVE_APPLICATION_PAYLOAD"),
@@ -328,12 +393,14 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
     @JsonSubTypes.Type(value = EmpVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload.class, name = "EMP_VARIATION_UKETS_SUBMIT_APPLICATION_AMEND_PAYLOAD"),
 
     @JsonSubTypes.Type(value = AviationAerUkEtsSaveApplicationRequestTaskActionPayload.class, name = "AVIATION_AER_UKETS_SAVE_APPLICATION_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerUkEtsSubmitApplicationRequestTaskActionPayload.class, name = "AVIATION_AER_UKETS_SUBMIT_APPLICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerApplicationRequestVerificationRequestTaskActionPayload.class, name = "AVIATION_AER_UKETS_REQUEST_VERIFICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerApplicationRequestVerificationRequestTaskActionPayload.class, name = "AVIATION_AER_UKETS_REQUEST_AMENDS_VERIFICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerUkEtsSaveApplicationVerificationRequestTaskActionPayload.class, name = "AVIATION_AER_UKETS_SAVE_APPLICATION_VERIFICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerUkEtsSaveReviewGroupDecisionRequestTaskActionPayload.class, name = "AVIATION_AER_UKETS_SAVE_REVIEW_GROUP_DECISION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerUkEtsSaveApplicationAmendRequestTaskActionPayload.class, name = "AVIATION_AER_UKETS_SAVE_APPLICATION_AMEND_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerSubmitApplicationAmendRequestTaskActionPayload.class, name = "AVIATION_AER_UKETS_SUBMIT_APPLICATION_AMEND_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerUkEtsVerificationReturnToOperatorRequestTaskActionPayload.class, name = "AVIATION_AER_UKETS_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD"),
 
     @JsonSubTypes.Type(value = AviationDreUkEtsSaveApplicationRequestTaskActionPayload.class, name = "AVIATION_DRE_UKETS_SAVE_APPLICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "AVIATION_DRE_UKETS_REQUEST_PEER_REVIEW_PAYLOAD"),
@@ -376,11 +443,28 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
     @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "EMP_VARIATION_CORSIA_REVIEW_SUBMIT_PEER_REVIEW_DECISION_REGULATOR_LED_PAYLOAD"),
 
     @JsonSubTypes.Type(value = AviationAerCorsiaSaveApplicationRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_SAVE_APPLICATION_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerCorsiaSubmitApplicationRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_SUBMIT_APPLICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerApplicationRequestVerificationRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_REQUEST_VERIFICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerApplicationRequestVerificationRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_REQUEST_AMENDS_VERIFICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerCorsiaSaveApplicationVerificationRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_SAVE_APPLICATION_VERIFICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerCorsiaSaveReviewGroupDecisionRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_SAVE_REVIEW_GROUP_DECISION_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerCorsiaSaveApplicationAmendRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_SAVE_APPLICATION_AMEND_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerSubmitApplicationAmendRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_SUBMIT_APPLICATION_AMEND_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerCorsiaAnnualOffsettingSaveRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_NOTIFY_OPERATOR_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_REQUEST_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_PEER_REVIEW_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerCorsiaVerificationReturnToOperatorRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = AviationAerCorsia3YearPeriodOffsettingSaveRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_REQUEST_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_PEER_REVIEW_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_NOTIFY_OPERATOR_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = AviationDoECorsiaSubmitSaveRequestTaskActionPayload.class, name = "AVIATION_DOE_CORSIA_SUBMIT_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "AVIATION_DOE_CORSIA_REQUEST_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "AVIATION_DOE_CORSIA_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
 
 })
 @Data

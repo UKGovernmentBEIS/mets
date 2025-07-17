@@ -50,7 +50,7 @@ export const AER_RECOMMENDED_IMPROVEMENTS_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { pageTitle: 'Check your answers', breadcrumb: 'Recommended improvements summary' },
+        data: { pageTitle: 'Check your answers', breadcrumb: 'Recommended improvements' },
         loadComponent: () =>
           import('./recommended-improvements-summary/recommended-improvements-summary.component').then(
             (c) => c.RecommendedImprovementsSummaryComponent,

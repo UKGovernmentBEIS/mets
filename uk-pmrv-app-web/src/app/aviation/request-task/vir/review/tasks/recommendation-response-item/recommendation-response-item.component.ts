@@ -40,8 +40,7 @@ interface ViewModel {
       [attachedFiles]="vm.documentFiles"
       [isEditable]="vm.isEditable"
       [isAviation]="true"
-      (formSubmit)="onSubmit()"
-    ></app-recommendation-response-item-form>
+      (formSubmit)="onSubmit()"></app-recommendation-response-item-form>
     <app-return-to-link></app-return-to-link>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

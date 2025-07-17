@@ -5,16 +5,16 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityUpdateService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.common.domain.transform.AddressMapper;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.verificationbody.domain.VerificationBody;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyEditDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyUpdateDTO;
 import uk.gov.pmrv.api.verificationbody.domain.dto.VerificationBodyUpdateStatusDTO;
 import uk.gov.pmrv.api.verificationbody.domain.event.VerificationBodyStatusDisabledEvent;
-import uk.gov.pmrv.api.verificationbody.domain.event.VerificationBodyStatusEnabledEvent;
 import uk.gov.pmrv.api.verificationbody.enumeration.VerificationBodyStatus;
 import uk.gov.pmrv.api.verificationbody.event.AccreditationEmissionTradingSchemeNotAvailableEvent;
 import uk.gov.pmrv.api.verificationbody.repository.VerificationBodyRepository;
@@ -33,6 +33,7 @@ public class VerificationBodyUpdateService {
     private final AccreditationRefNumValidationService accreditationRefNumValidationService;
     private final ApplicationEventPublisher eventPublisher;
     private final AddressMapper addressMapper = Mappers.getMapper(AddressMapper.class);
+    private final VerifierAuthorityUpdateService verifierAuthorityUpdateService;
 
     @Transactional
     public void updateVerificationBody(VerificationBodyUpdateDTO verificationBodyUpdateDTO) {
@@ -83,10 +84,17 @@ public class VerificationBodyUpdateService {
             throw new BusinessException(ErrorCode.VERIFICATION_BODY_DOES_NOT_EXIST);
         }
 
-        verificationBodies.forEach(verificationBody -> verificationBody.setStatus(VerificationBodyStatus.ACTIVE));
+        Set<Long> idsUpdated = verificationBodies.stream()
+                .filter(vb -> VerificationBodyStatus.ACTIVE != vb.getStatus())
+                .map(vb -> {
+                    vb.setStatus(VerificationBodyStatus.ACTIVE);
+                    return vb.getId();
+                })
+                .collect(Collectors.toSet());
 
-        // Publish event for changing status to ENABLED
-        eventPublisher.publishEvent(new VerificationBodyStatusEnabledEvent(verificationBodyIds));
+        // Event could be used for updating authorities
+        // but direct service call was preferred to avoid introducing dependency from authorization to verification body domain (for the event).
+        verifierAuthorityUpdateService.updateAuthoritiesOnVbActivation(idsUpdated);
     }
 
     private void updateStatusToDisabled(Set<Long> verificationBodyIds) {
@@ -96,10 +104,19 @@ public class VerificationBodyUpdateService {
             throw new BusinessException(ErrorCode.VERIFICATION_BODY_DOES_NOT_EXIST);
         }
 
-        verificationBodies.forEach(verificationBody -> verificationBody.setStatus(VerificationBodyStatus.DISABLED));
+        Set<Long> idsUpdated = verificationBodies.stream()
+                .filter(vb -> VerificationBodyStatus.DISABLED != vb.getStatus())
+                .map(vb -> {
+                    vb.setStatus(VerificationBodyStatus.DISABLED);
+                    return vb.getId();
+                })
+                .collect(Collectors.toSet());
 
-        // Publish event for changing status to DISABLED
-        eventPublisher.publishEvent(new VerificationBodyStatusDisabledEvent(verificationBodyIds));
+        // VerificationBodyStatusDisabledEvent could be used for deleting authorities
+        // but direct service call was preferred to avoid introducing dependency from authorization to verification body domain (for the VerificationBodyStatusDisabledEvent).
+        // On the other hand, event was preferred for notifying the account domain in order to avoid introducing dependency from verification body to account domain.
+        verifierAuthorityUpdateService.updateAuthoritiesOnVbDeactivation(idsUpdated);
+        eventPublisher.publishEvent(new VerificationBodyStatusDisabledEvent(idsUpdated));
     }
 
     private void updateVerificationBodyProperties(VerificationBody vb, VerificationBodyEditDTO vbUpdate) {

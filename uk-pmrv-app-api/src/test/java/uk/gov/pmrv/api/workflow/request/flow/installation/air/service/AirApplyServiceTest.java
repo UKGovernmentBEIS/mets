@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -75,7 +75,7 @@ class AirApplyServiceTest {
     void submitAir() {
 
         final String userId = "userId";
-        final PmrvUser pmrvUser = PmrvUser.builder().userId(userId).build();
+        final AppUser appUser = AppUser.builder().userId(userId).build();
         final Map<Integer, OperatorAirImprovementResponse> operatorImprovementResponses =
             Map.of(1, OperatorAirImprovementYesResponse.builder().proposal("proposal").build());
         final Map<Integer, AirImprovement> airImprovements = Map.of(1, AirImprovementCalculationCO2.builder().build());
@@ -111,7 +111,7 @@ class AirApplyServiceTest {
                 .build();
 
         // Invoke
-        applyService.applySubmitAction(requestTask, pmrvUser);
+        applyService.applySubmitAction(requestTask, appUser);
 
         // Verify
         verify(airSubmitValidator, times(1)).validate(operatorImprovementResponses, airImprovements);

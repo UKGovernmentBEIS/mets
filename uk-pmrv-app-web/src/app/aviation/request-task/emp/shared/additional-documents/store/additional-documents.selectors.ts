@@ -1,9 +1,10 @@
 import { map, OperatorFunction, pipe } from 'rxjs';
 
+import { RequestTaskState } from '@aviation/request-task/store';
+
 import { EmpAdditionalDocuments } from 'pmrv-api';
 
-import { RequestTaskState } from '../../../../store';
-import { empQuery } from '../../../shared/emp.selectors';
+import { empQuery } from '../../emp.selectors';
 
 const selectAdditionalDocuments: OperatorFunction<RequestTaskState, EmpAdditionalDocuments> = pipe(
   empQuery.selectEmissionsMonitoringPlan,

@@ -1,15 +1,16 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.handler;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestTaskActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.domain.PermitVariationSaveDetailsReviewGroupDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.service.PermitVariationReviewService;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -22,7 +23,7 @@ public class PermitVariationSaveDetailsReviewGroupDecisionActionHandler implemen
     @Override
     public void process(final Long requestTaskId,
         final RequestTaskActionType requestTaskActionType,
-        final PmrvUser pmrvUser,
+        final AppUser appUser,
         final PermitVariationSaveDetailsReviewGroupDecisionRequestTaskActionPayload payload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);

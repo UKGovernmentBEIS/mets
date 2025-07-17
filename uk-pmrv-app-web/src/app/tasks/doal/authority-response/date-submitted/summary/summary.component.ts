@@ -14,8 +14,7 @@ import { DoalService } from '@tasks/doal/core/doal.service';
 
       <app-doal-date-submitted-summary-template
         [dateSubmittedToAuthority]="dateSubmittedToAuthority$ | async"
-        [editable]="isEditable$ | async"
-      ></app-doal-date-submitted-summary-template>
+        [editable]="isEditable$ | async"></app-doal-date-submitted-summary-template>
 
       <div class="govuk-button-group" *ngIf="isEditable$ | async">
         <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>

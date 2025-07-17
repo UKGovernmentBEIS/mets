@@ -2,14 +2,15 @@ package uk.gov.pmrv.api.migration.report;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.utils.ExceptionUtils;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
-import uk.gov.pmrv.api.common.utils.ExceptionUtils;
 import uk.gov.pmrv.api.migration.MigrationBaseService;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.reporting.domain.ReportableEmissionsEntity;
@@ -32,7 +33,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 @Service
 @Log4j2
-@RequiredArgsConstructor
 public class MigrationReportHistoryService extends MigrationBaseService {
 
     private final JdbcTemplate migrationJdbcTemplate;
@@ -40,6 +40,18 @@ public class MigrationReportHistoryService extends MigrationBaseService {
     private final AccountRepository accountRepository;
     private final RequestCreateService requestCreateService;
     private final ReportableEmissionsRepository reportableEmissionsRepository;
+
+    public MigrationReportHistoryService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate,
+                                         Validator validator,
+                                         AccountRepository accountRepository,
+                                         RequestCreateService requestCreateService,
+                                         ReportableEmissionsRepository reportableEmissionsRepository) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+        this.validator = validator;
+        this.accountRepository = accountRepository;
+        this.requestCreateService = requestCreateService;
+        this.reportableEmissionsRepository = reportableEmissionsRepository;
+    }
 
     private static final String QUERY_BASE = """
         with XMLNAMESPACES (

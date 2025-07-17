@@ -4,7 +4,7 @@ import { CanActivateFn, CanDeactivateFn } from '@angular/router';
 import { map, take, tap } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 
 import { aerVerifyQuery } from '../../aer-verify.selector';
@@ -22,13 +22,13 @@ export const canActivateDataGapsMethodologies: CanActivateFn = () => {
       if (!verificationReport) {
         store.setPayload({
           ...payload,
-          dataGapsMethodologies: AerVerifyStoreDelegate.INITIAL_STATE.verificationReport?.dataGapsMethodologies,
+          dataGapsMethodologies: AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport?.dataGapsMethodologies,
         } as any);
       }
 
       if (!verificationReport?.dataGapsMethodologies) {
-        (store.aerVerifyDelegate as AerVerifyStoreDelegate).setDataGapsMethodologies(
-          AerVerifyStoreDelegate.INITIAL_STATE.verificationReport.dataGapsMethodologies,
+        (store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setDataGapsMethodologies(
+          AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport.dataGapsMethodologies,
         );
       }
 

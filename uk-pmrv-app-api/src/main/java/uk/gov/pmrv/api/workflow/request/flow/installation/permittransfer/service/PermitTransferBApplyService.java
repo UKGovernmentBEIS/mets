@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.validation.PermitValidatorService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -46,7 +46,7 @@ public class PermitTransferBApplyService {
     }
 
     @Transactional
-    public void applySubmitAction(final RequestTask requestTask, final PmrvUser pmrvUser) {
+    public void applySubmitAction(final RequestTask requestTask, final AppUser appUser) {
 
         final Request request = requestTask.getRequest();
         final PermitTransferBApplicationRequestTaskPayload taskPayload =
@@ -81,7 +81,7 @@ public class PermitTransferBApplyService {
             request,
             actionPayload,
             RequestActionType.PERMIT_TRANSFER_B_APPLICATION_SUBMITTED,
-            pmrvUser.getUserId()
+            appUser.getUserId()
         );
     }
 }

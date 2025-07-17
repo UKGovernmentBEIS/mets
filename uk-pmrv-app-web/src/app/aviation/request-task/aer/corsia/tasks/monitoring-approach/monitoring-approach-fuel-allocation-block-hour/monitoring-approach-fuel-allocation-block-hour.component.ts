@@ -104,6 +104,7 @@ export class MonitoringApproachFuelAllocationBlockHourComponent implements OnIni
 
     if (this.errorList.length === 0) {
       Papa.parse(this.uploadedFile, {
+        skipEmptyLines: true,
         complete: (result) => {
           this.processCSVData(result.data);
         },

@@ -11,5 +11,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public abstract class AccountHeaderInfoDTO {
 
+    private Long id;
     private String name;
 }

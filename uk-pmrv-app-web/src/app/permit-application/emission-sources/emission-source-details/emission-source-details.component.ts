@@ -20,9 +20,7 @@ import { emisionSourcesAddFormFactory } from './emission-source-details-form.pro
         (formSubmit)="onSubmit()"
         [form]="form"
         [isEditing]="isEditing$ | async"
-        [caption]="'Fuels and equipment inventory'"
-      >
-      </app-emission-source-details-template>
+        [caption]="'Fuels and equipment inventory'"></app-emission-source-details-template>
     </app-permit-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

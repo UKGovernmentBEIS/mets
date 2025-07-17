@@ -7,10 +7,9 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
       <a
         govukLink
         [routerLink]="link"
-        [state]="{ userId: userId, accountId: accountId, userName: userName, role: role }"
-      >
-        {{ title }}</a
-      >
+        [state]="{ userId: userId, accountId: accountId, userName: userName, role: role }">
+        {{ title }}
+      </a>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

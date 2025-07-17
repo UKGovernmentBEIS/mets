@@ -54,6 +54,6 @@ export class TransferAReasonComponent {
   }
 
   getDownloadUrl() {
-    return this.permitTransferAService.createBaseFileDownloadUrl();
+    return this.permitTransferAService.getBaseFileDownloadUrl();
   }
 }

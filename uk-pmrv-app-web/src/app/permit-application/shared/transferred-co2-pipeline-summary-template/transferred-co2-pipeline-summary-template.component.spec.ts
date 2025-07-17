@@ -14,8 +14,7 @@ describe('TransferredCo2PipelineSummaryTemplateComponent', () => {
   @Component({
     template: `
       <app-transferred-co2-pipeline-summary-template
-        [pipelineSystems]="pipelineSystems"
-      ></app-transferred-co2-pipeline-summary-template>
+        [pipelineSystems]="pipelineSystems"></app-transferred-co2-pipeline-summary-template>
     `,
   })
   class TestComponent {

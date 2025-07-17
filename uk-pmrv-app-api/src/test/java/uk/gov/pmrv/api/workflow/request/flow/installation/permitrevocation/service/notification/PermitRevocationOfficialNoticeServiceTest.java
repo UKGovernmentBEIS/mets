@@ -13,9 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.config.RegistryConfig;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
@@ -44,9 +43,6 @@ class PermitRevocationOfficialNoticeServiceTest {
     @Mock
     private OfficialNoticeGeneratorService officialNoticeGeneratorService;
 
-    @Mock
-    private RegistryConfig registryConfig;
-    
     @Test
     void generateRevocationOfficialNotice() {
         String requestId = "1";
@@ -135,50 +131,24 @@ class PermitRevocationOfficialNoticeServiceTest {
     }
 
     @Test
-    void sendOfficialNoticeForSubmitted() {
-        String requestId = "1";
-        Request request = Request.builder().id(requestId).build();
-        FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
-        final String registryEmail = "registry-admin@email";
-        List<String> ccUserEmails = List.of("operator1@email");
-        List<String> ccRecipientsEmails = List.of(registryEmail, "operator1@email");
-        DecisionNotification decisionNotification = DecisionNotification.builder()
-                .operators(Set.of("operatorUser"))
-                .signatory("signatoryUser")
-                .build();
-
-        when(registryConfig.getEmail()).thenReturn(registryEmail);
-        when(decisionNotificationUsersService.findUserEmails(decisionNotification))
-                .thenReturn(ccUserEmails);
-
-        service.sendOfficialNoticeForSubmitted(request, officialDocFileInfoDTO, decisionNotification);
-
-        verify(registryConfig, times(1)).getEmail();
-        verify(decisionNotificationUsersService, times(1))
-                .findUserEmails(decisionNotification);
-        verify(officialNoticeSendService, times(1))
-                .sendOfficialNotice(List.of(officialDocFileInfoDTO), request, ccRecipientsEmails);
-    }
-    
-    @Test
     void sendOfficialNotice() {
         String requestId = "1";
         Request request = Request.builder().id(requestId).build();
         FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
-        List<String> ccRecipientsEmails = List.of("operator1@email");
+        List<String> decisionNotificationRecipientsEmails = List.of("operator1@email");
         DecisionNotification decisionNotification = DecisionNotification.builder()
             .operators(Set.of("operatorUser"))
             .signatory("signatoryUser")
             .build();
         
         when(decisionNotificationUsersService.findUserEmails(decisionNotification))
-        .thenReturn(ccRecipientsEmails);
+        .thenReturn(decisionNotificationRecipientsEmails);
         
         service.sendOfficialNotice(request, officialDocFileInfoDTO, decisionNotification);
 
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         
-        verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialDocFileInfoDTO), request, List.of("operator1@email"));
+        verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialDocFileInfoDTO), request, decisionNotificationRecipientsEmails);
     }
     
     private FileInfoDTO buildOfficialFileInfo() {

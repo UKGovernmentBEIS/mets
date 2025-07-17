@@ -20,17 +20,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.regulator.domain.RegulatorUserUpdateStatusDTO;
-import uk.gov.pmrv.api.authorization.regulator.service.RegulatorAuthorityDeletionService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.regulator.domain.RegulatorUserUpdateStatusDTO;
+import uk.gov.netz.api.authorization.regulator.service.RegulatorAuthorityDeletionService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.security.Authorized;
+import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
+import uk.gov.pmrv.api.web.orchestrator.authorization.dto.RegulatorUsersAuthoritiesInfoDTO;
 import uk.gov.pmrv.api.web.orchestrator.authorization.service.RegulatorUserAuthorityQueryOrchestrator;
 import uk.gov.pmrv.api.web.orchestrator.authorization.service.RegulatorUserAuthorityUpdateOrchestrator;
-import uk.gov.pmrv.api.web.orchestrator.authorization.dto.RegulatorUsersAuthoritiesInfoDTO;
-import uk.gov.pmrv.api.web.security.Authorized;
-import uk.gov.pmrv.api.web.security.AuthorizedRole;
 
 import java.util.List;
 
@@ -52,10 +52,10 @@ public class RegulatorAuthorityController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<Void> updateCompetentAuthorityRegulatorUsersStatus(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @RequestBody @Valid @NotEmpty @Parameter(description = "The regulator users to update", required = true)
-                    List<RegulatorUserUpdateStatusDTO> regulatorUsers) {
-        regulatorUserAuthorityUpdateOrchestrator.updateRegulatorUsersStatus(regulatorUsers, pmrvUser);
+            List<RegulatorUserUpdateStatusDTO> regulatorUsers) {
+        regulatorUserAuthorityUpdateOrchestrator.updateRegulatorUsersStatus(regulatorUsers, appUser);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -66,9 +66,9 @@ public class RegulatorAuthorityController {
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
     public ResponseEntity<Void> deleteRegulatorUserByCompetentAuthority(
-            @Parameter(hidden = true) PmrvUser pmrvUser,
+            @Parameter(hidden = true) AppUser appUser,
             @PathVariable("userId") @Parameter(description = "The regulator to be deleted") String userId) {
-        regulatorAuthorityDeletionService.deleteRegulatorUser(userId, pmrvUser);
+        regulatorAuthorityDeletionService.deleteRegulatorUser(userId, appUser);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -78,7 +78,7 @@ public class RegulatorAuthorityController {
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @Authorized
-    public ResponseEntity<Void> deleteCurrentRegulatorUserByCompetentAuthority(@Parameter(hidden = true) PmrvUser currentUser) {
+    public ResponseEntity<Void> deleteCurrentRegulatorUserByCompetentAuthority(@Parameter(hidden = true) AppUser currentUser) {
         regulatorAuthorityDeletionService.deleteCurrentRegulatorUser(currentUser);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -89,10 +89,10 @@ public class RegulatorAuthorityController {
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-@AuthorizedRole(roleType = RoleType.REGULATOR)
-public ResponseEntity<RegulatorUsersAuthoritiesInfoDTO> getCaRegulators(@Parameter(hidden = true) PmrvUser pmrvUser) {
+    @AuthorizedRole(roleType = RoleTypeConstants.REGULATOR)
+    public ResponseEntity<RegulatorUsersAuthoritiesInfoDTO> getCaRegulators(@Parameter(hidden = true) AppUser appUser) {
 
-        return new ResponseEntity<>(regulatorUserAuthorityQueryOrchestrator.getCaUsersAuthoritiesInfo(pmrvUser),
-        HttpStatus.OK);
-        }
-        }
+        return new ResponseEntity<>(regulatorUserAuthorityQueryOrchestrator.getCaUsersAuthoritiesInfo(appUser),
+                HttpStatus.OK);
+    }
+}

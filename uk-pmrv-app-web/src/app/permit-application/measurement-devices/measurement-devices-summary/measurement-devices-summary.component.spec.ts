@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { MeasurementDevicesTableComponent } from '@permit-application/shared/measurement-devices-table/measurement-devices-table.component';
+
 import { BasePage } from '../../../../testing';
 import { PermitIssuanceStore } from '../../../permit-issuance/store/permit-issuance.store';
 import { SharedModule } from '../../../shared/shared.module';
@@ -18,8 +20,8 @@ describe('MeasurementDevicesSummaryComponent', () => {
 
   class Page extends BasePage<MeasurementDevicesSummaryComponent> {
     get measurementDevices() {
-      return this.queryAll<HTMLDListElement>('dl').map((measurementDevice) =>
-        Array.from(measurementDevice.querySelectorAll('dd')).map((dd) => dd.textContent.trim()),
+      return this.queryAll<HTMLDListElement>('tr').map((measurementDevice) =>
+        Array.from(measurementDevice.querySelectorAll('td')).map((dd) => dd.textContent.trim()),
       );
     }
 
@@ -31,7 +33,7 @@ describe('MeasurementDevicesSummaryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [MeasurementDevicesSummaryComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [RouterTestingModule, SharedModule, SharedPermitModule, MeasurementDevicesTableComponent],
       providers: [
         {
           provide: PermitApplicationStore,
@@ -56,8 +58,9 @@ describe('MeasurementDevicesSummaryComponent', () => {
 
   it('should display the list of data', () => {
     expect(page.measurementDevices).toEqual([
-      ['ref1', 'Ultrasonic meter', '3', 'litres', '± 2.0 %', 'north terminal'],
-      ['ref2', 'Ultrasonic meter', '3', 'litres', 'None', 'north terminal'],
+      [],
+      ['ref1', 'Ultrasonic meter', '3', 'litres', '± 2.0 %', 'north terminal', '', ''],
+      ['ref2', 'Ultrasonic meter', '3', 'litres', 'None', 'north terminal', '', ''],
     ]);
   });
 });

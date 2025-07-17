@@ -1,21 +1,22 @@
 package uk.gov.pmrv.api.permit.validation;
 
-import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.ANNUAL_EMISSIONS_TARGET_INVALID_PRECISION;
-import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.ANNUAL_EMISSIONS_TARGET_INVALID_YEAR;
-import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.ANNUAL_EMISSIONS_TARGET_NOT_FOUND;
-import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.INVALID_ANNUAL_EMISSIONS_TARGET;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.stream.Collectors;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Component;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.permit.domain.PermitType;
 import uk.gov.pmrv.api.permit.domain.PermitValidationResult;
 import uk.gov.pmrv.api.permit.domain.PermitViolation;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.stream.Collectors;
+
+import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.ANNUAL_EMISSIONS_TARGET_INVALID_PRECISION;
+import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.ANNUAL_EMISSIONS_TARGET_INVALID_YEAR;
+import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.ANNUAL_EMISSIONS_TARGET_NOT_FOUND;
+import static uk.gov.pmrv.api.permit.domain.PermitViolation.PermitViolationMessage.INVALID_ANNUAL_EMISSIONS_TARGET;
 
 @Component
 public class AnnualEmissionsTargetValidator implements PermitGrantedContextValidator {
@@ -47,7 +48,7 @@ public class AnnualEmissionsTargetValidator implements PermitGrantedContextValid
                 permitViolations.add(new PermitViolation(ANNUAL_EMISSIONS_TARGET_INVALID_PRECISION));
             }
         }
-        //permit type is GHGE
+        //permit type is GHGE and WASTE
         else {
             if (!annualEmissionsTargets.isEmpty()) {
                 permitViolations.add(new PermitViolation(INVALID_ANNUAL_EMISSIONS_TARGET));

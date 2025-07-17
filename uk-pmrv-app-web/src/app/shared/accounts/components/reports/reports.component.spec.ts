@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -35,11 +34,11 @@ describe('ReportsComponent', () => {
 
   class Page extends BasePage<ReportsComponent> {
     get emissionReportsTypeCheckbox() {
-      return this.query<HTMLInputElement>('input#reportsTypes-3');
+      return this.query<HTMLInputElement>('input#types-4');
     }
 
     get completedStatusCheckbox() {
-      return this.query<HTMLInputElement>('input#reportsStatuses-3');
+      return this.query<HTMLInputElement>('input#statuses-3');
     }
 
     get reportsHeader() {
@@ -59,6 +58,9 @@ describe('ReportsComponent', () => {
   }
 
   const createComponent = async () => {
+    authStore = TestBed.inject(AuthStore);
+    authStore.setCurrentDomain('INSTALLATION');
+
     fixture = TestBed.createComponent(ReportsComponent);
     component = fixture.componentInstance;
 
@@ -70,27 +72,20 @@ describe('ReportsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ReportsComponent],
-      imports: [RouterTestingModule, SharedModule, SharedUserModule, AccountsModule],
+      imports: [SharedModule, SharedUserModule, AccountsModule],
       providers: [
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: RequestsService, useValue: requestsService },
         { provide: AccountReportingService, useValue: accountReportingService },
       ],
     }).compileComponents();
-
-    fixture = TestBed.createComponent(ReportsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-
-    authStore = TestBed.inject(AuthStore);
-    authStore.setCurrentDomain('INSTALLATION');
   });
 
   describe('search filtering by type', () => {
     beforeEach(async () => {
       const aerReports = mockReportsResults.requestDetails.filter((report) => report.requestType === 'AER');
 
-      requestsService.getRequestDetailsByAccountId.mockReturnValue(
+      requestsService.getRequestDetailsByResource.mockReturnValue(
         of({
           requestDetails: [...aerReports],
           total: aerReports.length,
@@ -110,9 +105,10 @@ describe('ReportsComponent', () => {
       page.emissionReportsTypeCheckbox.click();
       fixture.detectChanges();
 
-      expect(requestsService.getRequestDetailsByAccountId).toHaveBeenCalledTimes(1);
-      expect(requestsService.getRequestDetailsByAccountId).toHaveBeenLastCalledWith({
-        accountId: mockedAccount.id,
+      expect(requestsService.getRequestDetailsByResource).toHaveBeenCalledTimes(1);
+      expect(requestsService.getRequestDetailsByResource).toHaveBeenLastCalledWith({
+        resourceType: 'ACCOUNT',
+        resourceId: String(mockedAccount.id),
         category: 'REPORTING',
         requestTypes: ['AER'],
         requestStatuses: [],
@@ -139,7 +135,7 @@ describe('ReportsComponent', () => {
     beforeEach(async () => {
       const closedReports = mockReportsResults.requestDetails.filter((report) => report.requestStatus === 'COMPLETED');
 
-      requestsService.getRequestDetailsByAccountId.mockReturnValue(
+      requestsService.getRequestDetailsByResource.mockReturnValue(
         of({ requestDetails: [...closedReports], total: closedReports.length }),
       );
 
@@ -156,9 +152,10 @@ describe('ReportsComponent', () => {
       page.completedStatusCheckbox.click();
       fixture.detectChanges();
 
-      expect(requestsService.getRequestDetailsByAccountId).toHaveBeenCalledTimes(1);
-      expect(requestsService.getRequestDetailsByAccountId).toHaveBeenLastCalledWith({
-        accountId: mockedAccount.id,
+      expect(requestsService.getRequestDetailsByResource).toHaveBeenCalledTimes(1);
+      expect(requestsService.getRequestDetailsByResource).toHaveBeenLastCalledWith({
+        resourceType: 'ACCOUNT',
+        resourceId: String(mockedAccount.id),
         category: 'REPORTING',
         requestTypes: [],
         requestStatuses: ['COMPLETED'],
@@ -178,7 +175,7 @@ describe('ReportsComponent', () => {
   describe('reports created date', () => {
     beforeEach(async () => {
       const reports = mockReportsResults.requestDetails;
-      requestsService.getRequestDetailsByAccountId.mockReturnValue(
+      requestsService.getRequestDetailsByResource.mockReturnValue(
         of({
           requestDetails: [...reports],
           total: reports.length,

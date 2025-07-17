@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { map, Observable, tap } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { catchElseRethrow } from '../../../../../../error/business-errors';
 import { viewNotFoundOperatorError } from '../../errors/business-error';
 
 @Injectable({ providedIn: 'root' })
-export class ReplaceGuard implements CanActivate {
+export class ReplaceGuard {
   private verificationBodyNameInfo: VerificationBodyNameInfoDTO;
 
   constructor(

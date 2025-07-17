@@ -1,70 +1,34 @@
 import { Injectable } from '@angular/core';
 
-import { first, Observable, switchMap, tap } from 'rxjs';
+import { first, switchMap, tap } from 'rxjs';
+
+import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 
 import {
   NonComplianceDailyPenaltyNoticeRequestTaskPayload,
-  RequestMetadata,
   RequestTaskDTO,
-  RequestTaskItemDTO,
-  RequestTaskPayload,
-  TasksService,
   WithholdingOfAllowancesApplicationSubmitRequestTaskPayload,
   WithholdingOfAllowancesSaveApplicationRequestTaskActionPayload,
   WithholdingOfAllowancesWithdrawalApplicationSubmitRequestTaskPayload,
 } from 'pmrv-api';
 
-import { BusinessErrorService } from '../../../error/business-error/business-error.service';
 import { catchTaskReassignedBadRequest } from '../../../error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '../../../error/not-found-error';
 import { requestTaskReassignedError, taskNotFoundError } from '../../../shared/errors/request-task-error';
-import { CommonTasksStore } from '../../store/common-tasks.store';
 import { StatusKey } from './withholding-allowances';
 
 @Injectable({
   providedIn: 'root',
 })
-export class WithholdingAllowancesService {
-  constructor(
-    private readonly store: CommonTasksStore,
-    private readonly tasksService: TasksService,
-    private readonly businessErrorService: BusinessErrorService,
-  ) {}
-
-  get requestTaskItem$(): Observable<RequestTaskItemDTO> {
-    return this.store.requestTaskItem$;
-  }
-
-  get payload$(): Observable<RequestTaskPayload> {
-    return this.store.payload$;
-  }
-
-  get requestMetadata$(): Observable<RequestMetadata> {
-    return this.store.requestMetadata$;
-  }
-
-  get isEditable$(): Observable<boolean> {
-    return this.store.isEditable$;
-  }
-
-  getBaseFileDownloadUrl() {
-    const requestTaskId = this.store.requestTaskId;
-    return `/tasks/${requestTaskId}/file-download/`;
-  }
-
+export class WithholdingAllowancesService extends TasksHelperService {
   getDownloadUrlFiles(files: string[]): { downloadUrl: string; fileName: string }[] {
-    const url = this.createBaseFileDownloadUrl();
+    const url = this.getBaseFileDownloadUrl();
     return (
       files?.map((id) => ({
         downloadUrl: url + `${id}`,
         fileName: this.attachments[id],
       })) ?? []
     );
-  }
-
-  createBaseFileDownloadUrl() {
-    const requestTaskId = this.store.requestTaskId;
-    return `/tasks/${requestTaskId}/file-download/`;
   }
 
   private get attachments() {

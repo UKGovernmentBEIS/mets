@@ -1,7 +1,6 @@
 package uk.gov.pmrv.api.user.operator.domain;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -38,6 +37,4 @@ public class OperatorUserRegistrationDTO {
     @Valid
     private PhoneNumberDTO mobileNumber;
 
-    @Max(value = 255)
-    private Short termsVersion;
 }

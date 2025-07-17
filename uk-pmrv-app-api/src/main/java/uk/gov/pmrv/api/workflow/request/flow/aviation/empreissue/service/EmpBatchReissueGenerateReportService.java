@@ -1,24 +1,24 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.service;
 
-import java.io.StringWriter;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.files.documents.service.FileDocumentService;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.documents.service.FileDocumentService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpReissueAccountReport;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.BatchReissueRequestPayload;
+
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 @Log4j2
 @Service
@@ -54,7 +54,7 @@ public class EmpBatchReissueGenerateReportService {
 						accountReport.isSucceeded() ? "Pass" : "Fail");
 			}
 			
-			final byte[] generatedFile = sw.toString().getBytes("UTF-8");
+			final byte[] generatedFile = sw.toString().getBytes(StandardCharsets.UTF_8);
 			final FileInfoDTO reportFile = fileDocumentService.createFileDocument(generatedFile, request.getId() + ".csv");
 			
 			//update payload

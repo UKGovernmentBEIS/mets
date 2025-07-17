@@ -6,6 +6,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
 import uk.gov.pmrv.api.account.domain.dto.LegalEntityDTO;
@@ -18,9 +20,8 @@ import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccou
 import uk.gov.pmrv.api.account.installation.transform.InstallationAccountMapper;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.service.LegalEntityService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDate;
 
@@ -31,8 +32,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.common.exception.ErrorCode.ACCOUNT_ALREADY_EXISTS;
-import static uk.gov.pmrv.api.common.exception.ErrorCode.ACCOUNT_FIELD_NOT_AMENDABLE;
 
 @ExtendWith(MockitoExtension.class)
 class InstallationAccountAmendServiceTest {
@@ -55,7 +54,7 @@ class InstallationAccountAmendServiceTest {
 	@Test
 	void amendAccount_non_amendable_fields_changed_should_throw_error() {
 	    Long accountId = 1L;
-		PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
 		LocationDTO location = LocationOnShoreDTO.builder().type(LocationType.ONSHORE).build();
 		
 		InstallationAccountDTO previousAccountDTO = InstallationAccountDTO.builder()
@@ -76,9 +75,9 @@ class InstallationAccountAmendServiceTest {
 
 		//invoke
 		BusinessException businessException = assertThrows(BusinessException.class, () ->
-			service.amendAccount(accountId, previousAccountDTO, newAccountDTO, pmrvUser));
+			service.amendAccount(accountId, previousAccountDTO, newAccountDTO, appUser));
 
-		assertThat(businessException.getErrorCode()).isEqualTo(ACCOUNT_FIELD_NOT_AMENDABLE);
+		assertThat(businessException.getErrorCode()).isEqualTo(MetsErrorCode.ACCOUNT_FIELD_NOT_AMENDABLE);
 
 		//verify
 		verifyNoInteractions(installationAccountQueryService, accountRepository, legalEntityService);
@@ -87,7 +86,7 @@ class InstallationAccountAmendServiceTest {
 	@Test
     void amendAccount_invalid_account_name() {
 	    Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         LocationDTO location = LocationOnShoreDTO.builder().type(LocationType.ONSHORE).build();
         LocalDate now = LocalDate.now();
 
@@ -107,14 +106,14 @@ class InstallationAccountAmendServiceTest {
                 .legalEntity(LegalEntityDTO.builder().id(1L).build())
                 .build();
         
-        doThrow(new BusinessException((ACCOUNT_ALREADY_EXISTS))).when(installationAccountQueryService)
+        doThrow(new BusinessException((MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS))).when(installationAccountQueryService)
             .validateAccountNameExistence(newAccountDTO.getName());
 
         //invoke
         BusinessException businessException = assertThrows(BusinessException.class, () ->
-        service.amendAccount(accountId, previousAccountDTO, newAccountDTO, pmrvUser));
+        service.amendAccount(accountId, previousAccountDTO, newAccountDTO, appUser));
 
-        assertThat(businessException.getErrorCode()).isEqualTo(ACCOUNT_ALREADY_EXISTS);
+        assertThat(businessException.getErrorCode()).isEqualTo(MetsErrorCode.ACCOUNT_REGISTRATION_NUMBER_ALREADY_EXISTS);
     
         //verify
         verify(installationAccountQueryService, times(1)).validateAccountNameExistence(newAccountDTO.getName());
@@ -124,7 +123,7 @@ class InstallationAccountAmendServiceTest {
 	@Test
     void amendAccount() {
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         LocationDTO locationDTO = LocationOnShoreDTO.builder().type(LocationType.ONSHORE).build();
         
         LocationOnShore location = new LocationOnShore();
@@ -179,20 +178,20 @@ class InstallationAccountAmendServiceTest {
         
         when(installationAccountQueryService.getAccountFullInfoById(accountId)).thenReturn(account);
         when(legalEntityService.getLegalEntityById(account.getLegalEntity().getId())).thenReturn(legalEntity);
-        when(legalEntityService.resolveAmendedLegalEntity(newAccountDTO.getLegalEntity(), legalEntity, pmrvUser)).thenReturn(newLegalEntity);
+        when(legalEntityService.resolveAmendedLegalEntity(newAccountDTO.getLegalEntity(), legalEntity, appUser)).thenReturn(newLegalEntity);
         when(installationAccountMapper.toInstallationAccount(newAccountDTO, accountId)).thenReturn(newAccount);
         when(accountRepository.save(newAccount)).thenReturn(accountSaved);
         when(installationAccountQueryService.isLegalEntityUnused(legalEntity.getId())).thenReturn(true);
         when(installationAccountMapper.toInstallationAccountDTO(accountSaved)).thenReturn(accountDTOSaved);
         
         //invoke
-        InstallationAccountDTO result = service.amendAccount(accountId, previousAccountDTO, newAccountDTO, pmrvUser);
+        InstallationAccountDTO result = service.amendAccount(accountId, previousAccountDTO, newAccountDTO, appUser);
         
         assertThat(result).isEqualTo(accountDTOSaved);
 
         verify(installationAccountQueryService, times(1)).getAccountFullInfoById(accountId);
         verify(legalEntityService, times(1)).getLegalEntityById(account.getLegalEntity().getId());
-        verify(legalEntityService, times(1)).resolveAmendedLegalEntity(newAccountDTO.getLegalEntity(), legalEntity, pmrvUser);
+        verify(legalEntityService, times(1)).resolveAmendedLegalEntity(newAccountDTO.getLegalEntity(), legalEntity, appUser);
         verify(installationAccountMapper, times(1)).toInstallationAccount(newAccountDTO, accountId);
         verify(installationAccountQueryService, times(1)).isLegalEntityUnused(legalEntity.getId());
         verify(installationAccountMapper, times(1)).toInstallationAccountDTO(accountSaved);

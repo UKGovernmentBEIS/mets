@@ -1,23 +1,25 @@
 <div *ngIf="vm$ | async as vm" class="govuk-!-width-two-thirds">
-  <app-page-heading>Check your answers</app-page-heading>
-  <h2 class="govuk-heading-m">{{ vm.detailsHeader }}</h2>
+  <app-page-heading>{{ vm.pageHeader }}</app-page-heading>
 
-  <dl govuk-summary-list [hasBorders]="true">
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>
-        <ng-container *ngIf="vm.isCorsia">
-          Have there been any uncorrected non-compliances with the Air Navigation Order?
-        </ng-container>
-        <ng-container *ngIf="!vm.isCorsia">
-          Have there been any uncorrected non-compliances with the monitoring and reporting regulations?
-        </ng-container>
-      </dt>
-      <dd govukSummaryListRowValue>{{ vm.data?.exist ? 'Yes' : 'No' }}</dd>
-      <dd govukSummaryListRowActions *ngIf="vm.isEditable">
-        <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
-      </dd>
-    </div>
-  </dl>
+  <ng-container *ngIf="vm.data">
+    <h2 class="govuk-heading-m">{{ vm.detailsHeader }}</h2>
+    <dl govuk-summary-list [hasBorders]="true">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>
+          <ng-container *ngIf="vm.isCorsia">
+            Have there been any uncorrected non-compliances with the Air Navigation Order?
+          </ng-container>
+          <ng-container *ngIf="!vm.isCorsia">
+            Have there been any uncorrected non-compliances with the monitoring and reporting regulations?
+          </ng-container>
+        </dt>
+        <dd govukSummaryListRowValue>{{ vm.data?.exist ? 'Yes' : 'No' }}</dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink routerLink="../" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+  </ng-container>
 
   <app-uncorrected-item-group
     [isEditable]="vm.isEditable"

@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -37,7 +37,7 @@ public class AviationAerUkEtsReviewReturnForAmendsActionHandler implements Reque
     private final AviationAerUkEtsReviewMapper aviationAerUkEtsReviewMapper;
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser,
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser,
                         RequestTaskActionEmptyPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         AviationAerUkEtsApplicationReviewRequestTaskPayload requestTaskPayload = (AviationAerUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload();
@@ -46,10 +46,10 @@ public class AviationAerUkEtsReviewReturnForAmendsActionHandler implements Reque
         aerUkEtsReviewValidatorService.validateAtLeastOneReviewGroupAmendsNeeded(requestTaskPayload);
 
         // Update request payload
-        aerUkEtsReviewService.updateRequestPayloadWithReviewOutcome(requestTask, pmrvUser);
+        aerUkEtsReviewService.updateRequestPayloadWithReviewOutcome(requestTask, appUser);
 
         // Add request action
-        createRequestAction(requestTask, pmrvUser);
+        createRequestAction(requestTask, appUser);
 
         // Close task
         workflowService.completeTask(requestTask.getProcessTaskId(),
@@ -62,7 +62,7 @@ public class AviationAerUkEtsReviewReturnForAmendsActionHandler implements Reque
         return List.of(RequestTaskActionType.AVIATION_AER_UKETS_REVIEW_RETURN_FOR_AMENDS);
     }
 
-    private void createRequestAction(RequestTask requestTask, PmrvUser pmrvUser) {
+    private void createRequestAction(RequestTask requestTask, AppUser appUser) {
         Request request = requestTask.getRequest();
         AviationAerUkEtsApplicationReviewRequestTaskPayload requestTaskPayload = (AviationAerUkEtsApplicationReviewRequestTaskPayload) requestTask.getPayload();
 
@@ -76,7 +76,7 @@ public class AviationAerUkEtsReviewReturnForAmendsActionHandler implements Reque
             request,
             requestActionPayload,
             RequestActionType.AVIATION_AER_UKETS_APPLICATION_RETURNED_FOR_AMENDS,
-            pmrvUser.getUserId());
+            appUser.getUserId());
     }
 
 }

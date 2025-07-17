@@ -31,8 +31,7 @@ interface ViewModel {
           [decisionAmends]="vm.decisionAmends"
           [reviewAttachments]="vm.reviewAttachments"
           [downloadBaseUrl]="vm.downloadBaseUrl"
-          [requestTaskType]="vm.requestTaskType"
-        ></app-return-for-amends-shared>
+          [requestTaskType]="vm.requestTaskType"></app-return-for-amends-shared>
       </div>
     </div>
   `,

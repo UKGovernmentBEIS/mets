@@ -2,6 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 
 import { map, Observable } from 'rxjs';
 
+import { CommonActionsStore } from '@actions/store/common-actions.store';
 import { RequestActionStore } from '@aviation/request-action/store';
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { Store } from '@core/store/store';
@@ -45,7 +46,9 @@ export class StoreContextResolver {
           ? <RequestActionStore>this.injector.get(RequestActionStore)
           : <RequestTaskStore>this.injector.get(RequestTaskStore);
       default:
-        return <CommonTasksStore>this.injector.get(CommonTasksStore);
+        return isAction
+          ? <CommonActionsStore>this.injector.get(CommonActionsStore)
+          : <CommonTasksStore>this.injector.get(CommonTasksStore);
     }
   }
 

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -55,7 +55,7 @@ class PermitSurrenderReviewRequestPeerReviewActionHandlerTest {
     @Test
     void process() {
         Long requestTaskId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         String selectedPeerReviewer = "selectedPeerReviewer";
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
@@ -84,16 +84,16 @@ class PermitSurrenderReviewRequestPeerReviewActionHandlerTest {
         requestPeerReviewActionHandler.process(
             requestTaskId,
             RequestTaskActionType.PERMIT_SURRENDER_REQUEST_PEER_REVIEW,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(permitSurrenderReviewRequestPeerReviewValidator, times(1))
-            .validate(requestTask, taskActionPayload, pmrvUser);
+            .validate(requestTask, taskActionPayload, appUser);
         verify(requestPermitSurrenderReviewService, times(1))
-            .saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, pmrvUser.getUserId());
+            .saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, appUser.getUserId());
         verify(requestService, times(1))
-            .addActionToRequest(requestTask.getRequest(), null, PERMIT_SURRENDER_PEER_REVIEW_REQUESTED, pmrvUser.getUserId());
+            .addActionToRequest(requestTask.getRequest(), null, PERMIT_SURRENDER_PEER_REVIEW_REQUESTED, appUser.getUserId());
         verify(workflowService, times(1)).completeTask(
             requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REQUEST_ID, request.getId(),

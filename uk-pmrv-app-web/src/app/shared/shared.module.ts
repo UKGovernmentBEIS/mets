@@ -36,6 +36,7 @@ import { PaymentNotCompletedComponent } from '@shared/components/payment-not-com
 import { PrtrSummaryTemplateComponent } from '@shared/components/prtr/prtr-summary-template.component';
 import { AerRegulatedActivitiesSummaryTemplateComponent } from '@shared/components/regulated-activities/aer-regulated-activities-summary-template.component';
 import { RelatedActionsComponent } from '@shared/components/related-actions/related-actions.component';
+import { RequestActionReportComponent } from '@shared/components/request-action-report/request-action-report.component';
 import { AdditionalInfoGroupComponent } from '@shared/components/review-groups/additional-info-group/additional-info-group.component';
 import { CalculationEmissionsGroupComponent } from '@shared/components/review-groups/calculation-emissions-group/calculation-emissions-group.component';
 import { ComplianceEtsGroupComponent } from '@shared/components/review-groups/compliance-ets-group/compliance-ets-group.component';
@@ -100,7 +101,7 @@ import { PfcTierSummaryComponent } from './components/approaches/aer/pfc-tier-su
 import { ArchiveComponent } from './components/archive/archive.component';
 import { AssignmentComponent } from './components/assignment/assignment.component';
 import { BatchReissueRequestsComponent } from './components/batch-reissue-requests/batch-reissue-requests.component';
-import { ConfirmationComponent } from './components/confirmation/confirmation.component';
+import { ConfirmationSharedComponent } from './components/confirmation/confirmation.component';
 import { DecisionComponent } from './components/decision/decision.component';
 import { DecisionConfirmationComponent } from './components/decision/decision-confirmation/decision-confirmation.component';
 import { ActivityLevelListTemplateComponent as DoalActivityLevelListTemplateComponent } from './components/doal/activity-level-list-template/activity-level-list-template.component';
@@ -122,6 +123,9 @@ import { ReportableEmissionsSummaryTemplateComponent } from './components/dre/re
 import { InstallationDetailsSummaryComponent } from './components/installation-details/installation-details-summary.component';
 import { ChooseWorkflowSummaryTemplateComponent } from './components/non-compliance/choose-workflow-summary-template/choose-workflow-summary-template.component';
 import { NotifyOperatorComponent } from './components/notify-operator/notify-operator.component';
+import { NotifyOperatorNoContactAddressComponent } from './components/notify-operator/notify-operator-no-contact-address/notify-operator-no-contact-address.component';
+import { OpinionStatementSummaryTemplateComponent } from './components/opinion-statement-summary-template/opinion-statement-summary-template.component';
+import { OverallDecisionSummaryTemplateComponent } from './components/overall-decision-summary-template/overall-decision-summary-template.component';
 import { PeerReviewComponent } from './components/peer-review/peer-review.component';
 import { AnswersComponent as PeerReviewDecisionAnswersComponent } from './components/peer-review-decision/answers/answers.component';
 import { ConfirmationComponent as PeerReviewDecisionConfirmationComponent } from './components/peer-review-decision/confirmation/confirmation.component';
@@ -129,6 +133,7 @@ import { PeerReviewDecisionComponent } from './components/peer-review-decision/p
 import { PeerReviewSubmittedComponent } from './components/peer-review-decision/timeline/peer-review-submitted.component';
 import { FiltersTemplateComponent } from './components/permit-batch-reissue/filters-template/filters-template.component';
 import { PermitTransferDetailsSummaryTemplateComponent } from './components/permit-transfer/transfer-details-summary-template/transfer-details-summary-template.component';
+import { PreviewDocumentsComponent } from './components/preview-documents/preview-documents.component';
 import { RelatedContentComponent } from './components/related-content/related-content.component';
 import { RelatedTasksComponent } from './components/related-tasks/related-tasks.component';
 import { RequestActionHeadingComponent } from './components/request-action-heading/request-action-heading.component';
@@ -188,7 +193,9 @@ import { ItemLinkPipe } from './pipes/item-link.pipe';
 import { NegativeNumberPipe } from './pipes/negative-number.pipe';
 import { ReportingSubheadingPipe } from './pipes/reporting-subheading.pipe';
 import { TextEllipsisPipe } from './pipes/text-ellipsis.pipe';
+import { PrintComponent } from './print/print.component';
 import { RadioOptionComponent } from './radio-option/radio-option.component';
+import { ServiceBannerComponent } from './service-banner/service-banner.component';
 import { SkipLinkFocusDirective } from './skip-link-focus.directive';
 import { SummaryHeaderComponent } from './summary-header/summary-header.component';
 import { TaskItemComponent } from './task-list/task-item/task-item.component';
@@ -197,7 +204,6 @@ import { TaskListComponent } from './task-list/task-list.component';
 import { TaskSectionComponent } from './task-list/task-section/task-section.component';
 import { TwoFaLinkComponent } from './two-fa-link/two-fa-link.component';
 import { UserInputComponent } from './user-input/user-input.component';
-import { UserLockedComponent } from './user-locked/user-locked.component';
 import { WizardStepComponent } from './wizard/wizard-step.component';
 
 @NgModule({
@@ -258,7 +264,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     ComplianceMonitoringGroupComponent,
     ConfidentialityStatementSummaryTemplateComponent,
     ConfidentialityStatementTemplateComponent,
-    ConfirmationComponent,
+    ConfirmationSharedComponent,
     ConvertLinksDirective,
     CountriesDirective,
     DashboardPageComponent,
@@ -327,12 +333,15 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     NonConformitiesPerPlanGroupComponent,
     NonConformitiesPreviousYearGroupComponent,
     NotifyOperatorComponent,
+    NotifyOperatorNoContactAddressComponent,
     OperatorDetailsComponent,
     OperatorsComponent,
     OpinionStatementGroupComponent,
+    OpinionStatementSummaryTemplateComponent,
     OverallAssessmentTypePipe,
     OverallDecisionGroupComponent,
     OverallDecisionReasonListComponent,
+    OverallDecisionSummaryTemplateComponent,
     PageHeadingComponent,
     PaginationComponent,
     PaymentNotCompletedComponent,
@@ -348,6 +357,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     PhaseBarComponent,
     PhoneInputComponent,
     PreliminaryAllocationDetailsTemplateComponent,
+    PrintComponent,
     ProcessActionsComponent,
     PrtrSummaryTemplateComponent,
     RadioOptionComponent,
@@ -360,6 +370,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     ReportingSubheadingPipe,
     ReportsComponent,
     RequestActionHeadingComponent,
+    RequestActionReportComponent,
     RouterLinkComponent,
     SelectOtherComponent,
     SkipLinkFocusDirective,
@@ -385,7 +396,6 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     TransferInstallationSummaryTemplateComponent,
     TwoFaLinkComponent,
     UserInputComponent,
-    UserLockedComponent,
     UsersTableDirective,
     VerBodyConfirmationComponent,
     VerificationBodyTypePipe,
@@ -395,6 +405,8 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     WizardStepComponent,
     WorkflowItemsListComponent,
     WorkflowsComponent,
+    ServiceBannerComponent,
+    PreviewDocumentsComponent,
   ],
   exports: [
     AbbreviationsSummaryTemplateComponent,
@@ -442,7 +454,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     ComplianceMonitoringGroupComponent,
     ConfidentialityStatementSummaryTemplateComponent,
     ConfidentialityStatementTemplateComponent,
-    ConfirmationComponent,
+    ConfirmationSharedComponent,
     ConvertLinksDirective,
     CountriesDirective,
     DashboardPageComponent,
@@ -510,11 +522,14 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     NonConformitiesPerPlanGroupComponent,
     NonConformitiesPreviousYearGroupComponent,
     NotifyOperatorComponent,
+    NotifyOperatorNoContactAddressComponent,
     OperatorsComponent,
     OpinionStatementGroupComponent,
+    OpinionStatementSummaryTemplateComponent,
     OverallAssessmentTypePipe,
     OverallDecisionGroupComponent,
     OverallDecisionReasonListComponent,
+    OverallDecisionSummaryTemplateComponent,
     PageHeadingComponent,
     PaginationComponent,
     PaymentNotCompletedComponent,
@@ -531,6 +546,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     PhoneInputComponent,
     PipesModule,
     PreliminaryAllocationDetailsTemplateComponent,
+    PrintComponent,
     ProcessActionsComponent,
     PrtrSummaryTemplateComponent,
     RadioOptionComponent,
@@ -544,6 +560,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     ReportingSubheadingPipe,
     ReportsComponent,
     RequestActionHeadingComponent,
+    RequestActionReportComponent,
     SelectOtherComponent,
     SkipLinkFocusDirective,
     SourceStreamDeleteTemplateComponent,
@@ -568,7 +585,6 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     TransferInstallationSummaryTemplateComponent,
     TwoFaLinkComponent,
     UserInputComponent,
-    UserLockedComponent,
     UsersTableDirective,
     VerificationBodyTypePipe,
     VerifierDetailsGroupComponent,
@@ -577,6 +593,8 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     WizardStepComponent,
     WorkflowItemsListComponent,
     WorkflowsComponent,
+    ServiceBannerComponent,
+    PreviewDocumentsComponent,
   ],
   providers: [
     AccountsStore,

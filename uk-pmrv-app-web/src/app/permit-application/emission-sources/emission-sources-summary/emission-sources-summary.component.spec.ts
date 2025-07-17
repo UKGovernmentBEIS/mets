@@ -2,6 +2,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
+import { EmissionSourceTableComponent } from '@shared/components/emission-sources/emission-source-table/emission-source-table.component';
+
 import { BasePage } from '../../../../testing';
 import { PermitIssuanceStore } from '../../../permit-issuance/store/permit-issuance.store';
 import { SharedModule } from '../../../shared/shared.module';
@@ -19,8 +21,8 @@ describe('EmissionSourcesSummaryComponent', () => {
 
   class Page extends BasePage<EmissionSourcesSummaryComponent> {
     get emissionSources() {
-      return this.queryAll<HTMLDListElement>('dl').map((emisisonSource) =>
-        Array.from(emisisonSource.querySelectorAll('dd')).map((dd) => dd.textContent.trim()),
+      return this.queryAll<HTMLDListElement>('tr').map((emisisonSource) =>
+        Array.from(emisisonSource.querySelectorAll('td')).map((dd) => dd.textContent.trim()),
       );
     }
     get notificationBanner() {
@@ -31,7 +33,7 @@ describe('EmissionSourcesSummaryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [EmissionSourcesSummaryComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [RouterTestingModule, SharedModule, SharedPermitModule, EmissionSourceTableComponent],
       providers: [
         {
           provide: PermitApplicationStore,
@@ -57,7 +59,7 @@ describe('EmissionSourcesSummaryComponent', () => {
   });
 
   it('should display the list of data', () => {
-    expect(page.emissionSources).toEqual([['S1 Boiler'], ['S2 Boiler 2']]);
+    expect(page.emissionSources).toEqual([[], ['S1', 'Boiler', '', ''], ['S2', 'Boiler 2', '', '']]);
   });
 
   it('should display the notification banner', () => {

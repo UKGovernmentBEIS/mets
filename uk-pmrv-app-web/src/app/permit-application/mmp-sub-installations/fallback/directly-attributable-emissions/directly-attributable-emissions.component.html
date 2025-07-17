@@ -1,0 +1,62 @@
+<app-permit-task [breadcrumb]="breadcrumb$ | async">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    [heading]="'Directly attributable emissions'"
+    [caption]="(productBenchmarkType$ | async | subInstallationType) + ': benchmark improvement rate'"
+    submitText="Continue">
+    <div class="govuk-!-width-two-thirds">
+      <h2 class="govuk-heading-m">Attribution of directly attributable emissions</h2>
+      <p class="govuk-caption-m">
+        For the specific purpose of the baseline data collection, this section should cover all data provided in section
+        G.(c) in the "baseline data collection" template.
+      </p>
+
+      @if (heatEmissions?.includes(productBenchmarkType$ | async)) {
+        <p class="govuk-caption-m">
+          Describe how the emissions of source streams and emissions sources are attributed to this sub-installation in
+          line with the provisions set out in section 10.1.1 of Annex VII of the FAR.
+        </p>
+
+        <div class="govuk-caption-m">For heat sub-installations, you must take into account:</div>
+        <ul class="govuk-list govuk-list--bullet govuk-caption-m">
+          <li>
+            where measurable heat is exclusively produced for this sub-installation, the emissions may be directly
+            attributed using the fuel’s emissions.
+          </li>
+          <li>
+            fuels used to produce measurable heat which is consumed in more than one sub-installation should be included
+            in the 'Fuel input and relevant emission factor' section, for example a central power house at the
+            installation.
+          </li>
+          <li>
+            where the heat is produced from CHPs, describe how all parameters in section 8 of Annex VII of the FAR have
+            been determined.
+          </li>
+          <li>
+            emissions associated with measurable heat produced from waste gases imported from other installations or
+            sub-installations and used in this sub-installation, should be included in the 'Fuel input and relevant
+            emission factor' section.
+          </li>
+        </ul>
+      } @else {
+        <p class="govuk-caption-m">
+          Please describe here how the emissions of source streams and emissions sources are attributed to this
+          sub-installation in accordance with the provisions set out in section 10.1.1 of Annex VII of the FAR.
+        </p>
+      }
+
+      <app-include-answer-details></app-include-answer-details>
+
+      <div formControlName="attribution" govuk-textarea [maxLength]="15000" rows="10"></div>
+
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload supporting files (optional)"
+        formControlName="supportingFiles"
+        listTitle="Uploaded files"></app-multiple-file-input>
+    </div>
+  </app-wizard-step>
+
+  <a govukLink [routerLink]="'../../../'">Return to: Sub-installations</a>
+</app-permit-task>

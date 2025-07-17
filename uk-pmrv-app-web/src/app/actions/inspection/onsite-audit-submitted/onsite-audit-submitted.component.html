@@ -1,0 +1,193 @@
+<app-base-action-container-component
+  *ngIf="action$ | async as action"
+  [header]="action | itemActionHeader: action.requestId?.split('-')[1]"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="expectedActionType"></app-base-action-container-component>
+<ng-template #customContentTemplate>
+  <ng-container *ngIf="details$ | async as details">
+    <h2 class="govuk-heading-m">
+      @if (isOnsiteInspection$ | async) {
+        On-site inspection details
+      } @else {
+        {{ auditYear$ | async }} audit report details
+      }
+    </h2>
+
+    <dl govuk-summary-list [hasBorders]="true">
+      <div govukSummaryListRow *ngIf="isOnsiteInspection$ | async">
+        <dt govukSummaryListRowKey>On-site inspection date</dt>
+        <dd govukSummaryListRowValue>
+          {{ details.date | date: 'd MMMM yyyy' }}
+        </dd>
+      </div>
+
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Names of officers</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          <ng-container *ngFor="let officer of details.officerNames; let i = index; let isLast = last">
+            <div class="pre-wrap">
+              {{ i + 1 }}. {{ officer }}
+              <br />
+            </div>
+          </ng-container>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow *ngIf="details?.files?.length > 0">
+        <dt govukSummaryListRowKey>
+          {{ (isOperatorRespond$ | async) === true ? 'Uploaded files' : 'Uploaded files (visible to the Operator)' }}
+        </dt>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files [files]="visibleFiles$ | async"></app-summary-download-files>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow *ngIf="details?.regulatorExtraFiles?.length > 0">
+        <dt govukSummaryListRowKey>Uploaded files (not visible to the Operator)</dt>
+        <dd govukSummaryListRowValue>
+          <app-summary-download-files [files]="notVisibleFiles$ | async"></app-summary-download-files>
+        </dd>
+      </div>
+
+      <div govukSummaryListRow *ngIf="details?.additionalInformation">
+        <dt govukSummaryListRowKey>Additional information</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ details.additionalInformation }}
+        </dd>
+      </div>
+    </dl>
+
+    <h2 class="govuk-heading-m">Follow-up actions for the operator</h2>
+
+    <dl
+      govuk-summary-list
+      [hasBorders]="true"
+      *ngIf="
+        inspectionPayload().installationInspection?.followUpActionsRequired !== null &&
+        inspectionPayload().installationInspection?.followUpActionsRequired !== undefined
+      ">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Do you want to add follow-up actions for the operator?</dt>
+        <dd govukSummaryListRowValue>
+          {{ inspectionPayload().installationInspection?.followUpActionsRequired ? 'Yes' : 'No' }}
+        </dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+
+      <div
+        govukSummaryListRow
+        *ngIf="
+          inspectionPayload().installationInspection?.followUpActionsRequired === false &&
+          inspectionPayload().installationInspection?.followUpActionsOmissionJustification
+        ">
+        <dt govukSummaryListRowKey>Justification</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          {{ inspectionPayload().installationInspection?.followUpActionsOmissionJustification }}
+        </dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+    </dl>
+
+    <ng-container *ngIf="inspectionPayload().installationInspection?.followUpActionsOmissionFiles?.length">
+      <dl govuk-summary-list [hasBorders]="true">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Uploaded files</dt>
+          <dd govukSummaryListRowValue>
+            <app-summary-download-files [files]="files()"></app-summary-download-files>
+          </dd>
+          <dd govukSummaryListRowActions></dd>
+        </div>
+      </dl>
+    </ng-container>
+
+    <app-follow-up-item
+      *ngFor="let followUpAction of followUpActions$ | async; let i = index"
+      [followUpAction]="followUpAction"
+      [isEditable]="false"
+      [index]="i"
+      [files]="(attachments$ | async)?.[i] || []"
+      [extraTitle]="(followUpActionsResponses$ | async).length > 0 ? 'Regulator’s comment' : ''">
+      <ng-container *ngIf="(followUpActionsResponses$ | async).length > 0">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-three-quarters">
+            <h2 class="govuk-heading-s">Action summary</h2>
+          </div>
+        </div>
+        <dl govuk-summary-list [hasBorders]="true">
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Completed action?</dt>
+            <dd govukSummaryListRowValue>
+              {{ (followUpActionsResponses$ | async)?.[i]?.completed === true ? 'Yes' : 'No' }}
+            </dd>
+          </div>
+          <div
+            govukSummaryListRow
+            *ngIf="
+              (followUpActionsResponses$ | async)?.[i]?.explanation &&
+              (followUpActionsResponses$ | async)?.[i]?.completed === true
+            ">
+            <dt govukSummaryListRowKey>Progress update</dt>
+            <dd govukSummaryListRowValue>
+              {{ (followUpActionsResponses$ | async)?.[i]?.explanation }}
+            </dd>
+          </div>
+          <div
+            govukSummaryListRow
+            *ngIf="
+              (followUpActionsResponses$ | async)?.[i]?.explanation &&
+              (followUpActionsResponses$ | async)?.[i]?.completed === false
+            ">
+            <dt govukSummaryListRowKey>Why you didn't complete the action</dt>
+            <dd govukSummaryListRowValue>
+              {{ (followUpActionsResponses$ | async)?.[i]?.explanation }}
+            </dd>
+          </div>
+          <div
+            govukSummaryListRow
+            *ngIf="(followUpActionsResponses$ | async)?.[i]?.followUpActionResponseAttachments?.length > 0">
+            <dt govukSummaryListRowKey>Uploaded files</dt>
+            <dd govukSummaryListRowValue>
+              <app-summary-download-files
+                [files]="followUpActionResponseAttachments$(i) | async"></app-summary-download-files>
+            </dd>
+          </div>
+        </dl>
+      </ng-container>
+    </app-follow-up-item>
+
+    <ng-container *ngIf="notificationUsers$ | async as notificationUsers">
+      <h2 app-summary-header class="govuk-heading-m">Official notification letter</h2>
+      <dl govuk-summary-list [hasBorders]="true">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Users</dt>
+          <dd govukSummaryListRowValue>
+            <div *ngFor="let user of notificationUsers">
+              {{ user }}
+            </div>
+          </dd>
+        </div>
+        <div govukSummaryListRow *ngIf="nameOnSignature$ | async as nameOnSignature">
+          <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+          <dd govukSummaryListRowValue>
+            {{ nameOnSignature }}
+          </dd>
+        </div>
+        <div govukSummaryListRow *ngIf="officialNoticeFile$ | async as officialNoticeFile">
+          <dt govukSummaryListRowKey>Official notice</dt>
+          <dd govukSummaryListRowValue>
+            <app-summary-download-files [files]="officialNoticeFile"></app-summary-download-files>
+          </dd>
+        </div>
+      </dl>
+    </ng-container>
+
+    <a govukLink [routerLink]="'../../../../'">
+      Return to:
+      @if (isOnsiteInspection$ | async) {
+        On-site inspection
+      } @else {
+        {{ auditYear$ | async }} audit report
+      }
+    </a>
+  </ng-container>
+</ng-template>

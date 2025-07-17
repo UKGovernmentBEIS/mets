@@ -19,5 +19,8 @@ export class SubmitContainerComponent {
     map(([isEditable, transferDetailsStatus]) => isEditable || transferDetailsStatus !== 'not started'),
   );
 
-  constructor(readonly permitTransferAService: PermitTransferAService, private readonly router: Router) {}
+  constructor(
+    readonly permitTransferAService: PermitTransferAService,
+    private readonly router: Router,
+  ) {}
 }

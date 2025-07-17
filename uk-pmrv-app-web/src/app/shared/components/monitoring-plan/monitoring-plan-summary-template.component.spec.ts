@@ -19,8 +19,7 @@ describe('MonitoringPlanSummaryTemplateComponent', () => {
       <app-monitoring-plan-summary-template
         [planDeviation]="planDeviation"
         [headingSmall]="headingSmall"
-        [opinionStatement]="opinionStatement"
-      ></app-monitoring-plan-summary-template>
+        [opinionStatement]="opinionStatement"></app-monitoring-plan-summary-template>
     `,
   })
   class TestComponent {

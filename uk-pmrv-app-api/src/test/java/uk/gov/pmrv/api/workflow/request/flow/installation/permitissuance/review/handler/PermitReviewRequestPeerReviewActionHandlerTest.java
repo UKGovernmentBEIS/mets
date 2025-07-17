@@ -17,9 +17,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -61,7 +61,7 @@ class PermitReviewRequestPeerReviewActionHandlerTest {
     @Test
     void process() {
         Long requestTaskId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         String selectedPeerReviewer = "selectedPeerReviewer";
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
@@ -83,15 +83,15 @@ class PermitReviewRequestPeerReviewActionHandlerTest {
         requestPeerReviewActionHandler.process(
             requestTaskId,
             RequestTaskActionType.PERMIT_ISSUANCE_REQUEST_PEER_REVIEW,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(permitReviewRequestPeerReviewValidator, times(1))
-            .validate(requestTask, RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW, taskActionPayload, pmrvUser);
-        verify(permitIssuanceReviewService, times(1)).saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, pmrvUser);
+            .validate(requestTask, RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW, taskActionPayload, appUser);
+        verify(permitIssuanceReviewService, times(1)).saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, appUser);
         verify(requestService, times(1))
-            .addActionToRequest(requestTask.getRequest(), null, PERMIT_ISSUANCE_PEER_REVIEW_REQUESTED, pmrvUser.getUserId());
+            .addActionToRequest(requestTask.getRequest(), null, PERMIT_ISSUANCE_PEER_REVIEW_REQUESTED, appUser.getUserId());
         verify(workflowService, times(1)).completeTask(
             requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
@@ -101,7 +101,7 @@ class PermitReviewRequestPeerReviewActionHandlerTest {
     @Test
     void process_invalid_determination() {
         Long requestTaskId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         String selectedPeerReviewer = "selectedPeerReviewer";
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
@@ -121,20 +121,20 @@ class PermitReviewRequestPeerReviewActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         doThrow(new BusinessException(ErrorCode.FORM_VALIDATION))
             .when(permitReviewRequestPeerReviewValidator)
-            .validate(requestTask,RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW, taskActionPayload, pmrvUser);
+            .validate(requestTask,RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW, taskActionPayload, appUser);
 
         BusinessException be = assertThrows(BusinessException.class,
             () -> requestPeerReviewActionHandler.process(
                 requestTaskId,
                 RequestTaskActionType.PERMIT_ISSUANCE_REQUEST_PEER_REVIEW,
-                pmrvUser,
+                appUser,
                 taskActionPayload));
 
         assertEquals(ErrorCode.FORM_VALIDATION, be.getErrorCode());
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(permitReviewRequestPeerReviewValidator, times(1))
-            .validate(requestTask,RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW, taskActionPayload, pmrvUser);
+            .validate(requestTask,RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW, taskActionPayload, appUser);
     }
 
     @Test

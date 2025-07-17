@@ -36,5 +36,8 @@ export class RespondedComponent {
     map((payload) => (payload?.files ? this.airService.getOperatorDownloadUrlFiles(payload?.files) : [])),
   );
 
-  constructor(private readonly airService: AirService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly airService: AirService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

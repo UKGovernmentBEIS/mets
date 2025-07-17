@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-
 import uk.gov.pmrv.api.permit.domain.PermitSection;
 import uk.gov.pmrv.api.permit.domain.common.ProcedureForm;
 

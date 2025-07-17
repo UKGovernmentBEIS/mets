@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { CanDeactivateFn, Routes } from '@angular/router';
 
+import { ChangeAssigneeGuard } from '../guards';
 import { RequestTaskStore } from '../store';
 import { AccountClosureConfirmationComponent } from './account-closure-confirmation/account-closure-confirmation.component';
 import { AccountClosureReasonComponent } from './account-closure-reason/account-closure-reason.component';
@@ -19,6 +20,13 @@ export const ACCOUNT_CLOSURE_ROUTES: Routes = [
         path: '',
         canDeactivate: [canDeactivateAccountClosure],
         component: AccountClosureReasonComponent,
+      },
+      {
+        path: 'change-assignee',
+        canActivate: [ChangeAssigneeGuard],
+        canDeactivate: [ChangeAssigneeGuard],
+        loadChildren: () =>
+          import('../../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
       {
         path: 'summary',

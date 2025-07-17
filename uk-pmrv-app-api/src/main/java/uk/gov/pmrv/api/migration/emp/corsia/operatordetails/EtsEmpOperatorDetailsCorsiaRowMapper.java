@@ -1,15 +1,14 @@
 package uk.gov.pmrv.api.migration.emp.corsia.operatordetails;
 
+import org.springframework.jdbc.core.RowMapper;
+import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.flightaircraftprocedures.EmpOperatingStatePairsCorsiaDetails;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import org.springframework.jdbc.core.RowMapper;
-
-import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.flightaircraftprocedures.EmpOperatingStatePairsCorsiaDetails;
 
 public class EtsEmpOperatorDetailsCorsiaRowMapper implements RowMapper<EtsEmpOperatorDetailsCorsia> {
 

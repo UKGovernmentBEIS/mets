@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.pmrv.api.user.core.service.UserSignatureService;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
+
+import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping(path = "/v1.0/user-signatures")
@@ -45,7 +47,7 @@ public class UserSignatureController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
-                        ContentDisposition.builder("signature").filename(file.getFileName()).build().toString())
+                        ContentDisposition.builder("signature").filename(file.getFileName(), StandardCharsets.UTF_8).build().toString())
                 .contentType(MediaType.parseMediaType(file.getFileType()))
                 .body(new ByteArrayResource(file.getFileContent()));
     }

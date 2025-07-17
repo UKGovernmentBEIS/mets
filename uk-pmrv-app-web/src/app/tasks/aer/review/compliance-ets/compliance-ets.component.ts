@@ -13,8 +13,7 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Compliance with ETS rules">
       <app-compliance-ets-group [etsComplianceRules]="etsComplianceRules$ | async"></app-compliance-ets-group>
       <app-verification-review-group-decision
-        (notification)="notification = $event"
-      ></app-verification-review-group-decision>
+        (notification)="notification = $event"></app-verification-review-group-decision>
     </app-aer-task-review>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,5 +24,8 @@ export class ComplianceEtsComponent {
     map((payload) => payload.verificationReport.etsComplianceRules),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

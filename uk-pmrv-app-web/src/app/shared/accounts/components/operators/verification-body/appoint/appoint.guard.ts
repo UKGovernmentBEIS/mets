@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { Observable, of, switchMap } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { BusinessErrorService } from '../../../../../../error/business-error/bus
 import { appointedVerificationBodyError } from '../../errors/business-error';
 
 @Injectable({ providedIn: 'root' })
-export class AppointGuard implements CanActivate {
+export class AppointGuard {
   constructor(
     private readonly accountVerificationBodyService: AccountVerificationBodyService,
     private readonly businessErrorService: BusinessErrorService,

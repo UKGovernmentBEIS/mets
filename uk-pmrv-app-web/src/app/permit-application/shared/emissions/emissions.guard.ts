@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
 
@@ -12,7 +12,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 import { isWizardComplete } from './emissions-wizard';
 
 @Injectable()
-export class EmissionsGuard implements CanActivate {
+export class EmissionsGuard {
   constructor(
     private readonly router: Router,
     private readonly store: PermitApplicationStore<PermitApplicationState>,

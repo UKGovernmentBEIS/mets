@@ -11,8 +11,7 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Confidentiality statement" [breadcrumb]="true">
       <app-confidentiality-statement-summary-template
-        [data]="confidentialityStatement$ | async"
-      ></app-confidentiality-statement-summary-template>
+        [data]="confidentialityStatement$ | async"></app-confidentiality-statement-summary-template>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

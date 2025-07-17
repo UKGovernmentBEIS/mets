@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -94,40 +94,43 @@ export class AviationReportingService {
 
   /**
    * Calculate total emissions for aerodrome pairs
-   * @param aviationAerCorsiaEmissionsCalculationDTO
+   * @param aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getAerodromePairsEmissionsCorsia(
-    aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO,
+    aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO: AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
   ): Observable<Array<AviationAerCorsiaAerodromePairsTotalEmissions>>;
   public getAerodromePairsEmissionsCorsia(
-    aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO,
+    aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO: AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpResponse<Array<AviationAerCorsiaAerodromePairsTotalEmissions>>>;
   public getAerodromePairsEmissionsCorsia(
-    aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO,
+    aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO: AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpEvent<Array<AviationAerCorsiaAerodromePairsTotalEmissions>>>;
   public getAerodromePairsEmissionsCorsia(
-    aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO,
+    aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO: AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<Array<AviationAerCorsiaAerodromePairsTotalEmissions>>;
   public getAerodromePairsEmissionsCorsia(
-    aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO,
+    aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO: AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<any> {
-    if (aviationAerCorsiaEmissionsCalculationDTO === null || aviationAerCorsiaEmissionsCalculationDTO === undefined) {
+    if (
+      aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO === null ||
+      aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO === undefined
+    ) {
       throw new Error(
-        'Required parameter aviationAerCorsiaEmissionsCalculationDTO was null or undefined when calling getAerodromePairsEmissionsCorsia.',
+        'Required parameter aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO was null or undefined when calling getAerodromePairsEmissionsCorsia.',
       );
     }
 
@@ -163,7 +166,7 @@ export class AviationReportingService {
 
     return this.httpClient.post<Array<AviationAerCorsiaAerodromePairsTotalEmissions>>(
       `${this.configuration.basePath}/v1.0/aviation-reporting/corsia/aerodrome-pairs-emissions`,
-      aviationAerCorsiaEmissionsCalculationDTO,
+      aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,
@@ -671,40 +674,43 @@ export class AviationReportingService {
 
   /**
    * Calculate total emissions for the scheme year
-   * @param aviationAerCorsiaEmissionsCalculationDTO
+   * @param aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getTotalEmissionsCorsia(
-    aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO,
+    aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO: AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
   ): Observable<AviationAerCorsiaTotalEmissions>;
   public getTotalEmissionsCorsia(
-    aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO,
+    aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO: AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
     observe: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpResponse<AviationAerCorsiaTotalEmissions>>;
   public getTotalEmissionsCorsia(
-    aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO,
+    aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO: AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
     observe: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<HttpEvent<AviationAerCorsiaTotalEmissions>>;
   public getTotalEmissionsCorsia(
-    aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO,
+    aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO: AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
     observe: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<AviationAerCorsiaTotalEmissions>;
   public getTotalEmissionsCorsia(
-    aviationAerCorsiaEmissionsCalculationDTO: AviationAerCorsiaEmissionsCalculationDTO,
+    aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO: AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json' },
   ): Observable<any> {
-    if (aviationAerCorsiaEmissionsCalculationDTO === null || aviationAerCorsiaEmissionsCalculationDTO === undefined) {
+    if (
+      aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO === null ||
+      aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO === undefined
+    ) {
       throw new Error(
-        'Required parameter aviationAerCorsiaEmissionsCalculationDTO was null or undefined when calling getTotalEmissionsCorsia.',
+        'Required parameter aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO was null or undefined when calling getTotalEmissionsCorsia.',
       );
     }
 
@@ -740,7 +746,7 @@ export class AviationReportingService {
 
     return this.httpClient.post<AviationAerCorsiaTotalEmissions>(
       `${this.configuration.basePath}/v1.0/aviation-reporting/corsia/total-emissions`,
-      aviationAerCorsiaEmissionsCalculationDTO,
+      aviationAerCorsiaInternationalFlightsEmissionsCalculationDTO,
       {
         responseType: <any>responseType_,
         withCredentials: this.configuration.withCredentials,

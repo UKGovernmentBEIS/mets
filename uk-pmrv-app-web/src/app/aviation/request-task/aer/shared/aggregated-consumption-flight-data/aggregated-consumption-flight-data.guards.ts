@@ -6,7 +6,7 @@ import { combineLatest, map, take } from 'rxjs';
 import { AerCorsiaStoreDelegate } from '@aviation/request-task/store/delegates/aer-corsia/aer-corsia-store-delegate';
 
 import { RequestTaskStore } from '../../../store';
-import { AerStoreDelegate } from '../../../store/delegates';
+import { AerUkEtsStoreDelegate } from '../../../store/delegates';
 import { TASK_FORM_PROVIDER } from '../../../task-form.provider';
 import { aerQuery } from '../../shared/aer.selectors';
 import { AggregatedConsumptionFlightDataFormProvider } from './aggregated-consumption-flight-data-form.provider';
@@ -20,7 +20,7 @@ export const canActivateAggregatedConsumptionFlightData: CanActivateFn = () => {
     map(([aer, isCorsia]) => {
       const initialState = isCorsia
         ? AerCorsiaStoreDelegate.INITIAL_STATE.aggregatedEmissionsData
-        : AerStoreDelegate.INITIAL_STATE.aggregatedEmissionsData;
+        : AerUkEtsStoreDelegate.INITIAL_STATE.aggregatedEmissionsData;
 
       if (!aer) {
         store.setPayload({
@@ -32,7 +32,7 @@ export const canActivateAggregatedConsumptionFlightData: CanActivateFn = () => {
       }
 
       if (!aer?.aggregatedEmissionsData) {
-        store.aerDelegate.setAggregatedEmissionsData(initialState);
+        store.aerDelegate.setAggregatedEmissionsData(initialState as any);
       }
 
       formProvider.setFormValue(aer.aggregatedEmissionsData);

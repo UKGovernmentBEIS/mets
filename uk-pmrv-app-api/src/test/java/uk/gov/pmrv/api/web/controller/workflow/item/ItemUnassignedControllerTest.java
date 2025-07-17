@@ -13,23 +13,22 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import uk.gov.pmrv.api.common.domain.dto.PagingRequest;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemUnassignedRegulatorService;
 import uk.gov.pmrv.api.workflow.request.application.item.service.ItemUnassignedService;
@@ -43,10 +42,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.OPERATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.REGULATOR;
-import static uk.gov.pmrv.api.common.domain.enumeration.RoleType.VERIFIER;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
+import static uk.gov.netz.api.common.constants.RoleTypeConstants.VERIFIER;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 
 @ExtendWith(MockitoExtension.class)
 class ItemUnassignedControllerTest {
@@ -60,13 +59,13 @@ class ItemUnassignedControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private ItemUnassignedRegulatorService itemUnassignedRegulatorService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
     private RoleAuthorizationService roleAuthorizationService;
@@ -77,7 +76,7 @@ class ItemUnassignedControllerTest {
         ItemUnassignedController itemController = new ItemUnassignedController(services);
 
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(itemController);
@@ -93,7 +92,7 @@ class ItemUnassignedControllerTest {
         conversionService.addConverter(new StringToAccountTypeEnumConverter());
 
         mockMvc = MockMvcBuilders.standaloneSetup(itemController)
-            .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+            .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
             .setControllerAdvice(new ExceptionControllerAdvice())
             .setConversionService(conversionService)
             .build();
@@ -102,13 +101,13 @@ class ItemUnassignedControllerTest {
     @Test
     void getUnassignedItems_regulator() throws Exception {
         final AccountType accountType = AccountType.INSTALLATION;
-        PmrvUser pmrvUser = buildMockPmrvUser(RoleType.REGULATOR);
+        AppUser appUser = buildMockAppUser(RoleTypeConstants.REGULATOR);
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().totalItems(1L).build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(itemUnassignedRegulatorService.getUnassignedItems(pmrvUser, accountType, PAGING))
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(itemUnassignedRegulatorService.getUnassignedItems(appUser, accountType, PAGING))
                 .thenReturn(itemDTOResponse);
-        when(itemUnassignedRegulatorService.getRoleType()).thenReturn(RoleType.REGULATOR);
+        when(itemUnassignedRegulatorService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(BASE_PATH + "/" + UNASSIGNED + "?page=0&size=10")
@@ -116,17 +115,17 @@ class ItemUnassignedControllerTest {
                 .andExpect(status().isOk());
 
         verify(itemUnassignedRegulatorService, times(1))
-                .getUnassignedItems(pmrvUser, accountType, PAGING);
+                .getUnassignedItems(appUser, accountType, PAGING);
     }
 
     @Test
     void getUnassignedItems_forbidden() throws Exception {
-        PmrvUser pmrvUser = buildMockPmrvUser(RoleType.REGULATOR);
+        AppUser appUser = buildMockAppUser(RoleTypeConstants.REGULATOR);
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(roleAuthorizationService)
-            .evaluate(pmrvUser, new RoleType[]{OPERATOR, REGULATOR, VERIFIER});
+            .evaluate(appUser, new String[]{OPERATOR, REGULATOR, VERIFIER});
 
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -137,12 +136,12 @@ class ItemUnassignedControllerTest {
         verify(itemUnassignedRegulatorService, never()).getUnassignedItems(any(), any(), any(PagingRequest.class));
     }
 
-    private PmrvUser buildMockPmrvUser(RoleType roleType) {
-        PmrvAuthority pmrvAuthority = PmrvAuthority.builder()
+    private AppUser buildMockAppUser(String roleType) {
+        AppAuthority pmrvAuthority = AppAuthority.builder()
             .competentAuthority(ENGLAND)
             .build();
 
-        return PmrvUser.builder()
+        return AppUser.builder()
             .userId(USER_ID)
             .authorities(List.of(pmrvAuthority))
             .roleType(roleType)

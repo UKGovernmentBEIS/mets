@@ -11,8 +11,7 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Monitoring approaches used during the reporting year" [breadcrumb]="true">
       <app-approaches-used-summary-template
-        [monitoringApproaches]="monitoringApproachEmissions$ | async"
-      ></app-approaches-used-summary-template>
+        [monitoringApproaches]="monitoringApproachEmissions$ | async"></app-approaches-used-summary-template>
     </app-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

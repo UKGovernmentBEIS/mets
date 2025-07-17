@@ -17,11 +17,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.MonitoringApproachType;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.MonitoringApproaches;
@@ -85,14 +85,14 @@ class PermitReviewNotifyOperatorValidatorTest {
             .payload(taskPayload)
             .build();
 
-        final PmrvUser pmrvUser = PmrvUser.builder()
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+        final AppUser appUser = AppUser.builder()
+            .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
             .build();
 
         when(permitReviewDeterminationValidatorService.isDeterminationAndDecisionsValid(determination, taskPayload, RequestType.PERMIT_ISSUANCE)).thenReturn(false);
 
         final BusinessException businessException = assertThrows(BusinessException.class,
-            () -> notifyOperatorValidator.validate(requestTask, actionPayload, pmrvUser));
+            () -> notifyOperatorValidator.validate(requestTask, actionPayload, appUser));
 
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
         
@@ -135,21 +135,21 @@ class PermitReviewNotifyOperatorValidatorTest {
             .payload(taskPayload)
             .build();
 
-        final PmrvUser pmrvUser = PmrvUser.builder()
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+        final AppUser appUser = AppUser.builder()
+            .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
             .build();
 
         
         when(permitReviewDeterminationValidatorService.isDeterminationAndDecisionsValid(determination, taskPayload, RequestType.PERMIT_ISSUANCE)).thenReturn(true);
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, actionPayload.getDecisionNotification(), pmrvUser)).thenReturn(false);
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, actionPayload.getDecisionNotification(), appUser)).thenReturn(false);
 
         final BusinessException businessException = assertThrows(BusinessException.class,
-            () -> notifyOperatorValidator.validate(requestTask, actionPayload, pmrvUser));
+            () -> notifyOperatorValidator.validate(requestTask, actionPayload, appUser));
 
         assertEquals(ErrorCode.FORM_VALIDATION, businessException.getErrorCode());
         
         verify(permitReviewDeterminationValidatorService, times(1)).validateDeterminationObject(determination);
         verify(permitReviewDeterminationValidatorService, times(1)).isDeterminationAndDecisionsValid(determination, taskPayload, RequestType.PERMIT_ISSUANCE);
-        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, actionPayload.getDecisionNotification(), pmrvUser);
+        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, actionPayload.getDecisionNotification(), appUser);
     }
 }

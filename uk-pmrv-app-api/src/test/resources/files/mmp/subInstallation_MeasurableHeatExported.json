@@ -1,0 +1,51 @@
+{
+  "subInstallationNo": "1",
+  "subInstallationType": "FUEL_BENCHMARK_CL",
+  "description": "sample_description",
+  "annualLevel": {
+    "annualLevelType": "ACTIVITY_FUEL",
+    "fuelDataSources": [
+      {
+        "dataSourceQuantificationNumber": "1",
+        "fuelInput": "METHOD_MONITORING_PLAN",
+        "energyContent": "CALCULATION_METHOD_MONITORING_PLAN"
+      }
+    ],
+    "methodologyAppliedDescription": "desc",
+    "hierarchicalOrder": {
+      "followed": true
+    },
+    "trackingMethodologyDescription": "desc",
+    "supportingFiles": []
+  },
+  "importedMeasurableHeatFlow": {
+    "exist": false
+  },
+  "directlyAttributableEmissions": {
+    "directlyAttributableEmissionsType": "FALLBACK_APPROACH",
+    "attribution": "a",
+    "supportingFiles": []
+  },
+  "fuelInputAndRelevantEmissionFactor": {
+    "fuelInputAndRelevantEmissionFactorType": "PRODUCT_BENCHMARK",
+    "exist": false,
+    "dataSources": null
+  },
+  "measurableHeat" : {
+    "measurableHeatExported": {
+      "dataSources": [
+        {
+          "dataSourceNo": "0",
+          "heatExported": "LEGAL_METROLOGICAL_CONTROL_READING",
+          "netMeasurableHeatFlows": "MEASUREMENTS"
+        }
+      ],
+      "methodologyAppliedDescription": "desc",
+      "hierarchicalOrder": {
+        "followed": true
+      },
+      "methodologyDeterminationEmissionDescription": "desc",
+      "supportingFiles": []
+    }
+  }
+}

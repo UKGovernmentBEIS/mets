@@ -1,11 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
@@ -23,6 +17,12 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.domain
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.mapper.PermitSurrenderMapper;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.service.notification.PermitSurrenderOfficialNoticeService;
 import uk.gov.pmrv.api.workflow.utils.DateUtils;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 @RequiredArgsConstructor
@@ -60,17 +60,17 @@ public class PermitSurrenderReviewGrantedService {
                 requestPayload.getRegulatorReviewer());
         
         //send official notice
-        permitSurrenderOfficialNoticeService.sendReviewDeterminationOfficialNoticeForGranted(request);
+        permitSurrenderOfficialNoticeService.sendReviewDeterminationOfficialNotice(request);
     }
     
     public Date resolveNoticeReminderDate(String requestId) {
     	Request request = requestService.findRequestById(requestId);
         PermitSurrenderRequestPayload requestPayload = (PermitSurrenderRequestPayload) request.getPayload();
-		return DateUtils.convertLocalDateToDate(
+		return DateUtils.atEndOfDay(
 				((PermitSurrenderReviewDeterminationGrant) requestPayload.getReviewDetermination()).getNoticeDate().minus(28, DAYS));
     }
 
-    public Map<String, Object> getAerVariables(String requestId) {
+    public Map<String, Object> constructAerVariables(String requestId) {
         Map<String, Object> variables = new HashMap<>();
 
         Request request = requestService.findRequestById(requestId);
@@ -82,7 +82,7 @@ public class PermitSurrenderReviewGrantedService {
 
         if(Boolean.TRUE.equals(reviewDeterminationGrant.getReportRequired())){
             variables.put(BpmnProcessConstants.AER_EXPIRATION_DATE,
-                    DateUtils.convertLocalDateToDate(reviewDeterminationGrant.getReportDate()));
+                    DateUtils.atEndOfDay(reviewDeterminationGrant.getReportDate()));
         }
 
         return variables;

@@ -13,8 +13,6 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.mapper.AerMapper;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationAmendsSubmitRequestTaskPayload;
 
 import java.util.Set;
 

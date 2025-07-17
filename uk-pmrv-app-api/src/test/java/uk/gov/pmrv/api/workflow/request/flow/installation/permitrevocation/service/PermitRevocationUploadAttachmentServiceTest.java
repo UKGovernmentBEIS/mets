@@ -2,8 +2,6 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.serv
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.UUID;
@@ -16,7 +14,6 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.domain.PermitRevocationWaitForAppealRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.permitrevocation.service.PermitRevocationUploadAttachmentService;
 
 @ExtendWith(MockitoExtension.class)
 class PermitRevocationUploadAttachmentServiceTest {

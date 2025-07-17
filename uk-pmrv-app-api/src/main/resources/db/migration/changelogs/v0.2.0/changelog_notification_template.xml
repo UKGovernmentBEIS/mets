@@ -1,0 +1,3681 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+		logicalFilePath="v0.2.0/changelog_notification_template.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_insert_installation_inspection_operator_response_notification_template" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            <![CDATA[
+             INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                text)
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Installation Inspection Operator Response',
+                       'New notification received - Manage your UK ETS reporting',
+                       '${accountName} ${emitterId} has submitted a response to one or more of your follow-up actions. Sign in to your account to view the response.
+
+This is an automatic email - please do not reply to this address'
+                   )]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template WHERE name = 'Installation Inspection Operator Response';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_reset_password_request_message_notification_template" author="p70453" context="migrate">
+        <sql>
+            UPDATE notification_template
+            SET subject = 'Password reset request - Manage your online reporting service',
+                text = 'We received a request to reset your password for the online reporting service.
+
+Use this link to reset your password:
+
+[Reset your password](${resetPasswordLink})
+
+This link will expire in ${expirationMinutes} minutes.
+
+If you did not request this reset you must [contact your regulator](${contactRegulator}).
+
+This is an automatic email - please do not reply to this address.'
+            WHERE name = 'ResetPasswordRequest';
+        </sql>
+
+        <rollback>
+            <sql>
+                UPDATE notification_template
+                SET subject = 'Password reset request - Manage your UK ETS reporting',
+                text = 'We received a request to reset your password for the UK ETS reporting service.
+
+                Use this link to reset your password:
+
+                [Reset your password](${resetPasswordLink})
+
+                This link will expire in ${expirationMinutes} minutes.
+
+                If you did not request this reset you must [contact your regulator](${contactRegulator})
+
+                This is an automatic email - please do not reply to this address.'
+                WHERE name = 'ResetPasswordRequest';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_reset_password_confirmation_message_notification_template" author="p70453" context="migrate">
+        <sql>
+            UPDATE notification_template
+            SET subject = 'Password reset - Manage your online reporting service',
+                text = 'You have successfully reset your password for the online reporting service. You can now [sign in to your account](${homeUrl}).
+
+If you did not request this reset you must [contact your regulator](${contactRegulator}).
+
+This is an automatic email - please do not reply to this address.'
+            WHERE name = 'ResetPasswordConfirmation';
+        </sql>
+
+        <rollback>
+            <sql>
+                UPDATE notification_template
+                SET subject = 'Password reset - Manage your UK ETS reporting',
+                text = 'You have successfully reset your password for the UK ETS reporting service. You can now [sign in to your account](${homeUrl}).
+
+                If you did not request this reset you must [contact your regulator](${contactRegulator}).
+
+                This is an automatic email - please do not reply to this address.'
+                WHERE name = 'ResetPasswordConfirmation';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_Reset2FaConfirmation_confirmation_message_notification_template" author="p70453" context="migrate">
+        <sql>
+            UPDATE notification_template
+            SET subject = 'Two-factor authentication reset - Manage your online reporting service',
+                text = 'We received a request to reset your two-factor authentication for the online reporting service.
+
+Sign in to the [online reporting service](${homeUrl}) to set up a new authenticator and access your account.
+
+If you did not make this request you must [contact your regulator](${contactRegulator}).
+
+This is an automatic email - please do not reply to this address.'
+            WHERE name = 'Reset2FaConfirmation';
+        </sql>
+
+        <rollback>
+            <sql>
+                UPDATE notification_template
+                SET subject = 'We received a request to reset your two-factor authentication for the UK ETS reporting service',
+
+                text = 'Sign in to the [UK ETS reporting service](${homeUrl}) to set up a new authenticator and access your account.
+
+                If you did not make this request you must [contact your regulator](${contactRegulator}).
+
+                This is an automatic email - please do not reply to this address.'
+                WHERE name = 'Reset2FaConfirmation';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_Change2FA_confirmation_message_notification_template" author="p70453" context="migrate">
+        <sql>
+            UPDATE notification_template
+            SET subject = 'Two factor authentication device update request - Manage your online reporting service',
+                text = 'Use this link to sign in to the online reporting service and update your authenticator app:
+
+[Sign in and set up new two factor authentication](${change2FALink})
+
+This link will expire in ${expirationMinutes} minutes.
+
+If you did not make this application you must [contact your regulator](${contactRegulator}).
+
+This is an automatic email - please do not reply to this address.'
+            WHERE name = 'Change2FA';
+        </sql>
+
+        <rollback>
+            <sql>
+                UPDATE notification_template
+                SET subject = 'Two factor authentication device update request - Manage your UK ETS reporting',
+
+                text = 'Use this link to sign in to the UK ETS reporting service and update your authenticator app:
+
+                [Sign in and set up new two factor authentication](${change2FALink})
+
+                This link will expire in ${expirationMinutes} minutes.
+
+                If you did not make this application you must [contact your regulator](${contactRegulator}).
+
+                This is an automatic email - please do not reply to this address.'
+                WHERE name = 'Change2FA';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_aviation_aer_corsia_annual_offsetting_official_notice_templates_england_2" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_Annual_Offsetting_Requirements_Notice_EA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMITTED',
+                       'CORSIA_Annual_Offsetting_Requirements_Notice_EA',
+                       'ENGLAND',
+                       'AVIATION',
+                       'CORSIA Annual Offsetting Requirements',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'CORSIA_Annual_Offsetting_Requirements_Notice_EA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_EA' and competent_authority = 'ENGLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'AVIATION')
+            and document_template_id = (select id from notification_document_template where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_EA' and competent_authority = 'ENGLAND');
+
+            delete from notification_document_template
+            where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_EA' and competent_authority = 'ENGLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'CORSIA_Annual_Offsetting_Requirements_Notice_EA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_aviation_aer_corsia_annual_offsetting_official_notice_templates_northern_ireland" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_Annual_Offsetting_Requirements_Notice_NIEA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMITTED',
+                       'CORSIA_Annual_Offsetting_Requirements_Notice_NIEA',
+                       'NORTHERN_IRELAND',
+                       'AVIATION',
+                       'CORSIA Annual Offsetting Requirements',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'CORSIA_Annual_Offsetting_Requirements_Notice_NIEA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_NIEA' and competent_authority = 'NORTHERN_IRELAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'AVIATION')
+            and document_template_id = (select id from notification_document_template where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_NIEA' and competent_authority = 'NORTHERN_IRELAND');
+
+            delete from notification_document_template
+            where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_NIEA' and competent_authority = 'NORTHERN_IRELAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'CORSIA_Annual_Offsetting_Requirements_Notice_NIEA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_aviation_aer_corsia_annual_offsetting_official_notice_templates_scotland" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_Annual_Offsetting_Requirements_Notice_SEPA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMITTED',
+                       'CORSIA_Annual_Offsetting_Requirements_Notice_SEPA',
+                       'SCOTLAND',
+                       'AVIATION',
+                       'CORSIA Annual Offsetting Requirements',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'CORSIA_Annual_Offsetting_Requirements_Notice_SEPA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_SEPA' and competent_authority = 'SCOTLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'AVIATION')
+            and document_template_id = (select id from notification_document_template where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_SEPA' and competent_authority = 'SCOTLAND');
+
+            delete from notification_document_template
+            where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_SEPA' and competent_authority = 'SCOTLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'CORSIA_Annual_Offsetting_Requirements_Notice_SEPA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_aviation_aer_corsia_annual_offsetting_official_notice_templates_wales" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_Annual_Offsetting_Requirements_Notice_NRW.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMITTED',
+                       'CORSIA_Annual_Offsetting_Requirements_Notice_NRW',
+                       'WALES',
+                       'AVIATION',
+                       'CORSIA Annual Offsetting Requirements',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'CORSIA_Annual_Offsetting_Requirements_Notice_NRW.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_NRW' and competent_authority = 'WALES')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'AVIATION')
+            and document_template_id = (select id from notification_document_template where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_NRW' and competent_authority = 'WALES');
+
+            delete from notification_document_template
+            where name = 'CORSIA_Annual_Offsetting_Requirements_Notice_NRW' and competent_authority = 'WALES';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'CORSIA_Annual_Offsetting_Requirements_Notice_NRW.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_audit_official_notice_templates_england" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - EA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'INSTALLATION_AUDIT_SUBMITTED',
+                       'Installation audit official notice',
+                       'ENGLAND',
+                       'INSTALLATION',
+                       'Installation audit',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L004 IW - Audit Report - Template - EA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Installation audit official notice' and competent_authority = 'ENGLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Installation audit official notice' and competent_authority = 'ENGLAND');
+
+            delete from notification_document_template
+            where name = 'Installation audit official notice' and competent_authority = 'ENGLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L004 IW - Audit Report - Template - EA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_audit_official_notice_templates_northern_ireland" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - NI.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'INSTALLATION_AUDIT_SUBMITTED',
+                       'Installation audit official notice',
+                       'NORTHERN_IRELAND',
+                       'INSTALLATION',
+                       'Installation audit',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L004 IW - Audit Report - Template - NI.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Installation audit official notice' and competent_authority = 'NORTHERN_IRELAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Installation audit official notice' and competent_authority = 'NORTHERN_IRELAND');
+
+            delete from notification_document_template
+            where name = 'Installation audit official notice' and competent_authority = 'NORTHERN_IRELAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L004 IW - Audit Report - Template - NI.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_audit_official_notice_templates_opred" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - OPRED.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'INSTALLATION_AUDIT_SUBMITTED',
+                       'Installation audit official notice',
+                       'OPRED',
+                       'INSTALLATION',
+                       'Installation audit',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L004 IW - Audit Report - Template - OPRED.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Installation audit official notice' and competent_authority = 'OPRED')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Installation audit official notice' and competent_authority = 'OPRED');
+
+            delete from notification_document_template
+            where name = 'Installation audit official notice' and competent_authority = 'OPRED';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L004 IW - Audit Report - Template - OPRED.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_audit_official_notice_templates_scotland" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - SEPA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'INSTALLATION_AUDIT_SUBMITTED',
+                       'Installation audit official notice',
+                       'SCOTLAND',
+                       'INSTALLATION',
+                       'Installation audit',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L004 IW - Audit Report - Template - SEPA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Installation audit official notice' and competent_authority = 'SCOTLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Installation audit official notice' and competent_authority = 'SCOTLAND');
+
+            delete from notification_document_template
+            where name = 'Installation audit official notice' and competent_authority = 'SCOTLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L004 IW - Audit Report - Template - SEPA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_audit_official_notice_templates_wales" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - NRW.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'INSTALLATION_AUDIT_SUBMITTED',
+                       'Installation audit official notice',
+                       'WALES',
+                       'INSTALLATION',
+                       'Installation audit',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L004 IW - Audit Report - Template - NRW.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Installation audit official notice' and competent_authority = 'WALES')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Installation audit official notice' and competent_authority = 'WALES');
+
+            delete from notification_document_template
+            where name = 'Installation audit official notice' and competent_authority = 'WALES';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L004 IW - Audit Report - Template - NRW.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_onsite_inspection_official_notice_templates_england" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - EA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'INSTALLATION_ONSITE_INSPECTION_SUBMITTED',
+                       'Installation onsite inspection official notice',
+                       'ENGLAND',
+                       'INSTALLATION',
+                       'Installation onsite inspection',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L004 IW - Onsite Inspection - Template - EA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Installation onsite inspection official notice' and competent_authority = 'ENGLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Installation onsite inspection official notice' and competent_authority = 'ENGLAND');
+
+            delete from notification_document_template
+            where name = 'Installation onsite inspection official notice' and competent_authority = 'ENGLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L004 IW - Onsite Inspection - Template - EA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_onsite_inspection_official_notice_templates_northern_ireland" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - NI.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'INSTALLATION_ONSITE_INSPECTION_SUBMITTED',
+                       'Installation onsite inspection official notice',
+                       'NORTHERN_IRELAND',
+                       'INSTALLATION',
+                       'Installation onsite inspection',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L004 IW - Onsite Inspection - Template - NI.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Installation onsite inspection official notice' and competent_authority = 'NORTHERN_IRELAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Installation onsite inspection official notice' and competent_authority = 'NORTHERN_IRELAND');
+
+            delete from notification_document_template
+            where name = 'Installation onsite inspection official notice' and competent_authority = 'NORTHERN_IRELAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L004 IW - Onsite Inspection - Template - NI.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_onsite_inspection_official_notice_templates_opred" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - OPRED.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'INSTALLATION_ONSITE_INSPECTION_SUBMITTED',
+                       'Installation onsite inspection official notice',
+                       'OPRED',
+                       'INSTALLATION',
+                       'Installation onsite inspection',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L004 IW - Onsite Inspection - Template - OPRED.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Installation onsite inspection official notice' and competent_authority = 'OPRED')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Installation onsite inspection official notice' and competent_authority = 'OPRED');
+
+            delete from notification_document_template
+            where name = 'Installation onsite inspection official notice' and competent_authority = 'OPRED';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L004 IW - Onsite Inspection - Template - OPRED.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_onsite_inspection_official_notice_templates_scotland" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - SEPA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'INSTALLATION_ONSITE_INSPECTION_SUBMITTED',
+                       'Installation onsite inspection official notice',
+                       'SCOTLAND',
+                       'INSTALLATION',
+                       'Installation onsite inspection',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L004 IW - Onsite Inspection - Template - SEPA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Installation onsite inspection official notice' and competent_authority = 'SCOTLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Installation onsite inspection official notice' and competent_authority = 'SCOTLAND');
+
+            delete from notification_document_template
+            where name = 'Installation onsite inspection official notice' and competent_authority = 'SCOTLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L004 IW - Onsite Inspection - Template - SEPA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_installation_onsite_inspection_official_notice_templates_wales" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - NRW.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'INSTALLATION_ONSITE_INSPECTION_SUBMITTED',
+                       'Installation onsite inspection official notice',
+                       'WALES',
+                       'INSTALLATION',
+                       'Installation onsite inspection',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L004 IW - Onsite Inspection - Template - NRW.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Installation onsite inspection official notice' and competent_authority = 'WALES')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Installation onsite inspection official notice' and competent_authority = 'WALES');
+
+            delete from notification_document_template
+            where name = 'Installation onsite inspection official notice' and competent_authority = 'WALES';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L004 IW - Onsite Inspection - Template - NRW.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_aer_corsia_three_year_period_offsetting_official_notice_templates_england" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - EA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED',
+                       'CORSIA_Notification_Offsetting_Oblications_3Years_Template_EA',
+                       'ENGLAND',
+                       'AVIATION',
+                       'CORSIA 3 Year Period Offsetting Requirements',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L101 CORSIA Notification Offsetting Oblications - 3Years - Template - EA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_EA' and competent_authority = 'ENGLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'AVIATION')
+            and document_template_id = (select id from notification_document_template where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_EA' and competent_authority = 'ENGLAND');
+
+            delete from notification_document_template
+            where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_EA' and competent_authority = 'ENGLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L101 CORSIA Notification Offsetting Oblications - 3Years - Template - EA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_aer_corsia_three_year_period_offsetting_official_notice_templates_northern_ireland" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - NI.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED',
+                       'CORSIA_Notification_Offsetting_Oblications_3Years_Template_NI',
+                       'NORTHERN_IRELAND',
+                       'AVIATION',
+                       'CORSIA 3 Year Period Offsetting Requirements',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L101 CORSIA Notification Offsetting Oblications - 3Years - Template - NI.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_NI' and competent_authority = 'NORTHERN_IRELAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'AVIATION')
+            and document_template_id = (select id from notification_document_template where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_NI' and competent_authority = 'NORTHERN_IRELAND');
+
+            delete from notification_document_template
+            where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_NI' and competent_authority = 'NORTHERN_IRELAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L101 CORSIA Notification Offsetting Oblications - 3Years - Template - NI.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_aer_corsia_three_year_period_offsetting_official_notice_templates_scotland" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - SEPA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED',
+                       'CORSIA_Notification_Offsetting_Oblications_3Years_Template_SEPA',
+                       'SCOTLAND',
+                       'AVIATION',
+                       'CORSIA 3 Year Period Offsetting Requirements',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L101 CORSIA Notification Offsetting Oblications - 3Years - Template - SEPA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_SEPA' and competent_authority = 'SCOTLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'AVIATION')
+            and document_template_id = (select id from notification_document_template where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_SEPA' and competent_authority = 'SCOTLAND');
+
+            delete from notification_document_template
+            where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_SEPA' and competent_authority = 'SCOTLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L101 CORSIA Notification Offsetting Oblications - 3Years - Template - SEPA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_aer_corsia_three_year_period_offsetting_official_notice_templates_wales" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - NRW.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED',
+                       'CORSIA_Notification_Offsetting_Oblications_3Years_Template_NRW',
+                       'WALES',
+                       'AVIATION',
+                       'CORSIA 3 Year Period Offsetting Requirements',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'L101 CORSIA Notification Offsetting Oblications - 3Years - Template - NRW.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_NRW' and competent_authority = 'WALES')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'AVIATION')
+            and document_template_id = (select id from notification_document_template where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_NRW' and competent_authority = 'WALES');
+
+            delete from notification_document_template
+            where name = 'CORSIA_Notification_Offsetting_Oblications_3Years_Template_NRW' and competent_authority = 'WALES';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'L101 CORSIA Notification Offsetting Oblications - 3Years - Template - NRW.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_aer_corsia_annual_offsetting_official_notice_templates_add_missing_percentage_symbol" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_Annual_Offsetting_Requirements_Notice_EA.docx"/>
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_Annual_Offsetting_Requirements_Notice_NIEA.docx"/>
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_Annual_Offsetting_Requirements_Notice_SEPA.docx"/>
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="CORSIA_Annual_Offsetting_Requirements_Notice_NRW.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_aer_corsia_annual_offsetting_official_notice_templates_fix_wrong_account_name_and_location_field_name" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - EA.docx"/>
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - NI.docx"/>
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - SEPA.docx"/>
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - NRW.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_aer_corsia_three_year_period_offsetting_official_notice_templates_add_operatorHasOffsettingRequirements_condition_and_relevant_text_change" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - EA.docx"/>
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - NI.docx"/>
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - SEPA.docx"/>
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="AVIATION_AER_CORSIA_3_YEAR_PERIOD_OFFSETTING_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="L101 CORSIA Notification Offsetting Oblications - 3Years - Template - NRW.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_aviation_email_notification_template_OPRED" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template consume registry error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'OPRED',
+                       null,
+                       'AVIATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point "Update emissions value" has failed with error: "${errorCode} - ${errorMessage}" for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: {registryId}
+                
+                If there is a need, then please raise a support ticket including the following information:
+
+                Source system identifier: ${sourceSystem}
+                Message ID (correlation ID): ${correlationId}
+                Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+                Error code: ${errorCode}
+                Error message: ${errorMessage}
+
+                Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template consume registry error'
+                and competent_authority = 'OPRED' and account_type = 'AVIATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_aviation_email_notification_template_SCOTLAND" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template consume registry error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'SCOTLAND',
+                       null,
+                       'AVIATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point "Update emissions value" has failed with error: "${errorCode} - ${errorMessage}" for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: {registryId}
+                
+                If there is a need, then please raise a support ticket including the following information:
+
+                Source system identifier: ${sourceSystem}
+                Message ID (correlation ID): ${correlationId}
+                Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+                Error code: ${errorCode}
+                Error message: ${errorMessage}
+
+                Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template consume registry error'
+                and competent_authority = 'SCOTLAND' and account_type = 'AVIATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_aviation_email_notification_template_WALES" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template consume registry error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'WALES',
+                       null,
+                       'AVIATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point "Update emissions value" has failed with error: "${errorCode} - ${errorMessage}" for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: {registryId}
+                
+                If there is a need, then please raise a support ticket including the following information:
+
+                Source system identifier: ${sourceSystem}
+                Message ID (correlation ID): ${correlationId}
+                Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+                Error code: ${errorCode}
+                Error message: ${errorMessage}
+
+                Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template consume registry error'
+                and competent_authority = 'WALES' and account_type = 'AVIATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_aviation_email_notification_template_NORTHERN_IRELAND" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template consume registry error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'NORTHERN_IRELAND',
+                       null,
+                       'AVIATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point "Update emissions value" has failed with error: "${errorCode} - ${errorMessage}" for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: {registryId}
+                
+                If there is a need, then please raise a support ticket including the following information:
+
+                Source system identifier: ${sourceSystem}
+                Message ID (correlation ID): ${correlationId}
+                Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+                Error code: ${errorCode}
+                Error message: ${errorMessage}
+
+                Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template consume registry error'
+                and competent_authority = 'NORTHERN_IRELAND' and account_type = 'AVIATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_aviation_email_notification_template_ENGLAND" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template consume registry error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'ENGLAND',
+                       null,
+                       'AVIATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point "Update emissions value" has failed with error: "${errorCode} - ${errorMessage}" for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: {registryId}
+                
+                If there is a need, then please raise a support ticket including the following information:
+
+                Source system identifier: ${sourceSystem}
+                Message ID (correlation ID): ${correlationId}
+                Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+                Error code: ${errorCode}
+                Error message: ${errorMessage}
+
+                Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template consume registry error'
+                and competent_authority = 'ENGLAND' and account_type = 'AVIATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_installation_email_notification_template_OPRED" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template consume registry error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'OPRED',
+                       null,
+                       'INSTALLATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point "Update emissions value" has failed with error: "${errorCode} - ${errorMessage}" for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: {registryId}
+                
+                If there is a need, then please raise a support ticket including the following information:
+
+                Source system identifier: ${sourceSystem}
+                Message ID (correlation ID): ${correlationId}
+                Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+                Error code: ${errorCode}
+                Error message: ${errorMessage}
+
+                Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template consume registry error'
+                and competent_authority = 'OPRED' and account_type = 'INSTALLATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_installation_email_notification_template_SCOTLAND" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template consume registry error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'SCOTLAND',
+                       null,
+                       'INSTALLATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point "Update emissions value" has failed with error: "${errorCode} - ${errorMessage}" for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: {registryId}
+                
+                If there is a need, then please raise a support ticket including the following information:
+
+                Source system identifier: ${sourceSystem}
+                Message ID (correlation ID): ${correlationId}
+                Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+                Error code: ${errorCode}
+                Error message: ${errorMessage}
+
+                Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template consume registry error'
+                and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume__installation_email_notification_template_WALES" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template consume registry error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'WALES',
+                       null,
+                       'INSTALLATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point "Update emissions value" has failed with error: "${errorCode} - ${errorMessage}" for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: {registryId}
+                
+                If there is a need, then please raise a support ticket including the following information:
+
+                Source system identifier: ${sourceSystem}
+                Message ID (correlation ID): ${correlationId}
+                Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+                Error code: ${errorCode}
+                Error message: ${errorMessage}
+
+                Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template consume registry error'
+                and competent_authority = 'WALES' and account_type = 'INSTALLATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_installation_email_notification_template_NORTHERN_IRELAND" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template consume registry error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'NORTHERN_IRELAND',
+                       null,
+                       'INSTALLATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point "Update emissions value" has failed with error: "${errorCode} - ${errorMessage}" for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: {registryId}
+                
+                If there is a need, then please raise a support ticket including the following information:
+
+                Source system identifier: ${sourceSystem}
+                Message ID (correlation ID): ${correlationId}
+                Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+                Error code: ${errorCode}
+                Error message: ${errorMessage}
+
+                Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template consume registry error'
+                and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_installation_email_notification_template_ENGLAND" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template consume registry error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'ENGLAND',
+                       null,
+                       'INSTALLATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point "Update emissions value" has failed with error: "${errorCode} - ${errorMessage}" for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: {registryId}
+                
+                If there is a need, then please raise a support ticket including the following information:
+
+                Source system identifier: ${sourceSystem}
+                Message ID (correlation ID): ${correlationId}
+                Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+                Error code: ${errorCode}
+                Error message: ${errorMessage}
+
+                Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template consume registry error'
+                and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_kafka_consume_aviation_email_notification_template_OPRED_noRegId_no_registry_id" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template missing registry id error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'OPRED',
+                       null,
+                       'AVIATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${emissions}Error message: ${errorMessage}
+
+Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template missing registry id error'
+                and competent_authority = 'OPRED' and account_type = 'AVIATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_aviation_email_notification_template_SCOTLAND_noRegId_no_registry_id" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template missing registry id error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'SCOTLAND',
+                       null,
+                       'AVIATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${emissions}Error message: ${errorMessage}
+
+Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template missing registry id error'
+                and competent_authority = 'SCOTLAND' and account_type = 'AVIATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_aviation_email_notification_template_WALES_noRegId_no_registry_id" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template missing registry id error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'WALES',
+                       null,
+                       'AVIATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${emissions}Error message: ${errorMessage}
+
+Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template missing registry id error'
+                and competent_authority = 'WALES' and account_type = 'AVIATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_aviation_email_notification_template_NORTHERN_IRELAND_noRegId_no_registry_id" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template missing registry id error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'NORTHERN_IRELAND',
+                       null,
+                       'AVIATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${emissions}Error message: ${errorMessage}
+
+Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template missing registry id error'
+                and competent_authority = 'NORTHERN_IRELAND' and account_type = 'AVIATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_aviation_email_notification_template_ENGLAND_noRegId_no_registry_id" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template missing registry id error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'ENGLAND',
+                       null,
+                       'AVIATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${emissions}Error message: ${errorMessage}
+
+Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template missing registry id error'
+                and competent_authority = 'ENGLAND' and account_type = 'AVIATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_installation_email_notification_template_OPRED_noRegId_no_registry_id" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template missing registry id error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'OPRED',
+                       null,
+                       'INSTALLATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${emissions}Error message: ${errorMessage}
+
+Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template missing registry id error'
+                and competent_authority = 'OPRED' and account_type = 'INSTALLATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_installation_email_notification_template_SCOTLAND_noRegId_no_registry_id" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template missing registry id error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'SCOTLAND',
+                       null,
+                       'INSTALLATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${emissions}
+Error message: ${errorMessage}
+
+Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template missing registry id error'
+                and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume__installation_email_notification_template_WALES_noRegId_no_registry_id" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template missing registry id error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'WALES',
+                       null,
+                       'INSTALLATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${emissions}
+Error message: ${errorMessage}
+
+Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template missing registry id error'
+                and competent_authority = 'WALES' and account_type = 'INSTALLATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_installation_email_notification_template_NORTHERN_IRELAND_noRegId_no_registry_id" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template missing registry id error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'NORTHERN_IRELAND',
+                       null,
+                       'INSTALLATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${emissions}
+Error message: ${errorMessage}
+
+Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template missing registry id error'
+                and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_consume_installation_email_notification_template_ENGLAND_no_registry_id" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration email template missing registry id error',
+                       'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       'ENGLAND',
+                       null,
+                       'INSTALLATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${emissions}
+Error message: ${errorMessage}
+
+Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template missing registry id error'
+                and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_2_0_update_kafka_consume_aviation_email_notification_template_all_CAs" author="dridakisc@unisystems.eu">
+        <sql>
+            <![CDATA[
+            UPDATE notification_template
+            SET
+                subject = 'ACTION REQUIRED - Error with integration point ''Update emissions value'' for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                text = 'Dear Regulator,
+
+The integration point ''Update emissions value'' has failed with error(s):
+
+<#list errors as code,description>
+- **${code}** - **${description}**
+
+</#list>
+ for **Operator: ${operatorName}** with **Emitter ID: ${emitterId}**
+
+
+Please review the affected fields:
+
+**UK ETS Registry ID: ${registryId}**
+
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+
+Message ID (correlation ID): ${correlationId}
+
+Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+
+<#list errors as code,description>
+- Error code: **${code}** - Error message: **${description}**
+
+</#list>
+
+
+Thank you.',
+                last_updated_date = CURRENT_TIMESTAMP
+            WHERE
+                name = 'Registry integration email template consume registry error'
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                <![CDATA[
+            UPDATE notification_template
+            SET
+                subject = 'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                text = 'Dear Regulator,
+
+                The integration point "Update emissions value" has failed with error: "${errorCode} - ${errorMessage}" for Operator: ${operatorName} with Emitter ID: ${emitterId}
+
+                Please review the affected fields:
+                UK ETS Registry ID: {registryId}
+
+                If there is a need, then please raise a support ticket including the following information:
+
+                Source system identifier: ${sourceSystem}
+                Message ID (correlation ID): ${correlationId}
+                Payload: Operator ID: ${registryId}, Year: ${year}, Emissions: ${emissions}
+                Error code: ${errorCode}
+                Error message: ${errorMessage}
+
+                Thank you.',
+                last_updated_date = CURRENT_TIMESTAMP
+            WHERE
+                name = 'Registry integration email template consume registry error'
+            ]]>;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_kafka_consume_aviation_email_notification_template_all_CAs_noRegId_no_registry_id" author="dridakisc@unisystems.eu">
+        <sql>
+            <![CDATA[
+            UPDATE notification_template
+            SET
+                subject = 'ACTION REQUIRED - Error with integration point ''Update emissions value'' for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                text = 'Dear Regulator,
+
+The integration point ''Update emissions value'' has failed with error: **''${errorMessage}''** for **Operator ${operatorName}** with **Emitter ID: ${emitterId}**
+
+Please review the affected fields:
+
+**UK ETS Registry ID: N/A**
+
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+
+Payload: Year: ${year}, Emissions: ${emissions}
+
+Error message: ${errorMessage}
+
+
+Thank you.',
+                last_updated_date = CURRENT_TIMESTAMP
+            WHERE
+                name = 'Registry integration email template missing registry id error'
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                <![CDATA[
+                UPDATE notification_template
+                SET
+                subject = 'ACTION REQUIRED - Error with integration point `Update emissions value` for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                text = 'Dear Regulator,
+
+The integration point `Update emissions value` has failed with error: `${errorMessage}` for Operator ${operatorName} with Emitter ID: ${emitterId}
+
+Please review the affected fields:
+UK ETS Registry ID: N/A
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+Payload: Year: ${year}, Emissions: ${emissions}Error message: ${errorMessage}
+
+Thank you.',
+                last_updated_date = CURRENT_TIMESTAMP
+                WHERE
+                name = 'Registry integration email template missing registry id error'
+                ]]>;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_kafka_consume_aviation_email_notification_template_all_CAs_noRegId_no_registry_id_update_subject" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+            UPDATE notification_template
+            SET
+                subject = '${subjectInfoType} - Error with integration point ''Update emissions value'' for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                last_updated_date = CURRENT_TIMESTAMP
+            WHERE
+                name = 'Registry integration email template consume registry error'
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                <![CDATA[
+                UPDATE notification_template
+                SET
+                'ACTION REQUIRED - Error with integration point ''Update emissions value'' for Operator: ${operatorName} with Emitter ID: ${emitterId}'
+                last_updated_date = CURRENT_TIMESTAMP
+                WHERE
+                name = 'Registry integration email template consume registry error'
+                ]]>;
+            </sql>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_2_0_update_kafka_error_emails_content" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+
+            UPDATE notification_template
+            SET text = REPLACE(REPLACE(REPLACE(REPLACE(text,
+                                                       'Year: ${year}', 'Year: ${year?int?string("0")}'),
+                                               'Operator ${operatorName}', 'Operator: ${operatorName}'),
+                                       'Registry ID: ${registryId}', 'Registry ID: ${registryId?int?string("0")}'),
+                               'Operator ID: ${registryId}', 'Operator ID: ${registryId?int?string("0")}')
+            WHERE name = 'Registry integration email template consume registry error'
+              AND (text LIKE '%Year: ${year}%'
+                OR text LIKE '%Operator ${operatorName}%'
+                OR text LIKE '%Registry ID: ${registryId}%'
+                OR text LIKE '%Operator ID: ${registryId}%');
+
+
+            UPDATE notification_template
+            SET text = REPLACE(REPLACE(REPLACE(REPLACE(text,
+                                                       'Year: ${year}', 'Year: ${year?int?string("0")}'),
+                                               'Operator ${operatorName}', 'Operator: ${operatorName}'),
+                                       'Registry ID: ${registryId}', 'Registry ID: ${registryId?int?string("0")}'),
+                               'Operator ID: ${registryId}', 'Operator ID: ${registryId?int?string("0")}')
+            WHERE name = 'Registry integration email template missing registry id error'
+              AND (text LIKE '%Year: ${year}%'
+                OR text LIKE '%Operator ${operatorName}%'
+                OR text LIKE '%Registry ID: ${registryId}%'
+                OR text LIKE '%Operator ID: ${registryId}%');
+
+
+
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                <![CDATA[
+
+                    UPDATE notification_template
+                    SET text = REPLACE(REPLACE(REPLACE(REPLACE(text,
+                                              'Year: ${year?int?string("0")}', 'Year: ${year}'),
+                                              'Operator: ${operatorName}', 'Operator ${operatorName}'),
+                                              'Registry ID: ${registryId?int?string("0")}', 'Registry ID: ${registryId}'),
+                                              'Operator ID: ${registryId?int?string("0")}', 'Operator ID: ${registryId}')
+                    WHERE name = 'Registry integration email template consume registry error'
+                                  AND (text LIKE '%Year: ${year?int?string("0")}%'
+                                       OR text LIKE '%Operator: ${operatorName}%'
+                                       OR text LIKE '%Registry ID: ${registryId?int?string("0")}%'
+                                       OR text LIKE '%Operator ID: ${registryId?int?string("0")}%');
+
+
+                    UPDATE notification_template
+                    SET text = REPLACE(REPLACE(REPLACE(REPLACE(text,
+                                              'Year: ${year?int?string("0")}', 'Year: ${year}'),
+                                              'Operator: ${operatorName}', 'Operator ${operatorName}'),
+                                              'Registry ID: ${registryId?int?string("0")}', 'Registry ID: ${registryId}'),
+                                              'Operator ID: ${registryId?int?string("0")}', 'Operator ID: ${registryId}')
+                    WHERE name = 'Registry integration email template missing registry id error'
+                                  AND (text LIKE '%Year: ${year?int?string("0")}%'
+                                       OR text LIKE '%Operator: ${operatorName}%'
+                                       OR text LIKE '%Registry ID: ${registryId?int?string("0")}%'
+                                       OR text LIKE '%Operator ID: ${registryId?int?string("0")}%');
+
+                ]]>;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_kafka_consume_registry_error_action_required_template" author="kourisp@unisystems.eu">
+        <sql>
+            <![CDATA[
+
+            update notification_template set
+                                             subject = 'ACTION REQUIRED - Error with integration point ''Update emissions value'' for Operator: ${operatorName} with Emitter ID: ${emitterId}',
+                                             text = 'Dear Regulator,
+
+The integration point ''Update emissions value'' has failed with error(s):
+
+<#list errors as code,description>
+- **${code?replace("ERROR_", "")}** - **${description}**
+
+</#list>
+ for **Operator: ${operatorName}** with **Emitter ID: ${emitterId}**
+
+
+
+Please review the affected fields:
+
+**UK ETS Registry ID: ${registryId?int?string("0")}**
+
+
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+
+Message ID (correlation ID): ${correlationId}
+
+Payload: Operator ID: ${registryId?int?string("0")}, Year: ${year?int?string("0")}, Emissions: ${emissions}
+
+<#list errors as code,description>
+- Error code: **${code?replace("ERROR_", "")}**
+
+
+    Error message: **${description}**
+
+</#list>
+
+
+Thank you.'
+            where name like 'Registry integration email template consume registry error'
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                <![CDATA[
+                update notification_template set
+
+                subject = '${subjectInfoType} - Error with integration point ''Update emissions value'' for Operator: ${operatorName} with Emitter ID: ${emitterId}',
+                text = 'Dear Regulator,
+
+                The integration point ''Update emissions value'' has failed with error(s):
+
+                <#list errors as code,description>
+                - **${code}** - **${description}**
+
+            </#list>
+                    for **Operator: ${operatorName}** with **Emitter ID: ${emitterId}**
+
+
+                    Please review the affected fields:
+
+                    **UK ETS Registry ID: ${registryId?int?string("0")}**
+
+
+                    If there is a need, then please raise a support ticket including the following information:
+
+                    Source system identifier: ${sourceSystem}
+
+                    Message ID (correlation ID): ${correlationId}
+
+                    Payload: Operator ID: ${registryId?int?string("0")}, Year: ${year?int?string("0")}, Emissions: ${emissions}
+
+            <#list errors as code,description>
+            - Error code: **${code}** - Error message: **${description}**
+
+        </#list>
+
+
+                Thank you.'
+                where name like 'Registry integration email template consume registry error';
+  ]]>;
+            </sql>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_2_0_insert_kafka_consume_error_info_templates" author="kourisp@unisystems.eu">
+        <sql>
+        <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            SELECT
+                nextval('notification_template_seq'),
+                'Registry integration email template consume registry error info template',
+                'INFORMATION ONLY - Error with integration point ''Update emissions value'' for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                ca.id,
+                null,
+                at.account_type,
+                null,
+                null,
+                false,
+                CURRENT_TIMESTAMP,
+                'Dear Regulator,
+
+The integration point ''Update emissions value'' has failed with error(s):
+
+<#list errors as code, description>
+- **${code?replace("ERROR_", "")}** - **${description}**
+</#list>
+
+For **Operator: ${operatorName}** with **Emitter ID: ${emitterId}**
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+
+Message ID (correlation ID): ${correlationId}
+
+Payload: Operator ID: ${registryId?int?string("0")}, Year: ${year?int?string("0")}, Emissions: ${emissions}
+
+<#list errors as code, description>
+- Error code: **${code?replace("ERROR_", "")}**
+
+    Error message: **${description}**
+</#list>
+
+Thank you.
+'
+
+            FROM
+                    (SELECT id FROM competent_authority) ca,
+                    (SELECT UNNEST(ARRAY['INSTALLATION', 'AVIATION']) AS account_type) at;
+            ]]>
+    </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template
+                WHERE name = 'Registry integration email template consume registry error info template';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_inspection_workwflow_templates_mets_605" author="dimitrios.topalidis@trasys.gr">
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="INSTALLATION_ONSITE_INSPECTION_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - EA.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="INSTALLATION_ONSITE_INSPECTION_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - NI.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED"/>
+            <param name="type" value="INSTALLATION_ONSITE_INSPECTION_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - OPRED.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="INSTALLATION_ONSITE_INSPECTION_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - NRW.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="INSTALLATION_ONSITE_INSPECTION_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - SEPA.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="INSTALLATION_AUDIT_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - EA.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="INSTALLATION_AUDIT_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - NI.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED"/>
+            <param name="type" value="INSTALLATION_AUDIT_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - OPRED.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="INSTALLATION_AUDIT_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - NRW.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="INSTALLATION_AUDIT_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - SEPA.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_insert_kafka_no_ghge_or_hse_flag_installation_email_notification_template" author="dridakisc@unisystems.eu">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                event_trigger,
+                account_type,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            SELECT
+                       nextval('notification_template_seq'),
+                       'Registry integration email template missing ghge - hse flag error',
+                       'ACTION REQUIRED - Error with integration point ''Update emissions value'' for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       UNNEST(ARRAY['ENGLAND','OPRED','SCOTLAND','WALES','NORTHERN_IRELAND']),
+                       null,
+                       'INSTALLATION',
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+'Dear Regulator,
+
+The integration point ''Update emissions value'' has failed with error(s):
+
+**''No GHGE/HSE flag in METS for that year''**
+
+
+for **Operator: ${operatorName}** with **Emitter ID: ${emitterId}**
+
+
+**Year: ${year?int?string("0")}**
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+
+Payload: Year: ${year?int?string("0")}, Emissions: ${emissions}
+
+Error message: No GHGE/HSE flag in METS for that year
+
+
+Thank you.'
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'Registry integration email template missing ghge - hse flag error'
+                and account_type = 'INSTALLATION';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_bdr_completed_notification_templates" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            <![CDATA[
+             INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                text,
+                competent_authority,
+                account_type,
+                workflow,
+                role_type,
+                is_managed)
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'BDR completed',
+                       '',
+                       '',
+                        UNNEST(ARRAY['ENGLAND','OPRED','SCOTLAND','WALES','NORTHERN_IRELAND']),
+                        'INSTALLATION',
+                        'BDR',
+                        null,
+                        false
+                   )]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template WHERE name = 'BDR completed';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_update_bdr_completed_notification_templates" author="dridakisc@unisystems.gr">
+        <sql>
+            UPDATE notification_template
+                SET SUBJECT = 'Baseline data report (BDR) application',
+                TEXT = 'The regulator has reviewed your baseline data report (BDR) application and submitted it to the UK ETS Authority.
+
+The regulator will contact you if necessary.'
+            WHERE NAME = 'BDR completed';
+        </sql>
+    </changeSet>
+    <changeSet id="0_2_0_insert_empty_template_permanent_cessation_notification_templates" author="kourisp@unisystems.gr">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                text,
+                competent_authority,
+                account_type,
+                workflow,
+                role_type,
+                is_managed)
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Permanent cessation completed',
+                       'Permanent cessation completed report',
+                       'Permanent cessation completed notification template content',
+                       UNNEST(ARRAY['ENGLAND','OPRED','SCOTLAND','WALES','NORTHERN_IRELAND']),
+                       'INSTALLATION',
+                       'PERMANENT_CESSATION',
+                       null,
+                       false
+                   )]]>;
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM notification_template WHERE name = 'Permanent cessation completed';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_installation_permanent_cessation_official_notice_templates_england" author="kourisp@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - EA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'PERMANENT_CESSATION',
+                       'Permanent cessation official notice',
+                       'ENGLAND',
+                       'INSTALLATION',
+                       'Permanent cessation',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'IN Permanent Cessation - Template - EA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Permanent cessation completed' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Permanent cessation official notice' and competent_authority = 'ENGLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = ( select id from notification_template where name = 'Permanent cessation completed'
+                                                and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION')
+                    and document_template_id = ( select id from notification_document_template where name = 'Permanent cessation official notice'
+                                                and competent_authority = 'ENGLAND');
+
+            delete from notification_document_template where name = 'Permanent cessation official notice'
+                and type = 'PERMANENT_CESSATION' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION'
+            and workflow = 'Permanent cessation';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_installation_permanent_cessation_official_notice_templates_opred" author="kourisp@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - OPRED.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'PERMANENT_CESSATION',
+                       'Permanent cessation official notice',
+                       'OPRED',
+                       'INSTALLATION',
+                       'Permanent cessation',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'IN Permanent Cessation - Template - OPRED.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Permanent cessation completed' and competent_authority = 'OPRED' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Permanent cessation official notice' and competent_authority = 'OPRED')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = ( select id from notification_template where name = 'Permanent cessation completed'
+                                                and competent_authority = 'OPRED' and account_type = 'INSTALLATION')
+                    and document_template_id = ( select id from notification_document_template where name = 'Permanent cessation official notice'
+                                                and competent_authority = 'OPRED');
+
+            delete from notification_document_template where name = 'Permanent cessation official notice'
+                and type = 'PERMANENT_CESSATION' and competent_authority = 'OPRED' and account_type = 'INSTALLATION'
+            and workflow = 'Permanent cessation';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_installation_permanent_cessation_official_notice_templates_scotland" author="kourisp@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - SEPA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'PERMANENT_CESSATION',
+                       'Permanent cessation official notice',
+                       'SCOTLAND',
+                       'INSTALLATION',
+                       'Permanent cessation',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'IN Permanent Cessation - Template - SEPA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Permanent cessation completed' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Permanent cessation official notice' and competent_authority = 'SCOTLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = ( select id from notification_template where name = 'Permanent cessation completed'
+                                                and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION')
+                    and document_template_id = ( select id from notification_document_template where name = 'Permanent cessation official notice'
+                                                and competent_authority = 'SCOTLAND');
+
+            delete from notification_document_template where name = 'Permanent cessation official notice'
+                and type = 'PERMANENT_CESSATION' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION'
+            and workflow = 'Permanent cessation';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_installation_permanent_cessation_official_notice_templates_wales" author="kourisp@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - NRW.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'PERMANENT_CESSATION',
+                       'Permanent cessation official notice',
+                       'WALES',
+                       'INSTALLATION',
+                       'Permanent cessation',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'IN Permanent Cessation - Template - NRW.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Permanent cessation completed' and competent_authority = 'WALES' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Permanent cessation official notice' and competent_authority = 'WALES')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = ( select id from notification_template where name = 'Permanent cessation completed'
+                                                and competent_authority = 'WALES' and account_type = 'INSTALLATION')
+                    and document_template_id = ( select id from notification_document_template where name = 'Permanent cessation official notice'
+                                                and competent_authority = 'WALES');
+
+            delete from notification_document_template where name = 'Permanent cessation official notice'
+                and type = 'PERMANENT_CESSATION' and competent_authority = 'WALES' and account_type = 'INSTALLATION'
+            and workflow = 'Permanent cessation';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_installation_permanent_cessation_official_notice_templates_northern_ireland" author="kourisp@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - NI.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'PERMANENT_CESSATION',
+                       'Permanent cessation official notice',
+                       'NORTHERN_IRELAND',
+                       'INSTALLATION',
+                       'Permanent cessation',
+                       '2024-08-07 00:00:00',
+                       (select id from file_document_template where file_name = 'IN Permanent Cessation - Template - NI.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Permanent cessation completed' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Permanent cessation official notice' and competent_authority = 'NORTHERN_IRELAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = ( select id from notification_template where name = 'Permanent cessation completed'
+                                                and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION')
+                    and document_template_id = ( select id from notification_document_template where name = 'Permanent cessation official notice'
+                                                and competent_authority = 'NORTHERN_IRELAND');
+
+            delete from notification_document_template where name = 'Permanent cessation official notice'
+                and type = 'PERMANENT_CESSATION' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION'
+            and workflow = 'Permanent cessation';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_installation_permanent_cessation_documentTemplates_update" author="kourisp@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - EA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - OPRED.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - NI.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - SEPA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - NRW.docx" />
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_installation_permanent_cessation_documentTemplates_update-2" author="kourisp@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - EA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - OPRED.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - NI.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - SEPA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - NRW.docx" />
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_installation_permit_notification_accept_update_docx_templates_METS-1156" author="kourisp@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="PERMIT_NOTIFICATION_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L010 IN Notification Accepted_20210204.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED"/>
+            <param name="type" value="PERMIT_NOTIFICATION_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L010 IN Notification Accepted 260721.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="PERMIT_NOTIFICATION_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L010_IN_Notification_Accepted_NI_UK Nov 2021.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="PERMIT_NOTIFICATION_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L010 IN Notification Accepted - UK ETS update doc FINAL.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="PERMIT_NOTIFICATION_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L010 IN Notification Accepted_20210204_NRW_HT.docx" />
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_installation_permit_notification_refused_update_docx_templates_METS-1156" author="kourisp@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="PERMIT_NOTIFICATION_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L011 IN Notification Refused_20210402.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED"/>
+            <param name="type" value="PERMIT_NOTIFICATION_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L011 IN Notification Refused 260721.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="PERMIT_NOTIFICATION_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L011 IN Notification Refused NI UK ETS feb 2021.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="PERMIT_NOTIFICATION_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L011 IN Notification Refused.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="PERMIT_NOTIFICATION_ACCEPTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L011 IN Notification Refused_20210402_NRW_HT.docx" />
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_installation_permanent_cessation_documentTemplates_update-3" author="kourisp@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - EA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - OPRED.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - NI.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - SEPA.docx" />
+        </customChange>
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="PERMANENT_CESSATION"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="IN Permanent Cessation - Template - NRW.docx" />
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet id="0_2_0_update_inspection_workflow_templates_mets_1065" author="dimitrios.topalidis@trasys.gr">
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="INSTALLATION_ONSITE_INSPECTION_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - EA.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="INSTALLATION_ONSITE_INSPECTION_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - NI.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED"/>
+            <param name="type" value="INSTALLATION_ONSITE_INSPECTION_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - OPRED.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="INSTALLATION_ONSITE_INSPECTION_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - NRW.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="INSTALLATION_ONSITE_INSPECTION_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Onsite Inspection - Template - SEPA.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="INSTALLATION_AUDIT_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - EA.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="INSTALLATION_AUDIT_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - NI.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED"/>
+            <param name="type" value="INSTALLATION_AUDIT_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - OPRED.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="INSTALLATION_AUDIT_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - NRW.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="INSTALLATION_AUDIT_SUBMITTED"/>
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="L004 IW - Audit Report - Template - SEPA.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_doe_CORSIA_official_notice_templates_england" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="METS DoE CORSIA Notice_aviation v2.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_DOE_SUBMITTED',
+                       'Estimations of emissions CORSIA official notice',
+                       'ENGLAND',
+                       'AVIATION',
+                       'Update reportable emissions',
+                        CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'METS DoE CORSIA Notice_aviation v2.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'Estimations of emissions CORSIA official notice' and competent_authority = 'ENGLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = ( select id from notification_template where name = 'Generic email template'
+            and competent_authority = 'ENGLAND' and account_type = 'AVIATION')
+            and document_template_id = ( select id from notification_document_template where name = 'Estimations of emissions CORSIA official notice'
+            and competent_authority = 'ENGLAND');
+
+            delete from notification_document_template where name = 'Estimations of emissions CORSIA official notice'
+            and type = 'AVIATION_DOE_SUBMITTED' and competent_authority = 'ENGLAND' and account_type = 'AVIATION'
+            and workflow = 'Update reportable emissions';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_doe_CORSIA_official_notice_templates_wales" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="METS DoE CORSIA Notice_aviation - WALES.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_DOE_SUBMITTED',
+                       'Estimations of emissions CORSIA official notice',
+                       'WALES',
+                       'AVIATION',
+                       'Update reportable emissions',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'METS DoE CORSIA Notice_aviation - WALES.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'Estimations of emissions CORSIA official notice' and competent_authority = 'WALES')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = ( select id from notification_template where name = 'Generic email template'
+            and competent_authority = 'WALES' and account_type = 'AVIATION')
+            and document_template_id = ( select id from notification_document_template where name = 'Estimations of emissions CORSIA official notice'
+            and competent_authority = 'WALES');
+
+            delete from notification_document_template where name = 'Estimations of emissions CORSIA official notice'
+            and type = 'AVIATION_DOE_SUBMITTED' and competent_authority = 'WALES' and account_type = 'AVIATION'
+            and workflow = 'Update reportable emissions';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_doe_CORSIA_official_notice_templates_northern_ireland" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="NIEA - Notice of estimation of emisisons CORSIA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_DOE_SUBMITTED',
+                       'Estimations of emissions CORSIA official notice',
+                       'NORTHERN_IRELAND',
+                       'AVIATION',
+                       'Update reportable emissions',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'NIEA - Notice of estimation of emisisons CORSIA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'Estimations of emissions CORSIA official notice' and competent_authority = 'NORTHERN_IRELAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = ( select id from notification_template where name = 'Generic email template'
+            and competent_authority = 'NORTHERN_IRELAND' and account_type = 'AVIATION')
+            and document_template_id = ( select id from notification_document_template where name = 'Estimations of emissions CORSIA official notice'
+            and competent_authority = 'NORTHERN_IRELAND');
+
+            delete from notification_document_template where name = 'Estimations of emissions CORSIA official notice'
+            and type = 'AVIATION_DOE_SUBMITTED' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'AVIATION'
+            and workflow = 'Update reportable emissions';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_aviation_doe_CORSIA_official_notice_templates_scotland" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="METS DoE Notice_aviation CORSIA - SEPA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'AVIATION_DOE_SUBMITTED',
+                       'Estimations of emissions CORSIA official notice',
+                       'SCOTLAND',
+                       'AVIATION',
+                       'Update reportable emissions',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'METS DoE Notice_aviation CORSIA - SEPA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'AVIATION'),
+                       (select id from notification_document_template where name = 'Estimations of emissions CORSIA official notice' and competent_authority = 'SCOTLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = ( select id from notification_template where name = 'Generic email template'
+            and competent_authority = 'SCOTLAND' and account_type = 'AVIATION')
+            and document_template_id = ( select id from notification_document_template where name = 'Estimations of emissions CORSIA official notice'
+            and competent_authority = 'SCOTLAND');
+
+            delete from notification_document_template where name = 'Estimations of emissions CORSIA official notice'
+            and type = 'AVIATION_DOE_SUBMITTED' and competent_authority = 'SCOTLAND' and account_type = 'AVIATION'
+            and workflow = 'Update reportable emissions';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_update_aviation_doe_CORSIA_templates" author="alekopoulosd@unisystems.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="AVIATION_DOE_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="METS DoE CORSIA Notice_aviation v2.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="AVIATION_DOE_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="METS DoE Notice_aviation CORSIA - SEPA.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="AVIATION_DOE_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="METS DoE CORSIA Notice_aviation - WALES.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_permit_issuance_WASTE_approval_template_ENGLAND" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="INPermitApplicationVoluntaryWaste_Approved_UKETS_EA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'PERMIT_ISSUANCE_WASTE_ACCEPTED',
+                       'Voluntary Waste Permit Application Approval Notice',
+                       'ENGLAND',
+                       'INSTALLATION',
+                       'Permit issuance',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'INPermitApplicationVoluntaryWaste_Approved_UKETS_EA.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'ENGLAND')
+                   );
+        </sql>
+
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'ENGLAND');
+
+            delete from notification_document_template
+            where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'ENGLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'INPermitApplicationVoluntaryWaste_Approved_UKETS_EA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_permit_issuance_WASTE_approval_template_NORTHERN_IRELAND" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="INPermitApplicationVoluntaryWaste_Approved_UKETS_NI.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'PERMIT_ISSUANCE_WASTE_ACCEPTED',
+                       'Voluntary Waste Permit Application Approval Notice',
+                       'NORTHERN_IRELAND',
+                       'INSTALLATION',
+                       'Permit issuance',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'INPermitApplicationVoluntaryWaste_Approved_UKETS_NI.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'NORTHERN_IRELAND')
+                   );
+        </sql>
+
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'NORTHERN_IRELAND');
+
+            delete from notification_document_template
+            where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'NORTHERN_IRELAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'INPermitApplicationVoluntaryWaste_Approved_UKETS_NI.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_permit_issuance_WASTE_approval_template_OPRED" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="OPRED" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="INPermitApplicationVoluntaryWaste_Approved_UKETS_OPRED.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'PERMIT_ISSUANCE_WASTE_ACCEPTED',
+                       'Voluntary Waste Permit Application Approval Notice',
+                       'OPRED',
+                       'INSTALLATION',
+                       'Permit issuance',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'INPermitApplicationVoluntaryWaste_Approved_UKETS_OPRED.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'OPRED')
+                   );
+        </sql>
+
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'OPRED' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'OPRED');
+
+            delete from notification_document_template
+            where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'OPRED';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'INPermitApplicationVoluntaryWaste_Approved_UKETS_OPRED.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_permit_issuance_WASTE_approval_template_SCOTLAND" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="INPermitApplicationVoluntaryWaste_Approved_UKETS_SEPA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'PERMIT_ISSUANCE_WASTE_ACCEPTED',
+                       'Voluntary Waste Permit Application Approval Notice',
+                       'SCOTLAND',
+                       'INSTALLATION',
+                       'Permit issuance',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'INPermitApplicationVoluntaryWaste_Approved_UKETS_SEPA.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'SCOTLAND')
+                   );
+        </sql>
+
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'SCOTLAND');
+
+            delete from notification_document_template
+            where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'SCOTLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'INPermitApplicationVoluntaryWaste_Approved_UKETS_SEPA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_permit_issuance_WASTE_approval_template_WALES" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="INPermitApplicationVoluntaryWaste_Approved_UKETS_NRW.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'PERMIT_ISSUANCE_WASTE_ACCEPTED',
+                       'Voluntary Waste Permit Application Approval Notice',
+                       'WALES',
+                       'INSTALLATION',
+                       'Permit issuance',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'INPermitApplicationVoluntaryWaste_Approved_UKETS_NRW.docx' order by id desc limit 1));
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'WALES')
+                   );
+        </sql>
+
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'WALES');
+
+            delete from notification_document_template
+            where name = 'Voluntary Waste Permit Application Approval Notice' and competent_authority = 'WALES';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'INPermitApplicationVoluntaryWaste_Approved_UKETS_NRW.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_aviation_doe_CORSIA_templates_1" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND"/>
+            <param name="type" value="AVIATION_DOE_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="METS EoE CORSIA Notice_v3.2.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND"/>
+            <param name="type" value="AVIATION_DOE_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="METS DoE Notice_aviation CORSIA - SEPA.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES"/>
+            <param name="type" value="AVIATION_DOE_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="METS DoE CORSIA Notice_aviation - WALES.docx"/>
+        </customChange>
+
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND"/>
+            <param name="type" value="AVIATION_DOE_SUBMITTED"/>
+            <param name="accountType" value="AVIATION" />
+            <param name="fileDocumentName" value="NIEA - Notice of estimation of emisisons CORSIA.docx"/>
+        </customChange>
+        <rollback></rollback>
+    </changeSet>
+</databaseChangeLog>

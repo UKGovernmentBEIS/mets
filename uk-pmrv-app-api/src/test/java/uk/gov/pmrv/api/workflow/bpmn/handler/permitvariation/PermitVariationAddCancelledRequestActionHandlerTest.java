@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.service.PermitVariationAddCancelledRequestActionService;
 
@@ -30,7 +30,7 @@ public class PermitVariationAddCancelledRequestActionHandlerTest {
     @Test
     void execute() throws Exception {
         String requestId = "1";
-        RoleType userRole = RoleType.OPERATOR;
+        String userRole = RoleTypeConstants.OPERATOR;
         when(execution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);
         when(execution.getVariable(BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE)).thenReturn(userRole);
 

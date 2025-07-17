@@ -9,7 +9,11 @@
   <ol class="app-task-list">
     <li app-task-section title="Details">
       <ul app-task-item-list>
-        <li app-task-item link="./summary" linkText="Details of breach"></li>
+        <li
+          app-task-item
+          [link]="(isAviation$ | async) ? './non-compliance/submitted/summary' : './summary'"
+          linkText="Details of breach"
+        ></li>
       </ul>
     </li>
   </ol>

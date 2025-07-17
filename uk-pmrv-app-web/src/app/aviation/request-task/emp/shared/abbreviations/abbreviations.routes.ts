@@ -18,7 +18,7 @@ export const EMP_ABBREVIATION_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
-        data: { breadcrumb: 'Abbreviations summary' },
+        data: { breadcrumb: 'Abbreviations' },
         loadComponent: () =>
           import('./abbreviations-summary/abbreviations-summary.component').then(
             (c) => c.AbbreviationsSummaryComponent,

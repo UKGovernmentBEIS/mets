@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.pmrv.api.aviationreporting.common.domain.dto.AviationRptAirportsDTO;
 import uk.gov.pmrv.api.aviationreporting.common.enumeration.CountryType;
@@ -66,10 +67,10 @@ class AviationRptAirportsServiceTest {
         String icao1 = "LEPA";
         String icao2 = "EGLL";
 
-        when(aviationRptAirportsRepository.findChapter3Icaos(Set.of(icao1, icao2)))
+        when(aviationRptAirportsRepository.findChapter3Icaos(Set.of(icao1, icao2), Year.of(2023)))
                 .thenReturn(List.of(icao1, icao2));
 
-        final List<String> actual = aviationRptAirportsService.findChapter3Icaos(Set.of(icao1, icao2));
+        final List<String> actual = aviationRptAirportsService.findChapter3Icaos(Set.of(icao1, icao2), Year.of(2023));
         assertThat(actual).hasSize(2);
         assertThat(actual).containsOnly(icao1, icao2);
     }

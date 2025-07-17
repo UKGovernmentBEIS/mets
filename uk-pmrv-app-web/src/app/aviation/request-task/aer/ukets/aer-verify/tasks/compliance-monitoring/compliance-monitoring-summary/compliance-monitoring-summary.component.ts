@@ -5,7 +5,7 @@ import { combineLatest, map, Observable, tap } from 'rxjs';
 
 import { AerVerificationReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-verification-review-decision-group/aer-verification-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
@@ -57,7 +57,7 @@ export default class ComplianceMonitoringSummaryComponent {
   ]).pipe(
     map(([type, isEditable, verificationReportData, taskStatus]) => {
       return {
-        pageHeader: getSummaryHeaderForTaskType(type, 'verificationReport'),
+        pageHeader: getSummaryHeaderForTaskType(type, 'complianceMonitoringReportingRules'),
         isEditable,
         verificationReportData,
         hideSubmit: !isEditable || ['complete', 'cannot start yet'].includes(taskStatus),
@@ -70,11 +70,11 @@ export default class ComplianceMonitoringSummaryComponent {
   );
 
   onSubmit() {
-    (this.store.aerVerifyDelegate as AerVerifyStoreDelegate)
+    (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate)
       .saveAerVerify({ complianceMonitoringReportingRules: this.formProvider.getFormValue() }, 'complete')
       .pipe(this.pendingRequest.trackRequest())
       .subscribe(() => {
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setComplianceMonitoring(
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setComplianceMonitoring(
           this.formProvider.getFormValue(),
         );
         this.router.navigate(['../../..'], { relativeTo: this.route, replaceUrl: true });

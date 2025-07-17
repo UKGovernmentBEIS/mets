@@ -20,8 +20,7 @@ import { officialNoticeFormProvider } from './official-notice-form.provider';
         [formGroup]="form"
         submitText="Continue"
         [hideSubmit]="(store.isEditable$ | async) === false"
-        [showBackLink]="true"
-      >
+        [showBackLink]="true">
         <span class="govuk-caption-l">Reject</span>
 
         <app-page-heading>Provide a text to be included in the official refusal letter</app-page-heading>
@@ -46,7 +45,6 @@ export class OfficialNoticeComponent implements PendingRequest {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
   ) {}
-
 
   onContinue(): void {
     if (!this.form.dirty) {

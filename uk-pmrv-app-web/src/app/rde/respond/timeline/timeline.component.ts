@@ -12,9 +12,7 @@ import { RdeStore } from '../../store/rde.store';
   template: `
     <app-request-action-heading
       headerText="Response to request for deadline extension"
-      [timelineCreationDate]="store.select('requestActionCreationDate') | async"
-    >
-    </app-request-action-heading>
+      [timelineCreationDate]="store.select('requestActionCreationDate') | async"></app-request-action-heading>
     <dl govuk-summary-list [hasBorders]="false" [class.summary-list--edge-border]="true">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Response</dt>

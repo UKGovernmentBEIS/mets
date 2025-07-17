@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { combineLatest, map, Observable } from 'rxjs';
 
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
+import { getPreviewDocumentsInfoVir } from '@aviation/request-task/vir/previewDocumentsVir.util';
 import { virQuery } from '@aviation/request-task/vir/vir.selectors';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { getReviewStatus } from '@aviation/shared/components/vir/vir-task-list/vir-task-status.util';
@@ -27,6 +28,8 @@ interface ViewModel {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SendReportComponent {
+  previewDocuments = getPreviewDocumentsInfoVir('AVIATION_VIR_NOTIFY_OPERATOR_FOR_DECISION');
+
   vm$: Observable<ViewModel> = combineLatest([
     this.store.pipe(requestTaskQuery.selectRequestInfo),
     this.store.pipe(requestTaskQuery.selectRequestTask),
@@ -47,5 +50,8 @@ export class SendReportComponent {
     }),
   );
 
-  constructor(private store: RequestTaskStore, private readonly requestItemsService: RequestItemsService) {}
+  constructor(
+    private store: RequestTaskStore,
+    private readonly requestItemsService: RequestItemsService,
+  ) {}
 }

@@ -23,7 +23,10 @@ export class VirStoreDelegate implements RequestTaskStoreDelegate {
     operatorImprovementResponses: null,
   };
 
-  constructor(private store: RequestTaskStore, private readonly businessErrorService: BusinessErrorService) {}
+  constructor(
+    private store: RequestTaskStore,
+    private readonly businessErrorService: BusinessErrorService,
+  ) {}
 
   get payload(): VirRequestTaskPayload | null {
     return this.store.getState().requestTaskItem?.requestTask?.payload as VirRequestTaskPayload;
@@ -187,6 +190,10 @@ export class VirStoreDelegate implements RequestTaskStoreDelegate {
         };
       }
       draft.virSectionsCompleted[referenceCode] = status === 'complete';
+
+      if (draft.sendEmailNotification) {
+        delete draft.sendEmailNotification;
+      }
     });
 
     return this.sendProcessRequestTaskAction(requestTask, payloadToUpdate);

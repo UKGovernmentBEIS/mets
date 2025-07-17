@@ -2,8 +2,6 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { FormControl } from '@angular/forms';
 
-import { PasswordStrengthMeterService } from 'angular-password-strength-meter';
-
 import { PasswordService } from './password.service';
 
 const mockResponse = '1E4C9B93F3F0682250B6CF8331B7EE68FD8:3759315';
@@ -15,7 +13,7 @@ describe('PasswordService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [PasswordService, PasswordStrengthMeterService],
+      providers: [PasswordService],
     });
     httpTestingController = TestBed.inject(HttpTestingController);
     service = TestBed.inject(PasswordService);

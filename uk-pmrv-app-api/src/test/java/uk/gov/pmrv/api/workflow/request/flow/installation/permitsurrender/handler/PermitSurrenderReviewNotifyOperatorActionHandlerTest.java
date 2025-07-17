@@ -5,9 +5,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -65,7 +65,7 @@ class PermitSurrenderReviewNotifyOperatorActionHandlerTest {
     void process() {
         final Long requestTaskId = 1L;
         final RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        final AppUser appUser = AppUser.builder().userId("user").build();
 
         final NotifyOperatorForDecisionRequestTaskActionPayload notifyPayload = NotifyOperatorForDecisionRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD)
@@ -97,15 +97,15 @@ class PermitSurrenderReviewNotifyOperatorActionHandlerTest {
                 .build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, notifyPayload.getDecisionNotification(), pmrvUser)).thenReturn(true);
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, notifyPayload.getDecisionNotification(), appUser)).thenReturn(true);
 
         //invoke
-        handler.process(requestTaskId, requestTaskActionType, pmrvUser, notifyPayload);
+        handler.process(requestTaskId, requestTaskActionType, appUser, notifyPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTask.getId());
         verify(reviewDeterminationHandlerService, times(1)).validateReview(taskPayload.getReviewDecision(), taskPayload.getReviewDetermination());
-        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, notifyPayload.getDecisionNotification(), pmrvUser);
-        verify(requestPermitSurrenderReviewService, times(1)).saveReviewDecisionNotification(requestTask, notifyPayload.getDecisionNotification(), pmrvUser);
+        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, notifyPayload.getDecisionNotification(), appUser);
+        verify(requestPermitSurrenderReviewService, times(1)).saveReviewDecisionNotification(requestTask, notifyPayload.getDecisionNotification(), appUser);
         verify(workflowService, times(1)).completeTask(processTaskId, Map.of(
                 BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
                 BpmnProcessConstants.REVIEW_DETERMINATION, taskPayload.getReviewDetermination().getType(),
@@ -117,7 +117,7 @@ class PermitSurrenderReviewNotifyOperatorActionHandlerTest {
     void process_users_invalid() {
         final Long requestTaskId = 1L;
         final RequestTaskActionType requestTaskActionType = RequestTaskActionType.PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        final AppUser appUser = AppUser.builder().userId("user").build();
 
         final NotifyOperatorForDecisionRequestTaskActionPayload notifyPayload = NotifyOperatorForDecisionRequestTaskActionPayload.builder()
                 .payloadType(RequestTaskActionPayloadType.PERMIT_SURRENDER_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD)
@@ -149,15 +149,15 @@ class PermitSurrenderReviewNotifyOperatorActionHandlerTest {
                 .build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, notifyPayload.getDecisionNotification(), pmrvUser)).thenReturn(false);
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, notifyPayload.getDecisionNotification(), appUser)).thenReturn(false);
 
         //invoke
-        BusinessException be = assertThrows(BusinessException.class, () -> handler.process(requestTaskId, requestTaskActionType, pmrvUser, notifyPayload));
+        BusinessException be = assertThrows(BusinessException.class, () -> handler.process(requestTaskId, requestTaskActionType, appUser, notifyPayload));
         assertThat(be.getErrorCode()).isEqualTo(ErrorCode.FORM_VALIDATION);
 
         verify(requestTaskService, times(1)).findTaskById(requestTask.getId());
         verify(reviewDeterminationHandlerService, times(1)).validateReview(taskPayload.getReviewDecision(), taskPayload.getReviewDetermination());
-        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, notifyPayload.getDecisionNotification(), pmrvUser);
+        verify(decisionNotificationUsersValidator, times(1)).areUsersValid(requestTask, notifyPayload.getDecisionNotification(), appUser);
         verifyNoInteractions(requestPermitSurrenderReviewService, workflowService);
     }
 

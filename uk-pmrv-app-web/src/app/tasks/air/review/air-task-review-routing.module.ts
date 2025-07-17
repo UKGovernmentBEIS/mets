@@ -15,8 +15,18 @@ import { AirImprovementItemResolver } from '@tasks/air/shared/resolvers/air-impr
 const routes: Routes = [
   {
     path: '',
-    data: { pageTitle: 'Review annual improvement report' },
-    component: ReviewContainerComponent,
+    children: [
+      {
+        path: '',
+        data: { pageTitle: 'Review annual improvement report' },
+        component: ReviewContainerComponent,
+      },
+      {
+        path: 'change-assignee',
+        loadChildren: () =>
+          import('../../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
+      },
+    ],
   },
   {
     path: 'send-report',

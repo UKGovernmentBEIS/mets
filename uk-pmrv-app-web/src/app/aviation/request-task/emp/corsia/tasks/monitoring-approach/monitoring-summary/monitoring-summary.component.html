@@ -1,10 +1,10 @@
 <ng-template #contentTpl let-showOriginal>
   <ng-container *ngIf="vm$ | async as vm">
-    <app-monitoring-approach-summary-template
-      [data]="vm.data"
+    <app-monitoring-approach-corsia-summary-template
+      [data]="showOriginal ? vm.originalData : vm.data"
+      [files]="showOriginal ? vm.originalDataFlowDiagramFile : vm.dataFlowDiagramFile"
       [isEditable]="vm.isEditable"
-      [files]="vm.dataFlowDiagramFile"
-    ></app-monitoring-approach-summary-template>
+    ></app-monitoring-approach-corsia-summary-template>
   </ng-container>
 </ng-template>
 

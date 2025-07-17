@@ -12,8 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.permit.domain.additionaldocuments.AdditionalDocuments;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationSubmitRequestTaskPayload;
 
@@ -40,7 +40,7 @@ class NerSubmitValidatorTest {
         final BusinessException businessException = assertThrows(BusinessException.class, () ->
             validator.validateSubmitTaskPayload(payload));
 
-        assertEquals(ErrorCode.INVALID_NER, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_NER, businessException.getErrorCode());
     }
 
     @Test
@@ -58,6 +58,6 @@ class NerSubmitValidatorTest {
         final BusinessException businessException = assertThrows(BusinessException.class, () ->
             validator.validateSubmitTaskPayload(payload));
 
-        assertEquals(ErrorCode.INVALID_NER, businessException.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_NER, businessException.getErrorCode());
     }
 }

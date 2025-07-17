@@ -1,16 +1,10 @@
 package uk.gov.pmrv.api.migration.emp.corsia.datagaps;
 
-import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmissionsMonitoringPlanCorsia;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.datagaps.EmpDataGapsCorsia;
@@ -18,14 +12,23 @@ import uk.gov.pmrv.api.migration.MigrationEndpoint;
 import uk.gov.pmrv.api.migration.emp.corsia.EmissionsMonitoringPlanCorsiaSectionMigrationService;
 import uk.gov.pmrv.api.migration.emp.corsia.EmissionsMonitoringPlanMigrationCorsiaContainer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
+
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class EmpDataGapsCorsiaSectionMigrationService implements EmissionsMonitoringPlanCorsiaSectionMigrationService<EmpDataGapsCorsia> {
 
 	private final JdbcTemplate migrationJdbcTemplate;
 
-    private static final String QUERY_BASE = "with XMLNAMESPACES (\r\n"
+	public EmpDataGapsCorsiaSectionMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+		this.migrationJdbcTemplate = migrationJdbcTemplate;
+	}
+
+	private static final String QUERY_BASE = "with XMLNAMESPACES (\r\n"
     		+ "	'urn:www-toplev-com:officeformsofd' AS fd\r\n"
     		+ "), r1 as (\r\n"
     		+ "    select F.fldEmitterID, e.fldEmitterDisplayID, F.fldFormStatusTypeID, FD.fldFormID, FD.fldMajorVersion, fd.fldMinorVersion, FD.fldDateUpdated, FD.fldFormDataID, FD.fldSubmittedXML,\r\n"

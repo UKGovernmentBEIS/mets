@@ -185,7 +185,7 @@ export class PermitVariationStore extends PermitApplicationStore<PermitVariation
     return (
       !!state?.determination?.reason &&
       !!state?.determination?.activationDate &&
-      (state.permitType === 'GHGE' || isHSEAnnualEmissionTargetsCompleted(state)) &&
+      (state.permitType === 'GHGE' || state.permitType === 'WASTE' || isHSEAnnualEmissionTargetsCompleted(state)) &&
       (!getVariationRequestTaskTypes().includes(state.requestTaskType) || !!state?.determination?.logChanges) &&
       (!isVariationRegulatorLedRequestTask(this.getState().requestTaskType) ||
         isVariationReasonTemplateCompleted(state.determination))
@@ -268,8 +268,8 @@ export class PermitVariationStore extends PermitApplicationStore<PermitVariation
           return state.requestActionType === 'PERMIT_VARIATION_APPLICATION_GRANTED'
             ? ('approved' as ReviewDeterminationStatus)
             : state.requestActionType === 'PERMIT_VARIATION_APPLICATION_REGULATOR_LED_APPROVED'
-            ? ('approved' as ReviewDeterminationStatus)
-            : ('undecided' as ReviewDeterminationStatus); //fallback, should not happen
+              ? ('approved' as ReviewDeterminationStatus)
+              : ('undecided' as ReviewDeterminationStatus); //fallback, should not happen
         } else {
           if (isVariationRegulatorLedRequestTask(this.getState().requestTaskType)) {
             return this.resolveDeterminationStatusRegulatorLed(state);
@@ -561,24 +561,24 @@ export class PermitVariationStore extends PermitApplicationStore<PermitVariation
           state.requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'
             ? 'PERMIT_VARIATION_SAVE_APPLICATION_REGULATOR_LED'
             : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_SUBMIT'
-            ? 'PERMIT_VARIATION_SAVE_APPLICATION'
-            : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_REVIEW'
-            ? 'PERMIT_VARIATION_SAVE_APPLICATION_REVIEW'
-            : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT'
-            ? 'PERMIT_VARIATION_SAVE_APPLICATION_AMEND'
-            : null,
+              ? 'PERMIT_VARIATION_SAVE_APPLICATION'
+              : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_REVIEW'
+                ? 'PERMIT_VARIATION_SAVE_APPLICATION_REVIEW'
+                : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT'
+                  ? 'PERMIT_VARIATION_SAVE_APPLICATION_AMEND'
+                  : null,
         requestTaskId: state.requestTaskId,
         requestTaskActionPayload: {
           payloadType:
             state.requestTaskType === 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'
               ? 'PERMIT_VARIATION_SAVE_APPLICATION_REGULATOR_LED_PAYLOAD'
               : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_SUBMIT'
-              ? 'PERMIT_VARIATION_SAVE_APPLICATION_PAYLOAD'
-              : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_REVIEW'
-              ? 'PERMIT_VARIATION_SAVE_APPLICATION_REVIEW_PAYLOAD'
-              : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT'
-              ? 'PERMIT_VARIATION_SAVE_APPLICATION_AMEND_PAYLOAD'
-              : null,
+                ? 'PERMIT_VARIATION_SAVE_APPLICATION_PAYLOAD'
+                : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_REVIEW'
+                  ? 'PERMIT_VARIATION_SAVE_APPLICATION_REVIEW_PAYLOAD'
+                  : state.requestTaskType === 'PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT'
+                    ? 'PERMIT_VARIATION_SAVE_APPLICATION_AMEND_PAYLOAD'
+                    : null,
           permit: state.permit,
           permitSectionsCompleted: state.permitSectionsCompleted,
           ...([
@@ -693,8 +693,8 @@ export class PermitVariationStore extends PermitApplicationStore<PermitVariation
     )
       ? 'cannot start yet'
       : !!state.determination && state.reviewSectionsCompleted?.determination
-      ? 'approved'
-      : 'undecided';
+        ? 'approved'
+        : 'undecided';
   }
 
   private variationDetailsReviewStatus(state: PermitVariationState) {
@@ -704,10 +704,10 @@ export class PermitVariationStore extends PermitApplicationStore<PermitVariation
       return this.isVariationRegulatorLedRequest
         ? 'complete'
         : permitVariationDetailsReviewDecision?.type === 'ACCEPTED'
-        ? 'accepted'
-        : permitVariationDetailsReviewDecision?.type === 'REJECTED'
-        ? 'rejected'
-        : 'operator to amend';
+          ? 'accepted'
+          : permitVariationDetailsReviewDecision?.type === 'REJECTED'
+            ? 'rejected'
+            : 'operator to amend';
     } else {
       if (isVariationRegulatorLedRequestTask(this.getState().requestTaskType)) {
         return variationDetailsStatus(state) as ReviewGroupTasksAggregatorStatus;
@@ -716,8 +716,8 @@ export class PermitVariationStore extends PermitApplicationStore<PermitVariation
           ? permitVariationDetailsReviewDecision?.type === 'ACCEPTED'
             ? 'accepted'
             : permitVariationDetailsReviewDecision?.type === 'REJECTED'
-            ? 'rejected'
-            : 'operator to amend'
+              ? 'rejected'
+              : 'operator to amend'
           : 'undecided';
       }
     }

@@ -5,18 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactRegistrationDTO;
 import uk.gov.pmrv.api.account.repository.CaExternalContactRepository;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
 
 @ExtendWith(MockitoExtension.class)
 class CaExternalContactValidatorTest {
@@ -39,7 +39,7 @@ class CaExternalContactValidatorTest {
                 .build();
 
         when(caExternalContactRepository.existsByCompetentAuthorityAndName(ca, name)).thenReturn(false);
-        when(caExternalContactRepository.existsByCompetentAuthorityAndEmail(ca, email)).thenReturn(false);
+        when(caExternalContactRepository.existsByCompetentAuthorityAndEmailIgnoreCase(ca, email)).thenReturn(false);
 
         caExternalContactValidator.validateCaExternalContactRegistration(ca, caExternalContactRegistration);
     }
@@ -56,7 +56,7 @@ class CaExternalContactValidatorTest {
                 .build();
 
         when(caExternalContactRepository.existsByCompetentAuthorityAndName(ca, name)).thenReturn(true);
-        when(caExternalContactRepository.existsByCompetentAuthorityAndEmail(ca, email)).thenReturn(false);
+        when(caExternalContactRepository.existsByCompetentAuthorityAndEmailIgnoreCase(ca, email)).thenReturn(false);
 
         BusinessException businessException =
             assertThrows(BusinessException.class, () ->
@@ -77,7 +77,7 @@ class CaExternalContactValidatorTest {
                 .build();
 
         when(caExternalContactRepository.existsByCompetentAuthorityAndName(ca, name)).thenReturn(false);
-        when(caExternalContactRepository.existsByCompetentAuthorityAndEmail(ca, email)).thenReturn(true);
+        when(caExternalContactRepository.existsByCompetentAuthorityAndEmailIgnoreCase(ca, email)).thenReturn(true);
 
         BusinessException businessException =
             assertThrows(BusinessException.class, () ->
@@ -98,7 +98,7 @@ class CaExternalContactValidatorTest {
                 .build();
 
         when(caExternalContactRepository.existsByCompetentAuthorityAndName(ca, name)).thenReturn(true);
-        when(caExternalContactRepository.existsByCompetentAuthorityAndEmail(ca, email)).thenReturn(true);
+        when(caExternalContactRepository.existsByCompetentAuthorityAndEmailIgnoreCase(ca, email)).thenReturn(true);
 
         BusinessException businessException =
             assertThrows(BusinessException.class, () ->
@@ -122,7 +122,7 @@ class CaExternalContactValidatorTest {
         caExternalContactValidator.validateCaExternalContactRegistration(ca, id, caExternalContactRegistration);
 
         verify(caExternalContactRepository, times(1)).existsByCompetentAuthorityAndNameAndIdNot(ca, name, id);
-        verify(caExternalContactRepository, times(1)).existsByCompetentAuthorityAndEmailAndIdNot(ca, email, id);
+        verify(caExternalContactRepository, times(1)).existsByCompetentAuthorityAndEmailIgnoreCaseAndIdNot(ca, email, id);
     }
 
     @Test
@@ -138,7 +138,7 @@ class CaExternalContactValidatorTest {
                 .build();
 
         when(caExternalContactRepository.existsByCompetentAuthorityAndNameAndIdNot(ca, name, id)).thenReturn(true);
-        when(caExternalContactRepository.existsByCompetentAuthorityAndEmailAndIdNot(ca, email, id)).thenReturn(false);
+        when(caExternalContactRepository.existsByCompetentAuthorityAndEmailIgnoreCaseAndIdNot(ca, email, id)).thenReturn(false);
 
         BusinessException businessException =
             assertThrows(BusinessException.class, () ->
@@ -160,7 +160,7 @@ class CaExternalContactValidatorTest {
                 .build();
 
         when(caExternalContactRepository.existsByCompetentAuthorityAndNameAndIdNot(ca, name, id)).thenReturn(false);
-        when(caExternalContactRepository.existsByCompetentAuthorityAndEmailAndIdNot(ca, email, id)).thenReturn(true);
+        when(caExternalContactRepository.existsByCompetentAuthorityAndEmailIgnoreCaseAndIdNot(ca, email, id)).thenReturn(true);
 
         BusinessException businessException =
             assertThrows(BusinessException.class, () ->
@@ -182,7 +182,7 @@ class CaExternalContactValidatorTest {
                 .build();
 
         when(caExternalContactRepository.existsByCompetentAuthorityAndNameAndIdNot(ca, name, id)).thenReturn(true);
-        when(caExternalContactRepository.existsByCompetentAuthorityAndEmailAndIdNot(ca, email, id)).thenReturn(true);
+        when(caExternalContactRepository.existsByCompetentAuthorityAndEmailIgnoreCaseAndIdNot(ca, email, id)).thenReturn(true);
 
         BusinessException businessException =
             assertThrows(BusinessException.class, () ->

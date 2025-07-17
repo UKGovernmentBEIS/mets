@@ -8,7 +8,7 @@
       <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
     </dd>
   </div>
-  <div govukSummaryListRow>
+  <div govukSummaryListRow *ngIf="verificationActivityLevelReport.comment">
     <dt govukSummaryListRowKey>Comments</dt>
     <dd govukSummaryListRowValue class="pre-wrap">{{ verificationActivityLevelReport.comment }}</dd>
     <dd govukSummaryListRowActions *ngIf="editable">

@@ -3,9 +3,9 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.permitsurrender.servi
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.account.installation.service.InstallationAccountStatusService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -43,14 +43,14 @@ public class RequestPermitSurrenderCessationService {
     }
 
     @Transactional
-    public void executeNotifyOperatorActions(RequestTask requestTask, PmrvUser pmrvUser,
+    public void executeNotifyOperatorActions(RequestTask requestTask, AppUser appUser,
                                              NotifyOperatorForDecisionRequestTaskActionPayload taskActionPayload) {
         Request request = requestTask.getRequest();
         PermitSurrenderRequestPayload requestPayload = (PermitSurrenderRequestPayload) request.getPayload();
         PermitCessationSubmitRequestTaskPayload requestTaskPayload =
                 (PermitCessationSubmitRequestTaskPayload) requestTask.getPayload();
         
-        cessationNotifyOperatorValidator.validate(requestTask, pmrvUser, taskActionPayload);
+        cessationNotifyOperatorValidator.validate(requestTask, appUser, taskActionPayload);
 
         // update account status
         installationAccountStatusService.handleSurrenderCessationCompleted(request.getAccountId());
@@ -72,6 +72,6 @@ public class RequestPermitSurrenderCessationService {
             requestPayload.getRegulatorReviewer());
         
         // send official notice
-        permitSurrenderOfficialNoticeService.sendOfficialNotice(request, cessationOfficialNotice, taskActionPayload.getDecisionNotification());
+        permitSurrenderOfficialNoticeService.sendOfficialNoticeForDecisionNotification(request, cessationOfficialNotice, taskActionPayload.getDecisionNotification());
     }
 }

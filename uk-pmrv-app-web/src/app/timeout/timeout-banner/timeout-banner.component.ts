@@ -21,7 +21,7 @@ import { TimeoutBannerService } from './timeout-banner.service';
 @Component({
   selector: 'app-timeout-banner',
   templateUrl: './timeout-banner.component.html',
-  styleUrls: ['./timeout-banner.component.scss'],
+  styleUrl: './timeout-banner.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DestroySubject],
 })

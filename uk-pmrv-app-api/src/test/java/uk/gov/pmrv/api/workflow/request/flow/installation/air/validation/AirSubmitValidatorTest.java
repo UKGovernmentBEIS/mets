@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirImprovement;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirImprovementCalculationCO2;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirImprovementFallback;
@@ -38,7 +38,7 @@ class AirSubmitValidatorTest {
         BusinessException be = assertThrows(BusinessException.class,
             () -> validator.validate(operatorImprovementResponses, airImprovements));
 
-        assertEquals(ErrorCode.INVALID_AIR, be.getErrorCode());
+        assertEquals(MetsErrorCode.INVALID_AIR, be.getErrorCode());
     }
 
 

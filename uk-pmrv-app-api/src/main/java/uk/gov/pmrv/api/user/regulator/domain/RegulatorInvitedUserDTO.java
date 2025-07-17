@@ -1,15 +1,15 @@
 package uk.gov.pmrv.api.user.regulator.domain;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import java.util.Map;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionGroup;
-import uk.gov.pmrv.api.authorization.regulator.domain.RegulatorPermissionLevel;
+import uk.gov.netz.api.authorization.regulator.domain.RegulatorPermissionLevel;
+
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -22,5 +22,5 @@ public class RegulatorInvitedUserDTO {
     private RegulatorInvitedUserDetailsDTO userDetails;
 
     @NotEmpty
-    private Map<RegulatorPermissionGroup, RegulatorPermissionLevel> permissions;
+    private Map<String, RegulatorPermissionLevel> permissions;
 }

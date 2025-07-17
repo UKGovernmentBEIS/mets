@@ -3,17 +3,25 @@ import {
   ChangeDetectorRef,
   Component,
   ContentChild,
+  forwardRef,
   Input,
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { ConditionalContentDirective } from '../../directives';
 
 @Component({
   selector: 'govuk-radio-option',
   templateUrl: './radio-option.component.html',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => RadioOptionComponent),
+      multi: true,
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioOptionComponent<T> implements ControlValueAccessor {
@@ -21,6 +29,7 @@ export class RadioOptionComponent<T> implements ControlValueAccessor {
   @Input() label: string;
   @Input() hint?: string;
   @Input() divider?: boolean;
+  @Input() disable?: boolean;
   @ContentChild(ConditionalContentDirective, { static: true }) readonly conditional: ConditionalContentDirective;
   @ViewChild('conditionalTemplate', { static: true }) conditionalTemplate: TemplateRef<any>;
   @ViewChild('optionTemplate', { static: true }) optionTemplate: TemplateRef<any>;
@@ -52,7 +61,7 @@ export class RadioOptionComponent<T> implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean) {
-    this.isDisabled = isDisabled;
+    this.isDisabled = isDisabled || this.disable;
     this.setConditionalDisabledState();
     this.changeDetectorRef.markForCheck();
   }

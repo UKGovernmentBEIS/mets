@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerReportingObligationDetails;
 import uk.gov.pmrv.api.aviationreporting.common.domain.verification.AviationAerVerificationDecisionType;
 import uk.gov.pmrv.api.aviationreporting.common.domain.verification.AviationAerVerifiedSatisfactoryDecision;
@@ -42,6 +42,7 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.A
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.domain.AviationAerCorsiaApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.domain.AviationAerCorsiaSubmitApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.mapper.AviationAerCorsiaSubmitMapper;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.domain.RequestAviationAccountInfo;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.RequestAviationAccountQueryService;
@@ -92,7 +93,7 @@ class RequestAviationAerCorsiaSubmitServiceTest {
     @Test
     void sendToVerifier() {
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         Map<String, List<Boolean>> verificationSectionsCompleted = Map.of("Verification Section 1", List.of(true));
         AviationAerApplicationRequestVerificationRequestTaskActionPayload requestVerificationRequestTaskActionPayload =
                 AviationAerApplicationRequestVerificationRequestTaskActionPayload.builder()
@@ -140,7 +141,10 @@ class RequestAviationAerCorsiaSubmitServiceTest {
                 .payload(aviationAerSubmitRequestTaskPayload)
                 .build();
 
-        AviationAerCorsiaContainer aerCorsiaContainer = AviationAerCorsiaContainer.builder().aer(aviationAerCorsia).build();
+        AviationAerCorsiaContainer aerCorsiaContainer = AviationAerCorsiaContainer.builder().reportingRequired(Boolean.TRUE).aer(aviationAerCorsia).build();
+        AviationAerCorsiaSubmittedEmissions submittedEmissions = AviationAerCorsiaSubmittedEmissions.builder()
+            .totalEmissions(AviationAerCorsiaTotalEmissions.builder().allFlightsEmissions(BigDecimal.valueOf(200)).build())
+            .build();
         RequestAviationAccountInfo accountInfo = RequestAviationAccountInfo.builder().crcoCode("crcoCode").operatorName("operatorName").build();
         AviationAerCorsiaApplicationSubmittedRequestActionPayload submittedRequestActionPayload =
                 AviationAerCorsiaApplicationSubmittedRequestActionPayload.builder()
@@ -151,12 +155,13 @@ class RequestAviationAerCorsiaSubmitServiceTest {
         when(aviationAerCorsiaSubmitMapper.toAviationAerCorsiaContainer(aviationAerSubmitRequestTaskPayload, EmissionTradingScheme.CORSIA))
                 .thenReturn(aerCorsiaContainer);
         doNothing().when(aviationAerCorsiaValidatorService).validateAer(aerCorsiaContainer);
+        when(aviationAerCorsiaEmissionsCalculationService.calculateSubmittedEmissions(aerCorsiaContainer)).thenReturn(submittedEmissions);
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(accountInfo);
         when(aviationAerCorsiaSubmitMapper
-                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD))
+                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, submittedEmissions, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD))
                 .thenReturn(submittedRequestActionPayload);
 
-        requestAviationAerCorsiaSubmitService.sendToVerifier(requestVerificationRequestTaskActionPayload, requestTask, pmrvUser);
+        requestAviationAerCorsiaSubmitService.sendToVerifier(requestVerificationRequestTaskActionPayload, requestTask, appUser);
 
         AviationAerCorsiaRequestPayload updatedRequestPayload = (AviationAerCorsiaRequestPayload) request.getPayload();
 
@@ -169,22 +174,27 @@ class RequestAviationAerCorsiaSubmitServiceTest {
         assertThat(updatedRequestPayload.getAerSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(aerSectionsCompleted);
         assertThat(updatedRequestPayload.getVerificationSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(verificationSectionsCompleted);
         assertEquals(empOriginatedData, updatedRequestPayload.getEmpOriginatedData());
+        assertEquals(submittedEmissions, updatedRequestPayload.getSubmittedEmissions());
 
         verify(aviationAerCorsiaSubmitMapper, times(1))
                 .toAviationAerCorsiaContainer(aviationAerSubmitRequestTaskPayload, EmissionTradingScheme.CORSIA);
         verify(aviationAerCorsiaValidatorService, times(1)).validateAer(aerCorsiaContainer);
         verify(requestAviationAccountQueryService, times(1)).getAccountInfo(accountId);
         verify(aviationAerCorsiaSubmitMapper, times(1))
-                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD);
+                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, submittedEmissions, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD);
         verify(requestService, times(1)).addActionToRequest(
-                request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_CORSIA_APPLICATION_SENT_TO_VERIFIER, pmrvUser.getUserId());
+                request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_CORSIA_APPLICATION_SENT_TO_VERIFIER, appUser.getUserId());
     }
 
     @Test
     void sendToRegulator_when_reporting_required_true() {
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
-
+        AppUser appUser = AppUser.builder().userId("userId").build();
+        
+        AviationAerCorsiaSubmitApplicationRequestTaskActionPayload requestTaskActionPayload = AviationAerCorsiaSubmitApplicationRequestTaskActionPayload.builder()
+        		.verificationSectionsCompleted(Map.of("ver1", List.of(true)))
+        		.build();
+        
         AviationAerCorsiaVerificationReport verificationReport = AviationAerCorsiaVerificationReport.builder()
                 .verificationData(AviationAerCorsiaVerificationData.builder()
                         .overallDecision(AviationAerVerifiedSatisfactoryDecision.builder()
@@ -254,6 +264,7 @@ class RequestAviationAerCorsiaSubmitServiceTest {
                 AviationAerCorsiaApplicationSubmittedRequestActionPayload.builder()
                         .reportingRequired(true)
                         .aer(aviationAerCorsia)
+                        .verificationReport(verificationReport)
                         .build();
 
         final BigDecimal allFlightsEmissions = BigDecimal.valueOf(1200);
@@ -279,11 +290,11 @@ class RequestAviationAerCorsiaSubmitServiceTest {
         doNothing().when(aviationAerCorsiaValidatorService).validate(aerCorsiaContainer);
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(accountInfo);
         when(aviationAerCorsiaSubmitMapper
-                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD))
+                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, submittedEmissions, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD))
                 .thenReturn(submittedRequestActionPayload);
-        when(aviationReportableEmissionsService.updateReportableEmissions(aerCorsiaContainer, accountId)).thenReturn(totalEmissions);
+        when(aviationReportableEmissionsService.updateReportableEmissions(aerCorsiaContainer, accountId, false)).thenReturn(totalEmissions);
 
-        requestAviationAerCorsiaSubmitService.sendToRegulator(requestTask, pmrvUser);
+        requestAviationAerCorsiaSubmitService.sendToRegulator(requestTaskActionPayload, requestTask, appUser);
 
         AviationAerCorsiaRequestPayload updatedRequestPayload = (AviationAerCorsiaRequestPayload) request.getPayload();
 
@@ -297,6 +308,8 @@ class RequestAviationAerCorsiaSubmitServiceTest {
         assertThat(updatedRequestPayload.getTotalEmissionsProvided()).isEqualTo(allFlightsEmissions);
         assertThat(updatedRequestPayload.getTotalOffsetEmissionsProvided()).isEqualTo(offsetFlightsEmissions);
         assertEquals(empOriginatedData, updatedRequestPayload.getEmpOriginatedData());
+        assertEquals(submittedEmissions, updatedRequestPayload.getSubmittedEmissions());
+        assertThat(updatedRequestPayload.getVerificationSectionsCompleted()).containsExactlyEntriesOf(requestTaskActionPayload.getVerificationSectionsCompleted());
 
         AviationAerCorsiaRequestMetadata updatedRequestMetadata = (AviationAerCorsiaRequestMetadata) request.getMetadata();
         assertEquals(allFlightsEmissions, updatedRequestMetadata.getEmissions());
@@ -309,17 +322,21 @@ class RequestAviationAerCorsiaSubmitServiceTest {
         verify(aviationAerCorsiaValidatorService, times(1)).validate(aerCorsiaContainer);
         verify(requestAviationAccountQueryService, times(1)).getAccountInfo(accountId);
         verify(aviationAerCorsiaSubmitMapper, times(1))
-                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD);
+                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, submittedEmissions, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD);
         verify(requestService, times(1)).addActionToRequest(
-                request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED, pmrvUser.getUserId());
+                request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED, appUser.getUserId());
         verify(aviationReportableEmissionsService, times(1))
-                .updateReportableEmissions(aerCorsiaContainer, accountId);
+                .updateReportableEmissions(aerCorsiaContainer, accountId, false);
     }
 
     @Test
     void sendToRegulator_when_reporting_required_false() {
         Long accountId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
+        
+        AviationAerCorsiaSubmitApplicationRequestTaskActionPayload requestTaskActionPayload = AviationAerCorsiaSubmitApplicationRequestTaskActionPayload.builder()
+        		.verificationSectionsCompleted(Map.of("ver1", List.of(true)))
+        		.build();
 
         AviationAerCorsiaRequestPayload aviationAerCorsiaRequestPayload = AviationAerCorsiaRequestPayload.builder()
                 .payloadType(RequestPayloadType.AVIATION_AER_CORSIA_REQUEST_PAYLOAD)
@@ -365,10 +382,10 @@ class RequestAviationAerCorsiaSubmitServiceTest {
         doNothing().when(aviationAerCorsiaValidatorService).validate(aerCorsiaContainer);
         when(requestAviationAccountQueryService.getAccountInfo(accountId)).thenReturn(accountInfo);
         when(aviationAerCorsiaSubmitMapper
-                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD))
+                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, null, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD))
                 .thenReturn(submittedRequestActionPayload);
 
-        requestAviationAerCorsiaSubmitService.sendToRegulator(requestTask, pmrvUser);
+        requestAviationAerCorsiaSubmitService.sendToRegulator(requestTaskActionPayload, requestTask, appUser);
 
         AviationAerCorsiaRequestPayload updatedRequestPayload = (AviationAerCorsiaRequestPayload) request.getPayload();
 
@@ -379,15 +396,16 @@ class RequestAviationAerCorsiaSubmitServiceTest {
 
         AviationAerCorsiaRequestMetadata updatedRequestMetadata = (AviationAerCorsiaRequestMetadata) request.getMetadata();
         assertNull((updatedRequestMetadata.getEmissions()));
+        assertThat(updatedRequestPayload.getVerificationSectionsCompleted()).containsExactlyEntriesOf(requestTaskActionPayload.getVerificationSectionsCompleted());
 
         verify(aviationAerCorsiaSubmitMapper, times(1))
                 .toAviationAerCorsiaContainer(aviationAerSubmitRequestTaskPayload, null, EmissionTradingScheme.CORSIA);
         verify(aviationAerCorsiaValidatorService, times(1)).validate(aerCorsiaContainer);
         verify(requestAviationAccountQueryService, times(1)).getAccountInfo(accountId);
         verify(aviationAerCorsiaSubmitMapper, times(1))
-                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD);
+                .toAviationAerCorsiaApplicationSubmittedRequestActionPayload(aviationAerSubmitRequestTaskPayload, accountInfo, null, RequestActionPayloadType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED_PAYLOAD);
         verify(requestService, times(1)).addActionToRequest(
-                request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED, pmrvUser.getUserId());
+                request, submittedRequestActionPayload, RequestActionType.AVIATION_AER_CORSIA_APPLICATION_SUBMITTED, appUser.getUserId());
         verifyNoInteractions(aviationReportableEmissionsService, aviationAerCorsiaEmissionsCalculationService);
     }
 }

@@ -11,14 +11,12 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
       [notification]="notification"
       [breadcrumb]="true"
       reviewGroupTitle="Monitoring methodology"
-      reviewGroupUrl="monitoring-methodology-plan"
-    >
+      reviewGroupUrl="monitoring-methodology-plan">
       <app-page-heading caption="Monitoring methodology plan">Monitoring methodology plan</app-page-heading>
       <app-monitoring-methodology-summary-details></app-monitoring-methodology-summary-details>
       <app-list-return-link
         reviewGroupTitle="Monitoring methodology"
-        reviewGroupUrl="monitoring-methodology-plan"
-      ></app-list-return-link>
+        reviewGroupUrl="monitoring-methodology-plan"></app-list-return-link>
     </app-permit-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,5 +24,8 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 export class MonitoringMethodologyPlanSummaryComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
 
-  constructor(readonly store: PermitApplicationStore<PermitApplicationState>, private readonly router: Router) {}
+  constructor(
+    readonly store: PermitApplicationStore<PermitApplicationState>,
+    private readonly router: Router,
+  ) {}
 }

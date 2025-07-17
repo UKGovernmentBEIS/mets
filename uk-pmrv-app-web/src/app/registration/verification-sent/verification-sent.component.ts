@@ -16,7 +16,10 @@ export class VerificationSentComponent implements OnInit {
 
   title$ = new BehaviorSubject<string>('Check your email');
 
-  constructor(private readonly titleService: Title, private readonly destroy$: DestroySubject) {}
+  constructor(
+    private readonly titleService: Title,
+    private readonly destroy$: DestroySubject,
+  ) {}
 
   ngOnInit() {
     this.title$

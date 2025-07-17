@@ -96,4 +96,10 @@
         <sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/camunda/bpm/engine/db/upgrade/postgres_engine_7.19_to_7.20.sql" />
     </changeSet>
 
+    <changeSet id="0_1_0_CAMUNDA_engine_7.20_to_7.21_db_updates" author="p70453">
+        <preConditions onFail="CONTINUE">
+            <sqlCheck expectedResult="1">select case when string_to_array(replace('7.21.0', '_', '.'),'.')::int[] > string_to_array(replace((select max(version_) from act_ge_schema_log), '_', '.'),'.')::int[] then 1 else 0 end diff</sqlCheck>
+        </preConditions>
+        <sqlFile encoding="utf8" splitStatements="true" stripComments="true" path="org/camunda/bpm/engine/db/upgrade/postgres_engine_7.20_to_7.21.sql" />
+    </changeSet>
 </databaseChangeLog>

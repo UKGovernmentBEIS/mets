@@ -5,6 +5,8 @@ import java.time.Year;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
@@ -18,20 +20,26 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 import uk.gov.pmrv.api.workflow.utils.DateUtils;
 
 @Service
-public class AviationAerCorsiaCreationRequestParamsBuilderService implements
-    AviationAerCreationRequestParamsBuilderService {
+@RequiredArgsConstructor
+public class AviationAerCorsiaCreationRequestParamsBuilderService
+		implements AviationAerCreationRequestParamsBuilderService {
+	
+	private final AviationAerCorsiaBuildEmpOriginatedDataService buildEmpOriginatedDataService;
+	private final AviationAerCorsiaBuildMonitoringPlanVersionsService buildMonitoringPlanVersionsService;
 
     @Override
     public RequestParams buildRequestParams(Long accountId, Year reportingYear) {
         Map<String, Object> processVars = new HashMap<>();
         processVars.put(BpmnProcessConstants.AVIATION_AER_EXPIRATION_DATE,
-            DateUtils.convertLocalDateToDate(LocalDate.of(Year.now().getValue(), 4, 30)));
+            DateUtils.atEndOfDay(LocalDate.of(Year.now().getValue(), 4, 30)));
 
         return RequestParams.builder()
             .type(RequestType.AVIATION_AER_CORSIA)
             .accountId(accountId)
             .requestPayload(AviationAerCorsiaRequestPayload.builder()
                 .payloadType(RequestPayloadType.AVIATION_AER_CORSIA_REQUEST_PAYLOAD)
+                .empOriginatedData(buildEmpOriginatedDataService.build(accountId))
+                .aerMonitoringPlanVersions(buildMonitoringPlanVersionsService.build(accountId, reportingYear))
                 .build())
             .requestMetadata(AviationAerCorsiaRequestMetadata.builder()
                 .type(RequestMetadataType.AVIATION_AER_CORSIA)

@@ -1,15 +1,14 @@
-import { RequestCreateActionProcessDTO, RequestDetailsDTO } from 'pmrv-api';
+import { RequestCreateActionProcessDTO } from 'pmrv-api';
 
-export interface WorkflowLabel {
-  title: string;
-  expandableTitle: string;
-  expandableTitleSummary: string;
+export interface WorkflowLabelProperties {
   button: string;
   type: RequestCreateActionProcessDTO['requestCreateActionType'];
   errors: string[];
 }
 
-export type WorkflowMap = Omit<
-  Record<RequestDetailsDTO['requestType'], Partial<WorkflowLabel>>,
-  'SYSTEM_MESSAGE_NOTIFICATION'
->;
+export interface WorkflowLabel {
+  title: string;
+  properties: WorkflowLabelProperties[];
+}
+
+export type WorkflowArray = Array<Partial<WorkflowLabel>>;

@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
+import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import {
@@ -34,7 +35,6 @@ import {
 } from 'pmrv-api';
 
 import { aerQuery } from '../../../../shared/aer.selectors';
-import { AerReviewDecisionGroupComponent } from '../../../aer-review-decision-group/aer-review-decision-group.component';
 import { BaseOperatorDetailsComponent } from '../base-operator-details.component';
 import { OperatorDetailsFormProvider } from '../operator-details-form.provider';
 

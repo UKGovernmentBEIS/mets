@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.netz.api.security.Authorized;
 import uk.gov.pmrv.api.permit.service.PermitAttachmentService;
 import uk.gov.pmrv.api.permit.service.PermitDocumentService;
-import uk.gov.pmrv.api.token.FileToken;
+import uk.gov.netz.api.token.FileToken;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
 
 import java.util.UUID;
 

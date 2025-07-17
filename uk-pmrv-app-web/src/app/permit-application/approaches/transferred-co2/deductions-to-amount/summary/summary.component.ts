@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, pluck, switchMap } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 
 import { ProcedureOptionalForm } from 'pmrv-api';
 
@@ -19,7 +19,7 @@ import { headingMap } from '../../heading';
 })
 export class SummaryComponent {
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
-  taskKey$: Observable<TaskKey> = this.route.data.pipe(pluck('taskKey'));
+  taskKey$: Observable<TaskKey> = this.route.data.pipe(map((x) => x?.taskKey));
   procedure$ = this.taskKey$.pipe(switchMap((taskKey) => this.store.findTask<ProcedureOptionalForm>(taskKey)));
   headingMap = headingMap;
 

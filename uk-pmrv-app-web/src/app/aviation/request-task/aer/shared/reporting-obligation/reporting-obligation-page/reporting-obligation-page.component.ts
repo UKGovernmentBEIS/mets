@@ -67,6 +67,9 @@ export default class ReportingObligationPageComponent {
         .pipe(this.pendingRequestService.trackRequest())
         .subscribe(() => {
           this.store.aerDelegate.setReportingObligation(this.formProvider.getFormValue());
+          this.formProvider.form.value?.reportingObligationDetails?.supportingDocuments?.forEach((doc) => {
+            this.store.aerDelegate.addAerAttachment({ [doc.uuid]: doc.file.name });
+          });
 
           this.router.navigate(['summary'], { relativeTo: this.route });
         });

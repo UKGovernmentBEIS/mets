@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration.emp.ukets.monitoringapproach;
 
-import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.EmissionsMonitoringPlanUkEtsContainer;
@@ -15,21 +16,24 @@ import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanSectionMigrati
 import uk.gov.pmrv.api.migration.files.EtsFileAttachment;
 import uk.gov.pmrv.api.migration.files.EtsFileAttachmentMapper;
 
-import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
+
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class EmpMonitoringApproachSectionMigrationService implements EmissionsMonitoringPlanSectionMigrationService<EmpMigrationMonitoringApproach> {
 
     private final JdbcTemplate migrationJdbcTemplate;
 
     private final EtsFileAttachmentMapper etsFileAttachmentMapper = Mappers.getMapper(EtsFileAttachmentMapper.class);
+
+    public EmpMonitoringApproachSectionMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+    }
 
     private static final String QUERY_BASE = """
             with XMLNAMESPACES (

@@ -24,8 +24,7 @@ describe('RecommendedImprovementsGroupComponent', () => {
       <app-recommended-improvements-group-template
         [isEditable]="isEditable"
         [queryParams]="queryParams"
-        [verifierComments]="verifierComments"
-      ></app-recommended-improvements-group-template>
+        [verifierComments]="verifierComments"></app-recommended-improvements-group-template>
     `,
   })
   class TestComponent {

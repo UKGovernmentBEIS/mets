@@ -16,8 +16,7 @@ describe('DeterminationProceedAuthorityWithholdingTemplateComponent', () => {
     template: `
       <app-determination-proceed-authority-withholding-template
         [determination]="determination"
-        [editable]="editable"
-      ></app-determination-proceed-authority-withholding-template>
+        [editable]="editable"></app-determination-proceed-authority-withholding-template>
     `,
   })
   class TestComponent {

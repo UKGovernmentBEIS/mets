@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.framework.DefaultAopProxyFactory;
@@ -16,18 +15,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.pmrv.api.reporting.domain.dto.ReportingYearsDTO;
 import uk.gov.pmrv.api.reporting.service.ReportableEmissionsService;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.math.BigDecimal;
 import java.time.Year;
@@ -56,10 +54,10 @@ class ReportingAccountControllerTest {
     private ReportableEmissionsService reportableEmissionsService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
@@ -68,7 +66,7 @@ class ReportingAccountControllerTest {
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver =
                 new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(reportingAccountController);
         aspectJProxyFactory.addAspect(aspect);
@@ -78,7 +76,7 @@ class ReportingAccountControllerTest {
         reportingAccountController = (ReportingAccountController) aopProxy.getProxy();
 
         mockMvc = MockMvcBuilders.standaloneSetup(reportingAccountController)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
                 .build();
 
@@ -95,7 +93,7 @@ class ReportingAccountControllerTest {
                 .years(Set.of(year))
                 .build();
 
-        PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+        AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         when(reportableEmissionsService.getReportableEmissions(accountId, Set.of(year)))
@@ -120,12 +118,12 @@ class ReportingAccountControllerTest {
         final ReportingYearsDTO reportingYears = ReportingYearsDTO.builder()
                 .years(Set.of(year))
                 .build();
-        PmrvUser currentUser = PmrvUser.builder().userId("currentuser").build();
+        AppUser currentUser = AppUser.builder().userId("currentuser").build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(currentUser, "getReportableEmissions", String.valueOf(accountId));
+                .when(appUserAuthorizationService)
+                .authorize(currentUser, "getReportableEmissions", String.valueOf(accountId), null, null);
 
         // Invoke
         mockMvc.perform(

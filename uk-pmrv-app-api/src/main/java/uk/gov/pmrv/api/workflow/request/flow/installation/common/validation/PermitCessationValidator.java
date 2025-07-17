@@ -2,10 +2,9 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.common.validation;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
-import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationContainer;
-
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationContainer;
 
 @Validated
 @Component

@@ -5,33 +5,33 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.config.CompetentAuthorityProperties;
+import uk.gov.netz.api.common.utils.DateService;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.account.domain.dto.LocationOnShoreStateDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.domain.enumeration.LocationType;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityDTO;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
-import uk.gov.pmrv.api.common.service.DateService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.aviation.domain.AviationAccountTemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.CompetentAuthorityTemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.SignatoryTemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.WorkflowTemplateParams;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.user.regulator.domain.RegulatorUserDTO;
 import uk.gov.pmrv.api.user.regulator.service.RegulatorUserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.ukets.submit.domain.EmpIssuanceUkEtsRequestPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.CompetentAuthorityDTOByRequestResolverDelegator;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateLocationInfoResolver;
 
 import java.io.IOException;
@@ -70,16 +70,16 @@ class AviationDocumentTemplateCommonParamsProviderTest {
     private UserAuthService userAuthService;
 
     @Mock
-    private AppProperties appProperties;
+    private CompetentAuthorityProperties competentAuthorityProperties;
 
     @Mock
     private DateService dateService;
 
     @Mock
-    private CompetentAuthorityService competentAuthorityService;
+    private DocumentTemplateLocationInfoResolver documentTemplateLocationInfoResolver;
 
     @Mock
-    private DocumentTemplateLocationInfoResolver documentTemplateLocationInfoResolver;
+    private CompetentAuthorityDTOByRequestResolverDelegator competentAuthorityDTOByRequestResolverDelegator;
 
     @Test
     void constructCommonTemplateParams() throws IOException {
@@ -138,8 +138,7 @@ class AviationDocumentTemplateCommonParamsProviderTest {
             .signature(FileInfoDTO.builder().name("signature.pdf").uuid(UUID.randomUUID().toString()).build())
             .build();
         when(regulatorUserAuthService.getRegulatorUserById(signatory)).thenReturn(signatoryUser);
-        when(appProperties.getCompetentAuthorityCentralInfo()).thenReturn(caCentralInfo);
-        when(competentAuthorityService.getCompetentAuthority(CompetentAuthorityEnum.ENGLAND, AccountType.AVIATION)).thenReturn(ca);
+        when(competentAuthorityProperties.getCentralInfo()).thenReturn(caCentralInfo);
 
         FileDTO signatorySignature = FileDTO.builder()
             .fileContent("content".getBytes())
@@ -150,6 +149,8 @@ class AviationDocumentTemplateCommonParamsProviderTest {
         when(userAuthService.getUserSignature(signatoryUser.getSignature().getUuid()))
             .thenReturn(Optional.of(signatorySignature));
         when(dateService.getLocalDateTime()).thenReturn(LocalDateTime.of(2021, 1, 2, 1, 1));
+        when(competentAuthorityDTOByRequestResolverDelegator.resolveCA(request, AccountType.AVIATION)).thenReturn(ca);
+
 
         //invoke
         TemplateParams result = aviationDocumentTemplateCommonParamsProvider.constructCommonTemplateParams(request, signatory);
@@ -186,6 +187,7 @@ class AviationDocumentTemplateCommonParamsProviderTest {
             .permitId(empId)
             .build());
 
+        verify(competentAuthorityDTOByRequestResolverDelegator, times(1)).resolveCA(request, AccountType.AVIATION);
         verify(aviationAccountQueryService, times(1)).getAviationAccountInfoDTOById(request.getAccountId());
         verify(empQueryService, times(1)).getEmpIdByAccountId(request.getAccountId());
         verify(accountContactQueryService, times(1)).findContactByAccountAndContactType(accountId, AccountContactType.PRIMARY);
@@ -195,7 +197,7 @@ class AviationDocumentTemplateCommonParamsProviderTest {
         verify(documentTemplateLocationInfoResolver, times(1)).constructLocationInfo(location);
         verify(regulatorUserAuthService, times(1)).getRegulatorUserById(signatory);
         verify(userAuthService, times(1)).getUserSignature(signatoryUser.getSignature().getUuid());
-        verify(appProperties, times(1)).getCompetentAuthorityCentralInfo();
+        verify(competentAuthorityProperties, times(1)).getCentralInfo();
         verify(dateService, times(1)).getLocalDateTime();
     }
 }

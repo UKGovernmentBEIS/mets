@@ -47,6 +47,6 @@ describe('DocumentsSummaryTemplateComponent', () => {
 
   it('should show summary details', () => {
     expect(page.attachments).toHaveLength(2);
-    expect(page.attachments.map((dd) => dd.textContent)).toEqual(['cover.jpg', 'PublicationAgreement.pdf']);
+    expect(page.attachments.map((dd) => dd.textContent)).toEqual([' cover.jpg ', ' PublicationAgreement.pdf ']);
   });
 });

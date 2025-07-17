@@ -6,7 +6,7 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -90,7 +90,7 @@ class RequestPermitSurrenderServiceTest {
     
     @Test
     void applySubmitPayload() {
-        PmrvUser authUser = PmrvUser.builder().userId("user").build();
+        AppUser authUser = AppUser.builder().userId("user").build();
         
         PermitSurrenderRequestPayload requestPayload = PermitSurrenderRequestPayload.builder().payloadType(RequestPayloadType.PERMIT_SURRENDER_REQUEST_PAYLOAD).build();
         Request request = Request.builder().id("1").payload(requestPayload).type(RequestType.PERMIT_SURRENDER).build();

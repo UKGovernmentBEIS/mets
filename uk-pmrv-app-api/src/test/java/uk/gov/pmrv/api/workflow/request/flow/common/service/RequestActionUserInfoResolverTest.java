@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.dto.AuthorityRoleDTO;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.authorization.core.domain.dto.AuthorityRoleDTO;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityQueryService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
@@ -58,7 +58,7 @@ class RequestActionUserInfoResolverTest {
         final String signatory = "regulator";
         final Request request = Request.builder().accountId(1L).build();
 
-        when(officialNoticeSendService.getDefaultOfficialNoticeRecipients(request))
+        when(officialNoticeSendService.getOfficialNoticeToRecipients(request))
                 .thenReturn(Set.of(
                         UserInfoDTO.builder().userId("accountServiceContactUser").build(),
                         UserInfoDTO.builder().userId("accountPrimaryContactUser").build()
@@ -86,7 +86,7 @@ class RequestActionUserInfoResolverTest {
 
         final Map<String, RequestActionUserInfo> usersInfo = resolver.getUsersInfo(operators, signatory, request);
 
-        verify(officialNoticeSendService, times(1)).getDefaultOfficialNoticeRecipients(request);
+        verify(officialNoticeSendService, times(1)).getOfficialNoticeToRecipients(request);
         verify(userAuthService, times(1)).getUserByUserId("operator");
         verify(userAuthService, times(1)).getUserByUserId("regulator");
         verify(userAuthService, times(1)).getUserByUserId("accountPrimaryContactUser");
@@ -128,7 +128,7 @@ class RequestActionUserInfoResolverTest {
         final Set<String> operators = Set.of("operator");
         final Request request = Request.builder().accountId(1L).build();
 
-        when(officialNoticeSendService.getDefaultOfficialNoticeRecipients(request))
+        when(officialNoticeSendService.getOfficialNoticeToRecipients(request))
             .thenReturn(Set.of(
                 UserInfoDTO.builder().userId("accountServiceContactUser").build(),
                 UserInfoDTO.builder().userId("accountPrimaryContactUser").build()
@@ -154,7 +154,7 @@ class RequestActionUserInfoResolverTest {
 
         final Map<String, RequestActionUserInfo> usersInfo = resolver.getUsersInfo(operators, request);
 
-        verify(officialNoticeSendService, times(1)).getDefaultOfficialNoticeRecipients(request);
+        verify(officialNoticeSendService, times(1)).getOfficialNoticeToRecipients(request);
         verify(userAuthService, times(1)).getUserByUserId("operator");
         verify(userAuthService, times(1)).getUserByUserId("accountPrimaryContactUser");
         verify(userAuthService, times(1)).getUserByUserId("accountServiceContactUser");

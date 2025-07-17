@@ -17,8 +17,7 @@ interface ViewModel {
   selector: 'app-total-emissions-domestic-flights-table',
   template: `
     <app-total-emissions-domestic-flights-table-template
-      [data]="(vm$ | async).data"
-    ></app-total-emissions-domestic-flights-table-template>
+      [data]="(vm$ | async).data"></app-total-emissions-domestic-flights-table-template>
   `,
   standalone: true,
   imports: [SharedModule, TotalEmissionsDomesticFlightsTableTemplateComponent],

@@ -14,7 +14,9 @@ describe('SourceStreamsSummaryTableComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    template: ` <app-source-streams-summary-table [data]="data"></app-source-streams-summary-table> `,
+    template: `
+      <app-source-streams-summary-table [data]="data"></app-source-streams-summary-table>
+    `,
   })
   class TestComponent {
     data: SourceStream[] = [

@@ -30,6 +30,6 @@ class CalculateApplicationReviewNoExpirationDateServiceTest {
 
     @Test
     void getTypes() {
-        assertThat(service.getTypes()).containsExactly(RequestType.VIR);
+        assertThat(service.getTypes()).containsExactlyInAnyOrder(RequestType.VIR, RequestType.AVIATION_VIR, RequestType.AIR);
     }
 }

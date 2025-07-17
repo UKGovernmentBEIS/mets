@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -14,6 +14,6 @@ import { MonitoringApproachMonitoringTiers } from './monitoringApproachMonitorin
 export interface PermitOriginatedData {
   permitMonitoringApproachMonitoringTiers: MonitoringApproachMonitoringTiers;
   permitNotificationIds?: Array<string>;
-  permitType: 'GHGE' | 'HSE';
+  permitType: 'GHGE' | 'HSE' | 'WASTE';
   installationCategory: 'A_LOW_EMITTER' | 'A' | 'B' | 'C' | 'N_A';
 }

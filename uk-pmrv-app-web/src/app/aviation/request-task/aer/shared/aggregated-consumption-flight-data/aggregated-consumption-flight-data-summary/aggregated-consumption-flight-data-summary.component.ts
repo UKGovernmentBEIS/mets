@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, filter, first, map, Observable, startWith, switchMap } from 'rxjs';
 
 import { aerQuery } from '@aviation/request-task/aer/shared/aer.selectors';
+import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-review-decision-group/aer-review-decision-group.component';
 import { AggregatedConsumptionFlightDataFormProvider } from '@aviation/request-task/aer/shared/aggregated-consumption-flight-data/aggregated-consumption-flight-data-form.provider';
-import { AerReviewDecisionGroupComponent } from '@aviation/request-task/aer/ukets/aer-review-decision-group/aer-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
@@ -30,6 +30,7 @@ interface ViewModel {
   isEditable: boolean;
   hideSubmit: boolean;
   showDecision: boolean;
+  isCorsia: boolean;
 }
 
 @Component({
@@ -50,8 +51,9 @@ export class AggregatedConsumptionFlightDataSummaryComponent implements OnInit, 
       startWith(this.form.get('aggregatedEmissionDataDetails').status),
       filter((status) => status === 'VALID' || status === 'INVALID'),
     ),
+    this.store.pipe(aerQuery.selectIsCorsia),
   ]).pipe(
-    map(([type, isEditable, taskStatus, formStatus]) => {
+    map(([type, isEditable, taskStatus, formStatus, isCorsia]) => {
       const isFormValid = formStatus === 'VALID';
       return {
         data: isFormValid ? this.formProvider.getFormValue() : null,
@@ -59,9 +61,12 @@ export class AggregatedConsumptionFlightDataSummaryComponent implements OnInit, 
         isEditable,
         hideSubmit: !isEditable || ['complete', 'cannot start yet'].includes(taskStatus),
         showDecision: showReviewDecisionComponent.includes(type),
+        isCorsia: isCorsia,
       };
     }),
   );
+
+  private reportingYear: number;
 
   constructor(
     @Inject(TASK_FORM_PROVIDER) private formProvider: AggregatedConsumptionFlightDataFormProvider,
@@ -75,6 +80,7 @@ export class AggregatedConsumptionFlightDataSummaryComponent implements OnInit, 
 
   ngOnInit(): void {
     this.backLinkService.show();
+    this.setAerYear();
   }
 
   ngOnDestroy(): void {
@@ -94,6 +100,7 @@ export class AggregatedConsumptionFlightDataSummaryComponent implements OnInit, 
         this.store.pipe(first(), requestTaskQuery.selectRequestTaskItem),
         this.aviationReportingService.getTotalEmissionsCorsia({
           aggregatedEmissionsData: this.form.value,
+          year: this.reportingYear,
         }),
       ])
         .pipe(
@@ -124,5 +131,11 @@ export class AggregatedConsumptionFlightDataSummaryComponent implements OnInit, 
           this.router.navigate(['../../..'], { relativeTo: this.route });
         });
     }
+  }
+
+  private setAerYear(): void {
+    this.store.pipe(first(), aerQuery.selectAerYear).subscribe((year) => {
+      this.reportingYear = year;
+    });
   }
 }

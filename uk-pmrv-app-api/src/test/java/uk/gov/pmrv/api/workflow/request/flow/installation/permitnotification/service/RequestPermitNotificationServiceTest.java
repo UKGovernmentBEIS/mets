@@ -1,6 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -13,7 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -34,6 +38,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.dom
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.TemporarySuspension;
 
 @ExtendWith(MockitoExtension.class)
 class RequestPermitNotificationServiceTest {
@@ -118,7 +123,7 @@ class RequestPermitNotificationServiceTest {
 
     @Test
     void applySubmitPayload() {
-        PmrvUser authUser = PmrvUser.builder().userId("user").build();
+        AppUser authUser = AppUser.builder().userId("user").build();
 
         PermitNotificationRequestPayload requestPayload = PermitNotificationRequestPayload.builder()
             .payloadType(RequestPayloadType.PERMIT_NOTIFICATION_REQUEST_PAYLOAD).build();
@@ -159,5 +164,54 @@ class RequestPermitNotificationServiceTest {
         verify(requestService, times(1))
             .addActionToRequest(request, actionPayload, RequestActionType.PERMIT_NOTIFICATION_APPLICATION_SUBMITTED,
                 "user");
+    }
+
+    @Test
+    void should_allow_existing_temporary_suspension_notification() {
+        PermitNotification existingNotification = new TemporarySuspension();
+        existingNotification.setType(PermitNotificationType.TEMPORARY_SUSPENSION);
+
+        PermitNotificationApplicationSubmitRequestTaskPayload existingPayload =
+                PermitNotificationApplicationSubmitRequestTaskPayload.builder()
+                        .permitNotification(existingNotification)
+                        .build();
+
+        RequestTask requestTask = new RequestTask();
+        requestTask.setPayload(existingPayload);
+
+        PermitNotification incomingNotification = new TemporarySuspension();
+        incomingNotification.setType(PermitNotificationType.TEMPORARY_SUSPENSION);
+
+        PermitNotificationSaveApplicationRequestTaskActionPayload actionPayload =
+                new PermitNotificationSaveApplicationRequestTaskActionPayload();
+        actionPayload.setPermitNotification(incomingNotification);
+        actionPayload.setSectionsCompleted(Map.of("Section1", true));
+
+        service.applySavePayload(actionPayload, requestTask);
+        PermitNotificationApplicationSubmitRequestTaskPayload result =
+                (PermitNotificationApplicationSubmitRequestTaskPayload) requestTask.getPayload();
+
+        assertEquals(incomingNotification, result.getPermitNotification());
+        assertEquals(Map.of("Section1", true), result.getSectionsCompleted());
+    }
+
+    @Test
+    void should_throw_exception_when_new_temporary_suspension_is_requested() {
+        RequestTask requestTask = new RequestTask();
+        PermitNotificationApplicationSubmitRequestTaskPayload existingPayload =
+                PermitNotificationApplicationSubmitRequestTaskPayload.builder().build();
+        requestTask.setPayload(existingPayload);
+
+        PermitNotification newNotification = new TemporarySuspension();
+        newNotification.setType(PermitNotificationType.TEMPORARY_SUSPENSION);
+
+        PermitNotificationSaveApplicationRequestTaskActionPayload actionPayload =
+                new PermitNotificationSaveApplicationRequestTaskActionPayload();
+        actionPayload.setPermitNotification(newNotification);
+
+        BusinessException ex = assertThrows(BusinessException.class, () ->
+                service.applySavePayload(actionPayload, requestTask));
+
+        assertEquals(MetsErrorCode.INVALID_PERMIT_NOTIFICATION_NOT_SUPPORTED_TEMPORARY_SUSPENSION, ex.getErrorCode());
     }
 }

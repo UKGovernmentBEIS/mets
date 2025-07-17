@@ -1,7 +1,7 @@
 import { UntypedFormBuilder, UntypedFormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { GovukDatePipe } from '@shared/pipes/govuk-date.pipe';
-import moment from 'moment';
+import { addDays, format, isAfter, startOfDay } from 'date-fns';
 
 import { PermitSurrenderReviewDeterminationGrant } from 'pmrv-api';
 
@@ -30,14 +30,15 @@ export const noticeDateFormProvider = {
 };
 
 function minDateValidator(): ValidatorFn {
-  return (group: UntypedFormGroup): ValidationErrors => {
+  return (group: UntypedFormGroup): ValidationErrors | null => {
     const govukDatePipe = new GovukDatePipe();
-    const after28Days = moment().add(28, 'd').set({ hour: 0, minute: 0, second: 0, millisecond: 0 });
-    return moment(group.value).isAfter(after28Days)
+    const after28Days = startOfDay(addDays(new Date(), 28));
+
+    return isAfter(group.value, after28Days)
       ? null
       : {
           invalidNoticeDate: `The date must be the same as or after ${govukDatePipe.transform(
-            new Date(after28Days.clone().add(1, 'd').toISOString()),
+            format(addDays(after28Days, 1), 'yyyy-MM-dd'),
           )}`,
         };
   };

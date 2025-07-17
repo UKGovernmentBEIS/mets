@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { filter, map, Observable, switchMap } from 'rxjs';
 
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 import { hasRequestTaskAllowedActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
 
 import { RequestActionInfoDTO, RequestActionsService, RequestTaskItemDTO } from 'pmrv-api';
@@ -13,7 +14,7 @@ import { RequestActionInfoDTO, RequestActionsService, RequestTaskItemDTO } from 
   templateUrl: './wait-for-appeal-tasklist.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WaitForAppealTasklistComponent {
+export class WaitForAppealTasklistComponent implements OnInit {
   readonly navigationState = { returnUrl: this.router.url };
 
   hasRelatedActions$ = this.store.pipe(
@@ -49,6 +50,7 @@ export class WaitForAppealTasklistComponent {
     private readonly requestActionsService: RequestActionsService,
     private router: Router,
     readonly route: ActivatedRoute,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
 
   notifyOperator(): void {
@@ -61,5 +63,9 @@ export class WaitForAppealTasklistComponent {
 
   private sortTimeline(res: RequestActionInfoDTO[], key: string): RequestActionInfoDTO[] {
     return res.slice().sort((a, b) => new Date(b[key]).getTime() - new Date(a[key]).getTime());
+  }
+
+  ngOnInit(): void {
+    this.breadcrumbService.cutLastBreadcrumbWithLinkandShow();
   }
 }

@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { map, pluck } from 'rxjs';
+import { map } from 'rxjs';
+
+import { statusMap } from '@shared/task-list/task-item/status.map';
 
 import { GovukTableColumn } from 'govuk-components';
 
 import { CalculationSourceStreamCategoryAppliedTier } from 'pmrv-api';
 
-import { statusMap } from '../../../shared/task-list/task-item/status.map';
 import { areCategoryTierPrerequisitesMet } from '../../approaches/calculation/calculation-status';
 import { PermitApplicationState } from '../../store/permit-application.state';
 import { PermitApplicationStore } from '../../store/permit-application.store';
@@ -20,7 +21,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 export class CalculationComponent {
   showDiff$ = this.store.showDiff$;
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
-  groupKey$ = this.route.data.pipe(pluck('groupKey'));
+  groupKey$ = this.route.data.pipe(map((x) => x?.groupKey));
 
   sourceStreamCategoryAppliedTiers$ = this.store.findTask<CalculationSourceStreamCategoryAppliedTier[]>(
     'monitoringApproaches.CALCULATION_CO2.sourceStreamCategoryAppliedTiers',

@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -12,7 +12,7 @@
 import { AviationAerCorsiaAggregatedEmissionsData } from './aviationAerCorsiaAggregatedEmissionsData';
 
 /**
- * DTO containing aggregated emissions data for corsia
+ * DTO containing emission data and emissions reduction claim data is required
  */
 export interface AviationAerCorsiaInternationalFlightsEmissionsCalculationDTO {
   aggregatedEmissionsData: AviationAerCorsiaAggregatedEmissionsData;

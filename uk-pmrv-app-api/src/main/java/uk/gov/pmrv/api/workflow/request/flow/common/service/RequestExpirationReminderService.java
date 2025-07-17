@@ -2,15 +2,16 @@ package uk.gov.pmrv.api.workflow.request.flow.common.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import uk.gov.netz.api.competentauthority.CompetentAuthorityDTO;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.account.domain.dto.AccountInfoDTO;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.NotificationTemplateExpirationReminderParams;
@@ -24,8 +25,8 @@ public class RequestExpirationReminderService {
 
     private final RequestService requestService;
     private final AccountQueryService accountQueryService;
-    private final NotificationEmailService notificationEmailService;
-    private final CompetentAuthorityService competentAuthorityService;
+    private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
+    private final CompetentAuthorityDTOByRequestResolverDelegator competentAuthorityDTOByRequestResolverDelegator;
 
     public void sendExpirationReminderNotification(String requestId, NotificationTemplateExpirationReminderParams expirationParams) {
         final Request request = requestService.findRequestById(requestId);
@@ -34,22 +35,24 @@ public class RequestExpirationReminderService {
         final AccountType accountType = request.getType().getAccountType();
         
         final Map<String, Object> templateParams = new HashMap<>();
-        templateParams.put(EmailNotificationTemplateConstants.ACCOUNT_NAME, accountInfo.getName());
-        templateParams.put(EmailNotificationTemplateConstants.EMITTER_ID, accountInfo.getEmitterId());
-        templateParams.put(EmailNotificationTemplateConstants.WORKFLOW_ID, request.getId());
-        templateParams.put(EmailNotificationTemplateConstants.WORKFLOW, request.getType().getDescription());
-        templateParams.put(EmailNotificationTemplateConstants.WORKFLOW_TASK, expirationParams.getWorkflowTask());
-        templateParams.put(EmailNotificationTemplateConstants.WORKFLOW_USER, expirationParams.getRecipient().getFullName());
-        templateParams.put(EmailNotificationTemplateConstants.WORKFLOW_EXPIRATION_TIME, expirationParams.getExpirationTime());
-        templateParams.put(EmailNotificationTemplateConstants.WORKFLOW_EXPIRATION_TIME_LONG, expirationParams.getExpirationTimeLong());
-        templateParams.put(EmailNotificationTemplateConstants.WORKFLOW_DEADLINE, expirationParams.getDeadline());
-        templateParams.put(EmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthorityService
-                .getCompetentAuthority(request.getCompetentAuthority(), accountType).getEmail());
+        templateParams.put(PmrvEmailNotificationTemplateConstants.ACCOUNT_NAME, accountInfo.getName());
+        templateParams.put(PmrvEmailNotificationTemplateConstants.EMITTER_ID, accountInfo.getEmitterId());
+        templateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_ID, request.getId());
+        templateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW, request.getType().getDescription());
+        templateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_TASK, expirationParams.getWorkflowTask());
+        templateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_USER, expirationParams.getRecipient().getFullName());
+        templateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_EXPIRATION_TIME, expirationParams.getExpirationTime());
+        templateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_EXPIRATION_TIME_LONG, expirationParams.getExpirationTimeLong());
+        templateParams.put(PmrvEmailNotificationTemplateConstants.WORKFLOW_DEADLINE, expirationParams.getDeadline());
         
-        final EmailData emailData = EmailData.builder()
-                .notificationTemplateData(EmailNotificationTemplateData.builder()
+        final CompetentAuthorityDTO competentAuthorityDTO = competentAuthorityDTOByRequestResolverDelegator.resolveCA(request, accountType);
+
+        templateParams.put(PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthorityDTO.getEmail());
+        
+        final EmailData<PmrvEmailNotificationTemplateData> emailData = EmailData.<PmrvEmailNotificationTemplateData>builder()
+                .notificationTemplateData(PmrvEmailNotificationTemplateData.builder()
                         .competentAuthority(request.getCompetentAuthority())
-                        .templateName(NotificationTemplateName.GENERIC_EXPIRATION_REMINDER)
+                        .templateName(PmrvNotificationTemplateName.GENERIC_EXPIRATION_REMINDER.getName())
                         .accountType(request.getType().getAccountType())
                         .templateParams(templateParams)
                         .build())

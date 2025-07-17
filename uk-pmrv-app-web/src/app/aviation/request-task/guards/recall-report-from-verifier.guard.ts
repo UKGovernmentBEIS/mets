@@ -9,7 +9,10 @@ import { requestTaskQuery, RequestTaskStore } from '../store';
   providedIn: 'root',
 })
 export class RecallReportFromVerifierGuard {
-  constructor(private readonly store: RequestTaskStore, private readonly router: Router) {}
+  constructor(
+    private readonly store: RequestTaskStore,
+    private readonly router: Router,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot): Observable<boolean | UrlTree> {
     return this.store.pipe(

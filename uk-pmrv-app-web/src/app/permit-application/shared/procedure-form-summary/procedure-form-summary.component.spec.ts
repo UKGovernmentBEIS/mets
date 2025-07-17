@@ -12,7 +12,9 @@ describe('ProcedureFormSummaryComponent', () => {
   let page: Page;
 
   @Component({
-    template: ` <app-procedure-form-summary [details]="details"></app-procedure-form-summary> `,
+    template: `
+      <app-procedure-form-summary [details]="details"></app-procedure-form-summary>
+    `,
   })
   class TestComponent {
     details = procedureForm;

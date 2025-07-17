@@ -16,7 +16,7 @@ import stripHtmlComments from 'strip-html-comments';
 @Component({
   selector: 'app-highlight-diff',
   templateUrl: './highlight-diff.component.html',
-  styleUrls: ['./highlight-diff.component.scss'],
+  styleUrl: './highlight-diff.component.scss',
   // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,7 +27,11 @@ export class HighlightDiffComponent implements AfterViewInit {
 
   diff: SafeHtml;
 
-  constructor(private sanitizer: DomSanitizer, private cdr: ChangeDetectorRef, private router: Router) {}
+  constructor(
+    private sanitizer: DomSanitizer,
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+  ) {}
 
   ngAfterViewInit(): void {
     const previous = stripHtmlComments(this.previous.nativeElement.innerHTML);
@@ -52,14 +56,22 @@ export class HighlightDiffComponent implements AfterViewInit {
   }
 
   onClickDiff(event: MouseEvent | KeyboardEvent) {
-    if (event.target instanceof HTMLAnchorElement && event.type === 'click') {
-      const anchorTag = event.target as HTMLAnchorElement;
+    let eventTarget;
+    if (event.target instanceof HTMLAnchorElement) {
+      eventTarget = event.target;
+    } else if ((event.target as Node).nodeName === 'INS' || (event.target as Node).nodeName === 'DEL') {
+      eventTarget = (event.target as Node).parentElement;
+    }
 
-      if (anchorTag.hasAttribute('ng-reflect-router-link')) {
-        event.preventDefault();
-        const link = anchorTag.getAttribute('href');
-        this.router.navigateByUrl(this.router.serializeUrl(this.router.parseUrl(link)));
-      }
+    if (
+      !!eventTarget &&
+      eventTarget instanceof HTMLAnchorElement &&
+      eventTarget.getAttribute('target') !== '_blank' &&
+      event.type === 'click'
+    ) {
+      event.preventDefault();
+      const link = eventTarget.href.replace(eventTarget.baseURI, '');
+      this.router.navigateByUrl(this.router.serializeUrl(this.router.parseUrl(link)));
     }
   }
 }

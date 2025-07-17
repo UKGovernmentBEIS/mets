@@ -34,6 +34,7 @@ export const EMP_DATA_GAPS_ROUTES: Routes = [
       {
         path: 'summary',
         canActivate: [canActivateSummaryPage],
+        data: { breadcrumb: 'Data gaps' },
         loadComponent: () => import('./summary/data-gaps-summary.component').then((c) => c.DataGapsSummaryComponent),
       },
     ],

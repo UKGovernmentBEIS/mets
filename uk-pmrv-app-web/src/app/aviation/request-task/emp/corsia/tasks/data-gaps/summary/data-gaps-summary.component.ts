@@ -15,7 +15,7 @@ import {
   showVariationRegLedDecisionComponent,
   showVariationReviewDecisionComponent,
 } from '@aviation/request-task/util';
-import { DataGapsSummaryTemplateComponent } from '@aviation/shared/components/emp-corsia/data-gaps/data-gaps-summary-template.component';
+import { DataGapsCorsiaSummaryTemplateComponent } from '@aviation/shared/components/emp-corsia/data-gaps/data-gaps-summary-template.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { SharedModule } from '@shared/shared.module';
@@ -45,7 +45,7 @@ interface ViewModel {
   imports: [
     SharedModule,
     ReturnToLinkComponent,
-    DataGapsSummaryTemplateComponent,
+    DataGapsCorsiaSummaryTemplateComponent,
     EmpVariationReviewDecisionGroupComponent,
     EmpReviewDecisionGroupComponent,
     EmpVariationRegulatorLedDecisionGroupComponent,

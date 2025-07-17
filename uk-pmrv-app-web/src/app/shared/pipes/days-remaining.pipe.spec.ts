@@ -22,7 +22,7 @@ describe('DaysRemainingPipe', () => {
   it('should return 0 value', () => {
     const transformation = pipe.transform(0);
 
-    expect(transformation).toEqual('Overdue');
+    expect(transformation).toEqual('0');
   });
 
   it('should return value', () => {

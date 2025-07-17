@@ -1,0 +1,43 @@
+<ng-container *ngIf="vm() as vm">
+  <app-base-task-container-component
+    [header]="vm.pageTitle"
+    [customContentTemplate]="customContentTemplate"
+    [expectedTaskType]="vm.expectedTaskType"
+    [daysRemaining]="vm.daysRemaining"></app-base-task-container-component>
+
+  <ng-template #customContentTemplate>
+    <h2 class="govuk-heading-m govuk-!-margin-0">Activity level report details</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectDetailsLink"
+        linkText="Activity level report"
+        [status]="vm.detailsSectionStatus"></li>
+    </ul>
+    <h2 class="govuk-heading-m govuk-!-margin-0">Verification opinion statement</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectOpinionStatementLink"
+        linkText="ALR verification opinion statement"
+        [status]="vm.opinionStatementSectionStatus"></li>
+    </ul>
+    <h2 class="govuk-heading-m govuk-!-margin-0">Decision</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectOverallDecisionLink"
+        linkText="Overall decision"
+        [status]="vm.overallDecisionSectionStatus"></li>
+    </ul>
+    <h2 class="govuk-heading-m govuk-!-margin-0">Complete report</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectSendReportLink"
+        linkText="Send verification report to operator"
+        [status]="vm.sendReportSectionStatus"
+        [hasContent]="true"></li>
+    </ul>
+  </ng-template>
+</ng-container>

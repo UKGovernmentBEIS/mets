@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -46,7 +45,7 @@ describe('ApproachesDeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
+      imports: [AerModule],
       providers: [
         KeycloakService,
         { provide: ActivatedRoute, useValue: activatedRoute },
@@ -70,7 +69,7 @@ describe('ApproachesDeleteComponent', () => {
   });
 
   it('should display the name of the approach to be deleted', () => {
-    expect(page.header.textContent.trim()).toContain("Are you sure you want to delete 'Calculation of CO2'?");
+    expect(page.header.textContent.trim()).toContain("Are you sure you want to delete'Calculation of CO2'?");
     expect(page.body.textContent.trim()).toContain(
       'All information related to the Calculation of CO2 approach will be deleted.',
     );

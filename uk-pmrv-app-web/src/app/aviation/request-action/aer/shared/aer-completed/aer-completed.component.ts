@@ -22,8 +22,7 @@ interface ViewModel {
     <app-request-action-heading
       *ngIf="vm$ | async as vm"
       [headerText]="vm.pageHeader"
-      [timelineCreationDate]="vm.creationDate"
-    >
+      [timelineCreationDate]="vm.creationDate">
       <h2 app-summary-header class="govuk-heading-m">Details</h2>
       <dl govuk-summary-list appGroupedSummaryList class="govuk-!-margin-bottom-6">
         <div govukSummaryListRow>

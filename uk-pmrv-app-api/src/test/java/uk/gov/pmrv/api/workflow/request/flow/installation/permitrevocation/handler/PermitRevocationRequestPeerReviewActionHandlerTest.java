@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -56,7 +56,7 @@ class PermitRevocationRequestPeerReviewActionHandlerTest {
     void process() {
 
         final Long requestTaskId = 1L;
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        final AppUser appUser = AppUser.builder().userId("userId").build();
         final String selectedPeerReviewer = "selectedPeerReviewer";
         final PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
@@ -86,18 +86,18 @@ class PermitRevocationRequestPeerReviewActionHandlerTest {
         requestPeerReviewActionHandler.process(
             requestTaskId,
             RequestTaskActionType.PERMIT_REVOCATION_REQUEST_PEER_REVIEW,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(peerReviewValidator, times(1))
-            .validatePeerReviewer( "selectedPeerReviewer", pmrvUser);
+            .validatePeerReviewer( "selectedPeerReviewer", appUser);
         verify(requestPermitRevocationService, times(1))
-            .requestPeerReview(requestTask, selectedPeerReviewer, pmrvUser.getUserId());
+            .requestPeerReview(requestTask, selectedPeerReviewer, appUser.getUserId());
         verify(requestService, times(1)).addActionToRequest(requestTask.getRequest(),
             null,
             RequestActionType.PERMIT_REVOCATION_PEER_REVIEW_REQUESTED,
-            pmrvUser.getUserId());
+            appUser.getUserId());
         verify(workflowService, times(1)).completeTask(
             requestTask.getProcessTaskId(),
             Map.of(BpmnProcessConstants.REVOCATION_OUTCOME, PermitRevocationOutcome.PEER_REVIEW_REQUIRED));

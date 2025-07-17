@@ -15,9 +15,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -59,7 +59,7 @@ class PermitVariationReviewRequestPeerReviewActionHandlerTest {
     @Test
     void process() {
         Long requestTaskId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
         String selectedPeerReviewer = "selectedPeerReviewer";
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
@@ -81,16 +81,16 @@ class PermitVariationReviewRequestPeerReviewActionHandlerTest {
         requestPeerReviewActionHandler.process(
             requestTaskId,
             RequestTaskActionType.PERMIT_VARIATION_REQUEST_PEER_REVIEW,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(permitVariationReviewRequestPeerReviewValidator, times(1))
-            .validate(requestTask, taskActionPayload, pmrvUser);
+            .validate(requestTask, taskActionPayload, appUser);
         verify(permitVariationReviewService, times(1))
             .saveRequestPeerReviewAction(requestTask, selectedPeerReviewer, "userId");
         verify(requestService, times(1))
-            .addActionToRequest(requestTask.getRequest(), null, PERMIT_VARIATION_PEER_REVIEW_REQUESTED, pmrvUser.getUserId());
+            .addActionToRequest(requestTask.getRequest(), null, PERMIT_VARIATION_PEER_REVIEW_REQUESTED, appUser.getUserId());
         verify(workflowService, times(1)).completeTask(
             requestTask.getProcessTaskId(),
             Map.of(
@@ -102,7 +102,7 @@ class PermitVariationReviewRequestPeerReviewActionHandlerTest {
     @Test
     void process_invalid_determination() {
         Long requestTaskId = 1L;
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         String selectedPeerReviewer = "selectedPeerReviewer";
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder()
             .peerReviewer(selectedPeerReviewer)
@@ -122,20 +122,20 @@ class PermitVariationReviewRequestPeerReviewActionHandlerTest {
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         doThrow(new BusinessException(ErrorCode.FORM_VALIDATION))
             .when(permitVariationReviewRequestPeerReviewValidator)
-            .validate(requestTask, taskActionPayload, pmrvUser);
+            .validate(requestTask, taskActionPayload, appUser);
 
         BusinessException be = assertThrows(BusinessException.class,
             () -> requestPeerReviewActionHandler.process(
                 requestTaskId,
                 RequestTaskActionType.PERMIT_VARIATION_REQUEST_PEER_REVIEW,
-                pmrvUser,
+                appUser,
                 taskActionPayload));
 
         assertEquals(ErrorCode.FORM_VALIDATION, be.getErrorCode());
 
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(permitVariationReviewRequestPeerReviewValidator, times(1))
-            .validate(requestTask, taskActionPayload, pmrvUser);
+            .validate(requestTask, taskActionPayload, appUser);
     }
 
     @Test

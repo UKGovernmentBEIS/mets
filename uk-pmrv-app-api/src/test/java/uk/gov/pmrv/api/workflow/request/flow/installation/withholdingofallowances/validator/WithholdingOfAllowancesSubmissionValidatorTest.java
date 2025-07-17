@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.NotifyOperatorForDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.validation.DecisionNotificationUsersValidator;
@@ -32,32 +32,32 @@ class WithholdingOfAllowancesSubmissionValidatorTest {
     void validate_InvalidUsers() {
         RequestTask requestTask = new RequestTask();
         NotifyOperatorForDecisionRequestTaskActionPayload payload = new NotifyOperatorForDecisionRequestTaskActionPayload();
-        PmrvUser pmrvUser = new PmrvUser();
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, payload.getDecisionNotification(), pmrvUser))
+        AppUser appUser = new AppUser();
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, payload.getDecisionNotification(), appUser))
             .thenReturn(false);
 
         assertThrows(BusinessException.class,
-            () -> validator.validate(requestTask, payload, pmrvUser));
+            () -> validator.validate(requestTask, payload, appUser));
     }
 
     @Test
     void validate() {
         NotifyOperatorForDecisionRequestTaskActionPayload payload = new NotifyOperatorForDecisionRequestTaskActionPayload();
-        PmrvUser pmrvUser = new PmrvUser();
+        AppUser appUser = new AppUser();
         WithholdingOfAllowancesApplicationSubmitRequestTaskPayload taskPayload =
             new WithholdingOfAllowancesApplicationSubmitRequestTaskPayload();
         RequestTask requestTask = RequestTask.builder()
             .payload(taskPayload)
             .build();
-        when(decisionNotificationUsersValidator.areUsersValid(requestTask, payload.getDecisionNotification(), pmrvUser))
+        when(decisionNotificationUsersValidator.areUsersValid(requestTask, payload.getDecisionNotification(), appUser))
             .thenReturn(true);
         WithholdingOfAllowances withholdingOfAllowances = new WithholdingOfAllowances();
         taskPayload.setWithholdingOfAllowances(withholdingOfAllowances);
 
-        validator.validate(requestTask, payload, pmrvUser);
+        validator.validate(requestTask, payload, appUser);
 
         verify(decisionNotificationUsersValidator).areUsersValid(requestTask, payload.getDecisionNotification(),
-            pmrvUser);
+            appUser);
         verify(withholdingOfAllowancesValidator).validate(withholdingOfAllowances);
     }
 }

@@ -12,9 +12,9 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Uncorrected misstatements" [breadcrumb]="true">
       <app-misstatements-group
-        [uncorrectedMisstatements]="(payload$ | async).verificationReport.uncorrectedMisstatements"
-      >
-      </app-misstatements-group>
+        [uncorrectedMisstatements]="
+          (payload$ | async).verificationReport.uncorrectedMisstatements
+        "></app-misstatements-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -26,5 +26,8 @@ export class MisstatementsComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

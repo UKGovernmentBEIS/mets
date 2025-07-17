@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
@@ -71,5 +71,15 @@ public class PermitVariationApplicationGrantedRequestActionPayload
             )
             .flatMap(m -> m.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
-	
+
+    @Override
+    public Map<UUID, String> getAttachments() {
+
+        final Map<UUID, String> originalAttachments = originalPermitContainer != null ?
+            originalPermitContainer.getPermitAttachments() : new HashMap<>();
+
+        return Stream.of(super.getAttachments(), originalAttachments).flatMap(m -> m.entrySet().stream()).collect(
+            Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (first, second) -> first)
+        );
+    }
 }

@@ -2,7 +2,7 @@ package uk.gov.pmrv.api.reporting.transform;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamType;
 import uk.gov.pmrv.api.reporting.domain.EmissionCalculationParams;
 import uk.gov.pmrv.api.reporting.domain.dto.EmissionsCalculationDTO;

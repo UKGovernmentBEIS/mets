@@ -22,7 +22,10 @@ export class AccountNotesComponent {
     switchMap(([accountId, page]) => this.accountNotesService.getNotesByAccountId(accountId, page - 1, this.pageSize)),
   );
 
-  constructor(private readonly accountNotesService: AccountNotesService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly accountNotesService: AccountNotesService,
+    private readonly route: ActivatedRoute,
+  ) {}
 
   getDownloadUrlFiles(note: AccountNoteDto): { downloadUrl: string; fileName: string }[] {
     const files = note.payload.files || {};

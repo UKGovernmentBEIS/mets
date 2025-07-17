@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
-import { mapTo, tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 
 import { RequestActionsService } from 'pmrv-api';
 
@@ -10,7 +10,7 @@ import { PermitSurrenderState } from './store/permit-surrender.state';
 import { PermitSurrenderStore } from './store/permit-surrender.store';
 
 @Injectable({ providedIn: 'root' })
-export class PermitSurrenderActionGuard implements CanActivate, CanDeactivate<any> {
+export class PermitSurrenderActionGuard {
   constructor(
     private readonly store: PermitSurrenderStore,
     private readonly incorporateHeaderStore: IncorporateHeaderStore,
@@ -42,7 +42,7 @@ export class PermitSurrenderActionGuard implements CanActivate, CanDeactivate<an
           accountId: requestAction.requestAccountId,
         });
       }),
-      mapTo(true),
+      map(() => true),
     );
   }
 

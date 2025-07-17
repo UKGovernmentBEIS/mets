@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, switchMap } from 'rxjs';
 
-import moment from 'moment';
+import { startOfDay } from 'date-fns';
 
 import { PendingRequestService } from '../../../../../core/guards/pending-request.service';
 import { PendingRequest } from '../../../../../core/interfaces/pending-request.interface';
@@ -19,7 +19,7 @@ import { reportFormProvider } from './report-form.provider';
   providers: [reportFormProvider],
 })
 export class ReportComponent implements PendingRequest {
-  today = moment().startOf('day').toDate();
+  today = startOfDay(new Date());
 
   constructor(
     @Inject(PERMIT_SURRENDER_TASK_FORM) readonly form: UntypedFormGroup,

@@ -18,7 +18,9 @@ describe('NavigationLinkDirective', () => {
   }
 
   @Component({
-    template: ` <router-outlet></router-outlet>`,
+    template: `
+      <router-outlet></router-outlet>
+    `,
   })
   class RouterComponent {}
 

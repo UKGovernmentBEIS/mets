@@ -19,8 +19,7 @@ import { dateFormProvider } from './date-form.provider';
       (formSubmit)="onSubmit()"
       [formGroup]="form"
       heading="What date will the transfer take place?"
-      [hideSubmit]="hideSubmit$ | async"
-    >
+      [hideSubmit]="hideSubmit$ | async">
       <p class="govuk-body">
         This means the agreed change of ownership between you and the operator you are transferring to.
       </p>

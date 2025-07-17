@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -35,11 +35,11 @@ public class AviationAccountClosureSubmitActionHandler implements RequestTaskAct
 
     @Override
     public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType,
-                        PmrvUser pmrvUser, RequestTaskActionEmptyPayload payload) {
+                        AppUser appUser, RequestTaskActionEmptyPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         Long accountId = requestTask.getRequest().getAccountId();
 
-        requestAviationAccountClosureService.applySubmitAction(requestTask, pmrvUser);
+        requestAviationAccountClosureService.applySubmitAction(requestTask, appUser);
         
         requestTask.getRequest().setSubmissionDate(LocalDateTime.now());
 

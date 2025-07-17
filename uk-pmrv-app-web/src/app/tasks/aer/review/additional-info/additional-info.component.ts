@@ -13,8 +13,7 @@ import { AerApplicationReviewRequestTaskPayload } from 'pmrv-api';
     <app-aer-task-review [breadcrumb]="true" [notification]="notification" heading="Additional information">
       <app-additional-info-group
         [aerData]="aerData$ | async"
-        [additionalDocumentFiles]="additionalDocumentFiles$ | async"
-      ></app-additional-info-group>
+        [additionalDocumentFiles]="additionalDocumentFiles$ | async"></app-additional-info-group>
       <app-aer-review-group-decision (notification)="notification = $event"></app-aer-review-group-decision>
     </app-aer-task-review>
   `,
@@ -32,5 +31,8 @@ export class AdditionalInfoComponent {
     ),
   );
 
-  constructor(private readonly aerService: AerService, private readonly router: Router) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly router: Router,
+  ) {}
 }

@@ -14,16 +14,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.dto.AssigneeUserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.dto.RequestTaskAssignmentDTO;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentQueryService;
@@ -66,10 +66,10 @@ class RequestTaskAssignmentControllerTest {
     private RequestTaskAssignmentController requestTaskAssignmentController;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private UserRequestTaskAssignmentService userRequestTaskAssignmentService;
@@ -80,7 +80,7 @@ class RequestTaskAssignmentControllerTest {
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(requestTaskAssignmentController);
         aspectJProxyFactory.addAspect(aspect);
@@ -92,17 +92,17 @@ class RequestTaskAssignmentControllerTest {
         mapper = new ObjectMapper();
         mockMvc = MockMvcBuilders.standaloneSetup(requestTaskAssignmentController)
                 .setControllerAdvice(new ExceptionControllerAdvice())
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .build();
     }
 
     @Test
     void assignTask() throws Exception {
-        PmrvUser pmrvUser = buildPmrvUser();
+        AppUser appUser = buildAppUser();
         RequestTaskAssignmentDTO
                 requestTaskAssignmentDTO = RequestTaskAssignmentDTO.builder().taskId(1L).userId("userId").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doNothing().when(userRequestTaskAssignmentService).assignTask(requestTaskAssignmentDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.post(BASE_PATH + ASSIGN )
@@ -115,14 +115,14 @@ class RequestTaskAssignmentControllerTest {
 
     @Test
     void assignTask_forbidden() throws Exception {
-        PmrvUser pmrvUser = buildPmrvUser();
+        AppUser appUser = buildAppUser();
         RequestTaskAssignmentDTO
                 requestTaskAssignmentDTO = RequestTaskAssignmentDTO.builder().taskId(1L).userId("userId").build();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
-                .authorize(pmrvUser, "assignTask", "1");
+                .when(appUserAuthorizationService)
+                .authorize(appUser, "assignTask", "1", null, null);
 
         mockMvc.perform(MockMvcRequestBuilders.post(BASE_PATH + ASSIGN )
                 .contentType(MediaType.APPLICATION_JSON)
@@ -134,13 +134,13 @@ class RequestTaskAssignmentControllerTest {
 
     @Test
     void getCandidateAssigneesByTaskId() throws Exception {
-        PmrvUser pmrvUser = buildPmrvUser();
+        AppUser appUser = buildAppUser();
         String userId1 = "userId1";
         String userId2 = "userId2";
         List<AssigneeUserInfoDTO> candidateAssigneesInfo = buildMockUserInfoList(Arrays.asList(userId1, userId2));
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(requestTaskAssignmentQueryService.getCandidateAssigneesByTaskId(TASK_ID, pmrvUser))
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(requestTaskAssignmentQueryService.getCandidateAssigneesByTaskId(TASK_ID, appUser))
             .thenReturn(candidateAssigneesInfo);
 
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_PATH + "/" + TASK_ID + CANDIDATE_ASSIGNEES)
@@ -150,17 +150,17 @@ class RequestTaskAssignmentControllerTest {
             .andExpect(jsonPath("$[*].id").value(containsInAnyOrder(userId1, userId2)));
 
         verify(requestTaskAssignmentQueryService, times(1))
-                .getCandidateAssigneesByTaskId(TASK_ID, pmrvUser);
+                .getCandidateAssigneesByTaskId(TASK_ID, appUser);
     }
 
     @Test
     void getCandidateAssigneesByTaskId_forbidden() throws Exception {
-        PmrvUser pmrvUser = buildPmrvUser();
+        AppUser appUser = buildAppUser();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "getCandidateAssigneesByTaskId", "1");
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "getCandidateAssigneesByTaskId", "1", null, null);
 
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_PATH + "/" + TASK_ID + CANDIDATE_ASSIGNEES)
             .contentType(MediaType.APPLICATION_JSON))
@@ -172,13 +172,13 @@ class RequestTaskAssignmentControllerTest {
     @Test
     void getCandidateAssigneesByTaskType() throws Exception {
         RequestTaskType taskType = RequestTaskType.PERMIT_ISSUANCE_APPLICATION_REVIEW;
-        PmrvUser pmrvUser = buildPmrvUser();
+        AppUser appUser = buildAppUser();
         String userId1 = "userId1";
         String userId2 = "userId2";
         List<AssigneeUserInfoDTO> candidateAssigneesInfo = buildMockUserInfoList(Arrays.asList(userId1, userId2));
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
-        when(requestTaskAssignmentQueryService.getCandidateAssigneesByTaskType(taskType, pmrvUser))
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+        when(requestTaskAssignmentQueryService.getCandidateAssigneesByTaskType(taskType, appUser))
             .thenReturn(candidateAssigneesInfo);
 
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_PATH + "/" + TASK_ID + CANDIDATE_ASSIGNEES + "/" + taskType.name())
@@ -188,18 +188,18 @@ class RequestTaskAssignmentControllerTest {
             .andExpect(jsonPath("$[*].id").value(containsInAnyOrder(userId1, userId2)));
 
         verify(requestTaskAssignmentQueryService, times(1))
-            .getCandidateAssigneesByTaskType(taskType, pmrvUser);
+            .getCandidateAssigneesByTaskType(taskType, appUser);
     }
 
     @Test
     void getCandidateAssigneesByTaskType_forbidden() throws Exception {
         RequestTaskType taskType = RequestTaskType.PERMIT_ISSUANCE_APPLICATION_REVIEW;
-        PmrvUser pmrvUser = buildPmrvUser();
+        AppUser appUser = buildAppUser();
 
-        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(pmrvUser);
+        when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(pmrvUserAuthorizationService)
-            .authorize(pmrvUser, "getCandidateAssigneesByTaskType", "1");
+            .when(appUserAuthorizationService)
+            .authorize(appUser, "getCandidateAssigneesByTaskType", "1", null, null);
 
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_PATH + "/" + TASK_ID + CANDIDATE_ASSIGNEES + "/" + taskType.name())
             .contentType(MediaType.APPLICATION_JSON))
@@ -208,8 +208,8 @@ class RequestTaskAssignmentControllerTest {
         verifyNoInteractions(requestTaskAssignmentQueryService);
     }
 
-    private PmrvUser buildPmrvUser() {
-        return PmrvUser.builder().userId(USER_ID).roleType(RoleType.REGULATOR).build();
+    private AppUser buildAppUser() {
+        return AppUser.builder().userId(USER_ID).roleType(RoleTypeConstants.REGULATOR).build();
     }
 
     private List<AssigneeUserInfoDTO> buildMockUserInfoList(List<String> userIds) {

@@ -13,7 +13,7 @@ import { analysisMethodListProvider } from './analysis-method-list.provider';
 @Component({
   selector: 'app-analysis-method-list',
   templateUrl: './analysis-method-list.component.html',
-  styleUrls: ['./analysis-method-list.component.scss'],
+  styleUrl: './analysis-method-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [analysisMethodListProvider],
 })

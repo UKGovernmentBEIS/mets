@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   template: `
     <div class="govuk-breadcrumbs govuk-breadcrumbs--collapse-on-mobile">
       <ol class="govuk-breadcrumbs__list">
-        <ng-content></ng-content>
+        <ng-content />
       </ol>
     </div>
   `,

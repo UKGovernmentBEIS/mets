@@ -16,7 +16,6 @@
     "lib": ["ES2022", "dom"],
     "strictPropertyInitialization": false,
     "strictNullChecks": false,
-    "noStrictGenericChecks": true,
     "paths": {
       "govuk-components": ["projects/govuk-components/src/public-api.ts"],
       "pmrv-api": ["projects/pmrv-api/src/lib/index.ts"],
@@ -31,7 +30,9 @@
       "@permit-issuance/*": ["src/app/permit-issuance/*"],
       "@permit-transfer/*": ["src/app/permit-transfer/*"],
       "@aviation/*": ["src/app/aviation/*"],
-      "@error/*": ["src/app/error/*"]
+      "@error/*": ["src/app/error/*"],
+      "@actions/*": ["src/app/actions/*"],
+      "@shared-user/*": ["src/app/shared-user/*"]
     },
     "useDefineForClassFields": false
   },

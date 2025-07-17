@@ -6,7 +6,10 @@ import { Router } from '@angular/router';
   selector: 'router-outlet[appSkipLinkFocus]',
 })
 export class SkipLinkFocusDirective {
-  constructor(@Inject(DOCUMENT) private readonly document, private readonly router: Router) {}
+  constructor(
+    @Inject(DOCUMENT) private readonly document,
+    private readonly router: Router,
+  ) {}
 
   @HostListener('activate')
   onRouteActivation(): void {

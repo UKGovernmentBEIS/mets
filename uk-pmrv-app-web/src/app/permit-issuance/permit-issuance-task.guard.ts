@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { combineLatest, first, map } from 'rxjs';
 
+import { selectFeatures } from '@core/config/config.selectors';
+import { ConfigStore } from '@core/config/config.store';
 import { AuthStore, selectUserState } from '@core/store/auth';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
@@ -16,7 +18,7 @@ import { IncorporateHeaderStore } from '../shared/incorporate-header/store/incor
 import { PermitIssuanceStore } from './store/permit-issuance.store';
 
 @Injectable({ providedIn: 'root' })
-export class PermitIssuanceTaskGuard extends PermitApplicationTaskGuard implements CanActivate, CanDeactivate<any> {
+export class PermitIssuanceTaskGuard extends PermitApplicationTaskGuard {
   constructor(
     private readonly store: PermitIssuanceStore,
     private readonly commonStore: CommonTasksStore,
@@ -24,6 +26,7 @@ export class PermitIssuanceTaskGuard extends PermitApplicationTaskGuard implemen
     private readonly tasksService: TasksService,
     private readonly businessErrorService: BusinessErrorService,
     private readonly authStore: AuthStore,
+    private readonly configStore: ConfigStore,
   ) {
     super();
   }
@@ -32,12 +35,13 @@ export class PermitIssuanceTaskGuard extends PermitApplicationTaskGuard implemen
     return combineLatest([
       this.tasksService.getTaskItemInfoById(Number(route.paramMap.get('taskId'))),
       this.authStore.pipe(selectUserState),
+      this.configStore.pipe(selectFeatures),
     ]).pipe(
       catchNotFoundRequest(ErrorCode.NOTFOUND1001, () =>
         this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
       ),
       first(),
-      map(([requestTaskItem, userState]) => {
+      map(([requestTaskItem, userState, features]) => {
         this.commonStore.setState({ ...this.commonStore.getState(), requestTaskItem });
 
         this.store.reset();
@@ -57,6 +61,8 @@ export class PermitIssuanceTaskGuard extends PermitApplicationTaskGuard implemen
           },
           permitSectionsCompleted: { ...requestTaskItem.requestTask.payload?.permitSectionsCompleted },
           reviewSectionsCompleted: { ...requestTaskItem.requestTask.payload?.reviewSectionsCompleted },
+
+          features: features,
         });
 
         this.incorporateHeaderStore.reset();

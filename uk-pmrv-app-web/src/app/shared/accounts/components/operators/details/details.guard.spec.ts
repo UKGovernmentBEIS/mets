@@ -6,7 +6,7 @@ import { lastValueFrom, throwError } from 'rxjs';
 import { AuthStore } from '@core/store/auth';
 import { HttpStatuses } from '@error/http-status';
 import { BusinessTestingModule, expectBusinessErrorToBe } from '@error/testing/business-error';
-import { ActivatedRouteSnapshotStub, address, asyncData } from '@testing';
+import { ActivatedRouteSnapshotStub, asyncData } from '@testing';
 
 import { OperatorUserDTO, OperatorUsersService, UsersService } from 'pmrv-api';
 
@@ -20,7 +20,6 @@ describe('DetailsGuard', () => {
   let operatorUsersService: Partial<jest.Mocked<OperatorUsersService>>;
 
   const operator: OperatorUserDTO = {
-    address,
     email: 'test@host.com',
     firstName: 'Mary',
     lastName: 'Za',
@@ -32,9 +31,11 @@ describe('DetailsGuard', () => {
     operatorUsersService = {
       getOperatorUserById: jest.fn().mockReturnValue(asyncData<OperatorUserDTO>(operator)),
     };
+
     usersService = {
       getCurrentUser: jest.fn().mockReturnValue(asyncData<OperatorUserDTO>(operator)),
     };
+
     TestBed.configureTestingModule({
       imports: [BusinessTestingModule],
       providers: [
@@ -43,8 +44,10 @@ describe('DetailsGuard', () => {
         { provide: OperatorUsersService, useValue: operatorUsersService },
       ],
     });
+
     authStore = TestBed.inject(AuthStore);
     authStore.setUserState({ userId: 'ABC1' });
+
     guard = TestBed.inject(DetailsGuard);
   });
 
@@ -57,7 +60,7 @@ describe('DetailsGuard', () => {
       lastValueFrom(guard.canActivate(new ActivatedRouteSnapshotStub({ accountId: '1', userId: 'asdf4' }))),
     ).resolves.toBeTruthy();
 
-    await expect(guard.resolve()).toEqual(operator);
+    expect(guard.resolve()).toEqual(operator);
 
     expect(operatorUsersService.getOperatorUserById).toHaveBeenCalledWith(1, 'asdf4');
   });
@@ -67,7 +70,7 @@ describe('DetailsGuard', () => {
       lastValueFrom(guard.canActivate(new ActivatedRouteSnapshotStub({ accountId: '1', userId: 'ABC1' }))),
     ).resolves.toBeTruthy();
 
-    await expect(guard.resolve()).toEqual(operator);
+    expect(guard.resolve()).toEqual(operator);
 
     expect(usersService.getCurrentUser).toHaveBeenCalled();
   });

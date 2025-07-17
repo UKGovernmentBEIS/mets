@@ -16,7 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.utils.DateUtils;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
@@ -61,7 +61,7 @@ class PermitRevocationNotifyOperatorActionHandlerTest {
                 .decisionNotification(decisionNotification)
                 .build();
 
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final String processTaskId = "processTaskId";
         final PermitRevocation permitRevocation = PermitRevocation.builder()
             .reason("reason")
@@ -88,18 +88,18 @@ class PermitRevocationNotifyOperatorActionHandlerTest {
         //invoke
         handler.process(requestTask.getId(),
             RequestTaskActionType.PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_SUBMISSION,
-            pmrvUser,
+            appUser,
             taskActionPayload);
             
         assertThat(requestTask.getRequest().getSubmissionDate()).isNotNull();
         verify(requestTaskService, times(1)).findTaskById(requestTask.getId());
-        verify(validator, times(1)).validateNotifyUsers(requestTask, decisionNotification, pmrvUser);
+        verify(validator, times(1)).validateNotifyUsers(requestTask, decisionNotification, appUser);
         Map<String, Object> taskVariables = new HashMap<>();  // `HashMap` permits null values and null key.
         taskVariables.put(BpmnProcessConstants.PAYMENT_EXPIRES, true);
         taskVariables.put(BpmnProcessConstants.REVOCATION_OUTCOME, PermitRevocationOutcome.NOTIFY_OPERATOR);
-        taskVariables.put(BpmnProcessConstants.REVOCATION_EFFECTIVE_DATE, DateUtils.convertLocalDateToDate(permitRevocation.getEffectiveDate()));
-        taskVariables.put(BpmnProcessConstants.REVOCATION_REMINDER_EFFECTIVE_DATE, DateUtils.convertLocalDateToDate(permitRevocation.getEffectiveDate().minus(28, ChronoUnit.DAYS)));
-        taskVariables.put(BpmnProcessConstants.PAYMENT_EXPIRATION_DATE, DateUtils.convertLocalDateToDate(permitRevocation.getFeeDate()));
+        taskVariables.put(BpmnProcessConstants.REVOCATION_EFFECTIVE_DATE, DateUtils.atEndOfDay(permitRevocation.getEffectiveDate()));
+        taskVariables.put(BpmnProcessConstants.REVOCATION_REMINDER_EFFECTIVE_DATE, DateUtils.atEndOfDay(permitRevocation.getEffectiveDate().minus(28, ChronoUnit.DAYS)));
+        taskVariables.put(BpmnProcessConstants.PAYMENT_EXPIRATION_DATE, DateUtils.atEndOfDay(permitRevocation.getFeeDate()));
         verify(workflowService, times(1)).completeTask(processTaskId, taskVariables);
         verify(validator, times(1)).validateSubmitRequestTaskPayload(taskPayload);
         
@@ -122,7 +122,7 @@ class PermitRevocationNotifyOperatorActionHandlerTest {
                 .decisionNotification(decisionNotification)
                 .build();
 
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final String processTaskId = "processTaskId";
         final PermitRevocation permitRevocation = PermitRevocation.builder()
             .reason("reason")
@@ -148,17 +148,17 @@ class PermitRevocationNotifyOperatorActionHandlerTest {
         //invoke
         handler.process(requestTask.getId(),
             RequestTaskActionType.PERMIT_REVOCATION_NOTIFY_OPERATOR_FOR_SUBMISSION,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         assertThat(requestTask.getRequest().getSubmissionDate()).isNotNull();
         verify(requestTaskService, times(1)).findTaskById(requestTask.getId());
-        verify(validator, times(1)).validateNotifyUsers(requestTask, decisionNotification, pmrvUser);
+        verify(validator, times(1)).validateNotifyUsers(requestTask, decisionNotification, appUser);
         Map<String, Object> taskVariables = new HashMap<>();  // `HashMap` permits null values and null key.
         taskVariables.put(BpmnProcessConstants.PAYMENT_EXPIRES, false);
         taskVariables.put(BpmnProcessConstants.REVOCATION_OUTCOME, PermitRevocationOutcome.NOTIFY_OPERATOR);
-        taskVariables.put(BpmnProcessConstants.REVOCATION_EFFECTIVE_DATE, DateUtils.convertLocalDateToDate(permitRevocation.getEffectiveDate()));
-        taskVariables.put(BpmnProcessConstants.REVOCATION_REMINDER_EFFECTIVE_DATE, DateUtils.convertLocalDateToDate(permitRevocation.getEffectiveDate().minus(28, ChronoUnit.DAYS)));
+        taskVariables.put(BpmnProcessConstants.REVOCATION_EFFECTIVE_DATE, DateUtils.atEndOfDay(permitRevocation.getEffectiveDate()));
+        taskVariables.put(BpmnProcessConstants.REVOCATION_REMINDER_EFFECTIVE_DATE, DateUtils.atEndOfDay(permitRevocation.getEffectiveDate().minus(28, ChronoUnit.DAYS)));
         taskVariables.put(BpmnProcessConstants.PAYMENT_EXPIRATION_DATE, null);
         verify(workflowService, times(1)).completeTask(processTaskId, taskVariables);
         verify(validator, times(1)).validateSubmitRequestTaskPayload(taskPayload);

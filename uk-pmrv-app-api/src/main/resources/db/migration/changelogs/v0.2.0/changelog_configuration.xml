@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.2.0/changelog_configuration.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+	<changeSet id="0_1_0_populate_configuration" author="P35066">
+        <sql>
+            insert into configuration(key, value, type) values ('ui.features.serviceGatewayEnabled', false, 'BOOLEAN');
+        </sql>
+        <rollback>
+        	delete from configuration where key = 'ui.features.serviceGatewayEnabled';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_populate_configuration_mmp_digitized" author="dridakisc@unisystems.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('ui.features.digitized-mmp', false, 'BOOLEAN');
+        </sql>
+        <rollback>
+            delete from configuration where key = 'ui.features.digitized-mmp';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_populate_configuration_enable_corsia_3year_offsetting" author="dridakisc@unisystems.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('ui.features.corsia3yearOffsettingEnabled', false, 'BOOLEAN');
+        </sql>
+        <rollback>
+            delete from configuration where key = 'ui.features.corsia3yearOffsettingEnabled';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_populate_configuration_annual-3YPO" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('ui.features.annual-3YPO', false, 'BOOLEAN');
+        </sql>
+        <rollback>
+            delete from configuration
+            where key = 'ui.features.annual-3YPO';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_populate_configuration_annual-3YPO_rollback" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            delete from configuration
+            where key = 'ui.features.annual-3YPO';
+        </sql>
+        <rollback>
+            insert into configuration(key, value, type) values ('ui.features.annual-3YPO', false, 'BOOLEAN');
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_add_configuration_aer.corsia.3year.first-reporting-year" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('aer.corsia.3year.first-reporting-year', 2023, 'INTEGER');
+        </sql>
+        <rollback>
+            delete from configuration
+            where key = 'aer.corsia.3year.first-reporting-year';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_add_configuration_ui-features-co2venting-permit-workflows-enabled" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('ui.features.co2-venting.permit-workflows.enabled', false, 'BOOLEAN');
+        </sql>
+        <rollback>
+            delete from configuration
+            where key = 'ui.features.co2-venting.permit-workflows.enabled';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_add_configuration_aer.installation.reporting-period.from" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('aer.installation.reporting-period.from', '01/01', 'STRING');
+        </sql>
+        <rollback>
+            delete from configuration
+            where key = 'aer.installation.reporting-period.from';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_add_configuration_aer.installation.reporting-period.to" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('aer.installation.reporting-period.to', '30/04', 'STRING');
+        </sql>
+        <rollback>
+            delete from configuration
+            where key = 'aer.installation.reporting-period.to';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_add_configuration_aer.aviation.reporting-period.from" author="kourisp@unisystems.eu">
+        <sql>
+            insert into configuration(key, value, type) values ('aer.aviation.reporting-period.from', '01/01', 'STRING');
+        </sql>
+        <rollback>
+            delete from configuration
+            where key = 'aer.aviation.reporting-period.from';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_add_configuration_aer.installation.reporting-period.to"  author="kourisp@unisystems.eu">
+        <sql>
+            insert into configuration(key, value, type) values ('aer.aviation.reporting-period.to', '30/04', 'STRING');
+        </sql>
+        <rollback>
+            delete from configuration
+            where key = 'aer.aviation.reporting-period.to';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_add_configuration_bdr_enabled" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('ui.features.bdrEnabled', false, 'BOOLEAN');
+        </sql>
+        <rollback>
+            delete from configuration where key = 'ui.features.bdrEnabled';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_add_configuration_bdr.reporting.period.toggle" author="alekopoulosd@unisystems.gr">
+        <sql>
+            insert into configuration(key, value, type) values ('bdr.reporting-period.toggle', true, 'BOOLEAN');
+        </sql>
+        <rollback>
+            delete from configuration where key = 'bdr.reporting-period.toggle';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_add_configuration_ui.features.wastePermitEnabled" author="spapagiannakopoulou">
+        <sql>
+            insert into configuration(key, value, type) values ('ui.features.wastePermitEnabled', false, 'BOOLEAN');
+        </sql>
+        <rollback>
+            delete from configuration where key = 'ui.features.wastePermitEnabled';
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

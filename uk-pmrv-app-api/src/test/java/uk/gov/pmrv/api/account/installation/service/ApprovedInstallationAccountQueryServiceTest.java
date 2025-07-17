@@ -16,7 +16,7 @@ import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountInfoDT
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.account.installation.repository.InstallationAccountRepository;
 import uk.gov.pmrv.api.account.installation.transform.InstallationAccountMapper;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
 import java.util.Optional;

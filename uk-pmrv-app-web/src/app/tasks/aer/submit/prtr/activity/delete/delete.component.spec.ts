@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -9,7 +8,6 @@ import { DeleteComponent } from '@tasks/aer/submit/prtr/activity/delete/delete.c
 import { mockPostBuild, mockStateBuild } from '@tasks/aer/submit/testing/mock-state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage, mockClass } from '@testing';
-import { KeycloakService } from 'keycloak-angular';
 
 import { TasksService } from 'pmrv-api';
 
@@ -32,9 +30,8 @@ describe('DeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AerModule, RouterTestingModule],
+      imports: [AerModule],
       providers: [
-        KeycloakService,
         { provide: TasksService, useValue: tasksService },
         {
           provide: ActivatedRoute,
@@ -72,7 +69,7 @@ describe('DeleteComponent', () => {
   });
 
   it('should display the activity item name', () => {
-    expect(page.header.textContent.trim()).toEqual('Are you sure you want to delete  ‘2.D.3 Other’?');
+    expect(page.header.textContent.trim()).toEqual('Are you sure you want to delete ‘2.D.3 Other’?');
   });
 
   it('should show activities and submit form', () => {

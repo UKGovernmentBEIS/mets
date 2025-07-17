@@ -64,6 +64,7 @@ export const typeOptions: MeasurementDeviceOrMethod['type'][] = [
   'BELLOWS_METER',
   'BELT_WEIGHER',
   'CORIOLIS_METER',
+  'CRANE_WEIGHT',
   'ELECTRONIC_VOLUME_CONVERSION_INSTRUMENT',
   'GAS_CHROMATOGRAPH',
   'LEVEL_GAUGE',

@@ -27,7 +27,7 @@
 
     <div *ngIf="multipleMethodsExplanation || vm.originalMultipleMethodsExplanation">
       <app-multiple-methods-summary-template
-        [editable]="vm.editable"
+        [editable]="vm.editable && !!multipleMethodsExplanation"
         [multipleMethodsExplanation]="showOriginal ? vm.originalMultipleMethodsExplanation : multipleMethodsExplanation"
       >
       </app-multiple-methods-summary-template>

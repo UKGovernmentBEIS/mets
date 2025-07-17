@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.reporting.domain.monitoringapproachesemissions.pfc;
 
-import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;

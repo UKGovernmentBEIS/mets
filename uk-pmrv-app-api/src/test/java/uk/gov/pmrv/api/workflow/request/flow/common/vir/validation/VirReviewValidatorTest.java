@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.OperatorImprovementResponse;
 import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.RegulatorImprovementResponse;
 import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.RegulatorReviewResponse;
@@ -50,7 +50,7 @@ class VirReviewValidatorTest {
                 () -> validator.validate(regulatorReviewResponse, operatorImprovementResponses));
 
         // Verify
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_VIR_REVIEW);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_VIR_REVIEW);
         assertThat(be.getData()).containsExactly("A2");
     }
 
@@ -72,7 +72,7 @@ class VirReviewValidatorTest {
                 () -> validator.validate(regulatorReviewResponse, operatorImprovementResponses));
 
         // Verify
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_VIR_REVIEW);
+        assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_VIR_REVIEW);
         assertThat(be.getData()).containsExactly("A2");
     }
 }

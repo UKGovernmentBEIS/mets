@@ -11,7 +11,7 @@ import { AerService } from '@tasks/aer/core/aer.service';
   template: `
     <app-page-heading size="xl">
       Are you sure you want to delete
-      <span class="nowrap"> ‘{{ activity$ | async | activityItemName }}’? </span>
+      <span class="nowrap">‘{{ activity$ | async | prtrActivityItemName }}’?</span>
     </app-page-heading>
 
     <p class="govuk-body">Any reference to this item will be removed from your application.</p>

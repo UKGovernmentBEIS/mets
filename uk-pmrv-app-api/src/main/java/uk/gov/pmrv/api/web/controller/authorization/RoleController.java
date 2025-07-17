@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.pmrv.api.authorization.core.domain.dto.RoleDTO;
-import uk.gov.pmrv.api.authorization.core.service.RoleService;
-import uk.gov.pmrv.api.authorization.regulator.domain.RegulatorRolePermissionsDTO;
-import uk.gov.pmrv.api.authorization.regulator.service.RegulatorRoleService;
+import uk.gov.netz.api.authorization.core.domain.dto.RoleDTO;
+import uk.gov.netz.api.authorization.core.service.RoleService;
+import uk.gov.netz.api.authorization.regulator.domain.RegulatorRolePermissionsDTO;
+import uk.gov.netz.api.authorization.regulator.service.RegulatorRoleService;
+import uk.gov.netz.api.security.Authorized;
 import uk.gov.pmrv.api.web.constants.SwaggerApiInfo;
 import uk.gov.pmrv.api.web.controller.exception.ErrorResponse;
-import uk.gov.pmrv.api.web.security.Authorized;
 
 import java.util.List;
 

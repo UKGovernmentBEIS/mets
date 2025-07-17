@@ -47,7 +47,10 @@ export class OperatorDetailsFormProvider
 
   private destroy$ = new Subject<void>();
 
-  constructor(private store: RequestTaskStore, private requestTaskFileService: RequestTaskFileService) {}
+  constructor(
+    private store: RequestTaskStore,
+    private requestTaskFileService: RequestTaskFileService,
+  ) {}
 
   get form(): FormGroup {
     if (!this._form) {
@@ -269,8 +272,8 @@ export class OperatorDetailsFormProvider
       .subscribe((value) => {
         if (value) {
           airOperatingCertificateFormGroup.controls.restrictionsDetails.setValidators([
-            GovukValidators.required('TBD'),
-            GovukValidators.maxLength(500, 'TBD'),
+            GovukValidators.required('Enter more information'),
+            GovukValidators.maxLength(500, 'Enter more information'),
           ]);
           airOperatingCertificateFormGroup.controls.restrictionsDetails.updateValueAndValidity();
         } else {

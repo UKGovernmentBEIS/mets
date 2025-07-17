@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 
+import { GenericServiceErrorCode } from '@error/service-errors';
 import { SharedModule } from '@shared/shared.module';
 
 import { InternalServerErrorComponent } from './internal-server-error.component';
@@ -8,35 +9,71 @@ import { InternalServerErrorComponent } from './internal-server-error.component'
 describe('InternalServerErrorComponent', () => {
   let component: InternalServerErrorComponent;
   let fixture: ComponentFixture<InternalServerErrorComponent>;
+  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedModule, RouterTestingModule],
+      imports: [SharedModule],
       declarations: [InternalServerErrorComponent],
     }).compileComponents();
   });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(InternalServerErrorComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  describe('for default error', () => {
+    beforeEach(() => {
+      router = TestBed.inject(Router);
+      jest.spyOn(router, 'getCurrentNavigation').mockReturnValue({ extras: {} } as any);
+
+      fixture = TestBed.createComponent(InternalServerErrorComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should display all HTML elements', () => {
+      const element: HTMLElement = fixture.nativeElement;
+      const paragraphContents = Array.from(element.querySelectorAll<HTMLParagraphElement>('p')).map((el) =>
+        el.textContent.trim(),
+      );
+
+      expect(element.querySelector('h1').textContent).toEqual('Sorry, there is a problem with the service');
+      expect(paragraphContents).toEqual([
+        'Try again later.',
+        'Contact the UK ETS reporting helpdesk  if you have any questions.',
+      ]);
+      expect(element.querySelector('a').href).toEqual('mailto:METS@energysecurity.gov.uk');
+    });
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  describe('for custom errors', () => {
+    const errorCode = GenericServiceErrorCode.INTREGEMISSIONSINSTAVUKETS1007;
 
-  it('should display all HTML elements', () => {
-    const element: HTMLElement = fixture.nativeElement;
-    const paragraphContents = Array.from(element.querySelectorAll<HTMLParagraphElement>('p')).map((el) =>
-      el.textContent.trim(),
-    );
+    beforeEach(() => {
+      router = TestBed.inject(Router);
+      jest.spyOn(router, 'getCurrentNavigation').mockReturnValue({ extras: { state: { errorCode } } } as any);
 
-    expect(element.querySelector('h1').textContent).toEqual('Sorry, there is a problem with the service');
-    expect(paragraphContents).toEqual([
-      'Try again later.',
-      'Contact the UK ETS reporting helpdesk if you have any questions.',
-    ]);
-    expect(element.querySelector('a').href).toEqual('mailto:METS@energysecurity.gov.uk');
+      fixture = TestBed.createComponent(InternalServerErrorComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should display all HTML elements', () => {
+      const element: HTMLElement = fixture.nativeElement;
+      const paragraphContents = Array.from(element.querySelectorAll<HTMLParagraphElement>('p')).map((el) =>
+        el.textContent.trim(),
+      );
+
+      expect(element.querySelector('h1').textContent).toEqual('Registry application data synchronisation error');
+      expect(paragraphContents).toEqual([
+        "We're experiencing temporary difficulties in syncing data. Please try again later or contact the  UK ETS reporting helpdesk  for assistance.",
+      ]);
+      expect(element.querySelector('a').href).toEqual('mailto:METS@energysecurity.gov.uk');
+    });
   });
 });

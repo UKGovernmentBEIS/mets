@@ -33,6 +33,7 @@
           }
         ],
         "@angular-eslint/no-forward-ref": "off",
+        "@angular-eslint/sort-lifecycle-methods": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off"
       }
@@ -57,7 +58,9 @@
         "@angular-eslint/template/attributes-order": "off",
         "@angular-eslint/template/no-inline-styles": "off",
         "@angular-eslint/template/accessibility-interactive-supports-focus": "off",
-        "@angular-eslint/template/no-interpolation-in-attributes": "off"
+        "@angular-eslint/template/no-interpolation-in-attributes": "off",
+        "@angular-eslint/template/prefer-control-flow": "off",
+        "@angular-eslint/template/interactive-supports-focus": "off"
       }
     }
   ]

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
@@ -83,7 +83,7 @@ class PermitTransferAApplyServiceTest {
     @Test
     void applySubmitAction() {
         
-        final PmrvUser user = PmrvUser.builder().userId("user").build();
+        final AppUser user = AppUser.builder().userId("user").build();
         
         final Request request = Request.builder()
             .payload(PermitTransferARequestPayload.builder()

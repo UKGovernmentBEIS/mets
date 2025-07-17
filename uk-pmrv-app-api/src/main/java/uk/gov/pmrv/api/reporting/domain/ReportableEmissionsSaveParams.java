@@ -18,4 +18,5 @@ public class ReportableEmissionsSaveParams {
     private Year year;
     private BigDecimal reportableEmissions;
     private boolean isFromDre;
+    private  boolean isFromRegulator;
 }

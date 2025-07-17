@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { filter, map, Observable } from 'rxjs';
+import { combineLatest, filter, map, Observable } from 'rxjs';
 
 import { AerApplicationCompletedRequestActionPayload, AerApplicationSubmittedRequestActionPayload } from 'pmrv-api';
 
+import { reportableAerRequestActionTypes, reportComponentRequestActionTypes } from '../../request-action.util';
 import { AerService } from '../core/aer.service';
 import { monitoringApproachMap } from '../core/monitoringApproaches';
+import { getAerTitle } from './submitted';
 
 @Component({
   selector: 'app-aer-submitted',
@@ -16,17 +18,29 @@ export class SubmittedComponent {
   payload$ = this.aerService.getPayload() as Observable<
     AerApplicationSubmittedRequestActionPayload | AerApplicationCompletedRequestActionPayload
   >;
-  aerTitle$ = this.payload$.pipe(
-    map((payload) =>
-      payload.payloadType === 'AER_APPLICATION_SUBMITTED_PAYLOAD' ||
-      payload.payloadType === 'AER_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD'
-        ? payload.reportingYear + ' emissions report submitted'
-        : payload.reportingYear + ' emissions report reviewed',
+
+  requestActionType$ = this.aerService.requestAction$.pipe(map((requestAction) => requestAction.type));
+
+  hasReport$ = this.requestActionType$.pipe(
+    map((requestActionType) => reportableAerRequestActionTypes.includes(requestActionType)),
+  );
+
+  aerTitle$ = combineLatest([this.requestActionType$, this.payload$]).pipe(
+    map(([requestActionType, payload]) => getAerTitle(requestActionType, payload)),
+  );
+
+  isVerificationSubmitted$ = this.requestActionType$.pipe(
+    map((requestActionType) => requestActionType === 'AER_APPLICATION_VERIFICATION_SUBMITTED'),
+  );
+
+  dataComponent$ = this.requestActionType$.pipe(
+    map(
+      (requestActionType) =>
+        reportComponentRequestActionTypes.find((entry) => entry.requestActionTypes.includes(requestActionType))
+          ?.reportComponent,
     ),
   );
-  isVerificationSubmitted$ = this.payload$.pipe(
-    map((payload) => payload.payloadType === 'AER_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD'),
-  );
+
   isMeasurementOrN2OApproachesSelected$ = this.payload$.pipe(
     map(
       (payload) =>
@@ -34,6 +48,7 @@ export class SubmittedComponent {
         payload.aer.monitoringApproachEmissions['MEASUREMENT_N2O'] !== undefined,
     ),
   );
+
   monitoringApproaches$ = this.payload$.pipe(
     filter((payload) => !!payload.aer.monitoringApproachEmissions),
     map(
@@ -44,9 +59,11 @@ export class SubmittedComponent {
         }[],
     ),
   );
+
   hasVerificationReport$ = this.payload$.pipe(
     map((payload) => !!(payload as AerApplicationCompletedRequestActionPayload).verificationReport),
   );
+
   isGHGE$: Observable<boolean> = this.payload$.pipe(
     map((payload) => payload?.permitOriginatedData?.permitType === 'GHGE'),
   );

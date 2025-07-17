@@ -7,7 +7,7 @@ import { InherentReceivingTransferringInstallation } from 'pmrv-api';
   selector: 'app-aer-inherent-summary-template',
   templateUrl: './aer-inherent-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./aer-inherent-summary-template.component.scss'],
+  styleUrl: './aer-inherent-summary-template.component.scss',
 })
 export class AerInherentSummaryTemplateComponent {
   @Input() inherentInstallations: InherentReceivingTransferringInstallation[];

@@ -58,6 +58,7 @@ class PermitVariationApplicationReviewRequestTaskInitializerTest {
 		PermitVariationRequestPayload requestPayload = PermitVariationRequestPayload.builder()
 				.permitType(PermitType.GHGE)
 				.permit(permitContainer.getPermit())
+				.originalPermitContainer(permitContainer)
 				.permitVariationDetails(PermitVariationDetails.builder().reason("reason").build())
 				.permitVariationDetailsCompleted(Boolean.TRUE)
 				.permitSectionsCompleted(Map.of("section1", List.of(true, false)))

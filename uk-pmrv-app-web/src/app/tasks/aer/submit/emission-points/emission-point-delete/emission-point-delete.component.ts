@@ -7,17 +7,16 @@ import { AerService } from '@tasks/aer/core/aer.service';
 @Component({
   selector: 'app-emission-point-delete',
   template: `
-    <app-emission-point-delete-template (delete)="onDelete()" [emissionPoint]="emissionPoint$ | async">
-    </app-emission-point-delete-template>
+    <app-emission-point-delete-template
+      (delete)="onDelete()"
+      [emissionPoint]="emissionPoint$ | async"></app-emission-point-delete-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      .nowrap {
-        white-space: nowrap;
-      }
-    `,
-  ],
+  styles: `
+    .nowrap {
+      white-space: nowrap;
+    }
+  `,
 })
 export class EmissionPointDeleteComponent {
   emissionPoint$ = combineLatest([this.aerService.getTask('emissionPoints'), this.route.paramMap]).pipe(

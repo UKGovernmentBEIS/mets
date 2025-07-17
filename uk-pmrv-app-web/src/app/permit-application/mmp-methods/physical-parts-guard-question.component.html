@@ -1,0 +1,40 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true"
+>
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    caption="Monitoring Methodology Plan"
+    heading="Are there any physical parts of the installation or units which serve more than one sub-installation?"
+    submitText="Continue"
+    [hideSubmit]="(store.isEditable$ | async) === false"
+  >
+    <p class="govuk-body govuk-!-width-two-thirds">
+      In line with Annex VI section 2(c) of the FAR, you must list all physical parts of installation and units which
+      serve more than one sub-installation, for example heat supply systems, jointly used boilers and CHP units.
+    </p>
+    <p class="govuk-body govuk-!-width-two-thirds">
+      Units which only serve one sub-installation should not be listed here. Describe these units in the
+      sub-installations section.
+    </p>
+
+    <govuk-details summary="See an example">
+      <p class="govuk-caption-m govuk-!-padding-left-3 govuk-!-padding-bottom-3 govuk-!-width-two-thirds">
+        If a boiler produces measurable heat that is consumed by two product benchmark sub-installations, the boiler
+        should be listed and both sub-installations selected from the drop-down list. If the heat is consumed by only
+        one of the two sub-installations, add this in the sub-installations section.
+      </p>
+    </govuk-details>
+    <div formControlName="physicalPartsAndUnitsAnswer" govuk-radio legendSize="medium" class="govuk-!-width-two-thirds">
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No"> </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+
+  <app-list-return-link
+    reviewGroupTitle="Monitoring methodology"
+    reviewGroupUrl="monitoring-methodology-plan"
+  ></app-list-return-link>
+</app-permit-task>

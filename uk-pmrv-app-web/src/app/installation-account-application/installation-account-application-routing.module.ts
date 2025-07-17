@@ -18,8 +18,14 @@ import { ApplicationGuard } from './guards/application.guard';
 import { FormGuard } from './guards/form.guard';
 import { LegalEntityDetailsGuard } from './guards/legal-entity-details.guard';
 import { InstallationTypeComponent } from './installation-type/installation-type.component';
-import { LegalEntitySelectComponent } from './legal-entity-select/legal-entity-select.component';
-import { LegalEntitySelectGuard } from './legal-entity-select/legal-entity-select.guard';
+import { LegalEntityDetailsOpComponent } from './legal-entity-operator/legal-entity-details-op/legal-entity-details-op.component';
+import { LegalEntityDetailsOpGuard } from './legal-entity-operator/legal-entity-details-op/legal-entity-details-op.guard';
+import { LegalEntityRegnoOpComponent } from './legal-entity-operator/legal-entity-regno-op/legal-entity-regno-op.component';
+import { LegalEntityRegnoOpGuard } from './legal-entity-operator/legal-entity-regno-op/legal-entity-regno-op.guard';
+import { LegalEntitySelectOpComponent } from './legal-entity-operator/legal-entity-select-op/legal-entity-select-op.component';
+import { LegalEntitySelectOpGuard } from './legal-entity-operator/legal-entity-select-op/legal-entity-select-op.guard';
+import { LegalEntitySelectRegComponent } from './legal-entity-regulator/legal-entity-select-reg/legal-entity-select-reg.component';
+import { LegalEntitySelectRegGuard } from './legal-entity-regulator/legal-entity-select-reg/legal-entity-select-reg.guard';
 import { OffshoreGuard } from './offshore-details/offshore.guard';
 import { OffshoreDetailsComponent } from './offshore-details/offshore-details.component';
 import { OnshoreGuard } from './onshore-details/onshore.guard';
@@ -47,6 +53,38 @@ const formRoutes: Routes = [
         component: CancelApplicationComponent,
       },
       {
+        path: 'legal-entity-op',
+        children: [
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: 'select',
+          },
+          {
+            path: 'select',
+            data: { pageTitle: 'Select the legal entity' },
+            component: LegalEntitySelectOpComponent,
+            canActivate: [LegalEntitySelectOpGuard],
+            canDeactivate: [PendingRequestGuard],
+            resolve: { legalEntities: LegalEntitySelectOpGuard },
+          },
+          {
+            path: 'regno',
+            data: { pageTitle: 'Select the registration number' },
+            component: LegalEntityRegnoOpComponent,
+            canActivate: [LegalEntityRegnoOpGuard],
+            canDeactivate: [PendingRequestGuard],
+          },
+          {
+            path: 'details',
+            data: { pageTitle: 'Enter the legal entity details' },
+            canActivate: [LegalEntityDetailsOpGuard],
+            canDeactivate: [PendingRequestGuard],
+            component: LegalEntityDetailsOpComponent,
+          },
+        ],
+      },
+      {
         path: 'legal-entity',
         children: [
           {
@@ -57,10 +95,10 @@ const formRoutes: Routes = [
           {
             path: 'select',
             data: { pageTitle: 'Select the legal entity' },
-            component: LegalEntitySelectComponent,
-            canActivate: [LegalEntitySelectGuard],
+            component: LegalEntitySelectRegComponent,
+            canActivate: [LegalEntitySelectRegGuard],
             canDeactivate: [PendingRequestGuard],
-            resolve: { legalEntities: LegalEntitySelectGuard },
+            resolve: { legalEntities: LegalEntitySelectRegGuard },
           },
           {
             path: 'details',

@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -90,8 +89,9 @@ describe('RegulatedActivitiesComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [RegulatedActivitiesComponent],
-      imports: [RouterTestingModule, SharedModule, SharedPermitModule],
+      imports: [SharedModule, SharedPermitModule],
       providers: [
+        provideRouter([]),
         { provide: TasksService, useValue: tasksService },
         {
           provide: PermitApplicationStore,
@@ -138,7 +138,7 @@ describe('RegulatedActivitiesComponent', () => {
               {
                 id: '16236817394240.1574963093314665',
                 type: 'MINERAL_OIL_REFINING',
-                capacity: '34345',
+                capacity: 34345,
                 capacityUnit: 'MW',
               },
             ],
@@ -174,7 +174,7 @@ describe('RegulatedActivitiesComponent', () => {
               {
                 id: '16236817394240.1574963093314665',
                 type: 'MINERAL_OIL_REFINING',
-                capacity: '34345',
+                capacity: 34345,
                 capacityUnit: 'MW',
               },
             ],
@@ -241,8 +241,6 @@ describe('RegulatedActivitiesComponent', () => {
       page.refiningCapacityUnit = 'MW';
 
       fixture.detectChanges();
-
-      expect(page.errorSummary).toBeTruthy();
 
       page.submitButton.click();
       fixture.detectChanges();

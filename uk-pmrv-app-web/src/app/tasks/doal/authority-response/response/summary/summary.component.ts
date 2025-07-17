@@ -17,8 +17,7 @@ import { DoalGrantAuthorityResponse } from 'pmrv-api';
       <app-doal-authority-decision-template
         [data]="authorityResponse$ | async"
         [documents]="documentFiles$ | async"
-        [editable]="isEditable$ | async"
-      ></app-doal-authority-decision-template>
+        [editable]="isEditable$ | async"></app-doal-authority-decision-template>
 
       <div class="govuk-button-group" *ngIf="isEditable$ | async">
         <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>

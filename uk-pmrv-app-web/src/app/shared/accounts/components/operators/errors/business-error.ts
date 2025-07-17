@@ -6,19 +6,16 @@ import {
   BusinessError,
 } from '@error/business-error/business-error';
 
-const buildOperatorBusinessLink: (
-  accountId: number,
-  domain: string,
-) => Pick<BusinessError, 'link' | 'linkText' | 'fragment'> = (accountId, domain) => ({
-  link: [domain + '/accounts', accountId],
+const buildOperatorBusinessLink: (accountId: number) => Pick<BusinessError, 'link' | 'linkText' | 'fragment'> = (
+  accountId,
+) => ({
+  link: ['/accounts', accountId],
   linkText: 'Return to the users, contacts and verifiers page',
   fragment: 'users',
 });
 
-const operatorErrorWithAccountIdFactory =
-  (errorFactory: () => BusinessError) =>
-  (accountId: number, domain = '') =>
-    errorFactory().withLink(buildOperatorBusinessLink(accountId, domain));
+const operatorErrorWithAccountIdFactory = (errorFactory: () => BusinessError) => (accountId: number) =>
+  errorFactory().withLink(buildOperatorBusinessLink(accountId));
 
 const buildNotAllowedAERVerificationInProgressError = () =>
   new BusinessError(
@@ -37,15 +34,15 @@ export const changeNotAllowedVerificationBodyError = operatorErrorWithAccountIdF
   buildNotAllowedAERVerificationInProgressError,
 );
 
-export const saveNotFoundVerificationBodyError = (accountId: number, domain = '') =>
+export const saveNotFoundVerificationBodyError = (accountId: number) =>
   buildSaveNotFoundError().withLink({
-    link: [domain + '/accounts', accountId, 'verification-body', 'appoint'],
+    link: ['/accounts', accountId, 'verification-body', 'appoint'],
     linkText: 'Return to appoint a verifier page',
   });
 
-export const appointedVerificationBodyError = (accountId: number, domain = '') =>
+export const appointedVerificationBodyError = (accountId: number) =>
   new BusinessError('A verification body is already appointed.').withLink({
-    link: [domain + '/accounts', accountId],
+    link: ['/accounts', accountId],
     linkText: 'Return to users, contacts and verifiers page',
     fragment: 'users',
   });

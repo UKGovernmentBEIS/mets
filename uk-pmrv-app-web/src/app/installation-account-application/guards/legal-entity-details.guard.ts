@@ -1,12 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 
-import { LEGAL_ENTITY_FORM } from '../factories/legal-entity-form.factory';
+import { LEGAL_ENTITY_FORM_REG } from '../factories/legal-entity/legal-entity-form-reg.factory';
 
 @Injectable()
-export class LegalEntityDetailsGuard implements CanActivate {
-  constructor(private readonly router: Router, @Inject(LEGAL_ENTITY_FORM) private readonly form: UntypedFormGroup) {}
+export class LegalEntityDetailsGuard {
+  constructor(
+    private readonly router: Router,
+    @Inject(LEGAL_ENTITY_FORM_REG) private readonly form: UntypedFormGroup,
+  ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
     return (

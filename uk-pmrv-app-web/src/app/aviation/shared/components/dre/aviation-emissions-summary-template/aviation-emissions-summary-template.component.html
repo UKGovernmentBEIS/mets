@@ -53,8 +53,8 @@
 
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Supporting documents</dt>
-      <dd govukSummaryListRowValue *ngIf="data?.supportingDocuments?.length === 0">None</dd>
-      <dd govukSummaryListRowValue *ngIf="data?.supportingDocuments?.length">
+      <dd govukSummaryListRowValue *ngIf="files?.length === 0">None</dd>
+      <dd govukSummaryListRowValue *ngIf="files?.length">
         <app-summary-download-files [files]="files"> </app-summary-download-files>
       </dd>
       <dd></dd>

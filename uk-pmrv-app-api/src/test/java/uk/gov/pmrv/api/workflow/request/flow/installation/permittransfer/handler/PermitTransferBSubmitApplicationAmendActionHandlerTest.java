@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -61,14 +61,14 @@ class PermitTransferBSubmitApplicationAmendActionHandlerTest {
             .request(Request.builder().build())
             .processTaskId(processTaskId)
             .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        final AppUser appUser = AppUser.builder().userId("user").build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
         submitApplicationAmendActionHandler.process(
             requestTask.getId(), 
             RequestTaskActionType.PERMIT_TRANSFER_B_SUBMIT_APPLICATION_AMEND, 
-            pmrvUser, 
+            appUser,
             submitAmendRequestTaskActionPayload
         );
 
@@ -80,7 +80,7 @@ class PermitTransferBSubmitApplicationAmendActionHandlerTest {
             requestTask.getRequest(),
             null,
             RequestActionType.PERMIT_TRANSFER_B_APPLICATION_AMENDS_SUBMITTED,
-            pmrvUser.getUserId());
+            appUser.getUserId());
         verify(workflowService, times(1)).completeTask(processTaskId);
     }
 

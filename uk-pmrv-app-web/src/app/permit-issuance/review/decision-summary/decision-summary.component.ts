@@ -54,7 +54,7 @@ export class DecisionSummaryComponent implements OnInit {
             ({
               year: key,
               target: state.determination.annualEmissionsTargets[key],
-            } as AnnualEmissionTarget),
+            }) as AnnualEmissionTarget,
         ),
     ),
   );

@@ -18,8 +18,7 @@ import { abbreviationsFormProvider } from '@tasks/aer/submit/abbreviations/abbre
           [form]="form"
           [isEditable]="aerService.isEditable$ | async"
           caption="Additional information"
-          submitText="Continue"
-        ></app-abbreviations-template>
+          submitText="Continue"></app-abbreviations-template>
         <app-return-link></app-return-link>
       </div>
     </div>

@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -36,6 +36,11 @@ export interface RequestCreateValidationResult {
     | 'DRE'
     | 'WITHHOLDING_OF_ALLOWANCES'
     | 'RETURN_OF_ALLOWANCES'
+    | 'INSTALLATION_ONSITE_INSPECTION'
+    | 'INSTALLATION_AUDIT'
+    | 'BDR'
+    | 'PERMANENT_CESSATION'
+    | 'ALR'
     | 'AVIATION_ACCOUNT_CLOSURE'
     | 'AVIATION_NON_COMPLIANCE'
     | 'EMP_BATCH_REISSUE'
@@ -48,5 +53,8 @@ export interface RequestCreateValidationResult {
     | 'EMP_ISSUANCE_CORSIA'
     | 'EMP_VARIATION_CORSIA'
     | 'AVIATION_AER_CORSIA'
+    | 'AVIATION_DOE_CORSIA'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING'
   >;
 }

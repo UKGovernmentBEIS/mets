@@ -18,8 +18,7 @@ describe('AerVerifyMaterialityLevelGroupComponent', () => {
       <app-aer-verify-materiality-level-group
         [isEditable]="isEditable"
         [materialityLevel]="materialityLevel"
-        [queryParams]="queryParams"
-      ></app-aer-verify-materiality-level-group>
+        [queryParams]="queryParams"></app-aer-verify-materiality-level-group>
     `,
   })
   class TestComponent {

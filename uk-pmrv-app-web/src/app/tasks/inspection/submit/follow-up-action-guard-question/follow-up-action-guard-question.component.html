@@ -1,0 +1,25 @@
+<app-inspection-task
+  [heading]="'Do you want to add follow-up actions for the operator?'"
+  caption="Follow-up actions for the operator"
+  [returnToLink]="'..'">
+  <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" submitText="Continue" [hideSubmit]="!isEditable()">
+    <div formControlName="followUpActionsRequired" govuk-radio [isInline]="false" legendSize="medium">
+      <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="followUpActionsOmissionJustification"
+            govuk-textarea
+            label="Justification (optional)"></div>
+
+          <app-multiple-file-input
+            [baseDownloadUrl]="getDownloadUrl()"
+            label="Upload files (visible to the Operator) (optional)"
+            headerSize="m"
+            listTitle="Uploaded attachments"
+            formControlName="followUpActionsOmissionFiles"></app-multiple-file-input>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-inspection-task>

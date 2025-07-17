@@ -17,9 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import uk.gov.pmrv.api.account.aviation.domain.enumeration.AviationAccountReportingStatus;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestCreateActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -82,7 +82,7 @@ class RequestCreateEmpBatchReissueValidatorTest {
     		.thenReturn(true);
     	
     	BusinessException be = assertThrows(BusinessException.class, () -> cut.validateAction(competentAuthority, payload));
-    	assertThat(be.getErrorCode()).isEqualTo(ErrorCode.BATCH_REISSUE_IN_PROGRESS_REQUEST_EXISTS);
+    	assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.BATCH_REISSUE_IN_PROGRESS_REQUEST_EXISTS);
     	
     	verify(requestQueryService, times(1)).existByRequestTypeAndRequestStatusAndCompetentAuthority(RequestType.EMP_BATCH_REISSUE, RequestStatus.IN_PROGRESS, competentAuthority);
     	verifyNoInteractions(empBatchReissueQueryService);
@@ -106,7 +106,7 @@ class RequestCreateEmpBatchReissueValidatorTest {
 			.thenReturn(false);
     	
     	BusinessException be = assertThrows(BusinessException.class, () -> cut.validateAction(competentAuthority, payload));
-    	assertThat(be.getErrorCode()).isEqualTo(ErrorCode.BATCH_REISSUE_ZERO_EMITTERS_SELECTED);
+    	assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.BATCH_REISSUE_ZERO_EMITTERS_SELECTED);
     	
     	verify(requestQueryService, times(1)).existByRequestTypeAndRequestStatusAndCompetentAuthority(RequestType.EMP_BATCH_REISSUE, RequestStatus.IN_PROGRESS, competentAuthority);
     	verify(empBatchReissueQueryService, times(1)).existAccountsByCAAndFilters(competentAuthority, filters);

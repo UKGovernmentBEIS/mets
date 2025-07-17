@@ -3,7 +3,6 @@ export interface UsersTableItem {
   authorityStatus?: 'ACCEPTED' | 'ACTIVE' | 'DISABLED' | 'PENDING' | 'TEMP_DISABLED' | 'TEMP_DISABLED_PENDING';
   firstName?: string;
   lastName?: string;
-  locked?: boolean;
   userId?: string;
   roleCode?: string;
   roleName?: string;

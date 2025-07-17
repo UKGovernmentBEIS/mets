@@ -1,10 +1,11 @@
 package uk.gov.pmrv.api.workflow.request.core.validation;
 
-import java.util.Optional;
-import java.util.Set;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTaskActionValidationResult;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
+
+import java.util.Optional;
+import java.util.Set;
 
 public abstract class RequestTaskActionConflictBasedAbstractValidator implements RequestTaskActionValidator{
 

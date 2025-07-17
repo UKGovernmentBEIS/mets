@@ -7,8 +7,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
       *ngIf="'environmentalManagementSystem' | task: !showOriginal | async as environmentalSystem"
       govuk-summary-list
       [hasBorders]="false"
-      [class.summary-list--edge-border]="hasBottomBorder"
-    >
+      [class.summary-list--edge-border]="hasBottomBorder">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Documented environmental management system</dt>
         <dd govukSummaryListRowValue>{{ environmentalSystem.exist ? 'Yes' : 'No' }}</dd>

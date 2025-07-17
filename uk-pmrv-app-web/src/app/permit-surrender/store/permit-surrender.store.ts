@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { distinctUntilChanged, map, Observable, pluck, tap } from 'rxjs';
+import { distinctUntilChanged, map, Observable, tap } from 'rxjs';
 
 import { Store } from '@core/store/store';
+import { BusinessErrorService } from '@error/business-error/business-error.service';
+import { catchTaskReassignedBadRequest } from '@error/business-errors';
+import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
+import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
 
 import {
   PermitSaveCessationRequestTaskActionPayload,
@@ -16,10 +20,6 @@ import {
   TasksService,
 } from 'pmrv-api';
 
-import { BusinessErrorService } from '../../error/business-error/business-error.service';
-import { catchTaskReassignedBadRequest } from '../../error/business-errors';
-import { catchNotFoundRequest, ErrorCode } from '../../error/not-found-error';
-import { requestTaskReassignedError, taskNotFoundError } from '../../shared/errors/request-task-error';
 import { initialState, PermitSurrenderState } from './permit-surrender.state';
 
 @Injectable({ providedIn: 'root' })
@@ -44,7 +44,7 @@ export class PermitSurrenderStore extends Store<PermitSurrenderState> {
   }
 
   get isEditable$(): Observable<boolean> {
-    return this.pipe(pluck('isEditable'));
+    return this.pipe(map((state) => state?.isEditable));
   }
 
   get isPaymentRequired(): boolean {
@@ -53,6 +53,10 @@ export class PermitSurrenderStore extends Store<PermitSurrenderState> {
 
   get isAssignableAndCapable$(): Observable<boolean> {
     return this.pipe(map((state) => state?.userAssignCapable && state?.assignable));
+  }
+
+  get reviewDetermination$() {
+    return this.pipe(map((state) => state.reviewDetermination));
   }
 
   getDownloadUrlFiles(files: string[]): { downloadUrl: string; fileName: string }[] {
@@ -73,7 +77,10 @@ export class PermitSurrenderStore extends Store<PermitSurrenderState> {
   }
 
   getPermitSurrender(): Observable<PermitSurrender> {
-    return this.pipe(pluck('permitSurrender'), distinctUntilChanged());
+    return this.pipe(
+      map((state) => state?.permitSurrender),
+      distinctUntilChanged(),
+    );
   }
 
   postApplyPermitSurrender(state: PermitSurrenderState) {

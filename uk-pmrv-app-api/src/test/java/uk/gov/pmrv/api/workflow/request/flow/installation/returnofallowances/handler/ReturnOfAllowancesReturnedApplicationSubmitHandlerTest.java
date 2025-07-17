@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -40,13 +40,13 @@ class ReturnOfAllowancesReturnedApplicationSubmitHandlerTest {
         Long requestTaskId = 123L;
         String processTaskId = "process";
         RequestTaskActionType requestTaskActionType = RequestTaskActionType.RETURN_OF_ALLOWANCES_RETURNED_SUBMIT_APPLICATION;
-        PmrvUser pmrvUser = mock(PmrvUser.class);
+        AppUser appUser = mock(AppUser.class);
         RequestTask requestTask = mock(RequestTask.class);
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
         when(requestTask.getProcessTaskId()).thenReturn(processTaskId);
 
-        handler.process(requestTaskId, requestTaskActionType, pmrvUser, RequestTaskActionEmptyPayload.builder().build());
+        handler.process(requestTaskId, requestTaskActionType, appUser, RequestTaskActionEmptyPayload.builder().build());
 
         verify(returnOfAllowancesReturnedService).submit(requestTask);
         verify(workflowService).completeTask(requestTask.getProcessTaskId());

@@ -7,7 +7,8 @@ import { PermitSurrenderStore } from '../../../store/permit-surrender.store';
 
 @Component({
   selector: 'app-summary',
-  template: `<app-page-heading>Surrender cessation</app-page-heading>
+  template: `
+    <app-page-heading>Surrender cessation</app-page-heading>
 
     <govuk-notification-banner *ngIf="notification" type="success">
       <h1 class="govuk-notification-banner__heading">Details updated</h1>
@@ -16,10 +17,10 @@ import { PermitSurrenderStore } from '../../../store/permit-surrender.store';
     <app-cessation-summary-details
       [cessation]="store.select('cessation') | async"
       [allowancesSurrenderRequired]="store.select('allowancesSurrenderRequired') | async"
-      [isEditable]="store.select('isEditable') | async"
-    ></app-cessation-summary-details>
+      [isEditable]="store.select('isEditable') | async"></app-cessation-summary-details>
 
-    <a govukLink routerLink="../..">Return to: Cessation</a> `,
+    <a govukLink routerLink="../..">Return to: Cessation</a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryComponent implements PendingRequest {

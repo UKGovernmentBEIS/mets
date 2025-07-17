@@ -19,11 +19,11 @@ import { codeFormProvider } from './code-form.provider';
       (formSubmit)="onSubmit()"
       [formGroup]="form"
       heading="Transfer code from permit recipient"
-      [hideSubmit]="hideSubmit$ | async"
-    >
+      [hideSubmit]="hideSubmit$ | async">
       <p class="govuk-body">
         You can request this from the business or organisation receiving the permit transfer.
-        <br /><br />
+        <br />
+        <br />
         If the operator does not have a code, they must apply for a new account first. Once their application has been
         approved they will get a code to share.
       </p>

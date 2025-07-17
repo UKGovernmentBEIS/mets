@@ -14,8 +14,7 @@ import { PermitApplicationStore } from '../../../../store/permit-application.sto
       *ngFor="let cellAnodeType of cellAnodeTypes$ | async"
       govuk-summary-list
       [hasBorders]="false"
-      [class.summary-list--edge-border]="hasBottomBorder"
-    >
+      [class.summary-list--edge-border]="hasBottomBorder">
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Cell type</dt>
         <dd class="pre-wrap" govukSummaryListRowValue>{{ cellAnodeType.cellType }}</dd>

@@ -5,10 +5,11 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserRoleTypeDTO;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.dto.UserRoleTypeDTO;
+import uk.gov.netz.api.authorization.core.service.UserRoleTypeService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;
 
@@ -34,13 +35,13 @@ public class RequestAssignmentService {
         UserRoleTypeDTO userRoleType = userRoleTypeService.getUserRoleTypeByUserId(userId);
 
         switch (userRoleType.getRoleType()) {
-            case OPERATOR:
+            case RoleTypeConstants.OPERATOR:
                 assignRequestToOperatorUser(request, userId);
                 break;
-            case REGULATOR:
+            case RoleTypeConstants.REGULATOR:
                 assignRequestToRegulatorUser(request, userId);
                 break;
-            case VERIFIER:
+            case RoleTypeConstants.VERIFIER:
                 assignRequestToVerifierUser(request, userId);
                 break;
             default:

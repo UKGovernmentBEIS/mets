@@ -37,7 +37,7 @@ describe('Withdraw reason Guard', () => {
     store.setState({
       ...mockTaskState,
       isEditable: true,
-      reason: 'Because i have to'       
+      reason: 'Because i have to',
     });
 
     expect(firstValueFrom(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>)).resolves.toEqual(
@@ -58,7 +58,6 @@ describe('Withdraw reason Guard', () => {
       ...mockTaskState,
       isEditable: false,
       reason: 'Because i have to',
-       
     });
 
     expect(guard.canActivate(activatedRouteSnapshot) as Observable<true | UrlTree>).toEqual(true);

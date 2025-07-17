@@ -10,10 +10,9 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestExpiratio
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.ExtendExpirationTimerService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestExpirationVarsBuilder;
+import uk.gov.pmrv.api.workflow.utils.DateUtils;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 
@@ -39,10 +38,7 @@ class ExtendReviewExpirationTimerHandlerTest {
         final DelegateExecution delegateExecution = mock(DelegateExecution.class);
         String requestId = "1";
         final LocalDate dueDateLocal = LocalDate.of(2023, 1, 2);
-        final Date dueDate = Date.from(dueDateLocal
-              .atTime(LocalTime.MIN)
-              .atZone(ZoneId.systemDefault())
-              .toInstant());
+        final Date dueDate = DateUtils.atEndOfDay(dueDateLocal);
         
         final Map<String, Object> vars = Map.of(
                 "var1", "val1"

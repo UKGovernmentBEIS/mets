@@ -16,24 +16,24 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
+import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.security.AppSecurityComponent;
+import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
+import uk.gov.netz.api.security.AuthorizedAspect;
+import uk.gov.netz.api.security.AuthorizedRoleAspect;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoDTO;
 import uk.gov.pmrv.api.account.domain.dto.AccountContactInfoResponse;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.service.AccountCaSiteContactService;
 import uk.gov.pmrv.api.account.transform.StringToAccountTypeEnumConverter;
-import uk.gov.pmrv.api.authorization.rules.services.PmrvUserAuthorizationService;
-import uk.gov.pmrv.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.pmrv.api.common.domain.enumeration.RoleType;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.web.config.PmrvUserArgumentResolver;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
+import uk.gov.pmrv.api.web.config.AppUserArgumentResolver;
 import uk.gov.pmrv.api.web.controller.exception.ExceptionControllerAdvice;
-import uk.gov.pmrv.api.web.security.AuthorizationAspectUserResolver;
-import uk.gov.pmrv.api.web.security.AuthorizedAspect;
-import uk.gov.pmrv.api.web.security.AuthorizedRoleAspect;
-import uk.gov.pmrv.api.web.security.PmrvSecurityComponent;
 
 import java.util.List;
 
@@ -59,7 +59,7 @@ class CaSiteContactControllerTest {
     private CaSiteContactController controller;
 
     @Mock
-    private PmrvSecurityComponent pmrvSecurityComponent;
+    private AppSecurityComponent pmrvSecurityComponent;
 
     @Mock
     private AccountCaSiteContactService accountCaSiteContactService;
@@ -68,14 +68,14 @@ class CaSiteContactControllerTest {
     private RoleAuthorizationService roleAuthorizationService;
 
     @Mock
-    private PmrvUserAuthorizationService pmrvUserAuthorizationService;
+    private AppUserAuthorizationService appUserAuthorizationService;
 
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(pmrvSecurityComponent);
-        AuthorizedAspect aspect = new AuthorizedAspect(pmrvUserAuthorizationService, authorizationAspectUserResolver);
+        AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
         AuthorizedRoleAspect authorizedRoleAspect = new AuthorizedRoleAspect(roleAuthorizationService, authorizationAspectUserResolver);
 
         AspectJProxyFactory aspectJProxyFactory = new AspectJProxyFactory(controller);
@@ -90,7 +90,7 @@ class CaSiteContactControllerTest {
         conversionService.addConverter(new StringToAccountTypeEnumConverter());
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
-                .setCustomArgumentResolvers(new PmrvUserArgumentResolver(pmrvSecurityComponent))
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(pmrvSecurityComponent))
                 .setControllerAdvice(new ExceptionControllerAdvice())
             .setConversionService(conversionService)
                 .build();
@@ -101,7 +101,7 @@ class CaSiteContactControllerTest {
     @Test
     void getCaSiteContacts() throws Exception {
         final AccountType accountType = AccountType.INSTALLATION;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
 
         AccountContactInfoResponse accountCASiteContactInfoResponse = AccountContactInfoResponse.builder()
                 .contacts(List.of(
@@ -131,12 +131,12 @@ class CaSiteContactControllerTest {
 
     @Test
     void getCaSiteContacts_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.OPERATOR).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.OPERATOR).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
                 .when(roleAuthorizationService)
-                .evaluate(user,new RoleType[] {RoleType.REGULATOR});
+                .evaluate(user,new String[] {RoleTypeConstants.REGULATOR});
 
         mockMvc.perform(MockMvcRequestBuilders.get(CA_SITE_CONTACT_CONTROLLER_PATH + "?page=0&size=2")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -149,7 +149,7 @@ class CaSiteContactControllerTest {
     @Test
     void updateCaSiteContacts() throws Exception {
         final AccountType accountType = AccountType.INSTALLATION;
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         List<AccountContactDTO> accountCASiteContacts = List.of(
                 AccountContactDTO.builder().accountId(1L).userId("userId1").build(),
                 AccountContactDTO.builder().accountId(2L).userId("userId2").build()
@@ -168,7 +168,7 @@ class CaSiteContactControllerTest {
 
     @Test
     void updateCaSiteContacts_forbidden() throws Exception {
-        final PmrvUser user = PmrvUser.builder().roleType(RoleType.REGULATOR).build();
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
         List<AccountContactDTO> accountCASiteContacts = List.of(
                 AccountContactDTO.builder().accountId(1L).userId("userId1").build(),
                 AccountContactDTO.builder().accountId(2L).userId("userId2").build()
@@ -176,7 +176,7 @@ class CaSiteContactControllerTest {
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-                .when(pmrvUserAuthorizationService)
+                .when(appUserAuthorizationService)
                 .authorize(user, "updateCaSiteContacts");
 
         mockMvc.perform(MockMvcRequestBuilders.post(CA_SITE_CONTACT_CONTROLLER_PATH)

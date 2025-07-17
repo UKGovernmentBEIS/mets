@@ -2,10 +2,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { combineLatest, map, Observable } from 'rxjs';
 
+import { AerDecisionViewModel, getAerDecisionReview } from '@aviation/request-action/aer/shared/util/aer.util';
 import { aerQuery } from '@aviation/request-action/aer/ukets/aer-ukets.selectors';
 import { RequestActionTaskComponent } from '@aviation/request-action/shared/components/request-action-task/request-action-task.component';
 import { requestActionQuery, RequestActionStore } from '@aviation/request-action/store';
 import { aerHeaderTaskMap } from '@aviation/request-task/aer/shared/util/aer.util';
+import { AerReviewDecisionGroupSummaryComponent } from '@aviation/shared/components/aer/aer-review-decision-group-summary/aer-review-decision-group-summary.component';
 import { EmissionsReductionClaimSummaryTemplateComponent } from '@aviation/shared/components/aer/emissions-reduction-claim-summary-template';
 import { SharedModule } from '@shared/shared.module';
 
@@ -25,19 +27,31 @@ interface ViewModel {
 @Component({
   selector: 'app-emissions-reduction-claim',
   standalone: true,
-  imports: [SharedModule, RequestActionTaskComponent, EmissionsReductionClaimSummaryTemplateComponent],
+  imports: [
+    SharedModule,
+    RequestActionTaskComponent,
+    EmissionsReductionClaimSummaryTemplateComponent,
+    AerReviewDecisionGroupSummaryComponent,
+  ],
+  // eslint-disable-next-line @angular-eslint/component-max-inline-declarations
   template: `
     <app-request-action-task
       *ngIf="vm$ | async as vm"
       [header]="vm.pageHeader"
       [requestActionType]="vm.requestActionType"
-      [breadcrumb]="true"
-    >
+      [breadcrumb]="true">
       <app-aer-emissions-reduction-claim-summary-template
         [data]="vm.saf"
         [purchases]="vm.purchases"
-        [declarationFile]="vm.declarationFile"
-      ></app-aer-emissions-reduction-claim-summary-template>
+        [declarationFile]="vm.declarationFile"></app-aer-emissions-reduction-claim-summary-template>
+
+      <ng-container *ngIf="vm.showDecision">
+        <h2 app-summary-header class="govuk-heading-m">Decision Summary</h2>
+        <app-aer-review-decision-group-summary
+          [data]="vm.reviewDecision"
+          [attachments]="vm.reviewAttachments"
+          [downloadBaseUrl]="store.aerDelegate.baseFileAttachmentDownloadUrl"></app-aer-review-decision-group-summary>
+      </ng-container>
     </app-request-action-task>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,11 +59,12 @@ interface ViewModel {
 export default class EmissionsReductionClaimComponent {
   constructor(public store: RequestActionStore) {}
 
-  vm$: Observable<ViewModel> = combineLatest([
+  vm$: Observable<ViewModel & AerDecisionViewModel> = combineLatest([
     this.store.pipe(aerQuery.selectRequestActionPayload),
     this.store.pipe(requestActionQuery.selectRequestActionType),
+    this.store.pipe(requestActionQuery.selectRegulatorViewer),
   ]).pipe(
-    map(([payload, requestActionType]) => ({
+    map(([payload, requestActionType, regulatorViewer]) => ({
       requestActionType: requestActionType,
       pageHeader: aerHeaderTaskMap['saf'],
       saf: payload.aer.saf,
@@ -72,6 +87,7 @@ export default class EmissionsReductionClaimComponent {
             downloadUrl: `${this.store.aerDelegate.baseFileAttachmentDownloadUrl}/${payload.aer.saf.safDetails.noDoubleCountingDeclarationFile}`,
           }
         : null,
+      ...getAerDecisionReview(payload, requestActionType, regulatorViewer, 'saf', true),
     })),
   );
 }

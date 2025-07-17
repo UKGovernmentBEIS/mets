@@ -10,4 +10,5 @@ export const statusesTagMap: Record<RequestDetailsDTO['requestStatus'], string> 
   CLOSED: 'CLOSED',
   MIGRATED: 'MIGRATED',
   EXEMPT: 'EXEMPT',
+  NOT_REQUIRED: 'NOT REQUIRED',
 };

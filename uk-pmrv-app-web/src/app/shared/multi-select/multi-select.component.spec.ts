@@ -68,7 +68,7 @@ describe('MultiSelectComponent', () => {
 
     expect(page.checkboxes[0].checked).toBeFalsy();
     expect(page.checkboxes[1].checked).toBeFalsy();
-    expect(page.button.textContent.trim()).toEqual('');
+    expect(page.button.textContent.trim()).toEqual('0 selected');
 
     hostComponent.form.get('test').setValue(['2']);
     fixture.detectChanges();

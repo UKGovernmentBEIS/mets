@@ -1,17 +1,20 @@
 package uk.gov.pmrv.api.migration;
 
-import java.util.Collections;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.boot.actuate.endpoint.annotation.Selector;
 import org.springframework.boot.actuate.endpoint.annotation.WriteOperation;
 import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
+
 @Component
 @WebEndpoint(id = "migration")
 @RequiredArgsConstructor
+@ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class MigrationEndpoint {
     private final List<MigrationService> migrationServices;
 

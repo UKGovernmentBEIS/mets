@@ -4,13 +4,14 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.vir.domain.AviationVirRequestPayload;
@@ -25,6 +26,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.Officia
 @RequiredArgsConstructor
 public class AviationVirOfficialNoticeService {
 
+    private static final String FILE_NAME = "Recommended_improvements.pdf";
+
     private final RequestService requestService;
     private final RequestAccountContactQueryService requestAccountContactQueryService;
     private final DecisionNotificationUsersService decisionNotificationUsersService;
@@ -34,17 +37,10 @@ public class AviationVirOfficialNoticeService {
 
     @Transactional
     public void generateAndSaveRecommendedImprovementsOfficialNotice(final String requestId) {
-        
         final Request request = requestService.findRequestById(requestId);
-
         final AviationVirRequestPayload requestPayload = (AviationVirRequestPayload) request.getPayload();
-        final UserInfoDTO accountPrimaryContact = requestAccountContactQueryService.getRequestAccountPrimaryContact(request)
-            .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
-        final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification());
-
         // Generate file
-        final FileInfoDTO officialNotice = generateOfficialNotice(request, accountPrimaryContact, ccRecipientsEmails);
-
+        final FileInfoDTO officialNotice = generateOfficialNotice(request);
         // Save to payload
         requestPayload.setOfficialNotice(officialNotice);
     }
@@ -59,14 +55,28 @@ public class AviationVirOfficialNoticeService {
         officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails);
     }
 
-    private FileInfoDTO generateOfficialNotice(final Request request,
-                                               final UserInfoDTO accountPrimaryContact,
-                                               final List<String> ccRecipientsEmails) {
+    @Transactional
+    public FileDTO doGenerateOfficialNoticeWithoutSave(Request dbRequest) {
+        final TemplateParams templateParams = constructTemplateParams(dbRequest);
+        return documentFileGeneratorService.generateFileDocument(DocumentTemplateType.AVIATION_VIR_REVIEWED,
+                templateParams, FILE_NAME);
+    }
+
+    private FileInfoDTO generateOfficialNotice(final Request request) {
+        final TemplateParams templateParams = constructTemplateParams(request);
+        return documentFileGeneratorService.generateAndSaveFileDocument(DocumentTemplateType.AVIATION_VIR_REVIEWED,
+                templateParams, FILE_NAME);
+    }
+
+    private TemplateParams constructTemplateParams(final Request request) {
 
         final AviationVirRequestPayload requestPayload = (AviationVirRequestPayload) request.getPayload();
+        final UserInfoDTO accountPrimaryContact = requestAccountContactQueryService.getRequestAccountPrimaryContact(request)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
+        final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification());
 
-        final TemplateParams templateParams = documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(
-                DocumentTemplateParamsSourceData.builder()
+        return documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(
+                 DocumentTemplateParamsSourceData.builder()
                         .contextActionType(DocumentTemplateGenerationContextActionType.AVIATION_VIR_REVIEWED)
                         .request(request)
                         .signatory(requestPayload.getDecisionNotification().getSignatory())
@@ -75,7 +85,5 @@ public class AviationVirOfficialNoticeService {
                         .ccRecipientsEmails(ccRecipientsEmails)
                         .build()
         );
-        return documentFileGeneratorService.generateFileDocument(DocumentTemplateType.AVIATION_VIR_REVIEWED,
-                templateParams, "Recommended_improvements.pdf");
     }
 }

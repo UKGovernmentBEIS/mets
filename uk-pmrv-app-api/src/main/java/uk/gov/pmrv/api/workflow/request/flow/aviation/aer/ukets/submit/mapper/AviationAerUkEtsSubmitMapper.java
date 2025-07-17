@@ -6,9 +6,10 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEts;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsContainer;
+import uk.gov.pmrv.api.aviationreporting.ukets.domain.totalemissions.AviationAerUkEtsSubmittedEmissions;
 import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.common.transform.MapperConfig;
+import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.operatordetails.AviationOperatorDetails;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.submit.domain.AviationAerUkEtsApplicationSubmitRequestTaskPayload;
@@ -32,7 +33,10 @@ public interface AviationAerUkEtsSubmitMapper {
     @Mapping(target = "aer.operatorDetails.crcoCode", ignore = true)
     @Mapping(target = "aer.aerSectionAttachmentIds", ignore = true)
     AviationAerUkEtsApplicationSubmittedRequestActionPayload toAviationAerUkEtsApplicationSubmittedRequestActionPayload(
-        AviationAerUkEtsApplicationSubmitRequestTaskPayload taskPayload, RequestAviationAccountInfo accountInfo, RequestActionPayloadType payloadType);
+        AviationAerUkEtsApplicationSubmitRequestTaskPayload taskPayload,
+        RequestAviationAccountInfo accountInfo,
+        AviationAerUkEtsSubmittedEmissions submittedEmissions,
+        RequestActionPayloadType payloadType);
 
     @AfterMapping
     default void setOperatorDetailsCrcoCode(@MappingTarget AviationAerUkEtsApplicationSubmittedRequestActionPayload requestActionPayload,

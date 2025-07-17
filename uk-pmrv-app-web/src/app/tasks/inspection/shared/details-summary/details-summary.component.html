@@ -1,0 +1,88 @@
+<ng-container *ngIf="inspectionPayload().installationInspection.details as details">
+  @if (isOnsiteInspection$ | async) {
+    <govuk-error-summary *ngIf="errors()" [form]="form"></govuk-error-summary>
+  }
+  <app-page-heading [caption]="isEditableDetails() ? (requestTasktype$ | async | detailsSubtaskHeader) : null">
+    @if (isEditableDetails()) {
+      Check your answers
+    } @else {
+      {{ requestTasktype$ | async | detailsSubtaskLinktext }}
+    }
+  </app-page-heading>
+
+  <dl govuk-summary-list [hasBorders]="true">
+    @if (isOnsiteInspection$ | async) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey [class.missing-row-key]="errors()?.invalidDate">On-site inspection date</dt>
+        <dd govukSummaryListRowValue>
+          {{ details.date | date: 'd MMMM yyyy' }}
+          <div *ngIf="errors()?.invalidDate" class="error">{{ errors()?.invalidDate }}</div>
+        </dd>
+        <dd govukSummaryListRowActions *ngIf="isEditableDetails()">
+          <a govukLink [routerLink]="['../', 'details']">Change</a>
+        </dd>
+      </div>
+    }
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Names of officers</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <ng-container *ngFor="let officer of details.officerNames; let i = index; let isLast = last">
+          <div class="pre-wrap">{{ i + 1 }}. {{ officer }} <br /></div>
+        </ng-container>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditableDetails()">
+        <a govukLink [routerLink]="['../', 'details']">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="details?.files?.length > 0">
+      <dt govukSummaryListRowKey>
+        {{ (isOperatorRespond$ | async) === true ? 'Uploaded files' : 'Uploaded files (visible to the Operator)' }}
+      </dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="visibleFiles$ | async"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditableDetails()">
+        <a govukLink [routerLink]="['..', 'details']">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="details?.regulatorExtraFiles?.length > 0">
+      <dt govukSummaryListRowKey>Uploaded files (not visible to the Operator)</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="notVisibleFiles$ | async"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditableDetails()">
+        <a govukLink [routerLink]="['..', 'details']">Change</a>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="details?.additionalInformation">
+      <dt govukSummaryListRowKey>Additional information</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ details.additionalInformation }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditableDetails()">
+        <a govukLink [routerLink]="['../', 'details']">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  @if (isEditableDetails() && (showConfirmButton$ | async) === true) {
+    <div>
+      <button
+        appPendingButton
+        govukButton
+        id="confirmBtn"
+        type="button"
+        (click)="onConfirm()"
+        routerLinkActive="router-link-active"
+      >
+        Confirm and continue
+      </button>
+    </div>
+  }
+
+  <a govukLink routerLink="..">Return to: {{ returnLinkText | async }}</a>
+</ng-container>

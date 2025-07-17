@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uk.gov.netz.api.common.validation.uniqueelements.UniqueElements;
 import uk.gov.pmrv.api.emissionsmonitoringplan.corsia.domain.EmpCorsiaSection;
 
 @Data
@@ -25,6 +26,7 @@ public class EmpEmissionSourcesCorsia implements EmpCorsiaSection {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonDeserialize(as = LinkedHashSet.class)
     @NotEmpty
+    @UniqueElements
     private Set<@NotNull @Valid AircraftTypeDetailsCorsia> aircraftTypes = new HashSet<>();
 
     @Size(max = 10000)

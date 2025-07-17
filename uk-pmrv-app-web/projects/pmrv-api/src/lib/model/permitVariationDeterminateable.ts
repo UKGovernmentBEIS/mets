@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -11,5 +11,5 @@
  */
 
 export interface PermitVariationDeterminateable {
-  type?: 'GRANTED' | 'REJECTED' | 'DEEMED_WITHDRAWN';
+  type?: 'GRANTED' | 'REJECTED' | 'COMPLETED' | 'DEEMED_WITHDRAWN';
 }

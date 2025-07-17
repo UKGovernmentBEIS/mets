@@ -1,9 +1,9 @@
 package uk.gov.pmrv.api.migration.emp.corsia.emissionsources;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.springframework.jdbc.core.RowMapper;
 
 public class EtsEmissionSourcesCorsiaRowMapper implements RowMapper<EtsEmissionSourcesCorsia> {
 

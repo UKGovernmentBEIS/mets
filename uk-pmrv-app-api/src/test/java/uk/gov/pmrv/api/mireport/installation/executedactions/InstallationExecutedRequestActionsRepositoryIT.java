@@ -1,35 +1,35 @@
 package uk.gov.pmrv.api.mireport.installation.executedactions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.mireport.MiReportType;
+import uk.gov.netz.api.mireport.executedactions.ExecutedRequestAction;
+import uk.gov.netz.api.mireport.executedactions.ExecutedRequestActionsMiReportParams;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.domain.LocationOnShore;
-import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityStatus;
 import uk.gov.pmrv.api.account.domain.enumeration.LegalEntityType;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.ApplicationType;
 import uk.gov.pmrv.api.account.installation.domain.enumeration.InstallationAccountStatus;
 import uk.gov.pmrv.api.common.domain.Address;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.common.domain.enumeration.EmissionTradingScheme;
-import uk.gov.pmrv.api.mireport.common.MiReportType;
-import uk.gov.pmrv.api.mireport.common.executedActions.ExecutedRequestAction;
-import uk.gov.pmrv.api.mireport.common.executedActions.ExecutedRequestActionsMiReportParams;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestActionType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestStatus;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 
-import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -80,37 +80,37 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
             .fromDate(LocalDate.of(2022,1,6))
             .build();
 
-        List<ExecutedRequestAction> actions = repository.findExecutedRequestActions(entityManager, reportParams);
+        List<InstallationExecutedRequestAction> actions = repository.findExecutedRequestActions(entityManager, reportParams);
 
         assertThat(actions).isNotEmpty();
         assertThat(actions).hasSize(2);
 
-        ExecutedRequestAction executedRequestAction = actions.get(0);
-        assertEquals(acc1.getEmitterId(), executedRequestAction.getEmitterId());
+        InstallationExecutedRequestAction executedRequestAction = actions.get(0);
+        assertEquals(acc1.getEmitterId(), executedRequestAction.getAccountId());
         assertEquals(acc1.getAccountType(), executedRequestAction.getAccountType());
         assertEquals(acc1.getStatus().getName(), executedRequestAction.getAccountStatus());
         assertEquals(acc1.getName(), executedRequestAction.getAccountName());
         assertEquals(acc1.getName(), executedRequestAction.getAccountName());
         assertEquals(legalEntity.getName(), executedRequestAction.getLegalEntityName());
         assertEquals(acc1InstAccOpenRequest.getId(), executedRequestAction.getRequestId());
-        assertEquals(acc1InstAccOpenRequest.getType(), executedRequestAction.getRequestType());
-        assertEquals(acc1InstAccOpenRequest.getStatus(), executedRequestAction.getRequestStatus());
-        assertEquals(acc1InstAccOpenRequestApproved.getType(), executedRequestAction.getRequestActionType());
+        assertEquals(acc1InstAccOpenRequest.getType().name(), executedRequestAction.getRequestType());
+        assertEquals(acc1InstAccOpenRequest.getStatus().name(), executedRequestAction.getRequestStatus());
+        assertEquals(acc1InstAccOpenRequestApproved.getType().name(), executedRequestAction.getRequestActionType());
         assertEquals(acc1InstAccOpenRequestApproved.getSubmitter(), executedRequestAction.getRequestActionSubmitter());
         assertEquals(acc1InstAccOpenRequestApproved.getCreationDate().truncatedTo(ChronoUnit.MILLIS),
             executedRequestAction.getRequestActionCompletionDate().truncatedTo(ChronoUnit.MILLIS));
 
         executedRequestAction = actions.get(1);
-        assertEquals(acc2.getEmitterId(), executedRequestAction.getEmitterId());
+        assertEquals(acc2.getEmitterId(), executedRequestAction.getAccountId());
         assertEquals(acc2.getAccountType(), executedRequestAction.getAccountType());
         assertEquals(acc2.getStatus().getName(), executedRequestAction.getAccountStatus());
         assertEquals(acc2.getName(), executedRequestAction.getAccountName());
         assertEquals(acc2.getName(), executedRequestAction.getAccountName());
         assertEquals(legalEntity.getName(), executedRequestAction.getLegalEntityName());
         assertEquals(acc2InstAccOpenRequest.getId(), executedRequestAction.getRequestId());
-        assertEquals(acc2InstAccOpenRequest.getType(), executedRequestAction.getRequestType());
-        assertEquals(acc2InstAccOpenRequest.getStatus(), executedRequestAction.getRequestStatus());
-        assertEquals(acc2InstAccOpenRequestApproved.getType(), executedRequestAction.getRequestActionType());
+        assertEquals(acc2InstAccOpenRequest.getType().name(), executedRequestAction.getRequestType());
+        assertEquals(acc2InstAccOpenRequest.getStatus().name(), executedRequestAction.getRequestStatus());
+        assertEquals(acc2InstAccOpenRequestApproved.getType().name(), executedRequestAction.getRequestActionType());
         assertEquals(acc2InstAccOpenRequestApproved.getSubmitter(), executedRequestAction.getRequestActionSubmitter());
         assertEquals(acc2InstAccOpenRequestApproved.getCreationDate().truncatedTo(ChronoUnit.MILLIS),
                 executedRequestAction.getRequestActionCompletionDate().truncatedTo(ChronoUnit.MILLIS));
@@ -143,11 +143,11 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
             .toDate(LocalDate.of(2022,1,10))
             .build();
 
-        List<ExecutedRequestAction> actions = repository.findExecutedRequestActions(entityManager, reportParams);
+        List<InstallationExecutedRequestAction> actions = repository.findExecutedRequestActions(entityManager, reportParams);
 
         assertThat(actions).isNotEmpty();
         assertThat(actions).hasSize(2);
-        assertThat(actions).extracting(ExecutedRequestAction::getEmitterId).containsOnly(acc1.getEmitterId());
+        assertThat(actions).extracting(ExecutedRequestAction::getAccountId).containsOnly(acc1.getEmitterId());
     }
 
     @Test
@@ -190,24 +190,24 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
             .fromDate(LocalDate.of(2022,1,1))
             .build();
 
-        List<ExecutedRequestAction> actions = repository.findExecutedRequestActions(entityManager, reportParams);
+        List<InstallationExecutedRequestAction> actions = repository.findExecutedRequestActions(entityManager, reportParams);
 
         assertThat(actions).isNotEmpty();
         assertThat(actions).hasSize(6);
-        assertThat(actions).extracting(ExecutedRequestAction::getEmitterId)
+        assertThat(actions).extracting(ExecutedRequestAction::getAccountId)
             .containsExactly(acc1.getEmitterId(), acc1.getEmitterId(), acc1.getEmitterId(), acc1.getEmitterId(), acc2.getEmitterId(), acc2.getEmitterId());
         assertThat(actions)
-            .filteredOn(action -> action.getEmitterId().equals(acc1.getEmitterId()))
-            .extracting(ExecutedRequestAction::getRequestType)
+            .filteredOn(action -> action.getAccountId().equals(acc1.getEmitterId()))
+            .extracting(InstallationExecutedRequestAction::getRequestType)
             .containsExactly(
-                RequestType.INSTALLATION_ACCOUNT_OPENING,
-                RequestType.INSTALLATION_ACCOUNT_OPENING,
-                RequestType.INSTALLATION_ACCOUNT_OPENING,
-                RequestType.PERMIT_ISSUANCE
+                RequestType.INSTALLATION_ACCOUNT_OPENING.name(),
+                RequestType.INSTALLATION_ACCOUNT_OPENING.name(),
+                RequestType.INSTALLATION_ACCOUNT_OPENING.name(),
+                RequestType.PERMIT_ISSUANCE.name()
             );
         assertThat(actions)
-            .filteredOn(action -> action.getEmitterId().equals(acc1.getEmitterId())
-                && action.getRequestType().equals(RequestType.INSTALLATION_ACCOUNT_OPENING)
+            .filteredOn(action -> action.getAccountId().equals(acc1.getEmitterId())
+                && action.getRequestType().equals(RequestType.INSTALLATION_ACCOUNT_OPENING.name())
             )
             .extracting(ExecutedRequestAction::getRequestId)
             .containsExactly(
@@ -216,8 +216,8 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
                 acc1InstAccOpenRequest2.getId()
             );
         assertThat(actions)
-            .filteredOn(action -> action.getEmitterId().equals(acc1.getEmitterId())
-                && action.getRequestType().equals(RequestType.INSTALLATION_ACCOUNT_OPENING)
+            .filteredOn(action -> action.getAccountId().equals(acc1.getEmitterId())
+                && action.getRequestType().equals(RequestType.INSTALLATION_ACCOUNT_OPENING.name())
                 && action.getRequestId().equals(acc1InstAccOpenRequest1.getId())
             )
             .extracting(ExecutedRequestAction::getRequestActionCompletionDate)
@@ -242,7 +242,7 @@ class InstallationExecutedRequestActionsRepositoryIT extends AbstractContainerBa
             .fromDate(LocalDate.of(2022,1,16))
             .build();
 
-        List<ExecutedRequestAction> executedRequestActions =
+        List<InstallationExecutedRequestAction> executedRequestActions =
             repository.findExecutedRequestActions(entityManager, reportParams);
 
         assertThat(executedRequestActions).isEmpty();

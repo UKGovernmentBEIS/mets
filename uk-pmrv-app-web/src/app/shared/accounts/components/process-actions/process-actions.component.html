@@ -4,18 +4,22 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <h2 class="govuk-heading-m">{{ task.title }}</h2>
-      <ng-template [ngIf]="!task.errors" [ngIfElse]="errors">
-        <button (click)="onRequestButtonClick(task.type)" appPendingButton govukButton type="button">
-          {{ task.button }}
-        </button>
-      </ng-template>
-      <ng-template #errors>
-        <ul class="govuk-list">
-          <li *ngFor="let error of task.errors">
-            {{ error }}
-          </li>
-        </ul>
-      </ng-template>
+      <ng-container *ngFor="let property of task.properties">
+        <ng-template [ngIf]="!property.errors.length" [ngIfElse]="errors">
+          <div>
+            <button (click)="onRequestButtonClick(property.type)" appPendingButton govukButton type="button">
+              {{ property.button }}
+            </button>
+          </div>
+        </ng-template>
+        <ng-template #errors>
+          <ul class="govuk-list">
+            <li *ngFor="let error of property.errors">
+              {{ error }}
+            </li>
+          </ul>
+        </ng-template>
+      </ng-container>
     </div>
   </div>
 

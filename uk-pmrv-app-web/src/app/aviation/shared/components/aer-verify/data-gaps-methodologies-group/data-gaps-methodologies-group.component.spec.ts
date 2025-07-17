@@ -19,8 +19,7 @@ describe('DataGapsMethodologiesGroupComponent', () => {
       <app-data-gaps-methodologies-group
         [isEditable]="isEditable"
         [dataGapsMethodologies]="dataGapsMethodologies"
-        [queryParams]="queryParams"
-      ></app-data-gaps-methodologies-group>
+        [queryParams]="queryParams"></app-data-gaps-methodologies-group>
     `,
   })
   class TestComponent {

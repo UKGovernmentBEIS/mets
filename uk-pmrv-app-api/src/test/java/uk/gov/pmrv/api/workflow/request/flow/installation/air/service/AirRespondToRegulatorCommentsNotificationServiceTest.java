@@ -1,6 +1,5 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.air.service;
 
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -15,18 +14,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.config.WebAppProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.account.service.AccountCaSiteContactService;
-import uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus;
-import uk.gov.pmrv.api.authorization.core.service.AuthorityService;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
+import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
+import uk.gov.netz.api.authorization.core.service.AuthorityService;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
@@ -39,7 +38,7 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
     private AirRespondToRegulatorCommentsNotificationService service;
 
     @Mock
-    private NotificationEmailService notificationEmailService;
+    private NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
 
     @Mock
     private UserAuthService userAuthService;
@@ -54,7 +53,7 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
     private InstallationOperatorDetailsQueryService installationOperatorDetailsQueryService;
 
     @Mock
-    private AppProperties appProperties;
+    private WebAppProperties webAppProperties;
 
     private static final String homeUrl = "url";
 
@@ -85,13 +84,13 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
                 .installationName(installationName)
                 .emitterId(emitterId)
                 .build();
-        final EmailData notifyInfo = EmailData.builder()
+        final EmailData<EmailNotificationTemplateData> notifyInfo = EmailData.<EmailNotificationTemplateData>builder()
                 .notificationTemplateData(EmailNotificationTemplateData.builder()
-                        .templateName(NotificationTemplateName.AIR_NOTIFICATION_OPERATOR_RESPONSE)
+                        .templateName(PmrvNotificationTemplateName.AIR_NOTIFICATION_OPERATOR_RESPONSE.getName())
                         .templateParams(Map.of(
-                                EmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
-                                EmailNotificationTemplateConstants.EMITTER_ID, emitterId,
-                                EmailNotificationTemplateConstants.HOME_URL, homeUrl
+                        		PmrvEmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
+                                PmrvEmailNotificationTemplateConstants.EMITTER_ID, emitterId,
+                                PmrvEmailNotificationTemplateConstants.HOME_URL, homeUrl
                         ))
                         .build())
                 .build();
@@ -101,8 +100,7 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
         when(accountCaSiteContactService.findCASiteContactByAccount(accountId)).thenReturn(Optional.of(siteContact));
         when(userAuthService.getUserByUserId(siteContact)).thenReturn(siteContactUser);
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId)).thenReturn(operatorDetails);
-        when(appProperties.getWeb()).thenReturn(mock(AppProperties.Web.class));
-        when(appProperties.getWeb().getUrl()).thenReturn(homeUrl);
+        when(webAppProperties.getUrl()).thenReturn(homeUrl);
 
         // Invoke
         service.sendSubmittedResponseToRegulatorCommentsNotificationToRegulator(request);
@@ -114,7 +112,7 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
         verify(userAuthService, times(1)).getUserByUserId(siteContact);
         verify(installationOperatorDetailsQueryService, times(1)).getInstallationOperatorDetails(accountId);
         verify(notificationEmailService, times(1))
-                .notifyRecipients(notifyInfo, List.of(reviewerEmail, siteContactEmail), List.of());
+                .notifyRecipients(notifyInfo, List.of(reviewerEmail, siteContactEmail));
     }
 
     @Test
@@ -140,13 +138,13 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
                 .installationName(installationName)
                 .emitterId(emitterId)
                 .build();
-        final EmailData notifyInfo = EmailData.builder()
+        final EmailData<EmailNotificationTemplateData> notifyInfo = EmailData.<EmailNotificationTemplateData>builder()
                 .notificationTemplateData(EmailNotificationTemplateData.builder()
-                        .templateName(NotificationTemplateName.AIR_NOTIFICATION_OPERATOR_RESPONSE)
+                        .templateName(PmrvNotificationTemplateName.AIR_NOTIFICATION_OPERATOR_RESPONSE.getName())
                         .templateParams(Map.of(
-                                EmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
-                                EmailNotificationTemplateConstants.EMITTER_ID, emitterId,
-                                EmailNotificationTemplateConstants.HOME_URL, homeUrl
+                        		PmrvEmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
+                                PmrvEmailNotificationTemplateConstants.EMITTER_ID, emitterId,
+                                PmrvEmailNotificationTemplateConstants.HOME_URL, homeUrl
                         ))
                         .build())
                 .build();
@@ -155,8 +153,7 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
         when(userAuthService.getUserByUserId(reviewer)).thenReturn(reviewerUser);
         when(accountCaSiteContactService.findCASiteContactByAccount(accountId)).thenReturn(Optional.empty());
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId)).thenReturn(operatorDetails);
-        when(appProperties.getWeb()).thenReturn(mock(AppProperties.Web.class));
-        when(appProperties.getWeb().getUrl()).thenReturn(homeUrl);
+        when(webAppProperties.getUrl()).thenReturn(homeUrl);
 
         // Invoke
         service.sendSubmittedResponseToRegulatorCommentsNotificationToRegulator(request);
@@ -167,7 +164,7 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
         verify(accountCaSiteContactService, times(1)).findCASiteContactByAccount(accountId);
         verify(installationOperatorDetailsQueryService, times(1)).getInstallationOperatorDetails(accountId);
         verify(notificationEmailService, times(1))
-                .notifyRecipients(notifyInfo, List.of(reviewerEmail), List.of());
+                .notifyRecipients(notifyInfo, List.of(reviewerEmail));
         verifyNoMoreInteractions(userAuthService);
     }
 
@@ -195,13 +192,13 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
                 .installationName(installationName)
                 .emitterId(emitterId)
                 .build();
-        final EmailData notifyInfo = EmailData.builder()
+        final EmailData<EmailNotificationTemplateData> notifyInfo = EmailData.<EmailNotificationTemplateData>builder()
                 .notificationTemplateData(EmailNotificationTemplateData.builder()
-                        .templateName(NotificationTemplateName.AIR_NOTIFICATION_OPERATOR_RESPONSE)
+                        .templateName(PmrvNotificationTemplateName.AIR_NOTIFICATION_OPERATOR_RESPONSE.getName())
                         .templateParams(Map.of(
-                                EmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
-                                EmailNotificationTemplateConstants.EMITTER_ID, emitterId,
-                                EmailNotificationTemplateConstants.HOME_URL, homeUrl
+                        		PmrvEmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
+                                PmrvEmailNotificationTemplateConstants.EMITTER_ID, emitterId,
+                                PmrvEmailNotificationTemplateConstants.HOME_URL, homeUrl
                         ))
                         .build())
                 .build();
@@ -210,8 +207,7 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
         when(accountCaSiteContactService.findCASiteContactByAccount(accountId)).thenReturn(Optional.of(siteContact));
         when(userAuthService.getUserByUserId(siteContact)).thenReturn(siteContactUser);
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId)).thenReturn(operatorDetails);
-        when(appProperties.getWeb()).thenReturn(mock(AppProperties.Web.class));
-        when(appProperties.getWeb().getUrl()).thenReturn(homeUrl);
+        when(webAppProperties.getUrl()).thenReturn(homeUrl);
 
         // Invoke
         service.sendSubmittedResponseToRegulatorCommentsNotificationToRegulator(request);
@@ -222,7 +218,7 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
         verify(userAuthService, times(1)).getUserByUserId(siteContact);
         verify(installationOperatorDetailsQueryService, times(1)).getInstallationOperatorDetails(accountId);
         verify(notificationEmailService, times(1))
-                .notifyRecipients(notifyInfo, List.of(siteContactEmail), List.of());
+                .notifyRecipients(notifyInfo, List.of(siteContactEmail));
         verifyNoMoreInteractions(userAuthService);
     }
 
@@ -248,7 +244,7 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
         // Verify
         verify(authorityService, times(1)).findStatusByUsers(List.of(reviewer));
         verify(accountCaSiteContactService, times(1)).findCASiteContactByAccount(accountId);
-        verifyNoInteractions(userAuthService, installationOperatorDetailsQueryService, notificationEmailService, appProperties);
+        verifyNoInteractions(userAuthService, installationOperatorDetailsQueryService, notificationEmailService, webAppProperties);
     }
 
     @Test
@@ -277,13 +273,13 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
                 .installationName(installationName)
                 .emitterId(emitterId)
                 .build();
-        final EmailData notifyInfo = EmailData.builder()
+        final EmailData<EmailNotificationTemplateData> notifyInfo = EmailData.<EmailNotificationTemplateData>builder()
                 .notificationTemplateData(EmailNotificationTemplateData.builder()
-                        .templateName(NotificationTemplateName.AIR_NOTIFICATION_OPERATOR_MISSES_DEADLINE)
+                        .templateName(PmrvNotificationTemplateName.AIR_NOTIFICATION_OPERATOR_MISSES_DEADLINE.getName())
                         .templateParams(Map.of(
-                                EmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
-                                EmailNotificationTemplateConstants.EMITTER_ID, emitterId,
-                                EmailNotificationTemplateConstants.HOME_URL, homeUrl
+                        		PmrvEmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
+                                PmrvEmailNotificationTemplateConstants.EMITTER_ID, emitterId,
+                                PmrvEmailNotificationTemplateConstants.HOME_URL, homeUrl
                         ))
                         .build())
                 .build();
@@ -293,8 +289,7 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
         when(accountCaSiteContactService.findCASiteContactByAccount(accountId)).thenReturn(Optional.of(siteContact));
         when(userAuthService.getUserByUserId(siteContact)).thenReturn(siteContactUser);
         when(installationOperatorDetailsQueryService.getInstallationOperatorDetails(accountId)).thenReturn(operatorDetails);
-        when(appProperties.getWeb()).thenReturn(mock(AppProperties.Web.class));
-        when(appProperties.getWeb().getUrl()).thenReturn(homeUrl);
+        when(webAppProperties.getUrl()).thenReturn(homeUrl);
 
         // Invoke
         service.sendDeadlineResponseToRegulatorCommentsNotificationToRegulator(request);
@@ -306,6 +301,6 @@ class AirRespondToRegulatorCommentsNotificationServiceTest {
         verify(userAuthService, times(1)).getUserByUserId(siteContact);
         verify(installationOperatorDetailsQueryService, times(1)).getInstallationOperatorDetails(accountId);
         verify(notificationEmailService, times(1))
-                .notifyRecipients(notifyInfo, List.of(reviewerEmail, siteContactEmail), List.of());
+                .notifyRecipients(notifyInfo, List.of(reviewerEmail, siteContactEmail));
     }
 }

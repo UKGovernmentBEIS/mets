@@ -60,7 +60,7 @@ class AviationAerReportingObligationServiceTest {
         String aerRequestId = "req-id";
         String submitterId = "submitterId";
         String processInstanceId = "processInstanceId";
-        Year reportingYear = Year.of(2022);
+        Year reportingYear = Year.now().minusYears(1);
         Long accountId = 1L;
         List<String> aviationAerRequestTypes = List.of(RequestType.AVIATION_AER_UKETS.name(), RequestType.AVIATION_AER_CORSIA.name());
         AviationAerRequestMetadata aerRequestMetadata = AviationAerRequestMetadata.builder().year(reportingYear).build();
@@ -116,7 +116,7 @@ class AviationAerReportingObligationServiceTest {
         String aerRequestId = "req-id";
         String submitterId = "submitterId";
         String processInstanceId = "processInstanceId";
-        Year reportingYear = Year.of(2022);
+        Year reportingYear = Year.now().minusYears(1);
         Long accountId = 1L;
         List<String> aviationAerRequestTypes = List.of(RequestType.AVIATION_AER_UKETS.name(), RequestType.AVIATION_AER_CORSIA.name());
         AviationAerRequestMetadata aerRequestMetadata = AviationAerRequestMetadata.builder().year(reportingYear).build();
@@ -167,7 +167,7 @@ class AviationAerReportingObligationServiceTest {
     @Test
     void markAsExempted_when_request_not_found() {
         String submitterId = "submitterId";
-        Year reportingYear = Year.of(2022);
+        Year reportingYear = Year.now().minusYears(1);
         Long accountId = 1L;
         List<String> aviationAerRequestTypes = List.of(RequestType.AVIATION_AER_UKETS.name(), RequestType.AVIATION_AER_CORSIA.name());
 
@@ -191,7 +191,7 @@ class AviationAerReportingObligationServiceTest {
     void markAsExempted_request_input() {
         String requestId = "req-id";
         String processInstanceId = "processInstanceId";
-        Year reportingYear = Year.of(2022);
+        Year reportingYear = Year.now().minusYears(1);
         AviationAerRequestMetadata aerRequestMetadata = AviationAerRequestMetadata.builder().year(reportingYear).build();
         Request request = Request.builder().id(requestId).processInstanceId(processInstanceId).metadata(aerRequestMetadata).build();
         String submitterId = "submitterId";
@@ -212,7 +212,7 @@ class AviationAerReportingObligationServiceTest {
     void revertExemption_when_request_status_exempted() {
         String aerRequestId = "req-id";
         String submitterId = "submitterId";
-        Year reportingYear = Year.of(2022);
+        Year reportingYear = Year.now().minusYears(1);
         Long accountId = 1L;
         List<String> aviationAerRequestTypes = List.of(RequestType.AVIATION_AER_UKETS.name(), RequestType.AVIATION_AER_CORSIA.name());
         AviationAerRequestMetadata aerRequestMetadata = AviationAerRequestMetadata.builder()
@@ -273,7 +273,7 @@ class AviationAerReportingObligationServiceTest {
     void revertExemption_when_request_status_completed() {
         String aerRequestId = "req-id";
         String submitterId = "submitterId";
-        Year reportingYear = Year.of(2022);
+        Year reportingYear = Year.now().minusYears(1);
         Long accountId = 1L;
         List<String> aviationAerRequestTypes = List.of(RequestType.AVIATION_AER_UKETS.name(), RequestType.AVIATION_AER_CORSIA.name());
         AviationAerRequestMetadata aerRequestMetadata = AviationAerRequestMetadata.builder().year(reportingYear).isExempted(true).build();
@@ -324,7 +324,7 @@ class AviationAerReportingObligationServiceTest {
     @Test
     void revertExemption_when_no_request_found() {
         String submitterId = "submitterId";
-        Year reportingYear = Year.of(2022);
+        Year reportingYear = Year.now().minusYears(1);
         Long accountId = 1L;
         List<String> aviationAerRequestTypes = List.of(RequestType.AVIATION_AER_UKETS.name(), RequestType.AVIATION_AER_CORSIA.name());
 

@@ -1,6 +1,12 @@
-<ng-container *ngIf="currentTab === 'users'">
+<ng-container *ngIf="(currentTab$ | async) === 'users'">
   <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="usersForm"></govuk-error-summary>
+
+  <govuk-notification-banner *ngIf="showNotificationBanner()" type="success">
+    <h1 class="govuk-notification-banner__heading">Details updated</h1>
+  </govuk-notification-banner>
+
   <app-page-heading size="l">Users, contacts and verifiers</app-page-heading>
+
   <ng-container *ngIf="(isAccountEditable$ | async) === true && isEditable$ | async">
     <ng-container [ngSwitch]="roleType$ | async">
       <ng-container *ngSwitchCase="'OPERATOR'">
@@ -11,16 +17,14 @@
               [formGroup]="addUserForm"
               class="govuk-grid-row row-container"
               id="add-user-form"
-              name="add-user"
-            >
+              name="add-user">
               <div class="govuk-grid-column-two-thirds">
                 <div
                   [options]="userType$ | async"
                   formControlName="userType"
                   govuk-select
                   label="Add a new user"
-                  widthClass="govuk-!-width-full"
-                ></div>
+                  widthClass="govuk-!-width-full"></div>
               </div>
               <div class="govuk-grid-column-one-third">
                 <button govukButton type="submit">Continue</button>
@@ -188,8 +192,7 @@
       [columns]="(isEditable$ | async) ? editableCols : nonEditableCols"
       [form]="usersForm"
       [users]="accountAuthorities$"
-      appUsersTable
-    >
+      appUsersTable>
       <ng-template let-column="column" let-index="index" let-row="row">
         <ng-container *ngIf="row.roleCode !== 'verifier'; else verifier">
           <div [ngSwitch]="column.field" class="cell-container">
@@ -199,8 +202,7 @@
                   (userId$ | async) === row.userId || ((isEditable$ | async) && row.authorityStatus !== 'PENDING');
                   else simpleUserName
                 "
-                [routerLink]="['users', row.userId]"
-              >
+                [routerLink]="['users', row.userId]">
                 {{ row | userFullName }}
               </a>
               <ng-template #simpleUserName>{{ row | userFullName }}</ng-template>
@@ -214,8 +216,7 @@
                       !(['operator', 'operator_admin'] | includes: row.roleCode) ||
                       usersArray.at(index).get('authorityStatus').value === 'DISABLED';
                     else selectRole
-                  "
-                >
+                  ">
                   {{ row[column.field] }}
                 </ng-container>
                 <ng-template #selectRole>
@@ -223,25 +224,22 @@
                     [options]="userTypes"
                     formControlName="roleCode"
                     govuk-select
-                    widthClass="govuk-!-width-full"
-                  ></div>
+                    widthClass="govuk-!-width-full"></div>
                 </ng-template>
               </ng-container>
             </ng-container>
             <ng-container *ngSwitchCase="'authorityStatus'" formArrayName="usersArray">
               <ng-container *ngIf="row.authorityStatus !== 'PENDING'; else simpleStatus" [formGroupName]="index">
-                <app-user-locked *ngIf="row.locked"></app-user-locked>
                 <div
                   [options]="row.authorityStatus === 'ACCEPTED' ? authorityStatusesAccepted : authorityStatuses"
                   formControlName="authorityStatus"
                   govuk-select
-                  widthClass="govuk-!-width-full"
-                ></div>
+                  widthClass="govuk-!-width-full"></div>
               </ng-container>
               <ng-template #simpleStatus>Awaiting confirmation</ng-template>
             </ng-container>
             <ng-container *ngSwitchCase="'deleteBtn'">
-              <a [routerLink]="['users', row.userId, 'delete']" govukLink> Delete </a>
+              <a [routerLink]="['users', row.userId, 'delete']" govukLink>Delete</a>
             </ng-container>
             <ng-container *ngSwitchDefault formGroupName="contactTypes">
               <ng-container *ngIf="(isEditable$ | async) === true; else nonEditableContact">
@@ -254,11 +252,10 @@
                   [index]="index"
                   [isDisabled]="usersArray.at(index).get('authorityStatus').value === 'DISABLED'"
                   [value]="row.userId"
-                  app-radio-option
-                ></div>
+                  app-radio-option></div>
               </ng-container>
               <ng-template #nonEditableContact>
-                <ng-container *ngIf="row.userId === contactTypes.get(column.field).value"> &#10003;</ng-container>
+                <ng-container *ngIf="row.userId === contactTypes.get(column.field).value">&#10003;</ng-container>
               </ng-template>
             </ng-container>
           </div>
@@ -281,8 +278,7 @@
     <div *ngIf="isEditable$ | async">
       <div
         *ngIf="(hasVerificationBody$ | async) === false && (roleType$ | async) === 'OPERATOR'"
-        class="govuk-!-margin-bottom-6"
-      >
+        class="govuk-!-margin-bottom-6">
         <a govukLink routerLink="verification-body/appoint">Appoint a verifier</a>
       </div>
       <div *ngIf="(accountAuthorities$ | async)?.length > 0" class="govuk-button-group">

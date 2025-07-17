@@ -2,15 +2,10 @@ package uk.gov.pmrv.api.aviationreporting.common.validation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerContainer;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerValidationResult;
 import uk.gov.pmrv.api.aviationreporting.common.domain.AviationAerViolation;
-import uk.gov.pmrv.api.aviationreporting.corsia.domain.AviationAerCorsiaContainer;
-import uk.gov.pmrv.api.aviationreporting.corsia.validation.AviationAerCorsiaContextValidator;
-import uk.gov.pmrv.api.aviationreporting.ukets.domain.AviationAerUkEtsContainer;
 import uk.gov.pmrv.api.aviationreporting.common.domain.aircraftdata.AviationAerAircraftData;
 import uk.gov.pmrv.api.aviationreporting.common.domain.aircraftdata.AviationAerAircraftDataDetails;
-import uk.gov.pmrv.api.aviationreporting.ukets.validation.AviationAerUkEtsContextValidator;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.AircraftTypeQueryService;
 
 import java.time.Year;

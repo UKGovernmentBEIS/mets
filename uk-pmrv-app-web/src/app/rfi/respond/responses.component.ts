@@ -2,10 +2,14 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { first, map, Observable, of, pluck, startWith, switchMap, withLatestFrom } from 'rxjs';
+import { first, map, Observable, of, startWith, switchMap, withLatestFrom } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
+import { BusinessErrorService } from '@error/business-error/business-error.service';
+import { catchTaskReassignedBadRequest } from '@error/business-errors';
+import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
+import { hasRequestTaskAllowedActions } from '@shared/components/related-actions/request-task-allowed-actions.map';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
 
 import {
@@ -17,9 +21,6 @@ import {
   TasksService,
 } from 'pmrv-api';
 
-import { BusinessErrorService } from '../../error/business-error/business-error.service';
-import { catchTaskReassignedBadRequest } from '../../error/business-errors';
-import { catchNotFoundRequest, ErrorCode } from '../../error/not-found-error';
 import { RfiStore } from '../store/rfi.store';
 import { responseFormProvider, RFI_FORM } from './responses-form.provider';
 
@@ -30,10 +31,12 @@ import { responseFormProvider, RFI_FORM } from './responses-form.provider';
   providers: [DestroySubject, responseFormProvider],
 })
 export class ResponsesComponent {
-  private readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
+  taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
   navigationState = { returnUrl: this.router.url };
   isAviation = this.router.url.includes('/aviation/');
-  readonly questions$ = this.store.pipe(pluck('rfiQuestionPayload', 'questions')) as Observable<Array<string>>;
+  readonly questions$ = this.store.pipe(map((state) => state?.rfiQuestionPayload?.questions)) as Observable<
+    Array<string>
+  >;
 
   readonly relatedTasks$ = this.store.pipe(
     first(),
@@ -57,8 +60,16 @@ export class ResponsesComponent {
     map((value) => value?.length > 0),
   );
 
-  readonly daysRemaining$ = this.store.pipe(pluck('daysRemaining'));
-  readonly assignee$ = this.store.pipe(pluck('assignee'));
+  readonly daysRemaining$ = this.store.pipe(map((state) => state?.daysRemaining));
+  readonly assignee$ = this.store.pipe(map((state) => state?.assignee));
+  readonly allowedRequestTaskActions$ = this.store.pipe(map((state) => state?.allowedRequestTaskActions));
+
+  hasRelatedActions$ = this.store.pipe(
+    map(
+      (state) =>
+        (state.assignable && state.userAssignCapable) || hasRequestTaskAllowedActions(state.allowedRequestTaskActions),
+    ),
+  );
 
   constructor(
     @Inject(RFI_FORM) readonly form: UntypedFormGroup,

@@ -19,8 +19,7 @@ describe('ComplianceEtsGroupComponent', () => {
     template: `
       <app-compliance-ets-group
         [isEditable]="isEditable"
-        [etsComplianceRules]="etsComplianceRules"
-      ></app-compliance-ets-group>
+        [etsComplianceRules]="etsComplianceRules"></app-compliance-ets-group>
     `,
   })
   class TestComponent {

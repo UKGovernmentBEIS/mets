@@ -1,22 +1,23 @@
 package uk.gov.pmrv.api.workflow.request.flow.aviation.common.service.notification;
 
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.common.config.CompetentAuthorityProperties;
 import uk.gov.pmrv.api.account.aviation.domain.dto.AviationAccountInfoDTO;
 import uk.gov.pmrv.api.account.aviation.service.AviationAccountQueryService;
 import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.common.config.AppProperties;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
-import uk.gov.pmrv.api.common.service.DateService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityService;
+import uk.gov.netz.api.common.utils.DateService;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.pmrv.api.notification.template.aviation.domain.AviationAccountTemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.AccountTemplateParams;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.user.regulator.service.RegulatorUserAuthService;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.CompetentAuthorityDTOByRequestResolverDelegator;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateCommonParamsAbstractProvider;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.DocumentTemplateLocationInfoResolver;
+
 
 import java.util.Optional;
 
@@ -30,20 +31,19 @@ public class AviationDocumentTemplateCommonParamsProvider extends DocumentTempla
     private final UserAuthService userAuthService;
 
     public AviationDocumentTemplateCommonParamsProvider(RegulatorUserAuthService regulatorUserAuthService, UserAuthService userAuthService,
-                                                        AppProperties appProperties, DateService dateService,
-                                                        CompetentAuthorityService competentAuthorityService,
+                                                        CompetentAuthorityProperties competentAuthorityProperties, DateService dateService,
                                                         EmissionsMonitoringPlanQueryService empQueryService,
                                                         AviationAccountQueryService aviationAccountQueryService,
                                                         DocumentTemplateLocationInfoResolver documentTemplateLocationInfoResolver,
-                                                        AccountContactQueryService accountContactQueryService) {
-        super(regulatorUserAuthService, userAuthService, appProperties, dateService, competentAuthorityService);
+                                                        AccountContactQueryService accountContactQueryService,
+                                                        CompetentAuthorityDTOByRequestResolverDelegator competentAuthorityDTOByRequestResolverDelegator) {
+        super(regulatorUserAuthService, userAuthService, competentAuthorityProperties, dateService, competentAuthorityDTOByRequestResolverDelegator);
         this.empQueryService = empQueryService;
         this.aviationAccountQueryService = aviationAccountQueryService;
         this.documentTemplateLocationInfoResolver = documentTemplateLocationInfoResolver;
         this.accountContactQueryService = accountContactQueryService;
         this.userAuthService = userAuthService;
     }
-
 
     @Override
     public String getPermitReferenceId(Long accountId) {
@@ -77,4 +77,5 @@ public class AviationDocumentTemplateCommonParamsProvider extends DocumentTempla
     public AccountType getAccountType() {
         return AccountType.AVIATION;
     }
+
 }

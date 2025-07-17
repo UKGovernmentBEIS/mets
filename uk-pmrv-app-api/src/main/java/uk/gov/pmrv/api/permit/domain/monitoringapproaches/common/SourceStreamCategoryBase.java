@@ -1,9 +1,6 @@
 package uk.gov.pmrv.api.permit.domain.monitoringapproaches.common;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import java.math.BigDecimal;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -13,6 +10,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.math.BigDecimal;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Data
 @SuperBuilder

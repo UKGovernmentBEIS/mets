@@ -12,9 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
@@ -52,7 +52,7 @@ class NerSaveReviewDeterminationActionHandlerTest {
                 .payloadType(RequestTaskActionPayloadType.NER_SAVE_REVIEW_DETERMINATION_PAYLOAD)
                 .determination(determination)
                 .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final String processTaskId = "processTaskId";
         final Request request = Request.builder().id("1").build();
         final NerApplicationReviewRequestTaskPayload taskPayload =
@@ -66,7 +66,7 @@ class NerSaveReviewDeterminationActionHandlerTest {
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.NER_SAVE_REVIEW_DETERMINATION,
-            pmrvUser,
+            appUser,
             taskActionPayload);
 
         verify(reviewValidator, times(1)).isReviewDeterminationValid(determination,
@@ -84,7 +84,7 @@ class NerSaveReviewDeterminationActionHandlerTest {
                 .payloadType(RequestTaskActionPayloadType.NER_SAVE_REVIEW_DETERMINATION_PAYLOAD)
                 .determination(determination)
                 .build();
-        final PmrvUser pmrvUser = PmrvUser.builder().build();
+        final AppUser appUser = AppUser.builder().build();
         final String processTaskId = "processTaskId";
         final Request request = Request.builder().id("1").build();
         final NerApplicationReviewRequestTaskPayload taskPayload =
@@ -100,7 +100,7 @@ class NerSaveReviewDeterminationActionHandlerTest {
         BusinessException ex = assertThrows(BusinessException.class, () ->
             handler.process(requestTaskIdd,
                 RequestTaskActionType.NER_SAVE_REVIEW_DETERMINATION,
-                pmrvUser,
+                appUser,
                 taskActionPayload)
         );
         assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.FORM_VALIDATION);

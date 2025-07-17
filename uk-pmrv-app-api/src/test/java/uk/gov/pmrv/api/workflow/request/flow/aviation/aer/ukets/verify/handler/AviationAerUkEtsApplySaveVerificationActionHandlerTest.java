@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActionType;
@@ -33,7 +33,7 @@ class AviationAerUkEtsApplySaveVerificationActionHandlerTest {
     @Test
     void process() {
         Long requestTaskId = 1L;
-        PmrvUser user = PmrvUser.builder().build();
+        AppUser user = AppUser.builder().build();
         AviationAerUkEtsSaveApplicationVerificationRequestTaskActionPayload taskActionPayload =
             AviationAerUkEtsSaveApplicationVerificationRequestTaskActionPayload.builder()
             .payloadType(RequestTaskActionPayloadType.AVIATION_AER_UKETS_SAVE_APPLICATION_VERIFICATION_PAYLOAD)

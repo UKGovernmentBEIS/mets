@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, first, map, Observable, of, switchMap, take, withLatestFrom } from 'rxjs';
 
+import { permitTypeMapLowercase } from '@permit-application/shared/utils/permit';
+
 import { PermitVariationReviewDecision, RequestActionsService, RequestItemsService } from 'pmrv-api';
 
 import { TaskStatusPipe } from '../../permit-application/shared/pipes/task-status.pipe';
@@ -25,12 +27,12 @@ export class SectionsContainerComponent extends SectionsContainerAbstractCompone
     map((state) => state.requestTaskType),
     map((requestTaskType) => requestTaskType === 'PERMIT_VARIATION_APPLICATION_AMENDS_SUBMIT'),
   );
-
+  permitTypeMapLowercase = permitTypeMapLowercase;
   header$: Observable<string> = this.store.pipe(
     first(),
     map(
       (state) =>
-        `Make a change to ${this.store.isVariationRegulatorLedRequest ? 'the' : 'your'} ${state.permitType} permit`,
+        `Make a change to ${this.store.isVariationRegulatorLedRequest ? 'the' : 'your'} ${permitTypeMapLowercase?.[state.permitType]} permit`,
     ),
   );
 

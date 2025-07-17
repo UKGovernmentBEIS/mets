@@ -1,0 +1,23 @@
+<ng-container *ngIf="vm$ | async as vm">
+  <app-page-heading>{{ vm.heading }}</app-page-heading>
+  <h2 class="govuk-heading-m">Non-conformities with the approved monitoring plan</h2>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Have there been any uncorrected non-conformities with the approved emissions monitoring plan?
+      </dt>
+      <dd govukSummaryListRowValue>
+        {{ vm.uncorrectedNonConformities.existUncorrectedNonConformities ? 'Yes' : 'No' }}
+      </dd>
+    </div>
+  </dl>
+  <app-uncorrected-item-group
+    *ngIf="vm.uncorrectedNonConformities.existUncorrectedNonConformities"
+    [uncorrectedItems]="vm.uncorrectedNonConformities?.uncorrectedNonConformities"
+  ></app-uncorrected-item-group>
+  <app-aviation-aer-verification-review-decision-group
+    *ngIf="vm.showDecision"
+    taskKey="uncorrectedNonConformities"
+  ></app-aviation-aer-verification-review-decision-group>
+</ng-container>
+<app-return-to-link></app-return-to-link>

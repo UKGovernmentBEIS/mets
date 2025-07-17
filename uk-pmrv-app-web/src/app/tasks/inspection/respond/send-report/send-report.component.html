@@ -1,0 +1,22 @@
+<ng-container *ngIf="vm() as vm">
+  <app-inspection-task *ngIf="!vm.isSubmitted; else isSubmitted" heading="Send to regulator" returnToLink="../">
+    <p class="govuk-body">
+      Your application will be sent directly to your Regulator ({{ vm.competentAuthority | competentAuthority }}).
+    </p>
+
+    <p class="govuk-body">
+      By selecting ‘Confirm and send’ you confirm that the information is correct to the best of your knowledge.
+    </p>
+
+    <div class="govuk-button-group" *ngIf="vm.isEditable">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and send</button>
+    </div>
+  </app-inspection-task>
+
+  <ng-template #isSubmitted>
+    <app-confirmation-shared
+      title="Sent to regulator for review"
+      titleContent="Your reference number {{ vm.requestId }}"
+    ></app-confirmation-shared>
+  </ng-template>
+</ng-container>

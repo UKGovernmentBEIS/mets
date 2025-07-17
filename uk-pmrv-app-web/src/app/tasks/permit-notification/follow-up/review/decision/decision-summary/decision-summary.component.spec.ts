@@ -14,7 +14,9 @@ import { DecisionSummaryComponent } from './decision-summary.component';
 
 describe('DecisionSummaryComponent', () => {
   @Component({
-    template: `<app-decision-summary [reviewDecision]="reviewDecision"></app-decision-summary>`,
+    template: `
+      <app-decision-summary [reviewDecision]="reviewDecision"></app-decision-summary>
+    `,
   })
   class TestComponent {
     currentDate = new Date().toISOString();

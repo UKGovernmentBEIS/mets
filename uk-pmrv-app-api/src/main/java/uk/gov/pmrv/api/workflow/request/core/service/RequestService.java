@@ -1,13 +1,12 @@
 package uk.gov.pmrv.api.workflow.request.core.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestAction;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestActionPayload;
@@ -17,7 +16,6 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.repository.RequestRepository;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInfoResolver;
 
-import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 
 @Validated
@@ -80,7 +78,7 @@ public class RequestService {
     public void paymentCompleted(final String requestId) {
         this.findRequestById(requestId).getPayload().setPaymentCompleted(true);
     }
-    
+
     private void closeRequest(Request request) {
         if(RequestStatus.IN_PROGRESS.equals(request.getStatus())){
             request.setStatus(RequestStatus.COMPLETED);

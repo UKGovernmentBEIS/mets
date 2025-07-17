@@ -13,10 +13,10 @@ describe('BigNumberPipe', () => {
     expect(pipe.transform(null)).toEqual('NaN');
     expect(pipe.transform(undefined)).toEqual('NaN');
   });
-  it("should correctly parse exponential notation", () => {
-    expect(pipe.transform(1.23456789e+5)).toEqual('123456.789');
+  it('should correctly parse exponential notation', () => {
+    expect(pipe.transform(1.23456789e5)).toEqual('123456.789');
   });
   it('should remove trailing zeros', () => {
-    expect(pipe.transform(1.23450000)).toEqual('1.2345');
+    expect(pipe.transform(1.2345)).toEqual('1.2345');
   });
 });

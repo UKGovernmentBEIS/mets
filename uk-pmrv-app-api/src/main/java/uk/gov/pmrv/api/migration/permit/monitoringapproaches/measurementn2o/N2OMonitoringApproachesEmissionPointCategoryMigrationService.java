@@ -1,9 +1,10 @@
 package uk.gov.pmrv.api.migration.permit.monitoringapproaches.measurementn2o;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
@@ -18,9 +19,9 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.AppliedStandard
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.HighestRequiredTier;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.Laboratory;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.NoHighestRequiredTierJustification;
-import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.MeasurementOfN2OMonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.MeasurementOfN2OEmissionPointCategory;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.MeasurementOfN2OEmissionPointCategoryAppliedTier;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.MeasurementOfN2OMonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.measuredemissions.MeasurementOfN2OMeasuredEmissions;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementn2o.measuredemissions.MeasurementOfN2OMeasuredEmissionsTier;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStream;
@@ -37,11 +38,14 @@ import java.util.stream.Collectors;
 
 @Log4j2
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class N2OMonitoringApproachesEmissionPointCategoryMigrationService implements PermitSectionMigrationService<MeasurementOfN2OMonitoringApproach> {
 
     private final JdbcTemplate migrationJdbcTemplate;
+
+    public N2OMonitoringApproachesEmissionPointCategoryMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+    }
 
     private static final String QUERY = """
         with emissions_emissionSource as (

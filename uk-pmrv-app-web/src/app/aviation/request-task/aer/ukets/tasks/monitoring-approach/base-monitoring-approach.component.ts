@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
+import { AerUkEtsStoreDelegate } from '@aviation/request-task/store/delegates';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import { BackLinkService } from '@shared/back-link/back-link.service';
@@ -43,7 +44,7 @@ export class BaseMonitoringApproachComponent {
       .pipe(this.pendingRequestService.trackRequest())
       .subscribe(() => {
         done();
-        this.store.aerDelegate.setMonitoringApproach(data);
+        (this.store.aerDelegate as AerUkEtsStoreDelegate).setMonitoringApproach(data);
         const navigation = {
           relativeTo: this.route,
         } as any;

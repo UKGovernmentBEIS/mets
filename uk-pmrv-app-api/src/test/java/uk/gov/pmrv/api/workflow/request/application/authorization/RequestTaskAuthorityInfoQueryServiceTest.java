@@ -5,20 +5,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.dto.RequestTaskAuthorityInfoDTO;
-import uk.gov.pmrv.api.authorization.rules.services.authorityinfo.dto.ResourceAuthorityInfo;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.authorization.rules.services.authorityinfo.dto.RequestTaskAuthorityInfoDTO;
+import uk.gov.netz.api.authorization.rules.services.authorityinfo.dto.ResourceAuthorityInfo;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
+import static uk.gov.netz.api.competentauthority.CompetentAuthorityEnum.ENGLAND;
 
 @ExtendWith(MockitoExtension.class)
 class RequestTaskAuthorityInfoQueryServiceTest {
@@ -46,7 +49,11 @@ class RequestTaskAuthorityInfoQueryServiceTest {
 
         RequestTaskAuthorityInfoDTO expectedRequestTaskInfoDTO = RequestTaskAuthorityInfoDTO.builder()
                 .type(requestTask.getType().name())
-                .authorityInfo(ResourceAuthorityInfo.builder().accountId(ACCOUNT_ID).competentAuthority(ENGLAND).build())
+                .authorityInfo(ResourceAuthorityInfo.builder()
+                                .requestResources(Map.of(
+                                        ResourceType.ACCOUNT, ACCOUNT_ID.toString(),
+                                        ResourceType.CA, ENGLAND.name()))
+                                .build())
                 .assignee(requestTask.getAssignee())
                 .requestType(RequestType.INSTALLATION_ACCOUNT_OPENING.name())
                 .build();

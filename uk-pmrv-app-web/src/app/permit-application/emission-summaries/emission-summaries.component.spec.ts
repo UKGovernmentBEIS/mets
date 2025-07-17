@@ -46,12 +46,12 @@ describe('EmissionSummariesComponent', () => {
     }
 
     get emissionSummaries(): HTMLDListElement[] {
-      return this.queryAll<HTMLDListElement>('dl');
+      return this.queryAll<HTMLDListElement>('tr');
     }
 
     get emissionSummariesTextContents(): string[][] {
       return this.emissionSummaries.map((emissionSummary) =>
-        Array.from(emissionSummary.querySelectorAll('dd')).map((dd) => dd.textContent.trim()),
+        Array.from(emissionSummary.querySelectorAll('td')).map((dd) => dd.textContent.trim()),
       );
     }
 
@@ -137,12 +137,14 @@ describe('EmissionSummariesComponent', () => {
     fixture.detectChanges();
 
     expect(page.emissionSummariesTextContents).toEqual([
+      [],
       [
         '13123124 White Spirit & SBP',
-        'Change | Delete',
         'S1 Boiler  S2 Boiler 2',
         'The big Ref Emission point 1  Yet another reference Point taken!',
         'Combustion',
+        'Change',
+        'Delete',
       ],
     ]);
   });
@@ -243,12 +245,14 @@ describe('EmissionSummariesComponent', () => {
       '‘33334 Lignite’ must be included in your emission summaries',
     ]);
     expect(page.emissionSummariesTextContents).toEqual([
+      [],
       [
         '13123124 White Spirit & SBP',
-        'Change | Delete',
         'S1 Boiler  S2 Boiler 2',
         'Select at least one emission point',
         'Combustion',
+        'Change',
+        'Delete',
       ],
     ]);
 
@@ -274,12 +278,14 @@ describe('EmissionSummariesComponent', () => {
       '‘33334 Lignite’ must be included in your emission summaries',
     ]);
     expect(page.emissionSummariesTextContents).toEqual([
+      [],
       [
         '13123124 White Spirit & SBP',
-        'Change | Delete',
         'Select at least one emission source',
         'Select at least one emission point',
         'Combustion',
+        'Change',
+        'Delete',
       ],
     ]);
 

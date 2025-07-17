@@ -18,12 +18,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.pmrv.api.notification.template.domain.dto.templateparams.TemplateParams;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.DocumentTemplateType;
 import uk.gov.pmrv.api.notification.template.service.DocumentFileGeneratorService;
 import uk.gov.pmrv.api.permit.domain.PermitType;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
@@ -97,7 +97,7 @@ public class PermitVariationOfficialNoticeServiceTest {
             .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocumentAsync(
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(
             DocumentTemplateType.PERMIT_VARIATION_ACCEPTED, templateParams, fileName))
             .thenReturn(CompletableFuture.completedFuture(officialDocFileInfoDTO));
 
@@ -111,7 +111,7 @@ public class PermitVariationOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocumentAsync(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
             DocumentTemplateType.PERMIT_VARIATION_ACCEPTED, templateParams, fileName);
     }
     
@@ -153,7 +153,7 @@ public class PermitVariationOfficialNoticeServiceTest {
             .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocumentAsync(
+        when(documentFileGeneratorService.generateAndSaveFileDocumentAsync(
             DocumentTemplateType.PERMIT_VARIATION_REGULATOR_LED_APPROVED, templateParams, fileName))
             .thenReturn(CompletableFuture.completedFuture(officialDocFileInfoDTO));
 
@@ -167,7 +167,7 @@ public class PermitVariationOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocumentAsync(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocumentAsync(
             DocumentTemplateType.PERMIT_VARIATION_REGULATOR_LED_APPROVED, templateParams, fileName);
     }
     
@@ -209,7 +209,7 @@ public class PermitVariationOfficialNoticeServiceTest {
             .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(
+        when(documentFileGeneratorService.generateAndSaveFileDocument(
             DocumentTemplateType.PERMIT_VARIATION_REJECTED, templateParams, fileName))
             .thenReturn(officialDocFileInfoDTO);
 
@@ -221,7 +221,7 @@ public class PermitVariationOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
             DocumentTemplateType.PERMIT_VARIATION_REJECTED, templateParams, fileName);
 
         assertThat(requestPayload.getOfficialNotice()).isEqualTo(officialDocFileInfoDTO);
@@ -264,7 +264,7 @@ public class PermitVariationOfficialNoticeServiceTest {
             .thenReturn(decisionNotificationUserEmails);
         when(documentTemplateOfficialNoticeParamsProvider.constructTemplateParams(documentTemplateSourceParams))
             .thenReturn(templateParams);
-        when(documentFileGeneratorService.generateFileDocument(
+        when(documentFileGeneratorService.generateAndSaveFileDocument(
             DocumentTemplateType.PERMIT_VARIATION_DEEMED_WITHDRAWN, templateParams, fileName))
             .thenReturn(officialDocFileInfoDTO);
 
@@ -276,7 +276,7 @@ public class PermitVariationOfficialNoticeServiceTest {
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
-        verify(documentFileGeneratorService, times(1)).generateFileDocument(
+        verify(documentFileGeneratorService, times(1)).generateAndSaveFileDocument(
             DocumentTemplateType.PERMIT_VARIATION_DEEMED_WITHDRAWN, templateParams, fileName);
 
         assertThat(requestPayload.getOfficialNotice()).isEqualTo(officialDocFileInfoDTO);

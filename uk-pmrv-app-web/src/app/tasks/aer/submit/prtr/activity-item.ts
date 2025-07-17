@@ -1,5 +1,24 @@
+import { PollutantRegisterActivities } from 'pmrv-api';
+
 export type activitySectionType = '_1' | '_2';
-export const activitiesSection: Array<activitySectionType> = ['_1', '_2'];
+export type activityIntermediateSectionType =
+  | '_1_A'
+  | '_1_A_1'
+  | '_1_A_2'
+  | '_1_A_3'
+  | '_1_A_4'
+  | '_1_A_5'
+  | '_1_B'
+  | '_1_B_1'
+  | '_1_B_2'
+  | '_2_A'
+  | '_2_B'
+  | '_2_C'
+  | '_2_D'
+  | '_2_E'
+  | '_2_F'
+  | '_2_G';
+
 export type activityFinalStepItemType =
   | '_1_A_1_A'
   | '_1_A_1_B'
@@ -70,38 +89,25 @@ export type activityFinalStepItemType =
   | '_2_G_3'
   | '_2_G_4'
   | '_2_H';
-export type activityItemType =
-  | activitySectionType
-  | activityFinalStepItemType
-  | '_1_A'
-  | '_1_A_1'
-  | '_1_A_2'
-  | '_1_A_3'
-  | '_1_A_4'
-  | '_1_A_5'
-  | '_1_B'
-  | '_1_B_1'
-  | '_1_B_2'
-  | '_2_A'
-  | '_2_B'
-  | '_2_C'
-  | '_2_D'
-  | '_2_E'
-  | '_2_F'
-  | '_2_G';
 
-export const activitiesChildSection: { [key: string]: activityItemType[] } = {
+export type activityItemType = activitySectionType | activityIntermediateSectionType | activityFinalStepItemType;
+
+export const activitySections: Array<activitySectionType> = ['_1', '_2'];
+
+export const activitiesChildSection: {
+  [key: string]: (activityIntermediateSectionType | activityFinalStepItemType)[];
+} = {
   _1: ['_1_A', '_1_B'],
   _2: ['_2_A', '_2_B', '_2_C', '_2_D', '_2_E', '_2_F', '_2_G', '_2_H'],
   _2_A: ['_2_A_1', '_2_A_2', '_2_A_3', '_2_A_4'],
-  _2_B: ['_2_B_1', '_2_B_10', '_2_B_2', '_2_B_3', '_2_B_4', '_2_B_5', '_2_B_6', '_2_B_7', '_2_B_8', '_2_B_9'],
+  _2_B: ['_2_B_1', '_2_B_2', '_2_B_3', '_2_B_4', '_2_B_5', '_2_B_6', '_2_B_7', '_2_B_8', '_2_B_9', '_2_B_10'],
   _2_C: ['_2_C_1', '_2_C_2', '_2_C_3', '_2_C_4', '_2_C_5', '_2_C_6', '_2_C_7'],
   _2_D: ['_2_D_1', '_2_D_2', '_2_D_3'],
   _2_E: ['_2_E_1', '_2_E_2', '_2_E_3', '_2_E_4', '_2_E_5'],
   _2_F: ['_2_F_1', '_2_F_2', '_2_F_3', '_2_F_4', '_2_F_5', '_2_F_6'],
   _2_G: ['_2_G_1', '_2_G_2', '_2_G_3', '_2_G_4'],
 };
-export const stepWithSubActivities: activityItemType[] = ['_1_A', '_1_B'];
+export const intermediateStepsWithSubIntermediateSteps: activityIntermediateSectionType[] = ['_1_A', '_1_B'];
 
 export const activityItemNameMap: Record<activityItemType, string> = {
   _1: '1. Energy',
@@ -193,7 +199,7 @@ export const activityItemNameMap: Record<activityItemType, string> = {
   _2_H: 'H. Other',
 };
 
-export const activityItemTypeMap: Record<activityFinalStepItemType, string> = {
+export const activityItemTypeMap: Record<activityFinalStepItemType, PollutantRegisterActivities['activities'][0]> = {
   _1_A_1_A: '_1_A_1_A_PUBLIC_ELECTRICITY_AND_HEAT_PRODUCTION',
   _1_A_1_B: '_1_A_1_B_PETROLEUM_REFINING',
   _1_A_1_C: '_1_A_1_C_MANUFACTURE_OF_SOLID_FUELS_AND_OTHER_ENERGY_INDUSTRIES',

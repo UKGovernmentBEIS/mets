@@ -13,12 +13,13 @@ describe('ReturnLinkComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    template: ` <app-return-link
-      [home]="home"
-      [requestType]="requestType"
-      [requestTaskType]="requestTaskType"
-      returnLink=".."
-    ></app-return-link>`,
+    template: `
+      <app-return-link
+        [home]="home"
+        [requestType]="requestType"
+        [requestTaskType]="requestTaskType"
+        returnLink=".."></app-return-link>
+    `,
   })
   class TestComponent {
     home = false;

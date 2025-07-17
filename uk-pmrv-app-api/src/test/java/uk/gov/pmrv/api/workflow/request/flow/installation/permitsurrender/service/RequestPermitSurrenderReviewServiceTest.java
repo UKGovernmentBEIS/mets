@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
@@ -185,7 +185,7 @@ class RequestPermitSurrenderReviewServiceTest {
 
     @Test
     void saveReviewDecisionNotification() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        final AppUser appUser = AppUser.builder().userId("user").build();
 
         PermitSurrenderApplicationReviewRequestTaskPayload taskPayload =
             PermitSurrenderApplicationReviewRequestTaskPayload.builder()
@@ -210,12 +210,12 @@ class RequestPermitSurrenderReviewServiceTest {
             .signatory("regulator")
             .build();
 
-        service.saveReviewDecisionNotification(requestTask, decisionNotification, pmrvUser);
+        service.saveReviewDecisionNotification(requestTask, decisionNotification, appUser);
 
         assertThat(((PermitSurrenderRequestPayload) request.getPayload()).getReviewDecision()).isEqualTo(taskPayload.getReviewDecision());
         assertThat(((PermitSurrenderRequestPayload) request.getPayload()).getReviewDetermination()).isEqualTo(taskPayload.getReviewDetermination());
         assertThat(((PermitSurrenderRequestPayload) request.getPayload()).getReviewDecisionNotification()).isEqualTo(decisionNotification);
-        assertThat(((PermitSurrenderRequestPayload) request.getPayload()).getRegulatorReviewer()).isEqualTo(pmrvUser.getUserId());
+        assertThat(((PermitSurrenderRequestPayload) request.getPayload()).getRegulatorReviewer()).isEqualTo(appUser.getUserId());
         assertThat(((PermitSurrenderRequestPayload) request.getPayload()).getReviewDeterminationCompletedDate()).isNotNull();
     }
 }

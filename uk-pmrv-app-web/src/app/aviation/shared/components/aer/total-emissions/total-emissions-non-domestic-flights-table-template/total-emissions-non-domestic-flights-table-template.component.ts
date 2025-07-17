@@ -27,9 +27,11 @@ import { createTablePage } from '../../../../../../mi-reports/core/mi-report';
 export class TotalEmissionsNonDomesticFlightsTableTemplateComponent implements OnInit {
   @Input() data: AviationAerUkEts;
 
+  @Input() showAllData = false;
+  @Input() nonDomesticFlightsTotalEmissions$: Observable<AviationAerNonDomesticFlightsEmissions>;
+
   getSummaryDescription = getSummaryDescription;
   aviationAerEmissionsCalculationDTO: AviationAerEmissionsCalculationDTO;
-  nonDomesticFlightsTotalEmissions$: Observable<AviationAerNonDomesticFlightsEmissions>;
   pageItems$: Observable<AviationAerNonDomesticFlightsEmissionsDetails[]>;
   totalNumOfItems$: Observable<number>;
   currentPage$ = new BehaviorSubject<number>(1);
@@ -46,19 +48,21 @@ export class TotalEmissionsNonDomesticFlightsTableTemplateComponent implements O
   constructor(private aviationReportingService: AviationReportingService) {}
 
   ngOnInit() {
-    const emissionData = this.data.aggregatedEmissionsData;
-    const safData = this.data.saf;
-    this.aviationAerEmissionsCalculationDTO = {
-      aggregatedEmissionsData: emissionData,
-      saf: safData,
-    };
-    this.nonDomesticFlightsTotalEmissions$ = this.aviationReportingService
-      .getNonDomesticFlightsEmissionsUkEts(this.aviationAerEmissionsCalculationDTO)
-      .pipe(shareReplay(1));
+    if (!this.nonDomesticFlightsTotalEmissions$) {
+      const emissionData = this.data.aggregatedEmissionsData;
+      const safData = this.data.saf;
+      this.aviationAerEmissionsCalculationDTO = {
+        aggregatedEmissionsData: emissionData,
+        saf: safData,
+      };
+      this.nonDomesticFlightsTotalEmissions$ = this.aviationReportingService
+        .getNonDomesticFlightsEmissionsUkEts(this.aviationAerEmissionsCalculationDTO)
+        .pipe(shareReplay(1));
+    }
     this.pageItems$ = combineLatest([this.nonDomesticFlightsTotalEmissions$, this.currentPage$]).pipe(
       map(([emissionsObj, currentPage]) => {
         const items = emissionsObj.nonDomesticFlightsEmissionsDetails || [];
-        return createTablePage(currentPage, this.pageSize, items);
+        return this.showAllData ? items : createTablePage(currentPage, this.pageSize, items);
       }),
     );
 

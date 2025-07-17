@@ -16,10 +16,15 @@
     <label [for]="identifier" class="govuk-label govuk-checkboxes__label">
       <ng-container *ngIf="label; else customLabel">{{ label }}</ng-container>
       <ng-template #customLabel>
-        <ng-content select="[govukLabel]"></ng-content>
+        <ng-content select="[govukLabel]" />
       </ng-template>
     </label>
-    <span *ngIf="hint" [id]="identifier + '-item-hint'" class="govuk-hint govuk-checkboxes__hint">{{ hint }}</span>
+    <span
+      *ngIf="hint"
+      [id]="identifier + '-item-hint'"
+      class="govuk-hint govuk-checkboxes__hint"
+      [innerHTML]="hint"
+    ></span>
   </div>
 </ng-template>
 <ng-template #conditionalTemplate>
@@ -29,6 +34,6 @@
     [id]="identifier + 'conditional'"
     class="govuk-checkboxes__conditional"
   >
-    <ng-content select="[govukConditionalContent]"></ng-content>
+    <ng-content select="[govukConditionalContent]" />
   </div>
 </ng-template>

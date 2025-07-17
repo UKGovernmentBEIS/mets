@@ -31,7 +31,7 @@ export const EMP_FLIGHT_PROCEDURES_ROUTES: Routes = [
       },
       {
         path: 'summary',
-        data: { breadcrumb: 'Flight and aircraft monitoring procedures summary' },
+        data: { breadcrumb: 'Flight and aircraft monitoring procedures' },
         canActivate: [canActivateSummaryPage],
         loadComponent: () => import('./flight-procedures-summary').then((c) => c.FlightProceduresSummaryComponent),
       },

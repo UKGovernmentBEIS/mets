@@ -4,37 +4,29 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.gov.pmrv.api.common.config.AppProperties;
-import uk.gov.pmrv.api.notification.mail.config.property.NotificationProperties;
-import uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants;
-import uk.gov.pmrv.api.notification.mail.domain.EmailData;
-import uk.gov.pmrv.api.notification.mail.domain.EmailNotificationTemplateData;
-import uk.gov.pmrv.api.notification.mail.service.NotificationEmailService;
-import uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName;
-import uk.gov.pmrv.api.token.JwtTokenService;
+import uk.gov.netz.api.common.config.WebAppProperties;
+import uk.gov.netz.api.notificationapi.mail.config.property.NotificationProperties;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
+import uk.gov.netz.api.token.JwtTokenService;
+import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplateConstants;
+import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.user.NavigationParams;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.domain.model.UserNotificationWithRedirectionLinkInfo;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants.APPLICANT_FNAME;
-import static uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants.APPLICANT_LNAME;
-import static uk.gov.pmrv.api.notification.mail.constants.EmailNotificationTemplateConstants.USER_ROLE_TYPE;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.INVITATION_TO_EMITTER_CONTACT;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.RESET_2FA_CONFIRMATION;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.RESET_PASSWORD_CONFIRMATION;
-import static uk.gov.pmrv.api.notification.template.domain.enumeration.NotificationTemplateName.USER_ACCOUNT_ACTIVATION;
-
 @Service
 @RequiredArgsConstructor
 public class UserNotificationService {
 
     private final UserAuthService userAuthService;
-    private final NotificationEmailService notificationEmailService;
-    private final AppProperties appProperties;
+    private final NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
+    private final WebAppProperties webAppProperties;
     private final NotificationProperties notificationProperties;
     private final JwtTokenService jwtTokenService;
 
@@ -57,47 +49,47 @@ public class UserNotificationService {
     public void notifyUserAccountActivation(String userId, String roleName) {
         UserInfoDTO user = userAuthService.getUserByUserId(userId);
         
-        notifyUser(user.getEmail(), USER_ACCOUNT_ACTIVATION, Map.of(USER_ROLE_TYPE, roleName,
-                EmailNotificationTemplateConstants.CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink(),
-                EmailNotificationTemplateConstants.HOME_URL, appProperties.getWeb().getUrl()));
+        notifyUser(user.getEmail(), PmrvNotificationTemplateName.USER_ACCOUNT_ACTIVATION, Map.of(PmrvEmailNotificationTemplateConstants.USER_ROLE_TYPE, roleName,
+        		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink(),
+        		PmrvEmailNotificationTemplateConstants.HOME_URL, webAppProperties.getUrl()));
     }
 
     public void notifyEmitterContactAccountActivation(String userId, String installationName) {
         UserInfoDTO user = userAuthService.getUserByUserId(userId);
         
-        notifyUser(user.getEmail(), INVITATION_TO_EMITTER_CONTACT, Map.of(APPLICANT_FNAME, user.getFirstName(),
-                APPLICANT_LNAME, user.getLastName(),
-                EmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
-                EmailNotificationTemplateConstants.CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink()));
+        notifyUser(user.getEmail(), PmrvNotificationTemplateName.INVITATION_TO_EMITTER_CONTACT, Map.of(PmrvEmailNotificationTemplateConstants.APPLICANT_FNAME, user.getFirstName(),
+        		PmrvEmailNotificationTemplateConstants.APPLICANT_LNAME, user.getLastName(),
+        		PmrvEmailNotificationTemplateConstants.ACCOUNT_NAME, installationName,
+        		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink()));
     }
     
     public void notifyUserPasswordReset(String userId) {
         UserInfoDTO user = userAuthService.getUserByUserId(userId);
         
-        notifyUser(user.getEmail(), RESET_PASSWORD_CONFIRMATION, Map.of(
-        		EmailNotificationTemplateConstants.HOME_URL, appProperties.getWeb().getUrl(),
-        		EmailNotificationTemplateConstants.CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink()));
+        notifyUser(user.getEmail(), PmrvNotificationTemplateName.RESET_PASSWORD_CONFIRMATION, Map.of(
+        		PmrvEmailNotificationTemplateConstants.HOME_URL, webAppProperties.getUrl(),
+        		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink()));
     }
     
     public void notifyUserReset2Fa(String userId) {
         UserInfoDTO user = userAuthService.getUserByUserId(userId);
         
-        notifyUser(user.getEmail(), RESET_2FA_CONFIRMATION, Map.of(
-        		EmailNotificationTemplateConstants.HOME_URL, appProperties.getWeb().getUrl(),
-        		EmailNotificationTemplateConstants.CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink()));		
+        notifyUser(user.getEmail(), PmrvNotificationTemplateName.RESET_2FA_CONFIRMATION, Map.of(
+        		PmrvEmailNotificationTemplateConstants.HOME_URL, webAppProperties.getUrl(),
+        		PmrvEmailNotificationTemplateConstants.CONTACT_REGULATOR, notificationProperties.getEmail().getContactUsLink()));		
 	}
     
     /**
      * Sends generic email notification for specified template and params
      * @param email
-     * @param templateName {@link NotificationTemplateName}
+     * @param templateName {@link PmrvNotificationTemplateName}
      * @param params
      * 
      */
-    private void notifyUser(String email, NotificationTemplateName templateName, Map<String, Object> params) {
-    	EmailData emailInfo = EmailData.builder()
+    private void notifyUser(String email, PmrvNotificationTemplateName templateName, Map<String, Object> params) {
+    	EmailData<EmailNotificationTemplateData> emailInfo = EmailData.<EmailNotificationTemplateData>builder()
                 .notificationTemplateData(EmailNotificationTemplateData.builder()
-                        .templateName(templateName)
+                        .templateName(templateName.getName())
                         .templateParams(params)
                         .build())
                 .build();
@@ -110,7 +102,7 @@ public class UserNotificationService {
             .generateToken(tokenParams.getJwtTokenAction(), tokenParams.getClaimValue(), tokenParams.getExpirationInterval());
 
         return UriComponentsBuilder
-            .fromHttpUrl(appProperties.getWeb().getUrl())
+            .fromUriString(webAppProperties.getUrl())
             .path("/")
             .path(path)
             .queryParam(NavigationParams.TOKEN, token)

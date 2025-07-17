@@ -2,9 +2,9 @@ package uk.gov.pmrv.api.account.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
+import uk.gov.netz.api.authorization.verifier.service.VerifierAuthorityQueryService;
 import uk.gov.pmrv.api.account.domain.Account;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityService;
-import uk.gov.pmrv.api.authorization.verifier.service.VerifierAuthorityQueryService;
 import uk.gov.pmrv.api.notification.message.domain.SystemMessageNotificationInfo;
 import uk.gov.pmrv.api.notification.message.domain.enumeration.SystemMessageNotificationType;
 import uk.gov.pmrv.api.notification.message.service.SystemMessageNotificationService;
@@ -19,7 +19,7 @@ public class AccountVerificationBodyNotificationService {
     
     private final SystemMessageNotificationService systemMessageNotificationService;
     private final VerifierAuthorityQueryService verifierAuthorityQueryService;
-    private final OperatorAuthorityService operatorAuthorityService;
+    private final OperatorAuthorityQueryService operatorAuthorityQueryService;
 
     public void notifyUsersForVerificationBodyApppointment(Long verificationBodyId, Account account) {
         List<String> verifierAdmins = verifierAuthorityQueryService.findVerifierAdminsByVerificationBody(verificationBodyId);
@@ -31,7 +31,7 @@ public class AccountVerificationBodyNotificationService {
     public void notifyUsersForVerificationBodyUnapppointment(Set<Account> accountsUnappointed) {
         accountsUnappointed
             .forEach(acc -> {
-                List<String> operatorAdmins = operatorAuthorityService.findActiveOperatorAdminUsersByAccount(acc.getId());
+                List<String> operatorAdmins = operatorAuthorityQueryService.findActiveOperatorAdminUsersByAccount(acc.getId());
                 operatorAdmins.forEach(op ->
                         systemMessageNotificationService.generateAndSendNotificationSystemMessage(
                             createVerifierNoLongerAvailableSystemMessage(acc, op)));

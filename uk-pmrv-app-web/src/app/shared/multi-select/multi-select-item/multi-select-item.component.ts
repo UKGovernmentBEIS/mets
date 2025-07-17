@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, Input } from '@angular/core';
-import { ControlValueAccessor, NgControl,UntypedFormControl } from '@angular/forms';
+import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 
 @Component({
   selector: 'div[app-multi-select-item]',
@@ -13,9 +13,8 @@ import { ControlValueAccessor, NgControl,UntypedFormControl } from '@angular/for
       [checked]="isChecked"
       [disabled]="isDisabled"
       (change)="onChange($event)"
-      (blur)="onBlur()"
-    />
-    <label class="govuk-label govuk-checkboxes__label" [for]="id"> {{ label }} </label>
+      (blur)="onBlur()" />
+    <label class="govuk-label govuk-checkboxes__label" [for]="id">{{ label }}</label>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -32,7 +31,10 @@ export class MultiSelectItemComponent implements ControlValueAccessor {
   onBlur: () => any;
   onChange: (event: Event) => any;
 
-  constructor(readonly cdRef: ChangeDetectorRef, private readonly ngControl: NgControl) {}
+  constructor(
+    readonly cdRef: ChangeDetectorRef,
+    private readonly ngControl: NgControl,
+  ) {}
 
   get control(): UntypedFormControl {
     return this.ngControl.control as UntypedFormControl;

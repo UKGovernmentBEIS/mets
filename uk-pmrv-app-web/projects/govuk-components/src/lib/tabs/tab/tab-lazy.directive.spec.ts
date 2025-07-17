@@ -18,7 +18,7 @@ describe('TabLazyDirective', () => {
         <ng-template govukTabLazy *ngFor="let tab of tabsLazy$ | async" [id]="tab.id" [label]="tab.label">
           {{ tab.body }}
         </ng-template>
-        <ng-template govukTabLazy id="lazy3" label="Lazy 3"> Lazy 3</ng-template>
+        <ng-template govukTabLazy id="lazy3" label="Lazy 3">Lazy 3</ng-template>
       </govuk-tabs>
     `,
   })

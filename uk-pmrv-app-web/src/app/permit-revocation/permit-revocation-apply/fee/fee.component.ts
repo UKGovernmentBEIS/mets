@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { combineLatest, first, map, pluck, switchMap } from 'rxjs';
+import { combineLatest, first, map, switchMap } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
 import {
@@ -19,7 +19,7 @@ import { PermitRevocationStore } from '@permit-revocation/store/permit-revocatio
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeeComponent {
-  feeAmount$ = this.store.pipe(pluck('feeAmount'));
+  feeAmount$ = this.store.pipe(map((state) => state?.feeAmount));
   readonly taskId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('taskId'))));
 
   constructor(

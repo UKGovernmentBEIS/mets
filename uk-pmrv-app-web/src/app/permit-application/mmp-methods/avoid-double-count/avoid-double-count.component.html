@@ -1,0 +1,37 @@
+<app-permit-task
+  reviewGroupTitle="Monitoring methodology"
+  reviewGroupUrl="monitoring-methodology-plan"
+  [breadcrumb]="true"
+>
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Methods used for ensuring that data gaps and double counting are avoided"
+    caption="Monitoring methodology plan"
+    submitText="Continue"
+  >
+    <p class="govuk-body">
+      Describe how you have ensured that no data gaps or double counting has occurred, in line with section 3(b) of
+      Annex VI of the FAR, and taking into consideration the provisions in Article 10(5) of the FAR.
+    </p>
+
+    <p class="govuk-body">
+      If there is more than one sub-installation relevant for your installation, and emissions of one source stream are
+      determined individually for each sub-installation, compare the emissions of the annual emission report with the
+      sum of emissions for each sub-installation.
+    </p>
+
+    <p class="govuk-body">
+      If deviations occur, describe the method used to correct the data in line with section 3.2.2 of Annex VII of the
+      FAR.
+    </p>
+
+    <div formControlName="avoidDoubleCount" [maxLength]="10000" govuk-textarea></div>
+  </app-wizard-step>
+
+  <app-list-return-link
+    reviewGroupTitle="Monitoring methodology"
+    reviewGroupUrl="monitoring-methodology-plan"
+    [innerRoute]="true"
+  ></app-list-return-link>
+</app-permit-task>

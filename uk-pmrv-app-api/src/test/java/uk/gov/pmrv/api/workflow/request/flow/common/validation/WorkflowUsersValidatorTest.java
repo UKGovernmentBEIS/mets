@@ -1,31 +1,32 @@
 package uk.gov.pmrv.api.workflow.request.flow.common.validation;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
-import static uk.gov.pmrv.api.authorization.core.domain.AuthorityStatus.ACTIVE;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.core.domain.dto.UserAuthoritiesDTO;
+import uk.gov.netz.api.authorization.core.domain.dto.UserAuthorityDTO;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityQueryService;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactDTO;
 import uk.gov.pmrv.api.account.domain.dto.CaExternalContactsDTO;
 import uk.gov.pmrv.api.account.service.CaExternalContactService;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserAuthoritiesDTO;
-import uk.gov.pmrv.api.authorization.core.domain.dto.UserAuthorityDTO;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityQueryService;
-import uk.gov.pmrv.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvAuthority;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
 import uk.gov.pmrv.api.workflow.request.core.assignment.taskassign.service.RequestTaskAssignmentValidationService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
+import static uk.gov.netz.api.authorization.core.domain.AuthorityStatus.ACTIVE;
 
 @ExtendWith(MockitoExtension.class)
 class WorkflowUsersValidatorTest {
@@ -45,8 +46,8 @@ class WorkflowUsersValidatorTest {
     @Test
     void validate_whenOperatorsNotValid_thenThrowException() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder()
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+        final AppUser appUser = AppUser.builder()
+            .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
             .build();
 
         final UserAuthorityDTO accountOperatorAuthority =
@@ -57,9 +58,9 @@ class WorkflowUsersValidatorTest {
                 .editable(true)
                 .build();
 
-        when(operatorAuthorityQueryService.getAccountAuthorities(pmrvUser, 1L)).thenReturn(accountOperatorAuthorities);
+        when(operatorAuthorityQueryService.getAccountAuthorities(appUser, 1L)).thenReturn(accountOperatorAuthorities);
 
-        final boolean result = validator.areOperatorsValid(1L, Set.of("operator1"), pmrvUser);
+        final boolean result = validator.areOperatorsValid(1L, Set.of("operator1"), appUser);
 
         assertFalse(result);
     }
@@ -67,8 +68,8 @@ class WorkflowUsersValidatorTest {
     @Test
     void validate_whenOperators_thenThrowException() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder()
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+        final AppUser appUser = AppUser.builder()
+            .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
             .build();
 
         final UserAuthorityDTO accountOperatorAuthority =
@@ -79,18 +80,18 @@ class WorkflowUsersValidatorTest {
                 .editable(true)
                 .build();
 
-        when(operatorAuthorityQueryService.getAccountAuthorities(pmrvUser, 1L)).thenReturn(accountOperatorAuthorities);
+        when(operatorAuthorityQueryService.getAccountAuthorities(appUser, 1L)).thenReturn(accountOperatorAuthorities);
 
-        final boolean result = validator.areOperatorsValid(1L, Set.of("operator1"), pmrvUser);
+        final boolean result = validator.areOperatorsValid(1L, Set.of("operator1"), appUser);
 
         assertFalse(result);
     }
     
     @Test
     void areOperatorsValid_when_operators_empty_then_should_return_true() {
-    	final PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+    	final AppUser appUser = AppUser.builder().userId("user").build();
 
-        final boolean result = validator.areOperatorsValid(1L, Collections.emptySet() , pmrvUser);
+        final boolean result = validator.areOperatorsValid(1L, Collections.emptySet() , appUser);
 
         assertThat(result).isTrue();
         verifyNoInteractions(operatorAuthorityQueryService);
@@ -99,8 +100,8 @@ class WorkflowUsersValidatorTest {
     @Test
     void validate_whenExternalContactsNotValid_thenThrowException() {
 
-        final PmrvUser pmrvUser = PmrvUser.builder()
-            .authorities(List.of(PmrvAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
+        final AppUser appUser = AppUser.builder()
+            .authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build()))
             .build();
 
         final CaExternalContactsDTO caExternalContactsDTO =
@@ -110,18 +111,18 @@ class WorkflowUsersValidatorTest {
                 .isEditable(false)
                 .build();
 
-        when(caExternalContactService.getCaExternalContacts(pmrvUser)).thenReturn(caExternalContactsDTO);
+        when(caExternalContactService.getCaExternalContacts(appUser)).thenReturn(caExternalContactsDTO);
 
-        final boolean result = validator.areExternalContactsValid(Set.of(10L), pmrvUser);
+        final boolean result = validator.areExternalContactsValid(Set.of(10L), appUser);
 
         assertFalse(result);
     }
     
     @Test
     void areExternalContactsValid_when_external_contacts_empty_then_should_return_true() {
-        final PmrvUser pmrvUser = PmrvUser.builder().userId("user").build();
+        final AppUser appUser = AppUser.builder().userId("user").build();
 
-        final boolean result = validator.areExternalContactsValid(Collections.emptySet(), pmrvUser);
+        final boolean result = validator.areExternalContactsValid(Collections.emptySet(), appUser);
 
         assertThat(result).isTrue();
         verifyNoInteractions(caExternalContactService);

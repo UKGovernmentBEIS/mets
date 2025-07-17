@@ -57,6 +57,7 @@ export function mapTrackPaymentToPaymentDetails(state: PaymentState): PaymentDet
     'EMP_VARIATION_UKETS_REGULATOR_LED_CONFIRM_PAYMENT',
     'EMP_VARIATION_CORSIA_REGULATOR_LED_CONFIRM_PAYMENT',
     'EMP_VARIATION_CORSIA_CONFIRM_PAYMENT',
+    'AVIATION_DOE_CORSIA_CONFIRM_PAYMENT',
   ].includes(state.requestTaskItem.requestTask.type)
     ? { ...state.paymentDetails, amount: +state.paymentDetails.amount }
     : {
@@ -127,6 +128,10 @@ export function getHeadingMap(year?: number): Partial<Record<RequestTaskDTO['typ
     AVIATION_DRE_UKETS_TRACK_PAYMENT: `Track payment for ${year} emissions determination`,
     AVIATION_DRE_UKETS_MAKE_PAYMENT: `Pay ${year} emissions determination fee`,
     AVIATION_DRE_UKETS_CONFIRM_PAYMENT: `Track payment for ${year} emissions determination`,
+
+    AVIATION_DOE_CORSIA_TRACK_PAYMENT: `Track payment for ${year} emissions estimation`,
+    AVIATION_DOE_CORSIA_MAKE_PAYMENT: `Pay ${year} emissions estimation fee`,
+    AVIATION_DOE_CORSIA_CONFIRM_PAYMENT: `Track payment for ${year} emissions estimation`,
   };
 }
 
@@ -192,9 +197,9 @@ export const paymentHintInfo: Partial<Record<RequestTaskDTO['type'], string>> = 
 };
 
 export function trackShouldDisplayMarkPaidConfirmationInfo(requestType: RequestInfoDTO['type']): boolean {
-  return !['DRE', 'AVIATION_DRE_UKETS'].includes(requestType);
+  return !['DRE', 'AVIATION_DRE_UKETS', 'AVIATION_DOE_CORSIA'].includes(requestType);
 }
 
 export function trackShouldDisplayCancelHintInfo(requestType: RequestInfoDTO['type']): boolean {
-  return !['DRE', 'AVIATION_DRE_UKETS'].includes(requestType);
+  return !['DRE', 'AVIATION_DRE_UKETS', 'AVIATION_DOE_CORSIA'].includes(requestType);
 }

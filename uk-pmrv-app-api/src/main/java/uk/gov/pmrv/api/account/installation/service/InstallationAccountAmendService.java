@@ -1,24 +1,24 @@
 package uk.gov.pmrv.api.account.installation.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.pmrv.api.account.domain.LegalEntity;
 import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationAccountDTO;
 import uk.gov.pmrv.api.account.installation.transform.InstallationAccountMapper;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.service.LegalEntityService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 
-import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static uk.gov.pmrv.api.common.exception.ErrorCode.ACCOUNT_FIELD_NOT_AMENDABLE;
 
 @Validated
 @Service
@@ -32,7 +32,7 @@ public class InstallationAccountAmendService {
 
     @Transactional
     public InstallationAccountDTO amendAccount(Long accountId, @Valid InstallationAccountDTO previousAccountDTO,
-                                               @Valid InstallationAccountDTO newAccountDTO, PmrvUser pmrvUser) {
+                                               @Valid InstallationAccountDTO newAccountDTO, AppUser appUser) {
         validateNonAmendableAccountFields(previousAccountDTO, newAccountDTO);
         validateAccountName(previousAccountDTO, newAccountDTO);
 
@@ -41,7 +41,7 @@ public class InstallationAccountAmendService {
         LegalEntity legalEntity = legalEntityService.getLegalEntityById(account.getLegalEntity().getId());
 
         final LegalEntity newLegalEntity = 
-                legalEntityService.resolveAmendedLegalEntity(newAccountDTO.getLegalEntity(), legalEntity, pmrvUser);
+                legalEntityService.resolveAmendedLegalEntity(newAccountDTO.getLegalEntity(), legalEntity, appUser);
 
         //update account
         InstallationAccount newAccount = installationAccountMapper.toInstallationAccount(newAccountDTO, account.getId());
@@ -74,7 +74,7 @@ public class InstallationAccountAmendService {
         }
 
         if (!errors.isEmpty()) {
-            throw new BusinessException(ACCOUNT_FIELD_NOT_AMENDABLE, errors.toArray());
+            throw new BusinessException(MetsErrorCode.ACCOUNT_FIELD_NOT_AMENDABLE, errors.toArray());
         }
     }
 

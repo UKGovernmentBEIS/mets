@@ -11,8 +11,7 @@
                 <govuk-checkbox
                   *ngFor="let type of workflowTypesPerDomain | keyvalue: originalOrder"
                   [value]="type.value"
-                  [label]="type.key"
-                ></govuk-checkbox>
+                  [label]="type.key"></govuk-checkbox>
               </div>
             </div>
             <div class="govuk-grid-column-full">
@@ -21,8 +20,7 @@
                 <govuk-checkbox
                   *ngFor="let type of workflowStatusesMap | keyvalue"
                   [value]="type.key"
-                  [label]="type.value"
-                ></govuk-checkbox>
+                  [label]="type.value"></govuk-checkbox>
               </div>
             </div>
           </div>
@@ -45,8 +43,7 @@
               </div>
               <div class="govuk-grid-column-one-quarter">
                 <span
-                  class="search-results-list_item_status govuk-tag govuk-tag--{{ workflow.requestStatus | tagColor }}"
-                >
+                  class="search-results-list_item_status govuk-tag govuk-tag--{{ workflow.requestStatus | tagColor }}">
                   <strong>{{ workflow.requestStatus | i18nSelect: workflowStatusesTagMap }}</strong>
                 </span>
               </div>
@@ -57,8 +54,7 @@
           *ngIf="workflowResults.total > 0 && showPagination$ | async"
           [count]="workflowResults.total"
           (currentPageChange)="page$.next($event)"
-          [pageSize]="pageSize"
-        ></app-pagination>
+          [pageSize]="pageSize"></app-pagination>
       </div>
     </div>
   </form>

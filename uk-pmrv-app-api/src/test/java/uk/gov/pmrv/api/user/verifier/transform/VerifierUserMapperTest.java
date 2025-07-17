@@ -4,8 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.mapstruct.factory.Mappers;
-import uk.gov.pmrv.api.authorization.AuthorityConstants;
-import uk.gov.pmrv.api.user.core.domain.enumeration.AuthenticationStatus;
 import uk.gov.pmrv.api.user.core.domain.enumeration.KeycloakUserAttributes;
 import uk.gov.pmrv.api.user.verifier.domain.AdminVerifierUserInvitationDTO;
 import uk.gov.pmrv.api.user.verifier.domain.VerifierUserDTO;
@@ -13,10 +11,12 @@ import uk.gov.pmrv.api.user.verifier.domain.VerifierUserInvitationDTO;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static uk.gov.netz.api.authorization.AuthorityConstants.VERIFIER_ADMIN_ROLE_CODE;
 
 class VerifierUserMapperTest {
 
@@ -30,9 +30,8 @@ class VerifierUserMapperTest {
     @Test
     void toVerifierUserDTO() {
         UserRepresentation userRepresentation = buildUserRepresentation();
+        userRepresentation.setEnabled(Boolean.TRUE);
         userRepresentation.setAttributes(new HashMap<>(){{
-            put(KeycloakUserAttributes.USER_STATUS.getName(), List.of(AuthenticationStatus.REGISTERED.name()));
-            put(KeycloakUserAttributes.TERMS_VERSION.getName(), List.of("1"));
             put(KeycloakUserAttributes.PHONE_NUMBER.getName(), List.of("2101313131"));
             put(KeycloakUserAttributes.MOBILE_NUMBER.getName(), List.of("2101313132"));
         }});
@@ -41,26 +40,19 @@ class VerifierUserMapperTest {
         VerifierUserDTO verifierUserDTO = mapper.toVerifierUserDTO(userRepresentation);
 
         // Assert
-        assertEquals(userRepresentation.getEmail(), verifierUserDTO.getEmail());
+        assertEquals(userRepresentation.getUsername(), verifierUserDTO.getEmail());
         assertEquals(userRepresentation.getFirstName(), verifierUserDTO.getFirstName());
         assertEquals(userRepresentation.getLastName(), verifierUserDTO.getLastName());
-        assertEquals(userRepresentation.getAttributes().get(KeycloakUserAttributes.USER_STATUS.getName()).get(0), verifierUserDTO.getStatus().name());
-        assertEquals(userRepresentation.getAttributes().get(KeycloakUserAttributes.TERMS_VERSION.getName()).get(0), verifierUserDTO.getTermsVersion().toString());
+        assertTrue(verifierUserDTO.getEnabled());
         assertEquals(userRepresentation.getAttributes().get(KeycloakUserAttributes.PHONE_NUMBER.getName()).get(0), verifierUserDTO.getPhoneNumber());
         assertEquals(userRepresentation.getAttributes().get(KeycloakUserAttributes.MOBILE_NUMBER.getName()).get(0), verifierUserDTO.getMobileNumber());
     }
 
     @Test
     void toUserRepresentation() {
-        String userId = "userId";
-        String username = "username";
-        String status = AuthenticationStatus.REGISTERED.name();
-        String terms = "1";
-        Map<String, List<String>> attributes = Map.of(KeycloakUserAttributes.USER_STATUS.getName(), List.of(status),
-                KeycloakUserAttributes.TERMS_VERSION.getName(), List.of(terms));
-
         VerifierUserDTO verifierUserDTO = VerifierUserDTO.builder()
-                .email("fromUI")
+                .email("email@email")
+                .enabled(true)
                 .firstName("firstName")
                 .lastName("lastName")
                 .phoneNumber("2101313131")
@@ -68,26 +60,25 @@ class VerifierUserMapperTest {
                 .build();
 
         // Invoke
-        UserRepresentation userRepresentation = mapper.toUserRepresentation(verifierUserDTO, userId, username, username, attributes);
+        UserRepresentation userRepresentation = mapper.toUserRepresentation(verifierUserDTO);
 
         // Assert
-        assertEquals(userId, userRepresentation.getId());
-        assertEquals(username, userRepresentation.getUsername());
-        assertEquals(username, userRepresentation.getEmail());
+        assertEquals(verifierUserDTO.getEmail(), userRepresentation.getUsername());
+        assertEquals(verifierUserDTO.getEmail(), userRepresentation.getEmail());
         assertEquals(verifierUserDTO.getFirstName(), userRepresentation.getFirstName());
         assertEquals(verifierUserDTO.getLastName(), userRepresentation.getLastName());
-        assertEquals(status, userRepresentation.getAttributes().get(KeycloakUserAttributes.USER_STATUS.getName()).get(0));
-        assertEquals(terms, userRepresentation.getAttributes().get(KeycloakUserAttributes.TERMS_VERSION.getName()).get(0));
+        assertThat(userRepresentation.isEnabled()).isNull();
         assertEquals(verifierUserDTO.getPhoneNumber(), userRepresentation.getAttributes().get(KeycloakUserAttributes.PHONE_NUMBER.getName()).get(0));
         assertEquals(verifierUserDTO.getMobileNumber(), userRepresentation.getAttributes().get(KeycloakUserAttributes.MOBILE_NUMBER.getName()).get(0));
     }
 
     @Test
     void toUserRepresentation_UserInvitation() {
-        String username = "username";
+    	String email = "email@email";
         VerifierUserInvitationDTO verifierUserInvitationDTO = VerifierUserInvitationDTO.builder()
                 .roleCode("roleCode")
-                .email(username)
+                .email(email)
+                .enabled(true)
                 .firstName("firstName")
                 .lastName("lastName")
                 .phoneNumber("2101313131")
@@ -98,8 +89,9 @@ class VerifierUserMapperTest {
         UserRepresentation userRepresentation = mapper.toUserRepresentation(verifierUserInvitationDTO);
 
         // Assert
-        assertEquals(username, userRepresentation.getUsername());
-        assertEquals(username, userRepresentation.getEmail());
+        assertEquals(email, userRepresentation.getUsername());
+        assertEquals(email, userRepresentation.getEmail());
+        assertThat(userRepresentation.isEnabled()).isNull();
         assertEquals(verifierUserInvitationDTO.getFirstName(), userRepresentation.getFirstName());
         assertEquals(verifierUserInvitationDTO.getLastName(), userRepresentation.getLastName());
         assertEquals(verifierUserInvitationDTO.getPhoneNumber(), userRepresentation.getAttributes().get(KeycloakUserAttributes.PHONE_NUMBER.getName()).get(0));
@@ -125,13 +117,13 @@ class VerifierUserMapperTest {
         assertEquals(adminVerifierUserInvitationDTO.getLastName(), verifierUserInvitationDTO.getLastName());
         assertEquals(adminVerifierUserInvitationDTO.getMobileNumber(), verifierUserInvitationDTO.getMobileNumber());
         assertEquals(adminVerifierUserInvitationDTO.getPhoneNumber(), verifierUserInvitationDTO.getPhoneNumber());
-        assertEquals(AuthorityConstants.VERIFIER_ADMIN_ROLE_CODE, verifierUserInvitationDTO.getRoleCode());
+        assertEquals(VERIFIER_ADMIN_ROLE_CODE, verifierUserInvitationDTO.getRoleCode());
 
     }
 
     private UserRepresentation buildUserRepresentation() {
         UserRepresentation userRepresentation = new UserRepresentation();
-        userRepresentation.setEmail("username");
+        userRepresentation.setEmail("email@email");
         userRepresentation.setId("userId");
         userRepresentation.setUsername("username");
         userRepresentation.setFirstName("FirstName");

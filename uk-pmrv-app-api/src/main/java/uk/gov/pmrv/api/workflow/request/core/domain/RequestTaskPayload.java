@@ -6,20 +6,24 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.util.CollectionUtils;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPayloadType;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.common.domain.AviationAerCorsiaAnnualOffsettingApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.review.domain.AviationAerCorsiaApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.submit.domain.AviationAerCorsiaApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.threeyearperiodoffsetting.common.domain.AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.verify.domain.AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.domain.AviationAerUkEtsApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.review.domain.AviationAerUkEtsApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.submit.domain.AviationAerUkEtsApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.verify.domain.AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aviationaccountclosure.domain.AviationAccountClosureSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.doe.corsia.domain.AviationDoECorsiaApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.ukets.submit.domain.AviationDreUkEtsApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.review.domain.EmpIssuanceCorsiaApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empissuance.corsia.review.domain.EmpIssuanceCorsiaApplicationReviewRequestTaskPayload;
@@ -52,14 +56,26 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationRespondToRegulatorCommentsRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationVerificationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationAmendsSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationRegulatorReviewSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationVerificationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationWaitForRegulatorReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.cessation.PermitCessationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthorityResponseRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.audit.domain.InstallationAuditApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionOperatorRespondRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.onsiteinspection.domain.InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerAuthorityResponseRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permanentcessation.domain.PermanentCessationApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.domain.PermitIssuanceApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.submit.domain.PermitIssuanceApplicationSubmitRequestTaskPayload;
@@ -223,6 +239,34 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = ReturnOfAllowancesReturnedApplicationSubmitRequestTaskPayload.class, value = "RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = ReturnOfAllowancesApplicationPeerReviewRequestTaskPayload.class, value = "RETURN_OF_ALLOWANCES_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
                 @DiscriminatorMapping(schema = ReturnOfAllowancesApplicationPeerReviewRequestTaskPayload.class, value = "RETURN_OF_ALLOWANCES_APPLICATION_PEER_REVIEW_PAYLOAD"),
+
+                @DiscriminatorMapping(schema = InstallationAuditApplicationSubmitRequestTaskPayload.class, value = "INSTALLATION_AUDIT_APPLICATION_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = InstallationInspectionApplicationSubmitRequestTaskPayload.class, value = "INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = InstallationInspectionApplicationSubmitRequestTaskPayload.class, value = "INSTALLATION_AUDIT_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+
+                @DiscriminatorMapping(schema = InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload.class, value = "INSTALLATION_ONSITE_INPSECTION_APPLICATION_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = InstallationInspectionApplicationSubmitRequestTaskPayload.class, value = "INSTALLATION_ONSITE_INPSECTION_APPLICATION_PEER_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = InstallationInspectionApplicationSubmitRequestTaskPayload.class, value = "INSTALLATION_ONSITE_INPSECTION_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = InstallationInspectionOperatorRespondRequestTaskPayload.class, value = "INSTALLATION_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_PAYLOAD"),
+                @DiscriminatorMapping(schema = BDRApplicationSubmitRequestTaskPayload.class, value = "BDR_APPLICATION_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = BDRApplicationVerificationSubmitRequestTaskPayload.class, value = "BDR_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = BDRApplicationWaitForRegulatorReviewRequestTaskPayload.class, value = "BDR_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = BDRApplicationAmendsSubmitRequestTaskPayload.class, value = "BDR_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "BDR_WAIT_FOR_AMENDS_PAYLOAD"),
+                @DiscriminatorMapping(schema = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "BDR_APPLICATION_PEER_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+                @DiscriminatorMapping(schema = PermanentCessationApplicationSubmitRequestTaskPayload.class, value = "PERMANENT_CESSATION_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = PermanentCessationApplicationSubmitRequestTaskPayload.class, value = "PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = PermanentCessationApplicationSubmitRequestTaskPayload.class, value = "PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+                @DiscriminatorMapping(schema = ALRApplicationSubmitRequestTaskPayload.class, value = "ALR_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationVerificationSubmitRequestTaskPayload.class, value = "ALR_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD"),
+
+
+
                 @DiscriminatorMapping(schema = EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload.class, value = "EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpIssuanceUkEtsApplicationReviewRequestTaskPayload.class, value = "EMP_ISSUANCE_UKETS_APPLICATION_REVIEW_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpIssuanceUkEtsApplicationReviewRequestTaskPayload.class, value = "EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW_PAYLOAD"),
@@ -279,6 +323,15 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = AviationAerCorsiaApplicationReviewRequestTaskPayload.class, value = "AVIATION_AER_CORSIA_APPLICATION_REVIEW_PAYLOAD"),
                 @DiscriminatorMapping(schema = AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload.class, value = "AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = AviationAerCorsiaApplicationReviewRequestTaskPayload.class, value = "AVIATION_AER_CORSIA_WAIT_FOR_AMENDS_PAYLOAD"),
+
+                @DiscriminatorMapping(schema = AviationAerCorsiaAnnualOffsettingApplicationSubmitRequestTaskPayload.class, value = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = AviationAerCorsiaAnnualOffsettingApplicationSubmitRequestTaskPayload.class, value = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_PEER_REVIEW_PAYLOAD"),
+
+                @DiscriminatorMapping(schema = AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload.class, value = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload.class, value = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_PEER_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload.class, value = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+                @DiscriminatorMapping(schema = AviationDoECorsiaApplicationSubmitRequestTaskPayload.class, value = "AVIATION_DOE_CORSIA_APPLICATION_SUBMIT_PAYLOAD")
 
 
         },
@@ -367,7 +420,6 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = AerApplicationAmendsSubmitRequestTaskPayload.class, name = "AER_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = AerApplicationReviewRequestTaskPayload.class, name = "AER_WAIT_FOR_AMENDS_PAYLOAD"),
 
-
     @JsonSubTypes.Type(value = VirApplicationSubmitRequestTaskPayload.class, name = "VIR_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = VirApplicationReviewRequestTaskPayload.class, name = "VIR_APPLICATION_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = VirApplicationRespondToRegulatorCommentsRequestTaskPayload.class, name = "VIR_RESPOND_TO_REGULATOR_COMMENTS_PAYLOAD"),
@@ -403,6 +455,33 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = ReturnOfAllowancesReturnedApplicationSubmitRequestTaskPayload.class, name = "RETURN_OF_ALLOWANCES_RETURNED_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = ReturnOfAllowancesApplicationPeerReviewRequestTaskPayload.class, name = "RETURN_OF_ALLOWANCES_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = ReturnOfAllowancesApplicationPeerReviewRequestTaskPayload.class, name = "RETURN_OF_ALLOWANCES_APPLICATION_PEER_REVIEW_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = InstallationAuditApplicationSubmitRequestTaskPayload.class, name = "INSTALLATION_AUDIT_APPLICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = InstallationInspectionApplicationSubmitRequestTaskPayload.class, name = "INSTALLATION_AUDIT_APPLICATION_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = InstallationInspectionApplicationSubmitRequestTaskPayload.class, name = "INSTALLATION_AUDIT_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = InstallationOnsiteInspectionApplicationSubmitRequestTaskPayload.class, name = "INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = InstallationInspectionApplicationSubmitRequestTaskPayload.class, name = "INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = InstallationInspectionApplicationSubmitRequestTaskPayload.class, name = "INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = InstallationInspectionOperatorRespondRequestTaskPayload.class, name = "INSTALLATION_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = BDRApplicationSubmitRequestTaskPayload.class, name = "BDR_APPLICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationVerificationSubmitRequestTaskPayload.class, name = "BDR_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationWaitForRegulatorReviewRequestTaskPayload.class, name = "BDR_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationAmendsSubmitRequestTaskPayload.class, name = "BDR_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "BDR_WAIT_FOR_AMENDS_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "BDR_APPLICATION_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = PermanentCessationApplicationSubmitRequestTaskPayload.class, name = "PERMANENT_CESSATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = PermanentCessationApplicationSubmitRequestTaskPayload.class, name = "PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PermanentCessationApplicationSubmitRequestTaskPayload.class, name = "PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = ALRApplicationSubmitRequestTaskPayload.class, name = "ALR_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationVerificationSubmitRequestTaskPayload.class, name = "ALR_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD"),
+
+        
 
     @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationReviewRequestTaskPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_REVIEW_PAYLOAD"),
@@ -460,6 +539,20 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = AviationAerCorsiaApplicationReviewRequestTaskPayload.class, name = "AVIATION_AER_CORSIA_APPLICATION_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload.class, name = "AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = AviationAerCorsiaApplicationReviewRequestTaskPayload.class, name = "AVIATION_AER_CORSIA_WAIT_FOR_AMENDS_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = AviationAerCorsiaAnnualOffsettingApplicationSubmitRequestTaskPayload.class, name = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerCorsiaAnnualOffsettingApplicationSubmitRequestTaskPayload.class, name = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerCorsiaAnnualOffsettingApplicationSubmitRequestTaskPayload.class, name = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload.class, name = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload.class, name = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload.class, name = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = AviationDoECorsiaApplicationSubmitRequestTaskPayload.class, name = "AVIATION_DOE_CORSIA_APPLICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationDoECorsiaApplicationSubmitRequestTaskPayload.class, name = "AVIATION_DOE_CORSIA_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = AviationDoECorsiaApplicationSubmitRequestTaskPayload.class, name = "AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+
 })
 @Data
 @SuperBuilder
@@ -468,6 +561,9 @@ import java.util.UUID;
 public abstract class RequestTaskPayload {
 
     private RequestTaskPayloadType payloadType;
+
+    @Builder.Default
+    private boolean sendEmailNotification = true;
 
     @JsonIgnore
     public Map<UUID, String> getAttachments() {
@@ -478,6 +574,9 @@ public abstract class RequestTaskPayload {
     public Set<UUID> getReferencedAttachmentIds() {
         return Collections.emptySet();
     }
+
+    @JsonIgnore
+    public Map<UUID, String> getAttachmentsToDelete() { return getAttachments(); }
 
     @JsonIgnore
     public void removeAttachments(final Collection<UUID> uuids) {

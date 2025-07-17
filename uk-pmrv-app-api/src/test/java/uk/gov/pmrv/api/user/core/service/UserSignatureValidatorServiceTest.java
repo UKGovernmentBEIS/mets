@@ -1,17 +1,6 @@
 package uk.gov.pmrv.api.user.core.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,13 +8,28 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileDTO;
+import uk.gov.netz.api.files.common.service.FileScanValidatorService;
+import uk.gov.netz.api.files.common.service.FileValidatorService;
+import uk.gov.netz.api.files.common.utils.MimeTypeUtils;
 
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.common.utils.MimeTypeUtils;
-import uk.gov.pmrv.api.files.common.domain.dto.FileDTO;
-import uk.gov.pmrv.api.files.common.service.FileScanValidatorService;
-import uk.gov.pmrv.api.files.common.service.FileValidatorService;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 public class UserSignatureValidatorServiceTest {
@@ -72,7 +76,8 @@ public class UserSignatureValidatorServiceTest {
         
         BusinessException be = assertThrows(BusinessException.class, () -> service.validateSignature(signature));
         assertThat(be.getErrorCode()).isEqualTo(ErrorCode.MAX_FILE_SIZE_ERROR);
-        
+        Assertions.assertEquals(Arrays.toString(new long[] {signature.getFileSize()}), Arrays.toString(be.getData()));
+
         verifyNoInteractions(fileScanValidator);
     }
     
@@ -80,11 +85,14 @@ public class UserSignatureValidatorServiceTest {
     void validateSignature_invalid_dimensions() throws IOException {
         Path sampleFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_bad_dimensions.bmp");
         FileDTO signature = createFile(sampleFilePath);
-        
-        BusinessException be = assertThrows(BusinessException.class, () -> service.validateSignature(signature));
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_IMAGE_DIMENSIONS);
-        
-        verifyNoInteractions(fileScanValidator);
+        try(ByteArrayInputStream imageStream = new ByteArrayInputStream(signature.getFileContent())) {
+            BufferedImage image = ImageIO.read(imageStream);
+            BusinessException be = assertThrows(BusinessException.class, () -> service.validateSignature(signature));
+            assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INVALID_IMAGE_DIMENSIONS);
+            Assertions.assertEquals(Arrays.toString(new long[]{image.getWidth(), image.getHeight()}), Arrays.toString(be.getData()));
+
+            verifyNoInteractions(fileScanValidator);
+        }
     }
     
     private FileDTO createFile(Path sampleFilePath) throws IOException {

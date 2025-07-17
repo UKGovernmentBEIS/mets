@@ -33,6 +33,7 @@ public class AviationDreUkEtsUpdateReportableEmissionsService {
                         .reportableEmissions(requestPayload.getDre().getTotalReportableEmissions())
                         .build()
                 )
+                .isExempted(metadata.isExempted())
                 .isFromDre(true)
                 .build();
 

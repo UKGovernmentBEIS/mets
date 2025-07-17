@@ -3,6 +3,7 @@ import { ActivatedRoute, Router, RouterLinkWithHref } from '@angular/router';
 
 import { combineLatest, iif, map, Observable, of, switchMap, take, tap, withLatestFrom } from 'rxjs';
 
+import { refreshVerificationSectionsCompletedUponSubmitToVerifier } from '@aviation/request-task/aer/ukets/tasks/send-report/send-report.utils';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -88,12 +89,10 @@ export class SendReportVerificationComponent {
                     ).verificationBodyId !== (vb as VerificationBodyNameInfoDTO)?.id
                       ? { verificationSectionsCompleted: {} }
                       : {
-                          verificationSectionsCompleted: {
-                            ...(
-                              state.requestTaskItem.requestTask
-                                .payload as AviationAerUkEtsApplicationSubmitRequestTaskPayload
-                            ).verificationSectionsCompleted,
-                          },
+                          verificationSectionsCompleted: refreshVerificationSectionsCompletedUponSubmitToVerifier(
+                            state.requestTaskItem.requestTask
+                              .payload as AviationAerUkEtsApplicationSubmitRequestTaskPayload,
+                          ),
                         }),
                   },
                 },

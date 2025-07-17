@@ -66,7 +66,7 @@ export class UploadEvidenceFilesComponent implements PendingRequest {
   }
 
   getDownloadUrl() {
-    return this.virService.createBaseFileDownloadUrl();
+    return this.virService.getBaseFileDownloadUrl();
   }
 
   private getFormData(payload: VirApplicationSubmitRequestTaskPayload): OperatorImprovementResponse {

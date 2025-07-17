@@ -2,13 +2,6 @@ package uk.gov.pmrv.api.permit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -38,6 +31,14 @@ import uk.gov.pmrv.api.permit.domain.sitediagram.SiteDiagrams;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStream;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreams;
 import uk.gov.pmrv.api.permit.domain.uncertaintyanalysis.UncertaintyAnalysis;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -126,6 +127,11 @@ public class Permit {
         Set<UUID> attachments = new HashSet<>();
         if(monitoringMethodologyPlans != null && !ObjectUtils.isEmpty(monitoringMethodologyPlans.getPlans())) {
             attachments.addAll(monitoringMethodologyPlans.getPlans());
+        }
+
+        if(monitoringMethodologyPlans != null
+                && !ObjectUtils.isEmpty(monitoringMethodologyPlans.getDigitizedPlan())) {
+            attachments.addAll(monitoringMethodologyPlans.getDigitizedPlan().getAttachmentIds());
         }
         
         if(siteDiagrams != null && !ObjectUtils.isEmpty(siteDiagrams.getSiteDiagrams())) {

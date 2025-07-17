@@ -9,7 +9,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { RequestTaskStore } from '../../../../../store';
 import { TASK_FORM_PROVIDER } from '../../../../../task-form.provider';
-import { aerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
+import { AerEmissionsReductionClaimFormProvider } from '../emissions-reduction-claim-form.provider';
 
 @Component({
   selector: 'app-emissions-reduction-claim-guard-page',
@@ -29,7 +29,7 @@ export class EmissionsReductionClaimGuardPageComponent implements OnInit, OnDest
     private route: ActivatedRoute,
     private backLinkService: BackLinkService,
     private pendingRequestService: PendingRequestService,
-    @Inject(TASK_FORM_PROVIDER) protected readonly formProvider: aerEmissionsReductionClaimFormProvider,
+    @Inject(TASK_FORM_PROVIDER) protected readonly formProvider: AerEmissionsReductionClaimFormProvider,
   ) {}
   ngOnInit(): void {
     this.backLinkService.show();

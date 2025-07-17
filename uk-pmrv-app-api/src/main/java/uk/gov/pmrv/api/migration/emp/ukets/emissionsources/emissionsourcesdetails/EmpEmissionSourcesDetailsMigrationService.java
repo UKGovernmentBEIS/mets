@@ -1,17 +1,10 @@
 package uk.gov.pmrv.api.migration.emp.ukets.emissionsources.emissionsourcesdetails;
 
-import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.endpoint.condition.ConditionalOnAvailableEndpoint;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.account.domain.Account;
 import uk.gov.pmrv.api.emissionsmonitoringplan.ukets.domain.emissionsources.EmpEmissionSources;
 import uk.gov.pmrv.api.migration.MigrationEndpoint;
@@ -19,12 +12,22 @@ import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanMigrationConta
 import uk.gov.pmrv.api.migration.emp.ukets.EmissionsMonitoringPlanSectionMigrationService;
 import uk.gov.pmrv.api.migration.emp.ukets.emissionsources.EmpEmissionSourcesMigrationMapper;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import static uk.gov.pmrv.api.migration.emp.common.MigrationEmissionsMonitoringPlanHelper.constructSectionQuery;
+
 @Service
-@RequiredArgsConstructor
 @ConditionalOnAvailableEndpoint(endpoint = MigrationEndpoint.class)
 public class EmpEmissionSourcesDetailsMigrationService implements EmissionsMonitoringPlanSectionMigrationService<EmpEmissionSources> {
 
 	private final JdbcTemplate migrationJdbcTemplate;
+
+    public EmpEmissionSourcesDetailsMigrationService(@Nullable @Qualifier("migrationJdbcTemplate") JdbcTemplate migrationJdbcTemplate) {
+        this.migrationJdbcTemplate = migrationJdbcTemplate;
+    }
 
     private static final String QUERY_BASE  =
         "with XMLNAMESPACES (\r\n"

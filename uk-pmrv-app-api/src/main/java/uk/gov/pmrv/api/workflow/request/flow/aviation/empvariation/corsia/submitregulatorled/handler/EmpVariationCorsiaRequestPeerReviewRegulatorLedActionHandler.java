@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -34,15 +34,15 @@ public class EmpVariationCorsiaRequestPeerReviewRegulatorLedActionHandler
     @Override
     public void process(final Long requestTaskId,
                         final RequestTaskActionType requestTaskActionType,
-                        final PmrvUser pmrvUser,
+                        final AppUser appUser,
                         final PeerReviewRequestTaskActionPayload taskActionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         final Request request = requestTask.getRequest();
-        final String userId = pmrvUser.getUserId();
+        final String userId = appUser.getUserId();
         final String peerReviewer = taskActionPayload.getPeerReviewer();
 
-        validator.validate(requestTask, taskActionPayload, pmrvUser);
+        validator.validate(requestTask, taskActionPayload, appUser);
         peerReviewService.saveRequestPeerReviewAction(requestTask, peerReviewer, userId);
         requestService.addActionToRequest(request,
             null,

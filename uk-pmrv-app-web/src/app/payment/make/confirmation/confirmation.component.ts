@@ -5,6 +5,7 @@ import { BehaviorSubject, combineLatest, first, map, of, switchMap, takeUntil } 
 
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { AuthStore, selectUserProfile } from '@core/store/auth';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
 import { KeycloakProfile } from 'keycloak-js';
 
 import { CardPaymentProcessResponseDTO } from 'pmrv-api';
@@ -40,10 +41,10 @@ export interface PaymentDetailsItem {
   providers: [DestroySubject],
 })
 export class ConfirmationComponent implements OnInit {
-  userProfile$ = this.authStore.pipe(selectUserProfile);
-  details$ = new BehaviorSubject<PaymentDetails>(null); //: PaymentDetails;
-
   readonly shouldDisplayAmount$ = this.store.pipe(map((state) => !shouldHidePaymentAmount(state)));
+
+  userProfile$ = this.authStore.pipe(selectUserProfile);
+  details$ = new BehaviorSubject<PaymentDetails>(null);
 
   constructor(
     readonly store: PaymentStore,
@@ -51,6 +52,7 @@ export class ConfirmationComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly destroy$: DestroySubject,
+    private readonly breadcrumbService: BreadcrumbService,
   ) {}
 
   ngOnInit(): void {
@@ -64,9 +66,10 @@ export class ConfirmationComponent implements OnInit {
                   ([userProfile, state]) =>
                     ({
                       details: mapMakePaymentToPaymentDetails(userProfile, state),
-                    } as PaymentDetailsItem),
+                    }) as PaymentDetailsItem,
                 ),
               );
+
             case 'CREDIT_OR_DEBIT_CARD':
               return this.route.paramMap.pipe(
                 first(),
@@ -79,6 +82,7 @@ export class ConfirmationComponent implements OnInit {
                 ),
                 map(([userProfile, state, res]) => this.GOVUKPaymentDetails(userProfile, state, res)),
               );
+
             default:
               return of({} as PaymentDetailsItem);
           }
@@ -96,8 +100,10 @@ export class ConfirmationComponent implements OnInit {
             queryParams: { message: data.message },
           });
         } else {
-          this.router.navigate(['../details'], { relativeTo: this.route });
+          this.router.navigate(['..'], { relativeTo: this.route });
         }
+
+        this.breadcrumbService.showDashboardBreadcrumb(this.router.url);
       });
   }
 
@@ -107,6 +113,7 @@ export class ConfirmationComponent implements OnInit {
     res: CardPaymentProcessResponseDTO,
   ): PaymentDetailsItem {
     const paymentState = res.state;
+
     return {
       details:
         paymentState.finished && paymentState.status === 'success'

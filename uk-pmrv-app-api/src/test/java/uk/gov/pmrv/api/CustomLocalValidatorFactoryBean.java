@@ -4,6 +4,7 @@ import jakarta.validation.Configuration;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorFactory;
 import org.hibernate.validator.HibernateValidator;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class CustomLocalValidatorFactoryBean extends LocalValidatorFactoryBean {
     }
 
     @Override
-    protected void postProcessConfiguration(Configuration<?> configuration) {
+    protected void postProcessConfiguration(@NotNull Configuration<?> configuration) {
         super.postProcessConfiguration(configuration);
         ConstraintValidatorFactory defaultConstraintValidatorFactory =
                 configuration.getDefaultConstraintValidatorFactory();

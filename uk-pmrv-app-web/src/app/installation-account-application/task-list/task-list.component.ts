@@ -19,8 +19,7 @@ import { InstallationAccountApplicationStore } from '../store/installation-accou
       heading="Request to open an installation account"
       submitLabel="Check and submit your request"
       submitButtonLabel="Continue"
-      cancelLinkLabel="Cancel this request"
-    ></app-task-list>
+      cancelLinkLabel="Cancel this request"></app-task-list>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

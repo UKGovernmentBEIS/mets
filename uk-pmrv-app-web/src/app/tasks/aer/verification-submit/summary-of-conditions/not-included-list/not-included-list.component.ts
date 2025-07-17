@@ -16,8 +16,7 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from 'pmrv-api';
       <app-summary-of-conditions-list
         [isEditable]="isEditable$ | async"
         [list]="list$ | async"
-        baseChangeLink="../not-included-list"
-      >
+        baseChangeLink="../not-included-list">
         <div *ngIf="(isEditable$ | async) === true" class="govuk-button-group">
           <button (click)="onSubmit()" govukButton type="button">Continue</button>
         </div>

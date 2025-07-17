@@ -1,14 +1,13 @@
 package uk.gov.pmrv.api.user.core.domain.dto;
 
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import uk.gov.pmrv.api.user.core.domain.dto.validation.CountryCode;
-
-import jakarta.validation.constraints.Size;
 
 /**
  * The phone number details DTO.

@@ -6,8 +6,8 @@ import { combineLatest, first, map, Observable, switchMap } from 'rxjs';
 
 import { AerVerificationReviewDecisionGroupComponent } from '@aviation/request-task/aer/shared/aer-verification-review-decision-group/aer-verification-review-decision-group.component';
 import { requestTaskQuery, RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
-import { showReviewDecisionComponent } from '@aviation/request-task/util';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
+import { getSummaryHeaderForTaskType, showReviewDecisionComponent } from '@aviation/request-task/util';
 import { DataGapsMethodologiesGroupComponent } from '@aviation/shared/components/aer-verify/data-gaps-methodologies-group/data-gaps-methodologies-group.component';
 import { ReturnToLinkComponent } from '@aviation/shared/components/return-to-link';
 import { PendingRequestService } from '@core/guards/pending-request.service';
@@ -58,7 +58,7 @@ export class MethodologiesSummaryComponent {
         .verificationReport.dataGapsMethodologies;
       return {
         data: methodologiesInfo,
-        pageHeader: 'Check Your Answers',
+        pageHeader: getSummaryHeaderForTaskType(type, 'dataGapsMethodologies'),
         isEditable,
         hideSubmit: !isEditable || ['complete', 'cannot start yet'].includes(taskStatus),
         showDecision: showReviewDecisionComponent.includes(type),
@@ -80,7 +80,7 @@ export class MethodologiesSummaryComponent {
       .pipe(
         switchMap((verificationReportData) => {
           methodologiesValue = verificationReportData.dataGapsMethodologies;
-          return (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).saveAerVerify(
+          return (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).saveAerVerify(
             { dataGapsMethodologies: methodologiesValue },
             'complete',
           );
@@ -88,7 +88,7 @@ export class MethodologiesSummaryComponent {
         this.pendingRequest.trackRequest(),
       )
       .subscribe(() => {
-        (this.store.aerVerifyDelegate as AerVerifyStoreDelegate).setDataGapsMethodologies({
+        (this.store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setDataGapsMethodologies({
           ...methodologiesValue,
         });
         this.router.navigate(['../../..'], { relativeTo: this.route });

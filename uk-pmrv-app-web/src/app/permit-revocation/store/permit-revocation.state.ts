@@ -35,7 +35,7 @@ export interface PermitRevocationState {
   };
 
   permitRevocation?: PermitRevocation;
-  feeAmount?: number;
+  feeAmount?: string;
   decisionNotification?: DecisionNotification;
   usersInfo?: { [key: string]: RequestActionUserInfo };
   allowancesSurrenderRequired?: boolean;

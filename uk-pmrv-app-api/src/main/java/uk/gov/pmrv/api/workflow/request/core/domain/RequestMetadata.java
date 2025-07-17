@@ -10,7 +10,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataType;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.common.domain.AviationAerRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.annualoffsetting.common.domain.AviationAerCorsiaAnnualOffsettingRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.common.domain.AviationAerCorsiaRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.corsia.threeyearperiodoffsetting.common.domain.AviationAerCorsia3YearPeriodOffsettingRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.aviation.doe.corsia.domain.AviationDoECorsiaRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.dre.common.domain.AviationDreRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empreissue.domain.EmpBatchReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.empvariation.common.domain.EmpVariationRequestMetadata;
@@ -18,8 +21,11 @@ import uk.gov.pmrv.api.workflow.request.flow.aviation.vir.domain.AviationVirRequ
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.ReissueRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRRequestMetaData;
+import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitreissue.domain.PermitBatchReissueRequestMetadata;
@@ -42,14 +48,20 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirRequestM
                 @DiscriminatorMapping(schema = VirRequestMetadata.class, value = "VIR"),
                 @DiscriminatorMapping(schema = DreRequestMetadata.class, value = "DRE"),
                 @DiscriminatorMapping(schema = AirRequestMetadata.class, value = "AIR"),
+                @DiscriminatorMapping(schema = InstallationInspectionRequestMetadata.class, value = "INSTALLATION_INSPECTION"),
+                @DiscriminatorMapping(schema = BDRRequestMetadata.class, value = "BDR"),
+                @DiscriminatorMapping(schema = ALRRequestMetaData.class, value = "ALR"),
 
                 // Aviation related request metadata
                 @DiscriminatorMapping(schema = AviationAerRequestMetadata.class, value = "AVIATION_AER"),
+                @DiscriminatorMapping(schema = AviationAerCorsiaAnnualOffsettingRequestMetadata.class, value = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING"),
+                @DiscriminatorMapping(schema = AviationAerCorsia3YearPeriodOffsettingRequestMetadata.class, value = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING"),
                 @DiscriminatorMapping(schema = AviationDreRequestMetadata.class, value = "AVIATION_DRE"),
                 @DiscriminatorMapping(schema = AviationVirRequestMetadata.class, value = "AVIATION_VIR"),
                 @DiscriminatorMapping(schema = EmpVariationRequestMetadata.class, value = "EMP_VARIATION"),
                 @DiscriminatorMapping(schema = EmpBatchReissueRequestMetadata.class, value = "EMP_BATCH_REISSUE"),
                 @DiscriminatorMapping(schema = AviationAerCorsiaRequestMetadata.class, value = "AVIATION_AER_CORSIA"),
+                @DiscriminatorMapping(schema = AviationDoECorsiaRequestMetadata.class, value = "AVIATION_DOE_CORSIA")
         },
         discriminatorProperty = "type")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME , include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "type", visible = true)
@@ -66,14 +78,20 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirRequestM
         @JsonSubTypes.Type(value = VirRequestMetadata.class, name = "VIR"),
         @JsonSubTypes.Type(value = DreRequestMetadata.class, name = "DRE"),
         @JsonSubTypes.Type(value = AirRequestMetadata.class, name = "AIR"),
+        @JsonSubTypes.Type(value = InstallationInspectionRequestMetadata.class, name = "INSTALLATION_INSPECTION"),
+        @JsonSubTypes.Type(value = BDRRequestMetadata.class, name = "BDR"),
+        @JsonSubTypes.Type(value = ALRRequestMetaData.class, name = "ALR"),
 
         // Aviation related request metadata
         @JsonSubTypes.Type(value = AviationAerRequestMetadata.class, name = "AVIATION_AER"),
+        @JsonSubTypes.Type(value = AviationAerCorsiaAnnualOffsettingRequestMetadata.class, name = "AVIATION_AER_CORSIA_ANNUAL_OFFSETTING"),
+        @JsonSubTypes.Type(value = AviationAerCorsia3YearPeriodOffsettingRequestMetadata.class, name = "AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING"),
         @JsonSubTypes.Type(value = AviationDreRequestMetadata.class, name = "AVIATION_DRE"),
         @JsonSubTypes.Type(value = AviationVirRequestMetadata.class, name = "AVIATION_VIR"),
         @JsonSubTypes.Type(value = EmpVariationRequestMetadata.class, name = "EMP_VARIATION"),
         @JsonSubTypes.Type(value = EmpBatchReissueRequestMetadata.class, name = "EMP_BATCH_REISSUE"),
         @JsonSubTypes.Type(value = AviationAerCorsiaRequestMetadata.class, name = "AVIATION_AER_CORSIA"),
+        @JsonSubTypes.Type(value = AviationDoECorsiaRequestMetadata.class, name = "AVIATION_DOE_CORSIA"),
 })
 @Data
 @SuperBuilder

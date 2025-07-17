@@ -1,9 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.dre.handler;
 
-import org.springframework.stereotype.Component;
-
 import lombok.RequiredArgsConstructor;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import org.springframework.stereotype.Component;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.StartProcessRequestService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.dto.RequestDetailsDTO;
@@ -12,7 +11,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestMetadataT
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestPayloadType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestQueryService;
-import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestCreateActionHandler;
+import uk.gov.pmrv.api.workflow.request.flow.common.actionhandler.RequestAccountCreateActionHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.ReportRelatedRequestCreateActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.dto.RequestParams;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerRequestMetadata;
@@ -21,14 +20,14 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestP
 
 @Component
 @RequiredArgsConstructor
-public class DreCreateActionHandler implements RequestCreateActionHandler<ReportRelatedRequestCreateActionPayload> {
+public class DreCreateActionHandler implements RequestAccountCreateActionHandler<ReportRelatedRequestCreateActionPayload> {
 
 	private final RequestQueryService requestQueryService;
 	private final StartProcessRequestService startProcessRequestService;
 	
 	@Override
-	public String process(Long accountId, RequestCreateActionType type, ReportRelatedRequestCreateActionPayload payload,
-			PmrvUser pmrvUser) {
+	public String process(Long accountId, ReportRelatedRequestCreateActionPayload payload,
+			AppUser appUser) {
 		final RequestDetailsDTO aerRequestDetails = requestQueryService.findRequestDetailsById(payload.getRequestId());
 		final AerRequestMetadata aerMetadata = (AerRequestMetadata) aerRequestDetails.getRequestMetadata();
 		final RequestParams requestParams = RequestParams.builder()
@@ -40,7 +39,7 @@ public class DreCreateActionHandler implements RequestCreateActionHandler<Report
 	            		.build())
 	            .requestPayload(DreRequestPayload.builder()
 	                .payloadType(RequestPayloadType.DRE_REQUEST_PAYLOAD)
-	                .regulatorAssignee(pmrvUser.getUserId())
+	                .regulatorAssignee(appUser.getUserId())
 	                .reportingYear(aerMetadata.getYear())
 	                .initiatorRequest(aerMetadata.getInitiatorRequest())
 	                .build())
@@ -52,7 +51,7 @@ public class DreCreateActionHandler implements RequestCreateActionHandler<Report
 	}
 
 	@Override
-	public RequestCreateActionType getType() {
+	public RequestCreateActionType getRequestCreateActionType() {
 		return RequestCreateActionType.DRE;
 	}
 

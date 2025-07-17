@@ -1,5 +1,6 @@
 import { NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
@@ -11,6 +12,7 @@ import { SharedModule } from '@shared/shared.module';
 
 import { GovukComponentsModule } from 'govuk-components';
 
+import { empQuery } from '../../emp.selectors';
 import { BlockHourProceduresFormProvider } from '../block-hour-procedures-form.provider';
 
 @Component({
@@ -22,6 +24,7 @@ import { BlockHourProceduresFormProvider } from '../block-hour-procedures-form.p
 })
 export class SpecificBurnFuelCalculationComponent {
   form = this.formProvider.specificBurnFuel;
+  isCorsia = toSignal(this.store.pipe(empQuery.selectIsCorsia));
 
   constructor(
     @Inject(TASK_FORM_PROVIDER) private formProvider: BlockHourProceduresFormProvider,
@@ -56,9 +59,11 @@ export class SpecificBurnFuelCalculationComponent {
       assignmentAndAdjustment: this.form.value.assignmentAndAdjustment,
       clearDistinguishionIcaoAircraftDesignators: parseCsv(
         this.form.value.clearDistinguishionIcaoAircraftDesignators as string,
+        true,
       ),
       notClearDistinguishionIcaoAircraftDesignators: parseCsv(
         this.form.value.notClearDistinguishionIcaoAircraftDesignators as string,
+        true,
       ),
     };
 

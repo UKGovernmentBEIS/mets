@@ -82,7 +82,7 @@ export class ManualCalculationValuesComponent {
         first(),
         filter(([form]) => form.valid),
         switchMap(([form, sourceStreamEmission, sourceStreamType]) => {
-          const { calculationActivityDataCalculationMethod } = sourceStreamEmission?.parameterCalculationMethod;
+          const { calculationActivityDataCalculationMethod } = sourceStreamEmission?.parameterCalculationMethod ?? {};
           const containsBiomass = sourceStreamEmission?.biomassPercentages?.contains;
 
           const manualEmissionsParams = this.getManualParametersValues(form, ['nonSustainableBiomassPercentage']);

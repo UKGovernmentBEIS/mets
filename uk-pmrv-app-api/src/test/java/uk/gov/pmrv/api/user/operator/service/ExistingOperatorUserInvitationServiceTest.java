@@ -4,23 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityService;
 import uk.gov.pmrv.api.account.service.AccountQueryService;
-import uk.gov.pmrv.api.authorization.core.service.UserRoleTypeService;
-import uk.gov.pmrv.api.authorization.operator.service.OperatorAuthorityService;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.user.core.domain.enumeration.AuthenticationStatus;
 import uk.gov.pmrv.api.user.operator.domain.OperatorUserInvitationDTO;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,104 +21,29 @@ class ExistingOperatorUserInvitationServiceTest {
     private ExistingOperatorUserInvitationService existingOperatorUserInvitationService;
 
     @Mock
-    private UserRoleTypeService userRoleTypeService;
+    private OperatorUserRegisterValidationService operatorUserRegisterValidationService;
+    
+    @Mock
+    private OperatorUserAuthService operatorUserAuthService;
 
     @Mock
     private OperatorAuthorityService operatorAuthorityService;
     
     @Mock
-    private AccountQueryService accountQueryService;;
+    private AccountQueryService accountQueryService;
 
     @Mock
     private OperatorUserNotificationGateway operatorUserNotificationGateway;
 
-    @Mock
-    private OperatorUserAuthService operatorUserAuthService;
-
     @Test
-    void addExistingOperatorUserToAccountWhenUserInStatusRegistered() {
+    void addExistingUserToAccount() {
         String email = "email";
         String roleCode = "roleCode";
         String userId = "userId";
         Long accountId = 1L;
         String accountName = "accountName";
         String authorityUuid = "authorityUuid";
-        PmrvUser currentUser = PmrvUser.builder().userId("current_user_id").build();
-        OperatorUserInvitationDTO operatorUserInvitationDTO = createOperatorUserInvitationDTO(email, roleCode);
-
-        when(userRoleTypeService.isUserOperator(userId)).thenReturn(true);
-        when(operatorAuthorityService.createPendingAuthorityForOperator(accountId, roleCode, userId, currentUser))
-            .thenReturn(authorityUuid);
-        when(accountQueryService.getAccountName(accountId))
-            .thenReturn(accountName);
-
-        existingOperatorUserInvitationService
-            .addExistingUserToAccount(operatorUserInvitationDTO, accountId, userId, AuthenticationStatus.REGISTERED, currentUser);
-
-        verify(userRoleTypeService, times(1)).isUserOperator(userId);
-        verify(operatorAuthorityService, times(1)).createPendingAuthorityForOperator(accountId, roleCode, userId, currentUser);
-        verify(accountQueryService, times(1)).getAccountName(accountId);
-        verify(operatorUserNotificationGateway, times(1)).notifyInvitedUser(operatorUserInvitationDTO, accountName, authorityUuid);
-        verify(operatorUserAuthService, never()).updateOperatorUserToPending(anyString(), any());
-    }
-
-    @Test
-    void addExistingOperatorUserToAccountThrowsExceptionWhenUserInStatusRegisteredIsNotOperator() {
-        String email = "email";
-        String roleCode = "roleCode";
-        String userId = "userId";
-        Long accountId = 1L;
-        PmrvUser currentUser = PmrvUser.builder().userId("current_user_id").build();
-        OperatorUserInvitationDTO operatorUserInvitationDTO = createOperatorUserInvitationDTO(email, roleCode);
-
-        when(userRoleTypeService.isUserOperator(userId)).thenReturn(false);
-
-        BusinessException businessException = assertThrows(BusinessException.class, () -> existingOperatorUserInvitationService
-            .addExistingUserToAccount(operatorUserInvitationDTO, accountId, userId, AuthenticationStatus.REGISTERED, currentUser));
-
-        assertEquals(ErrorCode.USER_ALREADY_REGISTERED, businessException.getErrorCode());
-
-        verify(userRoleTypeService, times(1)).isUserOperator(userId);
-        verify(operatorAuthorityService, never()).createPendingAuthorityForOperator(anyLong(), anyString(), anyString(), any());
-        verify(operatorUserNotificationGateway, never()).notifyInvitedUser(Mockito.any(), anyString(), anyString());
-        verify(operatorUserAuthService, never()).updateOperatorUserToPending(anyString(), any());
-    }
-
-    @Test
-    void addExistingOperatorUserToAccountWhenUserInStatusPending() {
-        String email = "email";
-        String roleCode = "roleCode";
-        String userId = "userId";
-        Long accountId = 1L;
-        String accountName = "accountName";
-        String authorityUuid = "authUuid";
-        PmrvUser currentUser = PmrvUser.builder().userId("current_user_id").build();
-        OperatorUserInvitationDTO operatorUserInvitationDTO = createOperatorUserInvitationDTO(email, roleCode);
-
-        when(operatorAuthorityService.createPendingAuthorityForOperator(accountId, roleCode, userId, currentUser))
-            .thenReturn(authorityUuid);
-        when(accountQueryService.getAccountName(accountId))
-            .thenReturn(accountName);
-        
-        existingOperatorUserInvitationService
-            .addExistingUserToAccount(operatorUserInvitationDTO, accountId, userId, AuthenticationStatus.PENDING, currentUser);
-
-        verify(userRoleTypeService, never()).isUserOperator(anyString());
-        verify(operatorUserAuthService, times(1)).updateOperatorUserToPending(userId, operatorUserInvitationDTO);
-        verify(operatorAuthorityService, times(1)).createPendingAuthorityForOperator(accountId, roleCode, userId, currentUser);
-        verify(accountQueryService, times(1)).getAccountName(accountId);
-        verify(operatorUserNotificationGateway, times(1)).notifyInvitedUser(operatorUserInvitationDTO, accountName, authorityUuid);
-    }
-
-    @Test
-    void addExistingOperatorUserToAccountWhenUserInStatusDeleted() {
-        String email = "email";
-        String roleCode = "roleCode";
-        String userId = "userId";
-        Long accountId = 1L;
-        String accountName = "accountName";
-        String authorityUuid = "authUuid";
-        PmrvUser currentUser = PmrvUser.builder().userId("current_user_id").build();
+        AppUser currentUser = AppUser.builder().userId("current_user_id").build();
         OperatorUserInvitationDTO operatorUserInvitationDTO = createOperatorUserInvitationDTO(email, roleCode);
 
         when(operatorAuthorityService.createPendingAuthorityForOperator(accountId, roleCode, userId, currentUser))
@@ -138,10 +52,10 @@ class ExistingOperatorUserInvitationServiceTest {
             .thenReturn(accountName);
 
         existingOperatorUserInvitationService
-            .addExistingUserToAccount(operatorUserInvitationDTO, accountId, userId, AuthenticationStatus.DELETED, currentUser);
+            .addExistingUserToAccount(operatorUserInvitationDTO, accountId, userId, currentUser);
 
-        verify(userRoleTypeService, never()).isUserOperator(anyString());
-        verify(operatorUserAuthService, times(1)).updateOperatorUserToPending(userId, operatorUserInvitationDTO);
+        verify(operatorUserRegisterValidationService, times(1)).validateRegisterForAccount(userId, accountId);
+        verify(operatorUserAuthService, times(1)).updateUser(operatorUserInvitationDTO);
         verify(operatorAuthorityService, times(1)).createPendingAuthorityForOperator(accountId, roleCode, userId, currentUser);
         verify(accountQueryService, times(1)).getAccountName(accountId);
         verify(operatorUserNotificationGateway, times(1)).notifyInvitedUser(operatorUserInvitationDTO, accountName, authorityUuid);

@@ -3,7 +3,7 @@ package uk.gov.pmrv.api.workflow.request.application.item.repository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.test.annotation.DirtiesContext;
-import uk.gov.pmrv.api.AbstractContainerBaseTest;
+import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.RequestTaskVisit;
 import uk.gov.pmrv.api.workflow.request.application.item.domain.RequestTaskVisitPK;
 

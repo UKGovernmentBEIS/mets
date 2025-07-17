@@ -11,7 +11,7 @@ import { BusinessTestingModule, expectBusinessErrorToBe } from '@error/testing/b
 import { SharedModule } from '@shared/shared.module';
 import { ActivatedRouteStub, BasePage, expectToHaveNavigatedTo, RouterStubComponent } from '@testing';
 
-import { ApplicationUserDTO, RegulatorAuthoritiesService } from 'pmrv-api';
+import { RegulatorAuthoritiesService, UserDTO } from 'pmrv-api';
 
 import { saveNotFoundRegulatorError } from '../errors/business-error';
 import { DeleteComponent } from './delete.component';
@@ -44,11 +44,10 @@ describe('DeleteComponent', () => {
     }
   }
 
-  const user: ApplicationUserDTO = {
+  const user: UserDTO = {
     email: 'alfyn-octo@pmrv.uk',
     firstName: 'Alfyn',
     lastName: 'Octo',
-    termsVersion: 1,
   };
 
   let regulatorAuthoritiesService: Partial<jest.Mocked<RegulatorAuthoritiesService>>;

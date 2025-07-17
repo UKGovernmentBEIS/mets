@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -58,17 +58,17 @@ class EmpIssuanceUkEtsReviewRequestPeerReviewActionHandlerTest {
             .processTaskId("process-task-id")
             .build();
         PeerReviewRequestTaskActionPayload taskActionPayload = PeerReviewRequestTaskActionPayload.builder().peerReviewer(peerReviewer).build();
-        PmrvUser pmrvUser = PmrvUser.builder().userId("userId").build();
+        AppUser appUser = AppUser.builder().userId("userId").build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        handler.process(requestTaskId, requestTaskActionType, pmrvUser, taskActionPayload);
+        handler.process(requestTaskId, requestTaskActionType, appUser, taskActionPayload);
 
-        verify(requestPeerReviewValidatorService, times(1)).validate(requestTask,peerReviewer, pmrvUser);
+        verify(requestPeerReviewValidatorService, times(1)).validate(requestTask,peerReviewer, appUser);
         verify(requestEmpUkEtsReviewService, times(1))
-            .saveRequestPeerReviewAction(requestTask,peerReviewer, pmrvUser);
+            .saveRequestPeerReviewAction(requestTask,peerReviewer, appUser);
         verify(requestService, times(1))
-            .addActionToRequest(requestTask.getRequest(), null, RequestActionType.EMP_ISSUANCE_UKETS_PEER_REVIEW_REQUESTED, pmrvUser.getUserId());
+            .addActionToRequest(requestTask.getRequest(), null, RequestActionType.EMP_ISSUANCE_UKETS_PEER_REVIEW_REQUESTED, appUser.getUserId());
         verify(workflowService, times(1))
             .completeTask(requestTask.getProcessTaskId(), Map.of(
                 BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),

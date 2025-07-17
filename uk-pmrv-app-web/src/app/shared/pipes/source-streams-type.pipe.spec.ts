@@ -16,6 +16,7 @@ describe('SourceStreamTypePipe', () => {
     expect(pipe.transform('PRIMARY_ALUMINIUM_MASS_BALANCE_METHODOLOGY')).toEqual(
       'Primary aluminium: Mass balance methodology',
     );
+    expect(pipe.transform('UPSTREAM_GHG_REMOVAL_VENTING_CO2')).toEqual('Upstream GHG removal: Venting CO2');
   });
 
   it('should handle empty value', () => {

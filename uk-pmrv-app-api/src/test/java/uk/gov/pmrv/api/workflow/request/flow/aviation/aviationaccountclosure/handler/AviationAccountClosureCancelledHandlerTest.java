@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.pmrv.api.workflow.request.WorkflowService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -38,7 +38,7 @@ class AviationAccountClosureCancelledHandlerTest {
     @Test
     void process() {
 
-        PmrvUser pmrvUser = PmrvUser.builder().build();
+        AppUser appUser = AppUser.builder().build();
         String processTaskId = "processTaskId";
         Request request = Request.builder().id("id").build();
         RequestTask requestTask = RequestTask.builder()
@@ -51,7 +51,7 @@ class AviationAccountClosureCancelledHandlerTest {
 
         handler.process(requestTask.getId(),
             RequestTaskActionType.AVIATION_ACCOUNT_CLOSURE_CANCEL_APPLICATION,
-            pmrvUser,
+            appUser,
             RequestTaskActionEmptyPayload.builder().build());
 
         verify(requestAviationAccountClosureService, times(1)).cancel("id");

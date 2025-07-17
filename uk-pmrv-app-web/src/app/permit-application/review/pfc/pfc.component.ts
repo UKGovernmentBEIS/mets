@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { map, pluck } from 'rxjs';
+import { map } from 'rxjs';
+
+import { statusMap } from '@shared/task-list/task-item/status.map';
 
 import { GovukTableColumn } from 'govuk-components';
 
 import { PFCSourceStreamCategoryAppliedTier } from 'pmrv-api';
 
-import { statusMap } from '../../../shared/task-list/task-item/status.map';
 import { areCategoryTierPrerequisitesMet } from '../../approaches/pfc/pfc-status';
 import { PermitApplicationState } from '../../store/permit-application.state';
 import { PermitApplicationStore } from '../../store/permit-application.store';
@@ -20,7 +21,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
 export class PfcComponent {
   showDiff$ = this.store.showDiff$;
   notification = this.router.getCurrentNavigation()?.extras.state?.notification;
-  groupKey$ = this.route.data.pipe(pluck('groupKey'));
+  groupKey$ = this.route.data.pipe(map((x) => x?.groupKey));
 
   sourceStreamCategoryAppliedTiers$ = this.store.findTask<PFCSourceStreamCategoryAppliedTier[]>(
     'monitoringApproaches.CALCULATION_PFC.sourceStreamCategoryAppliedTiers',
@@ -31,12 +32,18 @@ export class PfcComponent {
 
   sumOfAnnualEmitted$ = this.sourceStreamCategoryAppliedTiers$.pipe(
     map((appliedTiers) =>
-      appliedTiers?.reduce((total, tier) => total + (+tier?.sourceStreamCategory?.annualEmittedCO2Tonnes ?? 0), 0),
+      appliedTiers?.reduce(
+        (total, tier) => total + (Number(tier?.sourceStreamCategory?.annualEmittedCO2Tonnes) || 0),
+        0,
+      ),
     ),
   );
   originalSumOfAnnualEmitted$ = this.originalSourceStreamCategoryAppliedTiers$.pipe(
     map((appliedTiers) =>
-      appliedTiers?.reduce((total, tier) => total + (+tier?.sourceStreamCategory?.annualEmittedCO2Tonnes ?? 0), 0),
+      appliedTiers?.reduce(
+        (total, tier) => total + (Number(tier?.sourceStreamCategory?.annualEmittedCO2Tonnes) || 0),
+        0,
+      ),
     ),
   );
 

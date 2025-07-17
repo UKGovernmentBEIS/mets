@@ -167,6 +167,7 @@ export class CategoryComponent implements PendingRequest {
                     ],
               ...this.buildPermitSectionCompletedFactor(state, tiers, index, 'MEASUREMENT_CO2_Measured_Emissions'),
               ...this.buildPermitSectionCompletedFactor(state, tiers, index, 'MEASUREMENT_CO2_Applied_Standard'),
+              ...this.buildPermitSectionCompletedFactor(state, tiers, index, 'MEASUREMENT_CO2_Biomass_Fraction'),
             },
           }),
         ),

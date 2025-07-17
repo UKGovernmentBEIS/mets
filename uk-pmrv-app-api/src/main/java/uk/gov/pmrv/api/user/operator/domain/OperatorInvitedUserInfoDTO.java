@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.pmrv.api.user.core.domain.dto.InvitedUserInfoDTO;
-import uk.gov.pmrv.api.user.core.domain.enumeration.UserInvitationStatus;
 
 @Data
 @NoArgsConstructor
@@ -18,7 +17,6 @@ public class OperatorInvitedUserInfoDTO extends InvitedUserInfoDTO {
 	private String firstName;
 	private String lastName;
 	private String roleCode;
-    private String accountInstallationName;
-    private UserInvitationStatus invitationStatus;
+    private String accountName;
 	
 }

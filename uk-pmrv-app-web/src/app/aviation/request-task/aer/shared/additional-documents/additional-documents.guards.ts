@@ -7,7 +7,7 @@ import { combineLatest, map, take } from 'rxjs';
 import { AerCorsiaStoreDelegate } from '@aviation/request-task/store/delegates/aer-corsia/aer-corsia-store-delegate';
 
 import { RequestTaskStore } from '../../../store';
-import { AerStoreDelegate } from '../../../store/delegates';
+import { AerUkEtsStoreDelegate } from '../../../store/delegates';
 import { TASK_FORM_PROVIDER } from '../../../task-form.provider';
 import { aerQuery } from '../../shared/aer.selectors';
 
@@ -20,7 +20,7 @@ export const canActivateAdditionalDocuments: CanActivateFn = () => {
     map(([aer, isCorsia]) => {
       const initialState = isCorsia
         ? AerCorsiaStoreDelegate.INITIAL_STATE.additionalDocuments
-        : AerStoreDelegate.INITIAL_STATE.additionalDocuments;
+        : AerUkEtsStoreDelegate.INITIAL_STATE.additionalDocuments;
 
       if (!aer) {
         store.setPayload({

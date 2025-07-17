@@ -9,7 +9,6 @@ import {
   filter,
   map,
   Observable,
-  pluck,
   shareReplay,
   switchMap,
   takeUntil,
@@ -117,8 +116,8 @@ export class TemplatesComponent {
     }),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
-  templates$ = this.templateSearchResults$.pipe(pluck('templates'));
-  totalPages$ = this.templateSearchResults$.pipe(pluck('total'));
+  templates$ = this.templateSearchResults$.pipe(map((results) => results?.templates));
+  totalPages$ = this.templateSearchResults$.pipe(map((results) => results?.total));
 
   constructor(
     private readonly fb: UntypedFormBuilder,

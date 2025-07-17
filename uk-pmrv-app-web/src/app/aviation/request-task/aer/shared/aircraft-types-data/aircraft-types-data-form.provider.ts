@@ -5,7 +5,7 @@ import { catchError, map, Observable, of, Subject, take } from 'rxjs';
 
 import { RequestTaskStore } from '@aviation/request-task/store';
 import { TaskFormProvider } from '@aviation/request-task/task-form.provider';
-import moment from 'moment';
+import { differenceInMilliseconds, getYear, isValid, parse } from 'date-fns';
 
 import {
   AircraftTypeSearchResults,
@@ -68,17 +68,15 @@ export class AircraftTypesDataFormProvider
       {
         aviationAerAircraftDataDetails: [
           null,
+          [Validators.required],
           [
-            Validators.required,
-            this.validateMaxLength('subType', 255, 'Enter up to 255 characters'),
-            this.validateMaxLength('registrationNumber', 20, 'Enter up to 20 characters'),
-            this.validateMaxLength('ownerOrLessor', 255, 'Enter up to 255 characters'),
-            this.validateMandatory('aircraftTypeDesignator', 'Enter an aircraft designator'),
-            this.validateMandatory('registrationNumber', 'Enter an aircraft registration number'),
-            this.validateDate(['startDate', 'endDate'], 'The date must be entered as dd/mm/yyyy'),
-            this.validateStartEndDate(),
-          ],
-          [
+            this.validateMaxLengthAsync('subType', 255, 'Enter up to 255 characters'),
+            this.validateMaxLengthAsync('registrationNumber', 20, 'Enter up to 20 characters'),
+            this.validateMaxLengthAsync('ownerOrLessor', 255, 'Enter up to 255 characters'),
+            this.validateMandatoryAsync('aircraftTypeDesignator', 'Enter an aircraft designator'),
+            this.validateMandatoryAsync('registrationNumber', 'Enter an aircraft registration number'),
+            this.validateDateFormatAsync(['startDate', 'endDate'], 'The date must be entered as dd/mm/yyyy'),
+            this.validateStartEndDateAsync(),
             this.validateAerYear(['startDate', 'endDate'], 'The dates entered must be within the scheme year'),
             this.validateDesignators('The designator entered is not valid. Please check and try again.'),
           ],
@@ -89,176 +87,198 @@ export class AircraftTypesDataFormProvider
     return (this._form = formGroup);
   }
 
-  validateMaxLength(field: string, length: number, message: string) {
-    return (control: FormControl): { [key: string]: any } | null => {
-      const data = control.value;
-
-      if (!Array.isArray(data)) {
-        return null;
-      }
-
-      const rows = [];
-
-      for (let i = 0; i < data.length; i++) {
-        const entry = data[i];
-
-        if (entry) {
-          const myField = entry[field];
-          if (myField && myField?.length > length) {
-            rows.push({
-              rowIndex: i + 1,
-            });
-          }
-        }
-      }
-
-      if (rows.length > 0) {
-        return {
-          ['invalidMaxLength' + field]: {
-            rows,
-            columns: this.mapFieldsToColumnNames([field]),
-            message,
-          },
-        };
-      }
-
-      return null;
+  validateMaxLengthAsync(field: string, length: number, message: string): AsyncValidatorFn {
+    return (control: FormControl): Observable<ValidationErrors | null> => {
+      return of(this.validateMaxLength(control, field, length, message));
     };
   }
 
-  validateMandatory(field: string, message: string) {
-    return (control: FormControl): { [key: string]: any } | null => {
-      const data = control.value;
-      if (!Array.isArray(data)) {
-        return null;
-      }
+  private validateMaxLength(
+    control: FormControl,
+    field: string,
+    length: number,
+    message: string,
+  ): ValidationErrors | null {
+    const data = control.value;
 
-      const rows = [];
-
-      for (let i = 0; i < data.length; i++) {
-        const entry = data[i];
-
-        if (entry) {
-          const myField = entry[field];
-          if ((myField && myField.length === 0) || !myField) {
-            rows.push({
-              rowIndex: i + 1,
-            });
-          }
-        }
-      }
-
-      if (rows.length > 0) {
-        return {
-          ['invalidMandatory' + field]: {
-            rows,
-            columns: this.mapFieldsToColumnNames([field]),
-            message,
-          },
-        };
-      }
-
+    if (!Array.isArray(data)) {
       return null;
-    };
-  }
+    }
 
-  validateDate(fields: string[], message: string) {
-    return (control: FormControl): { [key: string]: any } | null => {
-      const data = control.value;
-      if (!Array.isArray(data)) {
-        return null;
-      }
+    const rows = [];
 
-      const rows = [];
-      const returnedFields = [];
-      for (let i = 0; i < data.length; i++) {
-        const entry = data[i];
+    for (let i = 0; i < data.length; i++) {
+      const entry = data[i];
 
-        const validFields = [];
-
-        for (const field of fields) {
-          if (entry) {
-            const myField = entry[field];
-            if ((myField && myField.length > 0) || !myField) {
-              const isValid = moment(myField, 'YYYY-MM-DD', true).isValid();
-              validFields.push(isValid);
-              if (!returnedFields.includes(field)) returnedFields.push(field);
-            }
-          }
-        }
-        if (validFields.includes(false)) {
+      if (entry) {
+        const myField = entry[field];
+        if (myField && myField?.length > length) {
           rows.push({
             rowIndex: i + 1,
           });
         }
       }
+    }
 
-      if (rows.length > 0) {
-        return {
-          invalidDate: {
-            rows,
-            columns: this.mapFieldsToColumnNames(returnedFields),
-            message,
-          },
-        };
-      }
+    if (rows.length > 0) {
+      return {
+        ['invalidMaxLength' + field]: {
+          rows,
+          columns: this.mapFieldsToColumnNames([field]),
+          message,
+        },
+      };
+    }
 
-      return null;
+    return null;
+  }
+
+  validateMandatoryAsync(field: string, message: string): AsyncValidatorFn {
+    return (control: FormControl): Observable<ValidationErrors | null> => {
+      return of(this.validateMandatory(control, field, message));
     };
   }
 
-  validateStartEndDate() {
-    return (control: FormControl): { [key: string]: any } | null => {
-      const data = control.value;
+  private validateMandatory(control: FormControl, field: string, message: string) {
+    const data = control.value;
+    if (!Array.isArray(data)) {
+      return null;
+    }
 
-      if (!Array.isArray(data)) {
-        return null;
+    const rows = [];
+
+    for (let i = 0; i < data.length; i++) {
+      const entry = data[i];
+
+      if (entry) {
+        const myField = entry[field];
+        if ((myField && myField.length === 0) || !myField) {
+          rows.push({
+            rowIndex: i + 1,
+          });
+        }
       }
+    }
 
-      const rows = [];
+    if (rows.length > 0) {
+      return {
+        ['invalidMandatory' + field]: {
+          rows,
+          columns: this.mapFieldsToColumnNames([field]),
+          message,
+        },
+      };
+    }
 
-      for (let i = 0; i < data.length; i++) {
-        const entry = data[i];
+    return null;
+  }
 
+  validateDateFormatAsync(fields: string[], message: string): AsyncValidatorFn {
+    return (control: FormControl): Observable<ValidationErrors | null> => {
+      return of(this.validateDateFormat(control, fields, message));
+    };
+  }
+
+  private validateDateFormat(control: FormControl, fields: string[], message: string) {
+    const data = control.value;
+    if (!Array.isArray(data)) {
+      return null;
+    }
+
+    const rows = [];
+    const returnedFields = [];
+    for (let i = 0; i < data.length; i++) {
+      const entry = data[i];
+
+      const validFields = [];
+
+      for (const field of fields) {
         if (entry) {
-          if (
-            entry['startDate'] &&
-            entry['endDate'] &&
-            entry['startDate'].length > 0 &&
-            entry['endDate'].length > 0 &&
-            moment(entry['startDate'], 'YYYY-MM-DD', true).isValid() &&
-            moment(entry['endDate'], 'YYYY-MM-DD', true).isValid()
-          ) {
-            const startDate = moment(entry['startDate'], 'YYYY-MM-DD', true);
-            const endDate = moment(entry['endDate'], 'YYYY-MM-DD', true);
-            if (endDate.diff(startDate) < 0) {
-              rows.push({
-                rowIndex: i + 1,
-              });
-            }
+          const myField = entry[field];
+          if ((myField && myField.length > 0) || !myField) {
+            const isValidDate = isValid(parse(myField, 'yyyy-MM-dd', new Date()));
+            validFields.push(isValidDate);
+            if (!returnedFields.includes(field)) returnedFields.push(field);
           }
         }
       }
-
-      if (rows.length > 0) {
-        return {
-          invalidStartEndDate: {
-            rows,
-            columns: this.mapFieldsToColumnNames(['startDate', 'endDate']),
-            message: 'The start date must be the same as or before the end date',
-          },
-        };
+      if (validFields.includes(false)) {
+        rows.push({
+          rowIndex: i + 1,
+        });
       }
+    }
 
-      return null;
+    if (rows.length > 0) {
+      return {
+        invalidDate: {
+          rows,
+          columns: this.mapFieldsToColumnNames(returnedFields),
+          message,
+        },
+      };
+    }
+
+    return null;
+  }
+
+  validateStartEndDateAsync(): AsyncValidatorFn {
+    return (control: FormControl): Observable<ValidationErrors | null> => {
+      return of(this.validateStartEndDate(control));
     };
+  }
+
+  private validateStartEndDate(control: FormControl): ValidationErrors | null {
+    const data = control.value;
+
+    if (!Array.isArray(data)) {
+      return null;
+    }
+
+    const rows = [];
+
+    for (let i = 0; i < data.length; i++) {
+      const entry = data[i];
+
+      if (entry) {
+        if (
+          entry['startDate'] &&
+          entry['endDate'] &&
+          entry['startDate'].length > 0 &&
+          entry['endDate'].length > 0 &&
+          isValid(parse(entry['startDate'], 'yyyy-MM-dd', new Date())) &&
+          isValid(parse(entry['endDate'], 'yyyy-MM-dd', new Date()))
+        ) {
+          const startDate = parse(entry['startDate'], 'yyyy-MM-dd', new Date());
+          const endDate = parse(entry['endDate'], 'yyyy-MM-dd', new Date());
+
+          if (differenceInMilliseconds(endDate, startDate) < 0) {
+            rows.push({
+              rowIndex: i + 1,
+            });
+          }
+        }
+      }
+    }
+
+    if (rows.length > 0) {
+      return {
+        invalidStartEndDate: {
+          rows,
+          columns: this.mapFieldsToColumnNames(['startDate', 'endDate']),
+          message: 'The start date must be the same as or before the end date',
+        },
+      };
+    }
+
+    return null;
   }
 
   validateAerYear(fields: string[], message: string): AsyncValidatorFn {
     return (control: FormControl): Observable<ValidationErrors | null> => {
       const data = control.value;
       if (!Array.isArray(data)) {
-        return null;
+        return of(null);
       }
 
       return this.store.pipe(
@@ -272,7 +292,8 @@ export class AircraftTypesDataFormProvider
             const notValidYears = [];
             for (const field of fields) {
               if (entry && entry[field] && aerYear) {
-                const year = moment(entry[field], 'YYYY-MM-DD', true).year().toString();
+                const year = getYear(parse(entry[field], 'yyyy-MM-dd', new Date())).toString();
+
                 if (year !== aerYear + '') {
                   notValidYears.push(year);
                   if (!returnedFields.includes(field)) returnedFields.push(field);
@@ -307,7 +328,7 @@ export class AircraftTypesDataFormProvider
     return (control: FormControl): Observable<ValidationErrors | null> => {
       const data = control.value;
       if (!Array.isArray(data)) {
-        return null;
+        return of(null);
       }
       const searchCriteria = {
         pageSize: 100000,

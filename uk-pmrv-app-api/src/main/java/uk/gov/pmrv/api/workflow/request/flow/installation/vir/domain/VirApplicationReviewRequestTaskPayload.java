@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 import org.springframework.util.CollectionUtils;
-
 import uk.gov.pmrv.api.workflow.request.flow.common.vir.domain.RegulatorReviewResponse;
 import uk.gov.pmrv.api.workflow.request.flow.common.vir.validation.VirReviewable;
 import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RequestTaskPayloadRfiAttachable;

@@ -1,9 +1,9 @@
-import { AerRequestActionPayload } from '@aviation/request-action/store';
+import { AerUkEtsRequestActionPayload } from '@aviation/request-action/store';
 import { aerHeaderTaskMap } from '@aviation/request-task/aer/shared/util/aer.util';
 import { aerVerifyHeaderTaskMap } from '@aviation/request-task/aer/shared/util/aer-verify-tasks.util';
 import { TaskSection } from '@shared/task-list/task-list.interface';
 
-function getAerSubTasks(payload: AerRequestActionPayload): TaskSection<any>[] {
+function getAerSubTasks(payload: AerUkEtsRequestActionPayload): TaskSection<any>[] {
   return [
     {
       title: 'Identification',
@@ -80,7 +80,7 @@ function getAerSubTasks(payload: AerRequestActionPayload): TaskSection<any>[] {
   ];
 }
 
-function getAerVerifySubTasks(): TaskSection<any>[] {
+function getAerVerifySubTasks(payload: AerUkEtsRequestActionPayload): TaskSection<any>[] {
   return [
     {
       title: 'Verifier assessment',
@@ -105,11 +105,13 @@ function getAerVerifySubTasks(): TaskSection<any>[] {
           linkText: aerVerifyHeaderTaskMap['complianceMonitoringReportingRules'],
           link: 'aer/verify-submitted/compliance-monitoring',
         },
-        {
-          name: 'emissionsReductionClaimVerification',
-          linkText: aerVerifyHeaderTaskMap['emissionsReductionClaimVerification'],
-          link: 'aer/verify-submitted/verify-emissions-reduction-claim',
-        },
+        payload?.aer?.saf?.exist
+          ? {
+              name: 'emissionsReductionClaimVerification',
+              linkText: aerVerifyHeaderTaskMap['emissionsReductionClaimVerification'],
+              link: 'aer/verify-submitted/verify-emissions-reduction-claim',
+            }
+          : null,
         {
           name: 'overallDecision',
           linkText: aerVerifyHeaderTaskMap['overallDecision'],
@@ -155,18 +157,20 @@ function getAerVerifySubTasks(): TaskSection<any>[] {
   ];
 }
 
-export function getAerApplicationSubmittedTasks(payload: AerRequestActionPayload): TaskSection<any>[] {
+export function getAerApplicationSubmittedTasks(payload: AerUkEtsRequestActionPayload): TaskSection<any>[] {
   return [
-    {
-      title: 'Reporting obligation',
-      tasks: [
-        {
-          name: 'reportingObligation',
-          linkText: aerHeaderTaskMap['reportingObligation'],
-          link: 'aer/submitted/reporting-obligation',
+    payload.reportingRequired
+      ? null
+      : {
+          title: 'Reporting obligation',
+          tasks: [
+            {
+              name: 'reportingObligation',
+              linkText: aerHeaderTaskMap['reportingObligation'],
+              link: 'aer/submitted/reporting-obligation',
+            },
+          ],
         },
-      ],
-    },
     ...(payload.reportingRequired ? getAerSubTasks(payload) : []),
   ]
     .filter((section) => !!section)
@@ -176,8 +180,20 @@ export function getAerApplicationSubmittedTasks(payload: AerRequestActionPayload
     }));
 }
 
-export function getAerVerifyApplicationSubmittedTasks(payload: AerRequestActionPayload): TaskSection<any>[] {
-  return [...getAerVerifySubTasks(), ...getAerSubTasks(payload)]
+export function getAerVerifyApplicationSubmittedTasks(payload: AerUkEtsRequestActionPayload): TaskSection<any>[] {
+  return [...getAerVerifySubTasks(payload), ...getAerSubTasks(payload)]
+    .filter((section) => !!section)
+    .map((section) => ({
+      ...section,
+      tasks: section.tasks.filter((task) => !!task),
+    }));
+}
+
+export function getAerUkEtsCompletedTasks(payload: AerUkEtsRequestActionPayload): TaskSection<any>[] {
+  return [
+    ...(payload.verificationReport ? getAerVerifySubTasks(payload) : []),
+    ...getAerApplicationSubmittedTasks(payload),
+  ]
     .filter((section) => !!section)
     .map((section) => ({
       ...section,

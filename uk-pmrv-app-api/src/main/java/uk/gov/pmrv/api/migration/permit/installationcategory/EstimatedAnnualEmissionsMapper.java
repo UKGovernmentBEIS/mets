@@ -1,8 +1,9 @@
 package uk.gov.pmrv.api.migration.permit.installationcategory;
 
-import java.math.BigDecimal;
 import org.apache.commons.lang3.math.NumberUtils;
 import uk.gov.pmrv.api.permit.domain.estimatedannualemissions.EstimatedAnnualEmissions;
+
+import java.math.BigDecimal;
 
 public class EstimatedAnnualEmissionsMapper {
 

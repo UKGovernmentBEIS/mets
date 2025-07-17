@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.pmrv.api.aviationreporting.ukets.domain.verification.AviationAerUkEtsVerificationReport;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.aer.ukets.common.domain.AviationAerUkEtsApplicationSubmittedRequestActionPayload;
 
 import java.math.BigDecimal;
@@ -17,8 +16,6 @@ import java.math.BigDecimal;
 @SuperBuilder
 public class AviationAerUkEtsApplicationVerificationSubmittedRequestActionPayload extends
     AviationAerUkEtsApplicationSubmittedRequestActionPayload {
-
-    private AviationAerUkEtsVerificationReport verificationReport;
 
     private BigDecimal totalEmissionsProvided;
 

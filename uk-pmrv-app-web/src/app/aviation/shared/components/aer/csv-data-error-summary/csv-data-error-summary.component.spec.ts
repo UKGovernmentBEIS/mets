@@ -11,7 +11,9 @@ import { CsvDataErrorSummaryComponent } from './csv-data-error-summary.component
 
 describe('CsvDataErrorSummaryComponent', () => {
   @Component({
-    template: ` <app-csv-data-error-summary></app-csv-data-error-summary> `,
+    template: `
+      <app-csv-data-error-summary></app-csv-data-error-summary>
+    `,
   })
   class TestHostComponent {
     @ViewChild(CsvDataErrorSummaryComponent) component: CsvDataErrorSummaryComponent;

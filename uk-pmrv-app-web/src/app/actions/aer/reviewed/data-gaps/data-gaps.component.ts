@@ -12,8 +12,7 @@ import { AerService } from '../../core/aer.service';
   template: `
     <app-action-task header="Methodologies to close data gaps" [breadcrumb]="true">
       <app-data-gaps-group
-        [dataGapsInfo]="(payload$ | async).verificationReport.methodologiesToCloseDataGaps"
-      ></app-data-gaps-group>
+        [dataGapsInfo]="(payload$ | async).verificationReport.methodologiesToCloseDataGaps"></app-data-gaps-group>
       <app-review-group-decision-summary [decisionData]="decisionData$ | async"></app-review-group-decision-summary>
     </app-action-task>
   `,
@@ -25,5 +24,8 @@ export class DataGapsComponent {
     map(([payload, data]) => payload.reviewGroupDecisions[data.groupKey]),
   );
 
-  constructor(private readonly aerService: AerService, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly aerService: AerService,
+    private readonly route: ActivatedRoute,
+  ) {}
 }

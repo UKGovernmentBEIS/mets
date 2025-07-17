@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -23,10 +23,17 @@ export interface RequestMetadata {
     | 'VIR'
     | 'DRE'
     | 'AIR'
+    | 'INSTALLATION_INSPECTION'
+    | 'BDR'
+    | 'PERMANENT_CESSATION'
+    | 'ALR'
     | 'REISSUE'
     | 'AVIATION_AER'
     | 'AVIATION_AER_CORSIA'
+    | 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING'
+    | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING'
     | 'AVIATION_DRE'
+    | 'AVIATION_DOE_CORSIA'
     | 'AVIATION_VIR'
     | 'EMP_VARIATION'
     | 'EMP_BATCH_REISSUE';

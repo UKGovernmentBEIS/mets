@@ -2,14 +2,15 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { BehaviorSubject, merge, Observable, pluck, shareReplay, Subject, switchMapTo, tap } from 'rxjs';
+import { BehaviorSubject, map, merge, Observable, shareReplay, Subject, switchMap, tap } from 'rxjs';
+
+import { BusinessErrorService } from '@error/business-error/business-error.service';
+import { catchBadRequest, ErrorCodes } from '@error/business-errors';
 
 import { GovukSelectOption, GovukTableColumn } from 'govuk-components';
 
 import { VerificationBodiesService, VerificationBodyInfoDTO, VerificationBodyInfoResponseDTO } from 'pmrv-api';
 
-import { BusinessErrorService } from '../error/business-error/business-error.service';
-import { catchBadRequest, ErrorCodes } from '../error/business-errors';
 import { savePartiallyNotFoundVerificationBodyError } from './errors/business-error';
 
 type TableData = Pick<VerificationBodyInfoDTO, 'name' | 'status'> & { deleteBtn?: any };
@@ -60,19 +61,19 @@ export class VerificationBodiesComponent implements OnInit {
       this.route.data as Observable<{
         verificationBodies: VerificationBodyInfoResponseDTO;
       }>
-    ).pipe(pluck('verificationBodies'));
+    ).pipe(map((data) => data?.verificationBodies));
 
     const refreshedVerificationBodies$ = this.refresh$.pipe(
-      switchMapTo(this.verificationBodiesService.getVerificationBodies()),
+      switchMap(() => this.verificationBodiesService.getVerificationBodies()),
     );
 
     const verificationBodiesManagement$ = merge(initialVerificationBodies$, refreshedVerificationBodies$).pipe(
       shareReplay({ bufferSize: 1, refCount: true }),
     );
 
-    this.isEditable$ = verificationBodiesManagement$.pipe(pluck('editable'));
+    this.isEditable$ = verificationBodiesManagement$.pipe(map((bodyInfoResponseDTO) => bodyInfoResponseDTO?.editable));
     this.verificationBodies$ = verificationBodiesManagement$.pipe(
-      pluck('verificationBodies'),
+      map((bodyInfoResponseDTO) => bodyInfoResponseDTO?.verificationBodies),
       tap((verificationBodies: VerificationBodyInfoDTO[]) =>
         this.verificationBodiesForm.setControl(
           'verificationBodies',
@@ -97,7 +98,7 @@ export class VerificationBodiesComponent implements OnInit {
       this.verificationBodiesService
         .updateVerificationBodiesStatus(
           this.verificationBodies.controls
-            .filter((cοntrol) => cοntrol.dirty)
+            .filter((control) => control.dirty)
             .map((control) => ({
               status: control.value.status,
               id: control.value.id,

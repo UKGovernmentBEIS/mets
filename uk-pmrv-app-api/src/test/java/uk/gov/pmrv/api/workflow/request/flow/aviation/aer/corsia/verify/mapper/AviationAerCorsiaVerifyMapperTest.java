@@ -45,10 +45,10 @@ class AviationAerCorsiaVerifyMapperTest {
                 .roleCode("service contact role code")
                 .build();
         final Map<UUID, String> aerAttachments = Map.of(UUID.randomUUID(), "attachment");
-
+        
         AviationAerCorsiaRequestPayload requestPayload = AviationAerCorsiaRequestPayload.builder()
                 .aer(AviationAerCorsia.builder()
-                        .build())
+							.build())
                 .aerAttachments(aerAttachments)
                 .build();
         AviationAerCorsiaVerificationReport verificationReport = AviationAerCorsiaVerificationReport.builder()
@@ -60,8 +60,8 @@ class AviationAerCorsiaVerifyMapperTest {
                                 .city("city")
                                 .country("country")
                                 .postcode("postcode")
-                                .build())
-                        .build())
+					.build())
+                				.build())
                 .verificationData(AviationAerCorsiaVerificationData.builder()
                         .build())
                 .build();

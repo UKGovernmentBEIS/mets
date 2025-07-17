@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { skipReviewMap } from '@aviation/request-task/containers/skip-review/skip-review.map';
 import { AerCorsiaStoreDelegate } from '@aviation/request-task/store/delegates/aer-corsia/aer-corsia-store-delegate';
 import { AerVerifyCorsiaStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-corsia';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { VirStoreDelegate } from '@aviation/request-task/store/delegates/vir';
 import { Store } from '@core/store';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
@@ -22,8 +23,10 @@ import {
 import { selectType, TypeAwareStore } from '../../type-aware.store';
 import { cancelActionMap } from '../containers/cancel/cancel-action.map';
 import { CorsiaRequestTypes, isPaymentRequired } from '../util';
-import { AccountClosureStoreDelegate, AerStoreDelegate, EmpUkEtsStoreDelegate } from './delegates';
-import { AerVerifyStoreDelegate } from './delegates/aer-verify';
+import { AccountClosureStoreDelegate, AerUkEtsStoreDelegate, EmpUkEtsStoreDelegate } from './delegates';
+import { AerCorsia3YearOffsettingStoreDelegate } from './delegates/aer-corsia-3year-period-offsetting/aer-corsia-3year-period-offsetting-store-delegate';
+import { AerCorsiaAnnualOffsettingStoreDelegate } from './delegates/aer-corsia-annual-offsetting/aer-corsia-annual-offsetting-store-delegate';
+import { DoeStoreDelegate } from './delegates/doe';
 import { DreStoreDelegate } from './delegates/dre';
 import { EmpCorsiaStoreDelegate } from './delegates/emp-corsia';
 import { initialState, RequestTaskState } from './request-task.state';
@@ -32,16 +35,22 @@ import { initialState, RequestTaskState } from './request-task.state';
 export class RequestTaskStore extends Store<RequestTaskState> implements TypeAwareStore {
   private _empUkEtsDelegate: EmpUkEtsStoreDelegate;
   private _empCorsiaDelegate: EmpCorsiaStoreDelegate;
-  private _aerDelegate: AerStoreDelegate | AerCorsiaStoreDelegate;
-  private _aerVerifyDelegate: AerVerifyStoreDelegate | AerVerifyCorsiaStoreDelegate;
+  private _aerDelegate: AerUkEtsStoreDelegate | AerCorsiaStoreDelegate;
+  private _aerVerifyDelegate: AerVerifyUkEtsStoreDelegate | AerVerifyCorsiaStoreDelegate;
   private _accountClosureDelegate: AccountClosureStoreDelegate;
   private readonly defaultTaskActionPayload = {
     payloadType: 'EMPTY_PAYLOAD',
   } as RequestTaskActionPayload;
   private _dreDelegate: DreStoreDelegate;
   private _virDelegate: VirStoreDelegate;
+  private _aerCorsiaAnnualOffsetting: AerCorsiaAnnualOffsettingStoreDelegate;
+  private _aerCorsia3YearPeriodOffsetting: AerCorsia3YearOffsettingStoreDelegate;
+  private _doeDelegate: DoeStoreDelegate;
 
-  constructor(public tasksService: TasksService, private readonly businessErrorService: BusinessErrorService) {
+  constructor(
+    public tasksService: TasksService,
+    private readonly businessErrorService: BusinessErrorService,
+  ) {
     super(initialState);
   }
 
@@ -79,7 +88,7 @@ export class RequestTaskStore extends Store<RequestTaskState> implements TypeAwa
       this._aerDelegate =
         this.getState().requestTaskItem.requestInfo?.type === 'AVIATION_AER_CORSIA'
           ? new AerCorsiaStoreDelegate(this, this.businessErrorService)
-          : new AerStoreDelegate(this, this.businessErrorService);
+          : new AerUkEtsStoreDelegate(this, this.businessErrorService);
     }
     return this._aerDelegate;
   }
@@ -89,7 +98,7 @@ export class RequestTaskStore extends Store<RequestTaskState> implements TypeAwa
       this._aerVerifyDelegate =
         this.getState().requestTaskItem.requestInfo?.type === 'AVIATION_AER_CORSIA'
           ? new AerVerifyCorsiaStoreDelegate(this, this.businessErrorService)
-          : new AerVerifyStoreDelegate(this, this.businessErrorService);
+          : new AerVerifyUkEtsStoreDelegate(this, this.businessErrorService);
     }
 
     return this._aerVerifyDelegate;
@@ -122,10 +131,34 @@ export class RequestTaskStore extends Store<RequestTaskState> implements TypeAwa
     return this._virDelegate;
   }
 
+  get aerCorsiaAnnualOffsetting() {
+    if (!this._aerCorsiaAnnualOffsetting) {
+      this._aerCorsiaAnnualOffsetting = new AerCorsiaAnnualOffsettingStoreDelegate(this, this.businessErrorService);
+    }
+    return this._aerCorsiaAnnualOffsetting;
+  }
+
+  get aerCorsia3YearPeriodOffsetting() {
+    if (!this._aerCorsia3YearPeriodOffsetting) {
+      this._aerCorsia3YearPeriodOffsetting = new AerCorsia3YearOffsettingStoreDelegate(this, this.businessErrorService);
+    }
+    return this._aerCorsia3YearPeriodOffsetting;
+  }
+
+  get doeDelegate() {
+    if (!this._doeDelegate) {
+      this._doeDelegate = new DoeStoreDelegate(this, this.businessErrorService);
+    }
+    return this._doeDelegate;
+  }
+
   initStoreDelegateByRequestType(requestType: RequestInfoDTO['type']) {
     switch (requestType) {
       case 'AVIATION_DRE_UKETS':
         this.dreDelegate.init();
+        break;
+      case 'AVIATION_DOE_CORSIA':
+        this.doeDelegate.init();
         break;
       case 'AVIATION_AER_UKETS':
         this.aerDelegate.init();
@@ -151,6 +184,13 @@ export class RequestTaskStore extends Store<RequestTaskState> implements TypeAwa
       // Non compliance uses code from installation,no delegeta is needed
       case 'AVIATION_NON_COMPLIANCE':
         break;
+      case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING':
+        this.aerCorsiaAnnualOffsetting.init();
+        break;
+      case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING':
+        this.aerCorsia3YearPeriodOffsetting.init();
+        break;
+
       default:
         throw new Error('Request type is not supported to init store delegate');
     }
@@ -164,6 +204,9 @@ export class RequestTaskStore extends Store<RequestTaskState> implements TypeAwa
     this._aerVerifyDelegate = null;
     this._accountClosureDelegate = null;
     this._virDelegate = null;
+    this._aerCorsiaAnnualOffsetting = null;
+    this._aerCorsia3YearPeriodOffsetting = null;
+    this._doeDelegate = null;
   }
 
   setRequestTaskItem(requestTaskItem: RequestTaskItemDTO) {

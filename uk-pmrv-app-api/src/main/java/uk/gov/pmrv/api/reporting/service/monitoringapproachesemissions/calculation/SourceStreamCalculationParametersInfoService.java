@@ -2,8 +2,8 @@ package uk.gov.pmrv.api.reporting.service.monitoringapproachesemissions.calculat
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamCategory;
 import uk.gov.pmrv.api.permit.domain.sourcestreams.SourceStreamType;
 import uk.gov.pmrv.api.reporting.domain.dto.CalculationParameterMeasurementUnits;
@@ -24,7 +24,7 @@ public class SourceStreamCalculationParametersInfoService {
             .filter(service -> service.getSourceStreamCategory().equals(sourceStreamCategory))
             .findFirst()
             .map(SourceStreamCategoryEmissionsCalculationService::getValidMeasurementUnitsCombinations)
-            .orElseThrow(() -> new BusinessException(ErrorCode.INVALID_SOURCE_STREAM_TYPE, sourceStreamType));
+            .orElseThrow(() -> new BusinessException(MetsErrorCode.INVALID_SOURCE_STREAM_TYPE, sourceStreamType));
 
 
         return SourceStreamCalculationParametersInfo.builder()

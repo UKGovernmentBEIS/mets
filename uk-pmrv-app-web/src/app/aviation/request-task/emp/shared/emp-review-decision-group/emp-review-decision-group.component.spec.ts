@@ -23,7 +23,9 @@ describe('EmpReviewDecisionGroupComponent', () => {
   const tasksService = mockClass(TasksService);
 
   @Component({
-    template: ` <app-emp-review-decision-group taskKey="abbreviations"></app-emp-review-decision-group> `,
+    template: `
+      <app-emp-review-decision-group taskKey="abbreviations"></app-emp-review-decision-group>
+    `,
   })
   class TestComponent {}
 

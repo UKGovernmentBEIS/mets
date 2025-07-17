@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, UrlTree } from '@angular/router';
 
 import { first, map, Observable, switchMap } from 'rxjs';
 
@@ -13,7 +13,7 @@ import { RdeStore } from '../../store/rde.store';
 @Injectable({
   providedIn: 'root',
 })
-export class ExtendDeterminationGuard implements CanActivate {
+export class ExtendDeterminationGuard {
   constructor(
     private readonly requestItemsService: RequestItemsService,
     private readonly router: Router,

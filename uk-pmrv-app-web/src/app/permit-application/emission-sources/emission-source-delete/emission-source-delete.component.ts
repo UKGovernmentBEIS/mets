@@ -11,8 +11,7 @@ import { PermitApplicationStore } from '../../store/permit-application.store';
   template: `
     <app-emission-source-delete-template
       [emissionSource]="emissionSource$ | async"
-      (delete)="delete()"
-    ></app-emission-source-delete-template>
+      (delete)="delete()"></app-emission-source-delete-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

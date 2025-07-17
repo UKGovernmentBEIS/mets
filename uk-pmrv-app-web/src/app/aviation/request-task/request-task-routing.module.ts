@@ -24,10 +24,12 @@ import {
 } from './containers';
 import { CompleteReportConfirmationComponent } from './containers/complete-report/complete-report-confirmation/complete-report-confirmation.component';
 import CompleteReportPageComponent from './containers/complete-report/complete-report-page/complete-report-page.component';
+import VerifierReturnComponent from './containers/verifier-return/verifier-return.component';
 import { canActivateRequestTask, canDeactivateRequestTask, ChangeAssigneeGuard, RecallFromAmendsGuard } from './guards';
 import { canCancelTask } from './guards/cancel-task.guard';
 import { CompleteReportGuard } from './guards/complete-report-page.guard';
 import { RecallReportFromVerifierGuard } from './guards/recall-report-from-verifier.guard';
+import { VerifierReturnGuard } from './guards/verifier-return.guard';
 
 const routes: Routes = [
   {
@@ -36,6 +38,10 @@ const routes: Routes = [
     children: [
       {
         path: ':taskId/file-download/:fileType/:uuid',
+        component: FileDownloadComponent,
+      },
+      {
+        path: ':taskId/file-download/:uuid',
         component: FileDownloadComponent,
       },
       {
@@ -113,6 +119,13 @@ const routes: Routes = [
               import('@aviation/request-task/aer/ukets/aer-verify/aer-verify.routes').then((r) => r.AER_VERIFY_ROUTES),
           },
           {
+            path: 'aer-review-corsia',
+            loadChildren: () =>
+              import('@aviation/request-task/aer/corsia/aer-review/aer-review-corsia.routes').then(
+                (r) => r.AER_REVIEW_CORSIA_ROUTES,
+              ),
+          },
+          {
             path: 'aer-verify-corsia',
             loadChildren: () =>
               import('@aviation/request-task/aer/corsia/aer-verify/aer-verify-corsia.routes').then(
@@ -148,8 +161,19 @@ const routes: Routes = [
             canDeactivate: [PendingRequestGuard],
           },
           {
+            path: 'verifier-return',
+            data: { breadcrumb: 'Return to operator for changes' },
+            component: VerifierReturnComponent,
+            canActivate: [VerifierReturnGuard],
+            canDeactivate: [PendingRequestGuard],
+          },
+          {
             path: 'dre',
             loadChildren: () => import('./dre/dre.routes').then((r) => r.DRE_ROUTES),
+          },
+          {
+            path: 'doe',
+            loadChildren: () => import('./doe/doe.routes').then((r) => r.DOE_ROUTES),
           },
           {
             path: 'peer-review-decision',
@@ -191,6 +215,20 @@ const routes: Routes = [
                 component: CompleteReportConfirmationComponent,
               },
             ],
+          },
+          {
+            path: 'annual-offsetting-requirements',
+            loadChildren: () =>
+              import('@aviation/request-task/aer-corsia-annual-offsetting/aer-corsia-annual-offsetting.routes').then(
+                (r) => r.AER_CORSIA_ANNUAL_OFFSETTING_ROUTES,
+              ),
+          },
+          {
+            path: '3year-offsetting-requirements',
+            loadChildren: () =>
+              import(
+                '@aviation/request-task/aer-corsia-3year-period-offsetting/aer-corsia-3year-period-offsetting.routes'
+              ).then((r) => r.AER_CORSIA_3YEAR_PERIOD_OFFSETTING_ROUTES),
           },
           {
             path: '',

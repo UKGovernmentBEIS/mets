@@ -1,12 +1,12 @@
 package uk.gov.pmrv.api.permit.domain.monitoringapproaches.common;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.util.Set;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

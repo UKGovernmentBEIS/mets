@@ -138,7 +138,7 @@ describe('TriggerDoalComponent', () => {
             year: 2025,
           },
         },
-        accountId,
+        String(accountId),
       );
       expect(requestItemsService.getItemsByRequest).toHaveBeenCalledTimes(1);
       expect(requestItemsService.getItemsByRequest).toHaveBeenCalledWith('1234');

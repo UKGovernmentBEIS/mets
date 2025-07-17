@@ -20,9 +20,9 @@ import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.Ope
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OperatorType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.OrganisationLegalStatusType;
 import uk.gov.pmrv.api.emissionsmonitoringplan.common.domain.operatordetails.PartnershipOrganisation;
-import uk.gov.pmrv.api.referencedata.service.CountryValidator;
-import uk.gov.pmrv.api.referencedata.domain.Country;
-import uk.gov.pmrv.api.referencedata.service.CountryService;
+import uk.gov.netz.api.referencedata.service.CountryValidator;
+import uk.gov.netz.api.referencedata.domain.Country;
+import uk.gov.netz.api.referencedata.service.CountryService;
 
 import java.util.Collections;
 import java.util.List;

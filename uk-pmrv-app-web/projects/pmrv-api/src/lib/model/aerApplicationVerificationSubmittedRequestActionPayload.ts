@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -22,7 +22,8 @@ export interface AerApplicationVerificationSubmittedRequestActionPayload extends
   installationOperatorDetails: InstallationOperatorDetails;
   permitOriginatedData?: PermitOriginatedData;
   monitoringPlanVersions?: Array<MonitoringPlanVersion>;
-  aerAttachments?: { [key: string]: string };
+  verificationPerformed?: boolean;
   verificationReport?: AerVerificationReport;
+  aerAttachments?: { [key: string]: string };
   verificationAttachments?: { [key: string]: string };
 }

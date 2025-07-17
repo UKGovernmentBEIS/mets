@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {By} from "@angular/platform-browser";
+import { By } from '@angular/platform-browser';
 
-import {of} from "rxjs";
+import { of } from 'rxjs';
 
 import { AviationAerTotalEmissions } from 'pmrv-api';
 

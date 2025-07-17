@@ -1,0 +1,45 @@
+<ng-container *ngIf="payload$ | async as payload">
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Uncorrected misstatements</h2>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+
+  <div class="govuk-!-margin-top-6">
+    <app-misstatements-group [uncorrectedMisstatements]="payload.verificationReport.uncorrectedMisstatements">
+    </app-misstatements-group>
+  </div>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Uncorrected non-conformities</h2>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <div class="govuk-!-margin-top-6">
+    <app-non-conformities-group
+      [uncorrectedNonConformities]="payload.verificationReport.uncorrectedNonConformities"
+    ></app-non-conformities-group>
+  </div>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Uncorrected non-compliances</h2>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <div class="govuk-!-margin-top-6">
+    <app-non-compliances-group
+      [uncorrectedNonCompliances]="payload.verificationReport.uncorrectedNonCompliances"
+    ></app-non-compliances-group>
+  </div>
+
+  <div class="govuk-!-margin-top-6">
+    <app-recommended-improvements-group
+      [recommendedImprovements]="payload.verificationReport.recommendedImprovements"
+    ></app-recommended-improvements-group>
+  </div>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Methodologies to close data gaps</h2>
+
+  <app-data-gaps-group [dataGapsInfo]="payload.verificationReport.methodologiesToCloseDataGaps"></app-data-gaps-group>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Materiality level and reference documents</h2>
+  <app-materiality-level-group
+    [materialityLevelInfo]="payload.verificationReport.materialityLevel"
+  ></app-materiality-level-group>
+
+  <h2 class="govuk-heading-m govuk-!-margin-top-6">Summary of conditions, changes, clarifications and variations</h2>
+  <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
+  <app-summary-of-conditions-group [summaryOfConditionsInfo]="payload.verificationReport.summaryOfConditions">
+  </app-summary-of-conditions-group>
+</ng-container>

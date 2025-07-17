@@ -5,7 +5,7 @@ import { map, take, tap } from 'rxjs';
 
 import { aerVerifyQuery } from '@aviation/request-task/aer/ukets/aer-verify/aer-verify.selector';
 import { RequestTaskStore } from '@aviation/request-task/store';
-import { AerVerifyStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify';
+import { AerVerifyUkEtsStoreDelegate } from '@aviation/request-task/store/delegates/aer-verify-ukets/aer-verify-ukets-store-delegate';
 import { TASK_FORM_PROVIDER } from '@aviation/request-task/task-form.provider';
 
 import { VerifierDetailsFormProvider } from './verifier-details-form.provider';
@@ -22,18 +22,18 @@ export const canActivateVerifierDetails: CanActivateFn = () => {
       if (!verificationReport) {
         store.setPayload({
           ...payload,
-          verificationReport: AerVerifyStoreDelegate.INITIAL_STATE.verificationReport,
+          verificationReport: AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport,
         } as any);
       }
 
       if (!verificationReport.verifierContact || !verificationReport.verificationTeamDetails) {
         const verificationReportToSet = {
           ...verificationReport,
-          verifierContact: AerVerifyStoreDelegate.INITIAL_STATE.verificationReport.verifierContact,
-          verificationTeamDetails: AerVerifyStoreDelegate.INITIAL_STATE.verificationReport.verificationTeamDetails,
+          verifierContact: AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport.verifierContact,
+          verificationTeamDetails: AerVerifyUkEtsStoreDelegate.INITIAL_STATE.verificationReport.verificationTeamDetails,
         };
 
-        (store.aerVerifyDelegate as AerVerifyStoreDelegate).setVerificationReport(verificationReportToSet);
+        (store.aerVerifyDelegate as AerVerifyUkEtsStoreDelegate).setVerificationReport(verificationReportToSet);
       }
 
       formProvider.setFormValue(verificationReport);

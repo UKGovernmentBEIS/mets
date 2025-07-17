@@ -17,8 +17,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.permit.domain.common.MeasuredEmissionsSamplingFrequency;
 import uk.gov.pmrv.api.permit.domain.common.ProcedureForm;
@@ -105,7 +105,7 @@ class PermitVariationReviewReturnForAmendsValidatorTest {
         BusinessException ex = assertThrows(BusinessException.class, () -> validator.validate(payload));
 
         // Verify
-        assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.INVALID_PERMIT_VARIATION_REVIEW);
+        assertThat(ex.getErrorCode()).isEqualTo(MetsErrorCode.INVALID_PERMIT_VARIATION_REVIEW);
     }
 
     private PermitVariationReviewDecision buildReviewDecision(ReviewDecisionType type, List<ReviewDecisionRequiredChange> requiredChanges) {

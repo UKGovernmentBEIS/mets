@@ -1,12 +1,13 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.aer.service.init;
 
-import java.util.stream.Collectors;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import uk.gov.pmrv.api.permit.domain.Permit;
 import uk.gov.pmrv.api.reporting.domain.Aer;
 import uk.gov.pmrv.api.reporting.domain.regulatedactivities.AerRegulatedActivities;
 import uk.gov.pmrv.api.workflow.request.flow.installation.aer.mapper.AerMapper;
+
+import java.util.stream.Collectors;
 
 @Service
 public class AerRegulatedActivitiesInitializationService implements AerSectionInitializationService {

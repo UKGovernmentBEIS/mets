@@ -1,6 +1,6 @@
 /**
- * PMRV API Documentation
- * PMRV API Documentation
+ * METS API Documentation
+ * METS API Documentation
  *
  * The version of the OpenAPI document: uk-pmrv-app-api 0.81.0-SNAPSHOT
  *
@@ -14,19 +14,24 @@ import { AviationAerDataGapsMethodologies } from './aviationAerDataGapsMethodolo
 import { AviationAerEmissionsReductionClaimVerification } from './aviationAerEmissionsReductionClaimVerification';
 import { AviationAerEtsComplianceRules } from './aviationAerEtsComplianceRules';
 import { AviationAerMaterialityLevel } from './aviationAerMaterialityLevel';
+import { AviationAerNotVerifiedDecision } from './aviationAerNotVerifiedDecision';
 import { AviationAerOpinionStatement } from './aviationAerOpinionStatement';
 import { AviationAerRecommendedImprovements } from './aviationAerRecommendedImprovements';
 import { AviationAerUncorrectedMisstatements } from './aviationAerUncorrectedMisstatements';
 import { AviationAerUncorrectedNonCompliances } from './aviationAerUncorrectedNonCompliances';
 import { AviationAerUncorrectedNonConformities } from './aviationAerUncorrectedNonConformities';
-import { AviationAerVerificationDecision } from './aviationAerVerificationDecision';
 import { AviationAerVerificationTeamDetails } from './aviationAerVerificationTeamDetails';
+import { AviationAerVerifiedSatisfactoryDecision } from './aviationAerVerifiedSatisfactoryDecision';
+import { AviationAerVerifiedSatisfactoryWithCommentsDecision } from './aviationAerVerifiedSatisfactoryWithCommentsDecision';
 import { AviationAerVerifierContact } from './aviationAerVerifierContact';
 
 export interface AviationAerUkEtsSaveApplicationVerificationRequestTaskActionPayloadAllOf {
   verifierContact?: AviationAerVerifierContact;
   verificationTeamDetails?: AviationAerVerificationTeamDetails;
-  overallDecision?: AviationAerVerificationDecision;
+  overallDecision?:
+    | AviationAerNotVerifiedDecision
+    | AviationAerVerifiedSatisfactoryDecision
+    | AviationAerVerifiedSatisfactoryWithCommentsDecision;
   etsComplianceRules?: AviationAerEtsComplianceRules;
   complianceMonitoringReportingRules?: AviationAerComplianceMonitoringReportingRules;
   opinionStatement?: AviationAerOpinionStatement;

@@ -1,19 +1,14 @@
 package uk.gov.pmrv.api.workflow.request.flow.rde.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
-
-import uk.gov.pmrv.api.common.exception.BusinessException;
-import uk.gov.pmrv.api.common.exception.ErrorCode;
-import uk.gov.pmrv.api.authorization.core.domain.PmrvUser;
-import uk.gov.pmrv.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.pmrv.api.user.core.domain.dto.UserInfoDTO;
-import uk.gov.pmrv.api.user.core.domain.model.UserInfo;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfoDTO;
+import uk.gov.netz.api.userinfoapi.UserInfo;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
@@ -35,6 +30,11 @@ import uk.gov.pmrv.api.workflow.request.flow.rde.service.RdeSendEventService;
 import uk.gov.pmrv.api.workflow.request.flow.rde.service.RdeSubmitOfficialNoticeService;
 import uk.gov.pmrv.api.workflow.request.flow.rde.validation.SubmitRdeValidatorService;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class RdeSubmitActionHandler implements RequestTaskActionHandler<RdeSubmitRequestTaskActionPayload> {
@@ -51,14 +51,14 @@ public class RdeSubmitActionHandler implements RequestTaskActionHandler<RdeSubmi
     private static final RdeMapper rdeMapper = Mappers.getMapper(RdeMapper.class);
 
     @Override
-    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, PmrvUser pmrvUser,
+    public void process(Long requestTaskId, RequestTaskActionType requestTaskActionType, AppUser appUser,
                         RdeSubmitRequestTaskActionPayload actionPayload) {
 
         final RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
         final RdePayload rdePayload = actionPayload.getRdePayload();
 
         // Validate
-        validator.validate(requestTask, rdePayload, pmrvUser);
+        validator.validate(requestTask, rdePayload, appUser);
 
         // Copy RDE request in request payload
         final Request request = requestTask.getRequest();
@@ -84,7 +84,7 @@ public class RdeSubmitActionHandler implements RequestTaskActionHandler<RdeSubmi
 
         // Create timeline action
         RdeSubmittedRequestActionPayload timelinePayload = rdeMapper.toRdeSubmittedRequestActionPayload(actionPayload, usersInfo, officialDocument);
-        requestService.addActionToRequest(request, timelinePayload, RequestActionType.RDE_SUBMITTED, pmrvUser.getUserId());
+        requestService.addActionToRequest(request, timelinePayload, RequestActionType.RDE_SUBMITTED, appUser.getUserId());
 
         // Send RDE event
         rdeSendEventService.send(request.getId(), rdePayload.getDeadline());

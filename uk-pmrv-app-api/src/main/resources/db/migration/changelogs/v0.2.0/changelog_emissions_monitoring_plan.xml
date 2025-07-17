@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.2.0/changelog_emissions_monitoring_plan.xml"
+                       xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_add_extra_emp_aircraft_types" author="spapagiannakopoulou">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(3) from emp_aircraft_type where designator_type in ('FA6X', 'GA7C');
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            insert into emp_aircraft_type(manufacturer, model, designator_type)  values ('DASSAULT', 'Falcon 6X', 'FA6X');
+            insert into emp_aircraft_type(manufacturer, model, designator_type)  values ('GULFSTREAM AEROSPACE', 'G-8 Gulfstream G700', 'GA7C');
+            insert into emp_aircraft_type(manufacturer, model, designator_type)  values ('GULFSTREAM AEROSPACE', 'Gulfstream G700', 'GA7C');
+        </sql>
+
+        <rollback>
+            delete from emp_aircraft_type where designator_type in ( 'FA6X', 'GA7C' );
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_2_0_add_emp_issuing_authority_mauritius_civil_aviation" author="spapagiannakopoulou">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(1) from emp_issuing_authority where name = 'Mauritius - Department of Civil Aviation';
+            </sqlCheck>
+        </preConditions>
+        <sql>
+            insert into emp_issuing_authority (id, name) VALUES (nextval('emp_issuing_authority_seq'), 'Mauritius - Department of Civil Aviation');
+        </sql>
+
+        <rollback>
+            delete from emp_issuing_authority where name = 'Mauritius - Department of Civil Aviation';
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

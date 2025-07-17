@@ -1,23 +1,33 @@
 import { FormGroup } from '@angular/forms';
 
+import { getAerCorsiaReviewSections } from '@aviation/request-task/aer/corsia/aer-review/util/aer-review-corsia.util';
 import { getAerVerifyCorsiaSections } from '@aviation/request-task/aer/corsia/aer-verify/util/aer-verify-corsia.util';
-import { getAerReviewSections, getAerSections } from '@aviation/request-task/aer/shared/util/aer.util';
+import {
+  aerHeaderTaskMap,
+  getAerReviewSections,
+  getAerSections,
+} from '@aviation/request-task/aer/shared/util/aer.util';
 import { getAerVerifySections } from '@aviation/request-task/aer/ukets/aer-verify/util/aer-verify.util';
+import { ReviewDeterminationStatus } from '@permit-application/review/types/review.permit.type';
 import { TaskSection } from '@shared/task-list/task-list.interface';
 import Papa from 'papaparse';
 
 import {
+  AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload,
   AviationAerCorsiaApplicationSubmitRequestTaskPayload,
   AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload,
   AviationAerRequestMetadata,
   AviationAerUkEtsApplicationReviewRequestTaskPayload,
   AviationAerUkEtsApplicationSubmitRequestTaskPayload,
   AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload,
+  AviationDoECorsiaApplicationSubmitRequestTaskPayload,
+  AviationDoECorsiaRequestMetadata,
   AviationDreUkEtsApplicationSubmitRequestTaskPayload,
   AviationVirRequestMetadata,
   EmpIssuanceCorsiaApplicationReviewRequestTaskPayload,
   EmpIssuanceUkEtsApplicationReviewRequestTaskPayload,
   EmpVariationCorsiaApplicationReviewRequestTaskPayload,
+  EmpVariationDetermination,
   EmpVariationUkEtsApplicationReviewRequestTaskPayload,
   ItemDTO,
   NonComplianceApplicationSubmitRequestTaskPayload,
@@ -34,15 +44,34 @@ import {
   RequestTaskPayload,
 } from 'pmrv-api';
 
-import { getDreSections } from '../dre/util/dre.util';
+import { aerVerifyHeaderTaskMap } from '../aer/shared/util/aer-verify-tasks.util';
+import {
+  areTasksCompletedForNotify3YearPeriodOffsetting,
+  getCorsia3YearOffsettingSections,
+  threeYearPeriodOffsettingDocumentPreviewRequestTaskActionTypesMap,
+} from '../aer-corsia-3year-period-offsetting/util/3year-period-offsetting.util';
+import { getPreviewDocumentsInfo3YearPeriodOffsetting } from '../aer-corsia-3year-period-offsetting/util/previewDocuments3YearPeriodOffsetting.util';
+import {
+  annualOffsettingDocumentPreviewRequestTaskActionTypesMap,
+  areTasksCompletedForNotifyAnnualOffsetting,
+  getCorsiaAnnualOffsettingSections,
+} from '../aer-corsia-annual-offsetting/util/annual-offsetting.util';
+import { getPreviewDocumentsInfoAnnualOffsetting } from '../aer-corsia-annual-offsetting/util/previewDocumentsAnnualOffsetting.util';
+import { doeDocumentPreviewRequestTaskActionTypesMap, getDoeSections } from '../doe/utils/doe.utils';
+import { getPreviewDocumentsInfoDoe } from '../doe/utils/previewDocuments-doe.util';
+import { DREdocumentPreviewRequestTaskActionTypesMap, getDreSections } from '../dre/util/dre.util';
+import { getPreviewDocumentsInfoDre } from '../dre/util/previewDocuments-dre.util';
 import {
   areTasksCompletedForNotifyVariationRegLed,
+  documentPreviewRequestTaskActionTypesMap,
   empHeaderTaskMap,
   getEmpCorsiaReviewSections,
   getEmpSections,
   getEmpUkEtsReviewSections,
   getEmpVariationReviewSections,
+  variationOperatorLedReviewRequestTaskTypes,
 } from '../emp/shared/util/emp.util';
+import { getPreviewDocumentsInfoEmp } from '../emp/shared/util/previewDocumentsEmp.util';
 import {
   getNonComplianceApplicationSections,
   getNonComplianceCivilPenaltytPeerReviewSections,
@@ -57,8 +86,11 @@ import {
   getNonComplianceNoticeOfIntentSections,
 } from '../non-compliance/non-compliance.util';
 import {
+  AerCorsiaAnnualOffsettingPayload,
   AerTaskKey,
   AerVerifyTaskKey,
+  Doe,
+  DoeTaskKey,
   Dre,
   DreTaskKey,
   EmpRequestTaskPayloadCorsia,
@@ -70,6 +102,7 @@ export const CorsiaRequestTypes: RequestInfoDTO['type'][] = [
   'EMP_ISSUANCE_CORSIA',
   'EMP_VARIATION_CORSIA',
   'AVIATION_AER_CORSIA',
+  'AVIATION_DOE_CORSIA',
 ];
 
 export function getRequestTaskHeaderForTaskType(type: RequestTaskDTO['type'], metadata: RequestMetadata): string {
@@ -81,7 +114,7 @@ export function getRequestTaskHeaderForTaskType(type: RequestTaskDTO['type'], me
     case 'AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT':
       return 'Provide details of breach: non-compliance';
     case 'AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE':
-      return 'Upload penalty notice: non-compliance';
+      return 'Upload initial penalty notice: non-compliance';
     case 'AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW':
       return 'Initial penalty notice sent to peer reviewer: non-compliance';
     case 'AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW':
@@ -110,9 +143,11 @@ export function getRequestTaskHeaderForTaskType(type: RequestTaskDTO['type'], me
       return 'Complete ' + (metadata as AviationAerRequestMetadata).year + ' emissions report';
 
     case 'AVIATION_AER_UKETS_APPLICATION_REVIEW':
+    case 'AVIATION_AER_CORSIA_APPLICATION_REVIEW':
       return 'Review ' + (metadata as AviationAerRequestMetadata).year + ' emissions report';
 
     case 'AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+    case 'AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT':
     case 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT':
     case 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT':
       return `Verify ${(metadata as AviationAerRequestMetadata).year} emissions report`;
@@ -120,15 +155,19 @@ export function getRequestTaskHeaderForTaskType(type: RequestTaskDTO['type'], me
     case 'AVIATION_AER_UKETS_AMEND_WAIT_FOR_VERIFICATION':
     case 'AVIATION_AER_UKETS_WAIT_FOR_VERIFICATION':
     case 'AVIATION_AER_CORSIA_WAIT_FOR_VERIFICATION':
+    case 'AVIATION_AER_CORSIA_AMEND_WAIT_FOR_VERIFICATION':
       return (metadata as AviationAerRequestMetadata).year + ' emissions report sent to verifier';
 
     case 'AVIATION_AER_UKETS_WAIT_FOR_REVIEW':
+    case 'AVIATION_AER_CORSIA_WAIT_FOR_REVIEW':
       return (metadata as AviationAerRequestMetadata).year + ' emissions report';
 
     case 'AVIATION_AER_UKETS_WAIT_FOR_AMENDS':
+    case 'AVIATION_AER_CORSIA_WAIT_FOR_AMENDS':
       return (metadata as AviationAerRequestMetadata).year + ' emissions report';
 
     case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT':
+    case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT':
       return 'Amend your ' + (metadata as AviationAerRequestMetadata).year + ' emissions report';
 
     case 'EMP_ISSUANCE_UKETS_WAIT_FOR_REVIEW':
@@ -208,9 +247,31 @@ export function getRequestTaskHeaderForTaskType(type: RequestTaskDTO['type'], me
     case 'AVIATION_VIR_WAIT_FOR_REVIEW':
     case 'AVIATION_VIR_RESPOND_TO_REGULATOR_COMMENTS':
       return (metadata as AviationVirRequestMetadata).year + ' verifier improvement report';
-
     case 'AVIATION_VIR_APPLICATION_REVIEW':
       return 'Review ' + (metadata as AviationVirRequestMetadata).year + ' verifier improvement report';
+
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT':
+      return 'Calculate annual offsetting requirements';
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW':
+      return 'Peer review annual offsetting requirements';
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW':
+      return 'Sent to peer reviewer annual offsetting requirements';
+
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT':
+      return 'Calculate 3-year period offsetting requirements';
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW':
+      return 'Peer review 3-year period offsetting requirements';
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW':
+      return 'Sent to peer reviewer 3-year period offsetting requirements';
+
+    case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
+      return `Estimate ${(metadata as AviationDoECorsiaRequestMetadata).year} emissions`;
+    case 'AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW':
+      return (
+        (metadata as AviationDoECorsiaRequestMetadata).year + ' emissions estimation application sent to peer reviewer'
+      );
+    case 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW':
+      return `Peer review ${(metadata as AviationDoECorsiaRequestMetadata).year} emissions estimation`;
 
     default:
       return '';
@@ -222,9 +283,13 @@ export function getMessageForTaskType(type: RequestTaskDTO['type']): string {
     case 'AVIATION_AER_UKETS_AMEND_WAIT_FOR_VERIFICATION':
     case 'AVIATION_AER_UKETS_WAIT_FOR_VERIFICATION':
     case 'AVIATION_AER_CORSIA_WAIT_FOR_VERIFICATION':
+    case 'AVIATION_AER_CORSIA_AMEND_WAIT_FOR_VERIFICATION':
       return 'Waiting for the verifier to complete the opinion statement.';
 
     case 'AVIATION_AER_UKETS_WAIT_FOR_REVIEW':
+    case 'AVIATION_AER_CORSIA_WAIT_FOR_REVIEW':
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW':
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW':
       return 'Waiting for the regulator to complete the review';
 
     default:
@@ -234,7 +299,7 @@ export function getMessageForTaskType(type: RequestTaskDTO['type']): string {
 
 export function getSummaryHeaderForTaskType(
   type: RequestTaskDTO['type'],
-  taskName: EmpTaskKey | AerTaskKey | DreTaskKey | AerVerifyTaskKey,
+  taskName: EmpTaskKey | AerTaskKey | DreTaskKey | AerVerifyTaskKey | DoeTaskKey,
 ): string {
   switch (type) {
     case 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW':
@@ -243,6 +308,7 @@ export function getSummaryHeaderForTaskType(
     case 'EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_SUBMIT':
     case 'EMP_VARIATION_UKETS_REGULATOR_LED_WAIT_FOR_PEER_REVIEW':
     case 'EMP_VARIATION_UKETS_REGULATOR_LED_APPLICATION_PEER_REVIEW':
+    case 'EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_SUBMIT':
     case 'EMP_VARIATION_CORSIA_REGULATOR_LED_WAIT_FOR_PEER_REVIEW':
     case 'EMP_VARIATION_CORSIA_REGULATOR_LED_APPLICATION_PEER_REVIEW':
     case 'EMP_VARIATION_CORSIA_APPLICATION_SUBMIT':
@@ -250,6 +316,11 @@ export function getSummaryHeaderForTaskType(
     case 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW':
       return empHeaderTaskMap[taskName];
 
+    case 'AVIATION_AER_UKETS_APPLICATION_REVIEW':
+      return aerHeaderTaskMap[taskName] ?? aerVerifyHeaderTaskMap[taskName];
+    case 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT':
+    case 'AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+      return aerHeaderTaskMap[taskName] ?? 'Check your answers';
     default:
       return 'Check your answers';
   }
@@ -289,6 +360,9 @@ export function getSaveRequestTaskActionTypeForRequestTaskType(
     case 'AVIATION_DRE_UKETS_APPLICATION_SUBMIT':
       return 'AVIATION_DRE_UKETS_SAVE_APPLICATION';
 
+    case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
+      return 'AVIATION_DOE_CORSIA_SUBMIT_SAVE';
+
     case 'EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMIT':
       return 'EMP_ISSUANCE_UKETS_SAVE_APPLICATION_AMEND';
 
@@ -309,6 +383,7 @@ export function getSaveRequestTaskActionTypeForRequestTaskType(
       return 'AVIATION_AER_UKETS_SAVE_APPLICATION_VERIFICATION';
 
     case 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT':
+    case 'AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT':
       return 'AVIATION_AER_CORSIA_SAVE_APPLICATION_VERIFICATION';
 
     case 'AVIATION_VIR_APPLICATION_SUBMIT':
@@ -316,6 +391,9 @@ export function getSaveRequestTaskActionTypeForRequestTaskType(
 
     case 'AVIATION_AER_UKETS_APPLICATION_REVIEW':
       return 'AVIATION_AER_UKETS_SAVE_REVIEW_GROUP_DECISION';
+
+    case 'AVIATION_AER_CORSIA_APPLICATION_REVIEW':
+      return 'AVIATION_AER_CORSIA_SAVE_REVIEW_GROUP_DECISION';
 
     case 'AVIATION_VIR_APPLICATION_REVIEW':
       return 'AVIATION_VIR_SAVE_REVIEW';
@@ -331,8 +409,18 @@ export function getSaveRequestTaskActionTypeForRequestTaskType(
 
     case 'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT':
       return 'AVIATION_AER_UKETS_SAVE_APPLICATION_AMEND';
+
+    case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT':
+      return 'AVIATION_AER_CORSIA_SAVE_APPLICATION_AMEND';
+
     case 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW':
       return 'EMP_VARIATION_CORSIA_SAVE_APPLICATION_REVIEW';
+
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT':
+      return 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SAVE_APPLICATION';
+
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT':
+      return 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SAVE_APPLICATION' as any;
   }
 }
 
@@ -363,6 +451,7 @@ export function getRequestTaskAttachmentTypeForRequestTaskType(
       return 'EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT';
 
     case 'AVIATION_AER_CORSIA_APPLICATION_SUBMIT':
+    case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT':
       return 'AVIATION_AER_UPLOAD_SECTION_ATTACHMENT';
 
     case 'AVIATION_VIR_APPLICATION_SUBMIT':
@@ -378,7 +467,6 @@ export function getSectionsForTaskType(
 ): TaskSection<any>[] {
   const isAmendsTask = amendsRequestedTaskActionTypes.includes(requestTaskType);
   const isCorsia = CorsiaRequestTypes.includes(requestType);
-
   switch (requestTaskType) {
     case 'EMP_ISSUANCE_UKETS_APPLICATION_REVIEW':
     case 'EMP_ISSUANCE_UKETS_WAIT_FOR_PEER_REVIEW':
@@ -431,14 +519,26 @@ export function getSectionsForTaskType(
     case 'AVIATION_AER_UKETS_APPLICATION_REVIEW':
       return getAerReviewSections(payload as AviationAerUkEtsApplicationReviewRequestTaskPayload);
 
+    case 'AVIATION_AER_CORSIA_WAIT_FOR_AMENDS':
+    case 'AVIATION_AER_CORSIA_APPLICATION_REVIEW':
+      return getAerCorsiaReviewSections(payload);
+
     case 'AVIATION_AER_CORSIA_APPLICATION_SUBMIT':
-      return getAerSections(payload as AviationAerCorsiaApplicationSubmitRequestTaskPayload, false, true);
+    case 'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT':
+      return getAerSections(
+        payload as
+          | AviationAerCorsiaApplicationSubmitRequestTaskPayload
+          | AviationAerCorsiaApplicationAmendsSubmitRequestTaskPayload,
+        isAmendsTask,
+        true,
+      );
 
     case 'AVIATION_AER_UKETS_APPLICATION_VERIFICATION_SUBMIT':
     case 'AVIATION_AER_UKETS_AMEND_APPLICATION_VERIFICATION_SUBMIT':
       return getAerVerifySections(payload as AviationAerUkEtsApplicationVerificationSubmitRequestTaskPayload);
 
     case 'AVIATION_AER_CORSIA_APPLICATION_VERIFICATION_SUBMIT':
+    case 'AVIATION_AER_CORSIA_AMEND_APPLICATION_VERIFICATION_SUBMIT':
       return getAerVerifyCorsiaSections(payload as AviationAerCorsiaApplicationVerificationSubmitRequestTaskPayload);
 
     case 'AVIATION_DRE_UKETS_APPLICATION_SUBMIT':
@@ -487,6 +587,19 @@ export function getSectionsForTaskType(
     case 'AVIATION_NON_COMPLIANCE_FINAL_DETERMINATION':
       return getNonComplianceFinalDeterminationSections(payload as NonComplianceFinalDeterminationRequestTaskPayload);
 
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT':
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW':
+      return getCorsiaAnnualOffsettingSections(payload as AerCorsiaAnnualOffsettingPayload);
+
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT':
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW':
+      return getCorsia3YearOffsettingSections(payload);
+
+    case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
+    case 'AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW':
+    case 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW':
+      return getDoeSections(payload as AviationDoECorsiaApplicationSubmitRequestTaskPayload);
+
     default:
       return [];
   }
@@ -504,14 +617,14 @@ export function getSubtaskSummaryValues(form: FormGroup): any {
     .reduce((prev, cur) => ({ ...prev, ...cur }), {});
 }
 
-export const parseCsv = (value: string): string[] => {
-  return Papa.parse(value || '').data.map((data: string[]) => {
+export const parseCsv = (value: string, skipEmptyLines = false): string[] => {
+  return Papa.parse(value || '', { skipEmptyLines }).data.map((data: string[]) => {
     return data.join(',');
   });
 };
 
 export const unparseCsv = (value: string[]): string => {
-  const valueTransformed = value.map((x) => (x || '').split(','));
+  const valueTransformed = (value || []).map((x) => (x || '').split(','));
   return Papa.unparse(valueTransformed);
 };
 
@@ -526,6 +639,9 @@ export const notifyOperatorRequestTaskActionTypes: Array<RequestTaskActionProces
   'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_NOTIFY_OPERATOR',
   'NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR',
   'NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR',
+  'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_NOTIFY_OPERATOR',
+  'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_NOTIFY_OPERATOR',
+  'AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR',
 ];
 
 export const peerReviewRequestTaskActionTypes: Array<RequestTaskActionProcessDTO['requestTaskActionType']> = [
@@ -539,6 +655,9 @@ export const peerReviewRequestTaskActionTypes: Array<RequestTaskActionProcessDTO
   'NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW',
   'NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW',
   'EMP_VARIATION_CORSIA_REQUEST_PEER_REVIEW',
+  'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_REQUEST_PEER_REVIEW',
+  'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_REQUEST_PEER_REVIEW',
+  'AVIATION_DOE_CORSIA_REQUEST_PEER_REVIEW',
 ];
 
 export const returnForAmendsRequestTaskActionTypes: Array<RequestTaskActionProcessDTO['requestTaskActionType']> = [
@@ -547,6 +666,7 @@ export const returnForAmendsRequestTaskActionTypes: Array<RequestTaskActionProce
   'EMP_VARIATION_UKETS_REVIEW_RETURN_FOR_AMENDS',
   'EMP_VARIATION_CORSIA_REVIEW_RETURN_FOR_AMENDS',
   'AVIATION_AER_UKETS_REVIEW_RETURN_FOR_AMENDS',
+  'AVIATION_AER_CORSIA_REVIEW_RETURN_FOR_AMENDS',
 ];
 
 export const startPeerReviewRequestTaskActionTypes: Array<RequestTaskActionProcessDTO['requestTaskActionType']> = [
@@ -560,6 +680,9 @@ export const startPeerReviewRequestTaskActionTypes: Array<RequestTaskActionProce
   'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_SUBMIT_PEER_REVIEW_DECISION',
   'NON_COMPLIANCE_NOTICE_OF_INTENT_SUBMIT_PEER_REVIEW_DECISION',
   'NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION',
+  'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_SUBMIT_PEER_REVIEW_DECISION',
+  'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_PEER_REVIEW_DECISION',
+  'AVIATION_DOE_CORSIA_SUBMIT_PEER_REVIEW_DECISION',
 ];
 
 export const isPaymentRequired: Array<ItemDTO['taskType']> = [
@@ -581,6 +704,10 @@ export const reviewButtonsVisible: Array<ItemDTO['taskType']> = [
   'AVIATION_NON_COMPLIANCE_NOTICE_OF_INTENT',
   'AVIATION_NON_COMPLIANCE_CIVIL_PENALTY',
   'AVIATION_AER_UKETS_APPLICATION_REVIEW',
+  'AVIATION_AER_CORSIA_APPLICATION_REVIEW',
+  'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT',
+  'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT',
+  'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT',
 ];
 
 export const notifyOperatorUrlMapper: Partial<Record<RequestTaskDTO['type'], string[]>> = {
@@ -594,6 +721,9 @@ export const notifyOperatorUrlMapper: Partial<Record<RequestTaskDTO['type'], str
   AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE: ['non-compliance', 'daily-penalty-notice', 'notify-operator'],
   AVIATION_NON_COMPLIANCE_NOTICE_OF_INTENT: ['non-compliance', 'notice-of-intent', 'notify-operator'],
   AVIATION_NON_COMPLIANCE_CIVIL_PENALTY: ['non-compliance', 'civil-penalty-notice', 'notify-operator'],
+  AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT: ['annual-offsetting-requirements', 'notify-operator'],
+  AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT: ['3year-offsetting-requirements', 'notify-operator'],
+  AVIATION_DOE_CORSIA_APPLICATION_SUBMIT: ['doe', 'review', 'notify-operator'],
 };
 
 export const sendForPeerReviewUrlMapper: Partial<Record<RequestTaskDTO['type'], string[]>> = {
@@ -607,6 +737,9 @@ export const sendForPeerReviewUrlMapper: Partial<Record<RequestTaskDTO['type'], 
   AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE: ['non-compliance', 'daily-penalty-notice', 'peer-review'],
   AVIATION_NON_COMPLIANCE_NOTICE_OF_INTENT: ['non-compliance', 'notice-of-intent', 'peer-review'],
   AVIATION_NON_COMPLIANCE_CIVIL_PENALTY: ['non-compliance', 'civil-penalty-notice', 'peer-review'],
+  AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT: ['annual-offsetting-requirements', 'peer-review'],
+  AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT: ['3year-offsetting-requirements', 'peer-review'],
+  AVIATION_DOE_CORSIA_APPLICATION_SUBMIT: ['doe', 'review', 'peer-review'],
 };
 
 export const returnForAmendsUrlMapper: Partial<Record<RequestTaskDTO['type'], string[]>> = {
@@ -615,6 +748,7 @@ export const returnForAmendsUrlMapper: Partial<Record<RequestTaskDTO['type'], st
   EMP_VARIATION_UKETS_APPLICATION_REVIEW: ['emp', 'variation', 'review', 'return-for-amends'],
   EMP_VARIATION_CORSIA_APPLICATION_REVIEW: ['emp-corsia', 'variation', 'review', 'return-for-amends'],
   AVIATION_AER_UKETS_APPLICATION_REVIEW: ['aer', 'review', 'return-for-amends'],
+  AVIATION_AER_CORSIA_APPLICATION_REVIEW: ['aer-review-corsia', 'return-for-amends'],
 };
 
 export const isDeterminationCompleted = (
@@ -652,16 +786,26 @@ export const isDeterminationCompleted = (
     case 'AVIATION_NON_COMPLIANCE_FINAL_DETERMINATION':
       return (payload as NonComplianceFinalDeterminationRequestTaskPayload).determinationCompleted;
 
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_SUBMIT':
+      return areTasksCompletedForNotifyAnnualOffsetting(payload as AerCorsiaAnnualOffsettingPayload);
+
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMIT':
+      return areTasksCompletedForNotify3YearPeriodOffsetting(payload);
+
+    case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
+      return (payload as Doe).sectionCompleted;
+
     default:
       return false;
   }
 };
 
-export const isAnySectionForAmends = (payload: EmpRequestTaskPayloadUkEts) => {
-  return Object.keys(payload?.reviewGroupDecisions ?? []).some(
+export const isAnySectionForAmends = (payload: any, requestTaskType: RequestTaskDTO['type']) => {
+  return Object.keys(payload?.reviewGroupDecisions ?? {}).some(
     (key) =>
       (payload.reviewGroupDecisions[key].type === 'OPERATOR_AMENDS_NEEDED' && payload.reviewSectionsCompleted[key]) ||
-      variationDetailsSentIsForAmends(payload),
+      (variationOperatorLedReviewRequestTaskTypes.includes(requestTaskType) &&
+        variationDetailsSectionIsForAmends(payload)),
   );
 };
 
@@ -685,13 +829,21 @@ export const isNotEditableByRequestTaskType: Array<RequestTaskDTO['type']> = [
   'AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW',
   'AVIATION_DRE_UKETS_WAIT_FOR_PEER_REVIEW',
   'AVIATION_AER_UKETS_APPLICATION_REVIEW',
+  'AVIATION_AER_CORSIA_APPLICATION_REVIEW',
   'AVIATION_AER_UKETS_WAIT_FOR_AMENDS',
+  'AVIATION_AER_CORSIA_WAIT_FOR_AMENDS',
   'AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW',
   'AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_PEER_REVIEW',
   'AVIATION_NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW',
   'AVIATION_NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW',
   'AVIATION_NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW',
   'AVIATION_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW',
+  'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW',
+  'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_WAIT_FOR_PEER_REVIEW',
+  'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_WAIT_FOR_PEER_REVIEW',
+  'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW',
+  'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW',
+  'AVIATION_DOE_CORSIA_WAIT_FOR_PEER_REVIEW',
 ];
 
 export const showReviewDecisionComponent: Array<RequestTaskDTO['type']> = [
@@ -703,6 +855,9 @@ export const showReviewDecisionComponent: Array<RequestTaskDTO['type']> = [
   'EMP_ISSUANCE_CORSIA_APPLICATION_REVIEW',
   'EMP_ISSUANCE_CORSIA_WAIT_FOR_REVIEW',
   'AVIATION_AER_UKETS_APPLICATION_REVIEW',
+  'AVIATION_AER_UKETS_WAIT_FOR_AMENDS',
+  'AVIATION_AER_CORSIA_APPLICATION_REVIEW',
+  'AVIATION_AER_CORSIA_WAIT_FOR_AMENDS',
 ];
 
 export const showVariationReviewDecisionComponent: Array<RequestTaskDTO['type']> = [
@@ -730,6 +885,7 @@ export const amendsRequestedTaskActionTypes: Array<RequestTaskDTO['type'] | null
   'EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMIT',
   'EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMIT',
   'AVIATION_AER_UKETS_APPLICATION_AMENDS_SUBMIT',
+  'AVIATION_AER_CORSIA_APPLICATION_AMENDS_SUBMIT',
 ];
 
 export const overallDecisionConfirmUrlMapper: Partial<Record<ItemDTO['requestType'], string[]>> = {
@@ -747,6 +903,7 @@ export const sendReturnForAmendsRequestTaskActionTypesMapper: Partial<
   EMP_VARIATION_UKETS_APPLICATION_REVIEW: 'EMP_VARIATION_UKETS_REVIEW_RETURN_FOR_AMENDS',
   EMP_VARIATION_CORSIA_APPLICATION_REVIEW: 'EMP_VARIATION_CORSIA_REVIEW_RETURN_FOR_AMENDS',
   AVIATION_AER_UKETS_APPLICATION_REVIEW: 'AVIATION_AER_UKETS_REVIEW_RETURN_FOR_AMENDS',
+  AVIATION_AER_CORSIA_APPLICATION_REVIEW: 'AVIATION_AER_CORSIA_REVIEW_RETURN_FOR_AMENDS',
 };
 
 export const recallFromAmendsTaskActionTypes: RequestTaskItemDTO['allowedRequestTaskActions'] = [
@@ -765,22 +922,53 @@ export const recallFromAmendsSubmitTaskActionTypes: Partial<
   EMP_VARIATION_CORSIA_WAIT_FOR_AMENDS: 'EMP_VARIATION_CORSIA_RECALL_FROM_AMENDS',
 };
 
-export const variationDetailsSentIsForAmends = (payload: EmpRequestTaskPayloadUkEts): boolean => {
-  const empVariationDetailsReviewDecision = payload.empVariationDetailsReviewDecision;
-  const empVariationDetailsReviewCompleted = payload.empVariationDetailsReviewCompleted;
-
-  if (
-    ['EMP_VARIATION_UKETS_APPLICATION_REVIEW_PAYLOAD', 'EMP_VARIATION_CORSIA_APPLICATION_REVIEW_PAYLOAD'].includes(
-      payload.payloadType,
-    )
-  ) {
-    return empVariationDetailsReviewCompleted && empVariationDetailsReviewDecision.type === 'OPERATOR_AMENDS_NEEDED';
-  } else {
-    return false;
-  }
+export const variationDetailsSectionIsForAmends = (payload: any): boolean => {
+  return (
+    payload.empVariationDetailsReviewCompleted &&
+    payload.empVariationDetailsReviewDecision.type === 'OPERATOR_AMENDS_NEEDED'
+  );
 };
 
 export const notDisplayDiffComponent: Array<RequestTaskPayload['payloadType']> = [
   'EMP_VARIATION_UKETS_APPLICATION_AMENDS_SUBMIT_PAYLOAD',
   'EMP_VARIATION_CORSIA_APPLICATION_AMENDS_SUBMIT_PAYLOAD',
 ];
+
+const getDeterminationMap = (determinationType: EmpVariationDetermination['type']): string => {
+  switch (determinationType) {
+    case 'APPROVED':
+      return 'approved';
+
+    case 'REJECTED':
+      return 'rejected';
+
+    case 'DEEMED_WITHDRAWN':
+      return 'withdrawn';
+  }
+};
+
+export const getPreviewDocumentsInfo = (requestTaskType: RequestTaskDTO['type'], payload: any) => {
+  switch (requestTaskType) {
+    case 'AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW':
+      return getPreviewDocumentsInfoDre(DREdocumentPreviewRequestTaskActionTypesMap(requestTaskType));
+
+    case 'AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_APPLICATION_PEER_REVIEW':
+      return getPreviewDocumentsInfoAnnualOffsetting(
+        annualOffsettingDocumentPreviewRequestTaskActionTypesMap(requestTaskType),
+      );
+
+    case 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW':
+      return getPreviewDocumentsInfo3YearPeriodOffsetting(
+        threeYearPeriodOffsettingDocumentPreviewRequestTaskActionTypesMap(requestTaskType),
+      );
+
+    case 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW':
+      return getPreviewDocumentsInfoDoe(doeDocumentPreviewRequestTaskActionTypesMap(requestTaskType));
+
+    default:
+      return getPreviewDocumentsInfoEmp(
+        documentPreviewRequestTaskActionTypesMap(requestTaskType),
+        getDeterminationMap(payload?.determination?.type) as ReviewDeterminationStatus,
+      );
+  }
+};

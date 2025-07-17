@@ -3,7 +3,11 @@
     <ng-container [ngSwitch]="column.field">
       <ng-container *ngSwitchCase="'sourceStreamDescription'">
         <ng-container *ngIf="row?.sourceStreamDescription !== 'totals'; else totals">
-          <a [routerLink]="['./', index, 'summary']" govukLink>
+          <a
+            [routerLink]="['./', index, 'summary']"
+            govukLink
+            attr.data-print-text="{{ row?.sourceStreamDescription }}"
+          >
             <ng-container *ngIf="row?.sourceStreamDescription; else noSourceStream">
               {{ row.sourceStreamDescription }}
               <ng-container *ngIf="row?.parameterMonitoringTierDiffReason?.type === 'DATA_GAP'">

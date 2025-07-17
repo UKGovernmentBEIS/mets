@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, CanDeactivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 
 import { combineLatest, first, map } from 'rxjs';
 
+import { selectFeatures } from '@core/config/config.selectors';
+import { ConfigStore } from '@core/config/config.store';
 import { AuthStore, selectUserState } from '@core/store/auth';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
@@ -21,13 +23,14 @@ import { PermitTransferStore } from './store/permit-transfer.store';
 @Injectable({
   providedIn: 'root',
 })
-export class PermitTransferTaskGuard extends PermitApplicationTaskGuard implements CanActivate, CanDeactivate<any> {
+export class PermitTransferTaskGuard extends PermitApplicationTaskGuard {
   constructor(
     private readonly store: PermitTransferStore,
     private readonly incorporateHeaderStore: IncorporateHeaderStore,
     private readonly tasksService: TasksService,
     private readonly authStore: AuthStore,
     private readonly businessErrorService: BusinessErrorService,
+    private readonly configStore: ConfigStore,
   ) {
     super();
   }
@@ -36,12 +39,13 @@ export class PermitTransferTaskGuard extends PermitApplicationTaskGuard implemen
     return combineLatest([
       this.tasksService.getTaskItemInfoById(Number(route.paramMap.get('taskId'))),
       this.authStore.pipe(selectUserState),
+      this.configStore.pipe(selectFeatures),
     ]).pipe(
       catchNotFoundRequest(ErrorCode.NOTFOUND1001, () =>
         this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
       ),
       first(),
-      map(([requestTaskItem, userState]) => {
+      map(([requestTaskItem, userState, features]) => {
         this.store.reset();
         const state = this.store.getState();
         this.store.setState({
@@ -61,7 +65,7 @@ export class PermitTransferTaskGuard extends PermitApplicationTaskGuard implemen
           permitSectionsCompleted: {
             ...(Object.keys(requestTaskItem.requestTask.payload?.permitSectionsCompleted ?? {})?.length === 0 &&
             requestTaskItem.requestTask.type.includes('PERMIT_TRANSFER_B_APPLICATION_SUBMIT')
-              ? initializePermitSectionsCompleted(requestTaskItem.requestTask.payload?.permit)
+              ? initializePermitSectionsCompleted(requestTaskItem.requestTask.payload?.permit, features)
               : requestTaskItem.requestTask.payload?.permitSectionsCompleted),
             siteDiagrams:
               requestTaskItem.requestTask.payload?.permitSectionsCompleted?.siteDiagrams?.length > 0
@@ -74,6 +78,7 @@ export class PermitTransferTaskGuard extends PermitApplicationTaskGuard implemen
               ? initializeReviewSectionsCompleted(requestTaskItem.requestTask.payload?.permit)
               : requestTaskItem.requestTask.payload?.reviewSectionsCompleted),
           },
+          features: features,
         });
         this.incorporateHeaderStore.reset();
         this.incorporateHeaderStore.setState({

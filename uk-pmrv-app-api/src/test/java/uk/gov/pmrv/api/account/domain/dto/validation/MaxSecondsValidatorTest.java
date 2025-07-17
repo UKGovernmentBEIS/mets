@@ -1,15 +1,13 @@
 package uk.gov.pmrv.api.account.domain.dto.validation;
 
+import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import uk.gov.pmrv.api.account.domain.dto.CoordinatesDTO;
 import uk.gov.pmrv.api.account.domain.enumeration.CardinalDirection;
-
-import jakarta.validation.ConstraintValidatorContext;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

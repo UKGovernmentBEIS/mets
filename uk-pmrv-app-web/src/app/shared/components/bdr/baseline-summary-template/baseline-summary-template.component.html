@@ -1,0 +1,84 @@
+<ng-container *ngIf="bdrFile">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded baseline data report</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="[bdrFile]"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+<ng-container *ngIf="files?.length">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="files"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Are you applying for free allocation?</dt>
+    <dd govukSummaryListRowValue>
+      {{ data?.isApplicationForFreeAllocation ? 'Yes' : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..', 'free-allocation']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Are you applying for HSE or USE status?</dt>
+    <dd govukSummaryListRowValue>
+      {{ data?.statusApplicationType | statusApplicationType }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..', 'free-allocation']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>
+      I confirm that the information provided in this submission is correct to the best of my knowledge.
+    </dt>
+    <dd govukSummaryListRowValue>
+      {{ data?.infoIsCorrectChecked ? 'Yes' : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..', 'free-allocation']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="data?.isApplicationForFreeAllocation">
+    <dt govukSummaryListRowKey>Are you providing a monitoring methodology plan as part of your application?</dt>
+    <dd govukSummaryListRowValue>
+      {{ data?.hasMmp ? 'Yes' : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..', 'provide-mmp']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>
+
+<ng-container *ngIf="mmpFiles?.length && data?.isApplicationForFreeAllocation && data?.hasMmp">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded Monitoring Methodology Plan file</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="mmpFiles"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..', 'provide-mmp']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>

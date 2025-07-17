@@ -1,11 +1,8 @@
 package uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.handler;
 
-import java.util.Set;
-
+import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 import uk.gov.pmrv.api.account.installation.domain.dto.InstallationOperatorDetails;
 import uk.gov.pmrv.api.account.installation.service.InstallationOperatorDetailsQueryService;
 import uk.gov.pmrv.api.permit.domain.PermitContainer;
@@ -17,7 +14,10 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandler;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.domain.PermitVariationRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.domain.PermitVariationRegulatorLedGrantDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.submitregulatorled.mapper.PermitVariationRegulatorLedMapper;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class PermitVariationApplicationSubmitRegulatorLedRequestTaskInitializer 
 	@Override
 	public RequestTaskPayload initializePayload(Request request) {
 		final PermitVariationRequestPayload requestPayload = (PermitVariationRequestPayload) request.getPayload();
-		
+
 		final InstallationOperatorDetails installationOperatorDetails = installationOperatorDetailsQueryService
 				.getInstallationOperatorDetails(request.getAccountId());
 		
@@ -47,6 +47,8 @@ public class PermitVariationApplicationSubmitRegulatorLedRequestTaskInitializer 
 			requestTaskPayload = PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload.builder()
 					.payloadType(RequestTaskPayloadType.PERMIT_VARIATION_APPLICATION_SUBMIT_REGULATOR_LED_PAYLOAD)
 					.installationOperatorDetails(installationOperatorDetails)
+					.determination(PermitVariationRegulatorLedGrantDetermination.builder()
+							.annualEmissionsTargets(permitContainer.getAnnualEmissionsTargets()).build())
 					.originalPermitContainer(permitContainer)
 					.permitType(permitContainer.getPermitType())
 					.permit(permitContainer.getPermit())
