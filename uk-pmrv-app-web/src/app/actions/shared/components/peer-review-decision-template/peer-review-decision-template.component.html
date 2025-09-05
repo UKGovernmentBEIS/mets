@@ -1,0 +1,22 @@
+<app-base-action-container-component
+  [header]="requestActionType | itemActionType"
+  [customContentTemplate]="customContentTemplate"
+  [expectedActionType]="[requestActionType]"></app-base-action-container-component>
+
+<ng-template #customContentTemplate>
+  <h2 class="govuk-heading-m">Decision details</h2>
+  <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Decision</dt>
+      <dd govukSummaryListRowValue>{{ decision.type | determinationAssessment }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Supporting notes</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ decision.notes }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Peer reviewer</dt>
+      <dd govukSummaryListRowValue>{{ submitter }}</dd>
+    </div>
+  </dl>
+</ng-template>

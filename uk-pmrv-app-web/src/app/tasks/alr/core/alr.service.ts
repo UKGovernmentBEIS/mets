@@ -1,7 +1,7 @@
 import { computed, Injectable, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import { first, map, switchMap, tap } from 'rxjs';
+import { first, map, Observable, switchMap, tap } from 'rxjs';
 
 import { AuthStore, selectUserRoleType } from '@core/store';
 import { BusinessErrorService } from '@error/business-error/business-error.service';
@@ -15,8 +15,15 @@ import { CommonTasksState } from '@tasks/store/common-tasks.state';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 import {
+  ALRApplicationAmendsSubmitRequestTaskPayload,
+  ALRApplicationAuthorityReviewOutcome,
+  ALRApplicationRegulatorReviewSaveTaskActionPayload,
+  ALRApplicationRegulatorReviewSubmitRequestTaskPayload,
   ALRApplicationSubmitRequestTaskPayload,
   ALRApplicationVerificationSubmitRequestTaskPayload,
+  ALRAuthorityResponseSubmitRequestTaskPayload,
+  ALRReviewDecision,
+  ALRSaveAuthorityResponseTaskActionPayload,
   InstallationAccountViewService,
   RequestMetadata,
   RequestTaskActionPayload,
@@ -39,12 +46,22 @@ export class AlrService extends TasksHelperService {
     super(store, tasksService, businessErrorService);
   }
 
-  get payload(): Signal<ALRApplicationSubmitRequestTaskPayload | ALRApplicationVerificationSubmitRequestTaskPayload> {
+  get payload(): Signal<
+    | ALRApplicationSubmitRequestTaskPayload
+    | ALRApplicationVerificationSubmitRequestTaskPayload
+    | ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+    | ALRApplicationAmendsSubmitRequestTaskPayload
+    | ALRAuthorityResponseSubmitRequestTaskPayload
+  > {
     return toSignal(this.store.payload$);
   }
 
+  get authorityPayload$(): Observable<ALRAuthorityResponseSubmitRequestTaskPayload> {
+    return this.store.payload$ as Observable<ALRAuthorityResponseSubmitRequestTaskPayload>;
+  }
+
   get requestTaskType(): Signal<RequestTaskDTO['type']> {
-    return toSignal(this.store.requestTaskType$);
+    return toSignal(this.requestTaskType$);
   }
 
   get requestMetadata(): Signal<RequestMetadata> {
@@ -57,6 +74,14 @@ export class AlrService extends TasksHelperService {
 
   get requestAccountId$() {
     return this.store.requestInfo$.pipe(map((info) => info.accountId));
+  }
+
+  get competentAuthority$() {
+    return this.store.requestInfo$.pipe(map((info) => info.competentAuthority));
+  }
+
+  get competentAuthority() {
+    return toSignal(this.competentAuthority$);
   }
 
   get requestTaskItem(): Signal<RequestTaskItemDTO> {
@@ -111,6 +136,9 @@ export class AlrService extends TasksHelperService {
     switch (requestTaskType) {
       case 'ALR_APPLICATION_SUBMIT':
         actionType = 'ALR_SAVE_APPLICATION';
+        break;
+      case 'ALR_APPLICATION_AMENDS_SUBMIT':
+        actionType = 'ALR_APPLICATION_AMENDS_SAVE';
         break;
     }
 
@@ -236,6 +264,200 @@ export class AlrService extends TasksHelperService {
     );
   }
 
+  postGroupDecisionReview(
+    value: any,
+    dataType: ALRReviewDecision['reviewDataType'],
+    groupKey: string,
+    attachments?: { uuid: string; file: File }[],
+  ) {
+    return this.store.pipe(
+      first(),
+      switchMap((state) =>
+        this.tasksService.processRequestTaskAction({
+          requestTaskActionType: 'ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION',
+          requestTaskId: state.requestTaskItem.requestTask.id,
+          requestTaskActionPayload: {
+            payloadType: 'ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION_PAYLOAD',
+            group: groupKey,
+            decision: {
+              ...value,
+              reviewDataType: dataType,
+            },
+            regulatorReviewSectionsCompleted: {
+              ...(state.requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload)
+                ?.regulatorReviewSectionsCompleted,
+              ...{ [groupKey]: true },
+            },
+          } as RequestTaskActionPayload,
+        }),
+      ),
+      catchNotFoundRequest(ErrorCode.NOTFOUND1001, () =>
+        this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
+      ),
+      catchTaskReassignedBadRequest(() =>
+        this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
+      ),
+      tap(() => {
+        const state = this.store.getState();
+        this.store.setState({
+          ...state,
+          requestTaskItem: {
+            ...state.requestTaskItem,
+            requestTask: {
+              ...state.requestTaskItem.requestTask,
+              payload: {
+                ...state.requestTaskItem.requestTask.payload,
+                regulatorReviewGroupDecisions: {
+                  ...(
+                    state.requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+                  ).regulatorReviewGroupDecisions,
+                  [groupKey]: {
+                    reviewDataType: dataType,
+                    ...value,
+                  },
+                },
+                regulatorReviewAttachments: {
+                  ...(
+                    state.requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+                  ).regulatorReviewAttachments,
+                  ...attachments?.reduce((result, item) => ({ ...result, [item.uuid]: item.file.name }), {}),
+                },
+                regulatorReviewSectionsCompleted: {
+                  ...(
+                    state.requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+                  )?.regulatorReviewSectionsCompleted,
+                  ...{ [groupKey]: true },
+                },
+              } as ALRApplicationRegulatorReviewSubmitRequestTaskPayload,
+            },
+          },
+        });
+      }),
+    );
+  }
+
+  postAlrReview(value: any, groupKey: string, groupStatus: boolean, attachments?: { [key: string]: string }) {
+    return this.store.pipe(
+      first(),
+      switchMap((state) => {
+        const payload = state.requestTaskItem.requestTask.payload as
+          | ALRApplicationRegulatorReviewSaveTaskActionPayload
+          | ALRApplicationRegulatorReviewSubmitRequestTaskPayload;
+
+        return this.tasksService.processRequestTaskAction({
+          requestTaskActionType: 'ALR_REGULATOR_REVIEW_SAVE',
+          requestTaskId: state.requestTaskItem.requestTask.id,
+          requestTaskActionPayload: {
+            payloadType: 'ALR_REGULATOR_REVIEW_SAVE_PAYLOAD',
+            regulatorReviewOutcome: {
+              ...payload.regulatorReviewOutcome,
+              ...value,
+            },
+            regulatorReviewSectionsCompleted: {
+              ...payload?.regulatorReviewSectionsCompleted,
+              ...{ [groupKey]: groupStatus },
+            },
+          } as ALRApplicationRegulatorReviewSaveTaskActionPayload,
+        });
+      }),
+      catchNotFoundRequest(ErrorCode.NOTFOUND1001, () =>
+        this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
+      ),
+      catchTaskReassignedBadRequest(() =>
+        this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
+      ),
+      tap(() => {
+        const state = this.store.getState();
+        const payload = state.requestTaskItem.requestTask
+          .payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload;
+
+        this.store.setState({
+          ...state,
+          requestTaskItem: {
+            ...state.requestTaskItem,
+            requestTask: {
+              ...state.requestTaskItem.requestTask,
+              payload: {
+                ...payload,
+                regulatorReviewOutcome: {
+                  ...payload.regulatorReviewOutcome,
+                  ...value,
+                },
+                regulatorReviewSectionsCompleted: {
+                  ...payload?.regulatorReviewSectionsCompleted,
+                  ...{ [groupKey]: groupStatus },
+                },
+                regulatorReviewAttachments: { ...payload?.regulatorReviewAttachments, ...attachments },
+              } as ALRApplicationRegulatorReviewSubmitRequestTaskPayload,
+            },
+          },
+        });
+      }),
+    );
+  }
+
+  postAlrAuthority(
+    value: Partial<ALRApplicationAuthorityReviewOutcome>,
+    groupKey: string,
+    groupStatus: boolean,
+    attachments?: { [key: string]: string },
+  ) {
+    return this.store.pipe(
+      first(),
+      switchMap((state) => {
+        const payload = state.requestTaskItem.requestTask.payload as ALRAuthorityResponseSubmitRequestTaskPayload;
+
+        return this.tasksService.processRequestTaskAction({
+          requestTaskActionType: 'ALR_SAVE_AUTHORITY_RESPONSE',
+          requestTaskId: state.requestTaskItem.requestTask.id,
+          requestTaskActionPayload: {
+            payloadType: 'ALR_SAVE_AUTHORITY_RESPONSE_PAYLOAD',
+            authorityReviewOutcome: {
+              ...payload.authorityReviewOutcome,
+              ...value,
+            },
+            authorityReviewSectionsCompleted: {
+              ...payload?.authorityReviewSectionsCompleted,
+              ...{ [groupKey]: groupStatus },
+            },
+          } as ALRSaveAuthorityResponseTaskActionPayload,
+        });
+      }),
+      catchNotFoundRequest(ErrorCode.NOTFOUND1001, () =>
+        this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
+      ),
+      catchTaskReassignedBadRequest(() =>
+        this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
+      ),
+      tap(() => {
+        const state = this.store.getState();
+        const payload = state.requestTaskItem.requestTask.payload as ALRAuthorityResponseSubmitRequestTaskPayload;
+
+        this.store.setState({
+          ...state,
+          requestTaskItem: {
+            ...state.requestTaskItem,
+            requestTask: {
+              ...state.requestTaskItem.requestTask,
+              payload: {
+                ...payload,
+                authorityReviewOutcome: {
+                  ...payload.authorityReviewOutcome,
+                  ...value,
+                },
+                authorityReviewSectionsCompleted: {
+                  ...payload?.authorityReviewSectionsCompleted,
+                  ...{ [groupKey]: groupStatus },
+                },
+                alrAttachments: { ...payload?.alrAttachments, ...attachments },
+              } as ALRAuthorityResponseSubmitRequestTaskPayload,
+            },
+          },
+        });
+      }),
+    );
+  }
+
   private createRequestTaskActionPayload(
     actionType: RequestTaskActionProcessDTO['requestTaskActionType'],
     payload?: any,
@@ -263,6 +485,36 @@ export class AlrService extends TasksHelperService {
           payloadType: 'ALR_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD',
           changesRequired: payload.changesRequired,
         } as RequestTaskActionPayload;
+      case 'ALR_REGULATOR_REVIEW_SAVE':
+        return {
+          payloadType: 'ALR_REGULATOR_REVIEW_SAVE_PAYLOAD',
+          regulatorReviewOutcome: payload.regulatorReviewOutcome,
+          regulatorReviewSectionsCompleted: payload.regulatorReviewSectionsCompleted,
+        } as RequestTaskActionPayload;
+      case 'ALR_APPLICATION_AMENDS_SAVE':
+        return {
+          payloadType: 'ALR_APPLICATION_AMENDS_SAVE_PAYLOAD',
+          alr: payload.alr,
+          alrSectionsCompleted: payload.alrSectionsCompleted,
+          regulatorReviewSectionsCompleted: payload.regulatorReviewSectionsCompleted,
+        } as RequestTaskActionPayload;
+      case 'ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR': {
+        const alrSectionsCompleted = (() => {
+          const { changesRequested, ...rest } = payload.alrSectionsCompleted;
+          return rest;
+        })();
+        return {
+          payloadType: 'ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD',
+          alrSectionsCompleted: alrSectionsCompleted,
+        } as RequestTaskActionPayload;
+      }
+      case 'ALR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER': {
+        return {
+          payloadType: 'ALR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER_PAYLOAD',
+          verificationSectionsCompleted: payload.verificationSectionsCompleted,
+        } as RequestTaskActionPayload;
+      }
+
       default:
         return {
           payloadType: 'EMPTY_PAYLOAD',
@@ -310,5 +562,45 @@ export class AlrService extends TasksHelperService {
         fileName: attachments[id],
       })) ?? []
     );
+  }
+
+  getRegulatorDownloadUrlFiles(files: string[]): AttachedFile[] {
+    const url = this.getBaseFileDownloadUrl();
+    const regulatorReviewAttachments: { [key: string]: string } = (
+      this.store.getValue().requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+    )?.regulatorReviewAttachments;
+
+    const alrAttachments: { [key: string]: string } = (
+      this.store.getValue().requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+    )?.alrAttachments;
+
+    const attachments = { ...alrAttachments, ...regulatorReviewAttachments };
+
+    return (
+      files?.map((id) => ({
+        downloadUrl: url + `${id}`,
+        fileName: attachments[id],
+      })) ?? []
+    );
+  }
+
+  getRegulatorDownloadUrlAlrFile(alrFile: string): AttachedFile {
+    const url = this.getBaseFileDownloadUrl();
+    const regulatorReviewAttachments: { [key: string]: string } = (
+      this.store.getValue().requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+    )?.regulatorReviewAttachments;
+
+    const alrAttachments: { [key: string]: string } = (
+      this.store.getValue().requestTaskItem.requestTask.payload as ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+    )?.alrAttachments;
+
+    const attachments = { ...alrAttachments, ...regulatorReviewAttachments };
+
+    return alrFile
+      ? {
+          downloadUrl: url + `${alrFile}`,
+          fileName: attachments[alrFile],
+        }
+      : null;
   }
 }

@@ -48,10 +48,12 @@ export class DoalService extends TasksHelperService {
 
   getDownloadUrlFile(file: string): { downloadUrl: string; fileName: string } {
     const attachments: { [key: string]: string } = this.doalAttachments;
-    return {
-      downloadUrl: this.getBaseFileDownloadUrl() + `${file}`,
-      fileName: attachments[file],
-    };
+    return file
+      ? {
+          downloadUrl: this.getBaseFileDownloadUrl() + `${file}`,
+          fileName: attachments[file],
+        }
+      : null;
   }
 
   saveDoal(

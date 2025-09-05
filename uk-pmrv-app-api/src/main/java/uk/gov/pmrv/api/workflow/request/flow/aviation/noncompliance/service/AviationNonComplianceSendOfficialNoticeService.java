@@ -16,12 +16,14 @@ import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateDat
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceDecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.service.NonComplianceSendOfficialNoticeService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.AviationAccountCompetentAuthorityDTOByRequestResolver;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -40,6 +42,7 @@ public class AviationNonComplianceSendOfficialNoticeService implements NonCompli
     private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
     private final AviationAccountCompetentAuthorityDTOByRequestResolver caResolver;
     private final FileAttachmentService fileAttachmentService;
+    private final OfficialNoticeSendService officialNoticeSendService;
 
     public void sendOfficialNotice(UUID officialNotice, Request request, NonComplianceDecisionNotification decisionNotification) {
         Optional<UserInfoDTO> requestAccountPrimaryContact = requestAccountContactQueryService.getRequestAccountPrimaryContact(request);
@@ -86,6 +89,8 @@ public class AviationNonComplianceSendOfficialNoticeService implements NonCompli
 
         templateParams.put(PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail());
         templateParams.put(PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName());
+
+        templateParams.put(PmrvEmailNotificationTemplateConstants.REQUEST_TYPE, officialNoticeSendService.processRequestTypeName(RequestType.AVIATION_NON_COMPLIANCE));
 
         return EmailData.<PmrvEmailNotificationTemplateData>builder()
             .notificationTemplateData(PmrvEmailNotificationTemplateData.builder()

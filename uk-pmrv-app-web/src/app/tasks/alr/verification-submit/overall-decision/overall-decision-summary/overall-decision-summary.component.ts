@@ -19,7 +19,7 @@ export interface ViewModel {
   standalone: true,
   imports: [AlrTaskSharedModule, SharedModule],
   template: `
-    <app-alr-task-review
+    <app-alr-task-common
       returnLink="../../"
       [breadcrumb]="true"
       *ngIf="vm() as vm"
@@ -29,9 +29,9 @@ export interface ViewModel {
         [isEditable]="vm.isEditable"
         [overallDecision]="vm.overallDecision"></app-shared-overall-decision-summary-template>
       <div *ngIf="vm.isEditable && !vm.hideSubmit" class="govuk-button-group">
-        <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+        <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and continue</button>
       </div>
-    </app-alr-task-review>
+    </app-alr-task-common>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

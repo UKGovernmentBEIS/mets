@@ -27,9 +27,9 @@ import { SubmitSectionListComponent } from './shared/components/submit-section-l
 import { VerificationReportSummaryComponent } from './shared/components/verification-report-summary/verification-report-summary.component';
 import { AdditionalDocumentsComponent } from './submit/additional-documents/additional-documents.component';
 import { SummaryComponent as AdditionalDocumentsSubmitSummaryComponent } from './submit/additional-documents/summary/summary.component';
-import { ActivityLevelComponent } from './submit/alc-information/activity-levels/activity-level/activity-level.component';
-import { DeleteComponent as ActivityLevelDeleteComponent } from './submit/alc-information/activity-levels/activity-level/delete/delete.component';
-import { ActivityLevelsComponent } from './submit/alc-information/activity-levels/activity-levels.component';
+import { DoalActivityLevelComponent } from './submit/alc-information/activity-levels/activity-level/activity-level.component';
+import { DoalActivityLevelDeleteComponent as ActivityLevelDeleteComponent } from './submit/alc-information/activity-levels/activity-level/delete/delete.component';
+import { DoalActivityLevelsComponent } from './submit/alc-information/activity-levels/activity-levels.component';
 import { CommentsComponent } from './submit/alc-information/comments/comments.component';
 import { EstimatesComponent } from './submit/alc-information/estimates/estimates.component';
 import { DeleteComponent as PreliminaryAllocationDeleteComponent } from './submit/alc-information/preliminary-allocations/preliminary-allocation/delete/delete.component';
@@ -52,9 +52,7 @@ import { VerificationReportComponent } from './submit/verification-report/verifi
 
 @NgModule({
   declarations: [
-    ActivityLevelComponent,
     ActivityLevelDeleteComponent,
-    ActivityLevelsComponent,
     AdditionalDocumentsComponent,
     AdditionalDocumentsSubmitSummaryComponent,
     AdditionalDocumentsSummaryComponent,
@@ -74,6 +72,8 @@ import { VerificationReportComponent } from './submit/verification-report/verifi
     DeterminationComponent,
     DeterminationSubmitSummaryComponent,
     DeterminationSummaryComponent,
+    DoalActivityLevelComponent,
+    DoalActivityLevelsComponent,
     DoalTaskComponent,
     EstimatesComponent,
     NotifyOperatorComponent,

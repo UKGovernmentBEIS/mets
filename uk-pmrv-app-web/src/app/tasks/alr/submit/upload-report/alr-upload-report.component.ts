@@ -29,7 +29,9 @@ export class ALRUploadReportComponent implements PendingRequest {
 
   renameFile = (originalFile: File): File => {
     const suffix = originalFile.name.slice(((originalFile.name.lastIndexOf('.') - 1) >>> 0) + 1);
-    const newName = this.alrService.fileName(this.getFileNextVersion(), suffix);
+    const fileVersion = this.alrPayload().alrFileVersion;
+    const newName = this.alrService.fileName(fileVersion, suffix);
+
     return new File([originalFile], newName, { type: originalFile.type, lastModified: originalFile.lastModified });
   };
 
@@ -44,7 +46,7 @@ export class ALRUploadReportComponent implements PendingRequest {
   onContinue(): void {
     const nextRoute = 'summary';
     if (!this.form.dirty) {
-      this.router.navigate([nextRoute], { relativeTo: this.route }).then();
+      this.router.navigate([nextRoute], { relativeTo: this.route });
     } else {
       const payload = this.alrPayload();
       this.alrService
@@ -83,14 +85,5 @@ export class ALRUploadReportComponent implements PendingRequest {
     }
 
     return attachments;
-  }
-
-  private getFileNextVersion(): number {
-    const fileName = this.form.controls.alrFile?.value?.file?.name;
-    if (fileName) {
-      const match = fileName.match(/-v(\d+)-/);
-      return match ? parseInt(match[1]) + 1 : 1;
-    }
-    return 1;
   }
 }

@@ -52,6 +52,9 @@
         </div>
       </dl>
     </ng-container>
-    <a govukLink [routerLink]="(isAviation$ | async) ? '../..' : '../../../..'">Return to: Non-compliance</a>
+
+    <a *ngIf="(isAmended$ | async) !== true" govukLink [routerLink]="(isAviation$ | async) ? '../..' : '../../../..'">
+      Return to: Non-compliance
+    </a>
   </div>
 </div>

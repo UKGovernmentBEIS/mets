@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { first, map, Observable, switchMap, tap } from 'rxjs';
 
 import { catchTaskReassignedBadRequest } from '@error/business-errors';
 import { catchNotFoundRequest, ErrorCode } from '@error/not-found-error';
 import { requestTaskReassignedError, taskNotFoundError } from '@shared/errors/request-task-error';
+import { TaskTypeToBreadcrumbPipe } from '@shared/pipes/task-type-to-breadcrumb.pipe';
 import { TasksHelperService } from '@tasks/shared/services/tasks-helper.service';
 
 import {
@@ -18,12 +20,17 @@ import {
   NonComplianceNoticeOfIntentRequestTaskPayload,
   NonComplianceNoticeOfIntentSaveApplicationRequestTaskActionPayload,
   RequestTaskActionPayload,
+  RequestTaskItemDTO,
 } from 'pmrv-api';
 
 @Injectable({ providedIn: 'root' })
 export class NonComplianceService extends TasksHelperService {
   get accountId$() {
     return this.store.requestTaskItem$.pipe(map((task) => task.requestInfo.accountId));
+  }
+
+  get requestTaskItem(): Signal<RequestTaskItemDTO> {
+    return toSignal(this.store.requestTaskItem$);
   }
 
   saveNonCompliance(
@@ -34,17 +41,40 @@ export class NonComplianceService extends TasksHelperService {
       first(),
       switchMap((state) => {
         const payload = state.requestTaskItem.requestTask.payload as NonComplianceApplicationSubmitRequestTaskPayload;
+        const isAmendable = state.requestTaskItem.allowedRequestTaskActions.includes('NON_COMPLIANCE_AMEND_DETAILS');
+
+        let amendPayload;
+        if (isAmendable) {
+          amendPayload = {
+            reason: payload.reason,
+            nonComplianceDate: payload.nonComplianceDate,
+            complianceDate: payload.complianceDate,
+          };
+        }
+
         return this.tasksService
-          .processRequestTaskAction({
-            requestTaskActionType: 'NON_COMPLIANCE_SAVE_APPLICATION',
-            requestTaskId: state.requestTaskItem.requestTask.id,
-            requestTaskActionPayload: {
-              ...payload,
-              payloadType: 'NON_COMPLIANCE_SAVE_APPLICATION_PAYLOAD',
-              ...data,
-              sectionCompleted: sectionCompleted,
-            } as RequestTaskActionPayload,
-          })
+          .processRequestTaskAction(
+            isAmendable
+              ? {
+                  requestTaskActionType: 'NON_COMPLIANCE_AMEND_DETAILS',
+                  requestTaskId: state.requestTaskItem.requestTask.id,
+                  requestTaskActionPayload: {
+                    ...amendPayload,
+                    payloadType: 'NON_COMPLIANCE_AMEND_DETAILS_PAYLOAD',
+                    ...data,
+                  } as RequestTaskActionPayload,
+                }
+              : {
+                  requestTaskActionType: 'NON_COMPLIANCE_SAVE_APPLICATION',
+                  requestTaskId: state.requestTaskItem.requestTask.id,
+                  requestTaskActionPayload: {
+                    ...payload,
+                    payloadType: 'NON_COMPLIANCE_SAVE_APPLICATION_PAYLOAD',
+                    ...data,
+                    sectionCompleted,
+                  } as RequestTaskActionPayload,
+                },
+          )
           .pipe(
             catchNotFoundRequest(ErrorCode.NOTFOUND1001, () =>
               this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
@@ -62,7 +92,7 @@ export class NonComplianceService extends TasksHelperService {
                     payload: {
                       ...state.requestTaskItem.requestTask.payload,
                       ...data,
-                      sectionCompleted: sectionCompleted,
+                      sectionCompleted,
                     } as NonComplianceApplicationSubmitRequestTaskPayload,
                   },
                 },
@@ -390,5 +420,24 @@ export class NonComplianceService extends TasksHelperService {
           );
       }),
     );
+  }
+
+  getAmendmentUrl(requestTaskType): string {
+    const urlMap = {
+      NON_COMPLIANCE_CIVIL_PENALTY: '../../civil-penalty-notice',
+      NON_COMPLIANCE_DAILY_PENALTY_NOTICE: '../../daily-penalty-notice',
+      NON_COMPLIANCE_NOTICE_OF_INTENT: '../../notice-of-intent',
+      NON_COMPLIANCE_FINAL_DETERMINATION: '../../conclusion',
+      AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE: '../../../',
+      AVIATION_NON_COMPLIANCE_NOTICE_OF_INTENT: '../../../',
+      AVIATION_NON_COMPLIANCE_CIVIL_PENALTY: '../../../',
+      AVIATION_NON_COMPLIANCE_FINAL_DETERMINATION: '../../../',
+    };
+    return urlMap[requestTaskType];
+  }
+
+  getAmendmentText(requestTaskType): string {
+    const taskTypePipe = new TaskTypeToBreadcrumbPipe();
+    return taskTypePipe.transform(requestTaskType);
   }
 }

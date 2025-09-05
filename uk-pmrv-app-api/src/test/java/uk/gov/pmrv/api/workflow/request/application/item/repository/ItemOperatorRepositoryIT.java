@@ -87,7 +87,7 @@ class ItemOperatorRepositoryIT extends AbstractContainerBaseTest {
         
         createRequestTask(null, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE, "t9", request1.getCreationDate());
 
-        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.ME, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0).pageSize(10).build());
 
         assertEquals(2L, itemPage.getTotalItems());
         assertEquals(2, itemPage.getItems().size());
@@ -151,7 +151,7 @@ class ItemOperatorRepositoryIT extends AbstractContainerBaseTest {
         
         createRequestTask(null, request1, RequestTaskType.INSTALLATION_ACCOUNT_OPENING_ARCHIVE, "t7", request1.getCreationDate());
 
-        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.OTHERS, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.OTHERS, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0).pageSize(10).build());
 
         assertEquals(1L, itemPage.getTotalItems());
         assertEquals(1, itemPage.getItems().size());
@@ -209,7 +209,7 @@ class ItemOperatorRepositoryIT extends AbstractContainerBaseTest {
         
         createRequestTask(null, request1, RequestTaskType.PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT, "t10", request1.getCreationDate());
         
-        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes,PagingRequest.builder().pageNumber(0).pageSize(10).build());
 
         assertEquals(1L, itemPage.getTotalItems());
         assertEquals(1, itemPage.getItems().size());
@@ -245,7 +245,7 @@ class ItemOperatorRepositoryIT extends AbstractContainerBaseTest {
         createOpenedItem(requestTask1.getId(), user);
 
 
-        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.ME, accountScopedMap, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemPage itemPage = cut.findItems(user, ItemAssignmentType.ME, accountScopedMap, PagingRequest.builder().pageNumber(0).pageSize(10).build());
 
         assertEquals(1L, itemPage.getTotalItems());
         assertEquals(1, itemPage.getItems().size());

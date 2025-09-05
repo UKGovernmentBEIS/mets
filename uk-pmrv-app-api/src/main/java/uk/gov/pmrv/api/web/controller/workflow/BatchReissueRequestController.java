@@ -46,8 +46,8 @@ public class BatchReissueRequestController {
 	public ResponseEntity<BatchReissuesResponseDTO> getBatchReissueRequests(
             @Parameter(hidden = true) AppUser appUser,
             @PathVariable("accountType") @Parameter(description = "The account type") AccountType accountType,
-            @RequestParam(value = "page") @NotNull @Parameter(name="page", description = "The page number starting from zero") @Min(value = 0, message = "{parameter.page.typeMismatch}") Long page,
-            @RequestParam(value = "size") @NotNull @Parameter(name="size", description = "The page size") @Min(value = 1, message = "{parameter.pageSize.typeMismatch}")  Long pageSize
+            @RequestParam(value = "page") @NotNull @Parameter(name="page", description = "The page number starting from zero") @Min(value = 0, message = "{parameter.page.typeMismatch}") Integer page,
+            @RequestParam(value = "size") @NotNull @Parameter(name="size", description = "The page size") @Min(value = 1, message = "{parameter.pageSize.typeMismatch}")  Integer pageSize
     ) {
 		return new ResponseEntity<>(orchestrator.findBatchReissueRequests(appUser, accountType,
 				PagingRequest.builder().pageNumber(page).pageSize(pageSize).build()), HttpStatus.OK);

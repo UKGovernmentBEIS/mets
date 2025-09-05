@@ -122,7 +122,7 @@ describe('VerificationReportComponent', () => {
       fixture.detectChanges();
 
       expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryList).toEqual(['Select a file', 'Enter a comment']);
+      expect(page.errorSummaryList).toEqual(['Enter a comment']);
 
       page.commentValue = 'A comment';
       page.documentFile = [new File(['fileBytes'], 'file1.txt')];

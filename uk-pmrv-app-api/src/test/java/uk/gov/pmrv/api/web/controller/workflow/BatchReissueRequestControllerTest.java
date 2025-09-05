@@ -109,8 +109,8 @@ class BatchReissueRequestControllerTest {
                 .build();
         
         PagingRequest paging = PagingRequest.builder()
-					.pageNumber(0L)
-					.pageSize(1L)
+					.pageNumber(0)
+					.pageSize(1)
 					.build();
         
         when(batchReissueRequestsAndInitiatePermissionOrchestrator.findBatchReissueRequests(authUser, accountType, paging)).thenReturn(response);

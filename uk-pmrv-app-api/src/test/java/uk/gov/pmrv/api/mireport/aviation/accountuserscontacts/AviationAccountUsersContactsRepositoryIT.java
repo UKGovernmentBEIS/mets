@@ -119,6 +119,7 @@ class AviationAccountUsersContactsRepositoryIT extends AbstractContainerBaseTest
             .accountId(account.getEmitterId())
             .accountName(account.getName())
             .accountStatus(account.getStatus().name())
+            .scheme(account.getEmissionTradingScheme().toString())
             .primaryContact(userId.equals(contacts.get(AccountContactType.PRIMARY)))
             .secondaryContact(userId.equals(contacts.get(AccountContactType.SECONDARY)))
             .financialContact(userId.equals(contacts.get(AccountContactType.FINANCIAL)))

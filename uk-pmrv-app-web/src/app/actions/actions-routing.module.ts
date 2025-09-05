@@ -139,6 +139,10 @@ const routes: Routes = [
         path: 'alr',
         loadChildren: () => import('./alr/alr.routes').then((r) => r.ALR_ACTION_ROUTES),
       },
+      {
+        path: 'hseti',
+        loadChildren: () => import('./hseti/hseti.routes').then((r) => r.HSETI_ACTION_ROUTES),
+      },
     ],
   },
 ];

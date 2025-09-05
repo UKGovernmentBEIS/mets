@@ -11,6 +11,6 @@
  */
 
 export interface DoalDetermination {
-  type: 'CLOSED' | 'PROCEED_TO_AUTHORITY';
+  type: 'CLOSED' | 'PROCEED_TO_AUTHORITY' | 'CLOSED_ALR';
   reason: string;
 }

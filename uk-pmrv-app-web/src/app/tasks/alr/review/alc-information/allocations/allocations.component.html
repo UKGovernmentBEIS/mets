@@ -1,0 +1,25 @@
+<app-alr-task-common
+  returnToLink="../../"
+  heading="Provide allocation for each sub-installation (optional)"
+  caption="Provide allocation for each sub-installation"
+  [breadcrumb]="true">
+  <h2 class="govuk-heading-m">Allocation for each sub-installation details</h2>
+
+  <app-alr-allocation-list-template [data]="allocations$ | async" [editable]="true"></app-alr-allocation-list-template>
+
+  <ng-container *ngIf="(allocations$ | async)?.length; else noPreliminaryAllocation">
+    <div class="govuk-button-group">
+      <a routerLink="./add" govukSecondaryButton type="button">Add another item</a>
+    </div>
+  </ng-container>
+
+  <ng-template #noPreliminaryAllocation>
+    <div class="govuk-button-group" *ngIf="isEditable$ | async">
+      <a routerLink="./add" govukButton type="button">Add an item</a>
+    </div>
+  </ng-template>
+
+  <button appPendingButton govukButton type="button" (click)="onSubmit()" *ngIf="isEditable$ | async">Continue</button>
+
+  <br />
+</app-alr-task-common>

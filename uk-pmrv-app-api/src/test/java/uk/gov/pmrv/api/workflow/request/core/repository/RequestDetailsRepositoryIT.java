@@ -57,7 +57,7 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
         		.resourceType(ResourceType.ACCOUNT)
                 .resourceId(String.valueOf(accountId))
-                .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+                .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
                 .category(RequestHistoryCategory.PERMIT)
                 .build();
         
@@ -87,7 +87,7 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
         		.resourceType(ResourceType.ACCOUNT)
                 .resourceId(String.valueOf(accountId))
-                .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+                .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
                 .category(RequestHistoryCategory.PERMIT)
                 .requestStatuses(Set.of(RequestStatus.IN_PROGRESS))
                 .build();
@@ -115,7 +115,7 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
         		.resourceType(ResourceType.ACCOUNT)
                 .resourceId(String.valueOf(accountId))
-                .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+                .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
                 .category(RequestHistoryCategory.PERMIT)
                 .requestTypes(Set.of(RequestType.INSTALLATION_ACCOUNT_OPENING))
                 .build();
@@ -144,7 +144,7 @@ class RequestDetailsRepositoryIT extends AbstractContainerBaseTest {
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
         		.resourceType(ResourceType.CA)
                 .resourceId(CompetentAuthorityEnum.ENGLAND.name())
-                .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+                .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
                 .category(RequestHistoryCategory.CA)
                 .requestTypes(Set.of(RequestType.PERMIT_BATCH_REISSUE))
                 .build();

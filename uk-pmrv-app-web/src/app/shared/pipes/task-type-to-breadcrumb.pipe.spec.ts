@@ -431,7 +431,33 @@ describe('TaskTypeToBreadcrumbPipe', () => {
 
     expect(pipe.transform('ALR_APPLICATION_SUBMIT')).toEqual('Complete activity level report');
     expect(pipe.transform('ALR_WAIT_FOR_VERIFICATION')).toEqual('Activity level report sent to verifier');
+    expect(pipe.transform('ALR_AMEND_WAIT_FOR_VERIFICATION')).toEqual('Activity level report sent to verifier');
     expect(pipe.transform('ALR_APPLICATION_VERIFICATION_SUBMIT')).toEqual('Verify activity level report');
+    expect(pipe.transform('ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT')).toEqual('Verify activity level report');
+    expect(pipe.transform('ALR_WAIT_FOR_REGULATOR_REVIEW')).toEqual('Activity level report sent to regulator');
+    expect(pipe.transform('ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT')).toEqual('Review activity level report');
+    expect(pipe.transform('ALR_WAIT_FOR_AMENDS')).toEqual('Activity level report returned to operator');
+    expect(pipe.transform('ALR_WAIT_FOR_AUTHORITY_REVIEW')).toEqual(
+      'Activity level report review completed by your Regulator',
+    );
+    expect(pipe.transform('ALR_AUTHORITY_RESPONSE_SUBMIT')).toEqual(
+      'Provide UK ETS Authority response for activity level change',
+    );
+    expect(pipe.transform('ALR_APPLICATION_AMENDS_SUBMIT')).toEqual('Amend activity level report');
+    expect(pipe.transform('ALR_WAIT_FOR_PEER_REVIEW')).toEqual('Activity level report sent to peer reviewer');
+    expect(pipe.transform('ALR_APPLICATION_PEER_REVIEW')).toEqual('Activity level report peer review');
+
+    expect(pipe.transform('HSE_TI_APPLICATION_SUBMIT')).toEqual('HSE target increase application');
+    expect(pipe.transform('HSE_TI_WAIT_FOR_AMENDS')).toEqual('HSE target increase application');
+    expect(pipe.transform('HSE_TI_MAKE_PAYMENT')).toEqual('Pay for HSE target increase application');
+    expect(pipe.transform('HSE_TI_CONFIRM_PAYMENT')).toEqual('Track payment for HSE target increase application');
+    expect(pipe.transform('HSE_TI_TRACK_PAYMENT')).toEqual('Track payment for HSE target increase application');
+    expect(pipe.transform('HSE_TI_WAIT_FOR_REGULATOR_REVIEW')).toEqual(
+      'HSE target increase application sent to regulator',
+    );
+    expect(pipe.transform('HSE_TI_APPLICATION_AMENDS_SUBMIT')).toEqual('Amend HSE target increase application');
+    expect(pipe.transform('HSE_TI_WAIT_FOR_PEER_REVIEW')).toEqual('Peer review HSE target increase application');
+    expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW')).toEqual('Peer review HSE target increase application');
 
     expect(pipe.transform(null)).toBeNull();
   });

@@ -58,6 +58,7 @@ export function mapTrackPaymentToPaymentDetails(state: PaymentState): PaymentDet
     'EMP_VARIATION_CORSIA_REGULATOR_LED_CONFIRM_PAYMENT',
     'EMP_VARIATION_CORSIA_CONFIRM_PAYMENT',
     'AVIATION_DOE_CORSIA_CONFIRM_PAYMENT',
+    'HSE_TI_CONFIRM_PAYMENT',
   ].includes(state.requestTaskItem.requestTask.type)
     ? { ...state.paymentDetails, amount: +state.paymentDetails.amount }
     : {
@@ -68,6 +69,18 @@ export function mapTrackPaymentToPaymentDetails(state: PaymentState): PaymentDet
 }
 
 export function getHeadingMap(year?: number): Partial<Record<RequestTaskDTO['type'], string>> {
+  let allocationPeriod: string | null = null;
+
+  if (year) {
+    const yearStr = String(year);
+    const parts = yearStr.split('_');
+    if (parts.length > 2) {
+      allocationPeriod = `${parts[1]}-${parts[2]}`;
+    } else if (!isNaN(Number(yearStr))) {
+      allocationPeriod = yearStr;
+    }
+  }
+
   return {
     PERMIT_ISSUANCE_TRACK_PAYMENT: 'Payment for permit application',
     PERMIT_ISSUANCE_MAKE_PAYMENT: 'Pay permit application fee',
@@ -132,6 +145,14 @@ export function getHeadingMap(year?: number): Partial<Record<RequestTaskDTO['typ
     AVIATION_DOE_CORSIA_TRACK_PAYMENT: `Track payment for ${year} emissions estimation`,
     AVIATION_DOE_CORSIA_MAKE_PAYMENT: `Pay ${year} emissions estimation fee`,
     AVIATION_DOE_CORSIA_CONFIRM_PAYMENT: `Track payment for ${year} emissions estimation`,
+
+    HSE_TI_MAKE_PAYMENT: allocationPeriod ? `Pay for ${allocationPeriod} HSE target increase application` : '',
+    HSE_TI_TRACK_PAYMENT: allocationPeriod
+      ? `Track payment for ${allocationPeriod} HSE target increase application`
+      : '',
+    HSE_TI_CONFIRM_PAYMENT: allocationPeriod
+      ? `Track payment for ${allocationPeriod} HSE target increase application`
+      : '',
   };
 }
 
@@ -194,12 +215,16 @@ export const paymentHintInfo: Partial<Record<RequestTaskDTO['type'], string>> = 
   EMP_VARIATION_CORSIA_TRACK_PAYMENT: 'The variation cannot be completed until the payment has been received',
   EMP_VARIATION_CORSIA_MAKE_PAYMENT: 'Your variation cannot be processed until this payment is received',
   EMP_VARIATION_CORSIA_CONFIRM_PAYMENT: 'The variation cannot be completed until the payment has been received',
+
+  HSE_TI_TRACK_PAYMENT: 'The application cannot be completed until the payment has been received',
+  HSE_TI_MAKE_PAYMENT: 'Your application cannot be processed until this payment is received',
+  HSE_TI_CONFIRM_PAYMENT: 'The application cannot be completed until the payment has been received',
 };
 
 export function trackShouldDisplayMarkPaidConfirmationInfo(requestType: RequestInfoDTO['type']): boolean {
-  return !['DRE', 'AVIATION_DRE_UKETS', 'AVIATION_DOE_CORSIA'].includes(requestType);
+  return !['DRE', 'AVIATION_DRE_UKETS', 'AVIATION_DOE_CORSIA', 'HSE_TI'].includes(requestType);
 }
 
 export function trackShouldDisplayCancelHintInfo(requestType: RequestInfoDTO['type']): boolean {
-  return !['DRE', 'AVIATION_DRE_UKETS', 'AVIATION_DOE_CORSIA'].includes(requestType);
+  return !['DRE', 'AVIATION_DRE_UKETS', 'AVIATION_DOE_CORSIA', 'HSE_TI'].includes(requestType);
 }

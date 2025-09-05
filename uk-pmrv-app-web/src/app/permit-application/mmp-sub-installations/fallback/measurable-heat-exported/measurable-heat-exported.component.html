@@ -10,8 +10,12 @@
         For the specific purpose of the baseline data collection, this section should cover all data provided in section
         G.(e) in the "baseline data collection" template.
       </div>
-      <h2 class="govuk-heading-m">Is any measurable heat exported from this sub-installation?</h2>
-      <div formControlName="measurableHeatExported" govuk-radio>
+
+      <div
+        formControlName="measurableHeatExported"
+        legend="Is any measurable heat exported from this sub-installation?"
+        legendSize="medium"
+        govuk-radio>
         <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
         <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
       </div>

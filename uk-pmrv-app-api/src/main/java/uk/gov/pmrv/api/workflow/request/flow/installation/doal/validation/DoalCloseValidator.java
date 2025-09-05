@@ -7,8 +7,8 @@ import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.pmrv.api.workflow.request.core.domain.RequestTask;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationSubmitRequestTaskPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalDetermination;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalDeterminationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.DoalDetermination;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.enums.DoalDeterminationType;
 
 @Validated
 @Service

@@ -35,6 +35,8 @@ interface ViewModel {
 export class BlockHourProceduresComponent {
   constructor(public store: RequestActionStore) {}
 
+  isCorsia$ = this.store.pipe(requestActionQuery.selectIsCorsia);
+
   vm$: Observable<ViewModel & EmpSubmittedViewModel> = combineLatest([
     this.store.pipe(empQuery.selectRequestActionPayload),
     this.store.pipe(requestActionQuery.selectRegulatorViewer),

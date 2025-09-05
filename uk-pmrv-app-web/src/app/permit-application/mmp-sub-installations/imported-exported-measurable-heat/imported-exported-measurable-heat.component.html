@@ -235,10 +235,11 @@
         <app-include-answer-details></app-include-answer-details>
         <div formControlName="methodologyDeterminationDescription" govuk-textarea [maxLength]="10000" rows="10"></div>
 
-        <h2 class="govuk-heading-m">
-          Are there any measurable heat flows imported from sub-installations producing pulp?
-        </h2>
-        <div formControlName="measurableHeatImportedFromPulp" govuk-radio>
+        <div
+          formControlName="measurableHeatImportedFromPulp"
+          legend="Are there any measurable heat flows imported from sub-installations producing pulp?"
+          legendSize="medium"
+          govuk-radio>
           <govuk-radio-option [value]="true" label="Yes">
             <ng-container govukConditionalContent>
               <div

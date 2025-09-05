@@ -19,10 +19,11 @@ import { SiteNameComponent } from './edit/site-name/site-name.component';
 import { SopIdComponent } from './edit/sop-id/sop-id.component';
 import { TriggerAirComponent } from './trigger-air/trigger-air.component';
 import { TriggerDoalComponent } from './trigger-doal/trigger-doal.component';
+import { TriggerHseTiComponent } from './trigger-hseti/trigger-hseti.component';
 import { AerMarkAsNotRequiredComponent } from './workflows/aer-mark-as-not-required/aer-mark-as-not-required.component';
 import { AerReinitializeComponent } from './workflows/aer-reinitialize/aer-reinitialize.component';
 
-const standaloneComponents: Type<any>[] = [InspectionsComponent];
+const standaloneComponents: Type<any>[] = [InspectionsComponent, TriggerHseTiComponent];
 
 @NgModule({
   declarations: [

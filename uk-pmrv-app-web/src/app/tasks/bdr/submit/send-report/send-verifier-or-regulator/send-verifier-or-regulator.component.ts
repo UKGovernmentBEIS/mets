@@ -13,7 +13,7 @@ import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 import { BDRApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 import { submitWizardComplete } from '../../submit.wizard';
-import { sendVerifierOrRegulatorFormProvider } from './send-verifier-or-regulator.provider';
+import { sendVerifierOrRegulatorFormProvider } from './send-verifier-or-regulator-form.provider';
 
 @Component({
   selector: 'app-send-verifier-or-regulator',

@@ -5,6 +5,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComp
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceFinalDeterminationRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceOutcome;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceReason;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.validation.NonComplianceApplicationValidator;
 
@@ -50,11 +52,18 @@ class NonComplianceFinalDeterminationSubmitApplicationActionHandlerTest {
     @Test
     void process() {
 
+        final LocalDate nonComplianceDate = LocalDate.of(2024, 9, 1);
+        final LocalDate complianceDate = LocalDate.of(2024, 10, 1);
+
         final long requestTaskId = 1L;
         final String processTaskId = "processTaskId";
         final NonComplianceFinalDeterminationRequestTaskPayload taskPayload =
             NonComplianceFinalDeterminationRequestTaskPayload.builder()
                 .finalDetermination(NonComplianceFinalDetermination.builder().reissuePenalty(true).build())
+                .reason(NonComplianceReason.EXCEEDING_EMISSIONS_TARGET)
+                .complianceDate(complianceDate)
+                .nonComplianceDate(nonComplianceDate)
+                .nonComplianceComments("test comments")
                 .build();
         final Request request = Request.builder().id("reqid").payload(NonComplianceRequestPayload.builder().build()).build();
         final RequestTask requestTask = RequestTask.builder()
@@ -71,6 +80,12 @@ class NonComplianceFinalDeterminationSubmitApplicationActionHandlerTest {
 
         handler.process(requestTaskId, RequestTaskActionType.NON_COMPLIANCE_SUBMIT_APPLICATION, appUser,
             taskActionPayload);
+
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getReason()).isEqualTo(NonComplianceReason.EXCEEDING_EMISSIONS_TARGET);
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getComplianceDate()).isEqualTo(complianceDate);
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getNonComplianceDate()).isEqualTo(nonComplianceDate);
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getComments()).isEqualTo("test comments");
+
 
         verify(validator, times(1)).validateFinalDetermination(taskPayload);
         verify(requestService, times(1)).addActionToRequest(

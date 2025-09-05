@@ -315,6 +315,25 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
       case 'WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_APPLICATION_SUBMIT':
         return 'Withdraw withholding of allowances notice';
 
+      // HSE-TI
+      case 'HSE_TI_APPLICATION_SUBMIT':
+      case 'HSE_TI_WAIT_FOR_AMENDS':
+        return 'HSE target increase application';
+      case 'HSE_TI_MAKE_PAYMENT':
+        return 'Pay for HSE target increase application';
+      case 'HSE_TI_CONFIRM_PAYMENT':
+      case 'HSE_TI_TRACK_PAYMENT':
+        return 'Track payment for HSE target increase application';
+      case 'HSE_TI_WAIT_FOR_REGULATOR_REVIEW':
+        return 'HSE target increase application sent to regulator';
+      case 'HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+        return 'Review HSE target increase application';
+      case 'HSE_TI_APPLICATION_AMENDS_SUBMIT':
+        return 'Amend HSE target increase application';
+      case 'HSE_TI_WAIT_FOR_PEER_REVIEW':
+      case 'HSE_TI_APPLICATION_PEER_REVIEW':
+        return `Peer review HSE target increase application`;
+
       // AVIATION
       // Common
       case 'EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT':
@@ -485,7 +504,6 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
       case 'BDR_APPLICATION_AMENDS_SUBMIT':
         return 'Amend baseline data report';
       case 'BDR_WAIT_FOR_PEER_REVIEW':
-        return `Peer review baseline data report`;
       case 'BDR_APPLICATION_PEER_REVIEW':
         return `Peer review baseline data report`;
 
@@ -511,9 +529,27 @@ export class TaskTypeToBreadcrumbPipe implements PipeTransform {
       case 'ALR_APPLICATION_SUBMIT':
         return 'Complete activity level report';
       case 'ALR_WAIT_FOR_VERIFICATION':
+      case 'ALR_AMEND_WAIT_FOR_VERIFICATION':
         return 'Activity level report sent to verifier';
       case 'ALR_APPLICATION_VERIFICATION_SUBMIT':
+      case 'ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT':
         return `Verify activity level report`;
+      case 'ALR_WAIT_FOR_REGULATOR_REVIEW':
+        return 'Activity level report sent to regulator';
+      case 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+        return 'Review activity level report';
+      case 'ALR_WAIT_FOR_AMENDS':
+        return 'Activity level report returned to operator';
+      case 'ALR_WAIT_FOR_AUTHORITY_REVIEW':
+        return 'Activity level report review completed by your Regulator';
+      case 'ALR_AUTHORITY_RESPONSE_SUBMIT':
+        return 'Provide UK ETS Authority response for activity level change';
+      case 'ALR_APPLICATION_AMENDS_SUBMIT':
+        return 'Amend activity level report';
+      case 'ALR_WAIT_FOR_PEER_REVIEW':
+        return 'Activity level report sent to peer reviewer';
+      case 'ALR_APPLICATION_PEER_REVIEW':
+        return 'Activity level report peer review';
 
       default:
         return null;

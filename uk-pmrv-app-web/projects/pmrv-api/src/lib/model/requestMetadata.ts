@@ -24,6 +24,7 @@ export interface RequestMetadata {
     | 'DRE'
     | 'AIR'
     | 'INSTALLATION_INSPECTION'
+    | 'HSE_TI'
     | 'BDR'
     | 'PERMANENT_CESSATION'
     | 'ALR'

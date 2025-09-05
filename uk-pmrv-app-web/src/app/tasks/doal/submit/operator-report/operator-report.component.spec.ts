@@ -131,7 +131,7 @@ describe('OperatorReportComponent', () => {
       fixture.detectChanges();
 
       expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryList).toEqual(['Select a file', 'Select yes or no', 'Enter a comment']);
+      expect(page.errorSummaryList).toEqual(['Select yes or no', 'Enter a comment']);
 
       page.areActivityLevelsEstimatedButtons[0].click();
       page.commentValue = 'A comment';

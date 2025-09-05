@@ -85,7 +85,7 @@ class AircraftTypesControllerTest {
     void getAircraftTypes() throws Exception {
         AircraftTypeSearchCriteria searchCriteria = AircraftTypeSearchCriteria.builder()
             .term("747")
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build())
             .build();
         AircraftTypeSearchResults searchResults = AircraftTypeSearchResults.builder()
             .aircraftTypes(List.of(
@@ -114,7 +114,7 @@ class AircraftTypesControllerTest {
             .userId("userId")
             .build();
         AircraftTypeSearchCriteria searchCriteria = AircraftTypeSearchCriteria.builder()
-        		.paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+        		.paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);

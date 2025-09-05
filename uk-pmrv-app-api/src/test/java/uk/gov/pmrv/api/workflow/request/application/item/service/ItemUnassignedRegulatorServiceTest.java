@@ -71,13 +71,13 @@ class ItemUnassignedRegulatorServiceTest {
         // Mock
         when(regulatorAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType))
             .thenReturn(scopedRequestTaskTypes);
-        when(itemRegulatorRepository.findItems(appUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
+        when(itemRegulatorRepository.findItems(appUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build()))
                 .thenReturn(expectedItemPage);
         when(itemResponseService.toItemDTOResponse(expectedItemPage, accountType, appUser))
                 .thenReturn(expectedItemDTOResponse);
 
         // Invoke
-        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
 
         // Assert
         assertThat(actualResponse).isEqualTo(expectedItemDTOResponse);
@@ -98,7 +98,7 @@ class ItemUnassignedRegulatorServiceTest {
             .thenReturn(scopedRequestTaskTypes);
 
         // Invoke
-        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
 
         // Assert
         assertThat(actualResponse).isEqualTo(ItemDTOResponse.emptyItemDTOResponse());
@@ -124,13 +124,13 @@ class ItemUnassignedRegulatorServiceTest {
         // Mock
         when(regulatorAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType))
             .thenReturn(scopedRequestTaskTypes);
-        when(itemRegulatorRepository.findItems(appUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
+        when(itemRegulatorRepository.findItems(appUser.getUserId(), ItemAssignmentType.UNASSIGNED, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build()))
                 .thenReturn(itemPage);
         when(itemResponseService.toItemDTOResponse(itemPage, accountType, appUser))
                 .thenReturn(expectedItemDTOResponse);
 
         // Invoke
-        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemDTOResponse actualResponse = service.getUnassignedItems(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
 
         // Assert
         assertThat(actualResponse).isEqualTo(expectedItemDTOResponse);

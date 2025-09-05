@@ -20,12 +20,16 @@
         <li app-task-section title="Verification opinion statement">
           <ul app-task-item-list>
             <li app-task-item link="opinion-statement" linkText="ALR verification opinion statement"></li>
+            <li app-task-item link="overall-decision" linkText="Overall decision"></li>
           </ul>
         </li>
+      </ng-container>
 
-        <li app-task-section title="Decision">
+      <ng-container *ngIf="vm.hasReviewDetermination">
+        <li app-task-section title="Review determination">
           <ul app-task-item-list>
-            <li app-task-item link="overall-decision" linkText="Overall decision"></li>
+            <li app-task-item link="alc-information" linkText="Information about this activity level change"></li>
+            <li app-task-item link="determination" linkText="Determination of activity level"></li>
           </ul>
         </li>
       </ng-container>

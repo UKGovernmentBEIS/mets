@@ -16,7 +16,8 @@ export type UrlRequestType =
   | 'return-of-allowances'
   | 'inspection'
   | 'bdr'
-  | 'permanent-cessation';
+  | 'permanent-cessation'
+  | 'alr';
 
 export const urlRequestTypes: UrlRequestType[] = [
   'aviation',
@@ -37,4 +38,5 @@ export const urlRequestTypes: UrlRequestType[] = [
   'inspection',
   'bdr',
   'permanent-cessation',
+  'alr',
 ];

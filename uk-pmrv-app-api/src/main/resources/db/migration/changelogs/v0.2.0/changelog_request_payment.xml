@@ -54,4 +54,193 @@
             </sql>
         </rollback>
     </changeSet>
+    <changeSet id="0_2_0_insert_request_payment_fee_method_data_for_HSE_TI" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type, type)
+            values (nextval('request_payment_fee_method_seq'), 'ENGLAND', 'HSE_TI', 'STANDARD');
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type, type)
+            values (nextval('request_payment_fee_method_seq'), 'SCOTLAND', 'HSE_TI', 'STANDARD');
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type, type)
+            values (nextval('request_payment_fee_method_seq'), 'NORTHERN_IRELAND', 'HSE_TI', 'STANDARD');
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type, type)
+            values (nextval('request_payment_fee_method_seq'), 'WALES', 'HSE_TI', 'STANDARD');
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type, type)
+            values (nextval('request_payment_fee_method_seq'), 'OPRED', 'HSE_TI', 'STANDARD');
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE
+                FROM request_payment_fee_method
+                WHERE request_type = 'HSE_TI';
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_request_payment_fee_for_HSE_TI" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            INSERT INTO request_payment_fee(fee_method_id, type, amount)
+            SELECT id , 'FIXED', '1'
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'ENGLAND'
+              AND request_type = 'HSE_TI';
+
+            INSERT INTO request_payment_fee(fee_method_id, type, amount)
+            SELECT id , 'FIXED', '1'
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'SCOTLAND'
+              AND request_type = 'HSE_TI';
+
+            INSERT INTO request_payment_fee(fee_method_id, type, amount)
+            SELECT id , 'FIXED', '1'
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'NORTHERN_IRELAND'
+              AND request_type = 'HSE_TI';
+
+            INSERT INTO request_payment_fee(fee_method_id, type, amount)
+            SELECT id , 'FIXED', '1'
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'WALES'
+              AND request_type = 'HSE_TI';
+
+            INSERT INTO request_payment_fee(fee_method_id, type, amount)
+            SELECT id , 'FIXED', '1'
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'OPRED'
+              AND request_type = 'HSE_TI';
+        </sql>
+        <rollback>
+            <sql>
+            DELETE
+            FROM request_payment_fee
+            WHERE fee_method_id = (SELECT id
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'ENGLAND'
+            AND request_type = 'HSE_TI');
+
+            DELETE
+            FROM request_payment_fee
+            WHERE fee_method_id = (SELECT id
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'SCOTLAND'
+            AND request_type = 'HSE_TI');
+
+            DELETE
+            FROM request_payment_fee
+            WHERE fee_method_id = (SELECT id
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'NORTHERN_IRELAND'
+            AND request_type = 'HSE_TI');
+
+            DELETE
+            FROM request_payment_fee
+            WHERE fee_method_id = (SELECT id
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'WALES'
+            AND request_type = 'HSE_TI');
+
+            DELETE
+            FROM request_payment_fee
+            WHERE fee_method_id = (SELECT id
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'OPRED'
+            AND request_type = 'HSE_TI');
+            </sql>
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_update_request_payment_fee_for_HSE_TI" author="mitzelose@unisystems.gr">
+        <sql>
+            UPDATE request_payment_fee
+            SET amount = '1154'
+            WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'ENGLAND'
+                  AND request_type = 'HSE_TI'
+            )
+              AND type = 'FIXED';
+
+            UPDATE request_payment_fee
+            SET amount = '2833'
+            WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'SCOTLAND'
+                  AND request_type = 'HSE_TI'
+            )
+              AND type = 'FIXED';
+
+            UPDATE request_payment_fee
+            SET amount = '1579'
+            WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'NORTHERN_IRELAND'
+                  AND request_type = 'HSE_TI'
+            )
+              AND type = 'FIXED';
+
+            UPDATE request_payment_fee
+            SET amount = '5622'
+            WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'WALES'
+                  AND request_type = 'HSE_TI'
+            )
+              AND type = 'FIXED';
+
+            UPDATE request_payment_fee
+            SET amount = '0'
+            WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'OPRED'
+                  AND request_type = 'HSE_TI'
+            )
+              AND type = 'FIXED';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE request_payment_fee
+                SET amount = '1'
+                WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'ENGLAND'
+                AND request_type = 'HSE_TI'
+                )
+                AND type = 'FIXED';
+
+                UPDATE request_payment_fee
+                SET amount = '1'
+                WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'SCOTLAND'
+                AND request_type = 'HSE_TI'
+                )
+                AND type = 'FIXED';
+
+                UPDATE request_payment_fee
+                SET amount = '1'
+                WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'NORTHERN_IRELAND'
+                AND request_type = 'HSE_TI'
+                )
+                AND type = 'FIXED';
+
+                UPDATE request_payment_fee
+                SET amount = '1'
+                WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'WALES'
+                AND request_type = 'HSE_TI'
+                )
+                AND type = 'FIXED';
+
+                UPDATE request_payment_fee
+                SET amount = '1'
+                WHERE fee_method_id IN (
+                SELECT id FROM request_payment_fee_method
+                WHERE competent_authority = 'OPRED'
+                AND request_type = 'HSE_TI'
+                )
+                AND type = 'FIXED';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

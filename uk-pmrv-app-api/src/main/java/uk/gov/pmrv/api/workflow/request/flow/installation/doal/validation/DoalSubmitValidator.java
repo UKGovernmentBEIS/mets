@@ -12,7 +12,7 @@ import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.Doal;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalProceedToAuthorityDetermination;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalDeterminationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.enums.DoalDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalViolation;
 
 import java.util.Set;

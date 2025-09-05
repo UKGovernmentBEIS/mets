@@ -36,6 +36,14 @@
           {{ v }} the official revocation withdrawal notice
         } @else if (['PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION'].includes(requestTaskActionType)) {
           {{ v }} the notice document
+        } @else if (
+          [
+            'ALR_PROCEED_TO_AUTHORITY',
+            'HSE_TI_REGULATOR_REVIEW_SUBMIT',
+            'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION',
+          ].includes(requestTaskActionType)
+        ) {
+          {{ v }} documents
         } @else {
           @if (isAviation$ | async) {
             {{ v }} documents
@@ -56,7 +64,18 @@
       <div
         *ngIf="accountOperatorUsersAutomaticallyNotified$ | async as accountOperatorUsersAutomaticallyNotified"
         class="govuk-heading-m govuk-!-margin-bottom-6">
-        {{ (isAviation$ | async) ? 'Users that automatically receive documents' : 'Users automatically notified' }}
+        @if (
+          (isAviation$ | async) ||
+          [
+            'ALR_PROCEED_TO_AUTHORITY',
+            'HSE_TI_REGULATOR_REVIEW_SUBMIT',
+            'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION',
+          ].includes(requestTaskActionType)
+        ) {
+          Users that automatically receive documents
+        } @else {
+          Users automatically notified
+        }
         <p *ngFor="let userInfo of accountOperatorUsersAutomaticallyNotified | keyvalue" class="govuk-body">
           {{ userInfo.key | userInfoResolver: accountOperatorUsersAutomaticallyNotified }}
         </p>
@@ -127,6 +146,14 @@
             letter
           } @else if (['PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION'].includes(requestTaskActionType)) {
             notice document
+          } @else if (
+            [
+              'ALR_PROCEED_TO_AUTHORITY',
+              'HSE_TI_REGULATOR_REVIEW_SUBMIT',
+              'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION',
+            ].includes(requestTaskActionType)
+          ) {
+            documents
           } @else {
             {{ (isAviation$ | async) ? 'documents' : 'official notice document' }}
           }
@@ -180,9 +207,11 @@
           </ng-container>
         </govuk-panel>
       } @else if (
-        ['INSTALLATION_ONSITE_INSPECTION_SUBMIT_NOTIFY_OPERATOR', 'INSTALLATION_AUDIT_SUBMIT_NOTIFY_OPERATOR'].includes(
-          requestTaskActionType
-        )
+        [
+          'INSTALLATION_ONSITE_INSPECTION_SUBMIT_NOTIFY_OPERATOR',
+          'INSTALLATION_AUDIT_SUBMIT_NOTIFY_OPERATOR',
+          'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION',
+        ].includes(requestTaskActionType)
       ) {
         <govuk-panel [title]="confirmationMessage">
           <ng-container *ngIf="referenceCode">
@@ -191,6 +220,8 @@
             {{ referenceCode }}
           </ng-container>
         </govuk-panel>
+      } @else if (['ALR_PROCEED_TO_AUTHORITY'].includes(requestTaskActionType)) {
+        <govuk-panel [title]="confirmationMessage"></govuk-panel>
       } @else {
         <govuk-panel [title]="confirmationMessage">
           <ng-container *ngIf="confirmationText">
@@ -315,9 +346,27 @@
 
         <ng-container *ngSwitchCase="'PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION'">
           <h3 class="govuk-heading-m">What happens next</h3>
-          <p class="govuk-body">The selected users will receive an email notification of your decision</p>
+          <p class="govuk-body">The selected users will receive an email notification of your decision.</p>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'ALR_PROCEED_TO_AUTHORITY'">
+          <p class="govuk-body">You have accepted the operator's activity level report details application.</p>
+          <p class="govuk-body">The selected users will receive an email notification of your decision.</p>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'HSE_TI_REGULATOR_REVIEW_SUBMIT'">
+          <p class="govuk-body">
+            You have approved the operator's {{ allocationPeriod }} HSE target increase application.
+          </p>
+          <p class="govuk-body">The selected users will receive an email notification of your decision.</p>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION'">
+          <h3 class="govuk-heading-m">What happens next</h3>
+          <p class="govuk-body">The selected users will receive an email notification of your decision.</p>
         </ng-container>
       </ng-container>
+
       <a govukLink [routerLink]="(isAviation$ | async) ? '/aviation/dashboard' : '/dashboard'">Return to dashboard</a>
     </div>
   </ng-template>

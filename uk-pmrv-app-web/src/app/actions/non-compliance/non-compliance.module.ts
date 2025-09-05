@@ -35,6 +35,7 @@ import { SubmittedComponent } from './submitted/submitted.component';
     ConclusionComponent,
     DailyPenaltyNoticePeerReviewDecisionComponent,
     DailyPenaltyNoticeSubmittedComponent,
+    NonComplianceSummaryComponent,
     NoticeOfIntentPeerReviewDecisionComponent,
     NoticeOfIntentSubmittedComponent,
     SubmittedComponent,

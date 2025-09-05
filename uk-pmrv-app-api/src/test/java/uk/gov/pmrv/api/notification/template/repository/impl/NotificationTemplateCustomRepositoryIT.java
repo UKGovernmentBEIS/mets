@@ -64,7 +64,7 @@ class NotificationTemplateCustomRepositoryIT extends AbstractContainerBaseTest {
             .accountType(accountType)
             .roleType(RoleTypeConstants.OPERATOR)
             .term("account")
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
         TemplateSearchResults searchResults = repo.findBySearchCriteria(searchCriteria);
@@ -106,7 +106,7 @@ class NotificationTemplateCustomRepositoryIT extends AbstractContainerBaseTest {
             .competentAuthority(competentAuthority)
             .accountType(accountType)
             .roleType(RoleTypeConstants.REGULATOR)
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
         TemplateSearchResults

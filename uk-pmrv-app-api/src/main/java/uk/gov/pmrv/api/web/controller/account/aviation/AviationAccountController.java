@@ -107,8 +107,8 @@ public class AviationAccountController {
     public ResponseEntity<AviationAccountSearchResults> getCurrentUserAviationAccounts(
             @Parameter(hidden = true)AppUser appUser,
             @RequestParam(value = "term", required = false) @Size(min = 3, max = 256) @Parameter(description = "The term to search") String term,
-            @RequestParam(value = "page") @NotNull @Parameter(description = "The page number starting from zero") @Min(value = 0, message = "{parameter.page.typeMismatch}") Long page,
-            @RequestParam(value = "size") @NotNull @Parameter(description = "The page size") @Min(value = 1, message = "{parameter.pageSize.typeMismatch}")  Long pageSize
+            @RequestParam(value = "page") @NotNull @Parameter(description = "The page number starting from zero") @Min(value = 0, message = "{parameter.page.typeMismatch}") Integer page,
+            @RequestParam(value = "size") @NotNull @Parameter(description = "The page size") @Min(value = 1, message = "{parameter.pageSize.typeMismatch}")  Integer pageSize
     ) {
         return new ResponseEntity<>(
                 aviationAccountQueryService.getAviationAccountsByUserAndSearchCriteria(appUser,

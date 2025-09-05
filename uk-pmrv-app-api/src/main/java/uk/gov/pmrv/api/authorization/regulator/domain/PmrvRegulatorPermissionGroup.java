@@ -65,6 +65,19 @@ public class PmrvRegulatorPermissionGroup {
     public static final String SUBMIT_BDR_REVIEW = "SUBMIT_BDR_REVIEW";
     public static final String PEER_REVIEW_BDR = "PEER_REVIEW_BDR";
 
+    //HSETI
+    public static final String SUBMIT_HSE_TI_REVIEW = "SUBMIT_HSE_TI_REVIEW";
+    public static final String PEER_REVIEW_HSE_TI = "PEER_REVIEW_HSE_TI";
+
+    //Permanent Cessation
+    public static final String SUBMIT_PERMANENT_CESSATION = "SUBMIT_PERMANENT_CESSATION";
+    public static final String PEER_REVIEW_PERMANENT_CESSATION = "PEER_REVIEW_PERMANENT_CESSATION";
+
+    //ALR
+    public static final String SUBMIT_ALR_REVIEW = "SUBMIT_ALR_REVIEW";
+    public static final String PEER_REVIEW_ALR = "PEER_REVIEW_ALR";
+
+
     //Aviation related permission groups
     public static final String REVIEW_EMP_APPLICATION = "REVIEW_EMP_APPLICATION";
     public static final String PEER_REVIEW_EMP_APPLICATION = "PEER_REVIEW_EMP_APPLICATION";
@@ -96,8 +109,4 @@ public class PmrvRegulatorPermissionGroup {
 
     public static final String AVIATION_AER_3YEAR_PERIOD_OFFSETTING = "AVIATION_AER_3YEAR_PERIOD_OFFSETTING";
     public static final String PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING = "PEER_REVIEW_AVIATION_AER_3YEAR_PERIOD_OFFSETTING";
-
-    public static final String SUBMIT_PERMANENT_CESSATION = "SUBMIT_PERMANENT_CESSATION";
-    public static final String PEER_REVIEW_PERMANENT_CESSATION = "PEER_REVIEW_PERMANENT_CESSATION";
-
 }

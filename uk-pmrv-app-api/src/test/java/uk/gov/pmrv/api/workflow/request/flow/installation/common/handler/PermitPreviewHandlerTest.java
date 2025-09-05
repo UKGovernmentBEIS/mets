@@ -28,6 +28,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.installation.common.service.permit.PermitPreviewDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.PermitIssuanceReviewPeerReviewPermitDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.review.service.PermitIssuanceReviewPreviewPermitDocumentService;
+import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.service.PermitVariationRegulatorLedPeerReviewPreviewPermitDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.common.service.PermitVariationRegulatorLedPreviewPermitDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.service.PermitVariationPeerReviewPreviewPermitDocumentService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitvariation.review.service.PermitVariationReviewPreviewPermitDocumentService;
@@ -58,8 +59,8 @@ class PermitPreviewHandlerTest {
                 Arguments.of(mock(PermitVariationReviewPreviewPermitDocumentService.class),RequestTaskType.PERMIT_VARIATION_APPLICATION_REVIEW),
                 Arguments.of(mock(PermitVariationRegulatorLedPreviewPermitDocumentService.class),RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT),
                 Arguments.of(mock(PermitIssuanceReviewPeerReviewPermitDocumentService.class),RequestTaskType.PERMIT_ISSUANCE_APPLICATION_PEER_REVIEW),
-                Arguments.of(mock(PermitIssuanceReviewPreviewPermitDocumentService.class),RequestTaskType.PERMIT_ISSUANCE_APPLICATION_REVIEW)
-
+                Arguments.of(mock(PermitIssuanceReviewPreviewPermitDocumentService.class),RequestTaskType.PERMIT_ISSUANCE_APPLICATION_REVIEW),
+                Arguments.of(mock(PermitVariationRegulatorLedPeerReviewPreviewPermitDocumentService.class),RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW)
                 );
 
         for(Arguments arg: arguments){

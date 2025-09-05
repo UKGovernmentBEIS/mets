@@ -27,6 +27,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.AviationAccountCompetentAuthorityDTOByRequestResolver;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 
 import java.util.Collections;
 import java.util.List;
@@ -46,7 +47,7 @@ import static org.mockito.Mockito.when;
 class AviationDreOfficialNoticeSendServiceTest {
 
     @InjectMocks
-    private AviationDreOfficialNoticeSendService officialNoticeSendService;
+    private AviationDreOfficialNoticeSendService aviationDreOfficialNoticeSendService;
 
     @Mock
     private RequestService requestService;
@@ -65,6 +66,10 @@ class AviationDreOfficialNoticeSendServiceTest {
 
     @Mock
     private AviationAccountCompetentAuthorityDTOByRequestResolver caResolver;
+
+    @Mock
+    private OfficialNoticeSendService officialNoticeSendService;
+
 
     @Test
     void sendOfficialNotice() {
@@ -104,9 +109,11 @@ class AviationDreOfficialNoticeSendServiceTest {
         when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(ccRecipientsEmails);
         when(fileDocumentService.getFileDTO(officialNoticeFileInfoDTO.getUuid())).thenReturn(officialNoticeFileDTO);
         when(caResolver.resolveCA(request)).thenReturn(competentAuthority);
+        when(officialNoticeSendService.processRequestTypeName(RequestType.AVIATION_DRE_UKETS)).thenReturn("AVIATION DRE UKETS");
+
 
         //invoke
-        officialNoticeSendService.sendOfficialNotice(requestId);
+        aviationDreOfficialNoticeSendService.sendOfficialNotice(requestId);
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
@@ -125,6 +132,7 @@ class AviationDreOfficialNoticeSendServiceTest {
                 .competentAuthority(CompetentAuthorityEnum.WALES)
                 .accountType(AccountType.AVIATION)
                 .templateParams(Map.of(
+                        PmrvEmailNotificationTemplateConstants.REQUEST_TYPE, "AVIATION DRE UKETS",
                 		PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
                 		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
                 		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
@@ -160,7 +168,7 @@ class AviationDreOfficialNoticeSendServiceTest {
         when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(Collections.emptyList());
 
         //invoke
-        officialNoticeSendService.sendOfficialNotice(requestId);
+        aviationDreOfficialNoticeSendService.sendOfficialNotice(requestId);
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
@@ -208,9 +216,10 @@ class AviationDreOfficialNoticeSendServiceTest {
         when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(ccRecipientsEmails);
         when(fileDocumentService.getFileDTO(officialNoticeFileInfoDTO.getUuid())).thenReturn(officialNoticeFileDTO);
         when(caResolver.resolveCA(request)).thenReturn(competentAuthority);
+        when(officialNoticeSendService.processRequestTypeName(RequestType.AVIATION_DRE_UKETS)).thenReturn("AVIATION DRE UKETS");
 
         //invoke
-        officialNoticeSendService.sendOfficialNotice(requestId);
+        aviationDreOfficialNoticeSendService.sendOfficialNotice(requestId);
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
@@ -228,6 +237,7 @@ class AviationDreOfficialNoticeSendServiceTest {
                 .competentAuthority(CompetentAuthorityEnum.WALES)
                 .accountType(AccountType.AVIATION)
                 .templateParams(Map.of(
+                        PmrvEmailNotificationTemplateConstants.REQUEST_TYPE, "AVIATION DRE UKETS",
                 		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
                 		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
                 ))

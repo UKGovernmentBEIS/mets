@@ -63,6 +63,10 @@ class InstallationReportableEmissionsNotifyRegistryService {
 	@Transactional
 	public void notifyRegistry(InstallationReportableEmissionsUpdatedEvent event) {
 
+		if (event.isFromAerMarkedAsNotRequired()) {
+			return;
+		}
+
 		Long accountId = event.getAccountId();
 		final InstallationAccountInfoDTO account = installationAccountQueryService.getInstallationAccountInfoDTOById(accountId);
 		Optional<Request> aerRequest = aerRequestQueryService.findAerByAccountIdAndYear(account.getId(), event.getYear().getValue());

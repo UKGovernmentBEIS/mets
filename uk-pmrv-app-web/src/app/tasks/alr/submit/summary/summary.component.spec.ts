@@ -10,19 +10,19 @@ import { ActivatedRouteStub, BasePage, mockClass } from '@testing';
 
 import { TasksService } from 'pmrv-api';
 
-import { SummaryComponent } from './summary.component';
+import { AlrFileSummaryComponent } from './summary.component';
 
 describe('SummaryComponent', () => {
   let page: Page;
   let router: Router;
   let store: CommonTasksStore;
-  let component: SummaryComponent;
-  let fixture: ComponentFixture<SummaryComponent>;
+  let component: AlrFileSummaryComponent;
+  let fixture: ComponentFixture<AlrFileSummaryComponent>;
 
   const activatedRoute: ActivatedRouteStub = new ActivatedRouteStub({ taskId: 1 });
   const tasksService = mockClass(TasksService);
 
-  class Page extends BasePage<SummaryComponent> {
+  class Page extends BasePage<AlrFileSummaryComponent> {
     get heading1(): HTMLHeadingElement {
       return this.query<HTMLHeadingElement>('h1');
     }
@@ -58,7 +58,7 @@ describe('SummaryComponent', () => {
         alrAttachments: { 'ebff80af-8c13-4f5a-b1eb-75b74a2121c5': 'test.txt' },
       }),
     );
-    fixture = TestBed.createComponent(SummaryComponent);
+    fixture = TestBed.createComponent(AlrFileSummaryComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
     router = TestBed.inject(Router);

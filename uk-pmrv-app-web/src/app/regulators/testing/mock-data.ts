@@ -130,6 +130,10 @@ export const mockRegulatorUser: {
       SUBMIT_PERMANENT_CESSATION: 'VIEW_ONLY',
       SUBMIT_AVIATION_DOE_CORSIA: 'NONE',
       PEER_REVIEW_AVIATION_DOE_CORSIA: 'NONE',
+      SUBMIT_ALR_REVIEW: 'NONE',
+      PEER_REVIEW_ALR: 'NONE',
+      SUBMIT_HSE_TI_REVIEW: 'NONE',
+      PEER_REVIEW_HSE_TI: 'NONE',
     },
   },
 };
@@ -195,6 +199,10 @@ export const mockRegulatorRolePermissions = [
   'SUBMIT_PERMANENT_CESSATION',
   'SUBMIT_AVIATION_DOE_CORSIA',
   'PEER_REVIEW_AVIATION_DOE_CORSIA',
+  'SUBMIT_ALR_REVIEW',
+  'PEER_REVIEW_ALR',
+  'SUBMIT_HSE_TI_REVIEW',
+  'PEER_REVIEW_HSE_TI',
 ];
 
 export const mockRegulatorBasePermissions = [
@@ -262,6 +270,10 @@ export const mockRegulatorBasePermissions = [
       PEER_REVIEW_PERMANENT_CESSATION: 'NONE',
       SUBMIT_AVIATION_DOE_CORSIA: 'ΝΟΝΕ',
       PEER_REVIEW_AVIATION_DOE_CORSIA: 'NONE',
+      SUBMIT_ALR_REVIEW: 'NONE',
+      PEER_REVIEW_ALR: 'NONE',
+      SUBMIT_HSE_TI_REVIEW: 'NONE',
+      PEER_REVIEW_HSE_TI: 'NONE',
     },
   },
   {
@@ -328,6 +340,10 @@ export const mockRegulatorBasePermissions = [
       PEER_REVIEW_PERMANENT_CESSATION: 'EXECUTE',
       SUBMIT_AVIATION_DOE_CORSIA: 'ΝΟΝΕ',
       PEER_REVIEW_AVIATION_DOE_CORSIA: 'NONE',
+      SUBMIT_ALR_REVIEW: 'NONE',
+      PEER_REVIEW_ALR: 'NONE',
+      SUBMIT_HSE_TI_REVIEW: 'NONE',
+      PEER_REVIEW_HSE_TI: 'NONE',
     },
   },
   {
@@ -394,6 +410,10 @@ export const mockRegulatorBasePermissions = [
       PEER_REVIEW_PERMANENT_CESSATION: 'EXECUTE',
       SUBMIT_AVIATION_DOE_CORSIA: 'ΝΟΝΕ',
       PEER_REVIEW_AVIATION_DOE_CORSIA: 'NONE',
+      SUBMIT_ALR_REVIEW: 'NONE',
+      PEER_REVIEW_ALR: 'NONE',
+      SUBMIT_HSE_TI_REVIEW: 'NONE',
+      PEER_REVIEW_HSE_TI: 'NONE',
     },
   },
   {
@@ -460,6 +480,10 @@ export const mockRegulatorBasePermissions = [
       PEER_REVIEW_PERMANENT_CESSATION: 'EXECUTE',
       SUBMIT_AVIATION_DOE_CORSIA: 'ΝΟΝΕ',
       PEER_REVIEW_AVIATION_DOE_CORSIA: 'NONE',
+      SUBMIT_ALR_REVIEW: 'NONE',
+      PEER_REVIEW_ALR: 'NONE',
+      SUBMIT_HSE_TI_REVIEW: 'EXECUTE',
+      PEER_REVIEW_HSE_TI: 'EXECUTE',
     },
   },
   {
@@ -526,6 +550,10 @@ export const mockRegulatorBasePermissions = [
       PEER_REVIEW_PERMANENT_CESSATION: 'EXECUTE',
       SUBMIT_AVIATION_DOE_CORSIA: 'ΝΟΝΕ',
       PEER_REVIEW_AVIATION_DOE_CORSIA: 'NONE',
+      SUBMIT_ALR_REVIEW: 'NONE',
+      PEER_REVIEW_ALR: 'NONE',
+      SUBMIT_HSE_TI_REVIEW: 'EXECUTE',
+      PEER_REVIEW_HSE_TI: 'EXECUTE',
     },
   },
 ];
@@ -590,4 +618,8 @@ export const mockRegulatorPermissionGroups = {
   PEER_REVIEW_PERMANENT_CESSATION: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   SUBMIT_AVIATION_DOE_CORSIA: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
   PEER_REVIEW_AVIATION_DOE_CORSIA: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
+  SUBMIT_ALR_REVIEW: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
+  PEER_REVIEW_ALR: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
+  SUBMIT_HSE_TI_REVIEW: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
+  PEER_REVIEW_HSE_TI: ['NONE', 'VIEW_ONLY', 'EXECUTE'],
 };

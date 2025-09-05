@@ -107,7 +107,7 @@ class RequestQueryServiceTest {
         Long accountId = 1L;
         final String requestId = "1";
         RequestSearchCriteria criteria = RequestSearchCriteria.builder().resourceId(String.valueOf(accountId)).resourceType(ResourceType.ACCOUNT)
-        		.paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build()).build();
+        		.paging(PagingRequest.builder().pageNumber(0).pageSize(30).build()).build();
 
         RequestDetailsDTO workflowResult1 = new RequestDetailsDTO(requestId, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, LocalDateTime.now(), null);
         RequestDetailsDTO workflowResult2 = new RequestDetailsDTO(requestId, RequestType.PERMIT_ISSUANCE, RequestStatus.IN_PROGRESS, LocalDateTime.now(), null);

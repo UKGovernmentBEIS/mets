@@ -666,13 +666,48 @@ export class ItemLinkPipe implements PipeTransform {
         }
       }
 
+      case 'HSE_TI': {
+        switch (value?.taskType) {
+          case 'HSE_TI_APPLICATION_SUBMIT':
+          case 'HSE_TI_WAIT_FOR_REGULATOR_REVIEW':
+          case 'HSE_TI_APPLICATION_AMENDS_SUBMIT':
+            return [routerLooks + 'tasks', value.taskId, 'hseti', 'submit'];
+          case 'HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+          case 'HSE_TI_WAIT_FOR_AMENDS':
+          case 'HSE_TI_APPLICATION_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'hseti', 'review'];
+          case 'HSE_TI_MAKE_PAYMENT':
+            return [routerLooks + 'payment', value.taskId, 'make'];
+          case 'HSE_TI_TRACK_PAYMENT':
+          case 'HSE_TI_CONFIRM_PAYMENT':
+            return [routerLooks + 'payment', value.taskId, 'track'];
+          case 'HSE_TI_WAIT_FOR_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'hseti', 'peer-review-wait'];
+          default:
+            return ['.'];
+        }
+      }
+
       case 'ALR': {
         switch (value?.taskType) {
           case 'ALR_APPLICATION_SUBMIT':
           case 'ALR_WAIT_FOR_VERIFICATION':
+          case 'ALR_AMEND_WAIT_FOR_VERIFICATION':
+          case 'ALR_WAIT_FOR_REGULATOR_REVIEW':
+          case 'ALR_APPLICATION_AMENDS_SUBMIT':
             return [routerLooks + 'tasks', value.taskId, 'alr', 'submit'];
           case 'ALR_APPLICATION_VERIFICATION_SUBMIT':
+          case 'ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT':
             return [routerLooks + 'tasks', value.taskId, 'alr', 'verification-submit'];
+          case 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+          case 'ALR_WAIT_FOR_AMENDS':
+          case 'ALR_WAIT_FOR_AUTHORITY_REVIEW':
+          case 'ALR_WAIT_FOR_PEER_REVIEW':
+          case 'ALR_APPLICATION_PEER_REVIEW':
+            return [routerLooks + 'tasks', value.taskId, 'alr', 'review'];
+          case 'ALR_AUTHORITY_RESPONSE_SUBMIT':
+            return [routerLooks + 'tasks', value.taskId, 'alr', 'authority'];
+
           default: {
             return ['.'];
           }

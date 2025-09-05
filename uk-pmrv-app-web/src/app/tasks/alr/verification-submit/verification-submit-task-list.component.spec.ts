@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
+import { CapitalizeFirstPipe } from '@shared/pipes/capitalize-first.pipe';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage } from '@testing';
 
-import { TasksService } from 'pmrv-api';
-
+import { AlrService } from '../core';
 import { alrMockVerificationState } from '../test/mock-verifier';
 import { VerificationSubmitTaskListComponent } from './verification-submit-task-list.component';
 
@@ -36,7 +36,7 @@ describe('VerificationSubmitContainerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [VerificationSubmitTaskListComponent],
-      providers: [provideRouter([]), TasksService],
+      providers: [provideRouter([]), AlrService, CapitalizeFirstPipe],
     }).compileComponents();
   });
 

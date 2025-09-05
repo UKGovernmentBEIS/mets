@@ -76,7 +76,7 @@ public class RequestDetailsRepository {
                 .from(request)
                 .where(whereClause)
                 .orderBy(request.creationDate.desc())
-                .offset(criteria.getPaging().getPageNumber() * criteria.getPaging().getPageSize())
+                .offset((long) criteria.getPaging().getPageNumber() * criteria.getPaging().getPageSize())
                 .limit(criteria.getPaging().getPageSize());
 
         return RequestDetailsSearchResults.builder()

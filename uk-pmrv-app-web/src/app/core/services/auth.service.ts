@@ -13,6 +13,8 @@ import { KeycloakLoginOptions, KeycloakProfile } from 'keycloak-js';
 
 import { AuthoritiesService, TermsAndConditionsService, UserDTO, UsersService, UserTermsVersionDTO } from 'pmrv-api';
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly _baseRedirectUri = new URL(this.baseHref, location.origin).toString();
@@ -45,8 +47,9 @@ export class AuthService {
   }
 
   logout(redirectPath = ''): Promise<void> {
+    const isDev = environment.production === false;
     return this.keycloakService
-      .logout(this._baseRedirectUri + redirectPath)
+      .logout(redirectPath || isDev ? this._baseRedirectUri + redirectPath : location.origin)
       .then(() => this.authStore.setIsLoggedIn(false));
   }
 

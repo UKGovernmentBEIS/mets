@@ -65,7 +65,9 @@ import { OverallDecisionTypePipe } from './overall-decision-type.pipe';
 import { CessationScopePipePipe } from './permanent-cessation/cessation-scope.pipe.pipe';
 import { PermitTransferPartyPipe } from './permit-transfer-party.pipe';
 import { PfcCalculationMethodPipe } from './pfc-calculation-method.pipe';
+import { ReviewBdrAlrGroupDecisionPipe } from './review-bdr-alr-group-decision.pipe';
 import { SnakeToKebabPipe } from './snake-to-kebab.pipe';
+import { SubInstallationTypePipe } from './sub-installation-type.pipe';
 import { TaskTypeToBreadcrumbPipe } from './task-type-to-breadcrumb.pipe';
 import { TransferredCO2N2ODirectionsPipe } from './transferred-co2-n2o-directions.pipe';
 import { TransportApproachDescriptionPipe } from './transport-approach-description.pipe';
@@ -74,7 +76,13 @@ import { WorkflowStatusPipe } from './workflow-status.pipe';
 import { WorkflowTypePipe } from './workflow-type.pipe';
 
 @NgModule({
-  imports: [CessationScopePipePipe, OverallDecisionTypePipe, StatusApplicationTypePipe, TaskTypeToBreadcrumbPipe],
+  imports: [
+    CessationScopePipePipe,
+    OverallDecisionTypePipe,
+    ReviewBdrAlrGroupDecisionPipe,
+    StatusApplicationTypePipe,
+    TaskTypeToBreadcrumbPipe,
+  ],
   declarations: [
     AccountStatusPipe,
     AccountTypePipe,
@@ -131,6 +139,7 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
     SnakeToKebabPipe,
     SourceStreamDescriptionPipe,
     SourceStreamTypePipe,
+    SubInstallationTypePipe,
     TagColorPipe,
     TemplateFilePipe,
     TimelineItemLinkPipe,
@@ -197,12 +206,14 @@ import { WorkflowTypePipe } from './workflow-type.pipe';
     RegulatedActivitiesSortPipe,
     RegulatedActivityTypePipe,
     ReportingTypePipe,
+    ReviewBdrAlrGroupDecisionPipe,
     ReviewGroupDecisionPipe,
     SecondsToMinutesPipe,
     SnakeToKebabPipe,
     SourceStreamDescriptionPipe,
     SourceStreamTypePipe,
     StatusApplicationTypePipe,
+    SubInstallationTypePipe,
     TagColorPipe,
     TaskTypeToBreadcrumbPipe,
     TemplateFilePipe,

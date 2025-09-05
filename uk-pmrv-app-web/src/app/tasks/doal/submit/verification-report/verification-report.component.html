@@ -3,14 +3,12 @@
     (formSubmit)="onSubmit()"
     [formGroup]="form"
     heading="Upload verification report of the activity level report"
-    submitText="Save and continue"
-  >
+    submitText="Save and continue">
     <app-file-input
       [downloadUrl]="getDownloadUrl"
       formControlName="document"
-      label="Upload file"
-      listTitle="File added"
-    ></app-file-input>
+      label="Upload file (optional)"
+      listTitle="File added"></app-file-input>
 
     <label for="comment" class="govuk-label govuk-label--m">Comments on the information submitted</label>
     <div govuk-textarea formControlName="comment" [maxLength]="10000"></div>

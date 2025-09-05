@@ -6,18 +6,18 @@ import { map } from 'rxjs';
 import { DoalService } from '../../../core/doal.service';
 
 @Component({
-  selector: 'app-activity-levels',
+  selector: 'app-doal-activity-levels',
   templateUrl: './activity-levels.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ActivityLevelsComponent {
+export class DoalActivityLevelsComponent {
   private readonly nextWizardStep = 'estimates';
 
   historicalActivityLevels$ = this.doalService.payload$.pipe(map((payload) => payload.historicalActivityLevels));
+  isEditable$ = this.doalService.isEditable$;
   activityLevels$ = this.doalService.payload$.pipe(
     map((payload) => payload.doal.activityLevelChangeInformation.activityLevels),
   );
-  isEditable$ = this.doalService.isEditable$;
 
   constructor(
     private readonly doalService: DoalService,

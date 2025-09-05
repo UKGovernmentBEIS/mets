@@ -7,11 +7,11 @@ import { PendingRequestService } from '@core/guards/pending-request.service';
 import { DoalService } from '@tasks/doal/core/doal.service';
 
 @Component({
-  selector: 'app-activity-level-delete',
+  selector: 'app-doal-activity-level-delete',
   templateUrl: './delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DeleteComponent {
+export class DoalActivityLevelDeleteComponent {
   index = this.route.snapshot.paramMap.get('index');
   editable$ = this.doalService.isEditable$;
 

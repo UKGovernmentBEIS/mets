@@ -31,7 +31,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalClosed
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalProceedToAuthorityDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalSaveApplicationRequestTaskActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalDeterminationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.enums.DoalDeterminationType;
 
 import java.time.Year;
 import java.util.Map;

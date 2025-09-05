@@ -22,12 +22,17 @@ export class SectionsContainerComponent extends SectionsContainerAbstractCompone
     map((state) => state.requestTaskType),
     map((requestTaskType) => requestTaskType === 'PERMIT_ISSUANCE_APPLICATION_AMENDS_SUBMIT'),
   );
+  isSubmitWasteTask$ = this.store.pipe(
+    map((state) => state.requestTaskType === 'PERMIT_ISSUANCE_APPLICATION_SUBMIT' && state.permitType === 'WASTE'),
+  );
   permitTypeMapLowercase = permitTypeMapLowercase;
   header$: Observable<string> = this.store.pipe(
     first(),
-    map(
-      (state) => `Apply for a ${state.permitType ? permitTypeMapLowercase?.[state.permitType] + ' permit' : 'permit'}`,
-    ),
+    map((state) => {
+      const permitText = state.permitType === 'WASTE' ? 'monitoring plan' : 'permit';
+
+      return `Apply for a ${state.permitType ? permitTypeMapLowercase?.[state.permitType] + ' ' + permitText : permitText}`;
+    }),
   );
 
   constructor(

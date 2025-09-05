@@ -8,7 +8,7 @@
     [hideSubmit]="(store.isEditable$ | async) === false">
     <p class="govuk-caption-m">
       Based on the information you gave, this installation can apply for a Hospital and Small Emitter (HSE) permit, a
-      full Greenhouse Gas Emissions (GHGE) permit or a voluntary waste monitoring plan.
+      full Greenhouse Gas Emissions (GHGE) permit or a waste voluntary monitoring plan.
     </p>
 
     <div formControlName="type" govuk-radio legend="Which type of permit are you applying for?" legendSize="medium">
@@ -23,11 +23,11 @@
       <govuk-radio-option
         *ngIf="(wastePermitEnabled$ | async) === true"
         [value]="'WASTE'"
-        label="Apply for a voluntary waste monitoring plan"
-        hint="Installations which process waste via incineration and are within scope of and participating in the voluntary monitoring, reporting and verification (MRV) period can apply for a voluntary waste monitoring plan. This includes facilities conducting advanced treatments and advanced conversion technologies, such as gasification and pyrolysis-based processes, as well as energy from waste facilities and waste incinerators without energy recovery.">
+        label="Apply for a waste voluntary monitoring plan"
+        hint="Installations which process waste via incineration and are within scope of and participating in the Waste Activities Voluntary Scheme for Greenhouse Gas Emissions can apply for a waste voluntary monitoring plan. This includes facilities conducting advanced treatments and advanced conversion technologies, such as gasification and pyrolysis-based processes, as well as energy from waste facilities and waste incinerators without energy recovery.">
         <ng-container govukConditionalContent>
           <govuk-warning-text>
-            During the voluntary waste monitoring, reporting and verification period, the METS service will reflect the
+            During the Waste Activities Voluntary Scheme for Greenhouse Gas Emissions, the METS service will reflect the
             full ETS scheme, so some references and data requests may not be relevant to waste operators. Contact your
             regulator for further information on how to participate.
           </govuk-warning-text>

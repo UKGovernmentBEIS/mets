@@ -287,7 +287,7 @@ class RequestControllerTest {
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
         		.resourceId(String.valueOf(accountId))
 				.resourceType(ResourceType.ACCOUNT)
-        		.paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+        		.paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
         		.category(RequestHistoryCategory.PERMIT).build();
         
         RequestDetailsDTO workflowResult1 = new RequestDetailsDTO(requestId, RequestType.INSTALLATION_ACCOUNT_OPENING, RequestStatus.IN_PROGRESS, LocalDateTime.now(), null);
@@ -320,7 +320,7 @@ class RequestControllerTest {
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
         		.resourceId(String.valueOf(accountId))
 				.resourceType(ResourceType.ACCOUNT)
-        		.paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+        		.paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
         		.category(RequestHistoryCategory.PERMIT).build();
         
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);

@@ -28,7 +28,7 @@ export class CommonActionsStore extends Store<CommonActionsState> {
   }
 
   get payload$(): Observable<any> {
-    return this.state$.pipe(map((state) => state.action.payload));
+    return this.state$.pipe(map((state) => state.action?.payload));
   }
 
   get requestAction$(): Observable<RequestActionDTO> {

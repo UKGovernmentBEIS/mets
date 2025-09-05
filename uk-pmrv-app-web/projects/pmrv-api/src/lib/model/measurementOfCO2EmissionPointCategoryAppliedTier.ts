@@ -18,5 +18,5 @@ export interface MeasurementOfCO2EmissionPointCategoryAppliedTier {
   emissionPointCategory: MeasurementOfCO2EmissionPointCategory;
   measuredEmissions: MeasurementOfCO2MeasuredEmissions;
   appliedStandard: AppliedStandard;
-  biomassFraction: MeasurementBiomassFraction;
+  biomassFraction?: MeasurementBiomassFraction;
 }

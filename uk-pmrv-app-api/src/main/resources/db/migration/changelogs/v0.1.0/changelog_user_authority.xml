@@ -4862,5 +4862,4 @@
         	</sql>
         </rollback>
     </changeSet>
-
 </databaseChangeLog>

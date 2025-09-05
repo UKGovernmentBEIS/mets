@@ -50,7 +50,7 @@ class BatchReissueRequestsAndInitiatePermissionOrchestratorTest {
     	AccountType accountType = AccountType.INSTALLATION;
     	AppUser authUser = AppUser.builder().userId("userId")
     			.authorities(List.of(AppAuthority.builder().competentAuthority(CompetentAuthorityEnum.ENGLAND).build())).build(); 
-    	PagingRequest pagingRequestInfo = PagingRequest.builder().pageNumber(0L).pageSize(30L).build();
+    	PagingRequest pagingRequestInfo = PagingRequest.builder().pageNumber(0).pageSize(30).build();
     	
     	RequestDetailsSearchResults requestDetailsSearchResults = RequestDetailsSearchResults.builder()
     			.total(10L)

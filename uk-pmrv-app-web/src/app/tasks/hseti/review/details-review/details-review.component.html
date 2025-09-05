@@ -1,0 +1,12 @@
+<app-hseti-task-review
+  [breadcrumb]="true"
+  heading="Review HSE target increase details"
+  [caption]="allocationPeriod() + ' HSE target increase details'">
+  <app-hseti-details-summary-template
+    [isEditable]="false"
+    [data]="hseti()"
+    [hsetiFile]="hsetiFile()"
+    [files]="files()"></app-hseti-details-summary-template>
+
+  <app-hseti-review-group-decision (notification)="notification = $event"></app-hseti-review-group-decision>
+</app-hseti-task-review>

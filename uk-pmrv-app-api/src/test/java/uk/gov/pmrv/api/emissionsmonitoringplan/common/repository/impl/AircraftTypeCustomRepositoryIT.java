@@ -41,7 +41,7 @@ class AircraftTypeCustomRepositoryIT extends AbstractContainerBaseTest {
         createAircraftType("LEARJET", "35", "LJ35");
 
         AircraftTypeSearchCriteria searchCriteria = AircraftTypeSearchCriteria.builder()
-        		.paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build())
+        		.paging(PagingRequest.builder().pageNumber(0).pageSize(10).build())
             .build();
 
         AircraftTypeDTO aircraftTypeDTOBoeing = new AircraftTypeDTO("BOEING", "747", "B747");
@@ -64,7 +64,7 @@ class AircraftTypeCustomRepositoryIT extends AbstractContainerBaseTest {
 
         AircraftTypeSearchCriteria searchCriteria = AircraftTypeSearchCriteria.builder()
             .term("air")
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build())
             .build();
 
         AircraftTypeDTO aircraftTypeDTOBoeing = new AircraftTypeDTO("BOEING", "747", "AIR747");
@@ -87,7 +87,7 @@ class AircraftTypeCustomRepositoryIT extends AbstractContainerBaseTest {
 
         AircraftTypeSearchCriteria searchCriteria = AircraftTypeSearchCriteria.builder()
             .excludedAircraftTypes(List.of(new AircraftTypeDTO("BOEING", "746", "B746")))
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build())
             .build();
 
         AircraftTypeDTO aircraftTypeDTOBoeing = new AircraftTypeDTO("BOEING", "747", "B747");
@@ -111,7 +111,7 @@ class AircraftTypeCustomRepositoryIT extends AbstractContainerBaseTest {
         AircraftTypeSearchCriteria searchCriteria = AircraftTypeSearchCriteria.builder()
             .term("air")
             .excludedAircraftTypes(List.of(new AircraftTypeDTO("SUPER PUMA", "Ultra Air", "AB12")))
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build())
             .build();
 
         AircraftTypeDTO aircraftTypeDTOBoeing = new AircraftTypeDTO("BOEING", "747", "AIR747");
@@ -132,7 +132,7 @@ class AircraftTypeCustomRepositoryIT extends AbstractContainerBaseTest {
 
         AircraftTypeSearchCriteria searchCriteria = AircraftTypeSearchCriteria.builder()
             .term("air")
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build())
             .build();
 
         flushAndClear();

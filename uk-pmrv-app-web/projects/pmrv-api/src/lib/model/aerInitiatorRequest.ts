@@ -34,6 +34,7 @@ export interface AerInitiatorRequest {
     | 'RETURN_OF_ALLOWANCES'
     | 'INSTALLATION_ONSITE_INSPECTION'
     | 'INSTALLATION_AUDIT'
+    | 'HSE_TI'
     | 'BDR'
     | 'PERMANENT_CESSATION'
     | 'ALR'

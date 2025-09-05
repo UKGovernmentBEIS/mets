@@ -93,6 +93,7 @@ public interface NonComplianceMapper {
 
     @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "comments", source = "requestPayload.dailyPenaltyComments")
+    @Mapping(target = "nonComplianceComments", source = "requestPayload.comments")
     NonComplianceDailyPenaltyNoticeRequestTaskPayload toNonComplianceDailyPenaltyNoticeRequestTaskPayload(
         NonComplianceRequestPayload requestPayload,
         RequestTaskPayloadType payloadType
@@ -117,6 +118,7 @@ public interface NonComplianceMapper {
     
     @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "comments", source = "requestPayload.noticeOfIntentComments")
+    @Mapping(target = "nonComplianceComments", source = "requestPayload.comments")
     NonComplianceNoticeOfIntentRequestTaskPayload toNonComplianceNoticeOfIntentRequestTaskPayload(
         NonComplianceRequestPayload requestPayload,
         RequestTaskPayloadType payloadType
@@ -132,6 +134,7 @@ public interface NonComplianceMapper {
     @Mapping(target = "penaltyAmount", source = "requestPayload.civilPenaltyAmount")
     @Mapping(target = "dueDate", source = "requestPayload.civilPenaltyDueDate")
     @Mapping(target = "comments", source = "requestPayload.civilPenaltyComments")
+    @Mapping(target = "nonComplianceComments", source = "requestPayload.comments")
     NonComplianceCivilPenaltyRequestTaskPayload toNonComplianceCivilPenaltyRequestTaskPayload(
         NonComplianceRequestPayload requestPayload,
         RequestTaskPayloadType payloadType

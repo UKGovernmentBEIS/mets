@@ -47,6 +47,7 @@ public class PermitPreviewHandler extends PreviewDocumentAbstractHandler {
                        RequestTaskType.PERMIT_VARIATION_APPLICATION_REVIEW,
                        RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT,
                         RequestTaskType.PERMIT_VARIATION_APPLICATION_PEER_REVIEW,
-                        RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_REVIEW);
+                        RequestTaskType.PERMIT_TRANSFER_B_APPLICATION_REVIEW,
+                      RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW);
     }
 }

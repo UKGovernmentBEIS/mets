@@ -48,7 +48,7 @@ public class AircraftTypeCustomRepositoryImpl implements AircraftTypeCustomRepos
             .from(aircraftType)
             .where(whereClause)
             .orderBy(manufacturer.asc(), model.asc(), designatorType.asc())
-            .offset(searchCriteria.getPaging().getPageNumber() * searchCriteria.getPaging().getPageSize())
+            .offset((long) searchCriteria.getPaging().getPageNumber() * searchCriteria.getPaging().getPageSize())
             .limit(searchCriteria.getPaging().getPageSize());
 
         return AircraftTypeSearchResults.builder()

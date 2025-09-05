@@ -136,6 +136,7 @@ export class ReportsComponent extends BaseComponent implements OnInit {
               ),
             ),
             hasDoeCorsia: this.getHasDoeCorsia(detailsByYear[year]),
+            hasActiveDRE: this.getHasActiveDRE(detailsByYear[year]),
           }))
           .sort((a, b) => Number(b.year) - Number(a.year))) ??
       []
@@ -155,6 +156,10 @@ export class ReportsComponent extends BaseComponent implements OnInit {
 
   private getHasDoeCorsia(detailsByYear): boolean {
     return detailsByYear.filter((details) => details.requestType === 'AVIATION_DOE_CORSIA').length > 0;
+  }
+
+  private getHasActiveDRE(detailsByYear): boolean {
+    return detailsByYear.filter((details) => details.requestType === 'DRE').length > 0;
   }
 
   private getReportableEmissions(accountId: number, reports: Reports[]) {

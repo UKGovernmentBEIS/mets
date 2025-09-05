@@ -32,10 +32,10 @@ import { SendPeerReviewGuard } from '@tasks/doal/submit/send-peer-review.guard';
 
 import { AdditionalDocumentsComponent } from './submit/additional-documents/additional-documents.component';
 import { SummaryComponent as AdditionalDocumentsSubmitSummaryComponent } from './submit/additional-documents/summary/summary.component';
-import { ActivityLevelComponent } from './submit/alc-information/activity-levels/activity-level/activity-level.component';
+import { DoalActivityLevelComponent } from './submit/alc-information/activity-levels/activity-level/activity-level.component';
 import { ActivityLevelGuard } from './submit/alc-information/activity-levels/activity-level/activity-level.guard';
-import { DeleteComponent as ActivityLevelDeleteComponent } from './submit/alc-information/activity-levels/activity-level/delete/delete.component';
-import { ActivityLevelsComponent } from './submit/alc-information/activity-levels/activity-levels.component';
+import { DoalActivityLevelDeleteComponent as ActivityLevelDeleteComponent } from './submit/alc-information/activity-levels/activity-level/delete/delete.component';
+import { DoalActivityLevelsComponent } from './submit/alc-information/activity-levels/activity-levels.component';
 import { AlcInformationGuard } from './submit/alc-information/alc-information.guard';
 import { CommentsComponent } from './submit/alc-information/comments/comments.component';
 import { EstimatesComponent } from './submit/alc-information/estimates/estimates.component';
@@ -223,7 +223,7 @@ const routes: Routes = [
                   pageTitle: 'Information about this activity level determination',
                   breadcrumb: 'Information about this activity level determination',
                 },
-                component: ActivityLevelsComponent,
+                component: DoalActivityLevelsComponent,
                 canDeactivate: [PendingRequestGuard],
               },
               {
@@ -232,7 +232,7 @@ const routes: Routes = [
                   pageTitle: 'Information about this activity level determination - create',
                   breadcrumb: 'Information about this activity level determination',
                 },
-                component: ActivityLevelComponent,
+                component: DoalActivityLevelComponent,
                 canDeactivate: [PendingRequestGuard],
               },
               {
@@ -244,7 +244,7 @@ const routes: Routes = [
                       pageTitle: 'Information about this activity level determination',
                       breadcrumb: 'Information about this activity level determination',
                     },
-                    component: ActivityLevelComponent,
+                    component: DoalActivityLevelComponent,
                     canActivate: [ActivityLevelGuard],
                     canDeactivate: [PendingRequestGuard],
                   },

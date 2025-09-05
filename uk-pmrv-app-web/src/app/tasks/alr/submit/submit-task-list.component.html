@@ -2,7 +2,8 @@
   <app-base-task-container-component
     [header]="vm.pageTitle"
     [customContentTemplate]="vm.isWaitTask ? waitContentTemplate : taskContentTemplate"
-    [expectedTaskType]="vm.expectedTaskType"
+    [expectedTaskType]="vm.requestTaskType"
+    [notification]="vm.notification"
     [daysRemaining]="vm.daysRemaining"></app-base-task-container-component>
 
   <ng-template #waitContentTemplate>
@@ -10,6 +11,17 @@
   </ng-template>
 
   <ng-template #taskContentTemplate>
+    <ng-container *ngIf="vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT'">
+      <h2 class="govuk-heading-m govuk-!-margin-0">Regulator comments</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="changes-requested"
+          linkText="Changes requested by the regulator"
+          [status]="vm.changesRequestedSectionStatus"></li>
+      </ul>
+    </ng-container>
+
     <h2 class="govuk-heading-m">Activity level report details</h2>
 
     <ul app-task-item-list>
@@ -25,7 +37,7 @@
     <ul app-task-item-list>
       <li
         app-task-item
-        [link]="vm.detailsSectionStatus === 'complete' ? vm.redirectSendReportLink : null"
+        [link]="vm.sectionsCompleted ? vm.redirectSendReportLink : null"
         linkText="Send report"
         [status]="vm.sendReportSectionStatus"></li>
     </ul>

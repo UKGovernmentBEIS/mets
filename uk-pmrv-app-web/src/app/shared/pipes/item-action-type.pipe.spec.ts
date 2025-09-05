@@ -277,6 +277,7 @@ describe('ItemActionTypePipe', () => {
 
     expect(pipe.transform('NON_COMPLIANCE_APPLICATION_SUBMITTED')).toEqual('Non-compliance details provided');
     expect(pipe.transform('NON_COMPLIANCE_APPLICATION_CLOSED')).toEqual('Non Compliance closed');
+    expect(pipe.transform('NON_COMPLIANCE_DETAILS_AMENDED')).toEqual('Details of the breach updated');
 
     expect(pipe.transform('AVIATION_ACCOUNT_CLOSURE_CANCELLED')).toEqual('Account closure cancelled');
     expect(pipe.transform('AVIATION_ACCOUNT_CLOSURE_SUBMITTED')).toEqual('Account closed');
@@ -503,6 +504,41 @@ describe('ItemActionTypePipe', () => {
       'Activity level report returned to operator for changes',
     );
     expect(pipe.transform('ALR_RECALLED_FROM_VERIFICATION')).toEqual('Activity level report recalled');
+    expect(pipe.transform('ALR_APPLICATION_SENT_TO_REGULATOR')).toEqual('Activity level report submitted to regulator');
+    expect(pipe.transform('ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS')).toEqual(
+      'Activity level report returned to operator',
+    );
+    expect(pipe.transform('HSE_TI_APPLICATION_SENT_TO_REGULATOR')).toEqual(
+      'HSE target increase application submitted to regulator',
+    );
+    expect(pipe.transform('ALR_APPLICATION_PROCEEDED_TO_AUTHORITY')).toEqual(
+      'Activity level determination sent to UK Authority',
+    );
+    expect(pipe.transform('ALR_APPLICATION_CLOSED')).toEqual('Activity level determination closed');
+    expect(pipe.transform('ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER')).toEqual(
+      'Activity level report submitted to verifier',
+    );
+    expect(pipe.transform('ALR_APPLICATION_AMENDS_SUBMITTED')).toEqual('Activity level report submitted to regulator');
+    expect(pipe.transform('ALR_APPLICATION_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
+    expect(pipe.transform('ALR_APPLICATION_PEER_REVIEW_ACCEPTED')).toEqual('Peer review agreement submitted');
+    expect(pipe.transform('ALR_APPLICATION_PEER_REVIEW_REJECTED')).toEqual('Peer review disagreement submitted');
+    expect(pipe.transform('ALR_APPLICATION_ACCEPTED')).toEqual('Activity level determination accepted as approved');
+    expect(pipe.transform('ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS')).toEqual(
+      'Activity level determination accepted as approved with corrections',
+    );
+    expect(pipe.transform('ALR_APPLICATION_REJECTED')).toEqual('Activity level determination accepted as not approved');
+
+    expect(pipe.transform('HSE_TI_APPLICATION_CANCELLED')).toEqual('HSE target increase application cancelled');
+    expect(pipe.transform('HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS')).toEqual(
+      'HSE target increase application returned to operator',
+    );
+    expect(pipe.transform('HSE_TI_APPROVED')).toEqual('HSE target increase application approved');
+    expect(pipe.transform('HSE_TI_REJECTED')).toEqual('HSE target increase application rejected');
+    expect(pipe.transform('HSE_TI_DEEMED_WITHDRAWN')).toEqual('HSE target increase application deemed withdrawn');
+    expect(pipe.transform('HSE_TI_WITHDRAWN')).toEqual('HSE target increase application withdrawn');
+    expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED')).toEqual('Peer review requested');
+    expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED')).toEqual('Peer review agreement submitted');
+    expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW_REJECTED')).toEqual('Peer review disagreement submitted');
 
     expect(pipe.transform(undefined)).toEqual('Approved Application');
   });

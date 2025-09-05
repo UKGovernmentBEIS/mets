@@ -105,7 +105,7 @@ class ItemAssignedToMeControllerTest {
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         when(itemAssignedToMeOperatorService
-                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build())).thenReturn(itemDTOResponse);
+                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build())).thenReturn(itemDTOResponse);
         when(itemAssignedToMeOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -114,7 +114,7 @@ class ItemAssignedToMeControllerTest {
                 .andExpect(status().isOk());
 
         verify(itemAssignedToMeOperatorService, times(1))
-                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
         verify(itemAssignedToMeRegulatorService, never())
                 .getItemsAssignedToMe(any(), any(), any(PagingRequest.class));
     }
@@ -126,7 +126,7 @@ class ItemAssignedToMeControllerTest {
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(itemAssignedToMeRegulatorService.getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
+        when(itemAssignedToMeRegulatorService.getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build()))
                 .thenReturn(itemDTOResponse);
         when(itemAssignedToMeOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
         when(itemAssignedToMeRegulatorService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
@@ -139,7 +139,7 @@ class ItemAssignedToMeControllerTest {
         verify(itemAssignedToMeOperatorService, never())
                 .getItemsAssignedToMe(any(), any(), any(PagingRequest.class));
         verify(itemAssignedToMeRegulatorService, times(1))
-                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
     }
 
     @Test

@@ -1,7 +1,7 @@
 import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { duplicatePreliminaryAllocationValidator } from '@shared/components/doal/preliminary-allocation-details/preliminary-allocation-details.util';
+import { duplicatePreliminaryAllocationValidator } from '@shared/components/preliminary-allocation-details/preliminary-allocation-details.util';
 import { DOAL_TASK_FORM } from '@tasks/doal/core/doal-task-form.token';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 

@@ -15,11 +15,13 @@ import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplate
 import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.core.service.RequestService;
 import uk.gov.pmrv.api.workflow.request.flow.aviation.doe.corsia.domain.AviationDoECorsiaRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.AviationAccountCompetentAuthorityDTOByRequestResolver;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,6 +42,7 @@ public class AviationDoECorsiaOfficialNoticeSendService {
     private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
     private final FileDocumentService fileDocumentService;
     private final AviationAccountCompetentAuthorityDTOByRequestResolver caResolver;
+    private final OfficialNoticeSendService officialNoticeSendService;
 
     public void sendOfficialNotice(String requestId) {
         Request request = requestService.findRequestById(requestId);
@@ -84,6 +87,8 @@ public class AviationDoECorsiaOfficialNoticeSendService {
 
         templateParams.put(PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail());
         templateParams.put(PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName());
+
+        templateParams.put(PmrvEmailNotificationTemplateConstants.REQUEST_TYPE, officialNoticeSendService.processRequestTypeName(RequestType.AVIATION_DOE_CORSIA));
 
         return EmailData.<PmrvEmailNotificationTemplateData>builder()
                 .notificationTemplateData(PmrvEmailNotificationTemplateData.builder()

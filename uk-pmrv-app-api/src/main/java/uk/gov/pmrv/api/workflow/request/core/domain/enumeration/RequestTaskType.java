@@ -900,7 +900,8 @@ public enum RequestTaskType {
                 RequestTaskActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_SAVE_APPLICATION,
                 RequestTaskActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_NOTIFY_OPERATOR,
                 RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION,
-                RequestTaskActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_REQUEST_PEER_REVIEW
+                RequestTaskActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_REQUEST_PEER_REVIEW,
+                RequestTaskActionType.NON_COMPLIANCE_AMEND_DETAILS
             );
         }
     },
@@ -934,7 +935,8 @@ public enum RequestTaskType {
                 RequestTaskActionType.NON_COMPLIANCE_NOTICE_OF_INTENT_SAVE_APPLICATION,
                 RequestTaskActionType.NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR,
                 RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION,
-                RequestTaskActionType.NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW
+                RequestTaskActionType.NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW,
+                RequestTaskActionType.NON_COMPLIANCE_AMEND_DETAILS
             );
         }
     },
@@ -968,7 +970,8 @@ public enum RequestTaskType {
                 RequestTaskActionType.NON_COMPLIANCE_CIVIL_PENALTY_SAVE_APPLICATION,
                 RequestTaskActionType.NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR,
                 RequestTaskActionType.NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW,
-                RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION
+                RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION,
+                RequestTaskActionType.NON_COMPLIANCE_AMEND_DETAILS
             );
         }
     },
@@ -1001,7 +1004,8 @@ public enum RequestTaskType {
                 RequestTaskActionType.NON_COMPLIANCE_UPLOAD_ATTACHMENT,
                 RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION,
                 RequestTaskActionType.NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION,
-                RequestTaskActionType.NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION
+                RequestTaskActionType.NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION,
+                RequestTaskActionType.NON_COMPLIANCE_AMEND_DETAILS
             );
         }
     },
@@ -1584,6 +1588,90 @@ public enum RequestTaskType {
         }
     },
     /**
+     * HSE_TI
+     */
+    HSE_TI_APPLICATION_SUBMIT(true, RequestType.HSE_TI) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.HSE_TI_SAVE_APPLICATION,
+                    RequestTaskActionType.HSE_TI_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.HSE_TI_SUBMIT_TO_REGULATOR,
+                    RequestTaskActionType.HSE_TI_CANCEL
+            );
+        }
+    },
+    HSE_TI_TRACK_PAYMENT(true, RequestType.HSE_TI, SupportingTaskType.DEFAULT) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
+        }
+    },
+    HSE_TI_WAIT_FOR_REGULATOR_REVIEW(true, RequestType.HSE_TI) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+    HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT(true, RequestType.HSE_TI, RequestExpirationType.HSETI) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.HSE_TI_REGULATOR_REVIEW_SAVE,
+                    RequestTaskActionType.HSE_TI_REGULATOR_REVIEW_SUBMIT,
+                    RequestTaskActionType.HSE_TI_SAVE_REGULATOR_REVIEW_GROUP_DECISION,
+                    RequestTaskActionType.HSE_TI_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT,
+                    RequestTaskActionType.HSE_TI_REGULATOR_REVIEW_RETURN_FOR_AMENDS,
+                    RequestTaskActionType.HSE_TI_REQUEST_PEER_REVIEW
+            );
+        }
+    },
+    HSE_TI_APPLICATION_PEER_REVIEW(true, RequestType.HSE_TI, SupportingTaskType.PEER_REVIEW) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.HSE_TI_SUBMIT_PEER_REVIEW_DECISION
+            );
+        }
+    },
+    HSE_TI_WAIT_FOR_PEER_REVIEW(true, RequestType.HSE_TI) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes()  {
+            return List.of();
+        }
+    },
+    HSE_TI_MAKE_PAYMENT(true, RequestType.HSE_TI, RequestExpirationType.PAYMENT) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return RequestTaskActionType.getMakePaymentAllowedTypes();
+        }
+    },
+    HSE_TI_CONFIRM_PAYMENT(true, RequestType.HSE_TI, SupportingTaskType.DEFAULT) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return RequestTaskActionType.getTrackAndConfirmPaymentAllowedTypes();
+        }
+    },
+
+    HSE_TI_WAIT_FOR_AMENDS(true, RequestType.HSE_TI) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    HSE_TI_APPLICATION_AMENDS_SUBMIT(true, RequestType.HSE_TI) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.HSE_TI_UPLOAD_ATTACHMENT,
+                    RequestTaskActionType.HSE_TI_APPLICATION_AMENDS_SAVE,
+                    RequestTaskActionType.HSE_TI_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
+            );
+        }
+    },
+
+    /**
      * BDR
      */
     BDR_APPLICATION_SUBMIT(true, RequestType.BDR, RequestExpirationType.BDR) {
@@ -1730,7 +1818,8 @@ public enum RequestTaskType {
             return List.of(
                     RequestTaskActionType.ALR_SAVE_APPLICATION,
                     RequestTaskActionType.ALR_UPLOAD_ATTACHMENT,
-                    RequestTaskActionType.ALR_SUBMIT_TO_VERIFIER
+                    RequestTaskActionType.ALR_SUBMIT_TO_VERIFIER,
+                    RequestTaskActionType.ALR_SUBMIT_TO_REGULATOR
             );
         }
     },
@@ -1753,6 +1842,98 @@ public enum RequestTaskType {
             return List.of(
                     RequestTaskActionType.ALR_RECALL_FROM_VERIFICATION
             );
+        }
+    },
+
+    ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT(true, RequestType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION,
+                    RequestTaskActionType.ALR_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT,
+                    RequestTaskActionType.ALR_REGULATOR_REVIEW_RETURN_FOR_AMENDS,
+                    RequestTaskActionType.ALR_REGULATOR_REVIEW_SAVE,
+                    RequestTaskActionType.ALR_PROCEED_TO_AUTHORITY,
+                    RequestTaskActionType.ALR_CLOSE_APPLICATION,
+                    RequestTaskActionType.ALR_REQUEST_PEER_REVIEW
+            );
+        }
+    },
+
+    ALR_WAIT_FOR_REGULATOR_REVIEW(true, RequestType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    ALR_APPLICATION_AMENDS_SUBMIT(true, RequestType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.ALR_APPLICATION_AMENDS_SAVE,
+                    RequestTaskActionType.ALR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER,
+                    RequestTaskActionType.ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR,
+                    RequestTaskActionType.ALR_UPLOAD_ATTACHMENT
+            );
+        }
+    },
+
+    ALR_WAIT_FOR_AMENDS(true, RequestType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT(true, RequestType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.ALR_SAVE_APPLICATION_VERIFICATION,
+                    RequestTaskActionType.ALR_SUBMIT_VERIFICATION,
+                    RequestTaskActionType.ALR_VERIFICATION_UPLOAD_ATTACHMENT
+            );
+        }
+    },
+
+    ALR_AMEND_WAIT_FOR_VERIFICATION(true, RequestType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(RequestTaskActionType.ALR_RECALL_FROM_VERIFICATION);
+        }
+    },
+
+    ALR_AUTHORITY_RESPONSE_SUBMIT(true, RequestType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                RequestTaskActionType.ALR_SAVE_AUTHORITY_RESPONSE,
+                RequestTaskActionType.ALR_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT,
+                RequestTaskActionType.ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
+            );
+        }
+    },
+
+    ALR_WAIT_FOR_AUTHORITY_REVIEW(true, RequestType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
+        }
+    },
+
+    ALR_APPLICATION_PEER_REVIEW(true, RequestType.ALR, SupportingTaskType.PEER_REVIEW) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of(
+                    RequestTaskActionType.ALR_SUBMIT_PEER_REVIEW_DECISION
+            );
+        }
+    },
+    ALR_WAIT_FOR_PEER_REVIEW(true, RequestType.ALR) {
+        @Override
+        public List<RequestTaskActionType> getAllowedRequestTaskActionTypes() {
+            return List.of();
         }
     },
 
@@ -1798,7 +1979,8 @@ public enum RequestTaskType {
                 RequestTaskActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_SAVE_APPLICATION,
                 RequestTaskActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_NOTIFY_OPERATOR,
                 RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION,
-                RequestTaskActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_REQUEST_PEER_REVIEW
+                RequestTaskActionType.NON_COMPLIANCE_DAILY_PENALTY_NOTICE_REQUEST_PEER_REVIEW,
+                RequestTaskActionType.NON_COMPLIANCE_AMEND_DETAILS
             );
         }
     },
@@ -1832,7 +2014,8 @@ public enum RequestTaskType {
                 RequestTaskActionType.NON_COMPLIANCE_NOTICE_OF_INTENT_SAVE_APPLICATION,
                 RequestTaskActionType.NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR,
                 RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION,
-                RequestTaskActionType.NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW
+                RequestTaskActionType.NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW,
+                RequestTaskActionType.NON_COMPLIANCE_AMEND_DETAILS
             );
         }
     },
@@ -1866,7 +2049,8 @@ public enum RequestTaskType {
                 RequestTaskActionType.NON_COMPLIANCE_CIVIL_PENALTY_SAVE_APPLICATION,
                 RequestTaskActionType.NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR,
                 RequestTaskActionType.NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW,
-                RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION
+                RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION,
+                RequestTaskActionType.NON_COMPLIANCE_AMEND_DETAILS
             );
         }
     },
@@ -1899,7 +2083,8 @@ public enum RequestTaskType {
                 RequestTaskActionType.NON_COMPLIANCE_UPLOAD_ATTACHMENT,
                 RequestTaskActionType.NON_COMPLIANCE_CLOSE_APPLICATION,
                 RequestTaskActionType.NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION,
-                RequestTaskActionType.NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION
+                RequestTaskActionType.NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION,
+                RequestTaskActionType.NON_COMPLIANCE_AMEND_DETAILS
             );
         }
     },

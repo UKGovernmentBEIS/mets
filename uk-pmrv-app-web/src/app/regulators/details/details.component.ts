@@ -185,6 +185,10 @@ export class DetailsComponent implements OnInit {
       SUBMIT_PERMANENT_CESSATION: ['NONE'],
       SUBMIT_AVIATION_DOE_CORSIA: ['NONE'],
       PEER_REVIEW_AVIATION_DOE_CORSIA: ['NONE'],
+      SUBMIT_ALR_REVIEW: ['NONE'],
+      PEER_REVIEW_ALR: ['NONE'],
+      SUBMIT_HSE_TI_REVIEW: ['NONE'],
+      PEER_REVIEW_HSE_TI: ['NONE'],
     }),
   });
 
@@ -497,6 +501,18 @@ export class DetailsComponent implements OnInit {
       task: 'Peer review',
       type: 'Aviation: DoE CORSIA',
     },
+    {
+      permission: 'SUBMIT_ALR_REVIEW',
+      task: 'Review/Submit',
+      type: 'ALR',
+    },
+    {
+      permission: 'PEER_REVIEW_ALR',
+      task: 'Peer review',
+      type: 'ALR',
+    },
+    { permission: 'SUBMIT_HSE_TI_REVIEW', task: 'Review/Submit', type: 'HSE target increase' },
+    { permission: 'PEER_REVIEW_HSE_TI', task: 'Peer review', type: 'HSE target increase' },
   ];
 
   private readonly configFeatures$ = this.configStore.asObservable().pipe(map((state) => state.features));

@@ -1,0 +1,105 @@
+<ng-container *ngIf="vm() as vm">
+  <app-base-task-container-component
+    [header]="vm.pageTitle"
+    [customContentTemplate]="vm.isWaitTask ? waitContentTemplate : taskContentTemplate"
+    [expectedTaskType]="vm.requestTaskType"
+    [daysRemaining]="vm.daysRemaining"></app-base-task-container-component>
+
+  <ng-template #waitContentTemplate>
+    <govuk-warning-text>{{ vm.warningText }}</govuk-warning-text>
+  </ng-template>
+
+  <ng-template #taskContentTemplate>
+    @switch (vm.requestTaskType) {
+      @case ('ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT') {
+        <div class="govuk-button-group">
+          <button
+            *ngIf="vm.allowReturnForAmends"
+            (click)="sendReturnForAmends()"
+            govukButton
+            title="Return for amendments"
+            type="button">
+            Return for amendments
+          </button>
+        </div>
+
+        <div class="govuk-button-group">
+          <button *ngIf="vm.allowCompleteReview" (click)="completeReview()" govukButton title="Complete" type="button">
+            Complete
+          </button>
+
+          <button
+            *ngIf="vm.allowNotify"
+            (click)="notifyOperator()"
+            govukButton
+            title="Notify operator of decision"
+            type="button">
+            Notify operator of decision
+          </button>
+
+          <button
+            *ngIf="vm.allowSendForPeerReview"
+            (click)="sendForPeerReview()"
+            govukButton
+            title="Send for peer review"
+            type="button">
+            Send for peer review
+          </button>
+        </div>
+      }
+
+      @case ('ALR_APPLICATION_PEER_REVIEW') {
+        <div class="govuk-button-group">
+          <button
+            *ngIf="vm.allowPeerReviewDecision"
+            (click)="peerReviewDecision()"
+            govukButton
+            title="Peer review decision"
+            type="button">
+            Peer review decision
+          </button>
+        </div>
+      }
+    }
+    <h2 class="govuk-heading-m govuk-!-margin-0">Activity level report details</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectDetailsLink"
+        linkText="Activity level report details"
+        [status]="vm.detailsSectionStatus"></li>
+    </ul>
+
+    <h2 class="govuk-heading-m govuk-!-margin-0">Verification opinion statement</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectOpinionStatementLink"
+        linkText="Activity level report verification opinion statement"
+        [status]="vm.opinionStatementSectionStatus"></li>
+
+      <li
+        app-task-item
+        [link]="vm.redirectOverallDecisionLink"
+        linkText="Overall decision"
+        [status]="vm.overallDecisionSectionStatus"></li>
+    </ul>
+
+    <h2 class="govuk-heading-m govuk-!-margin-0">Provide your determination</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectAlcLink"
+        linkText="Provide information about this activity level change"
+        [status]="vm.informationSectionStatus"
+        [hasContent]="true"></li>
+
+      <li
+        app-task-item
+        [link]="vm.redirectDeterminationLink"
+        linkText="Provide determination of activity level"
+        [status]="vm.determinationSectionStatus"
+        [hasContent]="true"></li>
+    </ul>
+  </ng-template>
+</ng-container>

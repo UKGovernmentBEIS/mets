@@ -60,6 +60,11 @@ public class NonComplianceSubmitApplicationActionHandler implements RequestTaskA
         final NonComplianceRequestPayload requestPayload = (NonComplianceRequestPayload) request.getPayload();
         requestPayload.setIssueNoticeOfIntent(Boolean.TRUE.equals(noticeOfIntent));
 
+        requestPayload.setReason(taskPayload.getReason());
+        requestPayload.setNonComplianceDate(taskPayload.getNonComplianceDate());
+        requestPayload.setComplianceDate(taskPayload.getComplianceDate());
+        requestPayload.setComments(taskPayload.getComments());
+
         requestService.addActionToRequest(
             request,
             actionPayload,

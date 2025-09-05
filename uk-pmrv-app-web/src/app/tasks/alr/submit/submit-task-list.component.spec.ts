@@ -1,10 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
+import { CapitalizeFirstPipe } from '@shared/pipes/capitalize-first.pipe';
 import { alrSubmitMockState } from '@tasks/alr/test/mock';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { BasePage } from '@testing';
 
+import { AlrService } from '../core';
 import { AlrTaskListComponent } from './submit-task-list.component';
 
 describe('TaskListComponent', () => {
@@ -28,7 +30,7 @@ describe('TaskListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AlrTaskListComponent],
-      providers: [provideRouter([])],
+      providers: [provideRouter([]), AlrService, CapitalizeFirstPipe],
     }).compileComponents();
 
     store = TestBed.inject(CommonTasksStore);

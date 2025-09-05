@@ -5,13 +5,13 @@ import { PermitContainer, RequestTaskActionProcessDTO, RequestTaskDTO } from 'pm
 export const permitTypeMap: Record<PermitContainer['permitType'], string> = {
   GHGE: 'GHGE',
   HSE: 'HSE',
-  WASTE: 'Voluntary waste',
+  WASTE: 'Waste voluntary',
 };
 
 export const permitTypeMapLowercase: Record<PermitContainer['permitType'], string> = {
   GHGE: 'GHGE',
   HSE: 'HSE',
-  WASTE: 'voluntary waste',
+  WASTE: 'waste voluntary',
 };
 
 export const notifyOperatorRequestTaskActionTypes: Array<RequestTaskActionProcessDTO['requestTaskActionType']> = [

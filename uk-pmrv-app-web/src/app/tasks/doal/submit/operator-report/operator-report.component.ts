@@ -27,7 +27,7 @@ export class OperatorReportComponent {
     if (!this.form.dirty) {
       this.router.navigate(['summary'], { relativeTo: this.route });
     } else {
-      const documentUuid = this.form.controls.document.value.uuid;
+      const documentUuid = this.form.controls?.document?.value?.uuid;
       this.doalService
         .saveDoal(
           {
@@ -38,7 +38,7 @@ export class OperatorReportComponent {
           },
           'operatorActivityLevelReport',
           false,
-          { [documentUuid]: this.form.controls.document.value.file.name },
+          documentUuid ? { [documentUuid]: this.form.controls.document.value.file.name } : {},
         )
         .pipe(this.pendingRequest.trackRequest())
         .subscribe(() => this.router.navigate(['summary'], { relativeTo: this.route }));

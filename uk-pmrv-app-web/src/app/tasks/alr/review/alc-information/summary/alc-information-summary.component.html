@@ -1,0 +1,11 @@
+<app-alr-task-common returnLink="../../" [breadcrumb]="true">
+  <app-page-heading caption="Provide information about this activity level change">Check your answers</app-page-heading>
+  <app-alr-alc-information-summary-template
+    *ngIf="alc$ | async as alc"
+    [data]="alc"
+    [editable]="editable$ | async"></app-alr-alc-information-summary-template>
+
+  <div class="govuk-button-group" *ngIf="editable$ | async">
+    <button (click)="onSubmit()" appPendingButton govukButton type="button">Continue</button>
+  </div>
+</app-alr-task-common>

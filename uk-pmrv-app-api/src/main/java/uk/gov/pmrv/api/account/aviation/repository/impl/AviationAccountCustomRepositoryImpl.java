@@ -98,7 +98,7 @@ public class AviationAccountCustomRepositoryImpl implements AviationAccountCusto
 
         if (!forCount) {
             query.setParameter("limit", searchCriteria.getPaging().getPageSize());
-            query.setParameter("offset", searchCriteria.getPaging().getPageNumber() * searchCriteria.getPaging().getPageSize());
+            query.setParameter("offset", (long) searchCriteria.getPaging().getPageNumber() * searchCriteria.getPaging().getPageSize());
         }
 
         return query;

@@ -803,6 +803,13 @@ describe('ItemActionHeaderPipe', () => {
     expect(
       pipe.transform({
         ...baseRequestAction,
+        type: 'NON_COMPLIANCE_DETAILS_AMENDED',
+      }),
+    ).toEqual('Details of the breach updated by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
         type: 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED',
       }),
     ).toEqual('Initial penalty notice sent to operator by John Bolt');
@@ -1435,5 +1442,161 @@ describe('ItemActionHeaderPipe', () => {
         type: 'ALR_RECALLED_FROM_VERIFICATION',
       }),
     ).toEqual('Activity level report recalled by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_SENT_TO_REGULATOR',
+      }),
+    ).toEqual('Activity level report submitted to regulator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS',
+      }),
+    ).toEqual('Activity level report returned to operator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_PROCEEDED_TO_AUTHORITY',
+      }),
+    ).toEqual('Activity level determination sent to UK Authority by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_CLOSED',
+      }),
+    ).toEqual('Activity level determination closed by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_AMENDS_SUBMITTED',
+      }),
+    ).toEqual('Activity level report submitted to regulator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER',
+      }),
+    ).toEqual('Activity level report submitted to verifier by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_PEER_REVIEW_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_PEER_REVIEW_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_ACCEPTED',
+      }),
+    ).toEqual('Activity level determination accepted as approved by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS',
+      }),
+    ).toEqual('Activity level determination accepted as approved with corrections by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'ALR_APPLICATION_REJECTED',
+      }),
+    ).toEqual('Activity level determination accepted as not approved by John Bolt');
+  });
+
+  it('should return HSE', () => {
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'HSE_TI_APPLICATION_SENT_TO_REGULATOR',
+      }),
+    ).toEqual('HSE target increase application submitted to regulator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'HSE_TI_APPLICATION_CANCELLED',
+      }),
+    ).toEqual('HSE target increase application cancelled by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS',
+      }),
+    ).toEqual('HSE target increase application returned to operator by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'HSE_TI_APPROVED',
+      }),
+    ).toEqual('HSE target increase application approved by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'HSE_TI_REJECTED',
+      }),
+    ).toEqual('HSE target increase application rejected by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'HSE_TI_DEEMED_WITHDRAWN',
+      }),
+    ).toEqual('HSE target increase application deemed withdrawn by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'HSE_TI_WITHDRAWN',
+      }),
+    ).toEqual('HSE target increase application withdrawn by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED',
+      }),
+    ).toEqual('Peer review requested by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED',
+      }),
+    ).toEqual('Peer review agreement submitted by John Bolt');
+
+    expect(
+      pipe.transform({
+        ...baseRequestAction,
+        type: 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED',
+      }),
+    ).toEqual('Peer review disagreement submitted by John Bolt');
   });
 });

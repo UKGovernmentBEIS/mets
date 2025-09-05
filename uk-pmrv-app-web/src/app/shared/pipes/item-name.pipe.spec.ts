@@ -562,7 +562,6 @@ describe('ItemNamePipe', () => {
       'Verify 2022 baseline data report',
     );
     expect(pipe.transform('BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT', 2022)).toEqual('Review 2022 baseline data report');
-    expect(pipe.transform('BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT', 2022)).toEqual('Review 2022 baseline data report');
     expect(pipe.transform('BDR_APPLICATION_PEER_REVIEW', 2025)).toEqual('Peer review 2025 baseline data report');
     expect(pipe.transform('BDR_WAIT_FOR_PEER_REVIEW', 2025)).toEqual('2025 baseline data report sent to peer reviewer');
     expect(pipe.transform('BDR_APPLICATION_AMENDS_SUBMIT', 2022)).toEqual('Amend 2022 baseline data report');
@@ -584,7 +583,57 @@ describe('ItemNamePipe', () => {
 
     expect(pipe.transform('ALR_APPLICATION_SUBMIT', 2022)).toEqual('Complete 2022 activity level report');
     expect(pipe.transform('ALR_WAIT_FOR_VERIFICATION', 2022)).toEqual('2022 activity level report sent to verifier');
+    expect(pipe.transform('ALR_AMEND_WAIT_FOR_VERIFICATION', 2022)).toEqual(
+      '2022 activity level report sent to verifier',
+    );
     expect(pipe.transform('ALR_APPLICATION_VERIFICATION_SUBMIT', 2022)).toEqual('Verify 2022 activity level report');
+    expect(pipe.transform('ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT', 2022)).toEqual(
+      'Verify 2022 activity level report',
+    );
+    expect(pipe.transform('ALR_WAIT_FOR_REGULATOR_REVIEW', 2022)).toEqual(
+      '2022 activity level report sent to regulator',
+    );
+    expect(pipe.transform('ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT', 2022)).toEqual(
+      'Review 2022 activity level report',
+    );
+    expect(pipe.transform('ALR_WAIT_FOR_AMENDS')).toEqual('Activity level report returned to operator');
+    expect(pipe.transform('ALR_WAIT_FOR_AUTHORITY_REVIEW')).toEqual(
+      'Activity level report review completed by your Regulator',
+    );
+    expect(pipe.transform('ALR_AUTHORITY_RESPONSE_SUBMIT')).toEqual(
+      'Provide UK ETS Authority response for activity level change',
+    );
+    expect(pipe.transform('ALR_APPLICATION_AMENDS_SUBMIT', 2022)).toEqual('Amend 2022 activity level report');
+    expect(pipe.transform('ALR_WAIT_FOR_PEER_REVIEW', 2022)).toEqual(
+      '2022 activity level report sent to peer reviewer',
+    );
+    expect(pipe.transform('ALR_APPLICATION_PEER_REVIEW', 2022)).toEqual('Peer review 2022 activity level report');
+
+    expect(pipe.transform('HSE_TI_APPLICATION_SUBMIT', '2021_2025')).toEqual(
+      'Complete 2021-2025 HSE target increase application',
+    );
+    expect(pipe.transform('HSE_TI_WAIT_FOR_REGULATOR_REVIEW', '2021_2025')).toEqual(
+      '2021-2025 HSE target increase application sent to regulator',
+    );
+    expect(pipe.transform('HSE_TI_WAIT_FOR_AMENDS', '2021_2025')).toEqual(
+      '2021-2025 HSE target increase application returned to operator',
+    );
+    expect(pipe.transform('HSE_TI_APPLICATION_AMENDS_SUBMIT', '2021_2025')).toEqual(
+      'Amend 2021-2025 HSE target increase application',
+    );
+
+    expect(pipe.transform('HSE_TI_MAKE_PAYMENT', '2021_2025')).toEqual(
+      'Pay for 2021-2025 HSE target increase application',
+    );
+    expect(pipe.transform('HSE_TI_CONFIRM_PAYMENT', '2021_2025')).toEqual(
+      'Track payment for 2021-2025 HSE target increase application',
+    );
+    expect(pipe.transform('HSE_TI_WAIT_FOR_PEER_REVIEW', '2021_2025')).toEqual(
+      '2021-2025 HSE target increase sent to peer reviewer',
+    );
+    expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW', '2021_2025')).toEqual(
+      'Peer review 2021-2025 HSE target increase application',
+    );
 
     expect(pipe.transform(null)).toBeNull();
   });

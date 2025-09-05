@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.mireport.accountuserscontacts.AccountUserContact;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Data
@@ -19,10 +17,13 @@ import java.util.List;
 @AllArgsConstructor
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
-@JsonPropertyOrder({"userId", "accountType", "accountId", "accountName", "accountStatus", "permitId", "permitType", "legalEntityName", "primaryContact", "secondaryContact", "financialContact", "serviceContact", "authorityStatus", "name", "telephone", "lastLogon", "email", "role", "crcoCode"})
+@JsonPropertyOrder({"userId", "accountType", "scheme", "accountId", "accountName", "accountStatus", "permitId", "permitType", "legalEntityName", "primaryContact", "secondaryContact", "financialContact", "serviceContact", "authorityStatus", "name", "telephone", "lastLogon", "email", "role", "crcoCode"})
 public class AviationAccountUserContact extends AccountUserContact {
     @JsonProperty(value = "Account type")
     private String accountType;
+
+    @JsonProperty(value = "Scheme")
+    private String scheme;
 
     @JsonProperty(value = "Permit ID")
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -48,6 +49,6 @@ public class AviationAccountUserContact extends AccountUserContact {
     private String crcoCode;
 
     public static List<String> getColumnNames() {
-        return List.of("Account type", "Account ID", "Account name", "Account status", "Permit ID", "Permit type/Account category", "Legal Entity name", "Is User Primary contact?", "Is User Secondary contact?", "Is User Financial contact?", "Is User Service contact?", "User status", "Name", "Telephone", "Last logon", "Email", "User role", "CRCO code");
+        return List.of("Account type", "Scheme","Account ID", "Account name", "Account status", "Permit ID", "Permit type/Account category", "Legal Entity name", "Is User Primary contact?", "Is User Secondary contact?", "Is User Financial contact?", "Is User Service contact?", "User status", "Name", "Telephone", "Last logon", "Email", "User role", "CRCO code");
     }
 }

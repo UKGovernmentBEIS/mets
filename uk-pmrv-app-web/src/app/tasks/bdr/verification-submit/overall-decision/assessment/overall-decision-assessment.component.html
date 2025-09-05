@@ -1,6 +1,9 @@
-<app-bdr-task-review [breadcrumb]="true" heading="What is your assessment of this report?" caption="Overall decision">
+<app-bdr-task-review [breadcrumb]="true">
+  <span [class]="'govuk-caption-l'">Overall decision</span>
   <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()">
-    <div formControlName="type" govuk-radio>
+    <div formControlName="type" govuk-radio legendSize="heading">
+      <h1 govukLegend>What is your assessment of this report?</h1>
+
       <govuk-radio-option
         [label]="'VERIFIED_AS_SATISFACTORY' | verificationDecisionType"
         [value]="'VERIFIED_AS_SATISFACTORY'"></govuk-radio-option>

@@ -25,9 +25,9 @@ describe('AlrTaskReviewComponent', () => {
 
   @Component({
     template: `
-      <app-alr-task-review [breadcrumb]="true" heading="Verify activity level report">
+      <app-alr-task-common [breadcrumb]="true" heading="Verify activity level report">
         <h2 class="govuk-heading-m">Activity level report</h2>
-      </app-alr-task-review>
+      </app-alr-task-common>
     `,
   })
   class TestComponent {}

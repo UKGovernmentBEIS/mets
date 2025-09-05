@@ -136,7 +136,8 @@ public class ALRApplicationVerificationInitializerTest {
     void getRequestTaskTypes() {
         assertEquals(
                 Set.of(
-                        RequestTaskType.ALR_APPLICATION_VERIFICATION_SUBMIT),
+                        RequestTaskType.ALR_APPLICATION_VERIFICATION_SUBMIT,
+                        RequestTaskType.ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT),
                 initializer.getRequestTaskTypes()
         );
     }

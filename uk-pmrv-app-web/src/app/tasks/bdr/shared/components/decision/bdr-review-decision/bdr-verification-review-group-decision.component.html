@@ -1,9 +1,12 @@
 <ng-container *ngIf="(isEditable$ | async) && ((canEdit$ | async) || isOnEditState); else viewDecision">
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
-    <h2 class="govuk-heading-m">What is your decision for the information submitted?</h2>
 
-    <div formControlName="decision" govuk-radio>
+    <div
+      formControlName="decision"
+      govuk-radio
+      legend="What is your decision for the information submitted?"
+      legendSize="medium">
       <govuk-radio-option value="ACCEPTED" label="Accepted"></govuk-radio-option>
     </div>
 
@@ -29,7 +32,6 @@
     *ngIf="decisionData$ | async as decisionData"
     govuk-summary-list
     class="govuk-summary-list--no-border summary-list--edge-border">
-
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Decision status</dt>
       <dd govukSummaryListRowValue>{{ decisionData.type | reviewGroupDecision }}</dd>

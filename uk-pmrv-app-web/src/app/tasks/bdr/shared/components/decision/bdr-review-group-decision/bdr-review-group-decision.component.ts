@@ -18,7 +18,6 @@ import { PendingRequestService } from '@core/guards/pending-request.service';
 import { PendingRequest } from '@core/interfaces/pending-request.interface';
 import { RequestTaskFileService } from '@shared/services/request-task-file-service/request-task-file.service';
 import { SharedModule } from '@shared/shared.module';
-import { ReviewBdrGroupDecisionPipe } from '@tasks/bdr/shared/pipes';
 import { BdrService } from '@tasks/bdr/shared/services';
 import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
@@ -36,7 +35,7 @@ import { createAnotherRequiredChange } from './bdr-review-group-decision-form.ut
   templateUrl: './bdr-review-group-decision.component.html',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [SharedModule, ReviewBdrGroupDecisionPipe, TaskSharedModule],
+  imports: [SharedModule, TaskSharedModule],
   providers: [bdrReviewGroupDecisionFormProvider],
 })
 export class BdrReviewGroupDecisionComponent implements OnInit, PendingRequest {

@@ -3,22 +3,19 @@
     (formSubmit)="onSubmit()"
     [formGroup]="form"
     heading="Upload Operator Activity level report"
-    submitText="Save and continue"
-  >
+    submitText="Save and continue">
     <app-file-input
       [downloadUrl]="getDownloadUrl"
       formControlName="document"
-      label="Upload a file"
-      listTitle="File added"
-    ></app-file-input>
+      label="Upload a file (optional)"
+      listTitle="File added"></app-file-input>
 
     <div
       formControlName="areActivityLevelsEstimated"
       govuk-radio
       legend="Has the regulator estimated activity levels?"
       legendSize="medium"
-      class="govuk-body govuk-!-width-two-thirds"
-    >
+      class="govuk-body govuk-!-width-two-thirds">
       <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
       <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
     </div>

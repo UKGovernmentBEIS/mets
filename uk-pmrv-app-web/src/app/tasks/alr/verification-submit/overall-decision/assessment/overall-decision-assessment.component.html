@@ -1,4 +1,4 @@
-<app-alr-task-review [breadcrumb]="true" heading="What is your assessment of this report?" caption="Overall decision">
+<app-alr-task-common [breadcrumb]="true" heading="What is your assessment of this report?" caption="Overall decision">
   <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" [hideSubmit]="!isEditable()">
     <div formControlName="type" govuk-radio>
       <govuk-radio-option
@@ -22,4 +22,4 @@
       </govuk-radio-option>
     </div>
   </app-wizard-step>
-</app-alr-task-review>
+</app-alr-task-common>

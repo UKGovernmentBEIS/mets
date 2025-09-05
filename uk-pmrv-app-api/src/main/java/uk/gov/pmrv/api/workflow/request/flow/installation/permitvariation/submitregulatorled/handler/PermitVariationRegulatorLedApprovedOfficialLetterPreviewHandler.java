@@ -74,7 +74,8 @@ public class PermitVariationRegulatorLedApprovedOfficialLetterPreviewHandler ext
 
     @Override
     protected List<RequestTaskType> getTaskTypes() {
-        return List.of(RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT);
+        return List.of(RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT,
+                RequestTaskType.PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW);
     }
     
     private Map<String, Object> constructParams(final PermitVariationApplicationSubmitRegulatorLedRequestTaskPayload taskPayload,

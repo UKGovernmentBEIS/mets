@@ -3,8 +3,9 @@
     <div class="govuk-grid-column-full">
       <govuk-notification-banner *ngIf="account.emitterType === 'WASTE' && (userRoleType$ | async) === 'OPERATOR'">
         <p class="govuk-body" id="waste-monitoring-notice">
-          During the voluntary waste monitoring, reporting and verification period, the METS service will reflect the
-          full ETS scheme, so some references and data requests may not be relevant to waste operators. Contact your
+          The METS service supports the UK ETS and refers to the legislation for and requirements of the scheme. During
+          the Waste Activities Voluntary Scheme for Greenhouse Gas Emissions, waste operators may use METS but
+          legislative references, certain terminology and certain data requests are not relevant to them. Contact your
           regulator for further information on how to participate.
         </p>
       </govuk-notification-banner>

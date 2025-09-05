@@ -4,5 +4,10 @@
   <app-page-heading *ngIf="heading" [caption]="caption">{{ heading }}</app-page-heading>
 
   <ng-content></ng-content>
-  <button appPendingButton govukButton type="submit" *ngIf="!hideSubmit">{{ submitText }}</button>
+  <div class="govuk-button-group">
+    <button appPendingButton govukButton type="submit" *ngIf="!hideSubmit">{{ submitText }}</button>
+    @if (cancelLink) {
+      <a [routerLink]="cancelLink" govukLink>Cancel</a>
+    }
+  </div>
 </form>

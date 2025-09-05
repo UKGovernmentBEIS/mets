@@ -147,6 +147,10 @@ const routes: Routes = [
         loadChildren: () => import('./alr/alr.module').then((m) => m.AlrModule),
       },
       {
+        path: 'hseti',
+        loadChildren: () => import('./hseti/hseti.module').then((m) => m.HseTiModule),
+      },
+      {
         path: 'cancel',
         loadChildren: () => import('../cancel-task/cancel-task.module').then((m) => m.CancelTaskModule),
       },

@@ -1,0 +1,64 @@
+<h2 class="govuk-heading-m">Decision details</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Were conservative estimates made to determine the activity level?</dt>
+    <dd govukSummaryListRowValue>
+      {{ data.conservativeDeterminesActivity ? 'Yes' : 'No' }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'estimates']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="data.conservativeDeterminesActivityComment">
+    <dt govukSummaryListRowKey>Explain why the estimate was made</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ data.conservativeDeterminesActivityComment }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'estimates']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="data?.ukEtsAuthorityComments">
+    <dt govukSummaryListRowKey>Comments</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      {{ data.ukEtsAuthorityComments }}
+    </dd>
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'comments']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>
+
+<app-activity-level-list-template
+  [data]="$any(data)?.historicalActivityLevels ?? []"
+  [historical]="true"
+  [editable]="false"
+  heading="History of activity level changes"></app-activity-level-list-template>
+
+<dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey><h2 class="govuk-heading-m">New activity level changes</h2></dt>
+
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'activity-levels']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>
+<app-activity-level-list-template
+  [data]="data?.activityLevels ?? []"
+  [historical]="false"
+  [editable]="false"></app-activity-level-list-template>
+
+<dl govuk-summary-list [hasBorders]="false" class="govuk-!-margin-bottom-0">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey><h2 class="govuk-heading-m">Allocation for each sub-installation details</h2></dt>
+
+    <dd govukSummaryListRowActions *ngIf="editable">
+      <a govukLink [routerLink]="['..', 'preliminary-allocations']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>
+
+<app-alr-allocation-list-template [data]="data.allocations ?? []" [editable]="false"></app-alr-allocation-list-template>

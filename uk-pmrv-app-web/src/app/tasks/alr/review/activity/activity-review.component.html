@@ -1,0 +1,11 @@
+<app-alr-task-common
+  [breadcrumb]="true"
+  heading="Review the activity level report and details"
+  caption="Activity level report details">
+  <app-alr-activity-summary-template
+    [isEditable]="false"
+    [alrFile]="alrFile()"
+    [files]="files()"></app-alr-activity-summary-template>
+
+  <app-alr-review-group-decision (notification)="notification = $event"></app-alr-review-group-decision>
+</app-alr-task-common>

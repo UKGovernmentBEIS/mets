@@ -13,6 +13,7 @@ import { AviationAerCorsia3YearPeriodCreateActionPayload } from './aviationAerCo
 import { AviationAerCorsiaAnnualOffsettingCreateActionPayload } from './aviationAerCorsiaAnnualOffsettingCreateActionPayload';
 import { BatchReissueRequestCreateActionPayload } from './batchReissueRequestCreateActionPayload';
 import { DoalRequestCreateActionPayload } from './doalRequestCreateActionPayload';
+import { HSETIRequestCreateActionPayload } from './hSETIRequestCreateActionPayload';
 import { InstallationAccountOpeningSubmitApplicationCreateActionPayload } from './installationAccountOpeningSubmitApplicationCreateActionPayload';
 import { InstallationAuditRequestCreateActionPayload } from './installationAuditRequestCreateActionPayload';
 import { ReportRelatedRequestCreateActionPayload } from './reportRelatedRequestCreateActionPayload';
@@ -40,6 +41,7 @@ export interface RequestCreateActionProcessDTO {
     | 'WITHHOLDING_OF_ALLOWANCES'
     | 'RETURN_OF_ALLOWANCES'
     | 'AIR'
+    | 'HSE_TI'
     | 'BDR'
     | 'PERMANENT_CESSATION'
     | 'ALR'
@@ -57,6 +59,7 @@ export interface RequestCreateActionProcessDTO {
     | AviationAerCorsiaAnnualOffsettingCreateActionPayload
     | BatchReissueRequestCreateActionPayload
     | DoalRequestCreateActionPayload
+    | HSETIRequestCreateActionPayload
     | InstallationAccountOpeningSubmitApplicationCreateActionPayload
     | InstallationAuditRequestCreateActionPayload
     | ReportRelatedRequestCreateActionPayload

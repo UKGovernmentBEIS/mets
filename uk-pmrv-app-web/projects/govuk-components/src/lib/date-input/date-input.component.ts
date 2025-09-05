@@ -12,6 +12,7 @@ import {
 import { BehaviorSubject, combineLatest, filter, takeUntil } from 'rxjs';
 
 import { GovukValidators } from '../error-message/govuk-validators';
+import { LegendSizeType } from '../fieldset';
 import { FormService } from '../form/form.service';
 import { FormInput } from '../form/form-input';
 import { DateInputValidators } from './date-input.validators';
@@ -24,6 +25,7 @@ import { DateInputValidators } from './date-input.validators';
 })
 export class DateInputComponent extends FormInput implements ControlValueAccessor, OnInit, DoCheck, OnDestroy {
   @Input() label: string;
+  @Input() size?: LegendSizeType;
   @Input() hint: string;
   @Input() min: Date;
   @Input() max: Date;

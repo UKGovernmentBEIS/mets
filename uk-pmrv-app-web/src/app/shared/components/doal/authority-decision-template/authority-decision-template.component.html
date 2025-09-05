@@ -24,7 +24,7 @@
   <div *ngIf="documents?.length > 0" govukSummaryListRow>
     <dt govukSummaryListRowKey>Uploaded files</dt>
     <dd govukSummaryListRowValue>
-      <app-summary-download-files [files]="documents"> </app-summary-download-files>
+      <app-summary-download-files [files]="documents"></app-summary-download-files>
     </dd>
     <dd govukSummaryListRowActions *ngIf="editable">
       <a govukLink [routerLink]="['../approved-allocations']" [state]="{ changing: true }">Change</a>
@@ -35,17 +35,14 @@
   <h2
     app-summary-header
     class="govuk-heading-m"
-    [changeRoute]="editable === true ? ['../preliminary-allocations'] : null"
-  >
+    [changeRoute]="editable === true ? ['../preliminary-allocations'] : null">
     Provide authority approved allocation for each sub-installation
   </h2>
   <app-doal-preliminary-allocation-list-template
     [data]="data.preliminaryAllocations"
-    [editable]="false"
-  ></app-doal-preliminary-allocation-list-template>
+    [editable]="false"></app-doal-preliminary-allocation-list-template>
 
   <h2 class="govuk-heading-m">Authority approved allocations</h2>
-  <app-doal-total-preliminary-allocation-list-template
-    [data]="data.preliminaryAllocations"
-  ></app-doal-total-preliminary-allocation-list-template>
+  <app-total-preliminary-allocation-list-template
+    [data]="data.preliminaryAllocations"></app-total-preliminary-allocation-list-template>
 </ng-container>

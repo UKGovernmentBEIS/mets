@@ -80,7 +80,6 @@ import { ReviewGroupStatusWrapperPipe } from './pipes/review-group-status-wrappe
 import { SamplingFrequencyPipe } from './pipes/sampling-frequency.pipe';
 import { SourceStreamCategoryNamePipe } from './pipes/source-stream-category-name.pipe';
 import { SpecialProductsBasisDescriptionPipe } from './pipes/special-products-basis-description.pipe';
-import { SubInstallationTypePipe } from './pipes/sub-installation-type.pipe';
 import { TaskPipe } from './pipes/task.pipe';
 import { TaskProcedureFormPipe } from './pipes/task-procedure-form.pipe';
 import { TaskProcedureOptionalFormPipe } from './pipes/task-procedure-optional-form.pipe';
@@ -128,7 +127,6 @@ const declarations = [
   SamplingFrequencyPipe,
   MeasurementDevicesLabelPipe,
   TransferredCo2PipelineSummaryTemplateComponent,
-
   JustificationComponent,
   EmissionsComponent,
   PermitsSummaryTemplateComponent,
@@ -145,7 +143,6 @@ const declarations = [
   ConnectionFlowDirectionTypePipe,
   SiteDiagramSummaryTemplateComponent,
   ConnectionListSummaryTemplateComponent,
-
   InherentSummaryTemplateComponent,
   IsDataFlowActivitiesPipe,
   IsRiskAssessmentPipe,
@@ -178,7 +175,6 @@ const declarations = [
   ReviewSectionsComponent,
   ReviewGroupStatusWrapperPipe,
   ReviewGroupDecisionComponent,
-  SubInstallationTypePipe,
   AnnualQuantityDeterminationMethodPipe,
   NotFollowingHierarchicalOrderReasonPipe,
   MeasurableHeatLabelPipe,

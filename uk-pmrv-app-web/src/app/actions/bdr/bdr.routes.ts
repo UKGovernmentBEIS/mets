@@ -5,10 +5,10 @@ import {
   BdrOpinionStatementSubmittedComponent,
   BdrOverallDecisionSubmittedComponent,
   BdrPeerReviewDecisionComponent,
+  BdrReturnedForAmendsComponent,
   BdrReturnedToOperatorComponent,
   BdrSubmittedComponent,
   OutcomeCompletedComponent,
-  ReturnedForAmendsComponent,
 } from '.';
 
 export const BDR_ACTION_ROUTES: Routes = [
@@ -55,7 +55,7 @@ export const BDR_ACTION_ROUTES: Routes = [
   {
     path: 'return-for-amends',
     data: { pageTitle: 'Baseline data report returned for amends' },
-    component: ReturnedForAmendsComponent,
+    component: BdrReturnedForAmendsComponent,
   },
   {
     path: 'peer-review-decision',

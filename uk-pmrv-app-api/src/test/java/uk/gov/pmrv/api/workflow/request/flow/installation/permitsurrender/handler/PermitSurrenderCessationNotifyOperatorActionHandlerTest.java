@@ -49,7 +49,7 @@ class PermitSurrenderCessationNotifyOperatorActionHandlerTest {
             .type(RequestType.PERMIT_SURRENDER)
             .payload(PermitSurrenderRequestPayload.builder()
                 .payloadType(RequestPayloadType.PERMIT_SURRENDER_REQUEST_PAYLOAD)
-                .regulatorReviewer("regulatorReviewer")
+                .regulatorReviewer("regulatorReviewer").regulatorAssignee("regulatorAssignee")
                 .build())
             .build();
         NotifyOperatorForDecisionRequestTaskActionPayload taskActionPayload = NotifyOperatorForDecisionRequestTaskActionPayload.builder()

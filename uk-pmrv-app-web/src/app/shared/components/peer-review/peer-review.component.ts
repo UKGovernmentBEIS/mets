@@ -40,10 +40,10 @@ import { requestTaskReassignedError, taskNotFoundError } from '../../errors/requ
 import { UserFullNamePipe } from '../../pipes/user-full-name.pipe';
 import { resolveRequestType } from '../../store-resolver/request-type.resolver';
 import { StoreContextResolver } from '../../store-resolver/store-context.resolver';
-import { referenceNoTextResolver } from './peer-review.utils';
 import { PEER_REVIEW_FORM, peerReviewFormFactory } from './peer-review-form.provider';
 import {
   resolvePeerReviewTaskType,
+  resolveReferenceCodeText,
   resolveRequestTaskActionPayloadType,
   resolveRequestTaskActionType,
   resolveReturnToText,
@@ -136,7 +136,7 @@ export class PeerReviewComponent implements OnInit {
       .pipe(
         take(1),
         tap((requestTaskType) => {
-          this.referenceNoText = referenceNoTextResolver(requestTaskType);
+          this.referenceNoText = resolveReferenceCodeText(requestTaskType);
         }),
         withLatestFrom(this.breadcrumbs$),
         map(([requestTaskType, breadcrumbs]) => {

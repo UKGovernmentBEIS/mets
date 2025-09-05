@@ -84,7 +84,7 @@ describe('SendReportComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display right content for operator side', () => {
+  it('should display right content for operator side, send to verifier', () => {
     expect(page.confirmationComponent).toBeFalsy();
     expect(page.heading).toEqual('Send report for verification');
     expect(page.paragraphsContent).toEqual([
@@ -93,7 +93,7 @@ describe('SendReportComponent', () => {
     ]);
   });
 
-  it('should submit for operator side', () => {
+  it('should submit for operator side, send to verifier', () => {
     tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
 
     expect(page.confirmationComponent).toBeFalsy();
@@ -110,6 +110,50 @@ describe('SendReportComponent', () => {
     });
     expect(page.confirmationComponent).toBeTruthy();
     expect(page.confirmationPanelHeading).toEqual('Sent to verifier for review');
+    expect(page.confirmationWhatHappensNextTemplate).toBeFalsy();
+  });
+
+  it('should display right content for operator side, send to regulator', () => {
+    store.setState(
+      mockAlrStateBuild({
+        alrSectionsCompleted: { activity: false },
+        verificationPerformed: true,
+      }),
+    );
+    fixture.autoDetectChanges();
+
+    expect(page.confirmationComponent).toBeFalsy();
+    expect(page.heading).toEqual('Send to regulator');
+    expect(page.paragraphsContent).toEqual([
+      'Your report will be sent directly to your regulator (Environment Agency).',
+      'By selecting ‘Confirm and send’ you confirm that the information is correct to the best of your knowledge.',
+    ]);
+  });
+
+  it('should submit for operator side, send to regulator', () => {
+    tasksService.processRequestTaskAction.mockReturnValueOnce(of({}));
+    store.setState(
+      mockAlrStateBuild({
+        alrSectionsCompleted: { activity: false },
+        verificationPerformed: true,
+      }),
+    );
+    fixture.autoDetectChanges();
+
+    expect(page.confirmationComponent).toBeFalsy();
+
+    page.submitButton.click();
+    fixture.detectChanges();
+
+    expect(tasksService.processRequestTaskAction).toHaveBeenCalledWith({
+      requestTaskActionType: 'ALR_SUBMIT_TO_REGULATOR',
+      requestTaskId: alrSubmitMockState.requestTaskItem.requestTask.id,
+      requestTaskActionPayload: {
+        payloadType: 'EMPTY_PAYLOAD',
+      },
+    });
+    expect(page.confirmationComponent).toBeTruthy();
+    expect(page.confirmationPanelHeading).toEqual('Sent to regulator for review');
     expect(page.confirmationWhatHappensNextTemplate).toBeFalsy();
   });
 

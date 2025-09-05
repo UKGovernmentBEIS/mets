@@ -10,7 +10,6 @@ import {
 export function isOperatorActivityLevelReportPopulated(operatorActivityLevelReport: OperatorActivityLevelReport) {
   return (
     operatorActivityLevelReport !== undefined &&
-    !!operatorActivityLevelReport.document &&
     operatorActivityLevelReport.areActivityLevelsEstimated !== undefined &&
     !!operatorActivityLevelReport.comment
   );
@@ -20,9 +19,7 @@ export function isVerificationActivityLevelReportPopulated(
   verificationReportOfTheActivityLevelReport: VerificationReportOfTheActivityLevelReport,
 ) {
   return (
-    verificationReportOfTheActivityLevelReport !== undefined &&
-    !!verificationReportOfTheActivityLevelReport.document &&
-    !!verificationReportOfTheActivityLevelReport.comment
+    verificationReportOfTheActivityLevelReport !== undefined && !!verificationReportOfTheActivityLevelReport.comment
   );
 }
 

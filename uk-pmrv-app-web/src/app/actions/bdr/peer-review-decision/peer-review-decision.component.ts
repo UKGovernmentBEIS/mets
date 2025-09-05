@@ -1,3 +1,4 @@
+import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -5,7 +6,6 @@ import { map } from 'rxjs';
 
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
 import { CommonActionsStore } from '@actions/store/common-actions.store';
-import { SharedModule } from '@shared/shared.module';
 
 import { PeerReviewDecisionSubmittedRequestActionPayload, RequestActionDTO } from 'pmrv-api';
 
@@ -13,7 +13,6 @@ import { BdrActionService } from '../core/bdr.service';
 
 interface ViewModel {
   actionType: RequestActionDTO['type'];
-  expectedActionType: Array<RequestActionDTO['type']>;
   decision: PeerReviewDecisionSubmittedRequestActionPayload['decision'];
   submitter: RequestActionDTO['submitter'];
 }
@@ -21,8 +20,15 @@ interface ViewModel {
 @Component({
   selector: 'app-action-bdr-peer-review-decision',
   standalone: true,
-  imports: [SharedModule, ActionSharedModule],
-  templateUrl: './peer-review-decision.component.html',
+  imports: [ActionSharedModule, NgIf],
+  template: `
+    <ng-container *ngIf="vm() as vm">
+      <app-peer-review-decision-template
+        [requestActionType]="vm.actionType"
+        [decision]="vm.decision"
+        [submitter]="vm.submitter"></app-peer-review-decision-template>
+    </ng-container>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrPeerReviewDecisionComponent {
@@ -33,7 +39,6 @@ export class BdrPeerReviewDecisionComponent {
 
     return {
       actionType: requestActionType,
-      expectedActionType: [requestActionType],
       decision,
       submitter,
     };

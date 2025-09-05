@@ -16,11 +16,11 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplic
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationRejectedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthorityResponseSubmittedRequestActionPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalDetermination;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.DoalDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalProceedToAuthorityDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.WithholdingAllowancesNotice;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalDeterminationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.enums.DoalDeterminationType;
 
 import java.util.HashSet;
 import java.util.List;

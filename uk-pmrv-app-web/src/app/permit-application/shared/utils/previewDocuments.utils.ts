@@ -34,6 +34,7 @@ export function getPreviewDocumentsInfo(
 ): DocumentFilenameAndDocumentType[] {
   switch (taskActionType) {
     case 'PERMIT_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED':
+    case 'PERMIT_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW':
       return [buildPreviewInfo('PERMIT_VARIATION_REGULATOR_LED_APPROVED'), buildPreviewInfo('PERMIT')];
 
     case 'PERMIT_VARIATION_NOTIFY_OPERATOR_FOR_DECISION':

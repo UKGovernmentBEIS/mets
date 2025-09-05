@@ -22,6 +22,7 @@ export interface Reports {
   isExempt?: boolean;
   hasEmissionReportNotRequired?: boolean;
   hasDoeCorsia?: boolean;
+  hasActiveDRE?: boolean;
 }
 
 export interface Inspections {

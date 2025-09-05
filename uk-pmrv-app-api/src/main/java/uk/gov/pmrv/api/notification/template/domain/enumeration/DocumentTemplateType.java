@@ -106,6 +106,15 @@ public enum DocumentTemplateType {
     INSTALLATION_ONSITE_INSPECTION_SUBMITTED,
     INSTALLATION_AUDIT_SUBMITTED,
 
+    /** ALR Preliminary Allocation Letter Final v01.doc */
+    ALR_SUBMITTED,
+    /** Notice of ALR Approval of Allocation (with corrections) Article 34H & 6a Final v01.doc */
+    ALR_ACCEPTED,
+    /** Notice of ALR Rejection of Allocation Article 34H & 6a Final v01.doc */
+    ALR_REJECTED,
+
+    HSE_TI_COMPLETED,
+
     AVIATION_DRE_SUBMITTED,
 
     AVIATION_DOE_SUBMITTED,

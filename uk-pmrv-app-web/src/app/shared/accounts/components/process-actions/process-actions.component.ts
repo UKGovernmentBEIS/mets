@@ -78,6 +78,17 @@ export class ProcessActionsComponent implements OnInit {
     },
 
     {
+      title: 'Start a new HSE target increase application',
+      properties: [
+        {
+          button: 'Start a new HSE target increase application',
+          type: 'HSE_TI',
+          errors: [],
+        },
+      ],
+    },
+
+    {
       title: 'Make a change to your emissions plan',
       properties: [
         {
@@ -295,6 +306,8 @@ export class ProcessActionsComponent implements OnInit {
       this.router.navigate(['../trigger-air'], { relativeTo: this.route }).then();
     } else if (requestType === 'DOAL') {
       this.router.navigate(['../trigger-doal'], { relativeTo: this.route }).then();
+    } else if (requestType === 'HSE_TI') {
+      this.router.navigate(['../trigger-hse'], { relativeTo: this.route }).then();
     } else if (requestType === 'INSTALLATION_AUDIT') {
       this.router.navigate(['../audit-year'], { relativeTo: this.route }).then();
     } else {
@@ -327,7 +340,12 @@ export class ProcessActionsComponent implements OnInit {
   ): string[] {
     const status = result?.accountStatus as unknown as InstallationAccountDTO['status'] | AviationAccountDTO['status'];
     const typeString = this.getTransformedRequestTypeFragment(requestType);
-    if (status && !result?.applicableAccountStatuses?.includes(status as AccountStatus)) {
+
+    if (requestType === 'HSE_TI') {
+      return [
+        'You cannot start an HSE target increase application as there is already one in progress for both allocation periods.',
+      ];
+    } else if (status && !result?.applicableAccountStatuses?.includes(status as AccountStatus)) {
       const accountStatusString = new AccountStatusPipe().transform(status)?.toUpperCase();
 
       return [`You cannot start ${typeString} while the account status is ${accountStatusString}.`];
@@ -359,7 +377,7 @@ export class ProcessActionsComponent implements OnInit {
   }
 
   private getTransformedRequestTypeFragment(requestType: RequestCreateActionProcessDTO['requestCreateActionType']) {
-    const result = workflowDetailsTypesMap[requestType].toLowerCase();
+    const result = workflowDetailsTypesMap[requestType]?.toLowerCase();
 
     return ['AIR', 'INSTALLATION_ONSITE_INSPECTION', 'INSTALLATION_AUDIT'].includes(requestType)
       ? `an ${result}`

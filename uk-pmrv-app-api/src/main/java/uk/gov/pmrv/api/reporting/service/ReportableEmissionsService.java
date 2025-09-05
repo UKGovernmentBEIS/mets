@@ -50,7 +50,7 @@ public class ReportableEmissionsService {
                 });
     }
 
-	private void emissionsUpdated(ReportableEmissionsSaveParams params) {
+    private void emissionsUpdated(ReportableEmissionsSaveParams params) {
 		publisher.publishEvent(InstallationReportableEmissionsUpdatedEvent.builder()
         		.accountId(params.getAccountId())
         		.isFromDre(params.isFromDre())

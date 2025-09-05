@@ -21,6 +21,7 @@ describe('WizardStepComponent', () => {
         [formGroup]="formGroup"
         heading="Some form"
         caption="Some caption"
+        [cancelLink]="cancelLink"
         (formSubmit)="onSubmit($event)">
         <div govuk-text-input formControlName="date" label="Date"></div>
         <div govuk-text-input formControlName="text" label="Text"></div>
@@ -32,6 +33,7 @@ describe('WizardStepComponent', () => {
       date: new FormControl('', [Validators.required]),
       text: new FormControl(''),
     });
+    cancelLink: string;
     onSubmit: (form: FormGroup) => any | jest.SpyInstance<void, [FormGroup]>;
   }
 
@@ -71,5 +73,22 @@ describe('WizardStepComponent', () => {
 
     expect(element.querySelector('.govuk-error-summary')).toBeTruthy();
     expect(hostComponent.onSubmit).not.toHaveBeenCalled();
+  });
+
+  it('should render the cancel button when cancelLink is provided', () => {
+    hostComponent.cancelLink = '/cancel-path';
+    fixture.detectChanges();
+
+    const cancelLink = element.querySelector('div.govuk-button-group > a.govuk-link');
+    expect(cancelLink).toBeTruthy();
+    expect(cancelLink.getAttribute('href')).toBe('/cancel-path');
+  });
+
+  it('should not render the cancel button when cancelLink is not provided', () => {
+    hostComponent.cancelLink = undefined;
+    fixture.detectChanges();
+
+    const cancelLink = element.querySelector('div.govuk-button-group > a.govuk-link');
+    expect(cancelLink).toBeFalsy();
   });
 });

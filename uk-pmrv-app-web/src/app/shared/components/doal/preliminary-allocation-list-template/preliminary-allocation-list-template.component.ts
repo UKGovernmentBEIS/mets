@@ -29,7 +29,7 @@ export class PreliminaryAllocationListTemplateComponent implements OnInit {
     this.columns = [
       { field: 'year', header: 'Year' },
       { field: 'subInstallationName', header: 'Sub-installation' },
-      { field: 'allowances', header: 'Allocation' },
+      { field: 'allowances', header: 'Allocation', alignRight: true },
     ];
 
     if (this.editable) {

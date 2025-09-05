@@ -3197,7 +3197,7 @@ paths:
           schema:
             minimum: 0
             type: integer
-            format: int64
+            format: int32
         - name: size
           in: query
           description: The page size
@@ -3205,7 +3205,7 @@ paths:
           schema:
             minimum: 1
             type: integer
-            format: int64
+            format: int32
       responses:
         '200':
           description: OK
@@ -4583,7 +4583,7 @@ paths:
           schema:
             minimum: 0
             type: integer
-            format: int64
+            format: int32
         - name: size
           in: query
           description: The page size
@@ -4591,7 +4591,7 @@ paths:
           schema:
             minimum: 1
             type: integer
-            format: int64
+            format: int32
       responses:
         '200':
           description: OK
@@ -4829,6 +4829,16 @@ paths:
                     - INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW
                     - >-
                       INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS
+                    - HSE_TI_APPLICATION_SUBMIT
+                    - HSE_TI_TRACK_PAYMENT
+                    - HSE_TI_WAIT_FOR_REGULATOR_REVIEW
+                    - HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT
+                    - HSE_TI_APPLICATION_PEER_REVIEW
+                    - HSE_TI_WAIT_FOR_PEER_REVIEW
+                    - HSE_TI_MAKE_PAYMENT
+                    - HSE_TI_CONFIRM_PAYMENT
+                    - HSE_TI_WAIT_FOR_AMENDS
+                    - HSE_TI_APPLICATION_AMENDS_SUBMIT
                     - BDR_APPLICATION_SUBMIT
                     - BDR_APPLICATION_VERIFICATION_SUBMIT
                     - BDR_WAIT_FOR_VERIFICATION
@@ -4846,6 +4856,16 @@ paths:
                     - ALR_APPLICATION_SUBMIT
                     - ALR_APPLICATION_VERIFICATION_SUBMIT
                     - ALR_WAIT_FOR_VERIFICATION
+                    - ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT
+                    - ALR_WAIT_FOR_REGULATOR_REVIEW
+                    - ALR_APPLICATION_AMENDS_SUBMIT
+                    - ALR_WAIT_FOR_AMENDS
+                    - ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT
+                    - ALR_AMEND_WAIT_FOR_VERIFICATION
+                    - ALR_AUTHORITY_RESPONSE_SUBMIT
+                    - ALR_WAIT_FOR_AUTHORITY_REVIEW
+                    - ALR_APPLICATION_PEER_REVIEW
+                    - ALR_WAIT_FOR_PEER_REVIEW
                     - AVIATION_ACCOUNT_CLOSURE_SUBMIT
                     - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
                     - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -5015,7 +5035,7 @@ paths:
           schema:
             minimum: 0
             type: integer
-            format: int64
+            format: int32
         - name: size
           in: query
           description: The page size
@@ -5023,7 +5043,7 @@ paths:
           schema:
             minimum: 1
             type: integer
-            format: int64
+            format: int32
       responses:
         '200':
           description: OK
@@ -5068,7 +5088,7 @@ paths:
           schema:
             minimum: 0
             type: integer
-            format: int64
+            format: int32
         - name: size
           in: query
           description: The page size
@@ -5076,7 +5096,7 @@ paths:
           schema:
             minimum: 1
             type: integer
-            format: int64
+            format: int32
       responses:
         '200':
           description: OK
@@ -5113,7 +5133,7 @@ paths:
           schema:
             minimum: 0
             type: integer
-            format: int64
+            format: int32
         - name: size
           in: query
           description: The page size
@@ -5121,7 +5141,7 @@ paths:
           schema:
             minimum: 1
             type: integer
-            format: int64
+            format: int32
       responses:
         '200':
           description: OK
@@ -5166,7 +5186,7 @@ paths:
           schema:
             minimum: 0
             type: integer
-            format: int64
+            format: int32
         - name: size
           in: query
           description: The page size
@@ -5174,7 +5194,7 @@ paths:
           schema:
             minimum: 1
             type: integer
-            format: int64
+            format: int32
       responses:
         '200':
           description: OK
@@ -5217,7 +5237,7 @@ paths:
           schema:
             minimum: 0
             type: integer
-            format: int64
+            format: int32
         - name: size
           in: query
           description: The page size
@@ -5225,7 +5245,7 @@ paths:
           schema:
             minimum: 1
             type: integer
-            format: int64
+            format: int32
       responses:
         '200':
           description: OK
@@ -5707,6 +5727,16 @@ paths:
               - INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW
               - >-
                 INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS
+              - HSE_TI_APPLICATION_SUBMIT
+              - HSE_TI_TRACK_PAYMENT
+              - HSE_TI_WAIT_FOR_REGULATOR_REVIEW
+              - HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT
+              - HSE_TI_APPLICATION_PEER_REVIEW
+              - HSE_TI_WAIT_FOR_PEER_REVIEW
+              - HSE_TI_MAKE_PAYMENT
+              - HSE_TI_CONFIRM_PAYMENT
+              - HSE_TI_WAIT_FOR_AMENDS
+              - HSE_TI_APPLICATION_AMENDS_SUBMIT
               - BDR_APPLICATION_SUBMIT
               - BDR_APPLICATION_VERIFICATION_SUBMIT
               - BDR_WAIT_FOR_VERIFICATION
@@ -5724,6 +5754,16 @@ paths:
               - ALR_APPLICATION_SUBMIT
               - ALR_APPLICATION_VERIFICATION_SUBMIT
               - ALR_WAIT_FOR_VERIFICATION
+              - ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT
+              - ALR_WAIT_FOR_REGULATOR_REVIEW
+              - ALR_APPLICATION_AMENDS_SUBMIT
+              - ALR_WAIT_FOR_AMENDS
+              - ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT
+              - ALR_AMEND_WAIT_FOR_VERIFICATION
+              - ALR_AUTHORITY_RESPONSE_SUBMIT
+              - ALR_WAIT_FOR_AUTHORITY_REVIEW
+              - ALR_APPLICATION_PEER_REVIEW
+              - ALR_WAIT_FOR_PEER_REVIEW
               - AVIATION_ACCOUNT_CLOSURE_SUBMIT
               - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
               - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -6944,7 +6984,7 @@ paths:
           schema:
             minimum: 0
             type: integer
-            format: int64
+            format: int32
         - name: size
           in: query
           description: The page size
@@ -6952,7 +6992,7 @@ paths:
           schema:
             minimum: 1
             type: integer
-            format: int64
+            format: int32
       responses:
         '200':
           description: OK
@@ -8653,6 +8693,261 @@ components:
           items:
             type: string
             format: uuid
+    ALRActivityLevel:
+      required:
+        - activityLevelChangeId
+        - changeType
+        - comments
+        - subInstallationName
+        - year
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int16
+        subInstallationName:
+          type: string
+          enum:
+            - ADIPIC_ACID
+            - ALUMINIUM
+            - AMMONIA
+            - AROMATICS
+            - BOTTLES_AND_JARS_OF_COLOURED_GLASS
+            - BOTTLES_AND_JARS_OF_COLOURLESS_GLASS
+            - CARBON_BLACK
+            - COATED_CARBON_BOARD
+            - COATED_FINE_PAPER
+            - COKE
+            - CONTINUOUS_FILAMENT_GLASS_FIBRE
+            - DISTRICT_HEATING
+            - DOLIME
+            - DRIED_SECONDARY_GYPSUM
+            - EAF_CARBON_STEEL
+            - EAF_HIGH_CARBON_STEEL
+            - E_PVC
+            - ETHYLENE_OXIDE_ETHYLENE_GLYCOLS
+            - FACING_BRICKS
+            - FLOAT_GLASS
+            - FUEL_CL
+            - FUEL_NON_CL
+            - GREY_CEMENT_CLINKER
+            - HEAT_CL
+            - HEAT_NON_CL
+            - HOT_METAL
+            - HYDROGEN
+            - IRON_CASTING
+            - LIME
+            - LONG_FIBRE_KRAFT_PULP
+            - MINERAL_WOOL
+            - NEWSPRINT
+            - NITRIC_ACID
+            - PAVERS
+            - PHENOL_ACETONE
+            - PLASTER
+            - PLASTERBOARD
+            - PRE_BAKE_ANODE
+            - PROCESS_EMISSIONS_CL
+            - PROCESS_EMISSIONS_NON_CL
+            - RECOVERED_PAPER_PULP
+            - REFINERY_PRODUCTS
+            - ROOF_TILES
+            - SHORT_FIBRE_KRAFT_PULP
+            - SINTERED_DOLIME
+            - SINTERED_ORE
+            - SODA_ASH
+            - SPRAY_DRIED_POWDER
+            - S_PVC
+            - STEAM_CRACKING
+            - STYRENE
+            - SULPHITE_PULP_THERMOMECHANICAL_PULP_AND_MECHANICAL_PULP
+            - SYTHESIS_GAS
+            - TESTLINER_AND_FLUTING
+            - TISSUE
+            - UNCOATED_CARBON_BOARD
+            - UNCOATED_FINE_PAPER
+            - VINYL_CHLORIDE_MONOMER
+            - WHITE_CEMENT_CLINKER
+        changeType:
+          type: string
+          enum:
+            - CESSATION
+            - INCREASE
+            - DECREASE
+            - RETURN_TO_HISTORICAL_ACTIVITY_LEVELS_HAL
+            - NER_ALLOCATION_FOR_YEAR_0_BASED_ON_ACTIVITY_LEVEL_AL_IN_YEAR_0
+            - >-
+              NER_ALLOCATION_FOR_YEAR_0_PLUS_1_BASED_ON_ACTIVITY_LEVEL_AL_IN_YEAR_0_PLUS_1
+            - >-
+              NER_ALLOCATION_FOR_YEAR_0_PLUS_2_BASED_ON_THE_HISTORICAL_ACTIVITY_LEVEL_HAL
+            - REGULATOR_REJECTS_ADJUSTMENT
+            - NO_CHANGE
+            - OTHER
+        otherChangeTypeName:
+          maxLength: 255
+          minLength: 0
+          type: string
+        changedActivityLevel:
+          maxLength: 255
+          minLength: 0
+          type: string
+        comments:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        activityLevelChangeId:
+          type: string
+    ALRAlrDataRegulatorReviewAcceptedDecisionDetails:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ALRRegulatorReviewDecisionDetails'
+    ALRAlrDataRegulatorReviewDecision:
+      required:
+        - type
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ALRReviewDecision'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - ACCEPTED
+                - OPERATOR_AMENDS_NEEDED
+            details:
+              oneOf:
+                - $ref: >-
+                    #/components/schemas/ALRAlrDataRegulatorReviewAcceptedDecisionDetails
+                - $ref: >-
+                    #/components/schemas/ALRAlrDataRegulatorReviewOperatorAmendsNeededDecisionDetails
+    ALRAlrDataRegulatorReviewOperatorAmendsNeededDecisionDetails:
+      required:
+        - requiredChanges
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ALRRegulatorReviewDecisionDetails'
+        - type: object
+          properties:
+            verificationRequired:
+              type: boolean
+            requiredChanges:
+              type: array
+              items:
+                $ref: '#/components/schemas/ALRAlrDataRegulatorReviewRequiredChange'
+    ALRAlrDataRegulatorReviewRequiredChange:
+      required:
+        - reason
+      type: object
+      properties:
+        reason:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        files:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+    ALRApplicationAmendsSaveRequestTaskActionPayload:
+      required:
+        - alr
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            alr:
+              $ref: '#/components/schemas/ALR'
+            alrSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+    ALRApplicationAmendsSubmitRequestTaskActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            alrSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+    ALRApplicationAmendsSubmitToVerifierRequestTaskActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            verificationSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+    ALRApplicationAuthorityReviewOutcome:
+      required:
+        - alr
+        - authorityResponse
+      type: object
+      properties:
+        alr:
+          $ref: '#/components/schemas/ALR'
+        submissionDate:
+          type: string
+          format: date
+        authorityResponse:
+          oneOf:
+            - $ref: '#/components/schemas/ALRGrantAuthorityResponse'
+            - $ref: '#/components/schemas/ALRGrantAuthorityWithCorrectionsResponse'
+            - $ref: '#/components/schemas/ALRRejectAuthorityResponse'
+    ALRApplicationRegulatorReviewOutcome:
+      required:
+        - conservativeDeterminesActivity
+        - determination
+      type: object
+      properties:
+        activityLevels:
+          type: array
+          items:
+            $ref: '#/components/schemas/ALRActivityLevel'
+        historicalActivityLevels:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistoricalActivityLevel'
+        allocations:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/ALRPreliminaryAllocation'
+        conservativeDeterminesActivity:
+          type: boolean
+        conservativeDeterminesActivityComment:
+          type: string
+        ukEtsAuthorityComments:
+          type: string
+        determination:
+          oneOf:
+            - $ref: '#/components/schemas/ALRClosedDetermination'
+            - $ref: '#/components/schemas/DoalClosedDetermination'
+            - $ref: '#/components/schemas/DoalProceedToAuthorityDetermination'
+    ALRApplicationRegulatorReviewSaveTaskActionPayload:
+      required:
+        - regulatorReviewOutcome
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            regulatorReviewOutcome:
+              $ref: '#/components/schemas/ALRApplicationRegulatorReviewOutcome'
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
     ALRApplicationSaveRequestTaskActionPayload:
       type: object
       allOf:
@@ -8712,6 +9007,101 @@ components:
                 type: array
                 items:
                   type: boolean
+    ALRAuthorityResponse:
+      required:
+        - authorityRespondDate
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - VALID
+            - VALID_WITH_CORRECTIONS
+            - INVALID
+        authorityRespondDate:
+          type: string
+          format: date
+      discriminator:
+        propertyName: type
+        mapping:
+          VALID: '#/components/schemas/ALRGrantAuthorityResponse'
+          VALID_WITH_CORRECTIONS: '#/components/schemas/ALRGrantAuthorityWithCorrectionsResponse'
+          INVALID: '#/components/schemas/ALRRejectAuthorityResponse'
+    ALRClosedDetermination:
+      required:
+        - alrFile
+        - reason
+        - type
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/DoalDetermination'
+        - type: object
+          properties:
+            alrFile:
+              type: string
+              format: uuid
+            files:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+                format: uuid
+    ALRGrantAuthorityResponse:
+      required:
+        - authorityRespondDate
+        - type
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ALRAuthorityResponse'
+        - type: object
+          properties:
+            preliminaryAllocations:
+              uniqueItems: true
+              type: array
+              items:
+                $ref: '#/components/schemas/ALRPreliminaryAllocation'
+            totalAllocationsPerYear:
+              type: object
+              additionalProperties:
+                type: integer
+                format: int32
+            documents:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+                format: uuid
+    ALRGrantAuthorityWithCorrectionsResponse:
+      required:
+        - authorityRespondDate
+        - decisionNotice
+        - type
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ALRAuthorityResponse'
+        - type: object
+          properties:
+            preliminaryAllocations:
+              uniqueItems: true
+              type: array
+              items:
+                $ref: '#/components/schemas/ALRPreliminaryAllocation'
+            totalAllocationsPerYear:
+              type: object
+              additionalProperties:
+                type: integer
+                format: int32
+            documents:
+              uniqueItems: true
+              type: array
+              items:
+                type: string
+                format: uuid
+            decisionNotice:
+              maxLength: 10000
+              minLength: 0
+              type: string
     ALRNotVerifiedOverallVerificationAssessment:
       required:
         - reasons
@@ -8744,6 +9134,164 @@ components:
           VERIFIED_WITH_COMMENTS: >-
             #/components/schemas/ALRVerifiedWithCommentsOverallVerificationAssessment
           NOT_VERIFIED: '#/components/schemas/ALRNotVerifiedOverallVerificationAssessment'
+    ALRPreliminaryAllocation:
+      required:
+        - allocationId
+        - allowances
+        - subInstallationName
+        - year
+      type: object
+      properties:
+        subInstallationName:
+          type: string
+          enum:
+            - ADIPIC_ACID
+            - ALUMINIUM
+            - AMMONIA
+            - AROMATICS
+            - BOTTLES_AND_JARS_OF_COLOURED_GLASS
+            - BOTTLES_AND_JARS_OF_COLOURLESS_GLASS
+            - CARBON_BLACK
+            - COATED_CARBON_BOARD
+            - COATED_FINE_PAPER
+            - COKE
+            - CONTINUOUS_FILAMENT_GLASS_FIBRE
+            - DISTRICT_HEATING
+            - DOLIME
+            - DRIED_SECONDARY_GYPSUM
+            - EAF_CARBON_STEEL
+            - EAF_HIGH_CARBON_STEEL
+            - E_PVC
+            - ETHYLENE_OXIDE_ETHYLENE_GLYCOLS
+            - FACING_BRICKS
+            - FLOAT_GLASS
+            - FUEL_CL
+            - FUEL_NON_CL
+            - GREY_CEMENT_CLINKER
+            - HEAT_CL
+            - HEAT_NON_CL
+            - HOT_METAL
+            - HYDROGEN
+            - IRON_CASTING
+            - LIME
+            - LONG_FIBRE_KRAFT_PULP
+            - MINERAL_WOOL
+            - NEWSPRINT
+            - NITRIC_ACID
+            - PAVERS
+            - PHENOL_ACETONE
+            - PLASTER
+            - PLASTERBOARD
+            - PRE_BAKE_ANODE
+            - PROCESS_EMISSIONS_CL
+            - PROCESS_EMISSIONS_NON_CL
+            - RECOVERED_PAPER_PULP
+            - REFINERY_PRODUCTS
+            - ROOF_TILES
+            - SHORT_FIBRE_KRAFT_PULP
+            - SINTERED_DOLIME
+            - SINTERED_ORE
+            - SODA_ASH
+            - SPRAY_DRIED_POWDER
+            - S_PVC
+            - STEAM_CRACKING
+            - STYRENE
+            - SULPHITE_PULP_THERMOMECHANICAL_PULP_AND_MECHANICAL_PULP
+            - SYTHESIS_GAS
+            - TESTLINER_AND_FLUTING
+            - TISSUE
+            - UNCOATED_CARBON_BOARD
+            - UNCOATED_FINE_PAPER
+            - VINYL_CHLORIDE_MONOMER
+            - WHITE_CEMENT_CLINKER
+        year:
+          type: integer
+          format: int16
+        allowances:
+          type: integer
+          format: int32
+        allocationId:
+          type: string
+    ALRRegulatorReviewDecisionDetails:
+      required:
+        - type
+      type: object
+      properties:
+        notes:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        type:
+          type: string
+      discriminator:
+        propertyName: type
+    ALRRejectAuthorityResponse:
+      required:
+        - authorityRespondDate
+        - decisionNotice
+        - type
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ALRAuthorityResponse'
+        - type: object
+          properties:
+            decisionNotice:
+              maxLength: 10000
+              minLength: 0
+              type: string
+    ALRReviewDecision:
+      type: object
+      properties:
+        reviewDataType:
+          type: string
+          enum:
+            - ALR_DATA
+            - VERIFICATION_REPORT_DATA
+      discriminator:
+        propertyName: reviewDataType
+        mapping:
+          ALR_DATA: '#/components/schemas/ALRAlrDataRegulatorReviewDecision'
+          VERIFICATION_REPORT_DATA: >-
+            #/components/schemas/ALRVerificationReportDataRegulatorReviewDecision
+    ALRSaveAuthorityResponseTaskActionPayload:
+      required:
+        - authorityReviewOutcome
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            authorityReviewOutcome:
+              $ref: '#/components/schemas/ALRApplicationAuthorityReviewOutcome'
+            authorityReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+    ALRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload:
+      required:
+        - decision
+        - group
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            group:
+              type: string
+              enum:
+                - ALR
+                - OPINION_STATEMENT
+                - OVERALL_DECISION
+            decision:
+              oneOf:
+                - $ref: '#/components/schemas/ALRReviewDecision'
+                - $ref: '#/components/schemas/ALRAlrDataRegulatorReviewDecision'
+                - $ref: >-
+                    #/components/schemas/ALRVerificationReportDataRegulatorReviewDecision
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
     ALRVerificationOpinionStatement:
       type: object
       properties:
@@ -8761,6 +9309,20 @@ components:
             format: uuid
         notes:
           type: string
+    ALRVerificationReportDataRegulatorReviewDecision:
+      required:
+        - type
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/ALRReviewDecision'
+        - type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - ACCEPTED
+            details:
+              $ref: '#/components/schemas/ALRRegulatorReviewDecisionDetails'
     ALRVerifiedSatisfactoryOverallVerificationAssessment:
       required:
         - type
@@ -13834,6 +14396,7 @@ components:
           $ref: '#/components/schemas/ActivityLevelChangeInformation'
         determination:
           oneOf:
+            - $ref: '#/components/schemas/ALRClosedDetermination'
             - $ref: '#/components/schemas/DoalClosedDetermination'
             - $ref: '#/components/schemas/DoalProceedToAuthorityDetermination'
     DoalAdditionalDocuments:
@@ -13903,6 +14466,7 @@ components:
           enum:
             - CLOSED
             - PROCEED_TO_AUTHORITY
+            - CLOSED_ALR
         reason:
           maxLength: 10000
           minLength: 0
@@ -13912,6 +14476,7 @@ components:
         mapping:
           CLOSED: '#/components/schemas/DoalClosedDetermination'
           PROCEED_TO_AUTHORITY: '#/components/schemas/DoalProceedToAuthorityDetermination'
+          CLOSED_ALR: '#/components/schemas/ALRClosedDetermination'
     DoalGrantAuthorityResponse:
       required:
         - authorityRespondDate
@@ -13995,6 +14560,8 @@ components:
                   - SETTING_ALLOCATION_UNDER_ARTICLE_3A
                   - SETTING_HAL_AND_ALLOCATION_UNDER_ARTICLE_3A
                   - ADJUSTMENT_OF_PARAMETERS_OTHER_THAN_ACTIVITY_LEVEL
+                  - TEMPORARY_CESSATION
+                  - PERMANENT_CESSATION
                   - ERROR_IN_BASELINE_DATA_REPORT
                   - ERROR_IN_NEW_ENTRANT_DATA_REPORT
                   - ERROR_IN_ACTIVITY_LEVEL_REPORT
@@ -16509,6 +17076,255 @@ components:
           maxLength: 10000
           minLength: 0
           type: string
+    HSETI:
+      required:
+        - hsetiFile
+      type: object
+      properties:
+        allocationPeriod:
+          type: string
+          enum:
+            - PERIOD_2021_2025
+            - PERIOD_2026_2030
+        hsetiFile:
+          type: string
+          format: uuid
+        files:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+        notes:
+          maxLength: 10000
+          minLength: 0
+          type: string
+    HSETIApplicationAmendsSaveRequestTaskActionPayload:
+      required:
+        - hseti
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            hseti:
+              $ref: '#/components/schemas/HSETI'
+            hsetiSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            requestedChangesCompleted:
+              type: boolean
+    HSETIApplicationAmendsSubmitRequestTaskActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            hsetiSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+    HSETIApplicationRegulatorReviewSaveTaskActionPayload:
+      required:
+        - overallDecision
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            overallDecision:
+              $ref: '#/components/schemas/HSETIRegulatorReviewOverallDecision'
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+    HSETIApplicationSaveRegulatorReviewGroupDecisionRequestTaskActionPayload:
+      required:
+        - decision
+        - group
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            group:
+              type: string
+              enum:
+                - HSETI
+            decision:
+              $ref: '#/components/schemas/HSETIRegulatorReviewDecision'
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+    HSETIApplicationSaveRequestTaskActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            hseti:
+              $ref: '#/components/schemas/HSETI'
+            hsetiSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+    HSETIRegulatorReviewDecision:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ACCEPTED
+            - REJECTED
+            - OPERATOR_AMENDS_NEEDED
+        details:
+          $ref: '#/components/schemas/HSETIRegulatorReviewDecisionDetails'
+    HSETIRegulatorReviewDecisionDetails:
+      required:
+        - capacityGreaterThanZeroDescription
+        - capacityIncreaseDescription
+        - capacityIncreasePermanence
+      type: object
+      properties:
+        capacityIncreaseDescription:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        capacityIncreasePermanence:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        capacityGreaterThanZeroDescription:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        notes:
+          maxLength: 10000
+          minLength: 0
+          type: string
+    HSETIRegulatorReviewOverallDecision:
+      required:
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - APPROVED
+            - REJECTED
+            - WITHDRAWN
+            - DEEMED_WITHDRAWN
+        reason:
+          maxLength: 10000
+          minLength: 0
+          type: string
+    HistoricalActivityLevel:
+      required:
+        - changeType
+        - comments
+        - subInstallationName
+        - year
+      type: object
+      properties:
+        year:
+          type: integer
+          format: int16
+        subInstallationName:
+          type: string
+          enum:
+            - ADIPIC_ACID
+            - ALUMINIUM
+            - AMMONIA
+            - AROMATICS
+            - BOTTLES_AND_JARS_OF_COLOURED_GLASS
+            - BOTTLES_AND_JARS_OF_COLOURLESS_GLASS
+            - CARBON_BLACK
+            - COATED_CARBON_BOARD
+            - COATED_FINE_PAPER
+            - COKE
+            - CONTINUOUS_FILAMENT_GLASS_FIBRE
+            - DISTRICT_HEATING
+            - DOLIME
+            - DRIED_SECONDARY_GYPSUM
+            - EAF_CARBON_STEEL
+            - EAF_HIGH_CARBON_STEEL
+            - E_PVC
+            - ETHYLENE_OXIDE_ETHYLENE_GLYCOLS
+            - FACING_BRICKS
+            - FLOAT_GLASS
+            - FUEL_CL
+            - FUEL_NON_CL
+            - GREY_CEMENT_CLINKER
+            - HEAT_CL
+            - HEAT_NON_CL
+            - HOT_METAL
+            - HYDROGEN
+            - IRON_CASTING
+            - LIME
+            - LONG_FIBRE_KRAFT_PULP
+            - MINERAL_WOOL
+            - NEWSPRINT
+            - NITRIC_ACID
+            - PAVERS
+            - PHENOL_ACETONE
+            - PLASTER
+            - PLASTERBOARD
+            - PRE_BAKE_ANODE
+            - PROCESS_EMISSIONS_CL
+            - PROCESS_EMISSIONS_NON_CL
+            - RECOVERED_PAPER_PULP
+            - REFINERY_PRODUCTS
+            - ROOF_TILES
+            - SHORT_FIBRE_KRAFT_PULP
+            - SINTERED_DOLIME
+            - SINTERED_ORE
+            - SODA_ASH
+            - SPRAY_DRIED_POWDER
+            - S_PVC
+            - STEAM_CRACKING
+            - STYRENE
+            - SULPHITE_PULP_THERMOMECHANICAL_PULP_AND_MECHANICAL_PULP
+            - SYTHESIS_GAS
+            - TESTLINER_AND_FLUTING
+            - TISSUE
+            - UNCOATED_CARBON_BOARD
+            - UNCOATED_FINE_PAPER
+            - VINYL_CHLORIDE_MONOMER
+            - WHITE_CEMENT_CLINKER
+        changeType:
+          type: string
+          enum:
+            - CESSATION
+            - INCREASE
+            - DECREASE
+            - RETURN_TO_HISTORICAL_ACTIVITY_LEVELS_HAL
+            - NER_ALLOCATION_FOR_YEAR_0_BASED_ON_ACTIVITY_LEVEL_AL_IN_YEAR_0
+            - >-
+              NER_ALLOCATION_FOR_YEAR_0_PLUS_1_BASED_ON_ACTIVITY_LEVEL_AL_IN_YEAR_0_PLUS_1
+            - >-
+              NER_ALLOCATION_FOR_YEAR_0_PLUS_2_BASED_ON_THE_HISTORICAL_ACTIVITY_LEVEL_HAL
+            - REGULATOR_REJECTS_ADJUSTMENT
+            - NO_CHANGE
+            - OTHER
+        otherChangeTypeName:
+          maxLength: 255
+          minLength: 0
+          type: string
+        changedActivityLevel:
+          maxLength: 255
+          minLength: 0
+          type: string
+        comments:
+          maxLength: 10000
+          minLength: 0
+          type: string
+        creationDate:
+          type: string
+          format: date-time
     HoldingCompanyAddressDTO:
       required:
         - city
@@ -18064,7 +18880,6 @@ components:
     MeasurementOfCO2EmissionPointCategoryAppliedTier:
       required:
         - appliedStandard
-        - biomassFraction
         - emissionPointCategory
         - measuredEmissions
       type: object
@@ -19544,6 +20359,69 @@ components:
               maxLength: 10000
               minLength: 0
               type: string
+    NonComplianceAmendDetailsRequestTaskActionPayload:
+      required:
+        - reason
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskActionPayload'
+        - type: object
+          properties:
+            reason:
+              type: string
+              enum:
+                - FAILURE_TO_SURRENDER_ALLOWANCES_100
+                - FAILURE_TO_SURRENDER_ALLOWANCES_20
+                - CARRYING_OUT_A_REGULATED_ACTIVITY_WITHOUT_A_PERMIT
+                - FAILURE_TO_MONITOR_REPORTABLE_EMISSIONS
+                - FAILURE_TO_REPORT_REPORTABLE_EMISSIONS
+                - FAILURE_TO_SUBMIT_AN_IMPROVEMENT_REPORT
+                - FAILURE_TO_NOTIFY
+                - FAILURE_TO_MONITOR_ACTIVITY_LEVELS
+                - FAILURE_TO_REPORT_ACTIVITY_LEVELS
+                - FAILURE_TO_COMPLY_WITH_THE_CONDITION_OF_A_PERMIT
+                - >-
+                  FAILURE_TO_TRANSFER_OR_SURRENDER_ALLOWANCES_WHEN_UNDERREPORTING_DISCOVERED_AFTER_TRANSFER
+                - FAILURE_TO_SURRENDER_A_PERMIT
+                - FAILURE_TO_SUBMIT_INFORMATION_UNDER_ARTICLE_27_A
+                - EXCEEDING_EMISSIONS_TARGET
+                - FAILURE_TO_PAY_PENALTY_FOR_EXCEEDING_EMISSIONS_TARGET
+                - UNDER_REPORTING_EMISSIONS
+                - FAILURE_TO_NOTIFY_WHEN_CEASE_TO_MEET_CRITERIA
+                - REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - >-
+                  FAILURE_TO_NOTIFY_WHEN_REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - FAILURE_TO_MONITOR_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_REPORT_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - FAILURE_TO_MONITOR_EMISSIONS_CORSIA
+                - FAILURE_TO_REPORT_EMISSIONS_CORSIA
+                - FAILURE_TO_KEEP_RECORDS_CORSIA
+                - FAILURE_TO_COMPLY_WITH_DEFICIT_NOTICE
+                - FAILURE_TO_COMPLY_WITH_NOTICE_TO_RETURN_ALLOWANCES
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_CORSIA
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_CORSIA
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_ETS
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_CORSIA
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_ETS
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_CORSIA
+            nonComplianceDate:
+              type: string
+              format: date
+            complianceDate:
+              type: string
+              format: date
+            comments:
+              maxLength: 10000
+              minLength: 0
+              type: string
     NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload:
       required:
         - civilPenalty
@@ -19843,7 +20721,6 @@ components:
     OperatorActivityLevelReport:
       required:
         - comment
-        - document
       type: object
       properties:
         document:
@@ -22698,6 +23575,7 @@ components:
             - NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW_PAYLOAD
             - NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD
             - NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION_PAYLOAD
+            - NON_COMPLIANCE_AMEND_DETAILS_PAYLOAD
             - NER_SAVE_APPLICATION_PAYLOAD
             - NER_SAVE_APPLICATION_REVIEW_PAYLOAD
             - NER_SAVE_REVIEW_GROUP_DECISION_PAYLOAD
@@ -22765,6 +23643,25 @@ components:
             - ALR_SUBMIT_TO_VERIFIER_PAYLOAD
             - ALR_APPLICATION_SAVE_VERIFICATION_PAYLOAD
             - ALR_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD
+            - ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION_PAYLOAD
+            - ALR_REGULATOR_REVIEW_SAVE_PAYLOAD
+            - >-
+              ALR_REGULATOR_REVIEW_SUBMIT_APPLICATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD
+            - ALR_APPLICATION_AMENDS_SAVE_PAYLOAD
+            - ALR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER_PAYLOAD
+            - ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD
+            - ALR_REQUEST_PEER_REVIEW_PAYLOAD
+            - ALR_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD
+            - ALR_SAVE_AUTHORITY_RESPONSE_PAYLOAD
+            - ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD
+            - HSE_TI_APPLICATION_SAVE_PAYLOAD
+            - HSE_TI_SAVE_REGULATOR_REVIEW_GROUP_DECISION_PAYLOAD
+            - HSE_TI_REGULATOR_REVIEW_SAVE_PAYLOAD
+            - HSE_TI_APPLICATION_AMENDS_SAVE_PAYLOAD
+            - HSE_TI_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD
+            - HSE_TI_REGULATOR_REVIEW_SUBMIT_PAYLOAD
+            - HSE_TI_REQUEST_PEER_REVIEW_PAYLOAD
+            - HSE_TI_PEER_REVIEW_DECISION_PAYLOAD
             - EMPTY_PAYLOAD
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION_PAYLOAD
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION_REVIEW_PAYLOAD
@@ -22989,6 +23886,7 @@ components:
             - NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION
             - NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION
             - NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION
+            - NON_COMPLIANCE_AMEND_DETAILS
             - NER_CANCEL_APPLICATION
             - NER_UPLOAD_ATTACHMENT
             - NER_SAVE_APPLICATION
@@ -23074,6 +23972,19 @@ components:
             - INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SAVE
             - INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SUBMIT
             - INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_UPLOAD_ATTACHMENT
+            - HSE_TI_SAVE_APPLICATION
+            - HSE_TI_UPLOAD_ATTACHMENT
+            - HSE_TI_SUBMIT_TO_REGULATOR
+            - HSE_TI_CANCEL
+            - HSE_TI_REGULATOR_REVIEW_SAVE
+            - HSE_TI_REGULATOR_REVIEW_SUBMIT
+            - HSE_TI_SAVE_REGULATOR_REVIEW_GROUP_DECISION
+            - HSE_TI_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT
+            - HSE_TI_REGULATOR_REVIEW_RETURN_FOR_AMENDS
+            - HSE_TI_APPLICATION_AMENDS_SAVE
+            - HSE_TI_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
+            - HSE_TI_REQUEST_PEER_REVIEW
+            - HSE_TI_SUBMIT_PEER_REVIEW_DECISION
             - BDR_SAVE_APPLICATION
             - BDR_UPLOAD_ATTACHMENT
             - BDR_SUBMIT_TO_VERIFIER
@@ -23103,10 +24014,25 @@ components:
             - ALR_UPLOAD_ATTACHMENT
             - ALR_SUBMIT_TO_VERIFIER
             - ALR_RECALL_FROM_VERIFICATION
+            - ALR_SUBMIT_TO_REGULATOR
             - ALR_SAVE_APPLICATION_VERIFICATION
             - ALR_VERIFICATION_UPLOAD_ATTACHMENT
             - ALR_VERIFICATION_RETURN_TO_OPERATOR
             - ALR_SUBMIT_VERIFICATION
+            - ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION
+            - ALR_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT
+            - ALR_REGULATOR_REVIEW_RETURN_FOR_AMENDS
+            - ALR_APPLICATION_AMENDS_SAVE
+            - ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
+            - ALR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER
+            - ALR_REGULATOR_REVIEW_SAVE
+            - ALR_PROCEED_TO_AUTHORITY
+            - ALR_CLOSE_APPLICATION
+            - ALR_REQUEST_PEER_REVIEW
+            - ALR_SUBMIT_PEER_REVIEW_DECISION
+            - ALR_SAVE_AUTHORITY_RESPONSE
+            - ALR_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT
+            - ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION
             - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION
             - EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT
@@ -23270,6 +24196,14 @@ components:
             - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_NOTIFY_OPERATOR
         requestTaskActionPayload:
           oneOf:
+            - $ref: >-
+                #/components/schemas/ALRApplicationAmendsSaveRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/ALRApplicationAmendsSubmitRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/ALRApplicationAmendsSubmitToVerifierRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/ALRApplicationRegulatorReviewSaveTaskActionPayload
             - $ref: '#/components/schemas/ALRApplicationSaveRequestTaskActionPayload'
             - $ref: >-
                 #/components/schemas/ALRApplicationSubmitToVerifierRequestTaskActionPayload
@@ -23277,6 +24211,9 @@ components:
                 #/components/schemas/ALRApplicationVerificationReturnToOperatorRequestTaskActionPayload
             - $ref: >-
                 #/components/schemas/ALRApplicationVerificationSaveRequestTaskActionPayload
+            - $ref: '#/components/schemas/ALRSaveAuthorityResponseTaskActionPayload'
+            - $ref: >-
+                #/components/schemas/ALRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload
             - $ref: >-
                 #/components/schemas/AerApplicationRequestVerificationRequestTaskActionPayload
             - $ref: >-
@@ -23429,6 +24366,16 @@ components:
             - $ref: >-
                 #/components/schemas/EmpVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload
             - $ref: >-
+                #/components/schemas/HSETIApplicationAmendsSaveRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/HSETIApplicationAmendsSubmitRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/HSETIApplicationRegulatorReviewSaveTaskActionPayload
+            - $ref: >-
+                #/components/schemas/HSETIApplicationSaveRegulatorReviewGroupDecisionRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/HSETIApplicationSaveRequestTaskActionPayload
+            - $ref: >-
                 #/components/schemas/InstallationAccountOpeningAmendApplicationRequestTaskActionPayload
             - $ref: >-
                 #/components/schemas/InstallationAccountOpeningSubmitDecisionRequestTaskActionPayload
@@ -23451,6 +24398,8 @@ components:
                 #/components/schemas/NerSaveReviewGroupDecisionRequestTaskActionPayload
             - $ref: >-
                 #/components/schemas/NerSubmitApplicationAmendRequestTaskActionPayload
+            - $ref: >-
+                #/components/schemas/NonComplianceAmendDetailsRequestTaskActionPayload
             - $ref: >-
                 #/components/schemas/NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload
             - $ref: >-
@@ -24545,7 +25494,6 @@ components:
     VerificationReportOfTheActivityLevelReport:
       required:
         - comment
-        - document
       type: object
       properties:
         document:
@@ -25141,6 +26089,7 @@ components:
             - NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION
             - NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION
             - NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION
+            - NON_COMPLIANCE_AMEND_DETAILS
             - NER_CANCEL_APPLICATION
             - NER_UPLOAD_ATTACHMENT
             - NER_SAVE_APPLICATION
@@ -25226,6 +26175,19 @@ components:
             - INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SAVE
             - INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SUBMIT
             - INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_UPLOAD_ATTACHMENT
+            - HSE_TI_SAVE_APPLICATION
+            - HSE_TI_UPLOAD_ATTACHMENT
+            - HSE_TI_SUBMIT_TO_REGULATOR
+            - HSE_TI_CANCEL
+            - HSE_TI_REGULATOR_REVIEW_SAVE
+            - HSE_TI_REGULATOR_REVIEW_SUBMIT
+            - HSE_TI_SAVE_REGULATOR_REVIEW_GROUP_DECISION
+            - HSE_TI_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT
+            - HSE_TI_REGULATOR_REVIEW_RETURN_FOR_AMENDS
+            - HSE_TI_APPLICATION_AMENDS_SAVE
+            - HSE_TI_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
+            - HSE_TI_REQUEST_PEER_REVIEW
+            - HSE_TI_SUBMIT_PEER_REVIEW_DECISION
             - BDR_SAVE_APPLICATION
             - BDR_UPLOAD_ATTACHMENT
             - BDR_SUBMIT_TO_VERIFIER
@@ -25255,10 +26217,25 @@ components:
             - ALR_UPLOAD_ATTACHMENT
             - ALR_SUBMIT_TO_VERIFIER
             - ALR_RECALL_FROM_VERIFICATION
+            - ALR_SUBMIT_TO_REGULATOR
             - ALR_SAVE_APPLICATION_VERIFICATION
             - ALR_VERIFICATION_UPLOAD_ATTACHMENT
             - ALR_VERIFICATION_RETURN_TO_OPERATOR
             - ALR_SUBMIT_VERIFICATION
+            - ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION
+            - ALR_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT
+            - ALR_REGULATOR_REVIEW_RETURN_FOR_AMENDS
+            - ALR_APPLICATION_AMENDS_SAVE
+            - ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
+            - ALR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER
+            - ALR_REGULATOR_REVIEW_SAVE
+            - ALR_PROCEED_TO_AUTHORITY
+            - ALR_CLOSE_APPLICATION
+            - ALR_REQUEST_PEER_REVIEW
+            - ALR_SUBMIT_PEER_REVIEW_DECISION
+            - ALR_SAVE_AUTHORITY_RESPONSE
+            - ALR_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT
+            - ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
             - EMP_ISSUANCE_UKETS_SAVE_APPLICATION
             - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION
             - EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT
@@ -25469,6 +26446,17 @@ components:
             year:
               type: integer
               format: int16
+    HSETIRequestCreateActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestCreateActionPayload'
+        - type: object
+          properties:
+            allocationPeriod:
+              type: string
+              enum:
+                - PERIOD_2021_2025
+                - PERIOD_2026_2030
     InstallationAccountOpeningSubmitApplicationCreateActionPayload:
       required:
         - accountType
@@ -25564,6 +26552,7 @@ components:
             - PERMIT_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD
             - REPORT_RELATED_REQUEST_CREATE_ACTION_PAYLOAD
             - DOAL_REQUEST_CREATE_ACTION_PAYLOAD
+            - HSE_TI_REQUEST_CREATE_ACTION_PAYLOAD
             - EMP_BATCH_REISSUE_REQUEST_CREATE_ACTION_PAYLOAD
             - INSTALLATION_AUDIT_REQUEST_CREATE_ACTION_PAYLOAD
             - AVIATION_AER_CORSIA_ANNUAL_OFFSETTING_CREATE_ACTION_PAYLOAD
@@ -25597,6 +26586,7 @@ components:
             - WITHHOLDING_OF_ALLOWANCES
             - RETURN_OF_ALLOWANCES
             - AIR
+            - HSE_TI
             - BDR
             - PERMANENT_CESSATION
             - ALR
@@ -25617,6 +26607,7 @@ components:
                 #/components/schemas/AviationAerCorsiaAnnualOffsettingCreateActionPayload
             - $ref: '#/components/schemas/BatchReissueRequestCreateActionPayload'
             - $ref: '#/components/schemas/DoalRequestCreateActionPayload'
+            - $ref: '#/components/schemas/HSETIRequestCreateActionPayload'
             - $ref: >-
                 #/components/schemas/InstallationAccountOpeningSubmitApplicationCreateActionPayload
             - $ref: '#/components/schemas/InstallationAuditRequestCreateActionPayload'
@@ -25669,6 +26660,7 @@ components:
               - RETURN_OF_ALLOWANCES
               - INSTALLATION_ONSITE_INSPECTION
               - INSTALLATION_AUDIT
+              - HSE_TI
               - BDR
               - PERMANENT_CESSATION
               - ALR
@@ -25697,6 +26689,7 @@ components:
               - COMPLETED
               - CANCELLED
               - WITHDRAWN
+              - DEEMED_WITHDRAWN
               - APPROVED
               - REJECTED
               - CLOSED
@@ -25713,11 +26706,11 @@ components:
         pageNumber:
           minimum: 0
           type: integer
-          format: int64
+          format: int32
         pageSize:
           minimum: 1
           type: integer
-          format: int64
+          format: int32
       description: The search criteria
     ALRRequestMetaData:
       required:
@@ -25760,6 +26753,7 @@ components:
             - RETURN_OF_ALLOWANCES
             - INSTALLATION_ONSITE_INSPECTION
             - INSTALLATION_AUDIT
+            - HSE_TI
             - BDR
             - PERMANENT_CESSATION
             - ALR
@@ -26064,6 +27058,17 @@ components:
               format: int32
             initiatorRoleType:
               type: string
+    HSETIRequestMetadata:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestMetadata'
+        - type: object
+          properties:
+            allocationPeriod:
+              type: string
+              enum:
+                - PERIOD_2021_2025
+                - PERIOD_2026_2030
     InstallationInspectionRequestMetadata:
       required:
         - year
@@ -26220,6 +27225,7 @@ components:
             - RETURN_OF_ALLOWANCES
             - INSTALLATION_ONSITE_INSPECTION
             - INSTALLATION_AUDIT
+            - HSE_TI
             - BDR
             - PERMANENT_CESSATION
             - ALR
@@ -26245,6 +27251,7 @@ components:
             - COMPLETED
             - CANCELLED
             - WITHDRAWN
+            - DEEMED_WITHDRAWN
             - APPROVED
             - REJECTED
             - CLOSED
@@ -26273,6 +27280,7 @@ components:
             - $ref: '#/components/schemas/DreRequestMetadata'
             - $ref: '#/components/schemas/EmpBatchReissueRequestMetadata'
             - $ref: '#/components/schemas/EmpVariationRequestMetadata'
+            - $ref: '#/components/schemas/HSETIRequestMetadata'
             - $ref: '#/components/schemas/InstallationInspectionRequestMetadata'
             - $ref: '#/components/schemas/PermitBatchReissueRequestMetadata'
             - $ref: '#/components/schemas/PermitIssuanceRequestMetadata'
@@ -26310,6 +27318,7 @@ components:
             - DRE
             - AIR
             - INSTALLATION_INSPECTION
+            - HSE_TI
             - BDR
             - PERMANENT_CESSATION
             - ALR
@@ -26341,6 +27350,7 @@ components:
           INSTALLATION_INSPECTION: '#/components/schemas/InstallationInspectionRequestMetadata'
           BDR: '#/components/schemas/BDRRequestMetadata'
           ALR: '#/components/schemas/ALRRequestMetaData'
+          HSE_TI: '#/components/schemas/HSETIRequestMetadata'
           AVIATION_AER: '#/components/schemas/AviationAerRequestMetadata'
           AVIATION_AER_CORSIA_ANNUAL_OFFSETTING: >-
             #/components/schemas/AviationAerCorsiaAnnualOffsettingRequestMetadata
@@ -26897,6 +27907,10 @@ components:
             - RETURN_OF_ALLOWANCES
             - INSTALLATION_ONSITE_INSPECTION_SUBMITTED
             - INSTALLATION_AUDIT_SUBMITTED
+            - ALR_SUBMITTED
+            - ALR_ACCEPTED
+            - ALR_REJECTED
+            - HSE_TI_COMPLETED
             - AVIATION_DRE_SUBMITTED
             - AVIATION_DOE_SUBMITTED
             - AVIATION_VIR_REVIEWED
@@ -27404,11 +28418,11 @@ components:
         pageNumber:
           minimum: 0
           type: integer
-          format: int64
+          format: int32
         pageSize:
           minimum: 1
           type: integer
-          format: int64
+          format: int32
       description: The search criteria
     AircraftTypeSearchResults:
       type: object
@@ -27588,6 +28602,7 @@ components:
             - RETURN_OF_ALLOWANCES
             - INSTALLATION_ONSITE_INSPECTION
             - INSTALLATION_AUDIT
+            - HSE_TI
             - BDR
             - PERMANENT_CESSATION
             - ALR
@@ -27776,6 +28791,16 @@ components:
             - INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW
             - >-
               INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS
+            - HSE_TI_APPLICATION_SUBMIT
+            - HSE_TI_TRACK_PAYMENT
+            - HSE_TI_WAIT_FOR_REGULATOR_REVIEW
+            - HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT
+            - HSE_TI_APPLICATION_PEER_REVIEW
+            - HSE_TI_WAIT_FOR_PEER_REVIEW
+            - HSE_TI_MAKE_PAYMENT
+            - HSE_TI_CONFIRM_PAYMENT
+            - HSE_TI_WAIT_FOR_AMENDS
+            - HSE_TI_APPLICATION_AMENDS_SUBMIT
             - BDR_APPLICATION_SUBMIT
             - BDR_APPLICATION_VERIFICATION_SUBMIT
             - BDR_WAIT_FOR_VERIFICATION
@@ -27793,6 +28818,16 @@ components:
             - ALR_APPLICATION_SUBMIT
             - ALR_APPLICATION_VERIFICATION_SUBMIT
             - ALR_WAIT_FOR_VERIFICATION
+            - ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT
+            - ALR_WAIT_FOR_REGULATOR_REVIEW
+            - ALR_APPLICATION_AMENDS_SUBMIT
+            - ALR_WAIT_FOR_AMENDS
+            - ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT
+            - ALR_AMEND_WAIT_FOR_VERIFICATION
+            - ALR_AUTHORITY_RESPONSE_SUBMIT
+            - ALR_WAIT_FOR_AUTHORITY_REVIEW
+            - ALR_APPLICATION_PEER_REVIEW
+            - ALR_WAIT_FOR_PEER_REVIEW
             - AVIATION_ACCOUNT_CLOSURE_SUBMIT
             - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
             - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -28151,6 +29186,105 @@ components:
         version:
           type: integer
           format: int32
+    ALRApplicationAmendsSubmitRequestTaskPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
+        - type: object
+          properties:
+            alr:
+              $ref: '#/components/schemas/ALR'
+            verificationSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+            alrSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            alrAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            alrFileVersion:
+              type: integer
+              format: int32
+            verificationPerformed:
+              type: boolean
+            verificationBodyId:
+              type: integer
+              format: int64
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            regulatorReviewGroupDecisions:
+              type: object
+              additionalProperties:
+                oneOf:
+                  - $ref: '#/components/schemas/ALRReviewDecision'
+                  - $ref: '#/components/schemas/ALRAlrDataRegulatorReviewDecision'
+                  - $ref: >-
+                      #/components/schemas/ALRVerificationReportDataRegulatorReviewDecision
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
+    ALRApplicationRegulatorReviewSubmitRequestTaskPayload:
+      required:
+        - regulatorReviewOutcome
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
+        - type: object
+          properties:
+            alr:
+              $ref: '#/components/schemas/ALR'
+            verificationSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+            alrSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            alrAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            alrFileVersion:
+              type: integer
+              format: int32
+            verificationReport:
+              $ref: '#/components/schemas/ALRVerificationReport'
+            verificationAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            verifiedAlr:
+              $ref: '#/components/schemas/ALR'
+            regulatorReviewOutcome:
+              $ref: '#/components/schemas/ALRApplicationRegulatorReviewOutcome'
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            regulatorReviewGroupDecisions:
+              type: object
+              additionalProperties:
+                oneOf:
+                  - $ref: '#/components/schemas/ALRReviewDecision'
+                  - $ref: '#/components/schemas/ALRAlrDataRegulatorReviewDecision'
+                  - $ref: >-
+                      #/components/schemas/ALRVerificationReportDataRegulatorReviewDecision
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
     ALRApplicationSubmitRequestTaskPayload:
       type: object
       allOf:
@@ -28173,6 +29307,9 @@ components:
               type: object
               additionalProperties:
                 type: string
+            alrFileVersion:
+              type: integer
+              format: int32
             verificationPerformed:
               type: boolean
             verificationBodyId:
@@ -28200,12 +29337,45 @@ components:
               type: object
               additionalProperties:
                 type: string
+            alrFileVersion:
+              type: integer
+              format: int32
             verificationReport:
               $ref: '#/components/schemas/ALRVerificationReport'
             verificationAttachments:
               type: object
               additionalProperties:
                 type: string
+    ALRApplicationWaitForAuthorityReviewRequestTaskPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
+    ALRAuthorityResponseSubmitRequestTaskPayload:
+      required:
+        - authorityReviewOutcome
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
+        - type: object
+          properties:
+            regulatorPreliminaryAllocations:
+              uniqueItems: true
+              type: array
+              items:
+                $ref: '#/components/schemas/ALRPreliminaryAllocation'
+            authorityReviewOutcome:
+              $ref: '#/components/schemas/ALRApplicationAuthorityReviewOutcome'
+            authorityReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            alrAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            alrFileVersion:
+              type: integer
+              format: int32
     ALRVerificationReport:
       required:
         - opinionStatement
@@ -30228,109 +31398,84 @@ components:
               type: object
               additionalProperties:
                 type: boolean
-    HistoricalActivityLevel:
-      required:
-        - changeType
-        - comments
-        - subInstallationName
-        - year
+    HSETIApplicationAmendsSubmitRequestTaskPayload:
       type: object
-      properties:
-        year:
-          type: integer
-          format: int16
-        subInstallationName:
-          type: string
-          enum:
-            - ADIPIC_ACID
-            - ALUMINIUM
-            - AMMONIA
-            - AROMATICS
-            - BOTTLES_AND_JARS_OF_COLOURED_GLASS
-            - BOTTLES_AND_JARS_OF_COLOURLESS_GLASS
-            - CARBON_BLACK
-            - COATED_CARBON_BOARD
-            - COATED_FINE_PAPER
-            - COKE
-            - CONTINUOUS_FILAMENT_GLASS_FIBRE
-            - DISTRICT_HEATING
-            - DOLIME
-            - DRIED_SECONDARY_GYPSUM
-            - EAF_CARBON_STEEL
-            - EAF_HIGH_CARBON_STEEL
-            - E_PVC
-            - ETHYLENE_OXIDE_ETHYLENE_GLYCOLS
-            - FACING_BRICKS
-            - FLOAT_GLASS
-            - FUEL_CL
-            - FUEL_NON_CL
-            - GREY_CEMENT_CLINKER
-            - HEAT_CL
-            - HEAT_NON_CL
-            - HOT_METAL
-            - HYDROGEN
-            - IRON_CASTING
-            - LIME
-            - LONG_FIBRE_KRAFT_PULP
-            - MINERAL_WOOL
-            - NEWSPRINT
-            - NITRIC_ACID
-            - PAVERS
-            - PHENOL_ACETONE
-            - PLASTER
-            - PLASTERBOARD
-            - PRE_BAKE_ANODE
-            - PROCESS_EMISSIONS_CL
-            - PROCESS_EMISSIONS_NON_CL
-            - RECOVERED_PAPER_PULP
-            - REFINERY_PRODUCTS
-            - ROOF_TILES
-            - SHORT_FIBRE_KRAFT_PULP
-            - SINTERED_DOLIME
-            - SINTERED_ORE
-            - SODA_ASH
-            - SPRAY_DRIED_POWDER
-            - S_PVC
-            - STEAM_CRACKING
-            - STYRENE
-            - SULPHITE_PULP_THERMOMECHANICAL_PULP_AND_MECHANICAL_PULP
-            - SYTHESIS_GAS
-            - TESTLINER_AND_FLUTING
-            - TISSUE
-            - UNCOATED_CARBON_BOARD
-            - UNCOATED_FINE_PAPER
-            - VINYL_CHLORIDE_MONOMER
-            - WHITE_CEMENT_CLINKER
-        changeType:
-          type: string
-          enum:
-            - CESSATION
-            - INCREASE
-            - DECREASE
-            - RETURN_TO_HISTORICAL_ACTIVITY_LEVELS_HAL
-            - NER_ALLOCATION_FOR_YEAR_0_BASED_ON_ACTIVITY_LEVEL_AL_IN_YEAR_0
-            - >-
-              NER_ALLOCATION_FOR_YEAR_0_PLUS_1_BASED_ON_ACTIVITY_LEVEL_AL_IN_YEAR_0_PLUS_1
-            - >-
-              NER_ALLOCATION_FOR_YEAR_0_PLUS_2_BASED_ON_THE_HISTORICAL_ACTIVITY_LEVEL_HAL
-            - REGULATOR_REJECTS_ADJUSTMENT
-            - NO_CHANGE
-            - OTHER
-        otherChangeTypeName:
-          maxLength: 255
-          minLength: 0
-          type: string
-        changedActivityLevel:
-          maxLength: 255
-          minLength: 0
-          type: string
-        comments:
-          maxLength: 10000
-          minLength: 0
-          type: string
-        creationDate:
-          type: string
-          format: date-time
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
+        - type: object
+          properties:
+            hseti:
+              $ref: '#/components/schemas/HSETI'
+            hsetiSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            hsetiAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            regulatorReviewGroupDecisions:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/HSETIRegulatorReviewDecision'
+            requestedChangesCompleted:
+              type: boolean
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
+    HSETIApplicationRegulatorReviewSubmitRequestTaskPayload:
+      required:
+        - overallDecision
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
+        - type: object
+          properties:
+            hseti:
+              $ref: '#/components/schemas/HSETI'
+            hsetiSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            hsetiAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            overallDecision:
+              $ref: '#/components/schemas/HSETIRegulatorReviewOverallDecision'
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            regulatorReviewGroupDecisions:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/HSETIRegulatorReviewDecision'
+    HSETIApplicationSubmitRequestTaskPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
+        - type: object
+          properties:
+            hseti:
+              $ref: '#/components/schemas/HSETI'
+            hsetiSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            hsetiAttachments:
+              type: object
+              additionalProperties:
+                type: string
+    HSETIApplicationWaitForRegulatorReviewRequestTaskPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestTaskPayload'
     InstallationAccountOpeningApplicationRequestTaskPayload:
       required:
         - accountType
@@ -30796,11 +31941,67 @@ components:
     NonComplianceCivilPenaltyRequestTaskPayload:
       required:
         - civilPenalty
+        - reason
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestTaskPayload'
         - type: object
           properties:
+            reason:
+              type: string
+              enum:
+                - FAILURE_TO_SURRENDER_ALLOWANCES_100
+                - FAILURE_TO_SURRENDER_ALLOWANCES_20
+                - CARRYING_OUT_A_REGULATED_ACTIVITY_WITHOUT_A_PERMIT
+                - FAILURE_TO_MONITOR_REPORTABLE_EMISSIONS
+                - FAILURE_TO_REPORT_REPORTABLE_EMISSIONS
+                - FAILURE_TO_SUBMIT_AN_IMPROVEMENT_REPORT
+                - FAILURE_TO_NOTIFY
+                - FAILURE_TO_MONITOR_ACTIVITY_LEVELS
+                - FAILURE_TO_REPORT_ACTIVITY_LEVELS
+                - FAILURE_TO_COMPLY_WITH_THE_CONDITION_OF_A_PERMIT
+                - >-
+                  FAILURE_TO_TRANSFER_OR_SURRENDER_ALLOWANCES_WHEN_UNDERREPORTING_DISCOVERED_AFTER_TRANSFER
+                - FAILURE_TO_SURRENDER_A_PERMIT
+                - FAILURE_TO_SUBMIT_INFORMATION_UNDER_ARTICLE_27_A
+                - EXCEEDING_EMISSIONS_TARGET
+                - FAILURE_TO_PAY_PENALTY_FOR_EXCEEDING_EMISSIONS_TARGET
+                - UNDER_REPORTING_EMISSIONS
+                - FAILURE_TO_NOTIFY_WHEN_CEASE_TO_MEET_CRITERIA
+                - REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - >-
+                  FAILURE_TO_NOTIFY_WHEN_REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - FAILURE_TO_MONITOR_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_REPORT_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - FAILURE_TO_MONITOR_EMISSIONS_CORSIA
+                - FAILURE_TO_REPORT_EMISSIONS_CORSIA
+                - FAILURE_TO_KEEP_RECORDS_CORSIA
+                - FAILURE_TO_COMPLY_WITH_DEFICIT_NOTICE
+                - FAILURE_TO_COMPLY_WITH_NOTICE_TO_RETURN_ALLOWANCES
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_CORSIA
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_CORSIA
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_ETS
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_CORSIA
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_ETS
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_CORSIA
+            nonComplianceDate:
+              type: string
+              format: date
+            complianceDate:
+              type: string
+              format: date
+            nonComplianceComments:
+              maxLength: 10000
+              minLength: 0
+              type: string
             civilPenalty:
               type: string
               format: uuid
@@ -30827,11 +32028,67 @@ components:
       required:
         - dailyPenaltyNotice
         - issueNoticeOfIntent
+        - reason
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestTaskPayload'
         - type: object
           properties:
+            reason:
+              type: string
+              enum:
+                - FAILURE_TO_SURRENDER_ALLOWANCES_100
+                - FAILURE_TO_SURRENDER_ALLOWANCES_20
+                - CARRYING_OUT_A_REGULATED_ACTIVITY_WITHOUT_A_PERMIT
+                - FAILURE_TO_MONITOR_REPORTABLE_EMISSIONS
+                - FAILURE_TO_REPORT_REPORTABLE_EMISSIONS
+                - FAILURE_TO_SUBMIT_AN_IMPROVEMENT_REPORT
+                - FAILURE_TO_NOTIFY
+                - FAILURE_TO_MONITOR_ACTIVITY_LEVELS
+                - FAILURE_TO_REPORT_ACTIVITY_LEVELS
+                - FAILURE_TO_COMPLY_WITH_THE_CONDITION_OF_A_PERMIT
+                - >-
+                  FAILURE_TO_TRANSFER_OR_SURRENDER_ALLOWANCES_WHEN_UNDERREPORTING_DISCOVERED_AFTER_TRANSFER
+                - FAILURE_TO_SURRENDER_A_PERMIT
+                - FAILURE_TO_SUBMIT_INFORMATION_UNDER_ARTICLE_27_A
+                - EXCEEDING_EMISSIONS_TARGET
+                - FAILURE_TO_PAY_PENALTY_FOR_EXCEEDING_EMISSIONS_TARGET
+                - UNDER_REPORTING_EMISSIONS
+                - FAILURE_TO_NOTIFY_WHEN_CEASE_TO_MEET_CRITERIA
+                - REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - >-
+                  FAILURE_TO_NOTIFY_WHEN_REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - FAILURE_TO_MONITOR_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_REPORT_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - FAILURE_TO_MONITOR_EMISSIONS_CORSIA
+                - FAILURE_TO_REPORT_EMISSIONS_CORSIA
+                - FAILURE_TO_KEEP_RECORDS_CORSIA
+                - FAILURE_TO_COMPLY_WITH_DEFICIT_NOTICE
+                - FAILURE_TO_COMPLY_WITH_NOTICE_TO_RETURN_ALLOWANCES
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_CORSIA
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_CORSIA
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_ETS
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_CORSIA
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_ETS
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_CORSIA
+            nonComplianceDate:
+              type: string
+              format: date
+            complianceDate:
+              type: string
+              format: date
+            nonComplianceComments:
+              maxLength: 10000
+              minLength: 0
+              type: string
             issueNoticeOfIntent:
               type: boolean
             dailyPenaltyNotice:
@@ -30853,12 +32110,68 @@ components:
       required:
         - comments
         - complianceRestored
+        - reason
         - reissuePenalty
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestTaskPayload'
         - type: object
           properties:
+            reason:
+              type: string
+              enum:
+                - FAILURE_TO_SURRENDER_ALLOWANCES_100
+                - FAILURE_TO_SURRENDER_ALLOWANCES_20
+                - CARRYING_OUT_A_REGULATED_ACTIVITY_WITHOUT_A_PERMIT
+                - FAILURE_TO_MONITOR_REPORTABLE_EMISSIONS
+                - FAILURE_TO_REPORT_REPORTABLE_EMISSIONS
+                - FAILURE_TO_SUBMIT_AN_IMPROVEMENT_REPORT
+                - FAILURE_TO_NOTIFY
+                - FAILURE_TO_MONITOR_ACTIVITY_LEVELS
+                - FAILURE_TO_REPORT_ACTIVITY_LEVELS
+                - FAILURE_TO_COMPLY_WITH_THE_CONDITION_OF_A_PERMIT
+                - >-
+                  FAILURE_TO_TRANSFER_OR_SURRENDER_ALLOWANCES_WHEN_UNDERREPORTING_DISCOVERED_AFTER_TRANSFER
+                - FAILURE_TO_SURRENDER_A_PERMIT
+                - FAILURE_TO_SUBMIT_INFORMATION_UNDER_ARTICLE_27_A
+                - EXCEEDING_EMISSIONS_TARGET
+                - FAILURE_TO_PAY_PENALTY_FOR_EXCEEDING_EMISSIONS_TARGET
+                - UNDER_REPORTING_EMISSIONS
+                - FAILURE_TO_NOTIFY_WHEN_CEASE_TO_MEET_CRITERIA
+                - REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - >-
+                  FAILURE_TO_NOTIFY_WHEN_REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - FAILURE_TO_MONITOR_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_REPORT_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - FAILURE_TO_MONITOR_EMISSIONS_CORSIA
+                - FAILURE_TO_REPORT_EMISSIONS_CORSIA
+                - FAILURE_TO_KEEP_RECORDS_CORSIA
+                - FAILURE_TO_COMPLY_WITH_DEFICIT_NOTICE
+                - FAILURE_TO_COMPLY_WITH_NOTICE_TO_RETURN_ALLOWANCES
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_CORSIA
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_CORSIA
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_ETS
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_CORSIA
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_ETS
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_CORSIA
+            nonComplianceDate:
+              type: string
+              format: date
+            complianceDate:
+              type: string
+              format: date
+            nonComplianceComments:
+              maxLength: 10000
+              minLength: 0
+              type: string
             complianceRestored:
               type: boolean
             complianceRestoredDate:
@@ -30886,11 +32199,67 @@ components:
     NonComplianceNoticeOfIntentRequestTaskPayload:
       required:
         - noticeOfIntent
+        - reason
       type: object
       allOf:
         - $ref: '#/components/schemas/RequestTaskPayload'
         - type: object
           properties:
+            reason:
+              type: string
+              enum:
+                - FAILURE_TO_SURRENDER_ALLOWANCES_100
+                - FAILURE_TO_SURRENDER_ALLOWANCES_20
+                - CARRYING_OUT_A_REGULATED_ACTIVITY_WITHOUT_A_PERMIT
+                - FAILURE_TO_MONITOR_REPORTABLE_EMISSIONS
+                - FAILURE_TO_REPORT_REPORTABLE_EMISSIONS
+                - FAILURE_TO_SUBMIT_AN_IMPROVEMENT_REPORT
+                - FAILURE_TO_NOTIFY
+                - FAILURE_TO_MONITOR_ACTIVITY_LEVELS
+                - FAILURE_TO_REPORT_ACTIVITY_LEVELS
+                - FAILURE_TO_COMPLY_WITH_THE_CONDITION_OF_A_PERMIT
+                - >-
+                  FAILURE_TO_TRANSFER_OR_SURRENDER_ALLOWANCES_WHEN_UNDERREPORTING_DISCOVERED_AFTER_TRANSFER
+                - FAILURE_TO_SURRENDER_A_PERMIT
+                - FAILURE_TO_SUBMIT_INFORMATION_UNDER_ARTICLE_27_A
+                - EXCEEDING_EMISSIONS_TARGET
+                - FAILURE_TO_PAY_PENALTY_FOR_EXCEEDING_EMISSIONS_TARGET
+                - UNDER_REPORTING_EMISSIONS
+                - FAILURE_TO_NOTIFY_WHEN_CEASE_TO_MEET_CRITERIA
+                - REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - >-
+                  FAILURE_TO_NOTIFY_WHEN_REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - FAILURE_TO_MONITOR_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_REPORT_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - FAILURE_TO_MONITOR_EMISSIONS_CORSIA
+                - FAILURE_TO_REPORT_EMISSIONS_CORSIA
+                - FAILURE_TO_KEEP_RECORDS_CORSIA
+                - FAILURE_TO_COMPLY_WITH_DEFICIT_NOTICE
+                - FAILURE_TO_COMPLY_WITH_NOTICE_TO_RETURN_ALLOWANCES
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_CORSIA
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_CORSIA
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_ETS
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_CORSIA
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_ETS
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_CORSIA
+            nonComplianceDate:
+              type: string
+              format: date
+            complianceDate:
+              type: string
+              format: date
+            nonComplianceComments:
+              maxLength: 10000
+              minLength: 0
+              type: string
             noticeOfIntent:
               type: string
               format: uuid
@@ -31941,6 +33310,7 @@ components:
             - RETURN_OF_ALLOWANCES
             - INSTALLATION_ONSITE_INSPECTION
             - INSTALLATION_AUDIT
+            - HSE_TI
             - BDR
             - PERMANENT_CESSATION
             - ALR
@@ -31989,6 +33359,7 @@ components:
             - $ref: '#/components/schemas/DreRequestMetadata'
             - $ref: '#/components/schemas/EmpBatchReissueRequestMetadata'
             - $ref: '#/components/schemas/EmpVariationRequestMetadata'
+            - $ref: '#/components/schemas/HSETIRequestMetadata'
             - $ref: '#/components/schemas/InstallationInspectionRequestMetadata'
             - $ref: '#/components/schemas/PermitBatchReissueRequestMetadata'
             - $ref: '#/components/schemas/PermitIssuanceRequestMetadata'
@@ -32172,6 +33543,16 @@ components:
             - INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW
             - >-
               INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS
+            - HSE_TI_APPLICATION_SUBMIT
+            - HSE_TI_TRACK_PAYMENT
+            - HSE_TI_WAIT_FOR_REGULATOR_REVIEW
+            - HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT
+            - HSE_TI_APPLICATION_PEER_REVIEW
+            - HSE_TI_WAIT_FOR_PEER_REVIEW
+            - HSE_TI_MAKE_PAYMENT
+            - HSE_TI_CONFIRM_PAYMENT
+            - HSE_TI_WAIT_FOR_AMENDS
+            - HSE_TI_APPLICATION_AMENDS_SUBMIT
             - BDR_APPLICATION_SUBMIT
             - BDR_APPLICATION_VERIFICATION_SUBMIT
             - BDR_WAIT_FOR_VERIFICATION
@@ -32189,6 +33570,16 @@ components:
             - ALR_APPLICATION_SUBMIT
             - ALR_APPLICATION_VERIFICATION_SUBMIT
             - ALR_WAIT_FOR_VERIFICATION
+            - ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT
+            - ALR_WAIT_FOR_REGULATOR_REVIEW
+            - ALR_APPLICATION_AMENDS_SUBMIT
+            - ALR_WAIT_FOR_AMENDS
+            - ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT
+            - ALR_AMEND_WAIT_FOR_VERIFICATION
+            - ALR_AUTHORITY_RESPONSE_SUBMIT
+            - ALR_WAIT_FOR_AUTHORITY_REVIEW
+            - ALR_APPLICATION_PEER_REVIEW
+            - ALR_WAIT_FOR_PEER_REVIEW
             - AVIATION_ACCOUNT_CLOSURE_SUBMIT
             - AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT
             - AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE
@@ -32318,9 +33709,17 @@ components:
             - VERIFIER_NO_LONGER_AVAILABLE
         payload:
           oneOf:
+            - $ref: >-
+                #/components/schemas/ALRApplicationAmendsSubmitRequestTaskPayload
+            - $ref: >-
+                #/components/schemas/ALRApplicationRegulatorReviewSubmitRequestTaskPayload
             - $ref: '#/components/schemas/ALRApplicationSubmitRequestTaskPayload'
             - $ref: >-
                 #/components/schemas/ALRApplicationVerificationSubmitRequestTaskPayload
+            - $ref: >-
+                #/components/schemas/ALRApplicationWaitForAuthorityReviewRequestTaskPayload
+            - $ref: >-
+                #/components/schemas/ALRAuthorityResponseSubmitRequestTaskPayload
             - $ref: >-
                 #/components/schemas/AerApplicationAmendsSubmitRequestTaskPayload
             - $ref: '#/components/schemas/AerApplicationReviewRequestTaskPayload'
@@ -32403,6 +33802,13 @@ components:
                 #/components/schemas/EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload
             - $ref: >-
                 #/components/schemas/EmpVariationUkEtsApplicationSubmitRequestTaskPayload
+            - $ref: >-
+                #/components/schemas/HSETIApplicationAmendsSubmitRequestTaskPayload
+            - $ref: >-
+                #/components/schemas/HSETIApplicationRegulatorReviewSubmitRequestTaskPayload
+            - $ref: '#/components/schemas/HSETIApplicationSubmitRequestTaskPayload'
+            - $ref: >-
+                #/components/schemas/HSETIApplicationWaitForRegulatorReviewRequestTaskPayload
             - $ref: >-
                 #/components/schemas/InstallationAccountOpeningApplicationRequestTaskPayload
             - $ref: >-
@@ -32638,6 +34044,7 @@ components:
               - NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION
               - NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION
               - NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION
+              - NON_COMPLIANCE_AMEND_DETAILS
               - NER_CANCEL_APPLICATION
               - NER_UPLOAD_ATTACHMENT
               - NER_SAVE_APPLICATION
@@ -32724,6 +34131,19 @@ components:
               - INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SUBMIT
               - >-
                 INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_UPLOAD_ATTACHMENT
+              - HSE_TI_SAVE_APPLICATION
+              - HSE_TI_UPLOAD_ATTACHMENT
+              - HSE_TI_SUBMIT_TO_REGULATOR
+              - HSE_TI_CANCEL
+              - HSE_TI_REGULATOR_REVIEW_SAVE
+              - HSE_TI_REGULATOR_REVIEW_SUBMIT
+              - HSE_TI_SAVE_REGULATOR_REVIEW_GROUP_DECISION
+              - HSE_TI_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT
+              - HSE_TI_REGULATOR_REVIEW_RETURN_FOR_AMENDS
+              - HSE_TI_APPLICATION_AMENDS_SAVE
+              - HSE_TI_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
+              - HSE_TI_REQUEST_PEER_REVIEW
+              - HSE_TI_SUBMIT_PEER_REVIEW_DECISION
               - BDR_SAVE_APPLICATION
               - BDR_UPLOAD_ATTACHMENT
               - BDR_SUBMIT_TO_VERIFIER
@@ -32753,10 +34173,25 @@ components:
               - ALR_UPLOAD_ATTACHMENT
               - ALR_SUBMIT_TO_VERIFIER
               - ALR_RECALL_FROM_VERIFICATION
+              - ALR_SUBMIT_TO_REGULATOR
               - ALR_SAVE_APPLICATION_VERIFICATION
               - ALR_VERIFICATION_UPLOAD_ATTACHMENT
               - ALR_VERIFICATION_RETURN_TO_OPERATOR
               - ALR_SUBMIT_VERIFICATION
+              - ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION
+              - ALR_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT
+              - ALR_REGULATOR_REVIEW_RETURN_FOR_AMENDS
+              - ALR_APPLICATION_AMENDS_SAVE
+              - ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR
+              - ALR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER
+              - ALR_REGULATOR_REVIEW_SAVE
+              - ALR_PROCEED_TO_AUTHORITY
+              - ALR_CLOSE_APPLICATION
+              - ALR_REQUEST_PEER_REVIEW
+              - ALR_SUBMIT_PEER_REVIEW_DECISION
+              - ALR_SAVE_AUTHORITY_RESPONSE
+              - ALR_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT
+              - ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION
               - EMP_ISSUANCE_UKETS_SAVE_APPLICATION
               - EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION
               - EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT
@@ -33034,6 +34469,13 @@ components:
             - INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW_PAYLOAD
             - >-
               INSTALLATION_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS_PAYLOAD
+            - HSE_TI_APPLICATION_SUBMIT_PAYLOAD
+            - HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD
+            - HSE_TI_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD
+            - HSE_TI_WAIT_FOR_AMENDS_PAYLOAD
+            - HSE_TI_APPLICATION_AMENDS_SUBMIT_PAYLOAD
+            - HSE_TI_WAIT_FOR_PEER_REVIEW_PAYLOAD
+            - HSE_TI_APPLICATION_PEER_REVIEW_PAYLOAD
             - BDR_APPLICATION_SUBMIT_PAYLOAD
             - BDR_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD
             - BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD
@@ -33047,6 +34489,14 @@ components:
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_PAYLOAD
             - ALR_SUBMIT_PAYLOAD
             - ALR_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD
+            - ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD
+            - ALR_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD
+            - ALR_APPLICATION_AMENDS_SUBMIT_PAYLOAD
+            - ALR_WAIT_FOR_AMENDS_PAYLOAD
+            - ALR_AUTHORITY_RESPONSE_SUBMIT_PAYLOAD
+            - ALR_WAIT_FOR_AUTHORITY_REVIEW_PAYLOAD
+            - ALR_WAIT_FOR_PEER_REVIEW_PAYLOAD
+            - ALR_APPLICATION_PEER_REVIEW_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_REVIEW_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_PEER_REVIEW_PAYLOAD
@@ -33286,6 +34736,18 @@ components:
             #/components/schemas/BDRApplicationRegulatorReviewSubmitRequestTaskPayload
           BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD: >-
             #/components/schemas/BDRApplicationRegulatorReviewSubmitRequestTaskPayload
+          HSE_TI_APPLICATION_SUBMIT_PAYLOAD: '#/components/schemas/HSETIApplicationSubmitRequestTaskPayload'
+          HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD: >-
+            #/components/schemas/HSETIApplicationRegulatorReviewSubmitRequestTaskPayload
+          HSE_TI_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD: >-
+            #/components/schemas/HSETIApplicationWaitForRegulatorReviewRequestTaskPayload
+          HSE_TI_WAIT_FOR_AMENDS_PAYLOAD: >-
+            #/components/schemas/HSETIApplicationRegulatorReviewSubmitRequestTaskPayload
+          HSE_TI_APPLICATION_AMENDS_SUBMIT_PAYLOAD: '#/components/schemas/HSETIApplicationAmendsSubmitRequestTaskPayload'
+          HSE_TI_APPLICATION_PEER_REVIEW_PAYLOAD: >-
+            #/components/schemas/HSETIApplicationRegulatorReviewSubmitRequestTaskPayload
+          HSE_TI_WAIT_FOR_PEER_REVIEW_PAYLOAD: >-
+            #/components/schemas/HSETIApplicationRegulatorReviewSubmitRequestTaskPayload
           PERMANENT_CESSATION_SUBMIT_PAYLOAD: >-
             #/components/schemas/PermanentCessationApplicationSubmitRequestTaskPayload
           PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_PAYLOAD: >-
@@ -33295,6 +34757,18 @@ components:
           ALR_SUBMIT_PAYLOAD: '#/components/schemas/ALRApplicationSubmitRequestTaskPayload'
           ALR_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD: >-
             #/components/schemas/ALRApplicationVerificationSubmitRequestTaskPayload
+          ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD: >-
+            #/components/schemas/ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+          ALR_APPLICATION_AMENDS_SUBMIT_PAYLOAD: '#/components/schemas/ALRApplicationAmendsSubmitRequestTaskPayload'
+          ALR_WAIT_FOR_AMENDS_PAYLOAD: >-
+            #/components/schemas/ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+          ALR_AUTHORITY_RESPONSE_SUBMIT_PAYLOAD: '#/components/schemas/ALRAuthorityResponseSubmitRequestTaskPayload'
+          ALR_WAIT_FOR_AUTHORITY_REVIEW_PAYLOAD: >-
+            #/components/schemas/ALRApplicationWaitForAuthorityReviewRequestTaskPayload
+          ALR_APPLICATION_PEER_REVIEW_PAYLOAD: >-
+            #/components/schemas/ALRApplicationRegulatorReviewSubmitRequestTaskPayload
+          ALR_WAIT_FOR_PEER_REVIEW_PAYLOAD: >-
+            #/components/schemas/ALRApplicationRegulatorReviewSubmitRequestTaskPayload
           EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD: >-
             #/components/schemas/EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload
           EMP_ISSUANCE_UKETS_APPLICATION_REVIEW_PAYLOAD: >-
@@ -33757,6 +35231,7 @@ components:
               - RETURN_OF_ALLOWANCES
               - INSTALLATION_ONSITE_INSPECTION
               - INSTALLATION_AUDIT
+              - HSE_TI
               - BDR
               - PERMANENT_CESSATION
               - ALR
@@ -33895,6 +35370,7 @@ components:
             - PERMIT_TRANSFER_APPLICATION_CANCELLED
             - NON_COMPLIANCE_APPLICATION_CLOSED
             - NON_COMPLIANCE_APPLICATION_SUBMITTED
+            - NON_COMPLIANCE_DETAILS_AMENDED
             - NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED
             - NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED
             - NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED
@@ -34014,10 +35490,32 @@ components:
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REJECTED
             - ALR_APPLICATION_SENT_TO_VERIFIER
             - ALR_RECALLED_FROM_VERIFICATION
+            - ALR_APPLICATION_SENT_TO_REGULATOR
             - ALR_VERIFICATION_RETURNED_TO_OPERATOR
             - ALR_APPLICATION_VERIFICATION_SUBMITTED
+            - ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS
+            - ALR_APPLICATION_PROCEEDED_TO_AUTHORITY
+            - ALR_APPLICATION_CLOSED
+            - ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER
+            - ALR_APPLICATION_AMENDS_SUBMITTED
+            - ALR_APPLICATION_PEER_REVIEW_REQUESTED
+            - ALR_APPLICATION_PEER_REVIEW_ACCEPTED
+            - ALR_APPLICATION_PEER_REVIEW_REJECTED
+            - ALR_APPLICATION_ACCEPTED
+            - ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS
+            - ALR_APPLICATION_REJECTED
             - INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPONDED
             - INSTALLATION_AUDIT_OPERATOR_RESPONDED
+            - HSE_TI_APPLICATION_CANCELLED
+            - HSE_TI_APPLICATION_SENT_TO_REGULATOR
+            - HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS
+            - HSE_TI_APPROVED
+            - HSE_TI_REJECTED
+            - HSE_TI_WITHDRAWN
+            - HSE_TI_DEEMED_WITHDRAWN
+            - HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED
+            - HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED
+            - HSE_TI_APPLICATION_PEER_REVIEW_REJECTED
             - REQUEST_TERMINATED
             - VERIFICATION_STATEMENT_CANCELLED
             - EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED
@@ -34120,6 +35618,209 @@ components:
         creationDate:
           type: string
           format: date-time
+    ALRApplicationAcceptedRequestActionPayload:
+      required:
+        - authorityReviewOutcome
+        - decisionNotification
+        - officialNotice
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            authorityReviewOutcome:
+              $ref: '#/components/schemas/ALRApplicationAuthorityReviewOutcome'
+            decisionNotification:
+              $ref: '#/components/schemas/DecisionNotification'
+            alrAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            usersInfo:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/RequestActionUserInfo'
+            officialNotice:
+              $ref: '#/components/schemas/FileInfoDTO'
+    ALRApplicationAcceptedWithCorrectionsRequestActionPayload:
+      required:
+        - authorityReviewOutcome
+        - decisionNotification
+        - officialNotice
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            authorityReviewOutcome:
+              $ref: '#/components/schemas/ALRApplicationAuthorityReviewOutcome'
+            decisionNotification:
+              $ref: '#/components/schemas/DecisionNotification'
+            alrAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            usersInfo:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/RequestActionUserInfo'
+            officialNotice:
+              $ref: '#/components/schemas/FileInfoDTO'
+    ALRApplicationAmendsSubmittedRequestActionPayload:
+      required:
+        - alr
+        - installationOperatorDetails
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            alr:
+              $ref: '#/components/schemas/ALR'
+            installationOperatorDetails:
+              $ref: '#/components/schemas/InstallationOperatorDetails'
+            verificationPerformed:
+              type: boolean
+            verificationReport:
+              $ref: '#/components/schemas/ALRVerificationReport'
+            alrAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            verificationAttachments:
+              type: object
+              additionalProperties:
+                type: string
+    ALRApplicationClosedRequestActionPayload:
+      required:
+        - alr
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            alr:
+              $ref: '#/components/schemas/ALR'
+            regulatorReviewOutcome:
+              $ref: '#/components/schemas/ALRApplicationRegulatorReviewOutcome'
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            regulatorReviewGroupDecisions:
+              type: object
+              additionalProperties:
+                oneOf:
+                  - $ref: '#/components/schemas/ALRReviewDecision'
+                  - $ref: '#/components/schemas/ALRAlrDataRegulatorReviewDecision'
+                  - $ref: >-
+                      #/components/schemas/ALRVerificationReportDataRegulatorReviewDecision
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            verificationPerformed:
+              type: boolean
+            verificationReport:
+              $ref: '#/components/schemas/ALRVerificationReport'
+            verificationAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            verificationSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+            alrAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            alrSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+    ALRApplicationProceededToAuthorityRequestActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            alr:
+              $ref: '#/components/schemas/ALR'
+            decisionNotification:
+              $ref: '#/components/schemas/DecisionNotification'
+            regulatorReviewOutcome:
+              $ref: '#/components/schemas/ALRApplicationRegulatorReviewOutcome'
+            regulatorReviewSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            regulatorReviewGroupDecisions:
+              type: object
+              additionalProperties:
+                oneOf:
+                  - $ref: '#/components/schemas/ALRReviewDecision'
+                  - $ref: '#/components/schemas/ALRAlrDataRegulatorReviewDecision'
+                  - $ref: >-
+                      #/components/schemas/ALRVerificationReportDataRegulatorReviewDecision
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            verificationPerformed:
+              type: boolean
+            verificationReport:
+              $ref: '#/components/schemas/ALRVerificationReport'
+            verificationAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            verificationSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: array
+                items:
+                  type: boolean
+            alrAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            alrSectionsCompleted:
+              type: object
+              additionalProperties:
+                type: boolean
+            usersInfo:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/RequestActionUserInfo'
+            officialNotice:
+              $ref: '#/components/schemas/FileInfoDTO'
+    ALRApplicationRejectedRequestActionPayload:
+      required:
+        - authorityReviewOutcome
+        - decisionNotification
+        - officialNotice
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            authorityReviewOutcome:
+              $ref: '#/components/schemas/ALRApplicationAuthorityReviewOutcome'
+            decisionNotification:
+              $ref: '#/components/schemas/DecisionNotification'
+            alrAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            usersInfo:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/RequestActionUserInfo'
+            officialNotice:
+              $ref: '#/components/schemas/FileInfoDTO'
     ALRApplicationSubmittedRequestActionPayload:
       required:
         - alr
@@ -34167,6 +35868,26 @@ components:
               additionalProperties:
                 type: string
             verificationAttachments:
+              type: object
+              additionalProperties:
+                type: string
+    ALRRegulatorReviewReturnedForAmendsRequestActionPayload:
+      required:
+        - regulatorReviewGroupDecisions
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            regulatorReviewGroupDecisions:
+              type: object
+              additionalProperties:
+                oneOf:
+                  - $ref: '#/components/schemas/ALRReviewDecision'
+                  - $ref: '#/components/schemas/ALRAlrDataRegulatorReviewDecision'
+                  - $ref: >-
+                      #/components/schemas/ALRVerificationReportDataRegulatorReviewDecision
+            regulatorReviewAttachments:
               type: object
               additionalProperties:
                 type: string
@@ -36032,6 +37753,67 @@ components:
               type: object
               additionalProperties:
                 type: string
+    HSETIApplicationSubmittedRequestActionPayload:
+      required:
+        - hseti
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            hseti:
+              $ref: '#/components/schemas/HSETI'
+            hsetiAttachments:
+              type: object
+              additionalProperties:
+                type: string
+    HSETICompletedRequestActionPayload:
+      required:
+        - hseti
+        - overallDecision
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            hseti:
+              $ref: '#/components/schemas/HSETI'
+            hsetiAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            decisionNotification:
+              $ref: '#/components/schemas/DecisionNotification'
+            officialNotice:
+              $ref: '#/components/schemas/FileInfoDTO'
+            usersInfo:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/RequestActionUserInfo'
+            overallDecision:
+              $ref: '#/components/schemas/HSETIRegulatorReviewOverallDecision'
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
+            regulatorReviewGroupDecisions:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/HSETIRegulatorReviewDecision'
+    HSETIRegulatorReviewReturnedForAmendsRequestActionPayload:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            regulatorReviewGroupDecisions:
+              type: object
+              additionalProperties:
+                $ref: '#/components/schemas/HSETIRegulatorReviewDecision'
+            regulatorReviewAttachments:
+              type: object
+              additionalProperties:
+                type: string
     InstallationAccountOpeningApplicationSubmittedRequestActionPayload:
       required:
         - accountType
@@ -36542,6 +38324,69 @@ components:
               type: object
               additionalProperties:
                 $ref: '#/components/schemas/RequestActionUserInfo'
+    NonComplianceDetailsAmendedRequestActionPayload:
+      required:
+        - reason
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/RequestActionPayload'
+        - type: object
+          properties:
+            reason:
+              type: string
+              enum:
+                - FAILURE_TO_SURRENDER_ALLOWANCES_100
+                - FAILURE_TO_SURRENDER_ALLOWANCES_20
+                - CARRYING_OUT_A_REGULATED_ACTIVITY_WITHOUT_A_PERMIT
+                - FAILURE_TO_MONITOR_REPORTABLE_EMISSIONS
+                - FAILURE_TO_REPORT_REPORTABLE_EMISSIONS
+                - FAILURE_TO_SUBMIT_AN_IMPROVEMENT_REPORT
+                - FAILURE_TO_NOTIFY
+                - FAILURE_TO_MONITOR_ACTIVITY_LEVELS
+                - FAILURE_TO_REPORT_ACTIVITY_LEVELS
+                - FAILURE_TO_COMPLY_WITH_THE_CONDITION_OF_A_PERMIT
+                - >-
+                  FAILURE_TO_TRANSFER_OR_SURRENDER_ALLOWANCES_WHEN_UNDERREPORTING_DISCOVERED_AFTER_TRANSFER
+                - FAILURE_TO_SURRENDER_A_PERMIT
+                - FAILURE_TO_SUBMIT_INFORMATION_UNDER_ARTICLE_27_A
+                - EXCEEDING_EMISSIONS_TARGET
+                - FAILURE_TO_PAY_PENALTY_FOR_EXCEEDING_EMISSIONS_TARGET
+                - UNDER_REPORTING_EMISSIONS
+                - FAILURE_TO_NOTIFY_WHEN_CEASE_TO_MEET_CRITERIA
+                - REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - >-
+                  FAILURE_TO_NOTIFY_WHEN_REPORTABLE_EMISSIONS_EXCEED_MAXIMUM_AMOUNT
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_ETS
+                - FAILURE_TO_MONITOR_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_REPORT_AVIATION_EMISSIONS_ETS
+                - FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - >-
+                  FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN_CORSIA
+                - FAILURE_TO_MONITOR_EMISSIONS_CORSIA
+                - FAILURE_TO_REPORT_EMISSIONS_CORSIA
+                - FAILURE_TO_KEEP_RECORDS_CORSIA
+                - FAILURE_TO_COMPLY_WITH_DEFICIT_NOTICE
+                - FAILURE_TO_COMPLY_WITH_NOTICE_TO_RETURN_ALLOWANCES
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE_CORSIA
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_ETS
+                - FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE_CORSIA
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_ETS
+                - PROVIDING_FALSE_OR_MISLEADING_INFORMATION_CORSIA
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_ETS
+                - REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_CORSIA
+            nonComplianceDate:
+              type: string
+              format: date
+            complianceDate:
+              type: string
+              format: date
+            comments:
+              maxLength: 10000
+              minLength: 0
+              type: string
     NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload:
       required:
         - comments
@@ -37696,6 +39541,7 @@ components:
             - PERMIT_TRANSFER_APPLICATION_CANCELLED
             - NON_COMPLIANCE_APPLICATION_CLOSED
             - NON_COMPLIANCE_APPLICATION_SUBMITTED
+            - NON_COMPLIANCE_DETAILS_AMENDED
             - NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED
             - NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED
             - NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED
@@ -37815,10 +39661,32 @@ components:
             - PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REJECTED
             - ALR_APPLICATION_SENT_TO_VERIFIER
             - ALR_RECALLED_FROM_VERIFICATION
+            - ALR_APPLICATION_SENT_TO_REGULATOR
             - ALR_VERIFICATION_RETURNED_TO_OPERATOR
             - ALR_APPLICATION_VERIFICATION_SUBMITTED
+            - ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS
+            - ALR_APPLICATION_PROCEEDED_TO_AUTHORITY
+            - ALR_APPLICATION_CLOSED
+            - ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER
+            - ALR_APPLICATION_AMENDS_SUBMITTED
+            - ALR_APPLICATION_PEER_REVIEW_REQUESTED
+            - ALR_APPLICATION_PEER_REVIEW_ACCEPTED
+            - ALR_APPLICATION_PEER_REVIEW_REJECTED
+            - ALR_APPLICATION_ACCEPTED
+            - ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS
+            - ALR_APPLICATION_REJECTED
             - INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPONDED
             - INSTALLATION_AUDIT_OPERATOR_RESPONDED
+            - HSE_TI_APPLICATION_CANCELLED
+            - HSE_TI_APPLICATION_SENT_TO_REGULATOR
+            - HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS
+            - HSE_TI_APPROVED
+            - HSE_TI_REJECTED
+            - HSE_TI_WITHDRAWN
+            - HSE_TI_DEEMED_WITHDRAWN
+            - HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED
+            - HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED
+            - HSE_TI_APPLICATION_PEER_REVIEW_REJECTED
             - REQUEST_TERMINATED
             - VERIFICATION_STATEMENT_CANCELLED
             - EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED
@@ -37918,9 +39786,20 @@ components:
             - AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED
         payload:
           oneOf:
+            - $ref: '#/components/schemas/ALRApplicationAcceptedRequestActionPayload'
+            - $ref: >-
+                #/components/schemas/ALRApplicationAcceptedWithCorrectionsRequestActionPayload
+            - $ref: >-
+                #/components/schemas/ALRApplicationAmendsSubmittedRequestActionPayload
+            - $ref: '#/components/schemas/ALRApplicationClosedRequestActionPayload'
+            - $ref: >-
+                #/components/schemas/ALRApplicationProceededToAuthorityRequestActionPayload
+            - $ref: '#/components/schemas/ALRApplicationRejectedRequestActionPayload'
             - $ref: '#/components/schemas/ALRApplicationSubmittedRequestActionPayload'
             - $ref: >-
                 #/components/schemas/ALRApplicationVerificationSubmittedRequestActionPayload
+            - $ref: >-
+                #/components/schemas/ALRRegulatorReviewReturnedForAmendsRequestActionPayload
             - $ref: >-
                 #/components/schemas/ALRVerificationReturnedToOperatorRequestActionPayload
             - $ref: >-
@@ -38046,6 +39925,11 @@ components:
             - $ref: >-
                 #/components/schemas/EmpVariationUkEtsApplicationSubmittedRequestActionPayload
             - $ref: >-
+                #/components/schemas/HSETIApplicationSubmittedRequestActionPayload
+            - $ref: '#/components/schemas/HSETICompletedRequestActionPayload'
+            - $ref: >-
+                #/components/schemas/HSETIRegulatorReviewReturnedForAmendsRequestActionPayload
+            - $ref: >-
                 #/components/schemas/InstallationAccountOpeningApplicationSubmittedRequestActionPayload
             - $ref: >-
                 #/components/schemas/InstallationAccountOpeningApprovedRequestActionPayload
@@ -38071,6 +39955,8 @@ components:
                 #/components/schemas/NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload
             - $ref: >-
                 #/components/schemas/NonComplianceDailyPenaltyNoticeApplicationSubmittedRequestActionPayload
+            - $ref: >-
+                #/components/schemas/NonComplianceDetailsAmendedRequestActionPayload
             - $ref: >-
                 #/components/schemas/NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload
             - $ref: >-
@@ -38184,6 +40070,7 @@ components:
             - RETURN_OF_ALLOWANCES
             - INSTALLATION_ONSITE_INSPECTION
             - INSTALLATION_AUDIT
+            - HSE_TI
             - BDR
             - PERMANENT_CESSATION
             - ALR
@@ -38285,6 +40172,7 @@ components:
             - >-
               NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
             - NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED_PAYLOAD
+            - NON_COMPLIANCE_DETAILS_AMENDED_PAYLOAD
             - NER_APPLICATION_SUBMITTED_PAYLOAD
             - NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
             - NER_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD
@@ -38336,6 +40224,10 @@ components:
               INSTALLATION_INSPECTION_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
             - INSTALLATION_INSPECTION_APPLICATION_SUBMITTED_PAYLOAD
             - INSTALLATION_INSPECTION_OPERATOR_RESPONDED_PAYLOAD
+            - HSE_TI_APPLICATION_SUBMITTED_PAYLOAD
+            - HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD
+            - HSE_TI_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
+            - HSE_TI_COMPLETED_PAYLOAD
             - BDR_APPLICATION_SUBMITTED_PAYLOAD
             - BDR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD
             - BDR_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD
@@ -38346,6 +40238,14 @@ components:
             - ALR_APPLICATION_SUBMITTED_PAYLOAD
             - ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD
             - ALR_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD
+            - ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD
+            - ALR_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD
+            - ALR_APPLICATION_CLOSED_PAYLOAD
+            - ALR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD
+            - ALR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD
+            - ALR_APPLICATION_ACCEPTED_PAYLOAD
+            - ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS_PAYLOAD
+            - ALR_APPLICATION_REJECTED_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_APPROVED_PAYLOAD
             - EMP_ISSUANCE_UKETS_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD
@@ -38534,6 +40434,7 @@ components:
           NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
           NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED_PAYLOAD: >-
             #/components/schemas/NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload
+          NON_COMPLIANCE_DETAILS_AMENDED_PAYLOAD: '#/components/schemas/NonComplianceDetailsAmendedRequestActionPayload'
           NER_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/NerApplicationSubmittedRequestActionPayload'
           NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
           NER_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD: >-
@@ -38596,6 +40497,23 @@ components:
             #/components/schemas/ALRVerificationReturnedToOperatorRequestActionPayload
           ALR_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD: >-
             #/components/schemas/ALRApplicationVerificationSubmittedRequestActionPayload
+          ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD: >-
+            #/components/schemas/ALRRegulatorReviewReturnedForAmendsRequestActionPayload
+          ALR_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD: >-
+            #/components/schemas/ALRApplicationProceededToAuthorityRequestActionPayload
+          ALR_APPLICATION_CLOSED_PAYLOAD: '#/components/schemas/ALRApplicationClosedRequestActionPayload'
+          ALR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD: >-
+            #/components/schemas/ALRApplicationAmendsSubmittedRequestActionPayload
+          ALR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
+          ALR_APPLICATION_ACCEPTED_PAYLOAD: '#/components/schemas/ALRApplicationAcceptedRequestActionPayload'
+          ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS_PAYLOAD: >-
+            #/components/schemas/ALRApplicationAcceptedWithCorrectionsRequestActionPayload
+          ALR_APPLICATION_REJECTED_PAYLOAD: '#/components/schemas/ALRApplicationRejectedRequestActionPayload'
+          HSE_TI_APPLICATION_SUBMITTED_PAYLOAD: '#/components/schemas/HSETIApplicationSubmittedRequestActionPayload'
+          HSE_TI_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD: '#/components/schemas/PeerReviewDecisionSubmittedRequestActionPayload'
+          HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD: >-
+            #/components/schemas/HSETIRegulatorReviewReturnedForAmendsRequestActionPayload
+          HSE_TI_COMPLETED_PAYLOAD: '#/components/schemas/HSETICompletedRequestActionPayload'
           EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED_PAYLOAD: >-
             #/components/schemas/EmpIssuanceUkEtsApplicationSubmittedRequestActionPayload
           EMP_ISSUANCE_UKETS_APPLICATION_APPROVED_PAYLOAD: >-

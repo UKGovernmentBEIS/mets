@@ -1,0 +1,17 @@
+<dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Decision</dt>
+    <dd govukSummaryListRowValue>{{ overallDecision.type | capitalizeFirst }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+
+  <div govukSummaryListRow *ngIf="overallDecision?.reason">
+    <dt govukSummaryListRowKey>Reason for decision</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">{{ overallDecision.reason }}</dd>
+    <dd govukSummaryListRowActions *ngIf="isEditable">
+      <a govukLink [routerLink]="['../reason']" [state]="{ changing: true }">Change</a>
+    </dd>
+  </div>
+</dl>

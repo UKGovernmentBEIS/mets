@@ -19,7 +19,7 @@ import { BDRApplicationRegulatorReviewSubmitRequestTaskPayload } from 'pmrv-api'
   imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReturnForAmendsComponent {
+export class BdrReturnForAmendsComponent {
   isSubmitted$ = new BehaviorSubject<boolean>(false);
   requestId$: BehaviorSubject<string | null> = new BehaviorSubject(null);
 

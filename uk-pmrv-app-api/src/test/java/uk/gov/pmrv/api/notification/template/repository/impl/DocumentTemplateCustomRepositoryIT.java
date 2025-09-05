@@ -53,7 +53,7 @@ class DocumentTemplateCustomRepositoryIT extends AbstractContainerBaseTest {
         DocumentTemplateSearchCriteria searchCriteria = DocumentTemplateSearchCriteria.builder()
             .competentAuthority(competentAuthority)
             .accountType(accountType)
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
         TemplateSearchResults searchResults = repo.findBySearchCriteria(searchCriteria);
@@ -86,7 +86,7 @@ class DocumentTemplateCustomRepositoryIT extends AbstractContainerBaseTest {
             .competentAuthority(competentAuthority)
             .accountType(accountType)
             .term("process")
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
         TemplateSearchResults searchResults = repo.findBySearchCriteria(searchCriteria);
@@ -119,7 +119,7 @@ class DocumentTemplateCustomRepositoryIT extends AbstractContainerBaseTest {
             .competentAuthority(competentAuthority)
             .accountType(accountType)
             .term("Request")
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
         TemplateSearchResults searchResults = repo.findBySearchCriteria(searchCriteria);

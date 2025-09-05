@@ -15,6 +15,6 @@ export class OperatorReportSummaryTemplateComponent {
   @Input() document: AttachedFile;
 
   get documents() {
-    return [this.document];
+    return this.document ? [this.document] : [];
   }
 }

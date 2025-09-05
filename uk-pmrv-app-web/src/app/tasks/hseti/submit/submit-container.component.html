@@ -1,0 +1,43 @@
+<ng-container *ngIf="vm() as vm">
+  <app-base-task-container-component
+    [header]="vm.title"
+    [customContentTemplate]="vm.isWaitTask ? waitContentTemplate : taskContentTemplate"
+    [expectedTaskType]="vm.expectedTaskType"
+    [notification]="vm.notification"></app-base-task-container-component>
+
+  <ng-template #waitContentTemplate>
+    <govuk-warning-text>Waiting for the regulator to complete the review</govuk-warning-text>
+  </ng-template>
+
+  <ng-template #taskContentTemplate>
+    <ng-container *ngIf="requestTaskType() === 'HSE_TI_APPLICATION_AMENDS_SUBMIT'">
+      <h2 class="govuk-heading-m govuk-!-margin-0">Regulator comments</h2>
+      <ul app-task-item-list>
+        <li
+          app-task-item
+          link="changes-requested"
+          linkText="Changes requested by the regulator"
+          [status]="vm.changedRequestedSectionStatus"></li>
+      </ul>
+    </ng-container>
+
+    <h2 class="govuk-heading-m govuk-!-margin-0">{{ vm.subTitle }}</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectDetailsLink"
+        linkText="Provide HSE details"
+        [status]="vm.detailsSectionStatus"></li>
+    </ul>
+
+    <h2 class="govuk-heading-m govuk-!-margin-0">Submit</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectSendReportLink"
+        linkText="Send to regulator"
+        [status]="vm.sendReportSectionStatus"
+        [hasContent]="true"></li>
+    </ul>
+  </ng-template>
+</ng-container>

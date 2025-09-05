@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
 import { map, Observable } from 'rxjs';
@@ -8,6 +9,7 @@ import {
   NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload,
   NonComplianceDailyPenaltyNoticeApplicationSubmittedRequestActionPayload,
   NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload,
+  RequestActionDTO,
 } from 'pmrv-api';
 
 import { CommonActionsStore } from '../../store/common-actions.store';
@@ -21,6 +23,14 @@ export class NonComplianceService {
 
   getPayload(): Observable<any> {
     return this.store.payload$.pipe(map((payload) => payload));
+  }
+
+  get requestActionType$(): Observable<RequestActionDTO['type']> {
+    return this.store.requestActionType$;
+  }
+
+  get requestActionType(): Signal<RequestActionDTO['type']> {
+    return toSignal(this.requestActionType$);
   }
 
   getDownloadUrlFiles(files: string[]): { downloadUrl: string; fileName: string }[] {

@@ -1,0 +1,11 @@
+<app-hseti-task-review returnToLink="../.." [linkText]="linkText()" [breadcrumb]="true">
+  <app-page-heading caption="Overall decision">Check your answers</app-page-heading>
+
+  <app-overall-decision-summary-template
+    [overallDecision]="hsetiPayload()?.overallDecision"
+    [isEditable]="isEditable()"></app-overall-decision-summary-template>
+
+  <div *ngIf="isEditable() && hideSubmit() === false" class="govuk-button-group">
+    <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+  </div>
+</app-hseti-task-review>

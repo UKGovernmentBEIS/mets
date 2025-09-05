@@ -6,10 +6,9 @@ import { ActionSharedModule } from '@actions/shared/action-shared-module';
 import { ActivitySummaryTemplateComponent } from '@shared/components/alr/activity-summary-template/activity-summary-template.component';
 import { AttachedFile } from '@shared/types/attached-file.type';
 
-import { ALR, ALRApplicationSubmittedRequestActionPayload } from 'pmrv-api';
+import { ALRApplicationSubmittedRequestActionPayload } from 'pmrv-api';
 
 interface ViewModel {
-  alr: ALR;
   alrFiles: AttachedFile;
   files: AttachedFile[];
 }
@@ -28,7 +27,6 @@ export class AlrActivitySubmittedComponent {
     const payload = this.payload();
 
     return {
-      alr: payload.alr,
       alrFiles: this.alrActionService.getOperatorDownloadUrlAlrFile(payload?.alr?.alrFile),
       files: this.alrActionService.getOperatorDownloadUrlFiles(payload?.alr?.files),
     };

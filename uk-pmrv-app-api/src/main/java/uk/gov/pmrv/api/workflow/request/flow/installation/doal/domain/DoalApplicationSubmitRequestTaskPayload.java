@@ -56,11 +56,13 @@ public class DoalApplicationSubmitRequestTaskPayload extends RequestTaskPayload 
     public Set<UUID> getReferencedAttachmentIds() {
         if(this.getDoal() != null) {
             final Set<UUID> operatorActivityLevelReportDocs =
-                    this.getDoal().getOperatorActivityLevelReport() != null ?
-                            Set.of(this.getDoal().getOperatorActivityLevelReport().getDocument()) : Set.of();
+                    this.getDoal().getOperatorActivityLevelReport() != null
+                            && this.getDoal().getOperatorActivityLevelReport().getDocument()!=null ?
+                                Set.of(this.getDoal().getOperatorActivityLevelReport().getDocument()) : Set.of();
             final Set<UUID> verificationReportOfTheActivityLevelReportDocs =
-                    this.getDoal().getVerificationReportOfTheActivityLevelReport() != null ?
-                            Set.of(this.getDoal().getVerificationReportOfTheActivityLevelReport().getDocument()) : Set.of();
+                    this.getDoal().getVerificationReportOfTheActivityLevelReport() != null
+                            && this.getDoal().getVerificationReportOfTheActivityLevelReport().getDocument()!=null ?
+                                Set.of(this.getDoal().getVerificationReportOfTheActivityLevelReport().getDocument()) : Set.of();
             final Set<UUID> additionalDocumentsDocs =
                     (this.getDoal().getAdditionalDocuments() != null) && (this.getDoal().getAdditionalDocuments().getDocuments() != null) ?
                            this.getDoal().getAdditionalDocuments().getDocuments() : Set.of();

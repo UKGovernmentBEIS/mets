@@ -55,6 +55,11 @@ describe('BdrVerificationReviewGroupDecisionComponent', () => {
         .map((row) => [row.querySelector('dt'), row.querySelector('dd')])
         .map((pair) => pair.map((element) => element.textContent.trim()));
     }
+
+    get legend() {
+      return this.query<HTMLHeadingElement>('.govuk-fieldset__legend').textContent.trim();
+    }
+
     get header() {
       return this.query<HTMLHeadingElement>('h2').textContent.trim();
     }
@@ -114,7 +119,7 @@ describe('BdrVerificationReviewGroupDecisionComponent', () => {
     });
 
     it('should display an empty form', () => {
-      expect(page.header).toEqual('What is your decision for the information submitted?');
+      expect(page.legend).toEqual('What is your decision for the information submitted?');
       expect(page.summaryListValues).toEqual([]);
       expect(page.decisionRadioButtons.every((radio) => !radio.checked)).toBeTruthy();
       expect(page.notes).toEqual('');

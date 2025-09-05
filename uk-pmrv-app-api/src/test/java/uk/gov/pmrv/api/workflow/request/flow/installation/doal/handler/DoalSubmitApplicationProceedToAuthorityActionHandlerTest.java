@@ -15,7 +15,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskActio
 import uk.gov.pmrv.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.pmrv.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestTaskActionEmptyPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalDeterminationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.enums.DoalDeterminationType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalSubmitOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.service.DoalSubmitService;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.validation.DoalProceedToAuthorityValidator;

@@ -35,7 +35,11 @@ const taskRoutes: PaymentRoute[] = [
     },
     resolve: {
       type: () => inject(PaymentStore).getState().requestTaskItem?.requestTask.type,
-      year: () => (inject(PaymentStore).getState().requestTaskItem?.requestInfo?.requestMetadata as any)?.year,
+      year: () => {
+        const requestMetadata = inject(PaymentStore).getState().requestTaskItem?.requestInfo?.requestMetadata;
+        // If allocationPeriod is not present, we assume it's a year-based request
+        return requestMetadata?.[!requestMetadata?.['allocationPeriod'] ? 'year' : 'allocationPeriod'];
+      },
     },
     children: [
       {
@@ -88,7 +92,11 @@ const taskRoutes: PaymentRoute[] = [
     },
     resolve: {
       type: () => inject(PaymentStore).getState().requestTaskItem?.requestTask.type,
-      year: () => (inject(PaymentStore).getState().requestTaskItem?.requestInfo?.requestMetadata as any)?.year,
+      year: () => {
+        const requestMetadata = inject(PaymentStore).getState().requestTaskItem?.requestInfo?.requestMetadata;
+        // If allocationPeriod is not present, we assume it's a year-based request
+        return requestMetadata?.[!requestMetadata?.['allocationPeriod'] ? 'year' : 'allocationPeriod'];
+      },
     },
     children: [
       {

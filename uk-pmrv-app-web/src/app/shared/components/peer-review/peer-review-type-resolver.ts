@@ -66,10 +66,14 @@ export function resolveRequestTaskActionType(
       return 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_REQUEST_PEER_REVIEW';
     case 'BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
       return 'BDR_REQUEST_PEER_REVIEW';
+    case 'HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+      return 'HSE_TI_REQUEST_PEER_REVIEW';
     case 'PERMANENT_CESSATION_APPLICATION_SUBMIT':
       return 'PERMANENT_CESSATION_REQUEST_PEER_REVIEW';
     case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
       return 'AVIATION_DOE_CORSIA_REQUEST_PEER_REVIEW';
+    case 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+      return 'ALR_REQUEST_PEER_REVIEW';
 
     default:
       return null;
@@ -138,10 +142,14 @@ export function resolveRequestTaskActionPayloadType(
       return 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_REQUEST_PEER_REVIEW_PAYLOAD';
     case 'BDR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
       return 'BDR_REQUEST_PEER_REVIEW_PAYLOAD';
+    case 'HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+      return 'HSE_TI_REQUEST_PEER_REVIEW_PAYLOAD';
     case 'PERMANENT_CESSATION_APPLICATION_SUBMIT':
       return 'PERMANENT_CESSATION_REQUEST_PEER_REVIEW_PAYLOAD';
     case 'AVIATION_DOE_CORSIA_APPLICATION_SUBMIT':
       return 'AVIATION_DOE_CORSIA_REQUEST_PEER_REVIEW_PAYLOAD';
+    case 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+      return 'ALR_REQUEST_PEER_REVIEW_PAYLOAD';
 
     default:
       return null;
@@ -231,9 +239,23 @@ export function resolveReturnToText(
         default:
           return null;
       }
+    case 'alr':
+      return { text: 'Review activity level report', link: '..' };
   }
 }
 
 export function resolvePeerReviewTaskType(taskType: RequestTaskDTO['type']): RequestTaskDTO['type'] {
   return requestTaskTypeToPeerReviewRequestTaskType[taskType];
 }
+
+export const resolveReferenceCodeText = (requestTaskType: RequestTaskDTO['type']): string => {
+  switch (requestTaskType) {
+    case 'INSTALLATION_AUDIT_APPLICATION_SUBMIT':
+    case 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT':
+    case 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+      return 'Your reference number';
+
+    default:
+      return 'Your reference code is:';
+  }
+};

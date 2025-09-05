@@ -2,25 +2,23 @@
   <div [class]="(isRelatedActionsSectionVisible$ | async) ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
     <govuk-notification-banner *ngIf="isTaskTypeAmendsSubmit$ | async" type="neutral">
       <h1 class="govuk-notification-banner__heading">The regulator has requested amends to your application.</h1>
-      <a [routerLink]="[]" (click)="viewAmends()" govukLink class="govuk-notification-banner__link"
-        >View all required amends</a
-      >
+      <a [routerLink]="[]" (click)="viewAmends()" govukLink class="govuk-notification-banner__link">
+        View all required amends
+      </a>
     </govuk-notification-banner>
     <app-page-heading size="xl">
       {{ header$ | async }}
       <app-task-header-info
         *ngIf="isTask$ | async"
         [assignee]="(store.select('assignee') | async).assigneeFullName"
-        [daysRemaining]="store.select('daysRemaining') | async"
-      ></app-task-header-info>
+        [daysRemaining]="store.select('daysRemaining') | async"></app-task-header-info>
     </app-page-heading>
 
     <app-task-list
       [hideSubmit]="(store.select('isEditable') | async) === false || (permitType$ | async) === undefined"
       (submitApplication)="onSubmit()"
       [submitLabel]="(isTaskTypeAmendsSubmit$ | async) ? 'Resubmit' : 'Submit'"
-      [hideCancel]="true"
-    >
+      [hideCancel]="true">
       <app-sections></app-sections>
     </app-task-list>
 
@@ -34,8 +32,7 @@
           *ngFor="let action of requestActions"
           [action]="action"
           [link]="action | timelineItemLink"
-          [state]="navigationState"
-        ></app-timeline-item>
+          [state]="navigationState"></app-timeline-item>
       </app-timeline>
     </ng-container>
   </div>
@@ -43,7 +40,17 @@
     <app-related-actions
       [isAssignable$]="store.isAssignableAndCapable$"
       [taskId$]="taskId$"
-      [allowedActions$]="store.select('allowedRequestTaskActions')"
-    ></app-related-actions>
+      [allowedActions$]="store.select('allowedRequestTaskActions')"></app-related-actions>
   </div>
+
+  <aside *ngIf="(isSubmitWasteTask$ | async) === true" class="govuk-grid-column-one-third" role="complementary">
+    <h2 class="govuk-heading-m">Waste voluntary guidance</h2>
+
+    <p class="govuk-body">
+      The METS service supports the UK ETS and refers to the legislation for and requirements of the scheme. During the
+      Waste Activities Voluntary Scheme for Greenhouse Gas Emissions, waste operators may use METS but legislative
+      references, certain terminology and certain data requests are not relevant to them. Contact your regulator for
+      further information on how to participate.
+    </p>
+  </aside>
 </div>

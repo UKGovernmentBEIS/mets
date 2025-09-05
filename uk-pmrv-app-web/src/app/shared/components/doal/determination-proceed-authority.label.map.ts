@@ -8,9 +8,8 @@ export const articleReasonGroupTypeLabelsMap: Record<
   ARTICLE_34H_REASONS: 'Article 34H reasons',
 };
 
-export const articleReasonItemsLabelsMap: Record<
-  DoalProceedToAuthorityDetermination['articleReasonItems'][number],
-  string
+export const articleReasonItemsLabelsMap: Partial<
+  Record<DoalProceedToAuthorityDetermination['articleReasonItems'][number], string>
 > = {
   ALLOCATION_ADJUSTMENT_UNDER_ARTICLE_5:
     'Article 6a of the Activity Level Changes Regulation (allocation adjustment under Article 5)',
@@ -20,6 +19,8 @@ export const articleReasonItemsLabelsMap: Record<
     'Article 6a of the Activity Level Changes Regulation (setting HAL and allocation under Article 3a - after first full calendar year operation of new sub-installation)',
   ADJUSTMENT_OF_PARAMETERS_OTHER_THAN_ACTIVITY_LEVEL:
     'Article 6a of the Activity Level Changes Regulation (adjustment of parameters other than activity level)',
+  TEMPORARY_CESSATION: 'Article 6a of the Activity Level Changes Regulation (temporary cessation)',
+  PERMANENT_CESSATION: 'Article 3za of the Activity Level Changes Regulation (permanent cessation)',
 
   ERROR_IN_BASELINE_DATA_REPORT: 'Article 34H of the Order - error in baseline data report',
   ERROR_IN_NEW_ENTRANT_DATA_REPORT: 'Article 34H of the Order - error in new entrant data report',

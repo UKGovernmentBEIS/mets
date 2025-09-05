@@ -14,6 +14,9 @@ import { Params } from '@angular/router';
       govukLink
       class="govuk-!-font-size-19 govuk-!-font-weight-regular float-right">
       Change
+      @if (changeHiddenText) {
+        <span class="govuk-visually-hidden">{{ changeHiddenText }}</span>
+      }
     </a>
   `,
   styles: `
@@ -25,6 +28,7 @@ import { Params } from '@angular/router';
 export class SummaryHeaderComponent {
   @Input() changeRoute: string | any[];
   @Input() queryParams?: Params | null;
+  @Input() changeHiddenText: string | null;
   @Output() readonly changeClick = new EventEmitter<Event>();
 
   @HostBinding('class.govuk-clearfix') get clearfix() {

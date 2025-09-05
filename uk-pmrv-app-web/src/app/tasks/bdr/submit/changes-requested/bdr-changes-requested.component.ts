@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject } from 'rxjs';
 
+import { ChangesRequestedTemplateComponent } from '@shared/components/changes-requested-template/changes-requested-template.component';
 import { SharedModule } from '@shared/shared.module';
 import { BdrService, BdrTaskSharedModule } from '@tasks/bdr/shared';
 import { TaskSharedModule } from '@tasks/shared/task-shared-module';
@@ -18,7 +19,7 @@ import { PendingRequestService } from '../../../../core/guards/pending-request.s
   selector: 'app-bdr-changes-requested',
   templateUrl: './bdr-changes-requested.component.html',
   standalone: true,
-  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule],
+  imports: [SharedModule, TaskSharedModule, BdrTaskSharedModule, ChangesRequestedTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BdrChangesRequestedComponent {

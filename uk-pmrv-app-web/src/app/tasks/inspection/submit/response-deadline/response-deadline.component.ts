@@ -21,16 +21,17 @@ import { responseDeadlineFormProvider } from './response-deadline-form.provider'
 @Component({
   selector: 'app-response-deadline',
   template: `
-    <app-inspection-task
-      heading="Set a response deadline"
-      caption="Follow-up actions for the operator"
-      [returnToLink]="'..'">
+    <app-inspection-task [returnToLink]="'..'">
+      <span [class]="'govuk-caption-l'">Follow-up actions for the operator</span>
       <app-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" submitText="Continue" [hideSubmit]="!isEditable()">
         <div
           formControlName="responseDeadline"
           govuk-date-input
+          size="heading"
           hint="This will be applied to all follow-up actions"
-          [isRequired]="true"></div>
+          [isRequired]="true">
+          <h1 govukLegend>Set a response deadline</h1>
+        </div>
       </app-wizard-step>
     </app-inspection-task>
   `,

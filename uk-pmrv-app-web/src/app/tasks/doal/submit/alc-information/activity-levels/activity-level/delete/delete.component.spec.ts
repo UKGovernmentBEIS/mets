@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -18,11 +17,11 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { TasksService } from 'pmrv-api';
 
-import { DeleteComponent } from './delete.component';
+import { DoalActivityLevelDeleteComponent } from './delete.component';
 
 describe('DeleteComponent', () => {
-  let component: DeleteComponent;
-  let fixture: ComponentFixture<DeleteComponent>;
+  let component: DoalActivityLevelDeleteComponent;
+  let fixture: ComponentFixture<DoalActivityLevelDeleteComponent>;
 
   let page: Page;
   let router: Router;
@@ -39,14 +38,14 @@ describe('DeleteComponent', () => {
 
   const tasksService = mockClass(TasksService);
 
-  class Page extends BasePage<DeleteComponent> {
+  class Page extends BasePage<DoalActivityLevelDeleteComponent> {
     get deleteButton() {
       return this.query<HTMLButtonElement>('button[type="button"]');
     }
   }
 
   const createComponent = () => {
-    fixture = TestBed.createComponent(DeleteComponent);
+    fixture = TestBed.createComponent(DoalActivityLevelDeleteComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
     router = TestBed.inject(Router);
@@ -56,8 +55,8 @@ describe('DeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DeleteComponent, DoalTaskComponent],
-      imports: [RouterTestingModule, SharedModule, TaskSharedModule],
+      declarations: [DoalActivityLevelDeleteComponent, DoalTaskComponent],
+      imports: [SharedModule, TaskSharedModule],
       providers: [
         KeycloakService,
         { provide: TasksService, useValue: tasksService },

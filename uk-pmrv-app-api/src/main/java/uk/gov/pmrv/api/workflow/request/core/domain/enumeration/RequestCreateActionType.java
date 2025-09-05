@@ -24,6 +24,7 @@ public enum RequestCreateActionType {
     WITHHOLDING_OF_ALLOWANCES(RequestType.WITHHOLDING_OF_ALLOWANCES),
     RETURN_OF_ALLOWANCES(RequestType.RETURN_OF_ALLOWANCES),
     AIR(RequestType.AIR),
+    HSE_TI(RequestType.HSE_TI),
     BDR(RequestType.BDR),
     PERMANENT_CESSATION(RequestType.PERMANENT_CESSATION),
     ALR(RequestType.ALR),

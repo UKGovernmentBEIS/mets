@@ -19,7 +19,7 @@ public class AviationAccountUsersContactsRepository implements AccountUsersConta
     public List<AviationAccountUserContact> findAccountUserContacts(EntityManager entityManager) {
         return entityManager.createNativeQuery(
                         "select auth.user_id as \"userId\", role.name as \"role\",  account.emitter_id as \"accountId\", account.name as \"accountName\", " +
-                                "account.type as \"accountType\", acc_av.status as \"accountStatus\", le.name as \"legalEntityName\", auth.status as \"authorityStatus\", acc_av.central_route_charges_office_code as \"crcoCode\",\n" +
+                                "account.type as \"accountType\", account.emission_trading_scheme as \"scheme\", acc_av.status as \"accountStatus\", le.name as \"legalEntityName\", auth.status as \"authorityStatus\", acc_av.central_route_charges_office_code as \"crcoCode\",\n" +
                                 "       case when acPrimary.user_id is not null then true else false end as \"primaryContact\",\n" +
                                 "       case when acService.user_id is not null then true else false end as \"serviceContact\",\n" +
                                 "       case when acFinancial.user_id is not null then true else false end as \"financialContact\",\n" +
@@ -40,6 +40,7 @@ public class AviationAccountUsersContactsRepository implements AccountUsersConta
                 .addScalar("accountId", StandardBasicTypes.STRING)
                 .addScalar("accountName", StandardBasicTypes.STRING)
                 .addScalar("accountType", StandardBasicTypes.STRING)
+                .addScalar("scheme", StandardBasicTypes.STRING)
                 .addScalar("accountStatus", StandardBasicTypes.STRING)
                 .addScalar("legalEntityName", StandardBasicTypes.STRING)
                 .addScalar("authorityStatus", StandardBasicTypes.STRING)
@@ -61,6 +62,7 @@ public class AviationAccountUsersContactsRepository implements AccountUsersConta
                     result.setAccountId((String)map.get("accountId"));
                     result.setAccountName((String)map.get("accountName"));
                     result.setAccountType((String)map.get("accountType"));
+                    result.setScheme((String)map.get("scheme"));
                     result.setAccountStatus((String)map.get("accountStatus"));
                     result.setLegalEntityName((String)map.get("legalEntityName"));
                     result.setAuthorityStatus((String)map.get("authorityStatus"));

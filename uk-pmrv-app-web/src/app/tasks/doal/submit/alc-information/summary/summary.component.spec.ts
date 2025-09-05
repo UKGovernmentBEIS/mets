@@ -37,7 +37,7 @@ describe('SummaryComponent', () => {
     }
 
     get activityLevelData() {
-      return this.queryAll<HTMLTableRowElement>('app-doal-activity-level-list-template table tr')
+      return this.queryAll<HTMLTableRowElement>('app-activity-level-list-template table tr')
         .filter((row) => !row.querySelector('th'))
         .map((row) => Array.from(row.querySelectorAll('td')).map((td) => td.textContent.trim()));
     }

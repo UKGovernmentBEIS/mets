@@ -2,13 +2,21 @@ import { Routes } from '@angular/router';
 
 import { RecallSharedComponent } from '@shared/components/recall/recall.component';
 
-import { AlrReturnedToOperatorComponent } from './returned-to-operator/returned-to-operator.component';
 import {
+  AlrActionCompletedComponent,
+  AlrActionCompletedSubmittedComponent,
+  AlrActionDateSubmittedComponent,
+  AlrActionResponseComponent,
   AlrActivitySubmittedComponent,
+  AlrAlcInformationSubmittedComponent,
+  AlrDeterminationSubmittedComponent,
   AlrOpinionStatementSubmittedComponent,
   AlrOverallDecisionSubmittedComponent,
+  AlrPeerReviewDecisionComponent,
+  AlrReturnedForAmendsComponent,
+  AlrReturnedToOperatorComponent,
   AlrSubmittedComponent,
-} from './submitted';
+} from '.';
 
 export const ALR_ACTION_ROUTES: Routes = [
   {
@@ -39,6 +47,16 @@ export const ALR_ACTION_ROUTES: Routes = [
         data: { pageTitle: 'ALR verification overall decision', breadcrumb: true },
         component: AlrOverallDecisionSubmittedComponent,
       },
+      {
+        path: 'alc-information',
+        data: { pageTitle: 'Information about this activity level change', breadcrumb: true },
+        component: AlrAlcInformationSubmittedComponent,
+      },
+      {
+        path: 'determination',
+        data: { pageTitle: 'Determination of activity level', breadcrumb: true },
+        component: AlrDeterminationSubmittedComponent,
+      },
     ],
   },
   {
@@ -50,5 +68,52 @@ export const ALR_ACTION_ROUTES: Routes = [
     path: 'recall-from-verifier',
     data: { pageTitle: 'Recall the report', breadcrumb: true },
     component: RecallSharedComponent,
+  },
+  {
+    path: 'return-for-amends',
+    data: { pageTitle: 'Baseline data report returned for amends' },
+    component: AlrReturnedForAmendsComponent,
+  },
+  {
+    path: 'peer-review-decision',
+    component: AlrPeerReviewDecisionComponent,
+    data: { pageTitle: 'Peer review decision' },
+  },
+  {
+    path: 'completed',
+    data: { pageTitle: 'Activity level determination' },
+    children: [
+      {
+        path: '',
+        component: AlrActionCompletedComponent,
+      },
+      {
+        path: 'submitted',
+        data: { pageTitle: 'Activity level determination', backlink: '../' },
+        children: [
+          {
+            path: '',
+            data: { pageTitle: 'Activity level determination' },
+            component: AlrActionCompletedSubmittedComponent,
+          },
+          {
+            path: 'date-submitted',
+            data: {
+              pageTitle: 'Provide the date application was submitted to UK authorities',
+              breadcrumb: 'Provide the date application was submitted to UK authorities',
+            },
+            component: AlrActionDateSubmittedComponent,
+          },
+          {
+            path: 'response',
+            data: {
+              pageTitle: 'Provide UK ETS Authority response',
+              breadcrumb: 'Provide UK ETS Authority response',
+            },
+            component: AlrActionResponseComponent,
+          },
+        ],
+      },
+    ],
   },
 ];

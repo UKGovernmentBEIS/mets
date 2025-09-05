@@ -14,6 +14,7 @@ import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 public class EmailNotificationAssignedTaskServiceTest {
 
@@ -46,7 +47,7 @@ public class EmailNotificationAssignedTaskServiceTest {
         userInfoDTO.setEmail(EMAIL);
         when(userAuthService.getUserByUserId(USER_ID)).thenReturn(userInfoDTO);
 
-        emailNotificationAssignedTaskService.sendEmailToRecipient(USER_ID);
+        emailNotificationAssignedTaskService.sendEmailToRecipient(USER_ID, RequestTaskType.INSTALLATION_ONSITE_INSPECTION_APPLICATION_SUBMIT);
 
         verify(notificationEmailService, times(1)).notifyRecipient(any(EmailData.class),
             eq(EMAIL));

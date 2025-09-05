@@ -122,7 +122,7 @@ class DocumentTemplateControllerTest {
             .competentAuthority(ca)
             .accountType(accountType)
             .term("term")
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
         List<TemplateInfoDTO> documentTemplates = List.of(
@@ -160,7 +160,7 @@ class DocumentTemplateControllerTest {
             .build();
         DocumentTemplateSearchCriteria searchCriteria = DocumentTemplateSearchCriteria.builder()
             .term("term")
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);

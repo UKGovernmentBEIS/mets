@@ -4,7 +4,11 @@ import { ChangeDetectionStrategy, Component, computed, Signal } from '@angular/c
 import { ActionSharedModule } from '@actions/shared/action-shared-module';
 import { SharedModule } from '@shared/shared.module';
 
-import { ALRApplicationSubmittedRequestActionPayload, RequestActionDTO } from 'pmrv-api';
+import {
+  ALRApplicationProceededToAuthorityRequestActionPayload,
+  ALRApplicationSubmittedRequestActionPayload,
+  RequestActionDTO,
+} from 'pmrv-api';
 
 import { AlrActionService } from '../core/alr.service';
 import { getAlrActionTitle } from '../utils';
@@ -13,6 +17,7 @@ export interface ViewModel {
   header: string;
   expectedActionType: Array<RequestActionDTO['type']>;
   hasVerificationReport: boolean;
+  hasReviewDetermination: boolean;
 }
 
 @Component({
@@ -36,6 +41,10 @@ export class AlrSubmittedComponent {
     return !!(this.payload() as ALRApplicationSubmittedRequestActionPayload).verificationReport;
   });
 
+  private readonly hasReviewDetermination = computed(() => {
+    return !!(this.payload() as ALRApplicationProceededToAuthorityRequestActionPayload).regulatorReviewOutcome;
+  });
+
   vm: Signal<ViewModel> = computed(() => {
     const header = getAlrActionTitle(this.requestActionType());
 
@@ -43,6 +52,7 @@ export class AlrSubmittedComponent {
       header,
       expectedActionType: [this.requestActionType()],
       hasVerificationReport: this.hasVerificationReport(),
+      hasReviewDetermination: this.hasReviewDetermination(),
     };
   });
 

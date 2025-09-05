@@ -55,7 +55,7 @@ import { IncorporateHeaderStore } from './store/incorporate-header.store';
             <span>{{ accountDetails.empId }} / {{ accountDetails.status | accountStatus }}</span>
           </span>
           <span class="govuk-!-padding-left-3" *ngIf="accountDetails?.emissionTradingScheme">
-            Schema: {{ accountDetails.emissionTradingScheme | aviationNamePipe }}
+            Scheme: {{ accountDetails.emissionTradingScheme | aviationNamePipe }}
           </span>
         </div>
       </div>

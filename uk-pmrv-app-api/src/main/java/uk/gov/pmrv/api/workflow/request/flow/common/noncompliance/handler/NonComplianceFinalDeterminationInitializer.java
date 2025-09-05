@@ -9,6 +9,7 @@ import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskPaylo
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 import uk.gov.pmrv.api.workflow.request.core.service.InitializeRequestTaskHandler;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceFinalDeterminationRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceRequestPayload;
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +18,14 @@ public class NonComplianceFinalDeterminationInitializer implements InitializeReq
     @Override
     public RequestTaskPayload initializePayload(Request request) {
 
+        NonComplianceRequestPayload requestPayload = (NonComplianceRequestPayload) request.getPayload();
+
         return NonComplianceFinalDeterminationRequestTaskPayload.builder()
             .payloadType(RequestTaskPayloadType.NON_COMPLIANCE_FINAL_DETERMINATION_PAYLOAD)
+                .nonComplianceComments(requestPayload.getComments())
+                .nonComplianceDate(requestPayload.getNonComplianceDate())
+                .complianceDate(requestPayload.getComplianceDate())
+                .reason(requestPayload.getReason())
             .build();
     }
 

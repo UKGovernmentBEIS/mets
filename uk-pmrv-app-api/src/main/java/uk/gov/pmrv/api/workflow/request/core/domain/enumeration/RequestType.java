@@ -39,6 +39,7 @@ public enum RequestType {
     RETURN_OF_ALLOWANCES("PROCESS_RETURN_OF_ALLOWANCES", "Return of allowances", RequestHistoryCategory.PERMIT, AccountType.INSTALLATION, false, true, ResourceType.ACCOUNT),
     INSTALLATION_ONSITE_INSPECTION("PROCESS_INSTALLATION_ONSITE_INSPECTION","Installation onsite inspection",RequestHistoryCategory.INSPECTION,AccountType.INSTALLATION,false,true, ResourceType.ACCOUNT),
     INSTALLATION_AUDIT("PROCESS_INSTALLATION_AUDIT","Installation audit",RequestHistoryCategory.INSPECTION,AccountType.INSTALLATION,false,true, ResourceType.ACCOUNT),
+    HSE_TI("PROCESS_HSE_TI","HSE target increase application",RequestHistoryCategory.PERMIT,AccountType.INSTALLATION,true,true,ResourceType.ACCOUNT),
     BDR("PROCESS_BDR","Baseline Data Report",RequestHistoryCategory.REPORTING,AccountType.INSTALLATION,true,true,ResourceType.ACCOUNT),
     PERMANENT_CESSATION("PROCESS_PERMANENT_CESSATION", "Permanent Cessation", RequestHistoryCategory.PERMIT, AccountType.INSTALLATION, true, true, ResourceType.ACCOUNT),
     ALR("PROCESS_ALR", "Activity Level Report", RequestHistoryCategory.REPORTING, AccountType.INSTALLATION, true, true, ResourceType.ACCOUNT),
@@ -151,7 +152,8 @@ public enum RequestType {
                 AVIATION_NON_COMPLIANCE,
                 
                 EMP_VARIATION_CORSIA,
-                PERMANENT_CESSATION
+                PERMANENT_CESSATION,
+                HSE_TI
         );
         return requestTypes.stream()
                 .filter(requestType -> accountType.equals(requestType.getAccountType()))

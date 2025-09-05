@@ -10,19 +10,14 @@
     "
     submitText="Continue">
     <div class="govuk-!-width-two-thirds">
-      <h2 class="govuk-heading-m">Choose a sub-installation fallback type</h2>
-      <p class="govuk-caption-m">
-        For heat benchmark, fuel benchmark, and process emissions, you can have up to two sub-installations: one exposed
-        to significant carbon leakage risk and one not exposed.
-      </p>
-      <p class="govuk-caption-m">
-        For measurable heat, you can have an additional sub-installation for the delivery of district heating that is
-        not exposed to carbon leakage.
-      </p>
-
       <div formGroupName="subInstallationTypeOptions">
         <div
           govuk-radio
+          legend="Choose a sub-installation fallback type"
+          legendSize="medium"
+          hint="For heat benchmark, fuel benchmark, and process emissions, you can have up to two sub-installations: one
+          exposed to significant carbon leakage risk and one not exposed.<br><br> For measurable heat, you can have an additional sub-installation for the delivery of district heating that is
+        not exposed to carbon leakage."
           formControlName="parentOption"
           [ngClass]="{ 'govuk-form-group--error': isInvalid('subInstallationType') }">
           <govuk-radio-option value="HEAT_BENCHMARK" label="Heat benchmark">

@@ -69,7 +69,7 @@ public class RequestPermitSurrenderCessationService {
                 cessationOfficialNotice,
                 RequestActionPayloadType.PERMIT_SURRENDER_CESSATION_COMPLETED_PAYLOAD),
             RequestActionType.PERMIT_SURRENDER_CESSATION_COMPLETED,
-            requestPayload.getRegulatorReviewer());
+            requestPayload.getRegulatorAssignee());
         
         // send official notice
         permitSurrenderOfficialNoticeService.sendOfficialNoticeForDecisionNotification(request, cessationOfficialNotice, taskActionPayload.getDecisionNotification());

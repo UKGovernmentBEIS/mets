@@ -1,0 +1,85 @@
+<ng-container *ngIf="hsetiFile">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded HSE target increase file</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="[hsetiFile]"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">
+          Change
+          <span class="govuk-visually-hidden">uploaded HSE target increase file</span>
+        </a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="files?.length">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded supporting files</dt>
+      <dd govukSummaryListRowValue>
+        <app-summary-download-files [files]="files"></app-summary-download-files>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">
+          Change
+          <span class="govuk-visually-hidden">uploaded supporting files</span>
+        </a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="data?.notes">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Notes</dt>
+      <dd govukSummaryListRowValue>
+        <div class="pre-wrap">{{ data?.notes }}</div>
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="isEditable">
+        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">
+          Change
+          <span class="govuk-visually-hidden">notes</span>
+        </a>
+      </dd>
+    </div>
+  </dl>
+</ng-container>
+
+<ng-container *ngIf="isRegulator()">
+  <dl govuk-summary-list [hasBorders]="hasBottomBorder" [class]="cssClass">
+    <div govukSummaryListRow *ngIf="regulatorData.details?.capacityIncreaseDescription">
+      <dt govukSummaryListRowKey>
+        Describe the capacity increase that has been put into operation at the installation
+      </dt>
+      <dd govukSummaryListRowValue>
+        <div class="pre-wrap">{{ regulatorData.details?.capacityIncreaseDescription }}</div>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="regulatorData.details?.capacityIncreasePermanence">
+      <dt govukSummaryListRowKey>Have you confirmed that the capacity increase is permanent?</dt>
+      <dd govukSummaryListRowValue>
+        <div class="pre-wrap">{{ regulatorData.details?.capacityIncreasePermanence }}</div>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="regulatorData.details?.capacityGreaterThanZeroDescription">
+      <dt govukSummaryListRowKey>
+        Describe how the net change in installed capacity at the installation since the reference date is greater than
+        zero
+      </dt>
+      <dd govukSummaryListRowValue>
+        <div class="pre-wrap">{{ regulatorData.details?.capacityGreaterThanZeroDescription }}</div>
+      </dd>
+    </div>
+
+    <div govukSummaryListRow *ngIf="regulatorData.type">
+      <dt govukSummaryListRowKey>Decision status</dt>
+      <dd govukSummaryListRowValue>{{ regulatorData.type | reviewGroupDecision }}</dd>
+    </div>
+  </dl>
+</ng-container>

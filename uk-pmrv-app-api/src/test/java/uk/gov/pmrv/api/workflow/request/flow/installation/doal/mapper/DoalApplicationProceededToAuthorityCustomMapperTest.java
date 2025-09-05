@@ -33,7 +33,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.Verificati
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.WithholdingAllowancesNotice;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.ArticleReasonGroupType;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.ArticleReasonItemType;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalDeterminationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.enums.DoalDeterminationType;
 
 @ExtendWith(MockitoExtension.class)
 class DoalApplicationProceededToAuthorityCustomMapperTest {

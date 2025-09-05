@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { first, map, startWith, switchMap } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
-import { getTotalAllocationsPerYear } from '@shared/components/doal/total-preliminary-allocation-list-template/total-preliminary-allocation-list.util';
+import { getTotalAllocationsPerYear } from '@shared/components/total-preliminary-allocation-list-template/total-preliminary-allocation-list.util';
 import { approvedAllocationsComponentFormProvider } from '@tasks/doal/authority-response/response/approved-allocations/approved-allocations.component-form.provider';
 import { DoalService } from '@tasks/doal/core/doal.service';
 import { DOAL_TASK_FORM } from '@tasks/doal/core/doal-task-form.token';

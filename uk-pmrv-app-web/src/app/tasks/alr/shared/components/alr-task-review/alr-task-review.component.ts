@@ -9,7 +9,7 @@ import { SharedModule } from '@shared/shared.module';
 import { ALRReturnLinkComponent } from '../alr-return-link/alr-return-link.component';
 
 @Component({
-  selector: 'app-alr-task-review',
+  selector: 'app-alr-task-common',
   template: `
     <govuk-notification-banner *ngIf="notification" type="success">
       <h1 class="govuk-notification-banner__heading">Details updated</h1>

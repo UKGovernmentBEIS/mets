@@ -114,6 +114,12 @@ export const returnToTextMapper = (requestTaskActionType: RequestTaskActionProce
       return 'Permanent cessation';
     case 'AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR':
       return 'Estimate emissions';
+    case 'ALR_PROCEED_TO_AUTHORITY':
+      return 'Review activity level report';
+    case 'HSE_TI_REGULATOR_REVIEW_SUBMIT':
+      return 'Hse target increase application';
+    case 'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION':
+      return 'Provide UK ETS Authority response for activity level change';
   }
 };
 
@@ -126,9 +132,17 @@ export const usersToNotifyHeaderMapper = (
       return 'Select other users';
 
     case 'INSTALLATION':
-      return requestTaskActionType === 'PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION'
-        ? 'Select any additional users you want to notify (optional)'
-        : 'Select the users you want to notify';
+      switch (requestTaskActionType) {
+        case 'PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION':
+          return 'Select any additional users you want to notify (optional)';
+        case 'ALR_PROCEED_TO_AUTHORITY':
+        case 'HSE_TI_REGULATOR_REVIEW_SUBMIT':
+        case 'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION':
+          return 'Select other users';
+
+        default:
+          return 'Select the users you want to notify';
+      }
   }
 };
 
@@ -141,8 +155,16 @@ export const externalContactsToNotifyHeaderMapper = (
       return 'Select external contacts';
 
     case 'INSTALLATION':
-      return requestTaskActionType === 'PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION'
-        ? 'Select the external contacts you want to notify (optional)'
-        : 'Select the external contacts you want to notify';
+      switch (requestTaskActionType) {
+        case 'PERMANENT_CESSATION_NOTIFY_OPERATOR_FOR_DECISION':
+          return 'Select the external contacts you want to notify (optional)';
+        case 'ALR_PROCEED_TO_AUTHORITY':
+        case 'HSE_TI_REGULATOR_REVIEW_SUBMIT':
+        case 'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION':
+          return 'Select the external contacts';
+
+        default:
+          return 'Select the external contacts you want to notify';
+      }
   }
 };

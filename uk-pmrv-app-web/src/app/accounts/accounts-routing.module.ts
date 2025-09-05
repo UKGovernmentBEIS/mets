@@ -35,6 +35,7 @@ import { SiteNameComponent } from './edit/site-name/site-name.component';
 import { SopIdComponent } from './edit/sop-id/sop-id.component';
 import { TriggerAirComponent } from './trigger-air/trigger-air.component';
 import { TriggerDoalComponent } from './trigger-doal/trigger-doal.component';
+import { TriggerHseTiComponent } from './trigger-hseti/trigger-hseti.component';
 import { AerMarkAsNotRequiredComponent } from './workflows/aer-mark-as-not-required/aer-mark-as-not-required.component';
 import { MarkAsNotRequiredGuard } from './workflows/aer-mark-as-not-required/mark-as-not-required-guard.service';
 import { AerReinitializeComponent } from './workflows/aer-reinitialize/aer-reinitialize.component';
@@ -353,6 +354,12 @@ const routes: Routes = [
         path: 'trigger-doal',
         data: { pageTitle: 'Start a determination of activity level change', breadcrumb: true },
         component: TriggerDoalComponent,
+        canDeactivate: [PendingRequestGuard],
+      },
+      {
+        path: 'trigger-hse',
+        data: { pageTitle: 'Start a new HSE target increase application', breadcrumb: true },
+        component: TriggerHseTiComponent,
         canDeactivate: [PendingRequestGuard],
       },
       {

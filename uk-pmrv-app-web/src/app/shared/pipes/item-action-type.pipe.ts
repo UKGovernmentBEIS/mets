@@ -330,6 +330,8 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Non Compliance closed';
       case 'NON_COMPLIANCE_APPLICATION_SUBMITTED':
         return 'Non-compliance details provided';
+      case 'NON_COMPLIANCE_DETAILS_AMENDED':
+        return 'Details of the breach updated';
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED':
         return `Initial penalty notice sent to operator`;
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED':
@@ -546,6 +548,7 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Peer review disagreement submitted';
 
       case 'ALR_APPLICATION_SENT_TO_VERIFIER':
+      case 'ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER':
         return 'Activity level report submitted to verifier';
       case 'ALR_APPLICATION_VERIFICATION_SUBMITTED':
         return 'Activity level report submitted to operator';
@@ -553,6 +556,48 @@ export class ItemActionTypePipe implements PipeTransform {
         return 'Activity level report returned to operator for changes';
       case 'ALR_RECALLED_FROM_VERIFICATION':
         return 'Activity level report recalled';
+      case 'ALR_APPLICATION_SENT_TO_REGULATOR':
+      case 'ALR_APPLICATION_AMENDS_SUBMITTED':
+        return 'Activity level report submitted to regulator';
+      case 'ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+        return 'Activity level report returned to operator';
+      case 'ALR_APPLICATION_PROCEEDED_TO_AUTHORITY':
+        return 'Activity level determination sent to UK Authority';
+      case 'ALR_APPLICATION_CLOSED':
+        return 'Activity level determination closed';
+      case 'ALR_APPLICATION_PEER_REVIEW_REQUESTED':
+        return 'Peer review requested';
+      case 'ALR_APPLICATION_PEER_REVIEW_ACCEPTED':
+        return 'Peer review agreement submitted';
+      case 'ALR_APPLICATION_PEER_REVIEW_REJECTED':
+        return 'Peer review disagreement submitted';
+      case 'ALR_APPLICATION_ACCEPTED':
+        return 'Activity level determination accepted as approved';
+      case 'ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS':
+        return 'Activity level determination accepted as approved with corrections';
+      case 'ALR_APPLICATION_REJECTED':
+        return 'Activity level determination accepted as not approved';
+
+      case 'HSE_TI_APPLICATION_SENT_TO_REGULATOR':
+        return 'HSE target increase application submitted to regulator';
+      case 'HSE_TI_APPLICATION_CANCELLED':
+        return 'HSE target increase application cancelled';
+      case 'HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+        return 'HSE target increase application returned to operator';
+      case 'HSE_TI_APPROVED':
+        return 'HSE target increase application approved';
+      case 'HSE_TI_REJECTED':
+        return 'HSE target increase application rejected';
+      case 'HSE_TI_WITHDRAWN':
+        return 'HSE target increase application withdrawn';
+      case 'HSE_TI_DEEMED_WITHDRAWN':
+        return 'HSE target increase application deemed withdrawn';
+      case 'HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED':
+        return 'Peer review requested';
+      case 'HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED':
+        return 'Peer review agreement submitted';
+      case 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED':
+        return 'Peer review disagreement submitted';
 
       default:
         return 'Approved Application';

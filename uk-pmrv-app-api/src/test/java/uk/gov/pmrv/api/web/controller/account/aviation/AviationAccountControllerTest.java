@@ -308,7 +308,7 @@ class AviationAccountControllerTest {
         final AppUser user = AppUser.builder().userId("userId").build();
         final AccountSearchCriteria criteria = AccountSearchCriteria.builder()
                 .term("key")
-                .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
+                .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
 
         final List<AviationAccountSearchResultsInfoDTO> accounts =
                 List.of(
@@ -342,7 +342,7 @@ class AviationAccountControllerTest {
         final AppUser user = AppUser.builder().userId("userId").build();
         final AccountSearchCriteria criteria = AccountSearchCriteria.builder()
                 .term("key")
-                .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
+                .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))

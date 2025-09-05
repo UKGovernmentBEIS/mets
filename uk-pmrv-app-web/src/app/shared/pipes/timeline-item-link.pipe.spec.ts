@@ -119,6 +119,9 @@ describe('TimelineItemLinkPipe', () => {
       'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REQUESTED',
 
       'ALR_RECALLED_FROM_VERIFICATION',
+      'ALR_APPLICATION_PEER_REVIEW_REQUESTED',
+
+      'HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED',
     ];
 
     noLinkActionTypes.forEach((type) => {
@@ -795,6 +798,17 @@ describe('TimelineItemLinkPipe', () => {
     ]);
   });
 
+  it('should return link for cunclusion of non compliance', () => {
+    requestAction.type = 'NON_COMPLIANCE_DETAILS_AMENDED';
+    expect(pipe.transform(requestAction)).toEqual([
+      '/actions',
+      requestAction.id,
+      'non-compliance',
+      'submitted',
+      'summary',
+    ]);
+  });
+
   it('should return link for aviation aer submitted', () => {
     requestAction.type = 'AVIATION_AER_UKETS_APPLICATION_SUBMITTED';
     expect(pipe.transform(requestAction)).toEqual(['/aviation', 'actions', requestAction.id]);
@@ -1118,7 +1132,66 @@ describe('TimelineItemLinkPipe', () => {
     requestAction.type = 'ALR_APPLICATION_VERIFICATION_SUBMITTED';
     expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'submitted']);
 
+    requestAction.type = 'ALR_APPLICATION_SENT_TO_REGULATOR';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'submitted']);
+
     requestAction.type = 'ALR_VERIFICATION_RETURNED_TO_OPERATOR';
     expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'returned-to-operator']);
+
+    requestAction.type = 'ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'return-for-amends']);
+
+    requestAction.type = 'ALR_APPLICATION_PROCEEDED_TO_AUTHORITY';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'submitted']);
+
+    requestAction.type = 'ALR_APPLICATION_CLOSED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'submitted']);
+
+    requestAction.type = 'ALR_APPLICATION_AMENDS_SUBMITTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'submitted']);
+
+    requestAction.type = 'ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'submitted']);
+
+    requestAction.type = 'ALR_APPLICATION_PEER_REVIEW_ACCEPTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'peer-review-decision']);
+
+    requestAction.type = 'ALR_APPLICATION_PEER_REVIEW_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'peer-review-decision']);
+
+    requestAction.type = 'ALR_APPLICATION_ACCEPTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'completed']);
+
+    requestAction.type = 'ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'completed']);
+
+    requestAction.type = 'ALR_APPLICATION_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'alr', 'completed']);
+  });
+
+  it('should return links for HSE', () => {
+    requestAction.type = 'HSE_TI_APPLICATION_CANCELLED';
+    expect(pipe.transform(requestAction)).toBe(null);
+
+    requestAction.type = 'HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'hseti', 'return-for-amends']);
+
+    requestAction.type = 'HSE_TI_APPROVED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'hseti', 'submitted']);
+
+    requestAction.type = 'HSE_TI_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'hseti', 'submitted']);
+
+    requestAction.type = 'HSE_TI_DEEMED_WITHDRAWN';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'hseti', 'submitted']);
+
+    requestAction.type = 'HSE_TI_WITHDRAWN';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'hseti', 'submitted']);
+
+    requestAction.type = 'HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'hseti', 'peer-review-decision']);
+
+    requestAction.type = 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED';
+    expect(pipe.transform(requestAction)).toEqual(['/actions', 1, 'hseti', 'peer-review-decision']);
   });
 });

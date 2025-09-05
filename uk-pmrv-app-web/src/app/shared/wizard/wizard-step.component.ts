@@ -10,6 +10,7 @@ import { BehaviorSubject, filter, startWith, take } from 'rxjs';
 })
 export class WizardStepComponent {
   @Input() showBackLink = false;
+  @Input() cancelLink: string;
   @Input() formGroup: UntypedFormGroup;
   @Input() heading: string;
   @Input() caption: string;

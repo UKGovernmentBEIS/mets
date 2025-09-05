@@ -1,0 +1,37 @@
+<ng-container *ngIf="requestAction()">
+  <app-base-action-container-component
+    [header]="hsetiTitle()"
+    [customContentTemplate]="customContentTemplate"
+    [expectedActionType]="['HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS']"></app-base-action-container-component>
+  <ng-template #customContentTemplate>
+    <div *ngFor="let decision of decisionAmends()">
+      <h2 app-summary-header class="govuk-heading-m">HSE target increase details</h2>
+
+      <dl govuk-summary-list class="govuk-summary-list--no-border summary-list--edge-border">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Changes required</dt>
+          <dd govukSummaryListRowValue>
+            <ng-container
+              *ngFor="let requiredChange of decision.data.details?.requiredChanges; let i = index; let isLast = last">
+              <div class="pre-wrap">
+                {{ i + 1 }}. {{ requiredChange.reason }}
+                <br />
+                <ng-container *ngIf="requiredChange?.files?.length > 0">
+                  <app-summary-download-files
+                    [files]="
+                      hsetiService.getRegulatorDownloadUrlFiles(requiredChange?.files)
+                    "></app-summary-download-files>
+                </ng-container>
+              </div>
+              <br *ngIf="!isLast" />
+            </ng-container>
+          </dd>
+        </div>
+        <div govukSummaryListRow *ngIf="decision?.data?.details?.notes">
+          <dt govukSummaryListRowKey>Notes</dt>
+          <dd govukSummaryListRowValue class="pre-wrap">{{ decision?.data?.details?.notes }}</dd>
+        </div>
+      </dl>
+    </div>
+  </ng-template>
+</ng-container>

@@ -301,7 +301,7 @@ export function updateMockDoalApplicationSubmitRequestTaskItem(
         doalSectionsCompleted:
           doalSectionsCompleted ??
           (mockDoalApplicationSubmitRequestTaskItem.requestTask.payload as any).doalSectionsCompleted,
-      } as RequestTaskPayload,
+      } as unknown as RequestTaskPayload,
     },
   };
 }

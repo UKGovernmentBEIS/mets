@@ -133,7 +133,7 @@ describe('IncorporateHeaderComponent', () => {
       const scheme = emissionTradingScheme.transform(mockedAviationAccountHeaderInfo.emissionTradingScheme);
 
       expect(page.candidateAssigneesSelectInputValue.textContent).toEqual(
-        ` ${mockedAviationAccountHeaderInfo.name}  Emissions Plan ID: ${mockedAviationAccountHeaderInfo.empId} / ${status} Schema: ${scheme} `,
+        ` ${mockedAviationAccountHeaderInfo.name}  Emissions Plan ID: ${mockedAviationAccountHeaderInfo.empId} / ${status} Scheme: ${scheme} `,
       );
     });
 

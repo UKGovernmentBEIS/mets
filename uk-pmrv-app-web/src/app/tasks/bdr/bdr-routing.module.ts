@@ -24,12 +24,12 @@ import {
   BaselineReviewComponent,
   BdrCompleteConfirmationComponent,
   BdrCompleteReviewComponent,
+  BdrReturnForAmendsComponent,
   Outcome27aQuestionComponent,
   OutcomeFaDecisionComponent,
   OutcomeSummaryComponent,
   OutcomeUploadFilesComponent,
   OutcomeUseHseDecisionComponent,
-  ReturnForAmendsComponent,
   ReviewContainerComponent,
 } from './review';
 import { BdrCompleteReviewGuard } from './review/guards/bdr-complete-review.guard';
@@ -285,7 +285,7 @@ const routes: Routes = [
           {
             path: '',
             data: { pageTitle: 'Return for amends', breadcrumb: true },
-            component: ReturnForAmendsComponent,
+            component: BdrReturnForAmendsComponent,
             canDeactivate: [PendingRequestGuard],
           },
         ],

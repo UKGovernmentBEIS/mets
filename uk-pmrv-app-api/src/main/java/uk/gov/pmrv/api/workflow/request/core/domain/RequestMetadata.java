@@ -25,6 +25,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRRequestM
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreRequestMetadata;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitissuance.common.domain.PermitIssuanceRequestMetadata;
 import uk.gov.pmrv.api.workflow.request.flow.installation.permitnotification.domain.PermitNotificationRequestMetadata;
@@ -51,6 +52,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirRequestM
                 @DiscriminatorMapping(schema = InstallationInspectionRequestMetadata.class, value = "INSTALLATION_INSPECTION"),
                 @DiscriminatorMapping(schema = BDRRequestMetadata.class, value = "BDR"),
                 @DiscriminatorMapping(schema = ALRRequestMetaData.class, value = "ALR"),
+                @DiscriminatorMapping(schema = HSETIRequestMetadata.class, value = "HSE_TI"),
 
                 // Aviation related request metadata
                 @DiscriminatorMapping(schema = AviationAerRequestMetadata.class, value = "AVIATION_AER"),
@@ -81,6 +83,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.vir.domain.VirRequestM
         @JsonSubTypes.Type(value = InstallationInspectionRequestMetadata.class, name = "INSTALLATION_INSPECTION"),
         @JsonSubTypes.Type(value = BDRRequestMetadata.class, name = "BDR"),
         @JsonSubTypes.Type(value = ALRRequestMetaData.class, name = "ALR"),
+        @JsonSubTypes.Type(value = HSETIRequestMetadata.class, name = "HSE_TI"),
 
         // Aviation related request metadata
         @JsonSubTypes.Type(value = AviationAerRequestMetadata.class, name = "AVIATION_AER"),

@@ -1,25 +1,56 @@
+<!-- eslint-disable @angular-eslint/template/conditional-complexity -->
 <ng-container *ngIf="vm() as vm">
   <ng-container *ngIf="!isSubmitted(); else submittedTemplate">
     <app-page-heading>
-      @if (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT') {
+      @if (
+        (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT' && !vm.verificationPerformed) ||
+        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && vm.regulatorVerificationRequired)
+      ) {
         Send report for verification
+      } @else if (
+        (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT' && vm.verificationPerformed) ||
+        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && !vm.regulatorVerificationRequired)
+      ) {
+        Send to regulator
       } @else {
         Send verification report to the operator
       }
     </app-page-heading>
-    <div *ngIf="vm.requestTaskType === 'ALR_APPLICATION_SUBMIT'" class="govuk-heading-m">
+    <div
+      *ngIf="
+        (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT' && !vm.verificationPerformed) ||
+        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && vm.regulatorVerificationRequired)
+      "
+      class="govuk-heading-m">
       Current verifier
       <p class="govuk-body">{{ assignedVerifier$ | async }}</p>
     </div>
-    <p
-      class="govuk-body"
-      *ngIf="
-        vm.requestTaskType === 'ALR_APPLICATION_SUBMIT'
-          ? 'in your report'
-          : 'you have provided in this verification report' as v
-      ">
-      By selecting ‘Confirm and send’ you confirm that the information {{ v }} is correct to the best of your knowledge.
-    </p>
+
+    @if (
+      (['ALR_APPLICATION_VERIFICATION_SUBMIT', 'ALR_APPLICATION_SUBMIT'].includes(vm.requestTaskType) &&
+        !vm.verificationPerformed) ||
+      (['ALR_APPLICATION_AMENDS_SUBMIT'].includes(vm.requestTaskType) && vm.regulatorVerificationRequired)
+    ) {
+      <p
+        class="govuk-body"
+        *ngIf="
+          ['ALR_APPLICATION_SUBMIT', 'ALR_APPLICATION_AMENDS_SUBMIT'].includes(vm.requestTaskType)
+            ? 'in your report'
+            : 'you have provided in this verification report' as v
+        ">
+        By selecting ‘Confirm and send’ you confirm that the information {{ v }} is correct to the best of your
+        knowledge.
+      </p>
+    } @else {
+      <p class="govuk-body">
+        Your report will be sent directly to your regulator ({{
+          alrService.competentAuthority$ | async | competentAuthority
+        }}).
+      </p>
+      <p class="govuk-body">
+        By selecting ‘Confirm and send’ you confirm that the information is correct to the best of your knowledge.
+      </p>
+    }
     <div class="govuk-button-group" *ngIf="vm.isEditable">
       <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and send</button>
     </div>
@@ -35,9 +66,13 @@
   <ng-template #submittedTemplate>
     <app-confirmation-shared
       [title]="
-        vm.requestTaskType === 'ALR_APPLICATION_SUBMIT'
+        (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT' && !vm.verificationPerformed) ||
+        (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && vm.regulatorVerificationRequired)
           ? 'Sent to verifier for review'
-          : 'Verification report sent to operator'
+          : (vm.requestTaskType === 'ALR_APPLICATION_SUBMIT' && vm.verificationPerformed) ||
+              (vm.requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && !vm.regulatorVerificationRequired)
+            ? 'Sent to regulator for review'
+            : 'Verification report sent to operator'
       "
       titleContent="Your reference number"
       [whatHappensNextTemplate]="whatHappensNextTemplate"
@@ -45,7 +80,7 @@
   </ng-template>
 
   <ng-template #whatHappensNextTemplate>
-    <ng-container *ngIf="vm.requestTaskType === 'ALR_APPLICATION_VERIFICATION_SUBMIT'">
+    <ng-container *ngIf="vm.requestTaskType === 'ALR_APPLICATION_VERIFICATION_SUBMIT' && !vm.verificationPerformed">
       <div id="whatHappensNextTemplate">
         <h3 class="govuk-heading-m">What happens next</h3>
 

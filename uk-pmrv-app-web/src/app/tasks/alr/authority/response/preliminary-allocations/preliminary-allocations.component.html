@@ -1,0 +1,28 @@
+<app-alr-task-common
+  returnLink="../../"
+  returnLinkTitle="Provide UK ETS Authority response for activity Level Change"
+  [breadcrumb]="true">
+  <app-page-heading caption="Provide UK ETS Authority response">
+    Provide authority approved allocation for each sub-installation
+  </app-page-heading>
+
+  <app-alr-allocation-list-template
+    [data]="preliminaryAllocations$ | async"
+    [editable]="true"></app-alr-allocation-list-template>
+
+  <ng-container *ngIf="(preliminaryAllocations$ | async).length; else noPreliminaryAllocation">
+    <div class="govuk-button-group">
+      <a routerLink="./add" govukSecondaryButton type="button">Add another item</a>
+    </div>
+  </ng-container>
+
+  <ng-template #noPreliminaryAllocation>
+    <div class="govuk-button-group" *ngIf="isEditable$ | async">
+      <a routerLink="./add" govukButton type="button">Add an item</a>
+    </div>
+  </ng-template>
+
+  <button appPendingButton govukButton type="button" (click)="onSubmit()" *ngIf="isEditable$ | async">Continue</button>
+
+  <br />
+</app-alr-task-common>

@@ -56,8 +56,12 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.aer.domain.AerApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationRespondToRegulatorCommentsRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAmendsSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationRegulatorReviewSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationVerificationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRAuthorityResponseSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationWaitForAuthorityReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationRegulatorReviewSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationSubmitRequestTaskPayload;
@@ -67,6 +71,10 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.c
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalAuthorityResponseRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIApplicationAmendsSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIApplicationRegulatorReviewSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIApplicationSubmitRequestTaskPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIApplicationWaitForRegulatorReviewRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.audit.domain.InstallationAuditApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionApplicationSubmitRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionOperatorRespondRequestTaskPayload;
@@ -258,12 +266,29 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "BDR_APPLICATION_PEER_REVIEW_PAYLOAD"),
                 @DiscriminatorMapping(schema = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
+                @DiscriminatorMapping(schema = HSETIApplicationSubmitRequestTaskPayload.class, value = "HSE_TI_APPLICATION_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = HSETIApplicationWaitForRegulatorReviewRequestTaskPayload.class, value = "HSE_TI_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "HSE_TI_WAIT_FOR_AMENDS_PAYLOAD"),
+                @DiscriminatorMapping(schema = HSETIApplicationAmendsSubmitRequestTaskPayload.class, value = "HSE_TI_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "HSE_TI_APPLICATION_PEER_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "HSE_TI_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+
                 @DiscriminatorMapping(schema = PermanentCessationApplicationSubmitRequestTaskPayload.class, value = "PERMANENT_CESSATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermanentCessationApplicationSubmitRequestTaskPayload.class, value = "PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_PAYLOAD"),
                 @DiscriminatorMapping(schema = PermanentCessationApplicationSubmitRequestTaskPayload.class, value = "PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = ALRApplicationSubmitRequestTaskPayload.class, value = "ALR_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = ALRApplicationVerificationSubmitRequestTaskPayload.class, value = "ALR_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationAmendsSubmitRequestTaskPayload.class, value = "ALR_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "ALR_WAIT_FOR_AMENDS_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRAuthorityResponseSubmitRequestTaskPayload.class, value = "ALR_AUTHORITY_RESPONSE_SUBMIT_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationWaitForAuthorityReviewRequestTaskPayload.class, value = "ALR_WAIT_FOR_AUTHORITY_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "ALR_APPLICATION_PEER_REVIEW_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationRegulatorReviewSubmitRequestTaskPayload.class, value = "ALR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
 
 
 
@@ -273,7 +298,6 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = EmpIssuanceUkEtsApplicationReviewRequestTaskPayload.class, value = "EMP_ISSUANCE_UKETS_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpIssuanceUkEtsApplicationAmendsSubmitRequestTaskPayload.class, value = "EMP_ISSUANCE_UKETS_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpIssuanceUkEtsApplicationReviewRequestTaskPayload.class, value = "EMP_ISSUANCE_UKETS_WAIT_FOR_AMENDS_PAYLOAD"),
-
                 @DiscriminatorMapping(schema = EmpVariationUkEtsApplicationSubmitRequestTaskPayload.class, value = "EMP_VARIATION_UKETS_APPLICATION_SUBMIT_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload.class, value = "EMP_VARIATION_UKETS_APPLICATION_SUBMIT_REGULATOR_LED_PAYLOAD"),
                 @DiscriminatorMapping(schema = EmpVariationUkEtsApplicationReviewRequestTaskPayload.class, value = "EMP_VARIATION_UKETS_APPLICATION_REVIEW_PAYLOAD"),
@@ -474,14 +498,30 @@ import java.util.UUID;
     @JsonSubTypes.Type(value = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "BDR_APPLICATION_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = BDRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "BDR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
-    @JsonSubTypes.Type(value = PermanentCessationApplicationSubmitRequestTaskPayload.class, name = "PERMANENT_CESSATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = HSETIApplicationSubmitRequestTaskPayload.class, name = "HSE_TI_APPLICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = HSETIApplicationWaitForRegulatorReviewRequestTaskPayload.class, name = "HSE_TI_APPLICATION_WAIT_FOR_REGULATOR_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "HSE_TI_WAIT_FOR_AMENDS_PAYLOAD"),
+    @JsonSubTypes.Type(value = HSETIApplicationAmendsSubmitRequestTaskPayload.class, name = "HSE_TI_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "HSE_TI_APPLICATION_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = HSETIApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "HSE_TI_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
+
+
+        @JsonSubTypes.Type(value = PermanentCessationApplicationSubmitRequestTaskPayload.class, name = "PERMANENT_CESSATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = PermanentCessationApplicationSubmitRequestTaskPayload.class, name = "PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = PermanentCessationApplicationSubmitRequestTaskPayload.class, name = "PERMANENT_CESSATION_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
     @JsonSubTypes.Type(value = ALRApplicationSubmitRequestTaskPayload.class, name = "ALR_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = ALRApplicationVerificationSubmitRequestTaskPayload.class, name = "ALR_APPLICATION_VERIFICATION_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationAmendsSubmitRequestTaskPayload.class, name = "ALR_APPLICATION_AMENDS_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "ALR_WAIT_FOR_AMENDS_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRAuthorityResponseSubmitRequestTaskPayload.class, name = "ALR_AUTHORITY_RESPONSE_SUBMIT_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationWaitForAuthorityReviewRequestTaskPayload.class, name = "ALR_WAIT_FOR_AUTHORITY_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "ALR_APPLICATION_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationRegulatorReviewSubmitRequestTaskPayload.class, name = "ALR_WAIT_FOR_PEER_REVIEW_PAYLOAD"),
 
-        
+
 
     @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationSubmitRequestTaskPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT_PAYLOAD"),
     @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationReviewRequestTaskPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_REVIEW_PAYLOAD"),

@@ -1,0 +1,20 @@
+<ng-container *ngIf="!isSubmitted(); else confirmationContent">
+  <app-alr-task-common returnLink="../" [breadcrumb]="true">
+    <app-page-heading size="l">Are you sure you want to complete the activity level report task?</app-page-heading>
+    <div class="govuk-button-group">
+      <button type="button" appPendingButton govukButton (click)="complete()">Yes, complete the task</button>
+    </div>
+  </app-alr-task-common>
+</ng-container>
+
+<ng-template #confirmationContent>
+  <app-confirmation-shared
+    title="Task completed"
+    [whatHappensNextTemplate]="whatHappensNextTemplate"></app-confirmation-shared>
+
+  <ng-template #whatHappensNextTemplate>
+    <h3 class="govuk-heading-s">What happens next</h3>
+
+    <p class="govuk-body">You can continue to edit the task from your dashboard.</p>
+  </ng-template>
+</ng-template>

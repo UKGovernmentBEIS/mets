@@ -24,6 +24,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComp
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceNoticeOfIntentRequestTaskPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceNotifyOperatorRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceOutcome;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.service.NonComplianceSendOfficialNoticeServiceDelegator;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestActionUserInfoResolver;
@@ -58,11 +59,17 @@ public class NonComplianceNoticeOfIntentNotifyOperatorActionHandler
         final Set<String> operators = decisionNotification.getOperators();
         final Set<Long> externalContacts = decisionNotification.getExternalContacts();
         final Request request = requestTask.getRequest();
+        final NonComplianceRequestPayload requestPayload = (NonComplianceRequestPayload) request.getPayload();
 
         // validate
         validator.validateNoticeOfIntent(taskPayload);
         validator.validateUsers(requestTask, operators, externalContacts,  appUser);
         validator.validateContactAddress(request);
+
+        requestPayload.setReason(taskPayload.getReason());
+        requestPayload.setNonComplianceDate(taskPayload.getNonComplianceDate());
+        requestPayload.setComplianceDate(taskPayload.getComplianceDate());
+        requestPayload.setComments(taskPayload.getNonComplianceComments());
 
         // add timeline action
         Optional<UserInfoDTO> requestAccountPrimaryContact = requestAccountContactQueryService.getRequestAccountPrimaryContact(request);

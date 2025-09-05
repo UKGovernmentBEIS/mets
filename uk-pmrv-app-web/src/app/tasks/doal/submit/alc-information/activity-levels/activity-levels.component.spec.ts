@@ -10,15 +10,15 @@ import { BasePage } from '@testing';
 import { KeycloakService } from 'keycloak-angular';
 
 import { mockDoalApplicationSubmitRequestTaskItem } from '../../../test/mock';
-import { ActivityLevelsComponent } from './activity-levels.component';
+import { DoalActivityLevelsComponent } from './activity-levels.component';
 
 describe('ActivityLevelsComponent', () => {
-  let component: ActivityLevelsComponent;
-  let fixture: ComponentFixture<ActivityLevelsComponent>;
+  let component: DoalActivityLevelsComponent;
+  let fixture: ComponentFixture<DoalActivityLevelsComponent>;
   let page: Page;
   let store: CommonTasksStore;
 
-  class Page extends BasePage<ActivityLevelsComponent> {
+  class Page extends BasePage<DoalActivityLevelsComponent> {
     get historicalActivityLevelData() {
       return this.getActivityLevelTable(0);
     }
@@ -35,7 +35,7 @@ describe('ActivityLevelsComponent', () => {
   }
 
   function createComponent() {
-    fixture = TestBed.createComponent(ActivityLevelsComponent);
+    fixture = TestBed.createComponent(DoalActivityLevelsComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
     fixture.detectChanges();
@@ -43,7 +43,7 @@ describe('ActivityLevelsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ActivityLevelsComponent, DoalTaskComponent],
+      declarations: [DoalActivityLevelsComponent, DoalTaskComponent],
       providers: [KeycloakService],
       imports: [SharedModule, RouterTestingModule, TaskSharedModule],
     }).compileComponents();

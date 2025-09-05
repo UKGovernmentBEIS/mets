@@ -28,7 +28,9 @@ export class ReturnLinkComponent implements OnInit {
       this.linkName = 'Dashboard';
       this.link = AVIATION_REQUEST_TYPES.includes(this.requestType) ? '/aviation/dashboard' : '/dashboard';
     } else {
-      const headingMap = getHeadingMap((this.requestMetadata as any)?.year);
+      const headingMap = getHeadingMap(
+        (this.requestMetadata as any)?.year ?? (this.requestMetadata as any)?.allocationPeriod,
+      );
       this.linkName = headingMap[this.requestTaskType];
       this.link = this.returnLink;
     }

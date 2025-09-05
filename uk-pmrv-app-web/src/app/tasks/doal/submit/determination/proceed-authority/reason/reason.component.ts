@@ -34,6 +34,8 @@ export class ReasonComponent implements OnInit {
     'SETTING_ALLOCATION_UNDER_ARTICLE_3A',
     'SETTING_HAL_AND_ALLOCATION_UNDER_ARTICLE_3A',
     'ADJUSTMENT_OF_PARAMETERS_OTHER_THAN_ACTIVITY_LEVEL',
+    'TEMPORARY_CESSATION',
+    'PERMANENT_CESSATION',
   ];
 
   article34HReasons: DoalProceedToAuthorityDetermination['articleReasonItems'][number][] = [

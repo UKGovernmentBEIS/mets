@@ -24,6 +24,7 @@ import { DoalRequestMetadata } from './doalRequestMetadata';
 import { DreRequestMetadata } from './dreRequestMetadata';
 import { EmpBatchReissueRequestMetadata } from './empBatchReissueRequestMetadata';
 import { EmpVariationRequestMetadata } from './empVariationRequestMetadata';
+import { HSETIRequestMetadata } from './hSETIRequestMetadata';
 import { InstallationInspectionRequestMetadata } from './installationInspectionRequestMetadata';
 import { PermitBatchReissueRequestMetadata } from './permitBatchReissueRequestMetadata';
 import { PermitIssuanceRequestMetadata } from './permitIssuanceRequestMetadata';
@@ -59,6 +60,7 @@ export interface RequestInfoDTO {
     | 'RETURN_OF_ALLOWANCES'
     | 'INSTALLATION_ONSITE_INSPECTION'
     | 'INSTALLATION_AUDIT'
+    | 'HSE_TI'
     | 'BDR'
     | 'PERMANENT_CESSATION'
     | 'ALR'
@@ -95,6 +97,7 @@ export interface RequestInfoDTO {
     | DreRequestMetadata
     | EmpBatchReissueRequestMetadata
     | EmpVariationRequestMetadata
+    | HSETIRequestMetadata
     | InstallationInspectionRequestMetadata
     | PermitBatchReissueRequestMetadata
     | PermitIssuanceRequestMetadata

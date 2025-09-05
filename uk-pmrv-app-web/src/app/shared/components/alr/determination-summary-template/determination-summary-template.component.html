@@ -1,0 +1,26 @@
+<ng-container *ngIf="determination">
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Decision</dt>
+      <dd govukSummaryListRowValue>
+        {{ determination.type === 'CLOSED_ALR' ? 'Close task' : 'Proceed to UK ETS authority' }}
+      </dd>
+      <dd govukSummaryListRowActions *ngIf="editable">
+        <a govukLink [routerLink]="['../..']" [state]="{ changing: true }">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <ng-container *ngIf="determination.type === 'CLOSED_ALR'; else proceedAuthority">
+    <app-alr-determination-close-summary-template
+      [determination]="$any(determination)"
+      [editable]="editable"
+      [alrFile]="alrFile"
+      [files]="files"></app-alr-determination-close-summary-template>
+  </ng-container>
+  <ng-template #proceedAuthority>
+    <app-alr-determination-proceed-authority-summary-template
+      [determination]="$any(determination)"
+      [editable]="editable"></app-alr-determination-proceed-authority-summary-template>
+  </ng-template>
+</ng-container>

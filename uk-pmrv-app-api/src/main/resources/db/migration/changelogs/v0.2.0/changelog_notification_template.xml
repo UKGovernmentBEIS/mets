@@ -3678,4 +3678,240 @@ The regulator will contact you if necessary.'
         </customChange>
         <rollback></rollback>
     </changeSet>
+    <changeSet id="0_2_0_insert_hseti_official_notice_templates_EA" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="HSE_TI_EA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'HSE_TI_COMPLETED',
+                       'HSETI official notice',
+                       'ENGLAND',
+                       'INSTALLATION',
+                       'HSETI',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'HSE_TI_EA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'HSETI official notice' and competent_authority = 'ENGLAND')
+                   );
+        </sql>
+        <rollback>
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'ENGLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'HSETI official notice' and competent_authority = 'ENGLAND');
+
+            delete from notification_document_template
+            where name = 'HSETI official notice' and competent_authority = 'ENGLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'HSE_TI_EA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_hseti_official_notice_templates_NIEA" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="HSE_TI_NIEA.docx" />
+        </customChange>
+
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'HSE_TI_COMPLETED',
+                       'HSETI official notice',
+                       'NORTHERN_IRELAND',
+                       'INSTALLATION',
+                       'HSETI',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'HSE_TI_NIEA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'HSETI official notice' and competent_authority = 'NORTHERN_IRELAND')
+                   );
+        </sql>
+        <rollback>
+
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'NORTHERN_IRELAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'HSETI official notice' and competent_authority = 'NORTHERN_IRELAND');
+
+            delete from notification_document_template
+            where name = 'HSETI official notice' and competent_authority = 'NORTHERN_IRELAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'HSE_TI_NIEA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_hseti_official_notice_templates_SEPA" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="HSE_TI_SEPA.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'HSE_TI_COMPLETED',
+                       'HSETI official notice',
+                       'SCOTLAND',
+                       'INSTALLATION',
+                       'HSETI',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'HSE_TI_SEPA.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'HSETI official notice' and competent_authority = 'SCOTLAND')
+                   );
+        </sql>
+        <rollback>
+
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'SCOTLAND' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'HSETI official notice' and competent_authority = 'SCOTLAND');
+
+            delete from notification_document_template
+            where name = 'HSETI official notice' and competent_authority = 'SCOTLAND';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'HSE_TI_SEPA.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_0_insert_hseti_official_notice_templates_NRW" author="dimitrios.topalidis@trasys.gr">
+        <customChange class="uk.gov.pmrv.api.migration.initialdata.InsertDocumentTemplateFileTaskChange">
+            <param name="competentAuthority" value="WALES" />
+            <param name="accountType" value="INSTALLATION" />
+            <param name="fileDocumentName" value="HSE_TI_NRW.docx" />
+        </customChange>
+        <sql>
+            insert into notification_document_template (
+                id,
+                type,
+                name,
+                competent_authority,
+                account_type,
+                workflow,
+                last_updated_date,
+                file_document_template_id)
+            values (
+                       nextval('notification_document_template_seq'),
+                       'HSE_TI_COMPLETED',
+                       'HSETI official notice',
+                       'WALES',
+                       'INSTALLATION',
+                       'HSETI',
+                       CURRENT_TIMESTAMP,
+                       (select id from file_document_template where file_name = 'HSE_TI_NRW.docx' order by id desc limit 1));
+
+        </sql>
+        <sql>
+            insert into notification_template_document_template (notification_template_id, document_template_id)
+            values (
+                       (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION'),
+                       (select id from notification_document_template where name = 'HSETI official notice' and competent_authority = 'WALES')
+                   );
+        </sql>
+        <rollback>
+
+            delete from notification_template_document_template
+            where notification_template_id = (select id from notification_template where name = 'Generic email template' and competent_authority = 'WALES' and account_type = 'INSTALLATION')
+            and document_template_id = (select id from notification_document_template where name = 'HSETI official notice' and competent_authority = 'WALES');
+
+            delete from notification_document_template
+            where name = 'HSETI official notice' and competent_authority = 'WALES';
+
+            delete from file_document_template
+            where ctid IN (select ctid FROM file_document_template where file_name = 'HSE_TI_NRW.docx' order by id desc limit 1);
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_EmailAssignedTask_notification_template_to_include_request_task_type_in_subject" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            update notification_template set subject='New task received - Manage your UK ETS reporting - ${requestTaskType}'
+            where name='EmailAssignedTask';
+        </sql>
+        <rollback>
+            update notification_template set subject='New task received - Manage your UK ETS reporting'
+            where name='EmailAssignedTask';
+        </rollback>
+    </changeSet>
+
+     <changeSet id="0_2_0_update_Generic_email_notification_template_to_include_request_type_in_subject" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            update notification_template set subject='An important letter from the Manage your UK ETS reporting service - ${requestType}'
+            where name='Generic email template';
+        </sql>
+        <rollback>
+            update notification_template set subject='An important letter from the Manage your UK ETS reporting service'
+            where name='Generic email template';
+        </rollback>
+    </changeSet>
+    <changeSet id="0_2_2_update_hseti_templates_content" author="dimitrios.topalidis@trasys.gr">
+       <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+           <param name="competentAuthority" value="ENGLAND" />
+           <param name="type" value="HSE_TI_COMPLETED"/>
+           <param name="accountType" value="INSTALLATION" />
+           <param name="fileDocumentName" value="HSE_TI_EA.docx" />
+       </customChange>
+       <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+           <param name="competentAuthority" value="NORTHERN_IRELAND" />
+           <param name="type" value="HSE_TI_COMPLETED"/>
+           <param name="accountType" value="INSTALLATION" />
+           <param name="fileDocumentName" value="HSE_TI_NIEA.docx" />
+       </customChange>
+       <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+           <param name="competentAuthority" value="SCOTLAND" />
+           <param name="type" value="HSE_TI_COMPLETED"/>
+           <param name="accountType" value="INSTALLATION" />
+           <param name="fileDocumentName" value="HSE_TI_SEPA.docx" />
+       </customChange>
+       <customChange class="uk.gov.pmrv.api.migration.initialdata.UpdateDocumentTemplateFileTaskChange">
+           <param name="competentAuthority" value="WALES" />
+           <param name="type" value="HSE_TI_COMPLETED"/>
+           <param name="accountType" value="INSTALLATION" />
+           <param name="fileDocumentName" value="HSE_TI_NRW.docx" />
+       </customChange>
+    </changeSet>
 </databaseChangeLog>

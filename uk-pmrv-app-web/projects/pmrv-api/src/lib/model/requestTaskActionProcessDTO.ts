@@ -21,10 +21,16 @@ import { AirSaveApplicationRequestTaskActionPayload } from './airSaveApplication
 import { AirSaveRespondToRegulatorCommentsRequestTaskActionPayload } from './airSaveRespondToRegulatorCommentsRequestTaskActionPayload';
 import { AirSaveReviewRequestTaskActionPayload } from './airSaveReviewRequestTaskActionPayload';
 import { AirSubmitRespondToRegulatorCommentsRequestTaskActionPayload } from './airSubmitRespondToRegulatorCommentsRequestTaskActionPayload';
+import { ALRApplicationAmendsSaveRequestTaskActionPayload } from './aLRApplicationAmendsSaveRequestTaskActionPayload';
+import { ALRApplicationAmendsSubmitRequestTaskActionPayload } from './aLRApplicationAmendsSubmitRequestTaskActionPayload';
+import { ALRApplicationAmendsSubmitToVerifierRequestTaskActionPayload } from './aLRApplicationAmendsSubmitToVerifierRequestTaskActionPayload';
+import { ALRApplicationRegulatorReviewSaveTaskActionPayload } from './aLRApplicationRegulatorReviewSaveTaskActionPayload';
 import { ALRApplicationSaveRequestTaskActionPayload } from './aLRApplicationSaveRequestTaskActionPayload';
 import { ALRApplicationSubmitToVerifierRequestTaskActionPayload } from './aLRApplicationSubmitToVerifierRequestTaskActionPayload';
 import { ALRApplicationVerificationReturnToOperatorRequestTaskActionPayload } from './aLRApplicationVerificationReturnToOperatorRequestTaskActionPayload';
 import { ALRApplicationVerificationSaveRequestTaskActionPayload } from './aLRApplicationVerificationSaveRequestTaskActionPayload';
+import { ALRSaveAuthorityResponseTaskActionPayload } from './aLRSaveAuthorityResponseTaskActionPayload';
+import { ALRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload } from './aLRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload';
 import { AviationAccountClosureSaveRequestTaskActionPayload } from './aviationAccountClosureSaveRequestTaskActionPayload';
 import { AviationAerApplicationRequestVerificationRequestTaskActionPayload } from './aviationAerApplicationRequestVerificationRequestTaskActionPayload';
 import { AviationAerCorsia3YearPeriodOffsettingSaveRequestTaskActionPayload } from './aviationAerCorsia3YearPeriodOffsettingSaveRequestTaskActionPayload';
@@ -92,6 +98,11 @@ import { EmpVariationUkEtsSaveReviewDeterminationRequestTaskActionPayload } from
 import { EmpVariationUkEtsSaveReviewGroupDecisionRegulatorLedRequestTaskActionPayload } from './empVariationUkEtsSaveReviewGroupDecisionRegulatorLedRequestTaskActionPayload';
 import { EmpVariationUkEtsSaveReviewGroupDecisionRequestTaskActionPayload } from './empVariationUkEtsSaveReviewGroupDecisionRequestTaskActionPayload';
 import { EmpVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload } from './empVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload';
+import { HSETIApplicationAmendsSaveRequestTaskActionPayload } from './hSETIApplicationAmendsSaveRequestTaskActionPayload';
+import { HSETIApplicationAmendsSubmitRequestTaskActionPayload } from './hSETIApplicationAmendsSubmitRequestTaskActionPayload';
+import { HSETIApplicationRegulatorReviewSaveTaskActionPayload } from './hSETIApplicationRegulatorReviewSaveTaskActionPayload';
+import { HSETIApplicationSaveRegulatorReviewGroupDecisionRequestTaskActionPayload } from './hSETIApplicationSaveRegulatorReviewGroupDecisionRequestTaskActionPayload';
+import { HSETIApplicationSaveRequestTaskActionPayload } from './hSETIApplicationSaveRequestTaskActionPayload';
 import { InstallationAccountOpeningAmendApplicationRequestTaskActionPayload } from './installationAccountOpeningAmendApplicationRequestTaskActionPayload';
 import { InstallationAccountOpeningSubmitDecisionRequestTaskActionPayload } from './installationAccountOpeningSubmitDecisionRequestTaskActionPayload';
 import { InstallationAuditApplicationSaveRequestTaskActionPayload } from './installationAuditApplicationSaveRequestTaskActionPayload';
@@ -104,6 +115,7 @@ import { NerSaveAuthorityResponseRequestTaskActionPayload } from './nerSaveAutho
 import { NerSaveReviewDeterminationRequestTaskActionPayload } from './nerSaveReviewDeterminationRequestTaskActionPayload';
 import { NerSaveReviewGroupDecisionRequestTaskActionPayload } from './nerSaveReviewGroupDecisionRequestTaskActionPayload';
 import { NerSubmitApplicationAmendRequestTaskActionPayload } from './nerSubmitApplicationAmendRequestTaskActionPayload';
+import { NonComplianceAmendDetailsRequestTaskActionPayload } from './nonComplianceAmendDetailsRequestTaskActionPayload';
 import { NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload } from './nonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload';
 import { NonComplianceCloseApplicationRequestTaskActionPayload } from './nonComplianceCloseApplicationRequestTaskActionPayload';
 import { NonComplianceDailyPenaltyNoticeSaveApplicationRequestTaskActionPayload } from './nonComplianceDailyPenaltyNoticeSaveApplicationRequestTaskActionPayload';
@@ -285,6 +297,7 @@ export interface RequestTaskActionProcessDTO {
     | 'NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION'
     | 'NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION'
     | 'NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION'
+    | 'NON_COMPLIANCE_AMEND_DETAILS'
     | 'NER_CANCEL_APPLICATION'
     | 'NER_UPLOAD_ATTACHMENT'
     | 'NER_SAVE_APPLICATION'
@@ -370,6 +383,19 @@ export interface RequestTaskActionProcessDTO {
     | 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SAVE'
     | 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_SUBMIT'
     | 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_UPLOAD_ATTACHMENT'
+    | 'HSE_TI_SAVE_APPLICATION'
+    | 'HSE_TI_UPLOAD_ATTACHMENT'
+    | 'HSE_TI_SUBMIT_TO_REGULATOR'
+    | 'HSE_TI_CANCEL'
+    | 'HSE_TI_REGULATOR_REVIEW_SAVE'
+    | 'HSE_TI_REGULATOR_REVIEW_SUBMIT'
+    | 'HSE_TI_SAVE_REGULATOR_REVIEW_GROUP_DECISION'
+    | 'HSE_TI_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT'
+    | 'HSE_TI_REGULATOR_REVIEW_RETURN_FOR_AMENDS'
+    | 'HSE_TI_APPLICATION_AMENDS_SAVE'
+    | 'HSE_TI_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR'
+    | 'HSE_TI_REQUEST_PEER_REVIEW'
+    | 'HSE_TI_SUBMIT_PEER_REVIEW_DECISION'
     | 'BDR_SAVE_APPLICATION'
     | 'BDR_UPLOAD_ATTACHMENT'
     | 'BDR_SUBMIT_TO_VERIFIER'
@@ -399,10 +425,25 @@ export interface RequestTaskActionProcessDTO {
     | 'ALR_UPLOAD_ATTACHMENT'
     | 'ALR_SUBMIT_TO_VERIFIER'
     | 'ALR_RECALL_FROM_VERIFICATION'
+    | 'ALR_SUBMIT_TO_REGULATOR'
     | 'ALR_SAVE_APPLICATION_VERIFICATION'
     | 'ALR_VERIFICATION_UPLOAD_ATTACHMENT'
     | 'ALR_VERIFICATION_RETURN_TO_OPERATOR'
     | 'ALR_SUBMIT_VERIFICATION'
+    | 'ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION'
+    | 'ALR_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT'
+    | 'ALR_REGULATOR_REVIEW_RETURN_FOR_AMENDS'
+    | 'ALR_APPLICATION_AMENDS_SAVE'
+    | 'ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR'
+    | 'ALR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER'
+    | 'ALR_REGULATOR_REVIEW_SAVE'
+    | 'ALR_PROCEED_TO_AUTHORITY'
+    | 'ALR_CLOSE_APPLICATION'
+    | 'ALR_REQUEST_PEER_REVIEW'
+    | 'ALR_SUBMIT_PEER_REVIEW_DECISION'
+    | 'ALR_SAVE_AUTHORITY_RESPONSE'
+    | 'ALR_AUTHORITY_RESPONSE_UPLOAD_ATTACHMENT'
+    | 'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION'
     | 'EMP_ISSUANCE_UKETS_SAVE_APPLICATION'
     | 'EMP_ISSUANCE_UKETS_SUBMIT_APPLICATION'
     | 'EMP_ISSUANCE_UKETS_UPLOAD_SECTION_ATTACHMENT'
@@ -562,10 +603,16 @@ export interface RequestTaskActionProcessDTO {
     | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_REQUEST_PEER_REVIEW'
     | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_NOTIFY_OPERATOR';
   requestTaskActionPayload:
+    | ALRApplicationAmendsSaveRequestTaskActionPayload
+    | ALRApplicationAmendsSubmitRequestTaskActionPayload
+    | ALRApplicationAmendsSubmitToVerifierRequestTaskActionPayload
+    | ALRApplicationRegulatorReviewSaveTaskActionPayload
     | ALRApplicationSaveRequestTaskActionPayload
     | ALRApplicationSubmitToVerifierRequestTaskActionPayload
     | ALRApplicationVerificationReturnToOperatorRequestTaskActionPayload
     | ALRApplicationVerificationSaveRequestTaskActionPayload
+    | ALRSaveAuthorityResponseTaskActionPayload
+    | ALRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload
     | AerApplicationRequestVerificationRequestTaskActionPayload
     | AerApplicationSkipReviewRequestTaskActionPayload
     | AerSaveApplicationAmendRequestTaskActionPayload
@@ -645,6 +692,11 @@ export interface RequestTaskActionProcessDTO {
     | EmpVariationUkEtsSaveReviewGroupDecisionRegulatorLedRequestTaskActionPayload
     | EmpVariationUkEtsSaveReviewGroupDecisionRequestTaskActionPayload
     | EmpVariationUkEtsSubmitApplicationAmendRequestTaskActionPayload
+    | HSETIApplicationAmendsSaveRequestTaskActionPayload
+    | HSETIApplicationAmendsSubmitRequestTaskActionPayload
+    | HSETIApplicationRegulatorReviewSaveTaskActionPayload
+    | HSETIApplicationSaveRegulatorReviewGroupDecisionRequestTaskActionPayload
+    | HSETIApplicationSaveRequestTaskActionPayload
     | InstallationAccountOpeningAmendApplicationRequestTaskActionPayload
     | InstallationAccountOpeningSubmitDecisionRequestTaskActionPayload
     | InstallationAuditApplicationSaveRequestTaskActionPayload
@@ -657,6 +709,7 @@ export interface RequestTaskActionProcessDTO {
     | NerSaveReviewDeterminationRequestTaskActionPayload
     | NerSaveReviewGroupDecisionRequestTaskActionPayload
     | NerSubmitApplicationAmendRequestTaskActionPayload
+    | NonComplianceAmendDetailsRequestTaskActionPayload
     | NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload
     | NonComplianceCloseApplicationRequestTaskActionPayload
     | NonComplianceDailyPenaltyNoticeSaveApplicationRequestTaskActionPayload

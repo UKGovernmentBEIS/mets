@@ -26,6 +26,8 @@ export class ConclusionComponent {
     map((v) => v === 'AVIATION'),
   );
 
+  isAmended$ = this.payload$.pipe(map((payload) => payload.payloadType === 'NON_COMPLIANCE_DETAILS_AMENDED_PAYLOAD'));
+
   constructor(
     readonly nonComplianceService: NonComplianceService,
     public readonly authStore: AuthStore,

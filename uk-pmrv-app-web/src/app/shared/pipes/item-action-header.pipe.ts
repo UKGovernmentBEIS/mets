@@ -191,6 +191,7 @@ export class ItemActionHeaderPipe implements PipeTransform {
 
       case 'NON_COMPLIANCE_APPLICATION_SUBMITTED':
       case 'NON_COMPLIANCE_APPLICATION_CLOSED':
+      case 'NON_COMPLIANCE_DETAILS_AMENDED':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
       case 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED':
@@ -330,6 +331,30 @@ export class ItemActionHeaderPipe implements PipeTransform {
       case 'ALR_APPLICATION_VERIFICATION_SUBMITTED':
       case 'ALR_VERIFICATION_RETURNED_TO_OPERATOR':
       case 'ALR_RECALLED_FROM_VERIFICATION':
+      case 'ALR_APPLICATION_SENT_TO_REGULATOR':
+      case 'ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+      case 'ALR_APPLICATION_PROCEEDED_TO_AUTHORITY':
+      case 'ALR_APPLICATION_CLOSED':
+      case 'ALR_APPLICATION_AMENDS_SUBMITTED':
+      case 'ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER':
+      case 'ALR_APPLICATION_PEER_REVIEW_REQUESTED':
+      case 'ALR_APPLICATION_PEER_REVIEW_ACCEPTED':
+      case 'ALR_APPLICATION_PEER_REVIEW_REJECTED':
+      case 'ALR_APPLICATION_ACCEPTED':
+      case 'ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS':
+      case 'ALR_APPLICATION_REJECTED':
+        return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
+
+      case 'HSE_TI_APPLICATION_SENT_TO_REGULATOR':
+      case 'HSE_TI_APPLICATION_CANCELLED':
+      case 'HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+      case 'HSE_TI_APPROVED':
+      case 'HSE_TI_REJECTED':
+      case 'HSE_TI_WITHDRAWN':
+      case 'HSE_TI_DEEMED_WITHDRAWN':
+      case 'HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED':
+      case 'HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED':
+      case 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED':
         return `${itemActionTypePipe.transform(item.type)} by ${item.submitter}`;
 
       default:

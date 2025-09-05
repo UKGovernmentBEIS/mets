@@ -34,50 +34,54 @@
           </dd>
         </div>
       </dl>
-      <p class="govuk-heading-m">Selected tasks</p>
-      <dl govuk-summary-list *ngIf="nonCompliance.selectedRequests as selectedRequests">
-        <ng-container *ngFor="let source of selectedRequests">
+      @if (isAmended() === false) {
+        <p class="govuk-heading-m">Selected tasks</p>
+        <dl govuk-summary-list *ngIf="nonCompliance.selectedRequests as selectedRequests">
+          <ng-container *ngFor="let source of selectedRequests">
+            <div govukSummaryListRow>
+              <dd class="pre-wrap" govukSummaryListRowValue>
+                {{ source.id }}
+                {{ source.type | workflowType }}
+              </dd>
+            </div>
+          </ng-container>
+        </dl>
+        <dl govuk-summary-list>
           <div govukSummaryListRow>
-            <dd class="pre-wrap" govukSummaryListRowValue>
-              {{ source.id }}
-              {{ source.type | workflowType }}
+            <dt govukSummaryListRowKey>Is the operator liable for a civil penalty?</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ nonCompliance.civilPenalty ? 'Yes' : 'No' }}
             </dd>
           </div>
-        </ng-container>
-      </dl>
-      <dl govuk-summary-list>
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Is the operator liable for a civil penalty?</dt>
-          <dd govukSummaryListRowValue class="pre-wrap">
-            {{ nonCompliance.civilPenalty ? 'Yes' : 'No' }}
-          </dd>
-        </div>
-      </dl>
-      <dl govuk-summary-list *ngIf="nonCompliance.noCivilPenaltyJustification">
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Explanation</dt>
-          <dd govukSummaryListRowValue class="pre-wrap">
-            {{ nonCompliance.noCivilPenaltyJustification }}
-          </dd>
-        </div>
-      </dl>
-      <dl govuk-summary-list *ngIf="nonCompliance.civilPenalty">
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Will you issue a notice of intent to the operator?</dt>
-          <dd govukSummaryListRowValue class="pre-wrap">
-            {{ nonCompliance.noticeOfIntent ? 'Yes' : 'No' }}
-          </dd>
-        </div>
-      </dl>
-      <dl govuk-summary-list *ngIf="nonCompliance.civilPenalty">
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Is the operator liable for an initial penalty notice?</dt>
-          <dd govukSummaryListRowValue class="pre-wrap">
-            {{ nonCompliance.dailyPenalty ? 'Yes' : 'No' }}
-          </dd>
-        </div>
-      </dl>
+        </dl>
+        <dl govuk-summary-list *ngIf="nonCompliance.noCivilPenaltyJustification">
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Explanation</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ nonCompliance.noCivilPenaltyJustification }}
+            </dd>
+          </div>
+        </dl>
+        <dl govuk-summary-list *ngIf="nonCompliance.civilPenalty">
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Will you issue a notice of intent to the operator?</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ nonCompliance.noticeOfIntent ? 'Yes' : 'No' }}
+            </dd>
+          </div>
+        </dl>
+        <dl govuk-summary-list *ngIf="nonCompliance.civilPenalty">
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Is the operator liable for an initial penalty notice?</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              {{ nonCompliance.dailyPenalty ? 'Yes' : 'No' }}
+            </dd>
+          </div>
+        </dl>
+      }
     </ng-container>
-    <a govukLink [routerLink]="(isAviation$ | async) ? '../../../' : '../'">Return to: Non compliance</a>
+    <a *ngIf="isAmended() === false" govukLink [routerLink]="(isAviation$ | async) ? '../../../' : '../'">
+      Return to: Non compliance
+    </a>
   </div>
 </div>

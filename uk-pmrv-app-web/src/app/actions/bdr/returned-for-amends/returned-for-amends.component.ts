@@ -15,7 +15,7 @@ import { BdrActionService } from '../core/bdr.service';
   imports: [ActionSharedModule, NgIf, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ReturnedForAmendsComponent {
+export class BdrReturnedForAmendsComponent {
   requestAction = this.bdrService.requestAction;
   payload = this.bdrService.payload;
 

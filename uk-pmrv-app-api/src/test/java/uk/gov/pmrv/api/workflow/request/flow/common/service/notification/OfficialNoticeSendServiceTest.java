@@ -117,6 +117,7 @@ class OfficialNoticeSendServiceTest {
 						.competentAuthority(CompetentAuthorityEnum.ENGLAND)
 						.accountType(AccountType.INSTALLATION)
 					.templateParams(Map.of(
+							PmrvEmailNotificationTemplateConstants.REQUEST_TYPE, "PERMIT ISSUANCE",
 							PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
 							PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
 							PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
@@ -183,6 +184,7 @@ class OfficialNoticeSendServiceTest {
 						.competentAuthority(CompetentAuthorityEnum.ENGLAND)
 						.accountType(AccountType.INSTALLATION)
 					.templateParams(Map.of(
+							PmrvEmailNotificationTemplateConstants.REQUEST_TYPE, "PERMIT ISSUANCE",
 							PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
 							PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
 							PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
@@ -263,6 +265,7 @@ class OfficialNoticeSendServiceTest {
 				.competentAuthority(CompetentAuthorityEnum.ENGLAND)
 				.accountType(AccountType.INSTALLATION)
 				.templateParams(Map.of(
+						PmrvEmailNotificationTemplateConstants.REQUEST_TYPE, "PERMIT ISSUANCE",
 						PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
 						PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
 						PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
@@ -332,6 +335,7 @@ class OfficialNoticeSendServiceTest {
 				.competentAuthority(CompetentAuthorityEnum.ENGLAND)
 				.accountType(AccountType.INSTALLATION)
 				.templateParams(Map.of(
+						PmrvEmailNotificationTemplateConstants.REQUEST_TYPE, "PERMIT ISSUANCE",
 						PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
 						PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
 						PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
@@ -362,5 +366,13 @@ class OfficialNoticeSendServiceTest {
 		Set<UserInfoDTO> defaultOfficialNoticeRecipients = service.getOfficialNoticeToRecipients(request);
 
 		assertEquals(Set.of(accountPrimaryContact, accountServiceContact), defaultOfficialNoticeRecipients);
+	}
+
+	@Test
+	void processRequestTypeName() {
+
+		String result = service.processRequestTypeName(RequestType.INSTALLATION_ONSITE_INSPECTION);
+		assertThat(result).isEqualTo("INSTALLATION ONSITE INSPECTION");
+
 	}
 }

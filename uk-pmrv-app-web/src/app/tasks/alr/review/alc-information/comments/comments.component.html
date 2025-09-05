@@ -1,0 +1,18 @@
+<app-alr-task-common returnLink="../../" [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    caption="Provide information about this activity level change"
+    heading="Comments for UK ETS authority (optional)"
+    submitText="Continue"
+    [hideSubmit]="(editable$ | async) === false">
+    <span class="govuk-body govuk-hint">For example:</span>
+    <ul class="govuk-list govuk-list--bullet govuk-hint">
+      <li>large changes to activity levels or allocation</li>
+      <li>adjustments to previous year's activity levels</li>
+      <li>energy efficiency, including where the regulator rejects the adjustment</li>
+    </ul>
+
+    <div govuk-textarea formControlName="ukEtsAuthorityComments"></div>
+  </app-wizard-step>
+</app-alr-task-common>

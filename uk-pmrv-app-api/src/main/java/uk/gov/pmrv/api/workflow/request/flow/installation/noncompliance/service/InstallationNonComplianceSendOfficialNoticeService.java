@@ -16,12 +16,14 @@ import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateDat
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceDecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.service.NonComplianceSendOfficialNoticeService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.InstallationAccountCompetentAuthorityDTOByRequestResolver;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +39,9 @@ public class InstallationNonComplianceSendOfficialNoticeService implements NonCo
     private final NotificationEmailService<PmrvEmailNotificationTemplateData> notificationEmailService;
     private final FileAttachmentService fileAttachmentService;
     private final InstallationAccountCompetentAuthorityDTOByRequestResolver caResolver;
+    private final OfficialNoticeSendService officialNoticeSendService;
 
-    public void sendOfficialNotice(final UUID officialNotice,
+    public void  sendOfficialNotice(final UUID officialNotice,
                                    final Request request,
                                    final NonComplianceDecisionNotification decisionNotification) {
 
@@ -74,6 +77,8 @@ public class InstallationNonComplianceSendOfficialNoticeService implements NonCo
                     .competentAuthority(request.getCompetentAuthority())
                     .accountType(request.getType().getAccountType())
                     .templateParams(Map.of(
+                        PmrvEmailNotificationTemplateConstants.REQUEST_TYPE,
+                            officialNoticeSendService.processRequestTypeName(RequestType.NON_COMPLIANCE),
                     		PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT,
                         accountPrimaryContact.getFullName(),
                         PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME,

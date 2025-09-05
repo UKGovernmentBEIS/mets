@@ -6,7 +6,7 @@
         <app-summary-download-files [files]="[alrFile]"></app-summary-download-files>
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+        <a govukLink [routerLink]="changeLink" [state]="{ changing: true }">Change</a>
       </dd>
     </div>
   </dl>
@@ -19,7 +19,7 @@
         <app-summary-download-files [files]="files"></app-summary-download-files>
       </dd>
       <dd govukSummaryListRowActions *ngIf="isEditable">
-        <a govukLink [routerLink]="['..']" [state]="{ changing: true }">Change</a>
+        <a govukLink [routerLink]="changeLink" [state]="{ changing: true }">Change</a>
       </dd>
     </div>
   </dl>

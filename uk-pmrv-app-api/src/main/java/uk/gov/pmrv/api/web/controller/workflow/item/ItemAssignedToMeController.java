@@ -54,10 +54,10 @@ public class ItemAssignedToMeController {
             @PathVariable("accountType") @Parameter(description = "The account type") AccountType accountType,
             @RequestParam("page") @Parameter(name = "page", description = "The page number starting from zero")
             @Min(value = 0, message = "{parameter.page.typeMismatch}")
-            @NotNull(message = "{parameter.page.typeMismatch}") Long page,
+            @NotNull(message = "{parameter.page.typeMismatch}") Integer page,
             @RequestParam("size") @Parameter(name = "size", description = "The page size")
             @Min(value = 1, message = "{parameter.pageSize.typeMismatch}")
-            @NotNull(message = "{parameter.pageSize.typeMismatch}") Long pageSize) {
+            @NotNull(message = "{parameter.pageSize.typeMismatch}") Integer pageSize) {
 
         Optional<ItemAssignedToMeService> itemService = services.stream()
                 .filter(itemAssignedToMeService -> itemAssignedToMeService.getRoleType().equals(user.getRoleType()))

@@ -16,6 +16,7 @@ import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateDat
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.workflow.request.core.domain.Request;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestType;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.CompetentAuthorityDTOByRequestResolverDelegator;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
 
@@ -71,6 +72,8 @@ public class OfficialNoticeSendService {
         templateParams.put(PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail());
         templateParams.put(PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName());
 
+        templateParams.put(PmrvEmailNotificationTemplateConstants.REQUEST_TYPE,processRequestTypeName(request.getType()));
+
         //notify
         notificationEmailService.notifyRecipients(
                 EmailData.<PmrvEmailNotificationTemplateData>builder()
@@ -92,6 +95,7 @@ public class OfficialNoticeSendService {
                 bccRecipientsEmails);
     }
 
+
     public Set<UserInfoDTO> getOfficialNoticeToRecipients(Request request) {
         final UserInfoDTO accountPrimaryContact = requestAccountContactQueryService.getRequestAccountPrimaryContact(request)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
@@ -99,4 +103,15 @@ public class OfficialNoticeSendService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_SERVICE_CONTACT_NOT_FOUND));
         return Stream.of(accountPrimaryContact, accountServiceContact).collect(Collectors.toSet());
     }
+
+
+    public String processRequestTypeName(RequestType requestType) {
+
+        String requestTypeName = requestType.name();
+        requestTypeName = requestTypeName .replaceAll("_"," ").toUpperCase();
+
+        return requestTypeName;
+
+    }
+
 }

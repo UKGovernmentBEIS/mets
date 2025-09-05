@@ -37,6 +37,7 @@ public class ALRApplicationSubmitInitializer implements InitializeRequestTaskHan
                 .verificationPerformed(requestPayload.isVerificationPerformed())
                 .verificationSectionsCompleted(requestPayload.getVerificationSectionsCompleted())
                 .verificationBodyId(verificationBodyId)
+                .alrFileVersion(requestPayload.getAlrFileVersion())
                 .build();
 
         return taskPayload;

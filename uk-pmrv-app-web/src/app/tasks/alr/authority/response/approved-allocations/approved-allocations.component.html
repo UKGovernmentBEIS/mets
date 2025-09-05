@@ -1,0 +1,22 @@
+<app-alr-task-common
+  returnLink="../../"
+  returnLinkTitle="Provide UK ETS Authority response for activity Level Change"
+  [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onSubmit()"
+    [formGroup]="form"
+    heading="Authority approved allocations"
+    caption="Provide information about this activity level determination"
+    submitText="Continue">
+    <p class="govuk-body">The commission approved allocations will appear in the official notice.</p>
+
+    <app-total-preliminary-allocation-list-template
+      [data]="preliminaryAllocations$ | async"></app-total-preliminary-allocation-list-template>
+
+    <app-multiple-file-input
+      [baseDownloadUrl]="getBaseFileDownloadUrl()"
+      [label]="(documentsExist$ | async) ? 'Upload a different file' : 'Upload supporting files (optional)'"
+      listTitle="Uploaded files"
+      formControlName="documents"></app-multiple-file-input>
+  </app-wizard-step>
+</app-alr-task-common>

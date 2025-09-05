@@ -45,6 +45,8 @@ export class WorkflowTypePipe implements PipeTransform {
         return 'Annual improvement';
       case 'DRE':
         return 'Determine emissions';
+      case 'HSE_TI':
+        return 'HSE target increase application';
 
       case 'WITHHOLDING_OF_ALLOWANCES':
         return 'Withholding of allowances';

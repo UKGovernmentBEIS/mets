@@ -47,7 +47,7 @@ public class ItemOperatorRepository {
 				.where(constructWherePredicate(userId, assignmentType, requestTask, request,
 						scopedAccountRequestTaskTypes))
                 .orderBy(requestTask.startDate.desc())
-                .offset(paging.getPageNumber() * paging.getPageSize())
+                .offset((long) paging.getPageNumber() * paging.getPageSize())
                 .limit(paging.getPageSize());
 
         return ItemPage.builder()

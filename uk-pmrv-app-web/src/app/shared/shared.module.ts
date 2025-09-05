@@ -11,6 +11,7 @@ import { DecisionSummaryComponent } from '@permit-notification/follow-up/review/
 import { WorkflowsComponent } from '@shared/accounts';
 import { AbbreviationsSummaryTemplateComponent } from '@shared/components/abbreviations/abbreviations-summary-template.component';
 import { AbbreviationsTemplateComponent } from '@shared/components/abbreviations/abbreviations-template.component';
+import { ActivityLevelTemplateFormComponent } from '@shared/components/activity-level-template-form/activity-level-template-form.component';
 import { ApproachesUsedSummaryTemplateComponent } from '@shared/components/approaches/aer/approaches-used/approaches-used-summary-template.component';
 import { CalculationEmissionsTierSummaryComponent } from '@shared/components/approaches/aer/calculation-emissions-tier/calculation-emissions-tier-summary.component';
 import { ApproachesAddTemplateComponent } from '@shared/components/approaches/approaches-add/approaches-add-template.component';
@@ -23,8 +24,6 @@ import { ConfidentialityStatementTemplateComponent } from '@shared/components/co
 import { AlcInformationTemplateComponent } from '@shared/components/doal/alc-information-template/alc-information-template.component';
 import { AuthorityDecisionTemplateComponent } from '@shared/components/doal/authority-decision-template/authority-decision-template.component';
 import { DateSubmittedSummaryTemplateComponent } from '@shared/components/doal/date-submitted-summary-template/date-submitted-summary-template.component';
-import { PreliminaryAllocationDetailsTemplateComponent } from '@shared/components/doal/preliminary-allocation-details/preliminary-allocation-details-template.component';
-import { TotalPreliminaryAllocationListTemplateComponent } from '@shared/components/doal/total-preliminary-allocation-list-template/total-preliminary-allocation-list-template.component';
 import { EmissionPointDeleteTemplateComponent } from '@shared/components/emission-points/emission-point-delete/emission-point-delete-template.component';
 import { EmissionPointDetailsTemplateComponent } from '@shared/components/emission-points/emission-point-details/emission-point-details-template.component';
 import { EmissionSourceDeleteTemplateComponent } from '@shared/components/emission-sources/emission-source-delete/emission-source-delete-template.component';
@@ -33,6 +32,7 @@ import { MonitoringPlanSummaryTemplateComponent } from '@shared/components/monit
 import { MonitoringPlanVersionsComponent } from '@shared/components/monitoring-plan/monitoring-plan-versions.component';
 import { NaceCodesSummaryTemplateComponent } from '@shared/components/nace-codes/nace-codes-summary-template.component';
 import { PaymentNotCompletedComponent } from '@shared/components/payment-not-completed/payment-not-completed.component';
+import { PreliminaryAllocationDetailsTemplateComponent } from '@shared/components/preliminary-allocation-details/preliminary-allocation-details-template.component';
 import { PrtrSummaryTemplateComponent } from '@shared/components/prtr/prtr-summary-template.component';
 import { AerRegulatedActivitiesSummaryTemplateComponent } from '@shared/components/regulated-activities/aer-regulated-activities-summary-template.component';
 import { RelatedActionsComponent } from '@shared/components/related-actions/related-actions.component';
@@ -59,6 +59,7 @@ import { SelectOtherComponent } from '@shared/components/select-other/select-oth
 import { SourceStreamDeleteTemplateComponent } from '@shared/components/source-streams/source-stream-delete/source-stream-delete-template.component';
 import { SourceStreamDetailsTemplateComponent } from '@shared/components/source-streams/source-stream-details/source-streams-details-template.component';
 import { TaskHeaderInfoComponent } from '@shared/components/task-header-info/task-header-info.component';
+import { TotalPreliminaryAllocationListTemplateComponent } from '@shared/components/total-preliminary-allocation-list-template/total-preliminary-allocation-list-template.component';
 import { CategoryTypeNamePipe } from '@shared/pipes/category-type-name.pipe';
 import { OverallAssessmentTypePipe } from '@shared/pipes/overall-assessment-type.pipe';
 import { PipesModule } from '@shared/pipes/pipes.module';
@@ -94,6 +95,7 @@ import { AttachmentComponent } from './attachment/attachment.component';
 import { BackToTopComponent } from './back-to-top/back-to-top.component';
 import { BaseSuccessComponent } from './base-success/base-success.component';
 import { BooleanRadioGroupComponent } from './boolean-radio-group/boolean-radio-group.component';
+import { ActivityLevelListTemplateComponent as DoalActivityLevelListTemplateComponent } from './components/activity-level-list-template/activity-level-list-template.component';
 import { AdditionalDocumentsSharedComponent } from './components/additional-documents/additional-documents.component';
 import { AdditionalDocumentsSummaryTemplateComponent } from './components/additional-documents/additional-documents-summary/documents-summary-template.component';
 import { MeasurementTierSummaryComponent } from './components/approaches/aer/measurement-tier-summary/measurement-tier-summary.component';
@@ -104,7 +106,6 @@ import { BatchReissueRequestsComponent } from './components/batch-reissue-reques
 import { ConfirmationSharedComponent } from './components/confirmation/confirmation.component';
 import { DecisionComponent } from './components/decision/decision.component';
 import { DecisionConfirmationComponent } from './components/decision/decision-confirmation/decision-confirmation.component';
-import { ActivityLevelListTemplateComponent as DoalActivityLevelListTemplateComponent } from './components/doal/activity-level-list-template/activity-level-list-template.component';
 import { AdditionalDocumentsSummaryTemplateComponent as DoalAdditionalDocumentsSummaryTemplateComponent } from './components/doal/additional-documents-summary-template/additional-documents-summary-template.component';
 import { DeterminationCloseSummaryTemplateComponent as DoalDeterminationCloseSummaryTemplateComponent } from './components/doal/determination-close-summary-template/determination-close-summary-template.component';
 import { DeterminationProceedAuthorityReasonTemplateComponent as DoalDeterminationProceedAuthorityReasonTemplateComponent } from './components/doal/determination-proceed-authority-reason-template/determination-proceed-authority-reason-template.component';
@@ -224,6 +225,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     AccountsListComponent,
     AccountsPageComponent,
     ActivityLevelReportGroupComponent,
+    ActivityLevelTemplateFormComponent,
     AddAnotherDirective,
     AddComponent,
     AdditionalDocumentsSharedComponent,
@@ -415,6 +417,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     AccountsListComponent,
     AccountsPageComponent,
     ActivityLevelReportGroupComponent,
+    ActivityLevelTemplateFormComponent,
     AddAnotherDirective,
     AdditionalDocumentsSharedComponent,
     AdditionalDocumentsSummaryTemplateComponent,

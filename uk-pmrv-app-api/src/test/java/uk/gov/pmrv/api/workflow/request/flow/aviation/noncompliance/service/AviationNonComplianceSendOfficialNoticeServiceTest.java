@@ -25,6 +25,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComp
 import uk.gov.pmrv.api.workflow.request.flow.common.service.AviationAccountCompetentAuthorityDTOByRequestResolver;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +45,7 @@ import static org.mockito.Mockito.when;
 class AviationNonComplianceSendOfficialNoticeServiceTest {
 
 	@InjectMocks
-    private AviationNonComplianceSendOfficialNoticeService officialNoticeSendService;
+    private AviationNonComplianceSendOfficialNoticeService aviationNonComplianceSendOfficialNoticeService;
 
     @Mock
     private RequestAccountContactQueryService requestAccountContactQueryService;
@@ -60,6 +61,9 @@ class AviationNonComplianceSendOfficialNoticeServiceTest {
 
     @Mock
     private AviationAccountCompetentAuthorityDTOByRequestResolver caResolver;
+
+    @Mock
+    private OfficialNoticeSendService officialNoticeSendService;
 
     @Test
     void sendOfficialNotice() {
@@ -98,9 +102,10 @@ class AviationNonComplianceSendOfficialNoticeServiceTest {
         when(decisionNotificationUsersService.findUserEmails(genericDecisionNotification)).thenReturn(ccRecipientsEmails);
         when(fileAttachmentService.getFileDTO(uuid.toString())).thenReturn(officialNoticeFileDTO);
         when(caResolver.resolveCA(request)).thenReturn(competentAuthority);
+        when(officialNoticeSendService.processRequestTypeName(RequestType.AVIATION_NON_COMPLIANCE)).thenReturn("AVIATION NON COMPLIANCE");
 
         //invoke
-        officialNoticeSendService.sendOfficialNotice(uuid, request, nonComplianceDecisionNotification);
+        aviationNonComplianceSendOfficialNoticeService.sendOfficialNotice(uuid, request, nonComplianceDecisionNotification);
 
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(requestAccountContactQueryService, times(1)).getRequestAccountServiceContact(request);
@@ -117,6 +122,7 @@ class AviationNonComplianceSendOfficialNoticeServiceTest {
                 .competentAuthority(CompetentAuthorityEnum.WALES)
                 .accountType(AccountType.AVIATION)
                 .templateParams(Map.of(
+                        PmrvEmailNotificationTemplateConstants.REQUEST_TYPE, "AVIATION NON COMPLIANCE",
                 		PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT, accountPrimaryContact.getFullName(),
                 		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
                 		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
@@ -148,7 +154,7 @@ class AviationNonComplianceSendOfficialNoticeServiceTest {
         when(decisionNotificationUsersService.findUserEmails(genericDecisionNotification)).thenReturn(Collections.emptyList());
 
         //invoke
-        officialNoticeSendService.sendOfficialNotice(uuid, request, nonComplianceDecisionNotification);
+        aviationNonComplianceSendOfficialNoticeService.sendOfficialNotice(uuid, request, nonComplianceDecisionNotification);
 
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(genericDecisionNotification);
@@ -192,9 +198,10 @@ class AviationNonComplianceSendOfficialNoticeServiceTest {
         when(fileAttachmentService.getFileDTO(uuid.toString())).thenReturn(officialNoticeFileDTO);
         when(caResolver.resolveCA(request))
         	.thenReturn(competentAuthority);
+        when(officialNoticeSendService.processRequestTypeName(RequestType.AVIATION_NON_COMPLIANCE)).thenReturn("AVIATION NON COMPLIANCE");
 
         //invoke
-        officialNoticeSendService.sendOfficialNotice(uuid, request, nonComplianceDecisionNotification);
+        aviationNonComplianceSendOfficialNoticeService.sendOfficialNotice(uuid, request, nonComplianceDecisionNotification);
 
         verify(requestAccountContactQueryService, times(1)).getRequestAccountPrimaryContact(request);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(genericDecisionNotification);
@@ -210,6 +217,7 @@ class AviationNonComplianceSendOfficialNoticeServiceTest {
                 .competentAuthority(CompetentAuthorityEnum.WALES)
                 .accountType(AccountType.AVIATION)
                 .templateParams(Map.of(
+                        PmrvEmailNotificationTemplateConstants.REQUEST_TYPE, "AVIATION NON COMPLIANCE",
                 		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_EMAIL, competentAuthority.getEmail(),
                 		PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME, competentAuthority.getName()
                 ))
@@ -221,7 +229,7 @@ class AviationNonComplianceSendOfficialNoticeServiceTest {
     
     @Test
     void getAccountType() {
-    	AccountType type = officialNoticeSendService.getAccountType();
+    	AccountType type = aviationNonComplianceSendOfficialNoticeService.getAccountType();
     	
     	assertThat(type).isEqualTo(AccountType.AVIATION);
     }

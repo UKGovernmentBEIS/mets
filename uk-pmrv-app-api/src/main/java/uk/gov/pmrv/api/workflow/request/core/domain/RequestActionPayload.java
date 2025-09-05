@@ -58,6 +58,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComp
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceDailyPenaltyNoticeApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceDetailsAmendedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.reissue.domain.BatchReissueCompletedRequestActionPayload;
@@ -78,7 +79,14 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.air.domain.AirApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationVerificationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRVerificationReturnedToOperatorRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationProceededToAuthorityRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationClosedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAmendsSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAcceptedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAcceptedWithCorrectionsRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationRejectedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationAmendsSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationCompletedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationSubmittedRequestActionPayload;
@@ -92,6 +100,9 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplic
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationProceededToAuthorityRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationRejectedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIApplicationSubmittedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETICompletedRequestActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIRegulatorReviewReturnedForAmendsRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionOperatorRespondedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.ner.domain.NerApplicationAcceptedRequestActionPayload;
@@ -234,6 +245,7 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload.class, value = "NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload.class, value = "NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = NonComplianceDetailsAmendedRequestActionPayload.class, value = "NON_COMPLIANCE_DETAILS_AMENDED_PAYLOAD"),
 
                 @DiscriminatorMapping(schema = NerApplicationSubmittedRequestActionPayload.class, value = "NER_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
@@ -290,6 +302,19 @@ import java.util.UUID;
                 @DiscriminatorMapping(schema = ALRApplicationSubmittedRequestActionPayload.class, value = "ALR_APPLICATION_SUBMITTED_PAYLOAD"),
                 @DiscriminatorMapping(schema = ALRVerificationReturnedToOperatorRequestActionPayload.class, value = "ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD"),
                 @DiscriminatorMapping(schema = ALRApplicationVerificationSubmittedRequestActionPayload.class, value = "ALR_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRRegulatorReviewReturnedForAmendsRequestActionPayload.class, value = "ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationProceededToAuthorityRequestActionPayload.class, value = "ALR_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationClosedRequestActionPayload.class, value = "ALR_APPLICATION_CLOSED_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationAmendsSubmittedRequestActionPayload.class, value = "ALR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "ALR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationAcceptedRequestActionPayload.class, value = "ALR_APPLICATION_ACCEPTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationAcceptedWithCorrectionsRequestActionPayload.class, value = "ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS_PAYLOAD"),
+                @DiscriminatorMapping(schema = ALRApplicationRejectedRequestActionPayload.class, value = "ALR_APPLICATION_REJECTED_PAYLOAD"),
+
+                @DiscriminatorMapping(schema = HSETIApplicationSubmittedRequestActionPayload.class, value = "HSE_TI_APPLICATION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = PeerReviewDecisionSubmittedRequestActionPayload.class, value = "HSE_TI_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+                @DiscriminatorMapping(schema = HSETIRegulatorReviewReturnedForAmendsRequestActionPayload.class, value = "HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
+                @DiscriminatorMapping(schema = HSETICompletedRequestActionPayload.class, value = "HSE_TI_COMPLETED_PAYLOAD"),
 
 
                 @DiscriminatorMapping(schema = EmpIssuanceUkEtsApplicationSubmittedRequestActionPayload.class, value = "EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED_PAYLOAD"),
@@ -449,6 +474,8 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload.class, name = "NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload.class, name = "NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = NonComplianceDetailsAmendedRequestActionPayload.class, name = "NON_COMPLIANCE_DETAILS_AMENDED_PAYLOAD"),
+
 
         @JsonSubTypes.Type(value = NerApplicationSubmittedRequestActionPayload.class, name = "NER_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "NER_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
@@ -504,7 +531,19 @@ import java.util.UUID;
         @JsonSubTypes.Type(value = ALRApplicationSubmittedRequestActionPayload.class, name = "ALR_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = ALRVerificationReturnedToOperatorRequestActionPayload.class, name = "ALR_VERIFICATION_RETURNED_TO_OPERATOR_PAYLOAD"),
         @JsonSubTypes.Type(value = ALRApplicationVerificationSubmittedRequestActionPayload.class, name = "ALR_APPLICATION_VERIFICATION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = ALRRegulatorReviewReturnedForAmendsRequestActionPayload.class, name = "ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
+        @JsonSubTypes.Type(value = ALRApplicationProceededToAuthorityRequestActionPayload.class, name = "ALR_APPLICATION_PROCEEDED_TO_AUTHORITY_PAYLOAD"),
+        @JsonSubTypes.Type(value = ALRApplicationClosedRequestActionPayload.class, name = "ALR_APPLICATION_CLOSED_PAYLOAD"),
+        @JsonSubTypes.Type(value = ALRApplicationAmendsSubmittedRequestActionPayload.class, name = "ALR_APPLICATION_AMENDS_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "ALR_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = ALRApplicationAcceptedRequestActionPayload.class, name = "ALR_APPLICATION_ACCEPTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = ALRApplicationAcceptedWithCorrectionsRequestActionPayload.class, name = "ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS_PAYLOAD"),
+        @JsonSubTypes.Type(value = ALRApplicationRejectedRequestActionPayload.class, name = "ALR_APPLICATION_REJECTED_PAYLOAD"),
 
+
+        @JsonSubTypes.Type(value = HSETIApplicationSubmittedRequestActionPayload.class, name = "HSE_TI_APPLICATION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = HSETIRegulatorReviewReturnedForAmendsRequestActionPayload.class, name = "HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
+        @JsonSubTypes.Type(value = HSETICompletedRequestActionPayload.class, name = "HSE_TI_COMPLETED_PAYLOAD"),
 
 
         @JsonSubTypes.Type(value = EmpIssuanceUkEtsApplicationSubmittedRequestActionPayload.class, name = "EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED_PAYLOAD"),
@@ -539,6 +578,11 @@ import java.util.UUID;
 
         @JsonSubTypes.Type(value = AviationDreApplicationSubmittedRequestActionPayload.class, name = "AVIATION_DRE_UKETS_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "AVIATION_DRE_UKETS_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+
+        @JsonSubTypes.Type(value = HSETIApplicationSubmittedRequestActionPayload.class, name = "HSE_TI_APPLICATION_SUBMITTED_PAYLOAD"),
+        @JsonSubTypes.Type(value = HSETIRegulatorReviewReturnedForAmendsRequestActionPayload.class, name = "HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS_PAYLOAD"),
+        @JsonSubTypes.Type(value = PeerReviewDecisionSubmittedRequestActionPayload.class, name = "HSE_TI_APPLICATION_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD"),
+
 
         @JsonSubTypes.Type(value = AviationVirApplicationSubmittedRequestActionPayload.class, name = "AVIATION_VIR_APPLICATION_SUBMITTED_PAYLOAD"),
         @JsonSubTypes.Type(value = AviationVirApplicationReviewedRequestActionPayload.class, name = "AVIATION_VIR_APPLICATION_REVIEWED_PAYLOAD"),

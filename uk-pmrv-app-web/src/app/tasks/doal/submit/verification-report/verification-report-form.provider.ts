@@ -27,7 +27,7 @@ export const verificationReportFormProvider = {
         verificationReportOfTheActivityLevelReport?.document ?? null,
         payload?.doalAttachments,
         'DOAL_UPLOAD_ATTACHMENT',
-        true,
+        false,
         disabled,
       ),
       comment: [

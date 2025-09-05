@@ -81,12 +81,14 @@ export function mockAlrStateBuild(value?: any): CommonTasksState {
 export function mockAlrPostBuild(
   value?: any,
   alrSectionsCompleted?: ALRApplicationSubmitRequestTaskPayload['alrSectionsCompleted'],
+  requestTaskActionType: RequestTaskActionProcessDTO['requestTaskActionType'] = 'ALR_SAVE_APPLICATION',
+  payloadType: RequestTaskActionPayload['payloadType'] = 'ALR_APPLICATION_SAVE_PAYLOAD',
 ): RequestTaskActionProcessDTO {
   return {
-    requestTaskActionType: 'ALR_SAVE_APPLICATION',
+    requestTaskActionType,
     requestTaskId: alrSubmitMockState.requestTaskItem.requestTask.id,
     requestTaskActionPayload: {
-      payloadType: 'ALR_APPLICATION_SAVE_PAYLOAD',
+      payloadType,
       ...value,
       alrSectionsCompleted: {
         ...mockAlrSubmitPayload.alrSectionsCompleted,

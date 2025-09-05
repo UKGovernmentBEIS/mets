@@ -17,6 +17,7 @@ export interface ALRApplicationVerificationSubmitRequestTaskPayloadAllOf {
   verificationSectionsCompleted?: { [key: string]: Array<boolean> };
   alrSectionsCompleted?: { [key: string]: boolean };
   alrAttachments?: { [key: string]: string };
+  alrFileVersion?: number;
   verificationReport?: ALRVerificationReport;
   verificationAttachments?: { [key: string]: string };
 }

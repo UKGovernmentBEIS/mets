@@ -544,9 +544,48 @@ export class ItemNamePipe implements PipeTransform {
       case 'ALR_APPLICATION_SUBMIT':
         return `Complete ${year} activity level report`;
       case 'ALR_WAIT_FOR_VERIFICATION':
+      case 'ALR_AMEND_WAIT_FOR_VERIFICATION':
         return `${year} activity level report sent to verifier`;
       case 'ALR_APPLICATION_VERIFICATION_SUBMIT':
+      case 'ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT':
         return `Verify ${year} activity level report`;
+      case 'ALR_WAIT_FOR_REGULATOR_REVIEW':
+        return `${year} activity level report sent to regulator`;
+      case 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+        return `Review ${year} activity level report`;
+      case 'ALR_WAIT_FOR_AMENDS':
+        return 'Activity level report returned to operator';
+      case 'ALR_WAIT_FOR_AUTHORITY_REVIEW':
+        return 'Activity level report review completed by your Regulator';
+      case 'ALR_AUTHORITY_RESPONSE_SUBMIT':
+        return 'Provide UK ETS Authority response for activity level change';
+      case 'ALR_APPLICATION_AMENDS_SUBMIT':
+        return `Amend ${year} activity level report`;
+      case 'ALR_WAIT_FOR_PEER_REVIEW':
+        return `${year} activity level report sent to peer reviewer`;
+      case 'ALR_APPLICATION_PEER_REVIEW':
+        return `Peer review ${year} activity level report`;
+
+      // HSE_TI
+      case 'HSE_TI_APPLICATION_SUBMIT':
+        return `Complete ${String(year).replace('_', '-')} HSE target increase application`;
+      case 'HSE_TI_WAIT_FOR_REGULATOR_REVIEW':
+        return `${String(year).replace('_', '-')} HSE target increase application sent to regulator`;
+      case 'HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT':
+        return `Review ${String(year).replace('_', '-')} HSE target increase application`;
+      case 'HSE_TI_WAIT_FOR_AMENDS':
+        return `${String(year).replace('_', '-')} HSE target increase application returned to operator`;
+      case 'HSE_TI_MAKE_PAYMENT':
+        return `Pay for ${String(year).replace('_', '-')} HSE target increase application`;
+      case 'HSE_TI_TRACK_PAYMENT':
+      case 'HSE_TI_CONFIRM_PAYMENT':
+        return `Track payment for ${String(year).replace('_', '-')} HSE target increase application`;
+      case 'HSE_TI_APPLICATION_AMENDS_SUBMIT':
+        return `Amend ${String(year).replace('_', '-')} HSE target increase application`;
+      case 'HSE_TI_WAIT_FOR_PEER_REVIEW':
+        return `${String(year).replace('_', '-')} HSE target increase sent to peer reviewer`;
+      case 'HSE_TI_APPLICATION_PEER_REVIEW':
+        return `Peer review ${String(year).replace('_', '-')} HSE target increase application`;
 
       default:
         return null;

@@ -1,0 +1,29 @@
+<app-alr-task-common [breadcrumb]="true" returnLink="../../../">
+  <app-wizard-step
+    [formGroup]="form"
+    (formSubmit)="onSubmit()"
+    heading="Has a withholding of allowances notice been issued?"
+    caption="Proceed to UK ETS authority"
+    submitText="Continue"
+    [hideSubmit]="!isEditable()">
+    <div formControlName="hasWithholdingOfAllowances" govuk-radio>
+      <govuk-radio-option label="Yes" [value]="true">
+        <ng-container govukConditionalContent>
+          <div
+            formControlName="noticeIssuedDate"
+            label="When was the notice issued?"
+            hint="This date cannot be in the future"
+            govuk-date-input></div>
+
+          <h2 class="govuk-heading-m">Comments on the withholding of allowances notice</h2>
+          <div
+            govuk-textarea
+            formControlName="withholdingOfAllowancesComment"
+            label="Comments on the withholding of allowances notice"></div>
+        </ng-container>
+      </govuk-radio-option>
+
+      <govuk-radio-option label="No" [value]="false"></govuk-radio-option>
+    </div>
+  </app-wizard-step>
+</app-alr-task-common>

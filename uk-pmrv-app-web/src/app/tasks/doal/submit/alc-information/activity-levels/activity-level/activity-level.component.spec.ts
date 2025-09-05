@@ -18,11 +18,11 @@ import {
   mockDoalApplicationSubmitRequestTaskItem,
   updateMockDoalApplicationSubmitRequestTaskItem,
 } from '../../../../test/mock';
-import { ActivityLevelComponent } from './activity-level.component';
+import { DoalActivityLevelComponent } from './activity-level.component';
 
 describe('ActivityLevelComponent', () => {
-  let component: ActivityLevelComponent;
-  let fixture: ComponentFixture<ActivityLevelComponent>;
+  let component: DoalActivityLevelComponent;
+  let fixture: ComponentFixture<DoalActivityLevelComponent>;
 
   let page: Page;
 
@@ -39,7 +39,7 @@ describe('ActivityLevelComponent', () => {
     { sectionKey: 'activityLevelChangeInformation' },
   );
 
-  class Page extends BasePage<ActivityLevelComponent> {
+  class Page extends BasePage<DoalActivityLevelComponent> {
     get year(): string {
       return this.getInputValue('#year');
     }
@@ -100,7 +100,7 @@ describe('ActivityLevelComponent', () => {
   }
 
   const createComponent = () => {
-    fixture = TestBed.createComponent(ActivityLevelComponent);
+    fixture = TestBed.createComponent(DoalActivityLevelComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
     router = TestBed.inject(Router);
@@ -111,7 +111,7 @@ describe('ActivityLevelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ActivityLevelComponent, DoalTaskComponent],
+      declarations: [DoalActivityLevelComponent, DoalTaskComponent],
       imports: [RouterTestingModule, SharedModule, TaskSharedModule],
       providers: [
         KeycloakService,

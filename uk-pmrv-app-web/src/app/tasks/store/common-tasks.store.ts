@@ -150,6 +150,39 @@ const requestTaskEditActionsMap: Partial<
 
   ALR_APPLICATION_SUBMIT: ['ALR_SAVE_APPLICATION', 'ALR_UPLOAD_ATTACHMENT'],
   ALR_APPLICATION_VERIFICATION_SUBMIT: ['ALR_SAVE_APPLICATION_VERIFICATION', 'ALR_VERIFICATION_UPLOAD_ATTACHMENT'],
+  ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT: [
+    'ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION',
+    'ALR_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT',
+  ],
+  ALR_APPLICATION_AMENDS_SUBMIT: [
+    'ALR_APPLICATION_AMENDS_SAVE',
+    'ALR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER',
+    'ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR',
+    'ALR_UPLOAD_ATTACHMENT',
+  ],
+  ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT: [
+    'ALR_SAVE_APPLICATION_VERIFICATION',
+    'ALR_SUBMIT_VERIFICATION',
+    'ALR_VERIFICATION_UPLOAD_ATTACHMENT',
+  ],
+  ALR_AUTHORITY_RESPONSE_SUBMIT: ['ALR_SAVE_AUTHORITY_RESPONSE'],
+
+  HSE_TI_APPLICATION_SUBMIT: [
+    'HSE_TI_SAVE_APPLICATION',
+    'HSE_TI_CANCEL',
+    'HSE_TI_SUBMIT_TO_REGULATOR',
+    'HSE_TI_UPLOAD_ATTACHMENT',
+  ],
+  HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT: [
+    'HSE_TI_REGULATOR_REVIEW_SAVE',
+    'HSE_TI_SAVE_REGULATOR_REVIEW_GROUP_DECISION',
+    'HSE_TI_UPLOAD_REGULATOR_REVIEW_GROUP_DECISION_ATTACHMENT',
+  ],
+  HSE_TI_APPLICATION_AMENDS_SUBMIT: [
+    'HSE_TI_APPLICATION_AMENDS_SAVE',
+    'HSE_TI_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR',
+    'HSE_TI_UPLOAD_ATTACHMENT',
+  ],
 };
 
 @Injectable({ providedIn: 'root' })
@@ -260,6 +293,33 @@ export class CommonTasksStore extends Store<CommonTasksState> {
         take(1),
       )
       .subscribe();
+  }
+
+  requestTaskObservable(taskId: number) {
+    return this.tasksService.getTaskItemInfoById(taskId).pipe(
+      catchNotFoundRequest(ErrorCode.NOTFOUND1001, () => {
+        this.router.navigate(['error', '404']);
+        return of(null);
+      }),
+      tap((requestTask) => {
+        if (requestTask) {
+          this.setState({
+            ...initialState,
+            requestTaskItem: requestTask,
+            isEditable: this.isTaskEditable(requestTask),
+          });
+        }
+      }),
+      switchMap((requestTask) => {
+        if (requestTask) {
+          return this.requestRelatedItemsAndActions$(requestTask);
+        } else {
+          return of(null);
+        }
+      }),
+      tap(() => this.patchState({ storeInitialized: true })),
+      take(1),
+    );
   }
 
   private requestRelatedItemsAndActions$(requestTaskItem: RequestTaskItemDTO) {

@@ -10,7 +10,6 @@ import { BdrTaskComponent } from './components/bdr-task/bdr-task.component';
 import { BdrTaskReviewComponent } from './components/bdr-task-review/bdr-task-review.component';
 import { BdrReviewGroupDecisionComponent } from './components/decision/bdr-review-group-decision/bdr-review-group-decision.component';
 import { BDRReturnLinkComponent } from './components/return-link/return-link.component';
-import { ReviewBdrGroupDecisionPipe } from './pipes';
 import { TaskStatusPipe } from './pipes/task-status.pipe';
 import { BdrService } from './services/bdr.service';
 
@@ -20,7 +19,6 @@ import { BdrService } from './services/bdr.service';
     BdrReviewGroupDecisionComponent,
     BdrTaskComponent,
     BdrTaskReviewComponent,
-    ReviewBdrGroupDecisionPipe,
     TaskStatusPipe,
   ],
   imports: [
@@ -28,7 +26,6 @@ import { BdrService } from './services/bdr.service';
     BdrReviewGroupDecisionComponent,
     BdrTaskComponent,
     BdrTaskReviewComponent,
-    ReviewBdrGroupDecisionPipe,
     RouterModule,
     SharedModule,
     TaskStatusPipe,

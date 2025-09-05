@@ -1,0 +1,84 @@
+<ng-container *ngIf="vm() as vm">
+  <app-base-task-container-component
+    [header]="vm.pageTitle"
+    [customContentTemplate]="customContentTemplate"
+    [expectedTaskType]="vm.requestTaskType"
+    [daysRemaining]="vm.daysRemaining"
+    [previewDocuments]="vm.previewDocuments"></app-base-task-container-component>
+
+  <ng-template #customContentTemplate>
+    @switch (vm.requestTaskType) {
+      @case ('HSE_TI_WAIT_FOR_AMENDS') {
+        <govuk-warning-text>You cannot edit the report as the operator is due to amend it</govuk-warning-text>
+      }
+
+      @case ('HSE_TI_WAIT_FOR_PEER_REVIEW') {
+        <govuk-warning-text>Waiting for peer review, you cannot make any changes</govuk-warning-text>
+      }
+
+      @case ('HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT') {
+        <div class="govuk-button-group">
+          <button
+            *ngIf="vm.allowReturnForAmends"
+            (click)="sendReturnForAmends()"
+            govukButton
+            title="Return for amendments"
+            type="button">
+            Return for amendments
+          </button>
+        </div>
+
+        <div class="govuk-button-group">
+          <button
+            *ngIf="vm.allowNotify"
+            (click)="notifyOperator()"
+            govukButton
+            title="Notify operator of decision"
+            type="button">
+            Notify operator of decision
+          </button>
+
+          <button
+            *ngIf="vm.allowSendForPeerReview"
+            (click)="sendForPeerReview()"
+            govukButton
+            title="Send for peer review"
+            type="button">
+            Send for peer review
+          </button>
+        </div>
+      }
+
+      @case ('HSE_TI_APPLICATION_PEER_REVIEW') {
+        <div class="govuk-button-group">
+          <button
+            *ngIf="vm.allowPeerReviewDecision"
+            (click)="peerReviewDecision()"
+            govukButton
+            title="Peer review decision"
+            type="button">
+            Peer review decision
+          </button>
+        </div>
+      }
+    }
+    <h2 class="govuk-heading-m govuk-!-margin-0">{{ vm.allocationPeriod }} HSE target increase details</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectDetailsLink"
+        linkText="HSE target increase details"
+        [status]="vm.detailsSectionStatus"></li>
+    </ul>
+
+    <h2 class="govuk-heading-m govuk-!-margin-0">Decision</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectOverallDecisionLink"
+        linkText="Overall decision"
+        [status]="vm.overallDecisionSectionStatus"
+        [hasContent]="true"></li>
+    </ul>
+  </ng-template>
+</ng-container>

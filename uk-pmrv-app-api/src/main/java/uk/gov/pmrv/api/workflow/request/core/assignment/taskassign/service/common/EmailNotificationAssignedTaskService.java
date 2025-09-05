@@ -11,6 +11,7 @@ import uk.gov.pmrv.api.notification.mail.constants.PmrvEmailNotificationTemplate
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
+import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
 
 import java.util.Collections;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class EmailNotificationAssignedTaskService {
      *
      * @param userId the unique identifier of the recipient user. {@link String}.
      */
-    public void sendEmailToRecipient(String userId) {
+    public void sendEmailToRecipient(String userId, RequestTaskType requestTaskType) {
         if (userId == null) {
             log.error("The userId cannot be null.");
             return;
@@ -42,19 +43,29 @@ public class EmailNotificationAssignedTaskService {
 
         notificationEmailService.notifyRecipient(
             EmailData.<EmailNotificationTemplateData>builder()
-                .notificationTemplateData(constructEmailTemplateData(webAppProperties.getUrl()))
+                .notificationTemplateData(constructEmailTemplateData(webAppProperties.getUrl(), requestTaskType))
                 .attachments(Collections.emptyMap())
                 .build(),
             userInfoDTO.getEmail()
         );
     }
 
-    private EmailNotificationTemplateData constructEmailTemplateData(String homePage) {
+    private EmailNotificationTemplateData constructEmailTemplateData(String homePage, RequestTaskType requestTaskType) {
         return EmailNotificationTemplateData.builder()
             .templateName(PmrvNotificationTemplateName.EMAIL_ASSIGNED_TASK.getName())
             .templateParams(
                 Map.ofEntries(
+                    entry(PmrvEmailNotificationTemplateConstants.REQUEST_TASK_TYPE, processRequestTaskTypeName(requestTaskType)),
                     entry(PmrvEmailNotificationTemplateConstants.HOME_URL, homePage)))
             .build();
+    }
+
+    private String processRequestTaskTypeName(RequestTaskType requestTaskType) {
+
+        String requestTaskTypeName = requestTaskType.name();
+        requestTaskTypeName = requestTaskTypeName .replaceAll("_"," ").toUpperCase();
+
+        return requestTaskTypeName;
+
     }
 }

@@ -1,0 +1,44 @@
+<ng-container *ngIf="vm() as vm">
+  <app-base-task-container-component
+    [header]="vm.pageTitle"
+    [customContentTemplate]="taskContentTemplate"
+    [expectedTaskType]="vm.requestTaskType"
+    [daysRemaining]="vm.daysRemaining"></app-base-task-container-component>
+
+  <ng-template #taskContentTemplate>
+    <div class="govuk-button-group">
+      <button
+        *ngIf="vm.allowNotify"
+        (click)="notifyOperator()"
+        govukButton
+        title="Notify operator of decision"
+        type="button">
+        Notify operator of decision
+      </button>
+    </div>
+
+    <h2 class="govuk-heading-m govuk-!-margin-0">UK ETS Authority response details</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectApplicationSubmittedLink"
+        linkText="Provide the date application was submitted to UK authorities"
+        [status]="vm.applicationSubmittedSectionStatus"></li>
+
+      <li
+        app-task-item
+        [link]="vm.redirectAuthorityResponseLink"
+        linkText="Provide UK ETS Authority response"
+        [status]="vm.authorityResponseSectionStatus"></li>
+    </ul>
+
+    <h2 class="govuk-heading-m govuk-!-margin-0">Upload activity level report</h2>
+    <ul app-task-item-list>
+      <li
+        app-task-item
+        [link]="vm.redirectUploadLink"
+        linkText="Provide the latest activity level report"
+        [status]="vm.uploadSectionStatus"></li>
+    </ul>
+  </ng-template>
+</ng-container>

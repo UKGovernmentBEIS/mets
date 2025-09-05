@@ -64,7 +64,7 @@ public class ALRApplicationVerificationInitializer implements InitializeRequestT
 
     @Override
     public Set<RequestTaskType> getRequestTaskTypes() {
-        return Set.of(RequestTaskType.ALR_APPLICATION_VERIFICATION_SUBMIT);
+        return Set.of(RequestTaskType.ALR_APPLICATION_VERIFICATION_SUBMIT, RequestTaskType.ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT);
     }
 
     private boolean isVbChanged(Long requestVBId, Long verificationReportVBId) {

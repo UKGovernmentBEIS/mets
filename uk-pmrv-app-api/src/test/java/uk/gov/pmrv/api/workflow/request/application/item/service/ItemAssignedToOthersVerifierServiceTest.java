@@ -71,11 +71,11 @@ class ItemAssignedToOthersVerifierServiceTest {
         when(verifierAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(appUser, accountType))
                 .thenReturn(scopedRequestTaskTypes);
         doReturn(expectedItemPage).when(itemRepository).findItems(appUser.getUserId(), ItemAssignmentType.OTHERS,
-                scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+                scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build());
         doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, appUser);
 
         // Invoke
-        ItemDTOResponse actualItemDTOResponse = itemService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemDTOResponse actualItemDTOResponse = itemService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
 
         // Assert
         assertEquals(expectedItemDTOResponse, actualItemDTOResponse);
@@ -94,7 +94,7 @@ class ItemAssignedToOthersVerifierServiceTest {
                 .thenReturn(scopedRequestTaskTypes);
 
         // Invoke
-        ItemDTOResponse actualItemDTOResponse = itemService.getItemsAssignedToOthers(appUser, accountType,PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        ItemDTOResponse actualItemDTOResponse = itemService.getItemsAssignedToOthers(appUser, accountType,PagingRequest.builder().pageNumber(0).pageSize(10).build());
 
         // Assert
         assertThat(actualItemDTOResponse).isEqualTo(ItemDTOResponse.emptyItemDTOResponse());

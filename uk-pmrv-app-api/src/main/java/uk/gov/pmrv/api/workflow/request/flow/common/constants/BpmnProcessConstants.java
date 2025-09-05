@@ -158,6 +158,16 @@ public class BpmnProcessConstants {
     //ALR
     public static final String ALR_EXPIRATION_DATE = RequestExpirationType.ALR.getCode() + _EXPIRATION_DATE;
     public static final String ALR_OUTCOME = "alrOutcome";
+    public static final String ALR_REGULATOR_REVIEW_OUTCOME = "alrRegulatorReviewOutcome";
+    public static final String ALR_DETERMINATION = "alrDetermination";
+    public static final String ALR_SEND_NOTICE = "alrSendNotice";
+    public static final String ALR_AUTHORITY_RESPONSE = "alrAuthorityResponse";
+
+
+    //HSETI
+    public static final String HSE_TI_SUBMIT_OUTCOME = "hsetiSubmitOutcome";
+    public static final String HSE_TI_EXPIRATION_DATE = RequestExpirationType.HSETI.getCode() + _EXPIRATION_DATE;
+    public static final String HSE_TI_REGULATOR_REVIEW_OUTCOME = "hsetiRegulatorReviewOutcome";
 
     // messaging
     public static final String PROCESS_TO_MESSAGE_BUSINESS_KEY = "processToMessageBusinessKey";

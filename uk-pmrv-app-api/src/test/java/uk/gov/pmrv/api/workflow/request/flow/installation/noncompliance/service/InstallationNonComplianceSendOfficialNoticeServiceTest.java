@@ -26,6 +26,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComp
 import uk.gov.pmrv.api.workflow.request.flow.common.service.DecisionNotificationUsersService;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.InstallationAccountCompetentAuthorityDTOByRequestResolver;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
+import uk.gov.pmrv.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,9 @@ class InstallationNonComplianceSendOfficialNoticeServiceTest {
 
     @Mock
     private InstallationAccountCompetentAuthorityDTOByRequestResolver caResolver;
+
+    @Mock
+    private OfficialNoticeSendService officialNoticeSendService;
 
     @Test
     void sendOfficialNotice() {
@@ -97,6 +101,8 @@ class InstallationNonComplianceSendOfficialNoticeServiceTest {
         when(fileAttachmentService.getFileDTO(uuid.toString())).thenReturn(fileDTO);
         when(caResolver.resolveCA(request))
             .thenReturn(CompetentAuthorityDTO.builder().name("ca name").email("ca@mail.com").build());
+        when(officialNoticeSendService.processRequestTypeName(RequestType.NON_COMPLIANCE)).thenReturn("NON COMPLIANCE");
+
 
         service.sendOfficialNotice(uuid, request, decisionNotification);
 
@@ -115,6 +121,7 @@ class InstallationNonComplianceSendOfficialNoticeServiceTest {
                 .competentAuthority(CompetentAuthorityEnum.ENGLAND)
                 .accountType(AccountType.INSTALLATION)
                 .templateParams(Map.of(
+                    PmrvEmailNotificationTemplateConstants.REQUEST_TYPE, "NON COMPLIANCE",
                 		PmrvEmailNotificationTemplateConstants.ACCOUNT_PRIMARY_CONTACT,
                     accountPrimaryContact.getFullName(),
                     PmrvEmailNotificationTemplateConstants.COMPETENT_AUTHORITY_NAME,

@@ -22,5 +22,8 @@ export type TaskItemStatus =
   | 'needs review'
   | 'undecided'
   | 'accepted'
+  | 'approved'
   | 'operator to amend'
+  | 'deemed withdrawn'
+  | 'withdrawn'
   | 'rejected';

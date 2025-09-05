@@ -52,7 +52,7 @@ public class RequestTaskAssignmentService {
         //notify user by email
         boolean sendEmailNotification = Optional.ofNullable(requestTask.getPayload()).map(RequestTaskPayload::isSendEmailNotification).orElse(true);
         if (sendEmailNotification) {
-            emailNotificationAssignedTaskService.sendEmailToRecipient(userId);
+            emailNotificationAssignedTaskService.sendEmailToRecipient(userId, requestTask.getType());
         }
     }
 

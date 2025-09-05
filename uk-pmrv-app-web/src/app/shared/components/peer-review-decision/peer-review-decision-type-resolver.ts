@@ -70,10 +70,14 @@ export function resolveRequestTaskActionType(
       return 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_SUBMIT_PEER_REVIEW_DECISION';
     case 'BDR_APPLICATION_PEER_REVIEW':
       return 'BDR_SUBMIT_PEER_REVIEW_DECISION';
+    case 'HSE_TI_APPLICATION_PEER_REVIEW':
+      return 'HSE_TI_SUBMIT_PEER_REVIEW_DECISION';
     case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW':
       return 'PERMANENT_CESSATION_SUBMIT_PEER_REVIEW_DECISION';
     case 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW':
       return 'AVIATION_DOE_CORSIA_SUBMIT_PEER_REVIEW_DECISION';
+    case 'ALR_APPLICATION_PEER_REVIEW':
+      return 'ALR_SUBMIT_PEER_REVIEW_DECISION';
 
     default:
       return null;
@@ -142,10 +146,14 @@ export function resolveRequestTaskActionPayloadType(
       return 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_PEER_REVIEW_DECISION_PAYLOAD';
     case 'BDR_APPLICATION_PEER_REVIEW':
       return 'BDR_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
+    case 'HSE_TI_APPLICATION_PEER_REVIEW':
+      return 'HSE_TI_PEER_REVIEW_DECISION_PAYLOAD';
     case 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW':
       return 'PERMANENT_CESSATION_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
     case 'AVIATION_DOE_CORSIA_APPLICATION_PEER_REVIEW':
       return 'AVIATION_DOE_CORSIA_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
+    case 'ALR_APPLICATION_PEER_REVIEW':
+      return 'ALR_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD';
 
     default:
       return null;
@@ -213,6 +221,8 @@ export function resolveReturnToText(requestType: UrlRequestType, requestTaskType
       return 'Peer review baseline data report';
     case 'permanent-cessation':
       return 'Peer review permanent cessation';
+    case 'alr':
+      return 'Activity level report peer review';
 
     default:
       return null;

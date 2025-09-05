@@ -19,8 +19,15 @@ import { AerVerificationReturnedToOperatorRequestActionPayload } from './aerVeri
 import { AirApplicationRespondedToRegulatorCommentsRequestActionPayload } from './airApplicationRespondedToRegulatorCommentsRequestActionPayload';
 import { AirApplicationReviewedRequestActionPayload } from './airApplicationReviewedRequestActionPayload';
 import { AirApplicationSubmittedRequestActionPayload } from './airApplicationSubmittedRequestActionPayload';
+import { ALRApplicationAcceptedRequestActionPayload } from './aLRApplicationAcceptedRequestActionPayload';
+import { ALRApplicationAcceptedWithCorrectionsRequestActionPayload } from './aLRApplicationAcceptedWithCorrectionsRequestActionPayload';
+import { ALRApplicationAmendsSubmittedRequestActionPayload } from './aLRApplicationAmendsSubmittedRequestActionPayload';
+import { ALRApplicationClosedRequestActionPayload } from './aLRApplicationClosedRequestActionPayload';
+import { ALRApplicationProceededToAuthorityRequestActionPayload } from './aLRApplicationProceededToAuthorityRequestActionPayload';
+import { ALRApplicationRejectedRequestActionPayload } from './aLRApplicationRejectedRequestActionPayload';
 import { ALRApplicationSubmittedRequestActionPayload } from './aLRApplicationSubmittedRequestActionPayload';
 import { ALRApplicationVerificationSubmittedRequestActionPayload } from './aLRApplicationVerificationSubmittedRequestActionPayload';
+import { ALRRegulatorReviewReturnedForAmendsRequestActionPayload } from './aLRRegulatorReviewReturnedForAmendsRequestActionPayload';
 import { ALRVerificationReturnedToOperatorRequestActionPayload } from './aLRVerificationReturnedToOperatorRequestActionPayload';
 import { AviationAccountClosureSubmittedRequestActionPayload } from './aviationAccountClosureSubmittedRequestActionPayload';
 import { AviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload } from './aviationAerCorsia3YearPeriodOffsettingApplicationSubmittedRequestActionPayload';
@@ -79,6 +86,9 @@ import { EmpVariationUkEtsApplicationRegulatorLedApprovedRequestActionPayload } 
 import { EmpVariationUkEtsApplicationRejectedRequestActionPayload } from './empVariationUkEtsApplicationRejectedRequestActionPayload';
 import { EmpVariationUkEtsApplicationReturnedForAmendsRequestActionPayload } from './empVariationUkEtsApplicationReturnedForAmendsRequestActionPayload';
 import { EmpVariationUkEtsApplicationSubmittedRequestActionPayload } from './empVariationUkEtsApplicationSubmittedRequestActionPayload';
+import { HSETIApplicationSubmittedRequestActionPayload } from './hSETIApplicationSubmittedRequestActionPayload';
+import { HSETICompletedRequestActionPayload } from './hSETICompletedRequestActionPayload';
+import { HSETIRegulatorReviewReturnedForAmendsRequestActionPayload } from './hSETIRegulatorReviewReturnedForAmendsRequestActionPayload';
 import { InstallationAccountOpeningApplicationSubmittedRequestActionPayload } from './installationAccountOpeningApplicationSubmittedRequestActionPayload';
 import { InstallationAccountOpeningApprovedRequestActionPayload } from './installationAccountOpeningApprovedRequestActionPayload';
 import { InstallationAccountOpeningDecisionRequestActionPayload } from './installationAccountOpeningDecisionRequestActionPayload';
@@ -94,6 +104,7 @@ import { NonComplianceApplicationClosedRequestActionPayload } from './nonComplia
 import { NonComplianceApplicationSubmittedRequestActionPayload } from './nonComplianceApplicationSubmittedRequestActionPayload';
 import { NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload } from './nonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload';
 import { NonComplianceDailyPenaltyNoticeApplicationSubmittedRequestActionPayload } from './nonComplianceDailyPenaltyNoticeApplicationSubmittedRequestActionPayload';
+import { NonComplianceDetailsAmendedRequestActionPayload } from './nonComplianceDetailsAmendedRequestActionPayload';
 import { NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload } from './nonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload';
 import { NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload } from './nonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload';
 import { PaymentCancelledRequestActionPayload } from './paymentCancelledRequestActionPayload';
@@ -219,6 +230,7 @@ export interface RequestActionDTO {
     | 'PERMIT_TRANSFER_APPLICATION_CANCELLED'
     | 'NON_COMPLIANCE_APPLICATION_CLOSED'
     | 'NON_COMPLIANCE_APPLICATION_SUBMITTED'
+    | 'NON_COMPLIANCE_DETAILS_AMENDED'
     | 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_APPLICATION_SUBMITTED'
     | 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEW_REQUESTED'
     | 'NON_COMPLIANCE_DAILY_PENALTY_NOTICE_PEER_REVIEWER_ACCEPTED'
@@ -338,10 +350,32 @@ export interface RequestActionDTO {
     | 'PERMANENT_CESSATION_APPLICATION_PEER_REVIEW_REJECTED'
     | 'ALR_APPLICATION_SENT_TO_VERIFIER'
     | 'ALR_RECALLED_FROM_VERIFICATION'
+    | 'ALR_APPLICATION_SENT_TO_REGULATOR'
     | 'ALR_VERIFICATION_RETURNED_TO_OPERATOR'
     | 'ALR_APPLICATION_VERIFICATION_SUBMITTED'
+    | 'ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS'
+    | 'ALR_APPLICATION_PROCEEDED_TO_AUTHORITY'
+    | 'ALR_APPLICATION_CLOSED'
+    | 'ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER'
+    | 'ALR_APPLICATION_AMENDS_SUBMITTED'
+    | 'ALR_APPLICATION_PEER_REVIEW_REQUESTED'
+    | 'ALR_APPLICATION_PEER_REVIEW_ACCEPTED'
+    | 'ALR_APPLICATION_PEER_REVIEW_REJECTED'
+    | 'ALR_APPLICATION_ACCEPTED'
+    | 'ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS'
+    | 'ALR_APPLICATION_REJECTED'
     | 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPONDED'
     | 'INSTALLATION_AUDIT_OPERATOR_RESPONDED'
+    | 'HSE_TI_APPLICATION_CANCELLED'
+    | 'HSE_TI_APPLICATION_SENT_TO_REGULATOR'
+    | 'HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS'
+    | 'HSE_TI_APPROVED'
+    | 'HSE_TI_REJECTED'
+    | 'HSE_TI_WITHDRAWN'
+    | 'HSE_TI_DEEMED_WITHDRAWN'
+    | 'HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED'
+    | 'HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED'
+    | 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED'
     | 'REQUEST_TERMINATED'
     | 'VERIFICATION_STATEMENT_CANCELLED'
     | 'EMP_ISSUANCE_UKETS_APPLICATION_SUBMITTED'
@@ -434,8 +468,15 @@ export interface RequestActionDTO {
     | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_PEER_REVIEW_REJECTED'
     | 'AVIATION_AER_CORSIA_3YEAR_PERIOD_OFFSETTING_APPLICATION_SUBMITTED';
   payload?:
+    | ALRApplicationAcceptedRequestActionPayload
+    | ALRApplicationAcceptedWithCorrectionsRequestActionPayload
+    | ALRApplicationAmendsSubmittedRequestActionPayload
+    | ALRApplicationClosedRequestActionPayload
+    | ALRApplicationProceededToAuthorityRequestActionPayload
+    | ALRApplicationRejectedRequestActionPayload
     | ALRApplicationSubmittedRequestActionPayload
     | ALRApplicationVerificationSubmittedRequestActionPayload
+    | ALRRegulatorReviewReturnedForAmendsRequestActionPayload
     | ALRVerificationReturnedToOperatorRequestActionPayload
     | AerApplicationAmendsSubmittedRequestActionPayload
     | AerApplicationCompletedRequestActionPayload
@@ -504,6 +545,9 @@ export interface RequestActionDTO {
     | EmpVariationUkEtsApplicationRejectedRequestActionPayload
     | EmpVariationUkEtsApplicationReturnedForAmendsRequestActionPayload
     | EmpVariationUkEtsApplicationSubmittedRequestActionPayload
+    | HSETIApplicationSubmittedRequestActionPayload
+    | HSETICompletedRequestActionPayload
+    | HSETIRegulatorReviewReturnedForAmendsRequestActionPayload
     | InstallationAccountOpeningApplicationSubmittedRequestActionPayload
     | InstallationAccountOpeningApprovedRequestActionPayload
     | InstallationAccountOpeningDecisionRequestActionPayload
@@ -519,6 +563,7 @@ export interface RequestActionDTO {
     | NonComplianceApplicationSubmittedRequestActionPayload
     | NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload
     | NonComplianceDailyPenaltyNoticeApplicationSubmittedRequestActionPayload
+    | NonComplianceDetailsAmendedRequestActionPayload
     | NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload
     | NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload
     | PaymentCancelledRequestActionPayload
@@ -591,6 +636,7 @@ export interface RequestActionDTO {
     | 'RETURN_OF_ALLOWANCES'
     | 'INSTALLATION_ONSITE_INSPECTION'
     | 'INSTALLATION_AUDIT'
+    | 'HSE_TI'
     | 'BDR'
     | 'PERMANENT_CESSATION'
     | 'ALR'

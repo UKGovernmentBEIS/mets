@@ -11,8 +11,11 @@
         G.(e) in the "baseline data collection" template.
       </div>
 
-      <h2 class="govuk-heading-m">Is measurable heat produced at this sub-installation?</h2>
-      <div formControlName="produced" govuk-radio>
+      <div
+        formControlName="produced"
+        legend="Is measurable heat produced at this sub-installation?"
+        legendSize="medium"
+        govuk-radio>
         <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
         <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
       </div>

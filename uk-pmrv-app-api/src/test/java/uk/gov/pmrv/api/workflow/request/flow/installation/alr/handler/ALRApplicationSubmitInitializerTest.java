@@ -57,6 +57,7 @@ public class ALRApplicationSubmitInitializerTest {
                 .alr( ((ALRRequestPayload) request.getPayload()).getAlr())
                 .alrAttachments( ((ALRRequestPayload) request.getPayload()).getAlrAttachments())
                 .alrSectionsCompleted( ((ALRRequestPayload) request.getPayload()).getAlrSectionsCompleted())
+                .alrFileVersion(1)
                 .build();
 
         ALRApplicationSubmitRequestTaskPayload actualTaskPayload = (ALRApplicationSubmitRequestTaskPayload) initializer.initializePayload(request);
@@ -98,6 +99,7 @@ public class ALRApplicationSubmitInitializerTest {
                 .verificationSectionsCompleted(verificationSectionsCompleted)
                 .verificationPerformed(true)
                 .alrSectionsCompleted(((ALRRequestPayload) request.getPayload()).getAlrSectionsCompleted())
+                .alrFileVersion(1)
                 .build();
 
         ALRApplicationSubmitRequestTaskPayload actualTaskPayload =
@@ -140,6 +142,7 @@ public class ALRApplicationSubmitInitializerTest {
                 .verificationSectionsCompleted(verificationSectionsCompleted)
                 .verificationPerformed(false)
                 .alrSectionsCompleted(((ALRRequestPayload) request.getPayload()).getAlrSectionsCompleted())
+                .alrFileVersion(1)
                 .build();
 
         ALRApplicationSubmitRequestTaskPayload actualTaskPayload =

@@ -36,6 +36,8 @@ public abstract class ALRApplicationRequestTaskPayload extends RequestTaskPayloa
     @Builder.Default
     private Map<UUID, String> alrAttachments = new HashMap<>();
 
+    private int alrFileVersion;
+
     @Override
     public Map<UUID, String> getAttachments() {
         return this.getAlrAttachments();

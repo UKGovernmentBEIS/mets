@@ -1,5 +1,6 @@
 package uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -17,6 +18,16 @@ import uk.gov.pmrv.api.workflow.request.core.domain.RequestPayload;
 @SuperBuilder
 @AllArgsConstructor
 public class NonComplianceRequestPayload extends RequestPayload {
+
+    @NotNull
+    private NonComplianceReason reason;
+
+    private LocalDate nonComplianceDate;
+
+    private LocalDate complianceDate;
+
+    @Size(max = 10000)
+    private String comments;
 
     private NonComplianceCloseJustification closeJustification;
     

@@ -356,6 +356,13 @@ export class TimelineItemLinkPipe implements PipeTransform {
             ? [routerLooks + 'actions', value.id]
             : [routerLooks + 'actions', value.id, 'non-compliance', 'conclusion-submitted'];
 
+      case 'NON_COMPLIANCE_DETAILS_AMENDED':
+        return isAviation && !isWorkflow
+          ? [routerLooks + 'aviation', 'actions', value.id]
+          : isAviation
+            ? [routerLooks + 'actions', value.id]
+            : [routerLooks + 'actions', value.id, 'non-compliance', 'submitted', 'summary'];
+
       case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_SUBMITTED':
         return [routerLooks + 'actions', value.id, 'withholding-allowances', 'submitted'];
       case 'WITHHOLDING_OF_ALLOWANCES_APPLICATION_WITHDRAWN':
@@ -514,12 +521,43 @@ export class TimelineItemLinkPipe implements PipeTransform {
         return isWorkflow ? [routerLooks + 'actions', value.id] : [routerLooks + 'aviation', 'actions', value.id];
 
       case 'ALR_RECALLED_FROM_VERIFICATION':
+      case 'ALR_APPLICATION_PEER_REVIEW_REQUESTED':
         return null;
       case 'ALR_APPLICATION_SENT_TO_VERIFIER':
       case 'ALR_APPLICATION_VERIFICATION_SUBMITTED':
+      case 'ALR_APPLICATION_SENT_TO_REGULATOR':
+      case 'ALR_APPLICATION_PROCEEDED_TO_AUTHORITY':
+      case 'ALR_APPLICATION_CLOSED':
+      case 'ALR_APPLICATION_AMENDS_SUBMITTED':
+      case 'ALR_APPLICATION_AMENDS_SENT_TO_VERIFIER':
         return [routerLooks + 'actions', value.id, 'alr', 'submitted'];
       case 'ALR_VERIFICATION_RETURNED_TO_OPERATOR':
         return [routerLooks + 'actions', value.id, 'alr', 'returned-to-operator'];
+      case 'ALR_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+        return [routerLooks + 'actions', value.id, 'alr', 'return-for-amends'];
+      case 'ALR_APPLICATION_PEER_REVIEW_ACCEPTED':
+      case 'ALR_APPLICATION_PEER_REVIEW_REJECTED':
+        return [routerLooks + 'actions', value.id, 'alr', 'peer-review-decision'];
+      case 'ALR_APPLICATION_ACCEPTED':
+      case 'ALR_APPLICATION_ACCEPTED_WITH_CORRECTIONS':
+      case 'ALR_APPLICATION_REJECTED':
+        return [routerLooks + 'actions', value.id, 'alr', 'completed'];
+
+      case 'HSE_TI_APPLICATION_SENT_TO_REGULATOR':
+      case 'HSE_TI_APPROVED':
+      case 'HSE_TI_REJECTED':
+      case 'HSE_TI_DEEMED_WITHDRAWN':
+      case 'HSE_TI_WITHDRAWN':
+        return [routerLooks + 'actions', value.id, 'hseti', 'submitted'];
+      case 'HSE_TI_REGULATOR_REVIEW_RETURNED_FOR_AMENDS':
+        return [routerLooks + 'actions', value.id, 'hseti', 'return-for-amends'];
+      case 'HSE_TI_APPLICATION_PEER_REVIEW_ACCEPTED':
+      case 'HSE_TI_APPLICATION_PEER_REVIEW_REJECTED':
+        return [routerLooks + 'actions', value.id, 'hseti', 'peer-review-decision'];
+
+      case 'HSE_TI_APPLICATION_CANCELLED':
+      case 'HSE_TI_APPLICATION_PEER_REVIEW_REQUESTED':
+        return null;
 
       default:
         throw new Error('Provide an action url');

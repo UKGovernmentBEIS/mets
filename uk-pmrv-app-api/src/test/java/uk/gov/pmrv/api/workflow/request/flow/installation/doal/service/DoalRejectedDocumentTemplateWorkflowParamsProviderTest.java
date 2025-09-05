@@ -13,7 +13,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalProcee
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRejectAuthorityResponse;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalAuthorityResponseType;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalDeterminationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.enums.DoalDeterminationType;
 
 import java.time.Year;
 import java.util.Map;

@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { ActivityLevelChangeInformation } from './activityLevelChangeInformation';
+import { ALRClosedDetermination } from './aLRClosedDetermination';
 import { DoalAdditionalDocuments } from './doalAdditionalDocuments';
 import { DoalClosedDetermination } from './doalClosedDetermination';
 import { DoalProceedToAuthorityDetermination } from './doalProceedToAuthorityDetermination';
@@ -21,5 +22,5 @@ export interface Doal {
   verificationReportOfTheActivityLevelReport: VerificationReportOfTheActivityLevelReport;
   additionalDocuments: DoalAdditionalDocuments;
   activityLevelChangeInformation: ActivityLevelChangeInformation;
-  determination: DoalClosedDetermination | DoalProceedToAuthorityDetermination;
+  determination: ALRClosedDetermination | DoalClosedDetermination | DoalProceedToAuthorityDetermination;
 }

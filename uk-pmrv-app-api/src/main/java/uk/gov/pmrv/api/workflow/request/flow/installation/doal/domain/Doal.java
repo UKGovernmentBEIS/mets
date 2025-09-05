@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.DoalDetermination;
 
 @Data
 @NoArgsConstructor

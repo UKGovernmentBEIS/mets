@@ -25,11 +25,20 @@ import { ConditionalContentDirective } from '../../directives';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioOptionComponent<T> implements ControlValueAccessor {
+  private _disable?: boolean;
+
   @Input() value: T;
   @Input() label: string;
   @Input() hint?: string;
   @Input() divider?: boolean;
-  @Input() disable?: boolean;
+
+  @Input() set disable(value: boolean) {
+    this._disable = value;
+    this.isDisabled = value;
+    this.setConditionalDisabledState();
+    this.changeDetectorRef.markForCheck();
+  }
+
   @ContentChild(ConditionalContentDirective, { static: true }) readonly conditional: ConditionalContentDirective;
   @ViewChild('conditionalTemplate', { static: true }) conditionalTemplate: TemplateRef<any>;
   @ViewChild('optionTemplate', { static: true }) optionTemplate: TemplateRef<any>;
@@ -42,6 +51,9 @@ export class RadioOptionComponent<T> implements ControlValueAccessor {
 
   constructor(readonly changeDetectorRef: ChangeDetectorRef) {}
 
+  get disable(): boolean {
+    return this._disable;
+  }
   get identifier(): string {
     return `${this.groupIdentifier}-option${this.index}`;
   }

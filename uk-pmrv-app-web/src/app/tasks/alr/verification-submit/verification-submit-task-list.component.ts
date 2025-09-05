@@ -7,7 +7,6 @@ import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 import { ALRRequestMetaData, RequestTaskDTO } from 'pmrv-api';
 
 import { AlrService } from '../core';
-import { AlrTaskSharedModule } from '../shared/alr-task-shared.module';
 import { resolveVerifierSectionStatus, submitVerificationWizardComplete, taskListTitle } from '../utils';
 
 interface ViewModel {
@@ -28,7 +27,7 @@ interface ViewModel {
   selector: 'app-verification-submit-task-list',
   templateUrl: './verification-submit-task-list.component.html',
   standalone: true,
-  imports: [SharedModule, TaskSharedModule, AlrTaskSharedModule],
+  imports: [SharedModule, TaskSharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerificationSubmitTaskListComponent {

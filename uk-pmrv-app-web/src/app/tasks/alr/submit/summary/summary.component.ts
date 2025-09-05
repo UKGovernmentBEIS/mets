@@ -12,13 +12,13 @@ import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 import { ALRApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 @Component({
-  selector: 'app-summary',
+  selector: 'app-alr-file-summary',
   templateUrl: './summary.component.html',
   standalone: true,
   imports: [SharedModule, TaskSharedModule, RouterLink, AlrTaskSharedModule, ActivitySummaryTemplateComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SummaryComponent {
+export class AlrFileSummaryComponent {
   isEditable: Signal<boolean> = this.alrService.isEditable;
   alrPayload: Signal<ALRApplicationSubmitRequestTaskPayload> = this.alrService.payload;
 

@@ -48,6 +48,7 @@ public class NonComplianceFinalDeterminationSubmitApplicationActionHandler
         validator.validateFinalDetermination(taskPayload);
 
         final Request request = requestTask.getRequest();
+
         final NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload actionPayload =
             NON_COMPLIANCE_MAPPER.toFinalDeterminationSubmittedRequestAction(taskPayload);
 
@@ -62,6 +63,11 @@ public class NonComplianceFinalDeterminationSubmitApplicationActionHandler
 
         final NonComplianceRequestPayload requestPayload = (NonComplianceRequestPayload) request.getPayload();
         requestPayload.setReIssueCivilPenalty(reissuePenalty);
+
+        requestPayload.setReason(taskPayload.getReason());
+        requestPayload.setNonComplianceDate(taskPayload.getNonComplianceDate());
+        requestPayload.setComplianceDate(taskPayload.getComplianceDate());
+        requestPayload.setComments(taskPayload.getNonComplianceComments());
 
         final NonComplianceOutcome
             outcome = reissuePenalty ? NonComplianceOutcome.REISSUE_CIVIL_PENALTY : NonComplianceOutcome.SUBMITTED; 

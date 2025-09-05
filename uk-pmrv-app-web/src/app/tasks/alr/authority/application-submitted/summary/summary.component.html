@@ -1,0 +1,21 @@
+<ng-container *ngIf="vm() as vm">
+  <app-alr-task-common
+    [breadcrumb]="true"
+    returnLink="../../"
+    heading="Check your answers"
+    caption="Provide the date application was submitted to UK authorities">
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>When was the relevant information submitted to the authority?</dt>
+        <dd govukSummaryListRowValue>{{ vm.submissionDate | govukDate }}</dd>
+        <dd govukSummaryListRowActions *ngIf="vm.isEditable">
+          <a govukLink [routerLink]="['../date']" [state]="{ changing: true }">Change</a>
+        </dd>
+      </div>
+    </dl>
+
+    <div class="govuk-button-group" *ngIf="vm.isSubmitDisplayed">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+    </div>
+  </app-alr-task-common>
+</ng-container>

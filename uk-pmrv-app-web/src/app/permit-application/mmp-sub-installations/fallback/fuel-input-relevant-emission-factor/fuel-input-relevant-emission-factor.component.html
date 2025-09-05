@@ -12,16 +12,22 @@
       </div>
 
       @if (isHeatProductBenchmarkType()) {
-        <h2 class="govuk-heading-m">Is fuel input relevant for this sub-installation?</h2>
-        <div formControlName="exists" govuk-radio>
+        <div
+          formControlName="exists"
+          legend="Is fuel input relevant for this sub-installation?"
+          legendSize="medium"
+          govuk-radio>
           <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
           <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
         </div>
       }
 
       @if (form.get('exists')?.value === true || !isHeatProductBenchmarkType()) {
-        <h2 class="govuk-heading-m">Is there any fuel input from waste gases?</h2>
-        <div formControlName="wasteGasesInput" govuk-radio>
+        <div
+          formControlName="wasteGasesInput"
+          legend="Is fuel input relevant for this sub-installation?"
+          legendSize="medium"
+          govuk-radio>
           <govuk-radio-option [value]="true" label="Yes"></govuk-radio-option>
           <govuk-radio-option [value]="false" label="No"></govuk-radio-option>
         </div>

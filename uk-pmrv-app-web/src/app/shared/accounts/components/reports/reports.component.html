@@ -38,14 +38,15 @@
                       report.reportableEmissions &&
                         !report.reportableOffsetEmissions &&
                         !report.reportableReductionClaimEmissions &&
-                        !report.hasDoeCorsia;
+                        !report.hasDoeCorsia &&
+                        !report?.hasEmissionReportNotRequired;
                       else offsettingEmissions
                     ">
                     {{ report.reportableEmissions | bigNumber }}
                     {{ domain === 'AVIATION' ? 'tCO2 emissions' : 'tCO2e reportable emissions' }}
                   </ng-container>
                   <ng-template #offsettingEmissions>
-                    <ng-container *ngIf="report.reportableEmissions">
+                    <ng-container *ngIf="report.reportableEmissions && !report?.hasEmissionReportNotRequired">
                       <b>Emissions from all international flights:</b>
                       &nbsp;
                       {{ report.reportableEmissions | bigNumber }} tCO2
@@ -67,13 +68,17 @@
                 <ng-container *ngIf="report?.isExempt">Emissions not required</ng-container>
                 <ng-container
                   *ngIf="
-                    !report?.isExempt &&
-                    !report.reportableEmissions &&
-                    !report.reportableOffsetEmissions &&
-                    !report.reportableReductionClaimEmissions &&
-                    !report?.hasEmissionReportNotRequired
+                    (!report?.isExempt &&
+                      !report.reportableEmissions &&
+                      !report.reportableOffsetEmissions &&
+                      !report.reportableReductionClaimEmissions) ||
+                    report?.hasEmissionReportNotRequired
                   ">
-                  No emissions reported
+                  @if (report?.hasActiveDRE && report?.hasEmissionReportNotRequired && report?.reportableEmissions) {
+                    {{ report.reportableEmissions | bigNumber }} tCO2
+                  } @else {
+                    No emissions reported
+                  }
                 </ng-container>
               </div>
             </li>

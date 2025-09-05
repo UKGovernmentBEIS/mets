@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { ActivatedRouteSnapshotStub, ActivatedRouteStub, BasePage, mockClass } from '@testing';
 
@@ -51,7 +50,7 @@ describe('PermitTypeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PermitTypeComponent],
-      imports: [SharedModule, SharedPermitModule, RouterTestingModule],
+      imports: [SharedModule, SharedPermitModule],
       providers: [
         { provide: ActivatedRoute, useValue: route },
         { provide: ActivatedRouteSnapshotStub, useValue: activatedRoute },

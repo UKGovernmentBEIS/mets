@@ -1,0 +1,67 @@
+<app-hseti-task-review [breadcrumb]="true" [linkText]="vm.linkText" *ngIf="vm() as vm">
+  <app-page-heading caption="Overall decision">Available actions</app-page-heading>
+
+  <div class="govuk-hint">These are based on the current status of the review</div>
+  <ng-container *ngIf="vm.isEditable; else nonEditable">
+    <div class="govuk-button-group">
+      <button
+        *ngIf="buttonDisplayed('APPROVED')"
+        appPendingButton
+        govukButton
+        type="button"
+        (click)="onContinue('APPROVED')">
+        Approve
+      </button>
+      <button
+        *ngIf="buttonDisplayed('REJECTED')"
+        appPendingButton
+        govukButton
+        type="button"
+        (click)="onContinue('REJECTED')">
+        Reject
+      </button>
+      <button
+        *ngIf="buttonDisplayed('DEEMED_WITHDRAWN')"
+        govukSecondaryButton
+        type="button"
+        (click)="onContinue('DEEMED_WITHDRAWN')">
+        Deem withdrawn
+      </button>
+      <button *ngIf="buttonDisplayed('WITHDRAWN')" govukSecondaryButton type="button" (click)="onContinue('WITHDRAWN')">
+        Withdrawn
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #nonEditable>
+    <div class="govuk-body" *ngIf="buttonDisplayed('APPROVED')">
+      <p>
+        <strong>Approve</strong>
+      </p>
+    </div>
+
+    <div class="govuk-body" *ngIf="buttonDisplayed('REJECTED')">
+      <p><strong>Reject</strong></p>
+    </div>
+
+    <div class="govuk-body" *ngIf="buttonDisplayed('DEEMED_WITHDRAWN')">
+      <p><strong>Deem withdrawn</strong></p>
+    </div>
+    <div class="govuk-body" *ngIf="buttonDisplayed('WITHDRAWN')">
+      <p><strong>Withdrawn</strong></p>
+    </div>
+  </ng-template>
+
+  <h2 class="govuk-heading-m">Unavailable actions</h2>
+
+  <div *ngIf="buttonDisplayed('REJECTED')" class="govuk-body">
+    <p>
+      <strong>Approve</strong>
+    </p>
+    <div class="govuk-hint">All sections must be marked as accepted.</div>
+  </div>
+  <div *ngIf="buttonDisplayed('APPROVED')" class="govuk-body">
+    <p><strong>Reject</strong></p>
+    <div class="govuk-hint">All sections must have a decision with one or more marked as rejected</div>
+  </div>
+</app-hseti-task-review>

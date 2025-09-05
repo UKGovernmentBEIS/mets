@@ -1,0 +1,57 @@
+<app-hseti-task returnLink="../" [breadcrumb]="true">
+  <app-wizard-step
+    (formSubmit)="onContinue()"
+    [formGroup]="form"
+    [heading]="title()"
+    caption="Provide the HSE details"
+    [hideSubmit]="!isEditable()"
+    [showBackLink]="false">
+    <div class="govuk-!-width-three-quarters">
+      <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Upload HSE target increase file</h3>
+
+      <div class="govuk-body govuk-hint">
+        Your application must contain:
+        <ul class="govuk-list govuk-list--bullet govuk-hint">
+          <li>
+            evidence of the capacity increase and the sub-installation to which it relates, including evidence that it
+            has been put into operation and is not temporary
+          </li>
+          <li>
+            evidence of any capacity decrease at the installation since the reference date and the sub-installation to
+            which it relates, including, where relevant, evidence that it is temporary
+          </li>
+          <li>
+            evidence to enable the combined capacity utilisation factor to be calculated, as set out in paragraph 19F of
+            Article 25 of the Greenhouse Gas Emissions Trading Scheme Order 2020
+          </li>
+          <li>
+            where the capacity increase or any capacity decrease relates to a district heating sub-installation or a
+            heat benchmark sub-installation of an installation that consumes or exports measurable heat produced outside
+            the installation, provide evidence of whether or not the capacity increase or capacity decrease is solely
+            associated with measurable heat produced at the installation
+          </li>
+        </ul>
+      </div>
+
+      <app-file-input
+        [downloadUrl]="getDocumentDownloadUrl"
+        formControlName="hseTiFile"
+        listTitle="Upload HSE target increase file added"
+        [showFilesizeHint]="false" />
+    </div>
+    <div class="govuk-!-width-three-quarters">
+      <app-multiple-file-input
+        [baseDownloadUrl]="getDownloadUrl()"
+        label="Upload supporting files"
+        headerSize="s"
+        listTitle="Uploaded supporting files"
+        formControlName="files"></app-multiple-file-input>
+    </div>
+    <div
+      class="govuk-!-width-three-quarters"
+      govuk-textarea
+      [maxLength]="10000"
+      formControlName="notes"
+      label="Notes (optional)"></div>
+  </app-wizard-step>
+</app-hseti-task>

@@ -46,7 +46,12 @@ export class DetailsComponent {
   readonly shouldDisplayAmount$ = this.store.pipe(map((state) => !shouldHidePaymentAmount(state)));
 
   readonly headingMap$ = this.store.pipe(
-    map((state) => getHeadingMap((state.requestTaskItem?.requestInfo?.requestMetadata as any)?.year)),
+    map((state) =>
+      getHeadingMap(
+        (state.requestTaskItem?.requestInfo?.requestMetadata as any)?.year ||
+          (state.requestTaskItem?.requestInfo?.requestMetadata as any)?.allocationPeriod,
+      ),
+    ),
   );
 
   readonly paymentHintInfo = paymentHintInfo;

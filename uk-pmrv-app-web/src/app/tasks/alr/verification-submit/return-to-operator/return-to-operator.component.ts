@@ -11,7 +11,7 @@ import { AlrTaskSharedModule } from '@tasks/alr/shared/alr-task-shared.module';
   standalone: true,
   imports: [AlrTaskSharedModule, SharedModule],
   template: `
-    <app-alr-task-review
+    <app-alr-task-common
       [breadcrumb]="true"
       heading="Changes required by the operator"
       caption="Return to operator for changes">
@@ -27,7 +27,7 @@ import { AlrTaskSharedModule } from '@tasks/alr/shared/alr-task-shared.module';
 
         <div formControlName="changesRequired" [maxLength]="10000" govuk-textarea></div>
       </app-wizard-step>
-    </app-alr-task-review>
+    </app-alr-task-common>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

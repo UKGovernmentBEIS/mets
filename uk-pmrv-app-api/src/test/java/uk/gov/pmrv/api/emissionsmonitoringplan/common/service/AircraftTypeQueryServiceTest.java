@@ -36,7 +36,7 @@ class AircraftTypeQueryServiceTest {
             .build();
 
         AircraftTypeSearchCriteria searchCriteria = AircraftTypeSearchCriteria.builder()
-        		.paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+        		.paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
         when(aircraftTypeRepository.findBySearchCriteria(searchCriteria)).thenReturn(searchResults);

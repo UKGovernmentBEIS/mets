@@ -69,4 +69,6 @@ public final class PmrvEmailNotificationTemplateConstants {
     public static final String SOURCE_SYSTEM = "sourceSystem";
     public static final String OPERATOR_NAME = "operatorName";
 
+    public static final String REQUEST_TASK_TYPE = "requestTaskType";
+    public static final String REQUEST_TYPE = "requestType";
 }

@@ -1,7 +1,6 @@
 import { Location } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -92,7 +91,7 @@ describe('PeerReviewComponent', () => {
     tasksAssignmentService.getCandidateAssigneesByTaskType.mockReturnValue(of(mockAssignees));
 
     await TestBed.configureTestingModule({
-      imports: [RouterTestingModule, SharedModule],
+      imports: [SharedModule],
       providers: [
         { provide: TasksAssignmentService, useValue: tasksAssignmentService },
         { provide: ActivatedRoute, useValue: route },

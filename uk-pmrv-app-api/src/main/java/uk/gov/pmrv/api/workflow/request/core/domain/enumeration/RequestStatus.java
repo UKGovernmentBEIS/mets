@@ -8,6 +8,7 @@ public enum RequestStatus {
     COMPLETED,
     CANCELLED,
     WITHDRAWN,
+    DEEMED_WITHDRAWN,
     APPROVED,
     REJECTED,
     CLOSED,

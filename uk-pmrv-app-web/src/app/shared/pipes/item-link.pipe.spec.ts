@@ -1343,8 +1343,102 @@ describe('ItemLinkPipe', () => {
     },
     {
       requestType: 'ALR',
+      taskType: 'ALR_AMEND_WAIT_FOR_VERIFICATION',
+      expectedPath: ['/tasks', taskId, 'alr', 'submit'],
+    },
+    {
+      requestType: 'ALR',
       taskType: 'ALR_APPLICATION_VERIFICATION_SUBMIT',
       expectedPath: ['/tasks', taskId, 'alr', 'verification-submit'],
+    },
+    {
+      requestType: 'ALR',
+      taskType: 'ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'alr', 'verification-submit'],
+    },
+    {
+      requestType: 'ALR',
+      taskType: 'ALR_WAIT_FOR_REGULATOR_REVIEW',
+      expectedPath: ['/tasks', taskId, 'alr', 'submit'],
+    },
+    {
+      requestType: 'ALR',
+      taskType: 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'alr', 'review'],
+    },
+    {
+      requestType: 'ALR',
+      taskType: 'ALR_WAIT_FOR_AMENDS',
+      expectedPath: ['/tasks', taskId, 'alr', 'review'],
+    },
+    {
+      requestType: 'ALR',
+      taskType: 'ALR_WAIT_FOR_AUTHORITY_REVIEW',
+      expectedPath: ['/tasks', taskId, 'alr', 'review'],
+    },
+    {
+      requestType: 'ALR',
+      taskType: 'ALR_AUTHORITY_RESPONSE_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'alr', 'authority'],
+    },
+    {
+      requestType: 'ALR',
+      taskType: 'ALR_APPLICATION_AMENDS_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'alr', 'submit'],
+    },
+    { requestType: 'ALR', taskType: 'ALR_WAIT_FOR_PEER_REVIEW', expectedPath: ['/tasks', taskId, 'alr', 'review'] },
+    { requestType: 'ALR', taskType: 'ALR_APPLICATION_PEER_REVIEW', expectedPath: ['/tasks', taskId, 'alr', 'review'] },
+
+    // HSE_TI
+    {
+      requestType: 'HSE_TI',
+      taskType: 'HSE_TI_APPLICATION_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'hseti', 'submit'],
+    },
+    {
+      requestType: 'HSE_TI',
+      taskType: 'HSE_TI_WAIT_FOR_REGULATOR_REVIEW',
+      expectedPath: ['/tasks', taskId, 'hseti', 'submit'],
+    },
+    {
+      requestType: 'HSE_TI',
+      taskType: 'HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'hseti', 'review'],
+    },
+    {
+      requestType: 'HSE_TI',
+      taskType: 'HSE_TI_MAKE_PAYMENT',
+      expectedPath: ['/payment', taskId, 'make'],
+    },
+    {
+      requestType: 'HSE_TI',
+      taskType: 'HSE_TI_CONFIRM_PAYMENT',
+      expectedPath: ['/payment', taskId, 'track'],
+    },
+    {
+      requestType: 'HSE_TI',
+      taskType: 'HSE_TI_TRACK_PAYMENT',
+      expectedPath: ['/payment', taskId, 'track'],
+    },
+    {
+      requestType: 'HSE_TI',
+      taskType: 'HSE_TI_WAIT_FOR_AMENDS',
+      expectedPath: ['/tasks', taskId, 'hseti', 'review'],
+    },
+    {
+      requestType: 'HSE_TI',
+      taskType: 'HSE_TI_APPLICATION_AMENDS_SUBMIT',
+      expectedPath: ['/tasks', taskId, 'hseti', 'submit'],
+    },
+    {
+      requestType: 'HSE_TI',
+      taskType: 'HSE_TI_APPLICATION_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'hseti', 'review'],
+    },
+    {
+      requestType: 'HSE_TI',
+      taskType: 'HSE_TI_WAIT_FOR_PEER_REVIEW',
+      expectedPath: ['/tasks', taskId, 'hseti', 'peer-review-wait'],
     },
 
     // NULL

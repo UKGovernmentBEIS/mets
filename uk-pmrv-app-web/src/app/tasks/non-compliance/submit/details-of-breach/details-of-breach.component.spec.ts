@@ -109,6 +109,10 @@ describe('DetailsOfBreachComponent', () => {
     it('should submit and navigate to choose workflow', () => {
       page.submitButton.click();
       fixture.detectChanges();
+      (route as any).snapshot = { params: { taskId: '123' } };
+
+      const commonStore = TestBed.inject(CommonTasksStore) as jest.Mocked<CommonTasksStore>;
+      jest.spyOn(commonStore, 'requestTaskObservable').mockReturnValue(of({}) as any);
 
       expect(page.errorSummary).toBeTruthy();
       expect(page.errorSummaryList).toEqual(['You must select a reason']);
@@ -135,7 +139,7 @@ describe('DetailsOfBreachComponent', () => {
         },
       });
       expect(navigateSpy).toHaveBeenCalledTimes(1);
-      expect(navigateSpy).toHaveBeenCalledWith(['..', 'choose-workflow'], { relativeTo: route });
+      expect(navigateSpy).toHaveBeenCalledWith(['../choose-workflow'], { relativeTo: route });
     });
   });
 });

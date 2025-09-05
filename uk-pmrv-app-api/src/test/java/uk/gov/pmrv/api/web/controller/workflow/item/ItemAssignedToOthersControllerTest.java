@@ -104,7 +104,7 @@ class ItemAssignedToOthersControllerTest {
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().totalItems(1L).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(itemAssignedToOthersOperatorService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
+        when(itemAssignedToOthersOperatorService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build()))
                 .thenReturn(itemDTOResponse);
         when(itemAssignedToOthersOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
 
@@ -114,7 +114,7 @@ class ItemAssignedToOthersControllerTest {
             .andExpect(status().isOk());
 
         verify(itemAssignedToOthersOperatorService, times(1))
-                .getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+                .getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
         verify(itemAssignedToOthersRegulatorService, never())
                 .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class));
     }
@@ -126,7 +126,7 @@ class ItemAssignedToOthersControllerTest {
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().totalItems(1L).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(itemAssignedToOthersRegulatorService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build()))
+        when(itemAssignedToOthersRegulatorService.getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build()))
                 .thenReturn(itemDTOResponse);
         when(itemAssignedToOthersOperatorService.getRoleType()).thenReturn(RoleTypeConstants.OPERATOR);
         when(itemAssignedToOthersRegulatorService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
@@ -139,7 +139,7 @@ class ItemAssignedToOthersControllerTest {
         verify(itemAssignedToOthersOperatorService, never())
                 .getItemsAssignedToOthers(any(), any(), any(PagingRequest.class));
         verify(itemAssignedToOthersRegulatorService, times(1))
-                .getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+                .getItemsAssignedToOthers(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
     }
 
     @Test

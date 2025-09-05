@@ -29,7 +29,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplic
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalClosedDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.OperatorActivityLevelReport;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.VerificationReportOfTheActivityLevelReport;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalDeterminationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.enums.DoalDeterminationType;
 
 @ExtendWith(MockitoExtension.class)
 class DoalApplicationClosedCustomMapperTest {

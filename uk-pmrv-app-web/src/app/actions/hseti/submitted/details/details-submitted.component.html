@@ -1,0 +1,11 @@
+<ng-container *ngIf="vm() as vm">
+  <app-action-task [header]="vm.header" [breadcrumb]="true">
+    <app-hseti-details-summary-template
+      [isEditable]="false"
+      [data]="vm.hseti"
+      [regulatorData]="vm.regulatorData"
+      [files]="vm.files"
+      [hsetiFile]="vm.hsetiFile"
+      [roleType]="vm.roleType"></app-hseti-details-summary-template>
+  </app-action-task>
+</ng-container>

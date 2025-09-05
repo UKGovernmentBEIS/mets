@@ -132,6 +132,14 @@ import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_BDR_
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_BDR_APPLICATION_PEER_REVIEW_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_PERMANENT_CESSATION_APPLICATION_SUBMIT_VIEW_TASK;
 import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_PERMANENT_CESSATION_APPLICATION_SUBMIT_EXECUTE_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_ALR_APPLICATION_PEER_REVIEW_VIEW_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_ALR_APPLICATION_PEER_REVIEW_EXECUTE_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_TI_APPLICATION_PEER_REVIEW_VIEW_TASK;
+import static uk.gov.pmrv.api.authorization.core.domain.PmrvPermission.PERM_HSE_TI_APPLICATION_PEER_REVIEW_EXECUTE_TASK;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_ACCOUNT_CLOSURE;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_AER_3YEAR_PERIOD_OFFSETTING;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.AVIATION_AER_ANNUAL_OFFSETTING;
@@ -185,9 +193,13 @@ import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermis
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_REVIEW_PERMIT_VARIATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_WITHHOLDING_OF_ALLOWANCES;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_BDR;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_HSE_TI;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_PERMANENT_CESSATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_PERMANENT_CESSATION;
 import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_BDR_REVIEW;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_ALR_REVIEW;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.PEER_REVIEW_ALR;
+import static uk.gov.pmrv.api.authorization.regulator.domain.PmrvRegulatorPermissionGroup.SUBMIT_HSE_TI_REVIEW;
 
 @Component
 public class PmrvRegulatorPermissionsAdapter extends AbstarctRegulatorPermissionsAdapter implements InitializingBean {
@@ -593,6 +605,26 @@ public class PmrvRegulatorPermissionsAdapter extends AbstarctRegulatorPermission
                 List.of(PERM_BDR_APPLICATION_PEER_REVIEW_VIEW_TASK,
                         PERM_BDR_APPLICATION_PEER_REVIEW_EXECUTE_TASK));
 
+
+        //HSETI
+        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(SUBMIT_HSE_TI_REVIEW, NONE), List.of());
+        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(SUBMIT_HSE_TI_REVIEW, VIEW_ONLY),
+                List.of(PERM_HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK));
+        permissionGroupLevelsConfig
+                .put(new RegulatorPermissionGroupLevel(SUBMIT_HSE_TI_REVIEW, EXECUTE),
+                        List.of(PERM_HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK, PERM_HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK));
+
+        permissionGroupLevelsConfig.put(
+                new RegulatorPermissionGroupLevel(PEER_REVIEW_HSE_TI, NONE),
+                List.of());
+        permissionGroupLevelsConfig.put(
+                new RegulatorPermissionGroupLevel(PEER_REVIEW_HSE_TI, VIEW_ONLY),
+                List.of(PERM_HSE_TI_APPLICATION_PEER_REVIEW_VIEW_TASK));
+        permissionGroupLevelsConfig.put(
+                new RegulatorPermissionGroupLevel(PEER_REVIEW_HSE_TI, EXECUTE),
+                List.of(PERM_HSE_TI_APPLICATION_PEER_REVIEW_VIEW_TASK,
+                        PERM_HSE_TI_APPLICATION_PEER_REVIEW_EXECUTE_TASK));
+
         //Permanent Cessation
         permissionGroupLevelsConfig.put(
                 new RegulatorPermissionGroupLevel(SUBMIT_PERMANENT_CESSATION, NONE),
@@ -613,6 +645,25 @@ public class PmrvRegulatorPermissionsAdapter extends AbstarctRegulatorPermission
         permissionGroupLevelsConfig.put(
                 new RegulatorPermissionGroupLevel(PEER_REVIEW_PERMANENT_CESSATION, EXECUTE),
                 List.of(PERM_PERMANENT_CESSATION_PEER_REVIEW_VIEW_TASK, PERM_PERMANENT_CESSATION_PEER_REVIEW_EXECUTE_TASK));
+
+        //ALR
+        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(SUBMIT_ALR_REVIEW, NONE), List.of());
+        permissionGroupLevelsConfig.put(new RegulatorPermissionGroupLevel(SUBMIT_ALR_REVIEW, VIEW_ONLY),
+                List.of(PERM_ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK));
+        permissionGroupLevelsConfig
+                .put(new RegulatorPermissionGroupLevel(SUBMIT_ALR_REVIEW, EXECUTE),
+                        List.of(PERM_ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT_VIEW_TASK, PERM_ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT_EXECUTE_TASK));
+
+        permissionGroupLevelsConfig.put(
+                new RegulatorPermissionGroupLevel(PEER_REVIEW_ALR, NONE),
+                List.of());
+        permissionGroupLevelsConfig.put(
+                new RegulatorPermissionGroupLevel(PEER_REVIEW_ALR, VIEW_ONLY),
+                List.of(PERM_ALR_APPLICATION_PEER_REVIEW_VIEW_TASK));
+        permissionGroupLevelsConfig.put(
+                new RegulatorPermissionGroupLevel(PEER_REVIEW_ALR, EXECUTE),
+                List.of(PERM_ALR_APPLICATION_PEER_REVIEW_VIEW_TASK,
+                        PERM_ALR_APPLICATION_PEER_REVIEW_EXECUTE_TASK));
 
 
         // REVIEW_EMP_APPLICATION

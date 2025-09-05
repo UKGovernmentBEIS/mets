@@ -9,17 +9,17 @@ import { BasePage, mockClass } from '@testing';
 import { TasksService } from 'pmrv-api';
 
 import { mockState } from '../testing/mock-state';
-import { ReturnForAmendsComponent } from './return-for-amends.component';
+import { BdrReturnForAmendsComponent } from './return-for-amends.component';
 
 describe('ReturnForAmendsComponent', () => {
-  let component: ReturnForAmendsComponent;
-  let fixture: ComponentFixture<ReturnForAmendsComponent>;
+  let component: BdrReturnForAmendsComponent;
+  let fixture: ComponentFixture<BdrReturnForAmendsComponent>;
   let page: Page;
   let store: CommonTasksStore;
 
   const tasksService = mockClass(TasksService);
 
-  class Page extends BasePage<ReturnForAmendsComponent> {
+  class Page extends BasePage<BdrReturnForAmendsComponent> {
     get summary() {
       return this.queryAll<HTMLDivElement>('.govuk-summary-list__row')
         .map((row) => [row.querySelector('dt'), row.querySelector('dd')])
@@ -65,7 +65,7 @@ describe('ReturnForAmendsComponent', () => {
       },
     });
 
-    fixture = TestBed.createComponent(ReturnForAmendsComponent);
+    fixture = TestBed.createComponent(BdrReturnForAmendsComponent);
     component = fixture.componentInstance;
 
     page = new Page(fixture);

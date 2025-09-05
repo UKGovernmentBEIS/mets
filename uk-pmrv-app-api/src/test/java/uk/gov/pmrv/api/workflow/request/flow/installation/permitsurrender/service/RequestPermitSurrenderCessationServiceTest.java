@@ -158,7 +158,7 @@ class RequestPermitSurrenderCessationServiceTest {
             .generateCessationOfficialNotice(request, taskActionPayload.getDecisionNotification());
         verify(installationAccountStatusService, times(1)).handleSurrenderCessationCompleted(request.getAccountId());
         verify(requestService, times(1))
-            .addActionToRequest(request, cessationCompletedRequestActionPayload, RequestActionType.PERMIT_SURRENDER_CESSATION_COMPLETED, request.getPayload().getRegulatorReviewer());
+            .addActionToRequest(request, cessationCompletedRequestActionPayload, RequestActionType.PERMIT_SURRENDER_CESSATION_COMPLETED, request.getPayload().getRegulatorAssignee());
         verify(permitSurrenderOfficialNoticeService, times(1))
             .sendOfficialNoticeForDecisionNotification(request, cessationOfficialNotice, taskActionPayload.getDecisionNotification());
         assertThat(requestPayload.getPermitCessation()).isEqualTo(PermitCessation.builder().notes("notes").build());

@@ -16,5 +16,4 @@ public class ALRApplicationSubmitRequestTaskPayload extends ALRApplicationReques
 
     private boolean verificationPerformed;
     private Long verificationBodyId;
-
 }

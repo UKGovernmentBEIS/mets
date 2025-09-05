@@ -1,0 +1,150 @@
+<ng-container *ngIf="(isEditable$ | async) && ((canEdit$ | async) || isOnEditState); else viewDecision">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form" class="govuk-!-width-three-quarters">
+    <govuk-error-summary *ngIf="isSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+    <div
+      govuk-textarea
+      [maxLength]="10000"
+      labelSize="medium"
+      formControlName="capacityIncreaseDescription"
+      label="Describe the capacity increase that has been put into operation at the installation"></div>
+    <div
+      govuk-textarea
+      [maxLength]="10000"
+      labelSize="medium"
+      formControlName="capacityIncreasePermanence"
+      label="Have you confirmed that the capacity increase is permanent?"></div>
+    <div
+      govuk-textarea
+      [maxLength]="10000"
+      labelSize="medium"
+      formControlName="capacityGreaterThanZeroDescription"
+      label="Describe how the net change in installed capacity at the installation since the reference date is greater than zero"></div>
+    <div
+      formControlName="decision"
+      legend="What is your decision on the information submitted?"
+      legendSize="medium"
+      govuk-radio>
+      <govuk-radio-option value="ACCEPTED" label="Accepted"></govuk-radio-option>
+      <govuk-radio-option value="REJECTED" label="Rejected"></govuk-radio-option>
+      <govuk-radio-option value="OPERATOR_AMENDS_NEEDED" label="Operator amendments needed">
+        <div govukConditionalContent>
+          <div>
+            <h3 #conditionalHeader class="govuk-heading-s">Changes required by the operator</h3>
+          </div>
+
+          <div formArrayName="requiredChanges">
+            <fieldset
+              *ngFor="let requiredChange of requiredChanges.controls; index as i"
+              [formGroupName]="i"
+              [disabled]="(isEditable$ | async) === false"
+              govukFieldset
+              id="required=changes-{{ i }}">
+              <legend class="govuk-heading-s">Required change {{ i + 1 }}</legend>
+              <button
+                (click)="requiredChanges.removeAt(i)"
+                *ngIf="requiredChanges.length > 1"
+                [disabled]="(isEditable$ | async) === false"
+                [heading]="conditionalHeader"
+                appAddAnother
+                govukSecondaryButton
+                type="button"
+                #removeButton>
+                Remove
+              </button>
+              <div govuk-textarea [maxLength]="10000" formControlName="reason"></div>
+
+              <app-multiple-file-input
+                [baseDownloadUrl]="getDownloadUrl()"
+                [label]="(uploadedFiles[i] | async) === true ? 'Upload a different file' : 'Upload a file (optional)'"
+                headerSize="s"
+                [listTitle]="'Uploaded attachments for the operator'"
+                formControlName="files"></app-multiple-file-input>
+            </fieldset>
+
+            <button
+              (click)="addOtherRequiredChange()"
+              [disabled]="(isEditable$ | async) === false"
+              govukSecondaryButton
+              type="button">
+              Add another required change
+            </button>
+          </div>
+        </div>
+      </govuk-radio-option>
+    </div>
+
+    <div
+      govuk-textarea
+      [maxLength]="10000"
+      formControlName="notes"
+      label="Notes"
+      hint="The operator cannot view this"></div>
+    <button appPendingButton govukButton type="submit">Confirm</button>
+  </form>
+</ng-container>
+
+<ng-template #viewDecision>
+  <h2
+    app-summary-header
+    class="govuk-heading-m"
+    (changeClick)="isOnEditState = true"
+    [changeRoute]="(isEditable$ | async) ? '.' : null"
+    changeHiddenText="decision">
+    Decision Summary
+  </h2>
+
+  <dl
+    *ngIf="decisionData$ | async as decisionData"
+    govuk-summary-list
+    class="govuk-summary-list--no-border summary-list--edge-border">
+    <div govukSummaryListRow *ngIf="decisionData?.details?.capacityIncreaseDescription">
+      <dt govukSummaryListRowKey>
+        Describe the capacity increase that has been put into operation at the installation
+      </dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ decisionData.details.capacityIncreaseDescription }}</dd>
+    </div>
+    <div govukSummaryListRow *ngIf="decisionData?.details?.capacityIncreasePermanence">
+      <dt govukSummaryListRowKey>Have you confirmed that the capacity increase is permanent?</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ decisionData.details.capacityIncreasePermanence }}</dd>
+    </div>
+    <div govukSummaryListRow *ngIf="decisionData?.details?.capacityGreaterThanZeroDescription">
+      <dt govukSummaryListRowKey>
+        Describe how the net change in installed capacity at the installation since the reference date is greater than
+        zero
+      </dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ decisionData.details.capacityGreaterThanZeroDescription }}</dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Decision status</dt>
+      <dd govukSummaryListRowValue>{{ decisionData.type | reviewGroupDecision }}</dd>
+    </div>
+    <ng-container *ngIf="$any(decisionData).details?.requiredChanges?.length > 0">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Changes required by operator</dt>
+
+        <dd govukSummaryListRowValue>
+          <ng-container
+            *ngFor="let requiredChange of $any(decisionData).details.requiredChanges; let i = index; let isLast = last">
+            <div class="pre-wrap">
+              {{ i + 1 }}. {{ requiredChange.reason }}
+              <br />
+              <ng-container *ngIf="requiredChange?.files?.length > 0">
+                <app-summary-download-files
+                  [files]="
+                    hsetiService.getRegulatorDownloadUrlFiles(requiredChange?.files)
+                  "></app-summary-download-files>
+              </ng-container>
+            </div>
+            <br *ngIf="!isLast" />
+          </ng-container>
+        </dd>
+      </div>
+    </ng-container>
+
+    <div govukSummaryListRow *ngIf="decisionData?.details?.notes">
+      <dt govukSummaryListRowKey>Notes</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ decisionData.details.notes }}</dd>
+    </div>
+  </dl>
+</ng-template>

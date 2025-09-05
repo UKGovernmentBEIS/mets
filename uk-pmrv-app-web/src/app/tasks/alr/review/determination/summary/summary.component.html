@@ -1,0 +1,17 @@
+<ng-container *ngIf="vm() as vm">
+  <app-alr-task-common
+    [breadcrumb]="true"
+    returnLink="../../../"
+    heading="Check your answers"
+    [caption]="determination()?.type === 'CLOSED_ALR' ? 'Close task' : 'Proceed to UK ETS authority'">
+    <app-alr-determination-summary-template
+      [determination]="determination()"
+      [alrFile]="vm.alrFile"
+      [files]="vm.files"
+      [editable]="vm.isEditable"></app-alr-determination-summary-template>
+
+    <div class="govuk-button-group" *ngIf="vm.isSubmitDisplayed">
+      <button (click)="onSubmit()" appPendingButton govukButton type="button">Confirm and complete</button>
+    </div>
+  </app-alr-task-common>
+</ng-container>

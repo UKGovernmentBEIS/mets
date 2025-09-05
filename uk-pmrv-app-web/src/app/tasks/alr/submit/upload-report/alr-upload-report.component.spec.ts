@@ -12,7 +12,7 @@ import { TaskSharedModule } from '@tasks/shared/task-shared-module';
 import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 import { ActivatedRouteStub, asyncData, BasePage, mockClass } from '@testing';
 
-import { RequestTaskAttachmentsHandlingService, TasksService } from 'pmrv-api';
+import { ALRApplicationSubmitRequestTaskPayload, RequestTaskAttachmentsHandlingService, TasksService } from 'pmrv-api';
 
 import { ALRUploadReportComponent } from './alr-upload-report.component';
 
@@ -99,7 +99,8 @@ describe('ALRUploadReportComponent', () => {
       store.setState(
         mockAlrStateBuild({
           alr: {},
-        }),
+          alrFileVersion: 1,
+        } as ALRApplicationSubmitRequestTaskPayload),
       );
       createComponent();
     });

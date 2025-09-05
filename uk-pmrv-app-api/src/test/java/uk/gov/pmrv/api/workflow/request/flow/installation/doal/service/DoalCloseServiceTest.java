@@ -15,7 +15,7 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.Doal;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalApplicationClosedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalClosedDetermination;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalRequestPayload;
-import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.enums.DoalDeterminationType;
+import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.enums.DoalDeterminationType;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

@@ -27,7 +27,7 @@ export const operatorReportFormProvider = {
         operatorActivityLevelReport?.document ?? null,
         payload?.doalAttachments,
         'DOAL_UPLOAD_ATTACHMENT',
-        true,
+        false,
         disabled,
       ),
       areActivityLevelsEstimated: [

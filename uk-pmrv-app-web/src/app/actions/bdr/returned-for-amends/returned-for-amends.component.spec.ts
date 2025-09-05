@@ -7,16 +7,16 @@ import { BasePage } from '../../../../testing';
 import { AuthStore } from '../../../core/store';
 import { CommonActionsState } from '../../store/common-actions.state';
 import { CommonActionsStore } from '../../store/common-actions.store';
-import { ReturnedForAmendsComponent } from './returned-for-amends.component';
+import { BdrReturnedForAmendsComponent } from './returned-for-amends.component';
 
 describe('ReturnedForAmendsComponent', () => {
   let page: Page;
   let store: CommonActionsStore;
-  let component: ReturnedForAmendsComponent;
-  let fixture: ComponentFixture<ReturnedForAmendsComponent>;
+  let component: BdrReturnedForAmendsComponent;
+  let fixture: ComponentFixture<BdrReturnedForAmendsComponent>;
   let authStore: AuthStore;
 
-  class Page extends BasePage<ReturnedForAmendsComponent> {
+  class Page extends BasePage<BdrReturnedForAmendsComponent> {
     get heading(): string {
       return this.query<HTMLHeadingElement>('h1').textContent.trim();
     }
@@ -57,7 +57,7 @@ describe('ReturnedForAmendsComponent', () => {
       },
     } as CommonActionsState);
 
-    fixture = TestBed.createComponent(ReturnedForAmendsComponent);
+    fixture = TestBed.createComponent(BdrReturnedForAmendsComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
     fixture.detectChanges();

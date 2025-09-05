@@ -55,7 +55,7 @@ class InstallationAccountCustomRepositoryIT extends AbstractContainerBaseTest {
         flushAndClear();
         
         final AccountSearchCriteria searchCriteria = AccountSearchCriteria.builder()
-        		.paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
+        		.paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
         List<Long> accountIds = List.of(account1.getId(), account3.getId());
         
         AccountSearchResults results = repo.findByAccountIds(accountIds, searchCriteria);
@@ -77,7 +77,7 @@ class InstallationAccountCustomRepositoryIT extends AbstractContainerBaseTest {
         
         final AccountSearchCriteria searchCriteria = AccountSearchCriteria.builder()
                 .term("leName")
-                .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
+                .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
         List<Long> accountIds = List.of(account1.getId(), account3.getId());
         
         AccountSearchResults results = repo.findByAccountIds(accountIds, searchCriteria);
@@ -98,7 +98,7 @@ class InstallationAccountCustomRepositoryIT extends AbstractContainerBaseTest {
         
         final AccountSearchCriteria searchCriteria = AccountSearchCriteria.builder()
                 .term("leName1")
-                .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
+                .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
         List<Long> accountIds = List.of(account1.getId(), account3.getId());
         
         AccountSearchResults results = repo.findByAccountIds(accountIds, searchCriteria);
@@ -116,7 +116,7 @@ class InstallationAccountCustomRepositoryIT extends AbstractContainerBaseTest {
         
         final AccountSearchCriteria searchCriteria = AccountSearchCriteria.builder()
                 .term("notpresentkey")
-                .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
+                .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
         List<Long> accountIds = List.of(account1.getId(), account3.getId());
         
         AccountSearchResults results = repo.findByAccountIds(accountIds, searchCriteria);
@@ -134,7 +134,7 @@ class InstallationAccountCustomRepositoryIT extends AbstractContainerBaseTest {
         
         final AccountSearchCriteria searchCriteria = AccountSearchCriteria.builder()
                 .term("account")
-                .paging(PagingRequest.builder().pageNumber(1L).pageSize(10L).build()).build();
+                .paging(PagingRequest.builder().pageNumber(1).pageSize(10).build()).build();
         List<Long> accountIds = LongStream.rangeClosed(1L, totalAccounts).boxed().collect(Collectors.toList());
         
         List<Long> expectedAccountIds = LongStream.rangeClosed(11L, 20L).boxed().collect(Collectors.toList());
@@ -153,7 +153,7 @@ class InstallationAccountCustomRepositoryIT extends AbstractContainerBaseTest {
 
         flushAndClear();
         
-        final AccountSearchCriteria searchCriteria = AccountSearchCriteria.builder().paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
+        final AccountSearchCriteria searchCriteria = AccountSearchCriteria.builder().paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
         
         AccountSearchResults results = repo.findByCompAuth(CompetentAuthorityEnum.ENGLAND, searchCriteria);
         assertThat(results.getTotal()).isEqualTo(2);
@@ -173,7 +173,7 @@ class InstallationAccountCustomRepositoryIT extends AbstractContainerBaseTest {
         
         final AccountSearchCriteria searchCriteria = AccountSearchCriteria.builder()
             .term("leName")
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
         
         AccountSearchResults results = repo.findByCompAuth(CompetentAuthorityEnum.ENGLAND, searchCriteria);
         assertThat(results.getTotal()).isEqualTo(2);

@@ -5,6 +5,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -31,6 +32,8 @@ import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComp
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceDecisionNotification;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceNotifyOperatorRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceOutcome;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceReason;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.service.NonComplianceSendOfficialNoticeServiceDelegator;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.validation.NonComplianceApplicationValidator;
 import uk.gov.pmrv.api.workflow.request.flow.common.service.RequestAccountContactQueryService;
@@ -66,11 +69,21 @@ class NonComplianceDailyPenaltyNoticeNotifyOperatorActionHandlerTest {
     @Test
     void process() {
 
+        final LocalDate nonComplianceDate = LocalDate.of(2024, 9, 1);
+        final LocalDate complianceDate = LocalDate.of(2024, 10, 1);
+
         final long requestTaskId = 1L;
-        final Request request = Request.builder().build();
+        final Request request = Request.builder().payload(NonComplianceRequestPayload.builder().build()).build();
         final UUID dailyPenaltyNotice = UUID.randomUUID();
         final NonComplianceDailyPenaltyNoticeRequestTaskPayload taskPayload =
-            NonComplianceDailyPenaltyNoticeRequestTaskPayload.builder().dailyPenaltyNotice(dailyPenaltyNotice).build();
+            NonComplianceDailyPenaltyNoticeRequestTaskPayload
+                    .builder()
+                    .dailyPenaltyNotice(dailyPenaltyNotice)
+                    .reason(NonComplianceReason.EXCEEDING_EMISSIONS_TARGET)
+                    .complianceDate(complianceDate)
+                    .nonComplianceDate(nonComplianceDate)
+                    .nonComplianceComments("test comments")
+                    .build();
         final RequestTask requestTask = RequestTask.builder()
             .id(requestTaskId)
             .payload(taskPayload)
@@ -105,6 +118,12 @@ class NonComplianceDailyPenaltyNoticeNotifyOperatorActionHandlerTest {
             appUser,
             taskActionPayload
         );
+
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getReason()).isEqualTo(NonComplianceReason.EXCEEDING_EMISSIONS_TARGET);
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getComplianceDate()).isEqualTo(complianceDate);
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getNonComplianceDate()).isEqualTo(nonComplianceDate);
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getComments()).isEqualTo("test comments");
+
 
         verify(validator, times(1)).validateDailyPenalty(taskPayload);
         verify(validator, times(1)).validateUsers(requestTask, operators, Set.of(), appUser);

@@ -1,0 +1,31 @@
+<ng-container *ngIf="vm() as vm">
+  <app-alr-task-common
+    [breadcrumb]="true"
+    returnLink="../../"
+    heading="Provide {{ vm.year }} updated activity level (optional)"
+    caption="Provide information about this activity level change">
+    <app-activity-level-list-template
+      [data]="$any(vm.historicalActivityLevels)"
+      [historical]="true"
+      [editable]="false"
+      heading="History of activity level changes"></app-activity-level-list-template>
+
+    <app-activity-level-list-template
+      [data]="$any(vm.activityLevels)"
+      [historical]="false"
+      [editable]="vm.isEditable"
+      heading="New activity level changes"></app-activity-level-list-template>
+
+    <div class="govuk-button-group">
+      @if (vm.activityLevels?.length > 0) {
+        <a routerLink="./add" govukSecondaryButton type="button">Add another item</a>
+      } @else {
+        <a routerLink="./add" govukButton type="button">Add an item</a>
+      }
+    </div>
+
+    <div class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onSubmit()" *ngIf="vm.isEditable">Continue</button>
+    </div>
+  </app-alr-task-common>
+</ng-container>

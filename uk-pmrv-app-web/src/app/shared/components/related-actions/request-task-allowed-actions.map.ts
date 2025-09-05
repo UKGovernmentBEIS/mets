@@ -18,6 +18,7 @@ const relatedRequestTaskActions: Array<RequestTaskActionProcessDTO['requestTaskA
   'WITHHOLDING_OF_ALLOWANCES_CANCEL_APPLICATION',
   'WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_CLOSE_APPLICATION',
   'NON_COMPLIANCE_CLOSE_APPLICATION',
+  'NON_COMPLIANCE_AMEND_DETAILS',
   'NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION',
   'WITHHOLDING_OF_ALLOWANCES_WITHDRAWAL_SAVE_APPLICATION',
   'DOAL_CANCEL_APPLICATION',
@@ -45,6 +46,7 @@ const relatedRequestTaskActions: Array<RequestTaskActionProcessDTO['requestTaskA
   'AVIATION_DOE_CORSIA_SUBMIT_CANCEL',
   'ALR_VERIFICATION_RETURN_TO_OPERATOR',
   'ALR_RECALL_FROM_VERIFICATION',
+  'HSE_TI_CANCEL',
 ];
 
 export function hasRelatedViewActions(type: RequestInfoDTO['type']) {
@@ -141,6 +143,12 @@ function actionDetails(
     case 'NON_COMPLIANCE_CLOSE_APPLICATION':
       return { text: 'Close task', link: [isAviation + routerLooks + 'tasks', taskId, 'non-compliance', 'close'] };
 
+    case 'NON_COMPLIANCE_AMEND_DETAILS':
+      return {
+        text: 'Change the details of breach',
+        link: [isAviation + routerLooks + 'tasks', taskId, 'non-compliance', 'submit', 'details-of-breach'],
+      };
+
     case 'NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION':
       return {
         text: 'Provide note on appeal',
@@ -207,6 +215,9 @@ function actionDetails(
       return { text: 'Return to operator for changes', link: ['return-to-operator-for-changes'] };
     case 'ALR_RECALL_FROM_VERIFICATION':
       return { text: 'Recall ALR application from verifier', link: ['recall-from-verifier'] };
+
+    case 'HSE_TI_CANCEL':
+      return { text: 'Cancel task', link: ['cancel'] };
 
     default:
       return null;

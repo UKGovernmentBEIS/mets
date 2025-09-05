@@ -3,6 +3,7 @@ package uk.gov.pmrv.api.workflow.request.flow.installation.bdr.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
@@ -33,7 +34,7 @@ public class BDROfficialNoticeService {
                 accountContactQueryService.findPrimaryContactByAccount(request.getAccountId());
 
         if (primaryContactUserId.isEmpty()) {
-            throw new BusinessException(MetsErrorCode.BDR_PRIMARY_CONTACT_NOT_FOUND);
+            throw new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND);
         }
 
         UserInfoDTO userInfo = userAuthService.getUserByUserId(primaryContactUserId.get());

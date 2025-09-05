@@ -5,6 +5,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +27,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComp
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceApplicationSubmittedRequestActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceOutcome;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonCompliancePenalties;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceReason;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceRequestPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.validation.NonComplianceApplicationValidator;
 
@@ -50,6 +52,9 @@ class NonComplianceSubmitApplicationActionHandlerTest {
     @Test
     void process() {
 
+        final LocalDate nonComplianceDate = LocalDate.of(2024, 9, 1);
+        final LocalDate complianceDate = LocalDate.of(2024, 10, 1);
+
         final long requestTaskId = 1L;
         final String processTaskId = "processTaskId";
         final NonComplianceApplicationSubmitRequestTaskPayload taskPayload =
@@ -57,7 +62,11 @@ class NonComplianceSubmitApplicationActionHandlerTest {
                 .nonCompliancePenalties(NonCompliancePenalties.builder()
                     .civilPenalty(true)
                     .noticeOfIntent(false)
-                    .dailyPenalty(false).build()).build();
+                    .dailyPenalty(false).build())
+                            .reason(NonComplianceReason.EXCEEDING_EMISSIONS_TARGET)
+                    .complianceDate(complianceDate)
+                    .nonComplianceDate(nonComplianceDate)
+                    .comments("test comments").build();
         final Request request = Request.builder().id("reqid").payload(NonComplianceRequestPayload.builder().build()).build();
         final RequestTask requestTask = RequestTask.builder()
             .id(requestTaskId)
@@ -71,14 +80,21 @@ class NonComplianceSubmitApplicationActionHandlerTest {
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
-        handler.process(requestTaskId, RequestTaskActionType.NON_COMPLIANCE_SUBMIT_APPLICATION, appUser,
-            taskActionPayload);
+        handler.process(requestTaskId, RequestTaskActionType.NON_COMPLIANCE_SUBMIT_APPLICATION, appUser, taskActionPayload);
+
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getReason()).isEqualTo(NonComplianceReason.EXCEEDING_EMISSIONS_TARGET);
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getComplianceDate()).isEqualTo(complianceDate);
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getNonComplianceDate()).isEqualTo(nonComplianceDate);
+        assertThat(((NonComplianceRequestPayload) request.getPayload()).getComments()).isEqualTo("test comments");
 
         verify(validator, times(1)).validateApplication(taskPayload);
         verify(requestService, times(1)).addActionToRequest(
             request,
             NonComplianceApplicationSubmittedRequestActionPayload.builder()
-                .payloadType(RequestActionPayloadType.NON_COMPLIANCE_APPLICATION_SUBMITTED_PAYLOAD)
+                .payloadType(RequestActionPayloadType.NON_COMPLIANCE_APPLICATION_SUBMITTED_PAYLOAD).reason(NonComplianceReason.EXCEEDING_EMISSIONS_TARGET)
+                .complianceDate(complianceDate)
+                .nonComplianceDate(nonComplianceDate)
+                .comments("test comments")
                 .nonCompliancePenalties(NonCompliancePenalties.builder()
                     .civilPenalty(true)
                     .noticeOfIntent(false)

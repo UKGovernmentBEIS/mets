@@ -33,6 +33,7 @@ describe('WorkflowTypePipe', () => {
     expect(pipe.transform('VIR')).toEqual('Verifier improvement');
     expect(pipe.transform('AIR')).toEqual('Annual improvement');
     expect(pipe.transform('DRE')).toEqual('Determine emissions');
+    expect(pipe.transform('HSE_TI')).toEqual('HSE target increase application');
 
     expect(pipe.transform('WITHHOLDING_OF_ALLOWANCES')).toEqual('Withholding of allowances');
     expect(pipe.transform('RETURN_OF_ALLOWANCES')).toEqual('Return of allowances');

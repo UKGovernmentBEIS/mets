@@ -1,0 +1,21 @@
+<app-page-heading size="xl">Select allocation period for the HSE target increase</app-page-heading>
+
+<form (ngSubmit)="onSubmit()" [formGroup]="form">
+  <govuk-error-summary *ngIf="isErrorSummaryDisplayed$ | async" [form]="form"></govuk-error-summary>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <div formControlName="allocationPeriod" govuk-radio>
+        <govuk-radio-option
+          *ngFor="let allocationPeriod of allocationPeriods"
+          [value]="allocationPeriod"
+          [label]="allocationPeriod"
+          [disable]="
+            (inProgressAllocationPeriod$ | async)?.includes(createAllocationPeriod(allocationPeriod))
+          "></govuk-radio-option>
+      </div>
+    </div>
+  </div>
+
+  <button appPendingButton govukButton type="submit">Save and continue</button>
+</form>

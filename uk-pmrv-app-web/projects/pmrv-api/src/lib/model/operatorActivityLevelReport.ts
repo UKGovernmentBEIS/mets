@@ -11,7 +11,7 @@
  */
 
 export interface OperatorActivityLevelReport {
-  document: string;
+  document?: string;
   areActivityLevelsEstimated?: boolean;
   comment: string;
 }

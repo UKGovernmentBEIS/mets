@@ -189,9 +189,11 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_RETURN_OF_ALLOWANCES, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_RETURN_OF_ALLOWANCES, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_EMP_VARIATION, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_HSE_TI, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.REVIEW_AVIATION_AER, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.REVIEW_AVIATION_VIR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_EMP_BATCH_REISSUE, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_HSE_TI_REVIEW, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_INSTALLATION_AUDIT, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_INSTALLATION_ONSITE_INSPECTION, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_INSTALLATION_AUDIT, RegulatorPermissionLevel.NONE);
@@ -207,6 +209,8 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_PERMANENT_CESSATION, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_AVIATION_DOE_CORSIA, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_DOE_CORSIA, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_ALR_REVIEW, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_ALR, RegulatorPermissionLevel.NONE);
 
         assertThat(pmrvRegulatorPermissionsAdapter.getPermissionGroupLevelsFromPermissions(permissions))
                 .containsExactlyInAnyOrderEntriesOf(expectedPermissionGroupLevels);
@@ -262,9 +266,11 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_RETURN_OF_ALLOWANCES, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_RETURN_OF_ALLOWANCES, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_EMP_VARIATION, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_HSE_TI, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.REVIEW_AVIATION_AER, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.REVIEW_AVIATION_VIR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_EMP_BATCH_REISSUE, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_HSE_TI_REVIEW, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_INSTALLATION_AUDIT, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_INSTALLATION_ONSITE_INSPECTION, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_INSTALLATION_AUDIT, RegulatorPermissionLevel.NONE);
@@ -280,6 +286,10 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_PERMANENT_CESSATION, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_AVIATION_DOE_CORSIA, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_DOE_CORSIA, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_ALR_REVIEW, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_ALR, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_HSE_TI_REVIEW, RegulatorPermissionLevel.NONE);
+
 
         assertThat(pmrvRegulatorPermissionsAdapter.getPermissionGroupLevelsFromPermissions(permissions))
                 .containsExactlyInAnyOrderEntriesOf(expectedPermissionGroupLevels);
@@ -354,9 +364,11 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_RETURN_OF_ALLOWANCES, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_RETURN_OF_ALLOWANCES, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_EMP_VARIATION, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_HSE_TI, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.REVIEW_AVIATION_AER, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.REVIEW_AVIATION_VIR, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_EMP_BATCH_REISSUE, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_HSE_TI_REVIEW, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_INSTALLATION_AUDIT, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_INSTALLATION_ONSITE_INSPECTION, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_INSTALLATION_AUDIT, RegulatorPermissionLevel.NONE);
@@ -372,6 +384,9 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_PERMANENT_CESSATION, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_AVIATION_DOE_CORSIA, RegulatorPermissionLevel.NONE);
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_DOE_CORSIA, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_ALR_REVIEW, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_ALR, RegulatorPermissionLevel.NONE);
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_HSE_TI_REVIEW, RegulatorPermissionLevel.NONE);
 
         assertThat(pmrvRegulatorPermissionsAdapter.getPermissionGroupLevelsFromPermissions(permissions))
                 .containsExactlyInAnyOrderEntriesOf(expectedPermissionGroupLevels);
@@ -440,6 +455,10 @@ class PmrvRegulatorPermissionsAdapterTest {
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_PERMANENT_CESSATION, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_AVIATION_DOE_CORSIA, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
         expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_AVIATION_DOE_CORSIA, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_ALR_REVIEW, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_ALR, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.SUBMIT_HSE_TI_REVIEW, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
+        expectedPermissionGroupLevels.put(PmrvRegulatorPermissionGroup.PEER_REVIEW_HSE_TI, List.of(RegulatorPermissionLevel.NONE, VIEW_ONLY, EXECUTE));
 
         Map<String, List<RegulatorPermissionLevel>> actualPermissionGroupLevels =
                 pmrvRegulatorPermissionsAdapter.getPermissionGroupLevels();

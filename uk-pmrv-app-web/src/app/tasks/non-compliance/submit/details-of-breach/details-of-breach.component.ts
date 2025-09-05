@@ -1,13 +1,16 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit, signal } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { first, switchMap, takeUntil } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
+import { BreadcrumbItem } from '@core/navigation/breadcrumbs';
 import { DestroySubject } from '@core/services/destroy-subject.service';
 import { selectCurrentDomain } from '@core/store';
 import { AuthStore } from '@core/store/auth/auth.store';
+import { BreadcrumbService } from '@shared/breadcrumbs/breadcrumb.service';
+import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 import { NonComplianceApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
@@ -21,7 +24,7 @@ import { detailsOfBreanchFormProvider } from './details-of-breach-form.provider'
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [detailsOfBreanchFormProvider],
 })
-export class DetailsOfBreachComponent {
+export class DetailsOfBreachComponent implements OnInit {
   reasonOptions: NonComplianceApplicationSubmitRequestTaskPayload['reason'][] = [
     'FAILURE_TO_SURRENDER_ALLOWANCES_100',
     'FAILURE_TO_SURRENDER_ALLOWANCES_20',
@@ -62,8 +65,35 @@ export class DetailsOfBreachComponent {
     'REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_ETS',
     'REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES_CORSIA',
   ];
-  private readonly nextWizardStep = 'choose-workflow';
+  private nextWizardStep = '../choose-workflow';
   currentDomain$ = this.authStore.pipe(selectCurrentDomain, takeUntil(this.destroy$));
+  requestTaskItem = this.nonComplianceService.requestTaskItem;
+  isAmendable = this.requestTaskItem().allowedRequestTaskActions.includes('NON_COMPLIANCE_AMEND_DETAILS');
+  requestTaskType = this.requestTaskItem().requestTask?.type;
+  cancelLink = signal(this.isAmendable ? this.nonComplianceService.getAmendmentUrl(this.requestTaskType) : null);
+  returnToLink = signal(this.isAmendable ? this.nonComplianceService.getAmendmentUrl(this.requestTaskType) : '..');
+
+  breadcrumbs: BreadcrumbItem[];
+
+  ngOnInit() {
+    const parentUrlSegments = this.route.snapshot.pathFromRoot.map((route) => route.url).flat();
+    const parentUrl = '/' + parentUrlSegments.slice(0, parentUrlSegments.length - 2).join('/');
+
+    this.breadcrumbs = [
+      {
+        link: this.router.url.startsWith('/aviation') ? ['/aviation/dashboard'] : ['/dashboard'],
+        text: 'Dashboard',
+      },
+      {
+        link: [
+          parentUrl + '/' + this.nonComplianceService.getAmendmentUrl(this.requestTaskType)?.split('/')?.reverse()[0],
+        ],
+        text: this.nonComplianceService.getAmendmentText(this.requestTaskType),
+      },
+    ];
+
+    this.breadcrumbService.show(this.breadcrumbs);
+  }
 
   constructor(
     @Inject(NON_COMPLIANCE_TASK_FORM) readonly form: UntypedFormGroup,
@@ -71,16 +101,23 @@ export class DetailsOfBreachComponent {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly pendingRequest: PendingRequestService,
+    private readonly breadcrumbService: BreadcrumbService,
     public readonly authStore: AuthStore,
     private readonly destroy$: DestroySubject,
+    private readonly commonStore: CommonTasksStore,
   ) {}
 
   onSubmit(): void {
+    const taskId = this.route.snapshot.params['taskId'];
+
     this.nonComplianceService.payload$
       .pipe(
         first(),
         switchMap((payload) => {
           const nonCompliance = payload as NonComplianceApplicationSubmitRequestTaskPayload;
+          if (this.isAmendable) {
+            this.nextWizardStep = this.nonComplianceService.getAmendmentUrl(this.requestTaskType);
+          }
           return this.nonComplianceService.saveNonCompliance(
             {
               ...(nonCompliance as any)?.payload,
@@ -89,8 +126,9 @@ export class DetailsOfBreachComponent {
             false,
           );
         }),
+        switchMap(() => this.commonStore.requestTaskObservable(taskId)),
       )
       .pipe(this.pendingRequest.trackRequest())
-      .subscribe(() => this.router.navigate(['..', this.nextWizardStep], { relativeTo: this.route }));
+      .subscribe(() => this.router.navigate([this.nextWizardStep], { relativeTo: this.route }));
   }
 }

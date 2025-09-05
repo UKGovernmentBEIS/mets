@@ -365,7 +365,7 @@ function controlsConfig(
           WASTE_GROUP: [
             form?.WASTE_GROUP ?? null,
             isWasteSelected
-              ? [GovukValidators.required('You must select waste to apply for a voluntary waste monitoring plan')]
+              ? [GovukValidators.required('You must select waste to apply for a waste voluntary monitoring plan')]
               : [],
           ],
           WASTE_CAPACITY: [

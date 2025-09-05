@@ -54,7 +54,7 @@ class ItemUnassignedControllerTest {
     private static final String UNASSIGNED = "unassigned";
 
     private static final String USER_ID = "user_id";
-    private static final PagingRequest PAGING = PagingRequest.builder().pageNumber(0L).pageSize(10L).build();
+    private static final PagingRequest PAGING = PagingRequest.builder().pageNumber(0).pageSize(10).build();
 
     private MockMvc mockMvc;
 

@@ -5,6 +5,7 @@ export const statusesTagMap: Record<RequestDetailsDTO['requestStatus'], string> 
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED',
   WITHDRAWN: 'WITHDRAWN',
+  DEEMED_WITHDRAWN: 'DEEMED WITHDRAWN',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
   CLOSED: 'CLOSED',

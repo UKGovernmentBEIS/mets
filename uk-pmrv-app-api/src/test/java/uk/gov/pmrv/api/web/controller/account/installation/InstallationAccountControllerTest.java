@@ -104,7 +104,7 @@ class InstallationAccountControllerTest {
 		final AppUser user = AppUser.builder().userId("userId").build();
 		final AccountSearchCriteria criteria = AccountSearchCriteria.builder()
                     .term("key")
-                    .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
+                    .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
 		
 		final List<AccountSearchResultsInfoDTO> accounts =
 				List.of(
@@ -138,7 +138,7 @@ class InstallationAccountControllerTest {
         final AppUser user = AppUser.builder().userId("userId").build();
         final AccountSearchCriteria criteria = AccountSearchCriteria.builder()
                 .term("key")
-                .paging(PagingRequest.builder().pageNumber(0L).pageSize(10L).build()).build();
+                .paging(PagingRequest.builder().pageNumber(0).pageSize(10).build()).build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))

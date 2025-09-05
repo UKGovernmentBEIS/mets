@@ -66,6 +66,7 @@ import uk.gov.pmrv.api.workflow.request.flow.common.domain.NotifyOperatorForDeci
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewDecisionRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.PeerReviewRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.domain.RequestTaskActionEmptyPayload;
+import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceAmendDetailsRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceCloseApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.common.noncompliance.domain.NonComplianceDailyPenaltyNoticeSaveApplicationRequestTaskActionPayload;
@@ -91,6 +92,12 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicat
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationSubmitToVerifierRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationVerificationReturnToOperatorRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationVerificationSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationRegulatorReviewSaveTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAmendsSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAmendsSubmitToVerifierRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRApplicationAmendsSubmitRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.alr.domain.ALRSaveAuthorityResponseTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationAmendsSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationAmendsSubmitRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.bdr.domain.BDRApplicationAmendsSubmitToVerifierRequestTaskActionPayload;
@@ -104,6 +111,11 @@ import uk.gov.pmrv.api.workflow.request.flow.installation.common.domain.permit.c
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalSaveApplicationRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.doal.domain.DoalSaveAuthorityResponseTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.dre.domain.DreSaveApplicationRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIApplicationAmendsSaveRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIApplicationAmendsSubmitRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIApplicationRegulatorReviewSaveTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIApplicationSaveRegulatorReviewGroupDecisionRequestTaskActionPayload;
+import uk.gov.pmrv.api.workflow.request.flow.installation.hseti.domain.HSETIApplicationSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.audit.domain.InstallationAuditApplicationSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.common.domain.InstallationInspectionOperatorRespondSaveRequestTaskActionPayload;
 import uk.gov.pmrv.api.workflow.request.flow.installation.inspection.onsiteinspection.domain.InstallationOnsiteInspectionApplicationSaveRequestTaskActionPayload;
@@ -253,6 +265,8 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
     @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW_PAYLOAD"),
     @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
     @JsonSubTypes.Type(value = NonComplianceFinalDeterminationSaveApplicationRequestTaskActionPayload.class, name = "NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION_PAYLOAD"),
+    @JsonSubTypes.Type(value = NonComplianceAmendDetailsRequestTaskActionPayload.class, name = "NON_COMPLIANCE_AMEND_DETAILS_PAYLOAD"),
+
 
     @JsonSubTypes.Type(value = NerSaveApplicationRequestTaskActionPayload.class, name = "NER_SAVE_APPLICATION_PAYLOAD"),
     @JsonSubTypes.Type(value = NerSaveApplicationReviewRequestTaskActionPayload.class, name = "NER_SAVE_APPLICATION_REVIEW_PAYLOAD"),
@@ -361,8 +375,27 @@ import uk.gov.pmrv.api.workflow.request.flow.rfi.domain.RfiSubmitRequestTaskActi
     @JsonSubTypes.Type(value = ALRApplicationSubmitToVerifierRequestTaskActionPayload.class, name = "ALR_SUBMIT_TO_VERIFIER_PAYLOAD"),
     @JsonSubTypes.Type(value = ALRApplicationVerificationReturnToOperatorRequestTaskActionPayload.class, name = "ALR_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD"),
     @JsonSubTypes.Type(value = ALRApplicationVerificationSaveRequestTaskActionPayload.class, name = "ALR_APPLICATION_SAVE_VERIFICATION_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRSaveRegulatorReviewGroupDecisionRequestTaskActionPayload.class, name = "ALR_SAVE_REGULATOR_REVIEW_GROUP_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationRegulatorReviewSaveTaskActionPayload.class, name = "ALR_REGULATOR_REVIEW_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "ALR_REGULATOR_REVIEW_SUBMIT_APPLICATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationAmendsSaveRequestTaskActionPayload.class, name = "ALR_APPLICATION_AMENDS_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationAmendsSubmitToVerifierRequestTaskActionPayload.class, name = "ALR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRApplicationAmendsSubmitRequestTaskActionPayload.class, name = "ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "ALR_REQUEST_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "ALR_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = ALRSaveAuthorityResponseTaskActionPayload.class, name = "ALR_SAVE_AUTHORITY_RESPONSE_PAYLOAD"),
+    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD"),
 
 
+        @JsonSubTypes.Type(value = HSETIApplicationSaveRequestTaskActionPayload.class, name = "HSE_TI_APPLICATION_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = HSETIApplicationRegulatorReviewSaveTaskActionPayload.class, name = "HSE_TI_REGULATOR_REVIEW_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = HSETIApplicationAmendsSaveRequestTaskActionPayload.class, name = "HSE_TI_APPLICATION_AMENDS_SAVE_PAYLOAD"),
+    @JsonSubTypes.Type(value = HSETIApplicationAmendsSubmitRequestTaskActionPayload.class, name = "HSE_TI_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR_PAYLOAD"),
+    @JsonSubTypes.Type(value = HSETIApplicationSaveRegulatorReviewGroupDecisionRequestTaskActionPayload.class, name = "HSE_TI_SAVE_REGULATOR_REVIEW_GROUP_DECISION_PAYLOAD"),
+    @JsonSubTypes.Type(value = NotifyOperatorForDecisionRequestTaskActionPayload.class, name = "HSE_TI_REGULATOR_REVIEW_SUBMIT_PAYLOAD"),
+
+    @JsonSubTypes.Type(value = PeerReviewRequestTaskActionPayload.class, name = "HSE_TI_REQUEST_PEER_REVIEW_PAYLOAD"),
+    @JsonSubTypes.Type(value = PeerReviewDecisionRequestTaskActionPayload.class, name = "HSE_TI_PEER_REVIEW_DECISION_PAYLOAD"),
 
     @JsonSubTypes.Type(value = RequestTaskActionEmptyPayload.class, name = "EMPTY_PAYLOAD"),
 

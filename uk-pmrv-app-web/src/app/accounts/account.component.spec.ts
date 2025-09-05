@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AuthService } from '@core/services/auth.service';
 import { DestroySubject } from '@core/services/destroy-subject.service';
@@ -51,7 +50,7 @@ describe('AccountComponent', () => {
 
     await TestBed.configureTestingModule({
       declarations: [AccountComponent, DetailsComponent, WorkflowsComponent, OperatorsComponent],
-      imports: [RouterTestingModule, SharedModule, SharedUserModule],
+      imports: [SharedModule, SharedUserModule, RouterLink],
       providers: [
         DestroySubject,
         { provide: ActivatedRoute, useValue: activatedRouteStub },
@@ -141,7 +140,7 @@ describe('AccountComponent', () => {
 
       it('should have a WASTE notification when the role type is an OPERATOR', () => {
         expect(page.notification?.textContent.trim()).toEqual(
-          'Important During the voluntary waste monitoring, reporting and verification period, the METS service will reflect the full ETS scheme, so some references and data requests may not be relevant to waste operators. Contact your regulator for further information on how to participate.',
+          'Important The METS service supports the UK ETS and refers to the legislation for and requirements of the scheme. During the Waste Activities Voluntary Scheme for Greenhouse Gas Emissions, waste operators may use METS but legislative references, certain terminology and certain data requests are not relevant to them. Contact your regulator for further information on how to participate.',
         );
       });
 

@@ -75,6 +75,7 @@ export class NotifyOperatorComponent implements PendingRequest, OnInit {
   @Input() hasSignature = true;
   @Input() serviceContactAutomaticallyNotified = true;
   @Input() previewDocuments: DocumentFilenameAndDocumentType[];
+  @Input() allocationPeriod?: string = '';
 
   readonly isTemplateGenerationErrorDisplayed$ = new BehaviorSubject<boolean>(false);
   errorMessage$ = new BehaviorSubject<string>(null);
@@ -397,6 +398,18 @@ export class NotifyOperatorComponent implements PendingRequest, OnInit {
 
       case 'AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR':
         payloadType = 'AVIATION_DOE_CORSIA_SUBMIT_NOTIFY_OPERATOR_PAYLOAD';
+        break;
+
+      case 'ALR_PROCEED_TO_AUTHORITY':
+        payloadType = 'ALR_REGULATOR_REVIEW_SUBMIT_APPLICATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD';
+        break;
+
+      case 'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION':
+        payloadType = 'ALR_AUTHORITY_RESPONSE_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD';
+        break;
+
+      case 'HSE_TI_REGULATOR_REVIEW_SUBMIT':
+        payloadType = 'HSE_TI_REGULATOR_REVIEW_SUBMIT_PAYLOAD';
         break;
     }
 

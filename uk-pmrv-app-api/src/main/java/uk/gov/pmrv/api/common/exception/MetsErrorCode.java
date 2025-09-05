@@ -48,18 +48,26 @@ public enum MetsErrorCode implements NetzErrorCode {
     /** Codes for DOAL. */
     INVALID_DOAL("DOAL1001", HttpStatus.BAD_REQUEST, "Invalid DOAL"),
 
+    /** Codes for HSE_TI. */
+    HSE_TI_CREATION_NOT_ALLOWED("HSETI1000", HttpStatus.BAD_REQUEST, "HSE TI creation is not allowed"),
+    HSE_TI_ALLOCATION_PERIOD_IS_OPEN("HSETI1001", HttpStatus.BAD_REQUEST, "An HSE target increase application is already in progress for the selected allocation period. You must select a different allocation period."),
+    INVALID_HSE_TI_REVIEW("HSETI1002", HttpStatus.BAD_REQUEST,"Invalid HSETI review"),
+
     /** Codes for BDR. */
     BDR_CREATION_NOT_ALLOWED("BDR1000", HttpStatus.BAD_REQUEST, "BDR creation is not allowed"),
     INVALID_BDR_REVIEW("BDR1001", HttpStatus.BAD_REQUEST, "Invalid BDR review"),
     BDR_MUST_UNDERGO_VERIFICATION("BDR1002", HttpStatus.BAD_REQUEST, "BDR must undergo verification"),
     INVALID_BDR_REVIEW_OUTCOME("BDR1003", HttpStatus.BAD_REQUEST, "Invalid BDR review outcome"),
-    BDR_PRIMARY_CONTACT_NOT_FOUND("BDR1004", HttpStatus.NOT_FOUND, "Account primary contact not found"),
     BDR_FILENAME_NOT_VALID("BDR1005", HttpStatus.BAD_REQUEST, "BDR file name is not valid"),
     BDR_REQUEST_IS_NOT_BDR("BDR1006", HttpStatus.BAD_REQUEST, "Provided request id is not of type BDR"),
 
     /** Codes for ALR. */
     ALR_CREATION_NOT_ALLOWED("ALR1000", HttpStatus.BAD_REQUEST, "ALR creation is not allowed"),
     ALR_FILENAME_NOT_VALID("ALR1001", HttpStatus.BAD_REQUEST, "ALR file name is not valid"),
+    INVALID_ALR_REVIEW("ALR1002", HttpStatus.BAD_REQUEST, "Invalid ALR review"),
+    INVALID_ALR_ARTICLE_REASONS("ALR1003", HttpStatus.BAD_REQUEST, "Proceed to authority determination article reasons are not valid"),
+    INVALID_ALR_PRELIMINARY_ALLOCATIONS("ALR1004", HttpStatus.BAD_REQUEST, "Preliminary allocations submitted are not valid"),
+    ALR_MUST_UNDERGO_VERIFICATION("ALR1005", HttpStatus.BAD_REQUEST, "ALR must undergo verification"),
 
 
     /** Codes for AER. */

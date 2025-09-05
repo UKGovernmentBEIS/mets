@@ -22,7 +22,7 @@ export class ActivityVerifierReviewComponent {
   payload: Signal<ALRApplicationVerificationSubmitRequestTaskPayload> = this.alrService.payload;
 
   alr = computed(() => {
-    const payload = this.payload() as ALRApplicationVerificationSubmitRequestTaskPayload;
+    const payload = this.payload();
     return payload.alr;
   });
 

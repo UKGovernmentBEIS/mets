@@ -17,6 +17,7 @@ export interface ALRApplicationSubmitRequestTaskPayload extends RequestTaskPaylo
   verificationSectionsCompleted?: { [key: string]: Array<boolean> };
   alrSectionsCompleted?: { [key: string]: boolean };
   alrAttachments?: { [key: string]: string };
+  alrFileVersion?: number;
   verificationPerformed?: boolean;
   verificationBodyId?: number;
 }

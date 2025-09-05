@@ -9,7 +9,7 @@ import { DoalApplicationSubmitRequestTaskPayload } from 'pmrv-api';
 
 import { DOAL_TASK_FORM } from '../../../../core/doal-task-form.token';
 
-export const activityLevelFormProvider = {
+export const doalActivityLevelFormProvider = {
   provide: DOAL_TASK_FORM,
   deps: [UntypedFormBuilder, CommonTasksStore, ActivatedRoute],
   useFactory: (fb: UntypedFormBuilder, store: CommonTasksStore, route: ActivatedRoute) => {

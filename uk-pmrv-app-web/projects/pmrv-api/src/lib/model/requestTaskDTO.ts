@@ -16,8 +16,12 @@ import { AerApplicationVerificationSubmitRequestTaskPayload } from './aerApplica
 import { AirApplicationRespondToRegulatorCommentsRequestTaskPayload } from './airApplicationRespondToRegulatorCommentsRequestTaskPayload';
 import { AirApplicationReviewRequestTaskPayload } from './airApplicationReviewRequestTaskPayload';
 import { AirApplicationSubmitRequestTaskPayload } from './airApplicationSubmitRequestTaskPayload';
+import { ALRApplicationAmendsSubmitRequestTaskPayload } from './aLRApplicationAmendsSubmitRequestTaskPayload';
+import { ALRApplicationRegulatorReviewSubmitRequestTaskPayload } from './aLRApplicationRegulatorReviewSubmitRequestTaskPayload';
 import { ALRApplicationSubmitRequestTaskPayload } from './aLRApplicationSubmitRequestTaskPayload';
 import { ALRApplicationVerificationSubmitRequestTaskPayload } from './aLRApplicationVerificationSubmitRequestTaskPayload';
+import { ALRApplicationWaitForAuthorityReviewRequestTaskPayload } from './aLRApplicationWaitForAuthorityReviewRequestTaskPayload';
+import { ALRAuthorityResponseSubmitRequestTaskPayload } from './aLRAuthorityResponseSubmitRequestTaskPayload';
 import { AviationAccountClosureSubmitRequestTaskPayload } from './aviationAccountClosureSubmitRequestTaskPayload';
 import { AviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload } from './aviationAerCorsia3YearPeriodOffsettingApplicationSubmitRequestTaskPayload';
 import { AviationAerCorsiaAnnualOffsettingApplicationSubmitRequestTaskPayload } from './aviationAerCorsiaAnnualOffsettingApplicationSubmitRequestTaskPayload';
@@ -56,6 +60,10 @@ import { EmpVariationUkEtsApplicationAmendsSubmitRequestTaskPayload } from './em
 import { EmpVariationUkEtsApplicationReviewRequestTaskPayload } from './empVariationUkEtsApplicationReviewRequestTaskPayload';
 import { EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload } from './empVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload';
 import { EmpVariationUkEtsApplicationSubmitRequestTaskPayload } from './empVariationUkEtsApplicationSubmitRequestTaskPayload';
+import { HSETIApplicationAmendsSubmitRequestTaskPayload } from './hSETIApplicationAmendsSubmitRequestTaskPayload';
+import { HSETIApplicationRegulatorReviewSubmitRequestTaskPayload } from './hSETIApplicationRegulatorReviewSubmitRequestTaskPayload';
+import { HSETIApplicationSubmitRequestTaskPayload } from './hSETIApplicationSubmitRequestTaskPayload';
+import { HSETIApplicationWaitForRegulatorReviewRequestTaskPayload } from './hSETIApplicationWaitForRegulatorReviewRequestTaskPayload';
 import { InstallationAccountOpeningApplicationRequestTaskPayload } from './installationAccountOpeningApplicationRequestTaskPayload';
 import { InstallationAccountTransferringArchiveRequestTaskPayload } from './installationAccountTransferringArchiveRequestTaskPayload';
 import { InstallationAuditApplicationSubmitRequestTaskPayload } from './installationAuditApplicationSubmitRequestTaskPayload';
@@ -275,6 +283,16 @@ export interface RequestTaskDTO {
     | 'INSTALLATION_ONSITE_INSPECTION_APPLICATION_PEER_REVIEW'
     | 'INSTALLATION_ONSITE_INSPECTION_WAIT_FOR_PEER_REVIEW'
     | 'INSTALLATION_ONSITE_INSPECTION_OPERATOR_RESPOND_TO_FOLLOWUP_ACTIONS'
+    | 'HSE_TI_APPLICATION_SUBMIT'
+    | 'HSE_TI_TRACK_PAYMENT'
+    | 'HSE_TI_WAIT_FOR_REGULATOR_REVIEW'
+    | 'HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+    | 'HSE_TI_APPLICATION_PEER_REVIEW'
+    | 'HSE_TI_WAIT_FOR_PEER_REVIEW'
+    | 'HSE_TI_MAKE_PAYMENT'
+    | 'HSE_TI_CONFIRM_PAYMENT'
+    | 'HSE_TI_WAIT_FOR_AMENDS'
+    | 'HSE_TI_APPLICATION_AMENDS_SUBMIT'
     | 'BDR_APPLICATION_SUBMIT'
     | 'BDR_APPLICATION_VERIFICATION_SUBMIT'
     | 'BDR_WAIT_FOR_VERIFICATION'
@@ -292,6 +310,16 @@ export interface RequestTaskDTO {
     | 'ALR_APPLICATION_SUBMIT'
     | 'ALR_APPLICATION_VERIFICATION_SUBMIT'
     | 'ALR_WAIT_FOR_VERIFICATION'
+    | 'ALR_APPLICATION_REGULATOR_REVIEW_SUBMIT'
+    | 'ALR_WAIT_FOR_REGULATOR_REVIEW'
+    | 'ALR_APPLICATION_AMENDS_SUBMIT'
+    | 'ALR_WAIT_FOR_AMENDS'
+    | 'ALR_AMEND_APPLICATION_VERIFICATION_SUBMIT'
+    | 'ALR_AMEND_WAIT_FOR_VERIFICATION'
+    | 'ALR_AUTHORITY_RESPONSE_SUBMIT'
+    | 'ALR_WAIT_FOR_AUTHORITY_REVIEW'
+    | 'ALR_APPLICATION_PEER_REVIEW'
+    | 'ALR_WAIT_FOR_PEER_REVIEW'
     | 'AVIATION_ACCOUNT_CLOSURE_SUBMIT'
     | 'AVIATION_NON_COMPLIANCE_APPLICATION_SUBMIT'
     | 'AVIATION_NON_COMPLIANCE_DAILY_PENALTY_NOTICE'
@@ -418,8 +446,12 @@ export interface RequestTaskDTO {
     | 'NEW_VERIFICATION_BODY_EMITTER'
     | 'VERIFIER_NO_LONGER_AVAILABLE';
   payload?:
+    | ALRApplicationAmendsSubmitRequestTaskPayload
+    | ALRApplicationRegulatorReviewSubmitRequestTaskPayload
     | ALRApplicationSubmitRequestTaskPayload
     | ALRApplicationVerificationSubmitRequestTaskPayload
+    | ALRApplicationWaitForAuthorityReviewRequestTaskPayload
+    | ALRAuthorityResponseSubmitRequestTaskPayload
     | AerApplicationAmendsSubmitRequestTaskPayload
     | AerApplicationReviewRequestTaskPayload
     | AerApplicationSubmitRequestTaskPayload
@@ -465,6 +497,10 @@ export interface RequestTaskDTO {
     | EmpVariationUkEtsApplicationReviewRequestTaskPayload
     | EmpVariationUkEtsApplicationSubmitRegulatorLedRequestTaskPayload
     | EmpVariationUkEtsApplicationSubmitRequestTaskPayload
+    | HSETIApplicationAmendsSubmitRequestTaskPayload
+    | HSETIApplicationRegulatorReviewSubmitRequestTaskPayload
+    | HSETIApplicationSubmitRequestTaskPayload
+    | HSETIApplicationWaitForRegulatorReviewRequestTaskPayload
     | InstallationAccountOpeningApplicationRequestTaskPayload
     | InstallationAccountTransferringArchiveRequestTaskPayload
     | InstallationAuditApplicationSubmitRequestTaskPayload

@@ -5,30 +5,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { first, Observable, switchMap } from 'rxjs';
 
 import { PendingRequestService } from '@core/guards/pending-request.service';
-import { changeTypeLabelsMap, subInstallationNameLabelsMap } from '@shared/components/doal/activity-level-label.map';
 
 import { DoalService } from '../../../../core/doal.service';
 import { DOAL_TASK_FORM } from '../../../../core/doal-task-form.token';
-import { activityLevelFormProvider } from './activity-level-form.provider';
+import { doalActivityLevelFormProvider } from './activity-level-form.provider';
 
 @Component({
-  selector: 'app-activity-level',
+  selector: 'app-doal-activity-level',
   templateUrl: './activity-level.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [activityLevelFormProvider],
+  providers: [doalActivityLevelFormProvider],
 })
-export class ActivityLevelComponent {
+export class DoalActivityLevelComponent {
   editable$: Observable<boolean> = this.doalService.isEditable$;
   index = this.route.snapshot.paramMap.get('index');
   createMode = this.index === null;
-
-  readonly years = Array.from({ length: 2030 - 2021 + 1 }, (_, i) => 2021 + i).map((year) => ({
-    text: `${year}`,
-    value: `${year}`,
-  }));
-
-  subInstallationNameLabelsMap = subInstallationNameLabelsMap;
-  changeTypeLabelsMap = changeTypeLabelsMap;
 
   constructor(
     @Inject(DOAL_TASK_FORM) readonly form: UntypedFormGroup,

@@ -71,19 +71,19 @@ class ItemAssignedToMeRegulatorServiceTest {
             .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType))
             .thenReturn(scopedRequestTaskTypes);
         doReturn(expectedItemPage).when(itemRegulatorRepository).findItems(appUser.getUserId(), ItemAssignmentType.ME,
-            scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+            scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build());
         doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, appUser);
 
         // Invoke
         ItemDTOResponse actualItemDTOResponse = itemService
-                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+                .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
 
         // Assert
         assertEquals(expectedItemDTOResponse, actualItemDTOResponse);
 
         verify(regulatorAuthorityResourceAdapter, times(1))
             .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType);
-        verify(itemRegulatorRepository, times(1)).findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        verify(itemRegulatorRepository, times(1)).findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build());
         verify(itemResponseService, times(1)).toItemDTOResponse(expectedItemPage, accountType, appUser);
     }
 
@@ -103,12 +103,12 @@ class ItemAssignedToMeRegulatorServiceTest {
         doReturn(scopedRequestTaskTypes)
             .when(regulatorAuthorityResourceAdapter)
             .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType);
-        doReturn(expectedItemPage).when(itemRegulatorRepository).findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+        doReturn(expectedItemPage).when(itemRegulatorRepository).findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build());
         doReturn(expectedItemDTOResponse).when(itemResponseService).toItemDTOResponse(expectedItemPage, accountType, appUser);
 
         // Invoke
         ItemDTOResponse actualItemDTOResponse = itemService
-            .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+            .getItemsAssignedToMe(appUser, accountType, PagingRequest.builder().pageNumber(0).pageSize(10).build());
 
         // Assert
         assertEquals(ItemDTOResponse.emptyItemDTOResponse(), actualItemDTOResponse);
@@ -116,7 +116,7 @@ class ItemAssignedToMeRegulatorServiceTest {
         verify(regulatorAuthorityResourceAdapter, times(1))
             .getUserScopedRequestTaskTypesByAccountType(appUser.getUserId(), accountType);
         verify(itemRegulatorRepository, times(1))
-                .findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0L).pageSize(10L).build());
+                .findItems(appUser.getUserId(), ItemAssignmentType.ME, scopedRequestTaskTypes, PagingRequest.builder().pageNumber(0).pageSize(10).build());
         verify(itemResponseService, times(1)).toItemDTOResponse(expectedItemPage, accountType, appUser);
     }
 

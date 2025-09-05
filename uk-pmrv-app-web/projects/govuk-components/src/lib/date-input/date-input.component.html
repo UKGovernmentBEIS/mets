@@ -1,5 +1,11 @@
-<fieldset [id]="identifier" govukFieldset>
-  <legend govukLegend>{{ label }}</legend>
+<!-- eslint-disable @angular-eslint/template/prefer-self-closing-tags -->
+<fieldset [id]="identifier" role="group" govukFieldset>
+  <legend [size]="size" govukLegend>
+    <ng-container *ngIf="label; else customLegend">{{ label }}</ng-container>
+    <ng-template #customLegend>
+      <ng-content select="[govukLegend]"></ng-content>
+    </ng-template>
+  </legend>
   <span *ngIf="hint" govukFieldsetHint>{{ hint }}</span>
   <div [formGroup]="formGroup" class="govuk-date-input">
     <govuk-error-message *ngIf="shouldDisplayErrors" [errors]="control.errors" [identifier]="identifier" />

@@ -1,0 +1,14 @@
+<app-alr-task-common
+  [breadcrumb]="true"
+  heading="Provide decision on application"
+  caption="Provide determination of activity level"
+  returnLink="../">
+  <ng-container *ngIf="editable$ | async">
+    <div class="govuk-button-group">
+      <button appPendingButton govukButton type="button" (click)="onContinue('PROCEED_TO_AUTHORITY')">
+        Proceed to UK ETS authority
+      </button>
+      <button govukSecondaryButton type="button" (click)="onContinue('CLOSED_ALR')">Close</button>
+    </div>
+  </ng-container>
+</app-alr-task-common>

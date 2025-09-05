@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, Signal, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { first, iif, map, of, switchMap, tap, withLatestFrom } from 'rxjs';
 
@@ -12,6 +13,9 @@ import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 import {
   AccountVerificationBodyService,
+  ALRAlrDataRegulatorReviewDecision,
+  ALRAlrDataRegulatorReviewOperatorAmendsNeededDecisionDetails,
+  ALRApplicationAmendsSubmitRequestTaskPayload,
   ALRApplicationSubmitRequestTaskPayload,
   RequestInfoDTO,
   RequestTaskActionProcessDTO,
@@ -24,6 +28,8 @@ interface ViewModel {
   requestId: RequestInfoDTO['id'];
   isSubmitted: boolean;
   requestTaskType: RequestTaskDTO['type'];
+  verificationPerformed: boolean;
+  regulatorVerificationRequired: boolean;
 }
 
 @Component({
@@ -47,7 +53,28 @@ export class AlrSendReportComponent {
     const isSubmitted = this.isSubmitted();
     const { requestTask: { type: requestTaskType } = {}, requestInfo: { id: requestId } = {} } = this.requestTaskItem();
 
-    return { isEditable, requestId, isSubmitted, requestTaskType };
+    const state = this.store.getState();
+    const verificationPerformed = (state.requestTaskItem.requestTask.payload as ALRApplicationSubmitRequestTaskPayload)
+      .verificationPerformed;
+    const regulatorVerificationRequired = !['verifier', 'regulator'].includes(
+      this.route.snapshot.queryParamMap.get('sendTo'),
+    )
+      ? (
+          (
+            (state.requestTaskItem.requestTask.payload as ALRApplicationAmendsSubmitRequestTaskPayload)
+              .regulatorReviewGroupDecisions?.ALR as ALRAlrDataRegulatorReviewDecision
+          )?.details as ALRAlrDataRegulatorReviewOperatorAmendsNeededDecisionDetails
+        )?.verificationRequired
+      : this.route.snapshot.queryParamMap.get('sendTo') === 'verifier';
+
+    return {
+      isEditable,
+      requestId,
+      isSubmitted,
+      requestTaskType,
+      verificationPerformed,
+      regulatorVerificationRequired,
+    };
   });
 
   constructor(
@@ -56,20 +83,35 @@ export class AlrSendReportComponent {
     private readonly accountVerificationBodyService: AccountVerificationBodyService,
     private readonly pendingRequest: PendingRequestService,
     private readonly businessErrorService: BusinessErrorService,
+    private readonly route: ActivatedRoute,
   ) {}
 
   onSubmit() {
     const requestTaskType = this.requestTaskItem().requestTask.type;
+    const state = this.store.getState();
+    const verificationPerformed = (state.requestTaskItem.requestTask.payload as ALRApplicationSubmitRequestTaskPayload)
+      .verificationPerformed;
+    const regulatorVerificationRequired = !['verifier', 'regulator'].includes(
+      this.route.snapshot.queryParamMap.get('sendTo'),
+    )
+      ? (
+          (
+            (state.requestTaskItem.requestTask.payload as ALRApplicationAmendsSubmitRequestTaskPayload)
+              .regulatorReviewGroupDecisions?.ALR as ALRAlrDataRegulatorReviewDecision
+          )?.details as ALRAlrDataRegulatorReviewOperatorAmendsNeededDecisionDetails
+        )?.verificationRequired
+      : this.route.snapshot.queryParamMap.get('sendTo') === 'verifier';
 
-    if (requestTaskType === 'ALR_APPLICATION_SUBMIT') {
+    if (
+      (requestTaskType === 'ALR_APPLICATION_SUBMIT' && !verificationPerformed) ||
+      (requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && regulatorVerificationRequired)
+    ) {
       this.alrService.requestAccountId$
         .pipe(
           first(),
           switchMap((accountId) => this.accountVerificationBodyService.getVerificationBodyOfAccount(accountId)),
           switchMap((vb) => (vb ? of(vb) : this.businessErrorService.showError(notFoundVerificationBodyError()))),
           tap((vb) => {
-            const state = this.store.getState();
-
             if (
               (vb as VerificationBodyNameInfoDTO)?.id &&
               (state.requestTaskItem.requestTask.payload as ALRApplicationSubmitRequestTaskPayload)?.verificationBodyId
@@ -100,6 +142,10 @@ export class AlrSendReportComponent {
               case 'ALR_APPLICATION_SUBMIT':
                 actionType = 'ALR_SUBMIT_TO_VERIFIER';
                 break;
+
+              case 'ALR_APPLICATION_AMENDS_SUBMIT':
+                actionType = 'ALR_APPLICATION_AMENDS_SUBMIT_TO_VERIFIER';
+                break;
             }
 
             return iif(
@@ -110,6 +156,32 @@ export class AlrSendReportComponent {
               of(null),
             );
           }),
+          this.pendingRequest.trackRequest(),
+        )
+        .subscribe(() => this.isSubmitted.set(true));
+    } else if (
+      (requestTaskType === 'ALR_APPLICATION_SUBMIT' && verificationPerformed) ||
+      (requestTaskType === 'ALR_APPLICATION_AMENDS_SUBMIT' && !regulatorVerificationRequired)
+    ) {
+      this.store.requestTaskType$
+        .pipe(
+          first(),
+          map((requestTaskType) => {
+            let actionType: RequestTaskActionProcessDTO['requestTaskActionType'];
+
+            switch (requestTaskType) {
+              case 'ALR_APPLICATION_SUBMIT':
+                actionType = 'ALR_SUBMIT_TO_REGULATOR';
+                break;
+
+              case 'ALR_APPLICATION_AMENDS_SUBMIT':
+                actionType = 'ALR_APPLICATION_AMENDS_SUBMIT_TO_REGULATOR';
+                break;
+            }
+
+            return actionType;
+          }),
+          switchMap((actionType) => this.alrService.postAlrSubmit(actionType)),
           this.pendingRequest.trackRequest(),
         )
         .subscribe(() => this.isSubmitted.set(true));

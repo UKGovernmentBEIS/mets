@@ -1,0 +1,14 @@
+<app-hseti-task-review [breadcrumb]="true" [linkText]="vm.linkText" returnToLink="../.." *ngIf="vm() as vm">
+  <app-wizard-step (formSubmit)="onContinue()" [formGroup]="form" [heading]="vm.title" caption="Overall decision">
+    <ng-container>
+      <div class="govuk-!-width-two-thirds" [formGroup]="form">
+        <div
+          govuk-textarea
+          [maxLength]="10000"
+          formControlName="reason"
+          label="Provide a reason for your decision (optional)"
+          hint="This cannot be viewed by the operator"></div>
+      </div>
+    </ng-container>
+  </app-wizard-step>
+</app-hseti-task-review>

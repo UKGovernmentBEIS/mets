@@ -11,6 +11,6 @@
  */
 
 export interface VerificationReportOfTheActivityLevelReport {
-  document: string;
+  document?: string;
   comment: string;
 }

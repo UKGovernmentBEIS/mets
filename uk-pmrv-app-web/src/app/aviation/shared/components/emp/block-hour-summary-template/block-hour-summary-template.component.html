@@ -29,8 +29,13 @@
 
     <div govukSummaryListRow *ngIf="data?.notClearDistinguishionIcaoAircraftDesignators">
       <dt govukSummaryListRowKey>
-        Aircraft types using block hour that you cannot clearly distinguish between international and national fuel
-        uplifts on a flight by flight basis
+        @if (isCorsia) {
+          Aircraft types using block hour that you cannot clearly distinguish between fuel uplifts international and
+          domestic flights on a flight by flight basis
+        } @else {
+          Aircraft types using block hour that you cannot clearly distinguish between international and national fuel
+          uplifts on a flight by flight basis
+        }
       </dt>
       <dd class="pre-wrap" govukSummaryListRowValue>
         {{ data.notClearDistinguishionIcaoAircraftDesignators }}
@@ -52,8 +57,7 @@
     "
     [isEditable]="isEditable"
     [procedureFormData]="data.blockHoursMeasurement"
-    formRouterLink="../block-hours-measurement"
-  ></app-procedure-form-summary>
+    formRouterLink="../block-hours-measurement"></app-procedure-form-summary>
 </ng-container>
 
 <ng-container *ngIf="data?.fuelUpliftSupplierRecordType">
@@ -78,6 +82,5 @@
     header="Measuring fuel density"
     [isEditable]="isEditable"
     [procedureFormData]="data.fuelDensity"
-    formRouterLink="../fuel-density"
-  ></app-procedure-form-summary>
+    formRouterLink="../fuel-density"></app-procedure-form-summary>
 </ng-container>

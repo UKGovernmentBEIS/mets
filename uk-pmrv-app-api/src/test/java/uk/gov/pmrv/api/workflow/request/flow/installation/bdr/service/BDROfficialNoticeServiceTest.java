@@ -7,11 +7,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.pmrv.api.account.service.AccountContactQueryService;
-import uk.gov.pmrv.api.common.exception.MetsErrorCode;
 import uk.gov.pmrv.api.notification.mail.domain.PmrvEmailNotificationTemplateData;
 import uk.gov.pmrv.api.notification.template.domain.enumeration.PmrvNotificationTemplateName;
 import uk.gov.pmrv.api.user.core.service.auth.UserAuthService;
@@ -100,7 +100,7 @@ public class BDROfficialNoticeServiceTest {
         BusinessException be = assertThrows(BusinessException.class, () ->
                         officialNoticeService.sendOfficialNotice(requestId));
 
-		assertThat(be.getErrorCode()).isEqualTo(MetsErrorCode.BDR_PRIMARY_CONTACT_NOT_FOUND);
+		assertThat(be.getErrorCode()).isEqualTo(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND);
 
         verify(	notificationEmailService, times(0)).notifyRecipient(any(),any());
     }

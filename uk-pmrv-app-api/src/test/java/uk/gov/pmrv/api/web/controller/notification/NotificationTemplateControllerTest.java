@@ -123,7 +123,7 @@ class NotificationTemplateControllerTest {
             .accountType(accountType)
             .term("term")
             .roleType(RoleTypeConstants.OPERATOR)
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
         List<TemplateInfoDTO> notificationTemplates = List.of(
@@ -167,7 +167,7 @@ class NotificationTemplateControllerTest {
             .accountType(accountType)
             .term("term")
             .roleType(RoleTypeConstants.OPERATOR)
-            .paging(PagingRequest.builder().pageNumber(0L).pageSize(30L).build())
+            .paging(PagingRequest.builder().pageNumber(0).pageSize(30).build())
             .build();
 
         when(pmrvSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);

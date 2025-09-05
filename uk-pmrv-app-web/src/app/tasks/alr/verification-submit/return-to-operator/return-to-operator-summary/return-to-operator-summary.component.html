@@ -1,5 +1,5 @@
 <ng-container *ngIf="vm() as vm">
-  <app-alr-task-review
+  <app-alr-task-common
     returnToLink="../../"
     [breadcrumb]="true"
     heading="Check your answers"
@@ -18,9 +18,9 @@
     </dl>
 
     <div *ngIf="vm.isEditable" class="govuk-button-group">
-      <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and complete</button>
+      <button appPendingButton govukButton type="button" (click)="onConfirm()">Confirm and send</button>
     </div>
-  </app-alr-task-review>
+  </app-alr-task-common>
 
   <ng-template #confirmationContent>
     <app-confirmation-shared

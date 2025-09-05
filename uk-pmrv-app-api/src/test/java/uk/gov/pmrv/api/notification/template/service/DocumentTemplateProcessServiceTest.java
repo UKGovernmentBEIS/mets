@@ -138,6 +138,7 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.Calcula
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.ProcedurePlan;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.SamplingPlan;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.SamplingPlanDetails;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationco2.ReducedSamplingFrequencyJustification;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationpfc.CalculationOfPFCMonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationpfc.CellAndAnodeType;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.calculationpfc.PFCActivityData;
@@ -158,6 +159,7 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.MeteringUncerta
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.NoHighestRequiredTierJustification;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.TransferCO2;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.TransferCO2Direction;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.common.MeasurementAnalysisMethodData;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.fallback.FallbackMonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.fallback.FallbackSourceStreamCategory;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.fallback.FallbackSourceStreamCategoryAppliedTier;
@@ -166,6 +168,13 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.inherentco2.InherentCO
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.inherentco2.InherentReceivingTransferringInstallation;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.inherentco2.InherentReceivingTransferringInstallationDetails;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.inherentco2.InherentReceivingTransferringInstallationEmitter;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementBiomassFraction;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementBiomassFractionStandardReferenceSource;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementBiomassFractionTier;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementBiomassFractionStandardReferenceSourceType;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementAnalysisMethod;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementSamplingFrequency;
+import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementLaboratory;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementOfCO2EmissionPointCategory;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementOfCO2EmissionPointCategoryAppliedTier;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.measurementco2.MeasurementOfCO2MonitoringApproach;
@@ -182,6 +191,7 @@ import uk.gov.pmrv.api.permit.domain.monitoringapproaches.transferredco2andn2o.M
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.transferredco2andn2o.TemperaturePressure;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.transferredco2andn2o.TransferredCO2AndN2OMonitoringApproach;
 import uk.gov.pmrv.api.permit.domain.monitoringapproaches.transferredco2andn2o.TransportCO2AndN2OPipelineSystems;
+import uk.gov.pmrv.api.permit.domain.monitoringmethodologyplan.MonitoringMethodologyPlans;
 import uk.gov.pmrv.api.permit.domain.monitoringreporting.MonitoringReporting;
 import uk.gov.pmrv.api.permit.domain.monitoringreporting.MonitoringRole;
 import uk.gov.pmrv.api.permit.domain.regulatedactivities.RegulatedActivities;
@@ -241,12 +251,12 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class DocumentTemplateProcessServiceTest {
-	
+
     private static FreemarkerTemplateEngine freemarkerTemplateEngine;
 
     @Mock
     private DocumentGeneratorRemoteClientService documentGeneratorClientService;
-    
+
     @BeforeAll
     public static void init() {
         CustomFreeMarkerConfiguration customFreeMarkerConfiguration = new CustomFreeMarkerConfiguration();
@@ -273,21 +283,21 @@ class DocumentTemplateProcessServiceTest {
         params.put("questions", List.of("question1", "question2"));
 
         TemplateParams templateParams = buildTemplateParams(ca, signatoryUser, signatureFile, params);
-        
+
         byte[] resultExpected = "some bytes".getBytes();
         when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
-        
+
         ArgumentCaptor<byte[]> postProcessedDocumentCaptor = ArgumentCaptor.forClass(byte[].class);
-        
+
         verify(documentGeneratorClientService, times(1)).generateDocument(postProcessedDocumentCaptor.capture(), eq(fileNameToGenerate));
-        
+
         byte[] postProcessedDocument = postProcessedDocumentCaptor.getValue();
-        
+
         try (InputStream bais = new ByteArrayInputStream(postProcessedDocument);
                 XWPFDocument document = new XWPFDocument(bais);
         		XWPFWordExtractor xwpfWordExtractor = new XWPFWordExtractor(document)) {
@@ -349,21 +359,21 @@ class DocumentTemplateProcessServiceTest {
         params.put("ccRecipients", List.of("cc1@email", "cc2@email"));
 
         TemplateParams templateParams = buildTemplateParams(ca, signatoryUser, signatureFile, params);
-        
+
         byte[] resultExpected = "some bytes".getBytes();
         when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
-        
+
         ArgumentCaptor<byte[]> postProcessedDocumentCaptor = ArgumentCaptor.forClass(byte[].class);
-        
+
         verify(documentGeneratorClientService, times(1)).generateDocument(postProcessedDocumentCaptor.capture(), eq(fileNameToGenerate));
-        
+
         byte[] postProcessedDocument = postProcessedDocumentCaptor.getValue();
-        
+
         try (InputStream bais = new ByteArrayInputStream(postProcessedDocument);
                 XWPFDocument document = new XWPFDocument(bais);
         		XWPFWordExtractor xwpfWordExtractor = new XWPFWordExtractor(document)) {
@@ -376,7 +386,7 @@ class DocumentTemplateProcessServiceTest {
 	        assertThat(docText).contains(((InstallationAccountTemplateParams) templateParams.getAccountParams()).getLegalEntityName());
 	        assertThat(docText).contains(((InstallationAccountTemplateParams) templateParams.getAccountParams()).getLegalEntityLocation().split("\\n")[0]);
 	        assertThat(docText).contains(new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH).format(extensionDate));
-        };
+        }
     }
 
     @Test
@@ -439,27 +449,27 @@ class DocumentTemplateProcessServiceTest {
 
         params.put("reportableEmissions", monApproaches);
         TemplateParams templateParams = buildTemplateParams(ca, signatoryUser, signatureFile, params);
-        
+
         byte[] resultExpected = "some bytes".getBytes();
         when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
-        
+
         ArgumentCaptor<byte[]> postProcessedDocumentCaptor = ArgumentCaptor.forClass(byte[].class);
-        
+
         verify(documentGeneratorClientService, times(1)).generateDocument(postProcessedDocumentCaptor.capture(), eq(fileNameToGenerate));
-        
+
         byte[] postProcessedDocument = postProcessedDocumentCaptor.getValue();
-        
+
         try (InputStream bais = new ByteArrayInputStream(postProcessedDocument);
                 XWPFDocument document = new XWPFDocument(bais);
         		XWPFWordExtractor xwpfWordExtractor = new XWPFWordExtractor(document)) {
             final String docText = xwpfWordExtractor.getText();
             assertThat(docText).contains("400");
-        };
+        }
     }
 
     @Test
@@ -470,6 +480,18 @@ class DocumentTemplateProcessServiceTest {
         final Path templateFilePath = Paths.get("src", "main", "resources", "templates", "ca", "northern_ireland", "installation", "INPermitApplication_Permit_UK ETS Final v5.docx");
         final FileDTO templateFile = createFile(templateFilePath);
 
+        TemplateParams templateParams = createPermitAndTemplateParams(ca, signatoryUser);
+
+        byte[] resultExpected = "some bytes".getBytes();
+        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
+
+        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
+                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
+
+        assertThat(resultActual).isEqualTo(resultExpected);
+    }
+
+    private TemplateParams createPermitAndTemplateParams(CompetentAuthorityEnum ca, String signatoryUser) throws IOException {
         final Path signatureFilePath = Paths.get("src", "test", "resources", "files", "signatures", "signature_valid.bmp");
         final FileDTO signatureFile = createFile(signatureFilePath);
 
@@ -541,12 +563,12 @@ class DocumentTemplateProcessServiceTest {
 
         final PermitContainer permitContainer = PermitContainer.builder()
                 .permitAttachments(Map.of(
-                        procedurePlanId1, "procedurePlan1.txt",
-                        procedurePlanId2, "procedurePlan2.txt",
-                        someOtherFileId, "someOtherFile.txt",
-                        assessAndControlRiskFileId1, "assessAndControlRiskFile.txt",
-                        assessAndControlRiskFileId2, "assessAndControlRiskFile2.txt"
-                    )
+                                procedurePlanId1, "procedurePlan1.txt",
+                                procedurePlanId2, "procedurePlan2.txt",
+                                someOtherFileId, "someOtherFile.txt",
+                                assessAndControlRiskFileId1, "assessAndControlRiskFile.txt",
+                                assessAndControlRiskFileId2, "assessAndControlRiskFile2.txt"
+                        )
                 )
                 .installationOperatorDetails(InstallationOperatorDetails.builder()
                         .companyReferenceNumber("companyReferenceNumber")
@@ -589,6 +611,7 @@ class DocumentTemplateProcessServiceTest {
                                         )
                                         .build()
                         )
+                        .monitoringMethodologyPlans(MonitoringMethodologyPlans.builder().plans(Set.of(UUID.randomUUID(), UUID.randomUUID())).build())
                         .environmentalPermitsAndLicences(EnvironmentalPermitsAndLicences.builder().exist(true)
                                 .envPermitOrLicences(List.of(
                                         EnvPermitOrLicence.builder().issuingAuthority("ia1").num("1").type("type1").build(),
@@ -809,15 +832,10 @@ class DocumentTemplateProcessServiceTest {
                 "analysisMethods", analysisMethods,
                 "transfers", List.of(transfer))
         );
-        
-        byte[] resultExpected = "some bytes".getBytes();
-        when(documentGeneratorClientService.generateDocument(Mockito.any(byte[].class), Mockito.eq(fileNameToGenerate))).thenReturn(resultExpected);
 
-        byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
-                .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
-        assertThat(resultActual).isEqualTo(resultExpected);
+        return templateParams;
     }
+
 
     @Test
     void generate_emp() throws Exception {
@@ -1359,7 +1377,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(empTemplateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
 
 //        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
@@ -1393,7 +1411,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
 
 //        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
@@ -1427,7 +1445,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
 
 //        var fileContent = assertDoesNotThrow(() -> new DocumentTemplateProcessService(freemarkerTemplateEngine)
@@ -1572,6 +1590,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                                                         .build())
                                                 .build())
                                         .build())
+                                .biomassFraction(buildMeasurementBiomassFraction())
                                 .build()
                 ))
                 .build();
@@ -2212,7 +2231,54 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 .params(params)
                 .build();
     }
-    
+
+
+    private MeasurementBiomassFraction buildMeasurementBiomassFraction() {
+        return MeasurementBiomassFraction.builder()
+                .exist(true)
+                .tier(MeasurementBiomassFractionTier.TIER_1)
+                .highestRequiredTier(HighestRequiredTier.builder()
+                        .isHighestRequiredTier(Boolean.TRUE)
+                        .noHighestRequiredTierJustification(NoHighestRequiredTierJustification.builder()
+                                .isTechnicallyInfeasible(Boolean.TRUE)
+                                .technicalInfeasibilityExplanation("explain")
+                                .isCostUnreasonable(Boolean.TRUE)
+                                .build())
+                        .build())
+                .defaultValueApplied(true)
+                .standardReferenceSource(MeasurementBiomassFractionStandardReferenceSource.builder()
+                        .defaultValue("defaultValue")
+                        .otherTypeDetails("otherTypeDetails")
+                        .type(MeasurementBiomassFractionStandardReferenceSourceType.LABORATORY_ANALYSIS)
+                        .build())
+                .calculationAnalysisMethodData(MeasurementAnalysisMethodData.builder()
+                        .analysisMethodUsed(false)
+                        .analysisMethods(List.of(MeasurementAnalysisMethod.builder()
+                                                .analysis("analysis")
+                                                .subParameter("subParam1")
+                                                .samplingFrequency(MeasurementSamplingFrequency.WEEKLY)
+                                                .samplingFrequencyOtherDetails("samplingFrequencyOtherDetails")
+                                                .frequencyMeetsMinRequirements(true)
+                                                .laboratory(
+                                                        MeasurementLaboratory.builder()
+                                                                .laboratoryName("laboratoryName")
+                                                                .laboratoryAccredited(true)
+                                                                .build()
+                                                )
+                                                .files(Set.of(UUID.fromString("123e4567-e89b-12d3-a456-426614174000")))
+                                                .reducedSamplingFrequencyJustification(
+                                                        ReducedSamplingFrequencyJustification.builder()
+                                                                .isCostUnreasonable(false)
+                                                                .isOneThirdRuleAndSampling(true)
+                                                                .files(Set.of(UUID.fromString("123e4567-e89b-12d3-a456-426614174000")))
+                                                                .build()
+                                                )
+                                                .build()
+                        ))
+                        .build())
+                .build();
+    }
+
     @Test
     void generate_Withholding_of_allowances_notice() throws Exception {
     	String fileNameToGenerate = "fileNameToGenerate";
@@ -2236,7 +2302,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
     }
 
@@ -2262,7 +2328,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
     }
 
@@ -2288,7 +2354,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
     }
 
@@ -2314,7 +2380,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
     }
 
@@ -2862,7 +2928,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
     }
 
@@ -2888,7 +2954,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
     }
 
@@ -2914,7 +2980,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
     }
 
@@ -2942,7 +3008,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
     }
 
@@ -2970,7 +3036,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
     }
 
@@ -2996,7 +3062,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
     }
 
@@ -3022,7 +3088,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 
         byte[] resultActual = new DocumentTemplateProcessService(documentGeneratorClientService, freemarkerTemplateEngine)
                 .generateFileDocumentFromTemplate(templateFile, templateParams, fileNameToGenerate);
-        
+
         assertThat(resultActual).isEqualTo(resultExpected);
     }
 
@@ -3035,7 +3101,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
                 .fileType(MimeTypeUtils.detect(bytes, sampleFilePath.getFileName().toString()))
                 .build();
     }
-    
+
     private TemplateParams buildTemplateParams(CompetentAuthorityEnum ca, String signatoryUser, FileDTO signatureFile,
             Map<String, Object> params) {
 		CompetentAuthorityDTO caDto = CompetentAuthorityDTO.builder().id(ca).email("email").name("name").build();
@@ -3051,7 +3117,7 @@ Aliquam nec ligula ipsum. Duis sit amet neque ut eros fermentum pharetra. Nunc i
 				.jobTitle("Project Manager")
 				.build())
 				.accountParams(InstallationAccountTemplateParams.builder()
-				.emitterType(EmitterType.GHGE.name())
+				.emitterType(EmitterType.WASTE.name())
 				.legalEntityName("LE name")
 				.legalEntityLocation("LE ethnikis antistaseos\nLE street number 124\nLE postal code 15125")
 				.name("account name")
