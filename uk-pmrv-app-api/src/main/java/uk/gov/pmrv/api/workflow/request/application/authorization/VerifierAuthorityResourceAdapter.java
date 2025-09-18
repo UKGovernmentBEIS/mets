@@ -1,11 +1,14 @@
 package uk.gov.pmrv.api.workflow.request.application.authorization;
 
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.Permission;
 import uk.gov.netz.api.authorization.rules.services.authorization.verifier.VerifierAccountAccessService;
 import uk.gov.netz.api.authorization.rules.services.resource.VerifierAuthorityResourceService;
+import uk.gov.pmrv.api.account.domain.Account;
+import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.account.service.VerifierAccountAccessByAccountTypeService;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
@@ -69,7 +72,8 @@ public class VerifierAuthorityResourceAdapter
             final Set<RequestTaskType> taskTypes = entry.getValue().stream().map(RequestTaskType::valueOf).collect(Collectors.toSet());
             final List<Long> accountIds = hasAccessToAllAccounts ?
                 accountRepository.findAllIdsByVerificationBody(vbId) :
-                taskRepository.findAccountIdsByTaskAssigneeAndTaskTypeInAndVerificationBody(user.getUserId(), taskTypes, vbId);
+                (Stream.concat(taskRepository.findAccountIdsByTaskAssigneeAndTaskTypeInAndVerificationBody(user.getUserId(), taskTypes, vbId).stream(),
+                    accountRepository.findAccountsByContactTypeAndUserId(AccountContactType.VB_SITE, user.getUserId()).stream().map(Account::getId)).toList());
             accountIds.forEach(accId -> requestTaskTypesPerAccount.put(accId, taskTypes));
         }
         return requestTaskTypesPerAccount;
@@ -83,4 +87,5 @@ public class VerifierAuthorityResourceAdapter
             .toList()
             .contains(Permission.PERM_VB_ACCESS_ALL_ACCOUNTS);
     }
+
 }

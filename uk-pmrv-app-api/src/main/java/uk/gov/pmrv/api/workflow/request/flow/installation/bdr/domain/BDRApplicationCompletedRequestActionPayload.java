@@ -11,6 +11,8 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -28,5 +30,12 @@ public class BDRApplicationCompletedRequestActionPayload extends BDRApplicationS
 
     @Builder.Default
     private Map<UUID, String> regulatorReviewAttachments = new HashMap<>();
+
+    @Override
+    public Map<UUID, String> getAttachments() {
+        return Stream.of(super.getAttachments(), regulatorReviewAttachments)
+                .flatMap(map -> map.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 
 }

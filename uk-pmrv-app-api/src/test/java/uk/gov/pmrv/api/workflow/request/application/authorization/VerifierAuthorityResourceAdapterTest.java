@@ -9,6 +9,9 @@ import uk.gov.netz.api.authorization.core.domain.AppAuthority;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.Permission;
 import uk.gov.netz.api.authorization.rules.services.resource.VerifierAuthorityResourceService;
+import uk.gov.pmrv.api.account.domain.Account;
+import uk.gov.pmrv.api.account.domain.enumeration.AccountContactType;
+import uk.gov.pmrv.api.account.installation.domain.InstallationAccount;
 import uk.gov.pmrv.api.account.repository.AccountRepository;
 import uk.gov.pmrv.api.common.domain.enumeration.AccountType;
 import uk.gov.pmrv.api.workflow.request.core.domain.enumeration.RequestTaskType;
@@ -81,7 +84,10 @@ class VerifierAuthorityResourceAdapterTest {
         final AccountType accountType = AccountType.INSTALLATION;
 
         final Long vbId = 1L;
-        final List<Long> accountIds = List.of(2L, 3L);
+        Account acc2 = InstallationAccount.builder().id(2L).build();
+        Account acc3 = InstallationAccount.builder().id(3L).build();
+        Account acc_vb_site = InstallationAccount.builder().id(4L).build();
+
         final Set<String> taskTypesString = Set.of(
             RequestTaskType.AER_APPLICATION_VERIFICATION_SUBMIT.name(),
             RequestTaskType.EMP_ISSUANCE_UKETS_APPLICATION_SUBMIT.name()
@@ -96,17 +102,23 @@ class VerifierAuthorityResourceAdapterTest {
                 taskTypesString
             ));
         when(taskRepository.findAccountIdsByTaskAssigneeAndTaskTypeInAndVerificationBody( "userId", taskTypes, vbId))
-            .thenReturn(accountIds);
+            .thenReturn(List.of(acc2.getId(), acc3.getId()));
+        when(accountRepository.findAccountsByContactTypeAndUserId(AccountContactType.VB_SITE, "userId"))
+            .thenReturn(List.of(acc_vb_site));
 
         Map<Long, Set<RequestTaskType>> userScopedRequestTaskTypesByAccountType =
             verifierAuthorityResourceAdapter.getUserScopedRequestTaskTypesByAccountType(user, accountType);
 
         assertThat(userScopedRequestTaskTypesByAccountType).containsExactlyInAnyOrderEntriesOf(
-            Map.of(3L,
+            Map.of(acc3.getId(),
                 Set.of(
                     RequestTaskType.AER_APPLICATION_VERIFICATION_SUBMIT
                 ),
-                2L,
+                acc2.getId(),
+                Set.of(
+                    RequestTaskType.AER_APPLICATION_VERIFICATION_SUBMIT
+                ),
+                acc_vb_site.getId(),
                 Set.of(
                     RequestTaskType.AER_APPLICATION_VERIFICATION_SUBMIT
                 ))
