@@ -32,7 +32,7 @@
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-three-quarters">
                 <a [routerLink]="['workflows', workflow.id]" govukLink>
-                  {{ workflow.id }} {{ workflowName(workflow.requestType) }}
+                  {{ workflow.id | hsetiWorkflowId }} {{ workflowName(workflow.requestType) }}
                 </a>
                 <ng-container *ngIf="workflow.requestType === 'AER'">
                   <div>

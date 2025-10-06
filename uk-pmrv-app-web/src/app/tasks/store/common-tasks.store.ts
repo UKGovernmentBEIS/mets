@@ -257,6 +257,10 @@ export class CommonTasksStore extends Store<CommonTasksState> {
     return this.state$.pipe(map((s) => s.isEditable));
   }
 
+  get isPaymentRequired(): boolean {
+    return true;
+  }
+
   get requestId() {
     return this.getValue().requestTaskItem?.requestInfo?.id;
   }

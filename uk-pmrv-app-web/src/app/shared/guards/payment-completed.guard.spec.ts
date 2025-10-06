@@ -9,6 +9,7 @@ import { RequestTaskStore } from '@aviation/request-task/store';
 import { mockState } from '@permit-application/testing/mock-state';
 import { PermitRevocationStore } from '@permit-revocation/store/permit-revocation-store';
 import { PaymentCompletedGuard } from '@shared/guards/payment-completed.guard';
+import { CommonTasksStore } from '@tasks/store/common-tasks.store';
 
 import { mockClass } from '../../../testing';
 import { PermitIssuanceStore } from '../../permit-issuance/store/permit-issuance.store';
@@ -242,6 +243,62 @@ describe('PaymentCompletedGuard', () => {
       });
       await expect(lastValueFrom(guard.canActivate(activatedRouteSnapshot, routerState))).resolves.toEqual(
         router.parseUrl(`/aviation/tasks/${activatedRouteSnapshot.params.taskId}/payment-not-completed`),
+      );
+    });
+  });
+
+  describe('hseti', () => {
+    const routerState = {
+      url: `/tasks/${activatedRouteSnapshot.params.taskId}/hseti/review/notiy-operator`,
+    } as RouterStateSnapshot;
+    let store: CommonTasksStore;
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [HttpClientModule, RouterTestingModule],
+        providers: [PaymentCompletedGuard, { provide: StoreContextResolver, useValue: storeResolver }],
+      });
+      guard = TestBed.inject(PaymentCompletedGuard);
+      router = TestBed.inject(Router);
+
+      store = TestBed.inject(CommonTasksStore);
+      storeResolver.getStore.mockReturnValue(store);
+    });
+
+    it('should be true if paymentCompleted is true', async () => {
+      store.setState({
+        requestTaskItem: {
+          requestInfo: { paymentCompleted: true },
+          requestTask: {
+            type: 'HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT',
+          },
+        },
+        relatedTasks: [],
+        isEditable: true,
+        timeLineActions: [],
+        storeInitialized: false,
+        user: undefined,
+      });
+      await expect(lastValueFrom(guard.canActivate(activatedRouteSnapshot, routerState))).resolves.toEqual(true);
+    });
+
+    it('should redirect to payment not completed page if paymentCompleted is false', async () => {
+      store.setState({
+        requestTaskItem: {
+          requestInfo: {
+            paymentCompleted: false,
+          },
+          requestTask: {
+            type: 'HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT',
+          },
+        },
+        relatedTasks: [],
+        timeLineActions: [],
+        storeInitialized: false,
+        isEditable: false,
+        user: undefined,
+      });
+      await expect(lastValueFrom(guard.canActivate(activatedRouteSnapshot, routerState))).resolves.toEqual(
+        router.parseUrl(`/tasks/${activatedRouteSnapshot.params.taskId}/hseti/payment-not-completed`),
       );
     });
   });

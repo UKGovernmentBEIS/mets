@@ -2,12 +2,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { PendingRequestGuard } from '@core/guards/pending-request.guard';
+import { PaymentNotCompletedComponent } from '@shared/components/payment-not-completed/payment-not-completed.component';
 import { PeerReviewComponent } from '@shared/components/peer-review/peer-review.component';
 import { AnswersComponent as PeerReviewDecisionAnswersComponent } from '@shared/components/peer-review-decision/answers/answers.component';
 import { AnswersGuard as PeerReviewDecisionAnswersGuard } from '@shared/components/peer-review-decision/answers/answers.guard';
 import { ConfirmationComponent as PeerReviewDecisionConfirmationComponent } from '@shared/components/peer-review-decision/confirmation/confirmation.component';
 import { PeerReviewDecisionComponent } from '@shared/components/peer-review-decision/peer-review-decision.component';
 import { PeerReviewDecisionGuard } from '@shared/components/peer-review-decision/peer-review-decision.guard';
+import { PaymentCompletedGuard } from '@shared/guards/payment-completed.guard';
 
 import { ReviewTaskListComponent } from './review';
 import { DetailsReviewComponent } from './review/details-review/details-review.component';
@@ -164,6 +166,7 @@ const routes: Routes = [
         path: 'notify-operator',
         data: { pageTitle: 'Notify operator of decision' },
         component: HsetiNotifyOperatorComponent,
+        canActivate: [PaymentCompletedGuard],
         canDeactivate: [PendingRequestGuard],
       },
       {
@@ -173,6 +176,7 @@ const routes: Routes = [
             path: '',
             data: { pageTitle: 'Send for peer review', breadcrumb: true },
             component: PeerReviewComponent,
+            canActivate: [PaymentCompletedGuard],
             canDeactivate: [PendingRequestGuard],
           },
         ],
@@ -217,6 +221,10 @@ const routes: Routes = [
           import('../../change-task-assignee/change-task-assignee.module').then((m) => m.ChangeTaskAssigneeModule),
       },
     ],
+  },
+  {
+    path: 'payment-not-completed',
+    component: PaymentNotCompletedComponent,
   },
 ];
 

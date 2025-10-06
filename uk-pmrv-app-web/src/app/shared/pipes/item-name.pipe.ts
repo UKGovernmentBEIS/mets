@@ -568,27 +568,34 @@ export class ItemNamePipe implements PipeTransform {
 
       // HSE_TI
       case 'HSE_TI_APPLICATION_SUBMIT':
-        return `Complete ${String(year).replace('_', '-')} HSE target increase application`;
+        return `Complete ${this.hsetiYearTransform(String(year))} HSE target increase application`;
       case 'HSE_TI_WAIT_FOR_REGULATOR_REVIEW':
-        return `${String(year).replace('_', '-')} HSE target increase application sent to regulator`;
+        return `${this.hsetiYearTransform(String(year))} HSE target increase application sent to regulator`;
       case 'HSE_TI_APPLICATION_REGULATOR_REVIEW_SUBMIT':
-        return `Review ${String(year).replace('_', '-')} HSE target increase application`;
+        return `Review ${this.hsetiYearTransform(String(year))} HSE target increase application`;
       case 'HSE_TI_WAIT_FOR_AMENDS':
-        return `${String(year).replace('_', '-')} HSE target increase application returned to operator`;
+        return `${this.hsetiYearTransform(String(year))} HSE target increase application returned to operator`;
       case 'HSE_TI_MAKE_PAYMENT':
-        return `Pay for ${String(year).replace('_', '-')} HSE target increase application`;
+        return `Pay for ${this.hsetiYearTransform(String(year))} HSE target increase application`;
       case 'HSE_TI_TRACK_PAYMENT':
       case 'HSE_TI_CONFIRM_PAYMENT':
-        return `Track payment for ${String(year).replace('_', '-')} HSE target increase application`;
+        return `Track payment for ${this.hsetiYearTransform(String(year))} HSE target increase application`;
       case 'HSE_TI_APPLICATION_AMENDS_SUBMIT':
-        return `Amend ${String(year).replace('_', '-')} HSE target increase application`;
+        return `Amend ${this.hsetiYearTransform(String(year))} HSE target increase application`;
       case 'HSE_TI_WAIT_FOR_PEER_REVIEW':
-        return `${String(year).replace('_', '-')} HSE target increase sent to peer reviewer`;
+        return `${this.hsetiYearTransform(String(year))} HSE target increase sent to peer reviewer`;
       case 'HSE_TI_APPLICATION_PEER_REVIEW':
-        return `Peer review ${String(year).replace('_', '-')} HSE target increase application`;
+        return `Peer review ${this.hsetiYearTransform(String(year))} HSE target increase application`;
 
       default:
         return null;
     }
+  }
+
+  hsetiYearTransform(value: string): string {
+    return value
+      .split('_')
+      .map((y) => (y.length === 2 ? '20' + y : y))
+      .join('-');
   }
 }

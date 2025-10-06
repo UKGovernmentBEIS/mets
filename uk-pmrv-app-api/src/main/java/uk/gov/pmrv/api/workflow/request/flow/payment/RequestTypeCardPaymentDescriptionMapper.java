@@ -25,6 +25,7 @@ public final class RequestTypeCardPaymentDescriptionMapper {
         cardPaymentDescriptions.put(RequestType.EMP_VARIATION_UKETS, "Pay emissions monitoring plan variation fee");
         cardPaymentDescriptions.put(RequestType.EMP_ISSUANCE_CORSIA, "Pay emissions monitoring plan application fee");
         cardPaymentDescriptions.put(RequestType.EMP_VARIATION_CORSIA, "Pay emissions monitoring plan variation fee");
+        cardPaymentDescriptions.put(RequestType.HSE_TI, "Pay HSE target increase fee");
     }
 
     public String getCardPaymentDescription(RequestType requestType) {

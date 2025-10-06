@@ -23,12 +23,15 @@ export class PaymentCompletedGuard {
       .slice(0, 1);
 
     const isAviation = lastSegment[0].path === 'aviation';
+    const isCommonTask = ['hseti'].includes(lastSegment[0].path);
 
     const aviationRedirectStringUrl = isAviation ? `/${segment[0].path}/${segment[1].path}/${segment[2].path}` : null;
 
     const redirectUrlPath = aviationRedirectStringUrl
       ? aviationRedirectStringUrl
-      : `/${lastSegment[0].path}/${route.paramMap.get('taskId')}`;
+      : isCommonTask
+        ? `/tasks/${route.paramMap.get('taskId')}/${lastSegment[0].path}`
+        : `/${lastSegment[0].path}/${route.paramMap.get('taskId')}`;
 
     const redirectUrl =
       lastSegment[0].path === 'permit-issuance' ||
@@ -43,10 +46,8 @@ export class PaymentCompletedGuard {
     return store.pipe(
       first(),
       map((state) => {
-        const paymentCompleted = isAviation
-          ? state.requestTaskItem?.requestInfo?.paymentCompleted
-          : !!state.paymentCompleted;
-
+        const paymentCompleted =
+          isAviation || isCommonTask ? state.requestTaskItem?.requestInfo?.paymentCompleted : !!state.paymentCompleted;
         return !(store as any).isPaymentRequired || !!paymentCompleted || redirectUrl;
       }),
     );

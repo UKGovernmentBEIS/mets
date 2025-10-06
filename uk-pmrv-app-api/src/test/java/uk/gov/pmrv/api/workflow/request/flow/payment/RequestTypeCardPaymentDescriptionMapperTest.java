@@ -20,6 +20,7 @@ class RequestTypeCardPaymentDescriptionMapperTest {
         assertEquals("Pay emissions monitoring plan variation fee", RequestTypeCardPaymentDescriptionMapper.getCardPaymentDescription(RequestType.EMP_VARIATION_UKETS));
         assertEquals("Pay emissions monitoring plan application fee", RequestTypeCardPaymentDescriptionMapper.getCardPaymentDescription(RequestType.EMP_ISSUANCE_CORSIA));
         assertEquals("Pay emissions monitoring plan variation fee", RequestTypeCardPaymentDescriptionMapper.getCardPaymentDescription(RequestType.EMP_VARIATION_CORSIA));
+        assertEquals("Pay HSE target increase fee", RequestTypeCardPaymentDescriptionMapper.getCardPaymentDescription(RequestType.HSE_TI));
         assertNull(RequestTypeCardPaymentDescriptionMapper.getCardPaymentDescription(RequestType.INSTALLATION_ACCOUNT_OPENING));
     }
 }

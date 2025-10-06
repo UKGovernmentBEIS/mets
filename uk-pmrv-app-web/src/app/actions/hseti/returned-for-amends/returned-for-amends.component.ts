@@ -22,8 +22,11 @@ export class HsetiReturnedForAmendsComponent {
 
   hsetiTitle: Signal<string> = computed(() => {
     return (
-      this.requestAction()?.requestId?.split('-')[1]?.replace(/_/g, '-') +
-      ' HSE target increase details returned for amends'
+      this.requestAction()
+        ?.requestId?.split('-')[1]
+        ?.split('_')
+        .map((y) => (y.length === 2 ? '20' + y : y))
+        .join('-') + ' HSE target increase details returned for amends'
     );
   });
 

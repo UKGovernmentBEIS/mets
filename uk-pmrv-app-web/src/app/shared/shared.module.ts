@@ -190,6 +190,7 @@ import { PaginationComponent } from './pagination/pagination.component';
 import { PendingButtonDirective } from './pending-button.directive';
 import { PhaseBarComponent } from './phase-bar/phase-bar.component';
 import { PhoneInputComponent } from './phone-input/phone-input.component';
+import { HsetiWorkFlowIdPipe } from './pipes/hseti-workflow-id.pipe';
 import { ItemLinkPipe } from './pipes/item-link.pipe';
 import { NegativeNumberPipe } from './pipes/negative-number.pipe';
 import { ReportingSubheadingPipe } from './pipes/reporting-subheading.pipe';
@@ -308,6 +309,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     GroupedSummaryListDirective,
     HighlightDiffComponent,
     HoldingCompanyFormComponent,
+    HsetiWorkFlowIdPipe,
     IdentityBarComponent,
     VerifyEmissionsReductionClaimGroupComponent,
     IncorporateHeaderComponent,
@@ -497,6 +499,7 @@ import { WizardStepComponent } from './wizard/wizard-step.component';
     GovukComponentsModule,
     GroupedSummaryListDirective,
     HighlightDiffComponent,
+    HsetiWorkFlowIdPipe,
     HoldingCompanyFormComponent,
     VerifyEmissionsReductionClaimGroupComponent,
     IdentityBarComponent,

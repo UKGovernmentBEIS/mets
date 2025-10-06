@@ -635,6 +635,30 @@ describe('ItemNamePipe', () => {
       'Peer review 2021-2025 HSE target increase application',
     );
 
+    expect(pipe.transform('HSE_TI_APPLICATION_SUBMIT', '21_25')).toEqual(
+      'Complete 2021-2025 HSE target increase application',
+    );
+    expect(pipe.transform('HSE_TI_WAIT_FOR_REGULATOR_REVIEW', '21_25')).toEqual(
+      '2021-2025 HSE target increase application sent to regulator',
+    );
+    expect(pipe.transform('HSE_TI_WAIT_FOR_AMENDS', '21_25')).toEqual(
+      '2021-2025 HSE target increase application returned to operator',
+    );
+    expect(pipe.transform('HSE_TI_APPLICATION_AMENDS_SUBMIT', '21_25')).toEqual(
+      'Amend 2021-2025 HSE target increase application',
+    );
+
+    expect(pipe.transform('HSE_TI_MAKE_PAYMENT', '21_25')).toEqual('Pay for 2021-2025 HSE target increase application');
+    expect(pipe.transform('HSE_TI_CONFIRM_PAYMENT', '21_25')).toEqual(
+      'Track payment for 2021-2025 HSE target increase application',
+    );
+    expect(pipe.transform('HSE_TI_WAIT_FOR_PEER_REVIEW', '21_25')).toEqual(
+      '2021-2025 HSE target increase sent to peer reviewer',
+    );
+    expect(pipe.transform('HSE_TI_APPLICATION_PEER_REVIEW', '21_25')).toEqual(
+      'Peer review 2021-2025 HSE target increase application',
+    );
+
     expect(pipe.transform(null)).toBeNull();
   });
 });
